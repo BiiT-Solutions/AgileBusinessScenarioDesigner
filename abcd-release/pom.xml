@@ -4,24 +4,15 @@
 
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>abcd-core</artifactId>
+	<artifactId>abcd-release</artifactId>
 	<packaging>jar</packaging>
-	<name>Agile Business sCenario Designer Tool (Core)</name>
+	<name>Agile Business sCenario Designer Tool (Release)</name>
 
 	<parent>
 		<groupId>com.biit.abcd</groupId>
 		<artifactId>abcd-tool</artifactId>
 		<version>0.0.1</version>
 	</parent>
-	
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>abcd-persistence</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-		</dependency>
-	</dependencies>
 	
 	<build>
 		<plugins>

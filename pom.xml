@@ -11,8 +11,11 @@
 	<name>Agile Business sCenario Designer Tool</name>
 
 	<modules>
+		<module>abcd-logger</module>
+		<module>abcd-persistence</module>
 		<module>abcd-core</module>
 		<module>abcd-gui</module>
+		<module>abcd-release</module>
 	</modules>
 
 	<distributionManagement>
