@@ -48,10 +48,10 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-	
-	
+
+
 	<dependencies>
-	    <!-- Core -->
+		<!-- Core -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>abcd-core</artifactId>
@@ -271,7 +271,12 @@
 											[${vaadin.version},)
 										</versionRange>
 										<goals>
+											<goal>clean</goal>
 											<goal>resources</goal>
+											<goal>update-theme</goal>
+											<goal>update-widgetset</goal>
+											<goal>compile-theme</goal>
+											<goal>compile</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
