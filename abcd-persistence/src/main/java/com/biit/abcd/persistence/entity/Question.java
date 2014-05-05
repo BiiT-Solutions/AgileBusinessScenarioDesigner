@@ -1,5 +1,21 @@
 package com.biit.abcd.persistence.entity;
 
-public class Question {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Question extends TreeObject {
+	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Answer.class));
+	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class, Group.class));
+
+	@Override
+	protected List<Class<?>> getAllowedChilds() {
+		return ALLOWED_CHILDS;
+	}
+
+	@Override
+	protected List<Class<?>> getAllowedParents() {
+		return ALLOWED_PARENTS;
+	}
 
 }

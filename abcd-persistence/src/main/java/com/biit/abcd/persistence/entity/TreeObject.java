@@ -206,7 +206,7 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	protected abstract List<Class> getAllowedChilds();
+	protected abstract List<Class<?>> getAllowedChilds();
 
 	@Override
 	public void setChildren(List<ITreeObject> children) throws NotValidChildException {
@@ -233,9 +233,15 @@ public abstract class TreeObject implements ITreeObject {
 			}
 		}
 	}
+	
+	protected abstract List<Class<?>> getAllowedParents();
 
 	@Override
 	public void setParent(ITreeObject parent) throws NotValidParentException {
+		if (!getAllowedParents().contains(parent.getClass())) {
+			throw new NotValidParentException("Class '" + this.getClass().getName()
+					+ "' does not allows instances of '" + parent.getClass().getName() + "' as parent.");
+		}
 		this.parent = parent;
 	}
 
