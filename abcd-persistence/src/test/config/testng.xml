@@ -3,9 +3,11 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
+				<include name="hierarchyTest" />
 			</run>
 		</groups>
 		<classes>
+			<class name="com.biit.abcd.persistence.entity.HierarchyTest" />
 		</classes>
 	</test>
 </suite>

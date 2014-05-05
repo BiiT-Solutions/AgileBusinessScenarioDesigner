@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +48,10 @@ public abstract class TreeObject implements ITreeObject {
 
 	@Override
 	public void addChild(ITreeObject child) throws NotValidChildException {
-		if (!getAllowedChilds().contains(child.getClass())) {
+		if (getChildren() == null) {
+			setChildren(new ArrayList<ITreeObject>());
+		}
+		if (getAllowedChilds() == null || !getAllowedChilds().contains(child.getClass())) {
 			throw new NotValidChildException("Class '" + this.getClass().getName() + "' does not allows instances of '"
 					+ child.getClass().getName() + "' as childs.");
 		}
@@ -233,7 +237,7 @@ public abstract class TreeObject implements ITreeObject {
 			}
 		}
 	}
-	
+
 	protected abstract List<Class<?>> getAllowedParents();
 
 	@Override
