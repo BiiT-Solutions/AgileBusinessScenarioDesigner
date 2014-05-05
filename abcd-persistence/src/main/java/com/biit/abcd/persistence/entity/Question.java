@@ -6,7 +6,9 @@ import java.util.List;
 
 public class Question extends TreeObject {
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Answer.class));
-	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class, Group.class));
+	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class,
+			Group.class));
+	private String technicalName;
 
 	@Override
 	protected List<Class<?>> getAllowedChilds() {
@@ -16,6 +18,14 @@ public class Question extends TreeObject {
 	@Override
 	protected List<Class<?>> getAllowedParents() {
 		return ALLOWED_PARENTS;
+	}
+
+	public String getTechnicalName() {
+		return technicalName;
+	}
+
+	public void setTechnicalName(String technicalName) {
+		this.technicalName = technicalName;
 	}
 
 }

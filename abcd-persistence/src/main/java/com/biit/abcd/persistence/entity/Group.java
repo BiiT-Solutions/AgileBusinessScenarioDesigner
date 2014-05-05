@@ -5,8 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Group extends TreeObject {
-	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class, Group.class));
+	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class,
+			Group.class));
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
+	private String technicalName;
+	private boolean repetable;
 
 	@Override
 	protected List<Class<?>> getAllowedChilds() {
@@ -16,5 +19,21 @@ public class Group extends TreeObject {
 	@Override
 	protected List<Class<?>> getAllowedParents() {
 		return ALLOWED_PARENTS;
+	}
+
+	public String getTechnicalName() {
+		return technicalName;
+	}
+
+	public void setTechnicalName(String technicalName) {
+		this.technicalName = technicalName;
+	}
+
+	public boolean isRepetable() {
+		return repetable;
+	}
+
+	public void setRepetable(boolean repetable) {
+		this.repetable = repetable;
 	}
 }

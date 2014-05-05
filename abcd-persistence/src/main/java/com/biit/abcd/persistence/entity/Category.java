@@ -7,7 +7,9 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 
 public class Category extends TreeObject {
-	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class, Group.class));
+	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class,
+			Group.class));
+	private String label;
 
 	@Override
 	protected List<Class<?>> getAllowedChilds() {
@@ -22,6 +24,14 @@ public class Category extends TreeObject {
 	@Override
 	public void setParent(ITreeObject parent) throws NotValidParentException {
 		throw new NotValidParentException("Categories cannot have a parent.");
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 }
