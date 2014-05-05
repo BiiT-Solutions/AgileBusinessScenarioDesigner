@@ -4,10 +4,12 @@
 		<groups>
 			<run>
 				<include name="hierarchyTest" />
+				<include name="formDao" />
 			</run>
 		</groups>
 		<classes>
 			<class name="com.biit.abcd.persistence.entity.HierarchyTest" />
+			<class name="com.biit.abcd.persistence.dao.FormTest" />
 		</classes>
 	</test>
 </suite>
