@@ -10,12 +10,15 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form";
+	private final static String FULL_FORM = "Complete Form";
 
 	@Autowired
 	private IFormDao formDao;
@@ -38,5 +41,13 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	public void getDummyForm() {
 		List<Form> forms = formDao.getAll();
 		Assert.assertEquals(forms.get(0).getName(), DUMMY_FORM);
+	}
+
+	@Test(groups = { "formDao" })
+	public void storeFormWithCategory() throws NotValidChildException {
+		Form form = new Form();
+		form.setName(FULL_FORM);
+		Category category = new Category();
+		form.addChild(category);
 	}
 }

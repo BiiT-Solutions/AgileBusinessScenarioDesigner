@@ -17,12 +17,13 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 @Table(name = "T_FORM")
 public class Form extends TreeObject {
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
-	private String name;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long formId;
+
+	private String name;
 
 	@Override
 	protected List<Class<?>> getAllowedChilds() {

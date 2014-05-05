@@ -23,11 +23,8 @@
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 
 		to set the correct base-package -->
 	<context:component-scan base-package="com.biit.abcd" />
-
-	<!-- Enables Interceptors -->
-	<aop:aspectj-autoproxy />
 	
-	     <!-- Read any *.properties file -->
+          <!-- Read any *.properties file -->
 	<context:property-placeholder location="classpath*:*.properties" />
 
 	<!-- Data Source -->
@@ -76,6 +73,8 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
+	<!-- Enables Interceptors -->
+	<aop:aspectj-autoproxy />
 	<!-- Aspect -->
 	<bean id="basicLogging" class="com.biit.abcd.logger.BasicLogging" />
 

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+import com.biit.abcd.annotation.AutoLogger;
+import com.biit.abcd.annotation.AutoLoggerLevel;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
@@ -14,6 +18,7 @@ import com.liferay.portal.model.User;
 /**
  * Basic functionality of the hierarchy of the elements of the form.
  */
+@Component
 public abstract class TreeObject implements ITreeObject {
 	private Timestamp creationDate = null;
 	private User createdBy = null;
@@ -46,6 +51,7 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
+	@AutoLogger(AutoLoggerLevel.DEBUG)
 	@Override
 	public void addChild(ITreeObject child) throws NotValidChildException {
 		if (getChildren() == null) {
