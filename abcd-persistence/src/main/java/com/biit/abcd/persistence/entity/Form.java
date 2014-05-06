@@ -4,24 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 
 @Entity
-@Table(name = "T_FORM")
+@Table(name = "FORMS")
 public class Form extends TreeObject {
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
-	private Long formId;
 
 	private String name;
 

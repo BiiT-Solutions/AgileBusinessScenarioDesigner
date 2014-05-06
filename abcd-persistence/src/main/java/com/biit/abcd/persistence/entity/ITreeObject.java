@@ -41,12 +41,6 @@ public interface ITreeObject {
 	 */
 	public void setChildren(List<ITreeObject> children) throws NotValidChildException, NotValidParentException;
 
-	/**
-	 * Gets all childrens.
-	 * 
-	 * @return
-	 */
-	public List<ITreeObject> getChildren();
 
 	/**
 	 * Removes this children.
@@ -75,13 +69,6 @@ public interface ITreeObject {
 	 * @param parent
 	 */
 	public void setParent(ITreeObject parent) throws NotValidParentException;
-
-	/**
-	 * Gets the parent of the element.
-	 * 
-	 * @return
-	 */
-	public ITreeObject getParent();
 
 	/**
 	 * Check if the child exists or not.

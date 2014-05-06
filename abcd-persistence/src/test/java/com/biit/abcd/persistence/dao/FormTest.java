@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,11 +45,31 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(forms.get(0).getName(), DUMMY_FORM);
 	}
 
-	@Test(groups = { "formDao" })
+	@Test(groups = { "answerDao" }, dependsOnMethods = "getDummyForm")
+	public void removeDummyForm() {
+		List<Form> forms = formDao.getAll();
+		formDao.makeTransient(forms.get(0));
+		Assert.assertEquals(formDao.getRowCount(), 0);
+	}
+
+	@Test(groups = { "formDao" }, dependsOnMethods = "removeDummyForm")
 	public void storeFormWithCategory() throws NotValidChildException {
 		Form form = new Form();
 		form.setName(FULL_FORM);
 		Category category = new Category();
 		form.addChild(category);
+		System.out.println("Form childs : " + form.getChildren().size());
+		formDao.makePersistent(form);
+		Form retrievedForm = formDao.read(form.getId());
+
+		Assert.assertEquals(retrievedForm.getId(), form.getId());
+		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
+	}
+	
+	@Test(groups = { "answerDao" }, dependsOnMethods = "storeFormWithCategory")
+	public void removeForm() {
+		List<Form> forms = formDao.getAll();
+		formDao.makeTransient(forms.get(0));
+		Assert.assertEquals(formDao.getRowCount(), 0);
 	}
 }

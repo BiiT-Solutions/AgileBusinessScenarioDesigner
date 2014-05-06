@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -9,6 +12,7 @@ import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.biit.abcd.persistence.dao.IGenericDao;
+import com.biit.abcd.persistence.entity.TreeObject;
 
 public abstract class GenericDao<T> implements IGenericDao<T> {
 
@@ -33,8 +37,22 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 		this.sessionFactory = sessionFactory;
 	}
 
+	private void setCreationInfo(T entity) {
+		TreeObject treeObject = (TreeObject) entity;
+		if (treeObject.getCreationTime() == null) {
+			treeObject.setCreationTime(new Timestamp(new Date().getTime()));
+		}
+	}
+
+	private void setUpdateInfo(T entity) {
+		TreeObject treeObject = (TreeObject) entity;
+		treeObject.setUpdateTime(new Timestamp(new Date().getTime()));
+	}
+
 	@Override
 	public T makePersistent(T entity) {
+		setCreationInfo(entity);
+		setUpdateInfo(entity);
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
@@ -55,6 +73,22 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 		try {
 			session.delete(entity);
 			session.getTransaction().commit();
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
+	}
+
+	@Override
+	public T read(Long id) {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			@SuppressWarnings("unchecked")
+			T event = (T) session.get(getType(), id);
+			initializeSet(event);
+			session.getTransaction().commit();
+			return event;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
 			throw e;
@@ -98,7 +132,20 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 	 * "LazyInitializationException: failed to lazily initialize a collection of..." error. This procedure must be
 	 * called before closing the session.
 	 * 
+	 * @param planningEvent
+	 */
+	private void initializeSet(T element) {
+		List<T> elements = new ArrayList<>();
+		elements.add(element);
+		initializeSets(elements);
+	}
+
+	/**
+	 * When using lazy loading, the sets must have a proxy to avoid a
+	 * "LazyInitializationException: failed to lazily initialize a collection of..." error. This procedure must be
+	 * called before closing the session.
+	 * 
 	 * @param forms
 	 */
-	protected abstract void initializeSets(List<T> forms);
+	protected abstract void initializeSets(List<T> elements);
 }

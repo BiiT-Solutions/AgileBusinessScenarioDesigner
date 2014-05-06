@@ -33,4 +33,12 @@ public interface IGenericDao<T> {
 	 * @return
 	 */
 	int getRowCount();
+
+	/**
+	 * Gets one element by id.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	T read(Long id);
 }

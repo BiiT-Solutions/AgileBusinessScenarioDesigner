@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 
 @Test
@@ -86,7 +85,7 @@ public class HierarchyTest {
 
 	@Test(groups = { "hierarchyTest" }, expectedExceptions = NotValidParentException.class)
 	public void groupParentNotAllowed() throws NotValidParentException {
-		group.setParent(group);
+		group.setParent(form);
 	}
 
 	@Test(groups = { "hierarchyTest" }, expectedExceptions = NotValidParentException.class)

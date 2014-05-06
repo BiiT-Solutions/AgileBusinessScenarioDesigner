@@ -5,11 +5,20 @@
 			<run>
 				<include name="hierarchyTest" />
 				<include name="formDao" />
+				<include name="categoryDao" />
+				<include name="groupDao" />
+				<include name="questionDao" />
+				<include name="answerDao" />
 			</run>
 		</groups>
 		<classes>
 			<class name="com.biit.abcd.persistence.entity.HierarchyTest" />
 			<class name="com.biit.abcd.persistence.dao.FormTest" />
+			<class name="com.biit.abcd.persistence.dao.CategoryTest" />
+			<class name="com.biit.abcd.persistence.dao.GroupTest" />
+			<class name="com.biit.abcd.persistence.dao.QuestionTest" />
+			<class name="com.biit.abcd.persistence.dao.AnswerTest" />
 		</classes>
 	</test>
 </suite>
+

@@ -5,7 +5,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 import com.biit.abcd.annotation.AutoLogger;
 import com.biit.abcd.annotation.AutoLoggerLevel;
@@ -18,17 +33,32 @@ import com.liferay.portal.model.User;
 /**
  * Basic functionality of the hierarchy of the elements of the form.
  */
-@Component
+@Entity
+@Table(name = "TREE_OBJECTS")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class TreeObject implements ITreeObject {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE)
+	@Column(name = "ID", unique = true, nullable = false)
+	private Long id;
+
 	private Timestamp creationDate = null;
 	private User createdBy = null;
 	private Timestamp updatedDate = null;
 	private User updatedBy = null;
-	private List<ITreeObject> children;
-	private ITreeObject parent;
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
+	@OrderColumn(name = "children_index")
+	private List<TreeObject> children;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private TreeObject parent;
 
-	@Override
-	public List<ITreeObject> getChildren() {
+	public List<TreeObject> getChildren() {
+		if (children == null) {
+			children = new ArrayList<>();
+		}
 		return children;
 	}
 
@@ -40,10 +70,10 @@ public abstract class TreeObject implements ITreeObject {
 		}
 		if (!getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if (child.getParent() != null && child.getParent() != this) {
-				child.getParent().getChildren().remove(child);
+			if (((TreeObject) child).getParent() != null && ((TreeObject) child).getParent() != this) {
+				((TreeObject) child).getParent().getChildren().remove(child);
 			}
-			getChildren().add(index, child);
+			getChildren().add(index, (TreeObject) child);
 			try {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
@@ -59,17 +89,19 @@ public abstract class TreeObject implements ITreeObject {
 		}
 		if (getAllowedChilds() == null || !getAllowedChilds().contains(child.getClass())) {
 			throw new NotValidChildException("Class '" + this.getClass().getName() + "' does not allows instances of '"
-					+ child.getClass().getName() + "' as childs.");
+					+ child.getClass().getName() + "' as child.");
 		}
 		if (!getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if (child.getParent() != null && child.getParent() != this) {
-				child.getParent().getChildren().remove(child);
+			if (((TreeObject) child).getParent() != null && ((TreeObject) child).getParent() != this) {
+				((TreeObject) child).getParent().getChildren().remove(child);
 			}
-			getChildren().add(child);
+			getChildren().add((TreeObject) child);
 			try {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
+				throw new NotValidChildException("Class '" + child.getClass().getName()
+						+ "' does not allows instances of '" + this.getClass().getName() + "' as parent.");
 			}
 		}
 	}
@@ -79,7 +111,7 @@ public abstract class TreeObject implements ITreeObject {
 		return contains(child, getChildren());
 	}
 
-	private boolean contains(ITreeObject treeObject, List<ITreeObject> children) {
+	private boolean contains(ITreeObject treeObject, List<TreeObject> children) {
 		for (ITreeObject child : children) {
 			if (child.equals(treeObject)) {
 				return true;
@@ -229,13 +261,19 @@ public abstract class TreeObject implements ITreeObject {
 		}
 
 		// Set childs.
-		this.children = children;
+		this.children = new ArrayList<>();
+		if (children != null) {
+			for (ITreeObject child : children) {
+				this.children.add((TreeObject) child);
+			}
+		}
+		// this.children = children;
 
 		// Update parents.
 		for (ITreeObject child : children) {
 			// Remove the child from previous parent.
-			if (child.getParent() != null && child.getParent() != this) {
-				child.getParent().getChildren().remove(child);
+			if (((TreeObject) child).getParent() != null && ((TreeObject) child).getParent() != this) {
+				((TreeObject) ((TreeObject) child).getParent()).getChildren().remove(child);
 			}
 			try {
 				child.setParent(this);
@@ -248,15 +286,26 @@ public abstract class TreeObject implements ITreeObject {
 
 	@Override
 	public void setParent(ITreeObject parent) throws NotValidParentException {
-		if (!getAllowedParents().contains(parent.getClass())) {
-			throw new NotValidParentException("Class '" + this.getClass().getName()
-					+ "' does not allows instances of '" + parent.getClass().getName() + "' as parent.");
+		if (parent == null) {
+			this.parent = null;
+		} else {
+			if (!getAllowedParents().contains(parent.getClass())) {
+				throw new NotValidParentException("Class '" + this.getClass().getName()
+						+ "' does not allows instances of '" + parent.getClass().getName() + "' as parent.");
+			}
+			this.parent = (TreeObject) parent;
 		}
-		this.parent = parent;
 	}
 
-	@Override
-	public ITreeObject getParent() {
+	public TreeObject getParent() {
 		return parent;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }
