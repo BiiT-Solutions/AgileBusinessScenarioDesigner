@@ -27,7 +27,7 @@ public class Form extends TreeObject {
 	}
 
 	@Override
-	public void setParent(ITreeObject parent) throws NotValidParentException {
+	public void setParent(TreeObject parent) throws NotValidParentException {
 		throw new NotValidParentException("Categories cannot have a parent.");
 	}
 

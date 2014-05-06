@@ -67,7 +67,7 @@ public class HierarchyTest {
 
 	@Test(groups = { "hierarchyTest" }, expectedExceptions = NotValidChildException.class)
 	public void categoryChildsArrayNotAllowed() throws NotValidChildException {
-		ArrayList<ITreeObject> array = new ArrayList<ITreeObject>();
+		ArrayList<TreeObject> array = new ArrayList<TreeObject>();
 		array.add(answer);
 		category.setChildren(array);
 	}

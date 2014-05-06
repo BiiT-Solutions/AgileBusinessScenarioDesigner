@@ -36,7 +36,7 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "TREE_OBJECTS")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class TreeObject implements ITreeObject {
+public abstract class TreeObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -62,18 +62,17 @@ public abstract class TreeObject implements ITreeObject {
 		return children;
 	}
 
-	@Override
-	public void addChild(int index, ITreeObject child) throws NotValidChildException {
+	public void addChild(int index, TreeObject child) throws NotValidChildException {
 		if (!getAllowedChilds().contains(child.getClass())) {
 			throw new NotValidChildException("Class '" + this.getClass().getName() + "' does not allows instances of '"
 					+ child.getClass().getName() + "' as childs.");
 		}
 		if (!getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if (((TreeObject) child).getParent() != null && ((TreeObject) child).getParent() != this) {
-				((TreeObject) child).getParent().getChildren().remove(child);
+			if (child.getParent() != null && child.getParent() != this) {
+				child.getParent().getChildren().remove(child);
 			}
-			getChildren().add(index, (TreeObject) child);
+			getChildren().add(index, child);
 			try {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
@@ -82,10 +81,9 @@ public abstract class TreeObject implements ITreeObject {
 	}
 
 	@AutoLogger(AutoLoggerLevel.DEBUG)
-	@Override
-	public void addChild(ITreeObject child) throws NotValidChildException {
+	public void addChild(TreeObject child) throws NotValidChildException {
 		if (getChildren() == null) {
-			setChildren(new ArrayList<ITreeObject>());
+			setChildren(new ArrayList<TreeObject>());
 		}
 		if (getAllowedChilds() == null || !getAllowedChilds().contains(child.getClass())) {
 			throw new NotValidChildException("Class '" + this.getClass().getName() + "' does not allows instances of '"
@@ -93,10 +91,10 @@ public abstract class TreeObject implements ITreeObject {
 		}
 		if (!getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if (((TreeObject) child).getParent() != null && ((TreeObject) child).getParent() != this) {
-				((TreeObject) child).getParent().getChildren().remove(child);
+			if (child.getParent() != null && child.getParent() != this) {
+				child.getParent().getChildren().remove(child);
 			}
-			getChildren().add((TreeObject) child);
+			getChildren().add(child);
 			try {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
@@ -106,13 +104,12 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
-	public boolean contains(ITreeObject child) {
+	public boolean contains(TreeObject child) {
 		return contains(child, getChildren());
 	}
 
-	private boolean contains(ITreeObject treeObject, List<TreeObject> children) {
-		for (ITreeObject child : children) {
+	private boolean contains(TreeObject treeObject, List<TreeObject> children) {
+		for (TreeObject child : children) {
 			if (child.equals(treeObject)) {
 				return true;
 			}
@@ -123,7 +120,6 @@ public abstract class TreeObject implements ITreeObject {
 		return false;
 	}
 
-	@Override
 	public void remove() {
 		if (getParent() != null) {
 			try {
@@ -134,12 +130,11 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
-	public void removeChild(ITreeObject elementToRemove) throws ChildrenNotFoundException {
+	public void removeChild(TreeObject elementToRemove) throws ChildrenNotFoundException {
 		if (getChildren().contains(elementToRemove)) {
 			getChildren().remove(elementToRemove);
 		} else {
-			for (ITreeObject child : getChildren()) {
+			for (TreeObject child : getChildren()) {
 				try {
 					child.removeChild(elementToRemove);
 					// Removed, not continue searching.
@@ -152,7 +147,6 @@ public abstract class TreeObject implements ITreeObject {
 		throw new ChildrenNotFoundException("Children '" + elementToRemove + "' does not exist.");
 	}
 
-	@Override
 	public void removeChild(int index) throws ChildrenNotFoundException {
 		if (getChildren() == null || getChildren().size() < index) {
 			throw new ChildrenNotFoundException("Index out of bounds. Index " + index + " is invalid.");
@@ -161,12 +155,10 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
 	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	@Override
 	public Timestamp getCreationTime() {
 		if (creationDate != null) {
 			return creationDate;
@@ -176,12 +168,10 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
 	public void setUpdateTime() {
 		setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 	}
 
-	@Override
 	public Timestamp getUpdateTime() {
 		if (updatedDate != null) {
 			return updatedDate;
@@ -191,22 +181,18 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
 	public User getUpdatedBy() {
 		return updatedBy;
 	}
 
-	@Override
 	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	@Override
 	public void setCreationTime(Timestamp dateCreated) {
 		this.creationDate = dateCreated;
 	}
 
-	@Override
 	public void setUpdateTime(Timestamp dateUpdated) {
 		this.updatedDate = dateUpdated;
 		if (getParent() != null) {
@@ -214,7 +200,6 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
 	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
 		if (getParent() != null) {
@@ -222,7 +207,6 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
 	public void switchChildren(int indexChild1, int indexChild2, User user) throws ChildrenNotFoundException {
 		if ((indexChild1 >= 0 && indexChild1 < getChildren().size())
 				&& (indexChild2 >= 0 && indexChild2 < getChildren().size())) {
@@ -239,8 +223,7 @@ public abstract class TreeObject implements ITreeObject {
 		}
 	}
 
-	@Override
-	public ITreeObject getChild(int index) throws ChildrenNotFoundException {
+	public TreeObject getChild(int index) throws ChildrenNotFoundException {
 		if (getChildren() == null || getChildren().size() < index) {
 			throw new ChildrenNotFoundException("Index out of bounds. Index " + index + " is invalid.");
 		} else {
@@ -250,10 +233,9 @@ public abstract class TreeObject implements ITreeObject {
 
 	protected abstract List<Class<?>> getAllowedChilds();
 
-	@Override
-	public void setChildren(List<ITreeObject> children) throws NotValidChildException {
+	public void setChildren(List<TreeObject> children) throws NotValidChildException {
 		// Only allowed classes can be a child.
-		for (ITreeObject child : children) {
+		for (TreeObject child : children) {
 			if (!getAllowedChilds().contains(child.getClass())) {
 				throw new NotValidChildException("Class '" + this.getClass().getName()
 						+ "' does not allows instances of '" + child.getClass().getName() + "' as childs.");
@@ -263,17 +245,17 @@ public abstract class TreeObject implements ITreeObject {
 		// Set childs.
 		this.children = new ArrayList<>();
 		if (children != null) {
-			for (ITreeObject child : children) {
-				this.children.add((TreeObject) child);
+			for (TreeObject child : children) {
+				this.children.add(child);
 			}
 		}
 		// this.children = children;
 
 		// Update parents.
-		for (ITreeObject child : children) {
+		for (TreeObject child : children) {
 			// Remove the child from previous parent.
-			if (((TreeObject) child).getParent() != null && ((TreeObject) child).getParent() != this) {
-				((TreeObject) ((TreeObject) child).getParent()).getChildren().remove(child);
+			if (child.getParent() != null && child.getParent() != this) {
+				child.getParent().getChildren().remove(child);
 			}
 			try {
 				child.setParent(this);
@@ -284,8 +266,7 @@ public abstract class TreeObject implements ITreeObject {
 
 	protected abstract List<Class<?>> getAllowedParents();
 
-	@Override
-	public void setParent(ITreeObject parent) throws NotValidParentException {
+	public void setParent(TreeObject parent) throws NotValidParentException {
 		if (parent == null) {
 			this.parent = null;
 		} else {
@@ -293,7 +274,7 @@ public abstract class TreeObject implements ITreeObject {
 				throw new NotValidParentException("Class '" + this.getClass().getName()
 						+ "' does not allows instances of '" + parent.getClass().getName() + "' as parent.");
 			}
-			this.parent = (TreeObject) parent;
+			this.parent = parent;
 		}
 	}
 
