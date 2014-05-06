@@ -13,7 +13,7 @@
 		<artifactId>abcd-tool</artifactId>
 		<version>0.0.1</version>
 	</parent>
-	
+
 	<dependencies>
 		<!-- log4j -->
 		<dependency>
@@ -26,12 +26,22 @@
 			Quartz, and Freemarker integration Define this if you need any of these integrations -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
 			<version>${aspectj.version}</version>
 		</dependency>
 	</dependencies>
