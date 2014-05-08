@@ -8,6 +8,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcs.component.WebPageComponent;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
 import com.biit.liferay.access.exceptions.WebServiceAccessError;
@@ -17,7 +18,6 @@ import com.biit.security.exceptions.PBKDF2EncryptorException;
 import com.liferay.portal.model.User;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.UserError;
 import com.vaadin.server.WebBrowser;
@@ -32,19 +32,26 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class Login extends VerticalLayout implements View {
+public class Login extends WebPageComponent {
 	private static final long serialVersionUID = 1559169232291159835L;
+	private VerticalLayout rootLayout;
 	private TextField usernameField;
 	private PasswordField passwordField;
 
-	// Login is the only web page that does not use DWebPage as parent.
+	public Login() {
+		rootLayout = new VerticalLayout();
+		rootLayout.setSizeFull();
+		setCompositionRoot(rootLayout);
+		setSizeFull();
+		
+		Panel loginPanel = buildLoginForm();
+		rootLayout.addComponent(loginPanel);
+		rootLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
+	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		setSizeFull();
-		Panel loginPanel = buildLoginForm();
-		addComponent(loginPanel);
-		setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
+		// Nothing to do.
 	}
 
 	private Panel buildLoginForm() {
