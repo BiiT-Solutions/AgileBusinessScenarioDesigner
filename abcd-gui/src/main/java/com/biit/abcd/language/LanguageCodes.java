@@ -24,6 +24,15 @@ public enum LanguageCodes {
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
 	
+	FORM_TABLE_COLUMN_NAME("formTable.column.name"),
+	FORM_TABLE_COLUMN_VERSION("formTable.column.version"),
+	FORM_TABLE_COLUMN_ACCESS("formTable.column.access"),
+	FORM_TABLE_COLUMN_USEDBY("formTable.column.usedBy"),
+	FORM_TABLE_COLUMN_CREATEDBY("formTable.column.createdBy"),
+	FORM_TABLE_COLUMN_CREATIONDATE("formTable.column.creationDate"),
+	FORM_TABLE_COLUMN_MODIFIEDBY("formTable.column.modifiedBy"),
+	FORM_TABLE_COLUMN_MODIFICATIONDATE("formTable.column.modificationDate"),
+	
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_ACCESS("error.access"),
 	ERROR_BADUSERPSWD("error.login.badUserPassword"),

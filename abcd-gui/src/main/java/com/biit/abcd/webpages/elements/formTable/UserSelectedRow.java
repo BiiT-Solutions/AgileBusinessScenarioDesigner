@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements;
+package com.biit.abcd.webpages.elements.formTable;
 
 import java.util.HashMap;
 
