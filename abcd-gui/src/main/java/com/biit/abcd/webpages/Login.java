@@ -17,9 +17,12 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.server.UserError;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
@@ -76,14 +79,14 @@ public class Login extends VerticalLayout implements View {
 		});
 
 		// Add the login button
-		// IconButton loginButton = new IconButton("Login", "user.png", "Check user.", new ClickListener() {
-		//
-		// private static final long serialVersionUID = -5577423546946890721L;
-		//
-		// public void buttonClick(ClickEvent event) {
-		// checkUserAndPassword();
-		// }
-		// });
+		Button loginButton = new Button("Login", new ClickListener() {
+			private static final long serialVersionUID = 1239035599265918788L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				checkUserAndPassword();
+			}
+		});
 
 		// Alignment and sizes.
 		FormLayout layout = new FormLayout();
@@ -91,7 +94,7 @@ public class Login extends VerticalLayout implements View {
 		layout.setSizeUndefined();
 		layout.addComponent(usernameField);
 		layout.addComponent(passwordField);
-		// layout.addComponent(loginButton);
+		layout.addComponent(loginButton);
 		panel.setContent(layout);
 		return panel;
 	}
