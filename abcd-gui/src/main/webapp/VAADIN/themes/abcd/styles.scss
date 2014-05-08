@@ -1,0 +1,11 @@
+@import "addons.scss";
+@import "abcd.scss";
+
+/* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
+/* The actual styles should be defined in abcd-theme.scss */
+.abcd {
+  @include addons;
+
+  // Include abcd theme styles in your theme
+  @include abcd;
+}

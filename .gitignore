@@ -6,7 +6,8 @@ target
 bin
 project.properties
 output.log
-VAADIN/
+gwt-unitCache/
+widgetsets/
 tmp
 *.zip
 
