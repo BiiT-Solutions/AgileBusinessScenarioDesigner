@@ -65,12 +65,6 @@
 			<version>${liferay-authentication-client.version}</version>
 		</dependency>
 		<!-- Vaadin plugins -->
-		<!-- Vaadin Touchkit -->
-		<dependency>
-			<groupId>com.vaadin.addon</groupId>
-			<artifactId>vaadin-touchkit-agpl</artifactId>
-			<version>${vaadin-toolkit.version}</version>
-		</dependency>
 		<!-- Vaadin -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
