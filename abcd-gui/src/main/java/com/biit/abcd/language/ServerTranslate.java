@@ -33,17 +33,17 @@ public class ServerTranslate {
 		} else {
 			if (Page.getCurrent() != null) {
 				return Page.getCurrent().getWebBrowser().getLocale();
-			}else{
+			} else {
 				return null;
 			}
 		}
 	}
 
-	public static String tr(ShapMessageCodes code) {
+	public static String tr(LanguageCodes code) {
 		return tr(code.toString(), null);
 	}
 
-	public static String tr(ShapMessageCodes code, Object[] args) {
+	public static String tr(LanguageCodes code, Object[] args) {
 		return tr(code.toString(), args);
 	}
 
@@ -55,9 +55,9 @@ public class ServerTranslate {
 			try {
 				MessageManager.showError(ServerTranslate.trException("error.fatal", null));
 			} catch (RuntimeException e2) {
-				MessageManager.showError("Translation fatal error.");
+				MessageManager.showError("Fatal error in the translations.");
 			}
-			return "Translation fatal error.";
+			return "No translation.";
 		}
 	}
 

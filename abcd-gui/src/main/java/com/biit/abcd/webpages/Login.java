@@ -5,6 +5,8 @@ import java.io.IOException;
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
@@ -17,12 +19,12 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.server.UserError;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
@@ -51,14 +53,14 @@ public class Login extends VerticalLayout implements View {
 		panel.setSizeUndefined();
 
 		// Create input fields for user name and password
-		usernameField = new TextField("Email:");
+		usernameField = new TextField(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_EMAIL));
 		usernameField.setRequired(true);
-		usernameField.setRequiredError("The Field may not be empty.");
+		usernameField.setRequiredError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_EMAIL));
 		usernameField.focus();
 
-		passwordField = new PasswordField("Password:");
+		passwordField = new PasswordField(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_PASSWORD));
 		passwordField.setRequired(true);
-		passwordField.setRequiredError("The Field may not be empty.");
+		passwordField.setRequiredError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_PASSWORD));
 
 		// If you press enter. Login operation.
 		passwordField.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
@@ -79,7 +81,7 @@ public class Login extends VerticalLayout implements View {
 		});
 
 		// Add the login button
-		Button loginButton = new Button("Login", new ClickListener() {
+		Button loginButton = new Button(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_SIGN_IN), new ClickListener() {
 			private static final long serialVersionUID = 1239035599265918788L;
 
 			@Override
@@ -108,16 +110,18 @@ public class Login extends VerticalLayout implements View {
 		try {
 			user = AuthenticationService.getInstance().authenticate(userMail, password);
 		} catch (InvalidCredentialsException | AuthenticationRequired e) {
-			passwordField.setComponentError(new UserError("Username '" + userMail
-					+ "' does not exists or password was wrong."));
-			MessageManager.showError("Either username or password was wrong.", "Try again.");
+			passwordField.setComponentError(new UserError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_USER,
+					new Object[] { userMail })));
+			MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_BADUSERPSWD),
+					ServerTranslate.tr(LanguageCodes.ERROR_TRYAGAIN));
 		} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
 			e.printStackTrace();
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
-			MessageManager.showError("Error connecting to Liferay user management service.",
-					"Contact the software administrator.");
+			MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_USER_SERVICE),
+					ServerTranslate.tr(LanguageCodes.ERROR_CONTACT));
 		} catch (PBKDF2EncryptorException e) {
-			MessageManager.showError("Error encrypting the password.", "Contact the software administrator.");
+			MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_ENCRYPTINGPASSWORD),
+					ServerTranslate.tr(LanguageCodes.ERROR_CONTACT));
 		}
 
 		if (user != null) {
