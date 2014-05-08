@@ -4,4 +4,6 @@ import com.biit.abcd.persistence.entity.Form;
 
 public interface IFormDao extends IGenericDao<Form> {
 
+	int getLastVersion(Form form);
+
 }

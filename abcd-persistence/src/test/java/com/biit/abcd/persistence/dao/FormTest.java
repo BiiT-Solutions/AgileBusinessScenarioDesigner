@@ -1,6 +1,5 @@
 package com.biit.abcd.persistence.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.runner.RunWith;
@@ -13,7 +12,6 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,6 +22,8 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Autowired
 	private IFormDao formDao;
+
+	private Form form;
 
 	@Test(groups = { "formDao" })
 	public void testEmptyDatabase() {
@@ -45,7 +45,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(forms.get(0).getName(), DUMMY_FORM);
 	}
 
-	@Test(groups = { "answerDao" }, dependsOnMethods = "getDummyForm")
+	@Test(groups = { "formDao" }, dependsOnMethods = "getDummyForm")
 	public void removeDummyForm() {
 		List<Form> forms = formDao.getAll();
 		formDao.makeTransient(forms.get(0));
@@ -54,22 +54,34 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "removeDummyForm")
 	public void storeFormWithCategory() throws NotValidChildException {
-		Form form = new Form();
+		form = new Form();
 		form.setName(FULL_FORM);
 		Category category = new Category();
 		form.addChild(category);
-		System.out.println("Form childs : " + form.getChildren().size());
 		formDao.makePersistent(form);
 		Form retrievedForm = formDao.read(form.getId());
 
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
 	}
-	
-	@Test(groups = { "answerDao" }, dependsOnMethods = "storeFormWithCategory")
+
+	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
+	public void increaseVersion() {
+		Form oldForm = formDao.read(form.getId());
+		form.increaseVersion();
+		Assert.assertEquals(oldForm.getVersion() + 1, (int) form.getVersion());
+		formDao.makePersistent(form);
+		Assert.assertEquals(formDao.getLastVersion(oldForm), 2);
+		Assert.assertEquals(formDao.getLastVersion(oldForm), formDao.getLastVersion(form));
+	}
+
+	@Test(groups = { "formDao" }, dependsOnMethods = "increaseVersion")
 	public void removeForm() {
 		List<Form> forms = formDao.getAll();
-		formDao.makeTransient(forms.get(0));
+		for (Form form : forms) {
+			formDao.makeTransient(form);
+		}
 		Assert.assertEquals(formDao.getRowCount(), 0);
 	}
+
 }
