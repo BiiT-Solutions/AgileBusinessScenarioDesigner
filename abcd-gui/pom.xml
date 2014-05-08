@@ -51,6 +51,13 @@
 
 
 	<dependencies>
+	    <!-- Vaadin plugins -->
+		<!-- BiiT Calendar Widget -->
+		<dependency>
+			<groupId>com.biit.vaadin</groupId>
+			<artifactId>jointjs-diagram-builder</artifactId>
+			<version>${jointjs-widget.version}</version>
+		</dependency>
 		<!-- Core -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
