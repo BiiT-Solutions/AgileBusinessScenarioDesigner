@@ -16,6 +16,8 @@ public enum LanguageCodes {
 	ABOUT_US_BIIT("aboutUs.biit"),
 	ABOUT_US_REPORT("aboutUs.report"),
 	
+	FORM_TREE_PROPERTY_NAME("form.tree.property.name"),
+	
 	INFO_USER_LOG("info.userLog"),
 	INFO_USER_SESSION_EXPIRED("info.userSessionExpired"),
 	
