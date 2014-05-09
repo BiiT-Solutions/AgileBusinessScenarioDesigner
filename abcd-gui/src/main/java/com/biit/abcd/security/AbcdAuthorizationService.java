@@ -21,7 +21,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 
 @Component
-public final class AbcdAuthorizationService extends AuthorizationService {
+public class AbcdAuthorizationService extends AuthorizationService {
 
 	@Autowired
 	private IFormDao formDao;

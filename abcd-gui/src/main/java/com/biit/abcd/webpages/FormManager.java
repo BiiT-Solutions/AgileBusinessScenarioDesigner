@@ -43,6 +43,7 @@ public class FormManager extends WebPageComponent {
 	
 	private void createTable() {
 		formTable = new FormsCollapsibleTable();
+		formTable.initTable();
 		formTable.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -119450082492122880L;
 

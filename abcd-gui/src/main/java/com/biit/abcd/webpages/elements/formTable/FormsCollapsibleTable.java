@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -23,6 +23,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Property.ValueChangeNotifier;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -30,7 +31,6 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.Align;
 import com.vaadin.ui.VerticalLayout;
 
-@Component
 public class FormsCollapsibleTable extends VerticalLayout implements ValueChangeNotifier {
 	private static final long serialVersionUID = -5943739337345699263L;
 	private String columnName = "Name";
@@ -50,9 +50,10 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 	private IFormDao formDao;
 
 	public FormsCollapsibleTable() {
-		setLanguage();
-		initUi();
 		valueChangeListeners = new ArrayList<>();
+		// Add Vaadin conext to Spring, and get beans for DAOs.
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	private void setLanguage() {
@@ -66,13 +67,17 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 		columnModicationDate = ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_MODIFICATIONDATE);
 	}
 
-	private void initUi() {
+	/**
+	 * InitTable cannot be used in the constructor due to Spring uses the constructor before Vaadin.
+	 */
+	public void initTable() {
 		removeAllComponents();
 
 		setMargin(true);
 		setSpacing(true);
 		setSizeFull();
 
+		setLanguage();
 		initializeFormTable();
 		addComponent(formTable);
 	}

@@ -48,19 +48,21 @@ public class MessageManager {
 			AbcdLogger.errorMessage(MessageManager.class.getName(), e);
 		}
 
-		Notification notif = new Notification(caption, description, type);
+		if (UI.getCurrent() != null) {
+			Notification notif = new Notification(caption, description, type);
 
-		// Set the position.
-		notif.setPosition(position);
+			// Set the position.
+			notif.setPosition(position);
 
-		// Let it stay there until the user clicks it if is error message
-		if (type.equals(Notification.Type.ERROR_MESSAGE)) {
-			notif.setDelayMsec(-1);
-		} else {
-			notif.setDelayMsec(MESSAGE_DURATION_MILISECONDS);
+			// Let it stay there until the user clicks it if is error message
+			if (type.equals(Notification.Type.ERROR_MESSAGE)) {
+				notif.setDelayMsec(-1);
+			} else {
+				notif.setDelayMsec(MESSAGE_DURATION_MILISECONDS);
+			}
+
+			// Show it in the main window.
+			notif.show(UI.getCurrent().getPage());
 		}
-
-		// Show it in the main window.
-		notif.show(UI.getCurrent().getPage());
 	}
 }

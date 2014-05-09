@@ -72,6 +72,8 @@
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
+	<bean name="formDao" class="com.biit.abcd.persistence.dao.hibernate.FormDao"/>
 
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />
