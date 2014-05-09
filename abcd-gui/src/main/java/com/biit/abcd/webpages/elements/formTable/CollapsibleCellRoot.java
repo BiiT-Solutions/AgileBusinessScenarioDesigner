@@ -3,7 +3,6 @@ package com.biit.abcd.webpages.elements.formTable;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.webpages.elements.formTable.TableFormsCollapsible.CollapsibleCellLabel;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Alignment;
@@ -12,18 +11,18 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-class CollapsibleFormParent extends TableFormsCollapsible.CollapsibleCellLabel {
+class CollapsibleCellRoot extends CollapsibleCellLabel {
 	/**
 	 * 
 	 */
-	private final TableFormsCollapsible tableFormsCollapsible;
+	private final FormsCollapsibleTable tableFormsCollapsible;
 	private static final long serialVersionUID = 3002037698058869287L;
 	private List<Form> forms;
 	private Button uncollapsedButton;
 	private Button collapsedButton;
 	private Label label;
 
-	public CollapsibleFormParent(TableFormsCollapsible tableFormsCollapsible, List<Form> forms) {
+	public CollapsibleCellRoot(FormsCollapsibleTable tableFormsCollapsible, List<Form> forms) {
 		this.tableFormsCollapsible = tableFormsCollapsible;
 		this.forms = forms;
 		initUi();
@@ -32,7 +31,7 @@ class CollapsibleFormParent extends TableFormsCollapsible.CollapsibleCellLabel {
 
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
-				CollapsibleFormParent.this.tableFormsCollapsible.formTable.setValue(getForms());
+				CollapsibleCellRoot.this.tableFormsCollapsible.getFormTable().setValue(getForms());
 			}
 		});
 	}
@@ -107,7 +106,7 @@ class CollapsibleFormParent extends TableFormsCollapsible.CollapsibleCellLabel {
 		this.tableFormsCollapsible.addChildRows(forms);
 	}
 
-	public int compareTo(CollapsibleFormParent o) {
+	public int compareTo(CollapsibleCellRoot o) {
 		String ori = "";
 		String dest = "";
 
@@ -121,7 +120,7 @@ class CollapsibleFormParent extends TableFormsCollapsible.CollapsibleCellLabel {
 		return ori.compareTo(dest);
 	}
 
-	public int compareTo(CollapsibleFormLeaf o) {
+	public int compareTo(CollapsibleCellLeaf o) {
 		String ori = "";
 		String dest = "";
 
@@ -138,10 +137,10 @@ class CollapsibleFormParent extends TableFormsCollapsible.CollapsibleCellLabel {
 
 	@Override
 	public int compareTo(CollapsibleCellLabel o) {
-		if (o instanceof CollapsibleFormParent) {
-			return compareTo((CollapsibleFormParent) o);
+		if (o instanceof CollapsibleCellRoot) {
+			return compareTo((CollapsibleCellRoot) o);
 		} else {
-			return compareTo((CollapsibleFormLeaf) o);
+			return compareTo((CollapsibleCellLeaf) o);
 		}
 	}
 }

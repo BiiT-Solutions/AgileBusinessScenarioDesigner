@@ -31,7 +31,7 @@ import com.vaadin.ui.Table.Align;
 import com.vaadin.ui.VerticalLayout;
 
 @Component
-public class TableFormsCollapsible extends VerticalLayout implements ValueChangeNotifier {
+public class FormsCollapsibleTable extends VerticalLayout implements ValueChangeNotifier {
 	private static final long serialVersionUID = -5943739337345699263L;
 	private String columnName = "Name";
 	private String columnVersion = "Version";
@@ -49,7 +49,7 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 	@Autowired
 	private IFormDao formDao;
 
-	public TableFormsCollapsible() {
+	public FormsCollapsibleTable() {
 		setLanguage();
 		initUi();
 		valueChangeListeners = new ArrayList<>();
@@ -88,21 +88,21 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 		formTable.setNullSelectionAllowed(false);
 		formTable.setSizeFull();
 
-		formTable.addContainerProperty(TableFormColumns.NAME, CollapsibleCellLabel.class, null, columnName, null,
+		formTable.addContainerProperty(FormsTableColumns.NAME, CollapsibleCellLabel.class, null, columnName, null,
 				Align.LEFT);
-		formTable.addContainerProperty(TableFormColumns.VERSION, StringLabel.class, null, columnVersion, null,
+		formTable.addContainerProperty(FormsTableColumns.VERSION, StringLabel.class, null, columnVersion, null,
 				Align.CENTER);
-		formTable.addContainerProperty(TableFormColumns.ACCESS, StringLabel.class, null, columnAccess, null,
+		formTable.addContainerProperty(FormsTableColumns.ACCESS, StringLabel.class, null, columnAccess, null,
 				Align.CENTER);
-		formTable.addContainerProperty(TableFormColumns.USED_BY, StringLabel.class, null, columnUsedBy, null,
+		formTable.addContainerProperty(FormsTableColumns.USED_BY, StringLabel.class, null, columnUsedBy, null,
 				Align.CENTER);
-		formTable.addContainerProperty(TableFormColumns.CREATED_BY, StringLabel.class, null, columnCreatedBy, null,
+		formTable.addContainerProperty(FormsTableColumns.CREATED_BY, StringLabel.class, null, columnCreatedBy, null,
 				Align.CENTER);
-		formTable.addContainerProperty(TableFormColumns.CREATION_DATE, StringLabel.class, null, columnCreationDate,
+		formTable.addContainerProperty(FormsTableColumns.CREATION_DATE, StringLabel.class, null, columnCreationDate,
 				null, Align.CENTER);
-		formTable.addContainerProperty(TableFormColumns.MODIFIED_BY, StringLabel.class, null, columnModifiedBy, null,
+		formTable.addContainerProperty(FormsTableColumns.MODIFIED_BY, StringLabel.class, null, columnModifiedBy, null,
 				Align.CENTER);
-		formTable.addContainerProperty(TableFormColumns.MODIFICATION_DATE, StringLabel.class, null,
+		formTable.addContainerProperty(FormsTableColumns.MODIFICATION_DATE, StringLabel.class, null,
 				columnModicationDate, null, Align.CENTER);
 		// formTable.addContainerProperty(TableFormColumns.NAME, CollapsibleCellLabel.class, null);
 		// formTable.addContainerProperty(TableFormColumns.VERSION, StringLabel.class, null);
@@ -123,22 +123,22 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 		// formTable.setColumnAlignment(TableFormColumns.MODIFICATION_DATE, Align.CENTER);
 
 		formTable.setColumnCollapsingAllowed(true);
-		formTable.setColumnCollapsible(TableFormColumns.NAME, false);
-		formTable.setColumnCollapsible(TableFormColumns.VERSION, false);
-		formTable.setColumnCollapsible(TableFormColumns.ACCESS, true);
-		formTable.setColumnCollapsible(TableFormColumns.USED_BY, true);
-		formTable.setColumnCollapsible(TableFormColumns.CREATED_BY, true);
-		formTable.setColumnCollapsible(TableFormColumns.CREATION_DATE, true);
-		formTable.setColumnCollapsible(TableFormColumns.MODIFIED_BY, true);
-		formTable.setColumnCollapsible(TableFormColumns.MODIFICATION_DATE, true);
-		formTable.setColumnCollapsed(TableFormColumns.CREATED_BY, true);
-		formTable.setColumnCollapsed(TableFormColumns.CREATION_DATE, true);
-		formTable.setColumnCollapsed(TableFormColumns.MODIFIED_BY, true);
+		formTable.setColumnCollapsible(FormsTableColumns.NAME, false);
+		formTable.setColumnCollapsible(FormsTableColumns.VERSION, false);
+		formTable.setColumnCollapsible(FormsTableColumns.ACCESS, true);
+		formTable.setColumnCollapsible(FormsTableColumns.USED_BY, true);
+		formTable.setColumnCollapsible(FormsTableColumns.CREATED_BY, true);
+		formTable.setColumnCollapsible(FormsTableColumns.CREATION_DATE, true);
+		formTable.setColumnCollapsible(FormsTableColumns.MODIFIED_BY, true);
+		formTable.setColumnCollapsible(FormsTableColumns.MODIFICATION_DATE, true);
+		formTable.setColumnCollapsed(FormsTableColumns.CREATED_BY, true);
+		formTable.setColumnCollapsed(FormsTableColumns.CREATION_DATE, true);
+		formTable.setColumnCollapsed(FormsTableColumns.MODIFIED_BY, true);
 
-		formTable.setColumnWidth(TableFormColumns.VERSION, 45);
-		formTable.setColumnWidth(TableFormColumns.ACCESS, 55);
-		formTable.setColumnWidth(TableFormColumns.USED_BY, 65);
-		formTable.setColumnWidth(TableFormColumns.MODIFICATION_DATE, 130);
+		formTable.setColumnWidth(FormsTableColumns.VERSION, 45);
+		formTable.setColumnWidth(FormsTableColumns.ACCESS, 55);
+		formTable.setColumnWidth(FormsTableColumns.USED_BY, 65);
+		formTable.setColumnWidth(FormsTableColumns.MODIFICATION_DATE, 130);
 
 		formTable.addValueChangeListener(new ValueChangeListener() {
 
@@ -147,11 +147,11 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				if (event.getProperty().getValue() instanceof Form) {
-					UserSelectedRow.getInstance().setSelected(UserSessionHandler.getUser(),
+					UserSelectedTableRow.getInstance().setSelected(UserSessionHandler.getUser(),
 							(Form) event.getProperty().getValue());
 					sendValueChangeEvent((Form) event.getProperty().getValue());
 				} else {
-					UserSelectedRow.getInstance().setSelected(UserSessionHandler.getUser(), null);
+					UserSelectedTableRow.getInstance().setSelected(UserSessionHandler.getUser(), null);
 					sendValueChangeEvent(null);
 				}
 			}
@@ -183,7 +183,7 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 		if (forms.isEmpty()) {
 			return;
 		}
-		formTable.addItem(new Object[] { new CollapsibleFormParent(this, forms), null, null, null, null, null, null,
+		formTable.addItem(new Object[] { new CollapsibleCellRoot(this, forms), null, null, null, null, null, null,
 				null, null, null }, forms);
 	}
 
@@ -197,17 +197,17 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 			if (newItem == null) {
 				return;
 			}
-			newItem.getItemProperty(TableFormColumns.NAME).setValue(new CollapsibleFormLeaf(this, form));
-			newItem.getItemProperty(TableFormColumns.VERSION).setValue(new StringLabel(form.getVersion().toString()));
-			newItem.getItemProperty(TableFormColumns.ACCESS).setValue(new StringLabel(getFormPermissionsTag(form)));
-			newItem.getItemProperty(TableFormColumns.USED_BY).setValue(new StringLabel(""));
-			newItem.getItemProperty(TableFormColumns.CREATED_BY).setValue(
+			newItem.getItemProperty(FormsTableColumns.NAME).setValue(new CollapsibleCellLeaf(this, form));
+			newItem.getItemProperty(FormsTableColumns.VERSION).setValue(new StringLabel(form.getVersion().toString()));
+			newItem.getItemProperty(FormsTableColumns.ACCESS).setValue(new StringLabel(getFormPermissionsTag(form)));
+			newItem.getItemProperty(FormsTableColumns.USED_BY).setValue(new StringLabel(""));
+			newItem.getItemProperty(FormsTableColumns.CREATED_BY).setValue(
 					new StringLabel(form.getCreatedBy().getEmailAddress()));
-			newItem.getItemProperty(TableFormColumns.CREATION_DATE).setValue(
+			newItem.getItemProperty(FormsTableColumns.CREATION_DATE).setValue(
 					new StringLabel(DateManager.convertDateToString(form.getCreationTime())));
-			newItem.getItemProperty(TableFormColumns.MODIFIED_BY).setValue(
+			newItem.getItemProperty(FormsTableColumns.MODIFIED_BY).setValue(
 					new StringLabel(form.getUpdatedBy().getEmailAddress()));
-			newItem.getItemProperty(TableFormColumns.MODIFICATION_DATE).setValue(
+			newItem.getItemProperty(FormsTableColumns.MODIFICATION_DATE).setValue(
 					new StringLabel(DateManager.convertDateToString(form.getUpdateTime())));
 		}
 	}
@@ -279,7 +279,7 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 	 * This function selects the last form used by the user or the first.
 	 */
 	public void selectLastUsedForm() {
-		Long selectedFormId = UserSelectedRow.getInstance().getSelectedFormId(UserSessionHandler.getUser());
+		Long selectedFormId = UserSelectedTableRow.getInstance().getSelectedFormId(UserSessionHandler.getUser());
 		if (selectedFormId != null) {
 			// Update form with new object if the form has change.
 			Form form = formDao.read(selectedFormId);
@@ -300,7 +300,7 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 		}
 		List<Form> forms = formMap.get(form.getName());
 		if (forms != null) {
-			((CollapsibleFormParent) formTable.getContainerProperty(forms, TableFormColumns.NAME).getValue())
+			((CollapsibleCellRoot) formTable.getContainerProperty(forms, FormsTableColumns.NAME).getValue())
 					.uncollapse();
 		}
 	}
@@ -331,10 +331,6 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 
 	public int getNumberOfRows() {
 		return formTable.getItemIds().size();
-	}
-
-	abstract class CollapsibleCellLabel extends HorizontalLayout implements Comparable<CollapsibleCellLabel> {
-		private static final long serialVersionUID = -721622752018794079L;
 	}
 
 	@Override
@@ -382,5 +378,9 @@ public class TableFormsCollapsible extends VerticalLayout implements ValueChange
 			addComponent(textLabel);
 			setComponentAlignment(textLabel, Alignment.MIDDLE_LEFT);
 		}
+	}
+
+	public Table getFormTable() {
+		return formTable;
 	}
 }

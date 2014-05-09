@@ -1,23 +1,19 @@
 package com.biit.abcd.webpages.elements.formTable;
 
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.webpages.elements.formTable.TableFormsCollapsible.CollapsibleCellLabel;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Label;
 
-class CollapsibleFormLeaf extends TableFormsCollapsible.CollapsibleCellLabel {
-	/**
-	 * 
-	 */
-	private final TableFormsCollapsible tableFormsCollapsible;
+public class CollapsibleCellLeaf extends CollapsibleCellLabel {
 	private static final long serialVersionUID = 712210189357730840L;
+	private final FormsCollapsibleTable tableFormsCollapsible;
 	private Form form;
 	private Label label;
 
-	public CollapsibleFormLeaf(TableFormsCollapsible tableFormsCollapsible, Form form) {
+	public CollapsibleCellLeaf(FormsCollapsibleTable tableFormsCollapsible, Form form) {
 		this.tableFormsCollapsible = tableFormsCollapsible;
 		this.form = form;
 		initUi();
@@ -26,12 +22,12 @@ class CollapsibleFormLeaf extends TableFormsCollapsible.CollapsibleCellLabel {
 
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
-				CollapsibleFormLeaf.this.tableFormsCollapsible.formTable.setValue(getForm());
+				CollapsibleCellLeaf.this.tableFormsCollapsible.getFormTable().setValue(getForm());
 			}
 		});
 	}
 
-	Form getForm() {
+	protected Form getForm() {
 		return form;
 	}
 
@@ -53,9 +49,9 @@ class CollapsibleFormLeaf extends TableFormsCollapsible.CollapsibleCellLabel {
 
 	@Override
 	public int compareTo(CollapsibleCellLabel o) {
-		if (o instanceof CollapsibleFormParent) {
+		if (o instanceof CollapsibleCellRoot) {
 			// It's a form list
-			CollapsibleFormParent cell = (CollapsibleFormParent) o;
+			CollapsibleCellRoot cell = (CollapsibleCellRoot) o;
 			if (cell.getName().equals(form.getName())) {
 				// If they have the same name
 				return 0;
@@ -64,7 +60,7 @@ class CollapsibleFormLeaf extends TableFormsCollapsible.CollapsibleCellLabel {
 			}
 		} else {
 			// It's a form
-			CollapsibleFormLeaf cell = (CollapsibleFormLeaf) o;
+			CollapsibleCellLeaf cell = (CollapsibleCellLeaf) o;
 			if (form.getName().equals(cell.getForm().getName())) {
 				// if equals, then version number
 				return form.getVersion().compareTo(cell.getForm().getVersion());

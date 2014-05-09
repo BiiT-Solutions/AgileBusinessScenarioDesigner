@@ -8,15 +8,15 @@ import com.liferay.portal.model.User;
 /**
  * Stores the last selected row for a specific user.
  */
-class UserSelectedRow {
-	private static UserSelectedRow instance = new UserSelectedRow();
+class UserSelectedTableRow {
+	private static UserSelectedTableRow instance = new UserSelectedTableRow();
 	// User has selected a form.
 	private HashMap<Long, Long> selectedForm = new HashMap<Long, Long>();
 
-	private UserSelectedRow() {
+	private UserSelectedTableRow() {
 	}
 
-	protected static UserSelectedRow getInstance() {
+	protected static UserSelectedTableRow getInstance() {
 		return instance;
 	}
 
