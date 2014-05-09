@@ -1,10 +1,10 @@
 package com.biit.abcd.webpages;
 
+import java.util.Arrays;
 import java.util.List;
 
-import com.biit.abcd.component.SecuredWebPageComponent;
-import com.biit.abcd.component.WebPageComponent;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.SecuredWebPageComponent;
 import com.biit.abcd.webpages.elements.formTable.FormsCollapsibleTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -45,9 +45,10 @@ public class FormManager extends SecuredWebPageComponent {
 
 		// Selected last row must be done after creation of buttons.
 		formTable.selectLastUsedForm();
-		
+
 		mainPanel.setContent(rootLayout);
-		mainPanel.setWidth("100%");
+		mainPanel.setWidth("98%");
+		mainPanel.setHeight("98%");
 	}
 
 	private void createTable() {
@@ -65,7 +66,7 @@ public class FormManager extends SecuredWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return DActivity.READ;
+		return Arrays.asList(DActivity.READ);
 	}
 
 }

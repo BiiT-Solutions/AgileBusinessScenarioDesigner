@@ -1,4 +1,4 @@
-package com.biit.abcd.component;
+package com.biit.abcd.webpages.components;
 
 import java.util.List;
 

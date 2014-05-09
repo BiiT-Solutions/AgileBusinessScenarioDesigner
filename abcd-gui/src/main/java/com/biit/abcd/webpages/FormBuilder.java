@@ -1,7 +1,7 @@
 package com.biit.abcd.webpages;
 
-import com.biit.abcd.component.FormTreeTable;
-import com.biit.abcd.component.WebPageComponent;
+import com.biit.abcd.webpages.components.FormTreeTable;
+import com.biit.abcd.webpages.components.WebPageComponent;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 

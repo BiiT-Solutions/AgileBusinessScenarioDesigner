@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.basic;
+package com.biit.abcd.webpages.components;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

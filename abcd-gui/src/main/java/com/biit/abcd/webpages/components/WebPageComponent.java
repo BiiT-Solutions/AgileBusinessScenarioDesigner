@@ -1,4 +1,4 @@
-package com.biit.abcd.component;
+package com.biit.abcd.webpages.components;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;

@@ -1,6 +1,6 @@
 package com.biit.abcd.webpages;
 
-import com.biit.abcd.component.WebPageComponent;
+import com.biit.abcd.webpages.components.WebPageComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.VerticalLayout;
