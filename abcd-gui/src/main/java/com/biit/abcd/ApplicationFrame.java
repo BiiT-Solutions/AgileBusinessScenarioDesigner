@@ -2,6 +2,8 @@ package com.biit.abcd;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -36,11 +38,17 @@ public class ApplicationFrame extends UI {
 
 			@Override
 			public boolean beforeViewChange(ViewChangeEvent event) {
+				setCurrentView(event.getNewView());
 				return true;
 			}
 
 			@Override
 			public void afterViewChange(ViewChangeEvent event) {
+				if (UserSessionHandler.getUser() != null) {
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has change view to '"
+							+ event.getNewView().getClass().getName() + "'.");
+				}
 			}
 		});
 	}
@@ -49,7 +57,7 @@ public class ApplicationFrame extends UI {
 	private void defineWebPages() {
 		// Create a navigator to control the views
 		navigator = new Navigator(this, this);
-		// Define login page.
+		// Define login page as first one.
 		navigator.addView("", WebMap.getLoginPage().getWebPageJavaClass());
 		// Create and register the other web pages.
 		for (WebMap page : WebMap.values()) {

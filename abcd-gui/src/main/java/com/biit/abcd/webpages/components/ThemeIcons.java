@@ -34,7 +34,13 @@ public enum ThemeIcons {
 
 	EXPAND("appbar.section.expand.svg"),
 
-	COLLAPSE("appbar.section.collapse.svg");
+	COLLAPSE("appbar.section.collapse.svg"),
+	
+	FORM_MANAGER_PAGE("appbar.column.one.svg"),
+	
+	TREE_DESIGNER_PAGE("appbar.debug.step.into.svg"),
+	
+	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg");
 
 	private String value;
 

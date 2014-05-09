@@ -3,70 +3,61 @@ package com.biit.abcd.webpages;
 import java.util.Arrays;
 import java.util.List;
 
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
-import com.biit.abcd.webpages.components.SecuredWebPageComponent;
+import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formTable.FormsCollapsibleTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
 
-public class FormManager extends SecuredWebPageComponent {
+public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
 	private FormsCollapsibleTable formTable;
-
-	private VerticalLayout rootLayout;
+	private Form form;
 
 	public FormManager() {
-		rootLayout = new VerticalLayout();
-		rootLayout.setSizeFull();
-		setCompositionRoot(rootLayout);
-
-		setSizeFull();
+		super();
+		updateButtons(false);
 	}
 
 	@Override
 	public void securedEnter(ViewChangeEvent event) {
-		Panel mainPanel = new Panel();
-
-		rootLayout.addComponent(mainPanel);
-		rootLayout.setComponentAlignment(mainPanel, Alignment.MIDDLE_CENTER);
-
-		VerticalLayout rootLayout = new VerticalLayout();
-		rootLayout.setMargin(true);
-		rootLayout.setSpacing(false);
-
-		createTable();
-
-		rootLayout.addComponent(formTable);
-		rootLayout.setComponentAlignment(formTable, Alignment.MIDDLE_CENTER);
-
-		// Selected last row must be done after creation of buttons.
+		setAsOneWindowWithBottomMenu();
+		formTable = createTable();
+		getWorkingAreaLayout().addComponent(formTable);
+		getWorkingAreaLayout().setComponentAlignment(formTable, Alignment.MIDDLE_CENTER);
 		formTable.selectLastUsedForm();
-
-		mainPanel.setContent(rootLayout);
-		mainPanel.setWidth("98%");
-		mainPanel.setHeight("50%");
 	}
 
-	private void createTable() {
-		formTable = new FormsCollapsibleTable();
+	private FormsCollapsibleTable createTable() {
+		FormsCollapsibleTable formTable = new FormsCollapsibleTable();
 		formTable.initTable();
 		formTable.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -119450082492122880L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				// updateButtons();
+				updateButtons(getForm() != null);
 			}
 		});
+		return formTable;
 	}
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
 		return Arrays.asList(DActivity.READ);
+	}
+
+	@Override
+	public Form getForm() {
+		return formTable.getValue();
+	}
+
+	@Override
+	public void setForm(Form form) {
+		this.form = form;
 	}
 
 }

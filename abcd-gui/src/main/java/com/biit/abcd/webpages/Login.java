@@ -43,7 +43,7 @@ public class Login extends WebPageComponent {
 		rootLayout.setSizeFull();
 		setCompositionRoot(rootLayout);
 		setSizeFull();
-		
+
 		Panel loginPanel = buildLoginForm();
 		rootLayout.addComponent(loginPanel);
 		rootLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);

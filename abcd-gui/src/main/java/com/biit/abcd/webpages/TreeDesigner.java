@@ -4,21 +4,21 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.FormTreeTable;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
-public class FormDiagramBuilder extends FormWebPageComponent {
+public class TreeDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 
-	private DiagramBuilder diagramBuilder;
+	private FormTreeTable formTreeTable;
 
 	private Form form;
 
-	public FormDiagramBuilder() {
-		diagramBuilder = new DiagramBuilder();
-		diagramBuilder.setSizeFull();
-		getWorkingAreaLayout().addComponent(diagramBuilder);
+	public TreeDesigner() {
+		formTreeTable = new FormTreeTable();
+		formTreeTable.setSizeFull();
+		getWorkingAreaLayout().addComponent(formTreeTable);
 	}
 
 	@Override
