@@ -7026,3 +7026,18 @@ body .abcd.v-app .v-app-loading {
 	background: transparent repeat-x;
 	background-image: url(../reindeer/window/img/black/content-bg.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
 }
+
+/*Css rule to change icon size*/
+.v-button-iconbutton-size-small {
+	height: 16px;
+}
+
+/*Css rule to change icon size*/
+.v-button-iconbutton-size-medium {
+	height: 32px;
+}
+
+/*Css rule to change icon size*/
+.v-button-iconbutton-size-big {
+	height: 64px;
+}

@@ -12,9 +12,11 @@ import com.liferay.portal.model.User;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public abstract class SecuredWebPageComponent extends WebPageComponent {
+	
+	public abstract void securedEnter(ViewChangeEvent event);
 
 	@Override
-	public void enter(ViewChangeEvent event) {
+	public final void enter(ViewChangeEvent event) {
 		// Check if the user is logged in. If not, redirect to main page.
 		try {
 			User user = UserSessionHandler.getUser();
@@ -38,7 +40,11 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 		} catch (NullPointerException npe) {
 			ApplicationFrame.navigateTo(WebMap.getLoginPage());
 		}
+		
+		securedEnter(event);
 	}
+	
+	
 
 	/**
 	 * Authorization required to access to this page. If user is not allowed, it will be redirect to login screen.

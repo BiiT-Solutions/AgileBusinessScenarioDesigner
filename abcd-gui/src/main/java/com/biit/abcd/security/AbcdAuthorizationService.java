@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
@@ -19,11 +20,10 @@ import com.biit.liferay.security.IActivity;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.vaadin.server.VaadinServlet;
 
-@Component
 public class AbcdAuthorizationService extends AuthorizationService {
 
-	@Autowired
 	private IFormDao formDao;
 
 	/**
@@ -146,6 +146,10 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	public AbcdAuthorizationService() {
 		super();
 		authorizationFormPool = new AuthorizationByFormPool();
+
+		// Add Vaadin conext to Spring, and get beans for DAOs.
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	public static AbcdAuthorizationService getInstance() {

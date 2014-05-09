@@ -120,12 +120,17 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 		formTable.setColumnCollapsible(FormsTableColumns.MODIFICATION_DATE, true);
 		formTable.setColumnCollapsed(FormsTableColumns.CREATED_BY, true);
 		formTable.setColumnCollapsed(FormsTableColumns.CREATION_DATE, true);
-		formTable.setColumnCollapsed(FormsTableColumns.MODIFIED_BY, true);
 
-		formTable.setColumnWidth(FormsTableColumns.VERSION, 45);
-		formTable.setColumnWidth(FormsTableColumns.ACCESS, 55);
-		formTable.setColumnWidth(FormsTableColumns.USED_BY, 65);
-		formTable.setColumnWidth(FormsTableColumns.MODIFICATION_DATE, 130);
+		formTable.setColumnExpandRatio(FormsTableColumns.NAME, 3);
+		formTable.setColumnExpandRatio(FormsTableColumns.VERSION, (float) 0.5);
+		formTable.setColumnExpandRatio(FormsTableColumns.ACCESS, 1);
+		formTable.setColumnExpandRatio(FormsTableColumns.USED_BY, 1);
+		formTable.setColumnExpandRatio(FormsTableColumns.CREATED_BY, 1);
+		formTable.setColumnExpandRatio(FormsTableColumns.CREATION_DATE, 1);
+		formTable.setColumnExpandRatio(FormsTableColumns.MODIFIED_BY, 1);
+		formTable.setColumnExpandRatio(FormsTableColumns.MODIFICATION_DATE, 1);
+		formTable.setColumnExpandRatio(FormsTableColumns.CREATED_BY, 1);
+		formTable.setColumnExpandRatio(FormsTableColumns.CREATION_DATE, 1);
 
 		formTable.addValueChangeListener(new ValueChangeListener() {
 
@@ -170,8 +175,8 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 		if (forms.isEmpty()) {
 			return;
 		}
-		formTable.addItem(new Object[] { new CollapsibleCellRoot(this, forms), null, null, null, null, null, null,
-				null, null, null }, forms);
+		formTable.addItem(
+				new Object[] { new CollapsibleCellRoot(this, forms), null, null, null, null, null, null, null }, forms);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -188,14 +193,22 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 			newItem.getItemProperty(FormsTableColumns.VERSION).setValue(new StringLabel(form.getVersion().toString()));
 			newItem.getItemProperty(FormsTableColumns.ACCESS).setValue(new StringLabel(getFormPermissionsTag(form)));
 			newItem.getItemProperty(FormsTableColumns.USED_BY).setValue(new StringLabel(""));
-			newItem.getItemProperty(FormsTableColumns.CREATED_BY).setValue(
-					new StringLabel(form.getCreatedBy().getEmailAddress()));
-			newItem.getItemProperty(FormsTableColumns.CREATION_DATE).setValue(
-					new StringLabel(DateManager.convertDateToString(form.getCreationTime())));
-			newItem.getItemProperty(FormsTableColumns.MODIFIED_BY).setValue(
-					new StringLabel(form.getUpdatedBy().getEmailAddress()));
-			newItem.getItemProperty(FormsTableColumns.MODIFICATION_DATE).setValue(
-					new StringLabel(DateManager.convertDateToString(form.getUpdateTime())));
+			if (form.getCreatedBy() != null) {
+				newItem.getItemProperty(FormsTableColumns.CREATED_BY).setValue(
+						new StringLabel(form.getCreatedBy().getEmailAddress()));
+			}
+			if (form.getCreationTime() != null) {
+				newItem.getItemProperty(FormsTableColumns.CREATION_DATE).setValue(
+						new StringLabel(DateManager.convertDateToString(form.getCreationTime())));
+			}
+			if (form.getUpdatedBy() != null) {
+				newItem.getItemProperty(FormsTableColumns.MODIFIED_BY).setValue(
+						new StringLabel(form.getUpdatedBy().getEmailAddress()));
+			}
+			if (form.getUpdateTime() != null) {
+				newItem.getItemProperty(FormsTableColumns.MODIFICATION_DATE).setValue(
+						new StringLabel(DateManager.convertDateToString(form.getUpdateTime())));
+			}
 		}
 	}
 

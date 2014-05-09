@@ -28,7 +28,7 @@ public class FormManager extends SecuredWebPageComponent {
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event) {
+	public void securedEnter(ViewChangeEvent event) {
 		Panel mainPanel = new Panel();
 
 		rootLayout.addComponent(mainPanel);
@@ -48,7 +48,7 @@ public class FormManager extends SecuredWebPageComponent {
 
 		mainPanel.setContent(rootLayout);
 		mainPanel.setWidth("98%");
-		mainPanel.setHeight("98%");
+		mainPanel.setHeight("50%");
 	}
 
 	private void createTable() {

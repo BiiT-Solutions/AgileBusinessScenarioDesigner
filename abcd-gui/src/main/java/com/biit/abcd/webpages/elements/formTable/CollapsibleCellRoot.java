@@ -3,13 +3,16 @@ package com.biit.abcd.webpages.elements.formTable;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.webpages.components.IconButton;
+import com.biit.abcd.webpages.components.IconSize;
+import com.biit.abcd.webpages.components.ThemeIcons;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Label;
 
 class CollapsibleCellRoot extends CollapsibleCellLabel {
 	/**
@@ -18,8 +21,8 @@ class CollapsibleCellRoot extends CollapsibleCellLabel {
 	private final FormsCollapsibleTable tableFormsCollapsible;
 	private static final long serialVersionUID = 3002037698058869287L;
 	private List<Form> forms;
-	private Button uncollapsedButton;
-	private Button collapsedButton;
+	private Button collapseButton;
+	private Button expandButton;
 	private Label label;
 
 	public CollapsibleCellRoot(FormsCollapsibleTable tableFormsCollapsible, List<Form> forms) {
@@ -56,7 +59,7 @@ class CollapsibleCellRoot extends CollapsibleCellLabel {
 		setSpacing(true);
 		setSizeUndefined();
 
-		collapsedButton = new Button("Expand forms", new ClickListener() {
+		expandButton = new IconButton(ThemeIcons.EXPAND.getFile(), "Expand forms", IconSize.SMALL, new ClickListener() {
 			private static final long serialVersionUID = -8790931587642079896L;
 
 			@Override
@@ -65,7 +68,7 @@ class CollapsibleCellRoot extends CollapsibleCellLabel {
 			}
 		});
 
-		uncollapsedButton = new Button("Contract forms", new ClickListener() {
+		collapseButton = new IconButton(ThemeIcons.COLLAPSE.getFile(), "Contract forms", IconSize.SMALL, new ClickListener() {
 			private static final long serialVersionUID = 3722311031488330957L;
 
 			@Override
@@ -80,16 +83,16 @@ class CollapsibleCellRoot extends CollapsibleCellLabel {
 			label = new Label("");
 		}
 
-		addComponent(collapsedButton);
-		setComponentAlignment(collapsedButton, Alignment.MIDDLE_LEFT);
+		addComponent(expandButton);
+		setComponentAlignment(expandButton, Alignment.MIDDLE_LEFT);
 		addComponent(label);
 		setComponentAlignment(label, Alignment.MIDDLE_LEFT);
 	}
 
 	private void collapse() {
 		removeAllComponents();
-		addComponent(collapsedButton);
-		setComponentAlignment(collapsedButton, Alignment.MIDDLE_LEFT);
+		addComponent(expandButton);
+		setComponentAlignment(expandButton, Alignment.MIDDLE_LEFT);
 		addComponent(label);
 		setComponentAlignment(label, Alignment.MIDDLE_LEFT);
 		markAsDirty();
@@ -98,8 +101,8 @@ class CollapsibleCellRoot extends CollapsibleCellLabel {
 
 	void uncollapse() {
 		removeAllComponents();
-		addComponent(uncollapsedButton);
-		setComponentAlignment(uncollapsedButton, Alignment.MIDDLE_LEFT);
+		addComponent(collapseButton);
+		setComponentAlignment(collapseButton, Alignment.MIDDLE_LEFT);
 		addComponent(label);
 		setComponentAlignment(label, Alignment.MIDDLE_LEFT);
 		markAsDirty();
