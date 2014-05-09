@@ -64,4 +64,6 @@
     <inherits name="com.biit.jointjs.diagram.builder.JointJsWidgetBuilder" />
 
     <inherits name="com.biit.jointjs.diagram.builder.JointJsWidgetBuilder" />
+
+    <inherits name="com.biit.jointjs.diagram.builder.JointJsWidgetBuilder" />
 </module>

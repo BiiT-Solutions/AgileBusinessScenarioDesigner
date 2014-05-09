@@ -46,7 +46,6 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 	private Table formTable;
 	private List<ValueChangeListener> valueChangeListeners;
 
-	@Autowired
 	private IFormDao formDao;
 
 	public FormsCollapsibleTable() {
@@ -109,23 +108,6 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 				Align.CENTER);
 		formTable.addContainerProperty(FormsTableColumns.MODIFICATION_DATE, StringLabel.class, null,
 				columnModicationDate, null, Align.CENTER);
-		// formTable.addContainerProperty(TableFormColumns.NAME, CollapsibleCellLabel.class, null);
-		// formTable.addContainerProperty(TableFormColumns.VERSION, StringLabel.class, null);
-		// formTable.addContainerProperty(TableFormColumns.ACCESS, StringLabel.class, null);
-		// formTable.addContainerProperty(TableFormColumns.USED_BY, StringLabel.class, null);
-		// formTable.addContainerProperty(TableFormColumns.CREATED_BY, StringLabel.class, null);
-		// formTable.addContainerProperty(TableFormColumns.CREATION_DATE, StringLabel.class, null);
-		// formTable.addContainerProperty(TableFormColumns.MODIFIED_BY, StringLabel.class, null);
-		// formTable.addContainerProperty(TableFormColumns.MODIFICATION_DATE, StringLabel.class, null);
-		//
-		// formTable.setColumnAlignment(TableFormColumns.NAME, Align.LEFT);
-		// formTable.setColumnAlignment(TableFormColumns.VERSION, Align.CENTER);
-		// formTable.setColumnAlignment(TableFormColumns.ACCESS, Align.CENTER);
-		// formTable.setColumnAlignment(TableFormColumns.USED_BY, Align.CENTER);
-		// formTable.setColumnAlignment(TableFormColumns.CREATED_BY, Align.CENTER);
-		// formTable.setColumnAlignment(TableFormColumns.CREATION_DATE, Align.CENTER);
-		// formTable.setColumnAlignment(TableFormColumns.MODIFIED_BY, Align.CENTER);
-		// formTable.setColumnAlignment(TableFormColumns.MODIFICATION_DATE, Align.CENTER);
 
 		formTable.setColumnCollapsingAllowed(true);
 		formTable.setColumnCollapsible(FormsTableColumns.NAME, false);

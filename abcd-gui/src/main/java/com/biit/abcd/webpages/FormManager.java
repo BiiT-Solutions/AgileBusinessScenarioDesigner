@@ -1,7 +1,11 @@
 package com.biit.abcd.webpages;
 
+import java.util.List;
+
+import com.biit.abcd.component.SecuredWebPageComponent;
+import com.biit.abcd.component.WebPageComponent;
+import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.elements.formTable.FormsCollapsibleTable;
-import com.biit.abcs.component.WebPageComponent;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -9,20 +13,20 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
-public class FormManager extends WebPageComponent {
+public class FormManager extends SecuredWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
 	private FormsCollapsibleTable formTable;
 
 	private VerticalLayout rootLayout;
-	
+
 	public FormManager() {
 		rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
 		setCompositionRoot(rootLayout);
-		
+
 		setSizeFull();
 	}
-	
+
 	@Override
 	public void enter(ViewChangeEvent event) {
 		Panel mainPanel = new Panel();
@@ -39,8 +43,13 @@ public class FormManager extends WebPageComponent {
 		rootLayout.addComponent(formTable);
 		rootLayout.setComponentAlignment(formTable, Alignment.MIDDLE_CENTER);
 
+		// Selected last row must be done after creation of buttons.
+		formTable.selectLastUsedForm();
+		
+		mainPanel.setContent(rootLayout);
+		mainPanel.setWidth("100%");
 	}
-	
+
 	private void createTable() {
 		formTable = new FormsCollapsibleTable();
 		formTable.initTable();
@@ -49,9 +58,14 @@ public class FormManager extends WebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				//updateButtons();
+				// updateButtons();
 			}
 		});
+	}
+
+	@Override
+	public List<DActivity> accessAuthorizationsRequired() {
+		return DActivity.READ;
 	}
 
 }
