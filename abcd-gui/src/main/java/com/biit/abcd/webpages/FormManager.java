@@ -70,14 +70,8 @@ public class FormManager extends FormWebPageComponent {
 		;
 	}
 
-	public void addForm() {
-		Form form = new Form();
-		addForm(form);
-	}
-
 	public void addForm(Form form) {
 		formTable.addNewForm(form);
-		upperMenu.disableNewFormButton();
 	}
 
 }

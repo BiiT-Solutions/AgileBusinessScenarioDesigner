@@ -9,10 +9,12 @@ import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
 import com.biit.abcd.webpages.components.UpperMenu;
+import com.biit.abcd.webpages.components.WindowNewForm;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.UI;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private Button newFormButton;
@@ -31,6 +33,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
+						UI.getCurrent().addWindow(new WindowNewForm(parent));
 						parent.addForm();
 					}
 				});
@@ -42,9 +45,5 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void setEnabledButtons() {
 		newFormButton.setEnabled(AbcdAuthorizationService.getInstance().isAuthorizedActivity(
 				UserSessionHandler.getUser(), DActivity.FORM_CREATE));
-	}
-
-	public void disableNewFormButton() {
-		newFormButton.setEnabled(false);
 	}
 }

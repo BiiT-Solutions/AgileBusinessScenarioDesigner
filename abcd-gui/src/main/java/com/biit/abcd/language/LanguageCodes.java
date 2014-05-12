@@ -38,6 +38,11 @@ public enum LanguageCodes {
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	
+	WINDOW_NEWFORM_NAME_TEXTFIELD("windowNewForm.name.textField"),
+	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
+	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
+	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
+	
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_ACCESS("error.access"),
 	ERROR_BADUSERPSWD("error.login.badUserPassword"),
