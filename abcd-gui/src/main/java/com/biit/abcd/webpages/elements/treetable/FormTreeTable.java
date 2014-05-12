@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components;
+package com.biit.abcd.webpages.elements.treetable;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ import com.vaadin.ui.TreeTable;
 public class FormTreeTable extends TreeTable {
 
 	private static final long serialVersionUID = -6949123334668973540L;
+	private Form form;
 
 	enum FormTreeTableProperties {
 		ELEMENT_NAME
@@ -36,18 +37,17 @@ public class FormTreeTable extends TreeTable {
 				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 	}
 
-	public void loadFormElement(TreeObject element) {
+	private void loadForm(TreeObject element) {
 		addItem(element);
 		List<TreeObject> children = element.getChildren();
 		for (TreeObject child : children) {
-			loadFormElement(child);
+			loadForm(child);
 			setParent(child, element);
 		}
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -59,8 +59,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
+	 * members.
 	 * 
 	 * @param element
 	 */
@@ -72,8 +72,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't
-	 * be defined, then raises a {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
+	 * {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -99,5 +99,19 @@ public class FormTreeTable extends TreeTable {
 			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
 		}
 		return name;
+	}
+
+	public void setForm(Form form) {
+		this.form = form;
+		this.removeAllItems();
+		loadForm(form);
+	}
+
+	public TreeObject getValue() {
+		Object value = super.getValue();
+		if (value instanceof TreeObject) {
+			return (TreeObject) value;
+		}
+		return null;
 	}
 }

@@ -40,6 +40,14 @@ public enum ThemeIcons {
 	
 	TREE_DESIGNER_PAGE("appbar.debug.step.into.svg"),
 	
+	TREE_DESIGNER_ADD_CATEGORY("appbar.category.add.svg"),
+	
+	TREE_DESIGNER_ADD_QUESTION("appbar.question.add.svg"),
+	
+	TREE_DESIGNER_ADD_GROUP("appbar.group.add.svg"),
+	
+	TREE_DESIGNER_ADD_ANSWER("appbar.answer.add.svg"),
+	
 	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg"),
 	
 	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg");

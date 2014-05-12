@@ -69,6 +69,7 @@ public abstract class BottomMenu extends Panel {
 
 					}
 				});
+		droolsEditorButton.setEnabled(false);
 		menuLayout.addComponent(droolsEditorButton);
 		menuLayout.setComponentAlignment(droolsEditorButton, Alignment.MIDDLE_CENTER);
 
@@ -93,7 +94,7 @@ public abstract class BottomMenu extends Panel {
 			diagramBuilderButton.setEnabled(enableFormButtons);
 		}
 		if (droolsEditorButton != null) {
-			droolsEditorButton.setEnabled(false);
+			
 		}
 	}
 

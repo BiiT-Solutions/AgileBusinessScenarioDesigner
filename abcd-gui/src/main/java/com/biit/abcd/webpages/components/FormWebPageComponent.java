@@ -31,13 +31,6 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 		setCompositionRoot(getRootLayout());
 		setSizeFull();
 
-		upperMenu = new UpperMenu() {
-
-		};
-
-		getRootLayout().addComponent(upperMenu);
-		getRootLayout().setComponentAlignment(upperMenu, Alignment.BOTTOM_CENTER);
-
 		Panel mainPanel = new Panel();
 		getRootLayout().addComponent(mainPanel);
 		getRootLayout().setComponentAlignment(mainPanel, Alignment.MIDDLE_CENTER);
@@ -52,8 +45,21 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 		mainPanel.setContent(workingAreaLayout);
 		mainPanel.setSizeFull();
 
-		bottomMenu = new BottomMenu() {
+		setButtonMenu();
+		setUpperMenu(new UpperMenu());
+	}
 
+	public void setUpperMenu(UpperMenu upperMenu) {
+		if (this.upperMenu != null) {
+			this.getRootLayout().removeComponent(this.upperMenu);
+		}
+		this.upperMenu = upperMenu;
+		this.getRootLayout().addComponent(upperMenu, 0);
+		getRootLayout().setComponentAlignment(upperMenu, Alignment.BOTTOM_CENTER);
+	}
+
+	private void setButtonMenu() {
+		bottomMenu = new BottomMenu() {
 			@Override
 			public void setSelectedForm(Form form) {
 				setForm(form);
@@ -63,7 +69,6 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 			public Form getSelectedForm() {
 				return getForm();
 			}
-
 		};
 		getRootLayout().addComponent(bottomMenu);
 		getRootLayout().setComponentAlignment(bottomMenu, Alignment.BOTTOM_CENTER);
