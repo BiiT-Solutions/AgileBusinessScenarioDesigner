@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "GROUPS")
 public class Group extends TreeObject {
+	private static final String DEFAULT_TECHNICAL_NAME = "Group";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class,
 			Group.class));
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class,
@@ -17,6 +18,10 @@ public class Group extends TreeObject {
 
 	private String technicalName;
 	private boolean repetable;
+	
+	public Group(){
+		setTechnicalName(DEFAULT_TECHNICAL_NAME);
+	}
 
 	@Override
 	protected List<Class<?>> getAllowedChilds() {

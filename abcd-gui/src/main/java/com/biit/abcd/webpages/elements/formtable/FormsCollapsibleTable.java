@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -148,6 +146,14 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 				}
 			}
 		});
+	}
+
+	public void addNewForm(Form form){
+		List<Form> listFormsForName = new ArrayList<Form>();
+		listFormsForName.add(form);
+		formMap.put(form.getName(), listFormsForName);
+		addRow(listFormsForName);
+		selectForm(form);
 	}
 
 	private void initializeFormTable() {

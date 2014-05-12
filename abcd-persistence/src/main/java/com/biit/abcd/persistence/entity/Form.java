@@ -14,10 +14,15 @@ import com.liferay.portal.model.UserGroup;
 @Entity
 @Table(name = "FORMS", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
 public class Form extends TreeObject {
+	private static final String DEFAULT_NAME = "New Form";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
 
 	private String name;
 	private Integer version = 1;
+
+	public Form() {
+		setName(DEFAULT_NAME);
+	}
 
 	@Override
 	protected List<Class<?>> getAllowedChilds() {
@@ -60,6 +65,5 @@ public class Form extends TreeObject {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
+
 }
