@@ -328,6 +328,13 @@
 	background: #f5f5f5;
 }
 
+@font-face {
+	font-family: "TkIcons";
+	src: fontAwesome format("woff"), fontAwesomeOtf format("opentype");
+	font-weight: normal;
+	font-style: normal;
+}
+
 .abcd .v-widget {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -7027,17 +7034,64 @@ body .abcd.v-app .v-app-loading {
 	background-image: url(../reindeer/window/img/black/content-bg.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
 }
 
-/*Css rule to change icon size*/
-.v-button-iconbutton-size-small {
-	height: 16px;
+.abcd .v-button:focus {
+	background-image: none;
+	outline: none;
+	box-shadow: 0px 0px 3px 2px #52A5C5;
 }
 
-/*Css rule to change icon size*/
-.v-button-iconbutton-size-medium {
+.abcd .v-button:focus .v-button-wrap {
+	background-image: none;
+	outline: none;
+}
+
+.abcd .v-button:active, .abcd .v-button.v-pressed {
+	background-image: none;
+	outline: none;
+	background-image: none;
+	background-color: rgba(247, 247, 247, 1);
+	box-shadow: 0px 0px 3px 2px #52A5C5;
+}
+
+.abcd .v-button:active .v-button-wrap, .abcd .v-button.v-pressed .v-button-wrap {
+	background-image: none;
+	outline: none;
+}
+
+.abcd .v-button, .abcd .v-disabled.v-button {
 	height: 32px;
+	padding: 0 0 0 6px;
+	background-image: none;
+	background-repeat: no-repeat;
+	background-color: rgba(255, 255, 255, 1);
+	cursor: default;
+	color: #00a3e8;
+	border: rgb(212, 201, 191);
+	border-width: 1px;
+	border-style: solid;
+	box-shadow: 0px 2px 2px -1px #777777;
 }
 
-/*Css rule to change icon size*/
-.v-button-iconbutton-size-big {
-	height: 64px;
+.abcd .v-button-wrap, .abcd .v-disabled.v-button.v-button-wrap {
+	display: block;
+	height: 24px;
+	padding: 8px 15px 0 9px;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: right top;
+	background-image: none;
+	color: #00a3e8;
+}
+
+.abcd .v-button-caption {
+	color: #1C86C2;
+	text-shadow: #fff 0 1px 0;
+	font-weight: 800;
+	font-size: 16px;
+	line-height: 16px;
+}
+
+.abcd.v-app, .abcd .v-caption, .abcd .v-window, .abcd .v-popupview-popup, .abcd .v-tooltip, .abcd.v-app input, .abcd.v-app select, .abcd.v-app button, .abcd.v-app textarea, .abcd .v-window input, .abcd .v-window select, .abcd .v-window button, .abcd .v-window textarea, .abcd .v-popupview-popup input, .abcd .v-popupview-popup select, .abcd .v-popupview-popup button, .abcd .v-popupview-popup textarea, .abcd .v-filterselect-suggestpopup, .abcd .v-datefield-popup, .abcd .v-contextmenu, .abcd .v-Notification, .abcd .v-menubar-submenu, .abcd .v-drag-element, .abcd .v-table-header-drag {
+	font-family: "TkIcons";
+	font-size: 14px;
 }

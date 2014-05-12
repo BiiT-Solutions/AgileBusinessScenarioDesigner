@@ -3,10 +3,107 @@
 @import "../reindeer/reindeer.scss";
 
 /* This contains all of your theme. */
+
+$buttonColor: #00a3e8;
+$blueShadowColor: #52A5C5;
+
+@font-face {
+	font-family: "TkIcons";
+	/* woff by default (smallest size), android needs a fallback as otf  */
+	src: fontAwesome format("woff"), fontAwesomeOtf format("opentype");
+	font-weight: normal;
+	font-style: normal;
+}
+
 /* If somebody wants to extend the theme she will include this mixin. */
 @mixin abcd {
   /* Include all the styles from the reindeer theme */
   @include reindeer;
 
   /* Insert your theme rules here */
+
+	.v-button:focus {
+		background-image: none;
+		outline: none;
+		box-shadow: 0px 0px 3px 2px $blueShadowColor;
+	}
+	
+	.v-button:focus .v-button-wrap {
+		background-image: none;
+		outline: none;
+	}
+	
+	.v-button:active, .v-button.v-pressed {
+		background-image: none;
+		outline: none;
+		background-image: none;
+		background-color: rgba(247, 247, 247, 1);
+		box-shadow: 0px 0px 3px 2px $blueShadowColor;
+	}
+	
+	.v-button:active .v-button-wrap, .v-button.v-pressed .v-button-wrap {
+		background-image: none;
+		outline: none;
+	}
+	
+	.v-button, .v-disabled.v-button {
+		height: 32px;
+		padding: 0 0 0 6px;
+		background-image: none;
+		background-repeat: no-repeat;
+		background-color: rgba(255, 255, 255, 1);
+		cursor: default;
+		color: $buttonColor;
+		border: rgb(212, 201, 191);
+		border-width: 1px;
+		border-style: solid;
+		box-shadow: 0px 2px 2px -1px #777777;
+	}
+	
+	.v-button-wrap, .v-disabled.v-button.v-button-wrap {
+		display: block;
+		height: 24px;
+		padding: 8px 15px 0 9px;
+		background-color: transparent;
+		background-repeat: no-repeat;
+		background-position: right top;
+		background-image: none;
+		color: $buttonColor;
+	}
+	
+	.v-button-caption {
+		color: #1C86C2;
+		text-shadow: #fff 0 1px 0;
+		font-weight: 800;
+		font-size: 16px;
+		line-height: 16px;
+	}
+	
+	&.v-app,
+	.v-caption,
+	.v-window,
+	.v-popupview-popup,
+	.v-tooltip,
+	&.v-app input,
+	&.v-app select,
+	&.v-app button,
+	&.v-app textarea,
+	.v-window input,
+	.v-window select,
+	.v-window button,
+	.v-window textarea,
+	.v-popupview-popup input,
+	.v-popupview-popup select,
+	.v-popupview-popup button,
+	.v-popupview-popup textarea,
+	.v-filterselect-suggestpopup,
+	.v-datefield-popup,
+	.v-contextmenu,
+	.v-Notification,
+	.v-menubar-submenu,
+	.v-drag-element,
+	.v-table-header-drag {
+	    font-family: "TkIcons";
+	    font-size: 14px;
+	}
 }
