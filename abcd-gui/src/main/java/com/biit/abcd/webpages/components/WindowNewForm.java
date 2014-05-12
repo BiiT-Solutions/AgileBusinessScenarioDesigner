@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.components;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
@@ -17,7 +18,7 @@ import com.vaadin.ui.Window;
 
 public class WindowNewForm extends Window {
 	private static final int WINDOW_WIDTH = 500;
-	private static final int WINDOW_HEIGHT = 200;
+	private static final int WINDOW_HEIGHT = 170;
 	private Form form;
 	private FormManager parent;
 
@@ -27,6 +28,7 @@ public class WindowNewForm extends Window {
 		form = new Form();
 		setWidth(Math.min(WINDOW_WIDTH, UI.getCurrent().getPage().getBrowserWindowWidth()), Unit.PIXELS);
 		setHeight(Math.min(WINDOW_HEIGHT, UI.getCurrent().getPage().getBrowserWindowHeight()), Unit.PIXELS);
+		this.setCaption(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER));
 
 		setContent(generateContent());
 		setResizable(false);
@@ -54,6 +56,8 @@ public class WindowNewForm extends Window {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						form.setName(formName.getValue());
+						form.setCreatedBy(UserSessionHandler.getUser());
+						form.setUpdatedBy(UserSessionHandler.getUser());
 						parent.addForm(form);
 						close();
 					}

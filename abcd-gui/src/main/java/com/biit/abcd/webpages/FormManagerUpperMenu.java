@@ -17,7 +17,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
 public class FormManagerUpperMenu extends UpperMenu {
-	private Button newFormButton;
+	private IconButton newFormButton;
 	private FormManager parent;
 
 	public FormManagerUpperMenu(FormManager parent) {
@@ -34,12 +34,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						UI.getCurrent().addWindow(new WindowNewForm(parent));
-						parent.addForm();
 					}
 				});
-		getMenuLayout().addComponent(newFormButton);
-		getMenuLayout().setComponentAlignment(newFormButton, Alignment.MIDDLE_CENTER);
-
+		addIconButton(newFormButton);
+		this.setContractIcons(true, "150px");
 	}
 
 	public void setEnabledButtons() {

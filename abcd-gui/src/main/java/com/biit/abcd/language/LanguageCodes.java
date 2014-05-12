@@ -33,11 +33,12 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_MODIFIEDBY("formTable.column.modifiedBy"),
 	FORM_TABLE_COLUMN_MODIFICATIONDATE("formTable.column.modificationDate"),
 	
-	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formMamager"),
+	BOTTOM_MENU_FORM_MANAGER("windowNewForm.window.title"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	
+	WINDOW_NEWFORM_WINDOW_TITLE("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_NAME_TEXTFIELD("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),

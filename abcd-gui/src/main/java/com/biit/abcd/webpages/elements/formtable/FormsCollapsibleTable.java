@@ -15,6 +15,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.utils.DateManager;
+import com.biit.liferay.access.UserPool;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -148,7 +149,7 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 		});
 	}
 
-	public void addNewForm(Form form){
+	public void addNewForm(Form form) {
 		List<Form> listFormsForName = new ArrayList<Form>();
 		listFormsForName.add(form);
 		formMap.put(form.getName(), listFormsForName);
@@ -201,7 +202,7 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 			newItem.getItemProperty(FormsTableColumns.USED_BY).setValue(new StringLabel(""));
 			if (form.getCreatedBy() != null) {
 				newItem.getItemProperty(FormsTableColumns.CREATED_BY).setValue(
-						new StringLabel(form.getCreatedBy().getEmailAddress()));
+						new StringLabel(UserPool.getInstance().getUserById(form.getCreatedBy()).getEmailAddress()));
 			}
 			if (form.getCreationTime() != null) {
 				newItem.getItemProperty(FormsTableColumns.CREATION_DATE).setValue(
@@ -209,7 +210,7 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 			}
 			if (form.getUpdatedBy() != null) {
 				newItem.getItemProperty(FormsTableColumns.MODIFIED_BY).setValue(
-						new StringLabel(form.getUpdatedBy().getEmailAddress()));
+						new StringLabel(UserPool.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress()));
 			}
 			if (form.getUpdateTime() != null) {
 				newItem.getItemProperty(FormsTableColumns.MODIFICATION_DATE).setValue(

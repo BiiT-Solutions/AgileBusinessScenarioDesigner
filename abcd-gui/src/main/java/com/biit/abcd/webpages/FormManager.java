@@ -3,6 +3,8 @@ package com.biit.abcd.webpages;
 import java.util.Arrays;
 import java.util.List;
 
+import com.biit.abcd.SpringContextHelper;
+import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
@@ -10,6 +12,7 @@ import com.biit.abcd.webpages.elements.formtable.FormsCollapsibleTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 
 public class FormManager extends FormWebPageComponent {
@@ -17,9 +20,14 @@ public class FormManager extends FormWebPageComponent {
 	private FormsCollapsibleTable formTable;
 	private FormManagerUpperMenu upperMenu;
 
+	private IFormDao formDao;
+
 	public FormManager() {
 		super();
 		updateButtons(false);
+
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	@Override
@@ -72,6 +80,7 @@ public class FormManager extends FormWebPageComponent {
 
 	public void addForm(Form form) {
 		formTable.addNewForm(form);
+		formDao.makePersistent(form);
 	}
 
 }

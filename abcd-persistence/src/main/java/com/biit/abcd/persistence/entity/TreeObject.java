@@ -44,9 +44,9 @@ public abstract class TreeObject {
 	private Long id;
 
 	private Timestamp creationDate = null;
-	private User createdBy = null;
+	private Long createdBy = null;
 	private Timestamp updatedDate = null;
-	private User updatedBy = null;
+	private Long updatedBy = null;
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
@@ -155,7 +155,7 @@ public abstract class TreeObject {
 		}
 	}
 
-	public User getCreatedBy() {
+	public Long getCreatedBy() {
 		return createdBy;
 	}
 
@@ -181,12 +181,18 @@ public abstract class TreeObject {
 		}
 	}
 
-	public User getUpdatedBy() {
+	public Long getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setCreatedBy(User createdBy) {
+	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public void setCreatedBy(User user) {
+		if (user != null) {
+			this.createdBy = user.getUserId();
+		}
 	}
 
 	public void setCreationTime(Timestamp dateCreated) {
@@ -200,10 +206,16 @@ public abstract class TreeObject {
 		}
 	}
 
-	public void setUpdatedBy(User updatedBy) {
+	public void setUpdatedBy(Long updatedBy) {
 		this.updatedBy = updatedBy;
 		if (getParent() != null) {
 			getParent().setUpdatedBy(updatedBy);
+		}
+	}
+
+	public void setUpdatedBy(User user) {
+		if (user != null) {
+			this.updatedBy = user.getUserId();
 		}
 	}
 
@@ -212,8 +224,8 @@ public abstract class TreeObject {
 				&& (indexChild2 >= 0 && indexChild2 < getChildren().size())) {
 			Collections.swap(getChildren(), indexChild1, indexChild2);
 			// Update elements date modification.
-			getChildren().get(indexChild1).setUpdatedBy(user);
-			getChildren().get(indexChild2).setUpdatedBy(user);
+			getChildren().get(indexChild1).setUpdatedBy(user.getUserId());
+			getChildren().get(indexChild2).setUpdatedBy(user.getUserId());
 		} else {
 			if (indexChild1 > indexChild2) {
 				throw new ChildrenNotFoundException("Index out of bounds. Index " + indexChild1 + " is invalid.");
