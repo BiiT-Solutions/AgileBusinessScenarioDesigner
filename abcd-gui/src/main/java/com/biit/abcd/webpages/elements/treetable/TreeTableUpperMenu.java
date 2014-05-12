@@ -13,65 +13,70 @@ import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
 import com.biit.abcd.webpages.components.UpperMenu;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
 public class TreeTableUpperMenu extends UpperMenu {
-	private Button newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton;
-	private TreeDesigner parent;
+	private static final long serialVersionUID = -4712688788270327039L;
+	private static String iconWidth = "150px";
+	private IconButton newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton;
+	private TreeDesigner parent;	
 
 	public TreeTableUpperMenu(TreeDesigner parent) {
 		super();
 		this.parent = parent;
+		setContractIcons(true,iconWidth);
 		defineMenu();
 	}
 
 	private void defineMenu() {
 		// Add new Category
-		newCategoryButton = new IconButton(ThemeIcons.TREE_DESIGNER_ADD_CATEGORY.getFile(),
+		newCategoryButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_CATEGORY.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = 4094066808071081684L;
+
 					@Override
 					public void buttonClick(ClickEvent event) {
 						parent.addCategory();
 					}
 				});
-		getMenuLayout().addComponent(newCategoryButton);
-		getMenuLayout().setComponentAlignment(newCategoryButton, Alignment.MIDDLE_CENTER);
+		addIconButton(newCategoryButton);
 
 		// Add new Group
-		newGroupButton = new IconButton(ThemeIcons.TREE_DESIGNER_ADD_GROUP.getFile(),
+		newGroupButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_GROUP.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = -3422118691290819294L;
+
 					@Override
 					public void buttonClick(ClickEvent event) {
 						parent.addGroup();
 					}
 				});
-		getMenuLayout().addComponent(newGroupButton);
-		getMenuLayout().setComponentAlignment(newGroupButton, Alignment.MIDDLE_CENTER);
+		addIconButton(newGroupButton);
 
 		// Add new Question
-		newQuestionButton = new IconButton(ThemeIcons.TREE_DESIGNER_ADD_QUESTION.getFile(),
+		newQuestionButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_QUESTION.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = -3581383072543137712L;
+
 					@Override
 					public void buttonClick(ClickEvent event) {
 						parent.addQuestion();
 					}
 				});
-		getMenuLayout().addComponent(newQuestionButton);
-		getMenuLayout().setComponentAlignment(newQuestionButton, Alignment.MIDDLE_CENTER);
+		addIconButton(newQuestionButton);
 
 		// Add new Answer
-		newAnswerButton = new IconButton(ThemeIcons.TREE_DESIGNER_ADD_ANSWER.getFile(),
+		newAnswerButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_ANSWER.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = 5128294955249902659L;
+
 					@Override
 					public void buttonClick(ClickEvent event) {
 						parent.addAnswer();
 					}
 				});
-		getMenuLayout().addComponent(newAnswerButton);
-		getMenuLayout().setComponentAlignment(newAnswerButton, Alignment.MIDDLE_CENTER);
+		addIconButton(newAnswerButton);
 	}
 
 	public void setEnabledButtons(TreeObject selectedObject) {

@@ -7034,8 +7034,11 @@ body .abcd.v-app .v-app-loading {
 	background-image: url(../reindeer/window/img/black/content-bg.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
 }
 
+.abcd .v-horizontal-button-group {
+	background-color: white;
+}
+
 .abcd .v-horizontal-button-group .v-button-wrap {
-	width: inherit;
 	height: inherit;
 }
 

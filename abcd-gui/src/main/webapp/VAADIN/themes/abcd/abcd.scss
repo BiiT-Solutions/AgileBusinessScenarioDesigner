@@ -22,8 +22,11 @@ $blueShadowColor: #52A5C5;
 
   /* Insert your theme rules here */
   
+  	.v-horizontal-button-group {
+		background-color: white;
+	}
+  
   	.v-horizontal-button-group .v-button-wrap {
-		width: inherit;
 		height: inherit;
 	}
   	.v-horizontal-button-group .v-icon {
