@@ -169,7 +169,7 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 			addRow(forms);
 		}
 
-		formTable.setSortContainerPropertyId("Name");
+		formTable.setSortContainerPropertyId(FormsTableColumns.NAME);
 		formTable.setSortAscending(true);
 		formTable.sort();
 	}
