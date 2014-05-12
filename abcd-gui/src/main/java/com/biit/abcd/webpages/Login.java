@@ -34,6 +34,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class Login extends WebPageComponent {
 	private static final long serialVersionUID = 1559169232291159835L;
+	private static String FIELD_SIZE = "160px";
 	private VerticalLayout rootLayout;
 	private TextField usernameField;
 	private PasswordField passwordField;
@@ -63,10 +64,12 @@ public class Login extends WebPageComponent {
 		usernameField = new TextField(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_EMAIL));
 		usernameField.setRequired(true);
 		usernameField.setRequiredError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_EMAIL));
+		usernameField.setWidth(FIELD_SIZE);
 		usernameField.focus();
 
 		passwordField = new PasswordField(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_PASSWORD));
 		passwordField.setRequired(true);
+		passwordField.setWidth(FIELD_SIZE);
 		passwordField.setRequiredError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_PASSWORD));
 
 		// If you press enter. Login operation.
@@ -96,6 +99,7 @@ public class Login extends WebPageComponent {
 				checkUserAndPassword();
 			}
 		});
+		loginButton.setWidth(FIELD_SIZE);
 
 		// Alignment and sizes.
 		FormLayout layout = new FormLayout();
