@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.formTable;
+package com.biit.abcd.webpages.elements.formtable;
 
 import com.vaadin.ui.HorizontalLayout;
 

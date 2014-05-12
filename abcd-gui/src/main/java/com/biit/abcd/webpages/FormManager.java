@@ -8,7 +8,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.biit.abcd.webpages.elements.formTable.FormsCollapsibleTable;
+import com.biit.abcd.webpages.elements.formtable.FormsCollapsibleTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

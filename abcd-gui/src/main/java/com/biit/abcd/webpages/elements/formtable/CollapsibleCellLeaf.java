@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.formTable;
+package com.biit.abcd.webpages.elements.formtable;
 
 import com.biit.abcd.persistence.entity.Form;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
