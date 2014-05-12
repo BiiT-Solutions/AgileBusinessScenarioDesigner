@@ -32,9 +32,24 @@ $blueShadowColor: #52A5C5;
   	.v-horizontal-button-group .v-icon {
 		margin-left: auto;
 		margin-right: auto;
-		height: 50px;
-		width: 50px;
+		height: 50px !important;
+		width: 50px !important;
 		display: block;
+	}
+	
+	.v-button-iconbutton-size-small .v-icon {
+		width: 16px;
+		height: 16px;
+	}
+	
+	.v-button-iconbutton-size-medium .v-icon {
+		width: 32px;
+		height: 32px;
+	}
+	
+	.v-button-iconbutton-size-big .v-icon {
+		width: 64px;
+		height: 64px;
 	}
 	
 	.v-horizontal-button-group .v-button:active, .v-horizontal-button-group .v-button:focus{
@@ -67,7 +82,8 @@ $blueShadowColor: #52A5C5;
 	
 	.v-button, .v-disabled.v-button {
 		height: 32px;
-		padding: 0 0 0 6px;
+		/*padding: 0 0 0 6px;*/
+		padding: 0 0 0 0px;
 		background-image: none;
 		background-repeat: no-repeat;
 		background-color: rgba(255, 255, 255, 1);
@@ -79,6 +95,18 @@ $blueShadowColor: #52A5C5;
 		box-shadow: 0px 2px 2px -1px #777777;
 	}
 	
+	.v-button.v-button-link{
+		border-width: 0px;
+	}
+	
+	.v-button-wrap, .v-button-caption {
+		vertical-align: middle;
+		white-space: nowrap;
+		font: inherit;
+		color: inherit;
+		line-height: normal;
+	}
+	
 	.v-disabled.v-button {
 		box-shadow: 0px 2px 2px -1px #777777 !important;
 	}
@@ -86,7 +114,7 @@ $blueShadowColor: #52A5C5;
 	.v-button-wrap, .v-disabled.v-button .v-button-wrap {
 		display: block;
 		height: 24px;
-		padding: 8px 15px 0 9px;
+		padding: 7px 9px 0 9px;
 		background-color: transparent;
 		background-repeat: no-repeat;
 		background-position: right top;
@@ -111,6 +139,7 @@ $blueShadowColor: #52A5C5;
 	&.v-app select,
 	&.v-app button,
 	&.v-app textarea,
+	.v-widget,
 	.v-window input,
 	.v-window select,
 	.v-window button,
@@ -126,7 +155,7 @@ $blueShadowColor: #52A5C5;
 	.v-menubar-submenu,
 	.v-drag-element,
 	.v-table-header-drag {
-	    font-family: "TkIcons";
-	    font-size: 14px;
+	    font-family: "TkIcons" !important;
+	    font-size: 14px !important;
 	}
 }

@@ -35,7 +35,7 @@
    inkscape:zoom="6.2105264"
    inkscape:cx="112.61486"
    inkscape:cy="23.713173"
-   inkscape:window-x="1912"
+   inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
    inkscape:current-layer="svg2"
@@ -44,14 +44,14 @@
      type="xygrid"
      id="grid3035" /></sodipodi:namedview>
 	<path
-   d="m 31,25 26,0 0,8 -26,0 z"
+   d="m 19.31757,12.284786 41.51271,0 0,12.773141 -41.51271,0 z"
    id="path4"
    inkscape:connector-curvature="0"
    style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
    sodipodi:nodetypes="ccccc" />
 <g
    id="g3031"
-   transform="translate(5.5789526,-30.961364)"><path
+   transform="matrix(1.5966427,0,0,1.5966427,-21.27076,-77.065518)"><path
      sodipodi:nodetypes="ccccc"
      style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
      inkscape:connector-curvature="0"
@@ -63,7 +63,7 @@
      id="path4-7"
      d="m 19.033826,68 8,3.985169 c -0.0164,-0.005 -8,4.014831 -8,4.014831 z" /></g><g
    id="g3031-4"
-   transform="translate(5.5693539,-18.94202)"><path
+   transform="matrix(1.5966427,0,0,1.5966427,-21.286086,-57.87492)"><path
      sodipodi:nodetypes="ccccc"
      style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
      inkscape:connector-curvature="0"
@@ -78,7 +78,7 @@
    d="m 69.678626,20.575677 0,-1.508593 -1.494362,0 -1.494363,0 0,-0.982011 0,-0.982008 1.494363,0 1.494362,0 0,-1.494363 0,-1.494362 0.982009,0 0.98201,0 0,1.494362 0,1.494363 1.508594,0 1.508595,0 0,0.981756 0,0.981758 -1.501479,0.0074 -1.501478,0.0074 -0.0074,1.501478 -0.0074,1.501478 -0.981758,0 -0.981758,0 0,-1.508594 z"
    id="path3077-4"
    inkscape:connector-curvature="0" /><g
-   transform="matrix(0.69896555,0,0,0.69896555,26.149786,13.288077)"
+   transform="matrix(1.1159983,0,0,1.1159983,11.573511,-6.414971)"
    id="g3807"><path
      sodipodi:nodetypes="ccccccccccsssccccccc"
      id="path4-1-8"
@@ -93,4 +93,4 @@
    style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
    inkscape:connector-curvature="0"
    id="path4-7-1"
-   d="m 27.005296,25.023305 -3.985169,8 c 0.005,-0.0164 -4.014831,-8 -4.014831,-8 z" /></svg>
+   d="M 12.939455,12.321995 6.5765639,25.095136 C 6.5845471,25.068952 0.1663132,12.321995 0.1663132,12.321995 z" /></svg>
