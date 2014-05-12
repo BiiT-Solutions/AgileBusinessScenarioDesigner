@@ -40,7 +40,9 @@ public enum ThemeIcons {
 	
 	TREE_DESIGNER_PAGE("appbar.debug.step.into.svg"),
 	
-	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg");
+	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg"),
+	
+	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg");
 
 	private String value;
 

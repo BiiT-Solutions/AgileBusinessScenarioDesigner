@@ -3,7 +3,9 @@ package com.biit.abcd.webpages;
 import java.util.Arrays;
 import java.util.List;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formTable.FormsCollapsibleTable;
@@ -39,6 +41,9 @@ public class FormManager extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
+//				updateButtons(getForm() != null
+//						&& AbcdAuthorizationService.getInstance().canEditForm(getForm(), UserSessionHandler.getUser(),
+//								DActivity.FORM_EDITING));
 				updateButtons(getForm() != null);
 			}
 		});

@@ -1,6 +1,8 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
 import com.vaadin.ui.Alignment;
@@ -12,7 +14,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
 public abstract class BottomMenu extends Panel {
-	private Button formManagerButton, treeDesignerButton, diagramBuilderButton;
+	private Button formManagerButton, treeDesignerButton, diagramBuilderButton, droolsEditorButton;
 
 	protected BottomMenu() {
 		defineButtomMenu();
@@ -27,8 +29,8 @@ public abstract class BottomMenu extends Panel {
 		menuLayout.setWidth("100%");
 
 		// Add FormManager button.
-		formManagerButton = new IconButton(ThemeIcons.FORM_MANAGER_PAGE.getFile(), "Forms Manager", IconSize.BIG,
-				new ClickListener() {
+		formManagerButton = new IconButton(ThemeIcons.FORM_MANAGER_PAGE.getFile(),
+				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						changeView(WebMap.FORM_MANAGER);
@@ -38,8 +40,8 @@ public abstract class BottomMenu extends Panel {
 		menuLayout.setComponentAlignment(formManagerButton, Alignment.MIDDLE_CENTER);
 
 		// Add Tree Designer button.
-		treeDesignerButton = new IconButton(ThemeIcons.TREE_DESIGNER_PAGE.getFile(), "Tree Designer", IconSize.BIG,
-				new ClickListener() {
+		treeDesignerButton = new IconButton(ThemeIcons.TREE_DESIGNER_PAGE.getFile(),
+				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						changeView(WebMap.TREE_DESIGNER);
@@ -49,8 +51,8 @@ public abstract class BottomMenu extends Panel {
 		menuLayout.setComponentAlignment(treeDesignerButton, Alignment.MIDDLE_CENTER);
 
 		// Add Diagram Builder button.
-		diagramBuilderButton = new IconButton(ThemeIcons.DIAGRAM_BUILDER_PAGE.getFile(), "Diagram Builder",
-				IconSize.BIG, new ClickListener() {
+		diagramBuilderButton = new IconButton(ThemeIcons.DIAGRAM_BUILDER_PAGE.getFile(),
+				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						changeView(WebMap.DIAGRAM_BUILDER);
@@ -60,6 +62,15 @@ public abstract class BottomMenu extends Panel {
 		menuLayout.setComponentAlignment(diagramBuilderButton, Alignment.MIDDLE_CENTER);
 
 		// Add Drools Editor button.
+		droolsEditorButton = new IconButton(ThemeIcons.DROOLS_RULE_EDITOR_PAGE.getFile(),
+				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR), IconSize.BIG, new ClickListener() {
+					@Override
+					public void buttonClick(ClickEvent event) {
+
+					}
+				});
+		menuLayout.addComponent(droolsEditorButton);
+		menuLayout.setComponentAlignment(droolsEditorButton, Alignment.MIDDLE_CENTER);
 
 	}
 
@@ -80,6 +91,9 @@ public abstract class BottomMenu extends Panel {
 		}
 		if (diagramBuilderButton != null) {
 			diagramBuilderButton.setEnabled(enableFormButtons);
+		}
+		if (droolsEditorButton != null) {
+			droolsEditorButton.setEnabled(false);
 		}
 	}
 
