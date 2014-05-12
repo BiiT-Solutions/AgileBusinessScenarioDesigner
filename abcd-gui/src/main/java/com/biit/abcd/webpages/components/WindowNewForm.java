@@ -1,10 +1,14 @@
 package com.biit.abcd.webpages.components;
 
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.FormManager;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -22,6 +26,8 @@ public class WindowNewForm extends Window {
 	private Form form;
 	private FormManager parent;
 
+	private IFormDao formDao;
+
 	public WindowNewForm(FormManager parent) {
 		super();
 		this.parent = parent;
@@ -34,6 +40,9 @@ public class WindowNewForm extends Window {
 		setResizable(false);
 		setModal(true);
 		center();
+
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	public AbstractOrderedLayout generateContent() {
@@ -55,11 +64,15 @@ public class WindowNewForm extends Window {
 				IconSize.SMALL, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-						form.setName(formName.getValue());
-						form.setCreatedBy(UserSessionHandler.getUser());
-						form.setUpdatedBy(UserSessionHandler.getUser());
-						parent.addForm(form);
-						close();
+						if (formDao.getForm(formName.getValue()) == null) {
+							form.setName(formName.getValue());
+							form.setCreatedBy(UserSessionHandler.getUser());
+							form.setUpdatedBy(UserSessionHandler.getUser());
+							parent.addForm(form);
+							close();
+						} else {
+							MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_REPEATED_FORM_NAME));
+						}
 					}
 				});
 

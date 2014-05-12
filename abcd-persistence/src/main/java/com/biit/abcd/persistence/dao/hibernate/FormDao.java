@@ -26,16 +26,16 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 			Hibernate.initialize(form.getChildren());
 		}
 	}
-	
+
 	@Override
-	public int getLastVersion(Form form){
+	public int getLastVersion(Form form) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
 			Criteria criteria = session.createCriteria(Form.class);
 			criteria.setProjection(Projections.max("version"));
 			criteria.add(Restrictions.eq("name", form.getName()));
-			Integer maxVersion = (Integer)criteria.uniqueResult();			
+			Integer maxVersion = (Integer) criteria.uniqueResult();
 			session.getTransaction().commit();
 			return maxVersion;
 		} catch (RuntimeException e) {
@@ -44,4 +44,24 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 		}
 	}
 
+	@Override
+	public Form getForm(String name) {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			Criteria criteria = session.createCriteria(Form.class);
+			criteria.add(Restrictions.eq("name", name));
+			@SuppressWarnings("unchecked")
+			List<Form> results = criteria.list();
+			session.getTransaction().commit();
+			if (!results.isEmpty()) {
+				Form form = (Form) results.get(0);
+				return form;
+			}
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
+		return null;
+	}
 }

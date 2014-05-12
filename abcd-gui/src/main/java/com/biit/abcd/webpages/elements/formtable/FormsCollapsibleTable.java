@@ -154,6 +154,7 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 		listFormsForName.add(form);
 		formMap.put(form.getName(), listFormsForName);
 		addRow(listFormsForName);
+		formTable.sort();
 		selectForm(form);
 	}
 
@@ -168,7 +169,7 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 			addRow(forms);
 		}
 
-		formTable.setSortContainerPropertyId("Name");
+		formTable.setSortContainerPropertyId(FormsTableColumns.NAME);
 		formTable.setSortAscending(true);
 		formTable.sort();
 	}
@@ -201,16 +202,20 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 			newItem.getItemProperty(FormsTableColumns.ACCESS).setValue(new StringLabel(getFormPermissionsTag(form)));
 			newItem.getItemProperty(FormsTableColumns.USED_BY).setValue(new StringLabel(""));
 			if (form.getCreatedBy() != null) {
-				newItem.getItemProperty(FormsTableColumns.CREATED_BY).setValue(
-						new StringLabel(UserPool.getInstance().getUserById(form.getCreatedBy()).getEmailAddress()));
+				if (form.getCreatedBy() != null && UserPool.getInstance().getUserById(form.getCreatedBy()) != null) {
+					newItem.getItemProperty(FormsTableColumns.CREATED_BY).setValue(
+							new StringLabel(UserPool.getInstance().getUserById(form.getCreatedBy()).getEmailAddress()));
+				}
 			}
 			if (form.getCreationTime() != null) {
 				newItem.getItemProperty(FormsTableColumns.CREATION_DATE).setValue(
 						new StringLabel(DateManager.convertDateToString(form.getCreationTime())));
 			}
 			if (form.getUpdatedBy() != null) {
-				newItem.getItemProperty(FormsTableColumns.MODIFIED_BY).setValue(
-						new StringLabel(UserPool.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress()));
+				if (form.getCreatedBy() != null && UserPool.getInstance().getUserById(form.getUpdatedBy()) != null) {
+					newItem.getItemProperty(FormsTableColumns.MODIFIED_BY).setValue(
+							new StringLabel(UserPool.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress()));
+				}
 			}
 			if (form.getUpdateTime() != null) {
 				newItem.getItemProperty(FormsTableColumns.MODIFICATION_DATE).setValue(

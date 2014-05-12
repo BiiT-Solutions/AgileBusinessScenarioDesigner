@@ -6,4 +6,6 @@ public interface IFormDao extends IGenericDao<Form> {
 
 	int getLastVersion(Form form);
 
+	Form getForm(String name);
+
 }
