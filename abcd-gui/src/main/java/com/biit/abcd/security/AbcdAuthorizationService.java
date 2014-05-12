@@ -286,6 +286,10 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		if (form == null) {
 			return false;
 		}
+		// Not stored, then this user has created the form.
+		if (form.getId() == null) {
+			return true;
+		}
 		return form.getVersion().equals(formDao.getLastVersion(form));
 	}
 
