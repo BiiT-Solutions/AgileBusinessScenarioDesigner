@@ -72,17 +72,47 @@ public class TreeDesigner extends FormWebPageComponent {
 	}
 
 	public void addCategory() {
+		Category newCategory = new Category();
 		try {
-			Category selectedCategory = formTreeTable.getValue().getCategory();
-			Category newCategory = new Category();
-			if (selectedCategory == null) {
-				getForm().addChild(newCategory);
-			} else {
-				int index = getForm().getChildren().indexOf(selectedCategory);
-				if (index >= 0) {
-					getForm().addChild(index, newCategory);
-				} else {
+			if (formTreeTable.getValue() != null) {
+				Category selectedCategory = formTreeTable.getValue().getCategory();
+				if (selectedCategory == null) {
 					getForm().addChild(newCategory);
+				} else {
+					int index = getForm().getChildren().indexOf(selectedCategory);
+					if (index >= 0) {
+						getForm().addChild(index, newCategory);
+					} else {
+						getForm().addChild(newCategory);
+					}
+				}
+			} else {
+				getForm().addChild(newCategory);
+			}
+		} catch (NotValidChildException e) {
+			// Not possible.
+		}
+		addCategoryToUI(newCategory);
+	}
+
+	public void addCategoryToUI(Category category) {
+		if (formTreeTable.getValue() != null) {
+			Category selectedCategory = formTreeTable.getValue().getCategory();
+			TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
+			formTreeTable.addItemAfter(FormTreeTable.getItemId(getLastElementOfCategory), category);
+		} else {
+			formTreeTable.addItem(category);
+		}
+	}
+
+	public void addGroup() {
+		Group newGroup = new Group();
+		try {
+			if (formTreeTable.getValue() != null) {
+				Category selectedCategory = formTreeTable.getValue().getCategory();
+				if (selectedCategory != null) {
+					selectedCategory.addChild(newGroup);
+					addGroupToUI(newGroup);
 				}
 			}
 		} catch (NotValidChildException e) {
@@ -90,18 +120,12 @@ public class TreeDesigner extends FormWebPageComponent {
 		}
 	}
 
-	public void addCategoryToUI(Category category) {
-		Category selectedCategory = formTreeTable.getValue().getCategory();
-		TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
-		formTreeTable.addItemAfter(FormTreeTable.getItemId(getLastElementOfCategory), category);
-	}
-
-	public void addGroup() {
-
-	}
-
 	public void addGroupToUI(Group group) {
-
+		if (formTreeTable.getValue() != null) {
+			Category selectedCategory = formTreeTable.getValue().getCategory();
+			TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
+			formTreeTable.addItemAfter(FormTreeTable.getItemId(getLastElementOfCategory), group);
+		}
 	}
 
 	public void addQuestion() {

@@ -7,11 +7,11 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 
 public abstract class BottomMenu extends Panel {
 	private Button formManagerButton, treeDesignerButton, diagramBuilderButton, droolsEditorButton;
@@ -94,7 +94,7 @@ public abstract class BottomMenu extends Panel {
 			diagramBuilderButton.setEnabled(enableFormButtons);
 		}
 		if (droolsEditorButton != null) {
-			
+
 		}
 	}
 

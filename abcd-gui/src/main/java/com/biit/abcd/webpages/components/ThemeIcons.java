@@ -38,6 +38,8 @@ public enum ThemeIcons {
 	
 	FORM_MANAGER_PAGE("appbar.column.one.svg"),
 	
+	FORM_MANAGER_ADD_FORM("appbar.form.add.svg"),
+	
 	TREE_DESIGNER_PAGE("appbar.form.edit.svg"),
 	
 	TREE_DESIGNER_ADD_CATEGORY("appbar.category.add.svg"),
