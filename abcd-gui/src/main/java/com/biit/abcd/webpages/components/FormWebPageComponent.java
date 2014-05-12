@@ -12,6 +12,7 @@ import com.vaadin.ui.VerticalLayout;
 public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	private AbstractOrderedLayout workingAreaLayout;
 	private BottomMenu bottomMenu;
+	private UpperMenu upperMenu;
 
 	public FormWebPageComponent() {
 		setRootLayout(new VerticalLayout());
@@ -29,6 +30,13 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 		getRootLayout().setSizeFull();
 		setCompositionRoot(getRootLayout());
 		setSizeFull();
+
+		upperMenu = new UpperMenu() {
+
+		};
+
+		getRootLayout().addComponent(upperMenu);
+		getRootLayout().setComponentAlignment(upperMenu, Alignment.BOTTOM_CENTER);
 
 		Panel mainPanel = new Panel();
 		getRootLayout().addComponent(mainPanel);
