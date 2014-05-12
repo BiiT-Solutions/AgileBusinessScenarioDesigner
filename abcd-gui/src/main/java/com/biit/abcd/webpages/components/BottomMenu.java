@@ -5,6 +5,8 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
 public abstract class BottomMenu extends HorizontalButtonGroup {
