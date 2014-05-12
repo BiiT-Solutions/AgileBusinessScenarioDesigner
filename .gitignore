@@ -10,4 +10,4 @@ gwt-unitCache/
 widgetsets/
 tmp
 *.zip
-
+/abcd-gui/src/main/webapp/VAADIN/themes/abcd/styles.css
