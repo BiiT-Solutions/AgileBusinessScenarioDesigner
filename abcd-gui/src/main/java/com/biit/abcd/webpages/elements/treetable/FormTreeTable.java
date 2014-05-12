@@ -53,7 +53,7 @@ public class FormTreeTable extends TreeTable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void addItem(TreeObject element) {
-		String name = getNameFromElement(element);
+		String name = getItemId(element);
 		Item item = addItem((Object) element);
 		item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
 	}
@@ -66,7 +66,7 @@ public class FormTreeTable extends TreeTable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void addItemAfter(Object previousItemId, TreeObject element) {
-		String name = getNameFromElement(element);
+		String name = getItemId(element);
 		Item item = addItemAfter(previousItemId, (Object) element);
 		item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
 	}
@@ -78,7 +78,7 @@ public class FormTreeTable extends TreeTable {
 	 * @param element
 	 * @return
 	 */
-	private static String getNameFromElement(TreeObject element) {
+	public static String getItemId(TreeObject element) {
 		String name = null;
 		if (element instanceof Form) {
 			name = ((Form) element).getName();
@@ -107,6 +107,7 @@ public class FormTreeTable extends TreeTable {
 		loadForm(form);
 	}
 
+	@Override
 	public TreeObject getValue() {
 		Object value = super.getValue();
 		if (value instanceof TreeObject) {

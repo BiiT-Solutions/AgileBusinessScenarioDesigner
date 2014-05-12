@@ -289,4 +289,34 @@ public abstract class TreeObject {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	/**
+	 * Gets the category in which this element is included.
+	 * 
+	 * @return
+	 */
+	public Category getCategory() {
+		if (this instanceof Category) {
+			return (Category) this;
+		}
+		while (getParent() != null) {
+			if (getParent() instanceof Category) {
+				return (Category) getParent();
+			}
+			return getParent().getCategory();
+		}
+		return null;
+	}
+
+	/**
+	 * Return the last element in order of this category.
+	 * 
+	 * @return
+	 */
+	public TreeObject getLastElement() {
+		if (getChildren().size() > 0) {
+			return getChildren().get(getChildren().size() - 1).getLastElement();
+		}
+		return this;
+	}
 }

@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.webpages.TreeDesigner;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
@@ -19,9 +20,11 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class TreeTableUpperMenu extends UpperMenu {
 	private Button newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton;
+	private TreeDesigner parent;
 
-	public TreeTableUpperMenu() {
+	public TreeTableUpperMenu(TreeDesigner parent) {
 		super();
+		this.parent = parent;
 		defineMenu();
 	}
 
@@ -31,7 +34,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						parent.addCategory();
 					}
 				});
 		getMenuLayout().addComponent(newCategoryButton);
@@ -42,7 +45,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						parent.addGroup();
 					}
 				});
 		getMenuLayout().addComponent(newGroupButton);
@@ -53,7 +56,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						parent.addQuestion();
 					}
 				});
 		getMenuLayout().addComponent(newQuestionButton);
@@ -64,7 +67,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						parent.addAnswer();
 					}
 				});
 		getMenuLayout().addComponent(newAnswerButton);
