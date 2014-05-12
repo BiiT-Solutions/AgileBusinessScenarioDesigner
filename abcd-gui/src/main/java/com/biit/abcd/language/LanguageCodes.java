@@ -33,6 +33,11 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_MODIFIEDBY("formTable.column.modifiedBy"),
 	FORM_TABLE_COLUMN_MODIFICATIONDATE("formTable.column.modificationDate"),
 	
+	TREE_DESIGNER_CATEGORY_ADD("treeDesigner.category.add"),
+	TREE_DESIGNER_GROUP_ADD("treeDesigner.group.add"),
+	TREE_DESIGNER_QUESTION_ADD("treeDesigner.question.add"),
+	TREE_DESIGNER_ANSWER_ADD("treeDesigner.answer.add"),
+	
 	BOTTOM_MENU_FORM_MANAGER("windowNewForm.window.title"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
@@ -52,6 +57,7 @@ public enum LanguageCodes {
 	ERROR_CONTACT("error.contact"),
 	ERROR_USER_SERVICE("error.userService"),
 	ERROR_UNEXPECTED_WEBSERVICE_ERROR("error.unexpectedWebserviceError"),
+	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled");
 	
 	private String value;

@@ -31,7 +31,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Add new Category
-		newCategoryButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_CATEGORY.getFile(),
+		newCategoryButton = new IconButton(ServerTranslate.tr(LanguageCodes.TREE_DESIGNER_CATEGORY_ADD),ThemeIcons.TREE_DESIGNER_ADD_CATEGORY.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 4094066808071081684L;
 
@@ -43,7 +43,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 		addIconButton(newCategoryButton);
 
 		// Add new Group
-		newGroupButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_GROUP.getFile(),
+		newGroupButton = new IconButton(ServerTranslate.tr(LanguageCodes.TREE_DESIGNER_GROUP_ADD),ThemeIcons.TREE_DESIGNER_ADD_GROUP.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -3422118691290819294L;
 
@@ -55,7 +55,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 		addIconButton(newGroupButton);
 
 		// Add new Question
-		newQuestionButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_QUESTION.getFile(),
+		newQuestionButton = new IconButton(ServerTranslate.tr(LanguageCodes.TREE_DESIGNER_QUESTION_ADD),ThemeIcons.TREE_DESIGNER_ADD_QUESTION.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -3581383072543137712L;
 
@@ -67,7 +67,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 		addIconButton(newQuestionButton);
 
 		// Add new Answer
-		newAnswerButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.TREE_DESIGNER_ADD_ANSWER.getFile(),
+		newAnswerButton = new IconButton(ServerTranslate.tr(LanguageCodes.TREE_DESIGNER_ANSWER_ADD),ThemeIcons.TREE_DESIGNER_ADD_ANSWER.getFile(),
 				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 5128294955249902659L;
 

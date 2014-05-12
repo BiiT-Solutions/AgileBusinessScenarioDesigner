@@ -29,8 +29,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Add new Category
-		newFormButton = new IconButton(ThemeIcons.FORM_MANAGER_ADD_FORM.getFile(),
-				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
+		newFormButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),
+				ThemeIcons.FORM_MANAGER_ADD_FORM.getFile(), ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),
+				IconSize.BIG, new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						UI.getCurrent().addWindow(new WindowNewForm(parent));
