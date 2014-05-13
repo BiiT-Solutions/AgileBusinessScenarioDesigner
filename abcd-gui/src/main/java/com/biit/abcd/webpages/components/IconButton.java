@@ -1,67 +1,67 @@
 package com.biit.abcd.webpages.components;
 
-import com.vaadin.server.ThemeResource;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.vaadin.ui.Button;
 
 public class IconButton extends Button {
 	private static final long serialVersionUID = -8287465276670542699L;
 	private final static IconSize defaultIconSize = IconSize.SMALL;
 
-	public IconButton(String icon, IconSize size, String tooltip) {
+	public IconButton(ThemeIcons icon, IconSize size, LanguageCodes tooltip) {
 		super("");
 		createButton(icon, defaultIconSize, tooltip);
 		addStyleName("link");
 	}
 
-	public IconButton(String icon, String tooltip, IconSize size, ClickListener clickListener) {
+	public IconButton(ThemeIcons icon, LanguageCodes tooltip, IconSize size, ClickListener clickListener) {
 		super("", clickListener);
 		createButton(icon, size, tooltip);
 		addStyleName("link");
 	}
 
-	public IconButton(String icon, String tooltip, ClickListener clickListener) {
+	public IconButton(ThemeIcons icon, LanguageCodes tooltip, ClickListener clickListener) {
 		super("", clickListener);
 		createButton(icon, defaultIconSize, tooltip);
 		addStyleName("link");
 	}
 
-	public IconButton(String caption, String icon, String tooltip, IconSize size, ClickListener clickListener) {
-		super(caption, clickListener);
+	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, IconSize size,
+			ClickListener clickListener) {
+		super(ServerTranslate.tr(caption),clickListener);
 		createButton(icon, size, tooltip);
 	}
 
-	public IconButton(String caption, String icon, String tooltip, ClickListener clickListener) {
-		super(caption, clickListener);
+	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, ClickListener clickListener) {
+		super(ServerTranslate.tr(caption),clickListener);
 		createButton(icon, defaultIconSize, tooltip);
 	}
 
-	public IconButton(String caption, String icon, String tooltip, IconSize size) {
-		super(caption);
+	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, IconSize size) {
+		super(ServerTranslate.tr(caption));
 		createButton(icon, size, tooltip);
 	}
 
-	public IconButton(String caption, String icon, String tooltip) {
-		super(caption);
-		setIcon(icon, defaultIconSize);
-		setDescription(tooltip);
+	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip) {
+		super(ServerTranslate.tr(caption));
+		createButton(icon, defaultIconSize, tooltip);
 	}
 
-	public void setIcon(String icon) {
+	public void setIcon(ThemeIcons icon) {
 		setIcon(icon, defaultIconSize);
 	}
 
-	public void setIcon(String icon, IconSize size) {
-		if (icon != null && icon.length() > 0) {
-			if (!size.equals(IconSize.NULL)) {
-				addStyleName(size.getSyle());
-				setIcon(new ThemeResource(icon));
-			}
+	public void setIcon(ThemeIcons icon, IconSize size) {
+		if (icon != null && (!size.equals(IconSize.NULL))) {
+			addStyleName(size.getSyle());
+			setIcon(icon.getThemeResource());
+
 		}
 	}
 
-	private void createButton(String icon, IconSize size, String tooltip) {
+	private void createButton(ThemeIcons icon, IconSize size, LanguageCodes tooltip) {
 		setIcon(icon, size);
-		setDescription(tooltip);
+		setDescription(ServerTranslate.tr(tooltip));
+		setImmediate(true);
 	}
-
 }

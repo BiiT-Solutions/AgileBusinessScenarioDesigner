@@ -21,6 +21,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 public class WindowNewForm extends Window {
+	private static final long serialVersionUID = 2963807969133587359L;
 	private static final int WINDOW_WIDTH = 500;
 	private static final int WINDOW_HEIGHT = 170;
 	private Form form;
@@ -59,9 +60,11 @@ public class WindowNewForm extends Window {
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		buttonLayout.setSpacing(true);
 
-		Button save = new IconButton(ServerTranslate.tr(LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_LABEL),
-				ThemeIcons.ACCEPT.getFile(), ServerTranslate.tr(LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP),
+		Button save = new IconButton(LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_LABEL,
+				ThemeIcons.ACCEPT, LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP,
 				IconSize.SMALL, new ClickListener() {
+					private static final long serialVersionUID = -3292565406584483547L;
+
 					@Override
 					public void buttonClick(ClickEvent event) {
 						if (formDao.getForm(formName.getValue()) == null) {
@@ -79,8 +82,10 @@ public class WindowNewForm extends Window {
 		buttonLayout.addComponent(save);
 		buttonLayout.setComponentAlignment(save, Alignment.MIDDLE_CENTER);
 
-		Button cancel = new IconButton(ServerTranslate.tr(LanguageCodes.WINDOW_NEWFORM_CANCELBUTTON_LABEL),
-				ThemeIcons.CANCEL.getFile(), "", IconSize.SMALL, new ClickListener() {
+		Button cancel = new IconButton(LanguageCodes.WINDOW_NEWFORM_CANCELBUTTON_LABEL,
+				ThemeIcons.CANCEL, null, IconSize.SMALL, new ClickListener() {
+					private static final long serialVersionUID = 521904682248680077L;
+
 					@Override
 					public void buttonClick(ClickEvent event) {
 						close();

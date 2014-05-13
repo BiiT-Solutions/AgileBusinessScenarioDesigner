@@ -2,7 +2,6 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
 import com.vaadin.ui.Button.ClickEvent;
@@ -23,8 +22,8 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		setHeight("80px");
 
 		// Add FormManager button.
-		formManagerButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),ThemeIcons.FORM_MANAGER_PAGE.getFile(),
-				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER), IconSize.BIG, new ClickListener() {
+		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcons.FORM_MANAGER_PAGE,
+				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 4002268252434768032L;
 
 					@Override
@@ -35,8 +34,8 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(formManagerButton);
 
 		// Add Tree Designer button.
-		treeDesignerButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER),ThemeIcons.TREE_DESIGNER_PAGE.getFile(),
-				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER), IconSize.BIG, new ClickListener() {
+		treeDesignerButton = new IconButton(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER, ThemeIcons.TREE_DESIGNER_PAGE,
+				LanguageCodes.BOTTOM_MENU_TREE_DESIGNER, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 6344185231722436896L;
 
 					@Override
@@ -47,8 +46,9 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(treeDesignerButton);
 
 		// Add Diagram Builder button.
-		diagramBuilderButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER),ThemeIcons.DIAGRAM_BUILDER_PAGE.getFile(),
-				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER), IconSize.BIG, new ClickListener() {
+		diagramBuilderButton = new IconButton(LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER,
+				ThemeIcons.DIAGRAM_BUILDER_PAGE, LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER, IconSize.BIG,
+				new ClickListener() {
 					private static final long serialVersionUID = -6778800510554818966L;
 
 					@Override
@@ -59,8 +59,9 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(diagramBuilderButton);
 
 		// Add Drools Editor button.
-		droolsEditorButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR),ThemeIcons.DROOLS_RULE_EDITOR_PAGE.getFile(),
-				ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR), IconSize.BIG, new ClickListener() {
+		droolsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
+				ThemeIcons.DROOLS_RULE_EDITOR_PAGE, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG,
+				new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
 					@Override
