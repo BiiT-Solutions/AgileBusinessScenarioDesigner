@@ -44,8 +44,10 @@ public abstract class TreeObject {
 	private Long id;
 
 	private Timestamp creationDate = null;
+	@Column(columnDefinition="DOUBLE")
 	private Long createdBy = null;
 	private Timestamp updatedDate = null;
+	@Column(columnDefinition="DOUBLE")
 	private Long updatedBy = null;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
