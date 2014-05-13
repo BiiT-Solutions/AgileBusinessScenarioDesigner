@@ -19,6 +19,10 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public class TreeDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
+	private static final String DEFAULT_ANSWER_TECHNICAL_NAME = "Answer";
+	private static final String DEFAULT_QUESTION_TECHNICAL_NAME = "Question";
+	private static final String DEFAULT_GROUP_TECHNICAL_NAME = "Group";
+	private static final String DEFAULT_CATEGORY_NAME = "Category";
 	private FormTreeTable formTreeTable;
 	private Form form;
 	private TreeTableUpperMenu upperMenu;
@@ -78,6 +82,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	 */
 	public void addCategory() {
 		Category newCategory = new Category();
+		newCategory.setLabel(DEFAULT_CATEGORY_NAME + (form.getChildren().size() + 1));
 		try {
 			if (formTreeTable.getValue() != null) {
 				Category selectedCategory = formTreeTable.getValue().getCategory();
@@ -128,6 +133,7 @@ public class TreeDesigner extends FormWebPageComponent {
 			if (formTreeTable.getValue() != null) {
 				Category selectedCategory = formTreeTable.getValue().getCategory();
 				if (selectedCategory != null) {
+					newGroup.setTechnicalName(DEFAULT_GROUP_TECHNICAL_NAME + (selectedCategory.getChildren().size() + 1));
 					addElementToUI(newGroup, selectedCategory);
 					selectedCategory.addChild(newGroup);
 				}
@@ -154,6 +160,7 @@ public class TreeDesigner extends FormWebPageComponent {
 					parent = formTreeTable.getValue().getParent().getParent();
 				}
 				if (parent != null) {
+					newQuestion.setTechnicalName(DEFAULT_QUESTION_TECHNICAL_NAME + (parent.getChildren().size() + 1));
 					addElementToUI(newQuestion, parent);
 					parent.addChild(newQuestion);
 				}
@@ -178,6 +185,7 @@ public class TreeDesigner extends FormWebPageComponent {
 					parent = formTreeTable.getValue().getParent();
 				}
 				if (parent != null) {
+					newAnswer.setTechnicalName(DEFAULT_ANSWER_TECHNICAL_NAME + (parent.getChildren().size() + 1));
 					addElementToUI(newAnswer, parent);
 					parent.addChild(newAnswer);
 				}
