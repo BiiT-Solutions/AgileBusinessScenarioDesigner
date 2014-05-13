@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="76.0106"
+   height="76.0106"
+   viewBox="0 0 76.01 76.01"
+   enable-background="new 0 0 76.01 76.01"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="appbar.redo.svg"><metadata
+   id="metadata10"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs8" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="640"
+   inkscape:window-height="480"
+   id="namedview6"
+   showgrid="false"
+   inkscape:zoom="3.1048302"
+   inkscape:cx="38.005299"
+   inkscape:cy="38.005299"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg2" />
+	<path
+   d="m 66.287075,0.1882226 10.39174,10.9499544 2.19e-4,29.199956 -27.711964,0 -10.391959,-10.949956 19.36733,-0.002 c -4.757766,-5.601306 -11.672029,-9.1265 -19.367549,-9.1265 -14.350311,0 -25.983616,12.257956 -25.983616,27.378806 0,7.560309 2.908435,14.405069 7.610414,19.359518 L 11.627777,76.03229 C 4.7314547,68.765598 0.46593805,58.726679 0.46593805,47.638179 c 0,-22.177462 17.06206495,-40.1554425 38.10917295,-40.1554425 10.91987,0 20.766854,4.8391875 27.715027,12.5936005 l -0.0031,-19.8881144 z"
+   id="path4"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round" />
+</svg>
