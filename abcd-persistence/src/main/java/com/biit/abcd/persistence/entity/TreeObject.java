@@ -48,6 +48,10 @@ public abstract class TreeObject {
 	private Timestamp updatedDate = null;
 	private Long updatedBy = null;
 
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
+	@OrderColumn(name = "children_index")
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject parent;
@@ -56,10 +60,6 @@ public abstract class TreeObject {
 	 * Gets all children of the treeObject. These annotations are in the method because must been overwritten by the
 	 * Form object. All objects but forms must be FetchType.EAGER.
 	 */
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@Cascade(org.hibernate.annotations.CascadeType.ALL)
-	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
-	@OrderColumn(name = "children_index")
 	public List<TreeObject> getChildren() {
 		if (children == null) {
 			children = new ArrayList<>();

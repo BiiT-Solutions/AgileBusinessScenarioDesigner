@@ -3,7 +3,9 @@ package com.biit.abcd.webpages;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.SpringContextHelper;
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
@@ -228,6 +230,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public void save() {
 		if (getForm() != null) {
 			formDao.makePersistent(getForm());
+			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		}
 	}
 

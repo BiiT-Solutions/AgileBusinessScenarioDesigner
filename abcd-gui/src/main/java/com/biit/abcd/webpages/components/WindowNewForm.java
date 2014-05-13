@@ -60,9 +60,8 @@ public class WindowNewForm extends Window {
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		buttonLayout.setSpacing(true);
 
-		Button save = new IconButton(LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_LABEL,
-				ThemeIcons.ACCEPT, LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP,
-				IconSize.SMALL, new ClickListener() {
+		Button save = new IconButton(LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_LABEL, ThemeIcons.ACCEPT,
+				LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP, IconSize.SMALL, new ClickListener() {
 					private static final long serialVersionUID = -3292565406584483547L;
 
 					@Override
@@ -74,7 +73,7 @@ public class WindowNewForm extends Window {
 							parent.addForm(form);
 							close();
 						} else {
-							MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_REPEATED_FORM_NAME));
+							MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);
 						}
 					}
 				});
@@ -82,8 +81,8 @@ public class WindowNewForm extends Window {
 		buttonLayout.addComponent(save);
 		buttonLayout.setComponentAlignment(save, Alignment.MIDDLE_CENTER);
 
-		Button cancel = new IconButton(LanguageCodes.WINDOW_NEWFORM_CANCELBUTTON_LABEL,
-				ThemeIcons.CANCEL, null, IconSize.SMALL, new ClickListener() {
+		Button cancel = new IconButton(LanguageCodes.WINDOW_NEWFORM_CANCELBUTTON_LABEL, ThemeIcons.CANCEL, null,
+				IconSize.SMALL, new ClickListener() {
 					private static final long serialVersionUID = 521904682248680077L;
 
 					@Override

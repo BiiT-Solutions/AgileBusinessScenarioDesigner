@@ -71,10 +71,9 @@ public enum LanguageCodes {
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOSVG_TOOLTIP("formDiagramBuilder.upper.buttonToSvg.tooltip"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_CAPTION("formDiagramBuilder.upper.buttonToPng.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_TOOLTIP("formDiagramBuilder.upper.buttonToPng.tooltip"),
-	
-	
-	
+		
 	ERROR_USER_PERMISSION("error.user.permission"),
+	ERROR_USER_NOACCESS("error.user.noaccess"),
 	ERROR_ACCESS("error.access"),
 	ERROR_BADUSERPSWD("error.login.badUserPassword"),
 	ERROR_ENCRYPTINGPASSWORD("error.login.passwordEncrypt"),
@@ -83,7 +82,10 @@ public enum LanguageCodes {
 	ERROR_USER_SERVICE("error.userService"),
 	ERROR_UNEXPECTED_WEBSERVICE_ERROR("error.unexpectedWebserviceError"),
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
-	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled");
+	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
+	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
+	
+	INFO_DATA_STORED("info.data.store");
 	
 	private String value;
 	

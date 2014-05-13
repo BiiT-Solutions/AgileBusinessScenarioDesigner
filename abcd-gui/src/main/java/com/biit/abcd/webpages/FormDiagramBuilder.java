@@ -3,6 +3,7 @@ package com.biit.abcd.webpages;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
@@ -44,7 +45,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				//Do nothing
-				MessageManager.showInfo("Function not implemented yet");
+				MessageManager.showInfo(LanguageCodes.ERROR_NOT_IMPLEMENTED);
 			}
 		});
 		diagramBuilderUpperMenu.addUndoButtonClickListener(new ClickListener() {
