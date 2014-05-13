@@ -13,12 +13,19 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
+import com.biit.abcd.webpages.elements.treetable.AnswerProperties;
+import com.biit.abcd.webpages.elements.treetable.CategoriesProperties;
+import com.biit.abcd.webpages.elements.treetable.FormProperties;
 import com.biit.abcd.webpages.elements.treetable.FormTreeTable;
+import com.biit.abcd.webpages.elements.treetable.GroupProperties;
+import com.biit.abcd.webpages.elements.treetable.PropertiesContainer;
+import com.biit.abcd.webpages.elements.treetable.QuestionProperties;
 import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.HorizontalLayout;
 
 public class TreeDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
@@ -27,6 +34,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	private static final String DEFAULT_GROUP_TECHNICAL_NAME = "Group";
 	private static final String DEFAULT_CATEGORY_NAME = "Category";
 	private FormTreeTable formTreeTable;
+	private PropertiesContainer elementPropertiesContainer;
 	private Form form;
 	private TreeTableUpperMenu upperMenu;
 
@@ -46,16 +54,39 @@ public class TreeDesigner extends FormWebPageComponent {
 		formTreeTable.setSizeFull();
 		formTreeTable.setSelectable(true);
 		formTreeTable.setImmediate(true);
-		getWorkingAreaLayout().addComponent(formTreeTable);
 		formTreeTable.addValueChangeListener(new ValueChangeListener() {
-
 			private static final long serialVersionUID = 5598877051361847210L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				updateUpperMenu(formTreeTable.getValue());
+				updatePropertiesComponent(formTreeTable.getValue());
 			}
 		});
+
+		elementPropertiesContainer = new PropertiesContainer();
+		elementPropertiesContainer.setSizeFull();
+		elementPropertiesContainer.registerPropertiesComponent(Form.class, new FormProperties());
+		elementPropertiesContainer.registerPropertiesComponent(Category.class, new CategoriesProperties());
+		elementPropertiesContainer.registerPropertiesComponent(Group.class, new GroupProperties());
+		elementPropertiesContainer.registerPropertiesComponent(Question.class, new QuestionProperties());
+		elementPropertiesContainer.registerPropertiesComponent(Answer.class, new AnswerProperties());
+
+		HorizontalLayout rootLayout = new HorizontalLayout();
+		rootLayout.setSizeFull();
+		rootLayout.setSpacing(true);
+		rootLayout.setMargin(true);
+
+		rootLayout.addComponent(formTreeTable);
+		rootLayout.addComponent(elementPropertiesContainer);
+		rootLayout.setExpandRatio(formTreeTable, 0.75f);
+		rootLayout.setExpandRatio(elementPropertiesContainer, 0.25f);
+
+		getWorkingAreaLayout().addComponent(rootLayout);
+	}
+
+	protected void updatePropertiesComponent(TreeObject value) {
+		elementPropertiesContainer.updatePropertiesComponent(value);
 	}
 
 	@Override
@@ -160,7 +191,8 @@ public class TreeDesigner extends FormWebPageComponent {
 				TreeObject parent = null;
 				if (formTreeTable.getValue() instanceof Category || formTreeTable.getValue() instanceof Group) {
 					parent = formTreeTable.getValue();
-					// If selected a question, we consider the same that selecting the question's parent.
+					// If selected a question, we consider the same that
+					// selecting the question's parent.
 				} else if (formTreeTable.getValue() instanceof Question) {
 					parent = formTreeTable.getValue().getParent();
 				} else if (formTreeTable.getValue() instanceof Answer) {
@@ -187,7 +219,8 @@ public class TreeDesigner extends FormWebPageComponent {
 				TreeObject parent = null;
 				if (formTreeTable.getValue() instanceof Question) {
 					parent = formTreeTable.getValue();
-					// If selected an answer, we consider the same that selecting the question.
+					// If selected an answer, we consider the same that
+					// selecting the question.
 				} else if (formTreeTable.getValue() instanceof Answer) {
 					parent = formTreeTable.getValue().getParent();
 				}

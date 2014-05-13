@@ -72,6 +72,15 @@ public enum LanguageCodes {
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_CAPTION("formDiagramBuilder.upper.buttonToPng.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_TOOLTIP("formDiagramBuilder.upper.buttonToPng.tooltip"),
 	
+	TREE_OBJECT_PROPERTIES_CREATION_TIME("treeObjectProperties.creationTime"),
+	TREE_OBJECT_PROPERTIES_UPDATE_TIME("treeObjectProperties.updateTime"),
+	TREE_OBJECT_PROPERTIES_CREATED_BY("treeObjectProperties.createdBy"),
+	TREE_OBJECT_PROPERTIES_UPDATED_BY("treeObjectProperties.updatedBy"),
+	FORM_PROPERTIES_NAME("formProperties.name"),
+	FORM_PROPERTIES_VERSION("formProperties.version"),
+	CATEGORY_PROPERTIES_LABEL("categoryProperties.label"),
+	GROUP_PROPERTIES_REPEAT("groupProperties.repeat"),
+	PROPERTIES_TECHNICAL_NAME("properties.technicalName"),
 	
 	
 	ERROR_USER_PERMISSION("error.user.permission"),
@@ -83,7 +92,8 @@ public enum LanguageCodes {
 	ERROR_USER_SERVICE("error.userService"),
 	ERROR_UNEXPECTED_WEBSERVICE_ERROR("error.unexpectedWebserviceError"),
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
-	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled");
+	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
+	ERROR_UNEXPECTED_ERROR("error.unexpectedError");
 	
 	private String value;
 	
