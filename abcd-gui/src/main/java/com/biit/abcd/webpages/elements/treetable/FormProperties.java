@@ -4,6 +4,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.liferay.access.UserPool;
 import com.vaadin.ui.TextField;
 
 public class FormProperties extends PropertiesComponent {
@@ -29,8 +30,8 @@ public class FormProperties extends PropertiesComponent {
 		formVersion = new TextField(ServerTranslate.tr(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
 
-		String createdBy = instance.getCreatedBy() == null ? "" : instance.getCreatedBy().toString();
-		String updatedBy = instance.getUpdatedBy() == null ? "" : instance.getUpdatedBy().toString();
+		String createdBy = instance.getCreatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getCreatedBy()).getEmailAddress();
+		String updatedBy = instance.getUpdatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getUpdatedBy()).getEmailAddress();
 		String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
 		String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
 		elementCreatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
@@ -42,12 +43,17 @@ public class FormProperties extends PropertiesComponent {
 		elementUpdateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
 		elementUpdateTime.setValue(updatedTime);
 
-		getFormLayout().addComponent(formName);
-		getFormLayout().addComponent(formVersion);
-		getFormLayout().addComponent(elementCreatedBy);
-		getFormLayout().addComponent(elementCreationTime);
-		getFormLayout().addComponent(elementUpdatedBy);
-		getFormLayout().addComponent(elementUpdateTime);
+		addFormField(formName);
+		addFormField(formVersion);
+		addFormField(elementCreatedBy);
+		addFormField(elementCreationTime);
+		addFormField(elementUpdatedBy);
+		addFormField(elementUpdateTime);
+	}
+
+	@Override
+	public void updateElement() {
+		
 	}
 
 }

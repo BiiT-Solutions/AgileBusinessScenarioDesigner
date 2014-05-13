@@ -95,8 +95,7 @@ public enum LanguageCodes {
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
-	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
-	ERROR_UNEXPECTED_ERROR("error.unexpectedError");
+	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
 	
 	INFO_DATA_STORED("info.data.store");
 	

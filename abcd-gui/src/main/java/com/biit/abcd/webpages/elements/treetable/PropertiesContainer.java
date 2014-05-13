@@ -1,6 +1,8 @@
 package com.biit.abcd.webpages.elements.treetable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
@@ -16,10 +18,12 @@ public class PropertiesContainer extends CustomComponent {
 	public static String CLASSNAME = "v-properties-container";
 	private VerticalLayout rootLayout;
 	private HashMap<Class<?>, PropertiesComponent> propertiesComponents;
+	private List<PropertieUpdateListener> propertyUpdateListeners;
 
 	public PropertiesContainer() {
 
 		propertiesComponents = new HashMap<Class<?>, PropertiesComponent>();
+		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
 
 		rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
@@ -39,17 +43,38 @@ public class PropertiesContainer extends CustomComponent {
 			PropertiesComponent baseObject = propertiesComponents.get(value.getClass());
 			try {
 				rootLayout.removeAllComponents();
-				
+
 				PropertiesComponent newInstance = baseObject.getClass().newInstance();
 				newInstance.setElement(value);
+				newInstance.addPropertyUpdateListener(new PropertieUpdateListener() {
+					
+					@Override
+					public void propertyUpdate(TreeObject element) {
+						firePropertyUpdateListener(element);
+					}
+				});
 				rootLayout.addComponent(newInstance);
-				
+
 				rootLayout.markAsDirty();
 			} catch (InstantiationException | IllegalAccessException e) {
 				MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_UNEXPECTED_ERROR) + " "
 						+ ServerTranslate.tr(LanguageCodes.ERROR_CONTACT));
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
+		}
+	}
+
+	public void addPropertyUpdateListener(PropertieUpdateListener listener) {
+		propertyUpdateListeners.add(listener);
+	}
+
+	public void removePropertyUpdateListener(PropertieUpdateListener listener) {
+		propertyUpdateListeners.remove(listener);
+	}
+
+	protected void firePropertyUpdateListener(TreeObject element) {
+		for (PropertieUpdateListener listener : propertyUpdateListeners) {
+			listener.propertyUpdate(element);
 		}
 	}
 }

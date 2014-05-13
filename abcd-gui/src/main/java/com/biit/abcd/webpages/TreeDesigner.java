@@ -23,6 +23,7 @@ import com.biit.abcd.webpages.elements.treetable.CategoriesProperties;
 import com.biit.abcd.webpages.elements.treetable.FormProperties;
 import com.biit.abcd.webpages.elements.treetable.FormTreeTable;
 import com.biit.abcd.webpages.elements.treetable.GroupProperties;
+import com.biit.abcd.webpages.elements.treetable.PropertieUpdateListener;
 import com.biit.abcd.webpages.elements.treetable.PropertiesContainer;
 import com.biit.abcd.webpages.elements.treetable.QuestionProperties;
 import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
@@ -76,6 +77,14 @@ public class TreeDesigner extends FormWebPageComponent {
 		elementPropertiesContainer.registerPropertiesComponent(Group.class, new GroupProperties());
 		elementPropertiesContainer.registerPropertiesComponent(Question.class, new QuestionProperties());
 		elementPropertiesContainer.registerPropertiesComponent(Answer.class, new AnswerProperties());
+		elementPropertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
+			
+			@Override
+			public void propertyUpdate(TreeObject element) {
+				System.out.println("kiwi property update");
+				formTreeTable.updateItem(element);
+			}
+		});
 
 		HorizontalLayout rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();

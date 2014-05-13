@@ -69,6 +69,13 @@ public class FormTreeTable extends TreeTable {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public void updateItem(TreeObject element) {
+		Item item = getItem(element);
+		String name = getItemName(element);
+		item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
+	}
+
 	/**
 	 * Adds item to table. This function is a specialization of
 	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.

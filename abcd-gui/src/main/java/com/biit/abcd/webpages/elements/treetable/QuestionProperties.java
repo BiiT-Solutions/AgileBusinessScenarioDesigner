@@ -1,9 +1,11 @@
 package com.biit.abcd.webpages.elements.treetable;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.liferay.access.UserPool;
 import com.vaadin.ui.TextField;
 
 public class QuestionProperties extends PropertiesComponent {
@@ -26,8 +28,8 @@ public class QuestionProperties extends PropertiesComponent {
 		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getTechnicalName());
 
-		String createdBy = instance.getCreatedBy() == null ? "" : instance.getCreatedBy().toString();
-		String updatedBy = instance.getUpdatedBy() == null ? "" : instance.getUpdatedBy().toString();
+		String createdBy = instance.getCreatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getCreatedBy()).getEmailAddress();
+		String updatedBy = instance.getUpdatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getUpdatedBy()).getEmailAddress();
 		String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
 		String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
 		elementCreatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
@@ -39,11 +41,19 @@ public class QuestionProperties extends PropertiesComponent {
 		elementUpdateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
 		elementUpdateTime.setValue(updatedTime);
 
-		getFormLayout().addComponent(groupTechnicalLabel);
-		getFormLayout().addComponent(elementCreatedBy);
-		getFormLayout().addComponent(elementCreationTime);
-		getFormLayout().addComponent(elementUpdatedBy);
-		getFormLayout().addComponent(elementUpdateTime);
+		addFormField(groupTechnicalLabel);
+		addFormField(elementCreatedBy);
+		addFormField(elementCreationTime);
+		addFormField(elementUpdatedBy);
+		addFormField(elementUpdateTime);
+	}
+	
+	@Override
+	public void updateElement() {
+		instance.setTechnicalName(groupTechnicalLabel.getValue());
+		instance.setUpdatedBy(UserSessionHandler.getUser());
+		instance.setUpdateTime();
+		firePropertyUpdateListener(instance);
 	}
 
 }
