@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,15 +13,14 @@ import com.biit.abcd.persistence.entity.exceptions.InvalidAnswerFormatException;
 @Entity
 @Table(name = "ANSWERS")
 public class Answer extends TreeObject {
-	private static final String DEFAULT_TECHNICAL_NAME = "Answer";
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Question.class));
 
+	@Column(unique=true)
 	private String technicalName;
 	private AnswerType answerType;
 	private AnswerFormat answerFormat;
 
 	public Answer() {
-		setTechnicalName(DEFAULT_TECHNICAL_NAME);
 	}
 
 	@Override

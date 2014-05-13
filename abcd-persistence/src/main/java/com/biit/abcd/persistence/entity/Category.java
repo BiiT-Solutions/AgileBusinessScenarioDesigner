@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CATEGORIES")
 public class Category extends TreeObject {
-	private static final String DEFAULT_NAME = "Category";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class,
 			Group.class));
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Form.class));
 
+	@Column(unique = true)
 	private String label;
 
 	public Category() {
-		setLabel(DEFAULT_NAME);
 	}
 
 	@Override
