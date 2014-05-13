@@ -123,16 +123,13 @@ public class Login extends WebPageComponent {
 		} catch (InvalidCredentialsException | AuthenticationRequired e) {
 			passwordField.setComponentError(new UserError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_USER,
 					new Object[] { userMail })));
-			MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_BADUSERPSWD),
-					ServerTranslate.tr(LanguageCodes.ERROR_TRYAGAIN));
+			MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
 		} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
 			e.printStackTrace();
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
-			MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_USER_SERVICE),
-					ServerTranslate.tr(LanguageCodes.ERROR_CONTACT));
+			MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
 		} catch (PBKDF2EncryptorException e) {
-			MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_ENCRYPTINGPASSWORD),
-					ServerTranslate.tr(LanguageCodes.ERROR_CONTACT));
+			MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD, LanguageCodes.ERROR_CONTACT);
 		}
 
 		if (user != null) {

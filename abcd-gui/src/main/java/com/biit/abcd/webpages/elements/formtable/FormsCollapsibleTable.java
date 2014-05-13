@@ -324,7 +324,14 @@ public class FormsCollapsibleTable extends VerticalLayout implements ValueChange
 		if (form != null && !formTable.containsId(form)) {
 			uncollapseForm(form);
 		}
-		formTable.setValue(form);
+		for (Object itemId : formTable.getItemIds()) {
+			if (itemId instanceof Form) {
+				Form tableForm = (Form) itemId;
+				if (tableForm.getId() != null && tableForm.getId().equals(form.getId())) {
+					formTable.setValue(tableForm);
+				}
+			}
+		}
 	}
 
 	/**

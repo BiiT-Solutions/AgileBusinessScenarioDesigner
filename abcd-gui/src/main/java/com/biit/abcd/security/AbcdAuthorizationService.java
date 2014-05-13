@@ -5,9 +5,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;

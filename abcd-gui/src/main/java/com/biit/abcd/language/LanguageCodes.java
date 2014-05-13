@@ -84,6 +84,7 @@ public enum LanguageCodes {
 	
 	
 	ERROR_USER_PERMISSION("error.user.permission"),
+	ERROR_USER_NOACCESS("error.user.noaccess"),
 	ERROR_ACCESS("error.access"),
 	ERROR_BADUSERPSWD("error.login.badUserPassword"),
 	ERROR_ENCRYPTINGPASSWORD("error.login.passwordEncrypt"),
@@ -93,7 +94,11 @@ public enum LanguageCodes {
 	ERROR_UNEXPECTED_WEBSERVICE_ERROR("error.unexpectedWebserviceError"),
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
+	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
+	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError");
+	
+	INFO_DATA_STORED("info.data.store");
 	
 	private String value;
 	
