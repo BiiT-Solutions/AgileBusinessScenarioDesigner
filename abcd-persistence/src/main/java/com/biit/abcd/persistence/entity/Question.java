@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -15,7 +14,6 @@ public class Question extends TreeObject {
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class,
 			Group.class));
 
-	@Column(unique=true)
 	private String technicalName;
 
 	public Question() {
