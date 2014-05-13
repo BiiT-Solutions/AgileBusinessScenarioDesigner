@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.treetable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
@@ -48,7 +50,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -67,8 +70,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
-	 * members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -87,8 +90,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
-	 * {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't
+	 * be defined, then raises a {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -140,5 +143,10 @@ public class FormTreeTable extends TreeTable {
 	 */
 	private void selectFirstRow() {
 		setValue(firstItemId());
+	}
+
+	@Override
+	public Collection<?> getSortableContainerPropertyIds() {
+		return Collections.EMPTY_LIST;
 	}
 }

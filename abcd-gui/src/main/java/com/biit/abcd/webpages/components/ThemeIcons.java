@@ -52,8 +52,22 @@ public enum ThemeIcons {
 	
 	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg"),
 	
-	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg");
-
+	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg"),
+	
+	CLEAN("appbar.clean.svg"),
+	
+	UNDO("appbar.undo.svg"),
+	
+	REDO("appbar.redo.svg"),
+	
+	TO_PNG("appbar.page.png.svg"),
+	
+	TO_SVG("appbar.page.svg.svg"),
+	
+	TO_BACK("appbar.toBack.svg"),
+	
+	TO_FRONT("appbar.toFront.svg");
+	
 	private String value;
 
 	ThemeIcons(String value) {
