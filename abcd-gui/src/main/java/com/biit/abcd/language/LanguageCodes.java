@@ -51,6 +51,25 @@ public enum LanguageCodes {
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
 	
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_CAPTION("formDiagramBuilder.upper.buttonClear.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_TOOLTIP("formDiagramBuilder.upper.buttonClear.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_SAVE_CAPTION("formDiagramBuilder.upper.buttonSave.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_SAVE_TOOLTIP("formDiagramBuilder.upper.buttonSave.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_UNDO_CAPTION("formDiagramBuilder.upper.buttonUndo.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_UNDO_TOOLTIP("formDiagramBuilder.upper.buttonUndo.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_REDO_CAPTION("formDiagramBuilder.upper.buttonRedo.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_REDO_TOOLTIP("formDiagramBuilder.upper.buttonRedo.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOFRONT_CAPTION("formDiagramBuilder.upper.buttonToFront.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOFRONT_TOOLTIP("formDiagramBuilder.upper.buttonToFront.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOBACK_CAPTION("formDiagramBuilder.upper.buttonToBack.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOBACK_TOOLTIP("formDiagramBuilder.upper.buttonToBack.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOSVG_CAPTION("formDiagramBuilder.upper.buttonToSvg.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOSVG_TOOLTIP("formDiagramBuilder.upper.buttonToSvg.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_CAPTION("formDiagramBuilder.upper.buttonToPng.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_TOOLTIP("formDiagramBuilder.upper.buttonToPng.tooltip"),
+	
+	
+	
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_ACCESS("error.access"),
 	ERROR_BADUSERPSWD("error.login.badUserPassword"),
