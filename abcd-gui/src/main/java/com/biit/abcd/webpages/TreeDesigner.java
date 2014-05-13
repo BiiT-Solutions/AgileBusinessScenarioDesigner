@@ -2,6 +2,8 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
+import com.biit.abcd.SpringContextHelper;
+import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
@@ -16,6 +18,7 @@ import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinServlet;
 
 public class TreeDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
@@ -27,8 +30,11 @@ public class TreeDesigner extends FormWebPageComponent {
 	private Form form;
 	private TreeTableUpperMenu upperMenu;
 
-	public TreeDesigner() {
+	private IFormDao formDao;
 
+	public TreeDesigner() {
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	@Override
@@ -133,7 +139,8 @@ public class TreeDesigner extends FormWebPageComponent {
 			if (formTreeTable.getValue() != null) {
 				Category selectedCategory = formTreeTable.getValue().getCategory();
 				if (selectedCategory != null) {
-					newGroup.setTechnicalName(DEFAULT_GROUP_TECHNICAL_NAME + (selectedCategory.getChildren().size() + 1));
+					newGroup.setTechnicalName(DEFAULT_GROUP_TECHNICAL_NAME
+							+ (selectedCategory.getChildren().size() + 1));
 					addElementToUI(newGroup, selectedCategory);
 					selectedCategory.addChild(newGroup);
 				}
@@ -206,6 +213,10 @@ public class TreeDesigner extends FormWebPageComponent {
 			TreeObject lastElement = parent.getLastElement();
 			formTreeTable.addItemAfter(lastElement, child, parent);
 		}
+	}
+
+	public void save() {
+		formDao.makePersistent(getForm());
 	}
 
 }

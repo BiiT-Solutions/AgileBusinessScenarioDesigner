@@ -37,7 +37,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						parent.save();
 					}
 				});
 		addIconButton(saveButton);

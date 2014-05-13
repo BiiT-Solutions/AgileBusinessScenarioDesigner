@@ -4,9 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Cascade;
 
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.liferay.portal.model.UserGroup;
@@ -22,6 +29,18 @@ public class Form extends TreeObject {
 
 	public Form() {
 		setName(DEFAULT_NAME);
+	}
+
+	/**
+	 * Gets all children of the form. This annotations are in the method because overwrites the TreeObject. Forms'
+	 * children must use FetchType.LAZY.
+	 */
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
+	@OrderColumn(name = "children_index")
+	public List<TreeObject> getChildren() {
+		return super.getChildren();
 	}
 
 	@Override
