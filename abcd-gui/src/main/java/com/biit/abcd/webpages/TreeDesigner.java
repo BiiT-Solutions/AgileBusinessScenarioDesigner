@@ -1,10 +1,12 @@
 package com.biit.abcd.webpages;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
-import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.SpringContextHelper;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
@@ -92,6 +94,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public void addCategory() {
 		if (getForm() != null) {
 			Category newCategory = new Category();
+			setCreator(newCategory);
 			newCategory.setLabel(DEFAULT_CATEGORY_NAME + (form.getChildren().size() + 1));
 			try {
 				if (formTreeTable.getValue() != null) {
@@ -141,6 +144,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public void addGroup() {
 		if (getForm() != null) {
 			Group newGroup = new Group();
+			setCreator(newGroup);
 			try {
 				if (formTreeTable.getValue() != null) {
 					Category selectedCategory = formTreeTable.getValue().getCategory();
@@ -163,6 +167,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public void addQuestion() {
 		if (getForm() != null) {
 			Question newQuestion = new Question();
+			setCreator(newQuestion);
 			try {
 				if (formTreeTable.getValue() != null) {
 					TreeObject parent = null;
@@ -193,6 +198,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public void addAnswer() {
 		if (getForm() != null) {
 			Answer newAnswer = new Answer();
+			setCreator(newAnswer);
 			try {
 				if (formTreeTable.getValue() != null) {
 					TreeObject parent = null;
@@ -234,4 +240,28 @@ public class TreeDesigner extends FormWebPageComponent {
 		}
 	}
 
+	/**
+	 * Updates the creator of the object and its parents.
+	 * 
+	 * @param treeObject
+	 */
+	private void setCreator(TreeObject treeObject) {
+		if (treeObject != null) {
+			treeObject.setCreatedBy(UserSessionHandler.getUser());
+			treeObject.setCreationTime(new Timestamp(new Date().getTime()));
+			setUpdater(treeObject);
+		}
+	}
+
+	/**
+	 * Updates the updater of the object and its parents.
+	 * 
+	 * @param treeObject
+	 */
+	private void setUpdater(TreeObject treeObject) {
+		if (treeObject != null) {
+			treeObject.setUpdatedBy(UserSessionHandler.getUser());
+			treeObject.setUpdateTime(new Timestamp(new Date().getTime()));
+		}
+	}
 }
