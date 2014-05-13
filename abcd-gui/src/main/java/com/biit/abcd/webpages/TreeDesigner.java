@@ -2,6 +2,7 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
@@ -87,28 +88,30 @@ public class TreeDesigner extends FormWebPageComponent {
 	 * Adds a new category into the UI and the Form object.
 	 */
 	public void addCategory() {
-		Category newCategory = new Category();
-		newCategory.setLabel(DEFAULT_CATEGORY_NAME + (form.getChildren().size() + 1));
-		try {
-			if (formTreeTable.getValue() != null) {
-				Category selectedCategory = formTreeTable.getValue().getCategory();
-				if (selectedCategory == null) {
-					getForm().addChild(newCategory);
-				} else {
-					int index = getForm().getChildren().indexOf(selectedCategory);
-					if (index >= 0) {
-						getForm().addChild(index, newCategory);
-					} else {
+		if (getForm() != null) {
+			Category newCategory = new Category();
+			newCategory.setLabel(DEFAULT_CATEGORY_NAME + (form.getChildren().size() + 1));
+			try {
+				if (formTreeTable.getValue() != null) {
+					Category selectedCategory = formTreeTable.getValue().getCategory();
+					if (selectedCategory == null) {
 						getForm().addChild(newCategory);
+					} else {
+						int index = getForm().getChildren().indexOf(selectedCategory);
+						if (index >= 0) {
+							getForm().addChild(index, newCategory);
+						} else {
+							getForm().addChild(newCategory);
+						}
 					}
+				} else {
+					getForm().addChild(newCategory);
 				}
-			} else {
-				getForm().addChild(newCategory);
+			} catch (NotValidChildException e) {
+				// Not possible.
 			}
-		} catch (NotValidChildException e) {
-			// Not possible.
+			addCategoryToUI(newCategory);
 		}
-		addCategoryToUI(newCategory);
 	}
 
 	/**
@@ -134,19 +137,21 @@ public class TreeDesigner extends FormWebPageComponent {
 	 * Adds a new group into the UI and the Form object.
 	 */
 	public void addGroup() {
-		Group newGroup = new Group();
-		try {
-			if (formTreeTable.getValue() != null) {
-				Category selectedCategory = formTreeTable.getValue().getCategory();
-				if (selectedCategory != null) {
-					newGroup.setTechnicalName(DEFAULT_GROUP_TECHNICAL_NAME
-							+ (selectedCategory.getChildren().size() + 1));
-					addElementToUI(newGroup, selectedCategory);
-					selectedCategory.addChild(newGroup);
+		if (getForm() != null) {
+			Group newGroup = new Group();
+			try {
+				if (formTreeTable.getValue() != null) {
+					Category selectedCategory = formTreeTable.getValue().getCategory();
+					if (selectedCategory != null) {
+						newGroup.setTechnicalName(DEFAULT_GROUP_TECHNICAL_NAME
+								+ (selectedCategory.getChildren().size() + 1));
+						addElementToUI(newGroup, selectedCategory);
+						selectedCategory.addChild(newGroup);
+					}
 				}
+			} catch (NotValidChildException e) {
+				// Not possible.
 			}
-		} catch (NotValidChildException e) {
-			// Not possible.
 		}
 	}
 
@@ -154,26 +159,29 @@ public class TreeDesigner extends FormWebPageComponent {
 	 * Adds a new question into the UI and the Form object.
 	 */
 	public void addQuestion() {
-		Question newQuestion = new Question();
-		try {
-			if (formTreeTable.getValue() != null) {
-				TreeObject parent = null;
-				if (formTreeTable.getValue() instanceof Category || formTreeTable.getValue() instanceof Group) {
-					parent = formTreeTable.getValue();
-					// If selected a question, we consider the same that selecting the question's parent.
-				} else if (formTreeTable.getValue() instanceof Question) {
-					parent = formTreeTable.getValue().getParent();
-				} else if (formTreeTable.getValue() instanceof Answer) {
-					parent = formTreeTable.getValue().getParent().getParent();
+		if (getForm() != null) {
+			Question newQuestion = new Question();
+			try {
+				if (formTreeTable.getValue() != null) {
+					TreeObject parent = null;
+					if (formTreeTable.getValue() instanceof Category || formTreeTable.getValue() instanceof Group) {
+						parent = formTreeTable.getValue();
+						// If selected a question, we consider the same that selecting the question's parent.
+					} else if (formTreeTable.getValue() instanceof Question) {
+						parent = formTreeTable.getValue().getParent();
+					} else if (formTreeTable.getValue() instanceof Answer) {
+						parent = formTreeTable.getValue().getParent().getParent();
+					}
+					if (parent != null) {
+						newQuestion.setTechnicalName(DEFAULT_QUESTION_TECHNICAL_NAME
+								+ (parent.getChildren().size() + 1));
+						addElementToUI(newQuestion, parent);
+						parent.addChild(newQuestion);
+					}
 				}
-				if (parent != null) {
-					newQuestion.setTechnicalName(DEFAULT_QUESTION_TECHNICAL_NAME + (parent.getChildren().size() + 1));
-					addElementToUI(newQuestion, parent);
-					parent.addChild(newQuestion);
-				}
+			} catch (NotValidChildException e) {
+				// Not possible.
 			}
-		} catch (NotValidChildException e) {
-			// Not possible.
 		}
 	}
 
@@ -181,24 +189,26 @@ public class TreeDesigner extends FormWebPageComponent {
 	 * Adds a new answer into the UI and the Form object.
 	 */
 	public void addAnswer() {
-		Answer newAnswer = new Answer();
-		try {
-			if (formTreeTable.getValue() != null) {
-				TreeObject parent = null;
-				if (formTreeTable.getValue() instanceof Question) {
-					parent = formTreeTable.getValue();
-					// If selected an answer, we consider the same that selecting the question.
-				} else if (formTreeTable.getValue() instanceof Answer) {
-					parent = formTreeTable.getValue().getParent();
+		if (getForm() != null) {
+			Answer newAnswer = new Answer();
+			try {
+				if (formTreeTable.getValue() != null) {
+					TreeObject parent = null;
+					if (formTreeTable.getValue() instanceof Question) {
+						parent = formTreeTable.getValue();
+						// If selected an answer, we consider the same that selecting the question.
+					} else if (formTreeTable.getValue() instanceof Answer) {
+						parent = formTreeTable.getValue().getParent();
+					}
+					if (parent != null) {
+						newAnswer.setTechnicalName(DEFAULT_ANSWER_TECHNICAL_NAME + (parent.getChildren().size() + 1));
+						addElementToUI(newAnswer, parent);
+						parent.addChild(newAnswer);
+					}
 				}
-				if (parent != null) {
-					newAnswer.setTechnicalName(DEFAULT_ANSWER_TECHNICAL_NAME + (parent.getChildren().size() + 1));
-					addElementToUI(newAnswer, parent);
-					parent.addChild(newAnswer);
-				}
+			} catch (NotValidChildException e) {
+				// Not possible.
 			}
-		} catch (NotValidChildException e) {
-			// Not possible.
 		}
 	}
 
@@ -216,7 +226,9 @@ public class TreeDesigner extends FormWebPageComponent {
 	}
 
 	public void save() {
-		formDao.makePersistent(getForm());
+		if (getForm() != null) {
+			formDao.makePersistent(getForm());
+		}
 	}
 
 }
