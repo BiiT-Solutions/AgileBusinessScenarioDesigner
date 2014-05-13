@@ -20,7 +20,6 @@ import com.vaadin.ui.TreeTable;
  * 
  */
 public class FormTreeTable extends TreeTable {
-
 	private static final long serialVersionUID = -6949123334668973540L;
 	private Form form;
 
@@ -37,12 +36,14 @@ public class FormTreeTable extends TreeTable {
 				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 	}
 
-	private void loadForm(TreeObject element) {
-		addItem(element);
+	private void loadForm(TreeObject element, TreeObject parent) {
+		addItem(element, parent);
+		if (parent != null) {
+			setParent(element, parent);
+		}
 		List<TreeObject> children = element.getChildren();
 		for (TreeObject child : children) {
-			loadForm(child);
-			setParent(child, element);
+			loadForm(child, element);
 		}
 	}
 
@@ -52,10 +53,17 @@ public class FormTreeTable extends TreeTable {
 	 * @param element
 	 */
 	@SuppressWarnings("unchecked")
-	public void addItem(TreeObject element) {
-		String name = getItemId(element);
-		Item item = addItem((Object) element);
-		item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
+	public void addItem(TreeObject element, TreeObject parent) {
+		if (element != null) {
+			String name = getItemName(element);
+			Item item = addItem((Object) element);
+			if (parent != null) {
+				setParent(element, parent);
+				setCollapsed(parent, false);
+			}
+			item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
+			setValue(element);
+		}
 	}
 
 	/**
@@ -65,10 +73,17 @@ public class FormTreeTable extends TreeTable {
 	 * @param element
 	 */
 	@SuppressWarnings("unchecked")
-	public void addItemAfter(Object previousItemId, TreeObject element) {
-		String name = getItemId(element);
-		Item item = addItemAfter(previousItemId, (Object) element);
-		item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
+	public void addItemAfter(Object previousItemId, TreeObject element, TreeObject parent) {
+		if (element != null) {
+			String name = getItemName(element);
+			Item item = addItemAfter(previousItemId, (Object) element);
+			if (parent != null) {
+				setParent(element, parent);
+				setCollapsed(parent, false);
+			}
+			item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
+			setValue(element);
+		}
 	}
 
 	/**
@@ -78,7 +93,7 @@ public class FormTreeTable extends TreeTable {
 	 * @param element
 	 * @return
 	 */
-	public static String getItemId(TreeObject element) {
+	public static String getItemName(TreeObject element) {
 		String name = null;
 		if (element instanceof Form) {
 			name = ((Form) element).getName();
@@ -104,7 +119,11 @@ public class FormTreeTable extends TreeTable {
 	public void setForm(Form form) {
 		this.form = form;
 		this.removeAllItems();
-		loadForm(form);
+		loadForm(form, null);
+		if (form != null) {
+			setCollapsed(form, false);
+		}
+		selectFirstRow();
 	}
 
 	@Override
@@ -114,5 +133,12 @@ public class FormTreeTable extends TreeTable {
 			return (TreeObject) value;
 		}
 		return null;
+	}
+
+	/**
+	 * Selects the first row.
+	 */
+	private void selectFirstRow() {
+		setValue(firstItemId());
 	}
 }

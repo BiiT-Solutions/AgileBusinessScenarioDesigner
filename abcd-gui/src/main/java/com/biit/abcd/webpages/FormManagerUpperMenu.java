@@ -29,7 +29,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Add new Category
-		newFormButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),
+		newFormButton = new IconButton(ServerTranslate.tr(LanguageCodes.FORM_MANAGER_EDIT_FORM),
 				ThemeIcons.FORM_MANAGER_ADD_FORM.getFile(), ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),
 				IconSize.BIG, new ClickListener() {
 					@Override
