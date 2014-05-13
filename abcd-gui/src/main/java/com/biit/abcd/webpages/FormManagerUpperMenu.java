@@ -2,7 +2,6 @@ package com.biit.abcd.webpages;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.IconButton;
@@ -10,13 +9,12 @@ import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.abcd.webpages.components.WindowNewForm;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
 public class FormManagerUpperMenu extends UpperMenu {
+	private static final long serialVersionUID = 504419812975550794L;
 	private IconButton newFormButton;
 	private FormManager parent;
 
@@ -29,11 +27,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Add new Category
-		newFormButton = new IconButton(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),
-				ThemeIcons.FORM_MANAGER_ADD_FORM.getFile(), ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER),
-				IconSize.BIG, new ClickListener() {
+		newFormButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcons.FORM_MANAGER_ADD_FORM,
+				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = 6053447189295644721L;
+
 					@Override
 					public void buttonClick(ClickEvent event) {
+						System.out.println("kiwi?");
 						UI.getCurrent().addWindow(new WindowNewForm(parent));
 					}
 				});

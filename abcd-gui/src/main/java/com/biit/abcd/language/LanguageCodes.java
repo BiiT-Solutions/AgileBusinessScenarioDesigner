@@ -32,6 +32,8 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_CREATIONDATE("formTable.column.creationDate"),
 	FORM_TABLE_COLUMN_MODIFIEDBY("formTable.column.modifiedBy"),
 	FORM_TABLE_COLUMN_MODIFICATIONDATE("formTable.column.modificationDate"),
+	FORM_TABLE_COLLAPSIBLE_CELL_EXPAND_TOOLTIP("formTable.collapsible.cell.expand.tooltip"),
+	FORM_TABLE_COLLAPSIBLE_CELL_CONTRACT_TOOLTIP("formTable.collapsible.cell.contract.tooltip"),
 	
 	TREE_DESIGNER_CATEGORY_ADD("treeDesigner.category.add"),
 	TREE_DESIGNER_GROUP_ADD("treeDesigner.group.add"),

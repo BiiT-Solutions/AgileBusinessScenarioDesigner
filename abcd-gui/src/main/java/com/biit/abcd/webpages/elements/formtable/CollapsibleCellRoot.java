@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.formtable;
 
 import java.util.List;
 
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
@@ -59,23 +60,25 @@ class CollapsibleCellRoot extends CollapsibleCellLabel {
 		setSpacing(true);
 		setSizeUndefined();
 
-		expandButton = new IconButton(ThemeIcons.EXPAND.getFile(), "Expand forms", IconSize.SMALL, new ClickListener() {
-			private static final long serialVersionUID = -8790931587642079896L;
+		expandButton = new IconButton(ThemeIcons.EXPAND, LanguageCodes.FORM_TABLE_COLLAPSIBLE_CELL_EXPAND_TOOLTIP,
+				IconSize.SMALL, new ClickListener() {
+					private static final long serialVersionUID = -8790931587642079896L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				uncollapse();
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						uncollapse();
+					}
+				});
 
-		collapseButton = new IconButton(ThemeIcons.COLLAPSE.getFile(), "Contract forms", IconSize.SMALL, new ClickListener() {
-			private static final long serialVersionUID = 3722311031488330957L;
+		collapseButton = new IconButton(ThemeIcons.COLLAPSE,
+				LanguageCodes.FORM_TABLE_COLLAPSIBLE_CELL_CONTRACT_TOOLTIP, IconSize.SMALL, new ClickListener() {
+					private static final long serialVersionUID = 3722311031488330957L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				collapse();
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						collapse();
+					}
+				});
 
 		if (forms != null && forms.get(0) != null) {
 			label = new Label(forms.get(0).getName());
