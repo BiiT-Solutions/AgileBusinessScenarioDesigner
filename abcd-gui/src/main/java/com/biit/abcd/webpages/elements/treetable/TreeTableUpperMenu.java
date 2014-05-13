@@ -18,7 +18,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class TreeTableUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -4712688788270327039L;
 	private static String iconWidth = "150px";
-	private IconButton newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton;
+	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton;
 	private TreeDesigner parent;
 
 	public TreeTableUpperMenu(TreeDesigner parent) {
@@ -29,6 +29,19 @@ public class TreeTableUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
+		// Save
+		saveButton = new IconButton(LanguageCodes.MENU_SAVE,
+				ThemeIcons.SAVE,
+				LanguageCodes.MENU_SAVE, IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = 4094066808071081684L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+
+					}
+				});
+		addIconButton(saveButton);
+
 		// Add new Category
 		newCategoryButton = new IconButton(LanguageCodes.TREE_DESIGNER_CATEGORY_ADD,
 				ThemeIcons.TREE_DESIGNER_ADD_CATEGORY, LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG,
@@ -101,14 +114,14 @@ public class TreeTableUpperMenu extends UpperMenu {
 		}
 		if (selectedObject instanceof Question) {
 			newCategoryButton.setEnabled(true);
-			newGroupButton.setEnabled(false);
+			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 			newAnswerButton.setEnabled(true);
 		}
 		if (selectedObject instanceof Answer) {
 			newCategoryButton.setEnabled(true);
-			newGroupButton.setEnabled(false);
-			newQuestionButton.setEnabled(false);
+			newGroupButton.setEnabled(true);
+			newQuestionButton.setEnabled(true);
 			newAnswerButton.setEnabled(true);
 		}
 	}

@@ -34,6 +34,8 @@ public class TreeDesigner extends FormWebPageComponent {
 
 		formTreeTable = new FormTreeTable();
 		formTreeTable.setSizeFull();
+		formTreeTable.setSelectable(true);
+		formTreeTable.setImmediate(true);
 		getWorkingAreaLayout().addComponent(formTreeTable);
 		formTreeTable.addValueChangeListener(new ValueChangeListener() {
 
@@ -71,6 +73,9 @@ public class TreeDesigner extends FormWebPageComponent {
 		return upperMenu;
 	}
 
+	/**
+	 * Adds a new category into the UI and the Form object.
+	 */
 	public void addCategory() {
 		Category newCategory = new Category();
 		try {
@@ -95,24 +100,36 @@ public class TreeDesigner extends FormWebPageComponent {
 		addCategoryToUI(newCategory);
 	}
 
-	public void addCategoryToUI(Category category) {
+	/**
+	 * Adds a Category to the UI. The parent always will be the form.
+	 * 
+	 * @param category
+	 */
+	private void addCategoryToUI(Category category) {
 		if (formTreeTable.getValue() != null) {
 			Category selectedCategory = formTreeTable.getValue().getCategory();
-			TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
-			formTreeTable.addItemAfter(FormTreeTable.getItemId(getLastElementOfCategory), category);
+			if (selectedCategory != null) {
+				TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
+				formTreeTable.addItemAfter(getLastElementOfCategory, category, form);
+			} else {
+				formTreeTable.addItem(category, form);
+			}
 		} else {
-			formTreeTable.addItem(category);
+			formTreeTable.addItem(category, form);
 		}
 	}
 
+	/**
+	 * Adds a new group into the UI and the Form object.
+	 */
 	public void addGroup() {
 		Group newGroup = new Group();
 		try {
 			if (formTreeTable.getValue() != null) {
 				Category selectedCategory = formTreeTable.getValue().getCategory();
 				if (selectedCategory != null) {
+					addElementToUI(newGroup, selectedCategory);
 					selectedCategory.addChild(newGroup);
-					addGroupToUI(newGroup);
 				}
 			}
 		} catch (NotValidChildException e) {
@@ -120,28 +137,67 @@ public class TreeDesigner extends FormWebPageComponent {
 		}
 	}
 
-	public void addGroupToUI(Group group) {
-		if (formTreeTable.getValue() != null) {
-			Category selectedCategory = formTreeTable.getValue().getCategory();
-			TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
-			formTreeTable.addItemAfter(FormTreeTable.getItemId(getLastElementOfCategory), group);
+	/**
+	 * Adds a new question into the UI and the Form object.
+	 */
+	public void addQuestion() {
+		Question newQuestion = new Question();
+		try {
+			if (formTreeTable.getValue() != null) {
+				TreeObject parent = null;
+				if (formTreeTable.getValue() instanceof Category || formTreeTable.getValue() instanceof Group) {
+					parent = formTreeTable.getValue();
+					// If selected a question, we consider the same that selecting the question's parent.
+				} else if (formTreeTable.getValue() instanceof Question) {
+					parent = formTreeTable.getValue().getParent();
+				} else if (formTreeTable.getValue() instanceof Answer) {
+					parent = formTreeTable.getValue().getParent().getParent();
+				}
+				if (parent != null) {
+					addElementToUI(newQuestion, parent);
+					parent.addChild(newQuestion);
+				}
+			}
+		} catch (NotValidChildException e) {
+			// Not possible.
 		}
 	}
 
-	public void addQuestion() {
-
-	}
-
-	public void addQuestionToUI(Question question) {
-
-	}
-
+	/**
+	 * Adds a new answer into the UI and the Form object.
+	 */
 	public void addAnswer() {
-
+		Answer newAnswer = new Answer();
+		try {
+			if (formTreeTable.getValue() != null) {
+				TreeObject parent = null;
+				if (formTreeTable.getValue() instanceof Question) {
+					parent = formTreeTable.getValue();
+					// If selected an answer, we consider the same that selecting the question.
+				} else if (formTreeTable.getValue() instanceof Answer) {
+					parent = formTreeTable.getValue().getParent();
+				}
+				if (parent != null) {
+					addElementToUI(newAnswer, parent);
+					parent.addChild(newAnswer);
+				}
+			}
+		} catch (NotValidChildException e) {
+			// Not possible.
+		}
 	}
 
-	public void addAnswerToUI(Answer answer) {
-
+	/**
+	 * Adds an element in the tree using the parent as root.
+	 * 
+	 * @param child
+	 * @param parent
+	 */
+	private void addElementToUI(TreeObject child, TreeObject parent) {
+		if (formTreeTable.getValue() != null) {
+			TreeObject lastElement = parent.getLastElement();
+			formTreeTable.addItemAfter(lastElement, child, parent);
+		}
 	}
 
 }

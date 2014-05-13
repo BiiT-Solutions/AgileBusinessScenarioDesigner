@@ -16,6 +16,8 @@ public enum LanguageCodes {
 	ABOUT_US_BIIT("aboutUs.biit"),
 	ABOUT_US_REPORT("aboutUs.report"),
 	
+	MENU_SAVE("menu.save"),
+	
 	FORM_TREE_PROPERTY_NAME("form.tree.property.name"),
 	
 	INFO_USER_LOG("info.userLog"),
@@ -23,6 +25,8 @@ public enum LanguageCodes {
 	
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
+	
+	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	
 	FORM_TABLE_COLUMN_NAME("formTable.column.name"),
 	FORM_TABLE_COLUMN_VERSION("formTable.column.version"),
@@ -40,7 +44,7 @@ public enum LanguageCodes {
 	TREE_DESIGNER_QUESTION_ADD("treeDesigner.question.add"),
 	TREE_DESIGNER_ANSWER_ADD("treeDesigner.answer.add"),
 	
-	BOTTOM_MENU_FORM_MANAGER("windowNewForm.window.title"),
+	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
