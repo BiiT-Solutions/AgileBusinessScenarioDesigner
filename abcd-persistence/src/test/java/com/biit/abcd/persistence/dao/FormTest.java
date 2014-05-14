@@ -1,7 +1,9 @@
 package com.biit.abcd.persistence.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -12,6 +14,8 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -19,6 +23,8 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form";
 	private final static String FULL_FORM = "Complete Form";
+	private final static String OTHER_FORM = "Other Form";
+	private final static String CATEGORY_LABEL = "Category1";
 
 	@Autowired
 	private IFormDao formDao;
@@ -57,6 +63,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		form = new Form();
 		form.setName(FULL_FORM);
 		Category category = new Category();
+		category.setLabel(CATEGORY_LABEL);
 		form.addChild(category);
 		formDao.makePersistent(form);
 		Form retrievedForm = formDao.read(form.getId());
@@ -76,6 +83,20 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "increaseVersion")
+	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException {
+		Form form2 = new Form();
+		form2.setName(OTHER_FORM);
+		Category category = new Category();
+		category.setLabel(CATEGORY_LABEL);
+		form2.addChild(category);
+		formDao.makePersistent(form2);
+		Form retrievedForm = formDao.read(form2.getId());
+
+		Assert.assertEquals(retrievedForm.getId(), form2.getId());
+		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
+	}
+
+	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
 	public void removeForm() {
 		List<Form> forms = formDao.getAll();
 		for (Form form : forms) {
