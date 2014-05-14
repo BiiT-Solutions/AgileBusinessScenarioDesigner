@@ -75,8 +75,6 @@ public class MessageManager {
 
 			// Set the position.
 			notif.setPosition(position);
-			notif.setStyleName(notif.getStyleName() + " allwidth");
-			// notif.set
 
 			// Let it stay there until the user clicks it if is error message
 			if (type.equals(Notification.Type.ERROR_MESSAGE)) {

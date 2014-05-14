@@ -22,6 +22,55 @@ $blueShadowColor: #52A5C5;
 
   /* Insert your theme rules here */
   
+  	/* Fix for diagram building style until further notice */
+  	.v-Notification h1 {
+	  	position: static;
+		z-index: inherit;
+		top: 0;
+		left: 0;
+		margin: inherit;
+		padding: inherit;
+  	}
+  	
+  	.v-Notification h1, .v-Notification p, .v-Notification-error h1, .v-Notification-error p, .v-Notification-warning h1, .v-Notification-warning p {
+		display: block;
+		margin: 0 0.5em 0 0;
+	}
+  	
+  	.v-Notification-warning {
+		background: #fdf3b5;
+		border: 3px solid #fee3af;
+	}
+	
+	.v-Notification.v-Notification-error h1 {
+	  	color: #FFFFFF !important;
+	  	font-size: 24px;
+  	}
+  	.v-Notification.v-Notification-error p {
+	  	color: #FFFFFF !important;
+	  	font-size: 14px;
+	  	padding-top: 14px;
+  	}
+	.v-Notification.v-Notification-warning h1 {
+	  	color: #ca9a61 !important;
+	  	font-size: 24px;
+  	}
+  	.v-Notification.v-Notification-warning p {
+	  	color: #ca9a61 !important;
+	  	font-size: 14px;
+	  	padding-top: 14px;
+  	}
+  	.v-Notification h1 {
+	  	color: #FFFFFF !important;
+	  	font-size: 24px;
+  	}
+  	.v-Notification p {
+	  	color: #FFFFFF !important;
+	  	font-size: 14px;
+	  	padding-top: 14px;
+  	}
+	
+  
   	.v-horizontal-button-group {
 		background-color: white;
 	}
