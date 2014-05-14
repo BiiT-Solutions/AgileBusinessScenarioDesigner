@@ -10,6 +10,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
@@ -17,6 +18,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
@@ -83,7 +85,6 @@ public class TreeDesigner extends FormWebPageComponent {
 
 			@Override
 			public void propertyUpdate(TreeObject element) {
-				System.out.println("kiwi property update");
 				formTreeTable.updateItem(element);
 			}
 		});
@@ -275,6 +276,9 @@ public class TreeDesigner extends FormWebPageComponent {
 		}
 	}
 
+	/**
+	 * Saves the form into the database.
+	 */
 	public void save() {
 		if (getForm() != null) {
 			try {
@@ -312,11 +316,54 @@ public class TreeDesigner extends FormWebPageComponent {
 		}
 	}
 
-	public void moveUp() {
-
+	/**
+	 * Moves the selected element up if possible.
+	 * 
+	 * @return true if the element has been moved.
+	 */
+	public boolean moveUp() {
+		if (formTreeTable != null) {
+			TreeObject selected = formTreeTable.getValue();
+			if (selected.getParent() != null && selected.getParent().getChildren().indexOf(selected) > 0) {
+				try {
+					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
+							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
+					// Refresh the GUI.
+					formTreeTable.setForm(form);
+					// Select the moved element
+					formTreeTable.setValue(selected);
+					return true;
+				} catch (ChildrenNotFoundException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+				}
+			}
+		}
+		return false;
 	}
 
-	public void moveDown() {
-
+	/**
+	 * Moves the selected element down if possible.
+	 * 
+	 * @return true if the element has been moved.
+	 */
+	public boolean moveDown() {
+		if (formTreeTable != null) {
+			TreeObject selected = formTreeTable.getValue();
+			if (selected.getParent() != null
+					&& selected.getParent().getChildren().indexOf(selected) < selected.getParent().getChildren().size() - 1) {
+				try {
+					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
+							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
+					// Refresh the GUI.
+					formTreeTable.setForm(form);
+					// Select the moved element
+					formTreeTable.setValue(selected);
+					return true;
+				} catch (ChildrenNotFoundException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+				}
+			}
+		}
+		return false;
 	}
 }

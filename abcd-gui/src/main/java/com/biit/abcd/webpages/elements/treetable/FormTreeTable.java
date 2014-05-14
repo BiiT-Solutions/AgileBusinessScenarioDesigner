@@ -50,8 +50,7 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -77,8 +76,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
+	 * members.
 	 * 
 	 * @param element
 	 */
@@ -97,8 +96,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't
-	 * be defined, then raises a {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
+	 * {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
