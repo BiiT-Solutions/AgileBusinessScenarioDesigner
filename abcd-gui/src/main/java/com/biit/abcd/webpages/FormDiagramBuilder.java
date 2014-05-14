@@ -21,15 +21,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private Form form;
 
 	public FormDiagramBuilder() {
-		diagramBuilder = new DiagramBuilder();
-		diagramBuilder.setSizeFull();
-		getWorkingAreaLayout().addComponent(diagramBuilder);
-		
-		
-		initUpperMenu();
+
 	}
-	
-	private void initUpperMenu(){
+
+	private void initUpperMenu() {
 		diagramBuilderUpperMenu = new FormDiagramBuilderUpperMenu();
 		diagramBuilderUpperMenu.addClearButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = -3419227544702101097L;
@@ -44,7 +39,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				//Do nothing
+				// Do nothing
 				MessageManager.showInfo(LanguageCodes.ERROR_NOT_IMPLEMENTED);
 			}
 		});
@@ -96,14 +91,17 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				diagramBuilder.openAsPng();
 			}
 		});
-		
+
 		setUpperMenu(diagramBuilderUpperMenu);
 	}
 
 	@Override
 	public void securedEnter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
+		diagramBuilder = new DiagramBuilder();
+		diagramBuilder.setSizeFull();
+		getWorkingAreaLayout().addComponent(diagramBuilder);
 
+		initUpperMenu();
 	}
 
 	@Override
