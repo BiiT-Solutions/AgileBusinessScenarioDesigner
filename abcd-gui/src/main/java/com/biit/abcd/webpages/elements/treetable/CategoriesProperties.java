@@ -3,9 +3,10 @@ package com.biit.abcd.webpages.elements.treetable;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.liferay.access.UserPool;
+import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.vaadin.ui.TextField;
 
 public class CategoriesProperties extends PropertiesComponent {
@@ -28,8 +29,22 @@ public class CategoriesProperties extends PropertiesComponent {
 		categoryLabel = new TextField(ServerTranslate.tr(LanguageCodes.CATEGORY_PROPERTIES_LABEL));
 		categoryLabel.setValue(instance.getLabel());
 
-		String createdBy = instance.getCreatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getCreatedBy()).getEmailAddress();
-		String updatedBy = instance.getUpdatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getUpdatedBy()).getEmailAddress();
+		String createdBy = "";
+		String updatedBy = "";
+		try {
+			createdBy = instance.getCreatedBy() == null ? "" : LiferayServiceAccess.getInstance()
+					.getUserById(instance.getCreatedBy()).getEmailAddress();
+		} catch (UserDoesNotExistException udne) {
+			createdBy = instance.getCreatedBy() + "";
+		}
+
+		try {
+			updatedBy = instance.getUpdatedBy() == null ? "" : LiferayServiceAccess.getInstance()
+					.getUserById(instance.getUpdatedBy()).getEmailAddress();
+		} catch (UserDoesNotExistException udne) {
+			updatedBy = instance.getUpdatedBy() + "";
+		}
+
 		String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
 		String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
 		elementCreatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
@@ -47,7 +62,7 @@ public class CategoriesProperties extends PropertiesComponent {
 		addFormField(elementUpdatedBy);
 		addFormField(elementUpdateTime);
 	}
-	
+
 	@Override
 	public void updateElement() {
 		instance.setLabel(categoryLabel.getValue());

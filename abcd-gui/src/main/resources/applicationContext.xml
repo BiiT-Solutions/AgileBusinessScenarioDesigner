@@ -85,5 +85,8 @@
 		<property name="basename" value="languages/localization"></property>
 		<property name="fallbackToSystemLocale" value="false"></property>
 	</bean>
+	
+	<!-- Lifeay Services -->
+	<bean id="userService" class="com.biit.liferay.access.UserService" />
 
 </beans>
