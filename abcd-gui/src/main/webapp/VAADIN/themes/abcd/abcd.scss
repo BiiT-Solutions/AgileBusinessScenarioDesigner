@@ -37,6 +37,15 @@ $blueShadowColor: #52A5C5;
 		display: block;
 	}
 	
+	.upper-menu.v-horizontal-button-group .v-icon {
+		width: 32px !important;
+		height: 32px !important;
+	}
+	
+	.upper-menu.v-horizontal-button-group .v-button-caption {
+		font-size: 14px;
+	}
+	
 	.v-button-iconbutton-size-small .v-icon {
 		width: 16px;
 		height: 16px;

@@ -28,7 +28,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	private void defineMenu() {
 		// Add new Category
 		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_EDIT_FORM, ThemeIcons.FORM_MANAGER_ADD_FORM,
-				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
+				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 6053447189295644721L;
 
 					@Override
@@ -37,7 +37,6 @@ public class FormManagerUpperMenu extends UpperMenu {
 					}
 				});
 		addIconButton(newFormButton);
-		this.setContractIcons(true, "150px");
 	}
 
 	public void setEnabledButtons() {

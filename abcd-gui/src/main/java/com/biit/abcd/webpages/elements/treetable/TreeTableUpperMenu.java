@@ -17,14 +17,12 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class TreeTableUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -4712688788270327039L;
-	private static String iconWidth = "150px";
 	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton;
 	private TreeDesigner parent;
 
 	public TreeTableUpperMenu(TreeDesigner parent) {
 		super();
 		this.parent = parent;
-		setContractIcons(true, iconWidth);
 		defineMenu();
 	}
 

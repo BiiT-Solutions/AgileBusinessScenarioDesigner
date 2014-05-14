@@ -30,16 +30,14 @@ public class FormDiagramBuilderUpperMenu extends UpperMenu{
 		toSvgButton = new IconButton(LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOSVG_CAPTION,ThemeIcons.TO_SVG,LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOSVG_TOOLTIP);
 		toPngButton = new IconButton(LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_CAPTION,ThemeIcons.TO_PNG,LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_TOOLTIP);
 		
-		addIconButton(clearButton);
 		addIconButton(saveButton);
+		addIconButton(clearButton);
 		addIconButton(undoButton);
 		addIconButton(redoButton);
 		addIconButton(toFrontButton);
 		addIconButton(toBackButton);
 		addIconButton(toSvgButton);
 		addIconButton(toPngButton);		
-		
-		setContractIcons(true, "150px");
 	}
 
 	public void setEnabledButtons() {
