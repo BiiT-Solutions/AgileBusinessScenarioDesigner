@@ -66,7 +66,11 @@ public enum ThemeIcons {
 	
 	TO_BACK("appbar.toBack.svg"),
 	
-	TO_FRONT("appbar.toFront.svg");
+	TO_FRONT("appbar.toFront.svg"),
+	
+	MOVE_UP("appbar.chevron.up.svg"),
+	
+	MOVE_DOWN("appbar.chevron.down.svg");
 	
 	private String value;
 

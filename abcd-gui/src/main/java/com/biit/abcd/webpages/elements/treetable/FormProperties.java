@@ -30,30 +30,39 @@ public class FormProperties extends PropertiesComponent {
 		formVersion = new TextField(ServerTranslate.tr(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
 
-		String createdBy = instance.getCreatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getCreatedBy()).getEmailAddress();
-		String updatedBy = instance.getUpdatedBy() == null ? "" : UserPool.getInstance().getUserById(instance.getUpdatedBy()).getEmailAddress();
-		String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
-		String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
-		elementCreatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
-		elementCreatedBy.setValue(createdBy);
-		elementCreationTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATION_TIME));
-		elementCreationTime.setValue(creationTime);
-		elementUpdatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATED_BY));
-		elementUpdatedBy.setValue(updatedBy);
-		elementUpdateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
-		elementUpdateTime.setValue(updatedTime);
+		try {
+			String createdBy = instance.getCreatedBy() == null ? "" : UserPool.getInstance()
+					.getUserById(instance.getCreatedBy()).getEmailAddress();
+			String updatedBy = instance.getUpdatedBy() == null ? "" : UserPool.getInstance()
+					.getUserById(instance.getUpdatedBy()).getEmailAddress();
+			String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
+			String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
+			elementCreatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
+			elementCreatedBy.setValue(createdBy);
+			elementCreationTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATION_TIME));
+			elementCreationTime.setValue(creationTime);
+			elementUpdatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATED_BY));
+			elementUpdatedBy.setValue(updatedBy);
+			elementUpdateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
+			elementUpdateTime.setValue(updatedTime);
 
-		addFormField(formName);
-		addFormField(formVersion);
-		addFormField(elementCreatedBy);
-		addFormField(elementCreationTime);
-		addFormField(elementUpdatedBy);
-		addFormField(elementUpdateTime);
+			addFormField(formName);
+			addFormField(formVersion);
+			addFormField(elementCreatedBy);
+			addFormField(elementCreationTime);
+			addFormField(elementUpdatedBy);
+			addFormField(elementUpdateTime);
+		} catch (NullPointerException npe) {
+			System.out.println(instance);
+			System.out.println(instance.getCreatedBy());
+			System.out.println(UserPool.getInstance().getUserById(instance.getCreatedBy()));
+			System.out.println(UserPool.getInstance().getUserById(instance.getCreatedBy()).getEmailAddress());
+		}
 	}
 
 	@Override
 	public void updateElement() {
-		
+
 	}
 
 }

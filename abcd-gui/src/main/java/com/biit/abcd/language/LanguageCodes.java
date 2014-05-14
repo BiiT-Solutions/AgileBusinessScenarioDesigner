@@ -17,6 +17,8 @@ public enum LanguageCodes {
 	ABOUT_US_REPORT("aboutUs.report"),
 	
 	MENU_SAVE("menu.save"),
+	MENU_MOVE_UP("menu.moveup"),
+	MENU_MOVE_DOWN("menu.movedown"),
 	
 	FORM_TREE_PROPERTY_NAME("form.tree.property.name"),
 	

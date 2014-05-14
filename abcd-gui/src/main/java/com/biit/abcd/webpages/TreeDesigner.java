@@ -78,7 +78,7 @@ public class TreeDesigner extends FormWebPageComponent {
 		elementPropertiesContainer.registerPropertiesComponent(Question.class, new QuestionProperties());
 		elementPropertiesContainer.registerPropertiesComponent(Answer.class, new AnswerProperties());
 		elementPropertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
-			
+
 			@Override
 			public void propertyUpdate(TreeObject element) {
 				System.out.println("kiwi property update");
@@ -303,5 +303,13 @@ public class TreeDesigner extends FormWebPageComponent {
 			treeObject.setUpdatedBy(UserSessionHandler.getUser());
 			treeObject.setUpdateTime(new Timestamp(new Date().getTime()));
 		}
+	}
+
+	public void moveUp() {
+
+	}
+
+	public void moveDown() {
+
 	}
 }
