@@ -261,7 +261,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 			return true;
 		}
 		try {
-			if (!AuthenticationService.getInstance().isInGroup(form.getGroup(), user)) {
+			if (!AuthenticationService.getInstance().isInGroup(form.getUserGroup(), user)) {
 				return false;
 			}
 			return true;

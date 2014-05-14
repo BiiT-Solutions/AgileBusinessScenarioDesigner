@@ -42,10 +42,10 @@ public abstract class TreeObject {
 	private Long id;
 
 	private Timestamp creationDate = null;
-	@Column(columnDefinition="DOUBLE")
+	@Column(columnDefinition = "DOUBLE")
 	private Long createdBy = null;
 	private Timestamp updatedDate = null;
-	@Column(columnDefinition="DOUBLE")
+	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
@@ -320,6 +320,23 @@ public abstract class TreeObject {
 				return (Category) getParent();
 			}
 			return getParent().getCategory();
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the inner group where this element is included. 
+	 * @return
+	 */
+	public Group getGroup() {
+		if (this instanceof Group) {
+			return (Group) this;
+		}
+		while (getParent() != null) {
+			if (getParent() instanceof Group) {
+				return (Group) getParent();
+			}
+			return getParent().getGroup();
 		}
 		return null;
 	}

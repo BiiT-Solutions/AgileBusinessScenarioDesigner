@@ -80,7 +80,7 @@ public class Form extends TreeObject {
 		this.setId(null);
 	}
 
-	public UserGroup getGroup() {
+	public UserGroup getUserGroup() {
 		// TODO Auto-generated method stub
 		return null;
 	}

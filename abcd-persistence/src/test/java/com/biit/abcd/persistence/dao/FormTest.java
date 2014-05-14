@@ -1,9 +1,7 @@
 package com.biit.abcd.persistence.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,8 +12,6 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)

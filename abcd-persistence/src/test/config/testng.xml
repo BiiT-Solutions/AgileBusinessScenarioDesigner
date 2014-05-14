@@ -9,6 +9,7 @@
 				<include name="groupDao" />
 				<include name="questionDao" />
 				<include name="answerDao" />
+				<include name="diagramDao" />
 			</run>
 		</groups>
 		<classes>
@@ -18,6 +19,7 @@
 			<class name="com.biit.abcd.persistence.dao.GroupTest" />
 			<class name="com.biit.abcd.persistence.dao.QuestionTest" />
 			<class name="com.biit.abcd.persistence.dao.AnswerTest" />
+			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
 		</classes>
 	</test>
 </suite>

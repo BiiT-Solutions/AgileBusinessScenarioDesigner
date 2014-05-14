@@ -190,12 +190,15 @@ public class TreeDesigner extends FormWebPageComponent {
 			setCreator(newGroup);
 			try {
 				if (formTreeTable.getValue() != null) {
-					Category selectedCategory = formTreeTable.getValue().getCategory();
-					if (selectedCategory != null) {
-						newGroup.setTechnicalName(DEFAULT_GROUP_TECHNICAL_NAME
-								+ (selectedCategory.getChildren().size() + 1));
-						addElementToUI(newGroup, selectedCategory);
-						selectedCategory.addChild(newGroup);
+					TreeObject container = formTreeTable.getValue().getGroup();
+					if (container == null) {
+						container = formTreeTable.getValue().getCategory();
+					}
+
+					if (container != null) {
+						newGroup.setTechnicalName(DEFAULT_GROUP_TECHNICAL_NAME + (container.getChildren().size() + 1));
+						addElementToUI(newGroup, container);
+						container.addChild(newGroup);
 					}
 				}
 			} catch (NotValidChildException e) {

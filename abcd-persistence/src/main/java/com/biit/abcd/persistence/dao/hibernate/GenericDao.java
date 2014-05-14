@@ -85,10 +85,10 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 		session.beginTransaction();
 		try {
 			@SuppressWarnings("unchecked")
-			T event = (T) session.get(getType(), id);
-			initializeSet(event);
+			T object = (T) session.get(getType(), id);
+			initializeSet(object);
 			session.getTransaction().commit();
-			return event;
+			return object;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
 			throw e;
@@ -117,10 +117,10 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 		session.beginTransaction();
 		try {
 			@SuppressWarnings("unchecked")
-			List<T> forms = session.createQuery("from " + getType().getSimpleName()).list();
-			initializeSets(forms);
+			List<T> objects = session.createQuery("from " + getType().getSimpleName()).list();
+			initializeSets(objects);
 			session.getTransaction().commit();
-			return forms;
+			return objects;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
 			throw e;
@@ -145,7 +145,7 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 	 * "LazyInitializationException: failed to lazily initialize a collection of..." error. This procedure must be
 	 * called before closing the session.
 	 * 
-	 * @param forms
+	 * @param elements
 	 */
 	protected abstract void initializeSets(List<T> elements);
 }
