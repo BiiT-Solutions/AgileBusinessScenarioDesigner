@@ -14,4 +14,73 @@
 		<version>0.0.1</version>
 	</parent>
 	
+	<properties>
+		<shap.root>${basedir}/..</shap.root>
+		<destination-file>${parent.artifactId}</destination-file>
+		<temporal-folder>tmp</temporal-folder>
+		<war-file.source>../abcd-gui/target/</war-file.source>
+		<documentation.source>./documentation</documentation.source>
+		<documentation.destination>./${temporal-folder}/documentation</documentation.destination>
+		<simple-project>simple</simple-project>
+		<abcd-project>abcd</abcd-project>
+	</properties>
+	
+	<!-- 'mvn install -Prelease' generates a ZIP file ready to distribute to 
+		the client. -->
+	<profiles>
+		<profile>
+			<id>release</id>
+			<activation>
+				<property>
+					<name>release</name>
+				</property>
+			</activation>
+			<build>
+				<finalName>Agile Business sCenario Designer Tool</finalName>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>${maven-antrun-plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<configuration>
+									<target>
+										<!-- delete old tmp folder -->
+										<delete dir="${temporal-folder}" failonerror="false"
+											includeemptydirs="true" />
+
+										<!-- create tmp folder -->
+										<mkdir dir="${temporal-folder}" />
+										<mkdir dir="${temporal-folder}/${simple-project}" />
+										<mkdir dir="${temporal-folder}/${abcd-project}" />
+
+										<!-- ZIP project -->
+										<copy
+											file="${war-file.source}/${project.parent.artifactId}-${project.parent.version}.war"
+											tofile="${temporal-folder}/${simple-project}/${project.parent.artifactId}-${project.parent.version}.war"
+											overwrite="true" />
+										<!-- copy database scripts -->
+										<copy todir="${temporal-folder}/${simple-project}/database/"
+											overwrite="true">
+											<fileset dir="./database" includes="**/*" />
+										</copy>
+										<!-- create the final file -->
+										<zip basedir="${temporal-folder}/${simple-project}/"
+											destfile="../${destination-file}-${project.version}.zip" />
+
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 </project>
