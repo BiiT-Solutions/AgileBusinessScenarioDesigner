@@ -77,7 +77,7 @@ public class Form extends TreeObject {
 	public void increaseVersion() {
 		this.version++;
 		// Force to be stored as a new record
-		this.setId(null);
+		this.resetIds();
 	}
 
 	public UserGroup getUserGroup() {

@@ -83,17 +83,17 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 //		formDao.makePersistent(form);
 //	}
 
-	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
-	public void increaseVersion() {
-		Form oldForm = formDao.read(form.getId());
-		form.increaseVersion();
-		Assert.assertEquals(oldForm.getVersion() + 1, (int) form.getVersion());
-		formDao.makePersistent(form);
-		Assert.assertEquals(formDao.getLastVersion(oldForm), 2);
-		Assert.assertEquals(formDao.getLastVersion(oldForm), formDao.getLastVersion(form));
-	}
+//	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
+//	public void increaseVersion() {
+//		Form oldForm = formDao.read(form.getId());
+//		form.increaseVersion();
+//		Assert.assertEquals(oldForm.getVersion() + 1, (int) form.getVersion());
+//		formDao.makePersistent(form);
+//		Assert.assertEquals(formDao.getLastVersion(oldForm), 2);
+//		Assert.assertEquals(formDao.getLastVersion(oldForm), formDao.getLastVersion(form));
+//	}
 
-	@Test(groups = { "formDao" }, dependsOnMethods = "increaseVersion")
+	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
 	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException {
 		Form form2 = new Form();
 		form2.setName(OTHER_FORM);

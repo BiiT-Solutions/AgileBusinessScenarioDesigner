@@ -9,7 +9,6 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.TreeDesigner;
 import com.biit.abcd.webpages.components.IconButton;
-import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button.ClickEvent;
@@ -18,7 +17,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class TreeTableUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -4712688788270327039L;
 	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton, moveUpButton,
-			moveDownButton;
+			moveDownButton, removeButton;
 	private TreeDesigner parent;
 
 	public TreeTableUpperMenu(TreeDesigner parent) {
@@ -88,6 +87,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 				});
 		addIconButton(newAnswerButton);
 
+		// Move up.
 		moveUpButton = new IconButton(LanguageCodes.MENU_MOVE_UP, ThemeIcons.MOVE_UP, LanguageCodes.MENU_MOVE_UP,
 				new ClickListener() {
 					private static final long serialVersionUID = 5128294955249902659L;
@@ -99,6 +99,7 @@ public class TreeTableUpperMenu extends UpperMenu {
 				});
 		addIconButton(moveUpButton);
 
+		// Move down.
 		moveDownButton = new IconButton(LanguageCodes.MENU_MOVE_DOWN, ThemeIcons.MOVE_DOWN,
 				LanguageCodes.MENU_MOVE_DOWN, new ClickListener() {
 					private static final long serialVersionUID = 5128294955249902659L;
@@ -109,6 +110,18 @@ public class TreeTableUpperMenu extends UpperMenu {
 					}
 				});
 		addIconButton(moveDownButton);
+
+		// Remove
+		removeButton = new IconButton(LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE, ThemeIcons.DELETE,
+				LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE, new ClickListener() {
+					private static final long serialVersionUID = 5128294955249902659L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						parent.removeSelected();
+					}
+				});
+		addIconButton(removeButton);
 	}
 
 	public void setEnabledButtons(TreeObject selectedObject) {

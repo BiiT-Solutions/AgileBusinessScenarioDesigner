@@ -48,7 +48,7 @@ public abstract class TreeObject {
 	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
 
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "PARENT_OF_CHILDREN")
 	@OrderColumn(name = "children_index")
 	private List<TreeObject> children;
@@ -135,20 +135,25 @@ public abstract class TreeObject {
 	}
 
 	public void removeChild(TreeObject elementToRemove) throws ChildrenNotFoundException {
+		boolean removed = false;
 		if (getChildren().contains(elementToRemove)) {
 			getChildren().remove(elementToRemove);
+			removed = true;
 		} else {
 			for (TreeObject child : getChildren()) {
 				try {
 					child.removeChild(elementToRemove);
 					// Removed, not continue searching.
+					removed = true;
 					break;
 				} catch (ChildrenNotFoundException cnfe) {
 					// Not found, continue the loop.
 				}
 			}
 		}
-		throw new ChildrenNotFoundException("Children '" + elementToRemove + "' does not exist.");
+		if (!removed) {
+			throw new ChildrenNotFoundException("Children '" + elementToRemove + "' does not exist.");
+		}
 	}
 
 	public void removeChild(int index) throws ChildrenNotFoundException {
@@ -325,7 +330,8 @@ public abstract class TreeObject {
 	}
 
 	/**
-	 * Gets the inner group where this element is included. 
+	 * Gets the inner group where this element is included.
+	 * 
 	 * @return
 	 */
 	public Group getGroup() {
@@ -351,5 +357,12 @@ public abstract class TreeObject {
 			return getChildren().get(getChildren().size() - 1).getLastElement();
 		}
 		return this;
+	}
+
+	public void resetIds() {
+		setId(null);
+		for (TreeObject child : getChildren()) {
+			child.resetIds();
+		}
 	}
 }

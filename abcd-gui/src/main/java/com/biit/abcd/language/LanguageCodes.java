@@ -46,6 +46,7 @@ public enum LanguageCodes {
 	TREE_DESIGNER_GROUP_ADD("treeDesigner.group.add"),
 	TREE_DESIGNER_QUESTION_ADD("treeDesigner.question.add"),
 	TREE_DESIGNER_ANSWER_ADD("treeDesigner.answer.add"),
+	TREE_DESIGNER_ELEMENT_REMOVE("treeDesigner.element.remove"),
 	
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
@@ -57,6 +58,7 @@ public enum LanguageCodes {
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
+
 	
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_CAPTION("formDiagramBuilder.upper.buttonClear.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_TOOLTIP("formDiagramBuilder.upper.buttonClear.tooltip"),

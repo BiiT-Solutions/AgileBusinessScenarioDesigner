@@ -369,4 +369,21 @@ public class TreeDesigner extends FormWebPageComponent {
 		}
 		return false;
 	}
+
+	public void removeSelected() {
+		if (formTreeTable != null) {
+			TreeObject selected = formTreeTable.getValue();
+			if (selected != null && selected.getParent() != null) {
+				selected.remove();
+				removeElementFromUI(selected);
+			}
+		}
+	}
+
+	private void removeElementFromUI(TreeObject element) {
+		for (TreeObject child : element.getChildren()) {
+			removeElementFromUI(child);
+		}
+		formTreeTable.removeItem(element);
+	}
 }
