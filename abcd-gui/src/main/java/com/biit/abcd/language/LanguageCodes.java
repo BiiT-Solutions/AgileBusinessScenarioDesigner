@@ -21,6 +21,7 @@ public enum LanguageCodes {
 	MENU_MOVE_DOWN("menu.movedown"),
 	
 	FORM_TREE_PROPERTY_NAME("form.tree.property.name"),
+	FORM_TREE_PROPERTY_RULES("form.tree.property.rules"),
 	
 	INFO_USER_LOG("info.userLog"),
 	INFO_USER_SESSION_EXPIRED("info.userSessionExpired"),

@@ -26,7 +26,7 @@ public class FormTreeTable extends TreeTable {
 	private Form form;
 
 	enum FormTreeTableProperties {
-		ELEMENT_NAME
+		ELEMENT_NAME, RULES
 	};
 
 	public FormTreeTable() {
@@ -36,6 +36,8 @@ public class FormTreeTable extends TreeTable {
 	private void initContainerProperties() {
 		addContainerProperty(FormTreeTableProperties.ELEMENT_NAME, String.class, "",
 				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
+		addContainerProperty(FormTreeTableProperties.RULES, String.class, "",
+				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_RULES), null, Align.CENTER);
 	}
 
 	private void loadForm(TreeObject element, TreeObject parent) {
