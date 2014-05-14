@@ -66,4 +66,9 @@ public class Category extends TreeObject {
 		setForm((Form) parent);
 	}
 
+	@Override
+	public String toString() {
+		return getLabel();
+	}
+
 }

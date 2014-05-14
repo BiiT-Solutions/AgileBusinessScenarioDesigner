@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.exception.ConstraintViolationException;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -144,7 +146,7 @@ public class TreeDesigner extends FormWebPageComponent {
 					} else {
 						int index = getForm().getChildren().indexOf(selectedCategory);
 						if (index >= 0) {
-							getForm().addChild(index, newCategory);
+							getForm().addChild(index + 1, newCategory);
 						} else {
 							getForm().addChild(newCategory);
 						}
@@ -275,8 +277,13 @@ public class TreeDesigner extends FormWebPageComponent {
 
 	public void save() {
 		if (getForm() != null) {
-			formDao.makePersistent(getForm());
-			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+			try {
+				formDao.makePersistent(getForm());
+				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+			} catch (ConstraintViolationException cve) {
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_CATEGORY,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION);
+			}
 		}
 	}
 

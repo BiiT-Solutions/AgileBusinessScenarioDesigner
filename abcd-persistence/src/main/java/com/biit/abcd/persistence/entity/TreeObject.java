@@ -20,8 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-
 import com.biit.abcd.annotation.AutoLogger;
 import com.biit.abcd.annotation.AutoLoggerLevel;
 import com.biit.abcd.logger.AbcdLogger;
@@ -51,8 +49,7 @@ public abstract class TreeObject {
 	private Long updatedBy = null;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@Cascade(org.hibernate.annotations.CascadeType.ALL)
-	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
+	@JoinTable(name = "PARENT_OF_CHILDREN")
 	@OrderColumn(name = "children_index")
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)

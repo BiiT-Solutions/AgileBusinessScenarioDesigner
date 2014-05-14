@@ -99,6 +99,9 @@ public enum LanguageCodes {
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
 	
+	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
+	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
+	
 	INFO_DATA_STORED("info.data.store");
 	
 	private String value;

@@ -1,7 +1,9 @@
 package com.biit.abcd.persistence.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -12,6 +14,8 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,6 +71,21 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
 	}
+
+//	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory", expectedExceptions = { ConstraintViolationException.class })
+//	public void addNewCategoryWithSameName() throws NotValidChildException, ConstraintViolationException {
+//		Category category = new Category();
+//		category.setLabel(CATEGORY_LABEL);
+//		form.addChild(category);
+//		formDao.makePersistent(form);
+//	}
+//
+//	@Test(groups = { "formDao" }, dependsOnMethods = "addNewCategoryWithSameName")
+//	public void removeRepeatedCategoryWithSameName() throws NotValidChildException, ConstraintViolationException,
+//			ChildrenNotFoundException {
+//		form.removeChild(0);
+//		formDao.makePersistent(form);
+//	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
 	public void increaseVersion() {
