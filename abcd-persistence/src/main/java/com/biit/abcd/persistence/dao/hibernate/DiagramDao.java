@@ -8,11 +8,13 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Diagram;
+import com.biit.abcd.persistence.entity.Form;
 
 @Repository
 public class DiagramDao implements IDiagramDao {
@@ -107,7 +109,6 @@ public class DiagramDao implements IDiagramDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
-			@SuppressWarnings("unchecked")
 			Diagram diagram = (Diagram) session.get(Diagram.class, id);
 			session.getTransaction().commit();
 			return diagram;
@@ -117,4 +118,24 @@ public class DiagramDao implements IDiagramDao {
 		}
 	}
 
+	@Override
+	public Diagram read(Form form) {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			Criteria criteria = session.createCriteria(Diagram.class);
+			criteria.add(Restrictions.eq("form", form));
+			@SuppressWarnings("unchecked")
+			List<Diagram> results = criteria.list();
+			// initialize(results);
+			session.getTransaction().commit();
+			if (results.size() > 0) {
+				return results.get(0);
+			}
+			return null;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
+	}
 }
