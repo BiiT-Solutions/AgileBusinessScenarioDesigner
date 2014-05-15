@@ -1,10 +1,12 @@
 package com.biit.abcd.persistence.entity;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
@@ -26,6 +28,10 @@ public class Form extends TreeObject {
 
 	private String name;
 	private Integer version = 1;
+
+	@Column(nullable = false)
+	private Timestamp availableFrom;
+	private Timestamp availableTo;
 
 	public Form() {
 		setName(DEFAULT_NAME);
@@ -55,7 +61,7 @@ public class Form extends TreeObject {
 
 	@Override
 	public void setParent(TreeObject parent) throws NotValidParentException {
-		throw new NotValidParentException("Categories cannot have a parent.");
+		throw new NotValidParentException("Forms cannot have a parent.");
 	}
 
 	public String getName() {
@@ -83,6 +89,35 @@ public class Form extends TreeObject {
 	public UserGroup getUserGroup() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	@Override
+	public void setCreationTime(Timestamp dateCreated) {
+		if (availableFrom == null) {
+			this.availableFrom = dateCreated;
+		}
+		super.setCreationTime(dateCreated);
+	}
+
+	public Timestamp getAvailableFrom() {
+		return availableFrom;
+	}
+
+	public void setAvailableFrom(Timestamp availableFrom) {
+		this.availableFrom = availableFrom;
+	}
+
+	public Timestamp getAvailableTo() {
+		return availableTo;
+	}
+
+	public void setAvailableTo(Timestamp availableTo) {
+		this.availableTo = availableTo;
 	}
 
 }

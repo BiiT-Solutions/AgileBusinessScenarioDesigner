@@ -23,6 +23,7 @@ public class Diagram {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 
+	@Column(length = 1048576)
 	private String diagramAsJson;
 
 	@ManyToOne(fetch = FetchType.EAGER)
