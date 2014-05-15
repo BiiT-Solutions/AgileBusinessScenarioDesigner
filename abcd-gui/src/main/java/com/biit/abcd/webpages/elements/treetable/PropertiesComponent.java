@@ -7,21 +7,35 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Accordion;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.VerticalLayout;
 
 public abstract class PropertiesComponent extends CustomComponent {
 	private static final long serialVersionUID = 4900379725073491238L;
 
-	private FormLayout rootLayout;
+	private Accordion rootAccordion;
+	private FormLayout formLayout;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
 
 	public PropertiesComponent() {
 		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
-		rootLayout = new FormLayout();
-		rootLayout.setImmediate(true);
 		
-		setCompositionRoot(rootLayout);
+		rootAccordion = new Accordion();
+		rootAccordion.setWidth("100%");
+		rootAccordion.setHeight(null);
+		
+		formLayout = new FormLayout();
+		formLayout.setImmediate(true);
+		
+		rootAccordion.addTab(formLayout,"Kiwi-1");
+		rootAccordion.addTab(new VerticalLayout(),"kiwi-2");
+		rootAccordion.addTab(new VerticalLayout(),"kiwi-3");
+		rootAccordion.addTab(new VerticalLayout(),"kiwi-4");
+		rootAccordion.addTab(new VerticalLayout(),"kiwi-5");
+		
+		setCompositionRoot(rootAccordion);
 		setSizeFull();
 	}
 	
@@ -35,7 +49,7 @@ public abstract class PropertiesComponent extends CustomComponent {
 				updateElement();
 			}
 		});
-		rootLayout.addComponent(component);
+		formLayout.addComponent(component);
 	}
 	
 	public abstract void setElement(TreeObject element);

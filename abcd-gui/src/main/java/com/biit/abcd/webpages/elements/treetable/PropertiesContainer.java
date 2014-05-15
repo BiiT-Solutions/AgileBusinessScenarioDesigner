@@ -47,7 +47,7 @@ public class PropertiesContainer extends CustomComponent {
 				PropertiesComponent newInstance = baseObject.getClass().newInstance();
 				newInstance.setElement(value);
 				newInstance.addPropertyUpdateListener(new PropertieUpdateListener() {
-					
+
 					@Override
 					public void propertyUpdate(TreeObject element) {
 						firePropertyUpdateListener(element);

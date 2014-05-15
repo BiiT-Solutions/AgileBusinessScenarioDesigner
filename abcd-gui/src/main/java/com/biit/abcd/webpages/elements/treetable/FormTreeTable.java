@@ -38,6 +38,7 @@ public class FormTreeTable extends TreeTable {
 				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		addContainerProperty(FormTreeTableProperties.RULES, String.class, "",
 				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_RULES), null, Align.CENTER);
+		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
 	}
 
 	private void loadForm(TreeObject element, TreeObject parent) {
@@ -52,7 +53,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -80,8 +82,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
-	 * members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -102,8 +104,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
-	 * {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't
+	 * be defined, then raises a {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
