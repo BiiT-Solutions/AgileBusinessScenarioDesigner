@@ -43,9 +43,7 @@ public class FormTreeTable extends TreeTable {
 
 	private void loadForm(TreeObject element, TreeObject parent) {
 		addItem(element, parent);
-		if (parent != null) {
-			setParent(element, parent);
-		}
+
 		List<TreeObject> children = element.getChildren();
 		for (TreeObject child : children) {
 			loadForm(child, element);

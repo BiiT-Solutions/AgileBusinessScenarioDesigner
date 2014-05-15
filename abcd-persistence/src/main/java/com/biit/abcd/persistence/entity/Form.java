@@ -55,7 +55,7 @@ public class Form extends TreeObject {
 
 	@Override
 	public void setParent(TreeObject parent) throws NotValidParentException {
-		throw new NotValidParentException("Categories cannot have a parent.");
+		throw new NotValidParentException("Forms cannot have a parent.");
 	}
 
 	public String getName() {
@@ -83,6 +83,11 @@ public class Form extends TreeObject {
 	public UserGroup getUserGroup() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 }
