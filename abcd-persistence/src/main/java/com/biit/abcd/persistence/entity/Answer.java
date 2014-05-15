@@ -12,6 +12,7 @@ import com.biit.abcd.persistence.entity.exceptions.InvalidAnswerFormatException;
 @Entity
 @Table(name = "ANSWERS")
 public class Answer extends TreeObject {
+	private static final String DEFAULT_ANSWER_TECHNICAL_NAME = "Answer";
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Question.class));
 
 	private String technicalName;
@@ -62,6 +63,28 @@ public class Answer extends TreeObject {
 			}
 		}
 		this.answerFormat = answerFormat;
+	}
+
+	/**
+	 * Creates a default Answer technical name, different for each Answer of the same Question.
+	 * 
+	 * @param startingIndex
+	 * @return
+	 */
+	public String getDefaultTechnicalName(TreeObject parent, int startingIndex) {
+		String name;
+		if (parent != null) {
+			name = DEFAULT_ANSWER_TECHNICAL_NAME + startingIndex;
+			for (TreeObject child : parent.getChildren()) {
+				if (child instanceof Question && ((Question) child).getTechnicalName() != null
+						&& ((Question) child).getTechnicalName().equals(name)) {
+					return getDefaultTechnicalName(parent, startingIndex + 1);
+				}
+			}
+		} else {
+			name = DEFAULT_ANSWER_TECHNICAL_NAME;
+		}
+		return name;
 	}
 
 }

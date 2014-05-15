@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "GROUPS")
 public class Group extends TreeObject {
+	private static final String DEFAULT_GROUP_TECHNICAL_NAME = "Group";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class,
 			Group.class));
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class,
@@ -17,8 +18,8 @@ public class Group extends TreeObject {
 
 	private String technicalName;
 	private boolean repetable;
-	
-	public Group(){
+
+	public Group() {
 	}
 
 	@Override
@@ -45,5 +46,27 @@ public class Group extends TreeObject {
 
 	public void setRepetable(boolean repetable) {
 		this.repetable = repetable;
+	}
+
+	/**
+	 * Creates a default Group technical name, different for each Group of the same parent.
+	 * 
+	 * @param startingIndex
+	 * @return
+	 */
+	public String getDefaultTechnicalName(TreeObject parent, int startingIndex) {
+		String name;
+		if (parent != null) {
+			name = DEFAULT_GROUP_TECHNICAL_NAME + startingIndex;
+			for (TreeObject child : parent.getChildren()) {
+				if (child instanceof Group && ((Group) child).getTechnicalName() != null
+						&& ((Group) child).getTechnicalName().equals(name)) {
+					return getDefaultTechnicalName(parent, startingIndex + 1);
+				}
+			}
+		} else {
+			name = DEFAULT_GROUP_TECHNICAL_NAME;
+		}
+		return name;
 	}
 }

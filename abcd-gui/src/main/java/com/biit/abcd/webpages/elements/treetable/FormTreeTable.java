@@ -62,11 +62,13 @@ public class FormTreeTable extends TreeTable {
 			String name = getItemName(element);
 			Item item = addItem((Object) element);
 			if (parent != null) {
+				setChildrenAllowed(parent, true);
 				setParent(element, parent);
 				setCollapsed(parent, false);
 			}
 			item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
 			setValue(element);
+			setChildrenAllowed(element, false);
 		}
 	}
 
@@ -89,11 +91,13 @@ public class FormTreeTable extends TreeTable {
 			String name = getItemName(element);
 			Item item = addItemAfter(previousItemId, (Object) element);
 			if (parent != null) {
+				setChildrenAllowed(parent, true);
 				setParent(element, parent);
 				setCollapsed(parent, false);
 			}
 			item.getItemProperty(FormTreeTableProperties.ELEMENT_NAME).setValue(name);
 			setValue(element);
+			setChildrenAllowed(element, false);
 		}
 	}
 
