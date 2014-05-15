@@ -27,6 +27,7 @@ public class PropertiesContainer extends CustomComponent {
 
 		rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
+		rootLayout.setStyleName(CLASSNAME);
 		setCompositionRoot(rootLayout);
 		setSizeFull();
 		setStyleName(CLASSNAME);
