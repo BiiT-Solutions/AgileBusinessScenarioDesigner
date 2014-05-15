@@ -281,6 +281,22 @@ $open-sans-pathPrefix: "./fonts/";
 		line-height: 16px;
 	}
 	
+	/* Table tree colours */
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-form, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-form {
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-category, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-category {
+		color: rgb(111, 79, 69);
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-group, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-group {
+		color:  rgb(91, 134, 57);
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-question, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-question {
+		color: rgb(90, 112, 151);
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-answer, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-answer {
+		color: rgb(165, 107, 124);
+	}
+	
 	&.v-app,
 	.v-caption,
 	.v-window,
