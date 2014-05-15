@@ -41,6 +41,7 @@ public abstract class TreeObject {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 
+	@Column(nullable = false)
 	private Timestamp creationDate = null;
 	@Column(columnDefinition = "DOUBLE")
 	private Long createdBy = null;
@@ -54,6 +55,10 @@ public abstract class TreeObject {
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject parent;
+
+	public TreeObject() {
+		setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+	}
 
 	/**
 	 * Gets all children of the treeObject. These annotations are in the method because must been overwritten by the

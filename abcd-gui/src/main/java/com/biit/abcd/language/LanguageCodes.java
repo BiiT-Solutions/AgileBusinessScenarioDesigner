@@ -34,6 +34,8 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_NAME("formTable.column.name"),
 	FORM_TABLE_COLUMN_VERSION("formTable.column.version"),
 	FORM_TABLE_COLUMN_ACCESS("formTable.column.access"),
+	FORM_TABLE_COLUMN_AVAILABLETO("formTable.column.availableTo"),
+	FORM_TABLE_COLUMN_AVAILABLEFROM("formTable.column.availableFrom"),
 	FORM_TABLE_COLUMN_USEDBY("formTable.column.usedBy"),
 	FORM_TABLE_COLUMN_CREATEDBY("formTable.column.createdBy"),
 	FORM_TABLE_COLUMN_CREATIONDATE("formTable.column.creationDate"),
@@ -78,6 +80,8 @@ public enum LanguageCodes {
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_TOOLTIP("formDiagramBuilder.upper.buttonToPng.tooltip"),
 	
 	TREE_OBJECT_PROPERTIES_CREATION_TIME("treeObjectProperties.creationTime"),
+	TREE_OBJECT_PROPERTIES_AVAILABLE_FROM("treeObjectProperties.availableFrom"),
+	TREE_OBJECT_PROPERTIES_AVAILABLE_TO("treeObjectProperties.availableTo"),
 	TREE_OBJECT_PROPERTIES_UPDATE_TIME("treeObjectProperties.updateTime"),
 	TREE_OBJECT_PROPERTIES_CREATED_BY("treeObjectProperties.createdBy"),
 	TREE_OBJECT_PROPERTIES_UPDATED_BY("treeObjectProperties.updatedBy"),

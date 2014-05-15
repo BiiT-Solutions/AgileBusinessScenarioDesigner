@@ -14,6 +14,8 @@ public class FormProperties extends PropertiesComponent {
 	private Form instance;
 	private TextField formName;
 	private TextField formVersion;
+	private TextField availableFrom;
+	private TextField availableTo;
 	private TextField elementCreatedBy;
 	private TextField elementCreationTime;
 	private TextField elementUpdatedBy;
@@ -46,6 +48,14 @@ public class FormProperties extends PropertiesComponent {
 		} catch (UserDoesNotExistException udne) {
 			updatedBy = instance.getUpdatedBy() + "";
 		}
+		
+		String availableFromTime = instance.getAvailableFrom() == null ? "" : instance.getAvailableFrom().toString();
+		availableFrom = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_FROM));
+		availableFrom.setValue(availableFromTime);
+		
+		String availableToTime = instance.getAvailableTo() == null ? "" : instance.getAvailableTo().toString();
+		availableTo = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_TO));
+		availableTo.setValue(availableToTime);
 
 		String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
 		String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
@@ -60,6 +70,8 @@ public class FormProperties extends PropertiesComponent {
 
 		addFormField(formName);
 		addFormField(formVersion);
+		addFormField(availableFrom);
+		addFormField(availableTo);
 		addFormField(elementCreatedBy);
 		addFormField(elementCreationTime);
 		addFormField(elementUpdatedBy);

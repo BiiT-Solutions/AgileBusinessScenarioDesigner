@@ -30,7 +30,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private HashMap<String, List<Form>> formMap;
 
 	enum FormsVersionsTreeTableProperties {
-		FORM_NAME, VERSION, ACCESS, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
+		FORM_NAME, VERSION, ACCESS, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
 	};
 
 	public FormsVersionsTreeTable() {
@@ -58,6 +58,12 @@ public class FormsVersionsTreeTable extends TreeTable {
 		addContainerProperty(FormsVersionsTreeTableProperties.ACCESS, String.class, "",
 				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_ACCESS), null, Align.CENTER);
 
+		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM, String.class, "",
+				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLEFROM), null, Align.CENTER);
+
+		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO, String.class, "",
+				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLETO), null, Align.CENTER);
+
 		addContainerProperty(FormsVersionsTreeTableProperties.USED_BY, String.class, "",
 				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_USEDBY), null, Align.CENTER);
 
@@ -77,19 +83,25 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setColumnCollapsible(FormsVersionsTreeTableProperties.FORM_NAME, false);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.VERSION, false);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.ACCESS, true);
+		setColumnCollapsible(FormsVersionsTreeTableProperties.AVAILABLE_FROM, true);
+		setColumnCollapsible(FormsVersionsTreeTableProperties.AVAILABLE_TO, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.USED_BY, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.CREATED_BY, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.CREATION_DATE, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.MODIFIED_BY, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.MODIFICATION_DATE, true);
+		setColumnCollapsed(FormsVersionsTreeTableProperties.CREATED_BY, true);
+		setColumnCollapsed(FormsVersionsTreeTableProperties.CREATION_DATE, true);
 
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.FORM_NAME, 3);
-		setColumnExpandRatio(FormsVersionsTreeTableProperties.VERSION, (float) 0.5);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.VERSION, 0.5f);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.ACCESS, 1);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.AVAILABLE_FROM, 1);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.AVAILABLE_TO, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.USED_BY, 1);
-		setColumnExpandRatio(FormsVersionsTreeTableProperties.CREATED_BY, 1);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.CREATED_BY, 1.2f);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.CREATION_DATE, 1);
-		setColumnExpandRatio(FormsVersionsTreeTableProperties.MODIFIED_BY, 1);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.MODIFIED_BY, 1.2f);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.MODIFICATION_DATE, 1);
 
 		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
@@ -107,6 +119,14 @@ public class FormsVersionsTreeTable extends TreeTable {
 			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_NAME).setValue(form.getName());
 			item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
 			item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
+			item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM).setValue(
+					(DateManager.convertDateToString(form.getAvailableFrom())));
+			if (form.getAvailableTo() != null) {
+				item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue(
+						(DateManager.convertDateToString(form.getAvailableTo())));
+			} else {
+				item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue("");
+			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue("");
 			try {
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue(

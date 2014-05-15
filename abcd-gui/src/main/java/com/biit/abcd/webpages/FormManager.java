@@ -9,7 +9,6 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.biit.abcd.webpages.elements.formtable.FormsCollapsibleTable;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
 import com.biit.abcd.webpages.elements.formtable.UserSelectedTableRow;
 import com.biit.abcd.webpages.elements.treetable.RootForm;
@@ -63,23 +62,6 @@ public class FormManager extends FormWebPageComponent {
 			}
 		});
 		return treeTable;
-	}
-
-	private FormsCollapsibleTable createTable() {
-		FormsCollapsibleTable formTable = new FormsCollapsibleTable();
-		formTable.initTable();
-		formTable.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = -119450082492122880L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				// updateButtons(getForm() != null
-				// && AbcdAuthorizationService.getInstance().canEditForm(getForm(), UserSessionHandler.getUser(),
-				// DActivity.FORM_EDITING));
-				updateButtons(getForm() != null);
-			}
-		});
-		return formTable;
 	}
 
 	private FormManagerUpperMenu createUpperMenu() {
