@@ -15,6 +15,99 @@ $blueShadowColor: #52A5C5;
 	font-style: normal;
 }
 
+$open-sans-pathPrefix: "./fonts/";
+
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.ttf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+  }
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.ttf') format('truetype');
+	font-weight: 300;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.ttf') format('truetype');
+	font-weight: 700;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+  }
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.ttf') format('truetype');
+	font-weight: 900;
+	font-style: italic;
+}
+
 /* If somebody wants to extend the theme she will include this mixin. */
 @mixin abcd {
   /* Include all the styles from the reindeer theme */
@@ -183,7 +276,7 @@ $blueShadowColor: #52A5C5;
 	.v-button-caption {
 		color: #1C86C2;
 		text-shadow: #fff 0 1px 0;
-		font-weight: 800;
+		font-weight: 700;
 		font-size: 16px;
 		line-height: 16px;
 	}
@@ -212,8 +305,81 @@ $blueShadowColor: #52A5C5;
 	.v-Notification,
 	.v-menubar-submenu,
 	.v-drag-element,
-	.v-table-header-drag {
-	    font-family: "TkIcons" !important;
+	.v-table-header-drag,
+	.v-table-table {
+	    font-family: "Open Sans" !important;
 	    font-size: 14px !important;
+	}
+	
+	.v-table-row, .v-table-row-odd {
+		background: #fff;
+		border: 0;
+		margin: 0;
+		padding: 0;
+		cursor: pointer;
+		color: #464646;
+	}		
+	
+	.v-table-row-odd {
+		background: #eff0f1;
+	}	
+	
+	.v-table .v-selected, .black .v-table .v-selected {
+		background: #6C94C0;
+		color: #fff;
+		text-shadow: #3b5a7a 0 1px 0;
+	}
+	
+	.v-table-header-cell-desc .v-table-sort-indicator {
+		opacity: 0.7;
+		width: 16px;
+		height: 16px;
+		background: url(appbar.chevron.down.svg);
+		background-size: contain;
+		display: block;
+	}
+	
+	.v-table-header-cell-asc .v-table-sort-indicator {
+		opacity: 0.7;
+		width: 16px;
+		height: 16px;
+		background: url(appbar.chevron.up.svg);
+		background-size: contain;
+		display: block;
+	}	
+	
+	.v-table-caption-container, .v-table-header-drag {
+		padding-top: 5px;
+		padding-right: 4px;
+	}
+	
+	.v-table-header, .v-table-footer, .v-table-footer table {
+		height: 32px;
+	}
+	
+	.v-table-header-wrap, .white .v-table-header-wrap, .v-table-footer-wrap, .white .v-table-footer-wrap, .v-table-header-drag {
+		border-color: #c2c3c4;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #e2e2e2 51%, #d3d3d3 80%);
+		height: 32px;
+		text-transform: uppercase;
+		font-size: 16px;
+		font-weight: 700;
+		color: #464646;
+		text-shadow: #f3f5f8 0 1px 0;
+		line-height: normal;
+	}
+	
+	.v-table .v-selected, .black .v-table .v-selected {
+		background: #4d749f url(../reindeer/common/img/sel-bg.png) repeat-x;
+		color: #fff;
+		text-shadow: #3b5a7a 0 1px 0;
+	}
+	
+	.v-table-resizer {
+		height: 32px;
+		width: 2px;
+		background: transparent;
+		border-right: 1px solid #c2c3c4;
 	}
 }
