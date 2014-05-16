@@ -263,14 +263,13 @@ $open-sans-pathPrefix: "./fonts/";
 	}
 	
 	.v-button-wrap, .v-disabled.v-button .v-button-wrap {
-		display: block;
-		height: 24px;
-		padding: 7px 9px 0 9px;
+		height: 26px;
+		padding: 5px 9px 0 9px;
 		background-color: transparent;
 		background-repeat: no-repeat;
 		background-position: right top;
 		background-image: none;
-		color: $buttonColor;
+		color: #00a3e8;
 	}
 	
 	.v-button-caption {
