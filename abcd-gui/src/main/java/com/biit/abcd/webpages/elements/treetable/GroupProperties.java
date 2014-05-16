@@ -29,7 +29,7 @@ public class GroupProperties extends PropertiesComponent {
 		instance = (Group) element;
 
 		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		groupTechnicalLabel.setValue(instance.getTechnicalName());
+		groupTechnicalLabel.setValue(instance.getName());
 		groupIsRepeatable = new CheckBox(ServerTranslate.tr(LanguageCodes.GROUP_PROPERTIES_REPEAT));
 		groupIsRepeatable.setValue(instance.isRepetable());
 
@@ -70,7 +70,7 @@ public class GroupProperties extends PropertiesComponent {
 
 	@Override
 	public void updateElement() {
-		instance.setTechnicalName(groupTechnicalLabel.getValue());
+		instance.setName(groupTechnicalLabel.getValue());
 		instance.setRepetable(groupIsRepeatable.getValue());
 		instance.setUpdatedBy(UserSessionHandler.getUser());
 		instance.setUpdateTime();

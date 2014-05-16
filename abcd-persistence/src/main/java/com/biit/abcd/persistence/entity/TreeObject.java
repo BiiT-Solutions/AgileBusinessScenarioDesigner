@@ -17,7 +17,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.biit.abcd.annotation.AutoLogger;
@@ -41,6 +40,8 @@ public abstract class TreeObject {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 
+	private String name;
+
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
 	@Column(nullable = false)
 	private long sortSeq = 0;
@@ -55,7 +56,7 @@ public abstract class TreeObject {
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "PARENT_OF_CHILDREN")
-	// @OrderColumn(name = "CHILDREN_INDEX", nullable=true)
+	// @OrderColumn(name = "CHILDREN_INDEX")
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject parent;
@@ -390,5 +391,13 @@ public abstract class TreeObject {
 
 	public void setSortSeq(long sortSeq) {
 		this.sortSeq = sortSeq;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

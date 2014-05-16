@@ -8,14 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "QUESTIONS")
+@Table(name = "TREE_QUESTIONS")
 public class Question extends TreeObject {
 	private static final String DEFAULT_QUESTION_TECHNICAL_NAME = "Question";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Answer.class));
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class,
 			Group.class));
-
-	private String technicalName;
 
 	public Question() {
 	}
@@ -30,14 +28,6 @@ public class Question extends TreeObject {
 		return ALLOWED_PARENTS;
 	}
 
-	public String getTechnicalName() {
-		return technicalName;
-	}
-
-	public void setTechnicalName(String technicalName) {
-		this.technicalName = technicalName;
-	}
-
 	/**
 	 * Creates a default Question technical name, different for each Question of the same parent.
 	 * 
@@ -49,8 +39,8 @@ public class Question extends TreeObject {
 		if (parent != null) {
 			name = DEFAULT_QUESTION_TECHNICAL_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
-				if (child instanceof Question && ((Question) child).getTechnicalName() != null
-						&& ((Question) child).getTechnicalName().equals(name)) {
+				if (child instanceof Question && ((Question) child).getName() != null
+						&& ((Question) child).getName().equals(name)) {
 					return getDefaultTechnicalName(parent, startingIndex + 1);
 				}
 			}
@@ -62,6 +52,6 @@ public class Question extends TreeObject {
 
 	@Override
 	public String toString() {
-		return getTechnicalName();
+		return getName();
 	}
 }

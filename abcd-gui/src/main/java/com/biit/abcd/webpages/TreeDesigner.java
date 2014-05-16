@@ -150,7 +150,7 @@ public class TreeDesigner extends FormWebPageComponent {
 				} else {
 					getForm().addChild(newCategory);
 				}
-				newCategory.setLabel(newCategory.getDefaultLabel(form, form.getChildren().size()));
+				newCategory.setName(newCategory.getDefaultLabel(form, form.getChildren().size()));
 				addCategoryToUI(newCategory);
 			} catch (NotValidChildException e) {
 				// Not possible.
@@ -191,7 +191,7 @@ public class TreeDesigner extends FormWebPageComponent {
 						container = formTreeTable.getValue().getCategory();
 					}
 					if (container != null) {
-						newGroup.setTechnicalName(newGroup.getDefaultTechnicalName(container, 1));
+						newGroup.setName(newGroup.getDefaultTechnicalName(container, 1));
 						addElementToUI(newGroup, container);
 						container.addChild(newGroup);
 					}
@@ -221,7 +221,7 @@ public class TreeDesigner extends FormWebPageComponent {
 						parent = formTreeTable.getValue().getParent().getParent();
 					}
 					if (parent != null) {
-						newQuestion.setTechnicalName(newQuestion.getDefaultTechnicalName(parent, 1));
+						newQuestion.setName(newQuestion.getDefaultTechnicalName(parent, 1));
 						addElementToUI(newQuestion, parent);
 						parent.addChild(newQuestion);
 					}
@@ -249,7 +249,7 @@ public class TreeDesigner extends FormWebPageComponent {
 						parent = formTreeTable.getValue().getParent();
 					}
 					if (parent != null) {
-						newAnswer.setTechnicalName(newAnswer.getDefaultTechnicalName(parent, 1));
+						newAnswer.setName(newAnswer.getDefaultTechnicalName(parent, 1));
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
 					}

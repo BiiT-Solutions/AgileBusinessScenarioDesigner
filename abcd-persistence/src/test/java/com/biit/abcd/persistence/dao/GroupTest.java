@@ -32,7 +32,7 @@ public class GroupTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "groupDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeDummyGroup() {
 		Group group = new Group();
-		group.setTechnicalName(DUMMY_GROUP);
+		group.setName(DUMMY_GROUP);
 		groupDao.makePersistent(group);
 		Assert.assertEquals(groupDao.getRowCount(), 1);
 	}
@@ -40,13 +40,13 @@ public class GroupTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "groupDao" }, dependsOnMethods = "storeDummyGroup")
 	public void getDummyGroup() {
 		List<Group> groups = groupDao.getAll();
-		Assert.assertEquals(groups.get(0).getTechnicalName(), DUMMY_GROUP);
+		Assert.assertEquals(groups.get(0).getName(), DUMMY_GROUP);
 	}
 
 	@Test(groups = { "groupDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeGroupWithQuestion() throws NotValidChildException {
 		Group group = new Group();
-		group.setTechnicalName(GROUP_WITH_QUESTIONS);
+		group.setName(GROUP_WITH_QUESTIONS);
 		Question question = new Question();
 		group.addChild(question);
 
@@ -60,7 +60,7 @@ public class GroupTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "groupDao" }, dependsOnMethods = "storeGroupWithQuestion")
 	public void getGroup() {
 		List<Group> groups = groupDao.getAll();
-		Assert.assertEquals(groups.get(0).getTechnicalName(), DUMMY_GROUP);
+		Assert.assertEquals(groups.get(0).getName(), DUMMY_GROUP);
 	}
 
 }

@@ -27,7 +27,7 @@ public class CategoriesProperties extends PropertiesComponent {
 		instance = (Category) element;
 
 		categoryLabel = new TextField(ServerTranslate.tr(LanguageCodes.CATEGORY_PROPERTIES_LABEL));
-		categoryLabel.setValue(instance.getLabel());
+		categoryLabel.setValue(instance.getName());
 
 		String createdBy = "";
 		String updatedBy = "";
@@ -65,7 +65,7 @@ public class CategoriesProperties extends PropertiesComponent {
 
 	@Override
 	public void updateElement() {
-		instance.setLabel(categoryLabel.getValue());
+		instance.setName(categoryLabel.getValue());
 		instance.setUpdatedBy(UserSessionHandler.getUser());
 		instance.setUpdateTime();
 		firePropertyUpdateListener(instance);

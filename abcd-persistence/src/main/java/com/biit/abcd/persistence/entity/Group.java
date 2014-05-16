@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "GROUPS")
+@Table(name = "TREE_GROUPS")
 public class Group extends TreeObject {
 	private static final String DEFAULT_GROUP_TECHNICAL_NAME = "Group";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class,
@@ -16,7 +16,6 @@ public class Group extends TreeObject {
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class,
 			Group.class));
 
-	private String technicalName;
 	private boolean repetable;
 
 	public Group() {
@@ -30,14 +29,6 @@ public class Group extends TreeObject {
 	@Override
 	protected List<Class<?>> getAllowedParents() {
 		return ALLOWED_PARENTS;
-	}
-
-	public String getTechnicalName() {
-		return technicalName;
-	}
-
-	public void setTechnicalName(String technicalName) {
-		this.technicalName = technicalName;
 	}
 
 	public boolean isRepetable() {
@@ -59,8 +50,8 @@ public class Group extends TreeObject {
 		if (parent != null) {
 			name = DEFAULT_GROUP_TECHNICAL_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
-				if (child instanceof Group && ((Group) child).getTechnicalName() != null
-						&& ((Group) child).getTechnicalName().equals(name)) {
+				if (child instanceof Group && ((Group) child).getName() != null
+						&& ((Group) child).getName().equals(name)) {
 					return getDefaultTechnicalName(parent, startingIndex + 1);
 				}
 			}
@@ -72,6 +63,6 @@ public class Group extends TreeObject {
 
 	@Override
 	public String toString() {
-		return getTechnicalName();
+		return getName();
 	}
 }

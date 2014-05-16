@@ -32,7 +32,7 @@ public class CategoryTest extends AbstractTransactionalTestNGSpringContextTests 
 	@Test(groups = { "categoryDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeDummyCategory() {
 		Category category = new Category();
-		category.setLabel(DUMMY_CATEGORY);
+		category.setName(DUMMY_CATEGORY);
 		categoryDao.makePersistent(category);
 		Assert.assertEquals(categoryDao.getRowCount(), 1);
 	}
@@ -40,7 +40,7 @@ public class CategoryTest extends AbstractTransactionalTestNGSpringContextTests 
 	@Test(groups = { "categoryDao" }, dependsOnMethods = "storeDummyCategory")
 	public void getDummyCategory() {
 		List<Category> categories = categoryDao.getAll();
-		Assert.assertEquals(categories.get(0).getLabel(), DUMMY_CATEGORY);
+		Assert.assertEquals(categories.get(0).getName(), DUMMY_CATEGORY);
 	}
 
 	@Test(groups = { "answerDao" }, dependsOnMethods = "getDummyCategory")
@@ -53,7 +53,7 @@ public class CategoryTest extends AbstractTransactionalTestNGSpringContextTests 
 	@Test(groups = { "categoryDao" }, dependsOnMethods = "removeDummyCategory")
 	public void storeCategoryWithGroup() throws NotValidChildException {
 		Category category = new Category();
-		category.setLabel(CATEGORY_WITH_GROUP);
+		category.setName(CATEGORY_WITH_GROUP);
 		Group group = new Group();
 		category.addChild(group);
 

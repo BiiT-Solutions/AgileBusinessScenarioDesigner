@@ -114,16 +114,16 @@ public class FormTreeTable extends TreeTable {
 			name = ((Form) element).getName();
 		}
 		if (element instanceof Category) {
-			name = ((Category) element).getLabel();
+			name = ((Category) element).getName();
 		}
 		if (element instanceof Group) {
-			name = ((Group) element).getTechnicalName();
+			name = ((Group) element).getName();
 		}
 		if (element instanceof Question) {
-			name = ((Question) element).getTechnicalName();
+			name = ((Question) element).getName();
 		}
 		if (element instanceof Answer) {
-			name = ((Answer) element).getTechnicalName();
+			name = ((Answer) element).getName();
 		}
 		if (name == null) {
 			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");

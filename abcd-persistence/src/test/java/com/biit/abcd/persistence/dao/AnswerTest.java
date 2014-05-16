@@ -33,7 +33,7 @@ public class AnswerTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "answerDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeDummyAnswer() {
 		Answer answer = new Answer();
-		answer.setTechnicalName(DUMMY_ANSWER);
+		answer.setName(DUMMY_ANSWER);
 		answerDao.makePersistent(answer);
 		Assert.assertEquals(answerDao.getRowCount(), 1);
 	}
@@ -41,7 +41,7 @@ public class AnswerTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "answerDao" }, dependsOnMethods = "storeDummyAnswer")
 	public void getDummyAnswer() {
 		List<Answer> answers = answerDao.getAll();
-		Assert.assertEquals(answers.get(0).getTechnicalName(), DUMMY_ANSWER);
+		Assert.assertEquals(answers.get(0).getName(), DUMMY_ANSWER);
 	}
 
 	@Test(groups = { "answerDao" }, dependsOnMethods = "getDummyAnswer")
@@ -54,7 +54,7 @@ public class AnswerTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "answerDao" }, dependsOnMethods = "removeDummyAnswer")
 	public void storeAnswerInputField() throws InvalidAnswerFormatException {
 		Answer answer = new Answer();
-		answer.setTechnicalName(ANSWER_INPUT_FIELD);
+		answer.setName(ANSWER_INPUT_FIELD);
 		answer.setAnswerType(AnswerType.INPUT);
 		answer.setAnswerFormat(AnswerFormat.TEXT);
 		answerDao.makePersistent(answer);
@@ -64,7 +64,7 @@ public class AnswerTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "answerDao" }, dependsOnMethods = "storeAnswerInputField")
 	public void getAnswerInputField() {
 		List<Answer> answers = answerDao.getAll();
-		Assert.assertEquals(answers.get(0).getTechnicalName(), ANSWER_INPUT_FIELD);
+		Assert.assertEquals(answers.get(0).getName(), ANSWER_INPUT_FIELD);
 		Assert.assertEquals(answers.get(0).getAnswerType(), AnswerType.INPUT);
 		Assert.assertEquals(answers.get(0).getAnswerFormat(), AnswerFormat.TEXT);
 	}

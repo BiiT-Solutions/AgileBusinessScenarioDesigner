@@ -18,14 +18,15 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.utils.DateManager;
-import com.biit.abcd.webpages.elements.treetable.RootForm;
 import com.biit.abcd.webpages.elements.treetable.FormTreeTableCellStyleGenerator;
+import com.biit.abcd.webpages.elements.treetable.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.vaadin.data.Item;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.TreeTable;
 
 public class FormsVersionsTreeTable extends TreeTable {
+	private static final long serialVersionUID = -7776688515497328826L;
 	private IFormDao formDao;
 	private HashMap<String, List<Form>> formMap;
 

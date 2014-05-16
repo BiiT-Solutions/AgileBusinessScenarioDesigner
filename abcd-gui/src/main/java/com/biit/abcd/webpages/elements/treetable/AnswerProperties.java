@@ -27,7 +27,7 @@ public class AnswerProperties extends PropertiesComponent {
 		instance = (Answer) element;
 
 		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		groupTechnicalLabel.setValue(instance.getTechnicalName());
+		groupTechnicalLabel.setValue(instance.getName());
 
 		String createdBy = "";
 		String updatedBy = "";
@@ -65,7 +65,7 @@ public class AnswerProperties extends PropertiesComponent {
 
 	@Override
 	public void updateElement() {
-		instance.setTechnicalName(groupTechnicalLabel.getValue());
+		instance.setName(groupTechnicalLabel.getValue());
 		instance.setUpdatedBy(UserSessionHandler.getUser());
 		instance.setUpdateTime();
 		firePropertyUpdateListener(instance);

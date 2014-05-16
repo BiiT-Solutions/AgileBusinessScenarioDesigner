@@ -64,7 +64,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		form = new Form();
 		form.setName(FULL_FORM);
 		Category category = new Category();
-		category.setLabel(CATEGORY_LABEL);
+		category.setName(CATEGORY_LABEL);
 		form.addChild(category);
 		formDao.makePersistent(form);
 		Form retrievedForm = formDao.read(form.getId());
@@ -104,7 +104,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Form form2 = new Form();
 		form2.setName(OTHER_FORM);
 		Category category = new Category();
-		category.setLabel(CATEGORY_LABEL);
+		category.setName(CATEGORY_LABEL);
 		form2.addChild(category);
 		formDao.makePersistent(form2);
 		Form retrievedForm = formDao.read(form2.getId());
@@ -116,47 +116,47 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
 	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException {
 		Category category2 = new Category();
-		category2.setLabel("Category2");
+		category2.setName("Category2");
 		form.addChild(category2);
 
 		Category category3 = new Category();
-		category3.setLabel("Category3");
+		category3.setName("Category3");
 		form.addChild(category3);
 
 		Group group1 = new Group();
-		group1.setTechnicalName("Group1");
+		group1.setName("Group1");
 		category2.addChild(group1);
 
 		Group group2 = new Group();
-		group2.setTechnicalName("Group2");
+		group2.setName("Group2");
 		category2.addChild(group2);
 
 		Group group3 = new Group();
-		group3.setTechnicalName("Group3");
+		group3.setName("Group3");
 		category2.addChild(group3);
 
 		Question question1 = new Question();
-		question1.setTechnicalName("Question1");
+		question1.setName("Question1");
 		group2.addChild(question1);
 
 		Question question2 = new Question();
-		question2.setTechnicalName("Question2");
+		question2.setName("Question2");
 		group2.addChild(question2);
 
 		Question question3 = new Question();
-		question3.setTechnicalName("Question3");
+		question3.setName("Question3");
 		group2.addChild(question3);
 
 		Answer answer1 = new Answer();
-		answer1.setTechnicalName("Answer1");
+		answer1.setName("Answer1");
 		question2.addChild(answer1);
 
 		Answer answer2 = new Answer();
-		answer2.setTechnicalName("Answer2");
+		answer2.setName("Answer2");
 		question2.addChild(answer2);
 
 		Answer answer3 = new Answer();
-		answer3.setTechnicalName("Answer3");
+		answer3.setName("Answer3");
 		question2.addChild(answer3);
 
 		// Update form with new elements
@@ -197,19 +197,19 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 				return false;
 			}
 		} else if (object1 instanceof Category) {
-			if (!((Category) object1).getLabel().equals(((Category) object2).getLabel())) {
+			if (!((Category) object1).getName().equals(((Category) object2).getName())) {
 				return false;
 			}
 		} else if (object1 instanceof Group) {
-			if (!((Group) object1).getTechnicalName().equals(((Group) object2).getTechnicalName())) {
+			if (!((Group) object1).getName().equals(((Group) object2).getName())) {
 				return false;
 			}
 		} else if (object1 instanceof Question) {
-			if (!((Question) object1).getTechnicalName().equals(((Question) object2).getTechnicalName())) {
+			if (!((Question) object1).getName().equals(((Question) object2).getName())) {
 				return false;
 			}
 		} else if (object1 instanceof Answer) {
-			if (!((Answer) object1).getTechnicalName().equals(((Answer) object2).getTechnicalName())) {
+			if (!((Answer) object1).getName().equals(((Answer) object2).getName())) {
 				return false;
 			}
 		}

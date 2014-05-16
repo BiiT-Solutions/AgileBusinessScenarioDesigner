@@ -10,12 +10,11 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.exceptions.InvalidAnswerFormatException;
 
 @Entity
-@Table(name = "ANSWERS")
+@Table(name = "TREE_ANSWERS")
 public class Answer extends TreeObject {
 	private static final String DEFAULT_ANSWER_TECHNICAL_NAME = "Answer";
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Question.class));
 
-	private String technicalName;
 	private AnswerType answerType;
 	private AnswerFormat answerFormat;
 
@@ -30,14 +29,6 @@ public class Answer extends TreeObject {
 	@Override
 	protected List<Class<?>> getAllowedParents() {
 		return ALLOWED_PARENTS;
-	}
-
-	public String getTechnicalName() {
-		return technicalName;
-	}
-
-	public void setTechnicalName(String technicalName) {
-		this.technicalName = technicalName;
 	}
 
 	public AnswerType getAnswerType() {
@@ -76,8 +67,8 @@ public class Answer extends TreeObject {
 		if (parent != null) {
 			name = DEFAULT_ANSWER_TECHNICAL_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
-				if (child instanceof Question && ((Question) child).getTechnicalName() != null
-						&& ((Question) child).getTechnicalName().equals(name)) {
+				if (child instanceof Question && ((Question) child).getName() != null
+						&& ((Question) child).getName().equals(name)) {
 					return getDefaultTechnicalName(parent, startingIndex + 1);
 				}
 			}
@@ -89,7 +80,7 @@ public class Answer extends TreeObject {
 
 	@Override
 	public String toString() {
-		return getTechnicalName();
+		return getName();
 	}
 
 }

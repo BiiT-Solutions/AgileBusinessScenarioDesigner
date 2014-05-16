@@ -8,14 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "CATEGORIES")
+@Table(name = "TREE_CATEGORIES")
 public class Category extends TreeObject {
 	private static final String DEFAULT_CATEGORY_NAME = "Category";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Question.class,
 			Group.class));
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Form.class));
-
-	private String label;
 
 	public Category() {
 	}
@@ -30,14 +28,6 @@ public class Category extends TreeObject {
 		return ALLOWED_PARENTS;
 	}
 
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
 	/**
 	 * Creates a default Category name, different for each category of the same form.
 	 * 
@@ -49,8 +39,8 @@ public class Category extends TreeObject {
 		if (parent != null) {
 			name = DEFAULT_CATEGORY_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
-				if (child instanceof Category && ((Category) child).getLabel() != null
-						&& ((Category) child).getLabel().equals(name)) {
+				if (child instanceof Category && ((Category) child).getName() != null
+						&& ((Category) child).getName().equals(name)) {
 					return getDefaultLabel(parent, startingIndex + 1);
 				}
 			}
@@ -62,7 +52,7 @@ public class Category extends TreeObject {
 
 	@Override
 	public String toString() {
-		return getLabel();
+		return getName();
 	}
 
 }
