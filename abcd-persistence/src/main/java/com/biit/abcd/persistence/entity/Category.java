@@ -34,14 +34,14 @@ public class Category extends TreeObject {
 	 * @param startingIndex
 	 * @return
 	 */
-	public String getDefaultLabel(TreeObject parent, int startingIndex) {
+	public String getDefaultName(TreeObject parent, int startingIndex) {
 		String name;
 		if (parent != null) {
 			name = DEFAULT_CATEGORY_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
 				if (child instanceof Category && ((Category) child).getName() != null
 						&& ((Category) child).getName().equals(name)) {
-					return getDefaultLabel(parent, startingIndex + 1);
+					return getDefaultName(parent, startingIndex + 1);
 				}
 			}
 		} else {

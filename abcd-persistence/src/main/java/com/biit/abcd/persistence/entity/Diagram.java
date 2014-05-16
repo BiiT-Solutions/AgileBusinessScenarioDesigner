@@ -1,7 +1,10 @@
 package com.biit.abcd.persistence.entity;
 
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +17,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
+import com.biit.json.DiagramObjectDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.liferay.portal.model.User;
 
 @Entity
@@ -38,7 +45,7 @@ public class Diagram {
 	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
 
-	//@SerializedName("cells")
+	// @SerializedName("cells")
 	@Transient
 	private Collection<DiagramObject> diagramObjects;
 
@@ -135,12 +142,16 @@ public class Diagram {
 		}
 	}
 
-//	private void translateJson() {
-//		if (diagramAsJson != null) {
-//			Gson gson = new Gson();
-//			Type collectionType = new TypeToken<Collection<Integer>>(){}.getType();
-//			diagramObjects = gson.fromJson(diagramAsJson, new TypeReference<List<DiagramObject>>() });
-//		}
-//
-//	}
+	private void translateJson() {
+		if (diagramAsJson != null) {
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
+			Gson gson = gsonBuilder.create();
+
+			Type listType = new TypeToken<ArrayList<DiagramObject>>() {
+			}.getType();
+			List<DiagramObject> objects = gson.fromJson(diagramAsJson, listType);
+
+		}
+	}
 }

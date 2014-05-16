@@ -56,7 +56,6 @@ public abstract class TreeObject {
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "PARENT_OF_CHILDREN")
-	// @OrderColumn(name = "CHILDREN_INDEX")
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject parent;

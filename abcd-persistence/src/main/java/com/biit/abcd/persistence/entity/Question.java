@@ -41,14 +41,14 @@ public class Question extends TreeObject {
 	 * @param startingIndex
 	 * @return
 	 */
-	public String getDefaultTechnicalName(TreeObject parent, int startingIndex) {
+	public String getDefaultName(TreeObject parent, int startingIndex) {
 		String name;
 		if (parent != null) {
 			name = DEFAULT_QUESTION_TECHNICAL_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
 				if (child instanceof Question && ((Question) child).getName() != null
 						&& ((Question) child).getName().equals(name)) {
-					return getDefaultTechnicalName(parent, startingIndex + 1);
+					return getDefaultName(parent, startingIndex + 1);
 				}
 			}
 		} else {
