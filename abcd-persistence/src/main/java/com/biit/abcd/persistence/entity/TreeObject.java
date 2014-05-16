@@ -249,8 +249,10 @@ public abstract class TreeObject {
 				&& (indexChild2 >= 0 && indexChild2 < getChildren().size())) {
 			Collections.swap(getChildren(), indexChild1, indexChild2);
 			// Update elements date modification.
-			getChildren().get(indexChild1).setUpdatedBy(user.getUserId());
-			getChildren().get(indexChild2).setUpdatedBy(user.getUserId());
+			if (user != null) {
+				getChildren().get(indexChild1).setUpdatedBy(user.getUserId());
+				getChildren().get(indexChild2).setUpdatedBy(user.getUserId());
+			}
 		} else {
 			if (indexChild1 > indexChild2) {
 				throw new ChildrenNotFoundException("Index out of bounds. Index " + indexChild1 + " is invalid.");

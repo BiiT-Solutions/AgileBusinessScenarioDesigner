@@ -170,7 +170,6 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 
 	protected void sortChildren(TreeObject treeObject) {
 		Collections.sort(treeObject.getChildren(), new ChildrenSort());
-		System.out.println(treeObject + " -> " + treeObject.getChildren());
 		for (TreeObject child : treeObject.getChildren()) {
 			sortChildren(child);
 		}
