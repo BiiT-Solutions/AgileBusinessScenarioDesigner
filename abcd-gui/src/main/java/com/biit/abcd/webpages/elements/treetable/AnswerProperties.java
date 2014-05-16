@@ -3,69 +3,39 @@ package com.biit.abcd.webpages.elements.treetable;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.liferay.access.exceptions.UserDoesNotExistException;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
 public class AnswerProperties extends PropertiesComponent {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Answer instance;
-	private TextField groupTechnicalLabel;
-	private TextField elementCreatedBy;
-	private TextField elementCreationTime;
-	private TextField elementUpdatedBy;
-	private TextField elementUpdateTime;
+	private TextField answerTechnicalLabel;
 
 	public AnswerProperties() {
 	}
 
 	@Override
-	public void setElement(TreeObject element) {
+	public void setElementAbstract(TreeObject element) {
 		instance = (Answer) element;
 
-		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		groupTechnicalLabel.setValue(instance.getTechnicalName());
+		answerTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		answerTechnicalLabel.setValue(instance.getTechnicalName());
+		addValueChangeListenerToField(answerTechnicalLabel);
 
-		String createdBy = "";
-		String updatedBy = "";
-		try {
-			createdBy = instance.getCreatedBy() == null ? "" : LiferayServiceAccess.getInstance()
-					.getUserById(instance.getCreatedBy()).getEmailAddress();
-		} catch (UserDoesNotExistException udne) {
-			createdBy = instance.getCreatedBy() + "";
-		}
+		FormLayout answerForm = new FormLayout();
+		answerForm.setWidth(null);
+		answerForm.addComponent(answerTechnicalLabel);
 
-		try {
-			updatedBy = instance.getUpdatedBy() == null ? "" : LiferayServiceAccess.getInstance()
-					.getUserById(instance.getUpdatedBy()).getEmailAddress();
-		} catch (UserDoesNotExistException udne) {
-			updatedBy = instance.getUpdatedBy() + "";
-		}
-
-		String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
-		String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
-		elementCreatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
-		elementCreatedBy.setValue(createdBy);
-		elementCreationTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATION_TIME));
-		elementCreationTime.setValue(creationTime);
-		elementUpdatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATED_BY));
-		elementUpdatedBy.setValue(updatedBy);
-		elementUpdateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
-		elementUpdateTime.setValue(updatedTime);
-
-		addFormField(groupTechnicalLabel);
-		addFormField(elementCreatedBy);
-		addFormField(elementCreationTime);
-		addFormField(elementUpdatedBy);
-		addFormField(elementUpdateTime);
+		getRootAccordion().addTab(answerForm,
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION),0);
 	}
 
 	@Override
 	public void updateElement() {
-		instance.setTechnicalName(groupTechnicalLabel.getValue());
+		instance.setTechnicalName(answerTechnicalLabel.getValue());
 		instance.setUpdatedBy(UserSessionHandler.getUser());
 		instance.setUpdateTime();
 		firePropertyUpdateListener(instance);

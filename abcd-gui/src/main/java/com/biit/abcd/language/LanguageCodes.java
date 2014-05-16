@@ -79,6 +79,12 @@ public enum LanguageCodes {
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_CAPTION("formDiagramBuilder.upper.buttonToPng.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_TOOLTIP("formDiagramBuilder.upper.buttonToPng.tooltip"),
 	
+	TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION("treeObjectProperties.common.form.caption"),
+	TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION("treeObjectProperties.answer.form.caption"),
+	TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION("treeObjectProperties.question.form.caption"),
+	TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION("treeObjectProperties.group.form.caption"),
+	TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION("treeObjectProperties.category.form.caption"),
+	TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION("treeObjectProperties.form.form.caption"),
 	TREE_OBJECT_PROPERTIES_CREATION_TIME("treeObjectProperties.creationTime"),
 	TREE_OBJECT_PROPERTIES_AVAILABLE_FROM("treeObjectProperties.availableFrom"),
 	TREE_OBJECT_PROPERTIES_AVAILABLE_TO("treeObjectProperties.availableTo"),

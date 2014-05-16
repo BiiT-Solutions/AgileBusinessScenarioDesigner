@@ -3,11 +3,10 @@ package com.biit.abcd.webpages.elements.treetable;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
 public class GroupProperties extends PropertiesComponent {
@@ -16,56 +15,27 @@ public class GroupProperties extends PropertiesComponent {
 	private Group instance;
 	private TextField groupTechnicalLabel;
 	private CheckBox groupIsRepeatable;
-	private TextField elementCreatedBy;
-	private TextField elementCreationTime;
-	private TextField elementUpdatedBy;
-	private TextField elementUpdateTime;
 
 	public GroupProperties() {
 	}
 
 	@Override
-	public void setElement(TreeObject element) {
+	public void setElementAbstract(TreeObject element) {
 		instance = (Group) element;
 
 		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getTechnicalName());
+		addValueChangeListenerToField(groupTechnicalLabel);
 		groupIsRepeatable = new CheckBox(ServerTranslate.tr(LanguageCodes.GROUP_PROPERTIES_REPEAT));
 		groupIsRepeatable.setValue(instance.isRepetable());
 
-		String createdBy = "";
-		String updatedBy = "";
-		try {
-			createdBy = instance.getCreatedBy() == null ? "" : LiferayServiceAccess.getInstance()
-					.getUserById(instance.getCreatedBy()).getEmailAddress();
-		} catch (UserDoesNotExistException udne) {
-			createdBy = instance.getCreatedBy() + "";
-		}
+		FormLayout answerForm = new FormLayout();
+		answerForm.setWidth(null);
+		answerForm.addComponent(groupTechnicalLabel);
+		answerForm.addComponent(groupIsRepeatable);
 
-		try {
-			updatedBy = instance.getUpdatedBy() == null ? "" : LiferayServiceAccess.getInstance()
-					.getUserById(instance.getUpdatedBy()).getEmailAddress();
-		} catch (UserDoesNotExistException udne) {
-			updatedBy = instance.getUpdatedBy() + "";
-		}
-
-		String creationTime = instance.getCreationTime() == null ? "" : instance.getCreationTime().toString();
-		String updatedTime = instance.getUpdateTime() == null ? "" : instance.getUpdateTime().toString();
-		elementCreatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
-		elementCreatedBy.setValue(createdBy);
-		elementCreationTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATION_TIME));
-		elementCreationTime.setValue(creationTime);
-		elementUpdatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATED_BY));
-		elementUpdatedBy.setValue(updatedBy);
-		elementUpdateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
-		elementUpdateTime.setValue(updatedTime);
-
-		addFormField(groupTechnicalLabel);
-		addFormField(groupIsRepeatable);
-		addFormField(elementCreatedBy);
-		addFormField(elementCreationTime);
-		addFormField(elementUpdatedBy);
-		addFormField(elementUpdateTime);
+		getRootAccordion().addTab(answerForm,
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION),0);
 	}
 
 	@Override
