@@ -2,6 +2,8 @@ package com.biit.abcd.persistence.dao.hibernate;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +53,10 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 
 	@Override
 	public T makePersistent(T entity) {
+		// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
+		if (entity instanceof TreeObject) {
+			((TreeObject) entity).updateChildrenSortSeqs();
+		}
 		setCreationInfo(entity);
 		setUpdateInfo(entity);
 		Session session = getSessionFactory().getCurrentSession();
@@ -72,6 +78,7 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 		session.beginTransaction();
 		try {
 			session.delete(entity);
+			session.flush();
 			session.getTransaction().commit();
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
@@ -88,6 +95,9 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 			T object = (T) session.get(getType(), id);
 			initializeSet(object);
 			session.getTransaction().commit();
+			if (object != null && object instanceof TreeObject) {
+				sortChildren((TreeObject) object);
+			}
 			return object;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
@@ -120,6 +130,7 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 			List<T> objects = session.createQuery("from " + getType().getSimpleName()).list();
 			initializeSets(objects);
 			session.getTransaction().commit();
+			sortChildren(objects);
 			return objects;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
@@ -148,4 +159,28 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 	 * @param elements
 	 */
 	protected abstract void initializeSets(List<T> elements);
+
+	protected void sortChildren(List<T> treeObjects) {
+		for (T treeObject : treeObjects) {
+			if (treeObject instanceof TreeObject) {
+				sortChildren((TreeObject) treeObject);
+			}
+		}
+	}
+
+	protected void sortChildren(TreeObject treeObject) {
+		Collections.sort(treeObject.getChildren(), new ChildrenSort());
+		System.out.println(treeObject + " -> " + treeObject.getChildren());
+		for (TreeObject child : treeObject.getChildren()) {
+			sortChildren(child);
+		}
+	}
+
+	class ChildrenSort implements Comparator<TreeObject> {
+
+		@Override
+		public int compare(TreeObject o1, TreeObject o2) {
+			return (o1.getSortSeq() < o2.getSortSeq() ? -1 : (o1 == o2 ? 0 : 1));
+		}
+	}
 }

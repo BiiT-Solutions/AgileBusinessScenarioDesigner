@@ -3,7 +3,6 @@ package com.biit.abcd.persistence.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
@@ -54,9 +53,10 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 			criteria.add(Restrictions.eq("name", name));
 			@SuppressWarnings("unchecked")
 			List<Form> results = criteria.list();
-			session.getTransaction().commit();
+			session.getTransaction().commit();		
 			if (!results.isEmpty()) {
 				Form form = (Form) results.get(0);
+				sortChildren(form);
 				return form;
 			}
 		} catch (RuntimeException e) {
