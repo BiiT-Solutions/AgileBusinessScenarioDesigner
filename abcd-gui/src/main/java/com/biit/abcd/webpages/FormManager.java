@@ -17,6 +17,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
@@ -39,8 +40,10 @@ public class FormManager extends FormWebPageComponent {
 		setUpperMenu(upperMenu);
 
 		formTable = createTreeTable();
-		getWorkingAreaLayout().addComponent(formTable);
-		getWorkingAreaLayout().setComponentAlignment(formTable, Alignment.MIDDLE_CENTER);
+		VerticalLayout rootLayout = new VerticalLayout(formTable);
+		rootLayout.setSizeFull();
+		rootLayout.setMargin(true);
+		getWorkingAreaLayout().addComponent(rootLayout);
 		formTable.selectLastUsedForm();
 		updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 	}

@@ -57,6 +57,7 @@ public class AccordionMultiple extends CustomComponent {
 		private static final long serialVersionUID = 3108983922974101784L;
 		private static final String CLASSNAME = "v-accordion-multiple-tab";
 		private static final String TAB_CLASSNAME = "v-tab-bar";
+		private static final String ICON_SIZE = "11px";
 		private VerticalLayout rootLayout;
 		private Component userComponent;
 		private HorizontalLayout bar;
@@ -80,11 +81,11 @@ public class AccordionMultiple extends CustomComponent {
 
 		private HorizontalLayout createTabBar(String caption) {
 			expandImage = new Image(null, ThemeIcons.EXPAND.getThemeResource());
-			expandImage.setWidth("16px");
-			expandImage.setHeight("16px");
+			expandImage.setWidth(ICON_SIZE);
+			expandImage.setHeight(ICON_SIZE);
 			collapseImage = new Image(null, ThemeIcons.COLLAPSE.getThemeResource());
-			collapseImage.setWidth("16px");
-			collapseImage.setHeight("16px");
+			collapseImage.setWidth(ICON_SIZE);
+			collapseImage.setHeight(ICON_SIZE);
 
 			bar = new HorizontalLayout();
 			Label captionLabel = new Label(caption);
