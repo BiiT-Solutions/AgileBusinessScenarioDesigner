@@ -87,4 +87,9 @@ public class Answer extends TreeObject {
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return getTechnicalName();
+	}
+
 }

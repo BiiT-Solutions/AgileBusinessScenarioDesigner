@@ -59,4 +59,9 @@ public class Question extends TreeObject {
 		}
 		return name;
 	}
+
+	@Override
+	public String toString() {
+		return getTechnicalName();
+	}
 }
