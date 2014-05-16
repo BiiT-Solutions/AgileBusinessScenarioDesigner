@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.webpages.components.AccordionMultiple;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbstractField;
@@ -15,20 +16,21 @@ import com.vaadin.ui.VerticalLayout;
 public abstract class PropertiesComponent extends CustomComponent {
 	private static final long serialVersionUID = 4900379725073491238L;
 
-	private Accordion rootAccordion;
+	private AccordionMultiple rootAccordion;
 	private FormLayout formLayout;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
 
 	public PropertiesComponent() {
 		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
 		
-		rootAccordion = new Accordion();
+		rootAccordion = new AccordionMultiple();
 		rootAccordion.setWidth("100%");
 		rootAccordion.setHeight(null);
 		
 		formLayout = new FormLayout();
 		formLayout.setImmediate(true);
 		
+		formLayout.setSizeFull();
 		rootAccordion.addTab(formLayout,"Kiwi-1");
 		rootAccordion.addTab(new VerticalLayout(),"kiwi-2");
 		rootAccordion.addTab(new VerticalLayout(),"kiwi-3");
@@ -36,7 +38,8 @@ public abstract class PropertiesComponent extends CustomComponent {
 		rootAccordion.addTab(new VerticalLayout(),"kiwi-5");
 		
 		setCompositionRoot(rootAccordion);
-		setSizeFull();
+		setWidth("100%");
+		setHeight(null);
 	}
 	
 	protected void addFormField(AbstractField<?> component){
