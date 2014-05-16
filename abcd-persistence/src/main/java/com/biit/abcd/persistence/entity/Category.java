@@ -60,4 +60,9 @@ public class Category extends TreeObject {
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return getLabel();
+	}
+
 }

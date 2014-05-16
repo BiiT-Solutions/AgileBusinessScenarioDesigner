@@ -10,8 +10,13 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Group;
+import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,30 +73,31 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
 	}
 
-//	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory", expectedExceptions = { ConstraintViolationException.class })
-//	public void addNewCategoryWithSameName() throws NotValidChildException, ConstraintViolationException {
-//		Category category = new Category();
-//		category.setLabel(CATEGORY_LABEL);
-//		form.addChild(category);
-//		formDao.makePersistent(form);
-//	}
-//
-//	@Test(groups = { "formDao" }, dependsOnMethods = "addNewCategoryWithSameName")
-//	public void removeRepeatedCategoryWithSameName() throws NotValidChildException, ConstraintViolationException,
-//			ChildrenNotFoundException {
-//		form.removeChild(0);
-//		formDao.makePersistent(form);
-//	}
+	// @Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory", expectedExceptions = {
+	// ConstraintViolationException.class })
+	// public void addNewCategoryWithSameName() throws NotValidChildException, ConstraintViolationException {
+	// Category category = new Category();
+	// category.setLabel(CATEGORY_LABEL);
+	// form.addChild(category);
+	// formDao.makePersistent(form);
+	// }
+	//
+	// @Test(groups = { "formDao" }, dependsOnMethods = "addNewCategoryWithSameName")
+	// public void removeRepeatedCategoryWithSameName() throws NotValidChildException, ConstraintViolationException,
+	// ChildrenNotFoundException {
+	// form.removeChild(0);
+	// formDao.makePersistent(form);
+	// }
 
-//	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
-//	public void increaseVersion() {
-//		Form oldForm = formDao.read(form.getId());
-//		form.increaseVersion();
-//		Assert.assertEquals(oldForm.getVersion() + 1, (int) form.getVersion());
-//		formDao.makePersistent(form);
-//		Assert.assertEquals(formDao.getLastVersion(oldForm), 2);
-//		Assert.assertEquals(formDao.getLastVersion(oldForm), formDao.getLastVersion(form));
-//	}
+	// @Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
+	// public void increaseVersion() {
+	// Form oldForm = formDao.read(form.getId());
+	// form.increaseVersion();
+	// Assert.assertEquals(oldForm.getVersion() + 1, (int) form.getVersion());
+	// formDao.makePersistent(form);
+	// Assert.assertEquals(formDao.getLastVersion(oldForm), 2);
+	// Assert.assertEquals(formDao.getLastVersion(oldForm), formDao.getLastVersion(form));
+	// }
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
 	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException {
@@ -107,8 +113,71 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
 	}
 
+	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
+	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException {
+		Category category2 = new Category();
+		category2.setLabel("Category2");
+		form.addChild(category2);
+
+		Category category3 = new Category();
+		category3.setLabel("Category3");
+		form.addChild(category3);
+
+		Group group1 = new Group();
+		group1.setTechnicalName("Group1");
+		category2.addChild(group1);
+
+		Group group2 = new Group();
+		group2.setTechnicalName("Group2");
+		category2.addChild(group2);
+
+		Group group3 = new Group();
+		group3.setTechnicalName("Group3");
+		category2.addChild(group3);
+
+		Question question1 = new Question();
+		question1.setTechnicalName("Question1");
+		group2.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setTechnicalName("Question2");
+		group2.addChild(question2);
+
+		Question question3 = new Question();
+		question3.setTechnicalName("Question3");
+		group2.addChild(question3);
+
+		Answer answer1 = new Answer();
+		answer1.setTechnicalName("Answer1");
+		question2.addChild(answer1);
+
+		Answer answer2 = new Answer();
+		answer2.setTechnicalName("Answer2");
+		question2.addChild(answer2);
+
+		Answer answer3 = new Answer();
+		answer3.setTechnicalName("Answer3");
+		question2.addChild(answer3);
+
+		// Update form with new elements
+		formDao.makePersistent(form);
+
+		// Move #2 up
+		form.switchChildren(1, 0, null);
+		category2.switchChildren(1, 0, null);
+		group2.switchChildren(1, 0, null);
+		question2.switchChildren(1, 0, null);
+
+		// Update form with this changes
+		formDao.makePersistent(form);
+		Form storedForm = formDao.read(form.getId());
+
+		// Compare order is the same.
+		Assert.assertTrue(compare(form, storedForm));
+	}
+
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
-	public void removeForm() {
+	public void removeForms() {
 		List<Form> forms = formDao.getAll();
 		for (Form form : forms) {
 			formDao.makeTransient(form);
@@ -116,4 +185,42 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(formDao.getRowCount(), 0);
 	}
 
+	private boolean compare(TreeObject object1, TreeObject object2) {
+		if (object1.getId() != object2.getId()) {
+			return false;
+		}
+		if (object1.getClass() != object2.getClass()) {
+			return false;
+		}
+		if (object1 instanceof Form) {
+			if (!((Form) object1).getName().equals(((Form) object2).getName())) {
+				return false;
+			}
+		} else if (object1 instanceof Category) {
+			if (!((Category) object1).getLabel().equals(((Category) object2).getLabel())) {
+				return false;
+			}
+		} else if (object1 instanceof Group) {
+			if (!((Group) object1).getTechnicalName().equals(((Group) object2).getTechnicalName())) {
+				return false;
+			}
+		} else if (object1 instanceof Question) {
+			if (!((Question) object1).getTechnicalName().equals(((Question) object2).getTechnicalName())) {
+				return false;
+			}
+		} else if (object1 instanceof Answer) {
+			if (!((Answer) object1).getTechnicalName().equals(((Answer) object2).getTechnicalName())) {
+				return false;
+			}
+		}
+		if (object1.getChildren().size() != object2.getChildren().size()) {
+			return false;
+		}
+		for (int i = 0; i < object1.getChildren().size(); i++) {
+			if (!compare(object1.getChildren().get(i), object2.getChildren().get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

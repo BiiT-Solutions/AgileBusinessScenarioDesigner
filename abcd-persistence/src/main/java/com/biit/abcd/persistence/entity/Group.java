@@ -69,4 +69,9 @@ public class Group extends TreeObject {
 		}
 		return name;
 	}
+
+	@Override
+	public String toString() {
+		return getTechnicalName();
+	}
 }

@@ -41,6 +41,10 @@ public abstract class TreeObject {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 
+	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
+	@Column(nullable = false)
+	private long sortSeq = 0;
+
 	@Column(nullable = false)
 	private Timestamp creationDate = null;
 	@Column(columnDefinition = "DOUBLE")
@@ -51,7 +55,7 @@ public abstract class TreeObject {
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "PARENT_OF_CHILDREN")
-	@OrderColumn(name = "children_index")
+	// @OrderColumn(name = "CHILDREN_INDEX", nullable=true)
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject parent;
@@ -86,6 +90,13 @@ public abstract class TreeObject {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
 			}
+		}
+	}
+
+	public void updateChildrenSortSeqs() {
+		for (int i = 0; i < getChildren().size(); i++) {
+			getChildren().get(i).setSortSeq(i);
+			getChildren().get(i).updateChildrenSortSeqs();
 		}
 	}
 
@@ -238,8 +249,10 @@ public abstract class TreeObject {
 				&& (indexChild2 >= 0 && indexChild2 < getChildren().size())) {
 			Collections.swap(getChildren(), indexChild1, indexChild2);
 			// Update elements date modification.
-			getChildren().get(indexChild1).setUpdatedBy(user.getUserId());
-			getChildren().get(indexChild2).setUpdatedBy(user.getUserId());
+			if (user != null) {
+				getChildren().get(indexChild1).setUpdatedBy(user.getUserId());
+				getChildren().get(indexChild2).setUpdatedBy(user.getUserId());
+			}
 		} else {
 			if (indexChild1 > indexChild2) {
 				throw new ChildrenNotFoundException("Index out of bounds. Index " + indexChild1 + " is invalid.");
@@ -369,5 +382,13 @@ public abstract class TreeObject {
 		for (TreeObject child : getChildren()) {
 			child.resetIds();
 		}
+	}
+
+	public long getSortSeq() {
+		return sortSeq;
+	}
+
+	public void setSortSeq(long sortSeq) {
+		this.sortSeq = sortSeq;
 	}
 }
