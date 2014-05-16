@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -105,6 +106,7 @@ public class AccordionMultiple extends CustomComponent {
 		public void layoutClick(LayoutClickEvent event) {
 			if (rootLayout.getComponentIndex(userComponent) == -1) {
 				rootLayout.addComponent(userComponent);
+				rootLayout.setComponentAlignment(userComponent, Alignment.TOP_CENTER);
 			} else {
 				rootLayout.removeComponent(userComponent);
 			}

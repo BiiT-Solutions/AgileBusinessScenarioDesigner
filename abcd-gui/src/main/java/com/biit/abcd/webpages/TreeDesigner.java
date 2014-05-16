@@ -23,7 +23,7 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.treetable.AnswerProperties;
-import com.biit.abcd.webpages.elements.treetable.CategoriesProperties;
+import com.biit.abcd.webpages.elements.treetable.CategoryProperties;
 import com.biit.abcd.webpages.elements.treetable.FormProperties;
 import com.biit.abcd.webpages.elements.treetable.FormTreeTable;
 import com.biit.abcd.webpages.elements.treetable.GroupProperties;
@@ -73,7 +73,7 @@ public class TreeDesigner extends FormWebPageComponent {
 		elementPropertiesContainer = new PropertiesContainer();
 		elementPropertiesContainer.setSizeFull();
 		elementPropertiesContainer.registerPropertiesComponent(Form.class, new FormProperties());
-		elementPropertiesContainer.registerPropertiesComponent(Category.class, new CategoriesProperties());
+		elementPropertiesContainer.registerPropertiesComponent(Category.class, new CategoryProperties());
 		elementPropertiesContainer.registerPropertiesComponent(Group.class, new GroupProperties());
 		elementPropertiesContainer.registerPropertiesComponent(Question.class, new QuestionProperties());
 		elementPropertiesContainer.registerPropertiesComponent(Answer.class, new AnswerProperties());

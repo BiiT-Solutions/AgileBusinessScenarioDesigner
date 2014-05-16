@@ -26,6 +26,7 @@ public class Form extends TreeObject {
 	private static final String DEFAULT_NAME = "New Form";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
 
+	private String name;
 	private Integer version = 1;
 
 	@Column(nullable = false)
@@ -61,6 +62,17 @@ public class Form extends TreeObject {
 	@Override
 	public void setParent(TreeObject parent) throws NotValidParentException {
 		throw new NotValidParentException("Forms cannot have a parent.");
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+		this.name = name;
 	}
 
 	public Integer getVersion() {

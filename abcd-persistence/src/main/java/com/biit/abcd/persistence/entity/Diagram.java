@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.liferay.portal.model.User;
@@ -35,6 +37,10 @@ public class Diagram {
 	private Timestamp updatedDate = null;
 	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
+
+	//@SerializedName("cells")
+	@Transient
+	private Collection<DiagramObject> diagramObjects;
 
 	protected Diagram() {
 
@@ -129,4 +135,12 @@ public class Diagram {
 		}
 	}
 
+//	private void translateJson() {
+//		if (diagramAsJson != null) {
+//			Gson gson = new Gson();
+//			Type collectionType = new TypeToken<Collection<Integer>>(){}.getType();
+//			diagramObjects = gson.fromJson(diagramAsJson, new TypeReference<List<DiagramObject>>() });
+//		}
+//
+//	}
 }

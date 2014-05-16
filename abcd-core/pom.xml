@@ -13,7 +13,7 @@
 		<artifactId>abcd-tool</artifactId>
 		<version>0.1.0</version>
 	</parent>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -22,7 +22,7 @@
 			<type>jar</type>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

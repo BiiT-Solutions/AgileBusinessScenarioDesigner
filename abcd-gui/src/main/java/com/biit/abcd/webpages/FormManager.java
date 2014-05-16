@@ -16,7 +16,6 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
@@ -56,7 +55,9 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				// updateButtons(getForm() != null
-				// && AbcdAuthorizationService.getInstance().canEditForm(getForm(), UserSessionHandler.getUser(),
+				// &&
+				// AbcdAuthorizationService.getInstance().canEditForm(getForm(),
+				// UserSessionHandler.getUser(),
 				// DActivity.FORM_EDITING));
 				if (!(getForm() instanceof RootForm)) {
 					UserSelectedTableRow.getInstance().setSelected(UserSessionHandler.getUser(), getForm());

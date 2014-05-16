@@ -460,5 +460,14 @@ $open-sans-pathPrefix: "./fonts/";
 		left: -2px;
 	}
 	
+	.v-caption.v-disabled {
+		opacity: 1.0;
+		cursor: default;
+	}
 	
+	.v-textfield.v-disabled {
+		opacity: 1.0;
+		cursor: default;
+		background-color: #f5f5f5;
+	}
 }

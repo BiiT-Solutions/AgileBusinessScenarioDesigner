@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +16,11 @@ public class Question extends TreeObject {
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Answer.class));
 	private static final List<Class<?>> ALLOWED_PARENTS = new ArrayList<Class<?>>(Arrays.asList(Category.class,
 			Group.class));
+
+	@Enumerated(EnumType.STRING)
+	private AnswerType answerType;
+	@Enumerated(EnumType.STRING)
+	private AnswerFormat answerFormat;
 
 	public Question() {
 	}
@@ -53,5 +60,21 @@ public class Question extends TreeObject {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public AnswerType getAnswerType() {
+		return answerType;
+	}
+
+	public void setAnswerType(AnswerType answerType) {
+		this.answerType = answerType;
+	}
+
+	public AnswerFormat getAnswerFormat() {
+		return answerFormat;
+	}
+
+	public void setAnswerFormat(AnswerFormat answerFormat) {
+		this.answerFormat = answerFormat;
 	}
 }

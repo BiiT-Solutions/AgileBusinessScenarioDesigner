@@ -3,41 +3,42 @@ package com.biit.abcd.webpages.elements.treetable;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class AnswerProperties extends PropertiesComponent {
+public class CategoryProperties extends PropertiesComponent {
 	private static final long serialVersionUID = -7673405239560362757L;
 
-	private Answer instance;
-	private TextField answerTechnicalLabel;
+	private Category instance;
+	private TextField categoryLabel;
 
-	public AnswerProperties() {
+	public CategoryProperties() {
 	}
 
 	@Override
 	public void setElementAbstract(TreeObject element) {
-		instance = (Answer) element;
+		instance = (Category) element;
 
-		answerTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		answerTechnicalLabel.setValue(instance.getName());
-		addValueChangeListenerToField(answerTechnicalLabel);
+		categoryLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		categoryLabel.setValue(instance.getName());
+		addValueChangeListenerToField(categoryLabel);
 
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
-		answerForm.addComponent(answerTechnicalLabel);
+		answerForm.addComponent(categoryLabel);
 
 		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION),0);
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION),0);
 	}
 
 	@Override
 	public void updateElement() {
-		instance.setName(answerTechnicalLabel.getValue());
+		instance.setName(categoryLabel.getValue());
 		instance.setUpdatedBy(UserSessionHandler.getUser());
 		instance.setUpdateTime();
 		firePropertyUpdateListener(instance);
 	}
+
 }
