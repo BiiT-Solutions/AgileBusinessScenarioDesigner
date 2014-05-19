@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.Diagram;
 import com.biit.abcd.persistence.entity.DiagramElement;
-import com.biit.abcd.persistence.entity.DiagramLink;
-import com.biit.abcd.persistence.entity.DiagramObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
