@@ -1,14 +1,12 @@
 package com.biit.abcd.persistence.entity;
 
+public class DiagramObject extends DiagramElement {
 
-public class DiagramObject {
-	private String type;
 	private String tooltip;
 	private Size size;
 	private Point position;
-	private int z;
+
 	private float angle;
-	private String id;
 
 	public class Size {
 		private int width;
@@ -62,14 +60,6 @@ public class DiagramObject {
 		}
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getTooltip() {
 		return tooltip;
 	}
@@ -86,28 +76,12 @@ public class DiagramObject {
 		this.position = position;
 	}
 
-	public int getZ() {
-		return z;
-	}
-
-	public void setZ(int z) {
-		this.z = z;
-	}
-
 	public float getAngle() {
 		return angle;
 	}
 
 	public void setAngle(float angle) {
 		this.angle = angle;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public Size getSize() {

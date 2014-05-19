@@ -1,8 +1,6 @@
 package com.biit.abcd.persistence.entity;
 
-import java.lang.reflect.Type;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,10 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.biit.abcd.json.DiagramDeserializer;
+import com.biit.abcd.json.DiagramSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
 import com.liferay.portal.model.User;
 
 @Entity
@@ -46,7 +44,7 @@ public class Diagram {
 
 	@Transient
 	@SerializedName("cells")
-	private List<DiagramObject> diagramObjects;
+	private List<DiagramElement> diagramElements;
 
 	public Diagram() {
 
@@ -138,21 +136,7 @@ public class Diagram {
 		}
 	}
 
-	// public static List<DiagramObject> getFromJson(String jsonString) {
-	// if (jsonString != null) {
-	// GsonBuilder gsonBuilder = new GsonBuilder();
-	// gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
-	// Gson gson = gsonBuilder.create();
-	//
-	// Type listType = new TypeToken<ArrayList<DiagramObject>>() {
-	// }.getType();
-	// List<DiagramObject> objects = gson.fromJson(jsonString, listType);
-	// return objects;
-	// }
-	// return null;
-	// }
-
-	public static Diagram getFromJson(String jsonString) {
+	public static Diagram fromJson(String jsonString) {
 		if (jsonString != null) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramDeserializer());
@@ -163,11 +147,19 @@ public class Diagram {
 		return null;
 	}
 
-	public List<DiagramObject> getDiagramObjects() {
-		return diagramObjects;
+	public String toJson() {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramSerializer());
+		Gson gson = gsonBuilder.create();
+		String json = gson.toJson(this);
+		return json;
 	}
 
-	public void setDiagramObjects(List<DiagramObject> objects) {
-		this.diagramObjects = objects;
+	public List<DiagramElement> getDiagramElements() {
+		return diagramElements;
+	}
+
+	public void setDiagramElements(List<DiagramElement> objects) {
+		this.diagramElements = objects;
 	}
 }

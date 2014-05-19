@@ -9,25 +9,32 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Diagram;
+import com.biit.abcd.persistence.entity.DiagramObject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class JsonParserTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DIAGRAM_IN_JSON = "{\"cells\":[{\"type\":\"biit.SourceNode\",\"tooltip\":\"Source Tooltip\",\"size\":{\"width\":30,\"height\":30},\"position\":{\"x\":328,\"y\":470},\"angle\":0,\"id\":\"a052d3a6-007c-4057-a789-c7aa19008b0f\",\"embeds\":\"\",\"z\":1,\"attrs\":{}},{\"type\":\"biit.RuleNode\",\"tooltip\":\"Rule Tooltip\",\"size\":{\"width\":30,\"height\":30},\"position\":{\"x\":490,\"y\":418},\"angle\":0,\"id\":\"31db56a7-53de-4e38-acf8-98ee300a20a1\",\"embeds\":\"\",\"z\":2,\"attrs\":{}},{\"type\":\"biit.SinkNode\",\"tooltip\":\"Sink Tooltip\",\"size\":{\"width\":30,\"height\":30},\"position\":{\"x\":644,\"y\":472},\"angle\":0,\"id\":\"62958d22-23ff-467f-9ad5-f034ac24ad1d\",\"embeds\":\"\",\"z\":3,\"attrs\":{}},{\"type\":\"link\",\"id\":\"aa228ac0-a038-4072-9ea2-45c8a39af388\",\"embeds\":\"\",\"source\":{\"id\":\"a052d3a6-007c-4057-a789-c7aa19008b0f\",\"selector\":\"g:nth-child(1) circle:nth-child(2)   \",\"port\":\"out\"},\"target\":{\"id\":\"31db56a7-53de-4e38-acf8-98ee300a20a1\",\"selector\":\"g:nth-child(1) circle:nth-child(2)   \",\"port\":\"in\"},\"z\":4,\"attrs\":{\".marker-source\":{\"d\":\"M 10 0 L 0 5 L 10 10 z\",\"transform\":\"scale(0.001)\"},\".marker-target\":{\"d\":\"M 10 0 L 0 5 L 10 10 z\"},\".connection\":{\"stroke\":\"black\"}}},{\"type\":\"link\",\"id\":\"5a5dfab6-3682-4d1e-b85c-c6d24de1a555\",\"embeds\":\"\",\"source\":{\"id\":\"31db56a7-53de-4e38-acf8-98ee300a20a1\",\"selector\":\"g:nth-child(1) circle:nth-child(3)   \",\"port\":\"out\"},\"target\":{\"id\":\"62958d22-23ff-467f-9ad5-f034ac24ad1d\",\"selector\":\"g:nth-child(1) circle:nth-child(2)   \",\"port\":\"in\"},\"z\":5,\"attrs\":{\".marker-source\":{\"d\":\"M 10 0 L 0 5 L 10 10 z\",\"transform\":\"scale(0.001)\"},\".marker-target\":{\"d\":\"M 10 0 L 0 5 L 10 10 z\"},\".connection\":{\"stroke\":\"black\"}}}]}";
+	private Diagram diagram;
 
 	@Test(groups = { "jsonParser" })
 	public void convertJsonToDiagram() {
-		Diagram diagram = Diagram.getFromJson(DIAGRAM_IN_JSON);
+		diagram = Diagram.fromJson(DIAGRAM_IN_JSON);
 		Assert.assertNotNull(diagram);
-		Assert.assertEquals(5, diagram.getDiagramObjects().size());
+		Assert.assertEquals(5, diagram.getDiagramElements().size());
 		// Test first child.
-		Assert.assertEquals("biit.SourceNode", diagram.getDiagramObjects().get(0).getType());
-		Assert.assertEquals("Source Tooltip", diagram.getDiagramObjects().get(0).getTooltip());
-		Assert.assertEquals(30, diagram.getDiagramObjects().get(0).getSize().getWidth());
-		Assert.assertEquals(30, diagram.getDiagramObjects().get(0).getSize().getHeight());
-		Assert.assertEquals(328, diagram.getDiagramObjects().get(0).getPosition().getX());
-		Assert.assertEquals(470, diagram.getDiagramObjects().get(0).getPosition().getY());
-		Assert.assertEquals(0f, diagram.getDiagramObjects().get(0).getAngle());
-		Assert.assertEquals("a052d3a6-007c-4057-a789-c7aa19008b0f", diagram.getDiagramObjects().get(0).getId());
+		Assert.assertEquals("biit.SourceNode", diagram.getDiagramElements().get(0).getType());
+		Assert.assertEquals("Source Tooltip", ((DiagramObject) diagram.getDiagramElements().get(0)).getTooltip());
+		Assert.assertEquals(30, ((DiagramObject) diagram.getDiagramElements().get(0)).getSize().getWidth());
+		Assert.assertEquals(30, ((DiagramObject) diagram.getDiagramElements().get(0)).getSize().getHeight());
+		Assert.assertEquals(328, ((DiagramObject) diagram.getDiagramElements().get(0)).getPosition().getX());
+		Assert.assertEquals(470, ((DiagramObject) diagram.getDiagramElements().get(0)).getPosition().getY());
+		Assert.assertEquals(0f, ((DiagramObject) diagram.getDiagramElements().get(0)).getAngle());
+		Assert.assertEquals("a052d3a6-007c-4057-a789-c7aa19008b0f", diagram.getDiagramElements().get(0).getId());
+	}
+
+	@Test(groups = { "jsonParser" }, dependsOnMethods = { "convertJsonToDiagram" })
+	public void convertDiagramToJson() {
+		System.out.println(diagram.toJson());
 	}
 }

@@ -9,7 +9,6 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Diagram;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
@@ -122,11 +121,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		}
 		// New diagram
 		if (diagram == null) {
-			try {
-				diagram = new Diagram(form);
-			} catch (NotValidFormException e) {
-				diagram = null;
-			}
+			diagram = new Diagram(form);
 		} else {
 			// Refresh jointjs
 			diagramBuilder.fromJson(diagram.getDiagramAsJson());
