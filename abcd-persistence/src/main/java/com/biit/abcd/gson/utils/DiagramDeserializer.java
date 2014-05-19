@@ -24,7 +24,7 @@ public class DiagramDeserializer implements JsonDeserializer<Diagram> {
 
 		final Diagram diagram = new Diagram();
 
-		GsonBuilder gsonBuilder = new GsonBuilder();
+		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
 		Gson gson = gsonBuilder.create();
 

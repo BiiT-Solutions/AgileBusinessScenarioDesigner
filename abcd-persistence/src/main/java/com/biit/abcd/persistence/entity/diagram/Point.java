@@ -7,15 +7,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name = "DIAGRAM_POINTS")
 public class Point {
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long databaseId;
 	
+	@Expose
 	private int x;
+	@Expose
 	private int y;
 
 	public int getY() {

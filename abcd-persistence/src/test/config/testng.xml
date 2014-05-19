@@ -3,13 +3,13 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<exclude name="hierarchyTest" />
-				<exclude name="formDao" />
-				<exclude name="categoryDao" />
-				<exclude name="groupDao" />
-				<exclude name="questionDao" />
-				<exclude name="answerDao" />
-				<exclude name="diagramDao" />
+				<include name="hierarchyTest" />
+				<include name="formDao" />
+				<include name="categoryDao" />
+				<include name="groupDao" />
+				<include name="questionDao" />
+				<include name="answerDao" />
+				<include name="diagramDao" />
 				<include name="jsonParser" />
 			</run>
 		</groups>
@@ -21,7 +21,6 @@
 			<class name="com.biit.abcd.persistence.dao.QuestionTest" />
 			<class name="com.biit.abcd.persistence.dao.AnswerTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
-			<class name="com.biit.abcd.json.JsonParserTest" />
 		</classes>
 	</test>
 </suite>

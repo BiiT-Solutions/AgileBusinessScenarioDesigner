@@ -7,19 +7,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
 @Table(name = "DIAGRAM_NODES")
 public class Node {
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long databaseId;
 
+	@Expose
 	@SerializedName("id")
 	private String jointjsId;
+	@Expose
 	private String selector;
+	@Expose
 	private String port;
 
 

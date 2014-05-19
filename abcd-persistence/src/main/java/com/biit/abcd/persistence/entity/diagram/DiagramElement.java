@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
@@ -14,10 +15,10 @@ public class DiagramElement extends DiagramObject {
 	@Expose
 	private String tooltip;
 	@Expose
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Size size;
 	@Expose
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Point position;
 
 	@Expose

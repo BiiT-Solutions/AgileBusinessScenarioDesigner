@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
@@ -12,10 +13,10 @@ import com.google.gson.annotations.Expose;
 public class DiagramLink extends DiagramObject {
 
 	@Expose
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Node source;
 	@Expose
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Node target;
 
 	public Node getSource() {

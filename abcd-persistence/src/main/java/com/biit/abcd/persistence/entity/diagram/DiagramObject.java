@@ -19,7 +19,7 @@ public class DiagramObject {
 
 	// Id is not exposed because not used in JSON
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long databaseId;
 

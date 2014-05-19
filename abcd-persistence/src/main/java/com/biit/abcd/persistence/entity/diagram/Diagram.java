@@ -3,13 +3,16 @@ package com.biit.abcd.persistence.entity.diagram;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -26,11 +29,11 @@ import com.liferay.portal.model.User;
 public class Diagram {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 
-	@Column(length = 1048576)
+	@Transient
 	private String diagramAsJson;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -43,8 +46,9 @@ public class Diagram {
 	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
 
-	@Transient
 	@SerializedName("cells")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinTable(name = "ELEMENTS_OF_DIAGRAM")
 	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
@@ -139,7 +143,7 @@ public class Diagram {
 
 	public static Diagram fromJson(String jsonString) {
 		if (jsonString != null) {
-			GsonBuilder gsonBuilder = new GsonBuilder();
+			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 			gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramDeserializer());
 			Gson gson = gsonBuilder.create();
 			Diagram object = gson.fromJson(jsonString, Diagram.class);
@@ -149,7 +153,7 @@ public class Diagram {
 	}
 
 	public String toJson() {
-		GsonBuilder gsonBuilder = new GsonBuilder();
+		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramSerializer());
 		Gson gson = gsonBuilder.create();
 		String json = gson.toJson(this);
