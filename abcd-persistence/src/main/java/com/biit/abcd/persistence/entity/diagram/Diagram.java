@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.biit.abcd.gson.utils.DiagramDeserializer;
 import com.biit.abcd.gson.utils.DiagramSerializer;
 import com.biit.abcd.persistence.entity.Form;
@@ -49,6 +52,7 @@ public class Diagram {
 	@SerializedName("cells")
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "ELEMENTS_OF_DIAGRAM")
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
@@ -150,6 +154,13 @@ public class Diagram {
 			return object;
 		}
 		return null;
+	}
+
+	public void fromJson() {
+		if (diagramAsJson != null) {
+			Diagram tempDiagram = Diagram.fromJson(diagramAsJson);
+			this.setDiagramElements(tempDiagram.getDiagramElements());
+		}
 	}
 
 	public String toJson() {

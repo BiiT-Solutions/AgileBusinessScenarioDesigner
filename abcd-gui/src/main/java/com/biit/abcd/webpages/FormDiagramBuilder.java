@@ -124,7 +124,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			diagram = new Diagram(form);
 		} else {
 			// Refresh jointjs
-			diagramBuilder.fromJson(diagram.getDiagramAsJson());
+			diagramBuilder.fromJson(diagram.toJson());
 		}
 	}
 
@@ -150,6 +150,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		public void generatedJsonString(String jsonString) {
 			try {
 				diagram.setDiagramAsJson(jsonString);
+				// Create objects
+				diagram.fromJson();
 				diagramDao.makePersistent(diagram);
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (Exception e) {
