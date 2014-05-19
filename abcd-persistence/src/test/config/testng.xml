@@ -10,6 +10,7 @@
 				<include name="questionDao" />
 				<include name="answerDao" />
 				<include name="diagramDao" />
+				<include name="jsonParser" />
 			</run>
 		</groups>
 		<classes>
@@ -20,6 +21,7 @@
 			<class name="com.biit.abcd.persistence.dao.QuestionTest" />
 			<class name="com.biit.abcd.persistence.dao.AnswerTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
+			<class name="com.biit.abcd.json.JsonParserTest" />
 		</classes>
 	</test>
 </suite>

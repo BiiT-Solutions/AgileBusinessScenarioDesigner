@@ -16,8 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.biit.abcd.json.DiagramObjectDeserializer;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
-import com.biit.json.DiagramObjectDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

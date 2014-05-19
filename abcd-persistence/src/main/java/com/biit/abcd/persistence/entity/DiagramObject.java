@@ -10,7 +10,7 @@ public class DiagramObject {
 	
 	
 
-	class Point {
+	public class Point {
 		private int x;
 		private int y;
 
@@ -29,5 +29,77 @@ public class DiagramObject {
 		public void setX(int x) {
 			this.x = x;
 		}
+	}
+
+
+
+	public String getType() {
+		return type;
+	}
+
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+
+	public String getToolType() {
+		return toolType;
+	}
+
+
+
+	public void setToolType(String toolType) {
+		this.toolType = toolType;
+	}
+
+
+
+	public Point getPosition() {
+		return position;
+	}
+
+
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+
+
+
+	public int getZ() {
+		return z;
+	}
+
+
+
+	public void setZ(int z) {
+		this.z = z;
+	}
+
+
+
+	public float getAngle() {
+		return angle;
+	}
+
+
+
+	public void setAngle(float angle) {
+		this.angle = angle;
+	}
+
+
+
+	public String getId() {
+		return id;
+	}
+
+
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }
