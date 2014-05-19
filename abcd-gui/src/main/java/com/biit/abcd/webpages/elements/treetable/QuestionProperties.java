@@ -1,10 +1,17 @@
 package com.biit.abcd.webpages.elements.treetable;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.AnswerFormatUi;
+import com.biit.abcd.language.AnswerTypeUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
@@ -13,6 +20,8 @@ public class QuestionProperties extends PropertiesComponent {
 
 	private Question instance;
 	private TextField questionTechnicalLabel;
+	private ComboBox answerType;
+	private ComboBox answerFormat;
 
 	public QuestionProperties() {
 	}
@@ -23,14 +32,22 @@ public class QuestionProperties extends PropertiesComponent {
 
 		questionTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		questionTechnicalLabel.setValue(instance.getName());
-		addValueChangeListenerToField(questionTechnicalLabel);
 
-		FormLayout answerForm = new FormLayout();
-		answerForm.setWidth(null);
-		answerForm.addComponent(questionTechnicalLabel);
+		initializeSelectionLists();
+		if(instance.getAnswerType()!=null){
+			answerType.setValue(instance.getAnswerType());
+			answerFormat.setValue(instance.getAnswerFormat());			
+		}
 
-		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION),0);
+		FormLayout questionForm = new FormLayout();
+		questionForm.setWidth(null);
+		questionForm.addComponent(questionTechnicalLabel);
+		questionForm.addComponent(answerType);
+		questionForm.addComponent(answerFormat);
+		addValueChangeListenerToFormComponents(questionForm);
+
+		getRootAccordion().addTab(questionForm,
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION), true, 0);
 	}
 
 	@Override
@@ -38,7 +55,44 @@ public class QuestionProperties extends PropertiesComponent {
 		instance.setName(questionTechnicalLabel.getValue());
 		instance.setUpdatedBy(UserSessionHandler.getUser());
 		instance.setUpdateTime();
+		instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
+		instance.setAnswerType((AnswerType) answerType.getValue());
 		firePropertyUpdateListener(instance);
 	}
 
+	private void initializeSelectionLists() {
+		
+		answerFormat = new ComboBox(ServerTranslate.tr(LanguageCodes.PROPERTIES_QUESTION_ANSWER_FORMAT));
+		answerFormat.setImmediate(true);
+		for (AnswerFormatUi answerFormatUi : AnswerFormatUi.values()) {
+			answerFormat.addItem(answerFormatUi.getAnswerFormat());
+			answerFormat.setItemCaption(answerFormatUi.getAnswerFormat(),
+					ServerTranslate.tr(answerFormatUi.getLanguageCode()));
+		}		
+		
+		answerType = new ComboBox(ServerTranslate.tr(LanguageCodes.PROPERTIES_QUESTION_ANSWER_TYPE));
+		answerType.setNullSelectionAllowed(false);
+		answerType.setImmediate(true);
+		for (AnswerTypeUi answerTypeUi : AnswerTypeUi.values()) {
+			answerType.addItem(answerTypeUi.getAnswerType());
+			answerType.setItemCaption(answerTypeUi.getAnswerType(), ServerTranslate.tr(answerTypeUi.getLanguageCode()));
+		}
+		answerType.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = -6322255129871221711L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				if (!((AnswerType) answerType.getValue()).equals(AnswerType.INPUT)) {
+					answerFormat.setNullSelectionAllowed(true);
+					answerFormat.setValue(null);
+					answerFormat.setEnabled(false);
+				} else {
+					answerFormat.setEnabled(true);
+					answerFormat.setNullSelectionAllowed(false);
+					answerFormat.setValue(AnswerFormatUi.values()[0].getAnswerFormat());
+				}
+			}
+		});
+		answerType.setValue(AnswerTypeUi.values()[0].getAnswerType());
+	}
 }

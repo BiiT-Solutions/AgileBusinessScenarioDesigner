@@ -95,7 +95,9 @@ public enum LanguageCodes {
 	FORM_PROPERTIES_VERSION("formProperties.version"),
 	CATEGORY_PROPERTIES_LABEL("categoryProperties.label"),
 	GROUP_PROPERTIES_REPEAT("groupProperties.repeat"),
-	PROPERTIES_TECHNICAL_NAME("properties.technicalName"),
+	PROPERTIES_TECHNICAL_NAME("properties.technicalName"), 
+	PROPERTIES_QUESTION_ANSWER_TYPE("properties.question.answer_type"),
+	PROPERTIES_QUESTION_ANSWER_FORMAT("properties.question.answer_format"),
 	
 	
 	ERROR_USER_PERMISSION("error.user.permission"),
@@ -116,7 +118,15 @@ public enum LanguageCodes {
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
 	
-	INFO_DATA_STORED("info.data.store");
+	INFO_DATA_STORED("info.data.store"),
+	
+	ANSWER_TYPE_INPUT("answer.type.input"),
+	ANSWER_TYPE_RADIO("answer.type.radio"),
+	MULTI_CHECKBOX("answer.type.multi.checkbox"),
+	
+	ANSWER_FORMAT_TEXT("answer.format.text"),
+	ANSWER_FORMAT_DATE("answer.format.date"),
+	ANSWER_FORMAT_NUMBER("answer.format.number");
 	
 	private String value;
 	
