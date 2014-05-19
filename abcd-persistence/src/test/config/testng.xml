@@ -3,13 +3,13 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="hierarchyTest" />
-				<include name="formDao" />
-				<include name="categoryDao" />
-				<include name="groupDao" />
-				<include name="questionDao" />
-				<include name="answerDao" />
-				<include name="diagramDao" />
+				<exclude name="hierarchyTest" />
+				<exclude name="formDao" />
+				<exclude name="categoryDao" />
+				<exclude name="groupDao" />
+				<exclude name="questionDao" />
+				<exclude name="answerDao" />
+				<exclude name="diagramDao" />
 				<include name="jsonParser" />
 			</run>
 		</groups>

@@ -3,7 +3,6 @@ package com.biit.abcd.persistence.entity;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,10 +15,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.biit.abcd.json.DiagramObjectDeserializer;
-import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
+import com.biit.abcd.json.DiagramDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.liferay.portal.model.User;
 
@@ -45,18 +44,15 @@ public class Diagram {
 	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
 
-	// @SerializedName("cells")
 	@Transient
-	private Collection<DiagramObject> diagramObjects;
+	@SerializedName("cells")
+	private List<DiagramObject> diagramObjects;
 
-	protected Diagram() {
+	public Diagram() {
 
 	}
 
-	public Diagram(Form form) throws NotValidFormException {
-		if (form == null) {
-			throw new NotValidFormException("Null forms not allowed here.");
-		}
+	public Diagram(Form form) {
 		this.form = form;
 	}
 
@@ -142,16 +138,36 @@ public class Diagram {
 		}
 	}
 
-	private void translateJson() {
-		if (diagramAsJson != null) {
+	// public static List<DiagramObject> getFromJson(String jsonString) {
+	// if (jsonString != null) {
+	// GsonBuilder gsonBuilder = new GsonBuilder();
+	// gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
+	// Gson gson = gsonBuilder.create();
+	//
+	// Type listType = new TypeToken<ArrayList<DiagramObject>>() {
+	// }.getType();
+	// List<DiagramObject> objects = gson.fromJson(jsonString, listType);
+	// return objects;
+	// }
+	// return null;
+	// }
+
+	public static Diagram getFromJson(String jsonString) {
+		if (jsonString != null) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
-			gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
+			gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramDeserializer());
 			Gson gson = gsonBuilder.create();
-
-			Type listType = new TypeToken<ArrayList<DiagramObject>>() {
-			}.getType();
-			List<DiagramObject> objects = gson.fromJson(diagramAsJson, listType);
-
+			Diagram object = gson.fromJson(jsonString, Diagram.class);
+			return object;
 		}
+		return null;
+	}
+
+	public List<DiagramObject> getDiagramObjects() {
+		return diagramObjects;
+	}
+
+	public void setDiagramObjects(List<DiagramObject> objects) {
+		this.diagramObjects = objects;
 	}
 }
