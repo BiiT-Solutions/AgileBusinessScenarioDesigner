@@ -23,14 +23,14 @@ public class AnswerProperties extends PropertiesComponent {
 
 		answerTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		answerTechnicalLabel.setValue(instance.getName());
-		addValueChangeListenerToField(answerTechnicalLabel);
 
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
 		answerForm.addComponent(answerTechnicalLabel);
+		addValueChangeListenerToFormComponents(answerForm);
 
 		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION),0);
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION),true,0);
 	}
 
 	@Override

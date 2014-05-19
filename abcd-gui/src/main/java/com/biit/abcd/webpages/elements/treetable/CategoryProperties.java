@@ -23,14 +23,14 @@ public class CategoryProperties extends PropertiesComponent {
 
 		categoryLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		categoryLabel.setValue(instance.getName());
-		addValueChangeListenerToField(categoryLabel);
 
-		FormLayout answerForm = new FormLayout();
-		answerForm.setWidth(null);
-		answerForm.addComponent(categoryLabel);
+		FormLayout categoryForm = new FormLayout();
+		categoryForm.setWidth(null);
+		categoryForm.addComponent(categoryLabel);
+		addValueChangeListenerToFormComponents(categoryForm);
 
-		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION),0);
+		getRootAccordion().addTab(categoryForm,
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION),true,0);
 	}
 
 	@Override

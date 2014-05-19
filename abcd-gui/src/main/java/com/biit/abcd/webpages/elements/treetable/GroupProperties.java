@@ -25,7 +25,6 @@ public class GroupProperties extends PropertiesComponent {
 
 		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getName());
-		addValueChangeListenerToField(groupTechnicalLabel);
 		groupIsRepeatable = new CheckBox(ServerTranslate.tr(LanguageCodes.GROUP_PROPERTIES_REPEAT));
 		groupIsRepeatable.setValue(instance.isRepetable());
 
@@ -33,9 +32,10 @@ public class GroupProperties extends PropertiesComponent {
 		answerForm.setWidth(null);
 		answerForm.addComponent(groupTechnicalLabel);
 		answerForm.addComponent(groupIsRepeatable);
+		addValueChangeListenerToFormComponents(answerForm);
 
 		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION),0);
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION),true,0);
 	}
 
 	@Override

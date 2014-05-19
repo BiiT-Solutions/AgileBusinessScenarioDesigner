@@ -32,13 +32,19 @@ public class AccordionMultiple extends CustomComponent {
 		setStyleName(CLASSNAME);
 	}
 
-	public void addTab(Component component, String caption) {
+	public void addTab(Component component, String caption,boolean toggle) {
 		AccordionTab tab = createTab(component, caption);
+		if(toggle){
+			tab.toggle();
+		}
 		rootLayout.addComponent(tab);
 	}
 
-	public void addTab(Component component, String caption, int index) {
+	public void addTab(Component component, String caption,boolean toggle, int index) {
 		AccordionTab tab = createTab(component, caption);
+		if(toggle){
+			tab.toggle();
+		}
 		rootLayout.addComponent(tab, index);
 	}
 
@@ -104,6 +110,10 @@ public class AccordionMultiple extends CustomComponent {
 
 		@Override
 		public void layoutClick(LayoutClickEvent event) {
+			toggle();
+		}
+		
+		public void toggle(){
 			if (rootLayout.getComponentIndex(userComponent) == -1) {
 				rootLayout.addComponent(userComponent);
 				rootLayout.setComponentAlignment(userComponent, Alignment.TOP_CENTER);

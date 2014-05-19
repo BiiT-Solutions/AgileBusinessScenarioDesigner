@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.treetable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
@@ -12,6 +13,7 @@ import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -56,7 +58,7 @@ public abstract class PropertiesComponent extends CustomComponent {
 		commonProperties.addComponent(updateTime);
 
 		rootAccordion.addTab(commonProperties,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION));
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION),false);
 	}
 
 	protected void initCommonPropertiesValues(TreeObject element) {
@@ -85,7 +87,19 @@ public abstract class PropertiesComponent extends CustomComponent {
 		updateTime.setValue(valueUpdatedTime);
 	}
 
-	protected void addValueChangeListenerToField(AbstractField<?> component) {
+	protected void addValueChangeListenerToFormComponents(FormLayout formLayout){
+		Iterator<Component> itr = formLayout.iterator();
+		while(itr.hasNext()){
+			Component formComponent = itr.next();
+			if(formComponent instanceof AbstractField<?>){
+				if(formComponent.isEnabled()){
+					addValueChangeListenerToField((AbstractField<?>) formComponent);
+				}
+			}
+		}
+	}
+	
+	private void addValueChangeListenerToField(AbstractField<?> component) {
 		component.setImmediate(true);
 		component.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -5503553212373718399L;
