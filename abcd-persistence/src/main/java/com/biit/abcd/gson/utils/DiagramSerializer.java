@@ -1,8 +1,8 @@
-package com.biit.abcd.json;
+package com.biit.abcd.gson.utils;
 
 import java.lang.reflect.Type;
 
-import com.biit.abcd.persistence.entity.Diagram;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;

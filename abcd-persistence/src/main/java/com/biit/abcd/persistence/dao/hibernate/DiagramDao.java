@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IDiagramDao;
-import com.biit.abcd.persistence.entity.Diagram;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 
 @Repository
 public class DiagramDao implements IDiagramDao {

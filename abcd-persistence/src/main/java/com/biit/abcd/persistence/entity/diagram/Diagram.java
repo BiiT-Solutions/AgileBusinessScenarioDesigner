@@ -1,4 +1,4 @@
-package com.biit.abcd.persistence.entity;
+package com.biit.abcd.persistence.entity.diagram;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -13,8 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.biit.abcd.json.DiagramDeserializer;
-import com.biit.abcd.json.DiagramSerializer;
+import com.biit.abcd.gson.utils.DiagramDeserializer;
+import com.biit.abcd.gson.utils.DiagramSerializer;
+import com.biit.abcd.persistence.entity.Form;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
@@ -44,7 +45,7 @@ public class Diagram {
 
 	@Transient
 	@SerializedName("cells")
-	private List<DiagramElement> diagramElements;
+	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
 
@@ -155,11 +156,11 @@ public class Diagram {
 		return json;
 	}
 
-	public List<DiagramElement> getDiagramElements() {
+	public List<DiagramObject> getDiagramElements() {
 		return diagramElements;
 	}
 
-	public void setDiagramElements(List<DiagramElement> objects) {
+	public void setDiagramElements(List<DiagramObject> objects) {
 		this.diagramElements = objects;
 	}
 }

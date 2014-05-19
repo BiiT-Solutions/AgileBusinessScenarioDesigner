@@ -8,8 +8,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.persistence.entity.Diagram;
-import com.biit.abcd.persistence.entity.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -24,17 +24,17 @@ public class JsonParserTest extends AbstractTransactionalTestNGSpringContextTest
 		Assert.assertEquals(5, diagram.getDiagramElements().size());
 		// Test first child.
 		Assert.assertEquals("biit.SourceNode", diagram.getDiagramElements().get(0).getType());
-		Assert.assertEquals("Source Tooltip", ((DiagramObject) diagram.getDiagramElements().get(0)).getTooltip());
-		Assert.assertEquals(30, ((DiagramObject) diagram.getDiagramElements().get(0)).getSize().getWidth());
-		Assert.assertEquals(30, ((DiagramObject) diagram.getDiagramElements().get(0)).getSize().getHeight());
-		Assert.assertEquals(328, ((DiagramObject) diagram.getDiagramElements().get(0)).getPosition().getX());
-		Assert.assertEquals(470, ((DiagramObject) diagram.getDiagramElements().get(0)).getPosition().getY());
-		Assert.assertEquals(0f, ((DiagramObject) diagram.getDiagramElements().get(0)).getAngle());
-		Assert.assertEquals("a052d3a6-007c-4057-a789-c7aa19008b0f", diagram.getDiagramElements().get(0).getId());
+		Assert.assertEquals("Source Tooltip", ((DiagramElement) diagram.getDiagramElements().get(0)).getTooltip());
+		Assert.assertEquals(30, ((DiagramElement) diagram.getDiagramElements().get(0)).getSize().getWidth());
+		Assert.assertEquals(30, ((DiagramElement) diagram.getDiagramElements().get(0)).getSize().getHeight());
+		Assert.assertEquals(328, ((DiagramElement) diagram.getDiagramElements().get(0)).getPosition().getX());
+		Assert.assertEquals(470, ((DiagramElement) diagram.getDiagramElements().get(0)).getPosition().getY());
+		Assert.assertEquals(0f, ((DiagramElement) diagram.getDiagramElements().get(0)).getAngle());
+		Assert.assertEquals("a052d3a6-007c-4057-a789-c7aa19008b0f", diagram.getDiagramElements().get(0).getJointjsId());
 	}
 
 	@Test(groups = { "jsonParser" }, dependsOnMethods = { "convertJsonToDiagram" })
 	public void convertDiagramToJson() {
-		System.out.println(diagram.toJson());
+		diagram.toJson();
 	}
 }

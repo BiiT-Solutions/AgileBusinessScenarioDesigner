@@ -1,7 +1,7 @@
 package com.biit.abcd.persistence.dao;
 
-import com.biit.abcd.persistence.entity.Diagram;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 
 public interface IDiagramDao extends IGenericDao<Diagram> {
 

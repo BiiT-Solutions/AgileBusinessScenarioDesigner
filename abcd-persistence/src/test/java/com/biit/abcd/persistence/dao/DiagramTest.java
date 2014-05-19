@@ -10,8 +10,8 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.persistence.entity.Diagram;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
