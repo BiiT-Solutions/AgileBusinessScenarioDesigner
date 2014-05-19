@@ -30,7 +30,7 @@ public class DiagramDeserializer implements JsonDeserializer<Diagram> {
 
 		Type listType = new TypeToken<ArrayList<DiagramObject>>() {}.getType();
 		List<DiagramObject> objects = gson.fromJson(jsonObject.get("cells"), listType);
-		diagram.setDiagramElements(objects);
+		diagram.setDiagramObjects(objects);
 
 		return diagram;
 	}

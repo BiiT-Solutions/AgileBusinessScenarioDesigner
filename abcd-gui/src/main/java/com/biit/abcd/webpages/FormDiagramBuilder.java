@@ -1,14 +1,17 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.SpringContextHelper;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
@@ -118,6 +121,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		this.form = form;
 		if (form != null) {
 			diagram = diagramDao.read(form);
+			diagram.setCreatedBy(UserSessionHandler.getUser());
+			diagram.setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 		}
 		// New diagram
 		if (diagram == null) {
@@ -149,9 +154,16 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		@Override
 		public void generatedJsonString(String jsonString) {
 			try {
-				diagram.setDiagramAsJson(jsonString);
-				// Create objects
-				diagram.fromJson();
+				// Get childs from json string.
+				Diagram tempDiagram = Diagram.fromJson(jsonString);
+				if (diagram.getDiagramObjects() != null && !diagram.getDiagramObjects().isEmpty()) {
+					// Remove old ones from database.
+					diagram.getDiagramObjects().removeAll(diagram.getDiagramObjects());
+				}
+				diagram.addDiagramObjects(tempDiagram.getDiagramObjects());
+				// Updater
+				diagram.setUpdatedBy(UserSessionHandler.getUser());
+				diagram.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 				diagramDao.makePersistent(diagram);
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (Exception e) {

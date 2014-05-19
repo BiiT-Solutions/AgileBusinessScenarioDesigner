@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity.diagram;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -35,9 +35,6 @@ public class Diagram {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-
-	@Transient
-	private String diagramAsJson;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Form form;
@@ -69,14 +66,6 @@ public class Diagram {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getDiagramAsJson() {
-		return diagramAsJson;
-	}
-
-	public void setDiagramAsJson(String diagramAsJson) {
-		this.diagramAsJson = diagramAsJson;
 	}
 
 	public Form getForm() {
@@ -156,13 +145,6 @@ public class Diagram {
 		return null;
 	}
 
-	public void fromJson() {
-		if (diagramAsJson != null) {
-			Diagram tempDiagram = Diagram.fromJson(diagramAsJson);
-			this.setDiagramElements(tempDiagram.getDiagramElements());
-		}
-	}
-
 	public String toJson() {
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramSerializer());
@@ -171,11 +153,21 @@ public class Diagram {
 		return json;
 	}
 
-	public List<DiagramObject> getDiagramElements() {
+	public List<DiagramObject> getDiagramObjects() {
 		return diagramElements;
 	}
 
-	public void setDiagramElements(List<DiagramObject> objects) {
+	public void setDiagramObjects(List<DiagramObject> objects) {
 		this.diagramElements = objects;
 	}
+
+	public void addDiagramObjects(List<DiagramObject> objects) {
+		if (diagramElements == null) {
+			diagramElements = new ArrayList<>();
+		}
+		if (objects != null) {
+			diagramElements.addAll(objects);
+		}
+	}
+
 }

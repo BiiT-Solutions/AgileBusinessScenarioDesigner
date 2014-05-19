@@ -61,16 +61,16 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 	public void convertJsonToDiagram() {
 		diagram = Diagram.fromJson(DIAGRAM_IN_JSON);
 		Assert.assertNotNull(diagram);
-		Assert.assertEquals(diagram.getDiagramElements().size(), 5);
+		Assert.assertEquals(diagram.getDiagramObjects().size(), 5);
 		// Test first child.
-		Assert.assertEquals(diagram.getDiagramElements().get(0).getType(), "biit.SourceNode");
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramElements().get(0)).getTooltip(), "Source Tooltip");
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramElements().get(0)).getSize().getWidth(), 30);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramElements().get(0)).getSize().getHeight(), 30);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramElements().get(0)).getPosition().getX(), 328);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramElements().get(0)).getPosition().getY(), 470);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramElements().get(0)).getAngle(), 0f);
-		Assert.assertEquals(diagram.getDiagramElements().get(0).getJointjsId(), "a052d3a6-007c-4057-a789-c7aa19008b0f");
+		Assert.assertEquals(diagram.getDiagramObjects().get(0).getType(), "biit.SourceNode");
+		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getTooltip(), "Source Tooltip");
+		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getSize().getWidth(), 30);
+		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getSize().getHeight(), 30);
+		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getPosition().getX(), 328);
+		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getPosition().getY(), 470);
+		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getAngle(), 0f);
+		Assert.assertEquals(diagram.getDiagramObjects().get(0).getJointjsId(), "a052d3a6-007c-4057-a789-c7aa19008b0f");
 	}
 
 	@Test(groups = { "jsonParser" }, dependsOnMethods = { "convertJsonToDiagram" })
@@ -83,7 +83,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 		diagram.setForm(form);
 		diagramDao.makePersistent(diagram);
 		Diagram diagram2 = diagramDao.read(diagram.getId());
-		Assert.assertEquals(diagram2.getDiagramElements().size(), 5);
+		Assert.assertEquals(diagram2.getDiagramObjects().size(), 5);
 		Assert.assertEquals(diagram2.toJson(), storedJson);
 	}
 

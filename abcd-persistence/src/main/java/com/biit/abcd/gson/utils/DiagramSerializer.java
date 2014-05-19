@@ -14,7 +14,7 @@ public class DiagramSerializer implements JsonSerializer<Diagram> {
 	public JsonElement serialize(Diagram diagram, Type type, JsonSerializationContext context) {
 		final JsonObject jsonObject = new JsonObject();
 
-		final JsonElement jsonDiagramObjects = context.serialize(diagram.getDiagramElements());
+		final JsonElement jsonDiagramObjects = context.serialize(diagram.getDiagramObjects());
 		jsonObject.add("cells", jsonDiagramObjects);
 
 		return jsonObject;
