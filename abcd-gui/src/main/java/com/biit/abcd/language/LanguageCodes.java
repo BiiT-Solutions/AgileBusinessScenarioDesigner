@@ -18,7 +18,10 @@ public enum LanguageCodes {
 	
 	MENU_SAVE("menu.save"),
 	MENU_MOVE_UP("menu.moveup"),
-	MENU_MOVE_DOWN("menu.movedown"),
+	MENU_MOVE_DOWN("menu.movedown"), 
+	
+	COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP("collapsable.panel.collapse.tooltip"),
+	COLLAPSABLE_PANEL_EXPAND_TOOLTIP("collapsable.panel.expand.tooltip"),
 	
 	FORM_TREE_PROPERTY_NAME("form.tree.property.name"),
 	FORM_TREE_PROPERTY_RULES("form.tree.property.rules"),

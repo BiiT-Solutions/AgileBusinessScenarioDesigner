@@ -10,7 +10,7 @@ public class IconButton extends Button {
 
 	public IconButton(ThemeIcons icon, IconSize size, LanguageCodes tooltip) {
 		super("");
-		createButton(icon, defaultIconSize, tooltip);
+		createButton(icon, size, tooltip);
 		addStyleName("link");
 	}
 

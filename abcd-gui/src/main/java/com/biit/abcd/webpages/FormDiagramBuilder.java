@@ -12,12 +12,19 @@ import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
+import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
+import com.biit.abcd.webpages.elements.diagramBuilder.DiagramBuilderPropertiesContainer;
+import com.biit.abcd.webpages.elements.diagramBuilder.FormDiagramBuilderUpperMenu;
+import com.biit.abcd.webpages.elements.diagramBuilder.JsonPropertieComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -109,9 +116,26 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	@Override
 	public void securedEnter(ViewChangeEvent event) {
+		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
+		rootLayout.setSizeFull();
+
+		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
+		rootDiagramBuilder.setSpacing(true);
+		
 		diagramBuilder = new DiagramBuilder();
 		diagramBuilder.setSizeFull();
-		getWorkingAreaLayout().addComponent(diagramBuilder);
+		
+		DiagramBuilderPropertiesContainer propertiesContainer = new DiagramBuilderPropertiesContainer();
+		propertiesContainer.setSizeFull();
+		
+		rootDiagramBuilder.addComponent(diagramBuilder);
+		rootDiagramBuilder.setExpandRatio(diagramBuilder, 0.80f);
+		rootDiagramBuilder.addComponent(propertiesContainer);
+		rootDiagramBuilder.setExpandRatio(propertiesContainer, 0.20f);
+
+		rootLayout.setContent(rootDiagramBuilder);
+
+		getWorkingAreaLayout().addComponent(rootLayout);
 
 		initUpperMenu();
 	}

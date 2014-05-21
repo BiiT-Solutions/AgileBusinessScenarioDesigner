@@ -7,6 +7,36 @@
 $buttonColor: #00a3e8;
 $blueShadowColor: #52A5C5;
 
+@mixin animation($animations) {
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@include keyframes(horizontal-collapse) {
+  	0%   {background-color:red;}
+	25%  {background-color:yellow;}
+	50%  {background-color:blue;}
+	75%  {background-color:green;}
+	100% {background-color:red;}
+}
+
 @font-face {
 	font-family: "TkIcons";
 	/* woff by default (smallest size), android needs a fallback as otf  */
@@ -468,5 +498,59 @@ $open-sans-pathPrefix: "./fonts/";
 		opacity: 1.0;
 		cursor: default;
 		background-color: #f5f5f5;
+	}
+	
+	/* Collapsible menu */
+	.v-horizontal-collapsible-panel-opened{
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+	}
+	
+	.v-horizontal-collapsible-panel-closed{
+	}
+	
+	div.v-csslayout {
+		display: flex;
+		padding: 17px;
+	}
+	
+	.v-horizontal-collapsible-panel-button-layout.v-verticallayout-v-horizontal-collapsible-panel-button-layout {
+		padding: 10px 10px 0px 2px;
+	}
+	
+	div#stencil-caption {
+		border-color: #c2c3c4;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #e2e2e2 51%, #d3d3d3 80%);
+		height: 32px;
+		text-transform: uppercase;
+		font-size: 14px;
+		font-weight: 700;
+		color: #464646;
+		text-shadow: #f3f5f8 0 1px 0;
+		line-height: normal;
+		text-align: center;
+		padding-top: 5px;
+	}
+	
+	.stencil {
+		top: 32px;
+	}
+	
+	.stencil-container {
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+		border-right-width: 0px;
+		bottom: 0px;
+	}
+	
+	.paper-container {
+		left: 151px;
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+		bottom: 0px;
 	}
 }
