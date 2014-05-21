@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.elements.treetable;
 
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Category;
@@ -8,19 +7,19 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class CategoryProperties extends PropertiesComponent {
+public class CategoryProperties extends GenericFormElementProperties<Category> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Category instance;
 	private TextField categoryLabel;
 
 	public CategoryProperties() {
+		super(new Category());
 	}
 
 	@Override
-	public void setElementAbstract(TreeObject element) {
-		instance = (Category) element;
-
+	public void setElementAbstract(Category element) {
+		instance = element;
 		categoryLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		categoryLabel.setValue(instance.getName());
 
@@ -30,15 +29,17 @@ public class CategoryProperties extends PropertiesComponent {
 		addValueChangeListenerToFormComponents(categoryForm);
 
 		getRootAccordion().addTab(categoryForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION),true,0);
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
 	}
 
 	@Override
-	public void updateElement() {
+	protected void updateConcreteFormElement() {
 		instance.setName(categoryLabel.getValue());
-		instance.setUpdatedBy(UserSessionHandler.getUser());
-		instance.setUpdateTime();
-		firePropertyUpdateListener(instance);
+	}
+
+	@Override
+	protected TreeObject getTreeObjectInstance() {
+		return instance;
 	}
 
 }

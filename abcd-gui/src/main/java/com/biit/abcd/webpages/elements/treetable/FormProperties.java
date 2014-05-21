@@ -11,7 +11,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class FormProperties extends PropertiesComponent {
+public class FormProperties extends GenericFormElementProperties<Form> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Form instance;
@@ -21,12 +21,12 @@ public class FormProperties extends PropertiesComponent {
 	private DateField availableTo;
 
 	public FormProperties() {
+		super(new Form());
 	}
 
 	@Override
-	public void setElementAbstract(TreeObject element) {
-		instance = (Form) element;
-
+	public void setElementAbstract(Form element) {
+		instance = element;
 		formName = new TextField(ServerTranslate.tr(LanguageCodes.FORM_PROPERTIES_NAME));
 		formName.setValue(instance.getName());
 		formName.setEnabled(false);
@@ -48,15 +48,20 @@ public class FormProperties extends PropertiesComponent {
 		formForm.addComponent(availableTo);
 		addValueChangeListenerToFormComponents(formForm);
 
-		getRootAccordion().addTab(formForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION),true,0);
+		getRootAccordion().addTab(formForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION),
+				true, 0);
 
 	}
 
 	@Override
-	public void updateElement() {
-		instance.setAvailableFrom(new Timestamp(((Date)availableFrom.getValue()).getTime()));
-		instance.setAvailableTo(new Timestamp(((Date)availableTo.getValue()).getTime()));
+	protected void updateConcreteFormElement() {
+		instance.setAvailableFrom(new Timestamp(((Date) availableFrom.getValue()).getTime()));
+		instance.setAvailableTo(new Timestamp(((Date) availableTo.getValue()).getTime()));
+	}
+
+	@Override
+	protected TreeObject getTreeObjectInstance() {
+		return instance;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.treetable;
+package com.biit.abcd.webpages.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,17 +12,17 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 
-public class PropertiesContainer extends CustomComponent {
+public class PropertiesComponent extends CustomComponent {
 
 	private static final long serialVersionUID = -4459509560858677005L;
 	public static String CLASSNAME = "v-properties-container";
 	private VerticalLayout rootLayout;
-	private HashMap<Class<?>, PropertiesComponent> propertiesComponents;
+	private HashMap<Class<?>, PropertiesForClassComponent<?>> propertiesComponents;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
 
-	public PropertiesContainer() {
+	public PropertiesComponent() {
 
-		propertiesComponents = new HashMap<Class<?>, PropertiesComponent>();
+		propertiesComponents = new HashMap<Class<?>, PropertiesForClassComponent<?>>();
 		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
 
 		rootLayout = new VerticalLayout();
@@ -33,24 +33,23 @@ public class PropertiesContainer extends CustomComponent {
 		setStyleName(CLASSNAME);
 	}
 
-	public void registerPropertiesComponent(Class<?> classId, PropertiesComponent component) {
-		propertiesComponents.put(classId, component);
+	public void registerPropertiesComponent(PropertiesForClassComponent<?> component) {
+		propertiesComponents.put(component.getUnderlyingType().getClass(), component);
 	}
 
 	public void updatePropertiesComponent(TreeObject value) {
 		if (value == null) {
 			rootLayout.removeAllComponents();
 		} else {
-			PropertiesComponent baseObject = propertiesComponents.get(value.getClass());
+			PropertiesForClassComponent<?> baseObject = propertiesComponents.get(value.getClass());
 			try {
 				rootLayout.removeAllComponents();
 
-				PropertiesComponent newInstance = baseObject.getClass().newInstance();
+				PropertiesForClassComponent<?> newInstance = baseObject.getClass().newInstance();
 				newInstance.setElement(value);
 				newInstance.addPropertyUpdateListener(new PropertieUpdateListener() {
-
 					@Override
-					public void propertyUpdate(TreeObject element) {
+					public void propertyUpdate(Object element) {
 						firePropertyUpdateListener(element);
 					}
 				});
@@ -73,7 +72,7 @@ public class PropertiesContainer extends CustomComponent {
 		propertyUpdateListeners.remove(listener);
 	}
 
-	protected void firePropertyUpdateListener(TreeObject element) {
+	protected void firePropertyUpdateListener(Object element) {
 		for (PropertieUpdateListener listener : propertyUpdateListeners) {
 			listener.propertyUpdate(element);
 		}

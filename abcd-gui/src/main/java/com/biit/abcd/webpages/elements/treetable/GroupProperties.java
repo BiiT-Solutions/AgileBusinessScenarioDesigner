@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.elements.treetable;
 
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Group;
@@ -9,7 +8,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class GroupProperties extends PropertiesComponent {
+public class GroupProperties extends GenericFormElementProperties<Group> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Group instance;
@@ -17,12 +16,12 @@ public class GroupProperties extends PropertiesComponent {
 	private CheckBox groupIsRepeatable;
 
 	public GroupProperties() {
+		super(new Group());
 	}
 
 	@Override
-	public void setElementAbstract(TreeObject element) {
-		instance = (Group) element;
-
+	public void setElementAbstract(Group element) {
+		instance = element;
 		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getName());
 		groupIsRepeatable = new CheckBox(ServerTranslate.tr(LanguageCodes.GROUP_PROPERTIES_REPEAT));
@@ -35,15 +34,17 @@ public class GroupProperties extends PropertiesComponent {
 		addValueChangeListenerToFormComponents(answerForm);
 
 		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION),true,0);
+				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION), true, 0);
 	}
 
 	@Override
-	public void updateElement() {
+	protected void updateConcreteFormElement() {
 		instance.setName(groupTechnicalLabel.getValue());
 		instance.setRepetable(groupIsRepeatable.getValue());
-		instance.setUpdatedBy(UserSessionHandler.getUser());
-		instance.setUpdateTime();
-		firePropertyUpdateListener(instance);
+	}
+
+	@Override
+	protected TreeObject getTreeObjectInstance() {
+		return instance;
 	}
 }

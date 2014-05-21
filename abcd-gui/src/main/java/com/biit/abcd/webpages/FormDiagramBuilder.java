@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
@@ -11,22 +10,20 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramObject;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.elements.diagramBuilder.DiagramBuilderPropertiesContainer;
+import com.biit.abcd.webpages.components.PropertieUpdateListener;
+import com.biit.abcd.webpages.elements.diagramBuilder.DiagramBuilderElementPicked;
 import com.biit.abcd.webpages.elements.diagramBuilder.FormDiagramBuilderUpperMenu;
-import com.biit.abcd.webpages.elements.diagramBuilder.JsonPropertieComponent;
+import com.biit.abcd.webpages.elements.diagramBuilder.JsonPropertiesComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.HorizontalLayout;
 
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
@@ -121,13 +118,22 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
 		rootDiagramBuilder.setSpacing(true);
-		
+
+		JsonPropertiesComponent propertiesContainer = new JsonPropertiesComponent();
+		propertiesContainer.setSizeFull();
+		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
+			
+			@Override
+			public void propertyUpdate(Object element) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
 		diagramBuilder = new DiagramBuilder();
 		diagramBuilder.setSizeFull();
-		
-		DiagramBuilderPropertiesContainer propertiesContainer = new DiagramBuilderPropertiesContainer();
-		propertiesContainer.setSizeFull();
-		
+		diagramBuilder.addElementPickedListener(new DiagramBuilderElementPicked(propertiesContainer));
+
 		rootDiagramBuilder.addComponent(diagramBuilder);
 		rootDiagramBuilder.setExpandRatio(diagramBuilder, 0.80f);
 		rootDiagramBuilder.addComponent(propertiesContainer);
@@ -145,8 +151,12 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		this.form = form;
 		if (form != null) {
 			diagram = diagramDao.read(form);
-			diagram.setCreatedBy(UserSessionHandler.getUser());
-			diagram.setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+			// Quick fix, this has to be changed when the full "diagrams" tree
+			// structure is decided.
+			if (diagram != null) {
+				diagram.setCreatedBy(UserSessionHandler.getUser());
+				diagram.setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+			}
 		}
 		// New diagram
 		if (diagram == null) {

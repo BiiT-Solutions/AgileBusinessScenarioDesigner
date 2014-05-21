@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.elements.treetable;
 
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.AnswerTypeUi;
 import com.biit.abcd.language.LanguageCodes;
@@ -15,7 +14,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class QuestionProperties extends PropertiesComponent {
+public class QuestionProperties extends GenericFormElementProperties<Question> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Question instance;
@@ -24,19 +23,19 @@ public class QuestionProperties extends PropertiesComponent {
 	private ComboBox answerFormat;
 
 	public QuestionProperties() {
+		super(new Question());
 	}
 
 	@Override
-	public void setElementAbstract(TreeObject element) {
-		instance = (Question) element;
-
+	public void setElementAbstract(Question element) {
+		instance = element;
 		questionTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		questionTechnicalLabel.setValue(instance.getName());
 
 		initializeSelectionLists();
-		if(instance.getAnswerType()!=null){
+		if (instance.getAnswerType() != null) {
 			answerType.setValue(instance.getAnswerType());
-			answerFormat.setValue(instance.getAnswerFormat());			
+			answerFormat.setValue(instance.getAnswerFormat());
 		}
 
 		FormLayout questionForm = new FormLayout();
@@ -50,26 +49,16 @@ public class QuestionProperties extends PropertiesComponent {
 				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION), true, 0);
 	}
 
-	@Override
-	public void updateElement() {
-		instance.setName(questionTechnicalLabel.getValue());
-		instance.setUpdatedBy(UserSessionHandler.getUser());
-		instance.setUpdateTime();
-		instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
-		instance.setAnswerType((AnswerType) answerType.getValue());
-		firePropertyUpdateListener(instance);
-	}
-
 	private void initializeSelectionLists() {
-		
+
 		answerFormat = new ComboBox(ServerTranslate.tr(LanguageCodes.PROPERTIES_QUESTION_ANSWER_FORMAT));
 		answerFormat.setImmediate(true);
 		for (AnswerFormatUi answerFormatUi : AnswerFormatUi.values()) {
 			answerFormat.addItem(answerFormatUi.getAnswerFormat());
 			answerFormat.setItemCaption(answerFormatUi.getAnswerFormat(),
 					ServerTranslate.tr(answerFormatUi.getLanguageCode()));
-		}		
-		
+		}
+
 		answerType = new ComboBox(ServerTranslate.tr(LanguageCodes.PROPERTIES_QUESTION_ANSWER_TYPE));
 		answerType.setNullSelectionAllowed(false);
 		answerType.setImmediate(true);
@@ -94,5 +83,17 @@ public class QuestionProperties extends PropertiesComponent {
 			}
 		});
 		answerType.setValue(AnswerTypeUi.values()[0].getAnswerType());
+	}
+
+	@Override
+	protected void updateConcreteFormElement() {
+		instance.setName(questionTechnicalLabel.getValue());
+		instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
+		instance.setAnswerType((AnswerType) answerType.getValue());
+	}
+
+	@Override
+	protected TreeObject getTreeObjectInstance() {
+		return instance;
 	}
 }

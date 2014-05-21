@@ -22,14 +22,9 @@ import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.biit.abcd.webpages.elements.treetable.AnswerProperties;
-import com.biit.abcd.webpages.elements.treetable.CategoryProperties;
-import com.biit.abcd.webpages.elements.treetable.FormProperties;
+import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.elements.treetable.FormTreeTable;
-import com.biit.abcd.webpages.elements.treetable.GroupProperties;
-import com.biit.abcd.webpages.elements.treetable.PropertieUpdateListener;
-import com.biit.abcd.webpages.elements.treetable.PropertiesContainer;
-import com.biit.abcd.webpages.elements.treetable.QuestionProperties;
+import com.biit.abcd.webpages.elements.treetable.TreeTablePropertiesComponent;
 import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -40,7 +35,7 @@ import com.vaadin.ui.HorizontalLayout;
 public class TreeDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 	private FormTreeTable formTreeTable;
-	private PropertiesContainer elementPropertiesContainer;
+	private TreeTablePropertiesComponent propertiesComponent;
 	private Form form;
 	private TreeTableUpperMenu upperMenu;
 
@@ -70,18 +65,12 @@ public class TreeDesigner extends FormWebPageComponent {
 			}
 		});
 
-		elementPropertiesContainer = new PropertiesContainer();
-		elementPropertiesContainer.setSizeFull();
-		elementPropertiesContainer.registerPropertiesComponent(Form.class, new FormProperties());
-		elementPropertiesContainer.registerPropertiesComponent(Category.class, new CategoryProperties());
-		elementPropertiesContainer.registerPropertiesComponent(Group.class, new GroupProperties());
-		elementPropertiesContainer.registerPropertiesComponent(Question.class, new QuestionProperties());
-		elementPropertiesContainer.registerPropertiesComponent(Answer.class, new AnswerProperties());
-		elementPropertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
-
+		propertiesComponent = new TreeTablePropertiesComponent();
+		propertiesComponent.setSizeFull();
+		propertiesComponent.addPropertyUpdateListener(new PropertieUpdateListener() {
 			@Override
-			public void propertyUpdate(TreeObject element) {
-				formTreeTable.updateItem(element);
+			public void propertyUpdate(Object element) {
+				formTreeTable.updateItem((TreeObject) element);
 			}
 		});
 
@@ -91,15 +80,15 @@ public class TreeDesigner extends FormWebPageComponent {
 		rootLayout.setMargin(true);
 
 		rootLayout.addComponent(formTreeTable);
-		rootLayout.addComponent(elementPropertiesContainer);
+		rootLayout.addComponent(propertiesComponent);
 		rootLayout.setExpandRatio(formTreeTable, 0.75f);
-		rootLayout.setExpandRatio(elementPropertiesContainer, 0.25f);
+		rootLayout.setExpandRatio(propertiesComponent, 0.25f);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {
-		elementPropertiesContainer.updatePropertiesComponent(value);
+		propertiesComponent.updatePropertiesComponent(value);
 	}
 
 	@Override
