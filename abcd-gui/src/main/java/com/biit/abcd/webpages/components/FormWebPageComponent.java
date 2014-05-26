@@ -10,6 +10,7 @@ import com.vaadin.ui.VerticalLayout;
  * Pages that has a form definition and can access to other pages that also have a form.
  */
 public abstract class FormWebPageComponent extends SecuredWebPageComponent {
+	private static final long serialVersionUID = 5215781045989004097L;
 	private AbstractOrderedLayout workingAreaLayout;
 	private BottomMenu bottomMenu;
 	private UpperMenu upperMenu;
@@ -60,6 +61,8 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 
 	private void setButtonMenu() {
 		bottomMenu = new BottomMenu() {
+			private static final long serialVersionUID = -4195315137788949245L;
+
 			@Override
 			public void setSelectedForm(Form form) {
 				setForm(form);

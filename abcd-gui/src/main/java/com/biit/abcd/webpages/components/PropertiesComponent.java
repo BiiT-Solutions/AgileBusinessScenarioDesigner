@@ -8,11 +8,12 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 
-public class PropertiesComponent extends CustomComponent {
+public class PropertiesComponent extends CustomComponent implements Component.Focusable{
 
 	private static final long serialVersionUID = -4459509560858677005L;
 	public static String CLASSNAME = "v-properties-container";
@@ -37,7 +38,7 @@ public class PropertiesComponent extends CustomComponent {
 		propertiesComponents.put(component.getUnderlyingType().getClass(), component);
 	}
 
-	public void updatePropertiesComponent(TreeObject value) {
+	public void updatePropertiesComponent(Object value) {
 		if (value == null) {
 			rootLayout.removeAllComponents();
 		} else {
@@ -50,6 +51,7 @@ public class PropertiesComponent extends CustomComponent {
 				newInstance.addPropertyUpdateListener(new PropertieUpdateListener() {
 					@Override
 					public void propertyUpdate(Object element) {
+						System.out.println("PropetiesUpdate - component -> fire General properties update");
 						firePropertyUpdateListener(element);
 					}
 				});
@@ -76,5 +78,22 @@ public class PropertiesComponent extends CustomComponent {
 		for (PropertieUpdateListener listener : propertyUpdateListeners) {
 			listener.propertyUpdate(element);
 		}
+	}
+	
+	@Override
+	public void focus(){
+		super.focus();
+	}
+
+	@Override
+	public int getTabIndex() {
+		return 0;
+		
+		
+	}
+
+	@Override
+	public void setTabIndex(int tabIndex) {
+		//Does nothing
 	}
 }

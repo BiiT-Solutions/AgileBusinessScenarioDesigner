@@ -15,15 +15,15 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 
 	public GenericFormElementProperties(T type) {
 		super(type);
-		initCommonProperties();
 	}
 
 	public void setElement(Object element) {
 		super.setElement(element);
-		initCommonPropertiesValues((TreeObject) element);
+		initCommonProperties(element);
+		
 	}
 
-	protected void initCommonProperties() {
+	protected void initCommonProperties(Object element) {
 		createdBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
 		createdBy.setEnabled(false);
 		creationTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATION_TIME));
@@ -32,6 +32,8 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		updatedBy.setEnabled(false);
 		updateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
 		updateTime.setEnabled(false);
+		//init values;
+		initCommonPropertiesValues((TreeObject) element);
 
 		FormLayout commonProperties = new FormLayout();
 		commonProperties.setWidth(null);
@@ -41,8 +43,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		commonProperties.addComponent(updatedBy);
 		commonProperties.addComponent(updateTime);
 
-		rootAccordion.addTab(commonProperties,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION), false);
+		addTab(commonProperties, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION), false);
 	}
 
 	protected void initCommonPropertiesValues(TreeObject element) {
@@ -76,12 +77,16 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		getTreeObjectInstance().setUpdatedBy(UserSessionHandler.getUser());
 		getTreeObjectInstance().setUpdateTime();
 		updateConcreteFormElement();
-		//Update common ui fields.
+		// Update common ui fields.
 		initCommonPropertiesValues(getTreeObjectInstance());
-		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	protected abstract void updateConcreteFormElement();
 
 	protected abstract TreeObject getTreeObjectInstance();
+
+	@Override
+	protected void firePropertyUpdateListener() {
+		firePropertyUpdateListener(getTreeObjectInstance());
+	}
 }

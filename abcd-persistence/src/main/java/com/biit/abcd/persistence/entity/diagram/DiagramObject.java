@@ -29,6 +29,8 @@ public class DiagramObject {
 	@Expose
 	private String jointjsId;
 	@Expose
+	private String embeds;
+	@Expose
 	private int z;
 
 	public String getType() {
@@ -61,5 +63,18 @@ public class DiagramObject {
 
 	public void setDatabaseId(Long databaseId) {
 		this.databaseId = databaseId;
+	}
+	
+	public String getEmbeds() {
+		return embeds;
+	}
+
+	public void setEmbeds(String embeds) {
+		this.embeds = embeds;
+	}
+
+	public String toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

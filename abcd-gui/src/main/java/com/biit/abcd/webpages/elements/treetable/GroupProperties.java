@@ -31,10 +31,8 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 		answerForm.setWidth(null);
 		answerForm.addComponent(groupTechnicalLabel);
 		answerForm.addComponent(groupIsRepeatable);
-		addValueChangeListenerToFormComponents(answerForm);
 
-		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION), true, 0);
+		addTab(answerForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION), true, 0);
 	}
 
 	@Override

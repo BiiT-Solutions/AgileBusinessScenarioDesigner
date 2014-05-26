@@ -46,17 +46,19 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 		formForm.addComponent(formVersion);
 		formForm.addComponent(availableFrom);
 		formForm.addComponent(availableTo);
-		addValueChangeListenerToFormComponents(formForm);
 
-		getRootAccordion().addTab(formForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION),
-				true, 0);
+		addTab(formForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION), true, 0);
 
 	}
 
 	@Override
 	protected void updateConcreteFormElement() {
-		instance.setAvailableFrom(new Timestamp(((Date) availableFrom.getValue()).getTime()));
-		instance.setAvailableTo(new Timestamp(((Date) availableTo.getValue()).getTime()));
+		if (availableFrom.getValue() != null) {
+			instance.setAvailableFrom(new Timestamp(((Date) availableFrom.getValue()).getTime()));
+		}
+		if (availableTo.getValue() != null) {
+			instance.setAvailableTo(new Timestamp(((Date) availableTo.getValue()).getTime()));
+		}
 	}
 
 	@Override

@@ -38,6 +38,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	private TreeTablePropertiesComponent propertiesComponent;
 	private Form form;
 	private TreeTableUpperMenu upperMenu;
+	private TreeTableValueChangeListener treeTableValueChangeListener;
 
 	private IFormDao formDao;
 
@@ -51,19 +52,13 @@ public class TreeDesigner extends FormWebPageComponent {
 		this.upperMenu = createUpperMenu();
 		setUpperMenu(upperMenu);
 
+		treeTableValueChangeListener = new TreeTableValueChangeListener();
+
 		formTreeTable = new FormTreeTable();
 		formTreeTable.setSizeFull();
 		formTreeTable.setSelectable(true);
 		formTreeTable.setImmediate(true);
-		formTreeTable.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = 5598877051361847210L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				updateUpperMenu(formTreeTable.getValue());
-				updatePropertiesComponent(formTreeTable.getValue());
-			}
-		});
+		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
 
 		propertiesComponent = new TreeTablePropertiesComponent();
 		propertiesComponent.setSizeFull();
@@ -94,7 +89,14 @@ public class TreeDesigner extends FormWebPageComponent {
 	@Override
 	public void setForm(Form form) {
 		this.form = form;
+		// Remove ValueChange listener and re add it after load the entire form.
+		// This will remove the unnecesary overhead of calls when loading a
+		// form.
+		formTreeTable.setValue(null);
+		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
 		formTreeTable.setForm(form);
+		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
+		formTreeTable.setValue(form);
 	}
 
 	@Override
@@ -203,7 +205,8 @@ public class TreeDesigner extends FormWebPageComponent {
 					TreeObject parent = null;
 					if (formTreeTable.getValue() instanceof Category || formTreeTable.getValue() instanceof Group) {
 						parent = formTreeTable.getValue();
-						// If selected a question, we consider the same that selecting the question's parent.
+						// If selected a question, we consider the same that
+						// selecting the question's parent.
 					} else if (formTreeTable.getValue() instanceof Question) {
 						parent = formTreeTable.getValue().getParent();
 					} else if (formTreeTable.getValue() instanceof Answer) {
@@ -233,7 +236,8 @@ public class TreeDesigner extends FormWebPageComponent {
 					TreeObject parent = null;
 					if (formTreeTable.getValue() instanceof Question) {
 						parent = formTreeTable.getValue();
-						// If selected an answer, we consider the same that selecting the question.
+						// If selected an answer, we consider the same that
+						// selecting the question.
 					} else if (formTreeTable.getValue() instanceof Answer) {
 						parent = formTreeTable.getValue().getParent();
 					}
@@ -371,5 +375,15 @@ public class TreeDesigner extends FormWebPageComponent {
 			// formTreeTable.setChildrenAllowed(element.getParent(), false);
 		}
 		formTreeTable.removeItem(element);
+	}
+
+	private class TreeTableValueChangeListener implements ValueChangeListener {
+		private static final long serialVersionUID = 5598877051361847210L;
+
+		@Override
+		public void valueChange(ValueChangeEvent event) {
+			updateUpperMenu(formTreeTable.getValue());
+			updatePropertiesComponent(formTreeTable.getValue());
+		}
 	}
 }

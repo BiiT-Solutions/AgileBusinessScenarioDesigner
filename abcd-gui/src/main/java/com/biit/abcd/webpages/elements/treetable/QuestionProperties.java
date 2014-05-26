@@ -43,10 +43,8 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 		questionForm.addComponent(questionTechnicalLabel);
 		questionForm.addComponent(answerType);
 		questionForm.addComponent(answerFormat);
-		addValueChangeListenerToFormComponents(questionForm);
 
-		getRootAccordion().addTab(questionForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION), true, 0);
+		addTab(questionForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION), true, 0);
 	}
 
 	private void initializeSelectionLists() {

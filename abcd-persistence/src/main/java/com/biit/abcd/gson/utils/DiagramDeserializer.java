@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,9 +28,12 @@ public class DiagramDeserializer implements JsonDeserializer<Diagram> {
 
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkDeserializer());
 		Gson gson = gsonBuilder.create();
 
-		Type listType = new TypeToken<ArrayList<DiagramObject>>() {}.getType();
+		Type listType = new TypeToken<ArrayList<DiagramObject>>() {
+		}.getType();
 		List<DiagramObject> objects = gson.fromJson(jsonObject.get("cells"), listType);
 		diagram.setDiagramObjects(objects);
 

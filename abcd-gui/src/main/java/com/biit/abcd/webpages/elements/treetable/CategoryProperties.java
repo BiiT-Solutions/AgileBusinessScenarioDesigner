@@ -26,10 +26,8 @@ public class CategoryProperties extends GenericFormElementProperties<Category> {
 		FormLayout categoryForm = new FormLayout();
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(categoryLabel);
-		addValueChangeListenerToFormComponents(categoryForm);
 
-		getRootAccordion().addTab(categoryForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
+		addTab(categoryForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
 	}
 
 	@Override

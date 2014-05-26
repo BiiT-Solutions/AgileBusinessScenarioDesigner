@@ -26,10 +26,8 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
 		answerForm.addComponent(answerTechnicalLabel);
-		addValueChangeListenerToFormComponents(answerForm);
 
-		getRootAccordion().addTab(answerForm,
-				ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION), true, 0);
+		addTab(answerForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION), true, 0);
 	}
 
 	@Override

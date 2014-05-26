@@ -13,6 +13,7 @@ import com.liferay.portal.model.User;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public abstract class SecuredWebPageComponent extends WebPageComponent {
+	private static final long serialVersionUID = 1948083638306683637L;
 
 	public abstract void securedEnter(ViewChangeEvent event);
 

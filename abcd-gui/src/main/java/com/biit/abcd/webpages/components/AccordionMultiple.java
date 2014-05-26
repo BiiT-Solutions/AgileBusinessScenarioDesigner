@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
@@ -46,6 +47,10 @@ public class AccordionMultiple extends CustomComponent {
 			tab.toggle();
 		}
 		rootLayout.addComponent(tab, index);
+	}
+	
+	public Collection<Component> getAllComponents(){
+		return componentToTabComponent.keySet();
 	}
 
 	public void removeTab(Component component) {

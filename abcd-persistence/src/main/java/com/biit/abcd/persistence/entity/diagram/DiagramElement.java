@@ -6,6 +6,10 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.gson.utils.DiagramElementDeserializer;
+import com.biit.abcd.gson.utils.DiagramElementSerializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 @Entity
@@ -23,6 +27,9 @@ public class DiagramElement extends DiagramObject {
 
 	@Expose
 	private float angle;
+	@Expose
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	private DiagramBiitText biitText;	
 
 	public String getTooltip() {
 		return tooltip;
@@ -54,5 +61,33 @@ public class DiagramElement extends DiagramObject {
 
 	public void setSize(Size size) {
 		this.size = size;
+	}
+	
+	public DiagramBiitText getBiitText() {
+		return biitText;
+	}
+
+	public void setBiitText(DiagramBiitText biitText) {
+		this.biitText = biitText;
+	}
+
+	public static DiagramElement fromJson(String jsonString) {
+		if (jsonString != null) {
+			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+			gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementDeserializer());
+			Gson gson = gsonBuilder.create();
+			DiagramElement object = gson.fromJson(jsonString, DiagramElement.class);
+			return object;
+		}
+		return null;
+	}
+
+	@Override
+	public String toJson() {
+		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+		gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementSerializer());
+		Gson gson = gsonBuilder.create();
+		String json = gson.toJson(this);
+		return json;
 	}
 }

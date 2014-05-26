@@ -10,6 +10,8 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
@@ -121,18 +123,25 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		JsonPropertiesComponent propertiesContainer = new JsonPropertiesComponent();
 		propertiesContainer.setSizeFull();
-		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
-			
-			@Override
-			public void propertyUpdate(Object element) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
 
 		diagramBuilder = new DiagramBuilder();
 		diagramBuilder.setSizeFull();
 		diagramBuilder.addElementPickedListener(new DiagramBuilderElementPicked(propertiesContainer));
+
+		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
+
+			@Override
+			public void propertyUpdate(Object element) {
+				System.out.println("property update Listener");
+				if (element instanceof DiagramElement) {
+					System.out.println(((DiagramObject) element).toJson());
+					diagramBuilder.updateCellJson(((DiagramObject) element).toJson());
+				} else {
+					System.out.println(((DiagramObject) element).toJson());
+					diagramBuilder.updateLinkJson(((DiagramObject) element).toJson());
+				}
+			}
+		});
 
 		rootDiagramBuilder.addComponent(diagramBuilder);
 		rootDiagramBuilder.setExpandRatio(diagramBuilder, 0.80f);

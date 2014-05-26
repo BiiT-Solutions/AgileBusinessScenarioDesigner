@@ -20,6 +20,9 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.biit.abcd.gson.utils.DiagramDeserializer;
+import com.biit.abcd.gson.utils.DiagramElementSerializer;
+import com.biit.abcd.gson.utils.DiagramLinkSerializer;
+import com.biit.abcd.gson.utils.DiagramObjectSerializer;
 import com.biit.abcd.gson.utils.DiagramSerializer;
 import com.biit.abcd.persistence.entity.Form;
 import com.google.gson.Gson;
@@ -148,6 +151,9 @@ public class Diagram {
 	public String toJson() {
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkSerializer());
 		Gson gson = gsonBuilder.create();
 		String json = gson.toJson(this);
 		return json;

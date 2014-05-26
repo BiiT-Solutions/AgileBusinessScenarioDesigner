@@ -23,7 +23,6 @@ import com.vaadin.ui.TreeTable;
  */
 public class FormTreeTable extends TreeTable {
 	private static final long serialVersionUID = -6949123334668973540L;
-	private Form form;
 
 	enum FormTreeTableProperties {
 		ELEMENT_NAME, RULES
@@ -132,13 +131,12 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	public void setForm(Form form) {
-		this.form = form;
 		this.removeAllItems();
+		select(null);
 		loadForm(form, null);
 		if (form != null) {
 			setCollapsed(form, false);
 		}
-		selectFirstRow();
 	}
 
 	@Override
@@ -148,13 +146,6 @@ public class FormTreeTable extends TreeTable {
 			return (TreeObject) value;
 		}
 		return null;
-	}
-
-	/**
-	 * Selects the first row.
-	 */
-	private void selectFirstRow() {
-		setValue(firstItemId());
 	}
 
 	@Override
