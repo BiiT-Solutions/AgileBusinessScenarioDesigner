@@ -10,7 +10,7 @@ import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.decisiontable.AcceptCancelWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
-import com.biit.abcd.webpages.elements.decisiontable.DecisionTable;
+import com.biit.abcd.webpages.elements.decisiontable.DecisionTableComponent;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button.ClickEvent;
@@ -21,7 +21,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	static final long serialVersionUID = -5547452506556261601L;
 
 	private Form form;
-	private DecisionTable decisionTable;
+	private DecisionTableComponent decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 
 	public DecisionTableEditor() {
@@ -35,7 +35,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
 		rootLayout.setSizeFull();
 
-		decisionTable = new DecisionTable();
+		decisionTable = new DecisionTableComponent();
 		decisionTable.setSizeFull();
 
 		rootLayout.setContent(decisionTable);

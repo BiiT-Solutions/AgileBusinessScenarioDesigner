@@ -6,14 +6,14 @@ import com.biit.abcd.persistence.entity.Question;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 
-public class DecisionTable extends CustomComponent {
+public class DecisionTableComponent extends CustomComponent {
 	private static final long serialVersionUID = 2314989763962134814L;
 
 	private HorizontalLayout rootLayout;
 	private ConditionTable conditionTable;
 	private ActionTable actionTable;
 
-	public DecisionTable() {
+	public DecisionTableComponent() {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
