@@ -8,6 +8,10 @@ public enum LanguageCodes {
 	CANCEL_BUTTON_TOOLTIP("cancel.button.tooltip"),
 	CLOSE_BUTTON_CAPTION("close.button.caption"),
 	CLOSE_BUTTON_TOOLTIP("close.button.tooltip"),
+	EDIT_BUTTON_CAPTION("edit.button.caption"),
+	EDIT_BUTTON_TOOLTIP("edit.button.tooltip"),
+	DELETE_BUTTON_CAPTION("delete.button.caption"),
+	DELETE_BUTTON_TOOLTIP("delete.button.tooltip"),
 	
 	LOGIN_CAPTION_EMAIL("login.caption.email"),
 	LOGIN_CAPTION_PASSWORD("login.caption.password"),

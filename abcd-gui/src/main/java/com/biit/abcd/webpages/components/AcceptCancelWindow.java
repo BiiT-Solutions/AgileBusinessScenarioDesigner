@@ -1,12 +1,9 @@
-package com.biit.abcd.webpages.elements.decisiontable;
+package com.biit.abcd.webpages.components;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.webpages.components.IconButton;
-import com.biit.abcd.webpages.components.IconSize;
-import com.biit.abcd.webpages.components.ThemeIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -39,10 +36,9 @@ public class AcceptCancelWindow extends Window {
 	}
 
 	public AcceptCancelWindow(Component content) {
-		super();
+		super("", content);
 		acceptListeners = new ArrayList<AcceptCancelWindow.AcceptActionListener>();
 		cancelListeners = new ArrayList<AcceptCancelWindow.CancelActionListener>();
-		setContent(content);
 	}
 
 	@Override
@@ -103,7 +99,16 @@ public class AcceptCancelWindow extends Window {
 		rootLayout.addComponent(buttonLayout);
 		rootLayout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_CENTER);
 		rootLayout.setExpandRatio(buttonLayout, 0.0f);
-		
+
+		addCloseListener(new CloseListener() {
+			private static final long serialVersionUID = 2148083623407046384L;
+
+			@Override
+			public void windowClose(CloseEvent e) {
+				fireCancelActionListeners();
+			}
+		});
+
 		super.setContent(rootLayout);
 	}
 

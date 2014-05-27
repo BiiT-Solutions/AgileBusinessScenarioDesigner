@@ -6,6 +6,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.vaadin.ui.Component;
 
 public class AddNewConditionWindow extends AcceptCancelWindow {

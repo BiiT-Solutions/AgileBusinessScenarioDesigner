@@ -11,6 +11,8 @@ public enum ThemeIcons {
 	ADD("appbar.add.svg"),
 
 	DELETE("appbar.delete.svg"),
+	
+	EDIT("appbar.edit.svg"),
 
 	LINK("appbar.link.svg"),
 

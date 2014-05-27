@@ -3,6 +3,8 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import java.util.Collection;
 
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.decisiontable.DecisionRule;
+import com.biit.abcd.persistence.entity.decisiontable.DecisionTable;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 
@@ -12,8 +14,11 @@ public class DecisionTableComponent extends CustomComponent {
 	private HorizontalLayout rootLayout;
 	private ConditionTable conditionTable;
 	private ActionTable actionTable;
+	private DecisionTable decisionTable;
 
 	public DecisionTableComponent() {
+		decisionTable = new DecisionTable();
+		
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
@@ -37,6 +42,7 @@ public class DecisionTableComponent extends CustomComponent {
 	public void addColumn(Question question) {
 		if (question != null) {
 			conditionTable.addColumn(question);
+			decisionTable.getConditions().add(question);
 		}
 	}
 
@@ -46,6 +52,28 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow() {
+		DecisionRule decisionRule = new DecisionRule();
+		decisionTable.getRules().add(decisionRule);
 		
+		//Add decision Rule to both tables.
+		conditionTable.addItem(decisionRule);
+		actionTable.addItem(decisionRule);
+	}
+	
+	public void removeSelectedRows(){
+		for(DecisionRule rule: conditionTable.getSelectedRules()){
+			conditionTable.removeItem(rule);
+			actionTable.removeItem(rule);
+		}
+	}
+	
+	public void removeSelectedCols(){
+		for(Question question: conditionTable.getSelectedQuestions()){
+			conditionTable.removeContainerProperty(question);
+		}
+	}
+	
+	public int getNumberOfRules(){
+		return decisionTable.getRules().size();
 	}
 }

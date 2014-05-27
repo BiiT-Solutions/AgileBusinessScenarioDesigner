@@ -558,4 +558,17 @@ $open-sans-pathPrefix: "./fonts/";
 	.v-table-row-cell-disabled {
 		color: rgba(0, 0, 0, 0.21) !important;
 	}
+	
+	.v-edit-cell-component.v-customcomponent-v-edit-cell-component .v-csslayout {
+		padding: 0px;
+	}
+	
+	/* Cell/Row selector */
+	.v-table-cell-content-selected {
+		background: #6C94C0;
+		color: #fff;
+		text-shadow: #3b5a7a 0 1px 0;
+	}
+	
+	
 }
