@@ -1,11 +1,11 @@
-package com.biit.abcd.webpages.elements.treetable;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.webpages.elements.treetable.FormTreeTable.FormTreeTableProperties;
+import com.biit.abcd.webpages.components.FormTreeTable.FormTreeTableProperties;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.CellStyleGenerator;
 
@@ -19,20 +19,20 @@ public class FormTreeTableCellStyleGenerator implements CellStyleGenerator {
 
 	@Override
 	public String getStyle(Table source, Object itemId, Object propertyId) {
-		if(propertyId==FormTreeTableProperties.ELEMENT_NAME){
-			if(itemId instanceof Form){
+		if (propertyId == FormTreeTableProperties.ELEMENT_NAME) {
+			if (itemId instanceof Form) {
 				return "tree-cell-form";
 			}
-			if(itemId instanceof Category){
+			if (itemId instanceof Category) {
 				return "tree-cell-category";
 			}
-			if(itemId instanceof Group){
+			if (itemId instanceof Group) {
 				return "tree-cell-group";
 			}
-			if(itemId instanceof Question){
+			if (itemId instanceof Question) {
 				return "tree-cell-question";
 			}
-			if(itemId instanceof Answer){
+			if (itemId instanceof Answer) {
 				return "tree-cell-answer";
 			}
 		}

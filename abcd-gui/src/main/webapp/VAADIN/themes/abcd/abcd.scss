@@ -553,4 +553,9 @@ $open-sans-pathPrefix: "./fonts/";
 		border-width: 1px;
 		bottom: 0px;
 	}
+	
+	/* Question-table */
+	.v-table-row-cell-disabled {
+		color: rgba(0, 0, 0, 0.21) !important;
+	}
 }

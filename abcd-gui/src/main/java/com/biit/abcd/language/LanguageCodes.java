@@ -2,6 +2,13 @@ package com.biit.abcd.language;
 
 public enum LanguageCodes {
 	
+	ACCEPT_BUTTON_CAPTION("accept.button.caption"),
+	ACCEPT_BUTTON_TOOLTIP("accept.button.tooltip"),
+	CANCEL_BUTTON_CAPTION("cancel.button.caption"),
+	CANCEL_BUTTON_TOOLTIP("cancel.button.tooltip"),
+	CLOSE_BUTTON_CAPTION("close.button.caption"),
+	CLOSE_BUTTON_TOOLTIP("close.button.tooltip"),
+	
 	LOGIN_CAPTION_EMAIL("login.caption.email"),
 	LOGIN_CAPTION_PASSWORD("login.caption.password"),
 	LOGIN_CAPTION_SIGN_IN("login.caption.signIn"),
@@ -63,7 +70,6 @@ public enum LanguageCodes {
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
-
 	
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_CAPTION("formDiagramBuilder.upper.buttonClear.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_TOOLTIP("formDiagramBuilder.upper.buttonClear.tooltip"),
@@ -129,7 +135,25 @@ public enum LanguageCodes {
 	
 	ANSWER_FORMAT_TEXT("answer.format.text"),
 	ANSWER_FORMAT_DATE("answer.format.date"),
-	ANSWER_FORMAT_NUMBER("answer.format.number");
+	ANSWER_FORMAT_NUMBER("answer.format.number"),
+	
+	ACTION_TABLE_HEADER("action.table.header"),
+	ACTION_TABLE_HEADER_ACTION("action.table.header.action"),
+	CONDITION_TABLE_HEADER("condition.table.header"),
+	CONDITION_TABLE_HEADER_CONDITION("condition.table.header.condition"), 
+	
+	CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION("condition.table.editor.button.save.caption"),
+	CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP("condition.table.editor.button.save.tooltip"), 
+	CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION("condition.table.editor.button.add.column.caption"),
+	CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_TOOLTIP("condition.table.editor.button.add.column.tooltip"),
+	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_CAPTION("condition.table.editor.button.remove.column.caption"),
+	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_TOOLTIP("condition.table.editor.button.remove.column.tooltip"),
+	CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_CAPTION("condition.table.editor.button.add.row.caption"),
+	CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_TOOLTIP("condition.table.editor.button.add.row.tooltip"),
+	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_CAPTION("condition.table.editor.button.remove.row.caption"),
+	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_TOOLTIP("condition.table.editor.button.remove.row.tooltip"),
+	
+	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name");
 	
 	private String value;
 	

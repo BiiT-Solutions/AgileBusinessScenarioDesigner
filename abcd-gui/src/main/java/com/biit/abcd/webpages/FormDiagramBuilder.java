@@ -41,6 +41,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	public FormDiagramBuilder() {
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		diagramDao = (IDiagramDao) helper.getBean("diagramDao");
+		updateButtons(true);
 	}
 
 	private void initUpperMenu() {

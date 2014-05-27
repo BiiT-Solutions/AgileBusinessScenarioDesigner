@@ -8,7 +8,9 @@ public enum WebMap {
 	
 	TREE_DESIGNER(TreeDesigner.class),
 	
-	DIAGRAM_BUILDER(FormDiagramBuilder.class);
+	DIAGRAM_BUILDER(FormDiagramBuilder.class),
+	
+	DECISSION_TABLE_EDITOR(DecisionTableEditor.class);
 
 	private static WebMap loginPage = WebMap.LOGIN_PAGE;
 

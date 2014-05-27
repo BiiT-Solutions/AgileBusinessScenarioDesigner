@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.treetable;
+package com.biit.abcd.webpages.components;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import com.vaadin.ui.TreeTable;
 public class FormTreeTable extends TreeTable {
 	private static final long serialVersionUID = -6949123334668973540L;
 
-	enum FormTreeTableProperties {
+	protected enum FormTreeTableProperties {
 		ELEMENT_NAME, RULES
 	};
 

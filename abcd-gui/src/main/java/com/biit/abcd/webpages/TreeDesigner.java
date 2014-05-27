@@ -21,9 +21,9 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.FormTreeTable;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
-import com.biit.abcd.webpages.elements.treetable.FormTreeTable;
 import com.biit.abcd.webpages.elements.treetable.TreeTablePropertiesComponent;
 import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -45,6 +45,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public TreeDesigner() {
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
+		updateButtons(true);
 	}
 
 	@Override

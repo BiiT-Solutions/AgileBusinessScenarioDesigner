@@ -27,7 +27,6 @@ public class FormManager extends FormWebPageComponent {
 
 	public FormManager() {
 		super();
-		updateButtons(false);
 
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");

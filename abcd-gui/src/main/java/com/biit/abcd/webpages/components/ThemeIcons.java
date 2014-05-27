@@ -70,7 +70,17 @@ public enum ThemeIcons {
 	
 	MOVE_UP("appbar.chevron.up.svg"),
 	
-	MOVE_DOWN("appbar.chevron.down.svg");
+	MOVE_DOWN("appbar.chevron.down.svg"),
+	
+	PAPER("appbar.paper.svg"),
+	
+	ADD_COLUMN("appbar.table.add.svg"),
+	
+	REMOVE_COLUMN("appbar.table.delete.svg"),
+	
+	ADD_ROW("appbar.table.add.row.svg"),
+	
+	REMOVE_ROW("appbar.table.delete.row.svg");
 	
 	private String value;
 

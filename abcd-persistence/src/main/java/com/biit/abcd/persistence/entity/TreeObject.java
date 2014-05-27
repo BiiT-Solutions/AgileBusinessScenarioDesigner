@@ -65,8 +65,9 @@ public abstract class TreeObject {
 	}
 
 	/**
-	 * Gets all children of the treeObject. These annotations are in the method because must been overwritten by the
-	 * Form object. All objects but forms must be FetchType.EAGER.
+	 * Gets all children of the treeObject. These annotations are in the method
+	 * because must been overwritten by the Form object. All objects but forms
+	 * must be FetchType.EAGER.
 	 */
 	public List<TreeObject> getChildren() {
 		if (children == null) {
@@ -398,5 +399,29 @@ public abstract class TreeObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Function to return the list of questions that a TreeObject contains.
+	 * 
+	 * @return
+	 */
+	public List<Question> getQuestions() {
+		List<Question> questions = new ArrayList<Question>();
+		if (this instanceof Question) {
+			questions.add((Question) this);
+			return questions;
+		}
+		for (TreeObject child : getChildren()) {
+			if (child instanceof Question) {
+				questions.add((Question) child);
+				continue;
+			}
+			if (child instanceof Category || child instanceof Group) {
+				questions.addAll(child.getQuestions());
+				continue;
+			}
+		}
+		return questions;
 	}
 }
