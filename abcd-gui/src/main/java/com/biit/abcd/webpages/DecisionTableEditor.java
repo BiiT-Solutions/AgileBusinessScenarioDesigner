@@ -57,7 +57,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 		});
 
-		decisionTableEditorUpperMenu.addAddConditionButtonClickListener(new ClickListener() {
+		decisionTableEditorUpperMenu.addNewConditionButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 2278600295153278706L;
 
 			@Override

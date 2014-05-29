@@ -10,6 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
+	private Form form;
 
 	public DroolsRuleEditor() {
 		super();
@@ -30,14 +31,12 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		// TODO Auto-generated method stub
-
+		this.form = form;
 	}
 
 	@Override
 	public Form getForm() {
-		// TODO Auto-generated method stub
-		return null;
+		return form;
 	}
 
 	@Override

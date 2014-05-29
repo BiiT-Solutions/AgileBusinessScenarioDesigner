@@ -38,6 +38,14 @@ public enum ThemeIcons {
 
 	COLLAPSE("appbar.section.collapse.svg"),
 	
+	LEFT_MENU_COLLAPSE("appbar.layout.collapse.left.variant.svg"),
+	
+	LEFT_MENU_EXPAND("appbar.layout.expand.right.variant.svg"),
+	
+	RIGHT_MENU_COLLAPSE("appbar.layout.collapse.right.variant.svg"),
+	
+	RIGHT_MENU_EXPAND("appbar.layout.expand.left.variant.svg"),
+	
 	FORM_MANAGER_PAGE("appbar.column.one.svg"),
 	
 	FORM_MANAGER_ADD_FORM("appbar.form.add.svg"),

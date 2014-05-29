@@ -42,18 +42,17 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 
 		VerticalLayout testLayout = new VerticalLayout();
 		testLayout.setHeight("100%");
-		addMenuTab(testLayout, ThemeIcons.COLLAPSE, ThemeIcons.EXPAND,
-				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP);
+		buttonMenu.addComponent(createMenuTab(testLayout, ThemeIcons.LEFT_MENU_COLLAPSE, ThemeIcons.LEFT_MENU_EXPAND,
+				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP));
 
 		setSizeFull();
 		setCompositionRoot(rootLayout);
 	}
 
-	public void addMenuTab(Component component, ThemeIcons enabledIcon, ThemeIcons disabledIcon,
+	public CollapseButtonTab createMenuTab(Component component, ThemeIcons enabledIcon, ThemeIcons disabledIcon,
 			LanguageCodes enabledTooltip, LanguageCodes disabledTooltip) {
 		final CollapseButtonTab collapseButtonTab = new CollapseButtonTab(component, enabledIcon, disabledIcon,
 				enabledTooltip, disabledTooltip);
-		buttonMenu.addComponent(collapseButtonTab);
 		collapseButtonTab.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -754510955831311296L;
 
@@ -70,6 +69,8 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 				collapseButtonTab.setValue(!collapseButtonTab.isValue());
 			}
 		});
+		
+		return collapseButtonTab;
 	}
 
 	public void setContent(Component component) {
@@ -84,7 +85,6 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		rootLayout.addComponent(buttonMenu);
 		rootLayout.addComponent(content);
 		rootLayout.markAsDirty();
-
 	}
 
 	private class CollapseButtonTab extends IconButton {

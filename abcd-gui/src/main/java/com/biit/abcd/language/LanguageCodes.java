@@ -68,7 +68,8 @@ public enum LanguageCodes {
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
-	BOTTOM_MENU_CALCULUS_EDITOR("page.bottommenu.calculusEditor"),
+	BOTTOM_MENU_DROOLS_TABLE_EDITOR("page.bottommenu.droolsTableEditor"),
+	BOTTOM_MENU_EXPRESSION_EDITOR("page.bottommenu.calculusEditor"),
 	
 	TOP_MENU_SETTINGS_TOOLTIP("page.topmenu.settings.tooltip"),
 	

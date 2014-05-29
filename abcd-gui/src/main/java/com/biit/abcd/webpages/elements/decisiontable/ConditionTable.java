@@ -58,43 +58,45 @@ public class ConditionTable extends Table {
 		@Override
 		public void itemClick(ItemClickEvent event) {
 			Table table = (Table) event.getComponent();
-			if (event.isShiftKey()) {
-				return;
-			}
-			if (event.isCtrlKey()) {
-				return;
-			}
-			// Simple selection mode.
-			// Clean selection first
-			cleanSelection(table);
+			if (table != null) {
+				if (event.isShiftKey()) {
+					return;
+				}
+				if (event.isCtrlKey()) {
+					return;
+				}
+				// Simple selection mode.
+				// Clean selection first
+				cleanSelection(table);
 
-			if (!event.isDoubleClick()) {
-				// Simple click (Select cell)
-				selectedItems.add(event.getItemId());
-				selectedProperties.add(event.getPropertyId());
-			} else {
-				// Double click (Select row)
-				selectedItems.add(event.getItemId());
-				selectedProperties.addAll(table.getContainerPropertyIds());
+				if (!event.isDoubleClick()) {
+					// Simple click (Select cell)
+					selectedItems.add(event.getItemId());
+					selectedProperties.add(event.getPropertyId());
+				} else {
+					// Double click (Select row)
+					selectedItems.add(event.getItemId());
+					selectedProperties.addAll(table.getContainerPropertyIds());
+				}
+				// Paint changes
+				paintSelection(table);
 			}
-			//Paint changes
-			paintSelection(table);
 		}
 
 		public void cleanSelection(Table table) {
-			for(Object itemId: selectedItems){
-				for(Object propertyId: selectedProperties){
-					((EditCellComponent)table.getItem(itemId).getItemProperty(propertyId).getValue()).select(false);
+			for (Object itemId : selectedItems) {
+				for (Object propertyId : selectedProperties) {
+					((EditCellComponent) table.getItem(itemId).getItemProperty(propertyId).getValue()).select(false);
 				}
 			}
 			selectedItems.clear();
 			selectedProperties.clear();
 		}
-		
-		public void paintSelection(Table table){
-			for(Object itemId: selectedItems){
-				for(Object propertyId: selectedProperties){
-					((EditCellComponent)table.getItem(itemId).getItemProperty(propertyId).getValue()).select(true);
+
+		public void paintSelection(Table table) {
+			for (Object itemId : selectedItems) {
+				for (Object propertyId : selectedProperties) {
+					((EditCellComponent) table.getItem(itemId).getItemProperty(propertyId).getValue()).select(true);
 				}
 			}
 			table.refreshRowCache();
@@ -109,11 +111,11 @@ public class ConditionTable extends Table {
 
 		@Override
 		public String getStyle(Table source, Object itemId, Object propertyId) {
-			if(propertyId==null||itemId==null){
-				//Yes this function is called with itemId and property null.
+			if (propertyId == null || itemId == null) {
+				// Yes this function is called with itemId and property null.
 				return "";
 			}
-			
+
 			if (selectedItems.contains(itemId) && selectedProperties.contains(propertyId)) {
 				return "selected";
 			}
@@ -173,12 +175,12 @@ public class ConditionTable extends Table {
 						mouseEvent.setRelativeX(event.getRelativeX());
 						mouseEvent.setRelativeY(event.getRelativeY());
 						mouseEvent.setShiftKey(event.isShiftKey());
-						if(event.isDoubleClick()){
-							//Double click
+						if (event.isDoubleClick()) {
+							// Double click
 							mouseEvent.setType(0x00002);
-						}else{
+						} else {
 							mouseEvent.setType(0x00001);
-						}						
+						}
 						cellRowSelector.itemClick(new ItemClickEvent(thisTable, item, itemId, propertyId, mouseEvent));
 					}
 				});
@@ -187,15 +189,15 @@ public class ConditionTable extends Table {
 			}
 		}
 	}
-	
-	public class CellEditButtonClickListener implements ClickListener{
+
+	public class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-		
+
 			UI.getCurrent().addWindow(new AcceptCancelWindow(new Label("kiei")));
-			
+
 		}
 	}
 

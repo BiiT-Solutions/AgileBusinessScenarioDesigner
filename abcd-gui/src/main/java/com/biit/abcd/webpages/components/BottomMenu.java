@@ -10,8 +10,8 @@ import com.vaadin.ui.UI;
 
 public abstract class BottomMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 6149788828670200504L;
-	private IconButton formManagerButton, treeDesignerButton, diagramBuilderButton, calcEditorButton,
-			droolsEditorButton, decissionTableButton;
+	private IconButton formManagerButton, treeDesignerButton, diagramBuilderButton, expressionsEditorButton,
+			ruleEditorButton, decissionTableButton;
 
 	protected BottomMenu() {
 		super();
@@ -63,20 +63,20 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(diagramBuilderButton);
 
 		// Add calculus expresion editor.
-		calcEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_CALCULUS_EDITOR, ThemeIcons.CALCULATOR,
-				LanguageCodes.BOTTOM_MENU_CALCULUS_EDITOR, IconSize.BIG, new ClickListener() {
+		expressionsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, ThemeIcons.CALCULATOR,
+				LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						changeView(WebMap.CALCULUS_EDITOR);
+						changeView(WebMap.EXPRESSION_EDITOR);
 					}
 				});
-		calcEditorButton.setEnabled(false);
-		addIconButton(calcEditorButton);
+		expressionsEditorButton.setEnabled(false);
+		addIconButton(expressionsEditorButton);
 
 		// Add Drools Editor button.
-		droolsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
+		ruleEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
 				ThemeIcons.DROOLS_RULE_EDITOR_PAGE, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG,
 				new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
@@ -86,11 +86,11 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 						changeView(WebMap.DROOLS_RULE_EDITOR);
 					}
 				});
-		droolsEditorButton.setEnabled(false);
-		addIconButton(droolsEditorButton);
+		ruleEditorButton.setEnabled(false);
+		addIconButton(ruleEditorButton);
 
-		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, ThemeIcons.PAPER,
-				LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG, new ClickListener() {
+		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcons.PAPER,
+				LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -2494460723270342409L;
 
 					@Override
@@ -121,11 +121,11 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		if (diagramBuilderButton != null) {
 			diagramBuilderButton.setEnabled(enableFormButtons);
 		}
-		if (calcEditorButton != null) {
-			calcEditorButton.setEnabled(enableFormButtons);
+		if (expressionsEditorButton != null) {
+			expressionsEditorButton.setEnabled(enableFormButtons);
 		}
-		if (droolsEditorButton != null) {
-			droolsEditorButton.setEnabled(enableFormButtons);
+		if (ruleEditorButton != null) {
+			ruleEditorButton.setEnabled(enableFormButtons);
 		}
 		if (decissionTableButton != null) {
 			decissionTableButton.setEnabled(enableFormButtons);
