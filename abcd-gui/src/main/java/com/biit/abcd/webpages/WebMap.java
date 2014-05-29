@@ -10,7 +10,11 @@ public enum WebMap {
 	
 	DIAGRAM_BUILDER(FormDiagramBuilder.class),
 	
-	DECISSION_TABLE_EDITOR(DecisionTableEditor.class);
+	DECISSION_TABLE_EDITOR(DecisionTableEditor.class), 
+	
+	CALCULUS_EDITOR(CalculusEditor.class),
+	
+	DROOLS_RULE_EDITOR(DroolsRuleEditor.class);
 
 	private static WebMap loginPage = WebMap.LOGIN_PAGE;
 

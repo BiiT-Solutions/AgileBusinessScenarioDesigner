@@ -10,7 +10,8 @@ import com.vaadin.ui.UI;
 
 public abstract class BottomMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 6149788828670200504L;
-	private IconButton formManagerButton, treeDesignerButton, diagramBuilderButton, droolsEditorButton, decissionTableButton;
+	private IconButton formManagerButton, treeDesignerButton, diagramBuilderButton, calcEditorButton,
+			droolsEditorButton, decissionTableButton;
 
 	protected BottomMenu() {
 		super();
@@ -61,6 +62,19 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		diagramBuilderButton.setEnabled(false);
 		addIconButton(diagramBuilderButton);
 
+		// Add calculus expresion editor.
+		calcEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_CALCULUS_EDITOR, ThemeIcons.CALCULATOR,
+				LanguageCodes.BOTTOM_MENU_CALCULUS_EDITOR, IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = 8212364503178436528L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						changeView(WebMap.CALCULUS_EDITOR);
+					}
+				});
+		calcEditorButton.setEnabled(false);
+		addIconButton(calcEditorButton);
+
 		// Add Drools Editor button.
 		droolsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
 				ThemeIcons.DROOLS_RULE_EDITOR_PAGE, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG,
@@ -69,15 +83,14 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						changeView(WebMap.DROOLS_RULE_EDITOR);
 					}
 				});
 		droolsEditorButton.setEnabled(false);
 		addIconButton(droolsEditorButton);
 
-		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
-				ThemeIcons.PAPER, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG,
-				new ClickListener() {
+		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, ThemeIcons.PAPER,
+				LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
 					@Override
@@ -98,6 +111,7 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 	}
 
 	public void updateButtons(boolean enableFormButtons) {
+
 		if (formManagerButton != null) {
 			formManagerButton.setEnabled(enableFormButtons);
 		}
@@ -107,10 +121,13 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		if (diagramBuilderButton != null) {
 			diagramBuilderButton.setEnabled(enableFormButtons);
 		}
-		if (droolsEditorButton != null) {
-
+		if (calcEditorButton != null) {
+			calcEditorButton.setEnabled(enableFormButtons);
 		}
-		if (decissionTableButton!=null) {
+		if (droolsEditorButton != null) {
+			droolsEditorButton.setEnabled(enableFormButtons);
+		}
+		if (decissionTableButton != null) {
 			decissionTableButton.setEnabled(enableFormButtons);
 		}
 	}

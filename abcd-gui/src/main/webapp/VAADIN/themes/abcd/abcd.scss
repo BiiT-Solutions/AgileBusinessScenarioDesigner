@@ -569,6 +569,27 @@ $open-sans-pathPrefix: "./fonts/";
 		color: #fff;
 		text-shadow: #3b5a7a 0 1px 0;
 	}
+
+	/* Formula editor*/
+	.v-formula-layout {
+		background-color: #f1f2f3;
+		border: #B4B4B4;
+		border-style: solid;
+		border-width: 2px;
+	}
 	
+	.v-formula-port .v-formula-port-layout {
+		border: black;
+		border-style: dashed;
+		border-width: 1px;
+	}
+	
+	.v-formula-port.v-selected .v-formula-port-layout {
+		background-color: #FEFEEE;
+	}
+	
+	.v-formula-port-layout, .v-formulaExpressionComponent-layout {
+		padding: 0px 0px 0px 0px !important;
+	}
 	
 }

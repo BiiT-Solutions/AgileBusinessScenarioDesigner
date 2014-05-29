@@ -82,7 +82,9 @@ public enum ThemeIcons {
 	
 	ADD_ROW("appbar.table.add.row.svg"),
 	
-	REMOVE_ROW("appbar.table.delete.row.svg");
+	REMOVE_ROW("appbar.table.delete.row.svg"), 
+	
+	CALCULATOR("appbar.calculator.svg");
 	
 	private String value;
 

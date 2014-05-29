@@ -68,6 +68,7 @@ public enum LanguageCodes {
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
+	BOTTOM_MENU_CALCULUS_EDITOR("page.bottommenu.calculusEditor"),
 	
 	WINDOW_NEWFORM_WINDOW_TITLE("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_NAME_TEXTFIELD("windowNewForm.name.textField"),
