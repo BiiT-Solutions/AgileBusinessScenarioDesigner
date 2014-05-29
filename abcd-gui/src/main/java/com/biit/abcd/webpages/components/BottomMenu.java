@@ -63,13 +63,13 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(diagramBuilderButton);
 
 		// Add calculus expresion editor.
-		calcEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_CALCULUS_EDITOR, ThemeIcons.CALCULATOR,
-				LanguageCodes.BOTTOM_MENU_CALCULUS_EDITOR, IconSize.BIG, new ClickListener() {
+		calcEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, ThemeIcons.CALCULATOR,
+				LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						changeView(WebMap.CALCULUS_EDITOR);
+						changeView(WebMap.EXPRESSION_EDITOR);
 					}
 				});
 		calcEditorButton.setEnabled(false);
@@ -89,8 +89,8 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		droolsEditorButton.setEnabled(false);
 		addIconButton(droolsEditorButton);
 
-		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, ThemeIcons.PAPER,
-				LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG, new ClickListener() {
+		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcons.PAPER,
+				LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -2494460723270342409L;
 
 					@Override

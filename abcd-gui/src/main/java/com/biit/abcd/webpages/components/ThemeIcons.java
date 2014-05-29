@@ -38,6 +38,14 @@ public enum ThemeIcons {
 
 	COLLAPSE("appbar.section.collapse.svg"),
 	
+	LEFT_MENU_COLLAPSE("appbar.sidebar.left.collapse.svg"),
+	
+	LEFT_MENU_EXPAND("appbar.sidebar.left.expand.svg"),
+	
+	RIGHT_MENU_COLLAPSE("appbar.sidebar.right.collapse.svg"),
+	
+	RIGHT_MENU_EXPAND("appbar.sidebar.right.expand.svg"),
+	
 	FORM_MANAGER_PAGE("appbar.column.one.svg"),
 	
 	FORM_MANAGER_ADD_FORM("appbar.form.add.svg"),
@@ -86,7 +94,7 @@ public enum ThemeIcons {
 	
 	CALCULATOR("appbar.calculator.svg"), 
 	
-	SETTINGS("appbar.lines.horizontal.4.svg");
+	SETTINGS("appbar.cogs.svg");
 	
 	private String value;
 
