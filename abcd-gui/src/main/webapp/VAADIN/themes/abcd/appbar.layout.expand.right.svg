@@ -15,7 +15,7 @@
    xml:space="preserve"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="appbar.sidebar.left.expand.svg"><metadata
+   sodipodi:docname="appbar.layout.expand.right.svg"><metadata
    id="metadata10"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
@@ -28,19 +28,19 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="640"
-   inkscape:window-height="480"
+   inkscape:window-width="1920"
+   inkscape:window-height="1017"
    id="namedview6"
    showgrid="false"
-   inkscape:zoom="3.1052632"
-   inkscape:cx="38"
-   inkscape:cy="38"
-   inkscape:window-x="0"
-   inkscape:window-y="0"
-   inkscape:window-maximized="0"
+   inkscape:zoom="8.7830105"
+   inkscape:cx="-13.635255"
+   inkscape:cy="25.10504"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
    inkscape:current-layer="svg2" />
 	<path
-   d="m 39.27411,25.218291 0,25.885448 L 52.216833,38.161016 39.27411,25.218291 z m -20.708359,19.414087 0,15.531268 16.825541,0 0,-15.531268 -16.825541,0 z m -3.882817,0 -13.77825509,0 C 1.7010966,50.200208 3.5100105,55.441494 6.1389237,60.163646 l 8.5440103,0 0,-15.531268 z m 20.708358,-12.942725 -34.48661309,0 C 0.60236278,33.8032 0.44593708,35.963859 0.44593708,38.161016 l 34.94535492,0 0,-6.471363 z m 0,-11.648451 -31.1760454,0 c -0.9089287,2.080284 -1.6661298,4.242107 -2.2576123,6.471362 l 33.4336577,0 0,-6.471362 z m 0,-12.9427243 -22.618187,0 C 10.892916,9.0935987 9.1917499,11.259176 7.6953639,13.56984 l 27.8037411,0 -0.107818,-6.4713623 z m 10.35418,68.5964373 0,-27.17972 -3.882818,3.882817 0,23.296903 3.882818,0 z m 0,-47.888079 0,-27.17970736 -3.882818,1.295e-5 0,23.29687741 3.882818,3.882817 z"
+   d="m 76.241694,-0.01398151 0,76.36953051 -76.36953169,0 0,-76.36953051 76.36953169,0 z M 5.9013359,70.326376 l 64.3111841,0 0,-64.3109829 -64.3111841,-2.01e-4 0,64.3111839 z m 4.019449,-60.291534 24.1166941,0 0,56.272085 -24.1166941,0 0,-56.272085 z m 28.1361431,24.116492 17.417478,0 -7.369057,-10.048421 8.038898,-2.01e-4 10.048824,14.068071 -10.048824,14.068072 -8.038898,0 7.369057,-10.048623 -17.417478,0 0,-8.038898 z"
    id="path4"
    inkscape:connector-curvature="0"
    style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round" />
