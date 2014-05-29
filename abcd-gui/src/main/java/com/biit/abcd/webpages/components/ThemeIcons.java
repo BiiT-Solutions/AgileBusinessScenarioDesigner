@@ -86,7 +86,12 @@ public enum ThemeIcons {
 	
 	CALCULATOR("appbar.calculator.svg"), 
 	
-	SETTINGS("appbar.lines.horizontal.4.svg");
+	SETTINGS("appbar.lines.horizontal.4.svg"),
+	
+	ADD_ITEM_LIST("appbar.list.add.svg"),
+	
+	REMOVE_ITEM_LIST("appbar.list.delete.svg");
+	
 	
 	private String value;
 

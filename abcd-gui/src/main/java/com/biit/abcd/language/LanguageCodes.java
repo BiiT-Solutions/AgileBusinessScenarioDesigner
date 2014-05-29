@@ -163,7 +163,22 @@ public enum LanguageCodes {
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
 	
 	SETTINGS_GLOBAL_CONSTANTS("settings.global.constants"),
-	SETTINGS_LOG_OUT("settings.log.out");
+	SETTINGS_LOG_OUT("settings.log.out"), 
+	
+	GLOBAL_VARIABLE_NAME("global.variable.name"),
+	GLOBAL_VARIABLE_VALUE("global.variable.value"),
+	GLOBAL_VARIABLE_VALID_FROM("global.variable.valid.from"),
+	GLOBAL_VARIABLE_VALID_TO("global.variable.valid.to"),
+	
+	GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_CAPTION("global.variables.table.add.variable.caption"),
+	GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP("global.variables.table.add.variable.tooltip"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_CAPTION("global.variables.table.remove.variable.caption"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_TOOLTIP("global.variables.table.remove.variable.tooltip"),
+	GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION("global.variables.table.add.data.caption"),
+	GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP("global.variables.table.add.data.tooltip"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_CAPTION("global.variables.table.remove.data.caption"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip");
+	
 	
 	private String value;
 	
