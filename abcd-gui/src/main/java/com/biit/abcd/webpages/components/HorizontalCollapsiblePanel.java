@@ -37,7 +37,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		buttonMenu.setWidth(null);
 		buttonMenu.setHeight(null);
 		buttonMenu.setMargin(true);
-		buttonMenu.setSpacing(false);
+		buttonMenu.setSpacing(true);
 		buttonMenu.setStyleName(CLASSNAME_BUTTON_LAYOUT);
 
 		VerticalLayout testLayout = new VerticalLayout();
@@ -85,7 +85,6 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		rootLayout.addComponent(buttonMenu);
 		rootLayout.addComponent(content);
 		rootLayout.markAsDirty();
-
 	}
 
 	private class CollapseButtonTab extends IconButton {

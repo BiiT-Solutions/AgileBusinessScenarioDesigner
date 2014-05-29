@@ -9,7 +9,7 @@ import com.vaadin.ui.Button;
 public class DecisionTableEditorUpperMenu extends UpperMenu {
 
 	private static final long serialVersionUID = 1878327027307547248L;
-	private IconButton saveButton, addConditionButton, removeConditionButton, addRuleButton, removeRuleButton;
+	private IconButton saveButton, newConditionButton, deleteConditionButton, newRuleButton, deleteRuleButton;
 
 	public DecisionTableEditorUpperMenu() {
 		super();
@@ -20,20 +20,20 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 
 		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcons.SAVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
-		addConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION,
+		newConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION,
 				ThemeIcons.ADD_COLUMN, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_TOOLTIP);
-		removeConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_CAPTION,
+		deleteConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_CAPTION,
 				ThemeIcons.REMOVE_COLUMN, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_TOOLTIP);
-		addRuleButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_CAPTION, ThemeIcons.ADD_ROW,
+		newRuleButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_CAPTION, ThemeIcons.ADD_ROW,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_TOOLTIP);
-		removeRuleButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_CAPTION,
+		deleteRuleButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_CAPTION,
 				ThemeIcons.REMOVE_ROW, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_TOOLTIP);
 
 		addIconButton(saveButton);
-		addIconButton(addConditionButton);
-		addIconButton(removeConditionButton);
-		addIconButton(addRuleButton);
-		addIconButton(removeRuleButton);
+		addIconButton(newConditionButton);
+		addIconButton(deleteConditionButton);
+		addIconButton(newRuleButton);
+		addIconButton(deleteRuleButton);
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
@@ -44,36 +44,36 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		saveButton.removeClickListener(listener);
 	}
 
-	public void addAddConditionButtonClickListener(Button.ClickListener listener) {
-		addConditionButton.addClickListener(listener);
+	public void addNewConditionButtonClickListener(Button.ClickListener listener) {
+		newConditionButton.addClickListener(listener);
 	}
 
-	public void removeAddConditionClickListener(Button.ClickListener listener) {
-		addConditionButton.removeClickListener(listener);
+	public void removeNewConditionClickListener(Button.ClickListener listener) {
+		newConditionButton.removeClickListener(listener);
 	}
 
 	public void addRemoveConditionButtonClickListener(Button.ClickListener listener) {
-		removeConditionButton.addClickListener(listener);
+		deleteConditionButton.addClickListener(listener);
 	}
 
-	public void removeRemoveConditionClickListener(Button.ClickListener listener) {
-		removeConditionButton.removeClickListener(listener);
+	public void removeDeleteConditionClickListener(Button.ClickListener listener) {
+		deleteConditionButton.removeClickListener(listener);
 	}
 	
 	public void addAddRuleButtonClickListener(Button.ClickListener listener) {
-		addRuleButton.addClickListener(listener);
+		newRuleButton.addClickListener(listener);
 	}
 
 	public void removeAddRuleClickListener(Button.ClickListener listener) {
-		addRuleButton.removeClickListener(listener);
+		newRuleButton.removeClickListener(listener);
 	}
 
 	public void addRemoveRuleButtonClickListener(Button.ClickListener listener) {
-		removeRuleButton.addClickListener(listener);
+		deleteRuleButton.addClickListener(listener);
 	}
 
 	public void removeRemoveRuleClickListener(Button.ClickListener listener) {
-		removeRuleButton.removeClickListener(listener);
+		deleteRuleButton.removeClickListener(listener);
 	}
 
 }

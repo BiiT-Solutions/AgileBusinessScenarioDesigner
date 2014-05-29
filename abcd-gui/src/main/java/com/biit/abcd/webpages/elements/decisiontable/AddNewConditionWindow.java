@@ -27,7 +27,6 @@ public class AddNewConditionWindow extends AcceptCancelWindow {
 	}
 
 	public Component generateContent(Form form) {
-
 		formQuestionTable = new FormQuestionTable();
 		formQuestionTable.setForm(form);
 		formQuestionTable.setSizeFull();
