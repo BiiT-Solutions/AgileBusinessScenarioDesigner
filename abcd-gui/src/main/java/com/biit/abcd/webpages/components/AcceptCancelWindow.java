@@ -43,7 +43,7 @@ public class AcceptCancelWindow extends Window {
 
 	@Override
 	public void setContent(Component content) {
-		// NOTE Vaadin WTF. Super initialization will call this function
+		// NOTE Vaadin. Super initialization will call this function
 		// even if no content is passed.
 		this.contentComponent = content;
 		generateLayout(contentComponent);

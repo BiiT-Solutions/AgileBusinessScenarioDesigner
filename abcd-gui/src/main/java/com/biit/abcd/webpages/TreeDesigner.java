@@ -95,7 +95,7 @@ public class TreeDesigner extends FormWebPageComponent {
 		// form.
 		formTreeTable.setValue(null);
 		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
-		formTreeTable.setForm(form);
+		formTreeTable.setRootElement(form);
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
 		formTreeTable.setValue(form);
 	}
@@ -320,7 +320,7 @@ public class TreeDesigner extends FormWebPageComponent {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
 					// Refresh the GUI.
-					formTreeTable.setForm(form);
+					formTreeTable.setRootElement(form);
 					// Select the moved element
 					formTreeTable.setValue(selected);
 					return true;
@@ -346,7 +346,7 @@ public class TreeDesigner extends FormWebPageComponent {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
 					// Refresh the GUI.
-					formTreeTable.setForm(form);
+					formTreeTable.setRootElement(form);
 					// Select the moved element
 					formTreeTable.setValue(selected);
 					return true;

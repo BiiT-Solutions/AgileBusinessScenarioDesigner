@@ -184,7 +184,8 @@ public class ConditionTable extends Table {
 						cellRowSelector.itemClick(new ItemClickEvent(thisTable, item, itemId, propertyId, mouseEvent));
 					}
 				});
-				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener());
+				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((Question) propertyId,
+						(DecisionRule) itemId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 			}
 		}
@@ -192,12 +193,17 @@ public class ConditionTable extends Table {
 
 	public class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
+		private Question question;
+		private DecisionRule rule;
+
+		public CellEditButtonClickListener(Question question, DecisionRule rule) {
+			this.question = question;
+			this.rule = rule;
+		}
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-
-			UI.getCurrent().addWindow(new AcceptCancelWindow(new Label("kiei")));
-
+			new AddNewAnswerValue(question);
 		}
 	}
 

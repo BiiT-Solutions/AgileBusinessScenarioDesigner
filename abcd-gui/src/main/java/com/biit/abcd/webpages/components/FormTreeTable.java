@@ -30,6 +30,7 @@ public class FormTreeTable extends TreeTable {
 
 	public FormTreeTable() {
 		initContainerProperties();
+		setImmediate(true);
 	}
 
 	private void initContainerProperties() {
@@ -40,18 +41,17 @@ public class FormTreeTable extends TreeTable {
 		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
 	}
 
-	private void loadForm(TreeObject element, TreeObject parent) {
+	private void loadTreeObject(TreeObject element, TreeObject parent) {
 		addItem(element, parent);
 
 		List<TreeObject> children = element.getChildren();
 		for (TreeObject child : children) {
-			loadForm(child, element);
+			loadTreeObject(child, element);
 		}
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -79,8 +79,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
+	 * members.
 	 * 
 	 * @param element
 	 */
@@ -101,8 +101,8 @@ public class FormTreeTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't
-	 * be defined, then raises a {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
+	 * {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -130,12 +130,16 @@ public class FormTreeTable extends TreeTable {
 		return name;
 	}
 
-	public void setForm(Form form) {
+	public void setRootElement(TreeObject root) {
 		this.removeAllItems();
 		select(null);
-		loadForm(form, null);
-		if (form != null) {
-			setCollapsed(form, false);
+		loadTreeObject(root, null);
+		if (root != null) {
+			try {
+				setCollapsed(root, false);
+			} catch (Exception e) {
+				// Root is not inserted. Ignore error.
+			}
 		}
 	}
 

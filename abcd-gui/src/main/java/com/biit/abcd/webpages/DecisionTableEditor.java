@@ -83,7 +83,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			private static final long serialVersionUID = 4217977221393500979L;
 			@Override
 			public void buttonClick(ClickEvent event) {
-				decisionTable.removeSelectedCols();
+				decisionTable.removeSelectedColumns();
 			}
 		});
 		

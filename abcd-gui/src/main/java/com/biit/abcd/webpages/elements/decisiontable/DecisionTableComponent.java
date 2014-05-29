@@ -67,7 +67,7 @@ public class DecisionTableComponent extends CustomComponent {
 		}
 	}
 	
-	public void removeSelectedCols(){
+	public void removeSelectedColumns(){
 		for(Question question: conditionTable.getSelectedQuestions()){
 			conditionTable.removeContainerProperty(question);
 		}

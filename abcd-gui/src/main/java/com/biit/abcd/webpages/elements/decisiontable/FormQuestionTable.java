@@ -17,8 +17,7 @@ public class FormQuestionTable extends FormTreeTable {
 	public FormQuestionTable() {
 		super();
 		disabledQuestions = new ArrayList<Question>();
-		setImmediate(true);
-		// Remove innecesary properties.
+		// Remove unnecessary properties.
 		removeContainerProperty(FormTreeTableProperties.RULES);
 
 		setCellStyleGenerator(new FormQuestionTableCellGenerator());
