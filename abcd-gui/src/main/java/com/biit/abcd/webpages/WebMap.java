@@ -12,7 +12,7 @@ public enum WebMap {
 	
 	DECISSION_TABLE_EDITOR(DecisionTableEditor.class), 
 	
-	CALCULUS_EDITOR(CalculusEditor.class),
+	CALCULUS_EDITOR(ExpressionEditor.class),
 	
 	DROOLS_RULE_EDITOR(DroolsRuleEditor.class), 
 	

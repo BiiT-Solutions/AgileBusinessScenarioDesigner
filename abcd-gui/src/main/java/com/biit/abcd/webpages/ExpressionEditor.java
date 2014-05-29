@@ -9,10 +9,10 @@ import com.biit.abcd.webpages.elements.formulaeditor.FormulaEditor;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 
-public class CalculusEditor extends FormWebPageComponent {
+public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
 
-	public CalculusEditor() {
+	public ExpressionEditor() {
 		super();
 		initContent();
 	}
