@@ -42,6 +42,8 @@ public enum LanguageCodes {
 	
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
+	WARNING_SELECT_VARIABLE_TO_DELETE("waring.select.variable.to.delete"),
+	WARNING_SELECT_VARIABLE_DATA_TO_DELETE("waring.select.variable.data.to.delete"),
 	
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	
@@ -116,7 +118,6 @@ public enum LanguageCodes {
 	PROPERTIES_QUESTION_ANSWER_TYPE("properties.question.answer_type"),
 	PROPERTIES_QUESTION_ANSWER_FORMAT("properties.question.answer_format"),
 	
-	
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_USER_NOACCESS("error.user.noaccess"),
 	ERROR_ACCESS("error.access"),
@@ -164,7 +165,22 @@ public enum LanguageCodes {
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
 	
 	SETTINGS_GLOBAL_CONSTANTS("settings.global.constants"),
-	SETTINGS_LOG_OUT("settings.log.out");
+	SETTINGS_LOG_OUT("settings.log.out"), 
+	
+	GLOBAL_VARIABLE_NAME("global.variable.name"),
+	GLOBAL_VARIABLE_VALUE("global.variable.value"),
+	GLOBAL_VARIABLE_VALID_FROM("global.variable.valid.from"),
+	GLOBAL_VARIABLE_VALID_TO("global.variable.valid.to"),
+	
+	GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_CAPTION("global.variables.table.add.variable.caption"),
+	GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP("global.variables.table.add.variable.tooltip"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_CAPTION("global.variables.table.remove.variable.caption"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_TOOLTIP("global.variables.table.remove.variable.tooltip"),
+	GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION("global.variables.table.add.data.caption"),
+	GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP("global.variables.table.add.data.tooltip"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_CAPTION("global.variables.table.remove.data.caption"),
+	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip");
+	
 	
 	private String value;
 	
