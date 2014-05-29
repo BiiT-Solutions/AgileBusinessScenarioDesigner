@@ -10,11 +10,17 @@ public class HorizontalButtonGroup extends CustomComponent {
 
 	private static final long serialVersionUID = 4862986305501412362L;
 	private static String CLASSNAME = "v-horizontal-button-group";
-	private HorizontalLayout rootLayout;
+	protected HorizontalLayout rootLayout;
 	private String size;
 	private boolean contractIcons;
 
 	public HorizontalButtonGroup() {
+		super();
+		initHorizontalButtonGroup();
+		setIconSizeWithAttachListener();
+	}
+	
+	protected void initHorizontalButtonGroup(){
 		setStyleName(CLASSNAME);
 
 		rootLayout = new HorizontalLayout();
@@ -24,7 +30,9 @@ public class HorizontalButtonGroup extends CustomComponent {
 		setSizeFull();
 
 		contractIcons = false;
-
+	}
+	
+	protected void setIconSizeWithAttachListener(){
 		addAttachListener(new AttachListener() {
 			private static final long serialVersionUID = -2513076537414804598L;
 
@@ -43,11 +51,13 @@ public class HorizontalButtonGroup extends CustomComponent {
 	public void setContractIcons(boolean contractIcons) {
 		this.contractIcons = contractIcons;
 		this.size = null;
+		rootLayout.setWidth(null);
 	}
 	
 	public void setContractIcons(boolean contractIcons, String size) {
 		this.contractIcons = contractIcons;
 		this.size = size;
+		rootLayout.setWidth(null);
 	}
 
 	private void setIconSize() {

@@ -14,7 +14,9 @@ public enum WebMap {
 	
 	CALCULUS_EDITOR(CalculusEditor.class),
 	
-	DROOLS_RULE_EDITOR(DroolsRuleEditor.class);
+	DROOLS_RULE_EDITOR(DroolsRuleEditor.class), 
+	
+	GLOBAL_VARIABLES(GlobalVariables.class);
 
 	private static WebMap loginPage = WebMap.LOGIN_PAGE;
 

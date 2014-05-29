@@ -209,6 +209,11 @@ $open-sans-pathPrefix: "./fonts/";
 		display: block;
 	}
 	
+	.v-horizontal-button-group-wrapper {
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+	
 	.upper-menu.v-horizontal-button-group .v-icon {
 		width: 32px !important;
 		height: 32px !important;

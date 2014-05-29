@@ -91,7 +91,7 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 
 		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, ThemeIcons.PAPER,
 				LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG, new ClickListener() {
-					private static final long serialVersionUID = 8212364503178436528L;
+					private static final long serialVersionUID = -2494460723270342409L;
 
 					@Override
 					public void buttonClick(ClickEvent event) {

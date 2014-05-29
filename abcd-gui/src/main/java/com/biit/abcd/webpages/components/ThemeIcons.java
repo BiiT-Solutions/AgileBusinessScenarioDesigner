@@ -84,7 +84,9 @@ public enum ThemeIcons {
 	
 	REMOVE_ROW("appbar.table.delete.row.svg"), 
 	
-	CALCULATOR("appbar.calculator.svg");
+	CALCULATOR("appbar.calculator.svg"), 
+	
+	SETTINGS("appbar.lines.horizontal.4.svg");
 	
 	private String value;
 

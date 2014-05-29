@@ -70,6 +70,8 @@ public enum LanguageCodes {
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	BOTTOM_MENU_CALCULUS_EDITOR("page.bottommenu.calculusEditor"),
 	
+	TOP_MENU_SETTINGS_TOOLTIP("page.topmenu.settings.tooltip"),
+	
 	WINDOW_NEWFORM_WINDOW_TITLE("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_NAME_TEXTFIELD("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
@@ -158,7 +160,10 @@ public enum LanguageCodes {
 	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_CAPTION("condition.table.editor.button.remove.row.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_TOOLTIP("condition.table.editor.button.remove.row.tooltip"),
 	
-	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name");
+	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
+	
+	SETTINGS_GLOBAL_CONSTANTS("settings.global.constants"),
+	SETTINGS_LOG_OUT("settings.log.out");
 	
 	private String value;
 	
