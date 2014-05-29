@@ -13,11 +13,13 @@ public class VariableDataTable extends Table {
 	public enum Properties {
 		VARIABLE_VALUE, VARIABLE_TYPE, VARIABLE_VALID_FROM, VARIABLE_VALID_TO
 	};
-	
+
 	private GlobalVariable globalVariable;
 
 	public VariableDataTable() {
 		super();
+		setImmediate(true);
+		setSelectable(true);
 		addContainerProperty(Properties.VARIABLE_VALUE, String.class, "",
 				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE), null, Align.CENTER);
 		addContainerProperty(Properties.VARIABLE_VALID_FROM, String.class, "",
@@ -25,19 +27,23 @@ public class VariableDataTable extends Table {
 		addContainerProperty(Properties.VARIABLE_VALID_TO, String.class, "",
 				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_TO), null, Align.CENTER);
 	}
-	
-	public void setGlobalVariable(GlobalVariable variable){
-		for (VariableData data : variable.getData()) {
-			addItem(data);
-		}
+
+	public void setVariable(GlobalVariable variable) {
 		globalVariable = variable;
+		setValue(null);
+		removeAllItems();
+		if (variable != null) {
+			for (VariableData data : variable.getData()) {
+				addItem(data);
+			}
+		}
 	}
 
-	public void removeSelectedItem(){
+	public void removeSelectedItem() {
 		VariableData data = (VariableData) getValue();
 		removeItem(data);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Item addItem(VariableData variableData) {
 		Item item = super.addItem(variableData);
@@ -46,24 +52,24 @@ public class VariableDataTable extends Table {
 		item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(variableData.getValidTo());
 		return item;
 	}
-	
+
 	public boolean removeItem(VariableData variableData) {
-		globalVariable.getData().remove(variableData);	
+		globalVariable.getData().remove(variableData);
 		return super.removeItem(variableData);
 	}
-	
+
 	@Override
-	public Item addItem(Object itemId){
-		if(itemId instanceof VariableData){
-			return addItem((VariableData)itemId);
+	public Item addItem(Object itemId) {
+		if (itemId instanceof VariableData) {
+			return addItem((VariableData) itemId);
 		}
 		return null;
 	}
-	
+
 	@Override
-	public boolean removeItem(Object itemId){
-		if(itemId instanceof VariableData){
-			return removeItem((VariableData)itemId);
+	public boolean removeItem(Object itemId) {
+		if (itemId instanceof VariableData) {
+			return removeItem((VariableData) itemId);
 		}
 		return false;
 	}

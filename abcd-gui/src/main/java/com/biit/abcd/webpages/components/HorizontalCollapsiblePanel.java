@@ -69,7 +69,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 				collapseButtonTab.setValue(!collapseButtonTab.isValue());
 			}
 		});
-		
+
 		return collapseButtonTab;
 	}
 

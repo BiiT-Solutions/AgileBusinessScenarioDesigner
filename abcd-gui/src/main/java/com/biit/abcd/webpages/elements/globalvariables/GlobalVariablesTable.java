@@ -15,6 +15,8 @@ public class GlobalVariablesTable extends Table {
 
 	public GlobalVariablesTable() {
 		super();
+		setImmediate(true);
+		setSelectable(true);
 		addContainerProperty(Properties.VARIABLE_NAME, String.class, "", ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_NAME), null, Align.CENTER);
 	}
 	

@@ -42,6 +42,8 @@ public enum LanguageCodes {
 	
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
+	WARNING_SELECT_VARIABLE_TO_DELETE("waring.select.variable.to.delete"),
+	WARNING_SELECT_VARIABLE_DATA_TO_DELETE("waring.select.variable.data.to.delete"),
 	
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	
@@ -115,7 +117,6 @@ public enum LanguageCodes {
 	PROPERTIES_TECHNICAL_NAME("properties.technicalName"), 
 	PROPERTIES_QUESTION_ANSWER_TYPE("properties.question.answer_type"),
 	PROPERTIES_QUESTION_ANSWER_FORMAT("properties.question.answer_format"),
-	
 	
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_USER_NOACCESS("error.user.noaccess"),
