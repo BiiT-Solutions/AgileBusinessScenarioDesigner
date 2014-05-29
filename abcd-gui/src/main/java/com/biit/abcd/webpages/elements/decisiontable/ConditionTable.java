@@ -203,7 +203,7 @@ public class ConditionTable extends Table {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			new AddNewAnswerValue(question);
+			new AddNewAnswerValue(question).showCentered();
 		}
 	}
 
