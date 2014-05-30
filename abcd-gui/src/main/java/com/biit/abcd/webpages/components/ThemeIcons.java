@@ -98,7 +98,9 @@ public enum ThemeIcons {
 	
 	ADD_ITEM_LIST("appbar.list.add.svg"),
 	
-	REMOVE_ITEM_LIST("appbar.list.delete.svg");
+	REMOVE_ITEM_LIST("appbar.list.delete.svg"),
+	
+	RULE_EDITOR_ADD_QUESTION("appbar.input.question.svg");
 	
 	
 	private String value;
