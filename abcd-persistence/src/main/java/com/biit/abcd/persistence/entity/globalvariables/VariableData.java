@@ -1,6 +1,6 @@
 package com.biit.abcd.persistence.entity.globalvariables;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 public class VariableData {
 
