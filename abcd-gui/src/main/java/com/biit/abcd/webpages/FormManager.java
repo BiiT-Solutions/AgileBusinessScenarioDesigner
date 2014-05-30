@@ -33,7 +33,7 @@ public class FormManager extends FormWebPageComponent {
 	}
 
 	@Override
-	public void securedEnter(ViewChangeEvent event) {
+	protected void initContent() {
 		this.upperMenu = createUpperMenu();
 		setUpperMenu(upperMenu);
 
@@ -41,9 +41,9 @@ public class FormManager extends FormWebPageComponent {
 		VerticalLayout rootLayout = new VerticalLayout(formTable);
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(true);
-		getWorkingAreaLayout().addComponent(rootLayout);
 		formTable.selectLastUsedForm();
 		updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
+		getWorkingAreaLayout().addComponent(rootLayout);
 	}
 
 	private FormsVersionsTreeTable createTreeTable() {

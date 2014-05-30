@@ -49,7 +49,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	}
 
 	@Override
-	public void securedEnter(ViewChangeEvent event) {
+	protected void initContent() {
 		this.upperMenu = createUpperMenu();
 		setUpperMenu(upperMenu);
 
@@ -387,4 +387,5 @@ public class TreeDesigner extends FormWebPageComponent {
 			updatePropertiesComponent(formTreeTable.getValue());
 		}
 	}
+
 }

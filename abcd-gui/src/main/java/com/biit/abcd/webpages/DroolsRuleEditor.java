@@ -17,7 +17,8 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		initContent();
 	}
 
-	private void initContent() {
+	@Override
+	protected void initContent() {
 		updateButtons(true);
 
 		VerticalLayout rootLayout = new VerticalLayout();
@@ -26,7 +27,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		// rootLayout.addComponent();
 
 		getWorkingAreaLayout().addComponent(rootLayout);
-
 	}
 
 	@Override
@@ -37,11 +37,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	@Override
 	public Form getForm() {
 		return form;
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-
 	}
 
 	@Override

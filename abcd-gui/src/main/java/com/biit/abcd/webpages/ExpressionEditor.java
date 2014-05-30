@@ -17,7 +17,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 		initContent();
 	}
 
-	private void initContent() {
+	@Override
+	protected void initContent() {
 		updateButtons(true);
 
 		VerticalLayout rootLayout = new VerticalLayout();
@@ -39,11 +40,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 	public Form getForm() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-
 	}
 
 	@Override

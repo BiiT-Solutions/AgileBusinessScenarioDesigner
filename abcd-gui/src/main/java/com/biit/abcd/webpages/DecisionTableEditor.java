@@ -6,9 +6,9 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableComponent;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
@@ -26,10 +26,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 	public DecisionTableEditor() {
 		super();
-		initContent();
 	}
 
-	private void initContent() {
+	@Override
+	protected void initContent() {
 		updateButtons(true);
 
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
@@ -67,10 +67,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 				addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						Question selectedQuestion = ((AddNewConditionWindow)window).getSelectedQuestion();
-						((AddNewConditionWindow)window).disableQuestion(selectedQuestion);
+						Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
+						((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
 						decisionTable.addColumn(selectedQuestion);
-						if(decisionTable.getColumns().size() == 1 && decisionTable.getNumberOfRules()==0){
+						if (decisionTable.getColumns().size() == 1 && decisionTable.getNumberOfRules() == 0) {
 							decisionTable.addRow();
 						}
 					}
@@ -81,22 +81,25 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 		decisionTableEditorUpperMenu.addRemoveConditionButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 4217977221393500979L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				decisionTable.removeSelectedColumns();
 			}
 		});
-		
+
 		decisionTableEditorUpperMenu.addNewRuleButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 9216527027244131593L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				decisionTable.addRow();
 			}
 		});
-		
+
 		decisionTableEditorUpperMenu.addRemoveRuleButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = -8046509925666397195L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				decisionTable.removeSelectedRows();
@@ -114,11 +117,6 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	@Override
 	public Form getForm() {
 		return form;
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-
 	}
 
 	@Override

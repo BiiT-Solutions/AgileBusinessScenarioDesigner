@@ -30,6 +30,11 @@ public class GlobalVariables extends FormWebPageComponent {
 	private VariableDataTable variableData;
 
 	public GlobalVariables() {
+
+	}
+
+	@Override
+	protected void initContent() {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(true);
@@ -90,7 +95,8 @@ public class GlobalVariables extends FormWebPageComponent {
 				if (selectedVariable != null) {
 					variableTable.removeItem(selectedVariable);
 				} else {
-					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.WARNING_SELECT_VARIABLE_TO_DELETE);
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_SELECT_VARIABLE_TO_DELETE);
 				}
 			}
 		});
@@ -112,17 +118,12 @@ public class GlobalVariables extends FormWebPageComponent {
 				if (selectedVariable != null) {
 					variableData.removeItem(selectedVariable);
 				} else {
-					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.WARNING_SELECT_VARIABLE_DATA_TO_DELETE);
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_SELECT_VARIABLE_DATA_TO_DELETE);
 				}
 			}
 		});
 		return upperMenu;
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
