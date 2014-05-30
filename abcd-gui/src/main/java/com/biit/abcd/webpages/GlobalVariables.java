@@ -6,12 +6,14 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.components.UpperMenu;
+import com.biit.abcd.webpages.components.VariableDataWindow;
+import com.biit.abcd.webpages.components.VariableWindow;
 import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesTable;
 import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataTable;
@@ -27,7 +29,7 @@ public class GlobalVariables extends FormWebPageComponent {
 
 	private HorizontalLayout rootLayout;
 	private GlobalVariablesTable variableTable;
-	private VariableDataTable variableData;
+	private VariableDataTable variableDataTable;
 
 	public GlobalVariables() {
 		rootLayout = new HorizontalLayout();
@@ -36,13 +38,13 @@ public class GlobalVariables extends FormWebPageComponent {
 		rootLayout.setSpacing(true);
 
 		variableTable = new GlobalVariablesTable();
-		variableData = new VariableDataTable();
+		variableDataTable = new VariableDataTable();
 
 		variableTable.setSizeFull();
-		variableData.setSizeFull();
+		variableDataTable.setSizeFull();
 
 		rootLayout.addComponent(variableTable);
-		rootLayout.addComponent(variableData);
+		rootLayout.addComponent(variableDataTable);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 		setUpperMenu(createUpperMenu());
@@ -52,7 +54,7 @@ public class GlobalVariables extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				variableData.setVariable((GlobalVariable) variableTable.getValue());
+				variableDataTable.setVariable((GlobalVariable) variableTable.getValue());
 			}
 		});
 	}
@@ -64,16 +66,14 @@ public class GlobalVariables extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				StringInputWindow window = new StringInputWindow();
+				VariableWindow window = new VariableWindow();
 				window.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						String value = ((StringInputWindow) window).getValue();
+						GlobalVariable value = ((VariableWindow) window).getValue();
 						if (value != null) {
-							GlobalVariable globalVariable = new GlobalVariable();
-							globalVariable.setName(value);
-							variableTable.addItem(globalVariable);
-							variableTable.setValue(globalVariable);
+							variableTable.addItem(value);
+							variableTable.setValue(value);
 						}
 						window.close();
 					}
@@ -90,7 +90,8 @@ public class GlobalVariables extends FormWebPageComponent {
 				if (selectedVariable != null) {
 					variableTable.removeItem(selectedVariable);
 				} else {
-					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.WARNING_SELECT_VARIABLE_TO_DELETE);
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_SELECT_VARIABLE_TO_DELETE);
 				}
 			}
 		});
@@ -99,8 +100,20 @@ public class GlobalVariables extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-
+				final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
+				
+				VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat());
+				variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						VariableData variableData = ((VariableDataWindow)window).getValue();
+						if(variableData!=null){
+							variableDataTable.addItem((VariableData)variableData);
+						}
+						window.close();
+					}
+				});
+				variableDataWindow.showCentered();
 			}
 		});
 		upperMenu.addRemoveValueButtonClickListener(new ClickListener() {
@@ -108,11 +121,12 @@ public class GlobalVariables extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Object selectedVariable = variableData.getValue();
+				Object selectedVariable = variableDataTable.getValue();
 				if (selectedVariable != null) {
-					variableData.removeItem(selectedVariable);
+					variableDataTable.removeItem(selectedVariable);
 				} else {
-					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.WARNING_SELECT_VARIABLE_DATA_TO_DELETE);
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_SELECT_VARIABLE_DATA_TO_DELETE);
 				}
 			}
 		});

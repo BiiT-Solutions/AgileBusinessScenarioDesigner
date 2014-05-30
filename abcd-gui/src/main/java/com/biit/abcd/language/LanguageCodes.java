@@ -169,6 +169,7 @@ public enum LanguageCodes {
 	
 	GLOBAL_VARIABLE_NAME("global.variable.name"),
 	GLOBAL_VARIABLE_VALUE("global.variable.value"),
+	GLOBAL_VARIABLE_TYPE("global.variable.type"),
 	GLOBAL_VARIABLE_VALID_FROM("global.variable.valid.from"),
 	GLOBAL_VARIABLE_VALID_TO("global.variable.valid.to"),
 	
