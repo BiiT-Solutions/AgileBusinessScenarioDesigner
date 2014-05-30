@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.diagramBuilder;
+package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;

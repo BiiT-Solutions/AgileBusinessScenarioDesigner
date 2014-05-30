@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.diagramBuilder;
+package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.webpages.components.PropertiesComponent;
 
