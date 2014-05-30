@@ -119,7 +119,7 @@ public class ConditionTable extends Table {
 		}
 	}
 
-	public class CellEditButtonClickListener implements ClickListener {
+	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private Question question;
 		private TableRule rule;
@@ -147,7 +147,7 @@ public class ConditionTable extends Table {
 		}
 	}
 
-	public class CellDeleteButtonClickListener implements ClickListener {
+	private class CellDeleteButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -7125934888135148456L;
 		private Question question;
 		private TableRule rule;
