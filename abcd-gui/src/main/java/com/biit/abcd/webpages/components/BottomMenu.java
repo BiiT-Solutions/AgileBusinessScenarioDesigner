@@ -76,9 +76,8 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(expressionsEditorButton);
 
 		// Add Drools Editor button.
-		ruleEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
-				ThemeIcons.DROOLS_RULE_EDITOR_PAGE, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG,
-				new ClickListener() {
+		ruleEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, ThemeIcons.DROOLS_RULE_EDITOR_PAGE,
+				LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
 					@Override
@@ -111,10 +110,8 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 	}
 
 	public void updateButtons(boolean enableFormButtons) {
+		formManagerButton.setEnabled(true);
 
-		if (formManagerButton != null) {
-			formManagerButton.setEnabled(enableFormButtons);
-		}
 		if (treeDesignerButton != null) {
 			treeDesignerButton.setEnabled(enableFormButtons);
 		}
