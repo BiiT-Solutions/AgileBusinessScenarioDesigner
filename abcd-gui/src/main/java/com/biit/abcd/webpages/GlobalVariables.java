@@ -106,21 +106,23 @@ public class GlobalVariables extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
-				
-				VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat());
-				variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						VariableData variableData = ((VariableDataWindow)window).getValue();
-						if(variableData!=null){
-							//Add item.
-							variableDataTable.addItem((VariableData)variableData);
-							((GlobalVariable)variableTable.getValue()).getData().add(variableData);
+
+				if (variable != null) {
+					VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat());
+					variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							VariableData variableData = ((VariableDataWindow) window).getValue();
+							if (variableData != null) {
+								// Add item.
+								variableDataTable.addItem((VariableData) variableData);
+								((GlobalVariable) variableTable.getValue()).getData().add(variableData);
+							}
+							window.close();
 						}
-						window.close();
-					}
-				});
-				variableDataWindow.showCentered();
+					});
+					variableDataWindow.showCentered();
+				}
 			}
 		});
 		upperMenu.addRemoveValueButtonClickListener(new ClickListener() {
@@ -131,7 +133,7 @@ public class GlobalVariables extends FormWebPageComponent {
 				Object selectedVariable = variableDataTable.getValue();
 				if (selectedVariable != null) {
 					variableDataTable.removeItem(selectedVariable);
-					((GlobalVariable)variableTable.getValue()).getData().remove(selectedVariable);
+					((GlobalVariable) variableTable.getValue()).getData().remove(selectedVariable);
 				} else {
 					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
 							LanguageCodes.WARNING_SELECT_VARIABLE_DATA_TO_DELETE);
