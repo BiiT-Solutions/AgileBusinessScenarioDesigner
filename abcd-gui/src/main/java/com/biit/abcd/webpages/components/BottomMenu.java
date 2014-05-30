@@ -32,7 +32,7 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 						changeView(WebMap.FORM_MANAGER);
 					}
 				});
-		formManagerButton.setEnabled(false);
+		formManagerButton.setEnabled(true);
 		addIconButton(formManagerButton);
 
 		// Add Tree Designer button.
@@ -110,8 +110,6 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 	}
 
 	public void updateButtons(boolean enableFormButtons) {
-		formManagerButton.setEnabled(true);
-
 		if (treeDesignerButton != null) {
 			treeDesignerButton.setEnabled(enableFormButtons);
 		}
