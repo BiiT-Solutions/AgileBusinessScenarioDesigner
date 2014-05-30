@@ -3,8 +3,8 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import java.util.Collection;
 
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.decisiontable.DecisionRule;
-import com.biit.abcd.persistence.entity.decisiontable.DecisionTable;
+import com.biit.abcd.persistence.entity.rules.DecisionTable;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 
@@ -52,7 +52,7 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow() {
-		DecisionRule decisionRule = new DecisionRule();
+		TableRule decisionRule = new TableRule();
 		decisionTable.getRules().add(decisionRule);
 		
 		//Add decision Rule to both tables.
@@ -61,7 +61,7 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 	
 	public void removeSelectedRows(){
-		for(DecisionRule rule: conditionTable.getSelectedRules()){
+		for(TableRule rule: conditionTable.getSelectedRules()){
 			conditionTable.removeItem(rule);
 			actionTable.removeItem(rule);
 		}

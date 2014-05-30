@@ -60,7 +60,7 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		deleteConditionButton.removeClickListener(listener);
 	}
 	
-	public void addAddRuleButtonClickListener(Button.ClickListener listener) {
+	public void addNewRuleButtonClickListener(Button.ClickListener listener) {
 		newRuleButton.addClickListener(listener);
 	}
 

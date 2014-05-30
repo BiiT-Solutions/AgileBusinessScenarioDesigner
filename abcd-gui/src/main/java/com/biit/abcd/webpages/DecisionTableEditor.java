@@ -87,7 +87,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 		});
 		
-		decisionTableEditorUpperMenu.addAddRuleButtonClickListener(new ClickListener() {
+		decisionTableEditorUpperMenu.addNewRuleButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 9216527027244131593L;
 			@Override
 			public void buttonClick(ClickEvent event) {

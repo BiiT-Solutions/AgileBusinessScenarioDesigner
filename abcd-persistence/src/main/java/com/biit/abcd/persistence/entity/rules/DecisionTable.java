@@ -1,4 +1,4 @@
-package com.biit.abcd.persistence.entity.decisiontable;
+package com.biit.abcd.persistence.entity.rules;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,18 +9,18 @@ public class DecisionTable {
 
 	private Set<Question> conditions;
 	
-	private Set<DecisionRule> rules;
+	private Set<TableRule> rules;
 	
 	public DecisionTable(){
 		conditions = new HashSet<Question>();
-		rules = new HashSet<DecisionRule>();
+		rules = new HashSet<TableRule>();
 	}
 
 	public Set<Question> getConditions() {
 		return conditions;
 	}
 	
-	public Set<DecisionRule> getRules() {
+	public Set<TableRule> getRules() {
 		return rules;
 	}
 	
