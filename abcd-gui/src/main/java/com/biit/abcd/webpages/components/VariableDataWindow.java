@@ -2,6 +2,9 @@ package com.biit.abcd.webpages.components;
 
 import java.sql.Timestamp;
 
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.vaadin.ui.AbstractField;
@@ -15,8 +18,8 @@ import com.vaadin.ui.TextField;
 public class VariableDataWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = -2674340247381330979L;
 	private static final String WIDTH = "400px";
-	private static final String HEIGHT = "400px";
-	private static final String FIELD_WIDTH = "400px";
+	private static final String HEIGHT = "250px";
+	private static final String FIELD_WIDTH = "150px";
 
 	private AbstractField<?> valueField;
 	private DateField validFrom;
@@ -44,15 +47,16 @@ public class VariableDataWindow extends AcceptCancelWindow {
 
 		switch (format) {
 		case DATE:
-			valueField = new DateField("Dat!");
+			valueField = new DateField();
 			break;
 		case NUMBER:
-			valueField = new TextField("Num!");
+			valueField = new TextField();
 		case TEXT:
-			valueField = new TextField("text!");
+			valueField = new TextField();
 		}
-		validFrom = new DateField("na?");
-		validTo = new DateField("na!");
+		valueField.setCaption(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE));
+		validFrom = new DateField(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_FROM));
+		validTo = new DateField(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_TO));
 
 		valueField.setWidth(FIELD_WIDTH);
 		validFrom.setWidth(FIELD_WIDTH);
@@ -70,11 +74,27 @@ public class VariableDataWindow extends AcceptCancelWindow {
 
 	public VariableData getValue() {
 		VariableData variableData = new VariableData();
-		if (valueField.getValue() != null) {
-			variableData.setValue(valueField.getValue().toString());
-			variableData.setValidFrom(new Timestamp(validFrom.getValue().getTime()));
-			variableData.setValidTo(new Timestamp(validTo.getValue().getTime()));
+		//TODO add not valid condition.
+		if (valueField.getValue() == null /*|| not valid*/) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALUE_MISSING);
+			return null;
 		}
+		if (validFrom.getValue() == null) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_FROM_MISSING);
+			return null;
+		}
+		if (validTo.getValue() == null) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_TO_MISSING);
+			return null;
+		}
+		if (validFrom.getValue().after(validTo.getValue())) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_RANGE_WRONG);
+			return null;
+		}
+		
+		variableData.setValue(valueField.getValue().toString());
+		variableData.setValidFrom(new Timestamp(validFrom.getValue().getTime()));
+		variableData.setValidTo(new Timestamp(validTo.getValue().getTime()));
 		return variableData;
 	}
 }

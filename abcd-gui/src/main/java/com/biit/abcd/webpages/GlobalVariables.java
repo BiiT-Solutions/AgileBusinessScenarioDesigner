@@ -31,7 +31,7 @@ public class GlobalVariables extends FormWebPageComponent {
 	private VariableDataTable variableDataTable;
 
 	public GlobalVariables() {
-
+		super();
 	}
 
 	@Override
@@ -58,6 +58,7 @@ public class GlobalVariables extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
+				variableDataTable.removeAllItems();
 				variableDataTable.setVariable((GlobalVariable) variableTable.getValue());
 			}
 		});
@@ -112,7 +113,9 @@ public class GlobalVariables extends FormWebPageComponent {
 					public void acceptAction(AcceptCancelWindow window) {
 						VariableData variableData = ((VariableDataWindow)window).getValue();
 						if(variableData!=null){
+							//Add item.
 							variableDataTable.addItem((VariableData)variableData);
+							((GlobalVariable)variableTable.getValue()).getData().add(variableData);
 						}
 						window.close();
 					}
@@ -128,6 +131,7 @@ public class GlobalVariables extends FormWebPageComponent {
 				Object selectedVariable = variableDataTable.getValue();
 				if (selectedVariable != null) {
 					variableDataTable.removeItem(selectedVariable);
+					((GlobalVariable)variableTable.getValue()).getData().remove(selectedVariable);
 				} else {
 					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
 							LanguageCodes.WARNING_SELECT_VARIABLE_DATA_TO_DELETE);

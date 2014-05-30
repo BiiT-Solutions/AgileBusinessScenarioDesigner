@@ -1,11 +1,10 @@
 package com.biit.abcd.webpages.elements.globalvariables;
 
-import java.sql.Timestamp;
-
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
+import com.biit.abcd.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 
@@ -16,49 +15,37 @@ public class VariableDataTable extends Table {
 		VARIABLE_VALUE, VARIABLE_VALID_FROM, VARIABLE_VALID_TO
 	};
 
-	private GlobalVariable globalVariable;
-
 	public VariableDataTable() {
 		super();
 		setImmediate(true);
 		setSelectable(true);
 		addContainerProperty(Properties.VARIABLE_VALUE, String.class, "",
 				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE), null, Align.CENTER);
-		addContainerProperty(Properties.VARIABLE_VALID_FROM, Timestamp.class, "",
+		addContainerProperty(Properties.VARIABLE_VALID_FROM, String.class, "",
 				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_FROM), null, Align.CENTER);
-		addContainerProperty(Properties.VARIABLE_VALID_TO, Timestamp.class, "",
+		addContainerProperty(Properties.VARIABLE_VALID_TO, String.class, "",
 				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_TO), null, Align.CENTER);
 	}
 
 	public void setVariable(GlobalVariable variable) {
-		globalVariable = variable;
-		setValue(null);
-		removeAllItems();
 		if (variable != null) {
 			for (VariableData data : variable.getData()) {
 				addItem(data);
 			}
+		}else{
+			removeAllItems();
 		}
-	}
-
-	public void removeSelectedItem() {
-		VariableData data = (VariableData) getValue();
-		removeItem(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Item addItem(VariableData variableData) {
-		globalVariable.getData().add(variableData);
 		Item item = super.addItem(variableData);
 		item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue());
-		item.getItemProperty(Properties.VARIABLE_VALID_FROM).setValue(variableData.getValidFrom());
-		item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(variableData.getValidTo());
+		item.getItemProperty(Properties.VARIABLE_VALID_FROM).setValue(
+				DateManager.convertDateToString(variableData.getValidFrom()));
+		item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(
+				DateManager.convertDateToString(variableData.getValidTo()));
 		return item;
-	}
-
-	public boolean removeItem(VariableData variableData) {
-		globalVariable.getData().remove(variableData);
-		return super.removeItem(variableData);
 	}
 
 	@Override
@@ -67,13 +54,5 @@ public class VariableDataTable extends Table {
 			return addItem((VariableData) itemId);
 		}
 		return null;
-	}
-
-	@Override
-	public boolean removeItem(Object itemId) {
-		if (itemId instanceof VariableData) {
-			return removeItem((VariableData) itemId);
-		}
-		return false;
 	}
 }

@@ -28,7 +28,7 @@ public class GlobalVariablesTable extends Table {
 	public Item addItem(GlobalVariable globalVariable) {
 		Item item = super.addItem(globalVariable);
 		item.getItemProperty(Properties.VARIABLE_NAME).setValue(globalVariable.getName());
-		item.getItemProperty(Properties.VARIABLE_NAME).setValue(ServerTranslate.tr(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
+		item.getItemProperty(Properties.VARIABLE_TYPE).setValue(ServerTranslate.tr(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
 		return item;
 	}
 

@@ -1,7 +1,10 @@
 package com.biit.abcd.webpages.components;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.AnswerFormatUi;
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
@@ -13,8 +16,8 @@ import com.vaadin.ui.TextField;
 public class VariableWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = -5976767693799864405L;
 	private static final String WIDTH = "400px";
-	private static final String HEIGHT = "400px";
-	private static final String FIELD_WIDTH = "400px";
+	private static final String HEIGHT = "250px";
+	private static final String FIELD_WIDTH = "150px";
 
 	private TextField variableName;
 	private ComboBox variableFormat;
@@ -39,15 +42,17 @@ public class VariableWindow extends AcceptCancelWindow {
 		formLayout.setSizeUndefined();
 		formLayout.setSpacing(true);
 
-		variableName = new TextField("name");
+		variableName = new TextField(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_NAME));
 
-		variableFormat = new ComboBox("nanana");
+		variableFormat = new ComboBox(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_TYPE));
 		variableFormat.setImmediate(true);
 		for (AnswerFormatUi answerFormatUi : AnswerFormatUi.values()) {
 			variableFormat.addItem(answerFormatUi.getAnswerFormat());
 			variableFormat.setItemCaption(answerFormatUi.getAnswerFormat(),
 					ServerTranslate.tr(answerFormatUi.getLanguageCode()));
 		}
+		variableFormat.setNullSelectionAllowed(false);
+		variableFormat.setValue(AnswerFormatUi.values()[0].getAnswerFormat());
 
 		variableName.setWidth(FIELD_WIDTH);
 		variableFormat.setWidth(FIELD_WIDTH);
@@ -62,13 +67,14 @@ public class VariableWindow extends AcceptCancelWindow {
 	}
 
 	public GlobalVariable getValue() {
-		GlobalVariable globalVariable = new GlobalVariable();
-		if (variableName.getValue() != null && !variableName.getValue().isEmpty()) {
-			globalVariable.setName(variableName.getValue());
-			globalVariable.setFormat(((AnswerFormatUi) variableFormat.getValue()).getAnswerFormat());
-			return globalVariable;
+		if (variableName.getValue() == null || variableName.getValue().isEmpty()) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_NAME_WRONG);
+			return null;
 		}
-		//MessageManager.showError()
-		return null;
+		
+		GlobalVariable globalVariable = new GlobalVariable();
+		globalVariable.setName(variableName.getValue());
+		globalVariable.setFormat((AnswerFormat) variableFormat.getValue());
+		return globalVariable;
 	}
 }
