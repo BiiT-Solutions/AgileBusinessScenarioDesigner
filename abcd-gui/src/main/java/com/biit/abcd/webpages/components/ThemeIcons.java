@@ -92,7 +92,7 @@ public enum ThemeIcons {
 	
 	REMOVE_ROW("appbar.table.delete.row.svg"), 
 	
-	CALCULATOR("appbar.calculator.svg"), 
+	EXPRESSION_EDITOR_PAGE("appbar.page.expression.svg"), 
 	
 	SETTINGS("appbar.lines.horizontal.4.svg"),
 	

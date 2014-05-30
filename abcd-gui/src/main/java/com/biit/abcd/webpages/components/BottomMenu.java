@@ -63,7 +63,7 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(diagramBuilderButton);
 
 		// Add calculus expresion editor.
-		expressionsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, ThemeIcons.CALCULATOR,
+		expressionsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, ThemeIcons.EXPRESSION_EDITOR_PAGE,
 				LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 

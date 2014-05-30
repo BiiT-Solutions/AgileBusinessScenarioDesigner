@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="76"
+   height="76"
+   viewBox="0 0 76.00 76.00"
+   enable-background="new 0 0 76.00 76.00"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="appbar.page.code.svg"><metadata
+   id="metadata10"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs8" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1017"
+   id="namedview6"
+   showgrid="false"
+   inkscape:zoom="2.1957526"
+   inkscape:cx="268.82574"
+   inkscape:cy="-16.474189"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg2" />
+	
+<g
+   id="g3005"
+   transform="matrix(1.5471841,0,0,1.5471841,-19.735481,-25.470819)"><path
+     sodipodi:nodetypes="ccccccccccccccccccccccccc"
+     style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
+     inkscape:connector-curvature="0"
+     id="path4"
+     d="m 19,17.4167 22.9583,0 11.875,11.875 0,5.002396 -3.1667,-0.0427 10e-5,-1.0014 -12.6667,0 0,-12.6667 -15.8333,10e-5 0,34.8333 13.067816,0 -2.748649,3.1666 -13.485867,0 z m 22.1667,3.9584 0,8.7082 8.7082,0 z m 9.466009,22.587004 -0.254532,11.494851 -2.080739,-0.01932 -2.848094,3.115836 8.365535,0.02875 0.02643,-14.577405 z" /><path
+     style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
+     inkscape:connector-curvature="0"
+     id="path4-1"
+     d="m 41.81755,59.407277 7.36816,-8.929367 -6.888527,-8.717747 0,-0.128405 12.425489,0 0,-5.510974 -20.883606,0 0,4.364703 8.240095,10.246337 -8.719651,10.564111 0,3.791643 22.451288,0 0,-5.510975 -13.993248,0 0,-0.169326 z" /></g></svg>
