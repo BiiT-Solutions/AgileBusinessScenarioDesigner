@@ -14,7 +14,6 @@ import com.biit.abcd.webpages.elements.decisiontable.DecisionTableComponent;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.UI;
 
 public class DecisionTableEditor extends FormWebPageComponent {
 	static final long serialVersionUID = -5547452506556261601L;
@@ -74,7 +73,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 						}
 					}
 				});
-				UI.getCurrent().addWindow(addNewConditionWindow);
+				addNewConditionWindow.showCentered();
 			}
 		});
 

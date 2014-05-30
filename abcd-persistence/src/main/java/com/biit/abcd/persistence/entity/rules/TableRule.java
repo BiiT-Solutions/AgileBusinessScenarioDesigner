@@ -12,9 +12,11 @@ import com.biit.abcd.persistence.entity.Question;
 public class TableRule {
 
 	private Map<Question, Condition> conditions;
+	private Action action;
 
 	public TableRule() {
 		conditions = new HashMap<Question, Condition>();
+		action = new Action();
 	}
 
 	public void putCondition(Question question, Condition condition) {
@@ -27,6 +29,10 @@ public class TableRule {
 
 	public Map<Question, Condition> getConditions() {
 		return conditions;
+	}
+
+	public Action getAction() {
+		return action;
 	}
 
 }
