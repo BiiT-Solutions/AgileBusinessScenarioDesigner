@@ -5,7 +5,6 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 
 public class DroolsRuleEditor extends FormWebPageComponent {

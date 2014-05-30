@@ -21,7 +21,6 @@ import com.biit.abcd.webpages.elements.diagramBuilder.FormDiagramBuilderUpperMen
 import com.biit.abcd.webpages.elements.diagramBuilder.JsonPropertiesComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;

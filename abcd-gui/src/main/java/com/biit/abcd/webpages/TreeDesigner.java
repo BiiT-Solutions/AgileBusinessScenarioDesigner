@@ -28,7 +28,6 @@ import com.biit.abcd.webpages.elements.treetable.TreeTablePropertiesComponent;
 import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.HorizontalLayout;
 

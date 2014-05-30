@@ -17,7 +17,6 @@ import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
