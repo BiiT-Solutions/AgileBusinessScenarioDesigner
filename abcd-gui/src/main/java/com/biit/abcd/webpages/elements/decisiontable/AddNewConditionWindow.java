@@ -16,15 +16,6 @@ public class AddNewConditionWindow extends SelectionTableWindow {
 		super(form);
 	}
 
-	public Component generateContent(Form form) {
-		formQuestionTable = new FormQuestionTable();
-		formQuestionTable.setRootElement(form);
-		formQuestionTable.setSizeFull();
-		formQuestionTable.setSelectable(true);
-
-		return formQuestionTable;
-	}
-
 	public Question getSelectedQuestion() {
 		return (Question) formQuestionTable.getValue();
 	}
