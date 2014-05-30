@@ -5,7 +5,6 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
@@ -17,7 +16,8 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		initContent();
 	}
 
-	private void initContent() {
+	@Override
+	protected void initContent() {
 		updateButtons(true);
 
 		VerticalLayout rootLayout = new VerticalLayout();
@@ -26,7 +26,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		// rootLayout.addComponent();
 
 		getWorkingAreaLayout().addComponent(rootLayout);
-
 	}
 
 	@Override
@@ -37,11 +36,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	@Override
 	public Form getForm() {
 		return form;
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-
 	}
 
 	@Override

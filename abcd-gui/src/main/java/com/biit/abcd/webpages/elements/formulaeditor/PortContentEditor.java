@@ -9,10 +9,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 public class PortContentEditor extends AcceptCancelWindow {
-
 	private static final long serialVersionUID = 4460942893259168920L;
-	
-	ComboBox comboBox; 
+	private ComboBox comboBox;
 
 	public PortContentEditor(List<FormulaElementType> contentTypesToGenerate) {
 		super();
@@ -54,8 +52,8 @@ public class PortContentEditor extends AcceptCancelWindow {
 		rootLayout.addComponent(comboBox);
 		return rootLayout;
 	}
-	
-	public FormulaExpressionComponent getValue(){
+
+	public FormulaExpressionComponent getValue() {
 		return ((FormulaExpresion) comboBox.getValue()).getNewFormulaExpressionComponent();
 	}
 }

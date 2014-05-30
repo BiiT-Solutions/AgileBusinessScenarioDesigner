@@ -7,18 +7,16 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.webpages.components.FormTreeTable;
+import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.vaadin.ui.TreeTable;
 
-public class FormQuestionTable extends FormTreeTable {
+public class FormQuestionTable extends TreeObjectTable {
 	private static final long serialVersionUID = -715631213528124119L;
 	private List<Question> disabledQuestions;
 
 	public FormQuestionTable() {
 		super();
 		disabledQuestions = new ArrayList<Question>();
-		// Remove unnecessary properties.
-		removeContainerProperty(FormTreeTableProperties.RULES);
 
 		setCellStyleGenerator(new FormQuestionTableCellGenerator());
 	}

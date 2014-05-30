@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.components.SelectionTableWindow;
@@ -23,6 +24,10 @@ public class AddNewAnswerValue extends SelectionTableWindow {
 		}
 
 		return formAnswerTable;
+	}
+
+	public Answer getSelectedTableValue() {
+		return formAnswerTable.getValue();
 	}
 
 }

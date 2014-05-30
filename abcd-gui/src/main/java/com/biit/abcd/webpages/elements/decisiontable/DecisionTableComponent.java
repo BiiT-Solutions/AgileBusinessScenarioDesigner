@@ -3,8 +3,8 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import java.util.Collection;
 
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.decisiontable.DecisionRule;
-import com.biit.abcd.persistence.entity.decisiontable.DecisionTable;
+import com.biit.abcd.persistence.entity.rules.DecisionTable;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 
@@ -18,7 +18,7 @@ public class DecisionTableComponent extends CustomComponent {
 
 	public DecisionTableComponent() {
 		decisionTable = new DecisionTable();
-		
+
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
@@ -52,28 +52,34 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow() {
-		DecisionRule decisionRule = new DecisionRule();
+		TableRule decisionRule = new TableRule();
 		decisionTable.getRules().add(decisionRule);
-		
-		//Add decision Rule to both tables.
+
+		// Add decision Rule to both tables.
 		conditionTable.addItem(decisionRule);
 		actionTable.addItem(decisionRule);
+
+		// Select first row if only exists this.
+//		if (decisionTable.getRules().size() == 1) {
+//			conditionTable.select(decisionRule);
+//			actionTable.select(decisionRule);
+//		}
 	}
-	
-	public void removeSelectedRows(){
-		for(DecisionRule rule: conditionTable.getSelectedRules()){
+
+	public void removeSelectedRows() {
+		for (TableRule rule : conditionTable.getSelectedRules()) {
 			conditionTable.removeItem(rule);
 			actionTable.removeItem(rule);
 		}
 	}
-	
-	public void removeSelectedColumns(){
-		for(Question question: conditionTable.getSelectedQuestions()){
+
+	public void removeSelectedColumns() {
+		for (Question question : conditionTable.getSelectedQuestions()) {
 			conditionTable.removeContainerProperty(question);
 		}
 	}
-	
-	public int getNumberOfRules(){
+
+	public int getNumberOfRules() {
 		return decisionTable.getRules().size();
 	}
 }

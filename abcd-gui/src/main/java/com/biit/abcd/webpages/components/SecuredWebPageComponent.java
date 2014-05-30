@@ -12,10 +12,23 @@ import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
+/**
+ * Before entering to the web page, the system checks user permissions to allow the access or redirect to another page.
+ */
 public abstract class SecuredWebPageComponent extends WebPageComponent {
 	private static final long serialVersionUID = 1948083638306683637L;
 
-	public abstract void securedEnter(ViewChangeEvent event);
+	public void securedEnter(ViewChangeEvent event) {
+		initContent();
+	}
+
+	/**
+	 * For increasing the performance, any class inheriting this, must defined the creation of the components inside the
+	 * securedEnter method. Is recommended then, that the rootlayout is inserted the last one to avoid multiple
+	 * communications with the client, i.e. add any component, button to the rootlayout and the last operation is
+	 * getWorkingAreaLayout().addComponent(rootLayout);
+	 */
+	protected abstract void initContent();
 
 	@Override
 	public final void enter(ViewChangeEvent event) {

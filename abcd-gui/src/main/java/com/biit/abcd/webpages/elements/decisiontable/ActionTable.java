@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.decisiontable.DecisionRule;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.vaadin.data.Item;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
@@ -25,7 +25,7 @@ public class ActionTable extends Table {
 
 	}
 
-	public void addItem(DecisionRule rule) {
+	public void addItem(TableRule rule) {
 		if (rule != null) {
 			setDefaultNewItemPropertyValues(rule,super.addItem(rule));
 		}

@@ -1,26 +1,24 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.decisiontable.DecisionRule;
+import com.biit.abcd.persistence.entity.rules.AnswerCondition;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.UI;
 
 public class ConditionTable extends Table {
 
@@ -44,93 +42,6 @@ public class ConditionTable extends Table {
 		}
 	}
 
-	public class CellRowSelector implements ItemClickListener, CellStyleGenerator {
-		private static final long serialVersionUID = 6036202869337803510L;
-
-		private List<Object> selectedItems;
-		private List<Object> selectedProperties;
-
-		public CellRowSelector() {
-			selectedItems = new ArrayList<Object>();
-			selectedProperties = new ArrayList<Object>();
-		}
-
-		@Override
-		public void itemClick(ItemClickEvent event) {
-			Table table = (Table) event.getComponent();
-			if (table != null) {
-				if (event.isShiftKey()) {
-					return;
-				}
-				if (event.isCtrlKey()) {
-					return;
-				}
-				// Simple selection mode.
-				// Clean selection first
-				cleanSelection(table);
-
-				if (!event.isDoubleClick()) {
-					// Simple click (Select cell)
-					selectedItems.add(event.getItemId());
-					selectedProperties.add(event.getPropertyId());
-				} else {
-					// Double click (Select row)
-					selectedItems.add(event.getItemId());
-					selectedProperties.addAll(table.getContainerPropertyIds());
-				}
-				// Paint changes
-				paintSelection(table);
-			}
-		}
-
-		public void cleanSelection(Table table) {
-			for (Object itemId : selectedItems) {
-				for (Object propertyId : selectedProperties) {
-					((EditCellComponent) table.getItem(itemId).getItemProperty(propertyId).getValue()).select(false);
-				}
-			}
-			selectedItems.clear();
-			selectedProperties.clear();
-		}
-
-		public void paintSelection(Table table) {
-			for (Object itemId : selectedItems) {
-				for (Object propertyId : selectedProperties) {
-					((EditCellComponent) table.getItem(itemId).getItemProperty(propertyId).getValue()).select(true);
-				}
-			}
-			table.refreshRowCache();
-		}
-
-		public void selectItem(Table table, Object itemId, Object propertyId) {
-			cleanSelection(table);
-			selectedItems.add(itemId);
-			selectedProperties.add(propertyId);
-			paintSelection(table);
-		}
-
-		@Override
-		public String getStyle(Table source, Object itemId, Object propertyId) {
-			if (propertyId == null || itemId == null) {
-				// Yes this function is called with itemId and property null.
-				return "";
-			}
-
-			if (selectedItems.contains(itemId) && selectedProperties.contains(propertyId)) {
-				return "selected";
-			}
-			return "";
-		}
-
-		public Collection<Object> getSelectedPropertiesId() {
-			return selectedProperties;
-		}
-
-		public Collection<Object> getSelectedItemsId() {
-			return selectedItems;
-		}
-	}
-
 	public Collection<Question> getSelectedQuestions() {
 		Set<Question> questions = new HashSet<Question>();
 		for (Object object : cellRowSelector.getSelectedPropertiesId()) {
@@ -139,15 +50,15 @@ public class ConditionTable extends Table {
 		return questions;
 	}
 
-	public Collection<DecisionRule> getSelectedRules() {
-		Set<DecisionRule> rules = new HashSet<DecisionRule>();
+	public Collection<TableRule> getSelectedRules() {
+		Set<TableRule> rules = new HashSet<TableRule>();
 		for (Object object : cellRowSelector.getSelectedItemsId()) {
-			rules.add((DecisionRule) object);
+			rules.add((TableRule) object);
 		}
 		return rules;
 	}
 
-	public void addItem(DecisionRule rule) {
+	public void addItem(TableRule rule) {
 		if (rule != null) {
 			setDefaultNewItemPropertyValues(rule, super.addItem(rule));
 		}
@@ -185,30 +96,71 @@ public class ConditionTable extends Table {
 					}
 				});
 				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((Question) propertyId,
-						(DecisionRule) itemId));
+						(TableRule) itemId));
+				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener((Question) propertyId,
+						(TableRule) itemId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 			}
+		}
+	}
+
+	/**
+	 * Updates a row of the table.
+	 * 
+	 * @param rule
+	 */
+	@SuppressWarnings("unchecked")
+	private void updateItem(TableRule rule) {
+		Item row = getItem(rule);
+		for (Question question : rule.getConditions().keySet()) {
+			QuestionValueEditCell questionValue = ((QuestionValueEditCell) row.getItemProperty(question).getValue());
+			questionValue.setLabel(rule.getConditions().get(question).toString());
+			row.getItemProperty(question).setValue(questionValue);
 		}
 	}
 
 	public class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private Question question;
-		private DecisionRule rule;
+		private TableRule rule;
 
-		public CellEditButtonClickListener(Question question, DecisionRule rule) {
+		public CellEditButtonClickListener(Question question, TableRule rule) {
 			this.question = question;
 			this.rule = rule;
 		}
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			new AddNewAnswerValue(question).showCentered();
+			final AddNewAnswerValue newAnswerValue = new AddNewAnswerValue(question);
+			newAnswerValue.showCentered();
+			newAnswerValue.addAcceptAcctionListener(new AcceptActionListener() {
+				@Override
+				public void acceptAction(AcceptCancelWindow window) {
+					Answer selectedAnswer = ((AddNewAnswerValue) window).getSelectedTableValue();
+					if (selectedAnswer != null) {
+						rule.putCondition(question, new AnswerCondition(selectedAnswer));
+						updateItem(rule);
+						newAnswerValue.close();
+					}
+				}
+			});
 		}
 	}
 
-	//
-	// public void setValue(Object itemId){
-	//
-	// }
+	public class CellDeleteButtonClickListener implements ClickListener {
+		private static final long serialVersionUID = -7125934888135148456L;
+		private Question question;
+		private TableRule rule;
+
+		public CellDeleteButtonClickListener(Question question, TableRule rule) {
+			this.question = question;
+			this.rule = rule;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			rule.removeCondition(question);
+			updateItem(rule);
+		}
+	}
 }

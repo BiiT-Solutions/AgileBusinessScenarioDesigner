@@ -6,7 +6,6 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formulaeditor.FormulaEditor;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 
 public class ExpressionEditor extends FormWebPageComponent {
@@ -17,7 +16,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 		initContent();
 	}
 
-	private void initContent() {
+	@Override
+	protected void initContent() {
 		updateButtons(true);
 
 		VerticalLayout rootLayout = new VerticalLayout();
@@ -39,11 +39,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 	public Form getForm() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-
 	}
 
 	@Override

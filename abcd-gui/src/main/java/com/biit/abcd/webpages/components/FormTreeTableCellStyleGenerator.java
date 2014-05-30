@@ -5,7 +5,7 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.webpages.components.FormTreeTable.FormTreeTableProperties;
+import com.biit.abcd.webpages.components.TreeObjectTable.TreeObjectTableProperties;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.CellStyleGenerator;
 
@@ -19,7 +19,7 @@ public class FormTreeTableCellStyleGenerator implements CellStyleGenerator {
 
 	@Override
 	public String getStyle(Table source, Object itemId, Object propertyId) {
-		if (propertyId == FormTreeTableProperties.ELEMENT_NAME) {
+		if (propertyId == TreeObjectTableProperties.ELEMENT_NAME) {
 			if (itemId instanceof Form) {
 				return "tree-cell-form";
 			}

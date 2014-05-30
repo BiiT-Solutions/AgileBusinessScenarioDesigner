@@ -19,7 +19,6 @@ import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -32,6 +31,11 @@ public class GlobalVariables extends FormWebPageComponent {
 	private VariableDataTable variableDataTable;
 
 	public GlobalVariables() {
+
+	}
+
+	@Override
+	protected void initContent() {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(true);
@@ -131,12 +135,6 @@ public class GlobalVariables extends FormWebPageComponent {
 			}
 		});
 		return upperMenu;
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

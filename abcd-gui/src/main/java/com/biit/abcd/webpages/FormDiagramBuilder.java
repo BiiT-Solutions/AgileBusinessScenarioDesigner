@@ -21,7 +21,6 @@ import com.biit.abcd.webpages.elements.diagramBuilder.FormDiagramBuilderUpperMen
 import com.biit.abcd.webpages.elements.diagramBuilder.JsonPropertiesComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -42,6 +41,48 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		diagramDao = (IDiagramDao) helper.getBean("diagramDao");
 		updateButtons(true);
+	}
+
+	@Override
+	protected void initContent() {
+		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
+		rootLayout.setSizeFull();
+
+		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
+		rootDiagramBuilder.setSpacing(true);
+
+		JsonPropertiesComponent propertiesContainer = new JsonPropertiesComponent();
+		propertiesContainer.setSizeFull();
+
+		diagramBuilder = new DiagramBuilder();
+		diagramBuilder.setSizeFull();
+		diagramBuilder.addElementPickedListener(new DiagramBuilderElementPicked(propertiesContainer));
+
+		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
+
+			@Override
+			public void propertyUpdate(Object element) {
+				System.out.println("property update Listener");
+				if (element instanceof DiagramElement) {
+					System.out.println(((DiagramObject) element).toJson());
+					diagramBuilder.updateCellJson(((DiagramObject) element).toJson());
+				} else {
+					System.out.println(((DiagramObject) element).toJson());
+					diagramBuilder.updateLinkJson(((DiagramObject) element).toJson());
+				}
+			}
+		});
+
+		rootDiagramBuilder.addComponent(diagramBuilder);
+		rootDiagramBuilder.setExpandRatio(diagramBuilder, 0.80f);
+		rootDiagramBuilder.addComponent(propertiesContainer);
+		rootDiagramBuilder.setExpandRatio(propertiesContainer, 0.20f);
+
+		rootLayout.setContent(rootDiagramBuilder);
+
+		getWorkingAreaLayout().addComponent(rootLayout);
+
+		initUpperMenu();
 	}
 
 	private void initUpperMenu() {
@@ -112,48 +153,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		});
 
 		setUpperMenu(diagramBuilderUpperMenu);
-	}
-
-	@Override
-	public void securedEnter(ViewChangeEvent event) {
-		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
-		rootLayout.setSizeFull();
-
-		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
-		rootDiagramBuilder.setSpacing(true);
-
-		JsonPropertiesComponent propertiesContainer = new JsonPropertiesComponent();
-		propertiesContainer.setSizeFull();
-
-		diagramBuilder = new DiagramBuilder();
-		diagramBuilder.setSizeFull();
-		diagramBuilder.addElementPickedListener(new DiagramBuilderElementPicked(propertiesContainer));
-
-		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
-
-			@Override
-			public void propertyUpdate(Object element) {
-				System.out.println("property update Listener");
-				if (element instanceof DiagramElement) {
-					System.out.println(((DiagramObject) element).toJson());
-					diagramBuilder.updateCellJson(((DiagramObject) element).toJson());
-				} else {
-					System.out.println(((DiagramObject) element).toJson());
-					diagramBuilder.updateLinkJson(((DiagramObject) element).toJson());
-				}
-			}
-		});
-
-		rootDiagramBuilder.addComponent(diagramBuilder);
-		rootDiagramBuilder.setExpandRatio(diagramBuilder, 0.80f);
-		rootDiagramBuilder.addComponent(propertiesContainer);
-		rootDiagramBuilder.setExpandRatio(propertiesContainer, 0.20f);
-
-		rootLayout.setContent(rootDiagramBuilder);
-
-		getWorkingAreaLayout().addComponent(rootLayout);
-
-		initUpperMenu();
 	}
 
 	@Override
