@@ -12,7 +12,6 @@ import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableComponent;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;

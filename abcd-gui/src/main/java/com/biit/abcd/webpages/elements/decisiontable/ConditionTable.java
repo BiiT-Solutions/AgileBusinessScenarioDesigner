@@ -104,6 +104,11 @@ public class ConditionTable extends Table {
 		}
 	}
 
+	/**
+	 * Updates a row of the table.
+	 * 
+	 * @param rule
+	 */
 	@SuppressWarnings("unchecked")
 	private void updateItem(TableRule rule) {
 		Item row = getItem(rule);
@@ -126,7 +131,7 @@ public class ConditionTable extends Table {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			AddNewAnswerValue newAnswerValue = new AddNewAnswerValue(question);
+			final AddNewAnswerValue newAnswerValue = new AddNewAnswerValue(question);
 			newAnswerValue.showCentered();
 			newAnswerValue.addAcceptAcctionListener(new AcceptActionListener() {
 				@Override
@@ -135,6 +140,7 @@ public class ConditionTable extends Table {
 					if (selectedAnswer != null) {
 						rule.putCondition(question, new AnswerCondition(selectedAnswer));
 						updateItem(rule);
+						newAnswerValue.close();
 					}
 				}
 			});
@@ -154,6 +160,7 @@ public class ConditionTable extends Table {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			rule.removeCondition(question);
+			updateItem(rule);
 		}
 	}
 }
