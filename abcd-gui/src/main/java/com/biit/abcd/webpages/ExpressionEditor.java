@@ -14,7 +14,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	public ExpressionEditor() {
 		super();
-		initContent();
 	}
 
 	@Override

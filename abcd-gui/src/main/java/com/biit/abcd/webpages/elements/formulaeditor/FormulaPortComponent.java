@@ -3,6 +3,8 @@ package com.biit.abcd.webpages.elements.formulaeditor;
 import java.util.ArrayList;
 import java.util.List;
 
+import javassist.expr.Instanceof;
+
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.CssLayout;
@@ -47,7 +49,19 @@ public class FormulaPortComponent extends CustomComponent {
 
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
-				firePortClickListeners();
+				if(event.getClickedComponent()!=null){
+					if(event.getClickedComponent() instanceof FormulaPortComponent){
+						System.out.println("kiwi?");
+					}
+					if(event.getClickedComponent() instanceof CssLayout){
+						System.out.println("kiwi2?");
+					}
+					System.out.println(rootLayout.getConnectorId()+" "+event.getConnector().getConnectorId());
+					System.out.println("Layout click! "+event.getClickedComponent().getConnectorId() + " " +rootLayout.getConnectorId());
+					//rootLayout.getComponentIndex()					
+				}else{
+					firePortClickListeners();
+				}				
 			}
 		});
 

@@ -16,7 +16,7 @@ public class SettingsWindow extends PopupWindow{
 	private static final String width = "300px";
 
 	public SettingsWindow() {
-		setClosable(false);
+		setClosable(true);
 		setResizable(false);
 		setDraggable(false);
 		setModal(true);
