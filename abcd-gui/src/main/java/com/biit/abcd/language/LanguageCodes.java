@@ -186,8 +186,10 @@ public enum LanguageCodes {
 	GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION("global.variables.table.add.data.caption"),
 	GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP("global.variables.table.add.data.tooltip"),
 	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_CAPTION("global.variables.table.remove.data.caption"),
-	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip");
+	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip"),
 	
+	RULE_EDITOR_WHEN_LABEL("window.when.label"),
+	RULE_EDITOR_THEN_LABEL("window.then.label");
 	
 	private String value;
 	
