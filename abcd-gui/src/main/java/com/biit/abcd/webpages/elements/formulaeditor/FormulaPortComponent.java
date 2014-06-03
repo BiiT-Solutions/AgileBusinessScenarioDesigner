@@ -3,8 +3,6 @@ package com.biit.abcd.webpages.elements.formulaeditor;
 import java.util.ArrayList;
 import java.util.List;
 
-import javassist.expr.Instanceof;
-
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.CssLayout;
@@ -17,25 +15,25 @@ public class FormulaPortComponent extends CustomComponent {
 	private static final String CLASSNAME_FORMULA_PORT_SELECTED = "v-selected";
 	private static final String emptyWidth = "60px";
 	private static final String emptyHeight = "20px";
-	
+
 	private FormulaExpressionComponent value;
 
 	private CssLayout rootLayout;
 	private List<FormulaElementType> acceptedTypes;
 
-	private  List<FormulaPortClickListener> listeners;
+	private List<FormulaPortClickListener> listeners;
 
 	public FormulaPortComponent(FormulaElementType acceptedType) {
 		List<FormulaElementType> acceptedTypes = new ArrayList<FormulaElementType>();
 		acceptedTypes.add(acceptedType);
 		initializate(acceptedTypes);
 	}
-	
+
 	public FormulaPortComponent(List<FormulaElementType> acceptedTypes) {
 		initializate(acceptedTypes);
 	}
-	
-	private void initializate(List<FormulaElementType> acceptedTypes){
+
+	private void initializate(List<FormulaElementType> acceptedTypes) {
 		listeners = new ArrayList<FormulaPortClickListener>();
 		this.acceptedTypes = new ArrayList<FormulaElementType>();
 		this.acceptedTypes.addAll(acceptedTypes);
@@ -49,19 +47,13 @@ public class FormulaPortComponent extends CustomComponent {
 
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
-				if(event.getClickedComponent()!=null){
-					if(event.getClickedComponent() instanceof FormulaPortComponent){
-						System.out.println("kiwi?");
+				if (event.getClickedComponent() != null) {
+					if(event.getClickedComponent().getParent().getParent() instanceof FormulaExpressionComponent){
+						firePortClickListeners();
 					}
-					if(event.getClickedComponent() instanceof CssLayout){
-						System.out.println("kiwi2?");
-					}
-					System.out.println(rootLayout.getConnectorId()+" "+event.getConnector().getConnectorId());
-					System.out.println("Layout click! "+event.getClickedComponent().getConnectorId() + " " +rootLayout.getConnectorId());
-					//rootLayout.getComponentIndex()					
-				}else{
+				} else {
 					firePortClickListeners();
-				}				
+				}
 			}
 		});
 
@@ -95,25 +87,26 @@ public class FormulaPortComponent extends CustomComponent {
 	public List<FormulaElementType> getAcceptedTypes() {
 		return acceptedTypes;
 	}
-	
-	public void setValue(FormulaExpressionComponent value){
+
+	public void setValue(FormulaExpressionComponent value) {
 		this.value = value;
-		if(value!=null){
+		if (value != null) {
+			rootLayout.removeAllComponents();
 			rootLayout.addComponent(value);
 			rootLayout.setWidth(null);
 			rootLayout.setHeight(null);
-		}else{
+		} else {
 			rootLayout.removeAllComponents();
 			rootLayout.setWidth(emptyWidth);
 			rootLayout.setHeight(emptyHeight);
 		}
 	}
-	
-	public FormulaElementType getType(){
+
+	public FormulaElementType getType() {
 		return getValue().getType();
 	}
-	
-	public FormulaExpressionComponent getValue(){
+
+	public FormulaExpressionComponent getValue() {
 		return value;
 	}
 }
