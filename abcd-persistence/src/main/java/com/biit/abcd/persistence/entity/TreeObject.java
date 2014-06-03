@@ -1,17 +1,18 @@
 package com.biit.abcd.persistence.entity;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinTable;
@@ -33,12 +34,7 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "TREE_OBJECTS")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class TreeObject {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
-	private Long id;
+public abstract class TreeObject extends StorableObject {
 
 	private String name;
 
@@ -46,28 +42,33 @@ public abstract class TreeObject {
 	@Column(nullable = false)
 	private long sortSeq = 0;
 
-	@Column(nullable = false)
-	private Timestamp creationDate = null;
-	@Column(columnDefinition = "DOUBLE")
-	private Long createdBy = null;
-	private Timestamp updatedDate = null;
-	@Column(columnDefinition = "DOUBLE")
-	private Long updatedBy = null;
-
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "PARENT_OF_CHILDREN")
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject parent;
 
+	/**
+	 * Customized variables are stored in {@link FormCustomVariables}. Here values obtained from applying the drools
+	 * rules and the form submitted information. This information is calculated and must not be stored on database.
+	 */
+	@ElementCollection
+	@CollectionTable(name = "TREE_OBJECT_INT_VARIABLES")
+	private transient Map<String, Integer> intVariables;
+	@ElementCollection
+	@CollectionTable(name = "TREE_OBJECT_STRING_VARIABLES")
+	private transient Map<String, String> stringVariables;
+	@ElementCollection
+	@CollectionTable(name = "TREE_OBJECT_DATE_VARIABLES")
+	private transient Map<String, Date> dateVariables;
+
 	public TreeObject() {
 		setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 	}
 
 	/**
-	 * Gets all children of the treeObject. These annotations are in the method
-	 * because must been overwritten by the Form object. All objects but forms
-	 * must be FetchType.EAGER.
+	 * Gets all children of the treeObject. These annotations are in the method because must been overwritten by the
+	 * Form object. All objects but forms must be FetchType.EAGER.
 	 */
 	public List<TreeObject> getChildren() {
 		if (children == null) {
@@ -181,70 +182,6 @@ public abstract class TreeObject {
 		}
 	}
 
-	public Long getCreatedBy() {
-		return createdBy;
-	}
-
-	public Timestamp getCreationTime() {
-		if (creationDate != null) {
-			return creationDate;
-		} else {
-			creationDate = new java.sql.Timestamp(new java.util.Date().getTime());
-			return creationDate;
-		}
-	}
-
-	public void setUpdateTime() {
-		setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
-	}
-
-	public Timestamp getUpdateTime() {
-		if (updatedDate != null) {
-			return updatedDate;
-		} else {
-			updatedDate = new java.sql.Timestamp(new java.util.Date().getTime());
-			return updatedDate;
-		}
-	}
-
-	public Long getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setCreatedBy(Long createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public void setCreatedBy(User user) {
-		if (user != null) {
-			this.createdBy = user.getUserId();
-		}
-	}
-
-	public void setCreationTime(Timestamp dateCreated) {
-		this.creationDate = dateCreated;
-	}
-
-	public void setUpdateTime(Timestamp dateUpdated) {
-		this.updatedDate = dateUpdated;
-		if (getParent() != null) {
-			getParent().setUpdateTime(dateUpdated);
-		}
-	}
-
-	public void setUpdatedBy(Long updatedBy) {
-		this.updatedBy = updatedBy;
-		if (getParent() != null) {
-			getParent().setUpdatedBy(updatedBy);
-		}
-	}
-
-	public void setUpdatedBy(User user) {
-		if (user != null) {
-			this.updatedBy = user.getUserId();
-		}
-	}
-
 	public void switchChildren(int indexChild1, int indexChild2, User user) throws ChildrenNotFoundException {
 		if ((indexChild1 >= 0 && indexChild1 < getChildren().size())
 				&& (indexChild2 >= 0 && indexChild2 < getChildren().size())) {
@@ -320,14 +257,6 @@ public abstract class TreeObject {
 
 	public TreeObject getParent() {
 		return parent;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**
@@ -423,5 +352,45 @@ public abstract class TreeObject {
 			}
 		}
 		return questions;
+	}
+
+	@Override
+	public void setUpdateTime(Timestamp dateUpdated) {
+		super.setUpdateTime(dateUpdated);
+		if (getParent() != null) {
+			getParent().setUpdateTime(dateUpdated);
+		}
+	}
+
+	@Override
+	public void setUpdatedBy(Long updatedBy) {
+		super.setUpdatedBy(updatedBy);
+		if (getParent() != null) {
+			getParent().setUpdatedBy(updatedBy);
+		}
+	}
+
+	public Map<String, Integer> getIntVariables() {
+		return intVariables;
+	}
+
+	public void setIntVariables(Map<String, Integer> intVariables) {
+		this.intVariables = intVariables;
+	}
+
+	public Map<String, String> getStringVariables() {
+		return stringVariables;
+	}
+
+	public void setStringVariables(Map<String, String> stringVariables) {
+		this.stringVariables = stringVariables;
+	}
+
+	public Map<String, Date> getDateVariables() {
+		return dateVariables;
+	}
+
+	public void setDateVariables(Map<String, Date> dateVariables) {
+		this.dateVariables = dateVariables;
 	}
 }

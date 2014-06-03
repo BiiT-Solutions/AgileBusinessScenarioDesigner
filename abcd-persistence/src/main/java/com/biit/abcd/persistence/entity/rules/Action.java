@@ -1,7 +1,15 @@
 package com.biit.abcd.persistence.entity.rules;
 
-public class Action {
-	private static final int MAX_CHARACTERS_TO_SHOW =25;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.biit.abcd.persistence.entity.StorableObject;
+
+@Entity
+@Table(name = "RULE_ACTION")
+public class Action extends StorableObject {
+	private static final int MAX_CHARACTERS_TO_SHOW = 25;
+
 	private String expression = "";
 
 	public String getExpression() {

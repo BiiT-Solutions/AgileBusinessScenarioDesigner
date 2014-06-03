@@ -1,10 +1,8 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -16,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.biit.abcd.persistence.dao.IGenericDao;
 import com.biit.abcd.persistence.entity.TreeObject;
 
-public abstract class GenericDao<T> implements IGenericDao<T> {
+public abstract class GenericDao<T> extends StorableObjectDao<T> implements IGenericDao<T> {
 
 	private Class<T> type;
 
@@ -37,18 +35,6 @@ public abstract class GenericDao<T> implements IGenericDao<T> {
 
 	protected void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}
-
-	private void setCreationInfo(T entity) {
-		TreeObject treeObject = (TreeObject) entity;
-		if (treeObject.getCreationTime() == null) {
-			treeObject.setCreationTime(new Timestamp(new Date().getTime()));
-		}
-	}
-
-	private void setUpdateInfo(T entity) {
-		TreeObject treeObject = (TreeObject) entity;
-		treeObject.setUpdateTime(new Timestamp(new Date().getTime()));
 	}
 
 	@Override

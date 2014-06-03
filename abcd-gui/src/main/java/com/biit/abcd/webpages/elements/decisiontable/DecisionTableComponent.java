@@ -58,12 +58,6 @@ public class DecisionTableComponent extends CustomComponent {
 		// Add decision Rule to both tables.
 		conditionTable.addItem(decisionRule);
 		actionTable.addItem(decisionRule);
-
-		// Select first row if only exists this.
-//		if (decisionTable.getRules().size() == 1) {
-//			conditionTable.select(decisionRule);
-//			actionTable.select(decisionRule);
-//		}
 	}
 
 	public void removeSelectedRows() {
