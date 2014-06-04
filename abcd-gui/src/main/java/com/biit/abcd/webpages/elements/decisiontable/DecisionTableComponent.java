@@ -27,9 +27,23 @@ public class DecisionTableComponent extends CustomComponent {
 
 		conditionTable = new ConditionTable();
 		conditionTable.setSizeFull();
+		conditionTable.addCellSelectionListener(new CellSelectionListener() {
+			
+			@Override
+			public void cellSelectionChanged(CellRowSelector selector) {
+				actionTable.selectRows(selector.getSelectedRows(), false);
+			}
+		});
 
 		actionTable = new ActionTable();
 		actionTable.setSizeFull();
+		actionTable.addCellSelectionListener(new CellSelectionListener() {
+			
+			@Override
+			public void cellSelectionChanged(CellRowSelector selector) {
+				conditionTable.selectRows(selector.getSelectedRows(), false);
+			}
+		});
 
 		conditionTable.setId("main-table");
 		actionTable.setId("freeze-pane");

@@ -18,63 +18,6 @@ import com.vaadin.ui.Table.CellStyleGenerator;
 public class CellRowSelector implements ItemClickListener, CellStyleGenerator, Handler {
 	private static final long serialVersionUID = 6036202869337803510L;
 
-	public class Cell {
-
-		private Object row;
-		private Object col;
-
-		public Cell(Object row, Object col) {
-			this.row = row;
-			this.col = col;
-		}
-
-		public Object getRow() {
-			return row;
-		}
-
-		public Object getCol() {
-			return col;
-		}
-
-		private CellRowSelector getOuterType() {
-			return CellRowSelector.this;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result + ((col == null) ? 0 : col.hashCode());
-			result = prime * result + ((row == null) ? 0 : row.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Cell other = (Cell) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (col == null) {
-				if (other.col != null)
-					return false;
-			} else if (!col.equals(other.col))
-				return false;
-			if (row == null) {
-				if (other.row != null)
-					return false;
-			} else if (!row.equals(other.row))
-				return false;
-			return true;
-		}
-	}
-
 	private Cell startSelectionCell;
 	private Cell cursorCell;
 	private Set<Cell> selectedCells;
@@ -138,7 +81,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		selectionCols = getAllIdsBetweenTwoIds(table.getContainerPropertyIds(), startSelectionCell.getCol(),
 				cursorCell.getCol());
 		selectionRows = getAllIdsBetweenTwoIds(table.getItemIds(), startSelectionCell.getRow(), cursorCell.getRow());
-		Set<Cell> selectedAreaCells = new HashSet<CellRowSelector.Cell>();
+		Set<Cell> selectedAreaCells = new HashSet<Cell>();
 
 		// Create a list of elements in the area to the new position
 		for (Object selectedCol : selectionCols) {
@@ -153,9 +96,14 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		paintSelection(table);
 	}
 	
-	public void setCurrentSelectedCells(Set<Cell> cells, Cell cursorCell){
+	public void setCurrentSelectedCells(Table table,Set<Cell> cells, Cell cursorCell,boolean propagate){
+		cleanSelection(table, false);
 		this.selectedCells = cells;
 		this.cursorCell = cursorCell;
+		if(propagate){
+			fireCellSelectionListener();
+		}
+		paintSelection(table);		
 	}
 
 	protected void setSelection(Table table, Collection<Cell> cells) {
@@ -172,6 +120,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 			((EditCellComponent) table.getItem(cell.getRow()).getItemProperty(cell.getCol()).getValue()).select(false);
 			selectedCells.remove(cell);
 		}
+		fireCellSelectionListener();
 		table.refreshRowCache();
 	}
 
@@ -265,6 +214,14 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 
 	public Set<Cell> getSelectedCells() {
 		return selectedCells;
+	}
+	
+	public Set<Object> getSelectedRows(){
+		Set<Object> selectedRows = new HashSet<>();
+		for(Cell cell: getSelectedCells()){
+			selectedRows.add(cell.getRow());
+		}
+		return selectedRows;
 	}
 
 	public void addCellSelectionListener(CellSelectionListener listener) {

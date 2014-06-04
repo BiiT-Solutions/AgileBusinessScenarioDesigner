@@ -10,7 +10,6 @@ import com.biit.abcd.persistence.entity.rules.AnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector.Cell;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
@@ -110,22 +109,32 @@ public class ConditionTable extends Table {
 			}
 		}
 	}
-	
+
 	@Override
-    public boolean removeContainerProperty(Object propertyId)
-            throws UnsupportedOperationException {
-		setCurrentSelectedCells(new HashSet<Cell>(), null);
-        return super.removeContainerProperty(propertyId);
-    }
+	public boolean removeContainerProperty(Object propertyId) throws UnsupportedOperationException {
+		setCurrentSelectedCells(new HashSet<Cell>(), null, false);
+		return super.removeContainerProperty(propertyId);
+	}
 
 	@Override
 	public boolean removeItem(Object itemId) {
-		setCurrentSelectedCells(new HashSet<Cell>(), null);
+		setCurrentSelectedCells(new HashSet<Cell>(), null, true);
 		return super.removeItem(itemId);
 	}
 
-	public void setCurrentSelectedCells(Set<Cell> cells, Cell cursorCell) {
-		cellRowSelector.setCurrentSelectedCells(cells, cursorCell);
+	public void setCurrentSelectedCells(Set<Cell> cells, Cell cursorCell, boolean propagate) {
+		cellRowSelector.setCurrentSelectedCells(this, cells, cursorCell, propagate);
+	}
+
+	public void selectRows(Set<Object> rowIds, boolean propagate) {
+		Set<Cell> rows = new HashSet<Cell>();
+		for (Object rowId : rowIds) {
+			for (Object colId : getContainerPropertyIds()) {
+				Cell tempCell = new Cell(rowId, colId);
+				rows.add(tempCell);
+			}
+		}
+		setCurrentSelectedCells(rows, null, propagate);
 	}
 
 	/**
@@ -186,5 +195,13 @@ public class ConditionTable extends Table {
 			rule.removeCondition(question);
 			updateItem(rule);
 		}
+	}
+
+	public void addCellSelectionListener(CellSelectionListener listener) {
+		cellRowSelector.addCellSelectionListener(listener);
+	}
+
+	public void removeCellSelectionListener(CellSelectionListener listener) {
+		cellRowSelector.removeCellSelectionListener(listener);
 	}
 }
