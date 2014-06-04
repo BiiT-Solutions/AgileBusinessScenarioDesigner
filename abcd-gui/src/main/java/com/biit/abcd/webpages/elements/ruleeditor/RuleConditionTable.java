@@ -11,6 +11,7 @@ import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector;
 import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector.Cell;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
 
 public class RuleConditionTable extends Table {
 	private static final long serialVersionUID = 6488012179627542320L;
@@ -22,7 +23,7 @@ public class RuleConditionTable extends Table {
 		setSelectable(true);
 
 		addContainerProperty("Question", String.class, null);
-		addContainerProperty("Condition", String.class, null);
+		addContainerProperty("Condition", TextField.class, null);
 	}
 
 	public Collection<Question> getSelectedQuestions() {
@@ -49,7 +50,9 @@ public class RuleConditionTable extends Table {
 			row1.getItemProperty("Question").setValue(question.getName());
 			if (question.getChildren().size() > 0) {
 				try {
-					row1.getItemProperty("Condition").setValue("= " + question.getChild(0));
+					TextField condition = new TextField();
+					condition.setValue("= " + question.getChild(0));
+					row1.getItemProperty("Condition").setValue(condition);
 				} catch (com.vaadin.data.Property.ReadOnlyException | ChildrenNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

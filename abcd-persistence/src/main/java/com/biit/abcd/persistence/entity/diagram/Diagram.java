@@ -1,16 +1,11 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,29 +20,17 @@ import com.biit.abcd.gson.utils.DiagramLinkSerializer;
 import com.biit.abcd.gson.utils.DiagramObjectSerializer;
 import com.biit.abcd.gson.utils.DiagramSerializer;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.StorableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "DIAGRAM")
-public class Diagram {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
-	private Long id;
+public class Diagram extends StorableObject {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Form form;
-
-	private Timestamp creationDate = null;
-	@Column(columnDefinition = "DOUBLE")
-	private Long createdBy = null;
-	private Timestamp updatedDate = null;
-	@Column(columnDefinition = "DOUBLE")
-	private Long updatedBy = null;
 
 	@SerializedName("cells")
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -63,78 +46,12 @@ public class Diagram {
 		this.form = form;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Form getForm() {
 		return form;
 	}
 
 	public void setForm(Form form) {
 		this.form = form;
-	}
-
-	public Long getCreatedBy() {
-		return createdBy;
-	}
-
-	public Timestamp getCreationTime() {
-		if (creationDate != null) {
-			return creationDate;
-		} else {
-			creationDate = new java.sql.Timestamp(new java.util.Date().getTime());
-			return creationDate;
-		}
-	}
-
-	public void setUpdateTime() {
-		setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
-	}
-
-	public Timestamp getUpdateTime() {
-		if (updatedDate != null) {
-			return updatedDate;
-		} else {
-			updatedDate = new java.sql.Timestamp(new java.util.Date().getTime());
-			return updatedDate;
-		}
-	}
-
-	public Long getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setCreatedBy(Long createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public void setCreatedBy(User user) {
-		if (user != null) {
-			this.createdBy = user.getUserId();
-		}
-	}
-
-	public void setCreationTime(Timestamp dateCreated) {
-		this.creationDate = dateCreated;
-	}
-
-	public void setUpdateTime(Timestamp dateUpdated) {
-		this.updatedDate = dateUpdated;
-	}
-
-	public void setUpdatedBy(Long updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public void setUpdatedBy(User user) {
-		if (user != null) {
-			this.updatedBy = user.getUserId();
-		}
 	}
 
 	public static Diagram fromJson(String jsonString) {

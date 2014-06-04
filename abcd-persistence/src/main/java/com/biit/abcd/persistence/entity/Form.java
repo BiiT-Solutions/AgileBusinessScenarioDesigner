@@ -15,8 +15,6 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cascade;
-
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.liferay.portal.model.UserGroup;
 
@@ -26,7 +24,6 @@ public class Form extends TreeObject {
 	private static final String DEFAULT_NAME = "New Form";
 	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
 
-	private String name;
 	private Integer version = 1;
 
 	@Column(nullable = false)
@@ -42,7 +39,6 @@ public class Form extends TreeObject {
 	 * children must use FetchType.LAZY.
 	 */
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
 	@OrderColumn(name = "children_index")
 	public List<TreeObject> getChildren() {
@@ -62,17 +58,6 @@ public class Form extends TreeObject {
 	@Override
 	public void setParent(TreeObject parent) throws NotValidParentException {
 		throw new NotValidParentException("Forms cannot have a parent.");
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		super.setName(name);
-		this.name = name;
 	}
 
 	public Integer getVersion() {
