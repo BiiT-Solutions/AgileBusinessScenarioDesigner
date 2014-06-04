@@ -17,8 +17,11 @@ public class EditCellComponent extends CustomComponent {
 	private CssLayout rootLayout;
 	private IconButton editButton, removeButton;
 	private Label textLabel;
+	private boolean selectValue;
 
 	public EditCellComponent() {
+		selectValue = false;
+		
 		addStyleName(CLASSNAME);
 
 		rootLayout = new CssLayout();
@@ -38,11 +41,16 @@ public class EditCellComponent extends CustomComponent {
 	}
 
 	public void select(boolean value) {
+		selectValue = value;
 		if (value) {
 			addButtons();
 		} else {
 			removeButtons();
 		}
+	}
+	
+	public void select(){
+		select(!selectValue);
 	}
 
 	private void addButtons() {

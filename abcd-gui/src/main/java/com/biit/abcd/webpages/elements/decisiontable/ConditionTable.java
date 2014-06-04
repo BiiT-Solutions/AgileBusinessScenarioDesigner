@@ -10,6 +10,7 @@ import com.biit.abcd.persistence.entity.rules.AnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector.Cell;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
@@ -23,15 +24,21 @@ import com.vaadin.ui.Table;
 public class ConditionTable extends Table {
 
 	private static final long serialVersionUID = -8109315235459994799L;
+	private static final int rowHeaderWidth = 32;
 
 	private CellRowSelector cellRowSelector;
 
 	public ConditionTable() {
+		setRowHeaderMode(RowHeaderMode.INDEX);
+		setColumnWidth(null, rowHeaderWidth);
+
 		setImmediate(true);
 		setSizeFull();
+
 		cellRowSelector = new CellRowSelector();
 		addItemClickListener(cellRowSelector);
 		setCellStyleGenerator(cellRowSelector);
+		addActionHandler(cellRowSelector);
 		setSelectable(false);
 	}
 
@@ -44,16 +51,16 @@ public class ConditionTable extends Table {
 
 	public Collection<Question> getSelectedQuestions() {
 		Set<Question> questions = new HashSet<Question>();
-		for (Object object : cellRowSelector.getSelectedPropertiesId()) {
-			questions.add((Question) object);
+		for (Cell cell : cellRowSelector.getSelectedCells()) {
+			questions.add((Question) cell.getCol());
 		}
 		return questions;
 	}
 
 	public Collection<TableRule> getSelectedRules() {
 		Set<TableRule> rules = new HashSet<TableRule>();
-		for (Object object : cellRowSelector.getSelectedItemsId()) {
-			rules.add((TableRule) object);
+		for (Cell cell : cellRowSelector.getSelectedCells()) {
+			rules.add((TableRule) cell.getRow());
 		}
 		return rules;
 	}
@@ -102,6 +109,23 @@ public class ConditionTable extends Table {
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 			}
 		}
+	}
+	
+	@Override
+    public boolean removeContainerProperty(Object propertyId)
+            throws UnsupportedOperationException {
+		setCurrentSelectedCells(new HashSet<Cell>(), null);
+        return super.removeContainerProperty(propertyId);
+    }
+
+	@Override
+	public boolean removeItem(Object itemId) {
+		setCurrentSelectedCells(new HashSet<Cell>(), null);
+		return super.removeItem(itemId);
+	}
+
+	public void setCurrentSelectedCells(Set<Cell> cells, Cell cursorCell) {
+		cellRowSelector.setCurrentSelectedCells(cells, cursorCell);
 	}
 
 	/**

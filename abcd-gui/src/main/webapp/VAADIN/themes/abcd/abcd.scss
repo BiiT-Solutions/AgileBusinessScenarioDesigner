@@ -420,6 +420,21 @@ $open-sans-pathPrefix: "./fonts/";
 		line-height: normal;
 	}
 	
+	.v-table-cell-content-cursor-cell {
+		box-shadow: inset 0px 0px 5px #000000;
+	}
+	
+	//Scrollable hack
+	#main-table .v-scrollable {
+		overflow-y: hidden !important;
+	}
+	
+	.v-table-cell-content-rowheader {
+		border-color: #c2c3c4;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #e2e2e2 51%, #d3d3d3 80%);
+	}
+	
 	.v-table .v-selected, .black .v-table .v-selected {
 		background: #4d749f url(../reindeer/common/img/sel-bg.png) repeat-x;
 		color: #fff;

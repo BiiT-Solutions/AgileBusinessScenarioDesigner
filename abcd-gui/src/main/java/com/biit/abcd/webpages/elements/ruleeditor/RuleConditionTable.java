@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector;
+import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector.Cell;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 
@@ -26,16 +27,16 @@ public class RuleConditionTable extends Table {
 
 	public Collection<Question> getSelectedQuestions() {
 		Set<Question> questions = new HashSet<Question>();
-		for (Object object : cellRowSelector.getSelectedPropertiesId()) {
-			questions.add((Question) object);
+		for (Cell cell : cellRowSelector.getSelectedCells()) {
+			questions.add((Question) cell.getCol());
 		}
 		return questions;
 	}
 
 	public Collection<TableRule> getSelectedRules() {
 		Set<TableRule> rules = new HashSet<TableRule>();
-		for (Object object : cellRowSelector.getSelectedItemsId()) {
-			rules.add((TableRule) object);
+		for (Cell cell : cellRowSelector.getSelectedCells()) {
+			rules.add((TableRule) cell.getRow());
 		}
 		return rules;
 	}

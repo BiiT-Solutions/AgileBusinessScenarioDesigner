@@ -7,6 +7,7 @@ import com.biit.abcd.persistence.entity.rules.DecisionTable;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 
 public class DecisionTableComponent extends CustomComponent {
 	private static final long serialVersionUID = 2314989763962134814L;
@@ -23,12 +24,19 @@ public class DecisionTableComponent extends CustomComponent {
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
 		rootLayout.setSpacing(true);
-		setCompositionRoot(rootLayout);
 
 		conditionTable = new ConditionTable();
 		conditionTable.setSizeFull();
+
 		actionTable = new ActionTable();
 		actionTable.setSizeFull();
+
+		conditionTable.setId("main-table");
+		actionTable.setId("freeze-pane");
+		JavaScript
+				.getCurrent()
+				.execute(
+						"var t=document.getElementById('main-table').children[1]; var fp=document.getElementById('freeze-pane').children[1]; fp.addEventListener('scroll', function() {t.scrollTop=fp.scrollTop;}, false);");
 
 		rootLayout.addComponent(conditionTable);
 		rootLayout.addComponent(actionTable);
@@ -37,6 +45,7 @@ public class DecisionTableComponent extends CustomComponent {
 
 		setSizeFull();
 		setImmediate(true);
+		setCompositionRoot(rootLayout);
 	}
 
 	public void addColumn(Question question) {
@@ -58,12 +67,6 @@ public class DecisionTableComponent extends CustomComponent {
 		// Add decision Rule to both tables.
 		conditionTable.addItem(decisionRule);
 		actionTable.addItem(decisionRule);
-
-		// Select first row if only exists this.
-//		if (decisionTable.getRules().size() == 1) {
-//			conditionTable.select(decisionRule);
-//			actionTable.select(decisionRule);
-//		}
 	}
 
 	public void removeSelectedRows() {

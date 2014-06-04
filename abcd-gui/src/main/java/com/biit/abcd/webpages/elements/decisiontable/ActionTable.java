@@ -1,10 +1,14 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector.Cell;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
@@ -126,5 +130,15 @@ public class ActionTable extends Table {
 			rule.getAction().setExpression("");
 			updateItem(rule);
 		}
+	}
+	
+	@Override
+	public boolean removeItem(Object itemId) {
+		setCurrentSelectedCells(new HashSet<Cell>(), null);
+		return super.removeItem(itemId);
+	}
+
+	public void setCurrentSelectedCells(Set<Cell> cells, Cell cursorCell) {
+		cellRowSelector.setCurrentSelectedCells(cells, cursorCell);
 	}
 }
