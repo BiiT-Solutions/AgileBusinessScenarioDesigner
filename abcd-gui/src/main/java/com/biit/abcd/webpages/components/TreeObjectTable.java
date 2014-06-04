@@ -72,8 +72,11 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void updateItem(TreeObject element) {
 		Item item = getItem(element);
-		String name = getItemName(element);
-		item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(name);
+		if(item!=null){
+			//If the item still exists on table.
+			String name = getItemName(element);
+			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(name);
+		}
 	}
 
 	/**
