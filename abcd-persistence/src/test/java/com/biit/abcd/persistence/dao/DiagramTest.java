@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Form;
@@ -87,7 +86,6 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(diagram2.toJson(), storedJson);
 	}
 
-	@AfterSuite(alwaysRun = true)
 	@Test(groups = { "diagramDao" }, dependsOnMethods = { "getDummyDiagram", "storeDiagramObjects" })
 	public void removeDummyDiagram() {
 		List<Diagram> diagrams = diagramDao.getAll();

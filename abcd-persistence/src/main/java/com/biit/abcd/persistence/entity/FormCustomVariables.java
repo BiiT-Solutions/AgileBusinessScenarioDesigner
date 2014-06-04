@@ -6,13 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.CollectionTable;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,15 +17,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FORM_CUSTOM_VARIABLES")
-public class FormCustomVariables {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
-	private Long id;
+public class FormCustomVariables extends StorableObject {
 
 	@OneToOne
-	@JoinColumn(name = "id")
 	private Form form;
 
 	/**
@@ -46,6 +35,10 @@ public class FormCustomVariables {
 	@ElementCollection
 	@CollectionTable(name = "FORM_CUSTOM_DATE_VARIABLES")
 	private Map<String, Class<TreeObject>> customDateVariables = new HashMap<>();
+
+	public FormCustomVariables() {
+
+	}
 
 	public FormCustomVariables(Form form) {
 		this.setForm(form);
@@ -117,5 +110,17 @@ public class FormCustomVariables {
 
 	public void setForm(Form form) {
 		this.form = form;
+	}
+
+	public Map<String, Class<TreeObject>> getCustomIntegerVariables() {
+		return customIntegerVariables;
+	}
+
+	public Map<String, Class<TreeObject>> getCustomStringVariables() {
+		return customStringVariables;
+	}
+
+	public Map<String, Class<TreeObject>> getCustomDateVariables() {
+		return customDateVariables;
 	}
 }
