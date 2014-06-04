@@ -1,6 +1,8 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
@@ -12,12 +14,23 @@ public class AddNewConditionWindow extends SelectionTableWindow {
 	private static final long serialVersionUID = 6781910083959136654L;
 	private FormQuestionTable formQuestionTable;
 
-	public AddNewConditionWindow(Form form) {
-		super(form);
+	public AddNewConditionWindow(Form form, boolean multiselect) {
+		super(form, multiselect);
 	}
 
 	public Question getSelectedQuestion() {
 		return (Question) formQuestionTable.getValue();
+	}
+
+	public Set<Question> getSelectedQuestions() {
+		Set<TreeObject> selectedObjects = formQuestionTable.getTreeObjectsSelected();
+		Set<Question> selectedQuestions = new HashSet<Question>();
+		for (TreeObject object : selectedObjects) {
+			if (object instanceof Question) {
+				selectedQuestions.add((Question) object);
+			}
+		}
+		return selectedQuestions;
 	}
 
 	public void disableQuestion(Question question) {
@@ -31,6 +44,7 @@ public class AddNewConditionWindow extends SelectionTableWindow {
 	@Override
 	public Component generateContent(TreeObject treeObject) {
 		formQuestionTable = new FormQuestionTable();
+		formQuestionTable.setMultiSelect(isMultiselect());
 		formQuestionTable.setSizeFull();
 		if (treeObject instanceof Form) {
 			formQuestionTable.setRootElement((Form) treeObject);

@@ -53,7 +53,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(getForm());
+						AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(getForm(), false);
 						addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {

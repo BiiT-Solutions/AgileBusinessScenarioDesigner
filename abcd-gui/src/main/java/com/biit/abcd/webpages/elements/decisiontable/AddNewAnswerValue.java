@@ -11,7 +11,7 @@ public class AddNewAnswerValue extends SelectionTableWindow {
 	private FormAnswerTable formAnswerTable;
 
 	public AddNewAnswerValue(Question question) {
-		super(question);
+		super(question,false);
 	}
 
 	@Override

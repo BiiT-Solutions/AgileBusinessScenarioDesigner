@@ -2,7 +2,9 @@ package com.biit.abcd.webpages.components;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -49,7 +51,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -72,16 +75,16 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void updateItem(TreeObject element) {
 		Item item = getItem(element);
-		if(item!=null){
-			//If the item still exists on table.
+		if (item != null) {
+			// If the item still exists on table.
 			String name = getItemName(element);
 			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(name);
 		}
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
-	 * members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -102,8 +105,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
-	 * {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't
+	 * be defined, then raises a {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -144,11 +147,24 @@ public class TreeObjectTable extends TreeTable {
 		}
 	}
 
-	@Override
-	public TreeObject getValue() {
+	public TreeObject getTreeObjectSelected() {
 		Object value = super.getValue();
 		if (value instanceof TreeObject) {
 			return (TreeObject) value;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<TreeObject> getTreeObjectsSelected() {
+		Object value = super.getValue();
+		if (value instanceof Set<?>) {
+			Set<Object> setObject = (Set<Object>) value;
+			Set<TreeObject> setTreeObject = new HashSet<TreeObject>();
+			for (Object obj : setObject) {
+				setTreeObject.add((TreeObject) obj);
+			}
+			return setTreeObject;
 		}
 		return null;
 	}

@@ -126,8 +126,8 @@ public class TreeDesigner extends FormWebPageComponent {
 			Category newCategory = new Category();
 			setCreator(newCategory);
 			try {
-				if (formTreeTable.getValue() != null) {
-					Category selectedCategory = formTreeTable.getValue().getCategory();
+				if (formTreeTable.getTreeObjectSelected() != null) {
+					Category selectedCategory = formTreeTable.getTreeObjectSelected().getCategory();
 					if (selectedCategory == null) {
 						getForm().addChild(newCategory);
 					} else {
@@ -155,8 +155,8 @@ public class TreeDesigner extends FormWebPageComponent {
 	 * @param category
 	 */
 	private void addCategoryToUI(Category category) {
-		if (formTreeTable.getValue() != null) {
-			Category selectedCategory = formTreeTable.getValue().getCategory();
+		if (formTreeTable.getTreeObjectSelected() != null) {
+			Category selectedCategory = formTreeTable.getTreeObjectSelected().getCategory();
 			if (selectedCategory != null) {
 				TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
 				formTreeTable.addItemAfter(getLastElementOfCategory, category, form);
@@ -176,10 +176,10 @@ public class TreeDesigner extends FormWebPageComponent {
 			Group newGroup = new Group();
 			setCreator(newGroup);
 			try {
-				if (formTreeTable.getValue() != null) {
-					TreeObject container = formTreeTable.getValue().getGroup();
+				if (formTreeTable.getTreeObjectSelected() != null) {
+					TreeObject container = formTreeTable.getTreeObjectSelected().getGroup();
 					if (container == null) {
-						container = formTreeTable.getValue().getCategory();
+						container = formTreeTable.getTreeObjectSelected().getCategory();
 					}
 					if (container != null) {
 						newGroup.setName(newGroup.getDefaultName(container, 1));
@@ -201,16 +201,16 @@ public class TreeDesigner extends FormWebPageComponent {
 			Question newQuestion = new Question();
 			setCreator(newQuestion);
 			try {
-				if (formTreeTable.getValue() != null) {
+				if (formTreeTable.getTreeObjectSelected() != null) {
 					TreeObject parent = null;
-					if (formTreeTable.getValue() instanceof Category || formTreeTable.getValue() instanceof Group) {
-						parent = formTreeTable.getValue();
+					if (formTreeTable.getTreeObjectSelected() instanceof Category || formTreeTable.getTreeObjectSelected() instanceof Group) {
+						parent = formTreeTable.getTreeObjectSelected();
 						// If selected a question, we consider the same that
 						// selecting the question's parent.
-					} else if (formTreeTable.getValue() instanceof Question) {
-						parent = formTreeTable.getValue().getParent();
-					} else if (formTreeTable.getValue() instanceof Answer) {
-						parent = formTreeTable.getValue().getParent().getParent();
+					} else if (formTreeTable.getTreeObjectSelected() instanceof Question) {
+						parent = formTreeTable.getTreeObjectSelected().getParent();
+					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
+						parent = formTreeTable.getTreeObjectSelected().getParent().getParent();
 					}
 					if (parent != null) {
 						newQuestion.setName(newQuestion.getDefaultName(parent, 1));
@@ -232,14 +232,14 @@ public class TreeDesigner extends FormWebPageComponent {
 			Answer newAnswer = new Answer();
 			setCreator(newAnswer);
 			try {
-				if (formTreeTable.getValue() != null) {
+				if (formTreeTable.getTreeObjectSelected() != null) {
 					TreeObject parent = null;
-					if (formTreeTable.getValue() instanceof Question) {
-						parent = formTreeTable.getValue();
+					if (formTreeTable.getTreeObjectSelected() instanceof Question) {
+						parent = formTreeTable.getTreeObjectSelected();
 						// If selected an answer, we consider the same that
 						// selecting the question.
-					} else if (formTreeTable.getValue() instanceof Answer) {
-						parent = formTreeTable.getValue().getParent();
+					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
+						parent = formTreeTable.getTreeObjectSelected().getParent();
 					}
 					if (parent != null) {
 						newAnswer.setName(newAnswer.getDefaultName(parent, 1));
@@ -260,7 +260,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	 * @param parent
 	 */
 	private void addElementToUI(TreeObject child, TreeObject parent) {
-		if (formTreeTable.getValue() != null) {
+		if (formTreeTable.getTreeObjectSelected() != null) {
 			TreeObject lastElement = parent.getLastElement();
 			formTreeTable.addItemAfter(lastElement, child, parent);
 		}
@@ -313,7 +313,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	 */
 	public boolean moveUp() {
 		if (formTreeTable != null) {
-			TreeObject selected = formTreeTable.getValue();
+			TreeObject selected = formTreeTable.getTreeObjectSelected();
 			if (selected.getParent() != null && selected.getParent().getChildren().indexOf(selected) > 0) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
@@ -338,7 +338,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	 */
 	public boolean moveDown() {
 		if (formTreeTable != null) {
-			TreeObject selected = formTreeTable.getValue();
+			TreeObject selected = formTreeTable.getTreeObjectSelected();
 			if (selected.getParent() != null
 					&& selected.getParent().getChildren().indexOf(selected) < selected.getParent().getChildren().size() - 1) {
 				try {
@@ -359,7 +359,7 @@ public class TreeDesigner extends FormWebPageComponent {
 
 	public void removeSelected() {
 		if (formTreeTable != null) {
-			TreeObject selected = formTreeTable.getValue();
+			TreeObject selected = formTreeTable.getTreeObjectSelected();
 			if (selected != null && selected.getParent() != null) {
 				selected.remove();
 				removeElementFromUI(selected);
@@ -382,8 +382,8 @@ public class TreeDesigner extends FormWebPageComponent {
 
 		@Override
 		public void valueChange(ValueChangeEvent event) {
-			updateUpperMenu(formTreeTable.getValue());
-			updatePropertiesComponent(formTreeTable.getValue());
+			updateUpperMenu(formTreeTable.getTreeObjectSelected());
+			updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
 		}
 	}
 

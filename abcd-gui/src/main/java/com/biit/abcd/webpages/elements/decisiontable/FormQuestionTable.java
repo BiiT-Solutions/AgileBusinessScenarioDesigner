@@ -35,18 +35,6 @@ public class FormQuestionTable extends TreeObjectTable {
 		refreshRowCache();
 	}
 
-	@Override
-	public Question getValue() {
-		if (disabledQuestions.contains(super.getValue())) {
-			return null;
-		} else {
-			if (!(super.getValue() instanceof Question)) {
-				return null;
-			}
-			return (Question) super.getValue();
-		}
-	}
-
 	/**
 	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members. in
 	 * this table answers are not shown.

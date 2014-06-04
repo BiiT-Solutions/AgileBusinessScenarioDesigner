@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages;
 
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
@@ -60,17 +61,20 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(getForm());
+				AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(getForm(), true);
 				addNewConditionWindow.disableQuestions(decisionTable.getColumns());
 				addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
-						((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
-						decisionTable.addColumn(selectedQuestion);
-						if (decisionTable.getColumns().size() == 1 && decisionTable.getNumberOfRules() == 0) {
-							decisionTable.addRow();
+						Set<Question> selectedQuestions = ((AddNewConditionWindow) window).getSelectedQuestions();
+						for (Question selectedQuestion : selectedQuestions) {
+							((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
+							decisionTable.addColumn(selectedQuestion);
+							if (decisionTable.getColumns().size() == 1 && decisionTable.getNumberOfRules() == 0) {
+								decisionTable.addRow();
+							}
 						}
+						window.close();
 					}
 				});
 				addNewConditionWindow.showCentered();
