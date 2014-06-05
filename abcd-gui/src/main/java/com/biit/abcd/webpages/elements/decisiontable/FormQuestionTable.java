@@ -36,8 +36,9 @@ public class FormQuestionTable extends TreeObjectTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members. in
-	 * this table answers are not shown.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItem(Object)} for form members. in this table answers
+	 * are not shown.
 	 * 
 	 * @param element
 	 */
@@ -46,5 +47,13 @@ public class FormQuestionTable extends TreeObjectTable {
 		if (!(element instanceof Answer)) {
 			super.addItem(element, parent);
 		}
+	}
+
+	@Override
+	public boolean isElementFiltered(Object itemId) {
+		if (itemId instanceof Question) {
+			return false;
+		}
+		return true;
 	}
 }

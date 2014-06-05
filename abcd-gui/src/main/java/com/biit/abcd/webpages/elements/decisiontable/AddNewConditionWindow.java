@@ -53,4 +53,8 @@ public class AddNewConditionWindow extends SelectionTableWindow {
 
 		return formQuestionTable;
 	}
+	
+	public boolean isElementFiltered(Object itemId) {
+		return true;
+	}
 }

@@ -13,11 +13,15 @@ public class FormQuestionTableCellGenerator extends FormTreeTableCellStyleGenera
 	public String getStyle(Table source, Object itemId, Object propertyId) {
 		FormQuestionTable formQuestionTable = (FormQuestionTable) source;
 		List<Question> disabledQuestions = formQuestionTable.getDisabledQuestions();
-		
-		if(disabledQuestions.contains(itemId)){
-			return "cell-disabled";
-		}else{		
-			return super.getStyle(source, itemId, propertyId);
-		}		
+
+		if (formQuestionTable.isElementFiltered(itemId)) {
+			return super.getStyle(source, itemId, propertyId)+" filtered";
+		} else {
+			if (disabledQuestions.contains(itemId)) {
+				return "cell-disabled";
+			} else {
+				return super.getStyle(source, itemId, propertyId);
+			}
+		}
 	}
 }

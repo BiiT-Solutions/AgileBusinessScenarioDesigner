@@ -173,4 +173,10 @@ public class TreeObjectTable extends TreeTable {
 	public Collection<?> getSortableContainerPropertyIds() {
 		return Collections.EMPTY_LIST;
 	}
+
+	public boolean isElementFiltered(Object itemId) {
+		return false;
+	}
+	
+	
 }

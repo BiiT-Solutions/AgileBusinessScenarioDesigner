@@ -330,6 +330,10 @@ $open-sans-pathPrefix: "./fonts/";
 	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-answer, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-answer {
 		color: rgb(165, 107, 124);
 	}
+	/* Element filter */
+	.filtered.v-table-row.v-selected {
+		background: #95A8BD url(../reindeer/common/img/sel-bg.png) repeat-x;
+	}
 	
 	&.v-app,
 	.v-caption,
