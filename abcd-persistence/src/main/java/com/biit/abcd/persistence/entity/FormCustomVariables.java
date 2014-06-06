@@ -28,13 +28,13 @@ public class FormCustomVariables extends StorableObject {
 	 */
 	@ElementCollection
 	@CollectionTable(name = "FORM_CUSTOM_INT_VARIABLES")
-	private Map<String, Class<TreeObject>> customIntegerVariables = new HashMap<>();
+	private Map<String, Class<?>> customIntegerVariables = new HashMap<>();
 	@ElementCollection
 	@CollectionTable(name = "FORM_CUSTOM_STRING_VARIABLES")
-	private Map<String, Class<TreeObject>> customStringVariables = new HashMap<>();
+	private Map<String, Class<?>> customStringVariables = new HashMap<>();
 	@ElementCollection
 	@CollectionTable(name = "FORM_CUSTOM_DATE_VARIABLES")
-	private Map<String, Class<TreeObject>> customDateVariables = new HashMap<>();
+	private Map<String, Class<?>> customDateVariables = new HashMap<>();
 
 	public FormCustomVariables() {
 
@@ -44,15 +44,15 @@ public class FormCustomVariables extends StorableObject {
 		this.setForm(form);
 	}
 
-	public void addCustomIntegerVariable(String name, Class<TreeObject> level) {
+	public void addCustomIntegerVariable(String name, Class<?> level) {
 		customIntegerVariables.put(name, level);
 	}
 
-	public void addCustomStringVariable(String name, Class<TreeObject> level) {
+	public void addCustomStringVariable(String name, Class<?> level) {
 		customStringVariables.put(name, level);
 	}
 
-	public void addCustomDateVariable(String name, Class<TreeObject> level) {
+	public void addCustomDateVariable(String name, Class<?> level) {
 		customDateVariables.put(name, level);
 	}
 
@@ -62,7 +62,7 @@ public class FormCustomVariables extends StorableObject {
 	 * @param level
 	 * @return
 	 */
-	public List<String> getCustomIntegerVariables(Class<TreeObject> level) {
+	public List<String> getCustomIntegerVariables(Class<?> level) {
 		List<String> values = new ArrayList<>();
 		for (String value : customIntegerVariables.keySet()) {
 			if (customIntegerVariables.get(value).equals(level)) {
@@ -78,7 +78,7 @@ public class FormCustomVariables extends StorableObject {
 	 * @param level
 	 * @return
 	 */
-	public List<String> getCustomStringVariables(Class<TreeObject> level) {
+	public List<String> getCustomStringVariables(Class<?> level) {
 		List<String> values = new ArrayList<>();
 		for (String value : customStringVariables.keySet()) {
 			if (customStringVariables.get(value).equals(level)) {
@@ -94,7 +94,7 @@ public class FormCustomVariables extends StorableObject {
 	 * @param level
 	 * @return
 	 */
-	public List<String> getCustomDateVariables(Class<TreeObject> level) {
+	public List<String> getCustomDateVariables(Class<?> level) {
 		List<String> values = new ArrayList<>();
 		for (String value : customDateVariables.keySet()) {
 			if (customDateVariables.get(value).equals(level)) {
@@ -112,15 +112,15 @@ public class FormCustomVariables extends StorableObject {
 		this.form = form;
 	}
 
-	public Map<String, Class<TreeObject>> getCustomIntegerVariables() {
+	public Map<String, Class<?>> getCustomIntegerVariables() {
 		return customIntegerVariables;
 	}
 
-	public Map<String, Class<TreeObject>> getCustomStringVariables() {
+	public Map<String, Class<?>> getCustomStringVariables() {
 		return customStringVariables;
 	}
 
-	public Map<String, Class<TreeObject>> getCustomDateVariables() {
+	public Map<String, Class<?>> getCustomDateVariables() {
 		return customDateVariables;
 	}
 }
