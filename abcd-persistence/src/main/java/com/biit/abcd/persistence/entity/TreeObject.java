@@ -91,6 +91,8 @@ public abstract class TreeObject extends StorableObject {
 			try {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
+				throw new NotValidChildException("Class '" + child.getClass().getName()
+						+ "' does not allows instances of '" + this.getClass().getName() + "' as parent.");
 			}
 		}
 	}

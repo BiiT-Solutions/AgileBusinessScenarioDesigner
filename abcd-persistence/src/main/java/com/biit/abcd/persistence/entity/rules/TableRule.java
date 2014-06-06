@@ -4,14 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.StorableObject;
 
@@ -22,17 +23,25 @@ import com.biit.abcd.persistence.entity.StorableObject;
 @Table(name = "RULE_DECISION_TABLE")
 public class TableRule extends StorableObject {
 
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@MapKey(name="id")
+	@ManyToOne
+	private Form form;
+
+	@ElementCollection
+	@CollectionTable(name = "TABLE_RULES_CONDITIONS")
 	private Map<Question, Condition> conditions;
 
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name = "id")
 	private Action action;
 
 	public TableRule() {
 		conditions = new HashMap<Question, Condition>();
 		action = new Action();
+	}
+
+	public TableRule(Form form) {
+		conditions = new HashMap<Question, Condition>();
+		action = new Action();
+		setForm(form);
 	}
 
 	public void putCondition(Question question, Condition condition) {
@@ -49,6 +58,14 @@ public class TableRule extends StorableObject {
 
 	public Action getAction() {
 		return action;
+	}
+
+	public Form getForm() {
+		return form;
+	}
+
+	public void setForm(Form form) {
+		this.form = form;
 	}
 
 }

@@ -26,7 +26,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	@Autowired
 	private IFormDao formDao;
 
-	private Form form;
+	private Form basicForm;
 
 	@Test(groups = { "formCustomVariablesDao" })
 	public void testEmptyDatabase() {
@@ -36,11 +36,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeDummyVariables() throws NotValidFormException {
-		form = new Form();
-		form.setName(DUMMY_FORM);
-		formDao.makePersistent(form);
+		basicForm = new Form();
+		basicForm.setName(DUMMY_FORM);
+		formDao.makePersistent(basicForm);
 
-		FormCustomVariables formCustomVariables = new FormCustomVariables(form);
+		FormCustomVariables formCustomVariables = new FormCustomVariables(basicForm);
 		formCustomVariablesDao.makePersistent(formCustomVariables);
 
 		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 1);
@@ -50,12 +50,12 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	public void getDummyVariables() {
 		List<FormCustomVariables> customVariables = formCustomVariablesDao.getAll();
 		Assert.assertEquals(customVariables.get(0).getForm().getName(), DUMMY_FORM);
-		Assert.assertNotNull(formCustomVariablesDao.getFormCustomVariables(form));
+		Assert.assertNotNull(formCustomVariablesDao.getFormCustomVariables(basicForm));
 	}
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
 	public void storeIntegerVariables() {
-		form = new Form();
+		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v2");
 		formDao.makePersistent(form);
 
@@ -70,7 +70,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
 	public void storeStringVariables() {
-		form = new Form();
+		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v3");
 		formDao.makePersistent(form);
 
@@ -85,7 +85,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
 	public void storeDateVariables() {
-		form = new Form();
+		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v4");
 		formDao.makePersistent(form);
 
