@@ -147,6 +147,7 @@ public enum LanguageCodes {
 	ANSWER_TYPE_RADIO("answer.type.radio"),
 	MULTI_CHECKBOX("answer.type.multi.checkbox"),
 	
+	ANSWER_FORMAT_POSTAL_CODE("answer.format.postal.code"),
 	ANSWER_FORMAT_TEXT("answer.format.text"),
 	ANSWER_FORMAT_DATE("answer.format.date"),
 	ANSWER_FORMAT_NUMBER("answer.format.number"),

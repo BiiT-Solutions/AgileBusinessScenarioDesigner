@@ -3,11 +3,14 @@ package com.biit.abcd.language;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 
 public enum AnswerFormatUi {
-	TEXT(AnswerFormat.TEXT, LanguageCodes.ANSWER_FORMAT_TEXT),
+	
+	POSTAL_CODE(AnswerFormat.POSTAL_CODE, LanguageCodes.ANSWER_FORMAT_POSTAL_CODE),
 
 	DATE(AnswerFormat.DATE, LanguageCodes.ANSWER_FORMAT_DATE),
 
-	NUMBER(AnswerFormat.NUMBER, LanguageCodes.ANSWER_FORMAT_NUMBER);
+	NUMBER(AnswerFormat.NUMBER, LanguageCodes.ANSWER_FORMAT_NUMBER),
+	
+	TEXT(AnswerFormat.TEXT, LanguageCodes.ANSWER_FORMAT_TEXT);
 
 	private AnswerFormat answerFormat;
 	private LanguageCodes languageCode;

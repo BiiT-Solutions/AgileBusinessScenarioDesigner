@@ -331,7 +331,7 @@ $open-sans-pathPrefix: "./fonts/";
 		color: rgb(165, 107, 124);
 	}
 	/* Element filter */
-	.filtered.v-table-row.v-selected {
+	.filtered.v-table-row.v-selected, .filtered.v-table-row-odd.v-selected {
 		background: #95A8BD;
 	}
 	
