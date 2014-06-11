@@ -616,4 +616,13 @@ $open-sans-pathPrefix: "./fonts/";
 		padding: 0px 0px 0px 0px !important;
 	}
 	
+	div.v-csslayout.v-formulaExpressionComponentRoot-layout {
+		padding: 0px 0px 0px 0px;
+		display: block;
+	}
+	
+	div.v-csslayout.v-second-line {
+		margin-top: 8px;
+	}
+	
 }

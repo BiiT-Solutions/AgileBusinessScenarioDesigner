@@ -12,7 +12,7 @@ public class PortContentEditor extends AcceptCancelWindow {
 	private static final long serialVersionUID = 4460942893259168920L;
 	private ComboBox comboBox;
 
-	public PortContentEditor(List<FormulaElementType> contentTypesToGenerate) {
+	public PortContentEditor(List<Type> contentTypesToGenerate) {
 		super();
 		setModal(true);
 		setResizable(false);
@@ -24,13 +24,13 @@ public class PortContentEditor extends AcceptCancelWindow {
 		setContent(content);
 	}
 
-	private Component generateContent(List<FormulaElementType> contentTypesToGenerate) {
+	private Component generateContent(List<Type> contentTypesToGenerate) {
 		HorizontalLayout rootLayout = new HorizontalLayout();
 		rootLayout.setSizeUndefined();
-		for (FormulaElementType formulaElementType : FormulaElementType.getAnyType()) {
+		for (Type formulaElementType : Type.getAnyType()) {
 			if (contentTypesToGenerate.contains(formulaElementType)) {
 				switch (formulaElementType) {
-				case EXPRESION:
+				case EXPRESSION:
 					rootLayout.addComponent(generateExpressionContent());
 					break;
 

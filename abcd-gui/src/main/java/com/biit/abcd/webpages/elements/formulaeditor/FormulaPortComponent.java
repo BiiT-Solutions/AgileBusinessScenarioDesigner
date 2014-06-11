@@ -19,23 +19,23 @@ public class FormulaPortComponent extends CustomComponent {
 	private FormulaExpressionComponent value;
 
 	private CssLayout rootLayout;
-	private List<FormulaElementType> acceptedTypes;
+	private List<Type> acceptedTypes;
 
 	private List<FormulaPortClickListener> listeners;
 
-	public FormulaPortComponent(FormulaElementType acceptedType) {
-		List<FormulaElementType> acceptedTypes = new ArrayList<FormulaElementType>();
+	public FormulaPortComponent(Type acceptedType) {
+		List<Type> acceptedTypes = new ArrayList<Type>();
 		acceptedTypes.add(acceptedType);
 		initializate(acceptedTypes);
 	}
 
-	public FormulaPortComponent(List<FormulaElementType> acceptedTypes) {
+	public FormulaPortComponent(List<Type> acceptedTypes) {
 		initializate(acceptedTypes);
 	}
 
-	private void initializate(List<FormulaElementType> acceptedTypes) {
+	private void initializate(List<Type> acceptedTypes) {
 		listeners = new ArrayList<FormulaPortClickListener>();
-		this.acceptedTypes = new ArrayList<FormulaElementType>();
+		this.acceptedTypes = new ArrayList<Type>();
 		this.acceptedTypes.addAll(acceptedTypes);
 
 		rootLayout = new CssLayout();
@@ -48,15 +48,19 @@ public class FormulaPortComponent extends CustomComponent {
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
 				if (event.getClickedComponent() != null) {
-					if(event.getClickedComponent().getParent().getParent() instanceof FormulaExpressionComponent){
-						firePortClickListeners();
+					if (event.getClickedComponent().getParent().getParent() instanceof FormulaExpressionComponent) {
+						if (getValue().isChildComponent(event.getClickedComponent())) {
+							//Only fires if the element is a child of the Formula Expression.
+							firePortClickListeners(event);
+						}
 					}
 				} else {
-					firePortClickListeners();
+					firePortClickListeners(event);
 				}
 			}
 		});
 
+		setImmediate(true);
 		setCompositionRoot(rootLayout);
 		setSizeUndefined();
 		setStyleName(CLASSNAME_FORMULA_PORT);
@@ -70,9 +74,9 @@ public class FormulaPortComponent extends CustomComponent {
 		listeners.remove(listener);
 	}
 
-	private void firePortClickListeners() {
+	private void firePortClickListeners(LayoutClickEvent event) {
 		for (FormulaPortClickListener listener : listeners) {
-			listener.formulaPortClicked(this);
+			listener.formulaPortClicked(this, event);
 		}
 	}
 
@@ -84,7 +88,7 @@ public class FormulaPortComponent extends CustomComponent {
 		}
 	}
 
-	public List<FormulaElementType> getAcceptedTypes() {
+	public List<Type> getAcceptedTypes() {
 		return acceptedTypes;
 	}
 
@@ -95,6 +99,13 @@ public class FormulaPortComponent extends CustomComponent {
 			rootLayout.addComponent(value);
 			rootLayout.setWidth(null);
 			rootLayout.setHeight(null);
+			// Add click listeners to descendants.
+			for (FormulaPortClickListener listener : listeners) {
+				if (listener instanceof ChangeValuePortClickListener) {
+					continue;
+				}
+				value.addFormulaPortClickListener(listener);
+			}
 		} else {
 			rootLayout.removeAllComponents();
 			rootLayout.setWidth(emptyWidth);
@@ -102,7 +113,7 @@ public class FormulaPortComponent extends CustomComponent {
 		}
 	}
 
-	public FormulaElementType getType() {
+	public Type getType() {
 		return getValue().getType();
 	}
 
