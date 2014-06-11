@@ -35,6 +35,12 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	@Autowired
 	private IFormDao formDao;
 
+	@Autowired
+	private IConditionDao conditionDao;
+
+	@Autowired
+	private IActionDao actionDao;
+
 	private Form basicForm;
 
 	@Test(groups = { "tableRulesDao" })
@@ -128,6 +134,8 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 			tableRuleDao.makeTransient(tableRule);
 		}
 		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
+		Assert.assertEquals(conditionDao.getRowCount(), 0);
+		Assert.assertEquals(actionDao.getRowCount(), 0);
 
 		List<Form> forms = formDao.getAll();
 		for (Form form : forms) {
