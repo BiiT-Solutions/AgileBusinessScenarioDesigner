@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import java.util.Collection;
 
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.DecisionTable;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.vaadin.ui.CustomComponent;
@@ -28,7 +29,7 @@ public class DecisionTableComponent extends CustomComponent {
 		conditionTable = new ConditionTable();
 		conditionTable.setSizeFull();
 		conditionTable.addCellSelectionListener(new CellSelectionListener() {
-			
+
 			@Override
 			public void cellSelectionChanged(CellRowSelector selector) {
 				actionTable.selectRows(selector.getSelectedRows(), false);
@@ -38,7 +39,7 @@ public class DecisionTableComponent extends CustomComponent {
 		actionTable = new ActionTable();
 		actionTable.setSizeFull();
 		actionTable.addCellSelectionListener(new CellSelectionListener() {
-			
+
 			@Override
 			public void cellSelectionChanged(CellRowSelector selector) {
 				conditionTable.selectRows(selector.getSelectedRows(), false);
@@ -76,6 +77,8 @@ public class DecisionTableComponent extends CustomComponent {
 
 	public void addRow() {
 		TableRule decisionRule = new TableRule();
+		Action action = new Action();
+		decisionRule.addAction(action);
 		decisionTable.getRules().add(decisionRule);
 
 		// Add decision Rule to both tables.

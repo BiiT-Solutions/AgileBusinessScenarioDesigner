@@ -90,7 +90,7 @@ public class ActionTable extends Table {
 	private void updateItem(TableRule rule) {
 		Item row = getItem(rule);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) row.getItemProperty(Columns.ACTION).getValue());
-		actionValue.setLabel(rule.getAction().getExpression());
+		actionValue.setLabel(rule.getActions().get(0).getExpression());
 	}
 
 	private class CellEditButtonClickListener implements ClickListener {
@@ -103,12 +103,12 @@ public class ActionTable extends Table {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			final AddNewActionValue newActionValue = new AddNewActionValue(rule.getAction());
+			final AddNewActionValue newActionValue = new AddNewActionValue(rule.getActions().get(0));
 			newActionValue.showCentered();
 			newActionValue.addAcceptAcctionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					rule.getAction().setExpression(newActionValue.getText());
+					rule.getActions().get(0).setExpression(newActionValue.getText());
 					updateItem(rule);
 					newActionValue.close();
 				}
@@ -126,7 +126,7 @@ public class ActionTable extends Table {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			rule.getAction().setExpression("");
+			rule.getActions().get(0).setExpression("");
 			updateItem(rule);
 		}
 	}
