@@ -5,13 +5,13 @@ import java.util.Set;
 
 import com.biit.abcd.persistence.entity.Question;
 
-public class DecisionTable {
+public class DecisionTableRules {
 
 	private Set<Question> conditions;
 	
 	private Set<TableRule> rules;
 	
-	public DecisionTable(){
+	public DecisionTableRules(){
 		conditions = new HashSet<Question>();
 		rules = new HashSet<TableRule>();
 	}
