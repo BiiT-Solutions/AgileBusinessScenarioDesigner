@@ -22,5 +22,4 @@ public class QuestionDao extends GenericDao<Question> implements IQuestionDao {
 			Hibernate.initialize(question.getChildren());
 		}
 	}
-
 }

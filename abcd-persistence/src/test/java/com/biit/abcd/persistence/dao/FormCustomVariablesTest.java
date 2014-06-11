@@ -10,6 +10,7 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormCustomVariables;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
@@ -25,7 +26,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	@Autowired
 	private IFormDao formDao;
 
-	private Form form;
+	private Form basicForm;
 
 	@Test(groups = { "formCustomVariablesDao" })
 	public void testEmptyDatabase() {
@@ -35,11 +36,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeDummyVariables() throws NotValidFormException {
-		form = new Form();
-		form.setName(DUMMY_FORM);
-		formDao.makePersistent(form);
+		basicForm = new Form();
+		basicForm.setName(DUMMY_FORM);
+		formDao.makePersistent(basicForm);
 
-		FormCustomVariables formCustomVariables = new FormCustomVariables(form);
+		FormCustomVariables formCustomVariables = new FormCustomVariables(basicForm);
 		formCustomVariablesDao.makePersistent(formCustomVariables);
 
 		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 1);
@@ -49,9 +50,56 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	public void getDummyVariables() {
 		List<FormCustomVariables> customVariables = formCustomVariablesDao.getAll();
 		Assert.assertEquals(customVariables.get(0).getForm().getName(), DUMMY_FORM);
+		Assert.assertNotNull(formCustomVariablesDao.getFormCustomVariables(basicForm));
 	}
 
-	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = { "getDummyVariables" })
+	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
+	public void storeIntegerVariables() {
+		Form form = new Form();
+		form.setName(DUMMY_FORM + "_v2");
+		formDao.makePersistent(form);
+
+		FormCustomVariables formCustomVariables = new FormCustomVariables(form);
+		formCustomVariables.addCustomIntegerVariable("Score", Category.class);
+
+		formCustomVariablesDao.makePersistent(formCustomVariables);
+		FormCustomVariables formCustomVariablesInDB = formCustomVariablesDao.getFormCustomVariables(form);
+		Assert.assertNotNull(formCustomVariablesInDB);
+		Assert.assertEquals(formCustomVariablesInDB.getCustomIntegerVariables(Category.class).get(0), "Score");
+	}
+
+	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
+	public void storeStringVariables() {
+		Form form = new Form();
+		form.setName(DUMMY_FORM + "_v3");
+		formDao.makePersistent(form);
+
+		FormCustomVariables formCustomVariables = new FormCustomVariables(form);
+		formCustomVariables.addCustomStringVariable("Name", Category.class);
+
+		formCustomVariablesDao.makePersistent(formCustomVariables);
+		FormCustomVariables formCustomVariablesInDB = formCustomVariablesDao.getFormCustomVariables(form);
+		Assert.assertNotNull(formCustomVariablesInDB);
+		Assert.assertEquals(formCustomVariablesInDB.getCustomStringVariables(Category.class).get(0), "Name");
+	}
+
+	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
+	public void storeDateVariables() {
+		Form form = new Form();
+		form.setName(DUMMY_FORM + "_v4");
+		formDao.makePersistent(form);
+
+		FormCustomVariables formCustomVariables = new FormCustomVariables(form);
+		formCustomVariables.addCustomDateVariable("CreationDate", Category.class);
+
+		formCustomVariablesDao.makePersistent(formCustomVariables);
+		FormCustomVariables formCustomVariablesInDB = formCustomVariablesDao.getFormCustomVariables(form);
+		Assert.assertNotNull(formCustomVariablesInDB);
+		Assert.assertEquals(formCustomVariablesInDB.getCustomDateVariables(Category.class).get(0), "CreationDate");
+	}
+
+	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = { "getDummyVariables", "storeIntegerVariables",
+			"storeStringVariables", "storeDateVariables" })
 	public void removeDummyVariables() {
 		List<FormCustomVariables> customVariables = formCustomVariablesDao.getAll();
 		for (FormCustomVariables formCustomVariables : customVariables) {

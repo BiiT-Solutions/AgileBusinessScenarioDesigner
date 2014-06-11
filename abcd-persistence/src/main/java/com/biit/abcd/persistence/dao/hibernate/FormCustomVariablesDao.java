@@ -36,8 +36,9 @@ public class FormCustomVariablesDao extends GenericDao<FormCustomVariables> impl
 		session.beginTransaction();
 		try {
 			Criteria criteria = session.createCriteria(FormCustomVariables.class);
-			criteria.add(Restrictions.eq("form", form.getName()));
+			criteria.add(Restrictions.eq("form", form));
 			List<FormCustomVariables> results = criteria.list();
+			initializeSets(results);
 			session.getTransaction().commit();
 			if (!results.isEmpty()) {
 				FormCustomVariables formCustomVariables = (FormCustomVariables) results.get(0);

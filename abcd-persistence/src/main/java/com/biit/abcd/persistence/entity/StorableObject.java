@@ -16,7 +16,7 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "STORABLE_OBJECTS")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class StorableObject {
+public abstract class StorableObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -24,12 +24,16 @@ public class StorableObject {
 	private Long id;
 
 	@Column(nullable = false)
-	private Timestamp creationDate = null;
+	private Timestamp creationTime = null;
 	@Column(columnDefinition = "DOUBLE")
 	private Long createdBy = null;
-	private Timestamp updatedDate = null;
+	private Timestamp updateTime = null;
 	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
+
+	public StorableObject() {
+		creationTime = new java.sql.Timestamp(new java.util.Date().getTime());
+	}
 
 	public Long getId() {
 		return id;
@@ -44,11 +48,11 @@ public class StorableObject {
 	}
 
 	public Timestamp getCreationTime() {
-		if (creationDate != null) {
-			return creationDate;
+		if (creationTime != null) {
+			return creationTime;
 		} else {
-			creationDate = new java.sql.Timestamp(new java.util.Date().getTime());
-			return creationDate;
+			creationTime = new java.sql.Timestamp(new java.util.Date().getTime());
+			return creationTime;
 		}
 	}
 
@@ -57,11 +61,11 @@ public class StorableObject {
 	}
 
 	public Timestamp getUpdateTime() {
-		if (updatedDate != null) {
-			return updatedDate;
+		if (updateTime != null) {
+			return updateTime;
 		} else {
-			updatedDate = new java.sql.Timestamp(new java.util.Date().getTime());
-			return updatedDate;
+			updateTime = new java.sql.Timestamp(new java.util.Date().getTime());
+			return updateTime;
 		}
 	}
 
@@ -80,11 +84,11 @@ public class StorableObject {
 	}
 
 	public void setCreationTime(Timestamp dateCreated) {
-		this.creationDate = dateCreated;
+		this.creationTime = dateCreated;
 	}
 
 	public void setUpdateTime(Timestamp dateUpdated) {
-		this.updatedDate = dateUpdated;
+		this.updateTime = dateUpdated;
 	}
 
 	public void setUpdatedBy(Long updatedBy) {
@@ -98,11 +102,11 @@ public class StorableObject {
 	}
 
 	public Timestamp getUpdatedDate() {
-		return updatedDate;
+		return updateTime;
 	}
 
 	public void setUpdatedDate(Timestamp updatedDate) {
-		this.updatedDate = updatedDate;
+		this.updateTime = updatedDate;
 	}
 
 }

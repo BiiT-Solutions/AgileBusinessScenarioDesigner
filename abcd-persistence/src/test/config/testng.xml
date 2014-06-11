@@ -12,6 +12,7 @@
 				<include name="diagramDao" />
 				<include name="jsonParser" />
 				<include name="formCustomVariablesDao" />
+				<include name="tableRulesDao" />
 			</run>
 		</groups>
 		<classes>
@@ -23,6 +24,7 @@
 			<class name="com.biit.abcd.persistence.dao.AnswerTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
 			<class name="com.biit.abcd.persistence.dao.FormCustomVariablesTest" />
+			<class name="com.biit.abcd.persistence.dao.TableRuleTest" />
 		</classes>
 	</test>
 </suite>
