@@ -52,7 +52,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// TODO Auto-generated method stub
+				save();
 			}
 		});
 
@@ -71,7 +71,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 						for (Question selectedQuestion : selectedQuestions) {
 							((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
 							decisionTable.addColumn(selectedQuestion);
-							if (decisionTable.getColumns().size() == 1 && decisionTable.getNumberOfRules() == 0) {
+							if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
 								decisionTable.addRow();
 							}
 						}
@@ -110,6 +110,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		});
 
 		setUpperMenu(decisionTableEditorUpperMenu);
+	}
+
+	private void save() {
+		
 	}
 
 	@Override

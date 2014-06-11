@@ -47,6 +47,9 @@ public class TableRule extends StorableObject {
 	public TableRule() {
 		conditions = new HashMap<Question, Condition>();
 		actions = new ArrayList<>();
+		//At least one action.
+		Action action = new Action();
+		addAction(action);
 	}
 
 	public TableRule(Form form) {

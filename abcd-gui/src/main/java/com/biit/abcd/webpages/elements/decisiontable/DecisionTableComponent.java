@@ -1,10 +1,11 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.rules.Action;
-import com.biit.abcd.persistence.entity.rules.DecisionTable;
+import com.biit.abcd.persistence.entity.rules.Condition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -16,10 +17,10 @@ public class DecisionTableComponent extends CustomComponent {
 	private HorizontalLayout rootLayout;
 	private ConditionTable conditionTable;
 	private ActionTable actionTable;
-	private DecisionTable decisionTable;
+	private List<TableRule> decisionTableRules;
 
 	public DecisionTableComponent() {
-		decisionTable = new DecisionTable();
+		decisionTableRules = new ArrayList<>();
 
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
@@ -66,7 +67,9 @@ public class DecisionTableComponent extends CustomComponent {
 	public void addColumn(Question question) {
 		if (question != null) {
 			conditionTable.addColumn(question);
-			decisionTable.getConditions().add(question);
+			for (TableRule tableRule : decisionTableRules) {
+				tableRule.getConditions().put(question, new Condition());
+			}
 		}
 	}
 
@@ -77,9 +80,7 @@ public class DecisionTableComponent extends CustomComponent {
 
 	public void addRow() {
 		TableRule decisionRule = new TableRule();
-		Action action = new Action();
-		decisionRule.addAction(action);
-		decisionTable.getRules().add(decisionRule);
+		decisionTableRules.add(decisionRule);
 
 		// Add decision Rule to both tables.
 		conditionTable.addItem(decisionRule);
@@ -99,7 +100,7 @@ public class DecisionTableComponent extends CustomComponent {
 		}
 	}
 
-	public int getNumberOfRules() {
-		return decisionTable.getRules().size();
+	public List<TableRule> getTableRules() {
+		return decisionTableRules;
 	}
 }
