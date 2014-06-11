@@ -6,14 +6,27 @@ import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.biit.abcd.persistence.dao.IActionDao;
+import com.biit.abcd.persistence.dao.IConditionDao;
+import com.biit.abcd.persistence.dao.IQuestionDao;
 import com.biit.abcd.persistence.dao.ITableRuleDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 
 @Repository
 public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao {
+
+	@Autowired
+	private IActionDao actionDao;
+
+	@Autowired
+	private IConditionDao conditionDao;
+
+	@Autowired
+	private IQuestionDao questionDao;
 
 	public TableRuleDao() {
 		super(TableRule.class);
@@ -22,7 +35,8 @@ public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao
 	@Override
 	protected void initializeSets(List<TableRule> elements) {
 		for (TableRule tableRule : elements) {
-			Hibernate.initialize(tableRule.getConditions());
+			Hibernate.initialize(tableRule.getConditions().keySet());
+			Hibernate.initialize(tableRule.getActions());
 		}
 	}
 
@@ -43,5 +57,4 @@ public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao
 			throw e;
 		}
 	}
-
 }

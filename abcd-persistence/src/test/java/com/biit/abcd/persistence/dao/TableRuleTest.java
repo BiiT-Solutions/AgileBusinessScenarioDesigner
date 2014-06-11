@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
+import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.Condition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 
@@ -39,6 +41,25 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	public void testEmptyDatabase() {
 		// Read
 		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
+	}
+
+	/**
+	 * Returns the question object of the retrieved hashmap from database.
+	 * 
+	 * @param map
+	 * @param originalQuestion
+	 * @return
+	 */
+	private Question getHibernateQuestion(Map<Question, Condition> map, Question originalQuestion) {
+		if (originalQuestion.getId() == null) {
+			return null;
+		}
+		for (Question question : map.keySet()) {
+			if (question.getId() == originalQuestion.getId()) {
+				return question;
+			}
+		}
+		return null;
 	}
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "testEmptyDatabase")
@@ -79,21 +100,25 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 		// Define rule elements
 		TableRule tableRules = new TableRule(form);
-		tableRules.getAction().setExpression(BASIC_ACTION);
+
+		Action action = new Action();
+		action.setExpression(BASIC_ACTION);
+		tableRules.addAction(action);
 
 		Condition condition = new Condition();
-		// Save the condition
-
 		// Set into the rule.
-		// tableRules.putCondition(question, condition);
+		tableRules.putCondition(question, condition);
 
 		tableRuleDao.makePersistent(tableRules);
 
 		List<TableRule> rulesOfForm = tableRuleDao.getFormTableRules(form);
 		Assert.assertEquals(rulesOfForm.size(), 1);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
-		Assert.assertEquals(rulesOfForm.get(0).getAction().getExpression(), BASIC_ACTION);
-		Assert.assertEquals(rulesOfForm.get(0).getConditions().get(question).getId(), condition.getId());
+		Assert.assertEquals(rulesOfForm.get(0).getActions().get(0).getExpression(), BASIC_ACTION);
+		Assert.assertEquals(
+				rulesOfForm.get(0).getConditions()
+						.get(getHibernateQuestion(rulesOfForm.get(0).getConditions(), question)).getId(),
+				condition.getId());
 	}
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })
