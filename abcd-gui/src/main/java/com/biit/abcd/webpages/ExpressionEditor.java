@@ -10,7 +10,6 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
-	private Form form;
 
 	public ExpressionEditor() {
 		super();
@@ -31,12 +30,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		this.form = form;
-	}
-
-	@Override
-	public Form getForm() {
-		return form;
 	}
 
 	@Override

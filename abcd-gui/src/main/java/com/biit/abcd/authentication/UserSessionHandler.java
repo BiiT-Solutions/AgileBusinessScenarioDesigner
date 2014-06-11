@@ -1,6 +1,9 @@
 package com.biit.abcd.authentication;
 
+import com.biit.abcd.core.FormController;
+import com.biit.abcd.core.SpringContextHelper;
 import com.liferay.portal.model.User;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
 /**
@@ -9,6 +12,7 @@ import com.vaadin.ui.UI;
 public class UserSessionHandler {
 	private static final String DEFAULT_SUFIX = "-sessionhandler";
 	private User user = null;
+	private FormController formController;
 
 	// Store the user object of the currently inlogged user
 
@@ -55,6 +59,12 @@ public class UserSessionHandler {
 	public static void setUser(User user) {
 		UserSessionHandler session = getCurrent();
 		session.user = user;
+		if (user != null) {
+			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+			session.formController = new FormController(user, helper);
+		} else {
+			session.formController = null;
+		}
 	}
 
 	/**
@@ -68,13 +78,22 @@ public class UserSessionHandler {
 	}
 
 	/**
+	 * Get the FormController object of the currently inlogged user for this application instance.
+	 * 
+	 * @return The currently inlogged user
+	 */
+	public static FormController getFormController() {
+		UserSessionHandler session = getCurrent();
+		return session.formController;
+	}
+
+	/**
 	 * Set the User object for the currently inlogged user for this application instance
 	 * 
 	 * @param user
 	 */
 	public static void login(User user) {
-		UserSessionHandler session = getCurrent();
-		session.user = user;
+		setUser(user);
 	}
 
 	/**

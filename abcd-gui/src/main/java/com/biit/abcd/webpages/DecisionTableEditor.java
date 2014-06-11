@@ -3,6 +3,7 @@ package com.biit.abcd.webpages;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.security.DActivity;
@@ -19,7 +20,6 @@ import com.vaadin.ui.Button.ClickListener;
 public class DecisionTableEditor extends FormWebPageComponent {
 	static final long serialVersionUID = -5547452506556261601L;
 
-	private Form form;
 	private DecisionTableComponent decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 
@@ -61,7 +61,8 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(getForm(), true);
+				AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
+						.getFormController().getForm(), true);
 				addNewConditionWindow.disableQuestions(decisionTable.getColumns());
 				addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
@@ -113,12 +114,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		this.form = form;
-	}
 
-	@Override
-	public Form getForm() {
-		return form;
 	}
 
 	@Override

@@ -3,11 +3,9 @@ package com.biit.abcd.webpages;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
@@ -21,7 +19,6 @@ import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMen
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -32,15 +29,20 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private DiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
 
-	private Form form;
-	private Diagram diagram;
-
-	private IDiagramDao diagramDao;
-
 	public FormDiagramBuilder() {
-		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-		diagramDao = (IDiagramDao) helper.getBean("diagramDao");
 		updateButtons(true);
+		addDetachListener(new DetachListener() {
+			private static final long serialVersionUID = -4725913087209115156L;
+
+			@Override
+			public void detach(DetachEvent event) {
+				// Update diagram object if modified.
+				if (diagramBuilder != null && UserSessionHandler.getFormController().getForm() != null) {
+					diagramBuilder.toJson(new ObtainJson());
+				}
+			}
+
+		});
 	}
 
 	@Override
@@ -62,12 +64,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void propertyUpdate(Object element) {
-				System.out.println("property update Listener");
 				if (element instanceof DiagramElement) {
-					System.out.println(((DiagramObject) element).toJson());
 					diagramBuilder.updateCellJson(((DiagramObject) element).toJson());
 				} else {
-					System.out.println(((DiagramObject) element).toJson());
 					diagramBuilder.updateLinkJson(((DiagramObject) element).toJson());
 				}
 			}
@@ -157,28 +156,21 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		this.form = form;
 		if (form != null) {
-			diagram = diagramDao.read(form);
 			// Quick fix, this has to be changed when the full "diagrams" tree
 			// structure is decided.
-			if (diagram != null) {
-				diagram.setCreatedBy(UserSessionHandler.getUser());
-				diagram.setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+			if (!UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty()) {
+				UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
+						.setUpdatedBy(UserSessionHandler.getUser());
+				UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
+						.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 			}
 		}
 		// New diagram
-		if (diagram == null) {
-			diagram = new Diagram(form);
-		} else {
-			// Refresh jointjs
-			diagramBuilder.fromJson(diagram.toJson());
+		if (UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty()) {
+			UserSessionHandler.getFormController().getForm().getDiagrams().add(new Diagram(form));
 		}
-	}
-
-	@Override
-	public Form getForm() {
-		return form;
+		updateDiagramDesigner();
 	}
 
 	@Override
@@ -187,27 +179,65 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	private void save() {
-		if (diagramBuilder != null && getForm() != null && diagram != null) {
+		if (diagramBuilder != null && UserSessionHandler.getFormController().getForm() != null
+				&& UserSessionHandler.getFormController().getForm().getDiagrams() != null) {
 			diagramBuilder.toJson(new SaveJson());
 		}
 	}
 
+	/**
+	 * Current diagram selected by the user in the left menu.
+	 * 
+	 * @return
+	 */
+	private int getSelectedDiagram() {
+		return 0;
+	}
+
+	private void updateDiagramDesigner() {
+		// Refresh jointjs
+		diagramBuilder.fromJson(UserSessionHandler.getFormController().getForm().getDiagrams()
+				.get(getSelectedDiagram()).toJson());
+	}
+
+	private void updateDiagram(String jsonString) {
+		// Get childs from json string.
+		Diagram tempDiagram = Diagram.fromJson(jsonString);
+		UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
+				.setDiagramObjects(tempDiagram.getDiagramObjects());
+		// Updater
+		UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
+				.setUpdatedBy(UserSessionHandler.getUser());
+		UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
+				.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+	}
+
+	/**
+	 * Updates diagram objects from the jointjs widget.
+	 */
+	class ObtainJson implements DiagramBuilderJsonGenerationListener {
+
+		@Override
+		public void generatedJsonString(String jsonString) {
+			try {
+				updateDiagram(jsonString);
+			} catch (Exception e) {
+				e.printStackTrace();
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			}
+		}
+	}
+
+	/**
+	 * Updates and save diagram objects from the jointjs widget.
+	 */
 	class SaveJson implements DiagramBuilderJsonGenerationListener {
 
 		@Override
 		public void generatedJsonString(String jsonString) {
 			try {
-				// Get childs from json string.
-				Diagram tempDiagram = Diagram.fromJson(jsonString);
-				if (diagram.getDiagramObjects() != null && !diagram.getDiagramObjects().isEmpty()) {
-					// Remove old ones from database.
-					diagram.getDiagramObjects().removeAll(diagram.getDiagramObjects());
-				}
-				diagram.addDiagramObjects(tempDiagram.getDiagramObjects());
-				// Updater
-				diagram.setUpdatedBy(UserSessionHandler.getUser());
-				diagram.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
-				diagramDao.makePersistent(diagram);
+				updateDiagram(jsonString);
+				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (Exception e) {
 				MessageManager.showError(LanguageCodes.ERROR_DATA_NOT_STORED);

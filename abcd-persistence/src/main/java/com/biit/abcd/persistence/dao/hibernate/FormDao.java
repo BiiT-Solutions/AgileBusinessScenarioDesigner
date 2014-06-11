@@ -24,6 +24,7 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 		for (Form form : forms) {
 			// Initializes the sets for lazy-loading (within the same session)
 			Hibernate.initialize(form.getChildren());
+			Hibernate.initialize(form.getDiagrams());
 		}
 	}
 

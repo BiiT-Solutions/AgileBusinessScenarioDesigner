@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.SpringContextHelper;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;

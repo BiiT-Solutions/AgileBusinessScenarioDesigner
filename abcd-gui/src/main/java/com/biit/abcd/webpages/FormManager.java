@@ -3,14 +3,13 @@ package com.biit.abcd.webpages;
 import java.util.Arrays;
 import java.util.List;
 
-import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
-import com.biit.abcd.webpages.elements.formtable.UserSelectedTableRow;
 import com.biit.abcd.webpages.elements.treetable.RootForm;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -26,7 +25,6 @@ public class FormManager extends FormWebPageComponent {
 
 	public FormManager() {
 		super();
-
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
 	}
@@ -52,14 +50,7 @@ public class FormManager extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				// updateButtons(getForm() != null
-				// &&
-				// AbcdAuthorizationService.getInstance().canEditForm(getForm(),
-				// UserSessionHandler.getUser(),
-				// DActivity.FORM_EDITING));
-				if (!(getForm() instanceof RootForm)) {
-					UserSelectedTableRow.getInstance().setSelected(UserSessionHandler.getUser(), getForm());
-				}
+				UserSessionHandler.getFormController().setForm(getForm());
 				updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 			}
 		});
@@ -76,7 +67,6 @@ public class FormManager extends FormWebPageComponent {
 		return Arrays.asList(DActivity.READ);
 	}
 
-	@Override
 	public Form getForm() {
 		return formTable.getValue();
 	}

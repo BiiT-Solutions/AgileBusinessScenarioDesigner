@@ -155,10 +155,4 @@ public class GlobalVariables extends FormWebPageComponent {
 
 	}
 
-	@Override
-	public Form getForm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

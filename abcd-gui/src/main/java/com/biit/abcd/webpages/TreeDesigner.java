@@ -7,11 +7,9 @@ import java.util.List;
 import org.hibernate.exception.ConstraintViolationException;
 
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
@@ -28,7 +26,6 @@ import com.biit.abcd.webpages.elements.treetable.TreeTablePropertiesComponent;
 import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.HorizontalLayout;
 
 public class TreeDesigner extends FormWebPageComponent {
@@ -39,11 +36,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	private TreeTableUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 
-	private IFormDao formDao;
-
 	public TreeDesigner() {
-		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-		formDao = (IFormDao) helper.getBean("formDao");
 		updateButtons(true);
 	}
 
@@ -99,8 +92,7 @@ public class TreeDesigner extends FormWebPageComponent {
 		formTreeTable.setValue(form);
 	}
 
-	@Override
-	public Form getForm() {
+	private Form getForm() {
 		return form;
 	}
 
@@ -203,7 +195,8 @@ public class TreeDesigner extends FormWebPageComponent {
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
 					TreeObject parent = null;
-					if (formTreeTable.getTreeObjectSelected() instanceof Category || formTreeTable.getTreeObjectSelected() instanceof Group) {
+					if (formTreeTable.getTreeObjectSelected() instanceof Category
+							|| formTreeTable.getTreeObjectSelected() instanceof Group) {
 						parent = formTreeTable.getTreeObjectSelected();
 						// If selected a question, we consider the same that
 						// selecting the question's parent.
@@ -272,7 +265,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public void save() {
 		if (getForm() != null) {
 			try {
-				formDao.makePersistent(getForm());
+				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_CATEGORY,

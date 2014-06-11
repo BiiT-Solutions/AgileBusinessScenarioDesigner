@@ -1,8 +1,8 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.dao.IFormDao;

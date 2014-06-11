@@ -16,6 +16,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
@@ -24,11 +25,15 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form";
 	private final static String FULL_FORM = "Complete Form";
+	private final static String DIAGRAM_FORM = "Diagram Form";
 	private final static String OTHER_FORM = "Other Form";
 	private final static String CATEGORY_LABEL = "Category1";
 
 	@Autowired
 	private IFormDao formDao;
+
+	@Autowired
+	private IDiagramDao diagramDao;
 
 	private Form form;
 
@@ -177,12 +182,28 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
+	public void storeFormDiagram() throws NotValidChildException {
+		form = new Form();
+		form.setName(DIAGRAM_FORM);
+
+		Diagram diagram = new Diagram(form);
+		form.getDiagrams().add(diagram);
+
+		formDao.makePersistent(form);
+		Form retrievedForm = formDao.read(form.getId());
+
+		Assert.assertEquals(retrievedForm.getId(), form.getId());
+		Assert.assertEquals(diagramDao.getRowCount(), 1);
+	}
+
+	@Test(groups = { "formDao" }, dependsOnMethods = {"storeFormDiagram", "storeOtherFormWithSameLabelCategory"})
 	public void removeForms() {
 		List<Form> forms = formDao.getAll();
 		for (Form form : forms) {
 			formDao.makeTransient(form);
 		}
 		Assert.assertEquals(formDao.getRowCount(), 0);
+		Assert.assertEquals(diagramDao.getRowCount(), 0);
 	}
 
 	private boolean compare(TreeObject object1, TreeObject object2) {

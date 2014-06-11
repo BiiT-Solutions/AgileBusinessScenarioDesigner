@@ -8,8 +8,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
@@ -251,11 +251,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * This function selects the last form used by the user or the first.
 	 */
 	public void selectLastUsedForm() {
-		Long selectedFormId = UserSelectedTableRow.getInstance().getSelectedFormId(UserSessionHandler.getUser());
-		if (selectedFormId != null) {
+		if (UserSessionHandler.getFormController().getForm() != null) {
 			// Update form with new object if the form has change.
-			Form form = formDao.read(selectedFormId);
-			selectForm(form);
+			selectForm(UserSessionHandler.getFormController().getForm());
 		} else {
 			// Select default one.
 			selectFirstRow();
