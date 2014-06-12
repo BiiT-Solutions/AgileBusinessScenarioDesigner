@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -33,7 +32,8 @@ public class TableRule extends StorableObject {
 	private Form form;
 
 	// Due to bug https://hibernate.atlassian.net/browse/HHH-8839, map must be LAZY.
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "RULE_DECISION_CONDITIONS_MAP", joinColumns = { @JoinColumn(name = "rule_decision_id") })
 	@MapKeyColumn(name = "condition_id")
 	private Map<Question, Condition> conditions;

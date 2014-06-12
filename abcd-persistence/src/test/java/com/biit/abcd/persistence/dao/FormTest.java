@@ -248,10 +248,9 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
 
-		Question persistedQuestion = questionDao.read(question1.getId());
-
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getConditions().get(persistedQuestion).toString(),
-				answerCondition.toString());
+		Assert.assertEquals(
+				retrievedForm.getTableRules().get(0).getConditions().get(question1),
+				answerCondition);
 		Assert.assertEquals(retrievedForm.getTableRules().get(0).getActions().get(0).getExpression(), ACTION_EXPRESSION);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
 	}
