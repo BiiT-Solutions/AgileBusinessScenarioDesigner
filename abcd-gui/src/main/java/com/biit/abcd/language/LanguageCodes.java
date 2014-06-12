@@ -175,6 +175,8 @@ public enum LanguageCodes {
 	SETTINGS_LOG_OUT("settings.log.out"),
 	SETTINGS_CLOSE("settings.close"),
 	
+	GLOBAL_VARIABLE_ADD_WINDOW_TITLE("global.variable.window.title"),
+	GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE("global.variable.value.window.title"),
 	GLOBAL_VARIABLE_NAME("global.variable.name"),
 	GLOBAL_VARIABLE_VALUE("global.variable.value"),
 	GLOBAL_VARIABLE_TYPE("global.variable.type"),

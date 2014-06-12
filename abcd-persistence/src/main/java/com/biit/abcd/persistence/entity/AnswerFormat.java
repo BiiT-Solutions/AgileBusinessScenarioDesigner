@@ -4,11 +4,12 @@ package com.biit.abcd.persistence.entity;
  * Used only for text inputs.
  */
 public enum AnswerFormat {
-	POSTAL_CODE,
+
+	TEXT,
+
+	NUMBER,
 
 	DATE,
 
-	NUMBER,
-	
-	TEXT;
+	POSTAL_CODE;
 }

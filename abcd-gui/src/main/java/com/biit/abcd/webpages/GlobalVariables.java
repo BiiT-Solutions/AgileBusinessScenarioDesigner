@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
@@ -71,7 +72,8 @@ public class GlobalVariables extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				VariableWindow window = new VariableWindow();
+				VariableWindow window = new VariableWindow(ServerTranslate
+						.tr(LanguageCodes.GLOBAL_VARIABLE_ADD_WINDOW_TITLE));
 				window.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
@@ -108,7 +110,8 @@ public class GlobalVariables extends FormWebPageComponent {
 				final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
 
 				if (variable != null) {
-					VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat());
+					VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
+							ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
 					variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {
