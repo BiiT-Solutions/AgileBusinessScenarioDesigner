@@ -46,7 +46,7 @@ public enum ThemeIcons {
 	
 	RIGHT_MENU_EXPAND("appbar.layout.expand.left.variant.svg"),
 	
-	FORM_MANAGER_PAGE("appbar.column.one.svg"),
+	FORM_MANAGER_PAGE("appbar.page.copy.svg"),
 	
 	FORM_MANAGER_ADD_FORM("appbar.form.add.svg"),
 	
