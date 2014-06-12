@@ -67,6 +67,14 @@ public class GlobalVariables extends FormWebPageComponent {
 
 	private UpperMenu createUpperMenu() {
 		GlobalVariablesUpperMenu upperMenu = new GlobalVariablesUpperMenu();
+		upperMenu.addSaveButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -3692380302089994511L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				save();
+			}
+		});
 		upperMenu.addAddVariableButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = -4843889679428803021L;
 
@@ -156,6 +164,10 @@ public class GlobalVariables extends FormWebPageComponent {
 	public void setForm(Form form) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void save() {
+		
 	}
 
 }

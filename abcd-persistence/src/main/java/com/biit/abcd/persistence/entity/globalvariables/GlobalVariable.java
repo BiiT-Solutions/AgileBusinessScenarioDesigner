@@ -3,17 +3,29 @@ package com.biit.abcd.persistence.entity.globalvariables;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.biit.abcd.persistence.entity.AnswerFormat;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-public class GlobalVariable {
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.StorableObject;
+
+@Entity
+@Table(name = "GLOBAL_VARIABLES")
+public class GlobalVariable extends StorableObject {
 
 	private String name;
-	
+
 	private AnswerFormat format;
 
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinTable(name = "GLOBAL_VARIABLE_DATA_SET")
 	private List<VariableData> data;
-	
-	public GlobalVariable(){
+
+	public GlobalVariable() {
 		data = new ArrayList<VariableData>();
 	}
 
