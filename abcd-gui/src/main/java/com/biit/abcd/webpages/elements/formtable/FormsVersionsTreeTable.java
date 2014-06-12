@@ -251,10 +251,15 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * This function selects the last form used by the user or the first.
 	 */
 	public void selectLastUsedForm() {
-		if (UserSessionHandler.getFormController().getForm() != null) {
-			// Update form with new object if the form has change.
-			selectForm(UserSessionHandler.getFormController().getForm());
-		} else {
+		try {
+			if (UserSessionHandler.getFormController().getForm() != null) {
+				// Update form with new object if the form has change.
+				selectForm(UserSessionHandler.getFormController().getForm());
+			} else {
+				// Select default one.
+				selectFirstRow();
+			}
+		} catch (Exception e) {
 			// Select default one.
 			selectFirstRow();
 		}

@@ -1,24 +1,16 @@
 package com.biit.abcd.core;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.biit.abcd.persistence.dao.IFormDao;
-import com.biit.abcd.persistence.dao.ITableRuleDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.User;
 
 public class FormController {
 	private User user;
 	private Form form;
-	private List<TableRule> formTableRules;
-
-	@Autowired
-	private ITableRuleDao tableRuleDao;
 
 	@Autowired
 	private IFormDao formDao;

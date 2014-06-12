@@ -50,7 +50,9 @@ public class FormManager extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				UserSessionHandler.getFormController().setForm(getForm());
+				if (UserSessionHandler.getFormController() != null) {
+					UserSessionHandler.getFormController().setForm(getForm());
+				}
 				updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 			}
 		});

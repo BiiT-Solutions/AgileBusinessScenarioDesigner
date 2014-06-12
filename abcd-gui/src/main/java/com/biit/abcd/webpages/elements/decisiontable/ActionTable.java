@@ -40,6 +40,7 @@ public class ActionTable extends Table {
 	public void addItem(TableRule rule) {
 		if (rule != null) {
 			setDefaultNewItemPropertyValues(rule, super.addItem(rule));
+			updateItem(rule);
 		}
 	}
 
@@ -133,7 +134,7 @@ public class ActionTable extends Table {
 
 	@Override
 	public boolean removeItem(Object itemId) {
-		setCurrentSelectedCells(new HashSet<Cell>(), null,true);
+		setCurrentSelectedCells(new HashSet<Cell>(), null, true);
 		return super.removeItem(itemId);
 	}
 

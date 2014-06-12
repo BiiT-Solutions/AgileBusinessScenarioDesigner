@@ -67,6 +67,7 @@ public class ConditionTable extends Table {
 	public void addItem(TableRule rule) {
 		if (rule != null) {
 			setDefaultNewItemPropertyValues(rule, super.addItem(rule));
+			updateItem(rule);
 		}
 	}
 

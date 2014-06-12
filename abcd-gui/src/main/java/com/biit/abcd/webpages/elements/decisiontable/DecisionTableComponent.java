@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.rules.Condition;
+import com.biit.abcd.persistence.entity.rules.AnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -68,7 +68,7 @@ public class DecisionTableComponent extends CustomComponent {
 		if (question != null) {
 			conditionTable.addColumn(question);
 			for (TableRule tableRule : decisionTableRules) {
-				tableRule.getConditions().put(question, new Condition());
+				tableRule.getConditions().put(question, new AnswerCondition(null));
 			}
 		}
 	}
@@ -79,7 +79,10 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow() {
-		TableRule decisionRule = new TableRule();
+		addRow(new TableRule());
+	}
+
+	public void addRow(TableRule decisionRule) {
 		decisionTableRules.add(decisionRule);
 
 		// Add decision Rule to both tables.

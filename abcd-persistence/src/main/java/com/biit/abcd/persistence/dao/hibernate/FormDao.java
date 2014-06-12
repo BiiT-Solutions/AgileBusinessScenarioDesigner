@@ -25,6 +25,7 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 			// Initializes the sets for lazy-loading (within the same session)
 			Hibernate.initialize(form.getChildren());
 			Hibernate.initialize(form.getDiagrams());
+			Hibernate.initialize(form.getTableRules());
 		}
 	}
 
@@ -54,7 +55,7 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 			criteria.add(Restrictions.eq("name", name));
 			@SuppressWarnings("unchecked")
 			List<Form> results = criteria.list();
-			session.getTransaction().commit();		
+			session.getTransaction().commit();
 			if (!results.isEmpty()) {
 				Form form = (Form) results.get(0);
 				sortChildren(form);

@@ -6,6 +6,7 @@ import java.util.Set;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -42,6 +43,18 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		getWorkingAreaLayout().addComponent(rootLayout);
 
 		initUpperMenu();
+
+		// Save current state when changing window.
+		addDetachListener(new DetachListener() {
+			private static final long serialVersionUID = -4725913087209115156L;
+
+			@Override
+			public void detach(DetachEvent event) {
+				// Update diagram object if modified.
+				updateForm();
+			}
+
+		});
 	}
 
 	private void initUpperMenu() {
@@ -112,13 +125,29 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
+	private void updateForm() {
+		UserSessionHandler.getFormController().getForm().setTableRules(decisionTable.getTableRules());
+	}
+
 	private void save() {
-		
+		updateForm();
+		UserSessionHandler.getFormController().save();
 	}
 
 	@Override
 	public void setForm(Form form) {
+		//Add table columns
+		if (!UserSessionHandler.getFormController().getForm().getTableRules().isEmpty()) {
+			for (Question question : UserSessionHandler.getFormController().getForm().getTableRules().get(0).getConditions()
+					.keySet()) {
+				decisionTable.addColumn(question);
+			}
+		}
 
+		//Add table rows.
+		for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
+			decisionTable.addRow(tableRule);
+		}
 	}
 
 	@Override
