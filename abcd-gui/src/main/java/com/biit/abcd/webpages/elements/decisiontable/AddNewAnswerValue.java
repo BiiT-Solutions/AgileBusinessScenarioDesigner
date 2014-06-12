@@ -8,26 +8,25 @@ import com.vaadin.ui.Component;
 
 public class AddNewAnswerValue extends SelectionTableWindow {
 	private static final long serialVersionUID = -5510653106309311210L;
-	private FormAnswerTable formAnswerTable;
 
 	public AddNewAnswerValue(Question question) {
-		super(question,false);
+		super(question, false);
 	}
 
 	@Override
 	public Component generateContent(TreeObject treeObject) {
-		formAnswerTable = new FormAnswerTable();
-		formAnswerTable.setSizeFull();
+		setTable(new FormAnswerTable());
+		getTable().setSizeFull();
 		if (treeObject instanceof Question) {
-			formAnswerTable.setRootElement(treeObject);
-			formAnswerTable.setSelectable(true);
+			getTable().setRootElement(treeObject);
+			getTable().setSelectable(true);
 		}
 
-		return formAnswerTable;
+		return getTable();
 	}
 
 	public Answer getSelectedTableValue() {
-		return formAnswerTable.getValue();
+		return ((FormAnswerTable) getTable()).getValue();
 	}
 
 }

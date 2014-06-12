@@ -51,8 +51,7 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -83,8 +82,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
+	 * members.
 	 * 
 	 * @param element
 	 */
@@ -105,8 +104,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't
-	 * be defined, then raises a {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
+	 * {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -155,6 +154,14 @@ public class TreeObjectTable extends TreeTable {
 		return null;
 	}
 
+	public void setTreeObjectsSelected(Set<TreeObject> treeObjects) {
+		super.setValue(treeObjects);
+	}
+	
+	public void setTreeObjectSelected(TreeObject treeObject) {
+		super.setValue(treeObject);
+	}
+
 	@SuppressWarnings("unchecked")
 	public Set<TreeObject> getTreeObjectsSelected() {
 		Object value = super.getValue();
@@ -177,6 +184,5 @@ public class TreeObjectTable extends TreeTable {
 	public boolean isElementFiltered(Object itemId) {
 		return false;
 	}
-	
-	
+
 }

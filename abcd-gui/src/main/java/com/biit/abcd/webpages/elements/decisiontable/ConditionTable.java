@@ -167,6 +167,10 @@ public class ConditionTable extends Table {
 		public void buttonClick(ClickEvent event) {
 			final AddNewAnswerValue newAnswerValue = new AddNewAnswerValue(question);
 			newAnswerValue.showCentered();
+			if (rule.getConditions() != null && rule.getConditions().get(question) != null) {
+				newAnswerValue
+						.setTreeObjectSelected(((AnswerCondition) rule.getConditions().get(question)).getAnswer());
+			}
 			newAnswerValue.addAcceptAcctionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {

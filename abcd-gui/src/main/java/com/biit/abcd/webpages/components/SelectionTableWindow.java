@@ -1,13 +1,14 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.Set;
+
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
 import com.vaadin.ui.Component;
 
 public abstract class SelectionTableWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 6781910083959136654L;
-	private FormQuestionTable formQuestionTable;
-	
+	private TreeObjectTable table;
+
 	private boolean multiselect;
 
 	public SelectionTableWindow(TreeObject treeObject, boolean multiselect) {
@@ -22,10 +23,24 @@ public abstract class SelectionTableWindow extends AcceptCancelWindow {
 	public abstract Component generateContent(TreeObject treeObject);
 
 	public TreeObjectTable getTable() {
-		return formQuestionTable;
+		return table;
 	}
-	
-	public boolean isMultiselect(){
+
+	public void setTable(TreeObjectTable table) {
+		this.table = table;
+	}
+
+	public boolean isMultiselect() {
 		return multiselect;
+	}
+
+	public void setTreeObjectsSelected(Set<TreeObject> selected) {
+		table.setTreeObjectsSelected(selected);
+	}
+
+	public void setTreeObjectSelected(TreeObject selected) {
+		if (table != null) {
+			table.setTreeObjectSelected(selected);
+		}
 	}
 }

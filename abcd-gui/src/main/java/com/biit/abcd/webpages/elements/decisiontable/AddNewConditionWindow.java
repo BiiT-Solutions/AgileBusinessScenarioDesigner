@@ -14,7 +14,6 @@ import com.vaadin.ui.Component;
 
 public class AddNewConditionWindow extends SelectionTableWindow {
 	private static final long serialVersionUID = 6781910083959136654L;
-	private FormQuestionTable formQuestionTable;
 
 	public AddNewConditionWindow(Form form, boolean multiselect) {
 		super(form, multiselect);
@@ -23,11 +22,11 @@ public class AddNewConditionWindow extends SelectionTableWindow {
 	}
 
 	public Question getSelectedQuestion() {
-		return (Question) formQuestionTable.getValue();
+		return (Question) getTable().getValue();
 	}
 
 	public Set<Question> getSelectedQuestions() {
-		Set<TreeObject> selectedObjects = formQuestionTable.getTreeObjectsSelected();
+		Set<TreeObject> selectedObjects = getTable().getTreeObjectsSelected();
 		Set<Question> selectedQuestions = new HashSet<Question>();
 		for (TreeObject object : selectedObjects) {
 			if (object instanceof Question) {
@@ -38,26 +37,26 @@ public class AddNewConditionWindow extends SelectionTableWindow {
 	}
 
 	public void disableQuestion(Question question) {
-		formQuestionTable.disableQuestion(question);
+		((FormQuestionTable) getTable()).disableQuestion(question);
 	}
 
 	public void disableQuestions(Collection<Question> collection) {
-		formQuestionTable.disableQuestions(collection);
+		((FormQuestionTable) getTable()).disableQuestions(collection);
 	}
 
 	@Override
 	public Component generateContent(TreeObject treeObject) {
-		formQuestionTable = new FormQuestionTable();
-		formQuestionTable.setMultiSelect(isMultiselect());
-		formQuestionTable.setSizeFull();
+		setTable(new FormQuestionTable());
+		getTable().setMultiSelect(isMultiselect());
+		getTable().setSizeFull();
 		if (treeObject instanceof Form) {
-			formQuestionTable.setRootElement((Form) treeObject);
-			formQuestionTable.setSelectable(true);
+			getTable().setRootElement((Form) treeObject);
+			getTable().setSelectable(true);
 		}
 
-		return formQuestionTable;
+		return getTable();
 	}
-	
+
 	public boolean isElementFiltered(Object itemId) {
 		return true;
 	}
