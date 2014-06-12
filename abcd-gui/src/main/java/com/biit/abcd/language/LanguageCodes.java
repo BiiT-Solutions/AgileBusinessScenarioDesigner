@@ -172,7 +172,8 @@ public enum LanguageCodes {
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
 	
 	SETTINGS_GLOBAL_CONSTANTS("settings.global.constants"),
-	SETTINGS_LOG_OUT("settings.log.out"), 
+	SETTINGS_LOG_OUT("settings.log.out"),
+	SETTINGS_CLOSE("settings.close"),
 	
 	GLOBAL_VARIABLE_NAME("global.variable.name"),
 	GLOBAL_VARIABLE_VALUE("global.variable.value"),

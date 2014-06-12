@@ -48,13 +48,23 @@ public class SettingsWindow extends PopupWindow{
 				ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
 				close();
 			}
+		});		
+		Button closeButton = new Button(ServerTranslate.tr(LanguageCodes.SETTINGS_CLOSE), new ClickListener() {
+			private static final long serialVersionUID = -1121572145945309858L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				close();
+			}
 		});
 		
 		globalConstantsButton.setWidth("100%");
 		logoutButton.setWidth("100%");
+		closeButton.setWidth("100%");
 		
 		rootLayout.addComponent(globalConstantsButton);
 		rootLayout.addComponent(logoutButton);
+		rootLayout.addComponent(closeButton);
 		
 		return rootLayout;
 	}
