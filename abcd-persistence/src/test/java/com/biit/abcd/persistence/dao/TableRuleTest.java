@@ -129,18 +129,12 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })
 	public void removeTableRules() {
-		List<TableRule> tableRules = tableRuleDao.getAll();
-		for (TableRule tableRule : tableRules) {
-			tableRuleDao.makeTransient(tableRule);
-		}
+		tableRuleDao.removeAll();
 		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
 		Assert.assertEquals(conditionDao.getRowCount(), 0);
 		Assert.assertEquals(actionDao.getRowCount(), 0);
 
-		List<Form> forms = formDao.getAll();
-		for (Form form : forms) {
-			formDao.makeTransient(form);
-		}
+		formDao.removeAll();
 		Assert.assertEquals(formDao.getRowCount(), 0);
 	}
 }

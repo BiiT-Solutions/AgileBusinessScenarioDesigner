@@ -248,9 +248,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
 
-		Assert.assertEquals(
-				retrievedForm.getTableRules().get(0).getConditions().get(question1),
-				answerCondition);
+		Assert.assertEquals(retrievedForm.getTableRules().get(0).getConditions().get(question1), answerCondition);
 		Assert.assertEquals(retrievedForm.getTableRules().get(0).getActions().get(0).getExpression(), ACTION_EXPRESSION);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
 	}
@@ -258,10 +256,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "formDao" }, dependsOnMethods = { "storeFormDiagram", "storeOtherFormWithSameLabelCategory",
 			"storeFormTableRule" })
 	public void removeForms() {
-		List<Form> forms = formDao.getAll();
-		for (Form form : forms) {
-			formDao.makeTransient(form);
-		}
+		formDao.removeAll();
 		Assert.assertEquals(formDao.getRowCount(), 0);
 		Assert.assertEquals(diagramDao.getRowCount(), 0);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 0);

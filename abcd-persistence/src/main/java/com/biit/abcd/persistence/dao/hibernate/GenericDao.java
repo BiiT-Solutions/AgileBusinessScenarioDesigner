@@ -125,6 +125,17 @@ public abstract class GenericDao<T> extends StorableObjectDao<T> implements IGen
 	}
 
 	/**
+	 * Truncates the table.
+	 */
+	@Override
+	public void removeAll() {
+		List<T> elements = getAll();
+		for (T element : elements) {
+			makeTransient(element);
+		}
+	}
+
+	/**
 	 * When using lazy loading, the sets must have a proxy to avoid a
 	 * "LazyInitializationException: failed to lazily initialize a collection of..." error. This procedure must be
 	 * called before closing the session.

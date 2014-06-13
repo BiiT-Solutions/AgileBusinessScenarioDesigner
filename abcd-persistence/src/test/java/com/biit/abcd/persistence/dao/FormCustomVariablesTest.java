@@ -101,16 +101,10 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = { "getDummyVariables", "storeIntegerVariables",
 			"storeStringVariables", "storeDateVariables" })
 	public void removeDummyVariables() {
-		List<FormCustomVariables> customVariables = formCustomVariablesDao.getAll();
-		for (FormCustomVariables formCustomVariables : customVariables) {
-			formCustomVariablesDao.makeTransient(formCustomVariables);
-		}
+		formCustomVariablesDao.removeAll();
 		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 0);
 
-		List<Form> forms = formDao.getAll();
-		for (Form form : forms) {
-			formDao.makeTransient(form);
-		}
+		formDao.removeAll();
 		Assert.assertEquals(formDao.getRowCount(), 0);
 	}
 

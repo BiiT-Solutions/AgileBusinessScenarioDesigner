@@ -41,4 +41,11 @@ public interface IGenericDao<T> {
 	 * @return
 	 */
 	T read(Long id);
+
+	/**
+	 * Remove all elements from database.
+	 * 
+	 * @return
+	 */
+	void removeAll();
 }

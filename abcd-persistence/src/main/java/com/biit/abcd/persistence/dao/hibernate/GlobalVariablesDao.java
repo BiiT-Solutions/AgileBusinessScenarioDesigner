@@ -5,11 +5,11 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
-import com.biit.abcd.persistence.dao.IGlobalVariables;
+import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 
 @Repository
-public class GlobalVariablesDao extends GenericDao<GlobalVariable> implements IGlobalVariables {
+public class GlobalVariablesDao extends GenericDao<GlobalVariable> implements IGlobalVariablesDao {
 
 	public GlobalVariablesDao() {
 		super(GlobalVariable.class);
@@ -22,5 +22,7 @@ public class GlobalVariablesDao extends GenericDao<GlobalVariable> implements IG
 			Hibernate.initialize(globalVariable.getData());
 		}
 	}
+	
+	
 
 }

@@ -88,16 +88,10 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test(groups = { "diagramDao" }, dependsOnMethods = { "getDummyDiagram", "storeDiagramObjects" })
 	public void removeDummyDiagram() {
-		List<Diagram> diagrams = diagramDao.getAll();
-		for (Diagram diagram : diagrams) {
-			diagramDao.makeTransient(diagram);
-		}
+		diagramDao.removeAll();
 		Assert.assertEquals(diagramDao.getRowCount(), 0);
 
-		List<Form> forms = formDao.getAll();
-		for (Form form : forms) {
-			formDao.makeTransient(form);
-		}
+		formDao.removeAll();
 		Assert.assertEquals(formDao.getRowCount(), 0);
 	}
 
