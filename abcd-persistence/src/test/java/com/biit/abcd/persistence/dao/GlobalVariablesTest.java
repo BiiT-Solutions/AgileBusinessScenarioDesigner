@@ -32,7 +32,7 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 			+ (3600 * 1000));
 
 	@Autowired
-	private IGlobalVariables globalVariablesDao;
+	private IGlobalVariablesDao globalVariablesDao;
 
 	@Autowired
 	private IVariableDataDao variableDataDao;

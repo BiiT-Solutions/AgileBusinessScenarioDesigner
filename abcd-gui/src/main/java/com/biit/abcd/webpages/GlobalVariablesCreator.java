@@ -64,6 +64,11 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				variableDataTable.setVariable((GlobalVariable) variableTable.getValue());
 			}
 		});
+
+		// Add already existing GlobalVariables.
+		for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
+			variableTable.addItem(globalVariable);
+		}
 	}
 
 	private UpperMenu createUpperMenu() {
@@ -163,12 +168,11 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		// TODO Auto-generated method stub
-
+		// No Forms here.
 	}
 
 	private void save() {
-		UserSessionHandler.getGlobalVariablesController().save();
+		UserSessionHandler.getGlobalVariablesController().update(variableTable.getGlobalVariables());
 	}
 
 }
