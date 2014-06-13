@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.IActionDao;
 import com.biit.abcd.persistence.dao.IConditionDao;
 import com.biit.abcd.persistence.dao.IQuestionDao;
-import com.biit.abcd.persistence.dao.ITableRuleDao;
+import com.biit.abcd.persistence.dao.ITableRuleRowDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 @Repository
-public class TableRuleDao extends GenericDao<TableRuleRow> implements ITableRuleDao {
+public class TableRuleRowDao extends GenericDao<TableRuleRow> implements ITableRuleRowDao {
 
 	@Autowired
 	private IActionDao actionDao;
@@ -28,7 +28,7 @@ public class TableRuleDao extends GenericDao<TableRuleRow> implements ITableRule
 	@Autowired
 	private IQuestionDao questionDao;
 
-	public TableRuleDao() {
+	public TableRuleRowDao() {
 		super(TableRuleRow.class);
 	}
 
