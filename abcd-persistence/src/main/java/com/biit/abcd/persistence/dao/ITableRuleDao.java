@@ -3,10 +3,10 @@ package com.biit.abcd.persistence.dao;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
-public interface ITableRuleDao extends IGenericDao<TableRule> {
+public interface ITableRuleDao extends IGenericDao<TableRuleRow> {
 
-	List<TableRule> getFormTableRules(Form form);
+	List<TableRuleRow> getFormTableRules(Form form);
 
 }

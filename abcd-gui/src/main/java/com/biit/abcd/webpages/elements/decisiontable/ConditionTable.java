@@ -7,7 +7,7 @@ import java.util.Set;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.AnswerCondition;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.data.Item;
@@ -56,15 +56,15 @@ public class ConditionTable extends Table {
 		return questions;
 	}
 
-	public Collection<TableRule> getSelectedRules() {
-		Set<TableRule> rules = new HashSet<TableRule>();
+	public Collection<TableRuleRow> getSelectedRules() {
+		Set<TableRuleRow> rules = new HashSet<TableRuleRow>();
 		for (Cell cell : cellRowSelector.getSelectedCells()) {
-			rules.add((TableRule) cell.getRow());
+			rules.add((TableRuleRow) cell.getRow());
 		}
 		return rules;
 	}
 
-	public void addItem(TableRule rule) {
+	public void addItem(TableRuleRow rule) {
 		if (rule != null) {
 			setDefaultNewItemPropertyValues(rule, super.addItem(rule));
 			updateItem(rule);
@@ -103,9 +103,9 @@ public class ConditionTable extends Table {
 					}
 				});
 				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((Question) propertyId,
-						(TableRule) itemId));
+						(TableRuleRow) itemId));
 				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener((Question) propertyId,
-						(TableRule) itemId));
+						(TableRuleRow) itemId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 			}
 		}
@@ -144,7 +144,7 @@ public class ConditionTable extends Table {
 	 * @param rule
 	 */
 	@SuppressWarnings("unchecked")
-	private void updateItem(TableRule rule) {
+	private void updateItem(TableRuleRow rule) {
 		Item row = getItem(rule);
 		for (Question question : rule.getConditions().keySet()) {
 			QuestionValueEditCell questionValue = ((QuestionValueEditCell) row.getItemProperty(question).getValue());
@@ -156,9 +156,9 @@ public class ConditionTable extends Table {
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private Question question;
-		private TableRule rule;
+		private TableRuleRow rule;
 
-		public CellEditButtonClickListener(Question question, TableRule rule) {
+		public CellEditButtonClickListener(Question question, TableRuleRow rule) {
 			this.question = question;
 			this.rule = rule;
 		}
@@ -188,9 +188,9 @@ public class ConditionTable extends Table {
 	private class CellDeleteButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -7125934888135148456L;
 		private Question question;
-		private TableRule rule;
+		private TableRuleRow rule;
 
-		public CellDeleteButtonClickListener(Question question, TableRule rule) {
+		public CellDeleteButtonClickListener(Question question, TableRuleRow rule) {
 			this.question = question;
 			this.rule = rule;
 		}

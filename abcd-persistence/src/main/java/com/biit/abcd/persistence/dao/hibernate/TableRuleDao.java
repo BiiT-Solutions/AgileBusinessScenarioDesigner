@@ -14,10 +14,10 @@ import com.biit.abcd.persistence.dao.IConditionDao;
 import com.biit.abcd.persistence.dao.IQuestionDao;
 import com.biit.abcd.persistence.dao.ITableRuleDao;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 @Repository
-public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao {
+public class TableRuleDao extends GenericDao<TableRuleRow> implements ITableRuleDao {
 
 	@Autowired
 	private IActionDao actionDao;
@@ -29,12 +29,12 @@ public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao
 	private IQuestionDao questionDao;
 
 	public TableRuleDao() {
-		super(TableRule.class);
+		super(TableRuleRow.class);
 	}
 
 	@Override
-	protected void initializeSets(List<TableRule> elements) {
-		for (TableRule tableRule : elements) {
+	protected void initializeSets(List<TableRuleRow> elements) {
+		for (TableRuleRow tableRule : elements) {
 			Hibernate.initialize(tableRule.getConditions().keySet());
 			Hibernate.initialize(tableRule.getActions());
 		}
@@ -42,13 +42,13 @@ public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<TableRule> getFormTableRules(Form form) {
+	public List<TableRuleRow> getFormTableRules(Form form) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
-			Criteria criteria = session.createCriteria(TableRule.class);
+			Criteria criteria = session.createCriteria(TableRuleRow.class);
 			criteria.add(Restrictions.eq("form", form));
-			List<TableRule> results = criteria.list();
+			List<TableRuleRow> results = criteria.list();
 			initializeSets(results);
 			session.getTransaction().commit();
 			return results;

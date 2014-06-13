@@ -20,7 +20,7 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.rules.AnswerCondition;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -235,7 +235,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		answer2.setName("Answer2");
 		question1.addChild(answer2);
 
-		TableRule tableRule = new TableRule();
+		TableRuleRow tableRule = new TableRuleRow();
 		AnswerCondition answerCondition = new AnswerCondition(answer1);
 		tableRule.getConditions().put(question1, answerCondition);
 		tableRule.getActions().get(0).setExpression(ACTION_EXPRESSION);

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.elements.decisiontable.Cell;
 import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector;
 import com.vaadin.data.Item;
@@ -34,10 +34,10 @@ public class RuleConditionTable extends Table {
 		return questions;
 	}
 
-	public Collection<TableRule> getSelectedRules() {
-		Set<TableRule> rules = new HashSet<TableRule>();
+	public Collection<TableRuleRow> getSelectedRules() {
+		Set<TableRuleRow> rules = new HashSet<TableRuleRow>();
 		for (Cell cell : cellRowSelector.getSelectedCells()) {
-			rules.add((TableRule) cell.getRow());
+			rules.add((TableRuleRow) cell.getRow());
 		}
 		return rules;
 	}

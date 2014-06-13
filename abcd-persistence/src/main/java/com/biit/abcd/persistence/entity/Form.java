@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.liferay.portal.model.UserGroup;
 
 @Entity
@@ -36,7 +36,7 @@ public class Form extends TreeObject {
 	private List<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<TableRule> tableRules;
+	private List<TableRuleRow> tableRules;
 
 	public Form() {
 		diagrams = new ArrayList<>();
@@ -126,11 +126,11 @@ public class Form extends TreeObject {
 		this.diagrams = diagrams;
 	}
 
-	public List<TableRule> getTableRules() {
+	public List<TableRuleRow> getTableRules() {
 		return tableRules;
 	}
 
-	public void setTableRules(List<TableRule> tableRules) {
+	public void setTableRules(List<TableRuleRow> tableRules) {
 		this.tableRules = tableRules;
 	}
 }

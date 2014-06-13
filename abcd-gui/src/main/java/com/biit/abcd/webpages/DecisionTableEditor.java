@@ -6,7 +6,7 @@ import java.util.Set;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -145,7 +145,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		}
 
 		//Add table rows.
-		for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
+		for (TableRuleRow tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
 			decisionTable.addRow(tableRule);
 		}
 	}

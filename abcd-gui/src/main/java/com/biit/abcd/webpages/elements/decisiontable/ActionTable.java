@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.data.Item;
@@ -37,7 +37,7 @@ public class ActionTable extends Table {
 		setSelectable(false);
 	}
 
-	public void addItem(TableRule rule) {
+	public void addItem(TableRuleRow rule) {
 		if (rule != null) {
 			setDefaultNewItemPropertyValues(rule, super.addItem(rule));
 			updateItem(rule);
@@ -76,8 +76,8 @@ public class ActionTable extends Table {
 					}
 				});
 				item.getItemProperty(propertyId).setValue(editCellComponent);
-				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((TableRule) itemId));
-				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener((TableRule) itemId));
+				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((TableRuleRow) itemId));
+				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener((TableRuleRow) itemId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 			}
 		}
@@ -88,7 +88,7 @@ public class ActionTable extends Table {
 	 * 
 	 * @param rule
 	 */
-	private void updateItem(TableRule rule) {
+	private void updateItem(TableRuleRow rule) {
 		Item row = getItem(rule);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) row.getItemProperty(Columns.ACTION).getValue());
 		actionValue.setLabel(rule.getActions().get(0).getExpression());
@@ -96,9 +96,9 @@ public class ActionTable extends Table {
 
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
-		private TableRule rule;
+		private TableRuleRow rule;
 
-		public CellEditButtonClickListener(TableRule rule) {
+		public CellEditButtonClickListener(TableRuleRow rule) {
 			this.rule = rule;
 		}
 
@@ -119,9 +119,9 @@ public class ActionTable extends Table {
 
 	private class CellDeleteButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -7125934888135148456L;
-		private TableRule rule;
+		private TableRuleRow rule;
 
-		public CellDeleteButtonClickListener(TableRule rule) {
+		public CellDeleteButtonClickListener(TableRuleRow rule) {
 			this.rule = rule;
 		}
 

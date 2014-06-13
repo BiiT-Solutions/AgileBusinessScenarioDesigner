@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.AnswerCondition;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
@@ -17,7 +17,7 @@ public class DecisionTableComponent extends CustomComponent {
 	private HorizontalLayout rootLayout;
 	private ConditionTable conditionTable;
 	private ActionTable actionTable;
-	private List<TableRule> decisionTableRules;
+	private List<TableRuleRow> decisionTableRules;
 
 	public DecisionTableComponent() {
 		decisionTableRules = new ArrayList<>();
@@ -67,7 +67,7 @@ public class DecisionTableComponent extends CustomComponent {
 	public void addColumn(Question question) {
 		if (question != null) {
 			conditionTable.addColumn(question);
-			for (TableRule tableRule : decisionTableRules) {
+			for (TableRuleRow tableRule : decisionTableRules) {
 				tableRule.getConditions().put(question, new AnswerCondition(null));
 			}
 		}
@@ -79,10 +79,10 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow() {
-		addRow(new TableRule());
+		addRow(new TableRuleRow());
 	}
 
-	public void addRow(TableRule decisionRule) {
+	public void addRow(TableRuleRow decisionRule) {
 		decisionTableRules.add(decisionRule);
 
 		// Add decision Rule to both tables.
@@ -91,19 +91,23 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void removeSelectedRows() {
-		for (TableRule rule : conditionTable.getSelectedRules()) {
+		for (TableRuleRow rule : conditionTable.getSelectedRules()) {
 			conditionTable.removeItem(rule);
 			actionTable.removeItem(rule);
+			decisionTableRules.remove(rule);
 		}
 	}
 
 	public void removeSelectedColumns() {
 		for (Question question : conditionTable.getSelectedQuestions()) {
 			conditionTable.removeContainerProperty(question);
+			for (TableRuleRow rule : decisionTableRules) {
+				rule.removeCondition(question);
+			}
 		}
 	}
 
-	public List<TableRule> getTableRules() {
+	public List<TableRuleRow> getTableRules() {
 		return decisionTableRules;
 	}
 }

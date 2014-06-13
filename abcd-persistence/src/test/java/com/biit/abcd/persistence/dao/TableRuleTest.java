@@ -20,7 +20,7 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.Condition;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -74,7 +74,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		basicForm.setName(DUMMY_FORM);
 		formDao.makePersistent(basicForm);
 
-		TableRule tableRules = new TableRule(basicForm);
+		TableRuleRow tableRules = new TableRuleRow(basicForm);
 		tableRuleDao.makePersistent(tableRules);
 
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
@@ -82,7 +82,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
 	public void getDummyTableRule() {
-		List<TableRule> tableRules = tableRuleDao.getAll();
+		List<TableRuleRow> tableRules = tableRuleDao.getAll();
 		Assert.assertEquals(tableRules.get(0).getForm().getName(), DUMMY_FORM);
 		Assert.assertEquals(tableRuleDao.getFormTableRules(basicForm).size(), 1);
 	}
@@ -105,7 +105,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		formDao.makePersistent(form);
 
 		// Define rule elements
-		TableRule tableRules = new TableRule(form);
+		TableRuleRow tableRules = new TableRuleRow(form);
 
 		Action action = new Action();
 		action.setExpression(BASIC_ACTION);
@@ -117,7 +117,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 		tableRuleDao.makePersistent(tableRules);
 
-		List<TableRule> rulesOfForm = tableRuleDao.getFormTableRules(form);
+		List<TableRuleRow> rulesOfForm = tableRuleDao.getFormTableRules(form);
 		Assert.assertEquals(rulesOfForm.size(), 1);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
 		Assert.assertEquals(rulesOfForm.get(0).getActions().get(0).getExpression(), BASIC_ACTION);

@@ -25,13 +25,13 @@ import com.biit.abcd.persistence.entity.StorableObject;
  * Specific rules created for managing decision tables.
  */
 @Entity
-@Table(name = "RULE_DECISION_TABLE")
-public class TableRule extends StorableObject {
+@Table(name = "RULE_DECISION_TABLE_ROW")
+public class TableRuleRow extends StorableObject {
 
 	@ManyToOne
 	private Form form;
 
-	// Due to bug https://hibernate.atlassian.net/browse/HHH-8839, map must be LAZY.
+	// Due to bug https://hibernate.atlassian.net/browse/HHH-8839, map must use @LazyCollection.
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "RULE_DECISION_CONDITIONS_MAP", joinColumns = { @JoinColumn(name = "rule_decision_id") })
@@ -44,7 +44,7 @@ public class TableRule extends StorableObject {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Action> actions;
 
-	public TableRule() {
+	public TableRuleRow() {
 		conditions = new HashMap<Question, Condition>();
 		actions = new ArrayList<>();
 		//At least one action.
@@ -52,7 +52,7 @@ public class TableRule extends StorableObject {
 		addAction(action);
 	}
 
-	public TableRule(Form form) {
+	public TableRuleRow(Form form) {
 		conditions = new HashMap<Question, Condition>();
 		actions = new ArrayList<>();
 		setForm(form);
