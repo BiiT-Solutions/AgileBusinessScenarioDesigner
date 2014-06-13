@@ -3,6 +3,7 @@ package com.biit.abcd.webpages;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
@@ -24,14 +25,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 
-public class GlobalVariables extends FormWebPageComponent {
+public class GlobalVariablesCreator extends FormWebPageComponent {
 	private static final long serialVersionUID = 6042328256995069412L;
 
 	private HorizontalLayout rootLayout;
 	private GlobalVariablesTable variableTable;
 	private VariableDataTable variableDataTable;
 
-	public GlobalVariables() {
+	public GlobalVariablesCreator() {
 		super();
 	}
 
@@ -167,7 +168,7 @@ public class GlobalVariables extends FormWebPageComponent {
 	}
 
 	private void save() {
-		
+		UserSessionHandler.getGlobalVariablesController().save();
 	}
 
 }
