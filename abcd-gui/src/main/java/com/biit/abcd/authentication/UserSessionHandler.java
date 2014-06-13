@@ -1,18 +1,17 @@
 package com.biit.abcd.authentication;
 
 import com.biit.abcd.core.FormController;
+import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
-/**
- * Based on the appfoundation vaadin plugin.
- */
 public class UserSessionHandler {
 	private static final String DEFAULT_SUFIX = "-sessionhandler";
 	private User user = null;
 	private FormController formController;
+	private static GlobalVariablesController globalVariablesController;
 
 	// Store the user object of the currently inlogged user
 
@@ -101,6 +100,14 @@ public class UserSessionHandler {
 	 */
 	public static void logout() {
 		setUser(null);
+	}
+
+	public static GlobalVariablesController getGlobalVariablesController() {
+		if (globalVariablesController == null) {
+			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+			globalVariablesController = new GlobalVariablesController(helper);
+		}
+		return globalVariablesController;
 	}
 
 }

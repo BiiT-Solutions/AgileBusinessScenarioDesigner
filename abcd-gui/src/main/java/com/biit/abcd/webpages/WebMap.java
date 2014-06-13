@@ -16,7 +16,7 @@ public enum WebMap {
 	
 	DROOLS_RULE_EDITOR(DroolsRuleEditor.class), 
 	
-	GLOBAL_VARIABLES(GlobalVariables.class);
+	GLOBAL_VARIABLES(GlobalVariablesCreator.class);
 
 	private static WebMap loginPage = WebMap.LOGIN_PAGE;
 

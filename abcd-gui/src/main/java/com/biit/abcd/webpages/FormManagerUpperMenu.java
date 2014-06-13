@@ -26,7 +26,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
-		// Add new Category
+		// Add new Form
 		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_EDIT_FORM, ThemeIcons.FORM_MANAGER_ADD_FORM,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 6053447189295644721L;

@@ -19,13 +19,14 @@ public class GlobalVariablesUpperMenu extends UpperMenu {
 	private void defineMenu() {
 		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcons.SAVE, LanguageCodes.MENU_SAVE);
 		addVariable = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_CAPTION,
-				ThemeIcons.ADD_ITEM_LIST, LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP);
+				ThemeIcons.GLOBAL_VARIABLES_ADD_VARIABLE, LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP);
 		removeVariable = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_CAPTION,
-				ThemeIcons.REMOVE_ITEM_LIST, LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_TOOLTIP);
-		addValue = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION, ThemeIcons.ADD_ITEM_LIST,
-				LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP);
+				ThemeIcons.GLOBAL_VARIABLES_REMOVE_VARIABLE,
+				LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_TOOLTIP);
+		addValue = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION,
+				ThemeIcons.GLOBAL_VARIABLES_ADD_VALUE, LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP);
 		removeValue = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_DATA_CAPTION,
-				ThemeIcons.REMOVE_ITEM_LIST, LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP);
+				ThemeIcons.GLOBAL_VARIABLES_REMOVE_VALUE, LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP);
 
 		addIconButton(saveButton);
 		addIconButton(addVariable);
