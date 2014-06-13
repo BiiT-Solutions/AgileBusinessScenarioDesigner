@@ -24,6 +24,7 @@ public class SettingsWindow extends PopupWindow{
 		setWidth(width);
 		setHeight(null);
 		setContent(generateContent());
+		setCaption(ServerTranslate.tr(LanguageCodes.SETTINGS_TITLE));
 	}
 	
 	private Component generateContent(){
