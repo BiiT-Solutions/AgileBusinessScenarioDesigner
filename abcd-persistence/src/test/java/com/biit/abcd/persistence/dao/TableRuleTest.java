@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.Condition;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,6 +34,9 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	private ITableRuleDao tableRuleDao;
 
 	@Autowired
+	private ITableRuleRowDao tableRuleRowDao;
+
+	@Autowired
 	private IFormDao formDao;
 
 	@Autowired
@@ -40,8 +44,6 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 	@Autowired
 	private IActionDao actionDao;
-
-	private Form basicForm;
 
 	@Test(groups = { "tableRulesDao" })
 	public void testEmptyDatabase() {
@@ -70,24 +72,25 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeDummyTableRule() throws NotValidFormException {
-		basicForm = new Form();
+		Form basicForm = new Form();
 		basicForm.setName(DUMMY_FORM);
 		formDao.makePersistent(basicForm);
 
-		TableRuleRow tableRules = new TableRuleRow(basicForm);
-		tableRuleDao.makePersistent(tableRules);
+		TableRule tableRule = new TableRule(basicForm);
+
+		TableRuleRow tableRuleRow = new TableRuleRow();
+		tableRule.getRules().add(tableRuleRow);
+		tableRuleDao.makePersistent(tableRule);
 
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
-	}
+		Assert.assertEquals(tableRuleRowDao.getRowCount(), 1);
 
-	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
-	public void getDummyTableRule() {
-		List<TableRuleRow> tableRules = tableRuleDao.getAll();
+		List<TableRule> tableRules = tableRuleDao.getAll();
 		Assert.assertEquals(tableRules.get(0).getForm().getName(), DUMMY_FORM);
 		Assert.assertEquals(tableRuleDao.getFormTableRules(basicForm).size(), 1);
 	}
 
-	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "getDummyTableRule")
+	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
 	public void storeTableRule() throws NotValidChildException {
 		// Define form.
 		Form form = new Form();
@@ -105,32 +108,37 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		formDao.makePersistent(form);
 
 		// Define rule elements
-		TableRuleRow tableRules = new TableRuleRow(form);
+		TableRule tableRule = new TableRule(form);
+
+		TableRuleRow tableRuleRow = new TableRuleRow();
 
 		Action action = new Action();
 		action.setExpression(BASIC_ACTION);
-		tableRules.addAction(action);
+		tableRuleRow.addAction(action);
 
 		Condition condition = new Condition();
 		// Set into the rule.
-		tableRules.putCondition(question, condition);
+		tableRuleRow.putCondition(question, condition);
+		tableRule.getRules().add(tableRuleRow);
 
-		tableRuleDao.makePersistent(tableRules);
+		tableRuleDao.makePersistent(tableRule);
 
-		List<TableRuleRow> rulesOfForm = tableRuleDao.getFormTableRules(form);
-		Assert.assertEquals(rulesOfForm.size(), 1);
+		List<TableRule> ruleTablesOfForm = tableRuleDao.getFormTableRules(form);
+		Assert.assertEquals(ruleTablesOfForm.size(), 1);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
-		Assert.assertEquals(rulesOfForm.get(0).getActions().get(0).getExpression(), BASIC_ACTION);
+		Assert.assertEquals(tableRuleRowDao.getRowCount(), 2);
+		Assert.assertEquals(ruleTablesOfForm.get(0).getRules().get(0).getActions().get(0).getExpression(), BASIC_ACTION);
 		Assert.assertEquals(
-				rulesOfForm.get(0).getConditions()
-						.get(getHibernateQuestion(rulesOfForm.get(0).getConditions(), question)).getId(),
-				condition.getId());
+				ruleTablesOfForm.get(0).getRules().get(0).getConditions()
+						.get(getHibernateQuestion(ruleTablesOfForm.get(0).getRules().get(0).getConditions(), question))
+						.getId(), condition.getId());
 	}
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })
 	public void removeTableRules() {
 		tableRuleDao.removeAll();
 		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
+		Assert.assertEquals(tableRuleRowDao.getRowCount(), 0);
 		Assert.assertEquals(conditionDao.getRowCount(), 0);
 		Assert.assertEquals(actionDao.getRowCount(), 0);
 
