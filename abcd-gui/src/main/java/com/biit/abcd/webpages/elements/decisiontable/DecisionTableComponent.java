@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.AnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
@@ -79,7 +80,10 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow() {
-		addRow(new TableRuleRow());
+		TableRuleRow tableRuleRow = new TableRuleRow();
+		// Add at least one action.
+		tableRuleRow.addAction(new Action());
+		addRow(tableRuleRow);
 	}
 
 	public void addRow(TableRuleRow decisionRule) {
@@ -96,6 +100,10 @@ public class DecisionTableComponent extends CustomComponent {
 			actionTable.removeItem(rule);
 			decisionTableRules.remove(rule);
 		}
+		// Always one row.
+		if (conditionTable.size() == 0) {
+			addRow();
+		}
 	}
 
 	public void removeSelectedColumns() {
@@ -108,6 +116,25 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public List<TableRuleRow> getTableRules() {
+		return decisionTableRules;
+	}
+
+	/**
+	 * Returns the table rules that has been filled up by the user.
+	 * 
+	 * @return
+	 */
+	public List<TableRuleRow> getDefinedTableRules() {
+		List<TableRuleRow> notEmptyRows = new ArrayList<>();
+		// Row is useful if at least has one action defined.
+		for (TableRuleRow row : decisionTableRules) {
+			for (Action action : row.getActions()) {
+				if (!action.undefined()) {
+					notEmptyRows.add(row);
+					break;
+				}
+			}
+		}
 		return decisionTableRules;
 	}
 }

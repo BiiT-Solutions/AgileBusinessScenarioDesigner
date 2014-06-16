@@ -25,4 +25,7 @@ public class Action extends StorableObject {
 		return getExpression().substring(0, Math.min(MAX_CHARACTERS_TO_SHOW, getExpression().length()));
 	}
 
+	public boolean undefined() {
+		return expression.length() > 0;
+	}
 }

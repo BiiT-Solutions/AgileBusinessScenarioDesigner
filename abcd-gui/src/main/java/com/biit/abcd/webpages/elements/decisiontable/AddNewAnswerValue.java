@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
@@ -11,6 +13,7 @@ public class AddNewAnswerValue extends SelectionTableWindow {
 
 	public AddNewAnswerValue(Question question) {
 		super(question, false);
+		setCaption(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_EDIT_CONDITION_CAPTION));
 	}
 
 	@Override

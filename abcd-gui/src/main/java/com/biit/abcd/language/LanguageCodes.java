@@ -167,7 +167,10 @@ public enum LanguageCodes {
 	CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_TOOLTIP("condition.table.editor.button.add.row.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_CAPTION("condition.table.editor.button.remove.row.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_TOOLTIP("condition.table.editor.button.remove.row.tooltip"),
-	CONDITION_TABLE_EDITOR_ACTION_EDITOR_CAPTION("action.window.caption"),
+	CONDITION_TABLE_EDITOR_ACTION_EDITOR_TEXTAREA_CAPTION("action.window.textarea.caption"),
+	CONDITION_TABLE_NEW_CONDITION_CAPTION("condition.window.new.caption"),
+	CONDITION_TABLE_EDIT_CONDITION_CAPTION("condition.window.edit.caption"),
+	CONDITION_TABLE_EDIT_ACTION_CAPTION("action.window.edit.caption"),
 	
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
 	

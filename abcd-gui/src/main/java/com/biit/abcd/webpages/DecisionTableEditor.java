@@ -6,6 +6,7 @@ import java.util.Set;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -126,7 +127,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	}
 
 	private void updateForm() {
-		UserSessionHandler.getFormController().getForm().setTableRules(decisionTable.getTableRules());
+		if (getSelectedTableRule() < UserSessionHandler.getFormController().getForm().getTableRules().size()) {
+			UserSessionHandler.getFormController().getForm().getTableRules().get(getSelectedTableRule())
+					.setRules(decisionTable.getDefinedTableRules());
+		}
 	}
 
 	private void save() {
@@ -136,23 +140,34 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		//Add table columns
-		if (!UserSessionHandler.getFormController().getForm().getTableRules().isEmpty()) {
-			for (Question question : UserSessionHandler.getFormController().getForm().getTableRules().get(0).getConditions()
-					.keySet()) {
-				decisionTable.addColumn(question);
-			}
+		// Add table columns
+		if (UserSessionHandler.getFormController().getForm().getTableRules().isEmpty()) {
+			UserSessionHandler.getFormController().getForm().getTableRules().add(new TableRule());
 		}
+		if (getSelectedTableRule() < UserSessionHandler.getFormController().getForm().getTableRules().size()) {
+			if (!UserSessionHandler.getFormController().getForm().getTableRules().get(getSelectedTableRule())
+					.getRules().isEmpty()) {
+				for (Question question : UserSessionHandler.getFormController().getForm().getTableRules()
+						.get(getSelectedTableRule()).getRules().get(0).getConditions().keySet()) {
+					decisionTable.addColumn(question);
+				}
+			}
 
-		//Add table rows.
-		for (TableRuleRow tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
-			decisionTable.addRow(tableRule);
+			// Add table rows.
+			for (TableRuleRow tableRule : UserSessionHandler.getFormController().getForm().getTableRules()
+					.get(getSelectedTableRule()).getRules()) {
+				decisionTable.addRow(tableRule);
+			}
 		}
 	}
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
 		return null;
+	}
+
+	public int getSelectedTableRule() {
+		return 0;
 	}
 
 }
