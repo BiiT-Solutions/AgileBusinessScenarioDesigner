@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.formulaeditor.operators;
+package com.biit.abcd.webpages.elements.formulaeditor.operators.calculus;
 
 import com.biit.abcd.webpages.elements.formulaeditor.CustomFormulaPortClickListener;
 import com.biit.abcd.webpages.elements.formulaeditor.FormulaExpressionComponent;
@@ -14,9 +14,9 @@ public class OperatorSum extends FormulaExpressionComponent {
 
 	public OperatorSum() {
 		super();
-		leftPort = new FormulaPortComponent(Type.getAnyType());
+		leftPort = new FormulaPortComponent(Type.CALCULATION);
 		leftPort.addFormulaPortClickListener(new CustomFormulaPortClickListener(leftPort));
-		rightPort = new FormulaPortComponent(Type.getAnyType());
+		rightPort = new FormulaPortComponent(Type.CALCULATION);
 		rightPort.addFormulaPortClickListener(new CustomFormulaPortClickListener(rightPort));
 
 		addText("( ");
@@ -24,6 +24,11 @@ public class OperatorSum extends FormulaExpressionComponent {
 		middleText = addText(" + ");
 		addPort(rightPort);
 		addText(" )");
+	}
+
+	@Override
+	public Type getReturnType() {
+		return Type.CALCULATION;
 	}
 
 

@@ -13,7 +13,7 @@ import com.vaadin.ui.TextField;
 public abstract class GenericFormElementProperties<T> extends PropertiesForClassComponent<T> {
 	private static final long serialVersionUID = -8230738772806878748L;
 
-	public GenericFormElementProperties(T type) {
+	public GenericFormElementProperties(Class<? extends T> type) {
 		super(type);
 	}
 

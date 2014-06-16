@@ -3,13 +3,14 @@ package com.biit.abcd.webpages.elements.formulaeditor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 
-public class FormulaExpressionComponent extends CustomComponent {
+public abstract class FormulaExpressionComponent extends CustomComponent {
 	private static final long serialVersionUID = 1350097467868000964L;
 	private static final String CLASSNAME = "v-formulaExpressionComponent";
 	private static final String CLASSNAME_ROOT_LAYOUT = "v-formulaExpressionComponentRoot-layout";
@@ -108,5 +109,6 @@ public class FormulaExpressionComponent extends CustomComponent {
 		}
 		return false;
 	}
-
+	
+	public abstract Type getReturnType();
 }

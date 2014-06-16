@@ -21,7 +21,7 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 	private DateField availableTo;
 
 	public FormProperties() {
-		super(new Form());
+		super(Form.class);
 	}
 
 	@Override

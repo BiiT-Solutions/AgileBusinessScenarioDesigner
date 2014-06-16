@@ -1,7 +1,6 @@
 package com.biit.abcd.webpages.elements.formulaeditor;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
-import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 
@@ -36,7 +35,7 @@ public class FormulaEditor extends CustomComponent {
 		formulaPort.addFormulaPortClickListener(new FormulaPortClickListener() {
 			@Override
 			public void formulaPortClicked(FormulaPortComponent formulaPort, LayoutClickEvent listener) {
-				System.out.println("Formula port Listener: "+formulaPort.getConnectorId());
+				System.out.println("Formula port Listener: " + formulaPort.getConnectorId());
 				setFormulaPortClicked(formulaPort);
 			}
 		});
@@ -47,7 +46,7 @@ public class FormulaEditor extends CustomComponent {
 		formulaExpressionComponent.addFormulaPortClickListener(new FormulaPortClickListener() {
 			@Override
 			public void formulaPortClicked(FormulaPortComponent formulaPort, LayoutClickEvent listener) {
-				//System.out.println("Formula expresion Listener: "+formulaPort.getConnectorId());
+				// System.out.println("Formula expresion Listener: "+formulaPort.getConnectorId());
 				setFormulaPortClicked(formulaPort);
 			}
 		});

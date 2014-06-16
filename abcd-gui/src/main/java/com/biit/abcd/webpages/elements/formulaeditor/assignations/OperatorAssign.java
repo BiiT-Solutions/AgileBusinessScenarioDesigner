@@ -16,14 +16,19 @@ public class OperatorAssign extends FormulaExpressionComponent {
 
 	public OperatorAssign() {
 		super();
-		leftPort = new FormulaPortComponent(Type.getAnyType());
+		leftPort = new FormulaPortComponent(Type.VARIABLE);
 		leftPort.addFormulaPortClickListener(new CustomFormulaPortClickListener(leftPort));
-		rightPort = new FormulaPortComponent(Type.getAnyType());
+		rightPort = new FormulaPortComponent(Type.CALCULATION);
 		rightPort.addFormulaPortClickListener(new CustomFormulaPortClickListener(rightPort));
 
 		addPort(leftPort);
 		assignText = addText("=");
 		addPort(rightPort);
+	}
+
+	@Override
+	public Type getReturnType() {
+		return Type.CALCULATION;
 	}
 
 }

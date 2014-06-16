@@ -18,13 +18,18 @@ public class ComparatorEq extends FormulaExpressionComponent {
 
 	public ComparatorEq() {
 		super();
-		port1 = new FormulaPortComponent(Type.getAnyType());
+		port1 = new FormulaPortComponent(Type.getComparisonAndLogic());
 		port1.addFormulaPortClickListener(new CustomFormulaPortClickListener(port1));
-		port2 = new FormulaPortComponent(Type.getAnyType());
+		port2 = new FormulaPortComponent(Type.getComparisonAndLogic());
 		port2.addFormulaPortClickListener(new CustomFormulaPortClickListener(port2));
 
 		addPort(port1);
 		comparatorLabel = addText("==");
 		addPort(port2);
+	}
+	
+	@Override
+	public Type getReturnType() {
+		return Type.COMPARISON;
 	}
 }

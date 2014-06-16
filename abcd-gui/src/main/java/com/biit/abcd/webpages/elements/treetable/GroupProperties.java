@@ -16,7 +16,7 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 	private CheckBox groupIsRepeatable;
 
 	public GroupProperties() {
-		super(new Group());
+		super(Group.class);
 	}
 
 	@Override

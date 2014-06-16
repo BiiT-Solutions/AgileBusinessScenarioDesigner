@@ -624,5 +624,9 @@ $open-sans-pathPrefix: "./fonts/";
 	div.v-csslayout.v-second-line {
 		margin-top: 8px;
 	}
-	
+
+	/* tabsheet */
+	.v-tabsheet-tabitem .v-caption.v-disabled {
+		opacity: 0.5;
+	}	
 }
