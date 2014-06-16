@@ -40,10 +40,17 @@ public class ServerTranslate {
 	}
 
 	public static String tr(LanguageCodes code) {
-		if(code == null){
+		if (code == null) {
 			return null;
 		}
 		return tr(code.toString(), null);
+	}
+
+	public static String tr(String code) {
+		if (code == null) {
+			return null;
+		}
+		return tr(code, null);
 	}
 
 	public static String tr(LanguageCodes code, Object[] args) {
