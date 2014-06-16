@@ -73,6 +73,7 @@ public enum LanguageCodes {
 	
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
+	BOTTOM_MENU_FORM_VARIABLES("page.bottommenu.formVariables"),
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	BOTTOM_MENU_DROOLS_TABLE_EDITOR("page.bottommenu.droolsTableEditor"),
@@ -197,7 +198,10 @@ public enum LanguageCodes {
 	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip"),
 	
 	RULE_EDITOR_WHEN_LABEL("window.when.label"),
-	RULE_EDITOR_THEN_LABEL("window.then.label");
+	RULE_EDITOR_THEN_LABEL("window.then.label"),
+	
+	FORM_VARIABLE_ADD("form.variables.add"),
+	FORM_VARIABLE_REMOVE("form.variables.remove");
 	
 	private String value;
 	

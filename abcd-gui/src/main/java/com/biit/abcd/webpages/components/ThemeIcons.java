@@ -110,7 +110,13 @@ public enum ThemeIcons {
 
 	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.svg"),
 
-	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.remove.svg"), ;
+	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.remove.svg"),
+
+	FORM_VARIABLES("appbar.form.variables.svg"),
+
+	VARIABLE_ADD("appbar.notification.add.svg"),
+
+	VARIABLE_REMOVE("appbar.notification.remove.svg");
 
 	private String value;
 

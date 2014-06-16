@@ -11,8 +11,8 @@ import com.vaadin.ui.UI;
 
 public abstract class BottomMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 6149788828670200504L;
-	private IconButton formManagerButton, treeDesignerButton, diagramBuilderButton, expressionsEditorButton,
-			ruleEditorButton, decissionTableButton;
+	private IconButton formManagerButton, treeDesignerButton, formVariables, diagramBuilderButton,
+			expressionsEditorButton, ruleEditorButton, decissionTableButton;
 
 	protected BottomMenu() {
 		super();
@@ -48,6 +48,19 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 				});
 		treeDesignerButton.setEnabled(false);
 		addIconButton(treeDesignerButton);
+
+		// Add Form Variables button.
+		formVariables = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_VARIABLES, ThemeIcons.FORM_VARIABLES,
+				LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER, IconSize.BIG, new ClickListener() {
+					private static final long serialVersionUID = -6778800510554818966L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						changeView(WebMap.FORM_VARIABLES);
+					}
+				});
+		formVariables.setEnabled(false);
+		addIconButton(formVariables);
 
 		// Add Diagram Builder button.
 		diagramBuilderButton = new IconButton(LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER,
@@ -115,6 +128,9 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 	public void updateButtons(boolean enableFormButtons) {
 		if (treeDesignerButton != null) {
 			treeDesignerButton.setEnabled(enableFormButtons);
+		}
+		if (formVariables != null) {
+			formVariables.setEnabled(enableFormButtons);
 		}
 		if (diagramBuilderButton != null) {
 			diagramBuilderButton.setEnabled(enableFormButtons);
