@@ -41,7 +41,7 @@ public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 			criteria.add(Restrictions.eq("form", form));
 			@SuppressWarnings("unchecked")
 			List<Diagram> results = criteria.list();
-			// initialize(results);
+			initializeSets(results);
 			session.getTransaction().commit();
 			if (results.size() > 0) {
 				return results.get(0);
