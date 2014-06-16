@@ -26,6 +26,8 @@ import com.biit.abcd.webpages.elements.treetable.TreeTablePropertiesComponent;
 import com.biit.abcd.webpages.elements.treetable.TreeTableUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 
 public class TreeDesigner extends FormWebPageComponent {
@@ -42,7 +44,7 @@ public class TreeDesigner extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
-		this.upperMenu = createUpperMenu();
+		this.upperMenu = initUpperMenu();
 		setUpperMenu(upperMenu);
 
 		treeTableValueChangeListener = new TreeTableValueChangeListener();
@@ -83,7 +85,7 @@ public class TreeDesigner extends FormWebPageComponent {
 	public void setForm(Form form) {
 		this.form = form;
 		// Remove ValueChange listener and re add it after load the entire form.
-		// This will remove the unnecesary overhead of calls when loading a
+		// This will remove the unnecessary overhead of calls when loading a
 		// form.
 		formTreeTable.setValue(null);
 		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
@@ -105,8 +107,81 @@ public class TreeDesigner extends FormWebPageComponent {
 		upperMenu.setEnabledButtons(selectedObject);
 	}
 
-	private TreeTableUpperMenu createUpperMenu() {
-		TreeTableUpperMenu upperMenu = new TreeTableUpperMenu(this);
+	private TreeTableUpperMenu initUpperMenu() {
+		TreeTableUpperMenu upperMenu = new TreeTableUpperMenu();
+
+		upperMenu.addSaveButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 7788465178005102302L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				save();
+			}
+		});
+
+		upperMenu.addNewCategoryButtonButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -2120693196054701885L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addCategory();
+			}
+		});
+
+		upperMenu.addNewGroupButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 564498223106608362L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addGroup();
+			}
+		});
+
+		upperMenu.addNewQuestionButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -6280274747616018339L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addQuestion();
+			}
+		});
+
+		upperMenu.addNewAnswerButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -1019979581523797207L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addAnswer();
+			}
+		});
+
+		upperMenu.addMoveUpButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -9204448853469545121L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				moveUp();
+			}
+		});
+
+		upperMenu.addMoveDownButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 4575916787722812776L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				moveDown();
+			}
+		});
+
+		upperMenu.addRemoveButtonButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -4058521934359941054L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				removeSelected();
+			}
+		});
+
 		return upperMenu;
 	}
 
