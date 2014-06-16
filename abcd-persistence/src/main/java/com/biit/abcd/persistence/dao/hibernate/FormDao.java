@@ -55,6 +55,7 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 			criteria.add(Restrictions.eq("name", name));
 			@SuppressWarnings("unchecked")
 			List<Form> results = criteria.list();
+			initializeSets(results);
 			session.getTransaction().commit();
 			if (!results.isEmpty()) {
 				Form form = (Form) results.get(0);

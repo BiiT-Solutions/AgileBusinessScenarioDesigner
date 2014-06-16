@@ -237,7 +237,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		answer2.setName("Answer2");
 		question1.addChild(answer2);
 
-		TableRule tableRule = new TableRule(form);
+		TableRule tableRule = new TableRule();
 
 		TableRuleRow tableRuleRow = new TableRuleRow();
 		AnswerCondition answerCondition = new AnswerCondition(answer1);

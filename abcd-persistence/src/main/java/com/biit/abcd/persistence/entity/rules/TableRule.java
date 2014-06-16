@@ -5,14 +5,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.StorableObject;
 
 /**
@@ -22,9 +20,6 @@ import com.biit.abcd.persistence.entity.StorableObject;
 @Table(name = "RULE_DECISION_TABLE")
 public class TableRule extends StorableObject {
 
-	@ManyToOne
-	private Form form;
-
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
@@ -33,19 +28,6 @@ public class TableRule extends StorableObject {
 
 	public TableRule() {
 		rules = new ArrayList<>();
-	}
-
-	public TableRule(Form form) {
-		rules = new ArrayList<>();
-		setForm(form);
-	}
-
-	public Form getForm() {
-		return form;
-	}
-
-	public void setForm(Form form) {
-		this.form = form;
 	}
 
 	public List<TableRuleRow> getRules() {
