@@ -139,5 +139,9 @@ public abstract class StorableObject {
 			return false;
 		return true;
 	}
+	
+	public void resetIds() {
+		setId(null);
+	}
 
 }

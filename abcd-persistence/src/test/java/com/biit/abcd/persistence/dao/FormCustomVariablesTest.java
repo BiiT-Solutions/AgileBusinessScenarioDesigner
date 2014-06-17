@@ -50,7 +50,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v2");
 
-		CustomVariable formCustomVariables = new CustomVariable("Score", CustomVariableType.NUMBER,
+		CustomVariable formCustomVariables = new CustomVariable(form, "Score", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
 		form.getCustomVariables().add(formCustomVariables);
 
@@ -70,7 +70,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v3");
 
-		CustomVariable formCustomVariables = new CustomVariable("Name", CustomVariableType.STRING,
+		CustomVariable formCustomVariables = new CustomVariable(form, "Name", CustomVariableType.STRING,
 				CustomVariableScope.QUESTION);
 		form.getCustomVariables().add(formCustomVariables);
 
@@ -91,7 +91,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		form.setName(DUMMY_FORM + "_v4");
 		formDao.makePersistent(form);
 
-		CustomVariable formCustomVariables = new CustomVariable("CreationDate", CustomVariableType.DATE,
+		CustomVariable formCustomVariables = new CustomVariable(form, "CreationDate", CustomVariableType.DATE,
 				CustomVariableScope.FORM);
 		form.getCustomVariables().add(formCustomVariables);
 

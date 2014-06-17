@@ -86,6 +86,15 @@ public class Form extends TreeObject {
 		this.version++;
 		// Force to be stored as a new record
 		this.resetIds();
+		for (Diagram diagram : getDiagrams()) {
+			diagram.resetIds();
+		}
+		for (TableRule tableRule : getTableRules()) {
+			tableRule.resetIds();
+		}
+		for (CustomVariable customVariable : getCustomVariables()) {
+			customVariable.resetIds();
+		}
 	}
 
 	public UserGroup getUserGroup() {
