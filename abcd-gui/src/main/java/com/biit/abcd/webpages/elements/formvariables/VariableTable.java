@@ -65,7 +65,7 @@ public class VariableTable extends Table {
 		item.getItemProperty(FormVariablesProperties.SCOPE).setValue(scopeComboBox);
 	}
 
-	public void removeSelectedRows() {
+	public void removeSelectedRow() {
 		CustomVariable variable = (CustomVariable) getValue();
 		if (variable != null) {
 			removeItem(variable);
@@ -76,6 +76,7 @@ public class VariableTable extends Table {
 		final VariableTable thisTable = this;
 		TextField nameTextField = new TextField();
 		nameTextField.addFocusListener(new FocusListener() {
+			private static final long serialVersionUID = -7714530380809948035L;
 
 			@Override
 			public void focus(FocusEvent event) {
@@ -94,6 +95,7 @@ public class VariableTable extends Table {
 		}
 		typeComboBox.setNullSelectionAllowed(false);
 		typeComboBox.addFocusListener(new FocusListener() {
+			private static final long serialVersionUID = -6584097055890517037L;
 
 			@Override
 			public void focus(FocusEvent event) {
@@ -112,6 +114,7 @@ public class VariableTable extends Table {
 		}
 		scopeComboBox.setNullSelectionAllowed(false);
 		scopeComboBox.addFocusListener(new FocusListener() {
+			private static final long serialVersionUID = -7131776594272787546L;
 
 			@Override
 			public void focus(FocusEvent event) {
