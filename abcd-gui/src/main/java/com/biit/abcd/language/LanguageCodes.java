@@ -134,6 +134,7 @@ public enum LanguageCodes {
 	ERROR_USER_SERVICE("error.userService"),
 	ERROR_UNEXPECTED_WEBSERVICE_ERROR("error.unexpectedWebserviceError"),
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
+	ERROR_REPEATED_TABLE_RULE_NAME("error.tablerule.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
@@ -161,6 +162,8 @@ public enum LanguageCodes {
 	CONDITION_TABLE_HEADER("condition.table.header"),
 	CONDITION_TABLE_HEADER_CONDITION("condition.table.header.condition"), 
 	
+	CONDITION_TABLE_EDITOR_ADD_TABLE("condition.table.editor.button.add.table"),
+	CONDITION_TABLE_EDITOR_REMOVE_TABLE("condition.table.editor.button.remove.table"),
 	CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION("condition.table.editor.button.save.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP("condition.table.editor.button.save.tooltip"), 
 	CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION("condition.table.editor.button.add.column.caption"),
@@ -175,6 +178,8 @@ public enum LanguageCodes {
 	CONDITION_TABLE_NEW_CONDITION_CAPTION("condition.window.new.caption"),
 	CONDITION_TABLE_EDIT_CONDITION_CAPTION("condition.window.edit.caption"),
 	CONDITION_TABLE_EDIT_ACTION_CAPTION("action.window.edit.caption"),
+	
+	WINDOW_NEWTABLE_NAME_TEXTFIELD("windowNewTable.name.textField"),
 	
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
 	
@@ -205,6 +210,7 @@ public enum LanguageCodes {
 	
 	FORM_VARIABLE_ADD("form.variables.add"),
 	FORM_VARIABLE_REMOVE("form.variables.remove"),
+	FORM_VARIABLE_TABLE_COLUMN_NAME("form.variables.tablecolumn.name"),
 	FORM_VARIABLE_COLUMN_NAME("form.variables.column.name"),
 	FORM_VARIABLE_COLUMN_TYPE("form.variables.column.type"),
 	FORM_VARIABLE_SCOPE("form.variables.column.scope");

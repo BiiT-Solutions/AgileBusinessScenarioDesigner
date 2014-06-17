@@ -16,14 +16,18 @@ import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableComponent;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
+import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
+import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.UI;
 
 public class DecisionTableEditor extends FormWebPageComponent {
 	static final long serialVersionUID = -5547452506556261601L;
 
 	private DecisionTableComponent decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
+	private SelectTableMenu rightMenu;
 
 	public DecisionTableEditor() {
 		super();
@@ -33,9 +37,15 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	protected void initContent() {
 		updateButtons(true);
 
+		// Create container
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
 		rootLayout.setSizeFull();
 
+		// Create menu
+		rightMenu = new SelectTableMenu();
+		rootLayout.setMenu(rightMenu);
+
+		// Create content
 		decisionTable = new DecisionTableComponent();
 		decisionTable.setSizeFull();
 
@@ -59,6 +69,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	}
 
 	private void initUpperMenu() {
+		final DecisionTableEditor thisPage = this;
 		decisionTableEditorUpperMenu = new DecisionTableEditorUpperMenu();
 
 		decisionTableEditorUpperMenu.addSaveButtonClickListener(new ClickListener() {
@@ -70,29 +81,51 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 		});
 
+		decisionTableEditorUpperMenu.addNewTableClickListener(new ClickListener() {
+			private static final long serialVersionUID = 4217977221393500979L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				UI.getCurrent().addWindow(new WindoNewTable(thisPage));
+			}
+
+		});
+
+		decisionTableEditorUpperMenu.addRemoveTableClickListener(new ClickListener() {
+			private static final long serialVersionUID = 9216527027244131593L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				removeSelectedTable();
+			}
+
+		});
+
 		decisionTableEditorUpperMenu.addNewConditionButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 2278600295153278706L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
-						.getFormController().getForm(), true);
-				addNewConditionWindow.disableQuestions(decisionTable.getColumns());
-				addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						Set<Question> selectedQuestions = ((AddNewConditionWindow) window).getSelectedQuestions();
-						for (Question selectedQuestion : selectedQuestions) {
-							((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
-							decisionTable.addColumn(selectedQuestion);
-							if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
-								decisionTable.addRow();
+				if (rightMenu.getSelectedTableRule() != null) {
+					AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
+							.getFormController().getForm(), true);
+					addNewConditionWindow.disableQuestions(decisionTable.getColumns());
+					addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							Set<Question> selectedQuestions = ((AddNewConditionWindow) window).getSelectedQuestions();
+							for (Question selectedQuestion : selectedQuestions) {
+								((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
+								decisionTable.addColumn(selectedQuestion);
+								if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
+									decisionTable.addRow();
+								}
 							}
+							window.close();
 						}
-						window.close();
-					}
-				});
-				addNewConditionWindow.showCentered();
+					});
+					addNewConditionWindow.showCentered();
+				}
 			}
 		});
 
@@ -110,7 +143,9 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				decisionTable.addRow();
+				if (rightMenu.getSelectedTableRule() != null) {
+					decisionTable.addRow();
+				}
 			}
 		});
 
@@ -141,9 +176,9 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	@Override
 	public void setForm(Form form) {
 		// Add table columns
-		if (UserSessionHandler.getFormController().getForm().getTableRules().isEmpty()) {
-			UserSessionHandler.getFormController().getForm().getTableRules().add(new TableRule());
-		}
+		// if (UserSessionHandler.getFormController().getForm().getTableRules().isEmpty()) {
+		// UserSessionHandler.getFormController().getForm().getTableRules().add(new TableRule());
+		// }
 		if (getSelectedTableRule() < UserSessionHandler.getFormController().getForm().getTableRules().size()) {
 			if (!UserSessionHandler.getFormController().getForm().getTableRules().get(getSelectedTableRule())
 					.getRules().isEmpty()) {
@@ -153,10 +188,15 @@ public class DecisionTableEditor extends FormWebPageComponent {
 				}
 			}
 
+			// Add tables
+			for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
+				addTableRuleToMenu(tableRule);
+			}
+
 			// Add table rows.
-			for (TableRuleRow tableRule : UserSessionHandler.getFormController().getForm().getTableRules()
+			for (TableRuleRow tableRuleRow : UserSessionHandler.getFormController().getForm().getTableRules()
 					.get(getSelectedTableRule()).getRules()) {
-				decisionTable.addRow(tableRule);
+				decisionTable.addRow(tableRuleRow);
 			}
 		}
 	}
@@ -168,6 +208,16 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 	public int getSelectedTableRule() {
 		return 0;
+	}
+
+	public void addTableRuleToMenu(TableRule tableRule) {
+		rightMenu.addRow(tableRule);
+		rightMenu.setSelectedTableRule(tableRule);
+	}
+
+	public void removeSelectedTable() {
+		UserSessionHandler.getFormController().getForm().getTableRules().remove(rightMenu.getSelectedTableRule());
+		rightMenu.removeSelectedRow();
 	}
 
 }

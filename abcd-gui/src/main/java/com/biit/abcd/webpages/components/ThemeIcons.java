@@ -82,11 +82,15 @@ public enum ThemeIcons {
 
 	MOVE_DOWN("appbar.chevron.down.svg"),
 
-	PAPER("appbar.paper.svg"),
+	TABLE("appbar.table.svg"),
 
-	ADD_COLUMN("appbar.table.add.svg"),
+	TABLE_ADD("appbar.table.add.svg"),
+	
+	TABLE_REMOVE("appbar.table.remove.svg"),
+	
+	TABLE_ADD_COLUMN("appbar.table.add.column.svg"),
 
-	REMOVE_COLUMN("appbar.table.delete.svg"),
+	TABLE_REMOVE_COLUMN("appbar.table.delete.column.svg"),
 
 	ADD_ROW("appbar.table.add.row.svg"),
 

@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -22,9 +23,9 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	private CssLayout rootLayout;
 	private HorizontalLayout titleLayout;
 	private Component content;
+	private SelectTableMenu tableMenu;
 
 	public HorizontalCollapsiblePanel() {
-
 		rootLayout = new CssLayout();
 		rootLayout.setSizeFull();
 
@@ -40,11 +41,6 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		buttonMenu.setSpacing(true);
 		buttonMenu.setStyleName(CLASSNAME_BUTTON_LAYOUT);
 
-		VerticalLayout testLayout = new VerticalLayout();
-		testLayout.setHeight("100%");
-		buttonMenu.addComponent(createMenuTab(testLayout, ThemeIcons.LEFT_MENU_COLLAPSE, ThemeIcons.LEFT_MENU_EXPAND,
-				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP));
-
 		setSizeFull();
 		setCompositionRoot(rootLayout);
 	}
@@ -58,7 +54,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				menuLayout.removeAllComponents();
+				// menuLayout.removeAllComponents();
 				menuLayout.setWidth(menuWidthClosed);
 				menuLayout.setStyleName(CLASSNAME_CLOSED);
 				if (!collapseButtonTab.isValue()) {
@@ -76,6 +72,12 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	public void setContent(Component component) {
 		this.content = component;
 		content.setSizeFull();
+	}
+
+	public void setMenu(SelectTableMenu component) {
+		tableMenu = component;
+		buttonMenu.addComponent(createMenuTab(component, ThemeIcons.LEFT_MENU_COLLAPSE, ThemeIcons.LEFT_MENU_EXPAND,
+				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP));
 	}
 
 	@Override
@@ -132,28 +134,5 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 			return component;
 		}
 	}
-
-	// titleLayout = new HorizontalLayout();
-	// titleLayout.setWidth("100%");
-	//
-	// collapse = new IconButton(ThemeIcons.COLLAPSE, IconSize.BIG,
-	// LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP);
-	// collapse.addClickListener(new ClickListener() {
-	// private static final long serialVersionUID = -7827258204263400187L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// setStyleName(CLASSNAME_COLLAPSE);
-	// }
-	// });
-	// expand = new IconButton(ThemeIcons.EXPAND, IconSize.BIG,
-	// LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP);
-	//
-	// titleLayout.addComponent(collapse);
-	//
-	// rootComponent.addComponent(titleLayout);
-	// rootComponent.setExpandRatio(titleLayout, 0.0f);
-	//
-	// setCompositionRoot(rootComponent);
 
 }

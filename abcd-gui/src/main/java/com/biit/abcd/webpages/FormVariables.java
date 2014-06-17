@@ -85,7 +85,7 @@ public class FormVariables extends FormWebPageComponent {
 
 	private void removeSelectedVariable() {
 		if (variableTable != null) {
-			variableTable.removeSelectedRows();
+			variableTable.removeSelectedRow();
 		}
 	}
 

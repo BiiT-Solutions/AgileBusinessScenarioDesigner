@@ -17,4 +17,5 @@ public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao
 	protected void initializeSets(List<TableRule> elements) {
 		// Nothing to do, all eager.
 	}
+
 }

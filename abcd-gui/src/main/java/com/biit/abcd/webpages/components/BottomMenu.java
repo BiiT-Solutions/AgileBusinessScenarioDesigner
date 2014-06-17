@@ -103,7 +103,7 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		ruleEditorButton.setEnabled(false);
 		addIconButton(ruleEditorButton);
 
-		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcons.PAPER,
+		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcons.TABLE,
 				LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -2494460723270342409L;
 

@@ -20,6 +20,8 @@ import com.biit.abcd.persistence.entity.StorableObject;
 @Table(name = "RULE_DECISION_TABLE")
 public class TableRule extends StorableObject {
 
+	private String name;
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
@@ -38,4 +40,18 @@ public class TableRule extends StorableObject {
 		this.rules.clear();
 		this.rules.addAll(rules);
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }
