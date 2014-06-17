@@ -54,13 +54,13 @@ public class VariableTable extends Table {
 	@SuppressWarnings({ "unchecked" })
 	public void addRow(CustomVariable customVariable) {
 		Item item = addItem(customVariable);
-		TextField nameTextField = createTextField(item);
+		TextField nameTextField = createTextField(customVariable);
 		nameTextField.setValue(customVariable.getName());
 		item.getItemProperty(FormVariablesProperties.VARIABLE_NAME).setValue(nameTextField);
-		ComboBox typeComboBox = createTypeComboBox(item);
+		ComboBox typeComboBox = createTypeComboBox(customVariable);
 		typeComboBox.setValue(customVariable.getType());
 		item.getItemProperty(FormVariablesProperties.TYPE).setValue(typeComboBox);
-		ComboBox scopeComboBox = createScopeComboBox(item);
+		ComboBox scopeComboBox = createScopeComboBox(customVariable);
 		scopeComboBox.setValue(customVariable.getScope());
 		item.getItemProperty(FormVariablesProperties.SCOPE).setValue(scopeComboBox);
 	}
@@ -72,20 +72,20 @@ public class VariableTable extends Table {
 		}
 	}
 
-	public TextField createTextField(final Item item) {
+	public TextField createTextField(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
 		TextField nameTextField = new TextField();
 		nameTextField.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focus(FocusEvent event) {
-				thisTable.select(item);
+				thisTable.select(customVariable);
 			}
 		});
 		return nameTextField;
 	}
 
-	public ComboBox createTypeComboBox(final Item item) {
+	public ComboBox createTypeComboBox(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
 		ComboBox typeComboBox = new ComboBox();
 		for (CustomVariableType variableType : CustomVariableType.values()) {
@@ -94,17 +94,16 @@ public class VariableTable extends Table {
 		}
 		typeComboBox.setNullSelectionAllowed(false);
 		typeComboBox.addFocusListener(new FocusListener() {
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void focus(FocusEvent event) {
-				thisTable.select(item);
+				thisTable.select(customVariable);
 			}
 		});
 		return typeComboBox;
 	}
 
-	public ComboBox createScopeComboBox(final Item item) {
+	public ComboBox createScopeComboBox(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
 		ComboBox scopeComboBox = new ComboBox();
 		for (CustomVariableScope variablesScope : CustomVariableScope.values()) {
@@ -116,7 +115,7 @@ public class VariableTable extends Table {
 
 			@Override
 			public void focus(FocusEvent event) {
-				thisTable.select(item);
+				thisTable.select(customVariable);
 			}
 		});
 		return scopeComboBox;
