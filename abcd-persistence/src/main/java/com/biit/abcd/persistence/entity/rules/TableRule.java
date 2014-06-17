@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.StorableObject;
 
 /**
@@ -22,6 +23,8 @@ public class TableRule extends StorableObject {
 
 	private String name;
 
+	private List<Question> conditions;
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
@@ -30,6 +33,7 @@ public class TableRule extends StorableObject {
 
 	public TableRule() {
 		rules = new ArrayList<>();
+		conditions = new ArrayList<>();
 	}
 
 	public List<TableRuleRow> getRules() {
@@ -52,6 +56,15 @@ public class TableRule extends StorableObject {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public List<Question> getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(List<Question> conditions) {
+		this.conditions.clear();
+		this.conditions.addAll(conditions);
 	}
 
 }

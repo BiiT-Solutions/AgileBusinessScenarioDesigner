@@ -57,5 +57,7 @@ public class SelectTableMenu extends Table {
 	public void setSelectedTableRule(TableRule tableRule) {
 		setValue(tableRule);
 	}
+	
+	
 
 }

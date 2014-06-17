@@ -65,10 +65,16 @@ public class DecisionTableComponent extends CustomComponent {
 		setCompositionRoot(rootLayout);
 	}
 
+	public void removeAll() {
+		conditionTable.removeAll();
+		actionTable.removeAllItems();
+		decisionTableRules = new ArrayList<>();
+	}
+
 	public void addColumn(Question question) {
 		if (question != null) {
 			conditionTable.addColumn(question);
-			for (TableRuleRow tableRule : decisionTableRules) {
+			for (TableRuleRow tableRule : getTableRules()) {
 				tableRule.getConditions().put(question, new AnswerCondition(null));
 			}
 		}
@@ -87,7 +93,7 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow(TableRuleRow decisionRule) {
-		decisionTableRules.add(decisionRule);
+		getTableRules().add(decisionRule);
 
 		// Add decision Rule to both tables.
 		conditionTable.addItem(decisionRule);
@@ -98,7 +104,7 @@ public class DecisionTableComponent extends CustomComponent {
 		for (TableRuleRow rule : conditionTable.getSelectedRules()) {
 			conditionTable.removeItem(rule);
 			actionTable.removeItem(rule);
-			decisionTableRules.remove(rule);
+			getTableRules().remove(rule);
 		}
 		// Always one row.
 		if (conditionTable.size() == 0) {
@@ -106,13 +112,15 @@ public class DecisionTableComponent extends CustomComponent {
 		}
 	}
 
-	public void removeSelectedColumns() {
-		for (Question question : conditionTable.getSelectedQuestions()) {
+	public Collection<Question> removeSelectedColumns() {
+		Collection<Question> selectedQuestions = conditionTable.getSelectedQuestions();
+		for (Question question : selectedQuestions) {
 			conditionTable.removeContainerProperty(question);
-			for (TableRuleRow rule : decisionTableRules) {
+			for (TableRuleRow rule : getTableRules()) {
 				rule.removeCondition(question);
 			}
 		}
+		return selectedQuestions;
 	}
 
 	public List<TableRuleRow> getTableRules() {

@@ -1,7 +1,9 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.persistence.entity.Answer;
@@ -39,6 +41,21 @@ public class ConditionTable extends Table {
 		setCellStyleGenerator(cellRowSelector);
 		addActionHandler(cellRowSelector);
 		setSelectable(false);
+	}
+
+	/**
+	 * Removes all columns and rows.
+	 */
+	public void removeAll() {
+		removeAllItems();
+		removeAllColumns();
+	}
+
+	private void removeAllColumns() {
+		List<Object> objectList = new ArrayList<>(getContainerPropertyIds());
+		for (Object propertyId : objectList) {
+			removeContainerProperty(propertyId);
+		}
 	}
 
 	public void addColumn(Question question) {

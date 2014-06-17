@@ -95,15 +95,15 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		fireCellSelectionListener();
 		paintSelection(table);
 	}
-	
-	public void setCurrentSelectedCells(Table table,Set<Cell> cells, Cell cursorCell,boolean propagate){
+
+	public void setCurrentSelectedCells(Table table, Set<Cell> cells, Cell cursorCell, boolean propagate) {
 		cleanSelection(table, false);
 		this.selectedCells = cells;
 		this.cursorCell = cursorCell;
-		if(propagate){
+		if (propagate) {
 			fireCellSelectionListener();
 		}
-		paintSelection(table);		
+		paintSelection(table);
 	}
 
 	protected void setSelection(Table table, Collection<Cell> cells) {
@@ -177,7 +177,12 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 
 	protected void cleanSelection(Table table, boolean propagate) {
 		for (Cell cell : selectedCells) {
-			((EditCellComponent) table.getItem(cell.getRow()).getItemProperty(cell.getCol()).getValue()).select(false);
+			try {
+				((EditCellComponent) table.getItem(cell.getRow()).getItemProperty(cell.getCol()).getValue())
+						.select(false);
+			} catch (Exception e) {
+
+			}
 		}
 		selectedCells.clear();
 		if (propagate) {
@@ -215,10 +220,10 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 	public Set<Cell> getSelectedCells() {
 		return selectedCells;
 	}
-	
-	public Set<Object> getSelectedRows(){
+
+	public Set<Object> getSelectedRows() {
 		Set<Object> selectedRows = new HashSet<>();
-		for(Cell cell: getSelectedCells()){
+		for (Cell cell : getSelectedCells()) {
 			selectedRows.add(cell.getRow());
 		}
 		return selectedRows;

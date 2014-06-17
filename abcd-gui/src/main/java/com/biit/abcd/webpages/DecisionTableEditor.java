@@ -1,9 +1,13 @@
 package com.biit.abcd.webpages;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -18,6 +22,8 @@ import com.biit.abcd.webpages.elements.decisiontable.DecisionTableComponent;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
@@ -43,6 +49,15 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 		// Create menu
 		rightMenu = new SelectTableMenu();
+		rightMenu.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = -7103550436798085895L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				refreshDecisionTable();
+			}
+
+		});
 		rootLayout.setMenu(rightMenu);
 
 		// Create content
@@ -117,6 +132,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 							for (Question selectedQuestion : selectedQuestions) {
 								((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
 								decisionTable.addColumn(selectedQuestion);
+								getSelectedTableRule().getConditions().add(selectedQuestion);
 								if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
 									decisionTable.addRow();
 								}
@@ -134,7 +150,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				decisionTable.removeSelectedColumns();
+				Collection<Question> removedQuestions = decisionTable.removeSelectedColumns();
+				for (Question question : removedQuestions) {
+					getSelectedTableRule().getConditions().remove(question);
+				}
 			}
 		});
 
@@ -162,15 +181,20 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	}
 
 	private void updateForm() {
-		if (getSelectedTableRule() < UserSessionHandler.getFormController().getForm().getTableRules().size()) {
-			UserSessionHandler.getFormController().getForm().getTableRules().get(getSelectedTableRule())
-					.setRules(decisionTable.getDefinedTableRules());
+		if (getSelectedTableRule() != null) {
+			getSelectedTableRule().setRules(decisionTable.getDefinedTableRules());
 		}
 	}
 
 	private void save() {
 		updateForm();
-		UserSessionHandler.getFormController().save();
+		try {
+			UserSessionHandler.getFormController().save();
+			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+		} catch (Exception e) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			AbcdLogger.errorMessage(DecisionTableEditor.class.getName(), e);
+		}
 	}
 
 	@Override
@@ -179,23 +203,31 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		// if (UserSessionHandler.getFormController().getForm().getTableRules().isEmpty()) {
 		// UserSessionHandler.getFormController().getForm().getTableRules().add(new TableRule());
 		// }
-		if (getSelectedTableRule() < UserSessionHandler.getFormController().getForm().getTableRules().size()) {
-			if (!UserSessionHandler.getFormController().getForm().getTableRules().get(getSelectedTableRule())
-					.getRules().isEmpty()) {
-				for (Question question : UserSessionHandler.getFormController().getForm().getTableRules()
-						.get(getSelectedTableRule()).getRules().get(0).getConditions().keySet()) {
+
+		// Add tables
+		for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
+			addTableRuleToMenu(tableRule);
+		}
+
+		// Select the first one if available.
+		if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
+			rightMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules().get(0));
+		}
+
+		refreshDecisionTable();
+	}
+
+	private void refreshDecisionTable() {
+		decisionTable.removeAll();
+		if (getSelectedTableRule() != null) {
+			if (!getSelectedTableRule().getRules().isEmpty()) {
+				for (Question question : getSelectedTableRule().getRules().get(0).getConditions().keySet()) {
 					decisionTable.addColumn(question);
 				}
 			}
 
-			// Add tables
-			for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
-				addTableRuleToMenu(tableRule);
-			}
-
 			// Add table rows.
-			for (TableRuleRow tableRuleRow : UserSessionHandler.getFormController().getForm().getTableRules()
-					.get(getSelectedTableRule()).getRules()) {
+			for (TableRuleRow tableRuleRow : getSelectedTableRule().getRules()) {
 				decisionTable.addRow(tableRuleRow);
 			}
 		}
@@ -206,8 +238,8 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		return null;
 	}
 
-	public int getSelectedTableRule() {
-		return 0;
+	private TableRule getSelectedTableRule() {
+		return rightMenu.getSelectedTableRule();
 	}
 
 	public void addTableRuleToMenu(TableRule tableRule) {

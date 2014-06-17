@@ -77,7 +77,8 @@ public class ActionTable extends Table {
 				});
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((TableRuleRow) itemId));
-				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener((TableRuleRow) itemId));
+				editCellComponent
+						.addRemoveButtonClickListener(new CellDeleteButtonClickListener((TableRuleRow) itemId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 			}
 		}
