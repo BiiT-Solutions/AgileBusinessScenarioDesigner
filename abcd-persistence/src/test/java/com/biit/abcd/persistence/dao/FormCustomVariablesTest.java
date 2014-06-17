@@ -50,7 +50,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v2");
 
-		CustomVariable formCustomVariables = new CustomVariable("Score", CustomVariableType.INTEGER,
+		CustomVariable formCustomVariables = new CustomVariable("Score", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
 		form.getCustomVariables().add(formCustomVariables);
 
@@ -61,7 +61,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getName(), "Score");
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.INTEGER);
+		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.NUMBER);
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getScope(), CustomVariableScope.CATEGORY);
 	}
 

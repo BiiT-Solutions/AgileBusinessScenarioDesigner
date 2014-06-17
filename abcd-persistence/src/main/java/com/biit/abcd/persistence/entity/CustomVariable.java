@@ -2,13 +2,13 @@ package com.biit.abcd.persistence.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Sets all user defined custom variables that will be used in drools conditions and action.
- * 
  */
 @Entity
-@Table(name = "FORM_CUSTOM_VARIABLES")
+@Table(name = "FORM_CUSTOM_VARIABLES", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "scope" }) })
 public class CustomVariable extends StorableObject {
 
 	private String name;

@@ -35,6 +35,7 @@ public class TableRule extends StorableObject {
 	}
 
 	public void setRules(List<TableRuleRow> rules) {
-		this.rules = rules;
+		this.rules.clear();
+		this.rules.addAll(rules);
 	}
 }

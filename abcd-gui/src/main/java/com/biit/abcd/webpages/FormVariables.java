@@ -58,8 +58,9 @@ public class FormVariables extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				CustomVariable customVariable = new CustomVariable("Variable", CustomVariableType.STRING,
+				CustomVariable customVariable = new CustomVariable("", CustomVariableType.STRING,
 						CustomVariableScope.FORM);
+				customVariable.setCreatedBy(UserSessionHandler.getUser().getUserId());
 				addNewVariable(customVariable);
 			}
 		});
@@ -77,26 +78,26 @@ public class FormVariables extends FormWebPageComponent {
 	}
 
 	private void addNewVariable(CustomVariable customVariable) {
-		if (variableTable != null) {
+		if (variableTable != null && customVariable != null) {
 			variableTable.addRow(customVariable);
 		}
 	}
 
 	private void removeSelectedVariable() {
 		if (variableTable != null) {
-			Object selected = variableTable.getValue();
-			variableTable.removeItem(selected);
+			variableTable.removeSelectedRows();
 		}
 	}
 
 	private void save() {
 		if (form != null) {
 			try {
+				UserSessionHandler.getFormController().getForm().setCustomVariables(variableTable.getCustomVariables());
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (ConstraintViolationException cve) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_CATEGORY,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION);
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
 			}
 		}
 	}
@@ -105,7 +106,11 @@ public class FormVariables extends FormWebPageComponent {
 	public void setForm(Form form) {
 		this.form = form;
 		if (form != null) {
-
+			if (variableTable != null) {
+				for (CustomVariable customVariable : form.getCustomVariables()) {
+					variableTable.addRow(customVariable);
+				}
+			}
 		}
 	}
 

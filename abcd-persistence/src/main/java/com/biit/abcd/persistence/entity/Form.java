@@ -127,7 +127,8 @@ public class Form extends TreeObject {
 	}
 
 	public void setDiagrams(List<Diagram> diagrams) {
-		this.diagrams = diagrams;
+		this.diagrams.clear();
+		this.diagrams.addAll(diagrams);
 	}
 
 	public List<TableRule> getTableRules() {
@@ -135,7 +136,8 @@ public class Form extends TreeObject {
 	}
 
 	public void setTableRules(List<TableRule> tableRules) {
-		this.tableRules = tableRules;
+		this.tableRules.clear();
+		this.tableRules.addAll(tableRules);
 	}
 
 	public List<CustomVariable> getCustomVariables() {
@@ -143,7 +145,8 @@ public class Form extends TreeObject {
 	}
 
 	public void setCustomVariables(List<CustomVariable> customVariables) {
-		this.customVariables = customVariables;
+		this.customVariables.clear();
+		this.customVariables.addAll(customVariables);
 	}
 
 }

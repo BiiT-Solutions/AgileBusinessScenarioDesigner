@@ -142,6 +142,9 @@ public enum LanguageCodes {
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
 	
+	ERROR_DATABASE_DUPLICATED_VARIABLE("error.database.duplicatedvariable"),
+	ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION("error.database.duplicatedvariablecatpion"),
+	
 	INFO_DATA_STORED("info.data.store"),
 	
 	ANSWER_TYPE_INPUT("answer.type.input"),
