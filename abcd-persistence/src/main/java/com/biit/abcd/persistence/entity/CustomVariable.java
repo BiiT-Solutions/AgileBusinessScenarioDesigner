@@ -1,6 +1,10 @@
 package com.biit.abcd.persistence.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -8,18 +12,25 @@ import javax.persistence.UniqueConstraint;
  * Sets all user defined custom variables that will be used in drools conditions and action.
  */
 @Entity
-@Table(name = "FORM_CUSTOM_VARIABLES", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "scope" }) })
+@Table(name = "FORM_CUSTOM_VARIABLES", uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name", "scope" }) })
 public class CustomVariable extends StorableObject {
 
+	// Used mainly for unique constraint.
+	@ManyToOne
+	@JoinColumn(name="form")
+	private Form form;
+
 	private String name;
+	@Enumerated(EnumType.STRING)
 	private CustomVariableScope scope;
+	@Enumerated(EnumType.STRING)
 	private CustomVariableType type;
 
 	public CustomVariable() {
-
 	}
 
-	public CustomVariable(String name, CustomVariableType type, CustomVariableScope scope) {
+	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope) {
+		this.form = form;
 		this.name = name;
 		this.scope = scope;
 		this.type = type;
@@ -47,6 +58,14 @@ public class CustomVariable extends StorableObject {
 
 	public void setType(CustomVariableType type) {
 		this.type = type;
+	}
+
+	public Form getForm() {
+		return form;
+	}
+
+	public void setForm(Form form) {
+		this.form = form;
 	}
 
 }
