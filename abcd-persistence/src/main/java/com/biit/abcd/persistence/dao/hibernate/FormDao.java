@@ -26,6 +26,7 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 			Hibernate.initialize(form.getChildren());
 			Hibernate.initialize(form.getDiagrams());
 			Hibernate.initialize(form.getTableRules());
+			Hibernate.initialize(form.getCustomVariables());
 		}
 	}
 

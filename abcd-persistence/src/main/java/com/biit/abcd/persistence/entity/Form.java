@@ -38,9 +38,13 @@ public class Form extends TreeObject {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<TableRule> tableRules;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<CustomVariable> customVariables;
+
 	public Form() {
 		diagrams = new ArrayList<>();
 		tableRules = new ArrayList<>();
+		customVariables = new ArrayList<>();
 		setName(DEFAULT_NAME);
 	}
 
@@ -123,7 +127,8 @@ public class Form extends TreeObject {
 	}
 
 	public void setDiagrams(List<Diagram> diagrams) {
-		this.diagrams = diagrams;
+		this.diagrams.clear();
+		this.diagrams.addAll(diagrams);
 	}
 
 	public List<TableRule> getTableRules() {
@@ -131,6 +136,17 @@ public class Form extends TreeObject {
 	}
 
 	public void setTableRules(List<TableRule> tableRules) {
-		this.tableRules = tableRules;
+		this.tableRules.clear();
+		this.tableRules.addAll(tableRules);
 	}
+
+	public List<CustomVariable> getCustomVariables() {
+		return customVariables;
+	}
+
+	public void setCustomVariables(List<CustomVariable> customVariables) {
+		this.customVariables.clear();
+		this.customVariables.addAll(customVariables);
+	}
+
 }

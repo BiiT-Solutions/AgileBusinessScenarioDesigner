@@ -8,6 +8,8 @@ public enum WebMap {
 	
 	TREE_DESIGNER(TreeDesigner.class),
 	
+	FORM_VARIABLES(FormVariables.class),
+	
 	DIAGRAM_BUILDER(FormDiagramBuilder.class),
 	
 	DECISSION_TABLE_EDITOR(DecisionTableEditor.class), 

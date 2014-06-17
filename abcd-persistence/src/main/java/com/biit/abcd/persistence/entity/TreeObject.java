@@ -49,7 +49,7 @@ public abstract class TreeObject extends StorableObject {
 	private TreeObject parent;
 
 	/**
-	 * Customized variables are stored in {@link FormCustomVariables}. Here values obtained from applying the drools
+	 * Customized variables are stored in {@link CustomVariable}. Here values obtained from applying the drools
 	 * rules and the form submitted information. This information is calculated and must not be stored on database.
 	 */
 	@ElementCollection

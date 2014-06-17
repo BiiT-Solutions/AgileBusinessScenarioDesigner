@@ -73,6 +73,7 @@ public enum LanguageCodes {
 	
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
+	BOTTOM_MENU_FORM_VARIABLES("page.bottommenu.formVariables"),
 	BOTTOM_MENU_DIAGRAM_DESIGNER("page.bottommenu.diagramDesigner"),
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	BOTTOM_MENU_DROOLS_TABLE_EDITOR("page.bottommenu.droolsTableEditor"),
@@ -141,6 +142,9 @@ public enum LanguageCodes {
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
 	
+	ERROR_DATABASE_DUPLICATED_VARIABLE("error.database.duplicatedvariable"),
+	ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION("error.database.duplicatedvariablecatpion"),
+	
 	INFO_DATA_STORED("info.data.store"),
 	
 	ANSWER_TYPE_INPUT("answer.type.input"),
@@ -197,7 +201,13 @@ public enum LanguageCodes {
 	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip"),
 	
 	RULE_EDITOR_WHEN_LABEL("window.when.label"),
-	RULE_EDITOR_THEN_LABEL("window.then.label");
+	RULE_EDITOR_THEN_LABEL("window.then.label"),
+	
+	FORM_VARIABLE_ADD("form.variables.add"),
+	FORM_VARIABLE_REMOVE("form.variables.remove"),
+	FORM_VARIABLE_COLUMN_NAME("form.variables.column.name"),
+	FORM_VARIABLE_COLUMN_TYPE("form.variables.column.type"),
+	FORM_VARIABLE_SCOPE("form.variables.column.scope");
 	
 	private String value;
 	
