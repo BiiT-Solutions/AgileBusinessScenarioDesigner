@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprWoChildLogic;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -9,14 +11,38 @@ import com.vaadin.ui.FormLayout;
 public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChildLogic> {
 	private static final long serialVersionUID = -5953203428567057845L;
 
+	public enum FuncOp {
+		ALWAYS("Always"), ANY("Any"), QUESTION_OR_VARIABLE("Question or Variable");
+
+		private String value;
+
+		private FuncOp(String value) {
+			this.value = value;
+		}
+
+		public String getLabel() {
+			return value;
+		}
+	}
+
+	private Button clean;
+
 	public ExprWoChildLogicProperties() {
 		super(ExprWoChildLogic.class);
 	}
 
 	@Override
 	protected void setElementAbstract(final ExprWoChildLogic element) {
-		final LogicExpressionWindow logicExpressionWindow = new LogicExpressionWindow(element);
 		
+		final LogicExpressionWindow logicExpressionWindow = new LogicExpressionWindow(element);
+		logicExpressionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+			@Override
+			public void acceptAction(AcceptCancelWindow window) {
+				logicExpressionWindow.close();
+				firePropertyUpdateListener(logicExpressionWindow.getValue());
+			}
+		});
+
 		FormLayout formLayout = getCommonFormLayout(element);
 
 		addTab(formLayout, "TODO - ExprWoChildLogic", true);
@@ -34,7 +60,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setEq();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		equals.setWidth(buttonWidth);
@@ -43,7 +68,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setNe();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		notEquals.setWidth(buttonWidth);
@@ -52,7 +76,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setLt();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		lessThan.setWidth(buttonWidth);
@@ -61,7 +84,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setGt();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		greaterThan.setWidth(buttonWidth);
@@ -70,7 +92,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setLe();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		lessEqual.setWidth(buttonWidth);
@@ -79,7 +100,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setGe();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		greaterEqual.setWidth(buttonWidth);
@@ -88,7 +108,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setIn();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		in.setWidth(buttonWidth);
@@ -97,7 +116,6 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 			public void buttonClick(ClickEvent event) {
 				element.setBetween();
 				logicExpressionWindow.showCentered();
-				firePropertyUpdateListener(element);
 			}
 		});
 		between.setWidth(buttonWidth);
@@ -113,7 +131,7 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 		exprWoChildForm.addComponent(greaterEqual);
 		exprWoChildForm.addComponent(in);
 		exprWoChildForm.addComponent(between);
-		
+
 		addTab(exprWoChildForm, "TODO - ExprWoChildLogicOperations", true, 1);
 
 	}
@@ -129,5 +147,55 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 		// Do Nothing. All actions are button based and personalized. Each
 		// action button will perform the update actions individually.
 	}
+
+	// FormLayout formLayout = getCommonFormLayout(element);
+	//
+	// addTab(formLayout, "TODO - ExprWoChildLogic", true);
+	//
+	// clean = new Button("Clean", new ClickListener() {
+	// private static final long serialVersionUID = -4680574367985072846L;
+	//
+	// @Override
+	// public void buttonClick(ClickEvent event) {
+	// element.clean();
+	// firePropertyUpdateListener(element);
+	// }
+	// });
+	//
+	// if (element.getType() == null && element.getLeftOperand() == null) {
+	// functionPrimera(element);
+	// }
+	//
+	//
+	// private void functionPrimera(final ExprWoChildLogic element) {
+	// ComboBox leftTypeSelection = new ComboBox("Text-1");
+	// leftTypeSelection.setImmediate(true);
+	// for (FuncOp op : FuncOp.values()) {
+	// leftTypeSelection.addItem(op);
+	// leftTypeSelection.setItemCaption(op, op.getLabel());
+	// }
+	//
+	// Button accept = new Button("Accept", new ClickListener() {
+	// private static final long serialVersionUID = -4868974846447241726L;
+	//
+	// @Override
+	// public void buttonClick(ClickEvent event) {
+	// updateExpressionFunctionPrimera();
+	// firePropertyUpdateListener(element);
+	// }
+	// });
+	//
+	// FormLayout exprWoChildForm = new FormLayout();
+	// exprWoChildForm.setWidth(null);
+	// exprWoChildForm.addComponent(leftTypeSelection);
+	// exprWoChildForm.addComponent(accept);
+	// exprWoChildForm.addComponent(clean);
+	//
+	// addTab(exprWoChildForm, "TODO - ExprWoChildLogicOperations", true, 1);
+	// }
+	//
+	// private boolean updateExpressionFunctionPrimera(){
+	// return true;
+	// }
 
 }

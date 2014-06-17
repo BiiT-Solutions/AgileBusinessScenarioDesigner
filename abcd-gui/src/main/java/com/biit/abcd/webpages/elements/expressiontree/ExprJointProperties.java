@@ -1,24 +1,24 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprJoint.JointValue;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprJointLogic;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprOp.JointValue;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprOpLogic;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class ExprJointProperties extends PropertiesForClassComponent<ExprJointLogic> {
+public class ExprJointProperties extends PropertiesForClassComponent<ExprOpLogic> {
 
 	private static final long serialVersionUID = 727775860211652782L;
 	private static final String buttonWidth = "180px";
 
 	public ExprJointProperties() {
-		super(ExprJointLogic.class);
+		super(ExprOpLogic.class);
 	}
 
 	@Override
-	protected void setElementAbstract(final ExprJointLogic element) {
+	protected void setElementAbstract(final ExprOpLogic element) {
 		
 		FormLayout exprJointForm = new FormLayout();
 		exprJointForm.setWidth(null);

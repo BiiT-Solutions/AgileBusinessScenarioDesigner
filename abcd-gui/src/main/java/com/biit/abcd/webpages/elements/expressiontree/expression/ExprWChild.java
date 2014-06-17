@@ -20,7 +20,7 @@ public class ExprWChild extends ExprWoChild {
 		childs.add(expression);
 	}
 
-	public void addChildExpression(ExprJoint exprJoint, ExprBasic exprBasic) {
+	public void addChildExpression(ExprOp exprJoint, ExprBasic exprBasic) {
 		// TODO check?
 		addChildExpression(exprJoint);
 		addChildExpression(exprBasic);

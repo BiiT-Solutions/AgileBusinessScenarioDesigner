@@ -2,12 +2,12 @@ package com.biit.abcd.webpages.elements.expressiontree.expression;
 
 public class ExprWoChildLogic extends ExprWoChild {
 
-	private ExprBasic leftOperand;
+	private ExprLeftOperand leftOperand;
 	private ExprWoChildLogicType type;
-	private ExprBasic rightOperand;
+	private ExprValues rightOperand;
 
 	public enum ExprWoChildLogicType {
-		ALWAYS, EQ, NE, LT, GT, LE, GE, IN, BETWEEN
+		ALWAYS, ANY, EQ, NE, LT, GT, LE, GE, IN, BETWEEN
 	};
 
 	@Override
@@ -15,28 +15,53 @@ public class ExprWoChildLogic extends ExprWoChild {
 		if (type == null) {
 			return generateNullLabelCaption("expr-logic");
 		} else {
+
+			String expression = new String();
+			if (leftOperand != null) {
+				expression += leftOperand.getExpressionTableString() + " ";
+			} else {
+				expression += generateNullLabelCaption("Left-Operand");
+			}
+
 			switch (type) {
 			case ALWAYS:
-				return "ALWAYS";
+				expression += "ALWAYS";
+				break;
+			case ANY:
+				expression += "ANY";
+				break;	
 			case EQ:
-				return "==";
+				expression += "==";
+				break;
 			case NE:
-				return "!=";
+				expression += "!=";
+				break;
 			case LT:
-				return "<";
+				expression += "<";
+				break;
 			case GT:
-				return ">";
+				expression += ">";
+				break;
 			case LE:
-				return "<=";
+				expression += "<=";
+				break;
 			case GE:
-				return ">=";
+				expression += ">=";
+				break;
 			case IN:
-				return "IN";
+				expression += "IN";
+				break;
 			case BETWEEN:
-				return "BETWEEN";
+				expression += "BETWEEN";
+				break;
 			}
+
+			if (rightOperand != null) {
+				expression += " " + rightOperand.getExpressionTableString();
+			}
+
+			return expression;
 		}
-		return "unknown error";
 	}
 
 	public void setAlways() {
@@ -73,5 +98,31 @@ public class ExprWoChildLogic extends ExprWoChild {
 
 	public void setBetween() {
 		type = ExprWoChildLogicType.BETWEEN;
+	}
+
+	public ExprWoChildLogicType getType() {
+		return type;
+	}
+
+	public ExprLeftOperand getLeftOperand() {
+		return leftOperand;
+	}
+
+	public void setLeftOperand(ExprLeftOperand leftOperand) {
+		this.leftOperand = leftOperand;
+	}
+
+	public ExprValues getRightOperand() {
+		return rightOperand;
+	}
+
+	public void setRightOperand(ExprValues values) {
+		this.rightOperand = values;
+	}
+
+	public void clean() {
+		leftOperand = null;
+		type = null;
+		rightOperand = null;
 	}
 }

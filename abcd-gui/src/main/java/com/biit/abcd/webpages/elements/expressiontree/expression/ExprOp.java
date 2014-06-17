@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.expressiontree.expression;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class ExprJoint extends ExprBasic{
+public abstract class ExprOp extends ExprBasic{
 	
 	public class JointValue{
 		
@@ -36,7 +36,7 @@ public abstract class ExprJoint extends ExprBasic{
 	private Set<JointValue> acceptedValues;
 	private JointValue value; 
 
-	public ExprJoint() {
+	public ExprOp() {
 		acceptedValues = new HashSet<>();
 		value = null;
 	}

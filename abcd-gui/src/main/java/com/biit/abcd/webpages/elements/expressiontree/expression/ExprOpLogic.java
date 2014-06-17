@@ -1,8 +1,8 @@
 package com.biit.abcd.webpages.elements.expressiontree.expression;
 
-public class ExprJointLogic extends ExprJoint {
+public class ExprOpLogic extends ExprOp {
 
-	public ExprJointLogic() {
+	public ExprOpLogic() {
 		getAcceptedValues().add(new JointValue("AND", "AND"));
 		getAcceptedValues().add(new JointValue("OR", "OR"));
 	}

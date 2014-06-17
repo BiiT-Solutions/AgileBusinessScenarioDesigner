@@ -27,7 +27,7 @@ public abstract class ExprPort extends ExprWChild {
 		return portName;
 	}
 
-	public abstract ExprJoint getDefaultJoiner();
+	public abstract ExprOp getDefaultJoiner();
 
 	public abstract ExprBasic getDefaultExpression();
 

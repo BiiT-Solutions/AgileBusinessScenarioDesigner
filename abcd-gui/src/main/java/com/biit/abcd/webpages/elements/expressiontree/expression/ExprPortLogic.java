@@ -12,8 +12,8 @@ public class ExprPortLogic extends ExprPort{
 	}
 
 	@Override
-	public ExprJoint getDefaultJoiner() {
-		return new ExprJointLogic();
+	public ExprOp getDefaultJoiner() {
+		return new ExprOpLogic();
 	}
 	
 	
