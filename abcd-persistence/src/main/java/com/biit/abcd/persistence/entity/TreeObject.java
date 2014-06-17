@@ -309,8 +309,9 @@ public abstract class TreeObject extends StorableObject {
 		return this;
 	}
 
+	@Override
 	public void resetIds() {
-		setId(null);
+		super.resetIds();
 		for (TreeObject child : getChildren()) {
 			child.resetIds();
 		}
