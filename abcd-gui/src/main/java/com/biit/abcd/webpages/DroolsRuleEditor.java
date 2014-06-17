@@ -2,6 +2,7 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
@@ -25,7 +26,6 @@ import com.vaadin.ui.VerticalLayout;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
-	private Form form;
 	private RuleConditionTable decisionTable;
 
 	public DroolsRuleEditor() {
@@ -53,7 +53,8 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(getForm(), false);
+						AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
+								.getFormController().getForm(), false);
 						addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -96,12 +97,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		this.form = form;
-	}
-
-	@Override
-	public Form getForm() {
-		return form;
 	}
 
 	@Override

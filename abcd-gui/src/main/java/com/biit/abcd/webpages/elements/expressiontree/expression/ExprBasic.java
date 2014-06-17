@@ -19,4 +19,8 @@ public abstract class ExprBasic {
 		}
 		return parent.getParentOfClass(clazz);
 	}
+	
+	protected String generateNullLabelCaption(String value){
+		return "<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">"+value+"</div>";
+	}
 }

@@ -1,12 +1,16 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprBasic;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprFunction;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprPort;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprWChild;
 import com.vaadin.data.Item;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TreeTable;
 
 public class ExpressionTreeTable extends TreeTable {
@@ -19,7 +23,7 @@ public class ExpressionTreeTable extends TreeTable {
 	public ExpressionTreeTable() {
 		super();
 
-		addContainerProperty(Properties.FORMULA_TEXT, String.class, "", "text", null, Align.LEFT);
+		addContainerProperty(Properties.FORMULA_TEXT, Label.class, "", "text", null, Align.LEFT);
 		setSelectable(true);
 		setImmediate(true);
 	}
@@ -42,7 +46,7 @@ public class ExpressionTreeTable extends TreeTable {
 	// }
 
 	public void addExpression(ExprBasic expression) {
-		addExpression(expression, true, false);
+		addExpression(expression, true, true);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -51,10 +55,10 @@ public class ExpressionTreeTable extends TreeTable {
 		// Could not create the item, then its an update.
 		if (item == null) {
 			item = getItem(expression);
-			// If we are updating the childs, then we need to delete them to get
-			// a correct order
+			// If we are updating the children we need to delete them to handle
+			// the reorder, and delete problems.
 			if (alsoChilds) {
-				removeExpressionChilds(expression);
+				removeAllChildrenOf(expression);
 			}
 		} else {
 			setChildrenAllowed(expression, false);
@@ -63,7 +67,7 @@ public class ExpressionTreeTable extends TreeTable {
 			setChildrenAllowed(expression.getParent(), true);
 			setParent(expression, expression.getParent());
 		}
-		item.getItemProperty(Properties.FORMULA_TEXT).setValue(expression.getExpressionTableString());
+		item.getItemProperty(Properties.FORMULA_TEXT).setValue(new Label(expression.getExpressionTableString(),ContentMode.HTML));
 
 		if (alsoChilds) {
 			addExpressionChilds(expression);
@@ -80,21 +84,12 @@ public class ExpressionTreeTable extends TreeTable {
 	 * 
 	 * @param expression
 	 */
-	private void removeExpressionChilds(ExprBasic expression) {
-		// If it is a function, then add the ports
-		if (expression instanceof ExprFunction) {
-			ExprFunction expressionFunction = (ExprFunction) expression;
-			for (ExprPort port : expressionFunction.getPorts()) {
-				removeItem(port);
-				removeExpressionChilds(port);
-			}
-		}
-		// If it is a expression with childs
-		if (expression instanceof ExprWChild) {
-			ExprWChild expressionWChilds = (ExprWChild) expression;
-			for (ExprBasic childExpression : expressionWChilds.getChilds()) {
-				removeItem(childExpression);
-				removeExpressionChilds(childExpression);
+	private void removeAllChildrenOf(Object itemId) {
+		if (hasChildren(itemId)) {
+			Set<Object> children = new HashSet<Object>(getChildren(itemId));
+			for (Object child : children) {
+				removeAllChildrenOf(child);
+				removeItem(child);
 			}
 		}
 	}
@@ -123,8 +118,12 @@ public class ExpressionTreeTable extends TreeTable {
 	}
 
 	public void removeExpressions(List<ExprBasic> expressions) {
-		for(ExprBasic expression: expressions){
+		for (ExprBasic expression : expressions) {
 			removeItem(expression);
 		}
+	}
+
+	public void setTitle(String value) {
+		setColumnHeader(Properties.FORMULA_TEXT, value);
 	}
 }

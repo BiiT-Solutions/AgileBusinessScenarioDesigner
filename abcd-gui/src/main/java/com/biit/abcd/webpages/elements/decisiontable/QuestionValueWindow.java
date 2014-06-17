@@ -1,7 +1,7 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TextField;

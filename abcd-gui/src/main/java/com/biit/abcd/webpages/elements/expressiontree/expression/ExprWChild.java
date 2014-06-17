@@ -54,11 +54,15 @@ public class ExprWChild extends ExprWoChild {
 
 	@Override
 	public String getExpressionTableString() {
+		return "( " + getChildExpressionTableString() + " )";
+	}
+	
+	public String getChildExpressionTableString(){
 		String expressionTableString = new String();
 		for (ExprBasic expression : getChilds()) {
 			expressionTableString += expression.getExpressionTableString();
 		}
-		return "( " + expressionTableString + " )";
+		return expressionTableString;
 	}
 
 	public void removeParenthesis() {
@@ -71,7 +75,7 @@ public class ExprWChild extends ExprWoChild {
 		parentGroup.childs.remove(this);
 	}
 
-	public void joinNewExpression() {
+	public void addChildExpression() {
 		ExprPort portParent = (ExprPort) getParentOfClass(ExprPort.class);
 		if (portParent != null) {
 			addChildExpression(portParent.getDefaultJoiner(), portParent.getDefaultExpression());

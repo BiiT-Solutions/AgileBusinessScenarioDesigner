@@ -11,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.utils.IdGenerator;
 import com.liferay.portal.model.User;
 
 @Entity
@@ -31,8 +32,13 @@ public abstract class StorableObject {
 	@Column(columnDefinition = "DOUBLE")
 	private Long updatedBy = null;
 
+	// A unique Id created with the object used to compare persisted objects and in memory objects.
+	@Column(unique = true, nullable = false, updatable = false)
+	private String comparationId;
+
 	public StorableObject() {
 		creationTime = new java.sql.Timestamp(new java.util.Date().getTime());
+		comparationId = IdGenerator.createId();
 	}
 
 	public Long getId() {
@@ -107,6 +113,31 @@ public abstract class StorableObject {
 
 	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updateTime = updatedDate;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((comparationId == null) ? 0 : comparationId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StorableObject other = (StorableObject) obj;
+		if (comparationId == null) {
+			if (other.comparationId != null)
+				return false;
+		} else if (!comparationId.equals(other.comparationId))
+			return false;
+		return true;
 	}
 
 }

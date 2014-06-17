@@ -18,13 +18,13 @@ public abstract class ExprPort extends ExprWChild {
 	}
 
 	@Override
-	public void joinNewExpression() {
+	public void addChildExpression() {
 		addChildExpression(getDefaultJoiner(), getDefaultExpression());
 	}
 
 	@Override
 	public String getExpressionTableString() {
-		return portName + ": " + super.getExpressionTableString();
+		return portName;
 	}
 
 	public abstract ExprJoint getDefaultJoiner();

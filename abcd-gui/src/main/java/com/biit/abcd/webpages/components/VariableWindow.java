@@ -22,7 +22,7 @@ public class VariableWindow extends AcceptCancelWindow {
 	private TextField variableName;
 	private ComboBox variableFormat;
 
-	public VariableWindow() {
+	public VariableWindow(String title) {
 		super();
 		setHeight(HEIGHT);
 		setWidth(WIDTH);
@@ -31,6 +31,7 @@ public class VariableWindow extends AcceptCancelWindow {
 		setDraggable(false);
 		setResizable(false);
 		setContent(generateContent());
+		setCaption(title);
 	}
 
 	private Component generateContent() {

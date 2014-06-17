@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
@@ -63,8 +64,9 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(diagramBuilderButton);
 
 		// Add calculus expresion editor.
-		expressionsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, ThemeIcons.EXPRESSION_EDITOR_PAGE,
-				LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, IconSize.BIG, new ClickListener() {
+		expressionsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR,
+				ThemeIcons.EXPRESSION_EDITOR_PAGE, LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, IconSize.BIG,
+				new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
 					@Override
@@ -104,8 +106,9 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 	private void changeView(WebMap newView) {
 		ApplicationFrame.navigateTo(newView);
 		WebPageComponent nextPage = (WebPageComponent) ((ApplicationFrame) UI.getCurrent()).getCurrentView();
-		if (getSelectedForm() != null && nextPage != null && nextPage instanceof FormWebPageComponent) {
-			((FormWebPageComponent) nextPage).setForm(getSelectedForm());
+		if (UserSessionHandler.getFormController().getForm() != null && nextPage != null
+				&& nextPage instanceof FormWebPageComponent) {
+			((FormWebPageComponent) nextPage).setForm(UserSessionHandler.getFormController().getForm());
 		}
 	}
 
@@ -127,8 +130,6 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 		}
 	}
 
-	public abstract void setSelectedForm(Form form);
-
-	public abstract Form getSelectedForm();
+	public abstract void updateSelectedForm(Form form);
 
 }

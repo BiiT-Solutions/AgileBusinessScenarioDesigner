@@ -9,29 +9,32 @@ import com.vaadin.ui.Button;
 public class GlobalVariablesUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -6726735583450218756L;
 
-	private IconButton addVariable, removeVariable, addValue, removeValue;
-	
-	public GlobalVariablesUpperMenu(){
+	private IconButton saveButton, addVariable, removeVariable, addValue, removeValue;
+
+	public GlobalVariablesUpperMenu() {
 		super();
 		defineMenu();
 	}
 
 	private void defineMenu() {
+		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcons.SAVE, LanguageCodes.MENU_SAVE);
 		addVariable = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_CAPTION,
-				ThemeIcons.ADD_ITEM_LIST, LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP);
+				ThemeIcons.GLOBAL_VARIABLES_ADD_VARIABLE, LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP);
 		removeVariable = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_CAPTION,
-				ThemeIcons.REMOVE_ITEM_LIST, LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_TOOLTIP);
-		addValue = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION, ThemeIcons.ADD_ITEM_LIST,
-				LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP);
+				ThemeIcons.GLOBAL_VARIABLES_REMOVE_VARIABLE,
+				LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_TOOLTIP);
+		addValue = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION,
+				ThemeIcons.GLOBAL_VARIABLES_ADD_VALUE, LanguageCodes.GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP);
 		removeValue = new IconButton(LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_DATA_CAPTION,
-				ThemeIcons.REMOVE_ITEM_LIST, LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP);
+				ThemeIcons.GLOBAL_VARIABLES_REMOVE_VALUE, LanguageCodes.GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP);
 
+		addIconButton(saveButton);
 		addIconButton(addVariable);
 		addIconButton(removeVariable);
 		addIconButton(addValue);
 		addIconButton(removeValue);
 	}
-	
+
 	public void addAddVariableButtonClickListener(Button.ClickListener listener) {
 		addVariable.addClickListener(listener);
 	}
@@ -47,7 +50,7 @@ public class GlobalVariablesUpperMenu extends UpperMenu {
 	public void removeRemoveVariableButtonClickListener(Button.ClickListener listener) {
 		removeVariable.removeClickListener(listener);
 	}
-	
+
 	public void addAddValueButtonClickListener(Button.ClickListener listener) {
 		addValue.addClickListener(listener);
 	}
@@ -62,5 +65,9 @@ public class GlobalVariablesUpperMenu extends UpperMenu {
 
 	public void removeRemoveValueClickListener(Button.ClickListener listener) {
 		removeValue.removeClickListener(listener);
+	}
+
+	public void addSaveButtonClickListener(Button.ClickListener listener) {
+		saveButton.addClickListener(listener);
 	}
 }

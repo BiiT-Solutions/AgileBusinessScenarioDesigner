@@ -8,7 +8,7 @@ public class ExprPortLogic extends ExprPort{
 
 	@Override
 	public ExprBasic getDefaultExpression() {
-		return new ExprLogic();
+		return new ExprWoChildLogic();
 	}
 
 	@Override

@@ -5,8 +5,8 @@ import java.util.Locale;
 import org.springframework.util.StringUtils;
 
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.SpringContextHelper;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.logger.AbcdLogger;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinServlet;

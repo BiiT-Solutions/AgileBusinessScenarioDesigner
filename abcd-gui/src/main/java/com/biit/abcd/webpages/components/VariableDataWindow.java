@@ -25,7 +25,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	private DateField validFrom;
 	private DateField validTo;
 
-	public VariableDataWindow(AnswerFormat format) {
+	public VariableDataWindow(AnswerFormat format, String title) {
 		super();
 		setHeight(HEIGHT);
 		setWidth(WIDTH);
@@ -34,6 +34,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		setClosable(false);
 		setDraggable(false);
 		setResizable(false);
+		setCaption(title);
 	}
 
 	private Component generateContent(AnswerFormat format) {
@@ -49,10 +50,9 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		case DATE:
 			valueField = new DateField();
 			break;
-		case NUMBER:
+		default:
 			valueField = new TextField();
-		case TEXT:
-			valueField = new TextField();
+			break;
 		}
 		valueField.setCaption(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE));
 		validFrom = new DateField(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_FROM));
@@ -74,24 +74,27 @@ public class VariableDataWindow extends AcceptCancelWindow {
 
 	public VariableData getValue() {
 		VariableData variableData = new VariableData();
-		//TODO add not valid condition.
-		if (valueField.getValue() == null /*|| not valid*/) {
+		// TODO add not valid condition.
+		if (valueField.getValue() == null /* || not valid */) {
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALUE_MISSING);
 			return null;
 		}
 		if (validFrom.getValue() == null) {
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_FROM_MISSING);
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+					LanguageCodes.WARNING_VARIABLE_DATA_VALID_FROM_MISSING);
 			return null;
 		}
 		if (validTo.getValue() == null) {
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_TO_MISSING);
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+					LanguageCodes.WARNING_VARIABLE_DATA_VALID_TO_MISSING);
 			return null;
 		}
 		if (validFrom.getValue().after(validTo.getValue())) {
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_RANGE_WRONG);
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+					LanguageCodes.WARNING_VARIABLE_DATA_VALID_RANGE_WRONG);
 			return null;
 		}
-		
+
 		variableData.setValue(valueField.getValue().toString());
 		variableData.setValidFrom(new Timestamp(validFrom.getValue().getTime()));
 		variableData.setValidTo(new Timestamp(validTo.getValue().getTime()));

@@ -2,12 +2,19 @@ package com.biit.abcd.persistence.entity.globalvariables;
 
 import java.sql.Timestamp;
 
-public class VariableData {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.biit.abcd.persistence.entity.StorableObject;
+
+@Entity
+@Table(name = "GLOBAL_VARIABLE_DATA")
+public class VariableData extends StorableObject {
 
 	private String value;
-	
+
 	private Timestamp validFrom;
-	
+
 	private Timestamp validTo;
 
 	public String getValue() {

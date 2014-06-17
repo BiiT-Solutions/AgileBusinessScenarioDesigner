@@ -15,7 +15,7 @@ public class WhenExpression extends ExprFunction {
 
 	@Override
 	public String getExpressionTableString() {
-		return "WHEN ( " + getPort(LOGIC_PORT).getExpressionTableString() + " )";
+		return "WHEN ( " + getPort(LOGIC_PORT).getChildExpressionTableString()+ " )";
 	}
 
 }

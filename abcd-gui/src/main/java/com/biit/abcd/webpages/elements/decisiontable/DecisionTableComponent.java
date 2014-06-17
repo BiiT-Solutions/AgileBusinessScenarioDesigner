@@ -1,11 +1,13 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.Action;
-import com.biit.abcd.persistence.entity.rules.DecisionTable;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.AnswerCondition;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
@@ -16,10 +18,10 @@ public class DecisionTableComponent extends CustomComponent {
 	private HorizontalLayout rootLayout;
 	private ConditionTable conditionTable;
 	private ActionTable actionTable;
-	private DecisionTable decisionTable;
+	private List<TableRuleRow> decisionTableRules;
 
 	public DecisionTableComponent() {
-		decisionTable = new DecisionTable();
+		decisionTableRules = new ArrayList<>();
 
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
@@ -66,7 +68,9 @@ public class DecisionTableComponent extends CustomComponent {
 	public void addColumn(Question question) {
 		if (question != null) {
 			conditionTable.addColumn(question);
-			decisionTable.getConditions().add(question);
+			for (TableRuleRow tableRule : decisionTableRules) {
+				tableRule.getConditions().put(question, new AnswerCondition(null));
+			}
 		}
 	}
 
@@ -76,10 +80,14 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void addRow() {
-		TableRule decisionRule = new TableRule();
-		Action action = new Action();
-		decisionRule.addAction(action);
-		decisionTable.getRules().add(decisionRule);
+		TableRuleRow tableRuleRow = new TableRuleRow();
+		// Add at least one action.
+		tableRuleRow.addAction(new Action());
+		addRow(tableRuleRow);
+	}
+
+	public void addRow(TableRuleRow decisionRule) {
+		decisionTableRules.add(decisionRule);
 
 		// Add decision Rule to both tables.
 		conditionTable.addItem(decisionRule);
@@ -87,19 +95,46 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public void removeSelectedRows() {
-		for (TableRule rule : conditionTable.getSelectedRules()) {
+		for (TableRuleRow rule : conditionTable.getSelectedRules()) {
 			conditionTable.removeItem(rule);
 			actionTable.removeItem(rule);
+			decisionTableRules.remove(rule);
+		}
+		// Always one row.
+		if (conditionTable.size() == 0) {
+			addRow();
 		}
 	}
 
 	public void removeSelectedColumns() {
 		for (Question question : conditionTable.getSelectedQuestions()) {
 			conditionTable.removeContainerProperty(question);
+			for (TableRuleRow rule : decisionTableRules) {
+				rule.removeCondition(question);
+			}
 		}
 	}
 
-	public int getNumberOfRules() {
-		return decisionTable.getRules().size();
+	public List<TableRuleRow> getTableRules() {
+		return decisionTableRules;
+	}
+
+	/**
+	 * Returns the table rules that has been filled up by the user.
+	 * 
+	 * @return
+	 */
+	public List<TableRuleRow> getDefinedTableRules() {
+		List<TableRuleRow> notEmptyRows = new ArrayList<>();
+		// Row is useful if at least has one action defined.
+		for (TableRuleRow row : decisionTableRules) {
+			for (Action action : row.getActions()) {
+				if (!action.undefined()) {
+					notEmptyRows.add(row);
+					break;
+				}
+			}
+		}
+		return decisionTableRules;
 	}
 }

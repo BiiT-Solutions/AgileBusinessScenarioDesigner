@@ -3,7 +3,9 @@ package com.biit.abcd.webpages;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
@@ -23,14 +25,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 
-public class GlobalVariables extends FormWebPageComponent {
+public class GlobalVariablesCreator extends FormWebPageComponent {
 	private static final long serialVersionUID = 6042328256995069412L;
 
 	private HorizontalLayout rootLayout;
 	private GlobalVariablesTable variableTable;
 	private VariableDataTable variableDataTable;
 
-	public GlobalVariables() {
+	public GlobalVariablesCreator() {
 		super();
 	}
 
@@ -62,16 +64,30 @@ public class GlobalVariables extends FormWebPageComponent {
 				variableDataTable.setVariable((GlobalVariable) variableTable.getValue());
 			}
 		});
+
+		// Add already existing GlobalVariables.
+		for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
+			variableTable.addItem(globalVariable);
+		}
 	}
 
 	private UpperMenu createUpperMenu() {
 		GlobalVariablesUpperMenu upperMenu = new GlobalVariablesUpperMenu();
+		upperMenu.addSaveButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -3692380302089994511L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				save();
+			}
+		});
 		upperMenu.addAddVariableButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = -4843889679428803021L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				VariableWindow window = new VariableWindow();
+				VariableWindow window = new VariableWindow(ServerTranslate
+						.tr(LanguageCodes.GLOBAL_VARIABLE_ADD_WINDOW_TITLE));
 				window.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
@@ -108,7 +124,8 @@ public class GlobalVariables extends FormWebPageComponent {
 				final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
 
 				if (variable != null) {
-					VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat());
+					VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
+							ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
 					variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {
@@ -151,14 +168,11 @@ public class GlobalVariables extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		// TODO Auto-generated method stub
-
+		// No Forms here.
 	}
 
-	@Override
-	public Form getForm() {
-		// TODO Auto-generated method stub
-		return null;
+	private void save() {
+		UserSessionHandler.getGlobalVariablesController().update(variableTable.getGlobalVariables());
 	}
 
 }

@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.biit.abcd</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>0.1.0</version>
+		<version>0.2.0</version>
 	</parent>
 
 	<dependencies>
@@ -20,6 +20,19 @@
 			<artifactId>abcd-persistence</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
+		</dependency>
+		<!-- For SpringContextHelper -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Spring MVC framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework.version}</version>
 		</dependency>
 	</dependencies>
 

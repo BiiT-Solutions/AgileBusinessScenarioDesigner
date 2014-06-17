@@ -81,6 +81,10 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 			listener.propertyUpdate(element);
 		}
 	}
+	
+	public void removeAllPropertyUpdateListeners() {
+		propertyUpdateListeners.clear();
+	}
 
 	@Override
 	public void focus() {

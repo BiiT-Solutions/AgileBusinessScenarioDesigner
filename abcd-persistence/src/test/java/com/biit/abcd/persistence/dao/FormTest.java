@@ -16,19 +16,36 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
+import com.biit.abcd.persistence.entity.rules.Action;
+import com.biit.abcd.persistence.entity.rules.AnswerCondition;
+import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form";
 	private final static String FULL_FORM = "Complete Form";
+	private final static String DIAGRAM_FORM = "Diagram Form";
+	private final static String TABLE_RULE_FORM = "Table Rule Form";
 	private final static String OTHER_FORM = "Other Form";
 	private final static String CATEGORY_LABEL = "Category1";
+	private final static String ACTION_EXPRESSION = "Score=3";
 
 	@Autowired
 	private IFormDao formDao;
+
+	@Autowired
+	private IDiagramDao diagramDao;
+
+	@Autowired
+	private ITableRuleRowDao tableRuleDao;
+
+	@Autowired
+	private IQuestionDao questionDao;
 
 	private Form form;
 
@@ -177,12 +194,81 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
+	public void storeFormDiagram() throws NotValidChildException {
+		Form form = new Form();
+		form.setName(DIAGRAM_FORM);
+
+		Diagram diagram = new Diagram(form);
+		form.getDiagrams().add(diagram);
+
+		formDao.makePersistent(form);
+		Form retrievedForm = formDao.read(form.getId());
+
+		Assert.assertEquals(retrievedForm.getId(), form.getId());
+		Assert.assertEquals(diagramDao.getRowCount(), 1);
+	}
+
+	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
+	public void storeFormTableRule() throws NotValidChildException {
+		Form form = new Form();
+		form.setName(TABLE_RULE_FORM);
+
+		Category category1 = new Category();
+		category1.setName("Category1");
+		form.addChild(category1);
+
+		Group group1 = new Group();
+		group1.setName("Group1");
+		category1.addChild(group1);
+
+		Question question1 = new Question();
+		question1.setName("Question1");
+		group1.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setName("Question2");
+		group1.addChild(question2);
+
+		Answer answer1 = new Answer();
+		answer1.setName("Answer1");
+		question1.addChild(answer1);
+
+		Answer answer2 = new Answer();
+		answer2.setName("Answer2");
+		question1.addChild(answer2);
+
+		TableRule tableRule = new TableRule();
+
+		TableRuleRow tableRuleRow = new TableRuleRow();
+		AnswerCondition answerCondition = new AnswerCondition(answer1);
+		tableRuleRow.getConditions().put(question1, answerCondition);
+		tableRuleRow.addAction(new Action());
+		tableRuleRow.getActions().get(0).setExpression(ACTION_EXPRESSION);
+
+		tableRule.getRules().add(tableRuleRow);
+
+		form.getTableRules().add(tableRule);
+
+		formDao.makePersistent(form);
+		Form retrievedForm = formDao.read(form.getId());
+
+		Assert.assertEquals(retrievedForm.getId(), form.getId());
+		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
+
+		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(question1),
+				answerCondition);
+		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
+				ACTION_EXPRESSION);
+		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
+	}
+
+	@Test(groups = { "formDao" }, dependsOnMethods = { "storeFormDiagram", "storeOtherFormWithSameLabelCategory",
+			"storeFormTableRule" })
 	public void removeForms() {
-		List<Form> forms = formDao.getAll();
-		for (Form form : forms) {
-			formDao.makeTransient(form);
-		}
+		formDao.removeAll();
 		Assert.assertEquals(formDao.getRowCount(), 0);
+		Assert.assertEquals(diagramDao.getRowCount(), 0);
+		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
 	}
 
 	private boolean compare(TreeObject object1, TreeObject object2) {

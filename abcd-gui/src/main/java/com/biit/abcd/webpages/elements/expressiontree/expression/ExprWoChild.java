@@ -7,7 +7,7 @@ import java.util.List;
  * 
  */
 public abstract class ExprWoChild extends ExprBasic{
-
+	
 	public void addParenthesis(){
 		//Create a new parenthesis
 		ExprWChild parenthesis = new ExprWChild();
@@ -21,5 +21,24 @@ public abstract class ExprWoChild extends ExprBasic{
 	public List<ExprBasic> delete(){
 		ExprWChild parentGroup = (ExprWChild) parent;
 		return parentGroup.removeChildExpression(this);
+	}
+
+	public boolean isParenthised(){
+		if(parent instanceof ExprWChild && !(parent instanceof ExprPort)){
+			return true;
+		}
+		return false;
+	}
+	
+	public void removeParenthesis() {
+		if(isParenthised()){
+			((ExprWChild)parent).removeParenthesis();
+		}
+	}
+
+	public void addExpression() {
+		if(parent instanceof ExprWChild){
+			((ExprWChild)parent).addChildExpression();
+		}
 	}
 }

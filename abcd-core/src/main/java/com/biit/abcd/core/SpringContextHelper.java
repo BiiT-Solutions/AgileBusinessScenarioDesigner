@@ -1,4 +1,4 @@
-package com.biit.abcd;
+package com.biit.abcd.core;
 
 import javax.servlet.ServletContext;
 
@@ -17,8 +17,8 @@ public class SpringContextHelper {
 	public SpringContextHelper(ServletContext servletContext) {
 		context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 	}
-	
-	public ApplicationContext getContext(){
+
+	public ApplicationContext getContext() {
 		return context;
 	}
 

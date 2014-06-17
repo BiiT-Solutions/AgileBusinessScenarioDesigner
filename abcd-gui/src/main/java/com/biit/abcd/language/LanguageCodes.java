@@ -167,13 +167,20 @@ public enum LanguageCodes {
 	CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_TOOLTIP("condition.table.editor.button.add.row.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_CAPTION("condition.table.editor.button.remove.row.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_TOOLTIP("condition.table.editor.button.remove.row.tooltip"),
-	CONDITION_TABLE_EDITOR_ACTION_EDITOR_CAPTION("action.window.caption"),
+	CONDITION_TABLE_EDITOR_ACTION_EDITOR_TEXTAREA_CAPTION("action.window.textarea.caption"),
+	CONDITION_TABLE_NEW_CONDITION_CAPTION("condition.window.new.caption"),
+	CONDITION_TABLE_EDIT_CONDITION_CAPTION("condition.window.edit.caption"),
+	CONDITION_TABLE_EDIT_ACTION_CAPTION("action.window.edit.caption"),
 	
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
 	
+	SETTINGS_TITLE("settings.title"),
 	SETTINGS_GLOBAL_CONSTANTS("settings.global.constants"),
-	SETTINGS_LOG_OUT("settings.log.out"), 
+	SETTINGS_LOG_OUT("settings.log.out"),
+	SETTINGS_CLOSE("settings.close"),
 	
+	GLOBAL_VARIABLE_ADD_WINDOW_TITLE("global.variable.window.title"),
+	GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE("global.variable.value.window.title"),
 	GLOBAL_VARIABLE_NAME("global.variable.name"),
 	GLOBAL_VARIABLE_VALUE("global.variable.value"),
 	GLOBAL_VARIABLE_TYPE("global.variable.type"),

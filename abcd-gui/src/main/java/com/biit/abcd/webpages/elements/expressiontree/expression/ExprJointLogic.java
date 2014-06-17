@@ -9,7 +9,7 @@ public class ExprJointLogic extends ExprJoint {
 
 	@Override
 	public String getValueNullCaption() {
-		return "logic-joint";
+		return generateNullLabelCaption("logic-join");
 	}
 
 }

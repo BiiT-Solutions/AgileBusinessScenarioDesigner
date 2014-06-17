@@ -11,7 +11,7 @@ public enum ThemeIcons {
 	ADD("appbar.add.svg"),
 
 	DELETE("appbar.delete.svg"),
-	
+
 	EDIT("appbar.edit.svg"),
 
 	LINK("appbar.link.svg"),
@@ -37,74 +37,81 @@ public enum ThemeIcons {
 	EXPAND("appbar.section.expand.svg"),
 
 	COLLAPSE("appbar.section.collapse.svg"),
-	
+
 	LEFT_MENU_COLLAPSE("appbar.layout.collapse.left.variant.svg"),
-	
+
 	LEFT_MENU_EXPAND("appbar.layout.expand.right.variant.svg"),
-	
+
 	RIGHT_MENU_COLLAPSE("appbar.layout.collapse.right.variant.svg"),
-	
+
 	RIGHT_MENU_EXPAND("appbar.layout.expand.left.variant.svg"),
-	
-	FORM_MANAGER_PAGE("appbar.column.one.svg"),
-	
-	FORM_MANAGER_ADD_FORM("appbar.form.add.svg"),
-	
-	TREE_DESIGNER_PAGE("appbar.form.edit.svg"),
-	
+
+	FORM_MANAGER_PAGE("appbar.cabinet.files.svg"),
+
+	FORM_MANAGER_ADD_FORM("appbar.page.add.svg"),
+
+	TREE_DESIGNER_PAGE("appbar.page.edit.svg"),
+
 	TREE_DESIGNER_ADD_CATEGORY("appbar.category.add.svg"),
-	
+
 	TREE_DESIGNER_ADD_QUESTION("appbar.question.add.svg"),
-	
+
 	TREE_DESIGNER_ADD_GROUP("appbar.group.add.svg"),
-	
+
 	TREE_DESIGNER_ADD_ANSWER("appbar.answer.add.svg"),
-	
+
 	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg"),
-	
+
 	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg"),
-	
+
 	CLEAN("appbar.clean.svg"),
-	
+
 	UNDO("appbar.undo.svg"),
-	
+
 	REDO("appbar.redo.svg"),
-	
+
 	TO_PNG("appbar.page.png.svg"),
-	
+
 	TO_SVG("appbar.page.svg.svg"),
-	
+
 	TO_BACK("appbar.toBack.svg"),
-	
+
 	TO_FRONT("appbar.toFront.svg"),
-	
+
 	MOVE_UP("appbar.chevron.up.svg"),
-	
+
 	MOVE_DOWN("appbar.chevron.down.svg"),
-	
+
 	PAPER("appbar.paper.svg"),
-	
+
 	ADD_COLUMN("appbar.table.add.svg"),
-	
+
 	REMOVE_COLUMN("appbar.table.delete.svg"),
-	
+
 	ADD_ROW("appbar.table.add.row.svg"),
-	
-	REMOVE_ROW("appbar.table.delete.row.svg"), 
-	
-	EXPRESSION_EDITOR_PAGE("appbar.page.expression.svg"), 
-	
+
+	REMOVE_ROW("appbar.table.delete.row.svg"),
+
+	EXPRESSION_EDITOR_PAGE("appbar.page.expression.svg"),
+
 	SETTINGS("appbar.lines.horizontal.4.svg"),
-	
+
 	ADD_ITEM_LIST("appbar.list.add.svg"),
-	
+
 	REMOVE_ITEM_LIST("appbar.list.delete.svg"),
-	
+
 	RULE_EDITOR_ADD_QUESTION("appbar.input.question.svg"),
-	
-	FORM_VARIABLE_EDITOR("appbar.form.variables.svg"),;
-	
-	
+
+	FORM_VARIABLE_EDITOR("appbar.form.variables.svg"),
+
+	GLOBAL_VARIABLES_ADD_VARIABLE("appbar.list.add.below.svg"),
+
+	GLOBAL_VARIABLES_REMOVE_VARIABLE("appbar.list.delete.inline.svg"),
+
+	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.svg"),
+
+	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.remove.svg"), ;
+
 	private String value;
 
 	ThemeIcons(String value) {
@@ -119,8 +126,8 @@ public enum ThemeIcons {
 	public ThemeResource getThemeResource() {
 		return new ThemeResource(value);
 	}
-	
-	public String getFile(){
+
+	public String getFile() {
 		return value;
 	}
 }

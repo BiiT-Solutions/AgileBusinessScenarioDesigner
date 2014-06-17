@@ -9,12 +9,13 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 
 public class ExpressionEditorComponent extends CustomComponent {
 	private static final long serialVersionUID = -3944907953375692547L;
 
 	private HorizontalLayout rootLayout;
-	private ExpressionTreeTable expressionTable;
+	private VerticalLayout expressionLayout;
 	private ExpressionEditorPropertiesComponent expressionEditorProperties;
 	public Form form;
 
@@ -22,48 +23,89 @@ public class ExpressionEditorComponent extends CustomComponent {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(false);
+		rootLayout.setSpacing(true);
 
-		expressionTable = new ExpressionTreeTable();
-		expressionTable.setSizeFull();
-
-		expressionTable.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = -8496011691185361507L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				ExprBasic expression = (ExprBasic) expressionTable.getValue();
-				updatePropertiesComponent(expression);
-			}
-		});
+		expressionLayout = new VerticalLayout();
+		expressionLayout.setSizeFull();
+		expressionLayout.setMargin(false);
+		expressionLayout.setSpacing(true);
 
 		expressionEditorProperties = new ExpressionEditorPropertiesComponent();
 		expressionEditorProperties.setSizeFull();
-		expressionEditorProperties.addPropertyUpdateListener(new PropertieUpdateListener() {
 
-			@Override
-			public void propertyUpdate(Object element) {
-				// TODO
-			}
-		});
-
-		rootLayout.addComponent(expressionTable);
+		rootLayout.addComponent(expressionLayout);
 		rootLayout.addComponent(expressionEditorProperties);
-		rootLayout.setExpandRatio(expressionTable, 0.75f);
+		rootLayout.setExpandRatio(expressionLayout, 0.75f);
 		rootLayout.setExpandRatio(expressionEditorProperties, 0.25f);
 
 		setCompositionRoot(rootLayout);
 	}
 
 	public void addWhenExpression() {
+
+		final ExpressionTreeTable whenTable = new ExpressionTreeTable();
+		whenTable.setTitle("WHEN");
+		whenTable.setSizeFull();
+		expressionLayout.addComponent(whenTable);
+
+		whenTable.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = -8496011691185361507L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				// Remove the update listeners.
+				expressionEditorProperties.removeAllPropertyUpdateListeners();
+				// Change the property element.
+				ExprBasic expression = (ExprBasic) whenTable.getValue();
+				updatePropertiesComponent(expression);
+				// Add update listener.
+				expressionEditorProperties.addPropertyUpdateListener(new PropertieUpdateListener() {
+					@Override
+					public void propertyUpdate(Object element) {
+						whenTable.addExpression((ExprBasic) element);
+					}
+				});
+			}
+		});
+
 		WhenExpression whenExpression = new WhenExpression();
 		// TODO delete luego
 		ExprPort exprPort = whenExpression.getLogicPort();
 
-		expressionTable.addExpression(whenExpression);
+		whenTable.addExpression(whenExpression);
 	}
 
 	public void addThenExpression() {
+		final ExpressionTreeTable whenTable = new ExpressionTreeTable();
+		whenTable.setTitle("THEN");
+		whenTable.setSizeFull();
+		expressionLayout.addComponent(whenTable);
 
+		whenTable.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = -8496011691185361507L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				// Remove the update listeners.
+				expressionEditorProperties.removeAllPropertyUpdateListeners();
+				// Change the property element.
+				ExprBasic expression = (ExprBasic) whenTable.getValue();
+				updatePropertiesComponent(expression);
+				// Add update listener.
+				expressionEditorProperties.addPropertyUpdateListener(new PropertieUpdateListener() {
+					@Override
+					public void propertyUpdate(Object element) {
+						whenTable.addExpression((ExprBasic) element);
+					}
+				});
+			}
+		});
+
+		WhenExpression whenExpression = new WhenExpression();
+		// TODO delete luego
+		ExprPort exprPort = whenExpression.getLogicPort();
+
+		whenTable.addExpression(whenExpression);
 	}
 
 	protected void updatePropertiesComponent(ExprBasic value) {

@@ -10,7 +10,6 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
-	private Form form;
 	private ExpressionEditorComponent expressionEditorComponent;
 
 	public ExpressionEditor() {
@@ -28,6 +27,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		expressionEditorComponent = new ExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 		expressionEditorComponent.addWhenExpression();
+		expressionEditorComponent.addThenExpression();
 		rootLayout.addComponent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
@@ -36,15 +36,9 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
-		this.form = form;
 		if(expressionEditorComponent!=null){
 			expressionEditorComponent.form = form;
 		}
-	}
-
-	@Override
-	public Form getForm() {
-		return form;
 	}
 
 	@Override

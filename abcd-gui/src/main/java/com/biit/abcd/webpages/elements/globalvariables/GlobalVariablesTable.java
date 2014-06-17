@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.globalvariables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -28,21 +31,31 @@ public class GlobalVariablesTable extends Table {
 	public Item addItem(GlobalVariable globalVariable) {
 		Item item = super.addItem(globalVariable);
 		item.getItemProperty(Properties.VARIABLE_NAME).setValue(globalVariable.getName());
-		item.getItemProperty(Properties.VARIABLE_TYPE).setValue(ServerTranslate.tr(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
+		item.getItemProperty(Properties.VARIABLE_TYPE).setValue(
+				ServerTranslate.tr(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
 		return item;
 	}
 
+	@Override
 	public Item addItem(Object itemId) {
 		if (itemId instanceof GlobalVariable) {
 			return addItem((GlobalVariable) itemId);
 		}
 		return null;
 	}
-	
-	public GlobalVariable getSelectedGlobalVariable(){
-		if(getValue()!=null){
-			return (GlobalVariable)getValue();
+
+	public GlobalVariable getSelectedGlobalVariable() {
+		if (getValue() != null) {
+			return (GlobalVariable) getValue();
 		}
 		return null;
+	}
+
+	public List<GlobalVariable> getGlobalVariables() {
+		List<GlobalVariable> globalVariables = new ArrayList<>();
+		for (Object item : getItemIds()) {
+			globalVariables.add((GlobalVariable) item);
+		}
+		return globalVariables;
 	}
 }

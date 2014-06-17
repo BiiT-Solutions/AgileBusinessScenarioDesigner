@@ -15,7 +15,9 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.UserGroup;
 
 @Entity
@@ -30,7 +32,15 @@ public class Form extends TreeObject {
 	private Timestamp availableFrom;
 	private Timestamp availableTo;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<Diagram> diagrams;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<TableRule> tableRules;
+
 	public Form() {
+		diagrams = new ArrayList<>();
+		tableRules = new ArrayList<>();
 		setName(DEFAULT_NAME);
 	}
 
@@ -106,5 +116,21 @@ public class Form extends TreeObject {
 
 	public void setAvailableTo(Timestamp availableTo) {
 		this.availableTo = availableTo;
+	}
+
+	public List<Diagram> getDiagrams() {
+		return diagrams;
+	}
+
+	public void setDiagrams(List<Diagram> diagrams) {
+		this.diagrams = diagrams;
+	}
+
+	public List<TableRule> getTableRules() {
+		return tableRules;
+	}
+
+	public void setTableRules(List<TableRule> tableRules) {
+		this.tableRules = tableRules;
 	}
 }
