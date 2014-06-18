@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.expressiontree.expression;
+package com.biit.abcd.persistence.entity.expressions;
 
 public class ThenExpression extends ExprFunction{
 	

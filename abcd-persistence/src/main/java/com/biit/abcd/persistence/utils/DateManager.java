@@ -1,4 +1,4 @@
-package com.biit.abcd.utils;
+package com.biit.abcd.persistence.utils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;

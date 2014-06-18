@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.expressiontree.expression;
+package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.HashSet;
 import java.util.Set;

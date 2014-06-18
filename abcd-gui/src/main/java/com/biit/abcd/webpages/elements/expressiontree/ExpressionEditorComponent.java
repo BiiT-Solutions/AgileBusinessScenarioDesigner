@@ -1,10 +1,10 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.ThenExpression;
+import com.biit.abcd.persistence.entity.expressions.WhenExpression;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprBasic;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ThenExpression;
-import com.biit.abcd.webpages.elements.expressiontree.expression.WhenExpression;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.CustomComponent;

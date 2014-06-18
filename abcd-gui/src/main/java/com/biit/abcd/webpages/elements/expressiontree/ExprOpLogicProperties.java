@@ -1,8 +1,8 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
+import com.biit.abcd.persistence.entity.expressions.ExprOpLogic;
+import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprOpLogic;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprOpValue;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
