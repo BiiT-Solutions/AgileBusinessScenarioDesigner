@@ -3,6 +3,14 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_PORT")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class ExprPort extends ExprGroup {
 
 	private String portName;

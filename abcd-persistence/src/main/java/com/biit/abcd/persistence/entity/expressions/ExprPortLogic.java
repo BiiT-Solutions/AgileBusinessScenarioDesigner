@@ -1,6 +1,11 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-public class ExprPortLogic extends ExprPort{
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_PORT_LOGIC")
+public class ExprPortLogic extends ExprPort {
 
 	public ExprPortLogic(String portName) {
 		super(portName);
@@ -15,7 +20,5 @@ public class ExprPortLogic extends ExprPort{
 	public ExprOp getDefaultJoiner() {
 		return new ExprOpLogic();
 	}
-	
-	
 
 }

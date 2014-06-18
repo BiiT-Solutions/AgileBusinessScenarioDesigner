@@ -4,9 +4,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public abstract class ExprFunction extends ExprWChilds {
-	
-	//Do not persist.
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "EXPRESSION_FUNCTION")
+public abstract class ExprFunction extends ExprWithChilds {
+
+	@Transient
 	private HashMap<String, ExprPort> portMap;
 
 	public ExprFunction() {

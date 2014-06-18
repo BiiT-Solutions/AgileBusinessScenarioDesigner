@@ -1,16 +1,28 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_ATOMIC_LOGIC")
 public class ExprAtomicLogic extends ExprAtomic {
 
+	@ManyToOne(fetch = FetchType.EAGER)
 	private ExprValueFormReference leftOperand;
+	@Enumerated(EnumType.STRING)
 	private ExprWoChildLogicType type;
+	@ManyToOne(fetch = FetchType.EAGER)
 	private ExprValues rightOperand;
 
 	public enum ExprWoChildLogicType {
-		ALWAYS, ANY, EQ, NE, LT, GT, LE, GE, IN, BETWEEN
+		ALWAYS, ANY, EQUALS, NOT_EQUALS, LESS_THAN, GREATER_THAN, LESS_EQUALS, GREATER_EQUALS, IN, BETWEEN
 	};
-	
-	public ExprAtomicLogic(){
+
+	public ExprAtomicLogic() {
 		super();
 	}
 
@@ -33,23 +45,23 @@ public class ExprAtomicLogic extends ExprAtomic {
 				break;
 			case ANY:
 				expression += "ANY";
-				break;	
-			case EQ:
+				break;
+			case EQUALS:
 				expression += "==";
 				break;
-			case NE:
+			case NOT_EQUALS:
 				expression += "!=";
 				break;
-			case LT:
+			case LESS_THAN:
 				expression += "<";
 				break;
-			case GT:
+			case GREATER_THAN:
 				expression += ">";
 				break;
-			case LE:
+			case LESS_EQUALS:
 				expression += "<=";
 				break;
-			case GE:
+			case GREATER_EQUALS:
 				expression += ">=";
 				break;
 			case IN:
@@ -73,27 +85,27 @@ public class ExprAtomicLogic extends ExprAtomic {
 	}
 
 	public void setEq() {
-		type = ExprWoChildLogicType.EQ;
+		type = ExprWoChildLogicType.EQUALS;
 	}
 
 	public void setNe() {
-		type = ExprWoChildLogicType.NE;
+		type = ExprWoChildLogicType.NOT_EQUALS;
 	}
 
 	public void setLt() {
-		type = ExprWoChildLogicType.LT;
+		type = ExprWoChildLogicType.LESS_THAN;
 	}
 
 	public void setGt() {
-		type = ExprWoChildLogicType.GT;
+		type = ExprWoChildLogicType.GREATER_THAN;
 	}
 
 	public void setLe() {
-		type = ExprWoChildLogicType.LE;
+		type = ExprWoChildLogicType.LESS_EQUALS;
 	}
 
 	public void setGe() {
-		type = ExprWoChildLogicType.GE;
+		type = ExprWoChildLogicType.GREATER_EQUALS;
 	}
 
 	public void setIn() {

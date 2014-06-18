@@ -1,11 +1,20 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.TreeObject;
 
+@Entity
+@Table(name = "EXPRESSION_VALUE_FORM_REFERENCE")
 public class ExprValueFormReference extends ExprValue {
 
+	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject question;
+	@ManyToOne(fetch = FetchType.EAGER)
 	private CustomVariable variable;
 
 	public ExprValueFormReference(TreeObject question, CustomVariable variable) {

@@ -1,11 +1,21 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-public abstract class ExprBasic {
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.StorableObject;
+
+@Entity
+@Table(name = "EXPRESSION_BASIC")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class ExprBasic extends StorableObject {
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	protected ExprBasic parent;
-
-	public ExprBasic() {
-	}
 
 	public abstract String getExpressionTableString();
 

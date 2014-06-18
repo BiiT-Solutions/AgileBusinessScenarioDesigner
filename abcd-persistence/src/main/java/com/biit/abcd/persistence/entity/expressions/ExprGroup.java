@@ -3,7 +3,12 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExprGroup extends ExprWChilds {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_GROUP")
+public class ExprGroup extends ExprWithChilds {
 
 	public ExprGroup() {
 		super();

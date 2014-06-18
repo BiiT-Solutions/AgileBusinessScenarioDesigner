@@ -1,9 +1,14 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-public class ExprValueDouble extends ExprValue{
-	
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_VALUE_DOUBLE")
+public class ExprValueDouble extends ExprValue {
+
 	private double value;
-	
+
 	public ExprValueDouble(double value) {
 		super();
 		this.setValue(value);
@@ -11,7 +16,7 @@ public class ExprValueDouble extends ExprValue{
 
 	@Override
 	public String getExpressionTableString() {
-		return ""+value;
+		return "" + value;
 	}
 
 	public double getValue() {

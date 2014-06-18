@@ -158,12 +158,12 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 
 	private void initializeSetValueComponent(CustomVariableType type) {
 		switch (element.getType()) {
-		case EQ:
-		case NE:
-		case GE:
-		case LE:
-		case GT:
-		case LT:
+		case EQUALS:
+		case NOT_EQUALS:
+		case GREATER_EQUALS:
+		case LESS_EQUALS:
+		case GREATER_THAN:
+		case LESS_THAN:
 			initializeSetValueComponentSingleValue(type);
 			break;
 		case BETWEEN:
@@ -190,12 +190,12 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 	public ExprAtomicLogic getValue() {
 		updateValueQuestionVariable();
 		switch (element.getType()) {
-		case EQ:
-		case NE:
-		case GE:
-		case LE:
-		case GT:
-		case LT:
+		case EQUALS:
+		case NOT_EQUALS:
+		case GREATER_EQUALS:
+		case LESS_EQUALS:
+		case GREATER_THAN:
+		case LESS_THAN:
 			updateValueSingleItem();
 			break;
 		case BETWEEN:

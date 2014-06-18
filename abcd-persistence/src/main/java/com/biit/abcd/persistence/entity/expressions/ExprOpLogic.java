@@ -1,5 +1,10 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_OPERATION_LOGIC")
 public class ExprOpLogic extends ExprOp {
 
 	public ExprOpLogic() {
