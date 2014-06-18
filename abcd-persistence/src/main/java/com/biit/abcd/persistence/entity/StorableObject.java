@@ -107,14 +107,6 @@ public abstract class StorableObject {
 		}
 	}
 
-	public Timestamp getUpdatedDate() {
-		return updateTime;
-	}
-
-	public void setUpdatedDate(Timestamp updatedDate) {
-		this.updateTime = updatedDate;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

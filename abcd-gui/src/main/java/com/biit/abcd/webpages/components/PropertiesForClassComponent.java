@@ -37,7 +37,6 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 
 			@Override
 			public void detach(DetachEvent event) {
-				System.out.println("is detaching!");
 				focus();
 				update();
 			}

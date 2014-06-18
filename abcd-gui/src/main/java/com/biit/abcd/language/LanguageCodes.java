@@ -221,6 +221,7 @@ public enum LanguageCodes {
 	FORM_VARIABLE_ADD("form.variables.add"),
 	FORM_VARIABLE_REMOVE("form.variables.remove"),
 	FORM_VARIABLE_TABLE_COLUMN_NAME("form.variables.tablecolumn.name"),
+	FORM_VARIABLE_TABLE_COLUMN_UPDATE("form.variables.tablecolumn.update"),
 	FORM_VARIABLE_COLUMN_NAME("form.variables.column.name"),
 	FORM_VARIABLE_COLUMN_TYPE("form.variables.column.type"),
 	FORM_VARIABLE_SCOPE("form.variables.column.scope");

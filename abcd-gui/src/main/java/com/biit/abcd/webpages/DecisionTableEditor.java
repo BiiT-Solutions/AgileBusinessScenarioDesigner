@@ -32,7 +32,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 	private DecisionTableComponent decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
-	private SelectTableMenu rightMenu;
+	private SelectTableMenu tableSelectionMenu;
 
 	public DecisionTableEditor() {
 		super();
@@ -47,8 +47,8 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		rootLayout.setSizeFull();
 
 		// Create menu
-		rightMenu = new SelectTableMenu();
-		rightMenu.addValueChangeListener(new ValueChangeListener() {
+		tableSelectionMenu = new SelectTableMenu();
+		tableSelectionMenu.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -7103550436798085895L;
 
 			@Override
@@ -57,7 +57,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 
 		});
-		rootLayout.setMenu(rightMenu);
+		rootLayout.setMenu(tableSelectionMenu);
 
 		// Create content
 		decisionTable = new DecisionTableComponent();
@@ -80,15 +80,16 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 
 		});
-		
+
 		// Add tables
 		for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
 			addTableRuleToMenu(tableRule);
 		}
+		sortTableMenu();
 
 		// Select the first one if available.
 		if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
-			rightMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules().get(0));
+			tableSelectionMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules().get(0));
 		}
 
 		refreshDecisionTable();
@@ -132,7 +133,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				if (rightMenu.getSelectedTableRule() != null) {
+				if (tableSelectionMenu.getSelectedTableRule() != null) {
 					AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
 							.getFormController().getForm(), true);
 					addNewConditionWindow.disableQuestions(decisionTable.getColumns());
@@ -173,7 +174,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				if (rightMenu.getSelectedTableRule() != null) {
+				if (tableSelectionMenu.getSelectedTableRule() != null) {
 					decisionTable.addRow();
 				}
 			}
@@ -229,17 +230,21 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	}
 
 	private TableRule getSelectedTableRule() {
-		return rightMenu.getSelectedTableRule();
+		return tableSelectionMenu.getSelectedTableRule();
 	}
 
 	public void addTableRuleToMenu(TableRule tableRule) {
-		rightMenu.addRow(tableRule);
-		rightMenu.setSelectedTableRule(tableRule);
+		tableSelectionMenu.addRow(tableRule);
+		tableSelectionMenu.setSelectedTableRule(tableRule);
+	}
+
+	public void sortTableMenu() {
+		tableSelectionMenu.sort();
 	}
 
 	public void removeSelectedTable() {
-		UserSessionHandler.getFormController().getForm().getTableRules().remove(rightMenu.getSelectedTableRule());
-		rightMenu.removeSelectedRow();
+		UserSessionHandler.getFormController().getForm().getTableRules().remove(tableSelectionMenu.getSelectedTableRule());
+		tableSelectionMenu.removeSelectedRow();
 	}
 
 }
