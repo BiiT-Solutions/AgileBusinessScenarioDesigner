@@ -1,7 +1,15 @@
-package com.biit.abcd.webpages.elements.expressiontree.expression;
+package com.biit.abcd.persistence.entity.expressions;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_VALUE_EXPRESSION_REFERENCE")
 public class ExprValueExprReference extends ExprValue{
 	
+	@ManyToOne(fetch = FetchType.EAGER)
 	private ExprBasic value;
 	
 	public ExprValueExprReference(ExprBasic value) {

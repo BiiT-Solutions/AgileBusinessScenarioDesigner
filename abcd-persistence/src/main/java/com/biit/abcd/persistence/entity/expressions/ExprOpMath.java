@@ -1,5 +1,10 @@
-package com.biit.abcd.webpages.elements.expressiontree.expression;
+package com.biit.abcd.persistence.entity.expressions;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_OPERATION_MATH")
 public class ExprOpMath extends ExprOp {
 
 	public ExprOpMath() {

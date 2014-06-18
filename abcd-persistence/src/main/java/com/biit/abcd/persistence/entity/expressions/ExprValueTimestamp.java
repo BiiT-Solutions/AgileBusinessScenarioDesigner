@@ -1,9 +1,14 @@
-package com.biit.abcd.webpages.elements.expressiontree.expression;
+package com.biit.abcd.persistence.entity.expressions;
 
 import java.sql.Timestamp;
 
-import com.biit.abcd.utils.DateManager;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+import com.biit.abcd.persistence.utils.DateManager;
+
+@Entity
+@Table(name = "EXPRESSION_VALUE_TIMESTAMP")
 public class ExprValueTimestamp extends ExprValue{
 
 	private Timestamp value;

@@ -42,19 +42,20 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 					MessageManager.showWarning(LanguageCodes.ERROR_USER_NOACCESS, LanguageCodes.ERROR_USER_PERMISSION);
 					ApplicationFrame.navigateTo(WebMap.getLoginPage());
 					// For security avoid access if an user type the url of this page.
-				} else if (accessAuthorizationsRequired() != null && !accessAuthorizationsRequired().isEmpty()) {
-					for (DActivity activity : accessAuthorizationsRequired()) {
-						if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(user, activity)) {
-							ApplicationFrame.navigateTo(WebMap.getLoginPage());
+				} else {
+					if (accessAuthorizationsRequired() != null && !accessAuthorizationsRequired().isEmpty()) {
+						for (DActivity activity : accessAuthorizationsRequired()) {
+							if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(user, activity)) {
+								ApplicationFrame.navigateTo(WebMap.getLoginPage());
+							}
 						}
 					}
+					securedEnter(event);
 				}
 			}
 		} catch (NullPointerException npe) {
 			ApplicationFrame.navigateTo(WebMap.getLoginPage());
 		}
-
-		securedEnter(event);
 	}
 
 	/**

@@ -1,7 +1,7 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
+import com.biit.abcd.persistence.entity.expressions.ExprFunction;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprFunction;
 
 /**
  * Right now the ExprFunction don't have any action or property.

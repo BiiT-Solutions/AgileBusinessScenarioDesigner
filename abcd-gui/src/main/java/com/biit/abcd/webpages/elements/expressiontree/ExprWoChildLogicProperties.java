@@ -1,8 +1,8 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
+import com.biit.abcd.persistence.entity.expressions.ExprAtomicLogic;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprAtomicLogic;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;

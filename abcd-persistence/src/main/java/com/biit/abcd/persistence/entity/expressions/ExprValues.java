@@ -1,6 +1,11 @@
-package com.biit.abcd.webpages.elements.expressiontree.expression;
+package com.biit.abcd.persistence.entity.expressions;
 
-public class ExprValues extends ExprWChilds {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EXPRESSION_VALUES")
+public class ExprValues extends ExprWithChilds {
 
 	public ExprValues() {
 		super();

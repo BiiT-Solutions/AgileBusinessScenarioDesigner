@@ -4,10 +4,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprBasic;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprFunction;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprPort;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprGroup;
+import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.ExprFunction;
+import com.biit.abcd.persistence.entity.expressions.ExprGroup;
+import com.biit.abcd.persistence.entity.expressions.ExprPort;
 import com.vaadin.data.Item;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;

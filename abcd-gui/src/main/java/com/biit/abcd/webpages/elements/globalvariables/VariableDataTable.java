@@ -4,7 +4,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
-import com.biit.abcd.utils.DateManager;
+import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 

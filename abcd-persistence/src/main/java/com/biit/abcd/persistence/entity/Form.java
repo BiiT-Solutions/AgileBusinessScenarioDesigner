@@ -17,6 +17,7 @@ import javax.persistence.UniqueConstraint;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
+import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.UserGroup;
 
@@ -40,6 +41,9 @@ public class Form extends TreeObject {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<CustomVariable> customVariables;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<ExprBasic> expressions;
 
 	public Form() {
 		diagrams = new ArrayList<>();

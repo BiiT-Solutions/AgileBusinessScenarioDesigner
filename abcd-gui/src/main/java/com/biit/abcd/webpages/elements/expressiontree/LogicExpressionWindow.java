@@ -7,13 +7,13 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.expressions.ExprAtomicLogic;
+import com.biit.abcd.persistence.entity.expressions.ExprValue;
+import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
+import com.biit.abcd.persistence.entity.expressions.ExprValueString;
+import com.biit.abcd.persistence.entity.expressions.ExprValues;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprAtomicLogic;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValue;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValueFormReference;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValueString;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValues;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
@@ -158,12 +158,12 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 
 	private void initializeSetValueComponent(CustomVariableType type) {
 		switch (element.getType()) {
-		case EQ:
-		case NE:
-		case GE:
-		case LE:
-		case GT:
-		case LT:
+		case EQUALS:
+		case NOT_EQUALS:
+		case GREATER_EQUALS:
+		case LESS_EQUALS:
+		case GREATER_THAN:
+		case LESS_THAN:
 			initializeSetValueComponentSingleValue(type);
 			break;
 		case BETWEEN:
@@ -190,12 +190,12 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 	public ExprAtomicLogic getValue() {
 		updateValueQuestionVariable();
 		switch (element.getType()) {
-		case EQ:
-		case NE:
-		case GE:
-		case LE:
-		case GT:
-		case LT:
+		case EQUALS:
+		case NOT_EQUALS:
+		case GREATER_EQUALS:
+		case LESS_EQUALS:
+		case GREATER_THAN:
+		case LESS_THAN:
 			updateValueSingleItem();
 			break;
 		case BETWEEN:
