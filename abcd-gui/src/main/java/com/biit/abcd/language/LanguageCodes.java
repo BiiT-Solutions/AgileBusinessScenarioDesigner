@@ -229,6 +229,7 @@ public enum LanguageCodes {
 	FORM_VARIABLE_COLUMN_TYPE("form.variables.column.type"),
 	FORM_VARIABLE_SCOPE("form.variables.column.scope"),
 	
+	FORM_EXPRESSION_TABLE_NAME("form.expressions.table.name"),
 	FORM_EXPRESSIONS_TABLE_COLUMN_NAME("form.expressions.tablecolumn.name"),	
 	FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE("form.variables.tablecolumn.update"),
 	MENU_EXPRESSIONS_ADD("form.expressions.menu.add"),

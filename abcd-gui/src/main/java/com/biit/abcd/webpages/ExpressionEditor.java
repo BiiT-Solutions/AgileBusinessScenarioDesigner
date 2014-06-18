@@ -5,6 +5,7 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.security.DActivity;
@@ -53,8 +54,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 		// Create content
 		expressionEditorComponent = new ExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
-		expressionEditorComponent.addWhenExpression();
-		expressionEditorComponent.addThenExpression();
+		//expressionEditorComponent.addWhenExpression();
+		expressionEditorComponent.addThenExpression(ServerTranslate.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);

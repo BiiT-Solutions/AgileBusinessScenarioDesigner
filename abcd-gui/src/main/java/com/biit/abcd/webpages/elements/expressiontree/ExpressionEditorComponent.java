@@ -39,10 +39,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 		setCompositionRoot(rootLayout);
 	}
 
-	public void addWhenExpression() {
-
+	public void addWhenExpression(String caption) {
 		final ExpressionTreeTable whenTable = new ExpressionTreeTable();
-		whenTable.setTitle("WHEN");
+		whenTable.setTitle(caption);
 		whenTable.setSizeFull();
 		expressionLayout.addComponent(whenTable);
 
@@ -70,9 +69,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 		whenTable.addExpression(whenExpression);
 	}
 
-	public void addThenExpression() {
+	public void addThenExpression(String caption) {
 		final ExpressionTreeTable thenTable = new ExpressionTreeTable();
-		thenTable.setTitle("THEN");
+		thenTable.setTitle(caption);
 		thenTable.setSizeFull();
 		expressionLayout.addComponent(thenTable);
 
