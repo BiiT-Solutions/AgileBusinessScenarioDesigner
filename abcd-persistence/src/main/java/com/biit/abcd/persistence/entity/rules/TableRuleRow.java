@@ -64,4 +64,9 @@ public class TableRuleRow extends StorableObject {
 		return actions;
 	}
 
+	@Override
+	public String toString() {
+		return conditions.toString();
+	}
+
 }

@@ -165,8 +165,10 @@ public class ConditionTable extends Table {
 		Item row = getItem(rule);
 		for (Question question : rule.getConditions().keySet()) {
 			QuestionValueEditCell questionValue = ((QuestionValueEditCell) row.getItemProperty(question).getValue());
-			questionValue.setLabel(rule.getConditions().get(question).toString());
-			row.getItemProperty(question).setValue(questionValue);
+			if (questionValue != null) {
+				questionValue.setLabel(rule.getConditions().get(question).toString());
+				row.getItemProperty(question).setValue(questionValue);
+			}
 		}
 	}
 

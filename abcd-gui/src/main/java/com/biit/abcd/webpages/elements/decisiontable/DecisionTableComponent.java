@@ -7,6 +7,7 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.AnswerCondition;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -18,10 +19,11 @@ public class DecisionTableComponent extends CustomComponent {
 	private HorizontalLayout rootLayout;
 	private ConditionTable conditionTable;
 	private ActionTable actionTable;
-	private List<TableRuleRow> decisionTableRules;
+	// private List<TableRuleRow> decisionTableRules;
+	private TableRule tableRule;
 
 	public DecisionTableComponent() {
-		decisionTableRules = new ArrayList<>();
+		// decisionTableRules = new ArrayList<>();
 
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
@@ -68,21 +70,24 @@ public class DecisionTableComponent extends CustomComponent {
 	public void removeAll() {
 		conditionTable.removeAll();
 		actionTable.removeAllItems();
-		decisionTableRules = new ArrayList<>();
+		// decisionTableRules = new ArrayList<>();
 	}
 
 	public void addColumn(Question question) {
 		if (question != null) {
 			conditionTable.addColumn(question);
-			for (TableRuleRow tableRule : getTableRules()) {
-				tableRule.getConditions().put(question, new AnswerCondition(null));
+			for (TableRuleRow tableRuleRow : getTableRules()) {
+				// New column is filled up with empty values for all existing rows.
+				if (tableRuleRow.getConditions().get(question) == null) {
+					tableRuleRow.getConditions().put(question, new AnswerCondition(null));
+				}
 			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Collection<Question> getColumns() {
-		return (Collection<Question>) conditionTable.getContainerPropertyIds();
+		// return (Collection<Question>) conditionTable.getContainerPropertyIds();
+		return getTableRule().getConditionsHeader();
 	}
 
 	public void addRow() {
@@ -90,11 +95,10 @@ public class DecisionTableComponent extends CustomComponent {
 		// Add at least one action.
 		tableRuleRow.addAction(new Action());
 		addRow(tableRuleRow);
+		getTableRules().add(tableRuleRow);
 	}
 
 	public void addRow(TableRuleRow decisionRule) {
-		getTableRules().add(decisionRule);
-
 		// Add decision Rule to both tables.
 		conditionTable.addItem(decisionRule);
 		actionTable.addItem(decisionRule);
@@ -124,7 +128,10 @@ public class DecisionTableComponent extends CustomComponent {
 	}
 
 	public List<TableRuleRow> getTableRules() {
-		return decisionTableRules;
+		if (tableRule != null) {
+			return tableRule.getRules();
+		}
+		return null;
 	}
 
 	/**
@@ -135,7 +142,7 @@ public class DecisionTableComponent extends CustomComponent {
 	public List<TableRuleRow> getDefinedTableRules() {
 		List<TableRuleRow> notEmptyRows = new ArrayList<>();
 		// Row is useful if at least has one action defined.
-		for (TableRuleRow row : decisionTableRules) {
+		for (TableRuleRow row : getTableRules()) {
 			for (Action action : row.getActions()) {
 				if (!action.undefined()) {
 					notEmptyRows.add(row);
@@ -143,6 +150,14 @@ public class DecisionTableComponent extends CustomComponent {
 				}
 			}
 		}
-		return decisionTableRules;
+		return notEmptyRows;
+	}
+
+	public TableRule getTableRule() {
+		return tableRule;
+	}
+
+	public void setTableRule(TableRule tableRule) {
+		this.tableRule = tableRule;
 	}
 }

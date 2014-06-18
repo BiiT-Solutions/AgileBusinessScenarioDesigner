@@ -23,7 +23,10 @@ public class TableRule extends StorableObject {
 
 	private String name;
 
-	private List<Question> conditions;
+	//A list of columns of the table (NOT IMPLEMENTED YET)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<Question> conditionsHeader;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
@@ -33,7 +36,7 @@ public class TableRule extends StorableObject {
 
 	public TableRule() {
 		rules = new ArrayList<>();
-		conditions = new ArrayList<>();
+		conditionsHeader = new ArrayList<>();
 	}
 
 	public List<TableRuleRow> getRules() {
@@ -58,13 +61,13 @@ public class TableRule extends StorableObject {
 		return getName();
 	}
 
-	public List<Question> getConditions() {
-		return conditions;
+	public List<Question> getConditionsHeader() {
+		return conditionsHeader;
 	}
 
-	public void setConditions(List<Question> conditions) {
-		this.conditions.clear();
-		this.conditions.addAll(conditions);
+	public void setConditionsHeader(List<Question> conditions) {
+		this.conditionsHeader.clear();
+		this.conditionsHeader.addAll(conditions);
 	}
 
 }

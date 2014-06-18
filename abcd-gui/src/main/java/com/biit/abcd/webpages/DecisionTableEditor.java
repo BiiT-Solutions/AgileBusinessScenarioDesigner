@@ -132,7 +132,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 							for (Question selectedQuestion : selectedQuestions) {
 								((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
 								decisionTable.addColumn(selectedQuestion);
-								getSelectedTableRule().getConditions().add(selectedQuestion);
+								getSelectedTableRule().getConditionsHeader().add(selectedQuestion);
 								if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
 									decisionTable.addRow();
 								}
@@ -152,7 +152,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			public void buttonClick(ClickEvent event) {
 				Collection<Question> removedQuestions = decisionTable.removeSelectedColumns();
 				for (Question question : removedQuestions) {
-					getSelectedTableRule().getConditions().remove(question);
+					getSelectedTableRule().getConditionsHeader().remove(question);
 				}
 			}
 		});
@@ -219,11 +219,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 	private void refreshDecisionTable() {
 		decisionTable.removeAll();
+		decisionTable.setTableRule(getSelectedTableRule());
 		if (getSelectedTableRule() != null) {
-			if (!getSelectedTableRule().getRules().isEmpty()) {
-				for (Question question : getSelectedTableRule().getRules().get(0).getConditions().keySet()) {
-					decisionTable.addColumn(question);
-				}
+			for (Question question : getSelectedTableRule().getConditionsHeader()) {
+				decisionTable.addColumn(question);
 			}
 
 			// Add table rows.

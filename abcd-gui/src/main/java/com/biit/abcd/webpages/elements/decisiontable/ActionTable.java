@@ -40,7 +40,7 @@ public class ActionTable extends Table {
 	public void addItem(TableRuleRow rule) {
 		if (rule != null) {
 			setDefaultNewItemPropertyValues(rule, super.addItem(rule));
-			updateItem(rule);
+			updateItemActionInGui(rule);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ActionTable extends Table {
 	 * 
 	 * @param rule
 	 */
-	private void updateItem(TableRuleRow rule) {
+	private void updateItemActionInGui(TableRuleRow rule) {
 		Item row = getItem(rule);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) row.getItemProperty(Columns.ACTION).getValue());
 		actionValue.setLabel(rule.getActions().get(0).getExpression());
@@ -111,7 +111,7 @@ public class ActionTable extends Table {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					rule.getActions().get(0).setExpression(newActionValue.getText());
-					updateItem(rule);
+					updateItemActionInGui(rule);
 					newActionValue.close();
 				}
 			});
@@ -129,7 +129,7 @@ public class ActionTable extends Table {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			rule.getActions().get(0).setExpression("");
-			updateItem(rule);
+			updateItemActionInGui(rule);
 		}
 	}
 
