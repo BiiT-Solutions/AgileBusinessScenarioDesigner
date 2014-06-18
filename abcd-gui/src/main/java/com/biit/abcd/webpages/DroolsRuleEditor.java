@@ -5,7 +5,6 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -93,10 +92,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		// rootLayout.addComponent();
 
 		getWorkingAreaLayout().addComponent(rootLayout);
-	}
-
-	@Override
-	public void setForm(Form form) {
 	}
 
 	@Override

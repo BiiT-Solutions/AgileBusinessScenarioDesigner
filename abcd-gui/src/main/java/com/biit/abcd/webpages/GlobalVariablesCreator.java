@@ -6,7 +6,6 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.security.DActivity;
@@ -164,11 +163,6 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	public List<DActivity> accessAuthorizationsRequired() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void setForm(Form form) {
-		// No Forms here.
 	}
 
 	private void save() {

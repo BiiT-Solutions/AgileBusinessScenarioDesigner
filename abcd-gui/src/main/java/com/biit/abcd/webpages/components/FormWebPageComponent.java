@@ -1,13 +1,13 @@
 package com.biit.abcd.webpages.components;
 
-import com.biit.abcd.persistence.entity.Form;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Pages that has a form definition and can access to other pages that also have a form.
+ * Pages that has a form definition and can access to other pages that also have
+ * a form.
  */
 public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	private static final long serialVersionUID = 5215781045989004097L;
@@ -60,23 +60,14 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	}
 
 	private void setButtonMenu() {
-		bottomMenu = new BottomMenu() {
-			private static final long serialVersionUID = -4195315137788949245L;
-
-			@Override
-			public void updateSelectedForm(Form form) {
-				setForm(form);
-			}
-
-		};
+		bottomMenu = new BottomMenu();
 		getRootLayout().addComponent(bottomMenu);
 		getRootLayout().setComponentAlignment(bottomMenu, Alignment.BOTTOM_CENTER);
 	}
 
-	public abstract void setForm(Form form);
-
 	/**
-	 * The Working Area Layout is the layout where the page includes its own components.
+	 * The Working Area Layout is the layout where the page includes its own
+	 * components.
 	 * 
 	 * @return
 	 */

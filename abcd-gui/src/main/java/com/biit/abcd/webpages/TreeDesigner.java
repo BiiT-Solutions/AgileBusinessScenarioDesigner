@@ -34,7 +34,6 @@ public class TreeDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 	private FormTreeTable formTreeTable;
 	private TreeTablePropertiesComponent propertiesComponent;
-	private Form form;
 	private TreeTableUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 
@@ -75,27 +74,19 @@ public class TreeDesigner extends FormWebPageComponent {
 		rootLayout.setExpandRatio(propertiesComponent, 0.25f);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
-	}
 
-	protected void updatePropertiesComponent(TreeObject value) {
-		propertiesComponent.updatePropertiesComponent(value);
-	}
-
-	@Override
-	public void setForm(Form form) {
-		this.form = form;
 		// Remove ValueChange listener and re add it after load the entire form.
 		// This will remove the unnecessary overhead of calls when loading a
 		// form.
 		formTreeTable.setValue(null);
 		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
-		formTreeTable.setRootElement(form);
+		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
-		formTreeTable.setValue(form);
+		formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
 	}
 
-	private Form getForm() {
-		return form;
+	protected void updatePropertiesComponent(TreeObject value) {
+		propertiesComponent.updatePropertiesComponent(value);
 	}
 
 	@Override
@@ -185,6 +176,10 @@ public class TreeDesigner extends FormWebPageComponent {
 		return upperMenu;
 	}
 
+	private Form getForm() {
+		return UserSessionHandler.getFormController().getForm();
+	}
+
 	/**
 	 * Adds a new category into the UI and the Form object.
 	 */
@@ -208,7 +203,7 @@ public class TreeDesigner extends FormWebPageComponent {
 				} else {
 					getForm().addChild(newCategory);
 				}
-				newCategory.setName(newCategory.getDefaultName(form, form.getChildren().size()));
+				newCategory.setName(newCategory.getDefaultName(getForm(), getForm().getChildren().size()));
 				addCategoryToUI(newCategory);
 			} catch (NotValidChildException e) {
 				// Not possible.
@@ -226,12 +221,12 @@ public class TreeDesigner extends FormWebPageComponent {
 			Category selectedCategory = formTreeTable.getTreeObjectSelected().getCategory();
 			if (selectedCategory != null) {
 				TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
-				formTreeTable.addItemAfter(getLastElementOfCategory, category, form);
+				formTreeTable.addItemAfter(getLastElementOfCategory, category, getForm());
 			} else {
-				formTreeTable.addItem(category, form);
+				formTreeTable.addItem(category, getForm());
 			}
 		} else {
-			formTreeTable.addItem(category, form);
+			formTreeTable.addItem(category, getForm());
 		}
 	}
 
@@ -387,7 +382,7 @@ public class TreeDesigner extends FormWebPageComponent {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
 					// Refresh the GUI.
-					formTreeTable.setRootElement(form);
+					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
 					return true;
@@ -413,7 +408,7 @@ public class TreeDesigner extends FormWebPageComponent {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
 					// Refresh the GUI.
-					formTreeTable.setRootElement(form);
+					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
 					return true;

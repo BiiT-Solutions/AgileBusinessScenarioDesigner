@@ -8,7 +8,6 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -81,6 +80,18 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 
 		});
+		
+		// Add tables
+		for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
+			addTableRuleToMenu(tableRule);
+		}
+
+		// Select the first one if available.
+		if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
+			rightMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules().get(0));
+		}
+
+		refreshDecisionTable();
 	}
 
 	private void initUpperMenu() {
@@ -195,26 +206,6 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(DecisionTableEditor.class.getName(), e);
 		}
-	}
-
-	@Override
-	public void setForm(Form form) {
-		// Add table columns
-		// if (UserSessionHandler.getFormController().getForm().getTableRules().isEmpty()) {
-		// UserSessionHandler.getFormController().getForm().getTableRules().add(new TableRule());
-		// }
-
-		// Add tables
-		for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
-			addTableRuleToMenu(tableRule);
-		}
-
-		// Select the first one if available.
-		if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
-			rightMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules().get(0));
-		}
-
-		refreshDecisionTable();
 	}
 
 	private void refreshDecisionTable() {
