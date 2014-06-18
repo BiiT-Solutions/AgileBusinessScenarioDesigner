@@ -18,6 +18,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 		setResizable(false);
 		setDraggable(false);
 		setClosable(false);
+		setModal(true);
 		setWidth(width);
 		setHeight(height);
 	}

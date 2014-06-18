@@ -28,6 +28,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form";
+	private final static String DUMMY_DIAGRAM = "Dummy Diagram";
 	private final static String FULL_FORM = "Complete Form";
 	private final static String DIAGRAM_FORM = "Diagram Form";
 	private final static String TABLE_RULE_FORM = "Table Rule Form";
@@ -198,7 +199,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Form form = new Form();
 		form.setName(DIAGRAM_FORM);
 
-		Diagram diagram = new Diagram(form);
+		Diagram diagram = new Diagram(form,DUMMY_DIAGRAM);
 		form.getDiagrams().add(diagram);
 
 		formDao.makePersistent(form);

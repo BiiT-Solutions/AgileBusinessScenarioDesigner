@@ -135,6 +135,14 @@ public class Form extends TreeObject {
 	public void setAvailableTo(Timestamp availableTo) {
 		this.availableTo = availableTo;
 	}
+	
+	public void addDiagram(Diagram diagram){
+		diagrams.add(diagram);
+	}
+	
+	public void removeDiagram(Diagram diagram){
+		diagrams.remove(diagram);
+	}
 
 	public List<Diagram> getDiagrams() {
 		return diagrams;

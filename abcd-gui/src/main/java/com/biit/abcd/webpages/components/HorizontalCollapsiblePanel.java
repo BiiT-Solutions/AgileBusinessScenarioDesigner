@@ -8,7 +8,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 public class HorizontalCollapsiblePanel extends CustomComponent {
@@ -23,7 +22,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	private CssLayout rootLayout;
 	private HorizontalLayout titleLayout;
 	private Component content;
-	private Table tableMenu;
+	private Component menu;
 
 	public HorizontalCollapsiblePanel() {
 		rootLayout = new CssLayout();
@@ -74,8 +73,8 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		content.setSizeFull();
 	}
 
-	public void setMenu(Table component) {
-		tableMenu = component;
+	public void setMenu(Component component) {
+		menu = component;
 		buttonMenu.addComponent(createMenuTab(component, ThemeIcons.LEFT_MENU_COLLAPSE, ThemeIcons.LEFT_MENU_EXPAND,
 				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP));
 	}
