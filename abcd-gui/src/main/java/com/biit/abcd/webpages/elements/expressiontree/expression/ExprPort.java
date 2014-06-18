@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.expressiontree.expression;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ExprPort extends ExprWChild {
+public abstract class ExprPort extends ExprGroup {
 
 	private String portName;
 

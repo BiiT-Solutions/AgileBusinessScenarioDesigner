@@ -1,6 +1,6 @@
 package com.biit.abcd.webpages.elements.expressiontree.expression;
 
-public class ExprWoChildOp extends ExprWoChild {
+public class ExprAtomicMath extends ExprAtomic {
 	
 	private ExprValue value;
 

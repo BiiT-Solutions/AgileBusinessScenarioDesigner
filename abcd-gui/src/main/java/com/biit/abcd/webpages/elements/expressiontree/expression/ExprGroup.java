@@ -3,16 +3,10 @@ package com.biit.abcd.webpages.elements.expressiontree.expression;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExprWChild extends ExprWoChild {
+public class ExprGroup extends ExprWChilds {
 
-	protected List<ExprBasic> childs;
-
-	public ExprWChild() {
-		childs = new ArrayList<>();
-	}
-
-	public List<ExprBasic> getChilds() {
-		return childs;
+	public ExprGroup() {
+		super();
 	}
 
 	protected void addChildExpression(ExprBasic expression) {
@@ -33,7 +27,7 @@ public class ExprWChild extends ExprWoChild {
 			//If this is a group, and there is only one element, we remove the parenthesis and do that parent makes all the cleaning 
 			elementsRemoved.add(this);
 			removeParenthesis();
-			elementsRemoved.addAll(((ExprWChild)parent).removeChildExpression(expression));
+			elementsRemoved.addAll(((ExprGroup)parent).removeChildExpression(expression));
 			return elementsRemoved;
 		}
 		
@@ -66,7 +60,7 @@ public class ExprWChild extends ExprWoChild {
 	}
 
 	public void removeParenthesis() {
-		ExprWChild parentGroup = (ExprWChild) parent;
+		ExprGroup parentGroup = (ExprGroup) parent;
 		int indexOfThisElement = parentGroup.childs.indexOf(this);
 		for (ExprBasic child : getChilds()) {
 			child.parent = parent;

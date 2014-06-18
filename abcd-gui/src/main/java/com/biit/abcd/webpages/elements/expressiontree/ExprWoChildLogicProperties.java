@@ -2,13 +2,13 @@ package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprWoChildLogic;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprAtomicLogic;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChildLogic> {
+public class ExprWoChildLogicProperties extends ExprAtomicProperties<ExprAtomicLogic> {
 	private static final long serialVersionUID = -5953203428567057845L;
 
 	public enum FuncOp {
@@ -28,11 +28,11 @@ public class ExprWoChildLogicProperties extends ExprWoChildProperties<ExprWoChil
 	private Button clean;
 
 	public ExprWoChildLogicProperties() {
-		super(ExprWoChildLogic.class);
+		super(ExprAtomicLogic.class);
 	}
 
 	@Override
-	protected void setElementAbstract(final ExprWoChildLogic element) {
+	protected void setElementAbstract(final ExprAtomicLogic element) {
 		
 		final LogicExpressionWindow logicExpressionWindow = new LogicExpressionWindow(element);
 		logicExpressionWindow.addAcceptAcctionListener(new AcceptActionListener() {

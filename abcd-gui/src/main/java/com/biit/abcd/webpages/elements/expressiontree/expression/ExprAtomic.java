@@ -6,25 +6,25 @@ import java.util.List;
  * Childless expression. It has the parenthesis method.
  * 
  */
-public abstract class ExprWoChild extends ExprBasic{
+public abstract class ExprAtomic extends ExprBasic{
 	
 	public void addParenthesis(){
 		//Create a new parenthesis
-		ExprWChild parenthesis = new ExprWChild();
+		ExprGroup parenthesis = new ExprGroup();
 		//Insert in the same position as this element in parent and update parent reference.
 		parenthesis.parent = parent;
-		int indexOfThisElement = ((ExprWChild)parent).childs.indexOf(this);
-		((ExprWChild)parent).childs.set(indexOfThisElement, parenthesis);
+		int indexOfThisElement = ((ExprGroup)parent).childs.indexOf(this);
+		((ExprGroup)parent).childs.set(indexOfThisElement, parenthesis);
 		parenthesis.addChildExpression(this);
 	}
 	
 	public List<ExprBasic> delete(){
-		ExprWChild parentGroup = (ExprWChild) parent;
+		ExprGroup parentGroup = (ExprGroup) parent;
 		return parentGroup.removeChildExpression(this);
 	}
 
 	public boolean isParenthised(){
-		if(parent instanceof ExprWChild && !(parent instanceof ExprPort)){
+		if(parent instanceof ExprGroup && !(parent instanceof ExprPort)){
 			return true;
 		}
 		return false;
@@ -32,13 +32,13 @@ public abstract class ExprWoChild extends ExprBasic{
 	
 	public void removeParenthesis() {
 		if(isParenthised()){
-			((ExprWChild)parent).removeParenthesis();
+			((ExprGroup)parent).removeParenthesis();
 		}
 	}
 
 	public void addExpression() {
-		if(parent instanceof ExprWChild){
-			((ExprWChild)parent).addChildExpression();
+		if(parent instanceof ExprGroup){
+			((ExprGroup)parent).addChildExpression();
 		}
 	}
 }

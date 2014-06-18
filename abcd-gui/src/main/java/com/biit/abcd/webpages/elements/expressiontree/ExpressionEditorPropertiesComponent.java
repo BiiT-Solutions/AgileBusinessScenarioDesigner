@@ -10,6 +10,6 @@ public class ExpressionEditorPropertiesComponent extends PropertiesComponent {
 		registerPropertiesComponent(new ExprFunctionProperties());
 		registerPropertiesComponent(new ExprWoChildLogicProperties());
 		registerPropertiesComponent(new ExprWChildProperties());
-		registerPropertiesComponent(new ExprJointProperties());
+		registerPropertiesComponent(new ExprOpLogicProperties());
 	}
 }

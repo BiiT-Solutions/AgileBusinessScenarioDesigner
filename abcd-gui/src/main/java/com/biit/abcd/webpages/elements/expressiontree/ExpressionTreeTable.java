@@ -7,7 +7,7 @@ import java.util.Set;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprBasic;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprFunction;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprPort;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprWChild;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprGroup;
 import com.vaadin.data.Item;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
@@ -103,8 +103,8 @@ public class ExpressionTreeTable extends TreeTable {
 			}
 		}
 		// If it is a expression with childs
-		if (expression instanceof ExprWChild) {
-			ExprWChild expressionWChilds = (ExprWChild) expression;
+		if (expression instanceof ExprGroup) {
+			ExprGroup expressionWChilds = (ExprGroup) expression;
 			for (ExprBasic childExpression : expressionWChilds.getChilds()) {
 				addExpression(childExpression);
 			}

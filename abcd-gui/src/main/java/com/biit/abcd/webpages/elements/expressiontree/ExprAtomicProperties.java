@@ -1,21 +1,21 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprWoChild;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprAtomic;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public abstract class ExprWoChildProperties<T extends ExprWoChild> extends PropertiesForClassComponent<T> {
+public abstract class ExprAtomicProperties<T extends ExprAtomic> extends PropertiesForClassComponent<T> {
 	private static final long serialVersionUID = -5417522321259478890L;
 	protected static final String buttonWidth = "180px";
 
-	public ExprWoChildProperties(Class<? extends T> type) {
+	public ExprAtomicProperties(Class<? extends T> type) {
 		super(type);
 	}
 
-	protected FormLayout getCommonFormLayout(final ExprWoChild exprWoChild) {
+	protected FormLayout getCommonFormLayout(final ExprAtomic exprWoChild) {
 
 		Button addParenthesis = new Button("Add Parenthesis", new ClickListener() {
 

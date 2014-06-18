@@ -9,10 +9,11 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprLeftOperand;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprAtomicLogic;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValue;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValueFormReference;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValueString;
 import com.biit.abcd.webpages.elements.expressiontree.expression.ExprValues;
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprWoChildLogic;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
@@ -27,7 +28,7 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = -4212298247094386855L;
 	private static final String FORM_FIELD_WIDTH = "250px";
 
-	private ExprWoChildLogic element;
+	private ExprAtomicLogic element;
 
 	private HorizontalLayout rootLayout;
 	private VerticalLayout firstComponent;
@@ -42,7 +43,7 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 
 	private ListSelect multipleValueField;
 
-	public LogicExpressionWindow(ExprWoChildLogic element) {
+	public LogicExpressionWindow(ExprAtomicLogic element) {
 		this.element = element;
 
 		setWidth("50%");
@@ -186,7 +187,7 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 		thirdComponent.addComponent(formLayout);
 	}
 
-	public ExprWoChildLogic getValue() {
+	public ExprAtomicLogic getValue() {
 		updateValueQuestionVariable();
 		switch (element.getType()) {
 		case EQ:
@@ -208,14 +209,14 @@ public class LogicExpressionWindow extends AcceptCancelWindow {
 	}
 
 	private void updateValueQuestionVariable() {
-		element.setLeftOperand(new ExprLeftOperand((TreeObject) formQuestionTable.getValue(),
+		element.setLeftOperand(new ExprValueFormReference((TreeObject) formQuestionTable.getValue(),
 				(CustomVariable) variableSelection.getValue()));
 	}
 
 	private void updateValueSingleItem() {
 		// TODO now is only a string
 		ExprValues values = new ExprValues();
-		values.addValue(new ExprValue(firstTextField.getValue()));
+		values.addValue(new ExprValueString(firstTextField.getValue()));
 		element.setRightOperand(values);
 	}
 

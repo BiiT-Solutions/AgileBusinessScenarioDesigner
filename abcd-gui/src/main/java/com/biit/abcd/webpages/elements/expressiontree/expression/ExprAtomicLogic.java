@@ -1,14 +1,18 @@
 package com.biit.abcd.webpages.elements.expressiontree.expression;
 
-public class ExprWoChildLogic extends ExprWoChild {
+public class ExprAtomicLogic extends ExprAtomic {
 
-	private ExprLeftOperand leftOperand;
+	private ExprValueFormReference leftOperand;
 	private ExprWoChildLogicType type;
 	private ExprValues rightOperand;
 
 	public enum ExprWoChildLogicType {
 		ALWAYS, ANY, EQ, NE, LT, GT, LE, GE, IN, BETWEEN
 	};
+	
+	public ExprAtomicLogic(){
+		super();
+	}
 
 	@Override
 	public String getExpressionTableString() {
@@ -104,11 +108,11 @@ public class ExprWoChildLogic extends ExprWoChild {
 		return type;
 	}
 
-	public ExprLeftOperand getLeftOperand() {
+	public ExprValueFormReference getLeftOperand() {
 		return leftOperand;
 	}
 
-	public void setLeftOperand(ExprLeftOperand leftOperand) {
+	public void setLeftOperand(ExprValueFormReference leftOperand) {
 		this.leftOperand = leftOperand;
 	}
 

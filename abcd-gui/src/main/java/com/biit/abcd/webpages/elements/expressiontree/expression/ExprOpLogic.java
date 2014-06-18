@@ -3,8 +3,9 @@ package com.biit.abcd.webpages.elements.expressiontree.expression;
 public class ExprOpLogic extends ExprOp {
 
 	public ExprOpLogic() {
-		getAcceptedValues().add(new JointValue("AND", "AND"));
-		getAcceptedValues().add(new JointValue("OR", "OR"));
+		super();
+		getAcceptedValues().add(new ExprOpValue("AND", "AND"));
+		getAcceptedValues().add(new ExprOpValue("OR", "OR"));
 	}
 
 	@Override

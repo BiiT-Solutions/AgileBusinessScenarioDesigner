@@ -1,20 +1,20 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
-import com.biit.abcd.webpages.elements.expressiontree.expression.ExprWChild;
-import com.vaadin.ui.FormLayout;
+import com.biit.abcd.webpages.components.PropertiesForClassComponent;
+import com.biit.abcd.webpages.elements.expressiontree.expression.ExprGroup;
 
-public class ExprWChildProperties extends ExprWoChildProperties<ExprWChild> {
+public class ExprWChildProperties extends PropertiesForClassComponent<ExprGroup> {
 	private static final long serialVersionUID = 4037946808027845321L;
 
 	public ExprWChildProperties() {
-		super(ExprWChild.class);
+		super(ExprGroup.class);
 	}
 
 	@Override
-	protected void setElementAbstract(ExprWChild element) {
-		FormLayout formLayout = getCommonFormLayout(element);
-
-		addTab(formLayout, "TODO - ExprWChild", true, 0);
+	protected void setElementAbstract(ExprGroup element) {
+		// FormLayout formLayout = getCommonFormLayout(element);
+		//
+		// addTab(formLayout, "TODO - ExprWChild", true, 0);
 	}
 
 	@Override

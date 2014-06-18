@@ -4,39 +4,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class ExprOp extends ExprBasic{
+
+	//Do not transient in DB
+	private Set<ExprOpValue> acceptedValues;
+	private ExprOpValue currentValue;
 	
-	public class JointValue{
-		
-		private String value;
-		private String caption;
-		
-		public JointValue(String value, String caption) {
-			this.setValue(value);
-			this.setCaption(caption);
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-
-		public String getCaption() {
-			return caption;
-		}
-
-		public void setCaption(String caption) {
-			this.caption = caption;
-		}
-		
-	}
-	
-	private Set<JointValue> acceptedValues;
-	private JointValue value; 
+	//Transient the value of the current exprOpValue
+	private String value;
+	private String caption;
 
 	public ExprOp() {
+		super();
 		acceptedValues = new HashSet<>();
 		value = null;
 	}
@@ -48,20 +26,22 @@ public abstract class ExprOp extends ExprBasic{
 		if(value==null){
 			return " "+getValueNullCaption()+" ";
 		}else{
-			return " "+value.getCaption()+" ";
+			return " "+caption+" ";
 		}
 	}
 
-	public Set<JointValue> getAcceptedValues() {
+	public Set<ExprOpValue> getAcceptedValues() {
 		return acceptedValues;
 	}
 
-	public JointValue getValue() {
-		return value;
+	public ExprOpValue getValue() {
+		return currentValue;
 	}
 
-	public void setValue(JointValue value) {
-		this.value = value;
+	public void setValue(ExprOpValue exprOpvalue) {
+		currentValue = exprOpvalue;
+		this.value = currentValue.getValue();
+		this.caption = currentValue.getCaption();
 	}
 	
 }

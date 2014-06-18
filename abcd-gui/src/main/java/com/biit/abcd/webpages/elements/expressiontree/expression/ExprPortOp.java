@@ -12,6 +12,6 @@ public class ExprPortOp extends ExprPort {
 
 	@Override
 	public ExprBasic getDefaultExpression() {
-		return new ExprWoChildOp();
+		return new ExprAtomicMath();
 	}
 }
