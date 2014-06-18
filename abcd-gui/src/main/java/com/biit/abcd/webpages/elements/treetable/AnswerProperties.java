@@ -14,7 +14,7 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 	private TextField answerTechnicalLabel;
 
 	public AnswerProperties() {
-		super(new Answer());
+		super(Answer.class);
 	}
 
 	@Override

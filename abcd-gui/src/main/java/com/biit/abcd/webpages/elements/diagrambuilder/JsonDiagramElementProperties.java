@@ -15,7 +15,7 @@ public class JsonDiagramElementProperties extends PropertiesForClassComponent<Di
 	private TextField diagramElementLabel;
 
 	public JsonDiagramElementProperties() {
-		super(new DiagramElement());
+		super(DiagramElement.class);
 	}
 
 	@Override

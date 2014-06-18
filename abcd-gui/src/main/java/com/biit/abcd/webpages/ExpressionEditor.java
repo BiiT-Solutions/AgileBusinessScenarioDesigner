@@ -5,11 +5,12 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.biit.abcd.webpages.elements.formulaeditor.FormulaEditor;
+import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
 import com.vaadin.ui.VerticalLayout;
 
 public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
+	private ExpressionEditorComponent expressionEditorComponent;
 
 	public ExpressionEditor() {
 		super();
@@ -22,7 +23,12 @@ public class ExpressionEditor extends FormWebPageComponent {
 		VerticalLayout rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
 
-		rootLayout.addComponent(new FormulaEditor());
+		// rootLayout.addComponent(new FormulaEditor());
+		expressionEditorComponent = new ExpressionEditorComponent();
+		expressionEditorComponent.setSizeFull();
+		expressionEditorComponent.addWhenExpression();
+		expressionEditorComponent.addThenExpression();
+		rootLayout.addComponent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
@@ -30,6 +36,9 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	@Override
 	public void setForm(Form form) {
+		if(expressionEditorComponent!=null){
+			expressionEditorComponent.form = form;
+		}
 	}
 
 	@Override

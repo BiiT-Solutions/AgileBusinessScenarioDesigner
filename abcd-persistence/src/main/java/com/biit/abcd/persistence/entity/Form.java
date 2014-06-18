@@ -49,8 +49,8 @@ public class Form extends TreeObject {
 	}
 
 	/**
-	 * Gets all children of the form. This annotations are in the method because overwrites the TreeObject. Forms'
-	 * children must use FetchType.LAZY.
+	 * Gets all children of the form. This annotations are in the method because
+	 * overwrites the TreeObject. Forms' children must use FetchType.LAZY.
 	 */
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
@@ -151,6 +151,22 @@ public class Form extends TreeObject {
 
 	public List<CustomVariable> getCustomVariables() {
 		return customVariables;
+	}
+
+	/**
+	 * Get Custom variables for a specific tree Object.
+	 * 
+	 * @param treeObject
+	 * @return
+	 */
+	public List<CustomVariable> getCustomVariables(TreeObject treeObject) {
+		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
+		for (CustomVariable customVariable : customVariables) {
+			if (customVariable.getScope().getScope().equals(treeObject.getClass())) {
+				customVariablesInThisElement.add(customVariable);
+			}
+		}
+		return customVariablesInThisElement;
 	}
 
 	public void setCustomVariables(List<CustomVariable> customVariables) {

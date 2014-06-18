@@ -23,7 +23,7 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 	private ComboBox answerFormat;
 
 	public QuestionProperties() {
-		super(new Question());
+		super(Question.class);
 	}
 
 	@Override

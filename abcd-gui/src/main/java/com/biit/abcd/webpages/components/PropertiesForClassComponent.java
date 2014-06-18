@@ -15,12 +15,12 @@ import com.vaadin.ui.TextField;
 public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 	private static final long serialVersionUID = 4900379725073491238L;
 
-	private T type;
+	private Class<?> type;
 	private AccordionMultiple rootAccordion;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
 	protected TextField createdBy, creationTime, updatedBy, updateTime;
 
-	public PropertiesForClassComponent(final T type) {
+	public PropertiesForClassComponent(Class<? extends T> type) {
 		this.type = type;
 		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
 
@@ -84,9 +84,9 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 		component.addValueChangeListener(new FieldValueChangeListener(component));
 	}
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("unchecked")
 	public void setElement(Object element) {
-		if (type.getClass().isInstance(element)) {
+		if (type.isInstance(element)) {
 			setElementAbstract((T) element);
 		}
 	}
@@ -116,13 +116,7 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public T getUnderlyingType() {
-		try {
-			return (T) type.getClass().newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
+	public Class<?> getUnderlyingClass() {
 		return type;
 	}
 
@@ -137,7 +131,7 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 
 		@Override
 		public void valueChange(ValueChangeEvent event) {
-			if (field.isAttached()&&field.isEnabled()) {
+			if (field.isAttached() && field.isEnabled()) {
 				update();
 			}
 		}

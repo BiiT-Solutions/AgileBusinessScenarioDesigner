@@ -1,7 +1,9 @@
 package com.biit.abcd.webpages.elements.formulaeditor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
@@ -19,23 +21,23 @@ public class FormulaPortComponent extends CustomComponent {
 	private FormulaExpressionComponent value;
 
 	private CssLayout rootLayout;
-	private List<Type> acceptedTypes;
+	private Set<Type> acceptedTypes;
 
 	private List<FormulaPortClickListener> listeners;
 
 	public FormulaPortComponent(Type acceptedType) {
-		List<Type> acceptedTypes = new ArrayList<Type>();
-		acceptedTypes.add(acceptedType);
+		this.acceptedTypes = new HashSet<Type>();
+		this.acceptedTypes.add(acceptedType);
 		initializate(acceptedTypes);
 	}
 
-	public FormulaPortComponent(List<Type> acceptedTypes) {
+	public FormulaPortComponent(Set<Type> acceptedTypes) {
 		initializate(acceptedTypes);
 	}
 
-	private void initializate(List<Type> acceptedTypes) {
+	private void initializate(Set<Type> acceptedTypes) {
 		listeners = new ArrayList<FormulaPortClickListener>();
-		this.acceptedTypes = new ArrayList<Type>();
+		this.acceptedTypes = new HashSet<Type>();
 		this.acceptedTypes.addAll(acceptedTypes);
 
 		rootLayout = new CssLayout();
@@ -50,7 +52,8 @@ public class FormulaPortComponent extends CustomComponent {
 				if (event.getClickedComponent() != null) {
 					if (event.getClickedComponent().getParent().getParent() instanceof FormulaExpressionComponent) {
 						if (getValue().isChildComponent(event.getClickedComponent())) {
-							//Only fires if the element is a child of the Formula Expression.
+							// Only fires if the element is a child of the
+							// Formula Expression.
 							firePortClickListeners(event);
 						}
 					}
@@ -88,7 +91,7 @@ public class FormulaPortComponent extends CustomComponent {
 		}
 	}
 
-	public List<Type> getAcceptedTypes() {
+	public Set<Type> getAcceptedTypes() {
 		return acceptedTypes;
 	}
 

@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.elements.formulaeditor;
 
-
 public class ExpresionRoot extends FormulaExpressionComponent {
 	private static final long serialVersionUID = 5306098446259586162L;
 	private FormulaPortComponent port1;
@@ -8,9 +7,9 @@ public class ExpresionRoot extends FormulaExpressionComponent {
 
 	public ExpresionRoot() {
 		super();
-		port1 = new FormulaPortComponent(Type.getAnyType());
+		port1 = new FormulaPortComponent(Type.getVoidComparisonLogicOrReference());
 		port1.addFormulaPortClickListener(new CustomFormulaPortClickListener(port1));
-		port2 = new FormulaPortComponent(Type.getAnyType());
+		port2 = new FormulaPortComponent(Type.getVoidAssignationCalculation());
 		port2.addFormulaPortClickListener(new CustomFormulaPortClickListener(port2));
 
 		addText("WHEN [");
@@ -22,9 +21,8 @@ public class ExpresionRoot extends FormulaExpressionComponent {
 		addText(" ]");
 	}
 
-	private class CustomFormulaPortClickListener extends ChangeValuePortClickListener {
-		public CustomFormulaPortClickListener(FormulaPortComponent port) {
-			super(new PortContentEditor(port.getAcceptedTypes()), true);
-		}
+	@Override
+	public Type getReturnType() {
+		return Type.EXPRESSION;
 	}
 }

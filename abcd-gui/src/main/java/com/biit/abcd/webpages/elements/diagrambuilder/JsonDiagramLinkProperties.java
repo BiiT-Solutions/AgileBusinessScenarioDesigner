@@ -13,7 +13,7 @@ public class JsonDiagramLinkProperties extends PropertiesForClassComponent<Diagr
 	private TextField diagramElementLabel;
 
 	public JsonDiagramLinkProperties() {
-		super(new DiagramLink());
+		super(DiagramLink.class);
 	}
 
 	@Override

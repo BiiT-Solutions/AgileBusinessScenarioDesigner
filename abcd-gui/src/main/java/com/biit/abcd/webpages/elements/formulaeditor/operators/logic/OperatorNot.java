@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.formulaeditor.operators;
+package com.biit.abcd.webpages.elements.formulaeditor.operators.logic;
 
 import com.biit.abcd.webpages.elements.formulaeditor.CustomFormulaPortClickListener;
 import com.biit.abcd.webpages.elements.formulaeditor.FormulaExpressionComponent;
@@ -11,7 +11,7 @@ public class OperatorNot extends FormulaExpressionComponent {
 
 	public OperatorNot() {
 		super();
-		port = new FormulaPortComponent(Type.getAnyType());
+		port = new FormulaPortComponent(Type.getComparisonAndLogic());
 		port.addFormulaPortClickListener(new CustomFormulaPortClickListener(port));
 
 		addText("(!");
@@ -19,4 +19,8 @@ public class OperatorNot extends FormulaExpressionComponent {
 		addText(")");
 	}
 
+	@Override
+	public Type getReturnType() {
+		return Type.LOGIC;
+	}
 }

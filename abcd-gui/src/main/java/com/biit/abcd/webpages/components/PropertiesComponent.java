@@ -34,23 +34,26 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	}
 
 	public void registerPropertiesComponent(PropertiesForClassComponent<?> component) {
-		propertiesComponents.put(component.getUnderlyingType().getClass(), component);
+		propertiesComponents.put(component.getUnderlyingClass(), component);
 	}
 
 	public void updatePropertiesComponent(Object value) {
 		if (value == null) {
 			rootLayout.removeAllComponents();
 		} else {
+			rootLayout.removeAllComponents();
 			PropertiesForClassComponent<?> baseObject = propertiesComponents.get(value.getClass());
-			try {
-				rootLayout.removeAllComponents();
+			
+			if (baseObject == null) {
+				return;
+			}
 
+			try {
 				PropertiesForClassComponent<?> newInstance = baseObject.getClass().newInstance();
 				newInstance.setElement(value);
 				newInstance.addPropertyUpdateListener(new PropertieUpdateListener() {
 					@Override
 					public void propertyUpdate(Object element) {
-						System.out.println("PropetiesUpdate - component -> fire General properties update");
 						firePropertyUpdateListener(element);
 					}
 				});
@@ -77,6 +80,10 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 		for (PropertieUpdateListener listener : propertyUpdateListeners) {
 			listener.propertyUpdate(element);
 		}
+	}
+	
+	public void removeAllPropertyUpdateListeners() {
+		propertyUpdateListeners.clear();
 	}
 
 	@Override

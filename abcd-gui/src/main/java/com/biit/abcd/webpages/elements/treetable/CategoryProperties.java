@@ -14,7 +14,7 @@ public class CategoryProperties extends GenericFormElementProperties<Category> {
 	private TextField categoryLabel;
 
 	public CategoryProperties() {
-		super(new Category());
+		super(Category.class);
 	}
 
 	@Override
