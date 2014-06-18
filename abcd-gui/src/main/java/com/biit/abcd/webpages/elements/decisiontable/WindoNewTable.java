@@ -72,8 +72,10 @@ public class WindoNewTable extends Window {
 						tableRule.setName(tableNameTextField.getValue());
 						tableRule.setCreatedBy(UserSessionHandler.getUser());
 						tableRule.setUpdatedBy(UserSessionHandler.getUser());
+						tableRule.setUpdateTime();
 						UserSessionHandler.getFormController().getForm().getTableRules().add(tableRule);
 						parent.addTableRuleToMenu(tableRule);
+						parent.sortTableMenu();
 						close();
 					}
 				});
