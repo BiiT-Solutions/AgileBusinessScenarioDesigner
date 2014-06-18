@@ -5,20 +5,26 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
+import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderElementPicked;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -49,6 +55,21 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		diagramBuilderTable = new DiagramBuilderTable();
 		diagramBuilderTable.setSizeFull();
+		diagramBuilderTable.setImmediate(true);
+		diagramBuilderTable.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 8142953635201344140L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				if (event.getProperty().getValue() == null) {
+					diagramBuilder.setEnabled(false);
+				} else {
+					Diagram newDiagramToShow = (Diagram) event.getProperty().getValue();
+					diagramBuilder.clear();
+					diagramBuilder.fromJson(newDiagramToShow.toJson());
+				}
+			}
+		});
 
 		diagramBuilder = new DiagramBuilder();
 		diagramBuilder.setSizeFull();
@@ -75,6 +96,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		rootLayout.setContent(rootDiagramBuilder);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
+
+		// TODO
+		diagramBuilderTable.setValue(null);
+		diagramBuilder.setEnabled(false);
 
 		initUpperMenu();
 	}
@@ -171,8 +196,24 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	protected void newDiagram() {
-		// TODO Auto-generated method stub
-
+		final StringInputWindow stringInputWindow = new StringInputWindow();
+		stringInputWindow.showCentered();
+		stringInputWindow.setCaption(ServerTranslate.tr(LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_CAPTION));
+		stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+			@Override
+			public void acceptAction(AcceptCancelWindow window) {
+				if (stringInputWindow.getValue() != null && !stringInputWindow.getValue().isEmpty()) {
+					stringInputWindow.close();
+					Diagram newDiagram = new Diagram(UserSessionHandler.getFormController().getForm(),
+							stringInputWindow.getValue());
+					UserSessionHandler.getFormController().getForm().addDiagram(newDiagram);
+					diagramBuilderTable.addDiagram(newDiagram);
+					diagramBuilderTable.setValue(newDiagram);
+				} else {
+					MessageManager.showError(LanguageCodes.ERROR_NAME_NOT_VALID);
+				}
+			}
+		});
 	}
 
 	@Override
