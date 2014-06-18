@@ -144,7 +144,7 @@ public class DecisionTableComponent extends CustomComponent {
 		// Row is useful if at least has one action defined.
 		for (TableRuleRow row : getTableRules()) {
 			for (Action action : row.getActions()) {
-				if (!action.undefined()) {
+				if (action.undefined()) {
 					notEmptyRows.add(row);
 					break;
 				}

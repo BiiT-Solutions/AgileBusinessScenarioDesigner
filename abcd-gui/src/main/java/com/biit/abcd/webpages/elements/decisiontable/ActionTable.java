@@ -105,14 +105,14 @@ public class ActionTable extends Table {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			final AddNewActionValue newActionValue = new AddNewActionValue(rule.getActions().get(0));
-			newActionValue.showCentered();
-			newActionValue.addAcceptAcctionListener(new AcceptActionListener() {
+			final AddNewActionValueWindow newActionValueWindow = new AddNewActionValueWindow(rule.getActions().get(0));
+			newActionValueWindow.showCentered();
+			newActionValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					rule.getActions().get(0).setExpression(newActionValue.getText());
+					rule.getActions().get(0).setExpression(newActionValueWindow.getText());
 					updateItemActionInGui(rule);
-					newActionValue.close();
+					newActionValueWindow.close();
 				}
 			});
 		}
