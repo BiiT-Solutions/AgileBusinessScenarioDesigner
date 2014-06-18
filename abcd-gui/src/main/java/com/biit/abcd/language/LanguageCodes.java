@@ -108,6 +108,7 @@ public enum LanguageCodes {
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOSVG_TOOLTIP("formDiagramBuilder.upper.buttonToSvg.tooltip"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_CAPTION("formDiagramBuilder.upper.buttonToPng.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_TOPNG_TOOLTIP("formDiagramBuilder.upper.buttonToPng.tooltip"),
+	FORM_DIAGRAM_BUILDER_TABLE_DIAGRAM_NAME("formDiagramBuilder.table.diagramName"),
 	
 	TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION("treeObjectProperties.common.form.caption"),
 	TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION("treeObjectProperties.answer.form.caption"),

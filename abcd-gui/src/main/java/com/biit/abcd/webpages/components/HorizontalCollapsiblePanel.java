@@ -2,7 +2,6 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -23,7 +22,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	private CssLayout rootLayout;
 	private HorizontalLayout titleLayout;
 	private Component content;
-	private SelectTableMenu tableMenu;
+	private Component menu;
 
 	public HorizontalCollapsiblePanel() {
 		rootLayout = new CssLayout();
@@ -74,8 +73,8 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		content.setSizeFull();
 	}
 
-	public void setMenu(SelectTableMenu component) {
-		tableMenu = component;
+	public void setMenu(Component component) {
+		menu = component;
 		buttonMenu.addComponent(createMenuTab(component, ThemeIcons.LEFT_MENU_COLLAPSE, ThemeIcons.LEFT_MENU_EXPAND,
 				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP));
 	}

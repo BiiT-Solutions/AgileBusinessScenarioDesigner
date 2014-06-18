@@ -14,6 +14,7 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderElementPicked;
+import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
@@ -25,27 +26,18 @@ import com.vaadin.ui.HorizontalLayout;
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 
+	private DiagramBuilderTable diagramBuilderTable;
 	private DiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
 
 	public FormDiagramBuilder() {
-		updateButtons(true);
-		addDetachListener(new DetachListener() {
-			private static final long serialVersionUID = -4725913087209115156L;
-
-			@Override
-			public void detach(DetachEvent event) {
-				// Update diagram object if modified.
-				if (diagramBuilder != null && UserSessionHandler.getFormController().getForm() != null) {
-					diagramBuilder.toJson(new ObtainJson());
-				}
-			}
-
-		});
+		super();
 	}
 
 	@Override
 	protected void initContent() {
+		updateButtons(true);
+
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
 		rootLayout.setSizeFull();
 
@@ -54,6 +46,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		JsonPropertiesComponent propertiesContainer = new JsonPropertiesComponent();
 		propertiesContainer.setSizeFull();
+
+		diagramBuilderTable = new DiagramBuilderTable();
+		diagramBuilderTable.setSizeFull();
 
 		diagramBuilder = new DiagramBuilder();
 		diagramBuilder.setSizeFull();
@@ -76,6 +71,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		rootDiagramBuilder.addComponent(propertiesContainer);
 		rootDiagramBuilder.setExpandRatio(propertiesContainer, 0.20f);
 
+		rootLayout.setMenu(diagramBuilderTable);
 		rootLayout.setContent(rootDiagramBuilder);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
@@ -100,7 +96,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			public void buttonClick(ClickEvent event) {
 				deleteDiagram();
 			}
-		});		
+		});
 		diagramBuilderUpperMenu.addClearButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = -3419227544702101097L;
 
@@ -171,12 +167,12 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	protected void deleteDiagram() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	protected void newDiagram() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -252,7 +248,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		}
 	}
 
-	//TODO
+	// TODO
 	//
 	// if (form != null) {
 	// // Quick fix, this has to be changed when the full "diagrams" tree

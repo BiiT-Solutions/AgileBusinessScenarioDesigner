@@ -29,6 +29,8 @@ import com.google.gson.annotations.SerializedName;
 @Table(name = "DIAGRAM")
 public class Diagram extends StorableObject {
 
+	private String name;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Form form;
 
@@ -42,8 +44,9 @@ public class Diagram extends StorableObject {
 
 	}
 
-	public Diagram(Form form) {
+	public Diagram(Form form,String name) {
 		this.form = form;
+		this.name = name;
 	}
 
 	public Form getForm() {
@@ -91,6 +94,14 @@ public class Diagram extends StorableObject {
 		if (objects != null) {
 			diagramElements.addAll(objects);
 		}
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
