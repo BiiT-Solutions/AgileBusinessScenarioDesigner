@@ -6,7 +6,6 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
@@ -86,6 +85,22 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	private void initUpperMenu() {
 		diagramBuilderUpperMenu = new FormDiagramBuilderUpperMenu();
+		diagramBuilderUpperMenu.addNewDiagramButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -4071103244551097590L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				newDiagram();
+			}
+		});
+		diagramBuilderUpperMenu.addDeleteNewDiagramButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -8948171519257161439L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				deleteDiagram();
+			}
+		});		
 		diagramBuilderUpperMenu.addClearButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = -3419227544702101097L;
 
@@ -154,23 +169,14 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		setUpperMenu(diagramBuilderUpperMenu);
 	}
 
-	@Override
-	public void setForm(Form form) {
-		if (form != null) {
-			// Quick fix, this has to be changed when the full "diagrams" tree
-			// structure is decided.
-			if (!UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty()) {
-				UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
-						.setUpdatedBy(UserSessionHandler.getUser());
-				UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
-						.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
-			}
-		}
-		// New diagram
-		if (UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty()) {
-			UserSessionHandler.getFormController().getForm().getDiagrams().add(new Diagram(form));
-		}
-		updateDiagramDesigner();
+	protected void deleteDiagram() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void newDiagram() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -246,4 +252,26 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		}
 	}
 
+	//TODO
+	//
+	// if (form != null) {
+	// // Quick fix, this has to be changed when the full "diagrams" tree
+	// // structure is decided.
+	// if
+	// (!UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty())
+	// {
+	// UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
+	// .setUpdatedBy(UserSessionHandler.getUser());
+	// UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
+	// .setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+	// }
+	// }
+	// // New diagram
+	// if
+	// (UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty())
+	// {
+	// UserSessionHandler.getFormController().getForm().getDiagrams().add(new
+	// Diagram(form));
+	// }
+	// updateDiagramDesigner();
 }

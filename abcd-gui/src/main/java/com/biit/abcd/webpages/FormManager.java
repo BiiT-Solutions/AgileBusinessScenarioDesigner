@@ -74,11 +74,6 @@ public class FormManager extends FormWebPageComponent {
 		return formTable.getValue();
 	}
 
-	@Override
-	public void setForm(Form form) {
-		;
-	}
-
 	public void addForm(Form form) {
 		formTable.addForm(form);
 		formDao.makePersistent(form);

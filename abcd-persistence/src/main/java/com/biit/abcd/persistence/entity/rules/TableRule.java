@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,7 +25,7 @@ public class TableRule extends StorableObject {
 	private String name;
 
 	//A list of columns of the table (NOT IMPLEMENTED YET)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Question> conditionsHeader;
 

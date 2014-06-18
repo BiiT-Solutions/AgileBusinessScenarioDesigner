@@ -2,7 +2,6 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
@@ -32,13 +31,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
-	}
-
-	@Override
-	public void setForm(Form form) {
-		if(expressionEditorComponent!=null){
-			expressionEditorComponent.form = form;
-		}
 	}
 
 	@Override

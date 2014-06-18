@@ -10,7 +10,6 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formvariables.FormVariablesUpperMenu;
@@ -21,7 +20,6 @@ import com.vaadin.ui.Button.ClickListener;
 public class FormVariables extends FormWebPageComponent {
 	private static final long serialVersionUID = 8796076485600899730L;
 	private FormVariablesUpperMenu upperMenu;
-	private Form form;
 	private VariableTable variableTable;
 
 	public FormVariables() {
@@ -39,6 +37,15 @@ public class FormVariables extends FormWebPageComponent {
 		variableTable.setImmediate(true);
 
 		getWorkingAreaLayout().addComponent(variableTable);
+
+		if (UserSessionHandler.getFormController().getForm() != null) {
+			if (variableTable != null) {
+				for (CustomVariable customVariable : UserSessionHandler.getFormController().getForm()
+						.getCustomVariables()) {
+					variableTable.addRow(customVariable);
+				}
+			}
+		}
 	}
 
 	private FormVariablesUpperMenu initUpperMenu() {
@@ -90,7 +97,7 @@ public class FormVariables extends FormWebPageComponent {
 	}
 
 	private void save() {
-		if (form != null) {
+		if (UserSessionHandler.getFormController().getForm() != null) {
 			try {
 				UserSessionHandler.getFormController().getForm().setCustomVariables(variableTable.getCustomVariables());
 				UserSessionHandler.getFormController().save();
@@ -98,18 +105,6 @@ public class FormVariables extends FormWebPageComponent {
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
-			}
-		}
-	}
-
-	@Override
-	public void setForm(Form form) {
-		this.form = form;
-		if (form != null) {
-			if (variableTable != null) {
-				for (CustomVariable customVariable : form.getCustomVariables()) {
-					variableTable.addRow(customVariable);
-				}
 			}
 		}
 	}

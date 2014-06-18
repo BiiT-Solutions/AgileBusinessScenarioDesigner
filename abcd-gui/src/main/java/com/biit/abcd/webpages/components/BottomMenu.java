@@ -1,15 +1,12 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.ApplicationFrame;
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.UI;
 
-public abstract class BottomMenu extends HorizontalButtonGroup {
+public class BottomMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 6149788828670200504L;
 	private IconButton formManagerButton, treeDesignerButton, formVariables, diagramBuilderButton,
 			expressionsEditorButton, ruleEditorButton, decissionTableButton;
@@ -118,11 +115,8 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 
 	private void changeView(WebMap newView) {
 		ApplicationFrame.navigateTo(newView);
-		WebPageComponent nextPage = (WebPageComponent) ((ApplicationFrame) UI.getCurrent()).getCurrentView();
-		if (UserSessionHandler.getFormController().getForm() != null && nextPage != null
-				&& nextPage instanceof FormWebPageComponent) {
-			((FormWebPageComponent) nextPage).setForm(UserSessionHandler.getFormController().getForm());
-		}
+		// WebPageComponent nextPage = (WebPageComponent) ((ApplicationFrame)
+		// UI.getCurrent()).getCurrentView();
 	}
 
 	public void updateButtons(boolean enableFormButtons) {
@@ -145,7 +139,4 @@ public abstract class BottomMenu extends HorizontalButtonGroup {
 			decissionTableButton.setEnabled(enableFormButtons);
 		}
 	}
-
-	public abstract void updateSelectedForm(Form form);
-
 }

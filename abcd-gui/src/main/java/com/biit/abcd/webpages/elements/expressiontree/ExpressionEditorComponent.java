@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.persistence.entity.expressions.ThenExpression;
 import com.biit.abcd.persistence.entity.expressions.WhenExpression;
@@ -17,7 +16,6 @@ public class ExpressionEditorComponent extends CustomComponent {
 	private HorizontalLayout rootLayout;
 	private VerticalLayout expressionLayout;
 	private ExpressionEditorPropertiesComponent expressionEditorProperties;
-	public Form form;
 
 	public ExpressionEditorComponent() {
 		rootLayout = new HorizontalLayout();

@@ -87,6 +87,11 @@ public enum LanguageCodes {
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
 	
+	
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_CAPTION("formDiagramBuilder.upper.newDiagram.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_TOOLTIP("formDiagramBuilder.upper.newDiagram.tooltip"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_DELETE_DIAGRAM_CAPTION("formDiagramBuilder.upper.deleteDiagram.caption"),
+	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_DELETE_DIAGRAM_TOOLTIP("formDiagramBuilder.upper.deleteDiagram.tooltip"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_CAPTION("formDiagramBuilder.upper.buttonClear.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_TOOLTIP("formDiagramBuilder.upper.buttonClear.tooltip"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_SAVE_CAPTION("formDiagramBuilder.upper.buttonSave.caption"),
