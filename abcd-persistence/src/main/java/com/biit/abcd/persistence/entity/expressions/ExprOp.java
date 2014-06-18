@@ -1,56 +1,51 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 
 @Entity
 @Table(name = "EXPRESSION_OPERATION")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class ExprOp extends ExprBasic {
 
-	@Transient
-	private Set<ExprOpValue> acceptedValues;
-	@Transient
+	@Enumerated(EnumType.STRING)
 	private ExprOpValue currentValue;
-
-	private String value;
-	private String caption;
 
 	public ExprOp() {
 		super();
-		acceptedValues = new HashSet<>();
-		value = null;
 	}
 
 	public abstract String getValueNullCaption();
 
 	@Override
 	public String getExpressionTableString() {
-		if (value == null) {
+		if (currentValue == null || currentValue.getValue() == null) {
 			return " " + getValueNullCaption() + " ";
 		} else {
-			return " " + caption + " ";
+			return " " + currentValue.getCaption() + " ";
 		}
 	}
 
-	public Set<ExprOpValue> getAcceptedValues() {
-		return acceptedValues;
-	}
+	public abstract List<ExprOpValue> getAcceptedValues();
 
 	public ExprOpValue getValue() {
 		return currentValue;
 	}
 
-	public void setValue(ExprOpValue exprOpvalue) {
-		currentValue = exprOpvalue;
-		this.value = currentValue.getValue();
-		this.caption = currentValue.getCaption();
+	public void setValue(ExprOpValue exprOpvalue) throws NotValidOperatorInExpression {
+		if (getAcceptedValues().contains(exprOpvalue)) {
+			currentValue = exprOpvalue;
+		} else {
+			throw new NotValidOperatorInExpression("The operator '" + exprOpvalue
+					+ "' is not allowed in this expression.");
+		}
 	}
-
 }

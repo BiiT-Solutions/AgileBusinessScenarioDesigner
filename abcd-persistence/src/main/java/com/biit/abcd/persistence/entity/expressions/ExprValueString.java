@@ -8,12 +8,16 @@ import javax.persistence.Table;
 public class ExprValueString extends ExprValue {
 
 	private String value;
-	
+
+	protected ExprValueString() {
+		super();
+	}
+
 	public ExprValueString(String value) {
 		super();
 		this.value = value;
 	}
-	
+
 	public String getValue() {
 		return value;
 	}

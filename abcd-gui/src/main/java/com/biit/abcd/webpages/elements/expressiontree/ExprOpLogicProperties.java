@@ -1,7 +1,10 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.expressions.ExprOpLogic;
 import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -29,7 +32,11 @@ public class ExprOpLogicProperties extends PropertiesForClassComponent<ExprOpLog
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					element.setValue(acceptedValue);
+					try {
+						element.setValue(acceptedValue);
+					} catch (NotValidOperatorInExpression e) {
+						MessageManager.showError(LanguageCodes.ERROR_OPERATION_NOT_ALLOWED);
+					}
 					firePropertyUpdateListener(element);
 				}
 			});

@@ -15,6 +15,11 @@ public abstract class ExprPort extends ExprGroup {
 
 	private String portName;
 
+	protected ExprPort() {
+		super();
+		addChildExpression(getDefaultExpression());
+	}
+
 	public ExprPort(String portName) {
 		super();
 		this.portName = portName;
