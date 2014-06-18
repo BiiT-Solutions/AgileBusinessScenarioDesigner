@@ -147,6 +147,7 @@ public enum LanguageCodes {
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
 	ERROR_DATA_NOT_STORED("error.data.notstored"),
 	ERROR_NAME_NOT_VALID("error.nameNotValid"),
+	ERROR_DIAGRAM_REPEATED_NAME("error.diagram.repeatedName"),
 	
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),

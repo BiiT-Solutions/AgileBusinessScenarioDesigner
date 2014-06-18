@@ -35,6 +35,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private DiagramBuilderTable diagramBuilderTable;
 	private DiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
+	private Diagram previousDiagram;
+	private Diagram currentDiagram;
 
 	public FormDiagramBuilder() {
 		super();
@@ -56,17 +58,40 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		diagramBuilderTable = new DiagramBuilderTable();
 		diagramBuilderTable.setSizeFull();
 		diagramBuilderTable.setImmediate(true);
+		diagramBuilderTable.setSelectable(true);
 		diagramBuilderTable.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 8142953635201344140L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if (event.getProperty().getValue() == null) {
-					diagramBuilder.setEnabled(false);
+				previousDiagram = currentDiagram;
+				currentDiagram = (Diagram) event.getProperty().getValue();
+
+				if (previousDiagram != null) {
+					diagramBuilder.toJson(new DiagramBuilderJsonGenerationListener() {
+						@Override
+						public void generatedJsonString(String jsonString) {
+							// Update previous diagram
+							updateDiagram(previousDiagram, jsonString);
+							if (currentDiagram == null) {
+								diagramBuilder.setEnabled(false);
+								diagramBuilder.clear();
+							} else {
+								diagramBuilder.setEnabled(true);
+								diagramBuilder.clear();
+								diagramBuilder.fromJson(currentDiagram.toJson());
+							}
+						}
+					});
 				} else {
-					Diagram newDiagramToShow = (Diagram) event.getProperty().getValue();
-					diagramBuilder.clear();
-					diagramBuilder.fromJson(newDiagramToShow.toJson());
+					if (currentDiagram == null) {
+						diagramBuilder.setEnabled(false);
+						diagramBuilder.clear();
+					} else {
+						diagramBuilder.setEnabled(true);
+						diagramBuilder.clear();
+						diagramBuilder.fromJson(currentDiagram.toJson());
+					}
 				}
 			}
 		});
@@ -97,11 +122,17 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
-		// TODO
+		initDiagrams();
+		initUpperMenu();
+	}
+
+	private void initDiagrams() {
+		List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
+		for (Diagram diagram : diagrams) {
+			diagramBuilderTable.addDiagram(diagram);
+		}
 		diagramBuilderTable.setValue(null);
 		diagramBuilder.setEnabled(false);
-
-		initUpperMenu();
 	}
 
 	private void initUpperMenu() {
@@ -191,8 +222,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	protected void deleteDiagram() {
-		// TODO Auto-generated method stub
-
+		UserSessionHandler.getFormController().getForm().removeDiagram(currentDiagram);
+		diagramBuilderTable.removeItem(currentDiagram);
+		diagramBuilderTable.setValue(null);
 	}
 
 	protected void newDiagram() {
@@ -203,12 +235,22 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				if (stringInputWindow.getValue() != null && !stringInputWindow.getValue().isEmpty()) {
+					List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
+					for(Diagram diagram: diagrams){
+						if(diagram.getName().equals(stringInputWindow.getValue())){
+							MessageManager.showError(LanguageCodes.ERROR_DIAGRAM_REPEATED_NAME);
+							return;
+						}
+					}
+					
+					//If is a valid string and there is no other diagram with the same name, then add it.
 					stringInputWindow.close();
 					Diagram newDiagram = new Diagram(UserSessionHandler.getFormController().getForm(),
 							stringInputWindow.getValue());
 					UserSessionHandler.getFormController().getForm().addDiagram(newDiagram);
 					diagramBuilderTable.addDiagram(newDiagram);
 					diagramBuilderTable.setValue(newDiagram);
+					
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_NAME_NOT_VALID);
 				}
@@ -228,31 +270,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		}
 	}
 
-	/**
-	 * Current diagram selected by the user in the left menu.
-	 * 
-	 * @return
-	 */
-	private int getSelectedDiagram() {
-		return 0;
-	}
-
-	private void updateDiagramDesigner() {
-		// Refresh jointjs
-		diagramBuilder.fromJson(UserSessionHandler.getFormController().getForm().getDiagrams()
-				.get(getSelectedDiagram()).toJson());
-	}
-
-	private void updateDiagram(String jsonString) {
+	private void updateDiagram(Diagram diagram, String jsonString) {
 		// Get childs from json string.
-		Diagram tempDiagram = Diagram.fromJson(jsonString);
-		UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
-				.setDiagramObjects(tempDiagram.getDiagramObjects());
-		// Updater
-		UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
-				.setUpdatedBy(UserSessionHandler.getUser());
-		UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
-				.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+		diagram.updateFromJson(jsonString);
+		diagram.setUpdatedBy(UserSessionHandler.getUser());
+		diagram.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 	}
 
 	/**
@@ -263,7 +285,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		@Override
 		public void generatedJsonString(String jsonString) {
 			try {
-				updateDiagram(jsonString);
+				updateDiagram(currentDiagram, jsonString);
 			} catch (Exception e) {
 				e.printStackTrace();
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -279,7 +301,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		@Override
 		public void generatedJsonString(String jsonString) {
 			try {
-				updateDiagram(jsonString);
+				updateDiagram(currentDiagram, jsonString);
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (Exception e) {

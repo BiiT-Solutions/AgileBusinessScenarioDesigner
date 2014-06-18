@@ -30,7 +30,7 @@ import com.google.gson.annotations.SerializedName;
 public class Diagram extends StorableObject {
 
 	private String name;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Form form;
 
@@ -41,12 +41,13 @@ public class Diagram extends StorableObject {
 	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
-
+		diagramElements = new ArrayList<>();
 	}
 
-	public Diagram(Form form,String name) {
+	public Diagram(Form form, String name) {
 		this.form = form;
 		this.name = name;
+		diagramElements = new ArrayList<>();
 	}
 
 	public Form getForm() {
@@ -68,6 +69,12 @@ public class Diagram extends StorableObject {
 		return null;
 	}
 
+	public void updateFromJson(String jsonString) {
+		Diagram tempDiagram = Diagram.fromJson(jsonString);
+		diagramElements.clear();
+		diagramElements.addAll(tempDiagram.getDiagramObjects());
+	}
+
 	public String toJson() {
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramSerializer());
@@ -84,13 +91,11 @@ public class Diagram extends StorableObject {
 	}
 
 	public void setDiagramObjects(List<DiagramObject> objects) {
+		this.diagramElements.clear();
 		this.diagramElements = objects;
 	}
 
 	public void addDiagramObjects(List<DiagramObject> objects) {
-		if (diagramElements == null) {
-			diagramElements = new ArrayList<>();
-		}
 		if (objects != null) {
 			diagramElements.addAll(objects);
 		}
