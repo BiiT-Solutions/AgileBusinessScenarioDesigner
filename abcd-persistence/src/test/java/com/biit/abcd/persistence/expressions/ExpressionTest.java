@@ -26,6 +26,7 @@ import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
 import com.biit.abcd.persistence.entity.expressions.ExprPortMath;
 import com.biit.abcd.persistence.entity.expressions.ExprValueDouble;
 import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
+import com.biit.abcd.persistence.entity.expressions.ExpressionThen;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -164,9 +165,11 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 				.get(0)).getChilds().get(0)).getValue()).getQuestion(), question2);
 
 		// Second child
-		Assert.assertEquals(((ExprPortMath) retrievedForm.getExpressions().get(0)).getChilds().get(1).getClass(), ExprOpMath.class);
-		Assert.assertEquals((((ExprOpMath) ((ExprPortMath) retrievedForm.getExpressions().get(0)).getChilds().get(1))
-				.getValue()), ExprOpValue.ASSIGNATION);
+		Assert.assertEquals(((ExprPortMath) retrievedForm.getExpressions().get(0)).getChilds().get(1).getClass(),
+				ExprOpMath.class);
+		Assert.assertEquals(
+				(((ExprOpMath) ((ExprPortMath) retrievedForm.getExpressions().get(0)).getChilds().get(1)).getValue()),
+				ExprOpValue.ASSIGNATION);
 
 		// Third child
 		Assert.assertEquals(
@@ -174,6 +177,59 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 						.getClass(), ExprValueDouble.class);
 		Assert.assertEquals(((ExprValueDouble) ((ExprAtomicMath) ((ExprPortMath) retrievedForm.getExpressions().get(0))
 				.getChilds().get(2)).getValue()).getValue(), 1d);
+
+		formDao.makeTransient(form);
+		Assert.assertEquals(formDao.getAll().size(), 0);
+	}
+
+	@Test(groups = { "expressions" })
+	public void basicThenAssignationExpression() throws NotValidChildException, NotValidOperatorInExpression {
+		Form form = createForm();
+		// With Then expression.
+		ExpressionThen expressionThen = new ExpressionThen();
+
+		// Then has already a child
+		Assert.assertEquals(expressionThen.getChilds().size(), 1);
+		Assert.assertEquals(expressionThen.getChilds().get(0).getClass(), ExprPortMath.class);
+
+		ExprPortMath exprPortMath = (ExprPortMath) expressionThen.getChilds().get(0);
+
+		// Port math has already a child
+		Assert.assertEquals(exprPortMath.getChilds().size(), 1);
+		Assert.assertEquals(exprPortMath.getChilds().get(0).getClass(), ExprAtomicMath.class);
+
+		// A child expression adds the joiner and a child (2 childs more).
+		exprPortMath.addChildExpression();
+		Assert.assertEquals(exprPortMath.getChilds().size(), 3);
+		Assert.assertEquals(exprPortMath.getChilds().get(1).getClass(), ExprOpMath.class);
+		Assert.assertEquals(exprPortMath.getChilds().get(2).getClass(), ExprAtomicMath.class);
+
+		// Setting values: Questions2's score = 1
+		ExprValueFormReference exprValueString = new ExprValueFormReference(question2, form.getCustomVariables().get(1));
+		((ExprAtomicMath) exprPortMath.getChilds().get(0)).setValue(exprValueString);
+		((ExprOpMath) exprPortMath.getChilds().get(1)).setValue(ExprOpValue.ASSIGNATION);
+		((ExprAtomicMath) exprPortMath.getChilds().get(2)).setValue(new ExprValueDouble(1d));
+
+		form.getExpressions().add(expressionThen);
+		formDao.makePersistent(form);
+
+		Form retrievedForm = formDao.read(form.getId());
+		Assert.assertEquals(retrievedForm.getExpressions().size(), 1);
+		Assert.assertEquals(retrievedForm.getExpressions().get(0).getClass(), ExpressionThen.class);
+		Assert.assertEquals(((ExpressionThen) retrievedForm.getExpressions().get(0)).getChilds().size(), 1);
+
+		Assert.assertEquals(
+				((ExprPortMath) ((ExpressionThen) retrievedForm.getExpressions().get(0)).getChilds().get(0))
+						.getChilds().size(), 3);
+		Assert.assertEquals(
+				((ExprPortMath) ((ExpressionThen) retrievedForm.getExpressions().get(0)).getChilds().get(0))
+						.getChilds().get(0).getClass(), ExprAtomicMath.class);
+		Assert.assertEquals(
+				((ExprPortMath) ((ExpressionThen) retrievedForm.getExpressions().get(0)).getChilds().get(0))
+						.getChilds().get(1).getClass(), ExprOpMath.class);
+		Assert.assertEquals(
+				((ExprPortMath) ((ExpressionThen) retrievedForm.getExpressions().get(0)).getChilds().get(0))
+						.getChilds().get(2).getClass(), ExprAtomicMath.class);
 
 		formDao.makeTransient(form);
 		Assert.assertEquals(formDao.getAll().size(), 0);

@@ -5,11 +5,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "EXPRESSION_THEN")
-public class ThenExpression extends ExprFunction {
+public class ExpressionThen extends ExprFunction {
 
 	private static final String EXPR_PORT = "exprPort";
 
-	public ThenExpression() {
+	public ExpressionThen() {
 		super();
 		addPort(EXPR_PORT, new ExprPortMath(EXPR_PORT));
 	}
