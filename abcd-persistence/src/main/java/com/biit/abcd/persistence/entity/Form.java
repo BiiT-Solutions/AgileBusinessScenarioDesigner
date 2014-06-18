@@ -49,6 +49,7 @@ public class Form extends TreeObject {
 		diagrams = new ArrayList<>();
 		tableRules = new ArrayList<>();
 		customVariables = new ArrayList<>();
+		expressions = new ArrayList<>();
 		setName(DEFAULT_NAME);
 	}
 
@@ -176,6 +177,14 @@ public class Form extends TreeObject {
 	public void setCustomVariables(List<CustomVariable> customVariables) {
 		this.customVariables.clear();
 		this.customVariables.addAll(customVariables);
+	}
+
+	public List<ExprBasic> getExpressions() {
+		return expressions;
+	}
+
+	public void setExpressions(List<ExprBasic> expressions) {
+		this.expressions = expressions;
 	}
 
 }

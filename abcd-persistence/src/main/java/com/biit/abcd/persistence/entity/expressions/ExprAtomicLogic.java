@@ -14,11 +14,11 @@ public class ExprAtomicLogic extends ExprAtomic {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ExprValueFormReference leftOperand;
 	@Enumerated(EnumType.STRING)
-	private ExprWoChildLogicType type;
+	private ExprAtomicChildLogicType type;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ExprValues rightOperand;
 
-	public enum ExprWoChildLogicType {
+	public enum ExprAtomicChildLogicType {
 		ALWAYS, ANY, EQUALS, NOT_EQUALS, LESS_THAN, GREATER_THAN, LESS_EQUALS, GREATER_EQUALS, IN, BETWEEN
 	};
 
@@ -81,42 +81,42 @@ public class ExprAtomicLogic extends ExprAtomic {
 	}
 
 	public void setAlways() {
-		type = ExprWoChildLogicType.ALWAYS;
+		type = ExprAtomicChildLogicType.ALWAYS;
 	}
 
 	public void setEq() {
-		type = ExprWoChildLogicType.EQUALS;
+		type = ExprAtomicChildLogicType.EQUALS;
 	}
 
 	public void setNe() {
-		type = ExprWoChildLogicType.NOT_EQUALS;
+		type = ExprAtomicChildLogicType.NOT_EQUALS;
 	}
 
 	public void setLt() {
-		type = ExprWoChildLogicType.LESS_THAN;
+		type = ExprAtomicChildLogicType.LESS_THAN;
 	}
 
 	public void setGt() {
-		type = ExprWoChildLogicType.GREATER_THAN;
+		type = ExprAtomicChildLogicType.GREATER_THAN;
 	}
 
 	public void setLe() {
-		type = ExprWoChildLogicType.LESS_EQUALS;
+		type = ExprAtomicChildLogicType.LESS_EQUALS;
 	}
 
 	public void setGe() {
-		type = ExprWoChildLogicType.GREATER_EQUALS;
+		type = ExprAtomicChildLogicType.GREATER_EQUALS;
 	}
 
 	public void setIn() {
-		type = ExprWoChildLogicType.IN;
+		type = ExprAtomicChildLogicType.IN;
 	}
 
 	public void setBetween() {
-		type = ExprWoChildLogicType.BETWEEN;
+		type = ExprAtomicChildLogicType.BETWEEN;
 	}
 
-	public ExprWoChildLogicType getType() {
+	public ExprAtomicChildLogicType getType() {
 		return type;
 	}
 
