@@ -1,11 +1,11 @@
-package com.biit.abcd.webpages.elements.decisiontable;
+package com.biit.abcd.webpages;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.abcd.webpages.DecisionTableEditor;
+import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionThen;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
@@ -20,17 +20,17 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class WindoNewTable extends Window {
+public class WindoNewExpression extends Window {
 	private static final long serialVersionUID = -466962195753116776L;
 	private static final int WINDOW_WIDTH = 500;
 	private static final int WINDOW_HEIGHT = 170;
-	private DecisionTableEditor parent;
-	private TableRule tableRule;
+	private ExpressionEditor parent;
+	private ExpressionThen expression;
 
-	public WindoNewTable(DecisionTableEditor parent) {
+	public WindoNewExpression(ExpressionEditor parent) {
 		super();
 		this.parent = parent;
-		tableRule = new TableRule();
+		expression = new ExpressionThen();
 		setWidth(Math.min(WINDOW_WIDTH, UI.getCurrent().getPage().getBrowserWindowWidth()), Unit.PIXELS);
 		setHeight(Math.min(WINDOW_HEIGHT, UI.getCurrent().getPage().getBrowserWindowHeight()), Unit.PIXELS);
 		this.setCaption(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER));
@@ -46,7 +46,7 @@ public class WindoNewTable extends Window {
 		VerticalLayout mainLayout = new VerticalLayout();
 
 		final TextField tableNameTextField = new TextField(
-				ServerTranslate.tr(LanguageCodes.WINDOW_NEW_TABLE_NAME_TEXTFIELD));
+				ServerTranslate.tr(LanguageCodes.WINDOW_NEW_EXPRESSION_TEXTFIELD));
 		tableNameTextField.setWidth("100%");
 		// formDescription.setMaxLength(Form.MAX_DESCRIPTION_LENGTH);
 
@@ -62,19 +62,19 @@ public class WindoNewTable extends Window {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						for (TableRule existingTableRule : UserSessionHandler.getFormController().getForm()
-								.getTableRules()) {
-							if (existingTableRule.getName().equals(tableNameTextField.getValue())) {
-								MessageManager.showError(LanguageCodes.ERROR_REPEATED_TABLE_RULE_NAME);
+						for (ExprBasic existingExpressions : UserSessionHandler.getFormController().getForm()
+								.getExpressions()) {
+							if (((ExpressionThen)existingExpressions).getName().equals(tableNameTextField.getValue())) {
+								MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 								return;
 							}
 						}
-						tableRule.setName(tableNameTextField.getValue());
-						tableRule.setCreatedBy(UserSessionHandler.getUser());
-						tableRule.setUpdatedBy(UserSessionHandler.getUser());
-						tableRule.setUpdateTime();
-						UserSessionHandler.getFormController().getForm().getTableRules().add(tableRule);
-						parent.addTableRuleToMenu(tableRule);
+						expression.setName(tableNameTextField.getValue());
+						expression.setCreatedBy(UserSessionHandler.getUser());
+						expression.setUpdatedBy(UserSessionHandler.getUser());
+						expression.setUpdateTime();
+						UserSessionHandler.getFormController().getForm().getExpressions().add(expression);
+						parent.addExpressionToMenu(expression);
 						parent.sortTableMenu();
 						close();
 					}

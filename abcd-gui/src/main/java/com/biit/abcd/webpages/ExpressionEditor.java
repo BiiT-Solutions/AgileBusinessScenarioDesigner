@@ -2,14 +2,28 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
+import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
-import com.vaadin.ui.VerticalLayout;
+import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
+import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.UI;
 
 public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
 	private ExpressionEditorComponent expressionEditorComponent;
+	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
+	private SelectExpressionTable tableSelectExpression;
 
 	public ExpressionEditor() {
 		super();
@@ -19,22 +33,111 @@ public class ExpressionEditor extends FormWebPageComponent {
 	protected void initContent() {
 		updateButtons(true);
 
-		VerticalLayout rootLayout = new VerticalLayout();
+		// Create container
+		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
 		rootLayout.setSizeFull();
 
-		// rootLayout.addComponent(new FormulaEditor());
+		// Create menu
+		tableSelectExpression = new SelectExpressionTable();
+		tableSelectExpression.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = -7103550436798085895L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				// refreshDecisionTable();
+			}
+
+		});
+		rootLayout.setMenu(tableSelectExpression);
+
+		// Create content
 		expressionEditorComponent = new ExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 		expressionEditorComponent.addWhenExpression();
 		expressionEditorComponent.addThenExpression();
-		rootLayout.addComponent(expressionEditorComponent);
+		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
+		initUpperMenu();
+	}
+
+	private void initUpperMenu() {
+		final ExpressionEditor thisPage = this;
+
+		decisionTableEditorUpperMenu = new ExpressionEditorUpperMenu();
+
+		decisionTableEditorUpperMenu.addSaveButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 6036676119057486519L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				save();
+			}
+		});
+
+		decisionTableEditorUpperMenu.addNewExpressionButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 377976184801401863L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				UI.getCurrent().addWindow(new WindoNewExpression(thisPage));
+			}
+
+		});
+
+		decisionTableEditorUpperMenu.addRemoveExpressionButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -3561685413299735048L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				removeSelectedExpression();
+			}
+
+		});
+
+		setUpperMenu(decisionTableEditorUpperMenu);
+	}
+
+	private ExprBasic getSelectedExpression() {
+		return tableSelectExpression.getSelectedExpression();
+	}
+
+	private void updateForm() {
+		if (getSelectedExpression() != null) {
+			// getSelectedExpression().setRules(decisionTable.getDefinedTableRules());
+		}
+	}
+
+	private void save() {
+		updateForm();
+		try {
+			UserSessionHandler.getFormController().save();
+			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+		} catch (Exception e) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			AbcdLogger.errorMessage(DecisionTableEditor.class.getName(), e);
+		}
 	}
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
 		return null;
 	}
+
+	private void removeSelectedExpression() {
+		UserSessionHandler.getFormController().getForm().getExpressions()
+				.remove(tableSelectExpression.getSelectedExpression());
+		tableSelectExpression.removeSelectedRow();
+	}
+
+	public void addExpressionToMenu(ExprBasic expression) {
+		tableSelectExpression.addRow(expression);
+		tableSelectExpression.setSelectedExpression(expression);
+	}
+
+	public void sortTableMenu() {
+		tableSelectExpression.sort();
+	}
+
 }

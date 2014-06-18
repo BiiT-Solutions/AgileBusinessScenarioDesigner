@@ -242,7 +242,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		tableSelectionMenu.sort();
 	}
 
-	public void removeSelectedTable() {
+	private void removeSelectedTable() {
 		UserSessionHandler.getFormController().getForm().getTableRules().remove(tableSelectionMenu.getSelectedTableRule());
 		tableSelectionMenu.removeSelectedRow();
 	}

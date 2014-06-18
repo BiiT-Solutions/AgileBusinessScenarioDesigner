@@ -85,9 +85,9 @@ public enum ThemeIcons {
 	TABLE("appbar.table.svg"),
 
 	TABLE_ADD("appbar.table.add.svg"),
-	
+
 	TABLE_REMOVE("appbar.table.remove.svg"),
-	
+
 	TABLE_ADD_COLUMN("appbar.table.add.column.svg"),
 
 	TABLE_REMOVE_COLUMN("appbar.table.delete.column.svg"),
@@ -105,6 +105,10 @@ public enum ThemeIcons {
 	REMOVE_ITEM_LIST("appbar.list.delete.svg"),
 
 	RULE_EDITOR_ADD_QUESTION("appbar.input.question.svg"),
+
+	EXPRESSION_ADD("appbar.expression.add.svg"),
+
+	EXPRESSION_REMOVE("appbar.expression.remove.svg"),
 
 	FORM_VARIABLE_EDITOR("appbar.form.variables.svg"),
 

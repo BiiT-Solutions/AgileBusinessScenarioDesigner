@@ -140,6 +140,7 @@ public enum LanguageCodes {
 	ERROR_UNEXPECTED_WEBSERVICE_ERROR("error.unexpectedWebserviceError"),
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
 	ERROR_REPEATED_TABLE_RULE_NAME("error.tablerule.repeatedName"),
+	ERROR_REPEATED_EXPRESSION_NAME("error.expression.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
@@ -186,7 +187,8 @@ public enum LanguageCodes {
 	CONDITION_TABLE_EDIT_CONDITION_CAPTION("condition.window.edit.caption"),
 	CONDITION_TABLE_EDIT_ACTION_CAPTION("action.window.edit.caption"),
 	
-	WINDOW_NEWTABLE_NAME_TEXTFIELD("windowNewTable.name.textField"),
+	WINDOW_NEW_TABLE_NAME_TEXTFIELD("windowNewTable.name.textField"),
+	WINDOW_NEW_EXPRESSION_TEXTFIELD("windowNewExpression.name.textField"),
 	
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
 	
@@ -221,7 +223,12 @@ public enum LanguageCodes {
 	FORM_VARIABLE_TABLE_COLUMN_UPDATE("form.variables.tablecolumn.update"),
 	FORM_VARIABLE_COLUMN_NAME("form.variables.column.name"),
 	FORM_VARIABLE_COLUMN_TYPE("form.variables.column.type"),
-	FORM_VARIABLE_SCOPE("form.variables.column.scope");
+	FORM_VARIABLE_SCOPE("form.variables.column.scope"),
+	
+	FORM_EXPRESSIONS_TABLE_COLUMN_NAME("form.expressions.tablecolumn.name"),	
+	FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE("form.variables.tablecolumn.update"),
+	MENU_EXPRESSIONS_ADD("form.expressions.menu.add"),
+	MENU_EXPRESSIONS_REMOVE("form.expressions.menu.remove");
 	
 	private String value;
 	
