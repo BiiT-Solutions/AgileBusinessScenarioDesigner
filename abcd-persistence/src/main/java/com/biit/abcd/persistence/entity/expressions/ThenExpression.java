@@ -11,7 +11,7 @@ public class ThenExpression extends ExprFunction {
 
 	public ThenExpression() {
 		super();
-		addPort(EXPR_PORT, new ExprPortOp(EXPR_PORT));
+		addPort(EXPR_PORT, new ExprPortMath(EXPR_PORT));
 	}
 
 	@Override

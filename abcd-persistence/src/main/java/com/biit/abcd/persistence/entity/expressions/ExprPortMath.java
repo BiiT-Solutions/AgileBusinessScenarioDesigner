@@ -4,9 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "EXPRESSION_PORT_OPERATION")
-public class ExprPortOp extends ExprPort {
-	public ExprPortOp(String portName) {
+@Table(name = "EXPRESSION_PORT_MATH")
+public class ExprPortMath extends ExprPort {
+	public ExprPortMath(String portName) {
 		super(portName);
 	}
 

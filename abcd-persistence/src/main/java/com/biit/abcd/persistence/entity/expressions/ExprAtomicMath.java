@@ -21,4 +21,12 @@ public class ExprAtomicMath extends ExprAtomic {
 		}
 	}
 
+	public ExprValue getValue() {
+		return value;
+	}
+
+	public void setValue(ExprValue value) {
+		this.value = value;
+	}
+
 }
