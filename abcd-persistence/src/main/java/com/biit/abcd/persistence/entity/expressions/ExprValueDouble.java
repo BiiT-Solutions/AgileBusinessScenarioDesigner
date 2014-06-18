@@ -9,6 +9,10 @@ public class ExprValueDouble extends ExprValue {
 
 	private double value;
 
+	protected ExprValueDouble() {
+		value = 0d;
+	}
+
 	public ExprValueDouble(double value) {
 		super();
 		this.setValue(value);

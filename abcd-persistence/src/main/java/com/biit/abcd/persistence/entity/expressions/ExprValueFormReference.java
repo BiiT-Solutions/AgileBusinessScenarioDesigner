@@ -17,6 +17,10 @@ public class ExprValueFormReference extends ExprValue {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private CustomVariable variable;
 
+	protected ExprValueFormReference() {
+		super();
+	}
+
 	public ExprValueFormReference(TreeObject question, CustomVariable variable) {
 		super();
 		this.question = question;
@@ -27,8 +31,8 @@ public class ExprValueFormReference extends ExprValue {
 	public String getExpressionTableString() {
 		String expressionString = new String();
 		expressionString += question;
-		if(variable!=null){
-			expressionString+="."+variable;
+		if (variable != null) {
+			expressionString += "." + variable;
 		}
 		return expressionString;
 	}

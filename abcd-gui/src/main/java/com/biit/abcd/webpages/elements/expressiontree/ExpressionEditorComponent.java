@@ -1,8 +1,8 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
-import com.biit.abcd.persistence.entity.expressions.ThenExpression;
-import com.biit.abcd.persistence.entity.expressions.WhenExpression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionThen;
+import com.biit.abcd.persistence.entity.expressions.ExpressionWhen;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -66,7 +66,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 			}
 		});
 
-		WhenExpression whenExpression = new WhenExpression();
+		ExpressionWhen whenExpression = new ExpressionWhen();
 		whenTable.addExpression(whenExpression);
 	}
 
@@ -96,7 +96,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 			}
 		});
 
-		ThenExpression thenExpression = new ThenExpression();
+		ExpressionThen thenExpression = new ExpressionThen();
 		thenTable.addExpression(thenExpression);
 	}
 

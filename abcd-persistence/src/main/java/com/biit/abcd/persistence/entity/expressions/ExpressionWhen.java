@@ -5,11 +5,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "EXPRESSION_WHEN")
-public class WhenExpression extends ExprFunction {
+public class ExpressionWhen extends ExprFunction {
 
 	private static final String LOGIC_PORT = "logicPort";
 
-	public WhenExpression() {
+	public ExpressionWhen() {
 		super();
 		addPort(LOGIC_PORT, new ExprPortLogic(LOGIC_PORT));
 	}

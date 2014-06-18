@@ -6,6 +6,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EXPRESSION_PORT_MATH")
 public class ExprPortMath extends ExprPort {
+
+	protected ExprPortMath() {
+		super();
+	}
+
 	public ExprPortMath(String portName) {
 		super(portName);
 	}

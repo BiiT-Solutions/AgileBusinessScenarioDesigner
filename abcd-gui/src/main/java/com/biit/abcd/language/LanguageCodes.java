@@ -152,6 +152,8 @@ public enum LanguageCodes {
 	ERROR_DATABASE_DUPLICATED_VARIABLE("error.database.duplicatedvariable"),
 	ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION("error.database.duplicatedvariablecatpion"),
 	
+	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"),
+	
 	INFO_DATA_STORED("info.data.store"),
 	
 	ANSWER_TYPE_INPUT("answer.type.input"),
