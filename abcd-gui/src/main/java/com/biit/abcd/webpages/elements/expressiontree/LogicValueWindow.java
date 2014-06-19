@@ -66,7 +66,6 @@ public class LogicValueWindow extends AcceptCancelWindow {
 	}
 
 	private Component initializeFormSelect() {
-		System.out.println("initialization-form-select: " + form);
 		formQuestionTable = new FormQuestionTable();
 		formQuestionTable.setRootElement(form);
 		formQuestionTable.setSizeFull();

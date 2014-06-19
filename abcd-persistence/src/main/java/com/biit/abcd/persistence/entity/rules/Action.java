@@ -1,31 +1,23 @@
 package com.biit.abcd.persistence.entity.rules;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 
 @Entity
 @Table(name = "RULE_ACTION")
-public class Action extends StorableObject {
-	private static final int MAX_CHARACTERS_TO_SHOW = 25;
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Action extends StorableObject {
 
-	private String expression = "";
+	public abstract Object getExpression();
+	
+	public abstract String getExpressionAsString();
 
-	public String getExpression() {
-		return expression;
-	}
+	public abstract void setExpression(Object expression) throws NotValidExpression;
 
-	public void setExpression(String expression) {
-		this.expression = expression;
-	}
-
-	@Override
-	public String toString() {
-		return getExpression().substring(0, Math.min(MAX_CHARACTERS_TO_SHOW, getExpression().length()));
-	}
-
-	public boolean undefined() {
-		return expression.length() > 0;
-	}
+	public abstract boolean undefined();
 }

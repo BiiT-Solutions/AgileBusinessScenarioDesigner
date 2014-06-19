@@ -7,20 +7,18 @@ import javax.persistence.Table;
 @Table(name = "EXPRESSION_WHEN")
 public class ExpressionWhen extends ExprFunction {
 
-	private static final String LOGIC_PORT = "logicPort";
-
 	public ExpressionWhen() {
 		super();
-		addPort(LOGIC_PORT, new ExprPortLogic(LOGIC_PORT));
 	}
 
-	public ExprPort getLogicPort() {
-		return getPort(LOGIC_PORT);
+	@Override
+	public void addDefaultChild() {
+		addChild(new ExprPortLogic());
 	}
 
 	@Override
 	public String getExpressionTableString() {
-		return "WHEN ( " + getPort(LOGIC_PORT).getChildExpressionTableString() + " )";
+		return "WHEN ( " + getChildsAsString() + " )";
 	}
 
 }

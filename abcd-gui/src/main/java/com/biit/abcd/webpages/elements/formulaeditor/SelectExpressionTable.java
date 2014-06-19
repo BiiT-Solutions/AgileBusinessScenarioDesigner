@@ -4,6 +4,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionThen;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
@@ -25,7 +26,7 @@ public class SelectExpressionTable extends Table {
 		setMultiSelect(false);
 		setSizeFull();
 
-		addContainerProperty(MenuProperties.EXPRESSION_NAME, ExprBasic.class, "",
+		addContainerProperty(MenuProperties.EXPRESSION_NAME, String.class, "",
 				ServerTranslate.tr(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
@@ -47,7 +48,7 @@ public class SelectExpressionTable extends Table {
 	@SuppressWarnings({ "unchecked" })
 	public void addRow(ExprBasic expression) {
 		Item item = addItem(expression);
-		item.getItemProperty(MenuProperties.EXPRESSION_NAME).setValue(expression);
+		item.getItemProperty(MenuProperties.EXPRESSION_NAME).setValue(((ExpressionThen) expression).getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
 				DateManager.convertDateToString(expression.getUpdateTime()));
 	}

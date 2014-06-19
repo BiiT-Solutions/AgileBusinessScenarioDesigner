@@ -6,18 +6,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EXPRESSION_THEN")
 public class ExpressionThen extends ExprFunction {
-	private static final String EXPR_PORT = "exprPort";
-
 	private String name;
 
 	public ExpressionThen() {
 		super();
-		addPort(EXPR_PORT, new ExprPortMath(EXPR_PORT));
+	}
+
+	@Override
+	public void addDefaultChild() {
+		addChild(new ExprPortMath());
 	}
 
 	@Override
 	public String getExpressionTableString() {
-		return "THEN ( " + getPort(EXPR_PORT).getChildExpressionTableString() + " )";
+		return "THEN ( " + getChildsAsString() + " )";
 	}
 
 	public String getName() {
@@ -26,11 +28,6 @@ public class ExpressionThen extends ExprFunction {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	@Override
-	public String toString(){
-		return getName();
 	}
 
 }

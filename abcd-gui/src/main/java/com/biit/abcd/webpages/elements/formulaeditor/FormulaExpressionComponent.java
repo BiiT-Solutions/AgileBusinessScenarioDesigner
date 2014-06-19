@@ -99,7 +99,6 @@ public abstract class FormulaExpressionComponent extends CustomComponent {
 	}
 
 	public boolean isChildComponent(Component clickedComponent) {
-		System.out.println("kiwi?");
 		Iterator<Component> layoutItr = rootLayout.iterator();
 		while(layoutItr.hasNext()){
 			CssLayout layout = (CssLayout)layoutItr.next();

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.Action;
+import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.persistence.entity.rules.AnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -93,7 +94,7 @@ public class DecisionTableComponent extends CustomComponent {
 	public void addRow() {
 		TableRuleRow tableRuleRow = new TableRuleRow();
 		// Add at least one action.
-		tableRuleRow.addAction(new Action());
+		tableRuleRow.addAction(new ActionExpression());
 		addRow(tableRuleRow);
 		getTableRules().add(tableRuleRow);
 	}

@@ -44,9 +44,7 @@ public class PortContentEditor extends AcceptCancelWindow {
 		operationExpressionTab.setEnabled(false);
 		assignationExpressionTab.setEnabled(false);
 
-		System.out.println("generate content");
 		for (Type type : contentTypesToGenerate) {
-			System.out.println(type.name());
 			switch (type) {
 			case VOID:
 				// Empty value, do nothing

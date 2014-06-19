@@ -65,6 +65,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 		});
 
 		ExpressionWhen whenExpression = new ExpressionWhen();
+		whenExpression.addDefaultChild();
 		whenTable.addExpression(whenExpression);
 
 		return whenTable;
@@ -95,9 +96,6 @@ public class ExpressionEditorComponent extends CustomComponent {
 				});
 			}
 		});
-
-//		ExpressionThen thenExpression = new ExpressionThen();
-//		thenTable.addExpression(thenExpression);
 
 		return thenTable;
 	}

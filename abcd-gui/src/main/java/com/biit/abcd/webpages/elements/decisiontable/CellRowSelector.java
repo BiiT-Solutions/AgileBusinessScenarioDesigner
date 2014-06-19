@@ -259,6 +259,5 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 
 	@Override
 	public void handleAction(Action action, Object sender, Object target) {
-		System.out.println("kiwi!");
 	}
 }

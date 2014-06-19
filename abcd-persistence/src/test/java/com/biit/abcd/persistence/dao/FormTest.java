@@ -19,7 +19,8 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
-import com.biit.abcd.persistence.entity.rules.Action;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
+import com.biit.abcd.persistence.entity.rules.ActionString;
 import com.biit.abcd.persistence.entity.rules.AnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -199,7 +200,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Form form = new Form();
 		form.setName(DIAGRAM_FORM);
 
-		Diagram diagram = new Diagram(form,DUMMY_DIAGRAM);
+		Diagram diagram = new Diagram(form, DUMMY_DIAGRAM);
 		form.getDiagrams().add(diagram);
 
 		formDao.makePersistent(form);
@@ -210,7 +211,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
-	public void storeFormTableRule() throws NotValidChildException {
+	public void storeFormTableRule() throws NotValidChildException, NotValidExpression {
 		Form form = new Form();
 		form.setName(TABLE_RULE_FORM);
 
@@ -243,7 +244,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		TableRuleRow tableRuleRow = new TableRuleRow();
 		AnswerCondition answerCondition = new AnswerCondition(answer1);
 		tableRuleRow.getConditions().put(question1, answerCondition);
-		tableRuleRow.addAction(new Action());
+		tableRuleRow.addAction(new ActionString());
 		tableRuleRow.getActions().get(0).setExpression(ACTION_EXPRESSION);
 
 		tableRule.getRules().add(tableRuleRow);

@@ -70,7 +70,7 @@ public class WindowNewForm extends Window {
 							form.setName(formName.getValue());
 							form.setCreatedBy(UserSessionHandler.getUser());
 							form.setUpdatedBy(UserSessionHandler.getUser());
-							parent.addForm(form);
+							parent.addNewForm(form);
 							close();
 						} else {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);
