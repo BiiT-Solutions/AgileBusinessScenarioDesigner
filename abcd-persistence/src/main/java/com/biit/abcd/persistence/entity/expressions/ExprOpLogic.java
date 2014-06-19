@@ -14,7 +14,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 @Table(name = "EXPRESSION_OPERATION_LOGIC")
 public class ExprOpLogic extends ExprOp {
 	private static final List<ExprOpValue> ALLOWED_OPERATORS = new ArrayList<ExprOpValue>(Arrays.asList(
-			ExprOpValue.AND, ExprOpValue.OR, ExprOpValue.NULL, ExprOpValue.EQUALS, ExprOpValue.NOT_EQUALS,
+			ExprOpValue.NULL, ExprOpValue.AND, ExprOpValue.OR, ExprOpValue.EQUALS, ExprOpValue.NOT_EQUALS,
 			ExprOpValue.LESS_EQUALS, ExprOpValue.LESS_THAN, ExprOpValue.GREATER_EQUALS, ExprOpValue.GREATER_THAN));
 
 	public ExprOpLogic() {
@@ -22,7 +22,7 @@ public class ExprOpLogic extends ExprOp {
 		try {
 			setValue(ExprOpValue.NULL);
 		} catch (NotValidOperatorInExpression e) {
-			//This should never happen
+			// This should never happen
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}

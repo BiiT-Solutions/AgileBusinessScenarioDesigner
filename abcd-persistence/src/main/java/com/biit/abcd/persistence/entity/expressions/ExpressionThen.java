@@ -17,7 +17,7 @@ public class ExpressionThen extends ExprFunction {
 
 	@Override
 	public String getExpressionTableString() {
-		return "( " + getPort(EXPR_PORT).getChildExpressionTableString() + " )";
+		return "THEN ( " + getPort(EXPR_PORT).getChildExpressionTableString() + " )";
 	}
 
 	public String getName() {
