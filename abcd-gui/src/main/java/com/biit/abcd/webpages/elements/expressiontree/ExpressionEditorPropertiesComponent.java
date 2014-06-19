@@ -8,8 +8,10 @@ public class ExpressionEditorPropertiesComponent extends PropertiesComponent {
 	public ExpressionEditorPropertiesComponent() {
 		super();
 		registerPropertiesComponent(new ExprFunctionProperties());
-		registerPropertiesComponent(new ExprWoChildLogicProperties());
-		registerPropertiesComponent(new ExprWChildProperties());
+		registerPropertiesComponent(new ExprAtomicLogicProperties());
+		registerPropertiesComponent(new ExprAtomicMathProperties());
+		registerPropertiesComponent(new ExprGroupProperties());
+		registerPropertiesComponent(new ExprOpMathProperties());
 		registerPropertiesComponent(new ExprOpLogicProperties());
 	}
 }

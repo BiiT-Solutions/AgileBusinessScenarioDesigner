@@ -1,20 +1,20 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.persistence.entity.expressions.ExprGroup;
-import com.biit.abcd.webpages.components.PropertiesForClassComponent;
+import com.vaadin.ui.FormLayout;
 
-public class ExprWChildProperties extends PropertiesForClassComponent<ExprGroup> {
+public class ExprGroupProperties extends ExprAtomicProperties<ExprGroup> {
 	private static final long serialVersionUID = 4037946808027845321L;
 
-	public ExprWChildProperties() {
+	public ExprGroupProperties() {
 		super(ExprGroup.class);
 	}
 
 	@Override
 	protected void setElementAbstract(ExprGroup element) {
-		// FormLayout formLayout = getCommonFormLayout(element);
-		//
-		// addTab(formLayout, "TODO - ExprWChild", true, 0);
+		FormLayout formLayout = getCommonFormLayout(element);
+
+		addTab(formLayout, "TODO - ExprGroup", true, 0);
 	}
 
 	@Override

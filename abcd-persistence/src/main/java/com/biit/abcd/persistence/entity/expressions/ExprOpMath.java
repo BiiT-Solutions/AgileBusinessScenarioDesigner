@@ -7,6 +7,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+
 @Entity
 @Table(name = "EXPRESSION_OPERATION_MATH")
 public class ExprOpMath extends ExprOp {
@@ -16,6 +19,12 @@ public class ExprOpMath extends ExprOp {
 
 	public ExprOpMath() {
 		super();
+		try {
+			setValue(ExprOpValue.NULL);
+		} catch (NotValidOperatorInExpression e) {
+			//This should never happen
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Override

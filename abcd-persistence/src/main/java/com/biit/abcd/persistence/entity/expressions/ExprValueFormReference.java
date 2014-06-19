@@ -30,9 +30,9 @@ public class ExprValueFormReference extends ExprValue {
 	@Override
 	public String getExpressionTableString() {
 		String expressionString = new String();
-		expressionString += question;
+		expressionString += question.getName();
 		if (variable != null) {
-			expressionString += "." + variable;
+			expressionString += "." + variable.getName();
 		}
 		return expressionString;
 	}

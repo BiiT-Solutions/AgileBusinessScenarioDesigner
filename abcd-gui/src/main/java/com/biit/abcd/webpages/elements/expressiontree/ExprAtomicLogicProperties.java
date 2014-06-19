@@ -8,7 +8,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class ExprWoChildLogicProperties extends ExprAtomicProperties<ExprAtomicLogic> {
+public class ExprAtomicLogicProperties extends ExprAtomicProperties<ExprAtomicLogic> {
 	private static final long serialVersionUID = -5953203428567057845L;
 
 	public enum FuncOp {
@@ -27,14 +27,14 @@ public class ExprWoChildLogicProperties extends ExprAtomicProperties<ExprAtomicL
 
 	private Button clean;
 
-	public ExprWoChildLogicProperties() {
+	public ExprAtomicLogicProperties() {
 		super(ExprAtomicLogic.class);
 	}
 
 	@Override
 	protected void setElementAbstract(final ExprAtomicLogic element) {
 		
-		final LogicExpressionWindow logicExpressionWindow = new LogicExpressionWindow(element);
+		final SelectQuestionVariableWindow logicExpressionWindow = new SelectQuestionVariableWindow();
 		logicExpressionWindow.addAcceptAcctionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
@@ -46,7 +46,7 @@ public class ExprWoChildLogicProperties extends ExprAtomicProperties<ExprAtomicL
 		FormLayout formLayout = getCommonFormLayout(element);
 
 		addTab(formLayout, "TODO - ExprWoChildLogic", true);
-
+		
 		Button always = new Button("ALWAYS", new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {

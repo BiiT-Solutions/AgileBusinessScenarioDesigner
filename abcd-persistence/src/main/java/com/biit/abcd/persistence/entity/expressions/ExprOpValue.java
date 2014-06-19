@@ -2,7 +2,7 @@ package com.biit.abcd.persistence.entity.expressions;
 
 public enum ExprOpValue {
 
-	NULL("NULL", ""),
+	NULL("NULL", "CLEAR"),
 
 	AND("AND", "AND"),
 
