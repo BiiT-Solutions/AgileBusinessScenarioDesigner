@@ -25,12 +25,10 @@ public class WindoNewExpression extends Window {
 	private static final int WINDOW_WIDTH = 500;
 	private static final int WINDOW_HEIGHT = 170;
 	private ExpressionEditor parent;
-	private ExpressionThen expression;
 
 	public WindoNewExpression(ExpressionEditor parent) {
 		super();
 		this.parent = parent;
-		expression = new ExpressionThen();
 		setWidth(Math.min(WINDOW_WIDTH, UI.getCurrent().getPage().getBrowserWindowWidth()), Unit.PIXELS);
 		setHeight(Math.min(WINDOW_HEIGHT, UI.getCurrent().getPage().getBrowserWindowHeight()), Unit.PIXELS);
 		this.setCaption(ServerTranslate.tr(LanguageCodes.BOTTOM_MENU_FORM_MANAGER));
@@ -64,11 +62,13 @@ public class WindoNewExpression extends Window {
 					public void buttonClick(ClickEvent event) {
 						for (ExprBasic existingExpressions : UserSessionHandler.getFormController().getForm()
 								.getExpressions()) {
-							if (((ExpressionThen)existingExpressions).getName().equals(tableNameTextField.getValue())) {
+							if (((ExpressionThen) existingExpressions).getName().equals(tableNameTextField.getValue())) {
 								MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 								return;
 							}
 						}
+						ExpressionThen expression = new ExpressionThen();
+						expression.addDefaultChild();
 						expression.setName(tableNameTextField.getValue());
 						expression.setCreatedBy(UserSessionHandler.getUser());
 						expression.setUpdatedBy(UserSessionHandler.getUser());

@@ -33,6 +33,15 @@ public class FormController {
 		}
 	}
 
+	/**
+	 * Reloads the selected form from database.
+	 */
+	public void reload() {
+		if (getForm() != null) {
+			setForm(formDao.read(getForm().getId()));
+		}
+	}
+
 	public void remove(TreeObject treeObject) {
 		if (getForm() != null && treeObject != null && treeObject.getParent() != null) {
 			treeObject.remove();

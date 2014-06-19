@@ -65,6 +65,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 		});
 
 		ExpressionWhen whenExpression = new ExpressionWhen();
+		whenExpression.addDefaultChild();
 		whenTable.addExpression(whenExpression);
 
 		return whenTable;

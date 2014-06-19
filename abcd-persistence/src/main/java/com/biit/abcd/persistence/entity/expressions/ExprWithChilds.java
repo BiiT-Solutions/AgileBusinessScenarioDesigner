@@ -10,6 +10,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +20,7 @@ public abstract class ExprWithChilds extends ExprAtomic {
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "PARENT_OF_EXPRESSION")
+	@OrderColumn
 	protected List<ExprBasic> childs;
 
 	public ExprWithChilds() {
@@ -28,6 +30,11 @@ public abstract class ExprWithChilds extends ExprAtomic {
 
 	public List<ExprBasic> getChilds() {
 		return childs;
+	}
+
+	public void addChild(ExprBasic child) {
+		getChilds().add(child);
+		child.parent = this;
 	}
 
 }

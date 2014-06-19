@@ -77,6 +77,7 @@ public class RuleExpressionEditorComponent extends CustomComponent{
 		expressionLayout.addComponent(thenTable);
 
 		ExpressionThen thenExpression = new ExpressionThen();
+		thenExpression.addDefaultChild();
 		thenTable.addExpression(thenExpression);
 	}
 
@@ -111,6 +112,7 @@ public class RuleExpressionEditorComponent extends CustomComponent{
 		expressionLayout.addComponent(whenTable);
 
 		ExpressionWhen whenExpression = new ExpressionWhen();
+		whenExpression.addDefaultChild();
 		whenTable.addExpression(whenExpression);
 	}
 	

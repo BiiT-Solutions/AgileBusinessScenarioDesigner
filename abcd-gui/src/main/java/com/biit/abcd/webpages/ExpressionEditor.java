@@ -36,8 +36,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 	protected void initContent() {
 		updateButtons(true);
 		
-		System.out.println(UserSessionHandler.getFormController().getForm().getExpressions().get(0).getExpressionTableString());
-
 		// Create container
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
 		rootLayout.setSizeFull();
@@ -131,8 +129,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	private void save() {
 		try {
-			System.out.println(UserSessionHandler.getFormController().getForm().getExpressions().get(0).getExpressionTableString());
 			UserSessionHandler.getFormController().save();
+			UserSessionHandler.getFormController().reload();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);

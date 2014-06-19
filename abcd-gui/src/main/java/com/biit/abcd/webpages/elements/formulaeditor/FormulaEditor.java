@@ -35,7 +35,6 @@ public class FormulaEditor extends CustomComponent {
 		formulaPort.addFormulaPortClickListener(new FormulaPortClickListener() {
 			@Override
 			public void formulaPortClicked(FormulaPortComponent formulaPort, LayoutClickEvent listener) {
-				System.out.println("Formula port Listener: " + formulaPort.getConnectorId());
 				setFormulaPortClicked(formulaPort);
 			}
 		});
@@ -46,7 +45,6 @@ public class FormulaEditor extends CustomComponent {
 		formulaExpressionComponent.addFormulaPortClickListener(new FormulaPortClickListener() {
 			@Override
 			public void formulaPortClicked(FormulaPortComponent formulaPort, LayoutClickEvent listener) {
-				// System.out.println("Formula expresion Listener: "+formulaPort.getConnectorId());
 				setFormulaPortClicked(formulaPort);
 			}
 		});

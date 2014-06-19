@@ -43,6 +43,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 				.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 
 		expression = new ExpressionThen();
+		expression.addDefaultChild();
 		expression.setCreatedBy(UserSessionHandler.getUser());
 		expression.setUpdatedBy(UserSessionHandler.getUser());
 		expression.setUpdateTime();

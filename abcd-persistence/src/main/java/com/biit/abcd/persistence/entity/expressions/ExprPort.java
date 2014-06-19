@@ -12,11 +12,13 @@ import javax.persistence.Table;
 @Table(name = "EXPRESSION_PORT")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class ExprPort extends ExprGroup {
+	private final static String DEFAULT_NAME = "exprPort";
 
 	private String portName;
 
 	protected ExprPort() {
 		super();
+		portName = DEFAULT_NAME;
 		addChildExpression(getDefaultExpression());
 	}
 

@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
-import com.biit.abcd.persistence.entity.expressions.ExprFunction;
-import com.biit.abcd.persistence.entity.expressions.ExprGroup;
-import com.biit.abcd.persistence.entity.expressions.ExprPort;
+import com.biit.abcd.persistence.entity.expressions.ExprWithChilds;
 import com.vaadin.data.Item;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
@@ -97,17 +95,10 @@ public class ExpressionTreeTable extends TreeTable {
 	}
 
 	private void addExpressionChilds(ExprBasic expression) {
-		// If it is a function, then add the ports
-		if (expression instanceof ExprFunction) {
-			ExprFunction expressionFunction = (ExprFunction) expression;
-			for (ExprPort port : expressionFunction.getPorts()) {
-				addExpression(port);
-			}
-		}
 		// If it is a expression with childs
-		if (expression instanceof ExprGroup) {
-			ExprGroup expressionWChilds = (ExprGroup) expression;
-			for (ExprBasic childExpression : expressionWChilds.getChilds()) {
+		if (expression instanceof ExprWithChilds) {
+			ExprWithChilds expressionWithChilds = (ExprWithChilds) expression;
+			for (ExprBasic childExpression : expressionWithChilds.getChilds()) {
 				addExpression(childExpression);
 			}
 		}
