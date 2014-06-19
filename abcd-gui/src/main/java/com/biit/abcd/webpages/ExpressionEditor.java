@@ -12,6 +12,7 @@ import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expressiontree.ExpressionTreeTable;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
 import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -25,6 +26,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTable tableSelectExpression;
+	private ExpressionTreeTable thenTable;
 
 	public ExpressionEditor() {
 		super();
@@ -45,7 +47,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				// refreshDecisionTable();
+				refreshExpressionEditor();
 			}
 
 		});
@@ -54,8 +56,9 @@ public class ExpressionEditor extends FormWebPageComponent {
 		// Create content
 		expressionEditorComponent = new ExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
-		//expressionEditorComponent.addWhenExpression();
-		expressionEditorComponent.addThenExpression(ServerTranslate.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
+		// expressionEditorComponent.addWhenExpression();
+		thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
+				.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
@@ -107,6 +110,14 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private void updateForm() {
 		if (getSelectedExpression() != null) {
 			// getSelectedExpression().setRules(decisionTable.getDefinedTableRules());
+		}
+	}
+
+	private void refreshExpressionEditor() {
+		thenTable.removeAll();
+		if (getSelectedExpression() != null) {
+			// Add table rows.
+			thenTable.addExpression(getSelectedExpression());
 		}
 	}
 

@@ -51,36 +51,38 @@ public class ExpressionTreeTable extends TreeTable {
 
 	@SuppressWarnings("unchecked")
 	public void addExpression(ExprBasic expression, boolean alsoChilds, boolean alsoParents) {
-		Item item = addItem(expression);
-		// Could not create the item, then its an update.
-		if (item == null) {
-			item = getItem(expression);
-			// If we are updating the children we need to delete them to handle
-			// the reorder, and delete problems.
-			if (alsoChilds) {
-				removeAllChildrenOf(expression);
+		if (expression != null) {
+			Item item = addItem(expression);
+			// Could not create the item, then its an update.
+			if (item == null) {
+				item = getItem(expression);
+				// If we are updating the children we need to delete them to handle
+				// the reorder, and delete problems.
+				if (alsoChilds) {
+					removeAllChildrenOf(expression);
+				}
+			} else {
+				setChildrenAllowed(expression, false);
 			}
-		} else {
-			setChildrenAllowed(expression, false);
-		}
-		if (expression.getParent() != null) {
-			setChildrenAllowed(expression.getParent(), true);
-			setParent(expression, expression.getParent());
-		}
-		item.getItemProperty(Properties.FORMULA_TEXT).setValue(new Label(expression.getExpressionTableString(),ContentMode.HTML));
+			if (expression.getParent() != null) {
+				setChildrenAllowed(expression.getParent(), true);
+				setParent(expression, expression.getParent());
+			}
+			item.getItemProperty(Properties.FORMULA_TEXT).setValue(
+					new Label(expression.getExpressionTableString(), ContentMode.HTML));
 
-		if (alsoChilds) {
-			addExpressionChilds(expression);
-		}
+			if (alsoChilds) {
+				addExpressionChilds(expression);
+			}
 
-		if (alsoParents) {
-			addExpressionParents(expression);
+			if (alsoParents) {
+				addExpressionParents(expression);
+			}
 		}
 	}
 
 	/**
-	 * Remove the child expressions of a expression element. This is used to fix
-	 * the order of elements in table.
+	 * Remove the child expressions of a expression element. This is used to fix the order of elements in table.
 	 * 
 	 * @param expression
 	 */
@@ -125,5 +127,9 @@ public class ExpressionTreeTable extends TreeTable {
 
 	public void setTitle(String value) {
 		setColumnHeader(Properties.FORMULA_TEXT, value);
+	}
+
+	public void removeAll() {
+		removeAllItems();
 	}
 }
