@@ -27,10 +27,10 @@ public class ExpressionThen extends ExprFunction {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
-	public String toString(){
-		return getName();
+	public String toString() {
+		return getName() + ": " + getChilds();
 	}
 
 }

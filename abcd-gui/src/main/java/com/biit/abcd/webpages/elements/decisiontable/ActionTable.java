@@ -3,8 +3,11 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -92,7 +95,7 @@ public class ActionTable extends Table {
 	private void updateItemActionInGui(TableRuleRow rule) {
 		Item row = getItem(rule);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) row.getItemProperty(Columns.ACTION).getValue());
-		actionValue.setLabel(rule.getActions().get(0).getExpression());
+		actionValue.setLabel(rule.getActions().get(0).getExpressionAsString());
 	}
 
 	private class CellEditButtonClickListener implements ClickListener {
@@ -105,16 +108,27 @@ public class ActionTable extends Table {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			final AddNewActionValueWindow newActionValueWindow = new AddNewActionValueWindow(rule.getActions().get(0));
-			newActionValueWindow.showCentered();
-			newActionValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
-				@Override
-				public void acceptAction(AcceptCancelWindow window) {
-					rule.getActions().get(0).setExpression(newActionValueWindow.getText());
-					updateItemActionInGui(rule);
-					newActionValueWindow.close();
-				}
-			});
+			try {
+				final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(rule
+						.getActions().get(0));
+
+				newActionValueWindow.showCentered();
+				newActionValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						try {
+							rule.getActions().get(0).setExpression(newActionValueWindow.getExpression());
+							updateItemActionInGui(rule);
+							newActionValueWindow.close();
+						} catch (NotValidExpression e) {
+							MessageManager.showError(e.getMessage());
+						}
+					}
+				});
+			} catch (NotValidExpression e1) {
+				MessageManager.showError(e1.getMessage());
+				AbcdLogger.errorMessage(ActionTable.class.getName(), e1);
+			}
 		}
 	}
 
@@ -128,8 +142,12 @@ public class ActionTable extends Table {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			rule.getActions().get(0).setExpression("");
-			updateItemActionInGui(rule);
+			try {
+				rule.getActions().get(0).setExpression("");
+				updateItemActionInGui(rule);
+			} catch (NotValidExpression e) {
+				MessageManager.showError(e.getMessage());
+			}
 		}
 	}
 

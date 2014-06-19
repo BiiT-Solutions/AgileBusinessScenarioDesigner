@@ -96,9 +96,6 @@ public class ExpressionEditorComponent extends CustomComponent {
 			}
 		});
 
-//		ExpressionThen thenExpression = new ExpressionThen();
-//		thenTable.addExpression(thenExpression);
-
 		return thenTable;
 	}
 

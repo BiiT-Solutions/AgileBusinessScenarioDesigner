@@ -46,6 +46,7 @@ public class ExpressionTreeTable extends TreeTable {
 	// }
 
 	public void addExpression(ExprBasic expression) {
+		removeAll();
 		addExpression(expression, true, true);
 	}
 

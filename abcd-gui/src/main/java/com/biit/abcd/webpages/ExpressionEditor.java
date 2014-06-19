@@ -125,6 +125,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		thenTable.removeAll();
 		if (getSelectedExpression() != null) {
 			// Add table rows.
+			System.out.println(getSelectedExpression());
 			thenTable.addExpression(getSelectedExpression());
 		}
 	}

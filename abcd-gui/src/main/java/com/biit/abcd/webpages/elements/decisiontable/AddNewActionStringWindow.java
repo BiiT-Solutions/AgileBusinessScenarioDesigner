@@ -9,12 +9,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
-public class AddNewActionValueWindow extends AcceptCancelWindow {
+public class AddNewActionStringWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
 	private FormAnswerTable formAnswerTable;
 	private TextArea textArea;
 
-	public AddNewActionValueWindow(Action action) {
+	public AddNewActionStringWindow(Action action) {
 		super();
 		setWidth("50%");
 		setHeight("75%");
@@ -26,7 +26,7 @@ public class AddNewActionValueWindow extends AcceptCancelWindow {
 	public Component generateContent(Action action) {
 		VerticalLayout layout = new VerticalLayout();
 		textArea = new TextArea(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_EDITOR_ACTION_EDITOR_TEXTAREA_CAPTION));
-		textArea.setValue(action.getExpression());
+		textArea.setValue((String) action.getExpression());
 		textArea.setSizeFull();
 		layout.addComponent(textArea);
 		layout.setSizeFull();
@@ -38,7 +38,7 @@ public class AddNewActionValueWindow extends AcceptCancelWindow {
 		return formAnswerTable.getValue();
 	}
 
-	public String getText() {
+	public String getExpression() {
 		return textArea.getValue();
 	}
 }
