@@ -14,18 +14,23 @@ public abstract class ExprAtomicProperties<T extends ExprAtomic> extends Propert
 	public ExprAtomicProperties(Class<? extends T> type) {
 		super(type);
 	}
+	
+	protected void setStandardCommonAtomicPart(ExprAtomic exprAtomic){
+		FormLayout formLayout = getCommonFormLayout(exprAtomic);
+		addTab(formLayout, "TODO - ExprWoChildLogic", true);
+	}
 
-	protected FormLayout getCommonFormLayout(final ExprAtomic exprWoChild) {
+	protected FormLayout getCommonFormLayout(final ExprAtomic exprAtomic) {
 
 		Button addParenthesis = new Button("Add Parenthesis", new ClickListener() {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				exprWoChild.addParenthesis();
+				exprAtomic.addParenthesis();
 				// Add parenthesis is done by adding a parent element
 				// parenthesis, so we need to update the parent as it still
 				// doesn't exist on the tree table.
-				firePropertyUpdateListener(exprWoChild.getParent().getParent());
+				firePropertyUpdateListener(exprAtomic.getParent().getParent());
 			}
 		});
 		addParenthesis.setWidth(buttonWidth);
@@ -34,23 +39,23 @@ public abstract class ExprAtomicProperties<T extends ExprAtomic> extends Propert
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				exprWoChild.removeParenthesis();
+				exprAtomic.removeParenthesis();
 				// Remove parenthesis is done by removing a parent element
 				// parenthesis and flattening the elements into the upper level.
 				// At this point the parenthesis no longer exists, so we have to
 				// update the parent of this element.
-				firePropertyUpdateListener(exprWoChild.getParent());
+				firePropertyUpdateListener(exprAtomic.getParent());
 			}
 		});
-		removeParenthesis.setEnabled(exprWoChild.isParenthised());
+		removeParenthesis.setEnabled(exprAtomic.isParenthised());
 		removeParenthesis.setWidth(buttonWidth);
 
 		Button addExpression = new Button("Add Expression", new ClickListener() {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				exprWoChild.addExpression();
-				firePropertyUpdateListener(exprWoChild.getParent());
+				exprAtomic.addExpression();
+				firePropertyUpdateListener(exprAtomic.getParent());
 			}
 		});
 		addExpression.setWidth(buttonWidth);
@@ -59,8 +64,8 @@ public abstract class ExprAtomicProperties<T extends ExprAtomic> extends Propert
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				exprWoChild.delete();
-				firePropertyUpdateListener(exprWoChild.getParent());
+				exprAtomic.delete();
+				firePropertyUpdateListener(exprAtomic.getParent());
 			}
 		});
 		deleteExpression.setWidth(buttonWidth);

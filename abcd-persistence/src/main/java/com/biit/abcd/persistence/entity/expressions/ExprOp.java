@@ -27,7 +27,7 @@ public abstract class ExprOp extends ExprBasic {
 
 	@Override
 	public String getExpressionTableString() {
-		if (currentValue == null || currentValue.getValue() == null) {
+		if (currentValue == null || currentValue == ExprOpValue.NULL) {
 			return " " + getValueNullCaption() + " ";
 		} else {
 			return " " + currentValue.getCaption() + " ";
