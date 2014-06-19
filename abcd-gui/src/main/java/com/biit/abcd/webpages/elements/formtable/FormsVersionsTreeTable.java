@@ -47,7 +47,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setSelectable(true);
 		setImmediate(true);
 		setMultiSelect(false);
-		// setNullSelectionAllowed(false);
+		setNullSelectionAllowed(true);
 		setSizeFull();
 
 		addContainerProperty(FormsVersionsTreeTableProperties.FORM_NAME, String.class, "",
@@ -170,9 +170,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			setValue(form);
 			setChildrenAllowed(form, false);
 		}
-
 		sort();
-		selectForm(form);
 	}
 
 	/**
@@ -268,7 +266,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	/**
 	 * This function selects a form from the table.
 	 */
-	private void selectForm(Form form) {
+	public void selectForm(Form form) {
 		if (form != null && !containsId(form)) {
 			// uncollapseForm(form);
 			setCollapsed(form, false);

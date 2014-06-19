@@ -39,9 +39,9 @@ public class FormManager extends FormWebPageComponent {
 		VerticalLayout rootLayout = new VerticalLayout(formTable);
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(true);
+		getWorkingAreaLayout().addComponent(rootLayout);
 		formTable.selectLastUsedForm();
 		updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
-		getWorkingAreaLayout().addComponent(rootLayout);
 	}
 
 	private FormsVersionsTreeTable createTreeTable() {
@@ -52,7 +52,11 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				if (UserSessionHandler.getFormController() != null) {
-					UserSessionHandler.getFormController().setForm(getForm());
+					if (!(getForm() instanceof RootForm)) {
+						UserSessionHandler.getFormController().setForm(getForm());
+					} else {
+						UserSessionHandler.getFormController().setForm(null);
+					}
 				}
 				updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 			}
@@ -74,8 +78,9 @@ public class FormManager extends FormWebPageComponent {
 		return formTable.getValue();
 	}
 
-	public void addForm(Form form) {
+	public void addNewForm(Form form) {
 		formTable.addForm(form);
+		formTable.selectForm(form);
 		formDao.makePersistent(form);
 	}
 
