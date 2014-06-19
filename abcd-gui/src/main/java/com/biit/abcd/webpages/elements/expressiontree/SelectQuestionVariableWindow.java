@@ -32,6 +32,7 @@ public class SelectQuestionVariableWindow extends AcceptCancelWindow {
 		setHeight("50%");
 		setClosable(false);
 		setModal(true);
+		setResizable(false);
 
 		setContent(generateComponent());
 	}
@@ -93,6 +94,7 @@ public class SelectQuestionVariableWindow extends AcceptCancelWindow {
 	}
 
 	private void initializeVariableSelectionValues(TreeObject treeObject) {
+		variableSelection.setValue(null);
 		variableSelection.removeAllItems();
 		if (treeObject != null) {
 			List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
@@ -101,15 +103,18 @@ public class SelectQuestionVariableWindow extends AcceptCancelWindow {
 				variableSelection.addItem(customvariable);
 				variableSelection.setItemCaption(customvariable, customvariable.getName());
 			}
-			variableSelection.setValue(customVariables.get(0));
+			if (customVariables != null && !customVariables.isEmpty()) {
+				variableSelection.setValue(customVariables.get(0));
+			}
 		}
 	}
 
 	public ExprValueFormReference getValue() {
-		if(formQuestionTable.getValue()==null){
+		if (formQuestionTable.getValue() == null || variableSelection.getValue()==null) {
 			return null;
 		}
-		return new ExprValueFormReference((TreeObject)formQuestionTable.getValue(), (CustomVariable)variableSelection.getValue());
+		return new ExprValueFormReference((TreeObject) formQuestionTable.getValue(),
+				(CustomVariable) variableSelection.getValue());
 	}
 
 }
