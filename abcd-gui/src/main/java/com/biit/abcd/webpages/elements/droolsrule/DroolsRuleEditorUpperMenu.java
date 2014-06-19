@@ -1,0 +1,55 @@
+package com.biit.abcd.webpages.elements.droolsrule;
+
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.webpages.components.IconButton;
+import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.UpperMenu;
+import com.vaadin.ui.Button;
+
+public class DroolsRuleEditorUpperMenu extends UpperMenu {
+	private static final long serialVersionUID = 4790116559655965919L;
+	private IconButton saveButton, newRule, removeRule;
+
+	public DroolsRuleEditorUpperMenu() {
+		super();
+		defineMenu();
+	}
+
+	private void defineMenu() {
+		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcons.SAVE,
+				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
+		newRule = new IconButton(LanguageCodes.MENU_RULE_ADD_CAPTION, ThemeIcons.EXPRESSION_ADD,
+				LanguageCodes.MENU_RULE_ADD_TOOLTIP);
+		removeRule = new IconButton(LanguageCodes.MENU_RULE_REMOVE_CAPTION, ThemeIcons.EXPRESSION_REMOVE,
+				LanguageCodes.MENU_RULE_REMOVE_TOOLTIP);
+
+		addIconButton(saveButton);
+		addIconButton(newRule);
+		addIconButton(removeRule);
+	}
+
+	public void addSaveButtonClickListener(Button.ClickListener listener) {
+		saveButton.addClickListener(listener);
+	}
+
+	public void removeSaveButtonClickListener(Button.ClickListener listener) {
+		saveButton.removeClickListener(listener);
+	}
+
+	public void addNewRuleButtonClickListener(Button.ClickListener listener) {
+		newRule.addClickListener(listener);
+	}
+
+	public void removeNewRuleButtonClickListener(Button.ClickListener listener) {
+		newRule.removeClickListener(listener);
+	}
+
+	public void addRemoveRuleButtonClickListener(Button.ClickListener listener) {
+		removeRule.addClickListener(listener);
+	}
+
+	public void removeRemoveRuleButtonClickListener(Button.ClickListener listener) {
+		removeRule.removeClickListener(listener);
+	}
+
+}

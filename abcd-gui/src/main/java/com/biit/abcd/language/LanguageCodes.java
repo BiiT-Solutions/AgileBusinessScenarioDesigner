@@ -129,7 +129,12 @@ public enum LanguageCodes {
 	GROUP_PROPERTIES_REPEAT("groupProperties.repeat"),
 	PROPERTIES_TECHNICAL_NAME("properties.technicalName"), 
 	PROPERTIES_QUESTION_ANSWER_TYPE("properties.question.answer_type"),
-	PROPERTIES_QUESTION_ANSWER_FORMAT("properties.question.answer_format"),
+	PROPERTIES_QUESTION_ANSWER_FORMAT("properties.question.answer_format"), 
+	
+	MENU_RULE_ADD_CAPTION("menu.rule.add.caption"),
+	MENU_RULE_ADD_TOOLTIP("menu.rule.add.tooltip"),
+	MENU_RULE_REMOVE_CAPTION("menu.rule.remove.caption"),
+	MENU_RULE_REMOVE_TOOLTIP("menu.rule.remove.tooltip"),
 	
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_USER_NOACCESS("error.user.noaccess"),
