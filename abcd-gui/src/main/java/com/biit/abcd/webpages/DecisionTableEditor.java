@@ -89,7 +89,8 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 		// Select the first one if available.
 		if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
-			tableSelectionMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules().get(0));
+			tableSelectionMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules()
+					.get(0));
 		}
 
 		refreshDecisionTable();
@@ -192,12 +193,19 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
+	/**
+	 * Rules are not stored into the form automatically. We need to set them to the form before saving or changing the
+	 * window.
+	 */
 	private void updateForm() {
 		if (getSelectedTableRule() != null) {
 			getSelectedTableRule().setRules(decisionTable.getDefinedTableRules());
 		}
 	}
 
+	/**
+	 * Saves all form information.
+	 */
 	private void save() {
 		updateForm();
 		try {
@@ -209,6 +217,9 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		}
 	}
 
+	/**
+	 * Updates the table where the user defines the rules with the information of the currently selected table.
+	 */
 	private void refreshDecisionTable() {
 		decisionTable.removeAll();
 		decisionTable.setTableRule(getSelectedTableRule());
@@ -229,6 +240,11 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		return null;
 	}
 
+	/**
+	 * Gets the currently selected table.
+	 * 
+	 * @return
+	 */
 	private TableRule getSelectedTableRule() {
 		return tableSelectionMenu.getSelectedTableRule();
 	}
@@ -238,12 +254,19 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		tableSelectionMenu.setSelectedTableRule(tableRule);
 	}
 
+	/**
+	 * Sorts the table selector by the modification time of the objects.
+	 */
 	public void sortTableMenu() {
 		tableSelectionMenu.sort();
 	}
 
+	/**
+	 * Deletes the currently selected table.
+	 */
 	private void removeSelectedTable() {
-		UserSessionHandler.getFormController().getForm().getTableRules().remove(tableSelectionMenu.getSelectedTableRule());
+		UserSessionHandler.getFormController().getForm().getTableRules()
+				.remove(tableSelectionMenu.getSelectedTableRule());
 		tableSelectionMenu.removeSelectedRow();
 	}
 

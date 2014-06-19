@@ -64,6 +64,20 @@ public class ExpressionEditor extends FormWebPageComponent {
 		getWorkingAreaLayout().addComponent(rootLayout);
 
 		initUpperMenu();
+
+		// Add tables
+		for (ExprBasic expression : UserSessionHandler.getFormController().getForm().getExpressions()) {
+			addExpressionToMenu(expression);
+		}
+		
+		sortTableMenu();
+
+		// Select the first one if available.
+		if (UserSessionHandler.getFormController().getForm().getExpressions().size() > 0) {
+			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
+					.getExpressions().get(0));
+		}
+		refreshExpressionEditor();
 	}
 
 	private void initUpperMenu() {
@@ -107,12 +121,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 		return tableSelectExpression.getSelectedExpression();
 	}
 
-	private void updateForm() {
-		if (getSelectedExpression() != null) {
-			// getSelectedExpression().setRules(decisionTable.getDefinedTableRules());
-		}
-	}
-
 	private void refreshExpressionEditor() {
 		thenTable.removeAll();
 		if (getSelectedExpression() != null) {
@@ -122,7 +130,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 	}
 
 	private void save() {
-		updateForm();
 		try {
 			UserSessionHandler.getFormController().save();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
