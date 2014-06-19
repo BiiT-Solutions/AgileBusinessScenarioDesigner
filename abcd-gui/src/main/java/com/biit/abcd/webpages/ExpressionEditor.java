@@ -5,12 +5,14 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expressiontree.ExpressionTreeTable;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
 import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -24,6 +26,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTable tableSelectExpression;
+	private ExpressionTreeTable thenTable;
 
 	public ExpressionEditor() {
 		super();
@@ -44,7 +47,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				// refreshDecisionTable();
+				refreshExpressionEditor();
 			}
 
 		});
@@ -53,13 +56,28 @@ public class ExpressionEditor extends FormWebPageComponent {
 		// Create content
 		expressionEditorComponent = new ExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
-		expressionEditorComponent.addWhenExpression();
-		expressionEditorComponent.addThenExpression();
+		// expressionEditorComponent.addWhenExpression();
+		thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
+				.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
 		initUpperMenu();
+
+		// Add tables
+		for (ExprBasic expression : UserSessionHandler.getFormController().getForm().getExpressions()) {
+			addExpressionToMenu(expression);
+		}
+		
+		sortTableMenu();
+
+		// Select the first one if available.
+		if (UserSessionHandler.getFormController().getForm().getExpressions().size() > 0) {
+			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
+					.getExpressions().get(0));
+		}
+		refreshExpressionEditor();
 	}
 
 	private void initUpperMenu() {
@@ -103,14 +121,15 @@ public class ExpressionEditor extends FormWebPageComponent {
 		return tableSelectExpression.getSelectedExpression();
 	}
 
-	private void updateForm() {
+	private void refreshExpressionEditor() {
+		thenTable.removeAll();
 		if (getSelectedExpression() != null) {
-			// getSelectedExpression().setRules(decisionTable.getDefinedTableRules());
+			// Add table rows.
+			thenTable.addExpression(getSelectedExpression());
 		}
 	}
 
 	private void save() {
-		updateForm();
 		try {
 			UserSessionHandler.getFormController().save();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);

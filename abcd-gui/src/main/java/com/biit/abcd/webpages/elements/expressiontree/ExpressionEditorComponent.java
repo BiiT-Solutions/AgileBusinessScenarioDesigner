@@ -1,7 +1,6 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
-import com.biit.abcd.persistence.entity.expressions.ExpressionThen;
 import com.biit.abcd.persistence.entity.expressions.ExpressionWhen;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -39,10 +38,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 		setCompositionRoot(rootLayout);
 	}
 
-	public void addWhenExpression() {
-
+	public ExpressionTreeTable addWhenExpression(String caption) {
 		final ExpressionTreeTable whenTable = new ExpressionTreeTable();
-		whenTable.setTitle("WHEN");
+		whenTable.setTitle(caption);
 		whenTable.setSizeFull();
 		expressionLayout.addComponent(whenTable);
 
@@ -68,11 +66,13 @@ public class ExpressionEditorComponent extends CustomComponent {
 
 		ExpressionWhen whenExpression = new ExpressionWhen();
 		whenTable.addExpression(whenExpression);
+
+		return whenTable;
 	}
 
-	public void addThenExpression() {
+	public ExpressionTreeTable addThenExpression(String caption) {
 		final ExpressionTreeTable thenTable = new ExpressionTreeTable();
-		thenTable.setTitle("THEN");
+		thenTable.setTitle(caption);
 		thenTable.setSizeFull();
 		expressionLayout.addComponent(thenTable);
 
@@ -96,171 +96,13 @@ public class ExpressionEditorComponent extends CustomComponent {
 			}
 		});
 
-		ExpressionThen thenExpression = new ExpressionThen();
-		thenTable.addExpression(thenExpression);
+//		ExpressionThen thenExpression = new ExpressionThen();
+//		thenTable.addExpression(thenExpression);
+
+		return thenTable;
 	}
 
 	protected void updatePropertiesComponent(ExprBasic value) {
 		expressionEditorProperties.updatePropertiesComponent(value);
 	}
-
-	// private void updateRightSideByExpression(ExprBasic expression) {
-	// rightLayout.removeAllComponents();
-	// if (expression == null) {
-	// return;
-	// }
-	//
-	// if (expression instanceof ExprFunction) {
-	// Label nameLabel = new Label("Function: " +
-	// expression.getClass().getSimpleName());
-	// rightLayout.addComponent(nameLabel);
-	// return;
-	// }
-	//
-	// if (expression instanceof ExprPort) {
-	// final ExprPort exprPort = (ExprPort) expression;
-	// Label nameLabel = new Label("Port: " + exprPort.getName());
-	// Button joinNewExpression = new Button("Add expression", new
-	// ClickListener() {
-	// private static final long serialVersionUID = 820753565688917978L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// exprPort.joinNewExpression();
-	// expressionTable.addExpression(exprPort, true, true);
-	// }
-	// });
-	// rightLayout.addComponent(nameLabel);
-	// rightLayout.addComponent(joinNewExpression);
-	// return;
-	// }
-	//
-	// if (expression instanceof ExprWChild) {
-	// final ExprWChild exprWChild = (ExprWChild) expression;
-	// Label nameLabel = new Label("Function: " +
-	// expression.getClass().getSimpleName());
-	// Button removeParenthesis = new Button("Remove Parenthesis", new
-	// ClickListener() {
-	// private static final long serialVersionUID = -9014000455735891421L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// System.out.println("removeParenthesis!");
-	// exprWChild.removeParenthesis();
-	// // Remove parenthesis is done by removing the group element,
-	// // so we need to update the parent.
-	// expressionTable.removeItem(exprWChild);
-	// expressionTable.addExpression(exprWChild.getParent(), true, true);
-	// }
-	// });
-	// Button joinNewExpression = new Button("Add expression", new
-	// ClickListener() {
-	// private static final long serialVersionUID = -6012042054818562027L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// exprWChild.joinNewExpression();
-	// expressionTable.addExpression(exprWChild, true, true);
-	// }
-	// });
-	// rightLayout.addComponent(nameLabel);
-	// rightLayout.addComponent(removeParenthesis);
-	// rightLayout.addComponent(joinNewExpression);
-	// return;
-	// }
-	//
-	// if (expression instanceof ExprWoChild) {
-	// final ExprWoChild exprWoChild = (ExprWoChild) expression;
-	// Label nameLabel = new Label("ExprWoChild: " +
-	// expression.getClass().getSimpleName());
-	// Button addParenthesis = new Button("Add Parenthesis", new ClickListener()
-	// {
-	// private static final long serialVersionUID = 5435210375713127863L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// System.out.println("addParenthesis!");
-	// exprWoChild.addParenthesis();
-	// // Add parenthesis is done by adding a parent element
-	// // parenthesis, so we need to update the parent as it still
-	// // doesn't exist on the tree table.
-	// expressionTable.addExpression(exprWoChild.getParent().getParent(), true,
-	// true);
-	// }
-	// });
-	//
-	// Button removeElement = new Button("Remove", new ClickListener() {
-	// private static final long serialVersionUID = 8516689932501288647L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// System.out.println("removeElement!");
-	// List<ExprBasic> expressionsToRemove = exprWoChild.delete();
-	// expressionTable.removeExpressions(expressionsToRemove);
-	// ExprBasic elementToUpdate = exprWoChild.getParent();
-	// // Retrieve the most parent element that has not been
-	// // deleted.
-	// while (expressionsToRemove.contains(elementToUpdate) && elementToUpdate
-	// != null) {
-	// elementToUpdate = elementToUpdate.getParent();
-	// }
-	// if (elementToUpdate != null) {
-	// expressionTable.addExpression(exprWoChild.getParent().getParent(), true,
-	// true);
-	// }
-	// }
-	// });
-	//
-	// Button setValueButton = new Button("Set value", new ClickListener() {
-	// private static final long serialVersionUID = 8986863061902964958L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// System.out.println("Set value! " + (form));
-	// final LogicValueWindow logicValueWindow = new LogicValueWindow(form);
-	// logicValueWindow.showCentered();
-	// logicValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
-	//
-	// @Override
-	// public void acceptAction(AcceptCancelWindow window) {
-	// ((ExprLogic) exprWoChild).value = logicValueWindow.value;
-	// expressionTable.addExpression(exprWoChild, true, true);
-	// logicValueWindow.close();
-	// }
-	// });
-	// }
-	// });
-	//
-	// rightLayout.addComponent(nameLabel);
-	// rightLayout.addComponent(addParenthesis);
-	// rightLayout.addComponent(removeElement);
-	// rightLayout.addComponent(setValueButton);
-	// return;
-	// }
-	//
-	// if (expression instanceof ExprJoint) {
-	// final ExprJoint exprJoint = (ExprJoint) expression;
-	// Label nameLabel = new Label("ExprJoint: " +
-	// expression.getClass().getSimpleName());
-	//
-	// ComboBox jointComboBox = new ComboBox();
-	// jointComboBox.setImmediate(true);
-	// for (JointValue value : exprJoint.getAcceptedValues()) {
-	// jointComboBox.addItem(value);
-	// jointComboBox.setItemCaption(value, value.getCaption());
-	// }
-	// jointComboBox.addValueChangeListener(new ValueChangeListener() {
-	// private static final long serialVersionUID = 2645094273499256660L;
-	//
-	// @Override
-	// public void valueChange(ValueChangeEvent event) {
-	// exprJoint.setValue((JointValue) event.getProperty().getValue());
-	// expressionTable.addExpression(exprJoint, true, true);
-	// }
-	// });
-	//
-	// rightLayout.addComponent(nameLabel);
-	// rightLayout.addComponent(jointComboBox);
-	// }
-	// }
 }
