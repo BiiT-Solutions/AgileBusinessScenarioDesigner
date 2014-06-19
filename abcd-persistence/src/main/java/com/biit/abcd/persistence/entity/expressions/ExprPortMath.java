@@ -25,8 +25,4 @@ public class ExprPortMath extends ExprPort {
 		return new ExprAtomicMath();
 	}
 
-	@Override
-	public String toString() {
-		return getChilds().toString();
-	}
 }

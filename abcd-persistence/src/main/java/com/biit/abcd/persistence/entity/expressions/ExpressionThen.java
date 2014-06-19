@@ -28,9 +28,4 @@ public class ExpressionThen extends ExprFunction {
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return getName() + ": " + getChilds();
-	}
-
 }

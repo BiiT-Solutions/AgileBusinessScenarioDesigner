@@ -35,9 +35,4 @@ public class ExprValueTimestamp extends ExprValue {
 		this.value = value;
 	}
 
-	@Override
-	public String toString() {
-		return getExpressionTableString();
-	}
-
 }

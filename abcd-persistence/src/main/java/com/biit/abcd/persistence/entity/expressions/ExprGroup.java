@@ -64,6 +64,7 @@ public class ExprGroup extends ExprWithChilds {
 		return expressionTableString;
 	}
 
+	@Override
 	public void removeParenthesis() {
 		ExprGroup parentGroup = (ExprGroup) parent;
 		int indexOfThisElement = parentGroup.childs.indexOf(this);
