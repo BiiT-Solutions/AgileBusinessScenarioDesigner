@@ -22,8 +22,8 @@ import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormTreeTable;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
-import com.biit.abcd.webpages.elements.formdesigner.TreeTablePropertiesComponent;
-import com.biit.abcd.webpages.elements.formdesigner.TreeTableUpperMenu;
+import com.biit.abcd.webpages.elements.formdesigner.FormDesignerPropertiesComponent;
+import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -33,8 +33,8 @@ import com.vaadin.ui.HorizontalLayout;
 public class FormDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 	private FormTreeTable formTreeTable;
-	private TreeTablePropertiesComponent propertiesComponent;
-	private TreeTableUpperMenu upperMenu;
+	private FormDesignerPropertiesComponent propertiesComponent;
+	private FormDesignerUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 
 	public FormDesigner() {
@@ -54,7 +54,7 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.setImmediate(true);
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
 
-		propertiesComponent = new TreeTablePropertiesComponent();
+		propertiesComponent = new FormDesignerPropertiesComponent();
 		propertiesComponent.setSizeFull();
 		propertiesComponent.addPropertyUpdateListener(new PropertieUpdateListener() {
 			@Override
@@ -98,8 +98,8 @@ public class FormDesigner extends FormWebPageComponent {
 		upperMenu.setEnabledButtons(selectedObject);
 	}
 
-	private TreeTableUpperMenu initUpperMenu() {
-		TreeTableUpperMenu upperMenu = new TreeTableUpperMenu();
+	private FormDesignerUpperMenu initUpperMenu() {
+		FormDesignerUpperMenu upperMenu = new FormDesignerUpperMenu();
 
 		upperMenu.addSaveButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 7788465178005102302L;
