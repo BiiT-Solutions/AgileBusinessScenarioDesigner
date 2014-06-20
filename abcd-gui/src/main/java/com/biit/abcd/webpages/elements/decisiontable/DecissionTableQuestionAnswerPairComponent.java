@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
@@ -23,9 +22,7 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 	private TableRule tableRule;
 
 	public DecissionTableQuestionAnswerPairComponent() {
-		//TODO this goes out.
-		tableRule = new TableRule();
-		
+
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
@@ -75,8 +72,8 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 	}
 
 	public void addColumnPair() {
-		if(tableRule==null){
-			//Do nothing if there is no table rule.
+		if (tableRule == null) {
+			// Do nothing if there is no table rule.
 			return;
 		}
 		conditionTable.addColumnPair();
@@ -85,16 +82,10 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 			tableRuleRow.getConditions().add(new QuestionAndAnswerValue());
 		}
 	}
-//
-//	public Collection<Question> getColumns() {
-//		// return (Collection<Question>)
-//		// conditionTable.getContainerPropertyIds();
-//		return getTableRule().getConditionsHeader();
-//	}
 
 	public void addRow() {
-		if(tableRule==null){
-			//Do nothing if there is no table rule.
+		if (tableRule == null) {
+			// Do nothing if there is no table rule.
 			return;
 		}
 		TableRuleRow tableRuleRow = new TableRuleRow();
@@ -123,15 +114,7 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 	}
 
 	public void removeSelectedColumns() {
-		//TODO
-//		Collection<Question> selectedQuestions = conditionTable.getSelectedQuestions();
-//		for (Question question : selectedQuestions) {
-//			conditionTable.removeContainerProperty(question);
-//			for (TableRuleRow rule : getTableRules()) {
-//				rule.removeCondition(question);
-//			}
-//		}
-//		return selectedQuestions;
+		conditionTable.removeColumns(conditionTable.getSelectedColumns());
 	}
 
 	public List<TableRuleRow> getTableRules() {
@@ -166,5 +149,9 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 
 	public void setTableRule(TableRule tableRule) {
 		this.tableRule = tableRule;
+	}
+
+	public Collection<?> getColumns() {
+		return conditionTable.getContainerPropertyIds();
 	}
 }
