@@ -11,6 +11,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
@@ -261,6 +262,7 @@ public class FormDesigner extends FormWebPageComponent {
 	public void addQuestion() {
 		if (getForm() != null) {
 			Question newQuestion = new Question();
+			newQuestion.setAnswerType(AnswerType.RADIO);
 			setCreator(newQuestion);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
@@ -306,6 +308,7 @@ public class FormDesigner extends FormWebPageComponent {
 					}
 					if (parent != null) {
 						newAnswer.setName(newAnswer.getDefaultName(parent, 1));
+						//First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
 					}
