@@ -141,8 +141,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().addWindow(new WindowNewDiagram(thisPage, LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_CAPTION,
-						LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_TEXTFIELD));
+				UI.getCurrent().addWindow(
+						new WindowNewDiagram(thisPage, LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_CAPTION,
+								LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_TEXTFIELD));
 			}
 		});
 		diagramBuilderUpperMenu.addDeleteNewDiagramButtonClickListener(new ClickListener() {
@@ -283,6 +284,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	public void addDiagram(Diagram newDiagram) {
 		diagramBuilderTable.addDiagram(newDiagram);
 		diagramBuilderTable.setValue(newDiagram);
+	}
+
+	public void sortTableMenu() {
+		diagramBuilderTable.sort();
 	}
 
 	// TODO

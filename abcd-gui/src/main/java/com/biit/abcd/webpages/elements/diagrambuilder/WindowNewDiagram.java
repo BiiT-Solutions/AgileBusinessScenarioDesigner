@@ -35,6 +35,7 @@ public class WindowNewDiagram extends WindowCreateNewObject {
 			UserSessionHandler.getFormController().getForm().addDiagram(newDiagram);
 
 			((FormDiagramBuilder) getParentWindow()).addDiagram(newDiagram);
+			((FormDiagramBuilder) getParentWindow()).sortTableMenu();
 			close();
 		} else {
 			MessageManager.showError(LanguageCodes.ERROR_NAME_NOT_VALID);
