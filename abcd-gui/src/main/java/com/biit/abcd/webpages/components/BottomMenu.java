@@ -8,7 +8,7 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class BottomMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 6149788828670200504L;
-	private IconButton formManagerButton, treeDesignerButton, formVariables, diagramBuilderButton,
+	private IconButton treeDesignerButton, formVariables, diagramBuilderButton,
 			expressionsEditorButton, ruleEditorButton, decissionTableButton;
 
 	protected BottomMenu() {
@@ -20,18 +20,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 		setWidth("100%");
 		setHeight("80px");
 
-		// Add FormManager button.
-		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcons.FORM_MANAGER_PAGE,
-				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
-					private static final long serialVersionUID = 4002268252434768032L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						changeView(WebMap.FORM_MANAGER);
-					}
-				});
-		formManagerButton.setEnabled(true);
-		addIconButton(formManagerButton);
+		
 
 		// Add Tree Designer button.
 		treeDesignerButton = new IconButton(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER, ThemeIcons.TREE_DESIGNER_PAGE,
