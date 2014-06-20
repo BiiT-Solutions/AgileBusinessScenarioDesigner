@@ -55,8 +55,8 @@ public class EditCellComponent extends CustomComponent {
 
 	private void addButtons() {
 		if (editButton.getParent() == null) {
-			rootLayout.addComponent(editButton);
-			rootLayout.addComponent(removeButton);
+			rootLayout.addComponent(removeButton, 0);
+			rootLayout.addComponent(editButton, 0);
 		}
 	}
 
