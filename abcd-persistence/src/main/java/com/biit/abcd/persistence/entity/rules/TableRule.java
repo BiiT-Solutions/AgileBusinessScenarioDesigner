@@ -62,10 +62,6 @@ public class TableRule extends StorableObject {
 		return getName();
 	}
 
-	public List<Question> getConditionsHeader() {
-		return conditionsHeader;
-	}
-
 	public void setConditionsHeader(List<Question> conditions) {
 		this.conditionsHeader.clear();
 		this.conditionsHeader.addAll(conditions);
