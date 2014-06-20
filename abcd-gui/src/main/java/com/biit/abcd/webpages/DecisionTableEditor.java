@@ -17,8 +17,8 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
-import com.biit.abcd.webpages.elements.decisiontable.DecisionTableComponent;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
+import com.biit.abcd.webpages.elements.decisiontable.DecissionTableQuestionAnswerPairComponent;
 import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -30,7 +30,7 @@ import com.vaadin.ui.UI;
 public class DecisionTableEditor extends FormWebPageComponent {
 	static final long serialVersionUID = -5547452506556261601L;
 
-	private DecisionTableComponent decisionTable;
+	private DecissionTableQuestionAnswerPairComponent decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableMenu tableSelectionMenu;
 
@@ -60,7 +60,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		rootLayout.setMenu(tableSelectionMenu);
 
 		// Create content
-		decisionTable = new DecisionTableComponent();
+		decisionTable = new DecissionTableQuestionAnswerPairComponent();
 		decisionTable.setSizeFull();
 
 		rootLayout.setContent(decisionTable);
@@ -134,27 +134,31 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				if (tableSelectionMenu.getSelectedTableRule() != null) {
-					AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
-							.getFormController().getForm(), true);
-					addNewConditionWindow.disableQuestions(decisionTable.getColumns());
-					addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
-						@Override
-						public void acceptAction(AcceptCancelWindow window) {
-							Set<Question> selectedQuestions = ((AddNewConditionWindow) window).getSelectedQuestions();
-							for (Question selectedQuestion : selectedQuestions) {
-								((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
-								decisionTable.addColumn(selectedQuestion);
-								getSelectedTableRule().getConditionsHeader().add(selectedQuestion);
-								if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
-									decisionTable.addRow();
-								}
-							}
-							window.close();
-						}
-					});
-					addNewConditionWindow.showCentered();
-				}
+				decisionTable.addColumnPair();
+				//if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
+					decisionTable.addRow();
+				//}
+//				if (tableSelectionMenu.getSelectedTableRule() != null) {
+//					AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
+//							.getFormController().getForm(), true);
+//					addNewConditionWindow.disableQuestions(decisionTable.getColumns());
+//					addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+//						@Override
+//						public void acceptAction(AcceptCancelWindow window) {
+//							Set<Question> selectedQuestions = ((AddNewConditionWindow) window).getSelectedQuestions();
+//							for (Question selectedQuestion : selectedQuestions) {
+//								((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
+//								decisionTable.addColumn(selectedQuestion);
+//								getSelectedTableRule().getConditionsHeader().add(selectedQuestion);
+//								if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
+//									decisionTable.addRow();
+//								}
+//							}
+//							window.close();
+//						}
+//					});
+//					addNewConditionWindow.showCentered();
+//				}
 			}
 		});
 
@@ -163,10 +167,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Collection<Question> removedQuestions = decisionTable.removeSelectedColumns();
-				for (Question question : removedQuestions) {
-					getSelectedTableRule().getConditionsHeader().remove(question);
-				}
+//				Collection<Question> removedQuestions = decisionTable.removeSelectedColumns();
+//				for (Question question : removedQuestions) {
+//					getSelectedTableRule().getConditionsHeader().remove(question);
+//				}
 			}
 		});
 
@@ -220,19 +224,20 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	/**
 	 * Updates the table where the user defines the rules with the information of the currently selected table.
 	 */
+	//TODO
 	private void refreshDecisionTable() {
 		decisionTable.removeAll();
 		decisionTable.setTableRule(getSelectedTableRule());
-		if (getSelectedTableRule() != null) {
-			for (Question question : getSelectedTableRule().getConditionsHeader()) {
-				decisionTable.addColumn(question);
-			}
-
-			// Add table rows.
-			for (TableRuleRow tableRuleRow : getSelectedTableRule().getRules()) {
-				decisionTable.addRow(tableRuleRow);
-			}
-		}
+//		if (getSelectedTableRule() != null) {
+//			for (Question question : getSelectedTableRule().getConditionsHeader()) {
+//				decisionTable.addColumn(question);
+//			}
+//
+//			// Add table rows.
+//			for (TableRuleRow tableRuleRow : getSelectedTableRule().getRules()) {
+//				decisionTable.addRow(tableRuleRow);
+//			}
+//		}
 	}
 
 	@Override

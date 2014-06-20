@@ -92,63 +92,63 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		Assert.assertEquals(tableRules.size(), 1);
 	}
 
-	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
-	public void storeTableRule() throws NotValidChildException, NotValidExpression {
-		// Define form.
-		Form form = new Form();
-		form.setName(DUMMY_FORM + "_v2");
+//	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
+//	public void storeTableRule() throws NotValidChildException, NotValidExpression {
+//		// Define form.
+//		Form form = new Form();
+//		form.setName(DUMMY_FORM + "_v2");
+//
+//		Category category = new Category();
+//		form.addChild(category);
+//
+//		Question question = new Question();
+//		question.setName("Put your age:");
+//		question.setAnswerFormat(AnswerFormat.NUMBER);
+//		question.setAnswerType(AnswerType.INPUT);
+//		category.addChild(question);
+//
+//		// Define rule elements
+//		TableRule tableRule = new TableRule();
+//		TableRuleRow tableRuleRow = new TableRuleRow();
+//
+//		ActionString action = new ActionString();
+//		action.setExpression(BASIC_ACTION);
+//		tableRuleRow.addAction(action);
+//
+//		Condition condition = new Condition();
+//		// Set into the rule.
+//		tableRuleRow.putCondition(question, condition);
+//		tableRule.getRules().add(tableRuleRow);
+//
+//		form.getTableRules().add(tableRule);
+//
+//		formDao.makePersistent(form);
+//
+//		Form retrievedForm = formDao.getForm(DUMMY_FORM + "_v2");
+//		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
+//		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
+//		Assert.assertEquals(tableRuleRowDao.getRowCount(), 2);
+//		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
+//				BASIC_ACTION);
+//		Assert.assertEquals(
+//				retrievedForm
+//						.getTableRules()
+//						.get(0)
+//						.getRules()
+//						.get(0)
+//						.getConditions()
+//						.get(getHibernateQuestion(retrievedForm.getTableRules().get(0).getRules().get(0)
+//								.getConditions(), question)).getId(), condition.getId());
+//	}
 
-		Category category = new Category();
-		form.addChild(category);
-
-		Question question = new Question();
-		question.setName("Put your age:");
-		question.setAnswerFormat(AnswerFormat.NUMBER);
-		question.setAnswerType(AnswerType.INPUT);
-		category.addChild(question);
-
-		// Define rule elements
-		TableRule tableRule = new TableRule();
-		TableRuleRow tableRuleRow = new TableRuleRow();
-
-		ActionString action = new ActionString();
-		action.setExpression(BASIC_ACTION);
-		tableRuleRow.addAction(action);
-
-		Condition condition = new Condition();
-		// Set into the rule.
-		tableRuleRow.putCondition(question, condition);
-		tableRule.getRules().add(tableRuleRow);
-
-		form.getTableRules().add(tableRule);
-
-		formDao.makePersistent(form);
-
-		Form retrievedForm = formDao.getForm(DUMMY_FORM + "_v2");
-		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
-		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
-		Assert.assertEquals(tableRuleRowDao.getRowCount(), 2);
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
-				BASIC_ACTION);
-		Assert.assertEquals(
-				retrievedForm
-						.getTableRules()
-						.get(0)
-						.getRules()
-						.get(0)
-						.getConditions()
-						.get(getHibernateQuestion(retrievedForm.getTableRules().get(0).getRules().get(0)
-								.getConditions(), question)).getId(), condition.getId());
-	}
-
-	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })
-	public void removeTableRules() {
-		formDao.removeAll();
-		Assert.assertEquals(formDao.getRowCount(), 0);
-		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
-		Assert.assertEquals(tableRuleRowDao.getRowCount(), 0);
-		Assert.assertEquals(conditionDao.getRowCount(), 0);
-		Assert.assertEquals(actionDao.getRowCount(), 0);
-
-	}
+//	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })
+//	public void removeTableRules() {
+//		formDao.removeAll();
+//		Assert.assertEquals(formDao.getRowCount(), 0);
+//		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
+//		Assert.assertEquals(tableRuleRowDao.getRowCount(), 0);
+//		Assert.assertEquals(conditionDao.getRowCount(), 0);
+//		Assert.assertEquals(actionDao.getRowCount(), 0);
+//
+//	}
 }

@@ -7,31 +7,31 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
-import com.biit.abcd.persistence.entity.rules.AnswerCondition;
+import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 
-public class DecisionTableComponent extends CustomComponent {
+public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 	private static final long serialVersionUID = 2314989763962134814L;
 
 	private HorizontalLayout rootLayout;
-	private ConditionTable conditionTable;
+	private QuestionAnswerPairTable conditionTable;
 	private ActionTable actionTable;
-	// private List<TableRuleRow> decisionTableRules;
 	private TableRule tableRule;
 
-	public DecisionTableComponent() {
-		// decisionTableRules = new ArrayList<>();
-
+	public DecissionTableQuestionAnswerPairComponent() {
+		//TODO this goes out.
+		tableRule = new TableRule();
+		
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
 		rootLayout.setSpacing(true);
 
-		conditionTable = new ConditionTable();
+		conditionTable = new QuestionAnswerPairTable();
 		conditionTable.setSizeFull();
 		conditionTable.addCellSelectionListener(new CellSelectionListener() {
 
@@ -74,24 +74,29 @@ public class DecisionTableComponent extends CustomComponent {
 		// decisionTableRules = new ArrayList<>();
 	}
 
-	public void addColumn(Question question) {
-		if (question != null) {
-			conditionTable.addColumn(question);
-			for (TableRuleRow tableRuleRow : getTableRules()) {
-				// New column is filled up with empty values for all existing rows.
-				if (tableRuleRow.getConditions().get(question) == null) {
-					tableRuleRow.getConditions().put(question, new AnswerCondition(null));
-				}
-			}
+	public void addColumnPair() {
+		if(tableRule==null){
+			//Do nothing if there is no table rule.
+			return;
+		}
+		conditionTable.addColumnPair();
+		for (TableRuleRow tableRuleRow : getTableRules()) {
+			// New column is filled up with empty values for all existing rows.
+			tableRuleRow.getConditions().add(new QuestionAndAnswerValue());
 		}
 	}
 
 	public Collection<Question> getColumns() {
-		// return (Collection<Question>) conditionTable.getContainerPropertyIds();
+s		// return (Collection<Question>)
+		// conditionTable.getContainerPropertyIds();
 		return getTableRule().getConditionsHeader();
 	}
 
 	public void addRow() {
+		if(tableRule==null){
+			//Do nothing if there is no table rule.
+			return;
+		}
 		TableRuleRow tableRuleRow = new TableRuleRow();
 		// Add at least one action.
 		tableRuleRow.addAction(new ActionExpression());
@@ -117,15 +122,16 @@ public class DecisionTableComponent extends CustomComponent {
 		}
 	}
 
-	public Collection<Question> removeSelectedColumns() {
-		Collection<Question> selectedQuestions = conditionTable.getSelectedQuestions();
-		for (Question question : selectedQuestions) {
-			conditionTable.removeContainerProperty(question);
-			for (TableRuleRow rule : getTableRules()) {
-				rule.removeCondition(question);
-			}
-		}
-		return selectedQuestions;
+	public void removeSelectedColumns() {
+		//TODO
+//		Collection<Question> selectedQuestions = conditionTable.getSelectedQuestions();
+//		for (Question question : selectedQuestions) {
+//			conditionTable.removeContainerProperty(question);
+//			for (TableRuleRow rule : getTableRules()) {
+//				rule.removeCondition(question);
+//			}
+//		}
+//		return selectedQuestions;
 	}
 
 	public List<TableRuleRow> getTableRules() {
