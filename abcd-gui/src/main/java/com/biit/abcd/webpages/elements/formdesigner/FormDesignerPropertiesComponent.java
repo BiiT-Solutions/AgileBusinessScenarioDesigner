@@ -2,10 +2,10 @@ package com.biit.abcd.webpages.elements.formdesigner;
 
 import com.biit.abcd.webpages.components.PropertiesComponent;
 
-public class TreeTablePropertiesComponent extends PropertiesComponent {
+public class FormDesignerPropertiesComponent extends PropertiesComponent {
 	private static final long serialVersionUID = -6946016320623141040L;
 
-	public TreeTablePropertiesComponent() {
+	public FormDesignerPropertiesComponent() {
 		super();
 		registerPropertiesComponent(new FormProperties());
 		registerPropertiesComponent(new CategoryProperties());

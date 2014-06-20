@@ -12,12 +12,12 @@ import com.biit.abcd.webpages.components.ThemeIcons;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
 
-public class TreeTableUpperMenu extends UpperMenu {
+public class FormDesignerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -4712688788270327039L;
 	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton, moveUpButton,
 			moveDownButton, removeButton;
 
-	public TreeTableUpperMenu() {
+	public FormDesignerUpperMenu() {
 		super();
 		defineMenu();
 	}
