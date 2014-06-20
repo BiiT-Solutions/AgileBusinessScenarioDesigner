@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
@@ -93,5 +94,14 @@ public class EditCellComponent extends CustomComponent {
 	
 	public void setLabel(String label){
 		textLabel.setValue(label);
+	}
+	
+	public void setLabel(TreeObject treeObject){
+		if(treeObject ==null){
+			//TODO
+			setLabel("null");
+		}else{
+			setLabel(treeObject.toString());
+		}
 	}
 }

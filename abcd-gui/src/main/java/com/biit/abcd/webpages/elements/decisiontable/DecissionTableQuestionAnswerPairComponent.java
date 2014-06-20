@@ -85,12 +85,12 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 			tableRuleRow.getConditions().add(new QuestionAndAnswerValue());
 		}
 	}
-
-	public Collection<Question> getColumns() {
-		// return (Collection<Question>)
-		// conditionTable.getContainerPropertyIds();
-		return getTableRule().getConditionsHeader();
-	}
+//
+//	public Collection<Question> getColumns() {
+//		// return (Collection<Question>)
+//		// conditionTable.getContainerPropertyIds();
+//		return getTableRule().getConditionsHeader();
+//	}
 
 	public void addRow() {
 		if(tableRule==null){

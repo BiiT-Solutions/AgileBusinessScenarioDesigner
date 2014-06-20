@@ -6,26 +6,32 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.MouseEventDetails;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Table;
 
 public class QuestionAnswerPairTable extends Table {
 	private static final long serialVersionUID = -963052429591605697L;
 	private static final int rowHeaderWidth = 32;
-	
+
 	private Table thisTable;
 	private CellRowSelector cellRowSelector;
-	
-	
+
 	public QuestionAnswerPairTable() {
 		thisTable = this;
-		
+
 		setRowHeaderMode(RowHeaderMode.INDEX);
 		setColumnWidth(null, rowHeaderWidth);
 
@@ -33,7 +39,7 @@ public class QuestionAnswerPairTable extends Table {
 		setSizeFull();
 
 		cellRowSelector = new CellRowSelector();
-		
+
 		addItemClickListener(cellRowSelector);
 		setCellStyleGenerator(cellRowSelector);
 		addActionHandler(cellRowSelector);
@@ -57,12 +63,14 @@ public class QuestionAnswerPairTable extends Table {
 
 	public void addColumnPair() {
 
-		addContainerProperty(getContainerPropertyIds().size(), QuestionValueEditCell.class, null, "TODO-QUESTION", null,
+		addContainerProperty(getContainerPropertyIds().size(), QuestionValueEditCell.class, null, "TODO-QUESTION",
+				null, Align.CENTER);
+		addContainerProperty(getContainerPropertyIds().size(), AnswerValueEditCell.class, null, "TODO-ANSWER", null,
 				Align.CENTER);
-		addContainerProperty(getContainerPropertyIds().size(), AnswerValueEditCell.class, null, "TODO-ANSWER", null, Align.CENTER);
 
 		for (Object itemId : getItemIds()) {
 			setDefaultNewItemPropertyValues(itemId, getItem(itemId));
+			updateItem((TableRuleRow) itemId);
 		}
 	}
 
@@ -94,16 +102,22 @@ public class QuestionAnswerPairTable extends Table {
 		for (final Object propertyId : getContainerPropertyIds()) {
 			if (item.getItemProperty(propertyId).getValue() == null) {
 				EditCellComponent editCellComponent = null;
-				if(item.getItemProperty(propertyId).getClass().isInstance(QuestionValueEditCell.class) ){
+				if (((Integer) propertyId) % 2 == 0) {
+					if (((Integer) propertyId / 2) >= ((TableRuleRow) itemId).getConditions().size()) {
+						((TableRuleRow) itemId).getConditions().add(new QuestionAndAnswerValue());
+					}
 					editCellComponent = new QuestionValueEditCell();
-				}else{
+					editCellComponent.addEditButtonClickListener(new CellEditButtonQuestionClickListener(
+							getQuestionAndAnswerValue((TableRuleRow) itemId, propertyId), (TableRuleRow) itemId));
+					editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonQuestionClickListener(
+							getQuestionAndAnswerValue((TableRuleRow) itemId, propertyId), (TableRuleRow) itemId));
+				} else {
 					editCellComponent = new AnswerValueEditCell();
+					editCellComponent.addEditButtonClickListener(new CellEditButtonAnswerClickListener(
+							getQuestionAndAnswerValue((TableRuleRow) itemId, propertyId), (TableRuleRow) itemId));
+					editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonAnswerClickListener(
+							getQuestionAndAnswerValue((TableRuleRow) itemId, propertyId), (TableRuleRow) itemId));
 				}
-				//TO DO
-//				editCellComponent.addEditButtonClickListener(new CellEditButtonQuestionAnswerPairClickListener(
-//						(Question) propertyId, (TableRuleRow) itemId));
-//				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonQuestionAnswerPairClickListener(
-//						(Question) propertyId, (TableRuleRow) itemId));
 				// Propagate element click.
 				editCellComponent.addLayoutClickListener(new LayoutClickPropagator(item, itemId, propertyId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
@@ -146,78 +160,136 @@ public class QuestionAnswerPairTable extends Table {
 	@SuppressWarnings("unchecked")
 	private void updateItem(TableRuleRow rule) {
 		Item row = getItem(rule);
-		int i=0;
+		int i = 0;
 		for (QuestionAndAnswerValue questionAndAnswerValue : rule.getConditions()) {
 			QuestionValueEditCell questionValue = ((QuestionValueEditCell) row.getItemProperty(i).getValue());
-			AnswerValueEditCell answerValue = ((AnswerValueEditCell) row.getItemProperty(i+1).getValue());
-			
+			AnswerValueEditCell answerValue = ((AnswerValueEditCell) row.getItemProperty(i + 1).getValue());
+
 			if (questionValue != null) {
-				questionValue.setLabel(questionAndAnswerValue.getQuestion().toString());
+				questionValue.setLabel(questionAndAnswerValue.getQuestion());
 				row.getItemProperty(i).setValue(questionValue);
 			}
 			if (answerValue != null) {
-				questionValue.setLabel(questionAndAnswerValue.getAnswer().toString());
-				row.getItemProperty(i+1).setValue(answerValue);
+				answerValue.setLabel(questionAndAnswerValue.getAnswer());
+				row.getItemProperty(i + 1).setValue(answerValue);
 			}
-			
-			i+=2;
+
+			i += 2;
 		}
 	}
-	
-	// private class CellEditButtonClickListener implements ClickListener {
-	// private static final long serialVersionUID = -4186477224806988479L;
-	// private Question question;
-	// private TableRuleRow rule;
-	//
-	// public CellEditButtonClickListener(Question question, TableRuleRow rule)
-	// {
-	// this.question = question;
-	// this.rule = rule;
-	// }
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// final AddNewAnswerValue newAnswerValue = new AddNewAnswerValue(question);
-	// newAnswerValue.showCentered();
-	// if (rule.getConditions() != null && rule.getConditions().get(question) !=
-	// null) {
-	// newAnswerValue
-	// .setTreeObjectSelected(((AnswerCondition)
-	// rule.getConditions().get(question)).getAnswer());
-	// }
-	// newAnswerValue.addAcceptAcctionListener(new AcceptActionListener() {
-	// @Override
-	// public void acceptAction(AcceptCancelWindow window) {
-	// Answer selectedAnswer = ((AddNewAnswerValue)
-	// window).getSelectedTableValue();
-	// if (selectedAnswer != null) {
-	// rule.putCondition(question, new AnswerCondition(selectedAnswer));
-	// updateItem(rule);
-	// newAnswerValue.close();
-	// }
-	// }
-	// });
-	// }
-	// }
-	//
-	// private class CellDeleteButtonClickListener implements ClickListener {
-	// private static final long serialVersionUID = -7125934888135148456L;
-	// private Question question;
-	// private TableRuleRow rule;
-	//
-	// public CellDeleteButtonClickListener(Question question, TableRuleRow
-	// rule) {
-	// this.question = question;
-	// this.rule = rule;
-	// }
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// rule.removeCondition(question);
-	// updateItem(rule);
-	// }
-	// }
-	
+
+	public QuestionAndAnswerValue getQuestionAndAnswerValue(TableRuleRow row, Object propertyId) {
+		if (((Integer) propertyId % 2) == 0) {
+			return row.getConditions().get(((Integer) propertyId) / 2);
+		} else {
+			return row.getConditions().get(((Integer) propertyId - 1) / 2);
+		}
+	}
+
+	private class CellEditButtonQuestionClickListener implements ClickListener {
+		private static final long serialVersionUID = -4186477224806988479L;
+		private QuestionAndAnswerValue questionAnswer;
+		private TableRuleRow rule;
+
+		public CellEditButtonQuestionClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+			this.questionAnswer = questionAndAnswerValue;
+			this.rule = rule;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			final AddNewConditionWindow newConditionWindow = new AddNewConditionWindow(UserSessionHandler
+					.getFormController().getForm(), false);
+
+			if (questionAnswer.getQuestion() != null) {
+				newConditionWindow.setTreeObjectSelected(questionAnswer.getQuestion());
+			}
+			newConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				@Override
+				public void acceptAction(AcceptCancelWindow window) {
+					Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
+					if (selectedQuestion == null) {
+						questionAnswer.setAnswer(null);
+					}
+					questionAnswer.setQuestion(selectedQuestion);
+					updateItem(rule);
+					newConditionWindow.close();
+				}
+			});
+
+			newConditionWindow.showCentered();
+		}
+	}
+
+	private class CellEditButtonAnswerClickListener implements ClickListener {
+		private static final long serialVersionUID = -1802531580937378464L;
+		private QuestionAndAnswerValue questionAnswer;
+		private TableRuleRow rule;
+
+		public CellEditButtonAnswerClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+			this.questionAnswer = questionAndAnswerValue;
+			this.rule = rule;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			if (questionAnswer.getQuestion() != null) {
+				final AddNewAnswerValue newAnswerValueWindow = new AddNewAnswerValue(questionAnswer.getQuestion());
+				if (questionAnswer.getAnswer() != null) {
+					newAnswerValueWindow.setTreeObjectSelected(questionAnswer.getAnswer());
+				}
+				newAnswerValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						Answer selectedanswer = ((AddNewAnswerValue) window).getSelectedTableValue();
+						questionAnswer.setAnswer(selectedanswer);
+						updateItem(rule);
+						newAnswerValueWindow.close();
+					}
+				});
+				newAnswerValueWindow.showCentered();
+			} else {
+				// TODO show message
+			}
+
+		}
+	}
+
+	private class CellDeleteButtonQuestionClickListener implements ClickListener {
+		private static final long serialVersionUID = -4967974394553397046L;
+		private QuestionAndAnswerValue questionAnswer;
+		private TableRuleRow rule;
+
+		public CellDeleteButtonQuestionClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+			this.questionAnswer = questionAndAnswerValue;
+			this.rule = rule;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			questionAnswer.setQuestion(null);
+			questionAnswer.setAnswer(null);
+			updateItem(rule);
+		}
+	}
+
+	private class CellDeleteButtonAnswerClickListener implements ClickListener {
+		private static final long serialVersionUID = 6594787287245555367L;
+		private QuestionAndAnswerValue questionAnswer;
+		private TableRuleRow rule;
+
+		public CellDeleteButtonAnswerClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+			this.questionAnswer = questionAndAnswerValue;
+			this.rule = rule;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			questionAnswer.setAnswer(null);
+			updateItem(rule);
+		}
+	}
+
 	public void addCellSelectionListener(CellSelectionListener listener) {
 		cellRowSelector.addCellSelectionListener(listener);
 	}
@@ -225,19 +297,19 @@ public class QuestionAnswerPairTable extends Table {
 	public void removeCellSelectionListener(CellSelectionListener listener) {
 		cellRowSelector.removeCellSelectionListener(listener);
 	}
-	
+
 	private class LayoutClickPropagator implements LayoutClickListener {
 		private static final long serialVersionUID = 5504698883691497113L;
 		private Item item;
 		private Object itemId;
 		private Object propertyId;
-		
+
 		public LayoutClickPropagator(Item item, Object itemId, Object propertyId) {
 			this.item = item;
 			this.itemId = itemId;
 			this.propertyId = propertyId;
 		}
-		
+
 		@Override
 		public void layoutClick(LayoutClickEvent event) {
 			MouseEventDetails mouseEvent = new MouseEventDetails();
