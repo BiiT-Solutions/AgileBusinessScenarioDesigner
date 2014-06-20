@@ -71,6 +71,7 @@ public class ExpressionTreeTable extends TreeTable {
 
 			if (alsoChilds) {
 				addExpressionChilds(expression);
+				setCollapsed(expression, false);
 			}
 
 			if (alsoParents) {
