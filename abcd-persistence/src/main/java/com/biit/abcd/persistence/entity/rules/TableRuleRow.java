@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -21,9 +22,7 @@ import com.biit.abcd.persistence.entity.StorableObject;
 @Table(name = "RULE_DECISION_TABLE_ROW")
 public class TableRuleRow extends StorableObject {
 
-	// Due to bug https://hibernate.atlassian.net/browse/HHH-8839, map must use @LazyCollection.
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "condition_index")
 	private List<QuestionAndAnswerValue> conditions;
 
