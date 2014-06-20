@@ -28,12 +28,12 @@ public class ExprAtomicMathProperties extends ExprAtomicProperties<ExprAtomicMat
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				SelectQuestionVariableWindow variableWindow = new SelectQuestionVariableWindow();
+				SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
 				variableWindow.showCentered();
 				variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						ExprValueFormReference formReference = ((SelectQuestionVariableWindow) window).getValue();
+						ExprValueFormReference formReference = ((SelectFormElementVariableWindow) window).getValue();
 						if (formReference == null) {
 							MessageManager.showError("TODO - error");
 						} else {

@@ -33,19 +33,19 @@ public class ExprAtomicLogicProperties extends ExprAtomicProperties<ExprAtomicLo
 				firePropertyUpdateListener(element);
 			}
 		});
-		
 		always.setWidth(buttonWidth);
-		Button variableSelect = new Button("Select Form Element", new ClickListener() {
+		
+		Button formElement = new Button("Select Form Element", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				SelectQuestionVariableWindow variableWindow = new SelectQuestionVariableWindow();
+				SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
 				variableWindow.showCentered();
 				variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						ExprValueFormReference formReference = ((SelectQuestionVariableWindow) window).getValue();
+						ExprValueFormReference formReference = ((SelectFormElementVariableWindow) window).getValue();
 						if (formReference == null) {
 							MessageManager.showError("TODO - error");
 						} else {
@@ -58,19 +58,19 @@ public class ExprAtomicLogicProperties extends ExprAtomicProperties<ExprAtomicLo
 
 			}
 		});
-		variableSelect.setWidth(buttonWidth);
+		formElement.setWidth(buttonWidth);
 		
 		Button variableSelect = new Button("Select variable", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				SelectQuestionVariableWindow variableWindow = new SelectQuestionVariableWindow();
+				SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
 				variableWindow.showCentered();
 				variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						ExprValueFormReference formReference = ((SelectQuestionVariableWindow) window).getValue();
+						ExprValueFormReference formReference = ((SelectFormElementVariableWindow) window).getValue();
 						if (formReference == null) {
 							MessageManager.showError("TODO - error");
 						} else {
@@ -113,6 +113,7 @@ public class ExprAtomicLogicProperties extends ExprAtomicProperties<ExprAtomicLo
 		FormLayout exprAtomicMathForm = new FormLayout();
 		exprAtomicMathForm.setWidth(null);
 		exprAtomicMathForm.addComponent(always);
+		exprAtomicMathForm.addComponent(formElement);
 		exprAtomicMathForm.addComponent(variableSelect);
 		exprAtomicMathForm.addComponent(valueSelect);
 

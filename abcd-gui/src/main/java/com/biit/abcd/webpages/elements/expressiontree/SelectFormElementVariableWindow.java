@@ -16,7 +16,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.VerticalLayout;
 
-public class SelectQuestionVariableWindow extends AcceptCancelWindow {
+public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 
 	private static final long serialVersionUID = -4212298247094386855L;
 
@@ -27,7 +27,7 @@ public class SelectQuestionVariableWindow extends AcceptCancelWindow {
 	private FormQuestionTable formQuestionTable;
 	private ListSelect variableSelection;
 
-	public SelectQuestionVariableWindow() {
+	public SelectFormElementVariableWindow() {
 		setWidth("50%");
 		setHeight("50%");
 		setClosable(false);
