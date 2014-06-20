@@ -210,68 +210,68 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(diagramDao.getRowCount(), 1);
 	}
 
-	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
-	public void storeFormTableRule() throws NotValidChildException, NotValidExpression {
-		Form form = new Form();
-		form.setName(TABLE_RULE_FORM);
+//	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
+//	public void storeFormTableRule() throws NotValidChildException, NotValidExpression {
+//		Form form = new Form();
+//		form.setName(TABLE_RULE_FORM);
+//
+//		Category category1 = new Category();
+//		category1.setName("Category1");
+//		form.addChild(category1);
+//
+//		Group group1 = new Group();
+//		group1.setName("Group1");
+//		category1.addChild(group1);
+//
+//		Question question1 = new Question();
+//		question1.setName("Question1");
+//		group1.addChild(question1);
+//
+//		Question question2 = new Question();
+//		question2.setName("Question2");
+//		group1.addChild(question2);
+//
+//		Answer answer1 = new Answer();
+//		answer1.setName("Answer1");
+//		question1.addChild(answer1);
+//
+//		Answer answer2 = new Answer();
+//		answer2.setName("Answer2");
+//		question1.addChild(answer2);
+//
+//		TableRule tableRule = new TableRule();
+//
+//		TableRuleRow tableRuleRow = new TableRuleRow();
+//		AnswerCondition answerCondition = new AnswerCondition(answer1);
+//		tableRuleRow.getConditions().put(question1, answerCondition);
+//		tableRuleRow.addAction(new ActionString());
+//		tableRuleRow.getActions().get(0).setExpression(ACTION_EXPRESSION);
+//
+//		tableRule.getRules().add(tableRuleRow);
+//
+//		form.getTableRules().add(tableRule);
+//
+//		formDao.makePersistent(form);
+//		Form retrievedForm = formDao.read(form.getId());
+//
+//		Assert.assertEquals(retrievedForm.getId(), form.getId());
+//		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
+//
+//		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(question1),
+//				answerCondition);
+//		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
+//				ACTION_EXPRESSION);
+//		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
+//	}
 
-		Category category1 = new Category();
-		category1.setName("Category1");
-		form.addChild(category1);
-
-		Group group1 = new Group();
-		group1.setName("Group1");
-		category1.addChild(group1);
-
-		Question question1 = new Question();
-		question1.setName("Question1");
-		group1.addChild(question1);
-
-		Question question2 = new Question();
-		question2.setName("Question2");
-		group1.addChild(question2);
-
-		Answer answer1 = new Answer();
-		answer1.setName("Answer1");
-		question1.addChild(answer1);
-
-		Answer answer2 = new Answer();
-		answer2.setName("Answer2");
-		question1.addChild(answer2);
-
-		TableRule tableRule = new TableRule();
-
-		TableRuleRow tableRuleRow = new TableRuleRow();
-		AnswerCondition answerCondition = new AnswerCondition(answer1);
-		tableRuleRow.getConditions().put(question1, answerCondition);
-		tableRuleRow.addAction(new ActionString());
-		tableRuleRow.getActions().get(0).setExpression(ACTION_EXPRESSION);
-
-		tableRule.getRules().add(tableRuleRow);
-
-		form.getTableRules().add(tableRule);
-
-		formDao.makePersistent(form);
-		Form retrievedForm = formDao.read(form.getId());
-
-		Assert.assertEquals(retrievedForm.getId(), form.getId());
-		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
-
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(question1),
-				answerCondition);
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
-				ACTION_EXPRESSION);
-		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
-	}
-
-	@Test(groups = { "formDao" }, dependsOnMethods = { "storeFormDiagram", "storeOtherFormWithSameLabelCategory",
-			"storeFormTableRule" })
-	public void removeForms() {
-		formDao.removeAll();
-		Assert.assertEquals(formDao.getRowCount(), 0);
-		Assert.assertEquals(diagramDao.getRowCount(), 0);
-		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
-	}
+//	@Test(groups = { "formDao" }, dependsOnMethods = { "storeFormDiagram", "storeOtherFormWithSameLabelCategory",
+//			"storeFormTableRule" })
+//	public void removeForms() {
+//		formDao.removeAll();
+//		Assert.assertEquals(formDao.getRowCount(), 0);
+//		Assert.assertEquals(diagramDao.getRowCount(), 0);
+//		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
+//	}
 
 	private boolean compare(TreeObject object1, TreeObject object2) {
 		if (object1.getId() != object2.getId()) {
