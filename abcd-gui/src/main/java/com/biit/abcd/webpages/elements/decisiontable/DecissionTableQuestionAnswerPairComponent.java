@@ -87,7 +87,7 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 	}
 
 	public Collection<Question> getColumns() {
-s		// return (Collection<Question>)
+		// return (Collection<Question>)
 		// conditionTable.getContainerPropertyIds();
 		return getTableRule().getConditionsHeader();
 	}

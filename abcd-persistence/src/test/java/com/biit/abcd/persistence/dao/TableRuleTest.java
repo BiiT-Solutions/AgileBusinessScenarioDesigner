@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
@@ -20,7 +19,7 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.ActionString;
-import com.biit.abcd.persistence.entity.rules.Condition;
+import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -52,25 +51,6 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
 	}
 
-	/**
-	 * Returns the question object of the retrieved hashmap from database.
-	 * 
-	 * @param map
-	 * @param originalQuestion
-	 * @return
-	 */
-	private Question getHibernateQuestion(Map<Question, Condition> map, Question originalQuestion) {
-		if (originalQuestion.getId() == null) {
-			return null;
-		}
-		for (Question question : map.keySet()) {
-			if (question.getId() == originalQuestion.getId()) {
-				return question;
-			}
-		}
-		return null;
-	}
-
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "testEmptyDatabase")
 	public void storeDummyTableRule() throws NotValidFormException {
 		Form basicForm = new Form();
@@ -92,63 +72,71 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		Assert.assertEquals(tableRules.size(), 1);
 	}
 
-//	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
-//	public void storeTableRule() throws NotValidChildException, NotValidExpression {
-//		// Define form.
-//		Form form = new Form();
-//		form.setName(DUMMY_FORM + "_v2");
-//
-//		Category category = new Category();
-//		form.addChild(category);
-//
-//		Question question = new Question();
-//		question.setName("Put your age:");
-//		question.setAnswerFormat(AnswerFormat.NUMBER);
-//		question.setAnswerType(AnswerType.INPUT);
-//		category.addChild(question);
-//
-//		// Define rule elements
-//		TableRule tableRule = new TableRule();
-//		TableRuleRow tableRuleRow = new TableRuleRow();
-//
-//		ActionString action = new ActionString();
-//		action.setExpression(BASIC_ACTION);
-//		tableRuleRow.addAction(action);
-//
-//		Condition condition = new Condition();
-//		// Set into the rule.
-//		tableRuleRow.putCondition(question, condition);
-//		tableRule.getRules().add(tableRuleRow);
-//
-//		form.getTableRules().add(tableRule);
-//
-//		formDao.makePersistent(form);
-//
-//		Form retrievedForm = formDao.getForm(DUMMY_FORM + "_v2");
-//		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
-//		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
-//		Assert.assertEquals(tableRuleRowDao.getRowCount(), 2);
-//		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
-//				BASIC_ACTION);
-//		Assert.assertEquals(
-//				retrievedForm
-//						.getTableRules()
-//						.get(0)
-//						.getRules()
-//						.get(0)
-//						.getConditions()
-//						.get(getHibernateQuestion(retrievedForm.getTableRules().get(0).getRules().get(0)
-//								.getConditions(), question)).getId(), condition.getId());
-//	}
+	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
+	public void storeTableRule() throws NotValidChildException, NotValidExpression {
+		// Define form.
+		Form form = new Form();
+		form.setName(DUMMY_FORM + "_v2");
 
-//	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })
-//	public void removeTableRules() {
-//		formDao.removeAll();
-//		Assert.assertEquals(formDao.getRowCount(), 0);
-//		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
-//		Assert.assertEquals(tableRuleRowDao.getRowCount(), 0);
-//		Assert.assertEquals(conditionDao.getRowCount(), 0);
-//		Assert.assertEquals(actionDao.getRowCount(), 0);
-//
-//	}
+		Category category = new Category();
+		form.addChild(category);
+
+		Question question = new Question();
+		question.setName("Select one answer:");
+		question.setAnswerType(AnswerType.RADIO);
+		category.addChild(question);
+
+		Answer answer1 = new Answer();
+		answer1.setName("Answer1");
+		question.addChild(answer1);
+
+		Answer answer2 = new Answer();
+		answer2.setName("Answer2");
+		question.addChild(answer2);
+
+		Answer answer3 = new Answer();
+		answer3.setName("Answer3");
+		question.addChild(answer3);
+
+		// Define rule elements
+		TableRule tableRule = new TableRule();
+		TableRuleRow tableRuleRow = new TableRuleRow();
+
+		ActionString action = new ActionString();
+		action.setExpression(BASIC_ACTION);
+		tableRuleRow.addAction(action);
+
+		// Set into the rule.
+		QuestionAndAnswerValue condition = new QuestionAndAnswerValue();
+		condition.setQuestion(question);
+		condition.setAnswer(answer2);
+		tableRuleRow.getConditions().add(condition);
+		tableRule.getRules().add(tableRuleRow);
+
+		form.getTableRules().add(tableRule);
+
+		formDao.makePersistent(form);
+
+		Form retrievedForm = formDao.getForm(DUMMY_FORM + "_v2");
+		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
+		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
+		Assert.assertEquals(tableRuleRowDao.getRowCount(), 2);
+		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
+				BASIC_ACTION);
+		Assert.assertEquals(
+				retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getQuestion(), question);
+		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getAnswer(),
+				answer2);
+	}
+
+	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })
+	public void removeTableRules() {
+		formDao.removeAll();
+		Assert.assertEquals(formDao.getRowCount(), 0);
+		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
+		Assert.assertEquals(tableRuleRowDao.getRowCount(), 0);
+		Assert.assertEquals(conditionDao.getRowCount(), 0);
+		Assert.assertEquals(actionDao.getRowCount(), 0);
+
+	}
 }
