@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.treetable;
+package com.biit.abcd.webpages.elements.formdesigner;
 
 import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.AnswerTypeUi;
