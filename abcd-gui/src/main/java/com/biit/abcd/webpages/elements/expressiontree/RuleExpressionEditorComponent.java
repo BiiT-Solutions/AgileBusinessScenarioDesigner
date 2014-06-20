@@ -69,6 +69,7 @@ public class RuleExpressionEditorComponent extends CustomComponent{
 					@Override
 					public void propertyUpdate(Object element) {
 						thenTable.addExpression((ExprBasic) element);
+						thenTable.setValue((ExprBasic) element);
 					}
 				});
 			}
@@ -104,6 +105,7 @@ public class RuleExpressionEditorComponent extends CustomComponent{
 					@Override
 					public void propertyUpdate(Object element) {
 						whenTable.addExpression((ExprBasic) element);
+						whenTable.setValue((ExprBasic) element);
 					}
 				});
 			}
