@@ -147,8 +147,20 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 		return tableRule;
 	}
 
+	@SuppressWarnings("unused")
 	public void setTableRule(TableRule tableRule) {
 		this.tableRule = tableRule;
+		// Add columns.
+		if (!tableRule.getRules().isEmpty()) {
+			for (QuestionAndAnswerValue questionAndAnswerCondition : tableRule.getRules().get(0).getConditions()) {
+				conditionTable.addColumnPair();
+			}
+			// Add rows.
+			for (TableRuleRow tableRuleRow : tableRule.getRules()) {
+				addRow(tableRuleRow);
+			}
+		}
+
 	}
 
 	public Collection<?> getColumns() {
