@@ -5,16 +5,17 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.droolsrule.DroolsRuleEditorUpperMenu;
-import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressiontree.ExpressionTreeTable;
 import com.biit.abcd.webpages.elements.expressiontree.RuleExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -22,7 +23,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
 	private RuleExpressionEditorComponent ruleExpressionEditorComponent;
 	private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
-	// private SelectExpressionTable tableSelectExpression;
+	private SelectExpressionTable tableSelectExpression;
 	private ExpressionTreeTable thenTable;
 
 	public DroolsRuleEditor() {
@@ -38,18 +39,17 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		rootLayout.setSizeFull();
 
 		// Create menu
-		// tableSelectExpression = new SelectExpressionTable();
-		// tableSelectExpression.addValueChangeListener(new
-		// ValueChangeListener() {
-		// private static final long serialVersionUID = -7103550436798085895L;
-		//
-		// @Override
-		// public void valueChange(ValueChangeEvent event) {
-		// refreshExpressionEditor();
-		// }
-		//
-		// });
-		// rootLayout.setMenu(tableSelectExpression);
+		tableSelectExpression = new SelectExpressionTable();
+		tableSelectExpression.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = -7103550436798085895L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				refreshExpressionEditor();
+			}
+
+		});
+		rootLayout.setMenu(tableSelectExpression);
 
 		// Create content
 		ruleExpressionEditorComponent = new RuleExpressionEditorComponent();
@@ -68,13 +68,11 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		sortTableMenu();
 
 		// Select the first one if available.
-		// if
-		// (UserSessionHandler.getFormController().getForm().getExpressions().size()
-		// > 0) {
-		// tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-		// .getExpressions().get(0));
-		// }
-		// refreshExpressionEditor();
+		if (UserSessionHandler.getFormController().getForm().getExpressions().size() > 0) {
+			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
+					.getExpressions().get(0));
+		}
+//		refreshExpressionEditor();
 	}
 
 	private void initUpperMenu() {
@@ -94,6 +92,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				//UI.getCurrent().addWindow(new WindoNewExpression(thisPage));
 			}
 
 		});

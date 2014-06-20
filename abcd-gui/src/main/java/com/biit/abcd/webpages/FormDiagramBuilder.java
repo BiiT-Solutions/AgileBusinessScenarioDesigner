@@ -5,22 +5,19 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.security.DActivity;
-import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
-import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderElementPicked;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
+import com.biit.abcd.webpages.elements.diagrambuilder.WindowNewDiagram;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -28,6 +25,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
@@ -136,13 +134,15 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	private void initUpperMenu() {
+		final FormDiagramBuilder thisPage = this;
 		diagramBuilderUpperMenu = new FormDiagramBuilderUpperMenu();
 		diagramBuilderUpperMenu.addNewDiagramButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = -4071103244551097590L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				newDiagram();
+				UI.getCurrent().addWindow(new WindowNewDiagram(thisPage, LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_CAPTION,
+						LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_TEXTFIELD));
 			}
 		});
 		diagramBuilderUpperMenu.addDeleteNewDiagramButtonClickListener(new ClickListener() {
@@ -221,41 +221,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		setUpperMenu(diagramBuilderUpperMenu);
 	}
 
-	protected void deleteDiagram() {
+	private void deleteDiagram() {
 		UserSessionHandler.getFormController().getForm().removeDiagram(currentDiagram);
 		diagramBuilderTable.removeItem(currentDiagram);
 		diagramBuilderTable.setValue(null);
-	}
-
-	protected void newDiagram() {
-		final StringInputWindow stringInputWindow = new StringInputWindow();
-		stringInputWindow.showCentered();
-		stringInputWindow.setCaption(ServerTranslate.tr(LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_CAPTION));
-		stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
-			@Override
-			public void acceptAction(AcceptCancelWindow window) {
-				if (stringInputWindow.getValue() != null && !stringInputWindow.getValue().isEmpty()) {
-					List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
-					for(Diagram diagram: diagrams){
-						if(diagram.getName().equals(stringInputWindow.getValue())){
-							MessageManager.showError(LanguageCodes.ERROR_DIAGRAM_REPEATED_NAME);
-							return;
-						}
-					}
-					
-					//If is a valid string and there is no other diagram with the same name, then add it.
-					stringInputWindow.close();
-					Diagram newDiagram = new Diagram(UserSessionHandler.getFormController().getForm(),
-							stringInputWindow.getValue());
-					UserSessionHandler.getFormController().getForm().addDiagram(newDiagram);
-					diagramBuilderTable.addDiagram(newDiagram);
-					diagramBuilderTable.setValue(newDiagram);
-					
-				} else {
-					MessageManager.showError(LanguageCodes.ERROR_NAME_NOT_VALID);
-				}
-			}
-		});
 	}
 
 	@Override
@@ -309,6 +278,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
+	}
+
+	public void addDiagram(Diagram newDiagram) {
+		diagramBuilderTable.addDiagram(newDiagram);
+		diagramBuilderTable.setValue(newDiagram);
 	}
 
 	// TODO

@@ -9,7 +9,6 @@ import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
 import com.biit.abcd.webpages.components.UpperMenu;
-import com.biit.abcd.webpages.components.WindowNewForm;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
@@ -34,7 +33,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						UI.getCurrent().addWindow(new WindowNewForm(parent));
+						UI.getCurrent().addWindow(
+								new WindowNewForm(parent, LanguageCodes.BOTTOM_MENU_FORM_MANAGER,
+										LanguageCodes.WINDOW_NEWFORM_NAME_TEXTFIELD));
 					}
 				});
 		addIconButton(newFormButton);

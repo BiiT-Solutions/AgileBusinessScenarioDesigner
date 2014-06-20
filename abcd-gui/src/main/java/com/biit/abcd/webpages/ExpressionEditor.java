@@ -13,6 +13,7 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressiontree.ExpressionTreeTable;
+import com.biit.abcd.webpages.elements.expressiontree.WindoNewExpression;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
 import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -35,7 +36,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 	@Override
 	protected void initContent() {
 		updateButtons(true);
-		
+
 		// Create container
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
 		rootLayout.setSizeFull();
@@ -67,7 +68,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 		// Add tables
 		tableSelectExpression.update(UserSessionHandler.getFormController().getForm());
-		
+
 		sortTableMenu();
 
 		// Select the first one if available.
@@ -97,7 +98,9 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().addWindow(new WindoNewExpression(thisPage));
+				UI.getCurrent().addWindow(
+						new WindoNewExpression(thisPage, LanguageCodes.BOTTOM_MENU_FORM_MANAGER,
+								LanguageCodes.WINDOW_NEW_EXPRESSION_TEXTFIELD));
 			}
 
 		});
