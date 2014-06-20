@@ -27,7 +27,7 @@ public class ActionString extends Action {
 
 	@Override
 	public boolean undefined() {
-		return (getExpression() != null && getExpression().length() > 0);
+		return (getExpression() == null || getExpression().length() == 0);
 	}
 
 	@Override

@@ -42,11 +42,15 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		ExpressionTreeTable thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
 				.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 
-		expression = new ExpressionThen();
-		expression.addDefaultChild();
-		expression.setCreatedBy(UserSessionHandler.getUser());
-		expression.setUpdatedBy(UserSessionHandler.getUser());
-		expression.setUpdateTime();
+		if (action.getExpression() == null) {
+			expression = new ExpressionThen();
+			expression.addDefaultChild();
+			expression.setCreatedBy(UserSessionHandler.getUser());
+			expression.setUpdatedBy(UserSessionHandler.getUser());
+			expression.setUpdateTime();
+		} else {
+			expression = action.getExpression();
+		}
 		thenTable.addExpression(expression);
 
 		layout.addComponent(expressionEditorComponent);
