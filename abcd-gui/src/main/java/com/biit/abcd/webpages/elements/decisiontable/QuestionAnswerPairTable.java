@@ -74,13 +74,45 @@ public class QuestionAnswerPairTable extends Table {
 		}
 	}
 
-	// TODO
-	/*
-	 * public Collection<Question> getSelectedColumns() { Set<Question>
-	 * questions = new HashSet<Question>(); for (Cell cell :
-	 * cellRowSelector.getSelectedCells()) { questions.add((Question)
-	 * cell.getCol()); } return questions; }
-	 */
+	public Collection<Integer> getSelectedColumns() {
+		Set<Integer> columns = new HashSet<Integer>();
+		for (Cell cell : cellRowSelector.getSelectedCells()) {
+			columns.add((Integer) cell.getCol());
+		}
+		return columns;
+	}
+
+	public void removeColumns(Collection<Integer> columnIds) {
+		for (Object object : getItemIds()) {
+			TableRuleRow row = (TableRuleRow) object;
+			Set<QuestionAndAnswerValue> values = new HashSet<QuestionAndAnswerValue>();
+			for (Integer columnId : columnIds) {
+				values.add(getQuestionAndAnswerValue(row, columnId));
+			}
+			for (QuestionAndAnswerValue value : values) {
+				row.getConditions().remove(value);
+			}
+		}
+		
+		Set<Integer> filteredColumnIds = new HashSet<>();
+		for(Integer columnId: columnIds){
+			if(columnId%2==0){
+				filteredColumnIds.add(columnId);
+			}else{
+				filteredColumnIds.add(columnId-1);
+			}
+		}
+		for(int i=0;i<filteredColumnIds.size();i++){
+			removeContainerProperty(getContainerPropertyIds().size()-1);
+			removeContainerProperty(getContainerPropertyIds().size()-1);
+		}
+		
+		//Update
+		for(Object object: getItemIds()){
+			TableRuleRow row = (TableRuleRow) object;
+			updateItem(row);
+		}
+	}
 
 	public Collection<TableRuleRow> getSelectedRules() {
 		Set<TableRuleRow> rules = new HashSet<TableRuleRow>();

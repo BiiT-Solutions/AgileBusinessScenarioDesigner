@@ -1,22 +1,15 @@
 package com.biit.abcd.webpages;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.security.DActivity;
-import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.biit.abcd.webpages.elements.decisiontable.DecissionTableQuestionAnswerPairComponent;
 import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
@@ -135,30 +128,9 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				decisionTable.addColumnPair();
-				//if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
+				if (decisionTable.getColumns().size() == 2 && decisionTable.getTableRules().isEmpty()) {
 					decisionTable.addRow();
-				//}
-//				if (tableSelectionMenu.getSelectedTableRule() != null) {
-//					AddNewConditionWindow addNewConditionWindow = new AddNewConditionWindow(UserSessionHandler
-//							.getFormController().getForm(), true);
-//					addNewConditionWindow.disableQuestions(decisionTable.getColumns());
-//					addNewConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
-//						@Override
-//						public void acceptAction(AcceptCancelWindow window) {
-//							Set<Question> selectedQuestions = ((AddNewConditionWindow) window).getSelectedQuestions();
-//							for (Question selectedQuestion : selectedQuestions) {
-//								((AddNewConditionWindow) window).disableQuestion(selectedQuestion);
-//								decisionTable.addColumn(selectedQuestion);
-//								getSelectedTableRule().getConditionsHeader().add(selectedQuestion);
-//								if (decisionTable.getColumns().size() == 1 && decisionTable.getTableRules().isEmpty()) {
-//									decisionTable.addRow();
-//								}
-//							}
-//							window.close();
-//						}
-//					});
-//					addNewConditionWindow.showCentered();
-//				}
+				}
 			}
 		});
 
@@ -167,10 +139,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-//				Collection<Question> removedQuestions = decisionTable.removeSelectedColumns();
-//				for (Question question : removedQuestions) {
-//					getSelectedTableRule().getConditionsHeader().remove(question);
-//				}
+				decisionTable.removeSelectedColumns();
 			}
 		});
 
@@ -198,8 +167,8 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	}
 
 	/**
-	 * Rules are not stored into the form automatically. We need to set them to the form before saving or changing the
-	 * window.
+	 * Rules are not stored into the form automatically. We need to set them to
+	 * the form before saving or changing the window.
 	 */
 	private void updateForm() {
 		if (getSelectedTableRule() != null) {
@@ -222,22 +191,24 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information of the currently selected table.
+	 * Updates the table where the user defines the rules with the information
+	 * of the currently selected table.
 	 */
-	//TODO
+	// TODO
 	private void refreshDecisionTable() {
 		decisionTable.removeAll();
 		decisionTable.setTableRule(getSelectedTableRule());
-//		if (getSelectedTableRule() != null) {
-//			for (Question question : getSelectedTableRule().getConditionsHeader()) {
-//				decisionTable.addColumn(question);
-//			}
-//
-//			// Add table rows.
-//			for (TableRuleRow tableRuleRow : getSelectedTableRule().getRules()) {
-//				decisionTable.addRow(tableRuleRow);
-//			}
-//		}
+		// if (getSelectedTableRule() != null) {
+		// for (Question question :
+		// getSelectedTableRule().getConditionsHeader()) {
+		// decisionTable.addColumn(question);
+		// }
+		//
+		// // Add table rows.
+		// for (TableRuleRow tableRuleRow : getSelectedTableRule().getRules()) {
+		// decisionTable.addRow(tableRuleRow);
+		// }
+		// }
 	}
 
 	@Override
