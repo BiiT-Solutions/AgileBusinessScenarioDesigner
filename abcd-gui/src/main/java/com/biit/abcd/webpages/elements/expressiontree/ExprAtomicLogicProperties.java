@@ -1,8 +1,13 @@
 package com.biit.abcd.webpages.elements.expressiontree;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.persistence.entity.expressions.ExprAtomicLogic;
+import com.biit.abcd.persistence.entity.expressions.ExprValueBoolean;
+import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
+import com.biit.abcd.persistence.entity.expressions.ExprValueString;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -11,128 +16,107 @@ import com.vaadin.ui.FormLayout;
 public class ExprAtomicLogicProperties extends ExprAtomicProperties<ExprAtomicLogic> {
 	private static final long serialVersionUID = -5953203428567057845L;
 
-	public enum FuncOp {
-		ALWAYS("Always"), ANY("Any"), QUESTION_OR_VARIABLE("Question or Variable");
-
-		private String value;
-
-		private FuncOp(String value) {
-			this.value = value;
-		}
-
-		public String getLabel() {
-			return value;
-		}
-	}
-
-	private Button clean;
-
 	public ExprAtomicLogicProperties() {
 		super(ExprAtomicLogic.class);
 	}
 
 	@Override
 	protected void setElementAbstract(final ExprAtomicLogic element) {
+		setStandardCommonAtomicPart(element);
 		
-		final SelectQuestionVariableWindow logicExpressionWindow = new SelectQuestionVariableWindow();
-		logicExpressionWindow.addAcceptAcctionListener(new AcceptActionListener() {
-			@Override
-			public void acceptAction(AcceptCancelWindow window) {
-				logicExpressionWindow.close();
-				firePropertyUpdateListener(logicExpressionWindow.getValue());
-			}
-		});
+		Button always = new Button("Always", new ClickListener() {
+			private static final long serialVersionUID = -3339234972234970277L;
 
-		FormLayout formLayout = getCommonFormLayout(element);
-
-		addTab(formLayout, "TODO - ExprWoChildLogic", true);
-		
-		Button always = new Button("ALWAYS", new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				element.setAlways();
+				element.setValue(new ExprValueBoolean(true));
 				firePropertyUpdateListener(element);
 			}
 		});
+		
 		always.setWidth(buttonWidth);
-		Button equals = new Button("==", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setEq();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		equals.setWidth(buttonWidth);
-		Button notEquals = new Button("!=", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setNe();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		notEquals.setWidth(buttonWidth);
-		Button lessThan = new Button("<", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setLt();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		lessThan.setWidth(buttonWidth);
-		Button greaterThan = new Button(">", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setGt();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		greaterThan.setWidth(buttonWidth);
-		Button lessEqual = new Button("<=", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setLe();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		lessEqual.setWidth(buttonWidth);
-		Button greaterEqual = new Button(">=", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setGe();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		greaterEqual.setWidth(buttonWidth);
-		Button in = new Button("IN", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setIn();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		in.setWidth(buttonWidth);
-		Button between = new Button("BETWEEN", new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				element.setBetween();
-				logicExpressionWindow.showCentered();
-			}
-		});
-		between.setWidth(buttonWidth);
+		Button variableSelect = new Button("Select Form Element", new ClickListener() {
+			private static final long serialVersionUID = -3339234972234970277L;
 
-		FormLayout exprWoChildForm = new FormLayout();
-		exprWoChildForm.setWidth(null);
-		exprWoChildForm.addComponent(always);
-		exprWoChildForm.addComponent(equals);
-		exprWoChildForm.addComponent(notEquals);
-		exprWoChildForm.addComponent(lessThan);
-		exprWoChildForm.addComponent(greaterThan);
-		exprWoChildForm.addComponent(lessEqual);
-		exprWoChildForm.addComponent(greaterEqual);
-		exprWoChildForm.addComponent(in);
-		exprWoChildForm.addComponent(between);
+			@Override
+			public void buttonClick(ClickEvent event) {
+				SelectQuestionVariableWindow variableWindow = new SelectQuestionVariableWindow();
+				variableWindow.showCentered();
+				variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						ExprValueFormReference formReference = ((SelectQuestionVariableWindow) window).getValue();
+						if (formReference == null) {
+							MessageManager.showError("TODO - error");
+						} else {
+							window.close();
+							element.setValue(formReference);
+							firePropertyUpdateListener(element);
+						}
+					}
+				});
 
-		addTab(exprWoChildForm, "TODO - ExprWoChildLogicOperations", true, 1);
+			}
+		});
+		variableSelect.setWidth(buttonWidth);
+		
+		Button variableSelect = new Button("Select variable", new ClickListener() {
+			private static final long serialVersionUID = -3339234972234970277L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				SelectQuestionVariableWindow variableWindow = new SelectQuestionVariableWindow();
+				variableWindow.showCentered();
+				variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						ExprValueFormReference formReference = ((SelectQuestionVariableWindow) window).getValue();
+						if (formReference == null) {
+							MessageManager.showError("TODO - error");
+						} else {
+							window.close();
+							element.setValue(formReference);
+							firePropertyUpdateListener(element);
+						}
+					}
+				});
+
+			}
+		});
+		variableSelect.setWidth(buttonWidth);
+		Button valueSelect = new Button("Select value", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				StringInputWindow stringInputWindow = new StringInputWindow();
+				stringInputWindow.setCaption("TODO - insert value");
+				stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						String value = ((StringInputWindow) window).getValue();
+						if (value == null || value.isEmpty()) {
+							MessageManager.showError("TODO - error");
+						} else {
+							window.close();
+							ExprValueString exprValue = new ExprValueString(value);
+							element.setValue(exprValue);
+							firePropertyUpdateListener(element);
+						}
+					}
+				});
+				stringInputWindow.showCentered();
+			}
+		});
+		valueSelect.setWidth(buttonWidth);
+
+		FormLayout exprAtomicMathForm = new FormLayout();
+		exprAtomicMathForm.setWidth(null);
+		exprAtomicMathForm.addComponent(always);
+		exprAtomicMathForm.addComponent(variableSelect);
+		exprAtomicMathForm.addComponent(valueSelect);
+
+		addTab(exprAtomicMathForm, "TODO - ExprAtomicMath", true, 1);
 
 	}
 

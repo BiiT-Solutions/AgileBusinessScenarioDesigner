@@ -19,11 +19,11 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.ExprAtomicLogic;
-import com.biit.abcd.persistence.entity.expressions.ExprAtomicLogic.ExprAtomicChildLogicType;
 import com.biit.abcd.persistence.entity.expressions.ExprAtomicMath;
 import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
 import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
 import com.biit.abcd.persistence.entity.expressions.ExprPortMath;
+import com.biit.abcd.persistence.entity.expressions.ExprValueBoolean;
 import com.biit.abcd.persistence.entity.expressions.ExprValueDouble;
 import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
 import com.biit.abcd.persistence.entity.expressions.ExprValueString;
@@ -104,7 +104,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	public void basicAlwaysExpression() throws NotValidChildException {
 		Form form = createForm();
 		ExprAtomicLogic exprAtomic = new ExprAtomicLogic();
-		exprAtomic.setAlways();
+		exprAtomic.setValue(new ExprValueBoolean(true));
 		form.getExpressions().add(exprAtomic);
 		formDao.makePersistent(form);
 
@@ -112,8 +112,9 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 		Assert.assertEquals(retrievedForm.getExpressions().size(), 1);
 		Assert.assertEquals(retrievedForm.getExpressions().get(0).getClass(), ExprAtomicLogic.class);
-		Assert.assertEquals(((ExprAtomicLogic) retrievedForm.getExpressions().get(0)).getType(),
-				ExprAtomicChildLogicType.ALWAYS);
+		Assert.assertEquals(
+				((ExprValueBoolean) ((ExprAtomicLogic) retrievedForm.getExpressions().get(0)).getValue()).getValue(),
+				true);
 
 		formDao.makeTransient(form);
 		Assert.assertEquals(formDao.getAll().size(), 0);

@@ -4,17 +4,17 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "EXPRESSION_VALUE_DOUBLE")
-public class ExprValueDouble extends ExprValue {
+@Table(name = "EXPRESSION_VALUE_BOOLEAN")
+public class ExprValueBoolean extends ExprValue {
 
-	private double value;
+	private boolean value;
 
-	protected ExprValueDouble() {
+	protected ExprValueBoolean() {
 		super();
-		value = 0d;
+		value = true;
 	}
 
-	public ExprValueDouble(double value) {
+	public ExprValueBoolean(boolean value) {
 		super();
 		this.setValue(value);
 	}
@@ -24,11 +24,11 @@ public class ExprValueDouble extends ExprValue {
 		return "" + value;
 	}
 
-	public double getValue() {
+	public boolean getValue() {
 		return value;
 	}
 
-	public void setValue(double value) {
+	public void setValue(boolean value) {
 		this.value = value;
 	}
 
