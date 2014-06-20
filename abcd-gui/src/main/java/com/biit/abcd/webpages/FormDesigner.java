@@ -30,14 +30,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 
-public class TreeDesigner extends FormWebPageComponent {
+public class FormDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 	private FormTreeTable formTreeTable;
 	private TreeTablePropertiesComponent propertiesComponent;
 	private TreeTableUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 
-	public TreeDesigner() {
+	public FormDesigner() {
 		updateButtons(true);
 	}
 

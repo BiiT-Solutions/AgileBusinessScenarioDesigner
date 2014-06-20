@@ -6,7 +6,7 @@ public enum WebMap {
 
 	FORM_MANAGER(FormManager.class),
 	
-	TREE_DESIGNER(TreeDesigner.class),
+	TREE_DESIGNER(FormDesigner.class),
 	
 	FORM_VARIABLES(FormVariables.class),
 	
