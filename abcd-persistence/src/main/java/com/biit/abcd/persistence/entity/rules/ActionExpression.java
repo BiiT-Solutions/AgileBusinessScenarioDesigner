@@ -43,7 +43,7 @@ public class ActionExpression extends Action {
 	@Override
 	public String getExpressionAsString() {
 		if (getExpression() != null) {
-			return getExpression().toString();
+			return getExpression().getExpressionTableString();
 		}
 		return "";
 	}
