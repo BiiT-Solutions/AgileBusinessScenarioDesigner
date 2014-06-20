@@ -40,9 +40,6 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	private IFormDao formDao;
 
 	@Autowired
-	private IConditionDao conditionDao;
-
-	@Autowired
 	private IActionDao actionDao;
 
 	@Test(groups = { "tableRulesDao" })
@@ -135,7 +132,6 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		Assert.assertEquals(formDao.getRowCount(), 0);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 0);
 		Assert.assertEquals(tableRuleRowDao.getRowCount(), 0);
-		Assert.assertEquals(conditionDao.getRowCount(), 0);
 		Assert.assertEquals(actionDao.getRowCount(), 0);
 
 	}
