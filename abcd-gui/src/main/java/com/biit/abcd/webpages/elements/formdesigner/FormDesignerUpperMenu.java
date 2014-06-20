@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.formdesigner;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
@@ -85,13 +86,16 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
-			newAnswerButton.setEnabled(true);
+			if (((Question) selectedObject).getAnswerType().equals(AnswerType.INPUT)) {
+				newAnswerButton.setEnabled(false);
+			} else {
+				newAnswerButton.setEnabled(true);
+			}
 		}
 		if (selectedObject instanceof Answer) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
-			newAnswerButton.setEnabled(true);
 		}
 	}
 
