@@ -22,9 +22,9 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcons.SAVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
 		newTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE, ThemeIcons.TABLE_ADD,
-				LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE);
+				LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP);
 		removeTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_REMOVE_TABLE, ThemeIcons.TABLE_REMOVE,
-				LanguageCodes.CONDITION_TABLE_EDITOR_REMOVE_TABLE);
+				LanguageCodes.CONDITION_TABLE_EDITOR_REMOVE_TABLE_TOOLTIP);
 		newConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION,
 				ThemeIcons.TABLE_ADD_COLUMN, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_TOOLTIP);
 		deleteConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_CAPTION,

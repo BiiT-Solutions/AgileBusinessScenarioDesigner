@@ -21,13 +21,12 @@ public class FormDiagramBuilderUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
-
 		saveButton = new IconButton(LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_SAVE_CAPTION, ThemeIcons.SAVE,
 				LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_SAVE_TOOLTIP);
 		newDiagramButton = new IconButton(LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_CAPTION,
-				ThemeIcons.DIAGRAM_BUILDER_PAGE, LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_TOOLTIP);
+				ThemeIcons.ADD_DIAGRAM, LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_TOOLTIP);
 		deleteDiagramButton = new IconButton(LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_DELETE_DIAGRAM_CAPTION,
-				ThemeIcons.DIAGRAM_BUILDER_PAGE, LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_DELETE_DIAGRAM_TOOLTIP);
+				ThemeIcons.REMOVE_DIAGRAM, LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_DELETE_DIAGRAM_TOOLTIP);
 		clearButton = new IconButton(LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_CAPTION, ThemeIcons.CLEAN,
 				LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_CLEAR_TOOLTIP);
 		undoButton = new IconButton(LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_UNDO_CAPTION, ThemeIcons.UNDO,
@@ -59,11 +58,11 @@ public class FormDiagramBuilderUpperMenu extends UpperMenu {
 		clearButton.setEnabled(AbcdAuthorizationService.getInstance().isAuthorizedActivity(
 				UserSessionHandler.getUser(), DActivity.FORM_CREATE));
 	}
-	
+
 	public void addNewDiagramButtonClickListener(Button.ClickListener listener) {
 		newDiagramButton.addClickListener(listener);
 	}
-	
+
 	public void addDeleteNewDiagramButtonClickListener(Button.ClickListener listener) {
 		deleteDiagramButton.addClickListener(listener);
 	}

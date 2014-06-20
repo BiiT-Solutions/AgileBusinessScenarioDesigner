@@ -180,7 +180,9 @@ public enum LanguageCodes {
 	CONDITION_TABLE_HEADER_CONDITION("condition.table.header.condition"), 
 	
 	CONDITION_TABLE_EDITOR_ADD_TABLE("condition.table.editor.button.add.table"),
+	CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP("condition.table.editor.button.add.table.tooltip"),
 	CONDITION_TABLE_EDITOR_REMOVE_TABLE("condition.table.editor.button.remove.table"),
+	CONDITION_TABLE_EDITOR_REMOVE_TABLE_TOOLTIP("condition.table.editor.button.remove.table.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION("condition.table.editor.button.save.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP("condition.table.editor.button.save.tooltip"), 
 	CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION("condition.table.editor.button.add.column.caption"),

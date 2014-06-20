@@ -64,6 +64,10 @@ public enum ThemeIcons {
 
 	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg"),
 
+	ADD_DIAGRAM("appbar.diagram.add.svg"),
+
+	REMOVE_DIAGRAM("appbar.diagram.remove.svg"),
+
 	CLEAN("appbar.clean.svg"),
 
 	UNDO("appbar.undo.svg"),
@@ -105,6 +109,10 @@ public enum ThemeIcons {
 	REMOVE_ITEM_LIST("appbar.list.delete.svg"),
 
 	RULE_EDITOR_ADD_QUESTION("appbar.input.question.svg"),
+	
+	RULE_ADD("appbar.rule.add.svg"),
+	
+	RULE_REMOVE("appbar.rule.remove.svg"),
 
 	EXPRESSION_ADD("appbar.expression.add.svg"),
 
