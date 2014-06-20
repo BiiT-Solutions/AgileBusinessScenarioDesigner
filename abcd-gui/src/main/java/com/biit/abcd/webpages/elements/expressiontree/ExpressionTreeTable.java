@@ -26,23 +26,6 @@ public class ExpressionTreeTable extends TreeTable {
 		setImmediate(true);
 	}
 
-	// public void addExpression(ChildBrotherExpression expression){
-	// addExpression(expression,null);
-	// }
-
-	// @SuppressWarnings("unchecked")
-	// public void addExpression(ChildBrotherExpression expression,
-	// ChildBrotherExpression parentExpression){
-	// Item item = addItem(expression);
-	// if(parentExpression!=null){
-	// setParent(expression, parentExpression);
-	// }
-	// item.getItemProperty(Properties.FORMULA_TEXT).setValue(expression.getExpressionTableString());
-	// for(ChildExpression childExpression: expression.getChilds()){
-	// addExpression(childExpression,expression);
-	// }
-	// }
-
 	public void addExpression(ExprBasic expression) {
 		addExpression(expression, true, true);
 	}
