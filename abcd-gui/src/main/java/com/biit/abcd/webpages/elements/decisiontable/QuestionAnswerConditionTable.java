@@ -22,14 +22,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Table;
 
-public class QuestionAnswerPairTable extends Table {
+public class QuestionAnswerConditionTable extends Table {
 	private static final long serialVersionUID = -963052429591605697L;
 	private static final int rowHeaderWidth = 32;
 
 	private Table thisTable;
 	private CellRowSelector cellRowSelector;
 
-	public QuestionAnswerPairTable() {
+	public QuestionAnswerConditionTable() {
 		thisTable = this;
 
 		setRowHeaderMode(RowHeaderMode.INDEX);

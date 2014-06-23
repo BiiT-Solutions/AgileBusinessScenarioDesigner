@@ -17,7 +17,7 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 	private static final long serialVersionUID = 2314989763962134814L;
 
 	private HorizontalLayout rootLayout;
-	private QuestionAnswerPairTable conditionTable;
+	private QuestionAnswerConditionTable conditionTable;
 	private ActionTable actionTable;
 	private TableRule tableRule;
 
@@ -28,7 +28,7 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 		rootLayout.setImmediate(true);
 		rootLayout.setSpacing(true);
 
-		conditionTable = new QuestionAnswerPairTable();
+		conditionTable = new QuestionAnswerConditionTable();
 		conditionTable.setSizeFull();
 		conditionTable.addCellSelectionListener(new CellSelectionListener() {
 
