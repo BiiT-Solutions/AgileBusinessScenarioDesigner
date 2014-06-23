@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
+import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
@@ -79,7 +79,7 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 		conditionTable.addColumnPair();
 		for (TableRuleRow tableRuleRow : getTableRules()) {
 			// New column is filled up with empty values for all existing rows.
-			tableRuleRow.getConditions().add(new QuestionAndAnswerValue());
+			tableRuleRow.getConditions().add(new QuestionAndAnswerCondition());
 		}
 	}
 
@@ -152,7 +152,7 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 		this.tableRule = tableRule;
 		// Add columns.
 		if (!tableRule.getRules().isEmpty()) {
-			for (QuestionAndAnswerValue questionAndAnswerCondition : tableRule.getRules().get(0).getConditions()) {
+			for (QuestionAndAnswerCondition questionAndAnswerCondition : tableRule.getRules().get(0).getConditions()) {
 				conditionTable.addColumnPair();
 			}
 			// Add rows.

@@ -19,7 +19,7 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.ActionString;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
+import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -104,7 +104,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		tableRuleRow.addAction(action);
 
 		// Set into the rule.
-		QuestionAndAnswerValue condition = new QuestionAndAnswerValue();
+		QuestionAndAnswerCondition condition = new QuestionAndAnswerCondition();
 		condition.setQuestion(question);
 		condition.setAnswer(answer2);
 		tableRuleRow.getConditions().add(condition);

@@ -14,7 +14,7 @@ import com.biit.abcd.persistence.entity.StorableObject;
  */
 @Entity
 @Table(name = "QUESTION_AND_ANSWERS_CONDITION")
-public class QuestionAndAnswerValue extends StorableObject {
+public class QuestionAndAnswerCondition extends StorableObject {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Question question;
@@ -55,7 +55,7 @@ public class QuestionAndAnswerValue extends StorableObject {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		QuestionAndAnswerValue other = (QuestionAndAnswerValue) obj;
+		QuestionAndAnswerCondition other = (QuestionAndAnswerCondition) obj;
 		if (answer == null) {
 			if (other.answer != null)
 				return false;

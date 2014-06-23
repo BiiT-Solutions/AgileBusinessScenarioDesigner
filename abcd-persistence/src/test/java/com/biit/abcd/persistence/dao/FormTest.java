@@ -21,7 +21,7 @@ import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.ActionString;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
+import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -243,7 +243,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 		TableRuleRow tableRuleRow = new TableRuleRow();
 
-		QuestionAndAnswerValue condition = new QuestionAndAnswerValue();
+		QuestionAndAnswerCondition condition = new QuestionAndAnswerCondition();
 		condition.setQuestion(question1);
 		condition.setAnswer(answer1);
 

@@ -9,7 +9,7 @@ import java.util.Set;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerValue;
+import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -85,11 +85,11 @@ public class QuestionAnswerPairTable extends Table {
 	public void removeColumns(Collection<Integer> columnIds) {
 		for (Object object : getItemIds()) {
 			TableRuleRow row = (TableRuleRow) object;
-			Set<QuestionAndAnswerValue> values = new HashSet<QuestionAndAnswerValue>();
+			Set<QuestionAndAnswerCondition> values = new HashSet<QuestionAndAnswerCondition>();
 			for (Integer columnId : columnIds) {
 				values.add(getQuestionAndAnswerValue(row, columnId));
 			}
-			for (QuestionAndAnswerValue value : values) {
+			for (QuestionAndAnswerCondition value : values) {
 				row.getConditions().remove(value);
 			}
 		}
@@ -136,7 +136,7 @@ public class QuestionAnswerPairTable extends Table {
 				EditCellComponent editCellComponent = null;
 				if (((Integer) propertyId) % 2 == 0) {
 					if (((Integer) propertyId / 2) >= ((TableRuleRow) itemId).getConditions().size()) {
-						((TableRuleRow) itemId).getConditions().add(new QuestionAndAnswerValue());
+						((TableRuleRow) itemId).getConditions().add(new QuestionAndAnswerCondition());
 					}
 					editCellComponent = new QuestionValueEditCell();
 					editCellComponent.addEditButtonClickListener(new CellEditButtonQuestionClickListener(
@@ -193,7 +193,7 @@ public class QuestionAnswerPairTable extends Table {
 	private void updateItem(TableRuleRow rule) {
 		Item row = getItem(rule);
 		int i = 0;
-		for (QuestionAndAnswerValue questionAndAnswerValue : rule.getConditions()) {
+		for (QuestionAndAnswerCondition questionAndAnswerValue : rule.getConditions()) {
 			QuestionValueEditCell questionValue = ((QuestionValueEditCell) row.getItemProperty(i).getValue());
 			AnswerValueEditCell answerValue = ((AnswerValueEditCell) row.getItemProperty(i + 1).getValue());
 
@@ -210,7 +210,7 @@ public class QuestionAnswerPairTable extends Table {
 		}
 	}
 
-	public QuestionAndAnswerValue getQuestionAndAnswerValue(TableRuleRow row, Object propertyId) {
+	public QuestionAndAnswerCondition getQuestionAndAnswerValue(TableRuleRow row, Object propertyId) {
 		if (((Integer) propertyId % 2) == 0) {
 			return row.getConditions().get(((Integer) propertyId) / 2);
 		} else {
@@ -220,10 +220,10 @@ public class QuestionAnswerPairTable extends Table {
 
 	private class CellEditButtonQuestionClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
-		private QuestionAndAnswerValue questionAnswer;
+		private QuestionAndAnswerCondition questionAnswer;
 		private TableRuleRow rule;
 
-		public CellEditButtonQuestionClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+		public CellEditButtonQuestionClickListener(QuestionAndAnswerCondition questionAndAnswerValue, TableRuleRow rule) {
 			this.questionAnswer = questionAndAnswerValue;
 			this.rule = rule;
 		}
@@ -255,10 +255,10 @@ public class QuestionAnswerPairTable extends Table {
 
 	private class CellEditButtonAnswerClickListener implements ClickListener {
 		private static final long serialVersionUID = -1802531580937378464L;
-		private QuestionAndAnswerValue questionAnswer;
+		private QuestionAndAnswerCondition questionAnswer;
 		private TableRuleRow rule;
 
-		public CellEditButtonAnswerClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+		public CellEditButtonAnswerClickListener(QuestionAndAnswerCondition questionAndAnswerValue, TableRuleRow rule) {
 			this.questionAnswer = questionAndAnswerValue;
 			this.rule = rule;
 		}
@@ -289,10 +289,10 @@ public class QuestionAnswerPairTable extends Table {
 
 	private class CellDeleteButtonQuestionClickListener implements ClickListener {
 		private static final long serialVersionUID = -4967974394553397046L;
-		private QuestionAndAnswerValue questionAnswer;
+		private QuestionAndAnswerCondition questionAnswer;
 		private TableRuleRow rule;
 
-		public CellDeleteButtonQuestionClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+		public CellDeleteButtonQuestionClickListener(QuestionAndAnswerCondition questionAndAnswerValue, TableRuleRow rule) {
 			this.questionAnswer = questionAndAnswerValue;
 			this.rule = rule;
 		}
@@ -307,10 +307,10 @@ public class QuestionAnswerPairTable extends Table {
 
 	private class CellDeleteButtonAnswerClickListener implements ClickListener {
 		private static final long serialVersionUID = 6594787287245555367L;
-		private QuestionAndAnswerValue questionAnswer;
+		private QuestionAndAnswerCondition questionAnswer;
 		private TableRuleRow rule;
 
-		public CellDeleteButtonAnswerClickListener(QuestionAndAnswerValue questionAndAnswerValue, TableRuleRow rule) {
+		public CellDeleteButtonAnswerClickListener(QuestionAndAnswerCondition questionAndAnswerValue, TableRuleRow rule) {
 			this.questionAnswer = questionAndAnswerValue;
 			this.rule = rule;
 		}

@@ -24,7 +24,7 @@ public class TableRuleRow extends StorableObject {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "condition_index")
-	private List<QuestionAndAnswerValue> conditions;
+	private List<QuestionAndAnswerCondition> conditions;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
@@ -37,15 +37,15 @@ public class TableRuleRow extends StorableObject {
 		actions = new ArrayList<>();
 	}
 
-	public void addCondition(QuestionAndAnswerValue questionAndAnswerValue) {
+	public void addCondition(QuestionAndAnswerCondition questionAndAnswerValue) {
 		conditions.add(questionAndAnswerValue);
 	}
 
-	public void removeCondition(QuestionAndAnswerValue questionAndAnswerValue) {
+	public void removeCondition(QuestionAndAnswerCondition questionAndAnswerValue) {
 		conditions.remove(questionAndAnswerValue);
 	}
 
-	public List<QuestionAndAnswerValue> getConditions() {
+	public List<QuestionAndAnswerCondition> getConditions() {
 		return conditions;
 	}
 
