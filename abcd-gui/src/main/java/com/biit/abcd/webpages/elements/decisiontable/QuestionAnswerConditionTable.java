@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
@@ -63,10 +65,10 @@ public class QuestionAnswerConditionTable extends Table {
 
 	public void addColumnPair() {
 
-		addContainerProperty(getContainerPropertyIds().size(), QuestionValueEditCell.class, null, "TODO-QUESTION",
-				null, Align.CENTER);
-		addContainerProperty(getContainerPropertyIds().size(), AnswerValueEditCell.class, null, "TODO-ANSWER", null,
-				Align.CENTER);
+		addContainerProperty(getContainerPropertyIds().size(), QuestionValueEditCell.class, null,
+				ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_HEADER_QUESTION_CONDITION), null, Align.CENTER);
+		addContainerProperty(getContainerPropertyIds().size(), AnswerValueEditCell.class, null,
+				ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_HEADER_ANSWER_CONDITION), null, Align.CENTER);
 
 		for (Object itemId : getItemIds()) {
 			setDefaultNewItemPropertyValues(itemId, getItem(itemId));
@@ -93,22 +95,22 @@ public class QuestionAnswerConditionTable extends Table {
 				row.getConditions().remove(value);
 			}
 		}
-		
+
 		Set<Integer> filteredColumnIds = new HashSet<>();
-		for(Integer columnId: columnIds){
-			if(columnId%2==0){
+		for (Integer columnId : columnIds) {
+			if (columnId % 2 == 0) {
 				filteredColumnIds.add(columnId);
-			}else{
-				filteredColumnIds.add(columnId-1);
+			} else {
+				filteredColumnIds.add(columnId - 1);
 			}
 		}
-		for(int i=0;i<filteredColumnIds.size();i++){
-			removeContainerProperty(getContainerPropertyIds().size()-1);
-			removeContainerProperty(getContainerPropertyIds().size()-1);
+		for (int i = 0; i < filteredColumnIds.size(); i++) {
+			removeContainerProperty(getContainerPropertyIds().size() - 1);
+			removeContainerProperty(getContainerPropertyIds().size() - 1);
 		}
-		
-		//Update
-		for(Object object: getItemIds()){
+
+		// Update
+		for (Object object : getItemIds()) {
 			TableRuleRow row = (TableRuleRow) object;
 			updateItem(row);
 		}
@@ -292,7 +294,8 @@ public class QuestionAnswerConditionTable extends Table {
 		private QuestionAndAnswerCondition questionAnswer;
 		private TableRuleRow rule;
 
-		public CellDeleteButtonQuestionClickListener(QuestionAndAnswerCondition questionAndAnswerValue, TableRuleRow rule) {
+		public CellDeleteButtonQuestionClickListener(QuestionAndAnswerCondition questionAndAnswerValue,
+				TableRuleRow rule) {
 			this.questionAnswer = questionAndAnswerValue;
 			this.rule = rule;
 		}

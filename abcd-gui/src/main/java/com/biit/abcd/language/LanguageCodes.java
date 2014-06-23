@@ -179,7 +179,8 @@ public enum LanguageCodes {
 	ACTION_TABLE_HEADER("action.table.header"),
 	ACTION_TABLE_HEADER_ACTION("action.table.header.action"),
 	CONDITION_TABLE_HEADER("condition.table.header"),
-	CONDITION_TABLE_HEADER_CONDITION("condition.table.header.condition"), 
+	CONDITION_TABLE_HEADER_QUESTION_CONDITION("condition.table.header.condition.question"),
+	CONDITION_TABLE_HEADER_ANSWER_CONDITION("condition.table.header.condition.answer"), 
 	
 	CONDITION_TABLE_EDITOR_ADD_TABLE("condition.table.editor.button.add.table"),
 	CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP("condition.table.editor.button.add.table.tooltip"),
