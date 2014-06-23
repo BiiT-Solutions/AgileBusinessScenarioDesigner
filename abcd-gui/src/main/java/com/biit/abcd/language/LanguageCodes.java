@@ -176,11 +176,12 @@ public enum LanguageCodes {
 	ANSWER_FORMAT_DATE("answer.format.date"),
 	ANSWER_FORMAT_NUMBER("answer.format.number"),
 	
-	ACTION_TABLE_HEADER("action.table.header"),
 	ACTION_TABLE_HEADER_ACTION("action.table.header.action"),
-	CONDITION_TABLE_HEADER("condition.table.header"),
 	CONDITION_TABLE_HEADER_QUESTION_CONDITION("condition.table.header.condition.question"),
 	CONDITION_TABLE_HEADER_ANSWER_CONDITION("condition.table.header.condition.answer"), 
+	
+	WARNING_NO_QUESTION_SELECTED_CAPTION("condition.table.noquestion.caption"),
+	WARNING_NO_QUESTION_SELECTED_BODY("condition.table.noquestion.body"),
 	
 	CONDITION_TABLE_EDITOR_ADD_TABLE("condition.table.editor.button.add.table"),
 	CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP("condition.table.editor.button.add.table.tooltip"),

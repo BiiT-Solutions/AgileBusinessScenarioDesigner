@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -242,7 +243,7 @@ public class QuestionAnswerConditionTable extends Table {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
-					if (selectedQuestion == null) {
+					if (selectedQuestion == null || !selectedQuestion.contains(questionAnswer.getAnswer())) {
 						questionAnswer.setAnswer(null);
 					}
 					questionAnswer.setQuestion(selectedQuestion);
@@ -283,9 +284,9 @@ public class QuestionAnswerConditionTable extends Table {
 				});
 				newAnswerValueWindow.showCentered();
 			} else {
-				// TODO show message
+				MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
+						LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
 			}
-
 		}
 	}
 
