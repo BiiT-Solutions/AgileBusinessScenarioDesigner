@@ -13,7 +13,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 
-public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
+public class DecisionTableQuestionAnswerConditionComponent extends CustomComponent {
 	private static final long serialVersionUID = 2314989763962134814L;
 
 	private HorizontalLayout rootLayout;
@@ -21,7 +21,7 @@ public class DecissionTableQuestionAnswerPairComponent extends CustomComponent {
 	private ActionTable actionTable;
 	private TableRule tableRule;
 
-	public DecissionTableQuestionAnswerPairComponent() {
+	public DecisionTableQuestionAnswerConditionComponent() {
 
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();

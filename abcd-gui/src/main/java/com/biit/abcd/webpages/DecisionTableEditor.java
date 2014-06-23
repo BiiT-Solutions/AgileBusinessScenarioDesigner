@@ -11,7 +11,7 @@ import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
-import com.biit.abcd.webpages.elements.decisiontable.DecissionTableQuestionAnswerPairComponent;
+import com.biit.abcd.webpages.elements.decisiontable.DecisionTableQuestionAnswerConditionComponent;
 import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -23,7 +23,7 @@ import com.vaadin.ui.UI;
 public class DecisionTableEditor extends FormWebPageComponent {
 	static final long serialVersionUID = -5547452506556261601L;
 
-	private DecissionTableQuestionAnswerPairComponent decisionTable;
+	private DecisionTableQuestionAnswerConditionComponent decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableMenu tableSelectionMenu;
 
@@ -53,7 +53,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		rootLayout.setMenu(tableSelectionMenu);
 
 		// Create content
-		decisionTable = new DecissionTableQuestionAnswerPairComponent();
+		decisionTable = new DecisionTableQuestionAnswerConditionComponent();
 		decisionTable.setSizeFull();
 
 		rootLayout.setContent(decisionTable);
