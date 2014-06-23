@@ -1,11 +1,13 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcons;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
@@ -22,7 +24,7 @@ public class EditCellComponent extends CustomComponent {
 
 	public EditCellComponent() {
 		selectValue = false;
-		
+
 		addStyleName(CLASSNAME);
 
 		rootLayout = new CssLayout();
@@ -32,7 +34,7 @@ public class EditCellComponent extends CustomComponent {
 
 		editButton = new IconButton(ThemeIcons.EDIT, IconSize.SMALL, LanguageCodes.EDIT_BUTTON_TOOLTIP);
 		removeButton = new IconButton(ThemeIcons.DELETE, IconSize.SMALL, LanguageCodes.DELETE_BUTTON_TOOLTIP);
-		textLabel = new Label("-NULL-");
+		textLabel = new Label(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE), ContentMode.HTML);
 		textLabel.setSizeUndefined();
 
 		rootLayout.addComponent(textLabel);
@@ -49,8 +51,8 @@ public class EditCellComponent extends CustomComponent {
 			removeButtons();
 		}
 	}
-	
-	public void select(){
+
+	public void select() {
 		select(!selectValue);
 	}
 
@@ -75,32 +77,31 @@ public class EditCellComponent extends CustomComponent {
 	public void removeLayoutClickListener(LayoutClickListener listener) {
 		rootLayout.removeLayoutClickListener(listener);
 	}
-	
-	public void addEditButtonClickListener(ClickListener listener){
+
+	public void addEditButtonClickListener(ClickListener listener) {
 		editButton.addClickListener(listener);
 	}
-	
-	public void removeEditButtonClickListener(ClickListener listener){
+
+	public void removeEditButtonClickListener(ClickListener listener) {
 		editButton.removeClickListener(listener);
 	}
-	
-	public void addRemoveButtonClickListener(ClickListener listener){
+
+	public void addRemoveButtonClickListener(ClickListener listener) {
 		removeButton.addClickListener(listener);
 	}
-	
-	public void removeRemoveButtonClickListener(ClickListener listener){
+
+	public void removeRemoveButtonClickListener(ClickListener listener) {
 		removeButton.removeClickListener(listener);
 	}
-	
-	public void setLabel(String label){
+
+	public void setLabel(String label) {
 		textLabel.setValue(label);
 	}
-	
-	public void setLabel(TreeObject treeObject){
-		if(treeObject ==null){
-			//TODO
-			setLabel("null");
-		}else{
+
+	public void setLabel(TreeObject treeObject) {
+		if (treeObject == null) {
+			setLabel(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
+		} else {
 			setLabel(treeObject.toString());
 		}
 	}

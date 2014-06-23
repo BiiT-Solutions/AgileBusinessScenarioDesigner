@@ -201,6 +201,7 @@ public enum LanguageCodes {
 	CONDITION_TABLE_NEW_CONDITION_CAPTION("condition.window.new.caption"),
 	CONDITION_TABLE_EDIT_CONDITION_CAPTION("condition.window.edit.caption"),
 	CONDITION_TABLE_EDIT_ACTION_CAPTION("action.window.edit.caption"),
+	CONDITION_TABLE_NULL_VALUE("condition.table.null.value"),
 	
 	WINDOW_NEW_TABLE_NAME_TEXTFIELD("windowNewTable.name.textField"),
 	WINDOW_NEW_EXPRESSION_TEXTFIELD("windowNewExpression.name.textField"),

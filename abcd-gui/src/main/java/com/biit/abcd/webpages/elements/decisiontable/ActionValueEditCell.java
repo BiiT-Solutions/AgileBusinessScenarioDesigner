@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.rules.Action;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -8,15 +11,23 @@ public class ActionValueEditCell extends EditCellComponent {
 
 	public ActionValueEditCell() {
 		super();
-		setLabel(" ");
 		addRemoveButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 6253961924451407630L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				setLabel(" ");
+				setLabel(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
 			}
 		});
+	}
+
+	public void setLabel(Action action) {
+		if (action == null || action.getExpressionAsString().length() == 0) {
+			setLabel("<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">"
+					+ ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE) + "</div>");
+		} else {
+			setLabel(action.getExpressionAsString());
+		}
 	}
 
 }

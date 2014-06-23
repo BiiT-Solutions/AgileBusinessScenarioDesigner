@@ -8,6 +8,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
+import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -95,7 +96,11 @@ public class ActionTable extends Table {
 	private void updateItemActionInGui(TableRuleRow rule) {
 		Item row = getItem(rule);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) row.getItemProperty(Columns.ACTION).getValue());
-		actionValue.setLabel(rule.getActions().get(0).getExpressionAsString());
+		if (rule.getActions() != null && !rule.getActions().isEmpty()) {
+			actionValue.setLabel(rule.getActions().get(0));
+		} else {
+			actionValue.setLabel((Action) null);
+		}
 	}
 
 	private class CellEditButtonClickListener implements ClickListener {
