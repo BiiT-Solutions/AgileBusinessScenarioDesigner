@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -28,7 +33,12 @@ public class DiagramDeserializer implements JsonDeserializer<Diagram> {
 
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
-		gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramSink.class, new DiagramSinkDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramSource.class, new DiagramSourceDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramTable.class, new DiagramTableDeserializer());
 		gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkDeserializer());
 		Gson gson = gsonBuilder.create();
 

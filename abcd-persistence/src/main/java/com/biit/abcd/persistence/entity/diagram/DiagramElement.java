@@ -14,7 +14,7 @@ import com.google.gson.annotations.Expose;
 
 @Entity
 @Table(name = "DIAGRAM_ELEMENTS")
-public class DiagramElement extends DiagramObject {
+public abstract class DiagramElement extends DiagramObject {
 
 	@Expose
 	private String tooltip;

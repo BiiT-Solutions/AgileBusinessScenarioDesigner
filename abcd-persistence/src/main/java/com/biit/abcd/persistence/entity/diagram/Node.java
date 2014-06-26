@@ -7,17 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.StorableObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
 @Table(name = "DIAGRAM_NODES")
-public class Node {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
-	private Long databaseId;
-
+public class Node extends StorableObject {
 	@Expose
 	@SerializedName("id")
 	private String jointjsId;
@@ -49,13 +45,5 @@ public class Node {
 
 	public void setPort(String port) {
 		this.port = port;
-	}
-
-	public Long getDatabaseId() {
-		return databaseId;
-	}
-
-	public void setDatabaseId(Long databaseId) {
-		this.databaseId = databaseId;
 	}
 }

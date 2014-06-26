@@ -2,10 +2,14 @@ package com.biit.abcd.gson.utils;
 
 import java.lang.reflect.Type;
 
-import com.biit.abcd.persistence.entity.diagram.DiagramBiitText;
+import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
-import com.biit.abcd.persistence.entity.diagram.Point;
-import com.biit.abcd.persistence.entity.diagram.Size;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -14,41 +18,30 @@ import com.google.gson.JsonParseException;
 
 public class DiagramElementDeserializer implements JsonDeserializer<DiagramElement> {
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public DiagramElement deserialize(JsonElement json, Type type, JsonDeserializationContext context)
 			throws JsonParseException {
+
 		final JsonObject jsonObject = json.getAsJsonObject();
+		DiagramObjectType diagramObjectType = DiagramObjectType.getFromJsonType(jsonObject.get("type").getAsString());
 
-		DiagramElement diagramElement = new DiagramElement();
-
-		diagramElement.setJointjsId(JsonUtils.getStringValue(jsonObject, "id"));
-		diagramElement.setType(JsonUtils.getStringValue(jsonObject, "type"));
-		diagramElement.setEmbeds(JsonUtils.getStringValue(jsonObject, "embeds"));
-		diagramElement.setZ(JsonUtils.getIntValue(jsonObject, "z"));
-
-		diagramElement.setTooltip(JsonUtils.getStringValue(jsonObject, "tooltip"));
-
-		JsonElement sizeElement = jsonObject.get("size");
-		if (sizeElement != null) {
-			Size size = context.deserialize(sizeElement, Size.class);
-			diagramElement.setSize(size);
+		switch (diagramObjectType) {
+		case CALCULATION:
+			return context.deserialize(json, DiagramCalculation.class);
+		case FORK:
+			return context.deserialize(json, DiagramFork.class);
+		case RULE:
+			return context.deserialize(json, DiagramRule.class);
+		case SINK:
+			return context.deserialize(json, DiagramSink.class);
+		case SOURCE:
+			return context.deserialize(json, DiagramSource.class);
+		case TABLE:
+			return context.deserialize(json, DiagramTable.class);
 		}
-		JsonElement positionElement = jsonObject.get("position");
-		if (positionElement != null) {
-			Point point = context.deserialize(positionElement, Point.class);
-			diagramElement.setPosition(point);
-		}
-		diagramElement.setAngle(JsonUtils.getFloatValue(jsonObject, "angle"));
-		
-		JsonElement attrs = jsonObject.get("attrs");
-		if(attrs!=null){
-			JsonObject attrsObject = attrs.getAsJsonObject();
-			JsonElement biitTextElement = attrsObject.get(".biitText");
-			DiagramBiitText biitText = context.deserialize(biitTextElement, DiagramBiitText.class);
-			diagramElement.setBiitText(biitText);
-		}		
 
-		return diagramElement;
+		// If reaches this point then the type is unknown.
+		throw new JsonParseException("Invalid type of diagram element");
 	}
-
 }

@@ -3,6 +3,7 @@ package com.biit.abcd.gson.utils;
 import java.lang.reflect.Type;
 
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.Node;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -21,7 +22,7 @@ public class DiagramLinkDeserializer implements JsonDeserializer<DiagramLink>{
 		DiagramLink diagramLink = new DiagramLink();
 
 		diagramLink.setJointjsId(JsonUtils.getStringValue(jsonObject, "id"));
-		diagramLink.setType(JsonUtils.getStringValue(jsonObject, "type"));
+		diagramLink.setType(DiagramObjectType.getFromJsonType(JsonUtils.getStringValue(jsonObject, "type")));
 		diagramLink.setEmbeds(JsonUtils.getStringValue(jsonObject, "embeds"));
 		diagramLink.setZ(JsonUtils.getIntValue(jsonObject, "z"));
 		
