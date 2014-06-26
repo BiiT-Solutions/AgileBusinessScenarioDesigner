@@ -199,7 +199,9 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	// TODO
 	private void refreshDecisionTable() {
 		decisionTable.removeAll();
-		decisionTable.setTableRule(getSelectedTableRule());
+		if(getSelectedTableRule()!=null){
+			decisionTable.setTableRule(getSelectedTableRule());
+		}
 		// if (getSelectedTableRule() != null) {
 		// for (Question question :
 		// getSelectedTableRule().getConditionsHeader()) {

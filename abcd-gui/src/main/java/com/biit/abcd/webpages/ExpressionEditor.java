@@ -5,15 +5,13 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.elements.expressiontree.ExpressionEditorComponent;
-import com.biit.abcd.webpages.elements.expressiontree.ExpressionTreeTable;
 import com.biit.abcd.webpages.elements.expressiontree.WindoNewExpression;
+import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
 import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -27,7 +25,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTable tableSelectExpression;
-	private ExpressionTreeTable thenTable;
+	// private ExpressionTreeTable thenTable;
+	//private ExpressionViewer expressionViewer;
 
 	public ExpressionEditor() {
 		super();
@@ -55,11 +54,12 @@ public class ExpressionEditor extends FormWebPageComponent {
 		rootLayout.setMenu(tableSelectExpression);
 
 		// Create content
-		expressionEditorComponent = new ExpressionEditorComponent();
-		expressionEditorComponent.setSizeFull();
-		// expressionEditorComponent.addWhenExpression();
-		thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
-				.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
+		//expressionViewer = new ExpressionViewer();
+		//expressionViewer.setSizeFull();
+		 expressionEditorComponent = new ExpressionEditorComponent();
+		 expressionEditorComponent.setSizeFull();
+		// thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
+		// .tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
@@ -72,9 +72,9 @@ public class ExpressionEditor extends FormWebPageComponent {
 		sortTableMenu();
 
 		// Select the first one if available.
-		if (UserSessionHandler.getFormController().getForm().getExpressions().size() > 0) {
+		if (UserSessionHandler.getFormController().getForm().getFormExpressions().size() > 0) {
 			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-					.getExpressions().get(0));
+					.getFormExpressions().get(0));
 		}
 		refreshExpressionEditor();
 	}
@@ -118,16 +118,12 @@ public class ExpressionEditor extends FormWebPageComponent {
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
-	private ExprBasic getSelectedExpression() {
+	private FormExpression getSelectedExpression() {
 		return tableSelectExpression.getSelectedExpression();
 	}
 
 	private void refreshExpressionEditor() {
-		thenTable.removeAll();
-		if (getSelectedExpression() != null) {
-			// Add table rows.
-			thenTable.addExpression(getSelectedExpression());
-		}
+		expressionEditorComponent.refreshExpressionEditor(getSelectedExpression());
 	}
 
 	private void save() {
@@ -147,12 +143,12 @@ public class ExpressionEditor extends FormWebPageComponent {
 	}
 
 	private void removeSelectedExpression() {
-		UserSessionHandler.getFormController().getForm().getExpressions()
+		UserSessionHandler.getFormController().getForm().getFormExpressions()
 				.remove(tableSelectExpression.getSelectedExpression());
 		tableSelectExpression.removeSelectedRow();
 	}
 
-	public void addExpressionToMenu(ExprBasic expression) {
+	public void addExpressionToMenu(FormExpression expression) {
 		tableSelectExpression.addRow(expression);
 		tableSelectExpression.setSelectedExpression(expression);
 	}

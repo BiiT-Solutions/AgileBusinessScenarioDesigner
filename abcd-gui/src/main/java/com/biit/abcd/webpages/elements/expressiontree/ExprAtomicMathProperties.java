@@ -87,7 +87,7 @@ public class ExprAtomicMathProperties extends ExprAtomicProperties<ExprAtomicMat
 	}
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		// TODO Auto-generated method stub
 	}
 

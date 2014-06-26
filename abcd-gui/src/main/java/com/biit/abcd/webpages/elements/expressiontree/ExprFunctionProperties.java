@@ -28,7 +28,7 @@ public class ExprFunctionProperties extends PropertiesForClassComponent<ExprFunc
 	}
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		// firePropertyUpdateListener(exprFunction);
 	}
 

@@ -94,11 +94,11 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 
 	protected abstract void updateElement();
 
-	protected abstract void firePropertyUpdateListener();
+	protected abstract void firePropertyUpdateOnExitListener();
 
 	private void update() {
 		updateElement();
-		firePropertyUpdateListener();
+		firePropertyUpdateOnExitListener();
 	}
 
 	public void addPropertyUpdateListener(PropertieUpdateListener listener) {

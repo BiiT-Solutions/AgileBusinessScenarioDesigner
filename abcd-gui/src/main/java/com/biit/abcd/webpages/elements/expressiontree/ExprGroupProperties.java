@@ -24,7 +24,7 @@ public class ExprGroupProperties extends ExprAtomicProperties<ExprGroup> {
 	}
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		// TODO Auto-generated method stub
 	}
 

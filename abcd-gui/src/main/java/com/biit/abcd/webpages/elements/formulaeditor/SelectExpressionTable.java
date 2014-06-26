@@ -4,7 +4,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
-import com.biit.abcd.persistence.entity.expressions.ExpressionThen;
+import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
@@ -46,9 +46,9 @@ public class SelectExpressionTable extends Table {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public void addRow(ExprBasic expression) {
+	public void addRow(FormExpression expression) {
 		Item item = addItem(expression);
-		item.getItemProperty(MenuProperties.EXPRESSION_NAME).setValue(((ExpressionThen) expression).getName());
+		item.getItemProperty(MenuProperties.EXPRESSION_NAME).setValue(expression.getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
 				DateManager.convertDateToString(expression.getUpdateTime()));
 	}
@@ -62,16 +62,16 @@ public class SelectExpressionTable extends Table {
 
 	public void update(Form form) {
 		this.removeAllItems();
-		for (ExprBasic expression : form.getExpressions()) {
+		for (FormExpression expression : form.getFormExpressions()) {
 			addRow(expression);
 		}
 	}
 
-	public ExprBasic getSelectedExpression() {
-		return (ExprBasic) getValue();
+	public FormExpression getSelectedExpression() {
+		return (FormExpression) getValue();
 	}
 
-	public void setSelectedExpression(ExprBasic expression) {
+	public void setSelectedExpression(FormExpression expression) {
 		setValue(expression);
 	}
 }

@@ -41,7 +41,7 @@ public class JsonDiagramElementProperties extends PropertiesForClassComponent<Di
 	}
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(instance);
 	}
 

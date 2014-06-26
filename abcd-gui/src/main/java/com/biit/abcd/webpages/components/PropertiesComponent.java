@@ -37,13 +37,17 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 		propertiesComponents.put(component.getUnderlyingClass(), component);
 	}
 
+	public PropertiesForClassComponent<?> getCurrentDisplayedProperties() {
+		return (PropertiesForClassComponent<?>) rootLayout.getComponent(0);
+	}
+
 	public void updatePropertiesComponent(Object value) {
 		if (value == null) {
 			rootLayout.removeAllComponents();
 		} else {
 			rootLayout.removeAllComponents();
 			PropertiesForClassComponent<?> baseObject = propertiesComponents.get(value.getClass());
-			
+
 			if (baseObject == null) {
 				return;
 			}
@@ -81,7 +85,7 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 			listener.propertyUpdate(element);
 		}
 	}
-	
+
 	public void removeAllPropertyUpdateListeners() {
 		propertyUpdateListeners.clear();
 	}
