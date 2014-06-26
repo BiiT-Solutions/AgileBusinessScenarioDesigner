@@ -10,7 +10,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-public class RuleExpressionEditorComponent extends CustomComponent{
+public class RuleExpressionEditorComponent extends CustomComponent {
 	private static final long serialVersionUID = -3032639915566119408L;
 
 	private HorizontalLayout rootLayout;
@@ -20,8 +20,8 @@ public class RuleExpressionEditorComponent extends CustomComponent{
 	private ExpressionTreeTable thenTable;
 	private ValueChangeListener whenTableValueChangeListener;
 	private ValueChangeListener thenTableValueChangeListener;
-	
-	public RuleExpressionEditorComponent(){
+
+	public RuleExpressionEditorComponent() {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(false);
@@ -34,7 +34,7 @@ public class RuleExpressionEditorComponent extends CustomComponent{
 
 		expressionEditorProperties = new ExpressionEditorPropertiesComponent();
 		expressionEditorProperties.setSizeFull();
-		
+
 		initWhenTable();
 		initThenTable();
 
@@ -117,7 +117,7 @@ public class RuleExpressionEditorComponent extends CustomComponent{
 		whenExpression.addDefaultChild();
 		whenTable.addExpression(whenExpression);
 	}
-	
+
 	protected void updatePropertiesComponent(ExprBasic value) {
 		expressionEditorProperties.updatePropertiesComponent(value);
 	}

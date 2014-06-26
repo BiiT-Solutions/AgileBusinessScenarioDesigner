@@ -7,6 +7,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
@@ -61,18 +62,18 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		initUpperMenu();
 
 		// Add tables
-		for (ExprBasic expression : UserSessionHandler.getFormController().getForm().getExpressions()) {
+		for (FormExpression expression : UserSessionHandler.getFormController().getForm().getFormExpressions()) {
 			addExpressionToMenu(expression);
 		}
 
 		sortTableMenu();
 
 		// Select the first one if available.
-		if (UserSessionHandler.getFormController().getForm().getExpressions().size() > 0) {
+		if (UserSessionHandler.getFormController().getForm().getFormExpressions().size() > 0) {
 			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-					.getExpressions().get(0));
+					.getFormExpressions().get(0));
 		}
-//		refreshExpressionEditor();
+		// refreshExpressionEditor();
 	}
 
 	private void initUpperMenu() {
@@ -92,7 +93,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				//UI.getCurrent().addWindow(new WindoNewExpression(thisPage));
+				// UI.getCurrent().addWindow(new WindoNewExpression(thisPage));
 			}
 
 		});
@@ -142,7 +143,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		// TODO
 	}
 
-	public void addExpressionToMenu(ExprBasic expression) {
+	public void addExpressionToMenu(FormExpression expression) {
 		// TODO
 	}
 

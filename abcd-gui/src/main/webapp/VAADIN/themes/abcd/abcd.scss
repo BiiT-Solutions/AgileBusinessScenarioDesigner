@@ -628,5 +628,26 @@ $open-sans-pathPrefix: "./fonts/";
 	/* tabsheet */
 	.v-tabsheet-tabitem .v-caption.v-disabled {
 		opacity: 0.5;
-	}	
+	}
+
+	.v-expression-viewer {
+		border: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+	}
+	
+	.v-button.expression{
+		border-width: 1px;
+		box-shadow: 0px 0px 0px 0px #fff;
+	}
+	
+	.v-button.expression-selected{
+		background-color: White;
+	}
+	
+	.v-button.expression-unselected{
+		background-color: #ededed;
+	}
+	
+	
 }

@@ -40,7 +40,7 @@ public class JsonDiagramLinkProperties extends PropertiesForClassComponent<Diagr
 	}
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(instance);
 	}
 

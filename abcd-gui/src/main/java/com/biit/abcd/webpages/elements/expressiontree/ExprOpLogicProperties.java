@@ -16,7 +16,7 @@ public class ExprOpLogicProperties extends ExprOpProperties<ExprOpLogic> {
 	}
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		// TODO Auto-generated method stub
 		
 	}

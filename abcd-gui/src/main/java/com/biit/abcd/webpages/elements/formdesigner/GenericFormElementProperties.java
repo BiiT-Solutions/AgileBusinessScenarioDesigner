@@ -86,7 +86,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 	protected abstract TreeObject getTreeObjectInstance();
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 }

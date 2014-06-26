@@ -48,4 +48,5 @@ public abstract class ExprOp extends ExprBasic {
 					+ "' is not allowed in this expression.");
 		}
 	}
+
 }

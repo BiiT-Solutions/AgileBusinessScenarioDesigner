@@ -128,59 +128,8 @@ public class ExprAtomicLogicProperties extends ExprAtomicProperties<ExprAtomicLo
 	}
 
 	@Override
-	protected void firePropertyUpdateListener() {
+	protected void firePropertyUpdateOnExitListener() {
 		// Do Nothing. All actions are button based and personalized. Each
 		// action button will perform the update actions individually.
 	}
-
-	// FormLayout formLayout = getCommonFormLayout(element);
-	//
-	// addTab(formLayout, "TODO - ExprWoChildLogic", true);
-	//
-	// clean = new Button("Clean", new ClickListener() {
-	// private static final long serialVersionUID = -4680574367985072846L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// element.clean();
-	// firePropertyUpdateListener(element);
-	// }
-	// });
-	//
-	// if (element.getType() == null && element.getLeftOperand() == null) {
-	// functionPrimera(element);
-	// }
-	//
-	//
-	// private void functionPrimera(final ExprWoChildLogic element) {
-	// ComboBox leftTypeSelection = new ComboBox("Text-1");
-	// leftTypeSelection.setImmediate(true);
-	// for (FuncOp op : FuncOp.values()) {
-	// leftTypeSelection.addItem(op);
-	// leftTypeSelection.setItemCaption(op, op.getLabel());
-	// }
-	//
-	// Button accept = new Button("Accept", new ClickListener() {
-	// private static final long serialVersionUID = -4868974846447241726L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// updateExpressionFunctionPrimera();
-	// firePropertyUpdateListener(element);
-	// }
-	// });
-	//
-	// FormLayout exprWoChildForm = new FormLayout();
-	// exprWoChildForm.setWidth(null);
-	// exprWoChildForm.addComponent(leftTypeSelection);
-	// exprWoChildForm.addComponent(accept);
-	// exprWoChildForm.addComponent(clean);
-	//
-	// addTab(exprWoChildForm, "TODO - ExprWoChildLogicOperations", true, 1);
-	// }
-	//
-	// private boolean updateExpressionFunctionPrimera(){
-	// return true;
-	// }
-
 }
