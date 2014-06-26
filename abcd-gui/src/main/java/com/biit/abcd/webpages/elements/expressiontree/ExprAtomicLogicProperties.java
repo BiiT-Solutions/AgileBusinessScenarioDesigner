@@ -89,7 +89,7 @@ public class ExprAtomicLogicProperties extends ExprAtomicProperties<ExprAtomicLo
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				StringInputWindow stringInputWindow = new StringInputWindow();
+				StringInputWindow stringInputWindow = new StringInputWindow("");
 				stringInputWindow.setCaption("TODO - insert value");
 				stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override

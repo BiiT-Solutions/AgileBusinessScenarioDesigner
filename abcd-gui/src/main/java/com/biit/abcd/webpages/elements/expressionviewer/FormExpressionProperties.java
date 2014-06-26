@@ -1,11 +1,20 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
 import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
+import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
+import com.biit.abcd.persistence.entity.expressions.ExprValueString;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
+import com.biit.abcd.webpages.components.StringInputWindow;
+import com.biit.abcd.webpages.elements.expressiontree.SelectFormElementVariableWindow;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -126,7 +135,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprLogicLayout.addComponent(equalsButton);
 		exprLogicLayout.addComponent(distinctButton);
 
-		addTab(exprLogicLayout, "TODO - Logical Operator", true);
+		addTab(exprLogicLayout, ServerTranslate.tr(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
 	}
 
 	private void createMathTab() {
@@ -135,7 +144,6 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// ExprAtomicMath plusExpression = new ExprAtomicMath();
 				ExprOpMath exprValue = new ExprOpMath();
 				try {
 					exprValue.setValue(ExprOpValue.PLUS);
@@ -206,7 +214,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprAtomicMathLayout.addComponent(moduleButton);
 		exprAtomicMathLayout.addComponent(potButton);
 
-		addTab(exprAtomicMathLayout, "TODO - Math Operators", true);
+		addTab(exprAtomicMathLayout, ServerTranslate.tr(LanguageCodes.EXPRESSION_PROPERTIES_MATH), true);
 	}
 
 	private void createFunctionTab() {
@@ -278,7 +286,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprFuncLayout.addComponent(sqrtButton);
 		exprFuncLayout.addComponent(roundButton);
 
-		addTab(exprFuncLayout, "TODO - Functions", true);
+		addTab(exprFuncLayout, ServerTranslate.tr(LanguageCodes.EXPRESSION_PROPERTIES_FUNCTIONS), true);
 	}
 
 	private void createBaseTab() {
@@ -307,7 +315,13 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				ExprOpMath exprValue = new ExprOpMath();
+				try {
+					exprValue.setValue(ExprOpValue.ASSIGNATION);
+					addExpression(exprValue);
+				} catch (NotValidOperatorInExpression e) {
 
+				}
 			}
 		});
 		assignButton.setWidth(buttonWidth);
@@ -318,7 +332,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprBaseLayout.addComponent(rightBracketButton);
 		exprBaseLayout.addComponent(assignButton);
 
-		addTab(exprBaseLayout, "TODO - Generic", true);
+		addTab(exprBaseLayout, ServerTranslate.tr(LanguageCodes.EXPRESSION_PROPERTIES_GENERIC), true);
 	}
 
 	private void createControlsTab() {
@@ -340,7 +354,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprControlsLayout.addComponent(deleteButton);
 		exprControlsLayout.addComponent(newLineButton);
 
-		addTab(exprControlsLayout, "TODO - Controls", true);
+		addTab(exprControlsLayout, ServerTranslate.tr(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS), true);
 	}
 
 	private void createFormTab() {
@@ -354,22 +368,65 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		});
 		globalConstantButton.setWidth(formButtonWidth);
 
-		Button FormVariabletButton = new Button("Variable", new ClickListener() {
+		Button formVariableButton = new Button("Variable", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
+				variableWindow.showCentered();
+				variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						ExprValueFormReference formReference = ((SelectFormElementVariableWindow) window).getValue();
+						if (formReference != null) {
+							addExpression(formReference);
+							window.close();
+						} else {
+							MessageManager.showError(ServerTranslate
+									.tr(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+						}
+					}
+				});
 
 			}
 		});
-		FormVariabletButton.setWidth(formButtonWidth);
+		formVariableButton.setWidth(formButtonWidth);
+
+		Button inputButton = new Button("Input", new ClickListener() {
+			private static final long serialVersionUID = -3339234972234970277L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				StringInputWindow stringInputWindow = new StringInputWindow(
+						ServerTranslate.tr(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+				stringInputWindow.setCaption(ServerTranslate.tr(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+				stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						String value = ((StringInputWindow) window).getValue();
+						if (value == null || value.isEmpty()) {
+							MessageManager.showError(ServerTranslate
+									.tr(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+						} else {
+							ExprValueString exprValue = new ExprValueString(value);
+							addExpression(exprValue);
+							window.close();
+						}
+					}
+				});
+				stringInputWindow.showCentered();
+			}
+		});
+		inputButton.setWidth(formButtonWidth);
 
 		GridLayout exprFormLayout = new GridLayout(1, 4);
 		exprFormLayout.setWidth(null);
 		exprFormLayout.addComponent(globalConstantButton);
-		exprFormLayout.addComponent(FormVariabletButton);
+		exprFormLayout.addComponent(formVariableButton);
+		exprFormLayout.addComponent(inputButton);
 
-		addTab(exprFormLayout, "TODO - Form Values", true);
+		addTab(exprFormLayout, ServerTranslate.tr(LanguageCodes.EXPRESSION_PROPERTIES_FORM), true);
 	}
 
 	private void addExpression(ExprBasic expression) {

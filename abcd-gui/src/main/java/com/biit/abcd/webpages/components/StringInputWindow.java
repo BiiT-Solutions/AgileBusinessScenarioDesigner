@@ -8,13 +8,13 @@ import com.vaadin.ui.VerticalLayout;
 public class StringInputWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 361486551550136464L;
 	private static final String width = "300px";
-	private static final String height = "200px";
+	private static final String height = "180px";
 
 	private TextField textField;
 
-	public StringInputWindow() {
+	public StringInputWindow(String inputFieldCaption) {
 		super();
-		setContent(generateContent());
+		setContent(generateContent(inputFieldCaption));
 		setResizable(false);
 		setDraggable(false);
 		setClosable(false);
@@ -27,8 +27,8 @@ public class StringInputWindow extends AcceptCancelWindow {
 		return textField.getValue();
 	}
 
-	private Component generateContent() {
-		textField = new TextField();
+	private Component generateContent(String inputFieldCaption) {
+		textField = new TextField(inputFieldCaption);
 
 		VerticalLayout rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();

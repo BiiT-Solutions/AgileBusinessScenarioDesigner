@@ -245,7 +245,22 @@ public enum LanguageCodes {
 	FORM_EXPRESSIONS_TABLE_COLUMN_NAME("form.expressions.tablecolumn.name"),	
 	FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE("form.variables.tablecolumn.update"),
 	MENU_EXPRESSIONS_ADD("form.expressions.menu.add"),
-	MENU_EXPRESSIONS_REMOVE("form.expressions.menu.remove");
+	MENU_EXPRESSIONS_REMOVE("form.expressions.menu.remove"),
+	
+	
+	EXPRESSION_PROPERTIES_CONTROLS("expression.properties.controls"),
+	EXPRESSION_PROPERTIES_GENERIC("expression.properties.generic"),
+	EXPRESSION_PROPERTIES_FORM("expression.properties.form"),
+	EXPRESSION_PROPERTIES_MATH("expression.properties.math"),
+	EXPRESSION_PROPERTIES_LOGICAL("expression.properties.logical"),
+	EXPRESSION_PROPERTIES_FUNCTIONS("expression.properties.functions"),
+
+	EXPRESSION_INPUT_WINDOW_CAPTION("expression.properties.input.window.caption"),
+	EXPRESSION_INPUT_WINDOW_TEXTFIELD("expression.properties.input.window.textfield"),
+	
+	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value");
+	
+	
 	
 	private String value;
 	
