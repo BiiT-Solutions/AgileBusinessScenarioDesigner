@@ -1,31 +1,20 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.StorableObject;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 @Entity
 @Table(name = "DIAGRAM_OBJECTS")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class DiagramObject {
-
-	// Id is not exposed because not used in JSON
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
-	private Long databaseId;
+public abstract class DiagramObject extends StorableObject {
 
 	@Expose
-	private String type;
-	@SerializedName("id")
+	@Enumerated(EnumType.STRING)
+	private DiagramObjectType type;
 	@Expose
 	private String jointjsId;
 	@Expose
@@ -33,11 +22,11 @@ public class DiagramObject {
 	@Expose
 	private int z;
 
-	public String getType() {
+	public DiagramObjectType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(DiagramObjectType type) {
 		this.type = type;
 	}
 
@@ -57,14 +46,6 @@ public class DiagramObject {
 		this.z = z;
 	}
 
-	public Long getDatabaseId() {
-		return databaseId;
-	}
-
-	public void setDatabaseId(Long databaseId) {
-		this.databaseId = databaseId;
-	}
-	
 	public String getEmbeds() {
 		return embeds;
 	}

@@ -64,7 +64,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			public void valueChange(ValueChangeEvent event) {
 				previousDiagram = currentDiagram;
 				currentDiagram = (Diagram) event.getProperty().getValue();
-
 				if (previousDiagram != null) {
 					diagramBuilder.toJson(new DiagramBuilderJsonGenerationListener() {
 						@Override

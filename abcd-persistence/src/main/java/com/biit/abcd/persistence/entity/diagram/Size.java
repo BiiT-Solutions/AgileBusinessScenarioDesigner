@@ -1,21 +1,14 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.StorableObject;
 import com.google.gson.annotations.Expose;
 
 @Entity
 @Table(name = "DIAGRAM_SIZES")
-public class Size {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
-	private Long databaseId;
+public class Size extends StorableObject {
 
 	@Expose
 	private int width;

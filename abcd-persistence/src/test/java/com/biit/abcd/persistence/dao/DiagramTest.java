@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -63,7 +64,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertNotNull(diagram);
 		Assert.assertEquals(diagram.getDiagramObjects().size(), 5);
 		// Test first child.
-		Assert.assertEquals(diagram.getDiagramObjects().get(0).getType(), "biit.SourceNode");
+		Assert.assertEquals(diagram.getDiagramObjects().get(0).getType(), DiagramObjectType.SOURCE);
 		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getTooltip(), "Source Tooltip");
 		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getSize().getWidth(), 30);
 		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getSize().getHeight(), 30);

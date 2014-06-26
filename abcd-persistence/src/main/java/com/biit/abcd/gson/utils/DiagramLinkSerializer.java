@@ -18,7 +18,7 @@ public class DiagramLinkSerializer implements JsonSerializer<DiagramLink> {
 		final JsonObject jsonObject = new JsonObject();
 
 		jsonObject.addProperty("id", diagramElement.getJointjsId());
-		jsonObject.addProperty("type", diagramElement.getType());
+		jsonObject.addProperty("type", diagramElement.getType().getJsonType());
 		jsonObject.addProperty("embeds", diagramElement.getEmbeds());
 		jsonObject.addProperty("z", diagramElement.getZ());
 
