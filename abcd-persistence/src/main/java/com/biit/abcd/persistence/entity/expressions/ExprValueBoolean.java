@@ -32,4 +32,13 @@ public class ExprValueBoolean extends ExprValue {
 		this.value = value;
 	}
 
+	@Override
+	public String getExpression() {
+		if (value) {
+			return "1";
+		} else {
+			return "0";
+		}
+	}
+
 }

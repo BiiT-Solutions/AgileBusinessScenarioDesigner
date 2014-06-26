@@ -32,4 +32,9 @@ public class ExprValueDouble extends ExprValue {
 		this.value = value;
 	}
 
+	@Override
+	public String getExpression() {
+		return new Double(value).toString();
+	}
+
 }

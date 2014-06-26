@@ -308,7 +308,7 @@ public class FormDesigner extends FormWebPageComponent {
 					}
 					if (parent != null) {
 						newAnswer.setName(newAnswer.getDefaultName(parent, 1));
-						//First add to UI and then add parent.
+						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
 					}

@@ -3,7 +3,11 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import java.util.HashMap;
 import java.util.List;
 
+import com.biit.abcd.persistence.entity.expressions.ExprAtomicLogic;
+import com.biit.abcd.persistence.entity.expressions.ExprAtomicSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
+import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -55,7 +59,7 @@ public class ExpressionViewer extends CssLayout {
 		addExpressions(lineLayout, formExpression.getExpressions());
 
 		rootLayout.addComponent(lineLayout);
-		updateExpressionStyles();
+		updateExpressionSelectionStyles();
 
 		addComponent(rootLayout);
 	}
@@ -87,10 +91,10 @@ public class ExpressionViewer extends CssLayout {
 
 	private void setSelectedExpression(ExprBasic expression) {
 		selectedExpression = expression;
-		updateExpressionStyles();
+		updateExpressionSelectionStyles();
 	}
 
-	private void updateExpressionStyles() {
+	private void updateExpressionSelectionStyles() {
 		for (int i = 0; i < rootLayout.getComponentCount(); i++) {
 			if (rootLayout.getComponent(i) instanceof HorizontalLayout) {
 				HorizontalLayout lineLayout = (HorizontalLayout) rootLayout.getComponent(i);
@@ -131,5 +135,32 @@ public class ExpressionViewer extends CssLayout {
 				setSelectedExpression(selected);
 			}
 		}
+	}
+
+	public void addElementToSelected(ExprBasic newElement) {
+		int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+		if (newElement instanceof ExprAtomicSymbol) {
+			// Brackets are added before selected expression in some cases.
+			if (((ExprAtomicSymbol) newElement).getValue().getLeftSymbol() == true
+			// Brackets always at right position in '<', '>', ... symbols.
+					&& !(getSelectedExpression() instanceof ExprAtomicLogic)
+					// Brackets always at right position in '=' symbol.
+					&& (!(getSelectedExpression() instanceof ExprOpMath) || !((ExprOpMath) getSelectedExpression())
+							.getValue().equals(ExprOpValue.ASSIGNATION))) {
+				index--;
+			}
+		}
+		if (index >= 0 && index < formExpression.getExpressions().size()) {
+			formExpression.getExpressions().add(index, newElement);
+		} else {
+			formExpression.getExpressions().add(newElement);
+		}
+		System.out.println(formExpression.getExpression());
+		updateExpression();
+		setSelectedExpression(newElement);
+	}
+
+	public FormExpression getFormExpression() {
+		return formExpression;
 	}
 }

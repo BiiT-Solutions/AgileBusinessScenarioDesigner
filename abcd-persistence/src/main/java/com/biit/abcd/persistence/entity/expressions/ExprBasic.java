@@ -19,6 +19,13 @@ public abstract class ExprBasic extends StorableObject {
 
 	public abstract String getExpressionTableString();
 
+	/**
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * 
+	 * @return
+	 */
+	public abstract String getExpression();
+
 	public ExprBasic getParent() {
 		return parent;
 	}

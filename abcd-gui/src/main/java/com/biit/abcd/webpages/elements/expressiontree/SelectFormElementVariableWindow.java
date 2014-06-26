@@ -3,6 +3,8 @@ package com.biit.abcd.webpages.elements.expressiontree;
 import java.util.List;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
@@ -30,7 +32,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 	public SelectFormElementVariableWindow() {
 		setWidth("50%");
 		setHeight("50%");
-		setClosable(false);
+		setClosable(true);
 		setModal(true);
 		setResizable(false);
 
@@ -43,6 +45,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		rootLayout.setMargin(true);
 		rootLayout.setSpacing(true);
 		rootLayout.setImmediate(true);
+		setCaption(ServerTranslate.tr(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION));
 
 		firstComponent = new VerticalLayout();
 		firstComponent.setSizeFull();
@@ -61,13 +64,14 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 
 		// Initialize value of formQuestionTable.
 		formQuestionTable.setValue(UserSessionHandler.getFormController().getForm());
+		initializeVariableSelectionValues(UserSessionHandler.getFormController().getForm());
 
 		return rootLayout;
 	}
 
 	private void initializeFormQuestionTable() {
 		formQuestionTable = new FormQuestionTable();
-		formQuestionTable.setCaption("TODO - Form element");
+		formQuestionTable.setCaption(ServerTranslate.tr(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
 		formQuestionTable.setSizeFull();
 		formQuestionTable.setRootElement((Form) UserSessionHandler.getFormController().getForm());
 		formQuestionTable.setSelectable(true);
@@ -87,7 +91,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 
 	private void initializeVariableSelection() {
 		variableSelection = new ListSelect();
-		variableSelection.setCaption("TODO - Variable");
+		variableSelection.setCaption(ServerTranslate.tr(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
 		variableSelection.setSizeFull();
 		variableSelection.setNullSelectionAllowed(false);
 		variableSelection.setImmediate(true);
@@ -110,7 +114,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 	}
 
 	public ExprValueFormReference getValue() {
-		if (formQuestionTable.getValue() == null || variableSelection.getValue()==null) {
+		if (formQuestionTable.getValue() == null || variableSelection.getValue() == null) {
 			return null;
 		}
 		return new ExprValueFormReference((TreeObject) formQuestionTable.getValue(),

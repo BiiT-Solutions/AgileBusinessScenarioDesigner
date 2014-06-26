@@ -3,9 +3,11 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.expressions.ExprAtomicSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
 import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
+import com.biit.abcd.persistence.entity.expressions.ExprSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
 import com.biit.abcd.persistence.entity.expressions.ExprValueString;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
@@ -295,7 +297,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
+				exprValue.setValue(ExprSymbol.LEFT_BRACKET);
+				addExpression(exprValue);
 			}
 		});
 		leftBracketButton.setWidth(buttonWidth);
@@ -305,7 +309,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
+				exprValue.setValue(ExprSymbol.RIGHT_BRACKET);
+				addExpression(exprValue);
 			}
 		});
 		rightBracketButton.setWidth(buttonWidth);
@@ -348,9 +354,31 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			}
 		});
 		newLineButton.setWidth(buttonWidth);
+		
+		Button moveLeft = new Button("\u21E4", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
 
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+			}
+		});
+		moveLeft.setWidth(buttonWidth);
+		
+		Button moveRight = new Button("\u21E5", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+			}
+		});
+		moveRight.setWidth(buttonWidth);
+		
 		GridLayout exprControlsLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprControlsLayout.setWidth(null);
+		exprControlsLayout.addComponent(moveLeft);
+		exprControlsLayout.addComponent(moveRight);
 		exprControlsLayout.addComponent(deleteButton);
 		exprControlsLayout.addComponent(newLineButton);
 
@@ -430,8 +458,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 	}
 
 	private void addExpression(ExprBasic expression) {
-		formExpression.addExpression(expression);
-		firePropertyUpdateListener(formExpression);
+		//formExpression.addExpression(expression);
+		//firePropertyUpdateListener(formExpression);
+		fireExpressionAddedListener(expression);
 	}
 
 	@Override

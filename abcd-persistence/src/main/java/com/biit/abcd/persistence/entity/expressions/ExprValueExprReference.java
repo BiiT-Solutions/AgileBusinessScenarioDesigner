@@ -34,4 +34,9 @@ public class ExprValueExprReference extends ExprValue {
 		this.value = value;
 	}
 
+	@Override
+	public String getExpression() {
+		return value.getExpression();
+	}
+
 }

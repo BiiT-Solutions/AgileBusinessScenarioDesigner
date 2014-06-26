@@ -50,7 +50,13 @@
 
 
 	<dependencies>
-	    <!-- Vaadin plugins -->
+		<!-- EXpression Evaluator -->
+		<dependency>
+			<groupId>com.biit</groupId>
+			<artifactId>jexeval</artifactId>
+			<version>${jexeval.version}</version>
+		</dependency>
+		<!-- Vaadin plugins -->
 		<!-- JointJs Calendar Widget -->
 		<dependency>
 			<groupId>com.biit.vaadin</groupId>

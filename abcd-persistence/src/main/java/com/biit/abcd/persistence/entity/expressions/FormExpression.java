@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.StorableObject;
@@ -18,6 +19,7 @@ public class FormExpression extends StorableObject {
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OrderColumn(name="expression_index")
 	List<ExprBasic> expressions;
 
 	public FormExpression() {
@@ -42,6 +44,19 @@ public class FormExpression extends StorableObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * 
+	 * @return
+	 */
+	public String getExpression() {
+		String result = "";
+		for (ExprBasic expression : expressions) {
+			result += expression.getExpression() + " ";
+		}
+		return result;
 	}
 
 }

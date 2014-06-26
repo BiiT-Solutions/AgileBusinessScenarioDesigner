@@ -37,4 +37,13 @@ public abstract class ExprWithChilds extends ExprAtomic {
 		child.parent = this;
 	}
 
+	@Override
+	public String getExpression() {
+		String result = "";
+		for (ExprBasic expression : getChilds()) {
+			result += expression.getExpression();
+		}
+		return result;
+	}
+
 }

@@ -649,5 +649,36 @@ $open-sans-pathPrefix: "./fonts/";
 		background-color: #ededed;
 	}
 	
+	.v-label.expression-valid{
+		background-color:#77b55a;
+		border-top-left-radius:0px;
+		border-top-right-radius:0px;
+		border-bottom-right-radius:0px;
+		border-bottom-left-radius:0px;
+		border:2px solid #4b8f29;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-weight:bold;
+		padding:10px 20px;
+		text-decoration:none;
+	}
+
+	
+	.v-label.expression-invalid{
+		background-color:#d0451b;
+		border-top-left-radius:0px;
+		border-top-right-radius:0px;
+		border-bottom-right-radius:0px;
+		border-bottom-left-radius:0px;
+		border:2px solid #942911;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-weight:bold;
+		padding:10px 20px;
+		text-decoration:none;
+	}
+	
 	
 }

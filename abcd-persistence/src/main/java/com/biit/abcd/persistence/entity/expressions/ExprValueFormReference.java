@@ -53,4 +53,9 @@ public class ExprValueFormReference extends ExprValue {
 		this.question = question;
 	}
 
+	@Override
+	public String getExpression() {
+		return getExpressionTableString();
+	}
+
 }

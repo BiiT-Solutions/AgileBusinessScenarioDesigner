@@ -18,11 +18,13 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 	private Class<?> type;
 	private AccordionMultiple rootAccordion;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
+	private List<ElementAddedListener> newElementListeners;
 	protected TextField createdBy, creationTime, updatedBy, updateTime;
 
 	public PropertiesForClassComponent(Class<? extends T> type) {
 		this.type = type;
-		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
+		propertyUpdateListeners = new ArrayList<>();
+		newElementListeners = new ArrayList<>();
 
 		rootAccordion = new AccordionMultiple();
 		rootAccordion.setWidth("100%");
@@ -105,13 +107,27 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 		propertyUpdateListeners.add(listener);
 	}
 
+	public void addNewElementListener(ElementAddedListener listener) {
+		newElementListeners.add(listener);
+	}
+
 	public void removePropertyUpdateListener(PropertieUpdateListener listener) {
 		propertyUpdateListeners.remove(listener);
+	}
+
+	public void removeNewElementListener(ElementAddedListener listener) {
+		newElementListeners.remove(listener);
 	}
 
 	protected void firePropertyUpdateListener(Object element) {
 		for (PropertieUpdateListener listener : propertyUpdateListeners) {
 			listener.propertyUpdate(element);
+		}
+	}
+
+	protected void fireExpressionAddedListener(Object newElement) {
+		for (ElementAddedListener listener : newElementListeners) {
+			listener.elementAdded(newElement);
 		}
 	}
 

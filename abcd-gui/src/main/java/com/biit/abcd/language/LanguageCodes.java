@@ -254,11 +254,14 @@ public enum LanguageCodes {
 	EXPRESSION_PROPERTIES_MATH("expression.properties.math"),
 	EXPRESSION_PROPERTIES_LOGICAL("expression.properties.logical"),
 	EXPRESSION_PROPERTIES_FUNCTIONS("expression.properties.functions"),
-
-	EXPRESSION_INPUT_WINDOW_CAPTION("expression.properties.input.window.caption"),
-	EXPRESSION_INPUT_WINDOW_TEXTFIELD("expression.properties.input.window.textfield"),
-	
-	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value");
+	EXPRESSION_INPUT_WINDOW_CAPTION("expression.input.window.caption"),
+	EXPRESSION_INPUT_WINDOW_TEXTFIELD("expression.input.window.textfield"),	
+	EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION("expression.form.variable.window.caption"),
+	EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS("expression.form.variable.window.elements"),
+	EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES("expression.form.variable.window.variables"),	
+	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value"),	
+	EXPRESSION_CHECKER_VALID("expression.checker.valid"),
+	EXPRESSION_CHECKER_INVALID("expression.checker.invalid");
 	
 	
 	

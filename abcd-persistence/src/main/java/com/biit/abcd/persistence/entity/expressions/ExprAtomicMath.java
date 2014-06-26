@@ -9,16 +9,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EXPRESSION_ATOMIC_MATH")
 public class ExprAtomicMath extends ExprAtomic {
-	
+
 	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private ExprValue value;
 
 	@Override
 	public String getExpressionTableString() {
-		if(value == null){
-			return generateNullLabelCaption("expr-op");
-		}else{
-			return value.getExpressionTableString(); 
+		if (value == null) {
+			return generateNullLabelCaption("expr-sym");
+		} else {
+			return value.getExpressionTableString();
 		}
 	}
 
@@ -28,6 +28,11 @@ public class ExprAtomicMath extends ExprAtomic {
 
 	public void setValue(ExprValue value) {
 		this.value = value;
+	}
+
+	@Override
+	public String getExpression() {
+		return value.getExpression();
 	}
 
 }

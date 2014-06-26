@@ -41,4 +41,9 @@ public class ExprAtomicLogic extends ExprAtomic {
 	public ExprValue getValue() {
 		return this.value;
 	}
+
+	@Override
+	public String getExpression() {
+		return value.getExpression();
+	}
 }

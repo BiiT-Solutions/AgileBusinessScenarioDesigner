@@ -49,4 +49,9 @@ public abstract class ExprOp extends ExprBasic {
 		}
 	}
 
+	@Override
+	public String getExpression() {
+		return currentValue.toString();
+	}
+
 }
