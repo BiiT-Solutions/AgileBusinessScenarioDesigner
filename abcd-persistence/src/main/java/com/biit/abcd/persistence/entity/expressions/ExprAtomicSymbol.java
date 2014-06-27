@@ -34,7 +34,7 @@ public class ExprAtomicSymbol extends ExprAtomic {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		return getExpressionTableString();
 	}
 }

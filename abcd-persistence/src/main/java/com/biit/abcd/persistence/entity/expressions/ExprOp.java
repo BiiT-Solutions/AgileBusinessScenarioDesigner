@@ -50,7 +50,7 @@ public abstract class ExprOp extends ExprBasic {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		return currentValue.toString();
 	}
 

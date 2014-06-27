@@ -38,7 +38,7 @@ public abstract class ExprWithChilds extends ExprAtomic {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		String result = "";
 		for (ExprBasic expression : getChilds()) {
 			result += expression.getExpression();

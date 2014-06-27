@@ -36,7 +36,7 @@ public class ExprValueTimestamp extends ExprValue {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		return value.toString();
 	}
 

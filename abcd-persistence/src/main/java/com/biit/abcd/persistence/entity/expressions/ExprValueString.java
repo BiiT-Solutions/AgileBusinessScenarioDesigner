@@ -32,7 +32,7 @@ public class ExprValueString extends ExprValue {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		return value;
 	}
 

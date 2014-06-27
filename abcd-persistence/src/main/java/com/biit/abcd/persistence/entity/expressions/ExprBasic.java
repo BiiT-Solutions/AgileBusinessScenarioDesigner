@@ -24,7 +24,7 @@ public abstract class ExprBasic extends StorableObject {
 	 * 
 	 * @return
 	 */
-	public abstract String getExpression();
+	protected abstract String getExpression();
 
 	public ExprBasic getParent() {
 		return parent;

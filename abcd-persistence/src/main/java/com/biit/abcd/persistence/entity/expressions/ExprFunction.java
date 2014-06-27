@@ -21,7 +21,7 @@ public class ExprFunction extends ExprBasic {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		return value.getValue();
 	}
 

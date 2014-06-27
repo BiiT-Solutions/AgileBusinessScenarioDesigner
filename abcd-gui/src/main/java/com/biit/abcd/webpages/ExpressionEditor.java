@@ -25,7 +25,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTable tableSelectExpression;
-	
+
 	public ExpressionEditor() {
 		super();
 	}
@@ -52,8 +52,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 		rootLayout.setMenu(tableSelectExpression);
 
 		// Create content
-		 expressionEditorComponent = new ExpressionEditorComponent();
-		 expressionEditorComponent.setSizeFull();
+		expressionEditorComponent = new ExpressionEditorComponent();
+		expressionEditorComponent.setSizeFull();
 		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);

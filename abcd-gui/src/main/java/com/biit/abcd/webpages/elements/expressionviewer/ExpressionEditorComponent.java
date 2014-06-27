@@ -89,7 +89,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 		checkerLayout.setSpacing(false);
 		checkerLayout.setSizeFull();
 
-		evaluatorOutput = new Label("Check");
+		evaluatorOutput = new Label();
 		evaluatorOutput.setSizeUndefined();
 		checkerLayout.addComponent(evaluatorOutput);
 		checkerLayout.setComponentAlignment(evaluatorOutput, Alignment.TOP_RIGHT);

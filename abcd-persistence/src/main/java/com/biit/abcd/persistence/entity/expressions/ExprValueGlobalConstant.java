@@ -41,11 +41,8 @@ public class ExprValueGlobalConstant extends ExprValue {
 	}
 
 	@Override
-	/**
-	 *  Dots are not allowed in the Evaluator Expression.
-	 */
-	public String getExpression() {
-		return getExpressionTableString().replace(".", "_");
+	protected String getExpression() {
+		return getExpressionTableString();
 	}
 
 }

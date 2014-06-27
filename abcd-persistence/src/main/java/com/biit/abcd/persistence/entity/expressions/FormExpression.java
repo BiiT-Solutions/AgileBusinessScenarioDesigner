@@ -10,18 +10,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.jexeval.ExpressionEvaluator;
 
 @Entity
 @Table(name = "EXPRESSION_FORMS_EXPRESSIONS")
-public class FormExpression extends StorableObject {
+public class FormExpression extends ExprBasic {
 
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "expression_index")
-	List<ExprBasic> expressions;
+	private List<ExprBasic> expressions;
 
 	public FormExpression() {
 		expressions = new ArrayList<>();
@@ -47,15 +46,30 @@ public class FormExpression extends StorableObject {
 		this.name = name;
 	}
 
+	@Override
+	public String getExpressionTableString() {
+		String result = "";
+		for (ExprBasic expression : expressions) {
+			result += expression.getExpressionTableString() + " ";
+		}
+		return result.trim();
+	}
+
 	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
 	 * 
 	 * @return
 	 */
-	public String getExpression() {
+	@Override
+	protected String getExpression() {
 		String result = "";
 		for (ExprBasic expression : expressions) {
-			result += expression.getExpression() + " ";
+			// Dots are not allowed in the Evaluator Expression.
+			if ((expression instanceof ExprValueFormCustomVariable) || (expression instanceof ExprValueGlobalConstant)) {
+				result += expression.getExpression().replace(".", "_") + " ";
+			} else {
+				result += expression.getExpression() + " ";
+			}
 		}
 		return result.trim();
 	}
@@ -66,7 +80,7 @@ public class FormExpression extends StorableObject {
 		for (ExprBasic expression : expressions) {
 			if ((expression instanceof ExprValueFormCustomVariable) || (expression instanceof ExprValueGlobalConstant)) {
 				// Dots are not allowed.
-				String varName = expression.getExpression();
+				String varName = expression.getExpression().replace(".", "_");
 				// Value is not needed for evaluation.
 				String value = "1";
 				evaluator.with(varName, value);

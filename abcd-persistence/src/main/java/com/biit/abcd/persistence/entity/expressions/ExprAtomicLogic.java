@@ -43,7 +43,7 @@ public class ExprAtomicLogic extends ExprAtomic {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		return value.getExpression();
 	}
 }

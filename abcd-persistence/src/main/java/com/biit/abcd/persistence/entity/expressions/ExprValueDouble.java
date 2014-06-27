@@ -33,7 +33,7 @@ public class ExprValueDouble extends ExprValue {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		return new Double(value).toString();
 	}
 

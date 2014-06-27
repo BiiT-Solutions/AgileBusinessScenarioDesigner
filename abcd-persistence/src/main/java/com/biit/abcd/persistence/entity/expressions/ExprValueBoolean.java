@@ -33,7 +33,7 @@ public class ExprValueBoolean extends ExprValue {
 	}
 
 	@Override
-	public String getExpression() {
+	protected String getExpression() {
 		if (value) {
 			return "1";
 		} else {
