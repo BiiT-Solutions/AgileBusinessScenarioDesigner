@@ -6,7 +6,6 @@ import com.biit.abcd.persistence.entity.expressions.ExprBasic;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
-import com.biit.jexeval.ExpressionEvaluator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -73,8 +72,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 	}
 
 	private void updateEvaluator(FormExpression formExpression) {
+		System.out.println(formExpression.getExpression());
 		try {
-			new ExpressionEvaluator(formExpression.getExpression()).eval();
+			formExpression.getExpressionEvaluator().eval();
 			evaluatorOutput.setStyleName("expression-valid");
 			evaluatorOutput.setValue(ServerTranslate.tr(LanguageCodes.EXPRESSION_CHECKER_VALID));
 		} catch (Exception e) {
@@ -121,6 +121,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				expressionViewer.removeSelectedExpression();
+				updateEvaluator(formExpression);
 			}
 		});
 	}

@@ -54,8 +54,11 @@ public class ExprValueFormReference extends ExprValue {
 	}
 
 	@Override
+	/**
+	 *  Dots are not allowed in the Evaluator Expression.
+	 */
 	public String getExpression() {
-		return getExpressionTableString();
+		return getExpressionTableString().replace(".", "_");
 	}
 
 }

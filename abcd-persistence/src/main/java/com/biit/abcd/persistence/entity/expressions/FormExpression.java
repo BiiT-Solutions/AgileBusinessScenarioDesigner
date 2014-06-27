@@ -11,15 +11,16 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.jexeval.ExpressionEvaluator;
 
 @Entity
-@Table(name = "TREE_FORMS_EXPRESSIONS")
+@Table(name = "EXPRESSION_FORMS_EXPRESSIONS")
 public class FormExpression extends StorableObject {
 
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@OrderColumn(name="expression_index")
+	@OrderColumn(name = "expression_index")
 	List<ExprBasic> expressions;
 
 	public FormExpression() {
@@ -56,7 +57,22 @@ public class FormExpression extends StorableObject {
 		for (ExprBasic expression : expressions) {
 			result += expression.getExpression() + " ";
 		}
-		return result;
+		return result.trim();
 	}
 
+	public ExpressionEvaluator getExpressionEvaluator() {
+		ExpressionEvaluator evaluator = new ExpressionEvaluator(getExpression());
+		// Define variables.
+		for (ExprBasic expression : expressions) {
+			if (expression instanceof ExprValueFormReference) {
+				// Dots are not allowed.
+				String varName = ((ExprValueFormReference) expression).getExpression();
+				// Value is not needed for evaluation.
+				String value = "1";
+				evaluator.with(varName, value);
+			}
+		}
+		return evaluator;
+
+	}
 }

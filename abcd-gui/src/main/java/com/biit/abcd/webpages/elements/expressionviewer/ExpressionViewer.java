@@ -155,7 +155,6 @@ public class ExpressionViewer extends CssLayout {
 		} else {
 			formExpression.getExpressions().add(newElement);
 		}
-		System.out.println(formExpression.getExpression());
 		updateExpression();
 		setSelectedExpression(newElement);
 	}
