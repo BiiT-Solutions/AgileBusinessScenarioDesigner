@@ -61,16 +61,16 @@ public class Login extends WebPageComponent {
 		panel.setSizeUndefined();
 
 		// Create input fields for user name and password
-		usernameField = new TextField(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_EMAIL));
+		usernameField = new TextField(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_EMAIL));
 		usernameField.setRequired(true);
-		usernameField.setRequiredError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_EMAIL));
+		usernameField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_EMAIL));
 		usernameField.setWidth(FIELD_SIZE);
 		usernameField.focus();
 
-		passwordField = new PasswordField(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_PASSWORD));
+		passwordField = new PasswordField(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_PASSWORD));
 		passwordField.setRequired(true);
 		passwordField.setWidth(FIELD_SIZE);
-		passwordField.setRequiredError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_PASSWORD));
+		passwordField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_PASSWORD));
 
 		// If you press enter. Login operation.
 		passwordField.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
@@ -91,7 +91,7 @@ public class Login extends WebPageComponent {
 		});
 
 		// Add the login button
-		Button loginButton = new Button(ServerTranslate.tr(LanguageCodes.LOGIN_CAPTION_SIGN_IN), new ClickListener() {
+		Button loginButton = new Button(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_SIGN_IN), new ClickListener() {
 			private static final long serialVersionUID = 1239035599265918788L;
 
 			@Override
@@ -121,7 +121,7 @@ public class Login extends WebPageComponent {
 		try {
 			user = AuthenticationService.getInstance().authenticate(userMail, password);
 		} catch (InvalidCredentialsException | AuthenticationRequired e) {
-			passwordField.setComponentError(new UserError(ServerTranslate.tr(LanguageCodes.LOGIN_ERROR_USER,
+			passwordField.setComponentError(new UserError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_USER,
 					new Object[] { userMail })));
 			MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
 		} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {

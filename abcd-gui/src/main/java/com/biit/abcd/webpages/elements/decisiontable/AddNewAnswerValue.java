@@ -13,7 +13,7 @@ public class AddNewAnswerValue extends SelectionTableWindow {
 
 	public AddNewAnswerValue(Question question) {
 		super(question, false);
-		setCaption(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_EDIT_CONDITION_CAPTION));
+		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_CONDITION_CAPTION));
 	}
 
 	@Override

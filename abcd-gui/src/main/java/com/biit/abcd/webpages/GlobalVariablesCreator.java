@@ -86,7 +86,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				VariableWindow window = new VariableWindow(ServerTranslate
-						.tr(LanguageCodes.GLOBAL_VARIABLE_ADD_WINDOW_TITLE));
+						.translate(LanguageCodes.GLOBAL_VARIABLE_ADD_WINDOW_TITLE));
 				window.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
@@ -124,7 +124,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 				if (variable != null) {
 					VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
-							ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
+							ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
 					variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {

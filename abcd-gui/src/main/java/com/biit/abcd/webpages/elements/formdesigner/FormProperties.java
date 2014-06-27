@@ -27,17 +27,17 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 	@Override
 	public void setElementAbstract(Form element) {
 		instance = element;
-		formName = new TextField(ServerTranslate.tr(LanguageCodes.FORM_PROPERTIES_NAME));
+		formName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
 		formName.setValue(instance.getName());
 		formName.setEnabled(false);
-		formVersion = new TextField(ServerTranslate.tr(LanguageCodes.FORM_PROPERTIES_VERSION));
+		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
 		formVersion.setEnabled(false);
 
-		availableFrom = new DateField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_FROM));
+		availableFrom = new DateField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_FROM));
 		availableFrom.setValue(instance.getAvailableFrom());
 
-		availableTo = new DateField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_TO));
+		availableTo = new DateField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_TO));
 		availableTo.setValue(instance.getAvailableTo());
 
 		FormLayout formForm = new FormLayout();
@@ -47,7 +47,7 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 		formForm.addComponent(availableFrom);
 		formForm.addComponent(availableTo);
 
-		addTab(formForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION), true, 0);
+		addTab(formForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION), true, 0);
 
 	}
 

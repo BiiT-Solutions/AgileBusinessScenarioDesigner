@@ -25,7 +25,7 @@ public abstract class WindowCreateNewObject extends Window {
 		this.setParentWindow(parentWindow);
 		setWidth(Math.min(WINDOW_WIDTH, UI.getCurrent().getPage().getBrowserWindowWidth()), Unit.PIXELS);
 		setHeight(Math.min(WINDOW_HEIGHT, UI.getCurrent().getPage().getBrowserWindowHeight()), Unit.PIXELS);
-		this.setCaption(ServerTranslate.tr(windowCaption));
+		this.setCaption(ServerTranslate.translate(windowCaption));
 
 		setContent(generateContent(inputFieldCaption));
 		setResizable(false);
@@ -36,7 +36,7 @@ public abstract class WindowCreateNewObject extends Window {
 	public AbstractOrderedLayout generateContent(LanguageCodes inputFieldCaption) {
 		VerticalLayout mainLayout = new VerticalLayout();
 
-		final TextField inputTextField = new TextField(ServerTranslate.tr(inputFieldCaption));
+		final TextField inputTextField = new TextField(ServerTranslate.translate(inputFieldCaption));
 		inputTextField.setWidth("100%");
 
 		mainLayout.addComponent(inputTextField);

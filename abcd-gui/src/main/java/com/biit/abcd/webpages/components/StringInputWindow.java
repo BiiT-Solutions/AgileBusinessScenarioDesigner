@@ -29,6 +29,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 
 	private Component generateContent(String inputFieldCaption) {
 		textField = new TextField(inputFieldCaption);
+		textField.focus();
 
 		VerticalLayout rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();

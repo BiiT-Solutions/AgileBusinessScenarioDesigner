@@ -34,7 +34,7 @@ public class EditCellComponent extends CustomComponent {
 
 		editButton = new IconButton(ThemeIcons.EDIT, IconSize.SMALL, LanguageCodes.EDIT_BUTTON_TOOLTIP);
 		removeButton = new IconButton(ThemeIcons.DELETE, IconSize.SMALL, LanguageCodes.DELETE_BUTTON_TOOLTIP);
-		textLabel = new Label(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE), ContentMode.HTML);
+		textLabel = new Label(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE), ContentMode.HTML);
 		textLabel.setSizeUndefined();
 
 		rootLayout.addComponent(textLabel);
@@ -100,7 +100,7 @@ public class EditCellComponent extends CustomComponent {
 
 	public void setLabel(TreeObject treeObject) {
 		if (treeObject == null) {
-			setLabel(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
+			setLabel(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
 		} else {
 			setLabel(treeObject.toString());
 		}

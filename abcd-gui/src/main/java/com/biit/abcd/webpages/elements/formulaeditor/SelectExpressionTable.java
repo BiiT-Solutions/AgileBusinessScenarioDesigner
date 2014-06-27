@@ -27,10 +27,10 @@ public class SelectExpressionTable extends Table {
 		setSizeFull();
 
 		addContainerProperty(MenuProperties.EXPRESSION_NAME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_NAME), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE), null, Align.LEFT);
 
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsible(MenuProperties.EXPRESSION_NAME, false);

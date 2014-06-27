@@ -25,9 +25,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTable tableSelectExpression;
-	// private ExpressionTreeTable thenTable;
-	//private ExpressionViewer expressionViewer;
-
+	
 	public ExpressionEditor() {
 		super();
 	}
@@ -54,12 +52,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 		rootLayout.setMenu(tableSelectExpression);
 
 		// Create content
-		//expressionViewer = new ExpressionViewer();
-		//expressionViewer.setSizeFull();
 		 expressionEditorComponent = new ExpressionEditorComponent();
 		 expressionEditorComponent.setSizeFull();
-		// thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
-		// .tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);

@@ -29,7 +29,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		setHeight("80%");
 		setContent(generateContent((ActionExpression) action));
 		setResizable(false);
-		setCaption(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
+		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
 	}
 
 	public Component generateContent(ActionExpression action) {
@@ -40,7 +40,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		expressionEditorComponent.setSizeFull();
 
 		ExpressionTreeTable thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
-				.tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
+				.translate(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 
 		if (action.getExpression() == null) {
 			expression = new ExpressionThen();

@@ -37,7 +37,7 @@ public class TreeObjectTable extends TreeTable {
 
 	private void initContainerProperties() {
 		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
 	}
 

@@ -26,10 +26,10 @@ public class SelectTableMenu extends Table {
 		setSizeFull();
 		
 		addContainerProperty(MenuProperties.TABLE_NAME, TableRule.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_UPDATE), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_UPDATE), null, Align.LEFT);
 		
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsible(MenuProperties.TABLE_NAME, false);

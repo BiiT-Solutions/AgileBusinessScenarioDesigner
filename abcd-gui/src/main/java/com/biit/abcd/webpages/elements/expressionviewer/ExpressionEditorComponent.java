@@ -72,14 +72,14 @@ public class ExpressionEditorComponent extends CustomComponent {
 	}
 
 	private void updateEvaluator(FormExpression formExpression) {
-		System.out.println(formExpression.getExpression());
+		//System.out.println(formExpression.getExpression());
 		try {
 			formExpression.getExpressionEvaluator().eval();
 			evaluatorOutput.setStyleName("expression-valid");
-			evaluatorOutput.setValue(ServerTranslate.tr(LanguageCodes.EXPRESSION_CHECKER_VALID));
+			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
 		} catch (Exception e) {
 			evaluatorOutput.setStyleName("expression-invalid");
-			evaluatorOutput.setValue(ServerTranslate.tr(LanguageCodes.EXPRESSION_CHECKER_INVALID));
+			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
 		}
 	}
 

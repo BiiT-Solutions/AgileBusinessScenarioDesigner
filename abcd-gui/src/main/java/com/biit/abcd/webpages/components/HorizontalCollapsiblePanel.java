@@ -117,11 +117,11 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 			if (enabled) {
 				setStyleName(CLASSNAME_ENABLED);
 				setIcon(this.enabledIcon);
-				setDescription(ServerTranslate.tr(enabledTooltip));
+				setDescription(ServerTranslate.translate(enabledTooltip));
 			} else {
 				setStyleName(CLASSNAME_DISABLED);
 				setIcon(this.disabledIcon);
-				setDescription(ServerTranslate.tr(disabledTooltip));
+				setDescription(ServerTranslate.translate(disabledTooltip));
 			}
 		}
 

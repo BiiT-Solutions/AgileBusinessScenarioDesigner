@@ -24,13 +24,13 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 	}
 
 	protected void initCommonProperties(Object element) {
-		createdBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
+		createdBy = new TextField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATED_BY));
 		createdBy.setEnabled(false);
-		creationTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATION_TIME));
+		creationTime = new TextField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CREATION_TIME));
 		creationTime.setEnabled(false);
-		updatedBy = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATED_BY));
+		updatedBy = new TextField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATED_BY));
 		updatedBy.setEnabled(false);
-		updateTime = new TextField(ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
+		updateTime = new TextField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
 		updateTime.setEnabled(false);
 		//init values;
 		initCommonPropertiesValues((TreeObject) element);
@@ -43,7 +43,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		commonProperties.addComponent(updatedBy);
 		commonProperties.addComponent(updateTime);
 
-		addTab(commonProperties, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION), false);
+		addTab(commonProperties, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION), false);
 	}
 
 	protected void initCommonPropertiesValues(TreeObject element) {

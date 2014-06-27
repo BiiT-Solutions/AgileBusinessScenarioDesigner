@@ -2,11 +2,12 @@ package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.persistence.entity.expressions.ExprAtomicMath;
-import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
+import com.biit.abcd.persistence.entity.expressions.ExprValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExprValueString;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.elements.expressionviewer.SelectFormElementVariableWindow;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -33,7 +34,7 @@ public class ExprAtomicMathProperties extends ExprAtomicProperties<ExprAtomicMat
 				variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						ExprValueFormReference formReference = ((SelectFormElementVariableWindow) window).getValue();
+						ExprValueFormCustomVariable formReference = ((SelectFormElementVariableWindow) window).getValue();
 						if (formReference == null) {
 							MessageManager.showError("TODO - error");
 						} else {

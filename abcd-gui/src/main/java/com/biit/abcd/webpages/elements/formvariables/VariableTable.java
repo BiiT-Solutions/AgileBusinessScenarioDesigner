@@ -36,13 +36,13 @@ public class VariableTable extends Table {
 		setColumnCollapsingAllowed(false);
 
 		addContainerProperty(FormVariablesProperties.VARIABLE_NAME, TextField.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_VARIABLE_COLUMN_NAME), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(FormVariablesProperties.TYPE, ComboBox.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_VARIABLE_COLUMN_TYPE), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_TYPE), null, Align.LEFT);
 
 		addContainerProperty(FormVariablesProperties.SCOPE, ComboBox.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_VARIABLE_SCOPE), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_SCOPE), null, Align.LEFT);
 
 		setColumnExpandRatio(FormVariablesProperties.VARIABLE_NAME, 1);
 		setColumnExpandRatio(FormVariablesProperties.TYPE, 1);
@@ -91,7 +91,7 @@ public class VariableTable extends Table {
 		ComboBox typeComboBox = new ComboBox();
 		for (CustomVariableType variableType : CustomVariableType.values()) {
 			typeComboBox.addItem(variableType);
-			typeComboBox.setItemCaption(variableType, ServerTranslate.tr(variableType.getTranslationCode()));
+			typeComboBox.setItemCaption(variableType, ServerTranslate.translate(variableType.getTranslationCode()));
 		}
 		typeComboBox.setNullSelectionAllowed(false);
 		typeComboBox.addFocusListener(new FocusListener() {
@@ -110,7 +110,7 @@ public class VariableTable extends Table {
 		ComboBox scopeComboBox = new ComboBox();
 		for (CustomVariableScope variablesScope : CustomVariableScope.values()) {
 			scopeComboBox.addItem(variablesScope);
-			scopeComboBox.setItemCaption(variablesScope, ServerTranslate.tr(variablesScope.getTranslationCode()));
+			scopeComboBox.setItemCaption(variablesScope, ServerTranslate.translate(variablesScope.getTranslationCode()));
 		}
 		scopeComboBox.setNullSelectionAllowed(false);
 		scopeComboBox.addFocusListener(new FocusListener() {

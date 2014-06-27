@@ -64,9 +64,16 @@ public class FormExpression extends StorableObject {
 		ExpressionEvaluator evaluator = new ExpressionEvaluator(getExpression());
 		// Define variables.
 		for (ExprBasic expression : expressions) {
-			if (expression instanceof ExprValueFormReference) {
+			if ((expression instanceof ExprValueFormCustomVariable) || (expression instanceof ExprValueGlobalConstant)) {
 				// Dots are not allowed.
-				String varName = ((ExprValueFormReference) expression).getExpression();
+				String varName = expression.getExpression();
+				// Avoid coincidences among custom and global
+				if (expression instanceof ExprValueFormCustomVariable) {
+					varName += "c_";
+				}
+				if (expression instanceof ExprValueGlobalConstant) {
+					varName += "g_";
+				}
 				// Value is not needed for evaluation.
 				String value = "1";
 				evaluator.with(varName, value);

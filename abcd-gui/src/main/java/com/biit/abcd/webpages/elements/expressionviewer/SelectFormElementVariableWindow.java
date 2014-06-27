@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.expressiontree;
+package com.biit.abcd.webpages.elements.expressionviewer;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
+import com.biit.abcd.persistence.entity.expressions.ExprValueFormCustomVariable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -45,7 +45,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		rootLayout.setMargin(true);
 		rootLayout.setSpacing(true);
 		rootLayout.setImmediate(true);
-		setCaption(ServerTranslate.tr(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION));
+		setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION));
 
 		firstComponent = new VerticalLayout();
 		firstComponent.setSizeFull();
@@ -71,7 +71,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 
 	private void initializeFormQuestionTable() {
 		formQuestionTable = new FormQuestionTable();
-		formQuestionTable.setCaption(ServerTranslate.tr(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
+		formQuestionTable.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
 		formQuestionTable.setSizeFull();
 		formQuestionTable.setRootElement((Form) UserSessionHandler.getFormController().getForm());
 		formQuestionTable.setSelectable(true);
@@ -91,7 +91,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 
 	private void initializeVariableSelection() {
 		variableSelection = new ListSelect();
-		variableSelection.setCaption(ServerTranslate.tr(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
+		variableSelection.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
 		variableSelection.setSizeFull();
 		variableSelection.setNullSelectionAllowed(false);
 		variableSelection.setImmediate(true);
@@ -113,11 +113,11 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		}
 	}
 
-	public ExprValueFormReference getValue() {
+	public ExprValueFormCustomVariable getValue() {
 		if (formQuestionTable.getValue() == null || variableSelection.getValue() == null) {
 			return null;
 		}
-		return new ExprValueFormReference((TreeObject) formQuestionTable.getValue(),
+		return new ExprValueFormCustomVariable((TreeObject) formQuestionTable.getValue(),
 				(CustomVariable) variableSelection.getValue());
 	}
 

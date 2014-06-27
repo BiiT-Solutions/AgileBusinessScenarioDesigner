@@ -25,7 +25,7 @@ import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
 import com.biit.abcd.persistence.entity.expressions.ExprPortMath;
 import com.biit.abcd.persistence.entity.expressions.ExprValueBoolean;
 import com.biit.abcd.persistence.entity.expressions.ExprValueDouble;
-import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
+import com.biit.abcd.persistence.entity.expressions.ExprValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExprValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionThen;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
@@ -145,7 +145,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		Assert.assertEquals(exprPortMath.getChilds().get(2).getClass(), ExprAtomicMath.class);
 
 		// Setting values: Questions2's score = 1
-		ExprValueFormReference exprValueString = new ExprValueFormReference(question2, form.getCustomVariables().get(1));
+		ExprValueFormCustomVariable exprValueString = new ExprValueFormCustomVariable(question2, form.getCustomVariables().get(1));
 		((ExprAtomicMath) exprPortMath.getChilds().get(0)).setValue(exprValueString);
 		((ExprOpMath) exprPortMath.getChilds().get(1)).setValue(ExprOpValue.ASSIGNATION);
 		((ExprAtomicMath) exprPortMath.getChilds().get(2)).setValue(new ExprValueDouble(1d));
@@ -172,10 +172,10 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 		// First child
 		Assert.assertEquals(((ExprAtomicMath) ((ExprPortMath) retrievedForm.getFormExpressions().get(0)
-				.getExpressions().get(0)).getChilds().get(0)).getValue().getClass(), ExprValueFormReference.class);
+				.getExpressions().get(0)).getChilds().get(0)).getValue().getClass(), ExprValueFormCustomVariable.class);
 		Assert.assertEquals(((ExprAtomicMath) ((ExprPortMath) retrievedForm.getFormExpressions().get(0)
 				.getExpressions().get(0)).getChilds().get(0)).getValue(), exprValueString);
-		Assert.assertEquals(((ExprValueFormReference) ((ExprAtomicMath) ((ExprPortMath) retrievedForm
+		Assert.assertEquals(((ExprValueFormCustomVariable) ((ExprAtomicMath) ((ExprPortMath) retrievedForm
 				.getFormExpressions().get(0).getExpressions().get(0)).getChilds().get(0)).getValue()).getQuestion(),
 				question2);
 
@@ -220,7 +220,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		Assert.assertEquals(exprPortMath.getChilds().get(2).getClass(), ExprAtomicMath.class);
 
 		// Setting values: Questions2's score = 1
-		ExprValueFormReference exprValueString = new ExprValueFormReference(question2, form.getCustomVariables().get(1));
+		ExprValueFormCustomVariable exprValueString = new ExprValueFormCustomVariable(question2, form.getCustomVariables().get(1));
 		((ExprAtomicMath) exprPortMath.getChilds().get(0)).setValue(exprValueString);
 		((ExprOpMath) exprPortMath.getChilds().get(1)).setValue(ExprOpValue.ASSIGNATION);
 		((ExprAtomicMath) exprPortMath.getChilds().get(2)).setValue(new ExprValueDouble(1d));
@@ -280,7 +280,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		Assert.assertEquals(exprPortMath.getChilds().get(2).getClass(), ExprAtomicMath.class);
 
 		// Setting values: Questions2's score = 1
-		ExprValueFormReference exprValueString = new ExprValueFormReference(question2, form.getCustomVariables().get(1));
+		ExprValueFormCustomVariable exprValueString = new ExprValueFormCustomVariable(question2, form.getCustomVariables().get(1));
 		((ExprAtomicMath) exprPortMath.getChilds().get(0)).setValue(exprValueString);
 		((ExprOpMath) exprPortMath.getChilds().get(1)).setValue(ExprOpValue.ASSIGNATION);
 		((ExprAtomicMath) exprPortMath.getChilds().get(2)).setValue(new ExprValueString("1"));

@@ -28,22 +28,22 @@ public class IconButton extends Button {
 
 	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, IconSize size,
 			ClickListener clickListener) {
-		super(ServerTranslate.tr(caption), clickListener);
+		super(ServerTranslate.translate(caption), clickListener);
 		createButton(icon, size, tooltip);
 	}
 
 	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, ClickListener clickListener) {
-		super(ServerTranslate.tr(caption), clickListener);
+		super(ServerTranslate.translate(caption), clickListener);
 		createButton(icon, defaultIconSize, tooltip);
 	}
 
 	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, IconSize size) {
-		super(ServerTranslate.tr(caption));
+		super(ServerTranslate.translate(caption));
 		createButton(icon, size, tooltip);
 	}
 
 	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip) {
-		super(ServerTranslate.tr(caption));
+		super(ServerTranslate.translate(caption));
 		createButton(icon, defaultIconSize, tooltip);
 	}
 
@@ -66,6 +66,6 @@ public class IconButton extends Button {
 	}
 
 	public void setDescription(LanguageCodes tooltip) {
-		setDescription(ServerTranslate.tr(tooltip));
+		setDescription(ServerTranslate.translate(tooltip));
 	}
 }

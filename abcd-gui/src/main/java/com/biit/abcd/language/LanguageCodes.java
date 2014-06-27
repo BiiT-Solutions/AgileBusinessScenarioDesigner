@@ -261,7 +261,19 @@ public enum LanguageCodes {
 	EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES("expression.form.variable.window.variables"),	
 	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value"),	
 	EXPRESSION_CHECKER_VALID("expression.checker.valid"),
-	EXPRESSION_CHECKER_INVALID("expression.checker.invalid");
+	EXPRESSION_CHECKER_INVALID("expression.checker.invalid"),
+
+	EXPRESSION_BUTTON_AND("expression.button.and"),
+	EXPRESSION_BUTTON_OR("expression.button.or"),
+	EXPRESSION_BUTTON_NOT("expression.button.not"),
+	EXPRESSION_BUTTON_CONSTANT("expression.button.constant"),
+	EXPRESSION_BUTTON_VARIABLE("expression.button.variable"),
+	EXPRESSION_BUTTON_INPUT("expression.button.input"),
+	EXPRESSION_BUTTON_MAX("expression.button.max"),
+	EXPRESSION_BUTTON_MIN("expression.button.min"),
+	EXPRESSION_BUTTON_ABS("expression.button.abs"),
+	EXPRESSION_BUTTON_ROUND("expression.button.round"),
+	EXPRESSION_BUTTON_SQRT("expression.button.sqrt");
 	
 	
 	
