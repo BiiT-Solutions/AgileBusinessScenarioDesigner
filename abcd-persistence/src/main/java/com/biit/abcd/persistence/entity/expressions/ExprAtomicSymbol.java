@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class ExprAtomicSymbol extends ExprAtomic {
 
 	@Enumerated(EnumType.STRING)
-	private ExprSymbol value;
+	private AvailableSymbols value;
 
 	public ExprAtomicSymbol() {
 		super();
@@ -21,15 +21,15 @@ public class ExprAtomicSymbol extends ExprAtomic {
 		if (value == null) {
 			return "";
 		} else {
-			return value.getCaption();
+			return value.getValue();
 		}
 	}
 
-	public void setValue(ExprSymbol value) {
+	public void setValue(AvailableSymbols value) {
 		this.value = value;
 	}
 
-	public ExprSymbol getValue() {
+	public AvailableSymbols getValue() {
 		return this.value;
 	}
 

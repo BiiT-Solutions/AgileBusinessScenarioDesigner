@@ -1,26 +1,36 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "EXPRESSION_FUNCTION")
-public abstract class ExprFunction extends ExprWithChilds {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class ExprFunction extends ExprBasic {
 
-	public abstract void addDefaultChild();
+	@Enumerated(EnumType.STRING)
+	private AvailableFunctions value;
 
-	public String getChildsAsString() {
-		String childText = "";
-		if (getChilds() != null && !getChilds().isEmpty()) {
-			for (ExprBasic exprPort : getChilds()) {
-				if (childText.length() > 0) {
-					childText += ", ";
-				}
-				for (ExprBasic child : ((ExprPort) exprPort).getChilds()) {
-					childText += child.getExpressionTableString();
-				}
-			}
-		}
-		return childText;
+	@Override
+	public String getExpressionTableString() {
+		return value.getValue();
 	}
+
+	@Override
+	public String getExpression() {
+		return value.getValue();
+	}
+
+	public AvailableFunctions getValue() {
+		return value;
+	}
+
+	public void setValue(AvailableFunctions function) {
+		this.value = function;
+	}
+
 }

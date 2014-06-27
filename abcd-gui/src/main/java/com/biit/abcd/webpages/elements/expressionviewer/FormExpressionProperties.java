@@ -3,11 +3,13 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunctions;
 import com.biit.abcd.persistence.entity.expressions.ExprAtomicSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.ExprFunction;
 import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
 import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
-import com.biit.abcd.persistence.entity.expressions.ExprSymbol;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbols;
 import com.biit.abcd.persistence.entity.expressions.ExprValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExprValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExprValueString;
@@ -47,24 +49,26 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 	}
 
 	private void createLogicalTab() {
-		Button andButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AND), new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button andButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AND),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		andButton.setWidth(buttonWidth);
 
-		Button orButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_OR), new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button orButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_OR),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		orButton.setWidth(buttonWidth);
 
 		Button greaterThanButton = new Button(">", new ClickListener() {
@@ -221,14 +225,15 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 	}
 
 	private void createFunctionTab() {
-		Button notButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT), new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button notButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		notButton.setWidth(buttonWidth);
 
 		Button maxButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MAX),
@@ -237,7 +242,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						ExprFunction exprValue = new ExprFunction();
+						exprValue.setValue(AvailableFunctions.MAX);
+						addExpression(exprValue);
 					}
 				});
 		maxButton.setWidth(buttonWidth);
@@ -286,6 +293,18 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 				});
 		roundButton.setWidth(buttonWidth);
 
+		Button commaButton = new Button(",", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
+				exprValue.setValue(AvailableSymbols.COMMA);
+				addExpression(exprValue);
+			}
+		});
+		commaButton.setWidth(buttonWidth);
+
 		GridLayout exprFuncLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprFuncLayout.setWidth(null);
 		exprFuncLayout.addComponent(maxButton);
@@ -293,6 +312,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprFuncLayout.addComponent(absoluteButton);
 		exprFuncLayout.addComponent(sqrtButton);
 		exprFuncLayout.addComponent(roundButton);
+		exprFuncLayout.addComponent(commaButton);
 
 		addTab(exprFuncLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_FUNCTIONS), true);
 	}
@@ -304,7 +324,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			@Override
 			public void buttonClick(ClickEvent event) {
 				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
-				exprValue.setValue(ExprSymbol.LEFT_BRACKET);
+				exprValue.setValue(AvailableSymbols.LEFT_BRACKET);
 				addExpression(exprValue);
 			}
 		});
@@ -316,7 +336,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			@Override
 			public void buttonClick(ClickEvent event) {
 				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
-				exprValue.setValue(ExprSymbol.RIGHT_BRACKET);
+				exprValue.setValue(AvailableSymbols.RIGHT_BRACKET);
 				addExpression(exprValue);
 			}
 		});

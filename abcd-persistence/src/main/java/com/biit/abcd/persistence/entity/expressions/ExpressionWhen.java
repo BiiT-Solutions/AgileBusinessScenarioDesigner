@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "EXPRESSION_WHEN")
-public class ExpressionWhen extends ExprFunction {
+public class ExpressionWhen extends ExprEvent {
 
 	public ExpressionWhen() {
 		super();

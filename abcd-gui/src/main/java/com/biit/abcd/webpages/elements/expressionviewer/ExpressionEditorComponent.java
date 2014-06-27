@@ -58,10 +58,11 @@ public class ExpressionEditorComponent extends CustomComponent {
 		expressionEditorProperties.setSizeFull();
 
 		viewLayout.addComponent(evaluatorLayout);
-		viewLayout.setExpandRatio(evaluatorLayout, 0.08f);
+		//If expandratio is 0, component is not shown.
+		viewLayout.setExpandRatio(evaluatorLayout, 0.00001f);
 		viewLayout.setComponentAlignment(evaluatorLayout, Alignment.BOTTOM_RIGHT);
 		viewLayout.addComponent(expressionViewer);
-		viewLayout.setExpandRatio(expressionViewer, 0.92f);
+		viewLayout.setExpandRatio(expressionViewer, 0.99999f);
 
 		rootLayout.addComponent(viewLayout);
 		rootLayout.addComponent(expressionEditorProperties);
@@ -72,7 +73,6 @@ public class ExpressionEditorComponent extends CustomComponent {
 	}
 
 	private void updateEvaluator(FormExpression formExpression) {
-		//System.out.println(formExpression.getExpression());
 		try {
 			formExpression.getExpressionEvaluator().eval();
 			evaluatorOutput.setStyleName("expression-valid");
@@ -92,7 +92,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 		evaluatorOutput = new Label("Check");
 		evaluatorOutput.setSizeUndefined();
 		checkerLayout.addComponent(evaluatorOutput);
-		checkerLayout.setComponentAlignment(evaluatorOutput, Alignment.BOTTOM_RIGHT);
+		checkerLayout.setComponentAlignment(evaluatorOutput, Alignment.TOP_RIGHT);
 
 		return checkerLayout;
 	}

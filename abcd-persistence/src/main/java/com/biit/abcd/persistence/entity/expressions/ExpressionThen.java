@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "EXPRESSION_THEN")
-public class ExpressionThen extends ExprFunction {
+public class ExpressionThen extends ExprEvent {
 	private String name;
 
 	public ExpressionThen() {
