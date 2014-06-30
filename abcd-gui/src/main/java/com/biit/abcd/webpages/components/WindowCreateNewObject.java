@@ -77,6 +77,8 @@ public abstract class WindowCreateNewObject extends Window {
 		mainLayout.setMargin(true);
 		mainLayout.setSpacing(true);
 		mainLayout.setSizeFull();
+		
+		inputTextField.focus();
 
 		return mainLayout;
 	}
