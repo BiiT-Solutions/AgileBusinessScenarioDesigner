@@ -84,6 +84,9 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
 		formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
+		if (formTreeTable.getTreeObjectSelected() != null) {
+			updateUpperMenu(formTreeTable.getTreeObjectSelected());
+		}
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {
