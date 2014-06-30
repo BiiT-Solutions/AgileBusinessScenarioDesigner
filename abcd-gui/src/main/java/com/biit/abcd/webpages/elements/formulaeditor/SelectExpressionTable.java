@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.formulaeditor;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
@@ -27,10 +27,10 @@ public class SelectExpressionTable extends Table {
 		setSizeFull();
 
 		addContainerProperty(MenuProperties.EXPRESSION_NAME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_NAME), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE), null, Align.LEFT);
 
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsible(MenuProperties.EXPRESSION_NAME, false);
@@ -54,7 +54,7 @@ public class SelectExpressionTable extends Table {
 	}
 
 	public void removeSelectedRow() {
-		ExprBasic expression = (ExprBasic) getValue();
+		Expression expression = (Expression) getValue();
 		if (expression != null) {
 			removeItem(expression);
 		}

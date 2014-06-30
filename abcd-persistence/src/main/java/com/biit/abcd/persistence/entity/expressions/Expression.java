@@ -1,0 +1,37 @@
+package com.biit.abcd.persistence.entity.expressions;
+
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+
+import com.biit.abcd.persistence.entity.StorableObject;
+
+/**
+ * Basic class for defining an expression. Any other expression must inherit from this class.
+ * 
+ */
+@Entity
+@Table(name = "EXPRESSION_BASIC")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Expression extends StorableObject {
+
+	public abstract String getExpressionTableString();
+
+	/**
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * 
+	 * @return
+	 */
+	protected abstract String getExpression();
+
+	protected String generateNullLabelCaption(String value) {
+		return "<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">" + value
+				+ "</div>";
+	}
+
+	@Override
+	public String toString() {
+		return getExpressionTableString();
+	}
+}

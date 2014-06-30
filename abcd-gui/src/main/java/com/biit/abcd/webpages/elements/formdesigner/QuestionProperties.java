@@ -29,7 +29,7 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 	@Override
 	public void setElementAbstract(Question element) {
 		instance = element;
-		questionTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		questionTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		questionTechnicalLabel.setValue(instance.getName());
 
 		initializeSelectionLists();
@@ -44,25 +44,25 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 		questionForm.addComponent(answerType);
 		questionForm.addComponent(answerFormat);
 
-		addTab(questionForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION), true, 0);
+		addTab(questionForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION), true, 0);
 	}
 
 	private void initializeSelectionLists() {
 
-		answerFormat = new ComboBox(ServerTranslate.tr(LanguageCodes.PROPERTIES_QUESTION_ANSWER_FORMAT));
+		answerFormat = new ComboBox(ServerTranslate.translate(LanguageCodes.PROPERTIES_QUESTION_ANSWER_FORMAT));
 		answerFormat.setImmediate(true);
 		for (AnswerFormatUi answerFormatUi : AnswerFormatUi.values()) {
 			answerFormat.addItem(answerFormatUi.getAnswerFormat());
 			answerFormat.setItemCaption(answerFormatUi.getAnswerFormat(),
-					ServerTranslate.tr(answerFormatUi.getLanguageCode()));
+					ServerTranslate.translate(answerFormatUi.getLanguageCode()));
 		}
 
-		answerType = new ComboBox(ServerTranslate.tr(LanguageCodes.PROPERTIES_QUESTION_ANSWER_TYPE));
+		answerType = new ComboBox(ServerTranslate.translate(LanguageCodes.PROPERTIES_QUESTION_ANSWER_TYPE));
 		answerType.setNullSelectionAllowed(false);
 		answerType.setImmediate(true);
 		for (AnswerTypeUi answerTypeUi : AnswerTypeUi.values()) {
 			answerType.addItem(answerTypeUi.getAnswerType());
-			answerType.setItemCaption(answerTypeUi.getAnswerType(), ServerTranslate.tr(answerTypeUi.getLanguageCode()));
+			answerType.setItemCaption(answerTypeUi.getAnswerType(), ServerTranslate.translate(answerTypeUi.getLanguageCode()));
 		}
 		answerType.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -6322255129871221711L;

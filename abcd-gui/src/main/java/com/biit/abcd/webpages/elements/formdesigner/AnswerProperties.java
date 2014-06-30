@@ -20,14 +20,14 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 	@Override
 	public void setElementAbstract(Answer element) {
 		instance = element;
-		answerTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		answerTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		answerTechnicalLabel.setValue(instance.getName());
 
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
 		answerForm.addComponent(answerTechnicalLabel);
 
-		addTab(answerForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION), true, 0);
+		addTab(answerForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION), true, 0);
 	}
 
 	@Override

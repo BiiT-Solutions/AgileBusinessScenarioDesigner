@@ -20,12 +20,12 @@ public class AddNewActionStringWindow extends AcceptCancelWindow {
 		setHeight("75%");
 		setContent(generateContent(action));
 		setResizable(false);
-		setCaption(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
+		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
 	}
 
 	public Component generateContent(Action action) {
 		VerticalLayout layout = new VerticalLayout();
-		textArea = new TextArea(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_EDITOR_ACTION_EDITOR_TEXTAREA_CAPTION));
+		textArea = new TextArea(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDITOR_ACTION_EDITOR_TEXTAREA_CAPTION));
 		textArea.setValue((String) action.getExpression());
 		textArea.setSizeFull();
 		layout.addComponent(textArea);

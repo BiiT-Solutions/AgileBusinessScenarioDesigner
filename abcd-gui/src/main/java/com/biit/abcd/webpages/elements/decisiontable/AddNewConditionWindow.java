@@ -17,9 +17,9 @@ public class AddNewConditionWindow extends SelectionTableWindow {
 
 	public AddNewConditionWindow(Form form, boolean multiselect) {
 		super(form, multiselect);
-		cancelButton.setCaption(ServerTranslate.tr(LanguageCodes.CLOSE_BUTTON_CAPTION));
-		cancelButton.setDescription(ServerTranslate.tr(LanguageCodes.CLOSE_BUTTON_TOOLTIP));
-		setCaption(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NEW_CONDITION_CAPTION));
+		cancelButton.setCaption(ServerTranslate.translate(LanguageCodes.CLOSE_BUTTON_CAPTION));
+		cancelButton.setDescription(ServerTranslate.translate(LanguageCodes.CLOSE_BUTTON_TOOLTIP));
+		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NEW_CONDITION_CAPTION));
 		setModal(true);
 	}
 

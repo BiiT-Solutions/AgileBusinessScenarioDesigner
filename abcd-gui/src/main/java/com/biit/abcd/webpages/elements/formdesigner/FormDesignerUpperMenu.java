@@ -9,7 +9,7 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.components.IconButton;
-import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
 
@@ -25,40 +25,40 @@ public class FormDesignerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Save
-		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcons.SAVE, LanguageCodes.MENU_SAVE);
+		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcon.SAVE, LanguageCodes.MENU_SAVE);
 		addIconButton(saveButton);
 
 		// Add new Category
 		newCategoryButton = new IconButton(LanguageCodes.TREE_DESIGNER_CATEGORY_ADD,
-				ThemeIcons.TREE_DESIGNER_ADD_CATEGORY, LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
+				ThemeIcon.TREE_DESIGNER_ADD_CATEGORY, LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
 		addIconButton(newCategoryButton);
 
 		// Add new Group
-		newGroupButton = new IconButton(LanguageCodes.TREE_DESIGNER_GROUP_ADD, ThemeIcons.TREE_DESIGNER_ADD_GROUP,
+		newGroupButton = new IconButton(LanguageCodes.TREE_DESIGNER_GROUP_ADD, ThemeIcon.TREE_DESIGNER_ADD_GROUP,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
 		addIconButton(newGroupButton);
 
 		// Add new Question
 		newQuestionButton = new IconButton(LanguageCodes.TREE_DESIGNER_QUESTION_ADD,
-				ThemeIcons.TREE_DESIGNER_ADD_QUESTION, LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
+				ThemeIcon.TREE_DESIGNER_ADD_QUESTION, LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
 		addIconButton(newQuestionButton);
 
 		// Add new Answer
-		newAnswerButton = new IconButton(LanguageCodes.TREE_DESIGNER_ANSWER_ADD, ThemeIcons.TREE_DESIGNER_ADD_ANSWER,
+		newAnswerButton = new IconButton(LanguageCodes.TREE_DESIGNER_ANSWER_ADD, ThemeIcon.TREE_DESIGNER_ADD_ANSWER,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
 		addIconButton(newAnswerButton);
 
 		// Move up.
-		moveUpButton = new IconButton(LanguageCodes.MENU_MOVE_UP, ThemeIcons.MOVE_UP, LanguageCodes.MENU_MOVE_UP);
+		moveUpButton = new IconButton(LanguageCodes.MENU_MOVE_UP, ThemeIcon.MOVE_UP, LanguageCodes.MENU_MOVE_UP);
 		addIconButton(moveUpButton);
 
 		// Move down.
-		moveDownButton = new IconButton(LanguageCodes.MENU_MOVE_DOWN, ThemeIcons.MOVE_DOWN,
+		moveDownButton = new IconButton(LanguageCodes.MENU_MOVE_DOWN, ThemeIcon.MOVE_DOWN,
 				LanguageCodes.MENU_MOVE_DOWN);
 		addIconButton(moveDownButton);
 
 		// Remove
-		removeButton = new IconButton(LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE, ThemeIcons.DELETE,
+		removeButton = new IconButton(LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE, ThemeIcon.DELETE,
 				LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE);
 		addIconButton(removeButton);
 	}

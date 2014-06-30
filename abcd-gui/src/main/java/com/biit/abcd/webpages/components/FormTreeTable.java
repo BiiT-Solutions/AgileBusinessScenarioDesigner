@@ -12,6 +12,6 @@ public class FormTreeTable extends TreeObjectTable {
 
 	public FormTreeTable() {
 		addContainerProperty(FormTreeTableProperties.RULES, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TREE_PROPERTY_RULES), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_RULES), null, Align.CENTER);
 	}
 }

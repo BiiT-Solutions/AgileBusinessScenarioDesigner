@@ -19,11 +19,13 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	private VerticalLayout rootLayout;
 	private HashMap<Class<?>, PropertiesForClassComponent<?>> propertiesComponents;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
+	private List<ElementAddedListener> elementAddedListener;
 
 	public PropertiesComponent() {
 
 		propertiesComponents = new HashMap<Class<?>, PropertiesForClassComponent<?>>();
 		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
+		elementAddedListener = new ArrayList<ElementAddedListener>();
 
 		rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
@@ -38,7 +40,10 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	}
 
 	public PropertiesForClassComponent<?> getCurrentDisplayedProperties() {
-		return (PropertiesForClassComponent<?>) rootLayout.getComponent(0);
+		if (rootLayout.getComponentCount() > 0) {
+			return (PropertiesForClassComponent<?>) rootLayout.getComponent(0);
+		}
+		return null;
 	}
 
 	public void updatePropertiesComponent(Object value) {
@@ -61,12 +66,19 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 						firePropertyUpdateListener(element);
 					}
 				});
+				newInstance.addNewElementListener(new ElementAddedListener() {
+
+					@Override
+					public void elementAdded(Object newElement) {
+						fireElementAddedListener(newElement);
+					}
+				});
 				rootLayout.addComponent(newInstance);
 
 				rootLayout.markAsDirty();
 			} catch (InstantiationException | IllegalAccessException e) {
-				MessageManager.showError(ServerTranslate.tr(LanguageCodes.ERROR_UNEXPECTED_ERROR) + " "
-						+ ServerTranslate.tr(LanguageCodes.ERROR_CONTACT));
+				MessageManager.showError(ServerTranslate.translate(LanguageCodes.ERROR_UNEXPECTED_ERROR) + " "
+						+ ServerTranslate.translate(LanguageCodes.ERROR_CONTACT));
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
@@ -76,13 +88,27 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 		propertyUpdateListeners.add(listener);
 	}
 
+	public void addNewElementListener(ElementAddedListener listener) {
+		elementAddedListener.add(listener);
+	}
+
 	public void removePropertyUpdateListener(PropertieUpdateListener listener) {
 		propertyUpdateListeners.remove(listener);
+	}
+
+	public void removeNewElementListener(ElementAddedListener listener) {
+		elementAddedListener.remove(listener);
 	}
 
 	protected void firePropertyUpdateListener(Object element) {
 		for (PropertieUpdateListener listener : propertyUpdateListeners) {
 			listener.propertyUpdate(element);
+		}
+	}
+
+	protected void fireElementAddedListener(Object element) {
+		for (ElementAddedListener listener : elementAddedListener) {
+			listener.elementAdded(element);
 		}
 	}
 

@@ -71,6 +71,9 @@ public enum LanguageCodes {
 	TREE_DESIGNER_ANSWER_ADD("treeDesigner.answer.add"),
 	TREE_DESIGNER_ELEMENT_REMOVE("treeDesigner.element.remove"),
 	
+	TREE_DESIGNER_WARNING_NO_UPDATE("warning.element.not.editable"),
+	TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION("warning.element.not.editable.description"),
+	
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_FORM_VARIABLES("page.bottommenu.formVariables"),
@@ -246,7 +249,39 @@ public enum LanguageCodes {
 	FORM_EXPRESSIONS_TABLE_COLUMN_NAME("form.expressions.tablecolumn.name"),	
 	FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE("form.variables.tablecolumn.update"),
 	MENU_EXPRESSIONS_ADD("form.expressions.menu.add"),
-	MENU_EXPRESSIONS_REMOVE("form.expressions.menu.remove");
+	MENU_EXPRESSIONS_REMOVE("form.expressions.menu.remove"),
+	
+	
+	EXPRESSION_PROPERTIES_CONTROLS("expression.properties.controls"),
+	EXPRESSION_PROPERTIES_GENERIC("expression.properties.generic"),
+	EXPRESSION_PROPERTIES_FORM("expression.properties.form"),
+	EXPRESSION_PROPERTIES_MATH("expression.properties.math"),
+	EXPRESSION_PROPERTIES_LOGICAL("expression.properties.logical"),
+	EXPRESSION_PROPERTIES_FUNCTIONS("expression.properties.functions"),
+	EXPRESSION_INPUT_WINDOW_CAPTION("expression.input.window.caption"),
+	EXPRESSION_INPUT_WINDOW_TEXTFIELD("expression.input.window.textfield"),
+	EXPRESSION_GLOBAL_CONSTANT_WINDOW_CAPTION("expression.global.constant.window.caption"),
+	EXPRESSION_GLOBAL_CONSTANT_WINDOW_LIST("expression.global.constant.window.list"),
+	EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION("expression.form.variable.window.caption"),
+	EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS("expression.form.variable.window.elements"),
+	EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES("expression.form.variable.window.variables"),	
+	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value"),	
+	EXPRESSION_CHECKER_VALID("expression.checker.valid"),
+	EXPRESSION_CHECKER_INVALID("expression.checker.invalid"),
+
+	EXPRESSION_BUTTON_AND("expression.button.and"),
+	EXPRESSION_BUTTON_OR("expression.button.or"),
+	EXPRESSION_BUTTON_NOT("expression.button.not"),
+	EXPRESSION_BUTTON_CONSTANT("expression.button.constant"),
+	EXPRESSION_BUTTON_VARIABLE("expression.button.variable"),
+	EXPRESSION_BUTTON_INPUT("expression.button.input"),
+	EXPRESSION_BUTTON_MAX("expression.button.max"),
+	EXPRESSION_BUTTON_MIN("expression.button.min"),
+	EXPRESSION_BUTTON_ABS("expression.button.abs"),
+	EXPRESSION_BUTTON_ROUND("expression.button.round"),
+	EXPRESSION_BUTTON_SQRT("expression.button.sqrt");
+	
+	
 	
 	private String value;
 	

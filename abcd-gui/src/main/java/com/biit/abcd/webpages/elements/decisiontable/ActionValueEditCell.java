@@ -16,7 +16,7 @@ public class ActionValueEditCell extends EditCellComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				setLabel(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
+				setLabel(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
 			}
 		});
 	}
@@ -24,7 +24,7 @@ public class ActionValueEditCell extends EditCellComponent {
 	public void setLabel(Action action) {
 		if (action == null || action.getExpressionAsString().length() == 0) {
 			setLabel("<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">"
-					+ ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE) + "</div>");
+					+ ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE) + "</div>");
 		} else {
 			setLabel(action.getExpressionAsString());
 		}

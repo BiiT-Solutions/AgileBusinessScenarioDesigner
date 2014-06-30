@@ -1,0 +1,47 @@
+package com.biit.abcd.persistence.entity.expressions;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.biit.abcd.persistence.utils.DateManager;
+
+/**
+ * Defines a value as a timestamp.
+ * 
+ */
+@Entity
+@Table(name = "EXPRESSION_VALUE_TIMESTAMP")
+public class ExpressionValueTimestamp extends ExpressionValue {
+
+	private Timestamp value;
+
+	protected ExpressionValueTimestamp() {
+		super();
+	}
+
+	public ExpressionValueTimestamp(Timestamp value) {
+		super();
+		this.setValue(value);
+	}
+
+	@Override
+	public String getExpressionTableString() {
+		return DateManager.convertDateToString(value);
+	}
+
+	public Timestamp getValue() {
+		return value;
+	}
+
+	public void setValue(Timestamp value) {
+		this.value = value;
+	}
+
+	@Override
+	protected String getExpression() {
+		return value.toString();
+	}
+
+}

@@ -20,14 +20,14 @@ public class CategoryProperties extends GenericFormElementProperties<Category> {
 	@Override
 	public void setElementAbstract(Category element) {
 		instance = element;
-		categoryLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		categoryLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		categoryLabel.setValue(instance.getName());
 
 		FormLayout categoryForm = new FormLayout();
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(categoryLabel);
 
-		addTab(categoryForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
+		addTab(categoryForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
 	}
 
 	@Override

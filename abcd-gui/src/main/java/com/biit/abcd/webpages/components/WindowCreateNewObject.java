@@ -25,7 +25,7 @@ public abstract class WindowCreateNewObject extends Window {
 		this.setParentWindow(parentWindow);
 		setWidth(Math.min(WINDOW_WIDTH, UI.getCurrent().getPage().getBrowserWindowWidth()), Unit.PIXELS);
 		setHeight(Math.min(WINDOW_HEIGHT, UI.getCurrent().getPage().getBrowserWindowHeight()), Unit.PIXELS);
-		this.setCaption(ServerTranslate.tr(windowCaption));
+		this.setCaption(ServerTranslate.translate(windowCaption));
 
 		setContent(generateContent(inputFieldCaption));
 		setResizable(false);
@@ -36,7 +36,7 @@ public abstract class WindowCreateNewObject extends Window {
 	public AbstractOrderedLayout generateContent(LanguageCodes inputFieldCaption) {
 		VerticalLayout mainLayout = new VerticalLayout();
 
-		final TextField inputTextField = new TextField(ServerTranslate.tr(inputFieldCaption));
+		final TextField inputTextField = new TextField(ServerTranslate.translate(inputFieldCaption));
 		inputTextField.setWidth("100%");
 
 		mainLayout.addComponent(inputTextField);
@@ -45,7 +45,7 @@ public abstract class WindowCreateNewObject extends Window {
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		buttonLayout.setSpacing(true);
 
-		Button save = new IconButton(LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_LABEL, ThemeIcons.ACCEPT,
+		Button save = new IconButton(LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_LABEL, ThemeIcon.ACCEPT,
 				LanguageCodes.WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP, IconSize.SMALL, new ClickListener() {
 					private static final long serialVersionUID = -3292565406584483547L;
 
@@ -58,7 +58,7 @@ public abstract class WindowCreateNewObject extends Window {
 		buttonLayout.addComponent(save);
 		buttonLayout.setComponentAlignment(save, Alignment.MIDDLE_CENTER);
 
-		Button cancel = new IconButton(LanguageCodes.WINDOW_NEWFORM_CANCELBUTTON_LABEL, ThemeIcons.CANCEL, null,
+		Button cancel = new IconButton(LanguageCodes.WINDOW_NEWFORM_CANCELBUTTON_LABEL, ThemeIcon.CANCEL, null,
 				IconSize.SMALL, new ClickListener() {
 					private static final long serialVersionUID = 521904682248680077L;
 

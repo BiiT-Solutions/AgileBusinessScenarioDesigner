@@ -24,8 +24,12 @@ import com.biit.abcd.annotation.AutoLogger;
 import com.biit.abcd.annotation.AutoLoggerLevel;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
+import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
+import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
+import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.liferay.portal.model.User;
 
 /**
@@ -49,8 +53,8 @@ public abstract class TreeObject extends StorableObject {
 	private TreeObject parent;
 
 	/**
-	 * Customized variables are stored in {@link CustomVariable}. Here values obtained from applying the drools
-	 * rules and the form submitted information. This information is calculated and must not be stored on database.
+	 * Customized variables are stored in {@link CustomVariable}. Here values obtained from applying the drools rules
+	 * and the form submitted information. This information is calculated and must not be stored on database.
 	 */
 	@ElementCollection
 	@CollectionTable(name = "TREE_OBJECT_INT_VARIABLES")
@@ -154,8 +158,11 @@ public abstract class TreeObject extends StorableObject {
 		}
 	}
 
-	public void removeChild(TreeObject elementToRemove) throws ChildrenNotFoundException {
+	public void removeChild(TreeObject elementToRemove) throws ChildrenNotFoundException, DependencyExistException {
 		boolean removed = false;
+		if (dependencyExists()) {
+			throw new DependencyExistException("The child cannot be removed. A Foreign Key will fail. ");
+		}
 		if (getChildren().contains(elementToRemove)) {
 			getChildren().remove(elementToRemove);
 			removed = true;
@@ -174,6 +181,30 @@ public abstract class TreeObject extends StorableObject {
 		if (!removed) {
 			throw new ChildrenNotFoundException("Children '" + elementToRemove + "' does not exist.");
 		}
+	}
+
+	/**
+	 * This element or any of its children has a dependency.
+	 */
+	public boolean dependencyExists() {
+		Form form = getForm();
+		if (form != null) {
+			for (TableRule tableRule : form.getTableRules()) {
+				for (TableRuleRow row : tableRule.getRules()) {
+					for (QuestionAndAnswerCondition condition : row.getConditions()) {
+						if (condition.getQuestion().equals(this) || condition.getAnswer().equals(this)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		for (TreeObject child : getChildren()) {
+			if (child.dependencyExists()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void removeChild(int index) throws ChildrenNotFoundException {
@@ -293,6 +324,24 @@ public abstract class TreeObject extends StorableObject {
 				return (Group) getParent();
 			}
 			return getParent().getGroup();
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the inner group where this element is included.
+	 * 
+	 * @return
+	 */
+	public Form getForm() {
+		if (this instanceof Form) {
+			return (Form) this;
+		}
+		while (getParent() != null) {
+			if (getParent() instanceof Form) {
+				return (Form) getParent();
+			}
+			return getParent().getForm();
 		}
 		return null;
 	}

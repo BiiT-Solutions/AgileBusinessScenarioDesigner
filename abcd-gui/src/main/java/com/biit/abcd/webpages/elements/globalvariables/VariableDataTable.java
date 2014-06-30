@@ -20,11 +20,11 @@ public class VariableDataTable extends Table {
 		setImmediate(true);
 		setSelectable(true);
 		addContainerProperty(Properties.VARIABLE_VALUE, String.class, "",
-				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE), null, Align.CENTER);
 		addContainerProperty(Properties.VARIABLE_VALID_FROM, String.class, "",
-				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_FROM), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALID_FROM), null, Align.CENTER);
 		addContainerProperty(Properties.VARIABLE_VALID_TO, String.class, "",
-				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_TO), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALID_TO), null, Align.CENTER);
 	}
 
 	public void setVariable(GlobalVariable variable) {

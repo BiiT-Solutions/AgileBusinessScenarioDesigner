@@ -34,7 +34,7 @@ public class ActionTable extends Table {
 		setImmediate(true);
 		setSizeFull();
 		addContainerProperty(Columns.ACTION, Component.class, null,
-				ServerTranslate.tr(LanguageCodes.ACTION_TABLE_HEADER_ACTION), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.ACTION_TABLE_HEADER_ACTION), null, Align.CENTER);
 		cellRowSelector = new CellRowSelector();
 		addItemClickListener(cellRowSelector);
 		setCellStyleGenerator(cellRowSelector);

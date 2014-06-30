@@ -44,7 +44,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		setCompositionRoot(rootLayout);
 	}
 
-	public CollapseButtonTab createMenuTab(Component component, ThemeIcons enabledIcon, ThemeIcons disabledIcon,
+	public CollapseButtonTab createMenuTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
 			LanguageCodes enabledTooltip, LanguageCodes disabledTooltip) {
 		final CollapseButtonTab collapseButtonTab = new CollapseButtonTab(component, enabledIcon, disabledIcon,
 				enabledTooltip, disabledTooltip);
@@ -75,7 +75,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 
 	public void setMenu(Component component) {
 		menu = component;
-		buttonMenu.addComponent(createMenuTab(component, ThemeIcons.LEFT_MENU_COLLAPSE, ThemeIcons.LEFT_MENU_EXPAND,
+		buttonMenu.addComponent(createMenuTab(component, ThemeIcon.LEFT_MENU_COLLAPSE, ThemeIcon.LEFT_MENU_EXPAND,
 				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP));
 	}
 
@@ -92,14 +92,14 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		private static final long serialVersionUID = -443120664603138986L;
 		private static final String CLASSNAME_ENABLED = "v-button-tab-enabled";
 		private static final String CLASSNAME_DISABLED = "v-button-tab-disabled";
-		private ThemeIcons enabledIcon;
-		private ThemeIcons disabledIcon;
+		private ThemeIcon enabledIcon;
+		private ThemeIcon disabledIcon;
 		private LanguageCodes enabledTooltip;
 		private LanguageCodes disabledTooltip;
 		private Component component;
 		private boolean currentValue;
 
-		public CollapseButtonTab(Component component, ThemeIcons enabledIcon, ThemeIcons disabledIcon,
+		public CollapseButtonTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
 				LanguageCodes enabledTooltip, LanguageCodes disabledTooltip) {
 			super(disabledIcon, IconSize.MEDIUM, disabledTooltip);
 			this.enabledIcon = enabledIcon;
@@ -117,11 +117,11 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 			if (enabled) {
 				setStyleName(CLASSNAME_ENABLED);
 				setIcon(this.enabledIcon);
-				setDescription(ServerTranslate.tr(enabledTooltip));
+				setDescription(ServerTranslate.translate(enabledTooltip));
 			} else {
 				setStyleName(CLASSNAME_DISABLED);
 				setIcon(this.disabledIcon);
-				setDescription(ServerTranslate.tr(disabledTooltip));
+				setDescription(ServerTranslate.translate(disabledTooltip));
 			}
 		}
 

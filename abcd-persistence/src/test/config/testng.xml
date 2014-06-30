@@ -14,7 +14,6 @@
 				<include name="formCustomVariablesDao" />
 				<include name="globalVariablesDao" />
 				<include name="tableRulesDao" />
-				<include name="expressions" />
 			</run>
 		</groups>
 		<classes>
@@ -28,7 +27,6 @@
 			<class name="com.biit.abcd.persistence.dao.FormCustomVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.GlobalVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.TableRuleTest" />
-			<class name="com.biit.abcd.persistence.expressions.ExpressionTest" />
 		</classes>
 	</test>
 </suite>

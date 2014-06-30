@@ -67,9 +67,9 @@ public class QuestionAnswerConditionTable extends Table {
 	public void addColumnPair() {
 
 		addContainerProperty(getContainerPropertyIds().size(), QuestionValueEditCell.class, null,
-				ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_HEADER_QUESTION_CONDITION), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_HEADER_QUESTION_CONDITION), null, Align.CENTER);
 		addContainerProperty(getContainerPropertyIds().size(), AnswerValueEditCell.class, null,
-				ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_HEADER_ANSWER_CONDITION), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_HEADER_ANSWER_CONDITION), null, Align.CENTER);
 
 		for (Object itemId : getItemIds()) {
 			setDefaultNewItemPropertyValues(itemId, getItem(itemId));

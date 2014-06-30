@@ -22,7 +22,7 @@ public class JsonDiagramElementProperties extends PropertiesForClassComponent<Di
 	public void setElementAbstract(DiagramElement element) {
 		instance = element;
 
-		diagramElementLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		if (instance.getBiitText() == null) {
 			instance.setBiitText(new DiagramBiitText());
 		}
@@ -32,7 +32,7 @@ public class JsonDiagramElementProperties extends PropertiesForClassComponent<Di
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(diagramElementLabel);
 
-		addTab(categoryForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
+		addTab(categoryForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
 	}
 
 	@Override

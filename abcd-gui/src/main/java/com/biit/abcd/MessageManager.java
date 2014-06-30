@@ -16,7 +16,7 @@ public class MessageManager {
 	}
 
 	public static void showWarning(LanguageCodes caption, LanguageCodes description) {
-		showWarning(ServerTranslate.tr(caption), ServerTranslate.tr(description));
+		showWarning(ServerTranslate.translate(caption), ServerTranslate.translate(description));
 	}
 
 	private static void showError(String caption, String description) {
@@ -24,7 +24,7 @@ public class MessageManager {
 	}
 
 	public static void showError(LanguageCodes caption, LanguageCodes description) {
-		showError(ServerTranslate.tr(caption), ServerTranslate.tr(description));
+		showError(ServerTranslate.translate(caption), ServerTranslate.translate(description));
 	}
 
 	public static void showError(String caption) {
@@ -32,7 +32,7 @@ public class MessageManager {
 	}
 
 	public static void showError(LanguageCodes caption) {
-		showError(ServerTranslate.tr(caption));
+		showError(ServerTranslate.translate(caption));
 	}
 
 	private static void showInfo(String caption, String description) {
@@ -40,7 +40,7 @@ public class MessageManager {
 	}
 
 	public static void showInfo(LanguageCodes caption, LanguageCodes description) {
-		showInfo(ServerTranslate.tr(caption), ServerTranslate.tr(description));
+		showInfo(ServerTranslate.translate(caption), ServerTranslate.translate(description));
 	}
 
 	private static void showInfo(String caption) {
@@ -48,7 +48,7 @@ public class MessageManager {
 	}
 
 	public static void showInfo(LanguageCodes caption) {
-		showInfo(ServerTranslate.tr(caption));
+		showInfo(ServerTranslate.translate(caption));
 	}
 
 	private static void showMessage(String caption, String description, Notification.Type type) {

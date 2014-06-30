@@ -1,11 +1,25 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
-import com.biit.abcd.persistence.entity.expressions.ExprBasic;
-import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
-import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunctions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbols;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
+import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -35,24 +49,26 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 	}
 
 	private void createLogicalTab() {
-		Button andButton = new Button("And", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button andButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AND),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		andButton.setWidth(buttonWidth);
 
-		Button orButton = new Button("Or", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button orButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_OR),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		orButton.setWidth(buttonWidth);
 
 		Button greaterThanButton = new Button(">", new ClickListener() {
@@ -126,7 +142,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprLogicLayout.addComponent(equalsButton);
 		exprLogicLayout.addComponent(distinctButton);
 
-		addTab(exprLogicLayout, "TODO - Logical Operator", true);
+		addTab(exprLogicLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
 	}
 
 	private void createMathTab() {
@@ -135,10 +151,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// ExprAtomicMath plusExpression = new ExprAtomicMath();
-				ExprOpMath exprValue = new ExprOpMath();
+				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
 				try {
-					exprValue.setValue(ExprOpValue.PLUS);
+					exprValue.setValue(AvailableOperators.PLUS);
 					addExpression(exprValue);
 				} catch (NotValidOperatorInExpression e) {
 
@@ -206,69 +221,89 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprAtomicMathLayout.addComponent(moduleButton);
 		exprAtomicMathLayout.addComponent(potButton);
 
-		addTab(exprAtomicMathLayout, "TODO - Math Operators", true);
+		addTab(exprAtomicMathLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_MATH), true);
 	}
 
 	private void createFunctionTab() {
-		Button notButton = new Button("Not", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button notButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		notButton.setWidth(buttonWidth);
 
-		Button maxButton = new Button("Max", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button maxButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MAX),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						ExpressionFunction exprValue = new ExpressionFunction();
+						exprValue.setValue(AvailableFunctions.MAX);
+						addExpression(exprValue);
+					}
+				});
 		maxButton.setWidth(buttonWidth);
 
-		Button minimumButton = new Button("Min", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button minimumButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MIN),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		minimumButton.setWidth(buttonWidth);
 
-		Button absoluteButton = new Button("Abs", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button absoluteButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ABS),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		absoluteButton.setWidth(buttonWidth);
 
-		Button sqrtButton = new Button("\u221A", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button sqrtButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_SQRT),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
 
-			}
-		});
+					}
+				});
 		sqrtButton.setWidth(buttonWidth);
 
-		Button roundButton = new Button("Round", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button roundButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ROUND),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+
+					}
+				});
+		roundButton.setWidth(buttonWidth);
+
+		Button commaButton = new Button(",", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				ExpressionSymbol exprValue = new ExpressionSymbol();
+				exprValue.setValue(AvailableSymbols.COMMA);
+				addExpression(exprValue);
 			}
 		});
-		roundButton.setWidth(buttonWidth);
+		commaButton.setWidth(buttonWidth);
 
 		GridLayout exprFuncLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprFuncLayout.setWidth(null);
@@ -277,8 +312,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprFuncLayout.addComponent(absoluteButton);
 		exprFuncLayout.addComponent(sqrtButton);
 		exprFuncLayout.addComponent(roundButton);
+		exprFuncLayout.addComponent(commaButton);
 
-		addTab(exprFuncLayout, "TODO - Functions", true);
+		addTab(exprFuncLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_FUNCTIONS), true);
 	}
 
 	private void createBaseTab() {
@@ -287,7 +323,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				ExpressionSymbol exprValue = new ExpressionSymbol();
+				exprValue.setValue(AvailableSymbols.LEFT_BRACKET);
+				addExpression(exprValue);
 			}
 		});
 		leftBracketButton.setWidth(buttonWidth);
@@ -297,7 +335,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				ExpressionSymbol exprValue = new ExpressionSymbol();
+				exprValue.setValue(AvailableSymbols.RIGHT_BRACKET);
+				addExpression(exprValue);
 			}
 		});
 		rightBracketButton.setWidth(buttonWidth);
@@ -307,7 +347,13 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
+				try {
+					exprValue.setValue(AvailableOperators.ASSIGNATION);
+					addExpression(exprValue);
+				} catch (NotValidOperatorInExpression e) {
 
+				}
 			}
 		});
 		assignButton.setWidth(buttonWidth);
@@ -318,7 +364,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		exprBaseLayout.addComponent(rightBracketButton);
 		exprBaseLayout.addComponent(assignButton);
 
-		addTab(exprBaseLayout, "TODO - Generic", true);
+		addTab(exprBaseLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_GENERIC), true);
 	}
 
 	private void createControlsTab() {
@@ -335,46 +381,130 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		});
 		newLineButton.setWidth(buttonWidth);
 
+		Button moveLeft = new Button("\u21A4", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+			}
+		});
+		moveLeft.setWidth(buttonWidth);
+
+		Button moveRight = new Button("\u21A6", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+			}
+		});
+		moveRight.setWidth(buttonWidth);
+
 		GridLayout exprControlsLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprControlsLayout.setWidth(null);
+		exprControlsLayout.addComponent(moveLeft);
+		exprControlsLayout.addComponent(moveRight);
 		exprControlsLayout.addComponent(deleteButton);
 		exprControlsLayout.addComponent(newLineButton);
 
-		addTab(exprControlsLayout, "TODO - Controls", true);
+		addTab(exprControlsLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS), true);
 	}
 
 	private void createFormTab() {
-		Button globalConstantButton = new Button("Global", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button globalConstantButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_CONSTANT),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
+						globalWindow.showCentered();
+						globalWindow.addAcceptAcctionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window).getValue();
+								if (globalVariable != null) {
+									addExpression(new ExpressionValueGlobalConstant(globalVariable));
+									window.close();
+								} else {
+									MessageManager.showError(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+								}
+							}
+						});
+					}
+				});
 		globalConstantButton.setWidth(formButtonWidth);
 
-		Button FormVariabletButton = new Button("Variable", new ClickListener() {
-			private static final long serialVersionUID = -3339234972234970277L;
+		Button formVariableButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_VARIABLE),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
+					@Override
+					public void buttonClick(ClickEvent event) {
+						SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
+						variableWindow.showCentered();
+						variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								ExpressionValueFormCustomVariable formReference = ((SelectFormElementVariableWindow) window)
+										.getValue();
+								if (formReference != null) {
+									addExpression(formReference);
+									window.close();
+								} else {
+									MessageManager.showError(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+								}
+							}
+						});
+					}
+				});
+		formVariableButton.setWidth(formButtonWidth);
 
-			}
-		});
-		FormVariabletButton.setWidth(formButtonWidth);
+		Button inputButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_INPUT),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						StringInputWindow stringInputWindow = new StringInputWindow(
+								ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+						stringInputWindow.setCaption(ServerTranslate
+								.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+						stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								String value = ((StringInputWindow) window).getValue();
+								if (value == null || value.isEmpty()) {
+									MessageManager.showError(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+								} else {
+									ExpressionValueString exprValue = new ExpressionValueString(value);
+									addExpression(exprValue);
+									window.close();
+								}
+							}
+						});
+						stringInputWindow.showCentered();
+					}
+				});
+		inputButton.setWidth(formButtonWidth);
 
 		GridLayout exprFormLayout = new GridLayout(1, 4);
 		exprFormLayout.setWidth(null);
 		exprFormLayout.addComponent(globalConstantButton);
-		exprFormLayout.addComponent(FormVariabletButton);
+		exprFormLayout.addComponent(formVariableButton);
+		exprFormLayout.addComponent(inputButton);
 
-		addTab(exprFormLayout, "TODO - Form Values", true);
+		addTab(exprFormLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_FORM), true);
 	}
 
-	private void addExpression(ExprBasic expression) {
-		formExpression.addExpression(expression);
-		firePropertyUpdateListener(formExpression);
+	private void addExpression(Expression expression) {
+		// formExpression.addExpression(expression);
+		// firePropertyUpdateListener(formExpression);
+		fireExpressionAddedListener(expression);
 	}
 
 	@Override

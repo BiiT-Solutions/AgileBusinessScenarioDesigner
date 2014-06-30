@@ -25,10 +25,10 @@ public class DiagramBuilderTable extends Table {
 		setSizeFull();
 
 		addContainerProperty(MenuProperties.DIAGRAM_NAME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_DIAGRAM_BUILDER_TABLE_DIAGRAM_NAME), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_DIAGRAM_BUILDER_TABLE_DIAGRAM_NAME), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_DIAGRAM_BUILDER_TABLE_DIAGRAM_UPDATE), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_DIAGRAM_BUILDER_TABLE_DIAGRAM_UPDATE), null, Align.LEFT);
 
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsible(MenuProperties.DIAGRAM_NAME, false);

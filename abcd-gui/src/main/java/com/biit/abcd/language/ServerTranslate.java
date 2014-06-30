@@ -21,7 +21,7 @@ public class ServerTranslate {
 		}
 	}
 
-	private static String trException(String code, Object[] args) {
+	private static String translationException(String code, Object[] args) {
 		initialize();
 		String translation = helper.getContext().getMessage(code, args, getLocale());
 		return translation;
@@ -39,31 +39,31 @@ public class ServerTranslate {
 		}
 	}
 
-	public static String tr(LanguageCodes code) {
+	public static String translate(LanguageCodes code) {
 		if (code == null) {
 			return null;
 		}
-		return tr(code.toString(), null);
+		return translate(code.toString(), null);
 	}
 
-	public static String tr(String code) {
+	public static String translate(String code) {
 		if (code == null) {
 			return null;
 		}
-		return tr(code, null);
+		return translate(code, null);
 	}
 
-	public static String tr(LanguageCodes code, Object[] args) {
-		return tr(code.toString(), args);
+	public static String translate(LanguageCodes code, Object[] args) {
+		return translate(code.toString(), args);
 	}
 
-	protected static String tr(String code, Object[] args) {
+	protected static String translate(String code, Object[] args) {
 		try {
-			return trException(code, args);
+			return translationException(code, args);
 		} catch (RuntimeException e) {
 			AbcdLogger.errorMessage(ServerTranslate.class.getName(), e);
 			try {
-				MessageManager.showError(ServerTranslate.trException("error.fatal", null));
+				MessageManager.showError(ServerTranslate.translationException("error.fatal", null));
 			} catch (RuntimeException e2) {
 				MessageManager.showError("Fatal error in the translations.");
 			}

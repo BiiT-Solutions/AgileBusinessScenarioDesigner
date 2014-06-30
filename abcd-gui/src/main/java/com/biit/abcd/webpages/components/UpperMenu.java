@@ -35,7 +35,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 		oldRootLayoutContainer.setStyleName(CLASSNAME_HORIZONTAL_BUTTON_WRAPPER);
 
 		// Add FormManager button.
-		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcons.FORM_MANAGER_PAGE,
+		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcon.FORM_MANAGER_PAGE,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 4002268252434768032L;
 
@@ -47,7 +47,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 		formManagerButton.setEnabled(true);
 		formManagerButton.setHeight("100%");
 
-		settingsButton = new IconButton(LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, ThemeIcons.SETTINGS,
+		settingsButton = new IconButton(LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, ThemeIcon.SETTINGS,
 				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 3450355943436017152L;
 

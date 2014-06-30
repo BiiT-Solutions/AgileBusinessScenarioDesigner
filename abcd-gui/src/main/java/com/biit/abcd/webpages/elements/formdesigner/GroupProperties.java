@@ -22,9 +22,9 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 	@Override
 	public void setElementAbstract(Group element) {
 		instance = element;
-		groupTechnicalLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		groupTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getName());
-		groupIsRepeatable = new CheckBox(ServerTranslate.tr(LanguageCodes.GROUP_PROPERTIES_REPEAT));
+		groupIsRepeatable = new CheckBox(ServerTranslate.translate(LanguageCodes.GROUP_PROPERTIES_REPEAT));
 		groupIsRepeatable.setValue(instance.isRepetable());
 
 		FormLayout answerForm = new FormLayout();
@@ -32,7 +32,7 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 		answerForm.addComponent(groupTechnicalLabel);
 		answerForm.addComponent(groupIsRepeatable);
 
-		addTab(answerForm, ServerTranslate.tr(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION), true, 0);
+		addTab(answerForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION), true, 0);
 	}
 
 	@Override

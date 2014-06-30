@@ -43,14 +43,14 @@ public class VariableWindow extends AcceptCancelWindow {
 		formLayout.setSizeUndefined();
 		formLayout.setSpacing(true);
 
-		variableName = new TextField(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_NAME));
+		variableName = new TextField(ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_NAME));
 
-		variableFormat = new ComboBox(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_TYPE));
+		variableFormat = new ComboBox(ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_TYPE));
 		variableFormat.setImmediate(true);
 		for (AnswerFormatUi answerFormatUi : AnswerFormatUi.values()) {
 			variableFormat.addItem(answerFormatUi.getAnswerFormat());
 			variableFormat.setItemCaption(answerFormatUi.getAnswerFormat(),
-					ServerTranslate.tr(answerFormatUi.getLanguageCode()));
+					ServerTranslate.translate(answerFormatUi.getLanguageCode()));
 		}
 		variableFormat.setNullSelectionAllowed(false);
 		variableFormat.setValue(AnswerFormatUi.values()[0].getAnswerFormat());

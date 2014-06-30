@@ -10,8 +10,8 @@ import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.elements.expressiontree.WindoNewExpression;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expressionviewer.WindoNewExpression;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
 import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -25,8 +25,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTable tableSelectExpression;
-	// private ExpressionTreeTable thenTable;
-	//private ExpressionViewer expressionViewer;
 
 	public ExpressionEditor() {
 		super();
@@ -54,12 +52,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 		rootLayout.setMenu(tableSelectExpression);
 
 		// Create content
-		//expressionViewer = new ExpressionViewer();
-		//expressionViewer.setSizeFull();
-		 expressionEditorComponent = new ExpressionEditorComponent();
-		 expressionEditorComponent.setSizeFull();
-		// thenTable = expressionEditorComponent.addThenExpression(ServerTranslate
-		// .tr(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
+		expressionEditorComponent = new ExpressionEditorComponent();
+		expressionEditorComponent.setSizeFull();
 		rootLayout.setContent(expressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);

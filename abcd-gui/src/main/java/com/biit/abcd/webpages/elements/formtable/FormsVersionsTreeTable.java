@@ -51,34 +51,34 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setSizeFull();
 
 		addContainerProperty(FormsVersionsTreeTableProperties.FORM_NAME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_NAME), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.VERSION, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_VERSION), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_VERSION), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.ACCESS, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_ACCESS), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_ACCESS), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLEFROM), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLEFROM), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLETO), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLETO), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.USED_BY, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_USEDBY), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_USEDBY), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.CREATED_BY, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_CREATEDBY), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_CREATEDBY), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.CREATION_DATE, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_CREATIONDATE), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_CREATIONDATE), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.MODIFIED_BY, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_MODIFIEDBY), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_MODIFIEDBY), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE, String.class, "",
-				ServerTranslate.tr(LanguageCodes.FORM_TABLE_COLUMN_MODIFICATIONDATE), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_MODIFICATIONDATE), null, Align.CENTER);
 
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.FORM_NAME, false);

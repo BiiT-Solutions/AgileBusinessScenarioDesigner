@@ -5,7 +5,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
-import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button.ClickListener;
@@ -32,9 +32,9 @@ public class EditCellComponent extends CustomComponent {
 		rootLayout.setHeight(null);
 		rootLayout.setImmediate(true);
 
-		editButton = new IconButton(ThemeIcons.EDIT, IconSize.SMALL, LanguageCodes.EDIT_BUTTON_TOOLTIP);
-		removeButton = new IconButton(ThemeIcons.DELETE, IconSize.SMALL, LanguageCodes.DELETE_BUTTON_TOOLTIP);
-		textLabel = new Label(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE), ContentMode.HTML);
+		editButton = new IconButton(ThemeIcon.EDIT, IconSize.SMALL, LanguageCodes.EDIT_BUTTON_TOOLTIP);
+		removeButton = new IconButton(ThemeIcon.DELETE, IconSize.SMALL, LanguageCodes.DELETE_BUTTON_TOOLTIP);
+		textLabel = new Label(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE), ContentMode.HTML);
 		textLabel.setSizeUndefined();
 
 		rootLayout.addComponent(textLabel);
@@ -100,7 +100,7 @@ public class EditCellComponent extends CustomComponent {
 
 	public void setLabel(TreeObject treeObject) {
 		if (treeObject == null) {
-			setLabel(ServerTranslate.tr(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
+			setLabel(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
 		} else {
 			setLabel(treeObject.toString());
 		}

@@ -61,6 +61,7 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void propertyUpdate(Object element) {
 				formTreeTable.updateItem((TreeObject) element);
+				updateUpperMenu(formTreeTable.getTreeObjectSelected());
 			}
 		});
 
@@ -84,6 +85,9 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
 		formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
+		if (formTreeTable.getTreeObjectSelected() != null) {
+			updateUpperMenu(formTreeTable.getTreeObjectSelected());
+		}
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {
@@ -308,7 +312,7 @@ public class FormDesigner extends FormWebPageComponent {
 					}
 					if (parent != null) {
 						newAnswer.setName(newAnswer.getDefaultName(parent, 1));
-						//First add to UI and then add parent.
+						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
 					}
@@ -427,8 +431,14 @@ public class FormDesigner extends FormWebPageComponent {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
 			if (selected != null && selected.getParent() != null) {
-				selected.remove();
-				removeElementFromUI(selected);
+				if (selected.dependencyExists()) {
+					// Forbid the remove action if exist dependency.
+					MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+				} else {
+					selected.remove();
+					removeElementFromUI(selected);
+				}
 			}
 		}
 	}

@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.formulaeditor;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
-import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
 
@@ -17,11 +17,11 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
-		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcons.SAVE,
+		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.SAVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
-		newExpression = new IconButton(LanguageCodes.MENU_EXPRESSIONS_ADD, ThemeIcons.EXPRESSION_ADD,
+		newExpression = new IconButton(LanguageCodes.MENU_EXPRESSIONS_ADD, ThemeIcon.EXPRESSION_ADD,
 				LanguageCodes.MENU_EXPRESSIONS_ADD);
-		removeExpression = new IconButton(LanguageCodes.MENU_EXPRESSIONS_REMOVE, ThemeIcons.EXPRESSION_REMOVE,
+		removeExpression = new IconButton(LanguageCodes.MENU_EXPRESSIONS_REMOVE, ThemeIcon.EXPRESSION_REMOVE,
 				LanguageCodes.MENU_EXPRESSIONS_REMOVE);
 
 		addIconButton(saveButton);

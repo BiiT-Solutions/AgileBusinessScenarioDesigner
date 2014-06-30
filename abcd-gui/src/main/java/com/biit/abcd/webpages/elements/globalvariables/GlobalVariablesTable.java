@@ -22,9 +22,9 @@ public class GlobalVariablesTable extends Table {
 		setImmediate(true);
 		setSelectable(true);
 		addContainerProperty(Properties.VARIABLE_NAME, String.class, "",
-				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_NAME), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_NAME), null, Align.CENTER);
 		addContainerProperty(Properties.VARIABLE_TYPE, String.class, "",
-				ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_TYPE), null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_TYPE), null, Align.CENTER);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -32,7 +32,7 @@ public class GlobalVariablesTable extends Table {
 		Item item = super.addItem(globalVariable);
 		item.getItemProperty(Properties.VARIABLE_NAME).setValue(globalVariable.getName());
 		item.getItemProperty(Properties.VARIABLE_TYPE).setValue(
-				ServerTranslate.tr(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
+				ServerTranslate.translate(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
 		return item;
 	}
 

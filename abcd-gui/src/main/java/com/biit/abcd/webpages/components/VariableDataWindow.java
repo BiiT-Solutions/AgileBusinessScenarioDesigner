@@ -54,9 +54,9 @@ public class VariableDataWindow extends AcceptCancelWindow {
 			valueField = new TextField();
 			break;
 		}
-		valueField.setCaption(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALUE));
-		validFrom = new DateField(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_FROM));
-		validTo = new DateField(ServerTranslate.tr(LanguageCodes.GLOBAL_VARIABLE_VALID_TO));
+		valueField.setCaption(ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE));
+		validFrom = new DateField(ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALID_FROM));
+		validTo = new DateField(ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALID_TO));
 
 		valueField.setWidth(FIELD_WIDTH);
 		validFrom.setWidth(FIELD_WIDTH);

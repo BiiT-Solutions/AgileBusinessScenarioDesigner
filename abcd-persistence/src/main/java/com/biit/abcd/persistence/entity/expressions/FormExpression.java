@@ -7,32 +7,37 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.jexeval.ExpressionEvaluator;
 
+/**
+ * A concatenation of expressions: values, operators, ... that defines a more complex expression.
+ */
 @Entity
-@Table(name = "TREE_FORMS_EXPRESSIONS")
-public class FormExpression extends StorableObject {
+@Table(name = "EXPRESSION_FORMS_EXPRESSION")
+public class FormExpression extends Expression {
 
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	List<ExprBasic> expressions;
+	@OrderColumn(name = "expression_index")
+	private List<Expression> expressions;
 
 	public FormExpression() {
 		expressions = new ArrayList<>();
 	}
 
-	public List<ExprBasic> getExpressions() {
+	public List<Expression> getExpressions() {
 		return expressions;
 	}
 
-	public void setExpressions(List<ExprBasic> expressions) {
+	public void setExpressions(List<Expression> expressions) {
 		this.expressions = expressions;
 	}
 
-	public void addExpression(ExprBasic expression) {
+	public void addExpression(Expression expression) {
 		this.expressions.add(expression);
 	}
 
@@ -44,4 +49,49 @@ public class FormExpression extends StorableObject {
 		this.name = name;
 	}
 
+	@Override
+	public String getExpressionTableString() {
+		String result = "";
+		for (Expression expression : expressions) {
+			result += expression.getExpressionTableString() + " ";
+		}
+		return result.trim();
+	}
+
+	/**
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * 
+	 * @return
+	 */
+	@Override
+	protected String getExpression() {
+		String result = "";
+		for (Expression expression : expressions) {
+			// Dots are not allowed in the Evaluator Expression.
+			if ((expression instanceof ExpressionValueFormCustomVariable)
+					|| (expression instanceof ExpressionValueGlobalConstant)) {
+				result += expression.getExpression().replace(".", "_") + " ";
+			} else {
+				result += expression.getExpression() + " ";
+			}
+		}
+		return result.trim();
+	}
+
+	public ExpressionEvaluator getExpressionEvaluator() {
+		ExpressionEvaluator evaluator = new ExpressionEvaluator(getExpression());
+		// Define variables.
+		for (Expression expression : expressions) {
+			if ((expression instanceof ExpressionValueFormCustomVariable)
+					|| (expression instanceof ExpressionValueGlobalConstant)) {
+				// Dots are not allowed.
+				String varName = expression.getExpression().replace(".", "_");
+				// Value is not needed for evaluation.
+				String value = "1";
+				evaluator.with(varName, value);
+			}
+		}
+		return evaluator;
+
+	}
 }

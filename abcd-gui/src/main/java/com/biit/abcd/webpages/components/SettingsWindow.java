@@ -24,7 +24,7 @@ public class SettingsWindow extends PopupWindow{
 		setWidth(width);
 		setHeight(null);
 		setContent(generateContent());
-		setCaption(ServerTranslate.tr(LanguageCodes.SETTINGS_TITLE));
+		setCaption(ServerTranslate.translate(LanguageCodes.SETTINGS_TITLE));
 	}
 	
 	private Component generateContent(){
@@ -32,7 +32,7 @@ public class SettingsWindow extends PopupWindow{
 		rootLayout.setWidth("100%");
 		rootLayout.setHeight(null);
 		
-		Button globalConstantsButton= new Button(ServerTranslate.tr(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS), new ClickListener() {
+		Button globalConstantsButton= new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS), new ClickListener() {
 			private static final long serialVersionUID = 5662848461729745562L;
 
 			@Override
@@ -41,7 +41,7 @@ public class SettingsWindow extends PopupWindow{
 				close();
 			}
 		});
-		Button logoutButton = new Button(ServerTranslate.tr(LanguageCodes.SETTINGS_LOG_OUT), new ClickListener() {
+		Button logoutButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_LOG_OUT), new ClickListener() {
 			private static final long serialVersionUID = -1121572145945309858L;
 
 			@Override
@@ -50,7 +50,7 @@ public class SettingsWindow extends PopupWindow{
 				close();
 			}
 		});		
-		Button closeButton = new Button(ServerTranslate.tr(LanguageCodes.SETTINGS_CLOSE), new ClickListener() {
+		Button closeButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_CLOSE), new ClickListener() {
 			private static final long serialVersionUID = -1121572145945309858L;
 
 			@Override

@@ -56,7 +56,7 @@ public class AcceptCancelWindow extends Window {
 	}
 
 	protected void generateAcceptCancelButton() {
-		acceptButton = new IconButton(LanguageCodes.ACCEPT_BUTTON_CAPTION, ThemeIcons.ACCEPT,
+		acceptButton = new IconButton(LanguageCodes.ACCEPT_BUTTON_CAPTION, ThemeIcon.ACCEPT,
 				LanguageCodes.ACCEPT_BUTTON_TOOLTIP, IconSize.SMALL, new ClickListener() {
 					private static final long serialVersionUID = 6785334478985006998L;
 
@@ -65,7 +65,7 @@ public class AcceptCancelWindow extends Window {
 						fireAcceptActionListeners();
 					}
 				});
-		cancelButton = new IconButton(LanguageCodes.CANCEL_BUTTON_CAPTION, ThemeIcons.CANCEL,
+		cancelButton = new IconButton(LanguageCodes.CANCEL_BUTTON_CAPTION, ThemeIcon.CANCEL,
 				LanguageCodes.CANCEL_BUTTON_TOOLTIP, IconSize.SMALL, new ClickListener() {
 					private static final long serialVersionUID = -6302237054661116415L;
 

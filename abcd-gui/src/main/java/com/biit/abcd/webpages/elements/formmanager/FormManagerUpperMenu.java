@@ -7,7 +7,7 @@ import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
-import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -27,7 +27,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Add new Form
-		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_EDIT_FORM, ThemeIcons.FORM_MANAGER_ADD_FORM,
+		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_EDIT_FORM, ThemeIcon.FORM_MANAGER_ADD_FORM,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 6053447189295644721L;
 
