@@ -7,7 +7,9 @@ public class JsonPropertiesComponent extends PropertiesComponent {
 
 	public JsonPropertiesComponent() {
 		super();
-		registerPropertiesComponent(new JsonDiagramElementProperties());
-		registerPropertiesComponent(new JsonDiagramLinkProperties());
+		registerPropertiesComponent(new JsonDiagramPropertiesSource());
+		registerPropertiesComponent(new JsonDiagramPropertiesSink());
+		registerPropertiesComponent(new JsonDiagramPropertiesFork());
+		registerPropertiesComponent(new JsonDiagramPropertiesLink());
 	}
 }

@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.expressiontree;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -63,7 +64,7 @@ public class SelectQuestionWindow extends AcceptCancelWindow {
 	}
 
 	public ExprValueFormReference getValue() {
-		if (formQuestionTable.getValue() == null) {
+		if (formQuestionTable.getValue() == null || !(formQuestionTable.getValue() instanceof Question)) {
 			return null;
 		}
 		return new ExprValueFormReference((TreeObject) formQuestionTable.getValue(), null);

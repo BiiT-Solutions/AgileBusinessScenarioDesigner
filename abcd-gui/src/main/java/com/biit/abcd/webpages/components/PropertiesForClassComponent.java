@@ -38,7 +38,7 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 			@Override
 			public void detach(DetachEvent event) {
 				focus();
-				update();
+				updateAndExit();
 			}
 		});
 	}
@@ -96,7 +96,7 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 
 	protected abstract void firePropertyUpdateOnExitListener();
 
-	private void update() {
+	private void updateAndExit() {
 		updateElement();
 		firePropertyUpdateOnExitListener();
 	}
@@ -131,7 +131,7 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 		@Override
 		public void valueChange(ValueChangeEvent event) {
 			if (field.isAttached() && field.isEnabled()) {
-				update();
+				updateElement();
 			}
 		}
 	};

@@ -7,12 +7,12 @@ import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class JsonDiagramLinkProperties extends PropertiesForClassComponent<DiagramLink> {
+public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<DiagramLink> {
 	private static final long serialVersionUID = 6308407654774598230L;
 	private DiagramLink instance;
 	private TextField diagramElementLabel;
 
-	public JsonDiagramLinkProperties() {
+	public JsonDiagramPropertiesLink() {
 		super(DiagramLink.class);
 	}
 

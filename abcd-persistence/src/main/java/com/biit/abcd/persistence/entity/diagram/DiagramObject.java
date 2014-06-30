@@ -54,8 +54,10 @@ public abstract class DiagramObject extends StorableObject {
 		this.embeds = embeds;
 	}
 
-	public String toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public abstract String toJson();
+
+	public void update(DiagramObject object) {
+		embeds = object.embeds;
+		z = object.z;
 	}
 }
