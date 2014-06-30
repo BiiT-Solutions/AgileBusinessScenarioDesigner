@@ -12,8 +12,6 @@ import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.droolsrule.DroolsRuleEditorUpperMenu;
-import com.biit.abcd.webpages.elements.expressiontree.ExpressionTreeTable;
-import com.biit.abcd.webpages.elements.expressiontree.RuleExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.formulaeditor.SelectExpressionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -22,10 +20,10 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
-	private RuleExpressionEditorComponent ruleExpressionEditorComponent;
+//	private RuleExpressionEditorComponent ruleExpressionEditorComponent;
 	private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
 	private SelectExpressionTable tableSelectExpression;
-	private ExpressionTreeTable thenTable;
+//	private ExpressionTreeTable thenTable;
 
 	public DroolsRuleEditor() {
 		super();
@@ -53,9 +51,9 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		rootLayout.setMenu(tableSelectExpression);
 
 		// Create content
-		ruleExpressionEditorComponent = new RuleExpressionEditorComponent();
-		ruleExpressionEditorComponent.setSizeFull();
-		rootLayout.setContent(ruleExpressionEditorComponent);
+//		ruleExpressionEditorComponent = new RuleExpressionEditorComponent();
+//		ruleExpressionEditorComponent.setSizeFull();
+//		rootLayout.setContent(ruleExpressionEditorComponent);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
@@ -117,10 +115,10 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	}
 
 	private void refreshExpressionEditor() {
-		thenTable.removeAll();
+//		thenTable.removeAll();
 		if (getSelectedRule() != null) {
 			// Add table rows.
-			thenTable.addExpression(getSelectedRule());
+//			thenTable.addExpression(getSelectedRule());
 		}
 	}
 

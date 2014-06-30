@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.expressiontree;
+package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
