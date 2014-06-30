@@ -1,16 +1,12 @@
 package com.biit.abcd.persistence.entity;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -51,20 +47,6 @@ public abstract class TreeObject extends StorableObject {
 	private List<TreeObject> children;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject parent;
-
-	/**
-	 * Customized variables are stored in {@link CustomVariable}. Here values obtained from applying the drools rules
-	 * and the form submitted information. This information is calculated and must not be stored on database.
-	 */
-	@ElementCollection
-	@CollectionTable(name = "TREE_OBJECT_INT_VARIABLES")
-	private transient Map<String, Integer> intVariables;
-	@ElementCollection
-	@CollectionTable(name = "TREE_OBJECT_STRING_VARIABLES")
-	private transient Map<String, String> stringVariables;
-	@ElementCollection
-	@CollectionTable(name = "TREE_OBJECT_DATE_VARIABLES")
-	private transient Map<String, Date> dateVariables;
 
 	public TreeObject() {
 		setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
@@ -154,6 +136,7 @@ public abstract class TreeObject extends StorableObject {
 				getParent().removeChild(this);
 			} catch (Exception e) {
 				AbcdLogger.severe(this.getClass().getName(), "Element not removed correctly");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -161,7 +144,7 @@ public abstract class TreeObject extends StorableObject {
 	public void removeChild(TreeObject elementToRemove) throws ChildrenNotFoundException, DependencyExistException {
 		boolean removed = false;
 		if (dependencyExists()) {
-			throw new DependencyExistException("The child cannot be removed. A Foreign Key will fail. ");
+			throw new DependencyExistException("The child cannot be removed. A Foreign Key would fail. ");
 		}
 		if (getChildren().contains(elementToRemove)) {
 			getChildren().remove(elementToRemove);
@@ -420,29 +403,5 @@ public abstract class TreeObject extends StorableObject {
 		if (getParent() != null) {
 			getParent().setUpdatedBy(updatedBy);
 		}
-	}
-
-	public Map<String, Integer> getIntVariables() {
-		return intVariables;
-	}
-
-	public void setIntVariables(Map<String, Integer> intVariables) {
-		this.intVariables = intVariables;
-	}
-
-	public Map<String, String> getStringVariables() {
-		return stringVariables;
-	}
-
-	public void setStringVariables(Map<String, String> stringVariables) {
-		this.stringVariables = stringVariables;
-	}
-
-	public Map<String, Date> getDateVariables() {
-		return dateVariables;
-	}
-
-	public void setDateVariables(Map<String, Date> dateVariables) {
-		this.dateVariables = dateVariables;
 	}
 }
