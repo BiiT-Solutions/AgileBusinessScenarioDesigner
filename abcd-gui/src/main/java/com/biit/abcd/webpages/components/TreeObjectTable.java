@@ -11,11 +11,14 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
+import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
 
@@ -60,9 +63,7 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void addItem(TreeObject element, TreeObject parent) {
 		if (element != null) {
-			// String name = getItemName(element);
-			TreeObjectWithIconComponent treeObjectIcon = new TreeObjectWithIconComponent(element, getIcon(element),
-					element.getName());
+			TreeObjectWithIconComponent treeObjectIcon = createElementWithIcon(element);
 			Item item = addItem((Object) element);
 			if (parent != null) {
 				setChildrenAllowed(parent, true);
@@ -83,7 +84,8 @@ public class TreeObjectTable extends TreeTable {
 			try {
 				removeChildren(element);
 			} catch (DependencyExistException e) {
-				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE, LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+						LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
 				// Impossible to remove children. Set as previous value (still stored at the icon).
 				TreeObjectWithIconComponent treeObjectIcon = (TreeObjectWithIconComponent) item.getItemProperty(
 						TreeObjectTableProperties.ELEMENT_NAME).getValue();
@@ -98,8 +100,7 @@ public class TreeObjectTable extends TreeTable {
 			}
 
 			// Update element.
-			TreeObjectWithIconComponent treeObjectIcon = new TreeObjectWithIconComponent(element, getIcon(element),
-					element.getName());
+			TreeObjectWithIconComponent treeObjectIcon = createElementWithIcon(element);
 			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
 		}
 	}
@@ -142,8 +143,7 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void addItemAfter(Object previousItemId, TreeObject element, TreeObject parent) {
 		if (element != null) {
-			TreeObjectWithIconComponent treeObjectIcon = new TreeObjectWithIconComponent(element, getIcon(element),
-					element.getName());
+			TreeObjectWithIconComponent treeObjectIcon = createElementWithIcon(element);
 			Item item = addItemAfter(previousItemId, (Object) element);
 			if (parent != null) {
 				setChildrenAllowed(parent, true);
@@ -190,6 +190,11 @@ public class TreeObjectTable extends TreeTable {
 				case TEXT:
 					return ThemeIcon.TREE_DESIGNER_QUESTION_TEXT;
 				}
+			}
+		} else if (element instanceof Group) {
+			Group group = (Group) element;
+			if (group.isRepetable()) {
+				return ThemeIcon.TREE_DESIGNER_GROUP_LOOP;
 			}
 		}
 
@@ -246,6 +251,29 @@ public class TreeObjectTable extends TreeTable {
 
 	public boolean isElementFiltered(Object itemId) {
 		return false;
+	}
+
+	private TreeObjectWithIconComponent createElementWithIcon(final TreeObject element) {
+		final TreeObjectTable thisObject = this;
+		TreeObjectWithIconComponent treeObjectWithIconComponent = new TreeObjectWithIconComponent(element,
+				getIcon(element), element.getName());
+
+		treeObjectWithIconComponent.addLayoutClickListener(new LayoutClickListener() {
+			private static final long serialVersionUID = 1176852269853300260L;
+
+			@Override
+			public void layoutClick(LayoutClickEvent event) {
+				// Select table row if the element is clicked.
+				if (thisObject.getValue() != element) {
+					thisObject.setValue(element);
+				} else {
+					// Unselect with second click.
+					thisObject.setValue(null);
+				}
+			}
+		});
+
+		return treeObjectWithIconComponent;
 	}
 
 }

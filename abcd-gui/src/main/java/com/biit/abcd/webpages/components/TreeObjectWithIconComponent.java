@@ -62,7 +62,6 @@ public class TreeObjectWithIconComponent extends CustomComponent {
 	public void addTreeObjectButtonClickListener(ClickListener listener) {
 		if (treeObjectIcon != null) {
 			treeObjectIcon.addClickListener(listener);
-
 		}
 	}
 

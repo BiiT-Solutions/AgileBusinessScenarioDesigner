@@ -73,6 +73,8 @@ public enum ThemeIcon {
 	TREE_DESIGNER_QUESTION_DROPDOWN("appbar.interface.dropdown.svg"),
 	
 	TREE_DESIGNER_QUESTION_POSTALCODE("appbar.email.hardedge.svg"),
+	
+	TREE_DESIGNER_GROUP_LOOP("appbar.loop.svg"),
 
 	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg"),
 
