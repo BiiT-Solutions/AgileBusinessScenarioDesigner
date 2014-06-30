@@ -62,7 +62,7 @@ public enum ThemeIcons {
 	
 	TREE_DESIGNER_QUESTION_DATE("appbar.calendar.31.svg"),
 	
-	TREE_DESIGNER_QUESTION_TEXT("appbar.interface.textbox.svg"),
+	TREE_DESIGNER_QUESTION_TEXT("appbar.interface.textbox.squared.svg"),
 	
 	TREE_DESIGNER_QUESTION_NUMBER("appbar.interface.textbox.number.svg"),
 	

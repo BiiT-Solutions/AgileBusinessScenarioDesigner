@@ -19,7 +19,8 @@
    id="metadata10"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
-   id="defs8" /><sodipodi:namedview
+   id="defs8">
+</defs><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -32,31 +33,31 @@
    inkscape:window-height="1017"
    id="namedview6"
    showgrid="false"
-   inkscape:zoom="2.1957526"
-   inkscape:cx="81.979421"
-   inkscape:cy="34.3267"
+   inkscape:zoom="8.7830104"
+   inkscape:cx="58.412117"
+   inkscape:cy="41.277021"
    inkscape:window-x="1912"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
    inkscape:current-layer="svg2" />
 	
 <g
-   id="g2984"
-   transform="matrix(1.7293633,0,0,1.7293633,-27.488092,-28.154952)"><path
+   id="g2988"
+   transform="matrix(1.0291477,0,0,1.0291477,0.0031061,-0.14998497)"><path
      sodipodi:nodetypes="ccccccccccccccc"
      style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
      inkscape:connector-curvature="0"
      id="path4"
-     d="m 15.8333,25.3333 44.3334,0 0,26.9167 -44.3334,0 z M 19,28.5 l 0,20.5833 38,0 L 57,28.5 z m 28.1042,19 0,-17.4167 1.9791,0 0,17.4167 z" /><text
+     d="m -0.10656419,9.0518698 74.21744019,0 0,56.6125522 -74.21744019,0 z m 6.66036209,6.6603622 0,43.291828 60.8967161,0 0,-43.291828 z m 49.8129671,39.961752 0,-36.631676 4.162542,0 0,36.631676 z" /><text
      sodipodi:linespacing="125%"
      id="text2987"
-     y="45.600399"
-     x="21.177248"
-     style="font-size:18px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Verdana Bold"
+     y="51.678646"
+     x="9.1330948"
+     style="font-size:37.85850143px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Verdana Bold"
      xml:space="preserve"><tspan
-       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Tahoma;-inkscape-font-specification:Tahoma Bold"
-       y="45.600399"
-       x="21.177248"
+       style="font-size:33.65200043px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Tahoma;-inkscape-font-specification:Tahoma Bold"
+       y="51.678646"
+       x="9.1330948"
        id="tspan2989"
        sodipodi:role="line">12</tspan></text>
 </g>
