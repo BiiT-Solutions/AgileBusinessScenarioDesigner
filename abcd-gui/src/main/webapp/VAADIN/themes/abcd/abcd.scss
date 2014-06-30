@@ -648,6 +648,10 @@ $open-sans-pathPrefix: "./fonts/";
 	.v-button.expression-unselected{
 		background-color: #ededed;
 	}
+
+	.v-button-IconOnlyButton img.v-icon {
+		height: 20px;
+	}	
 	
 	.v-label.expression-valid{
 		background-color:#77b55a;

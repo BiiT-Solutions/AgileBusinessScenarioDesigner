@@ -8,6 +8,8 @@ import com.google.gson.JsonSerializationContext;
 public class DiagramObjectSerializerCommon<T extends DiagramElement> {
 
 	public JsonElement serialize(DiagramElement diagramElement, JsonObject jsonObject, JsonSerializationContext context) {
+		System.out.println("Serialize: "+diagramElement.getJointjsId()+" "+diagramElement.getType().getJsonType());
+		
 		jsonObject.addProperty("id", diagramElement.getJointjsId());
 		jsonObject.addProperty("type", diagramElement.getType().getJsonType());
 		jsonObject.addProperty("embeds", diagramElement.getEmbeds());

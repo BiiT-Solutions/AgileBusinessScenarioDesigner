@@ -50,8 +50,10 @@ public class DiagramObjectDeserializerCommon<T extends DiagramElement> {
 		if (attrs != null) {
 			JsonObject attrsObject = attrs.getAsJsonObject();
 			JsonElement biitTextElement = attrsObject.get(".biitText");
-			DiagramBiitText biitText = context.deserialize(biitTextElement, DiagramBiitText.class);
-			diagramElement.setBiitText(biitText);
+			if(biitTextElement!=null){
+				DiagramBiitText biitText = context.deserialize(biitTextElement, DiagramBiitText.class);
+				diagramElement.setBiitText(biitText);
+			}
 		}
 
 		return diagramElement;

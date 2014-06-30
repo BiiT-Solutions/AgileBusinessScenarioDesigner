@@ -7,5 +7,10 @@ import javax.persistence.Table;
 @Table(name = "DIAGRAM_TABLE")
 public class DiagramTable extends DiagramElement{
 	
-	
+	public DiagramTable() {
+		super();
+		DiagramBiitText biitText = new DiagramBiitText();
+		biitText.setText("Table");
+		setBiitText(biitText);
+	}
 }

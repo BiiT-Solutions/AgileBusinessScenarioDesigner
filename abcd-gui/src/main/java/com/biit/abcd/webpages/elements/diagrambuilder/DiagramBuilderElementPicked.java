@@ -4,6 +4,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.jointjs.diagram.builder.server.ElementPickedListener;
 
+//TODO remove class
 public class DiagramBuilderElementPicked implements ElementPickedListener {
 
 	private JsonPropertiesComponent propertiesComponent;
@@ -16,6 +17,11 @@ public class DiagramBuilderElementPicked implements ElementPickedListener {
 	public void nodePickedListener(String jsonString) {
 		propertiesComponent.focus();
 		DiagramElement element = DiagramElement.fromJson(jsonString);
+		if(element!=null){
+			System.out.println("Node picked listener type: "+element.getClass().getName());
+		}else{
+			System.out.println("Node picked listener type: null");
+		}
 		propertiesComponent.updatePropertiesComponent(element);
 	}
 

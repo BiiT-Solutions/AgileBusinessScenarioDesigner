@@ -13,13 +13,14 @@ import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
+import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
+import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
+import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramUpdated;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderElementPicked;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
 import com.biit.abcd.webpages.elements.diagrambuilder.WindowNewDiagram;
-import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
-import com.biit.jointjs.diagram.builder.server.DiagramBuilder.DiagramBuilderJsonGenerationListener;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -31,8 +32,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 
 	private DiagramBuilderTable diagramBuilderTable;
-	private DiagramBuilder diagramBuilder;
+	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
+	private JsonPropertiesComponent propertiesContainer;
 	private Diagram previousDiagram;
 	private Diagram currentDiagram;
 
@@ -50,7 +52,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
 		rootDiagramBuilder.setSpacing(true);
 
-		JsonPropertiesComponent propertiesContainer = new JsonPropertiesComponent();
+		propertiesContainer = new JsonPropertiesComponent();
 		propertiesContainer.setSizeFull();
 
 		diagramBuilderTable = new DiagramBuilderTable();
@@ -64,48 +66,51 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			public void valueChange(ValueChangeEvent event) {
 				previousDiagram = currentDiagram;
 				currentDiagram = (Diagram) event.getProperty().getValue();
-				if (previousDiagram != null) {
-					diagramBuilder.toJson(new DiagramBuilderJsonGenerationListener() {
+				propertiesContainer.updatePropertiesComponent(null);
+
+				if (diagramBuilder.getDiagram() != null) {
+					diagramBuilder.updateDiagram(new DiagramUpdated() {
 						@Override
-						public void generatedJsonString(String jsonString) {
-							// Update previous diagram
-							updateDiagram(previousDiagram, jsonString);
+						public void updated(Diagram diagram) {
 							if (currentDiagram == null) {
 								diagramBuilder.setEnabled(false);
-								diagramBuilder.clear();
+								diagramBuilder.setDiagram(null);
 							} else {
 								diagramBuilder.setEnabled(true);
 								diagramBuilder.clear();
-								diagramBuilder.fromJson(currentDiagram.toJson());
+								diagramBuilder.setDiagram(currentDiagram);
 							}
 						}
 					});
 				} else {
 					if (currentDiagram == null) {
 						diagramBuilder.setEnabled(false);
-						diagramBuilder.clear();
+						diagramBuilder.setDiagram(null);
 					} else {
 						diagramBuilder.setEnabled(true);
 						diagramBuilder.clear();
-						diagramBuilder.fromJson(currentDiagram.toJson());
+						diagramBuilder.setDiagram(currentDiagram);
 					}
 				}
 			}
 		});
 
-		diagramBuilder = new DiagramBuilder();
+		diagramBuilder = new AbcdDiagramBuilder();
 		diagramBuilder.setSizeFull();
-		diagramBuilder.addElementPickedListener(new DiagramBuilderElementPicked(propertiesContainer));
+		diagramBuilder.addDiagramObjectPickedListener(new DiagramObjectPickedListener() {
 
+			@Override
+			public void diagramObjectPicked(DiagramObject object) {
+				propertiesContainer.focus();
+				propertiesContainer.updatePropertiesComponent(object);
+			}
+		});
 		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
 
 			@Override
 			public void propertyUpdate(Object element) {
-				if (element instanceof DiagramElement) {
-					diagramBuilder.updateCellJson(((DiagramObject) element).toJson());
-				} else {
-					diagramBuilder.updateLinkJson(((DiagramObject) element).toJson());
-				}
+				System.out.println("Property updateJson: " + ((DiagramObject) element).toJson());
+				diagramBuilder.updateChangesToDiagram((DiagramObject) element);
 			}
 		});
 
@@ -233,51 +238,33 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	private void save() {
-		if (diagramBuilder != null && UserSessionHandler.getFormController().getForm() != null
-				&& UserSessionHandler.getFormController().getForm().getDiagrams() != null) {
-			diagramBuilder.toJson(new SaveJson());
-		}
-	}
-
-	private void updateDiagram(Diagram diagram, String jsonString) {
-		// Get childs from json string.
-		diagram.updateFromJson(jsonString);
-		diagram.setUpdatedBy(UserSessionHandler.getUser());
-		diagram.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
-	}
-
-	/**
-	 * Updates diagram objects from the jointjs widget.
-	 */
-	class ObtainJson implements DiagramBuilderJsonGenerationListener {
-
-		@Override
-		public void generatedJsonString(String jsonString) {
+		if (diagramBuilder.getDiagram() != null) {
+			diagramBuilder.updateDiagram(new DiagramUpdated() {
+				@Override
+				public void updated(Diagram diagram) {
+					// Wait until the diagram has been updated.
+					try {
+						System.out.println("first element biitText: "
+								+ ((DiagramElement) diagramBuilder.getDiagram().getDiagramObjects().get(0))
+										.getBiitText());
+						UserSessionHandler.getFormController().save();
+						MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+					} catch (Exception e) {
+						MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+						AbcdLogger.errorMessage(FormDiagramBuilder.class.getName(), e);
+					}
+				}
+			});
+		} else {
 			try {
-				updateDiagram(currentDiagram, jsonString);
-			} catch (Exception e) {
-				e.printStackTrace();
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
-			}
-		}
-	}
-
-	/**
-	 * Updates and save diagram objects from the jointjs widget.
-	 */
-	class SaveJson implements DiagramBuilderJsonGenerationListener {
-
-		@Override
-		public void generatedJsonString(String jsonString) {
-			try {
-				updateDiagram(currentDiagram, jsonString);
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (Exception e) {
-				MessageManager.showError(LanguageCodes.ERROR_DATA_NOT_STORED);
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
+				MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+				AbcdLogger.errorMessage(FormDiagramBuilder.class.getName(), e);
 			}
 		}
+
 	}
 
 	public void addDiagram(Diagram newDiagram) {
@@ -288,27 +275,4 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	public void sortTableMenu() {
 		diagramBuilderTable.sort();
 	}
-
-	// TODO
-	//
-	// if (form != null) {
-	// // Quick fix, this has to be changed when the full "diagrams" tree
-	// // structure is decided.
-	// if
-	// (!UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty())
-	// {
-	// UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
-	// .setUpdatedBy(UserSessionHandler.getUser());
-	// UserSessionHandler.getFormController().getForm().getDiagrams().get(getSelectedDiagram())
-	// .setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
-	// }
-	// }
-	// // New diagram
-	// if
-	// (UserSessionHandler.getFormController().getForm().getDiagrams().isEmpty())
-	// {
-	// UserSessionHandler.getFormController().getForm().getDiagrams().add(new
-	// Diagram(form));
-	// }
-	// updateDiagramDesigner();
 }

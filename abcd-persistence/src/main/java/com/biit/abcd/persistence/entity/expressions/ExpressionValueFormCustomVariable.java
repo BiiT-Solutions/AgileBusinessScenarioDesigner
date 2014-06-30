@@ -13,7 +13,7 @@ import com.biit.abcd.persistence.entity.TreeObject;
  *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_FORM_REFERENCE")
+@Table(name = "EXPRESSION_VALUE_FORM_CUSTOM_VARIABLE")
 public class ExpressionValueFormCustomVariable extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)
