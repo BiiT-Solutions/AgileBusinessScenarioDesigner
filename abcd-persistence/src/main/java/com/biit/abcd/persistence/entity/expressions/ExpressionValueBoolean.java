@@ -3,18 +3,22 @@ package com.biit.abcd.persistence.entity.expressions;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * Defines boolean values.
+ *
+ */
 @Entity
 @Table(name = "EXPRESSION_VALUE_BOOLEAN")
-public class ExprValueBoolean extends ExprValue {
+public class ExpressionValueBoolean extends ExpressionValue {
 
 	private boolean value;
 
-	protected ExprValueBoolean() {
+	protected ExpressionValueBoolean() {
 		super();
 		value = true;
 	}
 
-	public ExprValueBoolean(boolean value) {
+	public ExpressionValueBoolean(boolean value) {
 		super();
 		this.setValue(value);
 	}

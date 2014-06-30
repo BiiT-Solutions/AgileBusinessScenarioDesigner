@@ -1,5 +1,9 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+/**
+ * Already defined functions. Used in JExVal. 
+ *
+ */
 public enum AvailableFunctions {
 
 	MAX("MAX("),

@@ -11,15 +11,19 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 
+/**
+ * Generic class for creating operators logical and mathematical. 
+ *
+ */
 @Entity
-@Table(name = "EXPRESSION_OPERATION")
+@Table(name = "EXPRESSION_OPERATOR")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ExprOp extends ExprBasic {
+public abstract class ExpressionOperator extends Expression {
 
 	@Enumerated(EnumType.STRING)
-	private ExprOpValue currentValue;
+	private AvailableOperators currentValue;
 
-	public ExprOp() {
+	public ExpressionOperator() {
 		super();
 	}
 
@@ -27,20 +31,20 @@ public abstract class ExprOp extends ExprBasic {
 
 	@Override
 	public String getExpressionTableString() {
-		if (currentValue == null || currentValue == ExprOpValue.NULL) {
+		if (currentValue == null || currentValue == AvailableOperators.NULL) {
 			return " " + getValueNullCaption() + " ";
 		} else {
 			return " " + currentValue.getCaption() + " ";
 		}
 	}
 
-	public abstract List<ExprOpValue> getAcceptedValues();
+	public abstract List<AvailableOperators> getAcceptedValues();
 
-	public ExprOpValue getValue() {
+	public AvailableOperators getValue() {
 		return currentValue;
 	}
 
-	public void setValue(ExprOpValue exprOpvalue) throws NotValidOperatorInExpression {
+	public void setValue(AvailableOperators exprOpvalue) throws NotValidOperatorInExpression {
 		if (getAcceptedValues().contains(exprOpvalue)) {
 			currentValue = exprOpvalue;
 		} else {

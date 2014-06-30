@@ -6,7 +6,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
@@ -109,7 +109,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		setUpperMenu(droolsRuleEditorUpperMenu);
 	}
 
-	private ExprBasic getSelectedRule() {
+	private Expression getSelectedRule() {
 		// TODO
 		return null;
 	}

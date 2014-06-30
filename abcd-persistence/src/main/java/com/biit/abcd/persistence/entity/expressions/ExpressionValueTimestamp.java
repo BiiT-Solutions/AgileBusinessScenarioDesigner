@@ -7,17 +7,21 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.utils.DateManager;
 
+/**
+ * Defines a value as a timestamp.
+ * 
+ */
 @Entity
 @Table(name = "EXPRESSION_VALUE_TIMESTAMP")
-public class ExprValueTimestamp extends ExprValue {
+public class ExpressionValueTimestamp extends ExpressionValue {
 
 	private Timestamp value;
 
-	protected ExprValueTimestamp() {
+	protected ExpressionValueTimestamp() {
 		super();
 	}
 
-	public ExprValueTimestamp(Timestamp value) {
+	public ExpressionValueTimestamp(Timestamp value) {
 		super();
 		this.setValue(value);
 	}

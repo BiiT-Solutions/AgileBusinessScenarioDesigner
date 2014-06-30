@@ -1,11 +1,16 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+/**
+ * Non operators symbols used for defining an expression.
+ * 
+ */
 public enum AvailableSymbols {
 
 	RIGHT_BRACKET(")", false),
 
 	LEFT_BRACKET("(", true),
-	
+
+	// Comma is used for separating parameters of a function.
 	COMMA(",", false);
 
 	private String value;

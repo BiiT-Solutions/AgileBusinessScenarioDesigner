@@ -7,18 +7,22 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 
+/**
+ * Defines a value as a already defined Global Constant.
+ * 
+ */
 @Entity
-@Table(name = "EXPRESSION_GLOBAL_VARIABLE")
-public class ExprValueGlobalConstant extends ExprValue {
+@Table(name = "EXPRESSION_VALUE_GLOBAL_VARIABLE")
+public class ExpressionValueGlobalConstant extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private GlobalVariable constant;
 
-	protected ExprValueGlobalConstant() {
+	protected ExpressionValueGlobalConstant() {
 		super();
 	}
 
-	public ExprValueGlobalConstant(GlobalVariable constant) {
+	public ExpressionValueGlobalConstant(GlobalVariable constant) {
 		super();
 		this.constant = constant;
 	}

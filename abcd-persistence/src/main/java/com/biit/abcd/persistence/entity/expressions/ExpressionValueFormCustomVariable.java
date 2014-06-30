@@ -8,20 +8,24 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.TreeObject;
 
+/**
+ * Defines a value as a already defined form custom variable.
+ *
+ */
 @Entity
 @Table(name = "EXPRESSION_VALUE_FORM_REFERENCE")
-public class ExprValueFormCustomVariable extends ExprValue {
+public class ExpressionValueFormCustomVariable extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject question;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private CustomVariable variable;
 
-	protected ExprValueFormCustomVariable() {
+	protected ExpressionValueFormCustomVariable() {
 		super();
 	}
 
-	public ExprValueFormCustomVariable(TreeObject question, CustomVariable variable) {
+	public ExpressionValueFormCustomVariable(TreeObject question, CustomVariable variable) {
 		super();
 		this.question = question;
 		this.variable = variable;

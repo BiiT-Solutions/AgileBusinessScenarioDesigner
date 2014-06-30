@@ -1,6 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-public enum ExprOpValue {
+public enum AvailableOperators {
 
 	NULL("NULL", "CLEAR"),
 
@@ -35,7 +35,7 @@ public enum ExprOpValue {
 	private String value;
 	private String caption;
 
-	private ExprOpValue(String value, String caption) {
+	private AvailableOperators(String value, String caption) {
 		this.value = value;
 		this.caption = caption;
 	}

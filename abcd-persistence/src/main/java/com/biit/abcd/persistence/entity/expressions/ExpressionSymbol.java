@@ -5,14 +5,18 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+/**
+ * Defines a special symbol as '(', ')', or ','
+ *
+ */
 @Entity
-@Table(name = "EXPRESSION_ATOMIC_SYMBOL")
-public class ExprAtomicSymbol extends ExprAtomic {
+@Table(name = "EXPRESSION_SYMBOL")
+public class ExpressionSymbol extends Expression {
 
 	@Enumerated(EnumType.STRING)
 	private AvailableSymbols value;
 
-	public ExprAtomicSymbol() {
+	public ExpressionSymbol() {
 		super();
 	}
 

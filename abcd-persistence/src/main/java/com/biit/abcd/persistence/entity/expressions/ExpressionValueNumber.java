@@ -3,18 +3,22 @@ package com.biit.abcd.persistence.entity.expressions;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * Defines values as a double.
+ *
+ */
 @Entity
-@Table(name = "EXPRESSION_VALUE_DOUBLE")
-public class ExprValueDouble extends ExprValue {
+@Table(name = "EXPRESSION_VALUE_NUMBER")
+public class ExpressionValueNumber extends ExpressionValue {
 
 	private double value;
 
-	protected ExprValueDouble() {
+	protected ExpressionValueNumber() {
 		super();
 		value = 0d;
 	}
 
-	public ExprValueDouble(double value) {
+	public ExpressionValueNumber(double value) {
 		super();
 		this.setValue(value);
 	}

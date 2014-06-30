@@ -3,11 +3,11 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import java.util.HashMap;
 import java.util.List;
 
-import com.biit.abcd.persistence.entity.expressions.ExprAtomicLogic;
-import com.biit.abcd.persistence.entity.expressions.ExprAtomicSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExprBasic;
-import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
-import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -20,9 +20,9 @@ public class ExpressionViewer extends CssLayout {
 	private static final long serialVersionUID = -3032370197806581430L;
 	public static String CLASSNAME = "v-expression-viewer";
 	private FormExpression formExpression;
-	private ExprBasic selectedExpression = null;
+	private Expression selectedExpression = null;
 	private VerticalLayout rootLayout;
-	private HashMap<Button, ExprBasic> expressionOfButton;
+	private HashMap<Button, Expression> expressionOfButton;
 
 	public ExpressionViewer() {
 		setImmediate(true);
@@ -64,13 +64,13 @@ public class ExpressionViewer extends CssLayout {
 		addComponent(rootLayout);
 	}
 
-	private void addExpressions(HorizontalLayout lineLayout, List<ExprBasic> expressions) {
-		for (ExprBasic expression : expressions) {
+	private void addExpressions(HorizontalLayout lineLayout, List<Expression> expressions) {
+		for (Expression expression : expressions) {
 			addExpression(lineLayout, expression);
 		}
 	}
 
-	public void addExpression(HorizontalLayout lineLayout, final ExprBasic expression) {
+	public void addExpression(HorizontalLayout lineLayout, final Expression expression) {
 		final Button button = new Button(expression.getExpressionTableString(), new ClickListener() {
 			private static final long serialVersionUID = 4607870570076802317L;
 
@@ -89,7 +89,7 @@ public class ExpressionViewer extends CssLayout {
 		setSelectedExpression(expression);
 	}
 
-	private void setSelectedExpression(ExprBasic expression) {
+	private void setSelectedExpression(Expression expression) {
 		selectedExpression = expression;
 		updateExpressionSelectionStyles();
 	}
@@ -111,7 +111,7 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
-	public ExprBasic getSelectedExpression() {
+	public Expression getSelectedExpression() {
 		return selectedExpression;
 	}
 
@@ -119,7 +119,7 @@ public class ExpressionViewer extends CssLayout {
 		if (getSelectedExpression() != null) {
 			int index = formExpression.getExpressions().indexOf(getSelectedExpression());
 			formExpression.getExpressions().remove(getSelectedExpression());
-			ExprBasic selected = null;
+			Expression selected = null;
 
 			// Select next expression.
 			if (index >= 0) {
@@ -137,16 +137,16 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
-	public void addElementToSelected(ExprBasic newElement) {
+	public void addElementToSelected(Expression newElement) {
 		int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
-		if (newElement instanceof ExprAtomicSymbol) {
+		if (newElement instanceof ExpressionSymbol) {
 			// Brackets are added before selected expression in some cases.
-			if (((ExprAtomicSymbol) newElement).getValue().getLeftSymbol() == true
+			if (((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true
 			// Brackets always at right position in '<', '>', ... symbols.
-					&& !(getSelectedExpression() instanceof ExprAtomicLogic)
+					&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
 					// Brackets always at right position in '=' symbol.
-					&& (!(getSelectedExpression() instanceof ExprOpMath) || !((ExprOpMath) getSelectedExpression())
-							.getValue().equals(ExprOpValue.ASSIGNATION))) {
+					&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
+							.getValue().equals(AvailableOperators.ASSIGNATION))) {
 				index--;
 			}
 		}

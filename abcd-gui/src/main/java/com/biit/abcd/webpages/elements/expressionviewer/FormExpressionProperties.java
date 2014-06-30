@@ -4,15 +4,15 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunctions;
-import com.biit.abcd.persistence.entity.expressions.ExprAtomicSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExprBasic;
-import com.biit.abcd.persistence.entity.expressions.ExprFunction;
-import com.biit.abcd.persistence.entity.expressions.ExprOpMath;
-import com.biit.abcd.persistence.entity.expressions.ExprOpValue;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbols;
-import com.biit.abcd.persistence.entity.expressions.ExprValueFormCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExprValueGlobalConstant;
-import com.biit.abcd.persistence.entity.expressions.ExprValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -151,9 +151,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExprOpMath exprValue = new ExprOpMath();
+				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
 				try {
-					exprValue.setValue(ExprOpValue.PLUS);
+					exprValue.setValue(AvailableOperators.PLUS);
 					addExpression(exprValue);
 				} catch (NotValidOperatorInExpression e) {
 
@@ -242,7 +242,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ExprFunction exprValue = new ExprFunction();
+						ExpressionFunction exprValue = new ExpressionFunction();
 						exprValue.setValue(AvailableFunctions.MAX);
 						addExpression(exprValue);
 					}
@@ -298,7 +298,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
+				ExpressionSymbol exprValue = new ExpressionSymbol();
 				exprValue.setValue(AvailableSymbols.COMMA);
 				addExpression(exprValue);
 			}
@@ -323,7 +323,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
+				ExpressionSymbol exprValue = new ExpressionSymbol();
 				exprValue.setValue(AvailableSymbols.LEFT_BRACKET);
 				addExpression(exprValue);
 			}
@@ -335,7 +335,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExprAtomicSymbol exprValue = new ExprAtomicSymbol();
+				ExpressionSymbol exprValue = new ExpressionSymbol();
 				exprValue.setValue(AvailableSymbols.RIGHT_BRACKET);
 				addExpression(exprValue);
 			}
@@ -347,9 +347,9 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExprOpMath exprValue = new ExprOpMath();
+				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
 				try {
-					exprValue.setValue(ExprOpValue.ASSIGNATION);
+					exprValue.setValue(AvailableOperators.ASSIGNATION);
 					addExpression(exprValue);
 				} catch (NotValidOperatorInExpression e) {
 
@@ -425,7 +425,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 							public void acceptAction(AcceptCancelWindow window) {
 								GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window).getValue();
 								if (globalVariable != null) {
-									addExpression(new ExprValueGlobalConstant(globalVariable));
+									addExpression(new ExpressionValueGlobalConstant(globalVariable));
 									window.close();
 								} else {
 									MessageManager.showError(ServerTranslate
@@ -448,7 +448,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 						variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								ExprValueFormCustomVariable formReference = ((SelectFormElementVariableWindow) window)
+								ExpressionValueFormCustomVariable formReference = ((SelectFormElementVariableWindow) window)
 										.getValue();
 								if (formReference != null) {
 									addExpression(formReference);
@@ -481,7 +481,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 									MessageManager.showError(ServerTranslate
 											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
 								} else {
-									ExprValueString exprValue = new ExprValueString(value);
+									ExpressionValueString exprValue = new ExpressionValueString(value);
 									addExpression(exprValue);
 									window.close();
 								}
@@ -501,7 +501,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 		addTab(exprFormLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_FORM), true);
 	}
 
-	private void addExpression(ExprBasic expression) {
+	private void addExpression(Expression expression) {
 		// formExpression.addExpression(expression);
 		// firePropertyUpdateListener(formExpression);
 		fireExpressionAddedListener(expression);

@@ -5,18 +5,22 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Defines a value as another existing expression.
+ * 
+ */
 @Entity
 @Table(name = "EXPRESSION_VALUE_EXPRESSION_REFERENCE")
-public class ExprValueExprReference extends ExprValue {
+public class ExpressionValueExpressionReference extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private ExprBasic value;
+	private Expression value;
 
-	protected ExprValueExprReference() {
+	protected ExpressionValueExpressionReference() {
 		super();
 	}
 
-	public ExprValueExprReference(ExprBasic value) {
+	public ExpressionValueExpressionReference(Expression value) {
 		super();
 		this.setValue(value);
 	}
@@ -26,11 +30,11 @@ public class ExprValueExprReference extends ExprValue {
 		return value.getExpressionTableString();
 	}
 
-	public ExprBasic getValue() {
+	public Expression getValue() {
 		return value;
 	}
 
-	public void setValue(ExprBasic value) {
+	public void setValue(Expression value) {
 		this.value = value;
 	}
 

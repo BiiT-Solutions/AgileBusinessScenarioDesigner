@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.expressions.ExprBasic;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
@@ -50,7 +50,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 
 			@Override
 			public void elementAdded(Object newElement) {
-				expressionViewer.addElementToSelected((ExprBasic) newElement);
+				expressionViewer.addElementToSelected((Expression) newElement);
 				updateEvaluator(formExpression);
 			}
 
@@ -97,7 +97,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 		return checkerLayout;
 	}
 
-	protected void updatePropertiesComponent(ExprBasic value) {
+	protected void updatePropertiesComponent(Expression value) {
 		expressionEditorProperties.updatePropertiesComponent(value);
 		addButtonListeners();
 	}
