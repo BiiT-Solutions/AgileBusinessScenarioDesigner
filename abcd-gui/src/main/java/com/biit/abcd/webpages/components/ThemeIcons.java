@@ -59,6 +59,20 @@ public enum ThemeIcons {
 	TREE_DESIGNER_ADD_GROUP("appbar.group.add.svg"),
 
 	TREE_DESIGNER_ADD_ANSWER("appbar.answer.add.svg"),
+	
+	TREE_DESIGNER_QUESTION_DATE("appbar.calendar.31.svg"),
+	
+	TREE_DESIGNER_QUESTION_TEXT("appbar.interface.textbox.svg"),
+	
+	TREE_DESIGNER_QUESTION_NUMBER("appbar.interface.textbox.number.svg"),
+	
+	TREE_DESIGNER_QUESTION_CHECKLIST("appbar.checkmark.svg"),
+	
+	TREE_DESIGNER_QUESTION_RADIOBUTTON("appbar.radiobutton.svg"),
+	
+	TREE_DESIGNER_QUESTION_DROPDOWN("appbar.interface.dropdown.svg"),
+	
+	TREE_DESIGNER_QUESTION_POSTALCODE("appbar.email.hardedge.svg"),
 
 	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg"),
 

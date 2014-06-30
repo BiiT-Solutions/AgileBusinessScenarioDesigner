@@ -8,13 +8,10 @@ import java.util.Set;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.Category;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.vaadin.data.Item;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
 
 /**
@@ -36,7 +33,7 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	private void initContainerProperties() {
-		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, String.class, "",
+		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
 				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
 	}
@@ -58,14 +55,16 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void addItem(TreeObject element, TreeObject parent) {
 		if (element != null) {
-			String name = getItemName(element);
+			// String name = getItemName(element);
+			TreeObjectWithIconComponent treeObjectIcon = new TreeObjectWithIconComponent(element, getIcon(element),
+					element.getName());
 			Item item = addItem((Object) element);
 			if (parent != null) {
 				setChildrenAllowed(parent, true);
 				setParent(element, parent);
 				setCollapsed(parent, false);
 			}
-			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(name);
+			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
 			setValue(element);
 			setChildrenAllowed(element, false);
 		}
@@ -76,8 +75,9 @@ public class TreeObjectTable extends TreeTable {
 		Item item = getItem(element);
 		if (item != null) {
 			// If the item still exists on table.
-			String name = getItemName(element);
-			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(name);
+			TreeObjectWithIconComponent treeObjectIcon = new TreeObjectWithIconComponent(element, getIcon(element),
+					element.getName());
+			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
 		}
 	}
 
@@ -90,14 +90,15 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void addItemAfter(Object previousItemId, TreeObject element, TreeObject parent) {
 		if (element != null) {
-			String name = getItemName(element);
+			TreeObjectWithIconComponent treeObjectIcon = new TreeObjectWithIconComponent(element, getIcon(element),
+					element.getName());
 			Item item = addItemAfter(previousItemId, (Object) element);
 			if (parent != null) {
 				setChildrenAllowed(parent, true);
 				setParent(element, parent);
 				setCollapsed(parent, false);
 			}
-			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(name);
+			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
 			setValue(element);
 			setChildrenAllowed(element, false);
 		}
@@ -111,26 +112,36 @@ public class TreeObjectTable extends TreeTable {
 	 * @return
 	 */
 	public static String getItemName(TreeObject element) {
-		String name = null;
-		if (element instanceof Form) {
-			name = ((Form) element).getName();
-		}
-		if (element instanceof Category) {
-			name = ((Category) element).getName();
-		}
-		if (element instanceof Group) {
-			name = ((Group) element).getName();
-		}
-		if (element instanceof Question) {
-			name = ((Question) element).getName();
-		}
-		if (element instanceof Answer) {
-			name = ((Answer) element).getName();
-		}
+		String name = element.getName();
 		if (name == null) {
 			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
 		}
 		return name;
+	}
+
+	public static ThemeIcons getIcon(TreeObject element) {
+		if (element instanceof Question) {
+			Question question = (Question) element;
+			switch (question.getAnswerType()) {
+			case MULTI_CHECKBOX:
+				return ThemeIcons.TREE_DESIGNER_QUESTION_CHECKLIST;
+			case RADIO:
+				return ThemeIcons.TREE_DESIGNER_QUESTION_RADIOBUTTON;
+			case INPUT:
+				switch (question.getAnswerFormat()) {
+				case DATE:
+					return ThemeIcons.TREE_DESIGNER_QUESTION_DATE;
+				case NUMBER:
+					return ThemeIcons.TREE_DESIGNER_QUESTION_NUMBER;
+				case POSTAL_CODE:
+					return ThemeIcons.TREE_DESIGNER_QUESTION_POSTALCODE;
+				case TEXT:
+					return ThemeIcons.TREE_DESIGNER_QUESTION_TEXT;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public void setRootElement(TreeObject root) {
@@ -157,7 +168,7 @@ public class TreeObjectTable extends TreeTable {
 	public void setTreeObjectsSelected(Set<TreeObject> treeObjects) {
 		super.setValue(treeObjects);
 	}
-	
+
 	public void setTreeObjectSelected(TreeObject treeObject) {
 		super.setValue(treeObject);
 	}

@@ -14,6 +14,12 @@ public class IconButton extends Button {
 		addStyleName("link");
 	}
 
+	public IconButton(ThemeIcons icon, IconSize size, String tooltip) {
+		super("");
+		createButton(icon, size, tooltip);
+		addStyleName("link");
+	}
+
 	public IconButton(ThemeIcons icon, LanguageCodes tooltip, IconSize size, ClickListener clickListener) {
 		super("", clickListener);
 		createButton(icon, size, tooltip);
@@ -47,6 +53,11 @@ public class IconButton extends Button {
 		createButton(icon, defaultIconSize, tooltip);
 	}
 
+	public IconButton(LanguageCodes caption, ThemeIcons icon, String tooltip) {
+		super(ServerTranslate.translate(caption));
+		createButton(icon, defaultIconSize, tooltip);
+	}
+
 	public void setIcon(ThemeIcons icon) {
 		setIcon(icon, defaultIconSize);
 	}
@@ -60,6 +71,12 @@ public class IconButton extends Button {
 	}
 
 	private void createButton(ThemeIcons icon, IconSize size, LanguageCodes tooltip) {
+		setIcon(icon, size);
+		setDescription(tooltip);
+		setImmediate(true);
+	}
+
+	private void createButton(ThemeIcons icon, IconSize size, String tooltip) {
 		setIcon(icon, size);
 		setDescription(tooltip);
 		setImmediate(true);
