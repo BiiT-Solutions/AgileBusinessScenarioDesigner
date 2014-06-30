@@ -8,7 +8,7 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
-import com.biit.abcd.webpages.elements.expressiontree.SelectQuestionWindow;
+import com.biit.abcd.webpages.components.SelectQuestionWindow;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
@@ -45,9 +45,9 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						if (questionWindow.getValue() != null) {
-							fieldWithSearchButton.setValue(questionWindow.getValue().getQuestion(), questionWindow
-									.getValue().getQuestion().getName());
-							instance.setQuestion((Question) questionWindow.getValue().getQuestion());
+							fieldWithSearchButton.setValue(questionWindow.getValue().getReference(), questionWindow
+									.getValue().getReference().getName());
+							instance.setQuestion((Question) questionWindow.getValue().getReference());
 							instance.getBiitText().setText(instance.getQuestion().getName());
 							System.out.println("Question set: "+instance.getQuestion());
 							firePropertyUpdateListener(instance);

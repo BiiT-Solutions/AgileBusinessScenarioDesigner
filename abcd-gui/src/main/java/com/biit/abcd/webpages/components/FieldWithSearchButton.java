@@ -35,10 +35,10 @@ public class FieldWithSearchButton extends CustomComponent {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 
-		searchButton = new IconOnlyButton(ThemeIcons.SEARCH.getThemeResource());
+		searchButton = new IconOnlyButton(ThemeIcon.SEARCH.getThemeResource());
 		searchButton.setWidth("20px");
 
-		removeButton = new IconOnlyButton(ThemeIcons.CANCEL.getThemeResource());
+		removeButton = new IconOnlyButton(ThemeIcon.CANCEL.getThemeResource());
 		removeButton.addClickListener(new DeleteContentListener());
 		removeButton.setWidth("20px");
 

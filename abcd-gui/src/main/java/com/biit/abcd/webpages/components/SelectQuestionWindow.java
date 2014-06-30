@@ -1,11 +1,10 @@
-package com.biit.abcd.webpages.elements.expressiontree;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.expressions.ExprValueFormReference;
-import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -63,11 +62,13 @@ public class SelectQuestionWindow extends AcceptCancelWindow {
 		formQuestionTable.setValue(UserSessionHandler.getFormController().getForm());
 	}
 
-	public ExprValueFormReference getValue() {
+	public ExpressionValueTreeObjectReference getValue() {
 		if (formQuestionTable.getValue() == null || !(formQuestionTable.getValue() instanceof Question)) {
 			return null;
 		}
-		return new ExprValueFormReference((TreeObject) formQuestionTable.getValue(), null);
+		ExpressionValueTreeObjectReference reference = new ExpressionValueTreeObjectReference();
+		reference.setReference((TreeObject) formQuestionTable.getValue());
+		return reference;
 	}
 
 }

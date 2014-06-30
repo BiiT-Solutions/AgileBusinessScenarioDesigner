@@ -22,7 +22,7 @@ public class JsonDiagramPropertiesSource extends PropertiesForClassComponent<Dia
 	public void setElementAbstract(DiagramSource element) {
 		instance = element;
 
-		diagramElementLabel = new TextField(ServerTranslate.tr(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		if (instance.getBiitText() == null) {
 			instance.setBiitText(new DiagramBiitText());
 		}
