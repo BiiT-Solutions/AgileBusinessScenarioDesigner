@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
-import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
 
@@ -19,20 +19,20 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 
-		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcons.SAVE,
+		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.SAVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
-		newTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE, ThemeIcons.TABLE_ADD,
+		newTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE, ThemeIcon.TABLE_ADD,
 				LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP);
-		removeTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_REMOVE_TABLE, ThemeIcons.TABLE_REMOVE,
+		removeTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_REMOVE_TABLE, ThemeIcon.TABLE_REMOVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_REMOVE_TABLE_TOOLTIP);
 		newConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION,
-				ThemeIcons.TABLE_ADD_COLUMN, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_TOOLTIP);
+				ThemeIcon.TABLE_ADD_COLUMN, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_TOOLTIP);
 		deleteConditionButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_CAPTION,
-				ThemeIcons.TABLE_REMOVE_COLUMN, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_TOOLTIP);
-		newRuleButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_CAPTION, ThemeIcons.ADD_ROW,
+				ThemeIcon.TABLE_REMOVE_COLUMN, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_TOOLTIP);
+		newRuleButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_CAPTION, ThemeIcon.ADD_ROW,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_ADD_ROW_TOOLTIP);
 		deleteRuleButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_CAPTION,
-				ThemeIcons.REMOVE_ROW, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_TOOLTIP);
+				ThemeIcon.REMOVE_ROW, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_REMOVE_ROW_TOOLTIP);
 
 		addIconButton(saveButton);
 		addIconButton(newTable);

@@ -21,9 +21,11 @@ public class TreeObjectWithIconComponent extends CustomComponent {
 	private IconButton treeObjectIcon;
 	private Label textLabel;
 	private TreeObject treeObject;
+	private ThemeIcon themeIcon;
 
-	public TreeObjectWithIconComponent(TreeObject treeObject, ThemeIcons icon, String iconTooltip) {
+	public TreeObjectWithIconComponent(TreeObject treeObject, ThemeIcon icon, String iconTooltip) {
 		this.treeObject = treeObject;
+		this.themeIcon = icon;
 
 		addStyleName(CLASSNAME);
 
@@ -84,6 +86,10 @@ public class TreeObjectWithIconComponent extends CustomComponent {
 
 	public TreeObject getTreeObject() {
 		return treeObject;
+	}
+
+	public ThemeIcon getThemeIcon() {
+		return themeIcon;
 	}
 
 }

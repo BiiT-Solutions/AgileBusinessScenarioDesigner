@@ -8,61 +8,61 @@ public class IconButton extends Button {
 	private static final long serialVersionUID = -8287465276670542699L;
 	private final static IconSize defaultIconSize = IconSize.SMALL;
 
-	public IconButton(ThemeIcons icon, IconSize size, LanguageCodes tooltip) {
+	public IconButton(ThemeIcon icon, IconSize size, LanguageCodes tooltip) {
 		super("");
 		createButton(icon, size, tooltip);
 		addStyleName("link");
 	}
 
-	public IconButton(ThemeIcons icon, IconSize size, String tooltip) {
+	public IconButton(ThemeIcon icon, IconSize size, String tooltip) {
 		super("");
 		createButton(icon, size, tooltip);
 		addStyleName("link");
 	}
 
-	public IconButton(ThemeIcons icon, LanguageCodes tooltip, IconSize size, ClickListener clickListener) {
+	public IconButton(ThemeIcon icon, LanguageCodes tooltip, IconSize size, ClickListener clickListener) {
 		super("", clickListener);
 		createButton(icon, size, tooltip);
 		addStyleName("link");
 	}
 
-	public IconButton(ThemeIcons icon, LanguageCodes tooltip, ClickListener clickListener) {
+	public IconButton(ThemeIcon icon, LanguageCodes tooltip, ClickListener clickListener) {
 		super("", clickListener);
 		createButton(icon, defaultIconSize, tooltip);
 		addStyleName("link");
 	}
 
-	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, IconSize size,
+	public IconButton(LanguageCodes caption, ThemeIcon icon, LanguageCodes tooltip, IconSize size,
 			ClickListener clickListener) {
 		super(ServerTranslate.translate(caption), clickListener);
 		createButton(icon, size, tooltip);
 	}
 
-	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, ClickListener clickListener) {
+	public IconButton(LanguageCodes caption, ThemeIcon icon, LanguageCodes tooltip, ClickListener clickListener) {
 		super(ServerTranslate.translate(caption), clickListener);
 		createButton(icon, defaultIconSize, tooltip);
 	}
 
-	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip, IconSize size) {
+	public IconButton(LanguageCodes caption, ThemeIcon icon, LanguageCodes tooltip, IconSize size) {
 		super(ServerTranslate.translate(caption));
 		createButton(icon, size, tooltip);
 	}
 
-	public IconButton(LanguageCodes caption, ThemeIcons icon, LanguageCodes tooltip) {
+	public IconButton(LanguageCodes caption, ThemeIcon icon, LanguageCodes tooltip) {
 		super(ServerTranslate.translate(caption));
 		createButton(icon, defaultIconSize, tooltip);
 	}
 
-	public IconButton(LanguageCodes caption, ThemeIcons icon, String tooltip) {
+	public IconButton(LanguageCodes caption, ThemeIcon icon, String tooltip) {
 		super(ServerTranslate.translate(caption));
 		createButton(icon, defaultIconSize, tooltip);
 	}
 
-	public void setIcon(ThemeIcons icon) {
+	public void setIcon(ThemeIcon icon) {
 		setIcon(icon, defaultIconSize);
 	}
 
-	public void setIcon(ThemeIcons icon, IconSize size) {
+	public void setIcon(ThemeIcon icon, IconSize size) {
 		if (icon != null && (!size.equals(IconSize.NULL))) {
 			addStyleName(size.getSyle());
 			setIcon(icon.getThemeResource());
@@ -70,13 +70,13 @@ public class IconButton extends Button {
 		}
 	}
 
-	private void createButton(ThemeIcons icon, IconSize size, LanguageCodes tooltip) {
+	private void createButton(ThemeIcon icon, IconSize size, LanguageCodes tooltip) {
 		setIcon(icon, size);
 		setDescription(tooltip);
 		setImmediate(true);
 	}
 
-	private void createButton(ThemeIcons icon, IconSize size, String tooltip) {
+	private void createButton(ThemeIcon icon, IconSize size, String tooltip) {
 		setIcon(icon, size);
 		setDescription(tooltip);
 		setImmediate(true);

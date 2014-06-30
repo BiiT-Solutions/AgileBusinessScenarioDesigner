@@ -1,15 +1,20 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
+import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
@@ -74,10 +79,57 @@ public class TreeObjectTable extends TreeTable {
 	public void updateItem(TreeObject element) {
 		Item item = getItem(element);
 		if (item != null) {
-			// If the item still exists on table.
+			// Remove children if are not valid.
+			try {
+				removeChildren(element);
+			} catch (DependencyExistException e) {
+				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE, LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+				// Impossible to remove children. Set as previous value (still stored at the icon).
+				TreeObjectWithIconComponent treeObjectIcon = (TreeObjectWithIconComponent) item.getItemProperty(
+						TreeObjectTableProperties.ELEMENT_NAME).getValue();
+				switch (treeObjectIcon.getThemeIcon()) {
+				case TREE_DESIGNER_QUESTION_CHECKLIST:
+					((Question) element).setAnswerType(AnswerType.MULTI_CHECKBOX);
+					break;
+				default:
+					((Question) element).setAnswerType(AnswerType.RADIO);
+					break;
+				}
+			}
+
+			// Update element.
 			TreeObjectWithIconComponent treeObjectIcon = new TreeObjectWithIconComponent(element, getIcon(element),
 					element.getName());
 			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
+		}
+	}
+
+	/**
+	 * Input fields cannot have children. Therefore remove any if exists.
+	 * 
+	 * @param element
+	 */
+	private void removeChildren(TreeObject element) throws DependencyExistException {
+		if (element instanceof Question) {
+			if (((Question) element).getAnswerType().equals(AnswerType.INPUT)) {
+				if (element.dependencyExists()) {
+					throw new DependencyExistException("Element cannot be removed. A rule is using this element.");
+				}
+				try {
+					List<Object> children = new ArrayList<Object>(getChildren(element));
+					for (Object child : children) {
+						try {
+							element.removeChild((TreeObject) child);
+							removeItem(child);
+						} catch (ChildrenNotFoundException e) {
+
+						}
+					}
+					setChildrenAllowed(element, false);
+				} catch (NullPointerException npe) {
+					// No children. Do nothing.
+				}
+			}
 		}
 	}
 
@@ -119,24 +171,24 @@ public class TreeObjectTable extends TreeTable {
 		return name;
 	}
 
-	public static ThemeIcons getIcon(TreeObject element) {
+	private static ThemeIcon getIcon(TreeObject element) {
 		if (element instanceof Question) {
 			Question question = (Question) element;
 			switch (question.getAnswerType()) {
 			case MULTI_CHECKBOX:
-				return ThemeIcons.TREE_DESIGNER_QUESTION_CHECKLIST;
+				return ThemeIcon.TREE_DESIGNER_QUESTION_CHECKLIST;
 			case RADIO:
-				return ThemeIcons.TREE_DESIGNER_QUESTION_RADIOBUTTON;
+				return ThemeIcon.TREE_DESIGNER_QUESTION_RADIOBUTTON;
 			case INPUT:
 				switch (question.getAnswerFormat()) {
 				case DATE:
-					return ThemeIcons.TREE_DESIGNER_QUESTION_DATE;
+					return ThemeIcon.TREE_DESIGNER_QUESTION_DATE;
 				case NUMBER:
-					return ThemeIcons.TREE_DESIGNER_QUESTION_NUMBER;
+					return ThemeIcon.TREE_DESIGNER_QUESTION_NUMBER;
 				case POSTAL_CODE:
-					return ThemeIcons.TREE_DESIGNER_QUESTION_POSTALCODE;
+					return ThemeIcon.TREE_DESIGNER_QUESTION_POSTALCODE;
 				case TEXT:
-					return ThemeIcons.TREE_DESIGNER_QUESTION_TEXT;
+					return ThemeIcon.TREE_DESIGNER_QUESTION_TEXT;
 				}
 			}
 		}

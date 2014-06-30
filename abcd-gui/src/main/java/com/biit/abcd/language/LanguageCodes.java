@@ -71,6 +71,9 @@ public enum LanguageCodes {
 	TREE_DESIGNER_ANSWER_ADD("treeDesigner.answer.add"),
 	TREE_DESIGNER_ELEMENT_REMOVE("treeDesigner.element.remove"),
 	
+	TREE_DESIGNER_WARNING_NO_UPDATE("warning.element.not.editable"),
+	TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION("warning.element.not.editable.description"),
+	
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_FORM_VARIABLES("page.bottommenu.formVariables"),

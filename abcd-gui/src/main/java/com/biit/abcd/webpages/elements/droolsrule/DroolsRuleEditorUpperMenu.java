@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.droolsrule;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
-import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
 
@@ -16,11 +16,11 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
-		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcons.SAVE,
+		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.SAVE,
 				LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_SAVE_TOOLTIP);
-		newRule = new IconButton(LanguageCodes.MENU_RULE_ADD_CAPTION, ThemeIcons.RULE_ADD,
+		newRule = new IconButton(LanguageCodes.MENU_RULE_ADD_CAPTION, ThemeIcon.RULE_ADD,
 				LanguageCodes.MENU_RULE_ADD_TOOLTIP);
-		removeRule = new IconButton(LanguageCodes.MENU_RULE_REMOVE_CAPTION, ThemeIcons.RULE_REMOVE,
+		removeRule = new IconButton(LanguageCodes.MENU_RULE_REMOVE_CAPTION, ThemeIcon.RULE_REMOVE,
 				LanguageCodes.MENU_RULE_REMOVE_TOOLTIP);
 
 		addIconButton(saveButton);

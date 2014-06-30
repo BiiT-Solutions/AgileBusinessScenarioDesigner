@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.formvariables;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
-import com.biit.abcd.webpages.components.ThemeIcons;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
 
@@ -17,15 +17,15 @@ public class FormVariablesUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Save
-		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcons.SAVE, LanguageCodes.MENU_SAVE);
+		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcon.SAVE, LanguageCodes.MENU_SAVE);
 		addIconButton(saveButton);
 
 		// Add Variable
-		addNewVariable = new IconButton(LanguageCodes.FORM_VARIABLE_ADD, ThemeIcons.VARIABLE_ADD, LanguageCodes.FORM_VARIABLE_ADD);
+		addNewVariable = new IconButton(LanguageCodes.FORM_VARIABLE_ADD, ThemeIcon.VARIABLE_ADD, LanguageCodes.FORM_VARIABLE_ADD);
 		addIconButton(addNewVariable);
 
 		// Remove Variable
-		removeVariable = new IconButton(LanguageCodes.FORM_VARIABLE_REMOVE, ThemeIcons.VARIABLE_REMOVE, LanguageCodes.FORM_VARIABLE_REMOVE);
+		removeVariable = new IconButton(LanguageCodes.FORM_VARIABLE_REMOVE, ThemeIcon.VARIABLE_REMOVE, LanguageCodes.FORM_VARIABLE_REMOVE);
 		addIconButton(removeVariable);
 	}
 

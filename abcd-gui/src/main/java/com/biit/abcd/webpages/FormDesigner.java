@@ -61,6 +61,7 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void propertyUpdate(Object element) {
 				formTreeTable.updateItem((TreeObject) element);
+				updateUpperMenu(formTreeTable.getTreeObjectSelected());
 			}
 		});
 
@@ -430,8 +431,14 @@ public class FormDesigner extends FormWebPageComponent {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
 			if (selected != null && selected.getParent() != null) {
-				selected.remove();
-				removeElementFromUI(selected);
+				if (selected.dependencyExists()) {
+					// Forbid the remove action if exist dependency.
+					MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+				} else {
+					selected.remove();
+					removeElementFromUI(selected);
+				}
 			}
 		}
 	}

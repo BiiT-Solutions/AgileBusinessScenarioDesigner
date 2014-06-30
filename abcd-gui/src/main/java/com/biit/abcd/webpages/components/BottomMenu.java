@@ -23,7 +23,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 		
 
 		// Add Tree Designer button.
-		treeDesignerButton = new IconButton(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER, ThemeIcons.TREE_DESIGNER_PAGE,
+		treeDesignerButton = new IconButton(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER, ThemeIcon.TREE_DESIGNER_PAGE,
 				LanguageCodes.BOTTOM_MENU_TREE_DESIGNER, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 6344185231722436896L;
 
@@ -36,7 +36,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(treeDesignerButton);
 
 		// Add Form Variables button.
-		formVariables = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_VARIABLES, ThemeIcons.FORM_VARIABLES,
+		formVariables = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_VARIABLES, ThemeIcon.FORM_VARIABLES,
 				LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -6778800510554818966L;
 
@@ -50,7 +50,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 		// Add Diagram Builder button.
 		diagramBuilderButton = new IconButton(LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER,
-				ThemeIcons.DIAGRAM_BUILDER_PAGE, LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER, IconSize.BIG,
+				ThemeIcon.DIAGRAM_BUILDER_PAGE, LanguageCodes.BOTTOM_MENU_DIAGRAM_DESIGNER, IconSize.BIG,
 				new ClickListener() {
 					private static final long serialVersionUID = -6778800510554818966L;
 
@@ -64,7 +64,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 		// Add calculus expresion editor.
 		expressionsEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR,
-				ThemeIcons.EXPRESSION_EDITOR_PAGE, LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, IconSize.BIG,
+				ThemeIcon.EXPRESSION_EDITOR_PAGE, LanguageCodes.BOTTOM_MENU_EXPRESSION_EDITOR, IconSize.BIG,
 				new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
@@ -77,7 +77,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 		addIconButton(expressionsEditorButton);
 
 		// Add Drools Editor button.
-		ruleEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, ThemeIcons.DROOLS_RULE_EDITOR_PAGE,
+		ruleEditorButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, ThemeIcon.DROOLS_RULE_EDITOR_PAGE,
 				LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 8212364503178436528L;
 
@@ -89,7 +89,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 		ruleEditorButton.setEnabled(false);
 		addIconButton(ruleEditorButton);
 
-		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcons.TABLE,
+		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcon.TABLE,
 				LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -2494460723270342409L;
 

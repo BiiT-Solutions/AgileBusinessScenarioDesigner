@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import com.vaadin.server.ThemeResource;
 
-public enum ThemeIcons {
+public enum ThemeIcon {
 
 	ACCEPT("appbar.check.svg"),
 
@@ -150,7 +150,7 @@ public enum ThemeIcons {
 
 	private String value;
 
-	ThemeIcons(String value) {
+	ThemeIcon(String value) {
 		this.value = value;
 	}
 
