@@ -10,9 +10,9 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
+import com.biit.abcd.webpages.components.SelectTableRuleTable;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableQuestionAnswerConditionComponent;
-import com.biit.abcd.webpages.elements.decisiontable.SelectTableMenu;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -25,7 +25,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 	private DecisionTableQuestionAnswerConditionComponent decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
-	private SelectTableMenu tableSelectionMenu;
+	private SelectTableRuleTable tableSelectionMenu;
 
 	public DecisionTableEditor() {
 		super();
@@ -40,7 +40,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		rootLayout.setSizeFull();
 
 		// Create menu
-		tableSelectionMenu = new SelectTableMenu();
+		tableSelectionMenu = new SelectTableRuleTable();
 		tableSelectionMenu.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -7103550436798085895L;
 

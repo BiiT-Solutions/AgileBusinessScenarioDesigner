@@ -5,13 +5,13 @@ import java.util.Set;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.vaadin.ui.Component;
 
-public abstract class SelectionTableWindow extends AcceptCancelWindow {
+public abstract class SelectionTreeObjectTableWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 6781910083959136654L;
 	private TreeObjectTable table;
 
 	private boolean multiselect;
 
-	public SelectionTableWindow(TreeObject treeObject, boolean multiselect) {
+	public SelectionTreeObjectTableWindow(TreeObject treeObject, boolean multiselect) {
 		super();
 		this.multiselect = multiselect;
 		setContent(generateContent(treeObject));
