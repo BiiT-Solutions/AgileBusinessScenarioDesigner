@@ -6,13 +6,16 @@ import com.biit.abcd.webpages.WebMap;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 
 public class UpperMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 3501103183357307175L;
-	public static final String BUTTON_WIDTH = "120px";
+	public static final String BUTTON_WIDTH = "100px";
+	public static final String SEPARATOR_WIDTH = "10px";
 
 	public static final String CLASSNAME_HORIZONTAL_BUTTON_WRAPPER = "v-horizontal-button-group-wrapper";
+	private static final String SEPARATOR_STYLE = "v-menu-separator";
 
 	private HorizontalLayout upperRootLayout;
 	private HorizontalLayout oldRootLayoutContainer;
@@ -46,6 +49,12 @@ public class UpperMenu extends HorizontalButtonGroup {
 				});
 		formManagerButton.setEnabled(true);
 		formManagerButton.setHeight("100%");
+		formManagerButton.setWidth(BUTTON_WIDTH);
+		
+		CssLayout separator = new CssLayout();
+		separator.setHeight("100%");
+		separator.setWidth(SEPARATOR_WIDTH);
+		separator.setStyleName(SEPARATOR_STYLE);
 
 		settingsButton = new IconButton(LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, ThemeIcon.SETTINGS,
 				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, IconSize.BIG, new ClickListener() {
@@ -58,6 +67,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 					}
 				});
 		settingsButton.setHeight("100%");
+		settingsButton.setWidth(BUTTON_WIDTH);
 
 		Component currentRootLayout = getCompositionRoot();
 
@@ -67,9 +77,11 @@ public class UpperMenu extends HorizontalButtonGroup {
 		oldRootLayoutContainer.addComponent(currentRootLayout);
 
 		upperRootLayout.addComponent(oldRootLayoutContainer);
+		upperRootLayout.addComponent(separator);
 		upperRootLayout.addComponent(formManagerButton);
 		upperRootLayout.addComponent(settingsButton);
 		upperRootLayout.setExpandRatio(oldRootLayoutContainer, 1.0f);
+		upperRootLayout.setExpandRatio(separator, 0.0f);
 		upperRootLayout.setExpandRatio(settingsButton, 0.0f);
 		upperRootLayout.setExpandRatio(formManagerButton, 0.0f);
 

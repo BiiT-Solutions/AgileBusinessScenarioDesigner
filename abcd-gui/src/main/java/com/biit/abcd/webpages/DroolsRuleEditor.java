@@ -32,46 +32,46 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	@Override
 	protected void initContent() {
 		updateButtons(true);
-
-		// Create container
-		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
-		rootLayout.setSizeFull();
-
-		// Create menu
-		tableSelectExpression = new SelectExpressionTable();
-		tableSelectExpression.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = -7103550436798085895L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				refreshExpressionEditor();
-			}
-
-		});
-		rootLayout.setMenu(tableSelectExpression);
-
-		// Create content
-//		ruleExpressionEditorComponent = new RuleExpressionEditorComponent();
-//		ruleExpressionEditorComponent.setSizeFull();
-//		rootLayout.setContent(ruleExpressionEditorComponent);
-
-		getWorkingAreaLayout().addComponent(rootLayout);
-
-		initUpperMenu();
-
-		// Add tables
-		for (FormExpression expression : UserSessionHandler.getFormController().getForm().getFormExpressions()) {
-			addExpressionToMenu(expression);
-		}
-
-		sortTableMenu();
-
-		// Select the first one if available.
-		if (UserSessionHandler.getFormController().getForm().getFormExpressions().size() > 0) {
-			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-					.getFormExpressions().get(0));
-		}
-		// refreshExpressionEditor();
+//
+//		// Create container
+//		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
+//		rootLayout.setSizeFull();
+//
+//		// Create menu
+////		tableSelectExpression = new SelectExpressionTable();
+////		tableSelectExpression.addValueChangeListener(new ValueChangeListener() {
+////			private static final long serialVersionUID = -7103550436798085895L;
+////
+////			@Override
+////			public void valueChange(ValueChangeEvent event) {
+////				refreshExpressionEditor();
+////			}
+////
+////		});
+////		rootLayout.setMenu(tableSelectExpression);
+//
+//		// Create content
+////		ruleExpressionEditorComponent = new RuleExpressionEditorComponent();
+////		ruleExpressionEditorComponent.setSizeFull();
+////		rootLayout.setContent(ruleExpressionEditorComponent);
+//
+//		getWorkingAreaLayout().addComponent(rootLayout);
+//
+//		initUpperMenu();
+//
+//		// Add expressions
+//		for (FormExpression expression : UserSessionHandler.getFormController().getForm().getFormExpressions()) {
+//			addExpressionToMenu(expression);
+//		}
+//
+//		sortTableMenu();
+//
+//		// Select the first one if available.
+//		if (UserSessionHandler.getFormController().getForm().getFormExpressions().size() > 0) {
+//			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
+//					.getFormExpressions().get(0));
+//		}
+//		// refreshExpressionEditor();
 	}
 
 	private void initUpperMenu() {
