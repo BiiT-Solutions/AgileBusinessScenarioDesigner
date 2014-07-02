@@ -24,7 +24,6 @@ public class DiagramLink extends DiagramObject {
 	private Answer answer;
 	@Column(length = 1000000)
 	private String answerExpression;
-	
 
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
@@ -48,9 +47,25 @@ public class DiagramLink extends DiagramObject {
 	public Node getSource() {
 		return source;
 	}
+	
+	public DiagramElement getSourceElement(){
+		if(getParent()==null){
+			return null;
+		}
+		String jointJsId = source.getJointjsId();
+		return (DiagramElement)getParent().findDiagramObjectByJointJsId(jointJsId);
+	}
 
 	public void setSource(Node source) {
 		this.source = source;
+	}
+	
+	public DiagramElement getTargetElement(){
+		if(getParent()==null){
+			return null;
+		}
+		String jointJsId = target.getJointjsId();
+		return (DiagramElement)getParent().findDiagramObjectByJointJsId(jointJsId);
 	}
 
 	public Node getTarget() {

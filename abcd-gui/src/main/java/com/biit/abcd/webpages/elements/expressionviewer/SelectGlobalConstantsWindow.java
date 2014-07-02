@@ -82,4 +82,8 @@ public class SelectGlobalConstantsWindow extends AcceptCancelWindow {
 		return (GlobalVariable) constantSelection.getValue();
 	}
 
+	public void setValue(GlobalVariable globalVariable) {
+		constantSelection.setValue(globalVariable);
+	}
+
 }

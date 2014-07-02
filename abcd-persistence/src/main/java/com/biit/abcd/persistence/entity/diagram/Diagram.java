@@ -137,4 +137,13 @@ public class Diagram extends StorableObject {
 		this.name = name;
 	}
 
+	public DiagramObject findDiagramObjectByJointJsId(String jointJsId) {
+		for(DiagramObject element: diagramElements){
+			if(element.getJointjsId().equals(jointJsId)){
+				return element;
+			}
+		}
+		return null;
+	}
+
 }

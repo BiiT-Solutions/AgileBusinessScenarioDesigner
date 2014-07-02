@@ -38,4 +38,8 @@ public class StringInputWindow extends AcceptCancelWindow {
 		rootLayout.setComponentAlignment(textField, Alignment.MIDDLE_CENTER);
 		return rootLayout;
 	}
+
+	public void setValue(String value) {
+		textField.setValue(value);
+	}
 }

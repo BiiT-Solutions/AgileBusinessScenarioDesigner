@@ -91,7 +91,8 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 
 	private void initializeVariableSelection() {
 		variableSelection = new ListSelect();
-		variableSelection.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
+		variableSelection
+				.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
 		variableSelection.setSizeFull();
 		variableSelection.setNullSelectionAllowed(false);
 		variableSelection.setImmediate(true);
@@ -119,6 +120,11 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		}
 		return new ExpressionValueFormCustomVariable((TreeObject) formQuestionTable.getValue(),
 				(CustomVariable) variableSelection.getValue());
+	}
+
+	public void setvalue(ExpressionValueFormCustomVariable expression) {
+		formQuestionTable.setValue(expression.getQuestion());
+		variableSelection.setValue(expression.getVariable());
 	}
 
 }
