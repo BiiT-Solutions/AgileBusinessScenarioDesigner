@@ -2,6 +2,8 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.vaadin.ui.FormLayout;
@@ -20,23 +22,40 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 	public void setElementAbstract(DiagramLink element) {
 		instance = element;
 
-		diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		if (instance.getText() == null) {
-			diagramElementLabel.setValue("");
+		FormLayout linkForm = new FormLayout();
+		linkForm.setWidth(null);
+
+		if (instance.getSourceElement() instanceof DiagramFork) {
+			DiagramFork fork = (DiagramFork) element.getSourceElement();
+			if(fork.getQuestion()!=null){
+				if(fork.getQuestion().getAnswerType() == AnswerType.INPUT ){
+					//Fill input field value (Expression?)
+					
+				}else{
+					//Select question/others
+					
+				}
+			}
 		} else {
-			diagramElementLabel.setValue(instance.getText());
+			diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+			if (instance.getText() == null) {
+				diagramElementLabel.setValue("");
+			} else {
+				diagramElementLabel.setValue(instance.getText());
+			}
+			linkForm.addComponent(diagramElementLabel);
 		}
 
-		FormLayout categoryForm = new FormLayout();
-		categoryForm.setWidth(null);
-		categoryForm.addComponent(diagramElementLabel);
-
-		addTab(categoryForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
+		addTab(linkForm, "TODO - diagramLinkExprProperties", true, 0);
 	}
 
 	@Override
 	public void updateElement() {
-		instance.setText(diagramElementLabel.getValue());
+		if (instance.getSourceElement() instanceof DiagramFork) {
+			
+		}else{
+			instance.setText(diagramElementLabel.getValue());
+		}
 	}
 
 	@Override

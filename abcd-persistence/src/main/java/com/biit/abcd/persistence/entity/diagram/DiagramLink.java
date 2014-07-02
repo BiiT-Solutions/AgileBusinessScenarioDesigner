@@ -4,11 +4,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.gson.utils.DiagramLinkDeserializer;
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
+import com.biit.abcd.persistence.entity.Answer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -16,6 +18,12 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "DIAGRAM_LINKS")
 public class DiagramLink extends DiagramObject {
+	
+	//This can change if later this wants to be changed to an expression that unifies both elements.
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Answer answer;
+	@Column(length = 1000000)
+	private String answerExpression;
 
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
@@ -39,9 +47,25 @@ public class DiagramLink extends DiagramObject {
 	public Node getSource() {
 		return source;
 	}
+	
+	public DiagramElement getSourceElement(){
+		if(getParent()==null){
+			return null;
+		}
+		String jointJsId = source.getJointjsId();
+		return (DiagramElement)getParent().findDiagramObjectByJointJsId(jointJsId);
+	}
 
 	public void setSource(Node source) {
 		this.source = source;
+	}
+	
+	public DiagramElement getTargetElement(){
+		if(getParent()==null){
+			return null;
+		}
+		String jointJsId = target.getJointjsId();
+		return (DiagramElement)getParent().findDiagramObjectByJointJsId(jointJsId);
 	}
 
 	public Node getTarget() {
@@ -91,11 +115,32 @@ public class DiagramLink extends DiagramObject {
 	public String getVertices() {
 		return vertices;
 	}
+	
+	public Answer getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(Answer answer) {
+		this.answer = answer;
+	}
+
+	public String getAnswerExpression() {
+		return answerExpression;
+	}
+
+	public void setAnswerExpression(String answerExpression) {
+		this.answerExpression = answerExpression;
+	}
+	
+	public void clearAnswerAndAnswerExpression(){
+		setAnswer(null);
+		setAnswerExpression(new String());
+	}
 
 	public static DiagramLink fromJson(String jsonString) {
 		if (jsonString != null) {
 			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-			gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramLinkDeserializer());
+			gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkDeserializer());
 			Gson gson = gsonBuilder.create();
 			DiagramLink object = gson.fromJson(jsonString, DiagramLink.class);
 			return object;

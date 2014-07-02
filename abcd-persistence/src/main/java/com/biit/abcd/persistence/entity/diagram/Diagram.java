@@ -98,18 +98,34 @@ public class Diagram extends StorableObject {
 		return json;
 	}
 
+	/**
+	 * Function to get the list of diagram object elements. Do not add elements
+	 * to this list, use the appropriate functions.
+	 * 
+	 * @return
+	 */
 	public List<DiagramObject> getDiagramObjects() {
 		return diagramElements;
 	}
 
 	public void setDiagramObjects(List<DiagramObject> objects) {
 		this.diagramElements.clear();
-		this.diagramElements = objects;
+		addDiagramObjects(objects);
 	}
 
 	public void addDiagramObjects(List<DiagramObject> objects) {
 		if (objects != null) {
 			diagramElements.addAll(objects);
+			for (DiagramObject object : objects) {
+				object.setParent(this);
+			}
+		}
+	}
+
+	public void addDiagramObject(DiagramObject object) {
+		if (object != null) {
+			diagramElements.add(object);
+			object.setParent(this);
 		}
 	}
 
@@ -119,6 +135,15 @@ public class Diagram extends StorableObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public DiagramObject findDiagramObjectByJointJsId(String jointJsId) {
+		for(DiagramObject element: diagramElements){
+			if(element.getJointjsId().equals(jointJsId)){
+				return element;
+			}
+		}
+		return null;
 	}
 
 }

@@ -245,6 +245,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 						System.out.println("first element biitText: "
 								+ ((DiagramElement) diagramBuilder.getDiagram().getDiagramObjects().get(0))
 										.getBiitText());
+						System.out.println("test: "+diagram+ " "+diagram.getDiagramObjects().get(0).getParent());
 						UserSessionHandler.getFormController().save();
 						MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 					} catch (Exception e) {
