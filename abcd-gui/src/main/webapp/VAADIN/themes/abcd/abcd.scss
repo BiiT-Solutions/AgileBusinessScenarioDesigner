@@ -688,5 +688,19 @@ $open-sans-pathPrefix: "./fonts/";
 		padding-left: 8px;
 	}
 	
+	.v-csslayout.v-expression-element.v-csslayout-v-expression-element {
+		padding: 0px 5px 0px 5px;
+		background-color: #ededed;
+		border: 1px solid #222;
+		border-color: #aaa;
+		display:inline-block;
+		font-weight:bold;
+		color:#1C86C2;
+	}
+	
+	.v-csslayout.v-expression-element.v-csslayout-v-expression-element.expression-selected {
+		background-color: White;
+	}
+	
 	
 }
