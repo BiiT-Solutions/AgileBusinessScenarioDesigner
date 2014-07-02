@@ -14,6 +14,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Component for editing an expression. Is composed by a viewer and a properties menu.
+ */
 public class ExpressionEditorComponent extends CustomComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
 	private HorizontalLayout rootLayout;
@@ -58,7 +61,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 		expressionEditorProperties.setSizeFull();
 
 		viewLayout.addComponent(evaluatorLayout);
-		//If expandratio is 0, component is not shown.
+		// If expand ratio is 0, component is not shown.
 		viewLayout.setExpandRatio(evaluatorLayout, 0.00001f);
 		viewLayout.setComponentAlignment(evaluatorLayout, Alignment.BOTTOM_RIGHT);
 		viewLayout.addComponent(expressionViewer);

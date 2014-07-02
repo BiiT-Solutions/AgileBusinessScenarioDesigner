@@ -130,7 +130,8 @@ public abstract class TreeObject extends StorableObject {
 		return false;
 	}
 
-	public void remove() {
+	public void remove() throws DependencyExistException {
+		checkDependencies();
 		if (getParent() != null) {
 			try {
 				getParent().removeChild(this);
@@ -143,10 +144,8 @@ public abstract class TreeObject extends StorableObject {
 
 	public void removeChild(TreeObject elementToRemove) throws ChildrenNotFoundException, DependencyExistException {
 		boolean removed = false;
-		if (dependencyExists()) {
-			throw new DependencyExistException("The child cannot be removed. A Foreign Key would fail. ");
-		}
 		if (getChildren().contains(elementToRemove)) {
+			elementToRemove.checkDependencies();
 			getChildren().remove(elementToRemove);
 			removed = true;
 		} else {
@@ -167,33 +166,38 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	/**
-	 * This element or any of its children has a dependency.
+	 * This element or any of its children has a dependency. Checks if it is used in a TableRule, Diagram or Expression. 
 	 */
-	public boolean dependencyExists() {
+	public void checkDependencies() throws DependencyExistException {
 		Form form = getForm();
 		if (form != null) {
+			// Check dependencies with TableRules.
 			for (TableRule tableRule : form.getTableRules()) {
 				for (TableRuleRow row : tableRule.getRules()) {
 					for (QuestionAndAnswerCondition condition : row.getConditions()) {
 						if (condition.getQuestion().equals(this) || condition.getAnswer().equals(this)) {
-							return true;
+							throw new DependencyExistException("A rule table uses this element.");
 						}
 					}
 				}
 			}
+			
+			//Checks dependencies with Diagram
+			//TODO
+			
+			//Checks dependencies with Expressions
+			//TODO
 		}
 		for (TreeObject child : getChildren()) {
-			if (child.dependencyExists()) {
-				return true;
-			}
+			child.checkDependencies();
 		}
-		return false;
 	}
 
-	public void removeChild(int index) throws ChildrenNotFoundException {
+	public void removeChild(int index) throws ChildrenNotFoundException, DependencyExistException {
 		if (getChildren() == null || getChildren().size() < index) {
 			throw new ChildrenNotFoundException("Index out of bounds. Index " + index + " is invalid.");
 		} else {
+			getChildren().get(index).checkDependencies();
 			getChildren().remove(index);
 		}
 	}

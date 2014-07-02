@@ -5,13 +5,16 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
 import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
@@ -79,11 +82,29 @@ public class ExpressionViewer extends CssLayout {
 					public void layoutClick(LayoutClickEvent event) {
 						setSelectedExpression(expression);
 						// Double click open operator popup.
-						if (event.isDoubleClick()) {
-							
+						if (expression instanceof ExpressionOperator) {
+							if (event.isDoubleClick()) {
+								final ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(expression);
+								operatorWindow.showCentered();
+								operatorWindow.addAcceptAcctionListener(new AcceptActionListener() {
+									@Override
+									public void acceptAction(AcceptCancelWindow window) {
+										try {
+											((ExpressionOperator) expression).setValue(((ChangeExpressionOperatorWindow) window)
+													.getOperator());
+											operatorWindow.close();
+											updateExpression();
+											setSelectedExpression(expression);
+										} catch (NotValidOperatorInExpression e) {
+											e.printStackTrace();
+											// Not possible
+										}
+
+									}
+								});
+							}
 						}
 					}
-
 				});
 
 		expressionOfElement.put(expressionElement, expression);

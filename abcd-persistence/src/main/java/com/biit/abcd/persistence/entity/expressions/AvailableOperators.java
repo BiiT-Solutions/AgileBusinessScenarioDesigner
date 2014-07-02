@@ -52,4 +52,13 @@ public enum AvailableOperators {
 	public String toString() {
 		return value;
 	}
+
+	public static AvailableOperators getOperator(String value) {
+		for (AvailableOperators operator : AvailableOperators.values()) {
+			if (operator.caption.equals(value)) {
+				return operator;
+			}
+		}
+		return null;
+	}
 }

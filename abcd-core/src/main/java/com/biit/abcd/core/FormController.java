@@ -4,6 +4,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
+import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.liferay.portal.model.User;
 
 public class FormController {
@@ -42,7 +43,7 @@ public class FormController {
 		}
 	}
 
-	public void remove(TreeObject treeObject) {
+	public void remove(TreeObject treeObject) throws DependencyExistException {
 		if (getForm() != null && treeObject != null && treeObject.getParent() != null) {
 			treeObject.remove();
 		}
@@ -78,4 +79,5 @@ public class FormController {
 	public User getUser() {
 		return user;
 	}
+
 }
