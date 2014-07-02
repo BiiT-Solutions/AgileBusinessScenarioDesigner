@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.components;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
@@ -24,7 +25,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	private AbstractField<?> valueField;
 	private DateField validFrom;
 	private DateField validTo;
-
+	
 	public VariableDataWindow(AnswerFormat format, String title) {
 		super();
 		setHeight(HEIGHT);
@@ -61,7 +62,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		valueField.setWidth(FIELD_WIDTH);
 		validFrom.setWidth(FIELD_WIDTH);
 		validTo.setWidth(FIELD_WIDTH);
-
+		
 		formLayout.addComponent(valueField);
 		formLayout.addComponent(validFrom);
 		formLayout.addComponent(validTo);
@@ -99,5 +100,13 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		variableData.setValidFrom(new Timestamp(validFrom.getValue().getTime()));
 		variableData.setValidTo(new Timestamp(validTo.getValue().getTime()));
 		return variableData;
+	}
+
+	public void setValidFromEditable(boolean editable) {
+		validFrom.setEnabled(editable);
+	}
+	
+	public void setValidFromValue(Date newDate) {
+		validFrom.setValue(newDate);
 	}
 }

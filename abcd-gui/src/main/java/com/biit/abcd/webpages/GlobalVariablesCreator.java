@@ -1,6 +1,8 @@
 package com.biit.abcd.webpages;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Date;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -161,6 +163,19 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		if (variable != null) {
 			VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
 					ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
+			
+			// If the global variable has values, we manage the
+			// "value from"/"value to" properties
+			List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
+			if(auxVariableList.size() > 0){
+				// Set the "value from" value related to the previous one
+				VariableData auxVariableData = auxVariableList.get(auxVariableList.size()-1);
+				Date auxDate = new Date(auxVariableData.getValidTo().getTime());
+				variableDataWindow.setValidFromValue(incrementDateOneDay(auxDate));
+				// Disable the "value from" data field
+				variableDataWindow.setValidFromEditable(false);
+			}
+			
 			variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
@@ -185,6 +200,13 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 	private void save() {
 		UserSessionHandler.getGlobalVariablesController().update(variableTable.getGlobalVariables());
+	}
+	
+	public Date incrementDateOneDay(Date date){
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DATE, 1);  // number of days to add
+		return c.getTime();
 	}
 
 }
