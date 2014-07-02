@@ -18,6 +18,7 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
+import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormTreeTable;
@@ -431,13 +432,14 @@ public class FormDesigner extends FormWebPageComponent {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
 			if (selected != null && selected.getParent() != null) {
-				if (selected.dependencyExists()) {
+				try {
+					selected.remove();
+					removeElementFromUI(selected);
+				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
 					MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
 							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
-				} else {
-					selected.remove();
-					removeElementFromUI(selected);
+
 				}
 			}
 		}
