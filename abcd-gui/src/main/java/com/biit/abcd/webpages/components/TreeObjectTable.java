@@ -113,9 +113,6 @@ public class TreeObjectTable extends TreeTable {
 	private void removeChildren(TreeObject element) throws DependencyExistException {
 		if (element instanceof Question) {
 			if (((Question) element).getAnswerType().equals(AnswerType.INPUT)) {
-				if (element.dependencyExists()) {
-					throw new DependencyExistException("Element cannot be removed. A rule is using this element.");
-				}
 				try {
 					List<Object> children = new ArrayList<Object>(getChildren(element));
 					for (Object child : children) {

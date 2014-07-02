@@ -160,6 +160,8 @@ public enum LanguageCodes {
 	ERROR_NAME_NOT_VALID("error.nameNotValid"),
 	ERROR_DIAGRAM_REPEATED_NAME("error.diagram.repeatedName"),
 	ERROR_SELECT_QUESTION("error.select.question"),
+	ERROR_SELECT_TABLE("error.select.table"),
+	ERROR_SELECT_EXPRESSION("error.select.expression"),
 	
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
@@ -268,6 +270,8 @@ public enum LanguageCodes {
 	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value"),	
 	EXPRESSION_CHECKER_VALID("expression.checker.valid"),
 	EXPRESSION_CHECKER_INVALID("expression.checker.invalid"),
+	EXPRESSION_CHANGE_OPERATOR_WINDOW_CAPTION("expression.operator.window.caption"),
+	EXPRESSION_CHANGE_OPERATOR_WINDOW_COMBOBOX("expression.operator.window.combobox"),
 
 	EXPRESSION_BUTTON_AND("expression.button.and"),
 	EXPRESSION_BUTTON_OR("expression.button.or"),

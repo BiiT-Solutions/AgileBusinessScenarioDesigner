@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.decisiontable;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -8,14 +8,14 @@ import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 
-public class SelectTableMenu extends Table {
+public class SelectTableRuleTable extends Table {
 	private static final long serialVersionUID = -5723571725991709050L;
 
 	enum MenuProperties {
 		TABLE_NAME, UPDATE_TIME;
 	};
 
-	public SelectTableMenu() {
+	public SelectTableRuleTable() {
 		initContainerProperties();
 	}
 

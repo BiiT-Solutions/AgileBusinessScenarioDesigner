@@ -4,7 +4,7 @@ package com.biit.abcd.persistence.entity.expressions;
  * Already defined functions. Used in JExVal. 
  *
  */
-public enum AvailableFunctions {
+public enum AvailableFunction {
 
 	MAX("MAX("),
 
@@ -18,7 +18,7 @@ public enum AvailableFunctions {
 
 	private String value;
 
-	private AvailableFunctions(String value) {
+	private AvailableFunction(String value) {
 		this.value = value;
 	}
 

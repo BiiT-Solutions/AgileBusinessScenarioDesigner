@@ -32,6 +32,7 @@ public class AcceptCancelWindow extends Window {
 
 	public AcceptCancelWindow() {
 		super();
+		setModal(true);
 		acceptListeners = new ArrayList<AcceptCancelWindow.AcceptActionListener>();
 		cancelListeners = new ArrayList<AcceptCancelWindow.CancelActionListener>();
 	}

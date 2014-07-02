@@ -14,6 +14,10 @@ public class DiagramTableSerializer extends DiagramObjectSerializerCommon<Diagra
 	@Override
 	public JsonElement serialize(DiagramTable element, Type type, JsonSerializationContext context) {
 		final JsonObject jsonObject = new JsonObject();
+		// Set the current name of the question.
+		if (element.getTable() != null) {
+			element.getBiitText().setText(element.getTable().getName());
+		}
 		return serialize(element, jsonObject, context);
 	}
 }
