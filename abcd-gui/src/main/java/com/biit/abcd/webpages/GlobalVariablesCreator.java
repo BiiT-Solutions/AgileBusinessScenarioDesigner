@@ -10,6 +10,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
+import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -171,7 +172,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				// Set the "value from" value related to the previous one
 				VariableData auxVariableData = auxVariableList.get(auxVariableList.size()-1);
 				Date auxDate = new Date(auxVariableData.getValidTo().getTime());
-				variableDataWindow.setValidFromValue(incrementDateOneDay(auxDate));
+				variableDataWindow.setValidFromValue(DateManager.incrementDateOneDay(auxDate));
 				// Disable the "value from" data field
 				variableDataWindow.setValidFromEditable(false);
 			}
@@ -201,12 +202,4 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	private void save() {
 		UserSessionHandler.getGlobalVariablesController().update(variableTable.getGlobalVariables());
 	}
-	
-	public Date incrementDateOneDay(Date date){
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		c.add(Calendar.DATE, 1);  // number of days to add
-		return c.getTime();
-	}
-
 }
