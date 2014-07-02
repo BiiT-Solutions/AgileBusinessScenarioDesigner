@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import java.util.HashMap;
 import java.util.List;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
@@ -11,9 +12,12 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
@@ -100,7 +104,7 @@ public class ExpressionViewer extends CssLayout {
 						// Double click open operator popup.
 						if (expression instanceof ExpressionOperator) {
 							if (event.isDoubleClick()) {
-								final ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
+								ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
 										expression);
 								operatorWindow.showCentered();
 								operatorWindow.addAcceptAcctionListener(new AcceptActionListener() {
@@ -109,7 +113,7 @@ public class ExpressionViewer extends CssLayout {
 										try {
 											((ExpressionOperator) expression)
 													.setValue(((ChangeExpressionOperatorWindow) window).getOperator());
-											operatorWindow.close();
+											window.close();
 											updateExpression();
 											setSelectedExpression(expression);
 										} catch (NotValidOperatorInExpression e) {
@@ -120,8 +124,29 @@ public class ExpressionViewer extends CssLayout {
 									}
 								});
 							}
-						} else if (expression instanceof ExpressionOperator) {
-							
+						} else if (expression instanceof ExpressionValueString) {
+							StringInputWindow stringInputWindow = new StringInputWindow(
+									ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+							stringInputWindow.setCaption(ServerTranslate
+									.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+							stringInputWindow.setValue(((ExpressionValueString) expression).getValue());
+							stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									String value = ((StringInputWindow) window).getValue();
+									if (value == null || value.isEmpty()) {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									} else {
+										// Update expression
+										((ExpressionValueString) expression).setValue(value);
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									}
+								}
+							});
+							stringInputWindow.showCentered();
 						}
 					}
 				});
