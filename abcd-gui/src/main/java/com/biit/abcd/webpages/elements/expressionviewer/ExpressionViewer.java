@@ -12,13 +12,15 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Alignment;
@@ -102,6 +104,8 @@ public class ExpressionViewer extends CssLayout {
 					public void layoutClick(LayoutClickEvent event) {
 						setSelectedExpression(expression);
 						// Double click open operator popup.
+
+						// For Operators.
 						if (expression instanceof ExpressionOperator) {
 							if (event.isDoubleClick()) {
 								ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
@@ -124,6 +128,7 @@ public class ExpressionViewer extends CssLayout {
 									}
 								});
 							}
+							// For Strings.
 						} else if (expression instanceof ExpressionValueString) {
 							StringInputWindow stringInputWindow = new StringInputWindow(
 									ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
@@ -147,6 +152,51 @@ public class ExpressionViewer extends CssLayout {
 								}
 							});
 							stringInputWindow.showCentered();
+							// For Global constants
+						} else if (expression instanceof ExpressionValueGlobalConstant) {
+							SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
+							globalWindow.showCentered();
+							globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getVariable());
+							globalWindow.addAcceptAcctionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window).getValue();
+									if (globalVariable != null) {
+										((ExpressionValueGlobalConstant) expression).setVariable(globalVariable);
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									} else {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									}
+								}
+							});
+							// Form variables.
+						} else if (expression instanceof ExpressionValueFormCustomVariable) {
+							SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
+							variableWindow.showCentered();
+							variableWindow.setvalue((ExpressionValueFormCustomVariable) expression);
+							variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									ExpressionValueFormCustomVariable formReference = ((SelectFormElementVariableWindow) window)
+											.getValue();
+									if (formReference != null) {
+										// Update the already existing expression.
+										((ExpressionValueFormCustomVariable) expression).setQuestion(formReference
+												.getQuestion());
+										((ExpressionValueFormCustomVariable) expression).setVariable(formReference
+												.getVariable());
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									} else {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									}
+								}
+							});
 						}
 					}
 				});
