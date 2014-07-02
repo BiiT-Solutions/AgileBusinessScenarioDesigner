@@ -23,6 +23,8 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Window.CloseEvent;
+import com.vaadin.ui.Window.CloseListener;
 
 public class GlobalVariablesCreator extends FormWebPageComponent {
 	private static final long serialVersionUID = 6042328256995069412L;
@@ -98,6 +100,14 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						window.close();
 					}
 				});
+				window.addCloseListener(new CloseListener() {
+					private static final long serialVersionUID = -1957065660286348445L;
+					@Override
+					public void windowClose(CloseEvent e) {
+						createDataWindow();						
+					}
+				});
+				
 				window.showCentered();
 			}
 		});
@@ -123,21 +133,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
 
 				if (variable != null) {
-					VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
-							ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
-					variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
-						@Override
-						public void acceptAction(AcceptCancelWindow window) {
-							VariableData variableData = ((VariableDataWindow) window).getValue();
-							if (variableData != null) {
-								// Add item.
-								variableDataTable.addItem((VariableData) variableData);
-								((GlobalVariable) variableTable.getValue()).getData().add(variableData);
-							}
-							window.close();
-						}
-					});
-					variableDataWindow.showCentered();
+					createDataWindow();
 				}
 			}
 		});
@@ -159,6 +155,28 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		return upperMenu;
 	}
 
+	private void createDataWindow(){
+		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
+
+		if (variable != null) {
+			VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
+					ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
+			variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				@Override
+				public void acceptAction(AcceptCancelWindow window) {
+					VariableData variableData = ((VariableDataWindow) window).getValue();
+					if (variableData != null) {
+						// Add item.
+						variableDataTable.addItem((VariableData) variableData);
+						((GlobalVariable) variableTable.getValue()).getData().add(variableData);
+					}
+					window.close();
+				}
+			});
+			variableDataWindow.showCentered();
+		}
+	}
+	
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
 		// TODO Auto-generated method stub
