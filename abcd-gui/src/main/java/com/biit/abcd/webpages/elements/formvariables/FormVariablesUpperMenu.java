@@ -21,11 +21,11 @@ public class FormVariablesUpperMenu extends UpperMenu {
 		addIconButton(saveButton);
 
 		// Add Variable
-		addNewVariable = new IconButton(LanguageCodes.FORM_VARIABLE_ADD, ThemeIcon.VARIABLE_ADD, LanguageCodes.FORM_VARIABLE_ADD);
+		addNewVariable = new IconButton(LanguageCodes.FORM_VARIABLE_ADD, ThemeIcon.FORM_VARIABLE_ADD, LanguageCodes.FORM_VARIABLE_ADD);
 		addIconButton(addNewVariable);
 
 		// Remove Variable
-		removeVariable = new IconButton(LanguageCodes.FORM_VARIABLE_REMOVE, ThemeIcon.VARIABLE_REMOVE, LanguageCodes.FORM_VARIABLE_REMOVE);
+		removeVariable = new IconButton(LanguageCodes.FORM_VARIABLE_REMOVE, ThemeIcon.FORM_VARIABLE_REMOVE, LanguageCodes.FORM_VARIABLE_REMOVE);
 		addIconButton(removeVariable);
 	}
 

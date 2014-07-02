@@ -136,9 +136,9 @@ public enum ThemeIcon {
 
 	FORM_VARIABLE_EDITOR("appbar.form.variables.svg"),
 
-	GLOBAL_VARIABLES_ADD_VARIABLE("appbar.list.add.below.svg"),
+	GLOBAL_VARIABLES_ADD_VARIABLE("appbar.notification.add.svg"),
 
-	GLOBAL_VARIABLES_REMOVE_VARIABLE("appbar.list.delete.inline.svg"),
+	GLOBAL_VARIABLES_REMOVE_VARIABLE("appbar.notification.remove.svg"),
 
 	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.svg"),
 
@@ -146,9 +146,9 @@ public enum ThemeIcon {
 
 	FORM_VARIABLES("appbar.form.variables.svg"),
 
-	VARIABLE_ADD("appbar.notification.add.svg"),
+	FORM_VARIABLE_ADD("appbar.notification.add.svg"),
 
-	VARIABLE_REMOVE("appbar.notification.remove.svg");
+	FORM_VARIABLE_REMOVE("appbar.notification.remove.svg");
 
 	private String value;
 
