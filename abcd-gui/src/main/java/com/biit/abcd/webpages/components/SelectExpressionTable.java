@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.formulaeditor;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;

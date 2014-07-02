@@ -5,10 +5,10 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.webpages.components.SelectionTableWindow;
+import com.biit.abcd.webpages.components.SelectionTreeObjectTableWindow;
 import com.vaadin.ui.Component;
 
-public class AddNewAnswerValue extends SelectionTableWindow {
+public class AddNewAnswerValue extends SelectionTreeObjectTableWindow {
 	private static final long serialVersionUID = -5510653106309311210L;
 
 	public AddNewAnswerValue(Question question) {

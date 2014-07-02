@@ -160,6 +160,8 @@ public enum LanguageCodes {
 	ERROR_NAME_NOT_VALID("error.nameNotValid"),
 	ERROR_DIAGRAM_REPEATED_NAME("error.diagram.repeatedName"),
 	ERROR_SELECT_QUESTION("error.select.question"),
+	ERROR_SELECT_TABLE("error.select.table"),
+	ERROR_SELECT_EXPRESSION("error.select.expression"),
 	
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),

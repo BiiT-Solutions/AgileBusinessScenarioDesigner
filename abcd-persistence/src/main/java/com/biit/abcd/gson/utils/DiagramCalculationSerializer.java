@@ -14,6 +14,10 @@ public class DiagramCalculationSerializer extends DiagramObjectSerializerCommon<
 	@Override
 	public JsonElement serialize(DiagramCalculation element, Type type, JsonSerializationContext context) {
 		final JsonObject jsonObject = new JsonObject();
+		// Set the current name of the question.
+		if (element.getFormExpression() != null) {
+			element.getBiitText().setText(element.getFormExpression().getName());
+		}
 		return serialize(element, jsonObject, context);
 	}
 }

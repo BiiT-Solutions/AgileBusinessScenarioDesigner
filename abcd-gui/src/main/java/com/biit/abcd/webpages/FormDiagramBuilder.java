@@ -16,7 +16,6 @@ import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramUpdated;
-import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderElementPicked;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
@@ -35,8 +34,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
 	private JsonPropertiesComponent propertiesContainer;
-	private Diagram previousDiagram;
-	private Diagram currentDiagram;
 
 	public FormDiagramBuilder() {
 		super();
@@ -64,8 +61,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				previousDiagram = currentDiagram;
-				currentDiagram = (Diagram) event.getProperty().getValue();
+				final Diagram currentDiagram = (Diagram) event.getProperty().getValue();
 				propertiesContainer.updatePropertiesComponent(null);
 
 				if (diagramBuilder.getDiagram() != null) {
@@ -227,9 +223,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	private void deleteDiagram() {
-		UserSessionHandler.getFormController().getForm().removeDiagram(currentDiagram);
-		diagramBuilderTable.removeItem(currentDiagram);
-		diagramBuilderTable.setValue(null);
+		if (diagramBuilderTable.getValue() != null) {
+			UserSessionHandler.getFormController().getForm().removeDiagram((Diagram) diagramBuilderTable.getValue());
+			diagramBuilderTable.removeItem(diagramBuilderTable.getValue());
+			diagramBuilderTable.setValue(null);
+		}
 	}
 
 	@Override

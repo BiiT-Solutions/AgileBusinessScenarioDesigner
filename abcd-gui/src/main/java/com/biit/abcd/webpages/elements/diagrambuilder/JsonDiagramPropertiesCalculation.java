@@ -2,59 +2,58 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
-import com.biit.abcd.webpages.components.SelectQuestionWindow;
+import com.biit.abcd.webpages.components.SelectExpressionWindow;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<DiagramFork> {
-	private static final long serialVersionUID = -5767909479835775870L;
-	private DiagramFork instance;
+public class JsonDiagramPropertiesCalculation extends PropertiesForClassComponent<DiagramCalculation> {
+	private static final long serialVersionUID = 5356130114169313201L;
+	private DiagramCalculation instance;
 	private FieldWithSearchButton fieldWithSearchButton;
 
-	public JsonDiagramPropertiesFork() {
-		super(DiagramFork.class);
+	public JsonDiagramPropertiesCalculation() {
+		super(DiagramCalculation.class);
 	}
 
 	@Override
-	public void setElementAbstract(DiagramFork element) {
+	public void setElementAbstract(DiagramCalculation element) {
 		instance = element;
 
 		fieldWithSearchButton = new FieldWithSearchButton("Question");
-		fieldWithSearchButton.setNullCaption("Fork");
+		fieldWithSearchButton.setNullCaption("Calculation");
 		fieldWithSearchButton.setValue(null);
-		if (instance.getQuestion() != null) {
-			fieldWithSearchButton.setValue(instance.getQuestion(), instance.getQuestion().getName());
+		if (instance.getFormExpression() != null) {
+			fieldWithSearchButton.setValue(instance.getFormExpression(), instance.getFormExpression().getName());
 		}
 		fieldWithSearchButton.addClickListener(new ClickListener() {
-			private static final long serialVersionUID = 1427800999596843191L;
+			private static final long serialVersionUID = -8500340609293771339L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final SelectQuestionWindow questionWindow = new SelectQuestionWindow();
-				questionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				final SelectExpressionWindow formExpressionWindow = new SelectExpressionWindow();
+				formExpressionWindow.addAcceptAcctionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						if (questionWindow.getValue() != null) {
-							fieldWithSearchButton.setValue(questionWindow.getValue().getReference(), questionWindow
-									.getValue().getReference().getName());
-							instance.setQuestion((Question) questionWindow.getValue().getReference());
-							instance.getBiitText().setText(instance.getQuestion().getName());
+						if (formExpressionWindow.getSelectedExpression() != null) {
+							fieldWithSearchButton.setValue(formExpressionWindow.getSelectedExpression(),
+									formExpressionWindow.getSelectedExpression().getName());
+							instance.setFormExpression(formExpressionWindow.getSelectedExpression());
+							instance.getBiitText().setText(instance.getFormExpression().getName());
 							firePropertyUpdateListener(instance);
 							window.close();
 						} else {
-							MessageManager.showError(LanguageCodes.ERROR_SELECT_TABLE);
+							MessageManager.showError(LanguageCodes.ERROR_SELECT_EXPRESSION);
 						}
 					}
 				});
-				questionWindow.showCentered();
+				formExpressionWindow.showCentered();
 			}
 		});
 		fieldWithSearchButton.addRemoveClickListener(new ClickListener() {
@@ -62,8 +61,8 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				instance.setQuestion(null);
-				instance.getBiitText().setText("Fork");
+				instance.setFormExpression(null);
+				instance.getBiitText().setText("Calculation");
 				firePropertyUpdateListener(instance);
 			}
 		});
@@ -77,7 +76,7 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 
 	@Override
 	public void updateElement() {
-		//All the updates are done in the field directly.
+		// All the updates are done in the field directly.
 	}
 
 	@Override
