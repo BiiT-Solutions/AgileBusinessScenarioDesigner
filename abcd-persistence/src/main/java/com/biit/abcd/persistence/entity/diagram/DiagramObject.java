@@ -3,6 +3,8 @@ package com.biit.abcd.persistence.entity.diagram;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.StorableObject;
@@ -11,6 +13,9 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "DIAGRAM_OBJECTS")
 public abstract class DiagramObject extends StorableObject {
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Diagram parent;
 
 	@Expose
 	@Enumerated(EnumType.STRING)
@@ -59,5 +64,13 @@ public abstract class DiagramObject extends StorableObject {
 	public void update(DiagramObject object) {
 		embeds = object.embeds;
 		z = object.z;
+	}
+	
+	public Diagram getParent() {
+		return parent;
+	}
+
+	public void setParent(Diagram parent) {
+		this.parent = parent;
 	}
 }

@@ -1,11 +1,18 @@
 package com.biit.abcd.persistence.entity.diagram;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.biit.abcd.persistence.entity.expressions.FormExpression;
 
 @Entity
 @Table(name = "DIAGRAM_SINK")
 public class DiagramSink  extends DiagramElement{
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private FormExpression formExpression;
 	
 	public DiagramSink() {
 		super();

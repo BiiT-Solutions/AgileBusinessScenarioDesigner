@@ -19,6 +19,7 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 	@Override
 	public void setElementAbstract(DiagramLink element) {
 		instance = element;
+		System.out.println("SetElement: "+ element.getType().getJsonType());
 
 		diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		if (instance.getText() == null) {

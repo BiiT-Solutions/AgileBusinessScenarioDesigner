@@ -38,8 +38,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 				if (diagramElements.containsKey(tempElement.getJointjsId())) {
 					System.out.println("kwnown element");
 					DiagramElement currentElement = (DiagramElement) diagramElements.get(tempElement.getJointjsId());
-					if(currentElement instanceof DiagramFork){
-						System.out.println("kwnown element, fork: "+((DiagramFork)currentElement).getQuestion());
+					if (currentElement instanceof DiagramFork) {
+						System.out.println("kwnown element, fork: " + ((DiagramFork) currentElement).getQuestion());
 					}
 					fireDiagramObjectPickedListeners(currentElement);
 				} else {
@@ -57,6 +57,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					return;
 				}
 				DiagramLink tempLink = DiagramLink.fromJson(jsonString);
+				System.out.println("Select element: " + tempLink.getJointjsId());
 				if (diagramElements.containsKey(tempLink.getJointjsId())) {
 					System.out.println("kwnown element");
 					fireDiagramObjectPickedListeners(diagramElements.get(tempLink.getJointjsId()));
@@ -76,7 +77,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			// Initialize the map of diagramElements.
 			diagramElements = createMapOfDiagramObjects(diagram);
 			fromJson(diagram.toJson());
-		}else{
+		} else {
 			clear();
 		}
 	}
@@ -87,8 +88,10 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	private HashMap<String, DiagramObject> createMapOfDiagramObjects(Diagram newDiagram) {
 		HashMap<String, DiagramObject> newDiagramElements = new HashMap<>();
+		System.out.println("Current diagram objects");
 		for (DiagramObject element : newDiagram.getDiagramObjects()) {
 			newDiagramElements.put(element.getJointjsId(), element);
+			System.out.println("Id: " + element.getJointjsId() + " " + element.getType().getJsonType());
 		}
 		return newDiagramElements;
 	}
@@ -121,7 +124,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 						currentValue.update(object);
 					} else {
 						// Doesn't exist, insert
-						diagram.getDiagramObjects().add(object);
+						diagram.addDiagramObject(object);
 						diagramElements.put(object.getJointjsId(), object);
 					}
 				}

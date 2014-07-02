@@ -14,10 +14,9 @@ public class DiagramLinkSerializer implements JsonSerializer<DiagramLink> {
 
 	@Override
 	public JsonElement serialize(DiagramLink diagramElement, Type type, JsonSerializationContext context) {
-
 		final JsonObject jsonObject = new JsonObject();
 
-		jsonObject.addProperty("id", diagramElement.getJointjsId());
+		jsonObject.addProperty("id", diagramElement.getJointjsId());		
 		jsonObject.addProperty("type", diagramElement.getType().getJsonType());
 		jsonObject.addProperty("embeds", diagramElement.getEmbeds());
 		jsonObject.addProperty("z", diagramElement.getZ());
