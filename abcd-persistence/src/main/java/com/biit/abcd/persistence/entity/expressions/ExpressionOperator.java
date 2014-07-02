@@ -21,7 +21,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 public abstract class ExpressionOperator extends Expression {
 
 	@Enumerated(EnumType.STRING)
-	private AvailableOperators currentValue;
+	private AvailableOperator currentValue;
 
 	public ExpressionOperator() {
 		super();
@@ -31,20 +31,20 @@ public abstract class ExpressionOperator extends Expression {
 
 	@Override
 	public String getExpressionTableString() {
-		if (currentValue == null || currentValue == AvailableOperators.NULL) {
+		if (currentValue == null || currentValue == AvailableOperator.NULL) {
 			return " " + getValueNullCaption() + " ";
 		} else {
 			return " " + currentValue.getCaption() + " ";
 		}
 	}
 
-	public abstract List<AvailableOperators> getAcceptedValues();
+	public abstract List<AvailableOperator> getAcceptedValues();
 
-	public AvailableOperators getValue() {
+	public AvailableOperator getValue() {
 		return currentValue;
 	}
 
-	public void setValue(AvailableOperators exprOpvalue) throws NotValidOperatorInExpression {
+	public void setValue(AvailableOperator exprOpvalue) throws NotValidOperatorInExpression {
 		if (getAcceptedValues().contains(exprOpvalue)) {
 			currentValue = exprOpvalue;
 		} else {

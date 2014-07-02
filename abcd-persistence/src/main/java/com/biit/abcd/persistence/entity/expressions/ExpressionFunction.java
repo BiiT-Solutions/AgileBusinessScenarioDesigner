@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class ExpressionFunction extends Expression {
 
 	@Enumerated(EnumType.STRING)
-	private AvailableFunctions value;
+	private AvailableFunction value;
 
 	@Override
 	public String getExpressionTableString() {
@@ -28,11 +28,11 @@ public class ExpressionFunction extends Expression {
 		return value.getValue();
 	}
 
-	public AvailableFunctions getValue() {
+	public AvailableFunction getValue() {
 		return value;
 	}
 
-	public void setValue(AvailableFunctions function) {
+	public void setValue(AvailableFunction function) {
 		this.value = function;
 	}
 

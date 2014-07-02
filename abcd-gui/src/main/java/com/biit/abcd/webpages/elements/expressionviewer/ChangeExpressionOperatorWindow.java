@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -30,8 +30,8 @@ public class ChangeExpressionOperatorWindow extends AcceptCancelWindow {
 		operatorComboBox.setNullSelectionAllowed(false);
 
 		if (expression instanceof ExpressionOperator) {
-			for (AvailableOperators operator : ((ExpressionOperator) expression).getAcceptedValues()) {
-				if (!operator.equals(AvailableOperators.NULL)) {
+			for (AvailableOperator operator : ((ExpressionOperator) expression).getAcceptedValues()) {
+				if (!operator.equals(AvailableOperator.NULL)) {
 					operatorComboBox.addItem(operator);
 				}
 			}
@@ -45,7 +45,7 @@ public class ChangeExpressionOperatorWindow extends AcceptCancelWindow {
 		return layout;
 	}
 
-	public AvailableOperators getOperator() {
-		return (AvailableOperators) operatorComboBox.getValue();
+	public AvailableOperator getOperator() {
+		return (AvailableOperator) operatorComboBox.getValue();
 	}
 }

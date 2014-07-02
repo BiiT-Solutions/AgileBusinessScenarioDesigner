@@ -3,9 +3,9 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.expressions.AvailableFunctions;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
-import com.biit.abcd.persistence.entity.expressions.AvailableSymbols;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
@@ -153,7 +153,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			public void buttonClick(ClickEvent event) {
 				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
 				try {
-					exprValue.setValue(AvailableOperators.PLUS);
+					exprValue.setValue(AvailableOperator.PLUS);
 					addExpression(exprValue);
 				} catch (NotValidOperatorInExpression e) {
 
@@ -243,7 +243,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 					@Override
 					public void buttonClick(ClickEvent event) {
 						ExpressionFunction exprValue = new ExpressionFunction();
-						exprValue.setValue(AvailableFunctions.MAX);
+						exprValue.setValue(AvailableFunction.MAX);
 						addExpression(exprValue);
 					}
 				});
@@ -299,7 +299,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			@Override
 			public void buttonClick(ClickEvent event) {
 				ExpressionSymbol exprValue = new ExpressionSymbol();
-				exprValue.setValue(AvailableSymbols.COMMA);
+				exprValue.setValue(AvailableSymbol.COMMA);
 				addExpression(exprValue);
 			}
 		});
@@ -324,7 +324,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			@Override
 			public void buttonClick(ClickEvent event) {
 				ExpressionSymbol exprValue = new ExpressionSymbol();
-				exprValue.setValue(AvailableSymbols.LEFT_BRACKET);
+				exprValue.setValue(AvailableSymbol.LEFT_BRACKET);
 				addExpression(exprValue);
 			}
 		});
@@ -336,7 +336,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			@Override
 			public void buttonClick(ClickEvent event) {
 				ExpressionSymbol exprValue = new ExpressionSymbol();
-				exprValue.setValue(AvailableSymbols.RIGHT_BRACKET);
+				exprValue.setValue(AvailableSymbol.RIGHT_BRACKET);
 				addExpression(exprValue);
 			}
 		});
@@ -349,7 +349,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 			public void buttonClick(ClickEvent event) {
 				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
 				try {
-					exprValue.setValue(AvailableOperators.ASSIGNATION);
+					exprValue.setValue(AvailableOperator.ASSIGNATION);
 					addExpression(exprValue);
 				} catch (NotValidOperatorInExpression e) {
 

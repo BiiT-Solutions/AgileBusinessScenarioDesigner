@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class ExpressionSymbol extends Expression {
 
 	@Enumerated(EnumType.STRING)
-	private AvailableSymbols value;
+	private AvailableSymbol value;
 
 	public ExpressionSymbol() {
 		super();
@@ -29,11 +29,11 @@ public class ExpressionSymbol extends Expression {
 		}
 	}
 
-	public void setValue(AvailableSymbols value) {
+	public void setValue(AvailableSymbol value) {
 		this.value = value;
 	}
 
-	public AvailableSymbols getValue() {
+	public AvailableSymbol getValue() {
 		return this.value;
 	}
 

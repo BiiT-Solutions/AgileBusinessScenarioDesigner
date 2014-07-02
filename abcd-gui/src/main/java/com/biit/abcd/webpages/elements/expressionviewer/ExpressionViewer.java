@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
@@ -120,6 +120,8 @@ public class ExpressionViewer extends CssLayout {
 									}
 								});
 							}
+						} else if (expression instanceof ExpressionOperator) {
+							
 						}
 					}
 				});
@@ -197,7 +199,7 @@ public class ExpressionViewer extends CssLayout {
 					&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
 					// Brackets always at right position in '=' symbol.
 					&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
-							.getValue().equals(AvailableOperators.ASSIGNATION))) {
+							.getValue().equals(AvailableOperator.ASSIGNATION))) {
 				index--;
 			}
 		}

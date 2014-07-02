@@ -17,14 +17,14 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 @Entity
 @Table(name = "EXPRESSION_OPERATOR_LOGIC")
 public class ExpressionOperatorLogic extends ExpressionOperator {
-	private static final List<AvailableOperators> ALLOWED_OPERATORS = new ArrayList<AvailableOperators>(Arrays.asList(
-			AvailableOperators.NULL, AvailableOperators.AND, AvailableOperators.OR, AvailableOperators.EQUALS, AvailableOperators.NOT_EQUALS,
-			AvailableOperators.LESS_EQUALS, AvailableOperators.LESS_THAN, AvailableOperators.GREATER_EQUALS, AvailableOperators.GREATER_THAN));
+	private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<AvailableOperator>(Arrays.asList(
+			AvailableOperator.NULL, AvailableOperator.AND, AvailableOperator.OR, AvailableOperator.EQUALS, AvailableOperator.NOT_EQUALS,
+			AvailableOperator.LESS_EQUALS, AvailableOperator.LESS_THAN, AvailableOperator.GREATER_EQUALS, AvailableOperator.GREATER_THAN));
 
 	public ExpressionOperatorLogic() {
 		super();
 		try {
-			setValue(AvailableOperators.NULL);
+			setValue(AvailableOperator.NULL);
 		} catch (NotValidOperatorInExpression e) {
 			// This should never happen
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -37,7 +37,7 @@ public class ExpressionOperatorLogic extends ExpressionOperator {
 	}
 
 	@Override
-	public List<AvailableOperators> getAcceptedValues() {
+	public List<AvailableOperator> getAcceptedValues() {
 		return ALLOWED_OPERATORS;
 	}
 

@@ -1,6 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-public enum AvailableOperators {
+public enum AvailableOperator {
 
 	NULL("NULL", "CLEAR"),
 
@@ -35,7 +35,7 @@ public enum AvailableOperators {
 	private String value;
 	private String caption;
 
-	private AvailableOperators(String value, String caption) {
+	private AvailableOperator(String value, String caption) {
 		this.value = value;
 		this.caption = caption;
 	}
@@ -53,8 +53,8 @@ public enum AvailableOperators {
 		return value;
 	}
 
-	public static AvailableOperators getOperator(String value) {
-		for (AvailableOperators operator : AvailableOperators.values()) {
+	public static AvailableOperator getOperator(String value) {
+		for (AvailableOperator operator : AvailableOperator.values()) {
 			if (operator.caption.equals(value)) {
 				return operator;
 			}
