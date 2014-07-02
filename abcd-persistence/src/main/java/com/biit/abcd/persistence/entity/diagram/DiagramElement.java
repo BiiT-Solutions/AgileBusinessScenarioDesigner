@@ -140,7 +140,9 @@ public abstract class DiagramElement extends DiagramObject {
 			if (biitText == null && element.biitText != null) {
 				biitText = element.biitText;
 			} else {
-				biitText.setText(element.getBiitText().getText());
+				if (element.getBiitText().getText() != null) {
+					biitText.setText(element.getBiitText().getText());
+				}
 				biitText.setFill(element.getBiitText().getFill());
 				biitText.setFontSize(element.getBiitText().getFontSize());
 				biitText.setStroke(element.getBiitText().getStroke());

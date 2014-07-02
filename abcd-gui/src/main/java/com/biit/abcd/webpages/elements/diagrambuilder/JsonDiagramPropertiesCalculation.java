@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -25,8 +26,10 @@ public class JsonDiagramPropertiesCalculation extends PropertiesForClassComponen
 	public void setElementAbstract(DiagramCalculation element) {
 		instance = element;
 
-		fieldWithSearchButton = new FieldWithSearchButton("Question");
-		fieldWithSearchButton.setNullCaption("Calculation");
+		fieldWithSearchButton = new FieldWithSearchButton(
+				ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_CAPTION));
+		fieldWithSearchButton.setNullCaption(ServerTranslate
+				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
 		if (instance.getFormExpression() != null) {
 			fieldWithSearchButton.setValue(instance.getFormExpression(), instance.getFormExpression().getName());

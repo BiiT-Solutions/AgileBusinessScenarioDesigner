@@ -30,10 +30,10 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 			if(fork.getQuestion()!=null){
 				if(fork.getQuestion().getAnswerType() == AnswerType.INPUT ){
 					//Fill input field value (Expression?)
-					
+					//TODO
 				}else{
 					//Select question/others
-					
+					//TODO
 				}
 			}
 		} else {
@@ -52,7 +52,7 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 	@Override
 	public void updateElement() {
 		if (instance.getSourceElement() instanceof DiagramFork) {
-			
+			//TODO
 		}else{
 			instance.setText(diagramElementLabel.getValue());
 		}

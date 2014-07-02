@@ -283,7 +283,13 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_MIN("expression.button.min"),
 	EXPRESSION_BUTTON_ABS("expression.button.abs"),
 	EXPRESSION_BUTTON_ROUND("expression.button.round"),
-	EXPRESSION_BUTTON_SQRT("expression.button.sqrt");
+	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"), 
+	
+	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_CAPTION("json.diagram.properties.calculation.expression.caption"),
+	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION("json.diagram.properties.calculation.expression.null.caption"),
+	JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION("json.diagram.properties.fork.question.caption"), 
+	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION("json.diagram.properties.sink.expression.caption"), 
+	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION("json.diagram.properties.sink.expression.null.caption");
 	
 	
 	
