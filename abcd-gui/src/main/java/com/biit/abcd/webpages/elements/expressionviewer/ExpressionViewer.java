@@ -3,6 +3,8 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import java.util.HashMap;
 import java.util.List;
 
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperators;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
@@ -15,8 +17,10 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 public class ExpressionViewer extends CssLayout {
@@ -26,6 +30,7 @@ public class ExpressionViewer extends CssLayout {
 	private Expression selectedExpression = null;
 	private VerticalLayout rootLayout;
 	private HashMap<ExpressionElement, Expression> expressionOfElement;
+	private Label evaluatorOutput;
 
 	public ExpressionViewer() {
 		setImmediate(true);
@@ -52,6 +57,9 @@ public class ExpressionViewer extends CssLayout {
 
 		this.formExpression = formExpression;
 
+		// Evaluator
+		HorizontalLayout evaluatorLayout = createEvaluatorLayout();
+
 		// One line for the expressions.
 		HorizontalLayout lineLayout = new HorizontalLayout();
 		lineLayout.setMargin(false);
@@ -61,10 +69,18 @@ public class ExpressionViewer extends CssLayout {
 
 		addExpressions(lineLayout, formExpression.getExpressions());
 
+		rootLayout.addComponent(evaluatorLayout);
+		// If expand ratio is 0, component is not shown.
+		rootLayout.setExpandRatio(evaluatorLayout, 0.00001f);
+		rootLayout.setComponentAlignment(evaluatorLayout, Alignment.BOTTOM_RIGHT);
+
 		rootLayout.addComponent(lineLayout);
+		rootLayout.setExpandRatio(lineLayout, 0.99999f);
 		updateExpressionSelectionStyles();
 
 		addComponent(rootLayout);
+
+		updateEvaluator();
 	}
 
 	private void addExpressions(HorizontalLayout lineLayout, List<Expression> expressions) {
@@ -84,14 +100,15 @@ public class ExpressionViewer extends CssLayout {
 						// Double click open operator popup.
 						if (expression instanceof ExpressionOperator) {
 							if (event.isDoubleClick()) {
-								final ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(expression);
+								final ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
+										expression);
 								operatorWindow.showCentered();
 								operatorWindow.addAcceptAcctionListener(new AcceptActionListener() {
 									@Override
 									public void acceptAction(AcceptCancelWindow window) {
 										try {
-											((ExpressionOperator) expression).setValue(((ChangeExpressionOperatorWindow) window)
-													.getOperator());
+											((ExpressionOperator) expression)
+													.setValue(((ChangeExpressionOperatorWindow) window).getOperator());
 											operatorWindow.close();
 											updateExpression();
 											setSelectedExpression(expression);
@@ -195,5 +212,30 @@ public class ExpressionViewer extends CssLayout {
 
 	public FormExpression getFormExpression() {
 		return formExpression;
+	}
+
+	private void updateEvaluator() {
+		try {
+			formExpression.getExpressionEvaluator().eval();
+			evaluatorOutput.setStyleName("expression-valid");
+			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
+		} catch (Exception e) {
+			evaluatorOutput.setStyleName("expression-invalid");
+			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
+		}
+	}
+
+	private HorizontalLayout createEvaluatorLayout() {
+		HorizontalLayout checkerLayout = new HorizontalLayout();
+		checkerLayout.setMargin(false);
+		checkerLayout.setSpacing(false);
+		checkerLayout.setSizeFull();
+
+		evaluatorOutput = new Label();
+		evaluatorOutput.setSizeUndefined();
+		checkerLayout.addComponent(evaluatorOutput);
+		checkerLayout.setComponentAlignment(evaluatorOutput, Alignment.TOP_RIGHT);
+
+		return checkerLayout;
 	}
 }
