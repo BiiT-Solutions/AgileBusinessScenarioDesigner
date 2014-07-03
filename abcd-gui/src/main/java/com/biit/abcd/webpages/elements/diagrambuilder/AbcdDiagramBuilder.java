@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
-import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
@@ -29,21 +28,15 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 			@Override
 			public void nodePickedListener(String jsonString) {
-				System.out.println("Check this string: " + jsonString);
 				if (jsonString == null) {
 					fireDiagramObjectPickedListeners(null);
 					return;
 				}
 				DiagramElement tempElement = DiagramElement.fromJson(jsonString);
 				if (diagramElements.containsKey(tempElement.getJointjsId())) {
-					System.out.println("kwnown element");
 					DiagramElement currentElement = (DiagramElement) diagramElements.get(tempElement.getJointjsId());
-					if (currentElement instanceof DiagramFork) {
-						System.out.println("kwnown element, fork: " + ((DiagramFork) currentElement).getQuestion());
-					}
 					fireDiagramObjectPickedListeners(currentElement);
 				} else {
-					System.out.println("new element");
 					diagram.getDiagramObjects().add(tempElement);
 					diagramElements.put(tempElement.getJointjsId(), tempElement);
 					fireDiagramObjectPickedListeners(tempElement);
@@ -57,12 +50,9 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					return;
 				}
 				DiagramLink tempLink = DiagramLink.fromJson(jsonString);
-				System.out.println("Select element: " + tempLink.getJointjsId());
 				if (diagramElements.containsKey(tempLink.getJointjsId())) {
-					System.out.println("kwnown element");
 					fireDiagramObjectPickedListeners(diagramElements.get(tempLink.getJointjsId()));
 				} else {
-					System.out.println("new element");
 					diagram.getDiagramObjects().add(tempLink);
 					diagramElements.put(tempLink.getJointjsId(), tempLink);
 					fireDiagramObjectPickedListeners(tempLink);
@@ -159,7 +149,6 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	}
 
 	public void updateChangesToDiagram(DiagramObject element) {
-		System.out.println("updateChangesToDiagram");
 		if (element instanceof DiagramElement) {
 			updateCellJson(((DiagramObject) element).toJson());
 		} else {

@@ -14,6 +14,14 @@ public class DiagramSink  extends DiagramElement{
 	@ManyToOne(fetch = FetchType.EAGER)
 	private FormExpression formExpression;
 	
+	public FormExpression getFormExpression() {
+		return formExpression;
+	}
+
+	public void setFormExpression(FormExpression formExpression) {
+		this.formExpression = formExpression;
+	}
+
 	public DiagramSink() {
 		super();
 		DiagramBiitText biitText = new DiagramBiitText();

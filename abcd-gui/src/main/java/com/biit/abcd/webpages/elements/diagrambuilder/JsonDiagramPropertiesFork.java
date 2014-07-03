@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -26,7 +27,7 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 	public void setElementAbstract(DiagramFork element) {
 		instance = element;
 
-		fieldWithSearchButton = new FieldWithSearchButton("Question");
+		fieldWithSearchButton = new FieldWithSearchButton(ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION));
 		fieldWithSearchButton.setNullCaption("Fork");
 		fieldWithSearchButton.setValue(null);
 		if (instance.getQuestion() != null) {
