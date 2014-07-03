@@ -12,7 +12,7 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectExpressionTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
-import com.biit.abcd.webpages.elements.expressionviewer.WindoNewExpression;
+import com.biit.abcd.webpages.elements.expressionviewer.WindowNewExpression;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -93,7 +93,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				UI.getCurrent().addWindow(
-						new WindoNewExpression(thisPage, LanguageCodes.BOTTOM_MENU_FORM_MANAGER,
+						new WindowNewExpression(thisPage, LanguageCodes.BOTTOM_MENU_FORM_MANAGER,
 								LanguageCodes.WINDOW_NEW_EXPRESSION_TEXTFIELD));
 			}
 
