@@ -12,7 +12,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 public abstract class TabLayout extends VerticalLayout {
 	private static final long serialVersionUID = -7278902256434884118L;
-	protected static final String BUTTON_WIDTH = "80px";
+	protected static final String BUTTON_WIDTH = "100%";
 	protected static final String FORM_BUTTON_WIDTH = "160px";
 
 	private List<ElementAddedListener> elementAddedListener;

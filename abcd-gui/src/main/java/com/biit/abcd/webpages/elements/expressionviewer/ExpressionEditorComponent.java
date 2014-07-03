@@ -40,8 +40,8 @@ public class ExpressionEditorComponent extends CustomComponent {
 		rootLayout.addComponent(viewLayout);
 		// rootLayout.addComponent(expressionEditorProperties);
 		rootLayout.addComponent(tabMenu);
-		rootLayout.setExpandRatio(viewLayout, 0.75f);
-		rootLayout.setExpandRatio(tabMenu, 0.25f);
+		rootLayout.setExpandRatio(viewLayout, 0.80f);
+		rootLayout.setExpandRatio(tabMenu, 0.20f);
 
 		setCompositionRoot(rootLayout);
 	}

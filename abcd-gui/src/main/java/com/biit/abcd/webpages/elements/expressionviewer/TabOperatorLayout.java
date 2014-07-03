@@ -18,7 +18,7 @@ import com.vaadin.ui.GridLayout;
 
 public class TabOperatorLayout extends TabLayout {
 	private static final long serialVersionUID = -6980953550185164306L;
-	private static final int GRID_COLUMNS = 2;
+	private static final int GRID_COLUMNS = 3;
 
 	public TabOperatorLayout() {
 		createMathOperators();
@@ -96,7 +96,7 @@ public class TabOperatorLayout extends TabLayout {
 		potButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprAtomicMathLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprAtomicMathLayout.setWidth(null);
+		exprAtomicMathLayout.setWidth("100%");
 		exprAtomicMathLayout.addComponent(plusButton);
 		exprAtomicMathLayout.addComponent(minusButton);
 		exprAtomicMathLayout.addComponent(multButton);
@@ -190,7 +190,7 @@ public class TabOperatorLayout extends TabLayout {
 		commaButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprFunctionLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprFunctionLayout.setWidth(null);
+		exprFunctionLayout.setWidth("100%");
 		exprFunctionLayout.addComponent(maxButton);
 		exprFunctionLayout.addComponent(minimumButton);
 		exprFunctionLayout.addComponent(absoluteButton);
@@ -243,7 +243,7 @@ public class TabOperatorLayout extends TabLayout {
 		assignButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprBaseLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprBaseLayout.setWidth(null);
+		exprBaseLayout.setWidth("100%");
 		exprBaseLayout.addComponent(leftBracketButton);
 		exprBaseLayout.addComponent(rightBracketButton);
 		exprBaseLayout.addComponent(assignButton);
@@ -342,7 +342,7 @@ public class TabOperatorLayout extends TabLayout {
 		distinctButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprLogicLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprLogicLayout.setWidth(null);
+		exprLogicLayout.setWidth("100%");
 		exprLogicLayout.addComponent(andButton);
 		exprLogicLayout.addComponent(orButton);
 		exprLogicLayout.addComponent(greaterThanButton);

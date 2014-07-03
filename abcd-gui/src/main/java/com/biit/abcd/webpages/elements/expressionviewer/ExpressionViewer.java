@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
@@ -300,7 +301,6 @@ public class ExpressionViewer extends CssLayout {
 			evaluatorOutput.setStyleName("expression-valid");
 			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			AbcdLogger.debug(ExpressionViewer.class.getName(), e.getMessage());
 			evaluatorOutput.setStyleName("expression-invalid");
 			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
