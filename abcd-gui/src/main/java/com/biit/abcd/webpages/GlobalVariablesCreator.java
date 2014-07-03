@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
 
@@ -107,7 +106,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 					private static final long serialVersionUID = -1957065660286348445L;
 					@Override
 					public void windowClose(CloseEvent e) {
-						createDataWindow();						
+						createValueDataWindow();						
 					}
 				});
 				
@@ -133,11 +132,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
-
-				if (variable != null) {
-					createDataWindow();
-				}
+				createValueDataWindow();
 			}
 		});
 		upperMenu.addRemoveValueButtonClickListener(new ClickListener() {
@@ -147,50 +142,83 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			public void buttonClick(ClickEvent event) {
 				Object selectedVariable = variableDataTable.getValue();
 				if (selectedVariable != null) {
-					variableDataTable.removeItem(selectedVariable);
-					((GlobalVariable) variableTable.getValue()).getData().remove(selectedVariable);
+					// Check if the value is the last of the list, if not, it can't be deleted
+					if(isLastValueOfVariableList(((GlobalVariable) variableTable.getValue()).getData(), selectedVariable)){
+						variableDataTable.removeItem(selectedVariable);
+						((GlobalVariable) variableTable.getValue()).getData().remove(selectedVariable);
+					}else {
+						MessageManager.showWarning(LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID_TITLE,
+								LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID);
+					}
 				} else {
 					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
 							LanguageCodes.WARNING_SELECT_VARIABLE_DATA_TO_DELETE);
 				}
 			}
 		});
+				
 		return upperMenu;
 	}
 
-	private void createDataWindow(){
+	private void createValueDataWindow(){
 		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
 
 		if (variable != null) {
-			VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
-					ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
-			
-			// If the global variable has values, we manage the
-			// "value from"/"value to" properties
-			List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
-			if(auxVariableList.size() > 0){
-				// Set the "value from" value related to the previous one
-				VariableData auxVariableData = auxVariableList.get(auxVariableList.size()-1);
-				Date auxDate = new Date(auxVariableData.getValidTo().getTime());
-				variableDataWindow.setValidFromValue(DateManager.incrementDateOneDay(auxDate));
-				// Disable the "value from" data field
-				variableDataWindow.setValidFromEditable(false);
-			}
-			
-			variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
-				@Override
-				public void acceptAction(AcceptCancelWindow window) {
-					VariableData variableData = ((VariableDataWindow) window).getValue();
-					if (variableData != null) {
-						// Add item.
-						variableDataTable.addItem((VariableData) variableData);
-						((GlobalVariable) variableTable.getValue()).getData().add(variableData);
-					}
-					window.close();
+			// Check if the previous value has "value to" set to infinite
+			if(isLastValueToInfinite(variable)){
+				MessageManager.showWarning(LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INFINITE_VALUE_TITLE,
+						LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INFINITE_VALUE);
+			}else{
+				VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
+						ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
+
+				// If the global variable has values, we manage the
+				// "value from"/"value to" properties
+				List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
+				if(auxVariableList.size() > 0){
+					// Set the "value from" value related to the previous one
+					VariableData auxVariableData = auxVariableList.get(auxVariableList.size()-1);
+					Date auxDate = new Date(auxVariableData.getValidTo().getTime());
+					variableDataWindow.setValidFromValue(DateManager.incrementDateOneDay(auxDate));
+					// Disable the "value from" data field
+					variableDataWindow.setValidFromEditable(false);
 				}
-			});
-			variableDataWindow.showCentered();
+
+				variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						VariableData variableData = ((VariableDataWindow) window).getValue();
+						if (variableData != null) {
+							// Add item.
+							variableDataTable.addItem((VariableData) variableData);
+							((GlobalVariable) variableTable.getValue()).getData().add(variableData);
+						}
+						window.close();
+					}
+				});
+				variableDataWindow.showCentered();
+			}
 		}
+	}
+	
+	private boolean isLastValueOfVariableList(List<VariableData> variableDataList, Object selectedVariable){
+		int variableListSize = variableDataList.size();
+		int valuePosition = variableDataList.indexOf(selectedVariable);
+		if(variableListSize == (valuePosition+1)){
+			return true;	
+		}
+		return false;	
+	}
+	
+	private boolean isLastValueToInfinite(GlobalVariable variable){
+		List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
+		if(auxVariableList.size() > 0){
+			VariableData auxVariableData = auxVariableList.get(auxVariableList.size()-1);
+			if(auxVariableData.getValidTo() == null){
+				return true;
+			}
+		}		
+		return false;
 	}
 	
 	@Override
@@ -201,5 +229,6 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 	private void save() {
 		UserSessionHandler.getGlobalVariablesController().update(variableTable.getGlobalVariables());
+		MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 	}
 }
