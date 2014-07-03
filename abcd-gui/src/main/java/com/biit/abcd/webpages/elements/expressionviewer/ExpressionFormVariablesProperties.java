@@ -26,7 +26,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 
-public class FormExpressionProperties extends PropertiesForClassComponent<FormExpression> {
+public class ExpressionFormVariablesProperties extends PropertiesForClassComponent<FormExpression> {
 	private static final long serialVersionUID = 7252467474326157874L;
 	private static final int GRID_COLUMNS = 2;
 	protected static final String buttonWidth = "80px";
@@ -34,7 +34,7 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 	private FormExpression formExpression;
 	private Button deleteButton;
 
-	public FormExpressionProperties() {
+	public ExpressionFormVariablesProperties() {
 		super(FormExpression.class);
 		createControlsTab();
 		createBaseTab();

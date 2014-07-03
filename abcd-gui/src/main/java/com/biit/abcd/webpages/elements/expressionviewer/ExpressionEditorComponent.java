@@ -4,20 +4,26 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
+import com.biit.abcd.webpages.components.ThemeIcon;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Component for editing an expression. Is composed by a viewer and a properties menu.
+ * Component for editing an expression. Is composed by a viewer and a properties menu in tabs.
  */
 public class ExpressionEditorComponent extends CustomComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
 	private HorizontalLayout rootLayout;
 	private ExpressionViewer expressionViewer;
-	private ExpressionEditorPropertiesComponent expressionEditorProperties;
+	private TabSheet tabMenu;
+	private ExpressionEditorOperatorsPropertiesComponent expressionEditorOperatorProperties;
+	private ExpressionEditorGlobalConstantsPropertiesComponent expressionEditorGlobalConstantsProperties;
+	private ExpressionEditorFormVariablesPropertiesComponent expressionEditorFormVariablesProperties;
 
 	private FormExpression formExpression;
 
@@ -32,17 +38,34 @@ public class ExpressionEditorComponent extends CustomComponent {
 		viewLayout.setMargin(false);
 		viewLayout.setSpacing(false);
 
+		tabMenu = createTabMenu();
+
 		expressionViewer = new ExpressionViewer();
 		expressionViewer.setSizeFull();
 
-		expressionEditorProperties = new ExpressionEditorPropertiesComponent();
-		expressionEditorProperties.addPropertyUpdateListener(new PropertieUpdateListener() {
+		viewLayout.addComponent(expressionViewer);
+
+		rootLayout.addComponent(viewLayout);
+		// rootLayout.addComponent(expressionEditorProperties);
+		rootLayout.addComponent(tabMenu);
+		rootLayout.setExpandRatio(viewLayout, 0.75f);
+		rootLayout.setExpandRatio(tabMenu, 0.25f);
+
+		setCompositionRoot(rootLayout);
+	}
+
+	private TabSheet createTabMenu() {
+		TabSheet tabMenu = new TabSheet();
+		tabMenu.setHeight("100%");
+
+		expressionEditorOperatorProperties = new ExpressionEditorOperatorsPropertiesComponent();
+		expressionEditorOperatorProperties.addPropertyUpdateListener(new PropertieUpdateListener() {
 			@Override
 			public void propertyUpdate(Object element) {
 				expressionViewer.updateExpression((FormExpression) element);
 			}
 		});
-		expressionEditorProperties.addNewElementListener(new ElementAddedListener() {
+		expressionEditorOperatorProperties.addNewElementListener(new ElementAddedListener() {
 
 			@Override
 			public void elementAdded(Object newElement) {
@@ -50,20 +73,56 @@ public class ExpressionEditorComponent extends CustomComponent {
 			}
 
 		});
-		expressionEditorProperties.setSizeFull();
+		expressionEditorOperatorProperties.setSizeFull();
+		Tab tab1 = tabMenu.addTab(expressionEditorOperatorProperties);
+		// tab.setCaption(ServerTranslate.translate(LanguageCodes.ABOUT_US_BIIT));
+		tab1.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
 
-		viewLayout.addComponent(expressionViewer);
+		expressionEditorGlobalConstantsProperties = new ExpressionEditorGlobalConstantsPropertiesComponent();
+		expressionEditorGlobalConstantsProperties.addPropertyUpdateListener(new PropertieUpdateListener() {
+			@Override
+			public void propertyUpdate(Object element) {
+				expressionViewer.updateExpression((FormExpression) element);
+			}
+		});
+		expressionEditorGlobalConstantsProperties.addNewElementListener(new ElementAddedListener() {
 
-		rootLayout.addComponent(viewLayout);
-		rootLayout.addComponent(expressionEditorProperties);
-		rootLayout.setExpandRatio(viewLayout, 0.75f);
-		rootLayout.setExpandRatio(expressionEditorProperties, 0.25f);
+			@Override
+			public void elementAdded(Object newElement) {
+				expressionViewer.addElementToSelected((Expression) newElement);
+			}
 
-		setCompositionRoot(rootLayout);
+		});
+		expressionEditorGlobalConstantsProperties.setSizeFull();
+		Tab tab2 = tabMenu.addTab(expressionEditorGlobalConstantsProperties);
+		// tab.setCaption(ServerTranslate.translate(LanguageCodes.ABOUT_US_BIIT));
+		tab2.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
+
+		expressionEditorFormVariablesProperties = new ExpressionEditorFormVariablesPropertiesComponent();
+		expressionEditorFormVariablesProperties.addPropertyUpdateListener(new PropertieUpdateListener() {
+			@Override
+			public void propertyUpdate(Object element) {
+				expressionViewer.updateExpression((FormExpression) element);
+			}
+		});
+		expressionEditorFormVariablesProperties.addNewElementListener(new ElementAddedListener() {
+
+			@Override
+			public void elementAdded(Object newElement) {
+				expressionViewer.addElementToSelected((Expression) newElement);
+			}
+
+		});
+		expressionEditorFormVariablesProperties.setSizeFull();
+		Tab tab3 = tabMenu.addTab(expressionEditorFormVariablesProperties);
+		// tab.setCaption(ServerTranslate.translate(LanguageCodes.ABOUT_US_BIIT));
+		tab3.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
+
+		return tabMenu;
 	}
 
 	protected void updatePropertiesComponent(Expression value) {
-		expressionEditorProperties.updatePropertiesComponent(value);
+		expressionEditorOperatorProperties.updatePropertiesComponent(value);
 		addButtonListeners();
 	}
 
@@ -73,20 +132,13 @@ public class ExpressionEditorComponent extends CustomComponent {
 		if (selectedExpression != null) {
 			// Add table rows.
 			expressionViewer.updateExpression(selectedExpression);
-			expressionEditorProperties.updatePropertiesComponent(selectedExpression);
+			expressionEditorOperatorProperties.updatePropertiesComponent(selectedExpression);
 			addButtonListeners();
 		}
 	}
 
 	private void addButtonListeners() {
-		expressionEditorProperties.addDeleteExpressionButtonClickListener(new ClickListener() {
-			private static final long serialVersionUID = -2528193426792371129L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				expressionViewer.removeSelectedExpression();
-			}
-		});
+		
 	}
 
 }
