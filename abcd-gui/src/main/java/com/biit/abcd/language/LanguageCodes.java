@@ -289,7 +289,8 @@ public enum LanguageCodes {
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION("json.diagram.properties.calculation.expression.null.caption"),
 	JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION("json.diagram.properties.fork.question.caption"), 
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION("json.diagram.properties.sink.expression.caption"), 
-	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION("json.diagram.properties.sink.expression.null.caption");
+	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION("json.diagram.properties.sink.expression.null.caption"),
+	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption");
 	
 	
 	
