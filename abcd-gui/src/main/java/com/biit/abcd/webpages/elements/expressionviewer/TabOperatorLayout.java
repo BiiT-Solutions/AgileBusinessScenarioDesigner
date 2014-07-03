@@ -29,7 +29,7 @@ public class TabOperatorLayout extends TabLayout {
 	}
 
 	private void createMathOperators() {
-		Button plusButton = new Button("+", new ClickListener() {
+		Button plusButton = createButton("+", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
 			@Override
@@ -43,9 +43,8 @@ public class TabOperatorLayout extends TabLayout {
 				}
 			}
 		});
-		plusButton.setWidth(BUTTON_WIDTH);
 
-		Button minusButton = new Button("-", new ClickListener() {
+		Button minusButton = createButton("-", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
 			@Override
@@ -53,9 +52,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		minusButton.setWidth(BUTTON_WIDTH);
 
-		Button multButton = new Button("*", new ClickListener() {
+		Button multButton = createButton("*", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -63,9 +61,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		multButton.setWidth(BUTTON_WIDTH);
 
-		Button divButton = new Button("/", new ClickListener() {
+		Button divButton = createButton("/", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -73,9 +70,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		divButton.setWidth(BUTTON_WIDTH);
 
-		Button moduleButton = new Button("%", new ClickListener() {
+		Button moduleButton = createButton("%", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -83,9 +79,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		moduleButton.setWidth(BUTTON_WIDTH);
 
-		Button potButton = new Button("x\u207F", new ClickListener() {
+		Button potButton = createButton("x\u207F", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -93,7 +88,6 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		potButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprAtomicMathLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprAtomicMathLayout.setWidth("100%");
@@ -109,7 +103,7 @@ public class TabOperatorLayout extends TabLayout {
 	}
 
 	private void createFunctionsOperators() {
-		Button notButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT),
+		Button notButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -118,9 +112,8 @@ public class TabOperatorLayout extends TabLayout {
 
 					}
 				});
-		notButton.setWidth(BUTTON_WIDTH);
 
-		Button maxButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MAX),
+		Button maxButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MAX),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -131,9 +124,8 @@ public class TabOperatorLayout extends TabLayout {
 						addExpression(exprValue);
 					}
 				});
-		maxButton.setWidth(BUTTON_WIDTH);
 
-		Button minimumButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MIN),
+		Button minimumButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MIN),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -142,9 +134,8 @@ public class TabOperatorLayout extends TabLayout {
 
 					}
 				});
-		minimumButton.setWidth(BUTTON_WIDTH);
 
-		Button absoluteButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ABS),
+		Button absoluteButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ABS),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -153,9 +144,8 @@ public class TabOperatorLayout extends TabLayout {
 
 					}
 				});
-		absoluteButton.setWidth(BUTTON_WIDTH);
 
-		Button sqrtButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_SQRT),
+		Button sqrtButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_SQRT),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -164,9 +154,8 @@ public class TabOperatorLayout extends TabLayout {
 
 					}
 				});
-		sqrtButton.setWidth(BUTTON_WIDTH);
 
-		Button roundButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ROUND),
+		Button roundButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ROUND),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -175,9 +164,8 @@ public class TabOperatorLayout extends TabLayout {
 
 					}
 				});
-		roundButton.setWidth(BUTTON_WIDTH);
 
-		Button commaButton = new Button(",", new ClickListener() {
+		Button commaButton = createButton(",", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -187,10 +175,10 @@ public class TabOperatorLayout extends TabLayout {
 				addExpression(exprValue);
 			}
 		});
-		commaButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprFunctionLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprFunctionLayout.setWidth("100%");
+		exprFunctionLayout.addComponent(notButton);
 		exprFunctionLayout.addComponent(maxButton);
 		exprFunctionLayout.addComponent(minimumButton);
 		exprFunctionLayout.addComponent(absoluteButton);
@@ -202,7 +190,7 @@ public class TabOperatorLayout extends TabLayout {
 	}
 
 	private void createBaseTab() {
-		Button leftBracketButton = new Button("(", new ClickListener() {
+		Button leftBracketButton = createButton("(", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
 			@Override
@@ -212,9 +200,8 @@ public class TabOperatorLayout extends TabLayout {
 				addExpression(exprValue);
 			}
 		});
-		leftBracketButton.setWidth(BUTTON_WIDTH);
 
-		Button rightBracketButton = new Button(")", new ClickListener() {
+		Button rightBracketButton = createButton(")", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
 			@Override
@@ -224,9 +211,8 @@ public class TabOperatorLayout extends TabLayout {
 				addExpression(exprValue);
 			}
 		});
-		rightBracketButton.setWidth(BUTTON_WIDTH);
 
-		Button assignButton = new Button("=", new ClickListener() {
+		Button assignButton = createButton("=", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -240,7 +226,6 @@ public class TabOperatorLayout extends TabLayout {
 				}
 			}
 		});
-		assignButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprBaseLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprBaseLayout.setWidth("100%");
@@ -253,7 +238,7 @@ public class TabOperatorLayout extends TabLayout {
 	}
 
 	private void createLogicalOperators() {
-		Button andButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AND),
+		Button andButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AND),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -268,9 +253,8 @@ public class TabOperatorLayout extends TabLayout {
 						}
 					}
 				});
-		andButton.setWidth(BUTTON_WIDTH);
 
-		Button orButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_OR),
+		Button orButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_OR),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
 
@@ -279,9 +263,8 @@ public class TabOperatorLayout extends TabLayout {
 
 					}
 				});
-		orButton.setWidth(BUTTON_WIDTH);
 
-		Button greaterThanButton = new Button(">", new ClickListener() {
+		Button greaterThanButton = createButton(">", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -289,9 +272,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		greaterThanButton.setWidth(BUTTON_WIDTH);
 
-		Button greaterEqualsButton = new Button("\u2265", new ClickListener() {
+		Button greaterEqualsButton = createButton("\u2265", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -299,9 +281,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		greaterEqualsButton.setWidth(BUTTON_WIDTH);
 
-		Button lessThanButton = new Button("<", new ClickListener() {
+		Button lessThanButton = createButton("<", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -309,9 +290,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		lessThanButton.setWidth(BUTTON_WIDTH);
 
-		Button lessEqualsButton = new Button("\u2264", new ClickListener() {
+		Button lessEqualsButton = createButton("\u2264", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -319,9 +299,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		lessEqualsButton.setWidth(BUTTON_WIDTH);
 
-		Button equalsButton = new Button("==", new ClickListener() {
+		Button equalsButton = createButton("==", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -329,9 +308,8 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		equalsButton.setWidth(BUTTON_WIDTH);
 
-		Button distinctButton = new Button("!=", new ClickListener() {
+		Button distinctButton = createButton("!=", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -339,7 +317,6 @@ public class TabOperatorLayout extends TabLayout {
 
 			}
 		});
-		distinctButton.setWidth(BUTTON_WIDTH);
 
 		GridLayout exprLogicLayout = new GridLayout(GRID_COLUMNS, 4);
 		exprLogicLayout.setWidth("100%");
@@ -354,6 +331,13 @@ public class TabOperatorLayout extends TabLayout {
 
 		addComponent(exprLogicLayout);
 		setComponentAlignment(exprLogicLayout, Alignment.MIDDLE_CENTER);
+	}
+
+	private Button createButton(String caption, ClickListener listener) {
+		Button button = new Button(caption, listener);
+		button.setWidth(BUTTON_WIDTH);
+		button.addStyleName("v-expression-button-selector");
+		return button;
 	}
 
 }

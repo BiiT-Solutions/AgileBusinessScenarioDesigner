@@ -285,6 +285,9 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_ROUND("expression.button.round"),
 	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"), 
 	
+	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
+	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE("expression.form.variable.addvariable"),
+	
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_CAPTION("json.diagram.properties.calculation.expression.caption"),
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION("json.diagram.properties.calculation.expression.null.caption"),
 	JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION("json.diagram.properties.fork.question.caption"), 
