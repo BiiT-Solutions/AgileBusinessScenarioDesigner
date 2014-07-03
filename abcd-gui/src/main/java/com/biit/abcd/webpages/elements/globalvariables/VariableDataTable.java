@@ -43,8 +43,14 @@ public class VariableDataTable extends Table {
 		item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue());
 		item.getItemProperty(Properties.VARIABLE_VALID_FROM).setValue(
 				DateManager.convertDateToString(variableData.getValidFrom(), DateManager.DATE_FORMAT_SIMPLE));
-		item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(
-				DateManager.convertDateToString(variableData.getValidTo(), DateManager.DATE_FORMAT_SIMPLE));
+		
+		if(variableData.getValidTo() == null){
+			// Value set to infinite (null)
+			item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(null);
+		}else{
+			item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(
+					DateManager.convertDateToString(variableData.getValidTo(), DateManager.DATE_FORMAT_SIMPLE));
+		}
 		return item;
 	}
 
