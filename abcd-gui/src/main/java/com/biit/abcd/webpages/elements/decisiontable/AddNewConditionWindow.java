@@ -9,10 +9,10 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.webpages.components.SelectionTreeObjectTableWindow;
+import com.biit.abcd.webpages.components.SelectTreeObjectTableWindow;
 import com.vaadin.ui.Component;
 
-public class AddNewConditionWindow extends SelectionTreeObjectTableWindow {
+public class AddNewConditionWindow extends SelectTreeObjectTableWindow {
 	private static final long serialVersionUID = 6781910083959136654L;
 
 	public AddNewConditionWindow(Form form, boolean multiselect) {

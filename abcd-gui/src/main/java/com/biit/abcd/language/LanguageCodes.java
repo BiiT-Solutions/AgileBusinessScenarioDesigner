@@ -162,6 +162,7 @@ public enum LanguageCodes {
 	ERROR_SELECT_QUESTION("error.select.question"),
 	ERROR_SELECT_TABLE("error.select.table"),
 	ERROR_SELECT_EXPRESSION("error.select.expression"),
+	ERROR_SELECT_ANSWER("error.select.answer"),
 	
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
@@ -290,7 +291,8 @@ public enum LanguageCodes {
 	JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION("json.diagram.properties.fork.question.caption"), 
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION("json.diagram.properties.sink.expression.caption"), 
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION("json.diagram.properties.sink.expression.null.caption"),
-	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption");
+	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption"),
+	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION("json.diagram.properties.link.field.null.caption");
 	
 	
 	

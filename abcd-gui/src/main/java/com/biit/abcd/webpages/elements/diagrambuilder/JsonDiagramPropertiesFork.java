@@ -47,7 +47,6 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 							fieldWithSearchButton.setValue(questionWindow.getValue().getReference(), questionWindow
 									.getValue().getReference().getName());
 							instance.setQuestion((Question) questionWindow.getValue().getReference());
-							instance.getBiitText().setText(instance.getQuestion().getName());
 							firePropertyUpdateListener(instance);
 							window.close();
 						} else {
@@ -64,7 +63,6 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 			@Override
 			public void buttonClick(ClickEvent event) {
 				instance.setQuestion(null);
-				instance.getBiitText().setText("Fork");
 				firePropertyUpdateListener(instance);
 			}
 		});

@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -154,5 +156,9 @@ public abstract class DiagramElement extends DiagramObject {
 	@Override
 	public String toString() {
 		return "Element: " + getJointjsId() + " " + getType().getJsonType();
+	}
+
+	public List<DiagramLink> getOutgoingLinks() {
+		return getParent().getOutgoingLinks(this);
 	}
 }

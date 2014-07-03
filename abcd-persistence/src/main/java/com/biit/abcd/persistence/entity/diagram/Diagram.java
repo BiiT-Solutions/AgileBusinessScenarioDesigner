@@ -146,4 +146,22 @@ public class Diagram extends StorableObject {
 		return null;
 	}
 
+	/**
+	 * Retrieves all links of a specific Diagram Element.
+	 * @param source
+	 * @return
+	 */
+	public List<DiagramLink> getOutgoingLinks(DiagramElement source) {
+		List<DiagramLink> links = new ArrayList<>();
+		for(DiagramObject element: diagramElements){
+			if(element instanceof DiagramLink){
+				DiagramLink link = (DiagramLink) element;
+				if(link.getSource().getJointjsId().equals(source.getJointjsId())){
+					links.add(link);
+				}
+			}
+		}
+		return links;
+	}
+
 }

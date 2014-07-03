@@ -9,13 +9,14 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressio
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
-	private FormAnswerTable formAnswerTable;
+	private SelectFormAnswerTable formAnswerTable;
 	private ExpressionEditorComponent expressionEditorComponent;
 	private FormExpression expression;
 

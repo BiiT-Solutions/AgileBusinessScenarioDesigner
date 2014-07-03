@@ -6,14 +6,14 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.abcd.webpages.elements.decisiontable.FormAnswerTable;
+import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 public class AddNewExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
-	private FormAnswerTable formAnswerTable;
+	private SelectFormAnswerTable formAnswerTable;
 	private ExpressionEditorComponent expressionEditorComponent;
 	private FormExpression expression;
 

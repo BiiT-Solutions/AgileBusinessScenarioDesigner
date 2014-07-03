@@ -45,7 +45,6 @@ public class JsonDiagramPropertiesTable extends PropertiesForClassComponent<Diag
 							fieldWithSearchButton.setValue(tableWindow.getSelectedTableRule(), tableWindow
 									.getSelectedTableRule().getName());
 							instance.setTable(tableWindow.getSelectedTableRule());
-							instance.getBiitText().setText(instance.getTable().getName());
 							firePropertyUpdateListener(instance);
 							window.close();
 						} else {
@@ -62,7 +61,6 @@ public class JsonDiagramPropertiesTable extends PropertiesForClassComponent<Diag
 			@Override
 			public void buttonClick(ClickEvent event) {
 				instance.setTable(null);
-				instance.getBiitText().setText("Table");
 				firePropertyUpdateListener(instance);
 			}
 		});

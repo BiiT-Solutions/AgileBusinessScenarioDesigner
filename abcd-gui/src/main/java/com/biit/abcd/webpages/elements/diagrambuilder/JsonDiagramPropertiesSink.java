@@ -47,7 +47,6 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 							fieldWithSearchButton.setValue(formExpressionWindow.getSelectedExpression(),
 									formExpressionWindow.getSelectedExpression().getName());
 							instance.setFormExpression(formExpressionWindow.getSelectedExpression());
-							instance.getBiitText().setText(instance.getFormExpression().getExpressionTableString());
 							firePropertyUpdateListener(instance);
 							window.close();
 						} else {
@@ -64,7 +63,6 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 			@Override
 			public void buttonClick(ClickEvent event) {
 				instance.setFormExpression(null);
-				instance.getBiitText().setText("Sink");
 				firePropertyUpdateListener(instance);
 			}
 		});

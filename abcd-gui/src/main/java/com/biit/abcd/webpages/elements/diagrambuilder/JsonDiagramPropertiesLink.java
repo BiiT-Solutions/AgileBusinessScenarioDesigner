@@ -1,13 +1,19 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
+import com.biit.abcd.webpages.components.SelectAnswerWindow;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
@@ -69,10 +75,10 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 		linkForm.addComponent(inputFieldValue);
 	}
 
-	private void setSelectAnswer(Question question) {
+	private void setSelectAnswer(final Question question) {
 		fieldWithSearchButton = new FieldWithSearchButton(
 				ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION));
-		fieldWithSearchButton.setNullCaption("others");
+		fieldWithSearchButton.setNullCaption(ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
 		if (instance.getAnswer() != null) {
 			fieldWithSearchButton.setValue(instance.getAnswer(), instance.getAnswer().getName());
@@ -82,8 +88,24 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				
+				final SelectAnswerWindow selectAnswerWindow = new SelectAnswerWindow(question);
+				selectAnswerWindow.addAcceptAcctionListener(new AcceptActionListener() {
+
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						Answer answer = selectAnswerWindow.getSelectedTableValue();
+						if(answer!=null){
+							instance.setAnswer(answer);
+							instance.setText(answer.getName());
+							fieldWithSearchButton.setValue(answer, answer.getName());
+							selectAnswerWindow.close();
+							firePropertyUpdateListener(instance);
+						}else{
+							MessageManager.showError(LanguageCodes.ERROR_SELECT_ANSWER);
+						}
+					}
+				});
+				selectAnswerWindow.showCentered();
 			}
 		});
 		fieldWithSearchButton.addRemoveClickListener(new ClickListener() {
@@ -92,9 +114,11 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 			@Override
 			public void buttonClick(ClickEvent event) {
 				instance.setAnswer(null);
-				instance.setText("others");
+				instance.setText("");
+				firePropertyUpdateListener(instance);
 			}
 		});
+		linkForm.addComponent(fieldWithSearchButton);
 	}
 
 	private void updateDiagramElementLabel() {
@@ -103,20 +127,18 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 
 	@Override
 	public void updateElement() {
-		if (instance.getSourceElement() instanceof DiagramFork) {
-			if (instance.getAnswer() == null
-					&& (instance.getAnswerExpression() == null || instance.getAnswerExpression().isEmpty())) {
-				instance.setText("others");
-			}
-			if (instance.getAnswer() != null) {
-				instance.setText(instance.getAnswer().getName());
-			}
-			if (instance.getAnswerExpression() != null) {
-				instance.setText(instance.getAnswerExpression());
+		DiagramElement element = instance.getSourceElement();
+		if (element instanceof DiagramFork) {
+			DiagramFork fork = (DiagramFork) element;
+			if(fork.getQuestion()!=null){
+				if(fork.getQuestion().getAnswerType()==AnswerType.INPUT){
+					instance.setAnswerExpression(inputFieldValue.getValue());
+				}
 			}
 		} else {
 			updateDiagramElementLabel();
 		}
+		firePropertyUpdateListener(instance);
 	}
 
 	@Override
