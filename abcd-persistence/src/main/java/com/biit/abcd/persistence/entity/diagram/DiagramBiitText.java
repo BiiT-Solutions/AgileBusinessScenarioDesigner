@@ -28,7 +28,7 @@ public class DiagramBiitText extends StorableObject {
 	private String strokeWidth;
 
 	public DiagramBiitText() {
-		text = "";
+		//text = "";
 		fill = "#000000";
 		fontSize = "16";
 		stroke = "#000000";

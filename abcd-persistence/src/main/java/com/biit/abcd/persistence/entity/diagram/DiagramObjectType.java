@@ -26,7 +26,6 @@ public enum DiagramObjectType {
 				return value;
 			}
 		}
-		System.out.println("Error: diagramObjectType es nulo");
 		return null;
 	}
 }

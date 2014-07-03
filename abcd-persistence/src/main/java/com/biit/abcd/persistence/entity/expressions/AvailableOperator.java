@@ -4,9 +4,9 @@ public enum AvailableOperator {
 
 	NULL("NULL", "CLEAR"),
 
-	AND("AND", "AND"),
+	AND("&&", "AND"),
 
-	OR("OR", "OR"),
+	OR("||", "OR"),
 
 	EQUALS("==", "=="),
 
@@ -50,7 +50,7 @@ public enum AvailableOperator {
 
 	@Override
 	public String toString() {
-		return value;
+		return caption;
 	}
 
 	public static AvailableOperator getOperator(String value) {

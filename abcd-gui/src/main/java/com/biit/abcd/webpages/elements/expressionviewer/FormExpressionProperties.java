@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
@@ -55,7 +56,13 @@ public class FormExpressionProperties extends PropertiesForClassComponent<FormEx
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						ExpressionOperatorLogic exprValue = new ExpressionOperatorLogic();
+						try {
+							exprValue.setValue(AvailableOperator.AND);
+							addExpression(exprValue);
+						} catch (NotValidOperatorInExpression e) {
 
+						}
 					}
 				});
 		andButton.setWidth(buttonWidth);
