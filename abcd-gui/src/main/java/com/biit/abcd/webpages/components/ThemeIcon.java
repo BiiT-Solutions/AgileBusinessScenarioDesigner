@@ -148,9 +148,9 @@ public enum ThemeIcon {
 
 	GLOBAL_VARIABLES_REMOVE_VARIABLE("appbar.notification.remove.svg"),
 
-	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.svg"),
+	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.watch.svg"),
 
-	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.remove.svg"),
+	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.remove.watch.svg"),
 
 	FORM_VARIABLES("appbar.form.variables.svg"),
 
