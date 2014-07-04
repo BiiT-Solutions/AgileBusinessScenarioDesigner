@@ -9,11 +9,13 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ListSelect;
 
@@ -35,6 +37,18 @@ public class TabFormVariablesLayout extends TabLayout {
 		setExpandRatio(formQuestionTable, 0.5f);
 		addTreeObjectButton = new Button(
 				ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT));
+		addTreeObjectButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = -4754466212065015629L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if (formQuestionTable.getValue() != null) {
+					ExpressionValueTreeObjectReference formReference = new ExpressionValueTreeObjectReference();
+					formReference.setReference((TreeObject) formQuestionTable.getValue());
+					addExpression(formReference);
+				}
+			}
+		});
 		addComponent(addTreeObjectButton);
 		setComponentAlignment(addTreeObjectButton, Alignment.TOP_RIGHT);
 		initializeVariableSelection();
@@ -42,6 +56,19 @@ public class TabFormVariablesLayout extends TabLayout {
 		setExpandRatio(variableSelection, 0.5f);
 		addVariableButton = new Button(
 				ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE));
+		addVariableButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = 305156770292048868L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if (variableSelection.getValue() != null && formQuestionTable.getValue() != null) {
+					ExpressionValueFormCustomVariable formVariableReference = new ExpressionValueFormCustomVariable(
+							(TreeObject) formQuestionTable.getValue(), (CustomVariable) variableSelection.getValue());
+					addExpression(formVariableReference);
+				}
+			}
+
+		});
 		addComponent(addVariableButton);
 		setComponentAlignment(addVariableButton, Alignment.TOP_RIGHT);
 
