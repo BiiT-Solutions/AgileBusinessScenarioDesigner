@@ -8,6 +8,11 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
+import com.biit.abcd.persistence.entity.globalvariables.VariableDataDate;
+import com.biit.abcd.persistence.entity.globalvariables.VariableDataNumber;
+import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalCode;
+import com.biit.abcd.persistence.entity.globalvariables.VariableDataText;
+import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -25,12 +30,14 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	private AbstractField<?> valueField;
 	private DateField validFrom;
 	private DateField validTo;
+	private AnswerFormat format;
 	
 	public VariableDataWindow(AnswerFormat format, String title) {
 		super();
 		setHeight(HEIGHT);
 		setWidth(WIDTH);
-		setContent(generateContent(format));
+		this.format = format;
+		setContent(generateContent());
 		setModal(true);
 		setClosable(false);
 		setDraggable(false);
@@ -38,7 +45,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		setCaption(title);
 	}
 
-	private Component generateContent(AnswerFormat format) {
+	private Component generateContent() {
 		HorizontalLayout rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(true);
@@ -74,9 +81,8 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	}
 
 	public VariableData getValue() {
-		VariableData variableData = new VariableData();
-		// TODO add not valid condition.
-		if (valueField.getValue() == null /* || not valid */) {
+		VariableData variableData = createVariable();
+		if (valueField.getValue() == null  || !isValueFieldTypeCorrect()) {
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALUE_MISSING);
 			return null;
 		}
@@ -91,7 +97,12 @@ public class VariableDataWindow extends AcceptCancelWindow {
 			return null;
 		}
 
-		variableData.setValue(valueField.getValue().toString());
+		try {
+			variableData.setValue(valueField.getValue());
+		} catch (NotValidTypeInVariableData e) {
+			MessageManager.showError(e.getMessage());
+		}
+		
 		variableData.setValidFrom(new Timestamp(validFrom.getValue().getTime()));
 		
 		if (validTo == null || validTo.getValue() == null){
@@ -109,5 +120,55 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	
 	public void setValidFromValue(Date newDate) {
 		validFrom.setValue(newDate);
+	}
+	
+	public void setValue(VariableData variable){
+		if(variable instanceof VariableDataText){
+			((TextField)valueField).setValue(((VariableDataText)variable).getValue());
+		}
+		else if(variable instanceof VariableDataNumber){
+			((TextField)valueField).setValue(((VariableDataNumber)variable).getValue().toString());
+		}
+		else if(variable instanceof VariableDataPostalCode){
+			((TextField)valueField).setValue(((VariableDataPostalCode)variable).getValue());
+		}
+		else if(variable instanceof VariableDataDate){
+			((DateField)valueField).setValue(((VariableDataDate)variable).getValue());
+		}
+		validFrom.setValue(variable.getValidFrom());
+		validTo.setValue(variable.getValidTo());
+	}
+	
+	public void disableValueFromTo(){
+		validFrom.setEnabled(false);
+		validTo.setEnabled(false);
+	}
+	
+	public VariableData createVariable(){
+		switch (format) {
+		case TEXT:
+			return new VariableDataText();
+		case NUMBER:
+			return new VariableDataNumber();
+		case POSTAL_CODE:
+			return new VariableDataPostalCode();
+		default:
+			return new VariableDataDate();
+		}
+	}
+	
+	
+	private boolean isValueFieldTypeCorrect(){
+		switch (format) {
+		case NUMBER:
+			try {
+				Double.parseDouble(valueField.getValue().toString());
+			} catch (Exception e) {
+				return false;
+			}
+			return true;
+		default:
+			return true;
+		}
 	}
 }

@@ -73,9 +73,19 @@ public class VariableWindow extends AcceptCancelWindow {
 			return null;
 		}
 		
-		GlobalVariable globalVariable = new GlobalVariable();
+		GlobalVariable globalVariable = new GlobalVariable((AnswerFormat) variableFormat.getValue());
 		globalVariable.setName(variableName.getValue());
-		globalVariable.setFormat((AnswerFormat) variableFormat.getValue());
 		return globalVariable;
+	}
+	
+	public void setValue(GlobalVariable value){
+		if (value != null ) {
+			variableName.setValue(value.getName());
+			variableFormat.setValue(value.getFormat());
+		}
+	}
+	
+	public void disableTypeEdition(){
+		variableFormat.setEnabled(false);
 	}
 }
