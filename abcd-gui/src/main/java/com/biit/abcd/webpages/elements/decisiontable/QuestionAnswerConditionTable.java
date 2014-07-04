@@ -15,6 +15,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.SelectAnswerWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
@@ -269,14 +270,14 @@ public class QuestionAnswerConditionTable extends Table {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			if (questionAnswer.getQuestion() != null) {
-				final AddNewAnswerValue newAnswerValueWindow = new AddNewAnswerValue(questionAnswer.getQuestion());
+				final SelectAnswerWindow newAnswerValueWindow = new SelectAnswerWindow(questionAnswer.getQuestion());
 				if (questionAnswer.getAnswer() != null) {
 					newAnswerValueWindow.setTreeObjectSelected(questionAnswer.getAnswer());
 				}
 				newAnswerValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						Answer selectedanswer = ((AddNewAnswerValue) window).getSelectedTableValue();
+						Answer selectedanswer = ((SelectAnswerWindow) window).getSelectedTableValue();
 						questionAnswer.setAnswer(selectedanswer);
 						updateItem(rule);
 						newAnswerValueWindow.close();

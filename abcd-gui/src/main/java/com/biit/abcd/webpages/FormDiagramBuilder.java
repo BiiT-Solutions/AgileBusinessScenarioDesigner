@@ -8,6 +8,8 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
@@ -105,7 +107,30 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void propertyUpdate(Object element) {
-				System.out.println("Property updateJson: " + ((DiagramObject) element).toJson());
+				//Switch limitation with instanceof.
+				if (element instanceof DiagramLink) {
+					// If we are updating a link, then we must update all the
+					// links from the same source.
+					DiagramLink currentLink = (DiagramLink) element;
+					List<DiagramLink> links = currentLink.getSourceElement().getOutgoingLinks();
+					for (DiagramLink link : links) {
+						diagramBuilder.updateChangesToDiagram(link);
+					}
+					return;
+				}
+				if (element instanceof DiagramFork) {
+					DiagramFork currentFork = (DiagramFork) element;
+					List<DiagramLink> links = currentFork.getOutgoingLinks();
+					for (DiagramLink link : links) {
+						link.clear();
+					}
+					for (DiagramLink link : links) {
+						diagramBuilder.updateChangesToDiagram(link);
+					}
+					diagramBuilder.updateChangesToDiagram(currentFork);
+					return;
+				}
+				// Anyone else
 				diagramBuilder.updateChangesToDiagram((DiagramObject) element);
 			}
 		});
@@ -245,7 +270,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 						System.out.println("first element biitText: "
 								+ ((DiagramElement) diagramBuilder.getDiagram().getDiagramObjects().get(0))
 										.getBiitText());
-						System.out.println("test: "+diagram+ " "+diagram.getDiagramObjects().get(0).getParent());
+						System.out.println("test: " + diagram + " " + diagram.getDiagramObjects().get(0).getParent());
 						UserSessionHandler.getFormController().save();
 						MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 					} catch (Exception e) {

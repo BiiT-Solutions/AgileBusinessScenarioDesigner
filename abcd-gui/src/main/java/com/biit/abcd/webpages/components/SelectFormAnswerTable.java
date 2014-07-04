@@ -1,14 +1,13 @@
-package com.biit.abcd.webpages.elements.decisiontable;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.vaadin.ui.TreeTable;
 
-public class FormAnswerTable extends TreeObjectTable {
+public class SelectFormAnswerTable extends TreeObjectTable {
 	private static final long serialVersionUID = 6558723176678770970L;
 
-	public FormAnswerTable() {
+	public SelectFormAnswerTable() {
 		super();
 	}
 

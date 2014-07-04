@@ -5,13 +5,14 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
 public class AddNewActionStringWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
-	private FormAnswerTable formAnswerTable;
+	private SelectFormAnswerTable formAnswerTable;
 	private TextArea textArea;
 
 	public AddNewActionStringWindow(Action action) {

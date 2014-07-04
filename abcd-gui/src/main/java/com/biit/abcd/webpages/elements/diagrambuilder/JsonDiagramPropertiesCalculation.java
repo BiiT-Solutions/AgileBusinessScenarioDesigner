@@ -48,7 +48,6 @@ public class JsonDiagramPropertiesCalculation extends PropertiesForClassComponen
 							fieldWithSearchButton.setValue(formExpressionWindow.getSelectedExpression(),
 									formExpressionWindow.getSelectedExpression().getName());
 							instance.setFormExpression(formExpressionWindow.getSelectedExpression());
-							instance.getBiitText().setText(instance.getFormExpression().getName());
 							firePropertyUpdateListener(instance);
 							window.close();
 						} else {
@@ -65,7 +64,6 @@ public class JsonDiagramPropertiesCalculation extends PropertiesForClassComponen
 			@Override
 			public void buttonClick(ClickEvent event) {
 				instance.setFormExpression(null);
-				instance.getBiitText().setText("Calculation");
 				firePropertyUpdateListener(instance);
 			}
 		});

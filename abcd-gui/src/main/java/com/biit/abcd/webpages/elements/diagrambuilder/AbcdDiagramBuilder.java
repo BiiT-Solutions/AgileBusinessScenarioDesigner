@@ -37,7 +37,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					DiagramElement currentElement = (DiagramElement) diagramElements.get(tempElement.getJointjsId());
 					fireDiagramObjectPickedListeners(currentElement);
 				} else {
-					diagram.getDiagramObjects().add(tempElement);
+					diagram.addDiagramObject(tempElement);
 					diagramElements.put(tempElement.getJointjsId(), tempElement);
 					fireDiagramObjectPickedListeners(tempElement);
 				}
@@ -53,7 +53,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 				if (diagramElements.containsKey(tempLink.getJointjsId())) {
 					fireDiagramObjectPickedListeners(diagramElements.get(tempLink.getJointjsId()));
 				} else {
-					diagram.getDiagramObjects().add(tempLink);
+					diagram.addDiagramObject(tempLink);
 					diagramElements.put(tempLink.getJointjsId(), tempLink);
 					fireDiagramObjectPickedListeners(tempLink);
 				}

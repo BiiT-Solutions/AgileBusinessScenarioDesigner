@@ -42,8 +42,12 @@ public enum LanguageCodes {
 	
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
-	WARNING_SELECT_VARIABLE_TO_DELETE("waring.select.variable.to.delete"),
-	WARNING_SELECT_VARIABLE_DATA_TO_DELETE("waring.select.variable.data.to.delete"),
+	WARNING_SELECT_VARIABLE_TO_DELETE("warning.select.variable.to.delete"),
+	WARNING_SELECT_VARIABLE_DATA_TO_DELETE("warning.select.variable.data.to.delete"),
+	WARNING_SELECT_VARIABLE_DATA_INVALID("warning.select.variable.data.invalid"),
+	WARNING_SELECT_VARIABLE_DATA_INVALID_TITLE("warning.select.variable.data.invalid.title"),
+	WARNING_SELECT_VARIABLE_DATA_INFINITE_VALUE("warning.select.variable.data.infinite.value"),
+	WARNING_SELECT_VARIABLE_DATA_INFINITE_VALUE_TITLE("warning.select.variable.data.infinite.value.title"),
 	WARNING_VARIABLE_DATA_VALUE_MISSING("warning.variable.data.value.missing"),
 	WARNING_VARIABLE_DATA_VALID_FROM_MISSING("warning.variable.data.valid.from.missing"),
 	WARNING_VARIABLE_DATA_VALID_TO_MISSING("warning.variable.data.valid.to.missing"),
@@ -162,6 +166,7 @@ public enum LanguageCodes {
 	ERROR_SELECT_QUESTION("error.select.question"),
 	ERROR_SELECT_TABLE("error.select.table"),
 	ERROR_SELECT_EXPRESSION("error.select.expression"),
+	ERROR_SELECT_ANSWER("error.select.answer"),
 	
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
@@ -293,7 +298,8 @@ public enum LanguageCodes {
 	JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION("json.diagram.properties.fork.question.caption"), 
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION("json.diagram.properties.sink.expression.caption"), 
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION("json.diagram.properties.sink.expression.null.caption"),
-	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption");
+	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption"),
+	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION("json.diagram.properties.link.field.null.caption");
 	
 	
 	

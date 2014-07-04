@@ -85,12 +85,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 					LanguageCodes.WARNING_VARIABLE_DATA_VALID_FROM_MISSING);
 			return null;
 		}
-		if (validTo.getValue() == null) {
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-					LanguageCodes.WARNING_VARIABLE_DATA_VALID_TO_MISSING);
-			return null;
-		}
-		if (validFrom.getValue().after(validTo.getValue())) {
+		if (validTo != null && validTo.getValue() != null && validFrom.getValue().after(validTo.getValue())) {
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
 					LanguageCodes.WARNING_VARIABLE_DATA_VALID_RANGE_WRONG);
 			return null;
@@ -98,7 +93,13 @@ public class VariableDataWindow extends AcceptCancelWindow {
 
 		variableData.setValue(valueField.getValue().toString());
 		variableData.setValidFrom(new Timestamp(validFrom.getValue().getTime()));
-		variableData.setValidTo(new Timestamp(validTo.getValue().getTime()));
+		
+		if (validTo == null || validTo.getValue() == null){
+			// Value set to infinite (null)
+			variableData.setValidTo(null);
+		}else{
+			variableData.setValidTo(new Timestamp(validTo.getValue().getTime()));
+		}
 		return variableData;
 	}
 

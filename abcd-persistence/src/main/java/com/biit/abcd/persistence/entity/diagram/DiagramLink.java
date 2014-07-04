@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +20,9 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "DIAGRAM_LINKS")
 public class DiagramLink extends DiagramObject {
-	
-	//This can change if later this wants to be changed to an expression that unifies both elements.
+
+	// This can change if later this wants to be changed to an expression that
+	// unifies both elements.
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Answer answer;
 	@Column(length = 1000000)
@@ -47,25 +50,25 @@ public class DiagramLink extends DiagramObject {
 	public Node getSource() {
 		return source;
 	}
-	
-	public DiagramElement getSourceElement(){
-		if(getParent()==null){
-			return null;
+
+	public DiagramElement getSourceElement() {
+		if (getParent() == null) {
+			throw new RuntimeException("Diagram Link getSourceElement used without diagram.");
 		}
 		String jointJsId = source.getJointjsId();
-		return (DiagramElement)getParent().findDiagramObjectByJointJsId(jointJsId);
+		return (DiagramElement) getParent().findDiagramObjectByJointJsId(jointJsId);
 	}
 
 	public void setSource(Node source) {
 		this.source = source;
 	}
-	
-	public DiagramElement getTargetElement(){
-		if(getParent()==null){
-			return null;
+
+	public DiagramElement getTargetElement() {
+		if (getParent() == null) {
+			throw new RuntimeException("Diagram Link getTargetElement used without diagram.");
 		}
 		String jointJsId = target.getJointjsId();
-		return (DiagramElement)getParent().findDiagramObjectByJointJsId(jointJsId);
+		return (DiagramElement) getParent().findDiagramObjectByJointJsId(jointJsId);
 	}
 
 	public Node getTarget() {
@@ -115,7 +118,7 @@ public class DiagramLink extends DiagramObject {
 	public String getVertices() {
 		return vertices;
 	}
-	
+
 	public Answer getAnswer() {
 		return answer;
 	}
@@ -131,8 +134,8 @@ public class DiagramLink extends DiagramObject {
 	public void setAnswerExpression(String answerExpression) {
 		this.answerExpression = answerExpression;
 	}
-	
-	public void clearAnswerAndAnswerExpression(){
+
+	public void clearAnswerAndAnswerExpression() {
 		setAnswer(null);
 		setAnswerExpression(new String());
 	}
@@ -157,4 +160,73 @@ public class DiagramLink extends DiagramObject {
 		return json;
 	}
 
+	public boolean hasSourceFork() {
+		if (getSourceElement() instanceof DiagramFork) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isOthers() {
+		DiagramElement source = getSourceElement();
+		if (source instanceof DiagramFork) {
+			DiagramFork forkSource = (DiagramFork) source;
+			if (!isAnswerEmpty()) {
+				return false;
+			}
+
+			if (getParent() == null) {
+				throw new RuntimeException("Diagram Link isOthers used without diagram.");
+			}
+
+			List<DiagramLink> links = getParent().getOutgoingLinks((DiagramElement) forkSource);
+			int numOfEmptyLinks = 0;
+			for (DiagramLink link : links) {
+				if (link.isAnswerEmpty()) {
+					numOfEmptyLinks++;
+				}
+			}
+			if (numOfEmptyLinks > 1) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	private boolean isAnswerEmpty() {
+		if (answer == null && (answerExpression == null || answerExpression.isEmpty())) {
+			return true;
+		}
+		return false;
+	}
+
+	public String getCorrectedText() {
+		if (hasSourceFork()) {
+			// Source is Fork
+			if (isAnswerEmpty()) {
+				if (isOthers()) {
+					return "others";
+				} else {
+					return "";
+				}
+			} else {
+				if (getAnswer() != null) {
+					return getAnswer().getName();
+				} else {
+					return getAnswerExpression();
+				}
+			}
+		} else {
+			return getText();
+		}
+	}
+
+	public void clear() {
+		answer = null;
+		answerExpression = null;
+		setText("");
+	}
 }
