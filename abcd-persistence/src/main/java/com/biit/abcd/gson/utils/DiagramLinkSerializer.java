@@ -16,7 +16,7 @@ public class DiagramLinkSerializer implements JsonSerializer<DiagramLink> {
 	public JsonElement serialize(DiagramLink diagramElement, Type type, JsonSerializationContext context) {
 		final JsonObject jsonObject = new JsonObject();
 
-		jsonObject.addProperty("id", diagramElement.getJointjsId());		
+		jsonObject.addProperty("id", diagramElement.getJointjsId());
 		jsonObject.addProperty("type", diagramElement.getType().getJsonType());
 		jsonObject.addProperty("embeds", diagramElement.getEmbeds());
 		jsonObject.addProperty("z", diagramElement.getZ());
@@ -24,9 +24,10 @@ public class DiagramLinkSerializer implements JsonSerializer<DiagramLink> {
 		jsonObject.add("source", context.serialize(diagramElement.getSource()));
 		jsonObject.add("target", context.serialize(diagramElement.getTarget()));
 
-		// Create Text node
+		// Create Text node with the correct text for its position.
+		// TODO this needs to be checked and tested.
 		JsonObject textObject = new JsonObject();
-		textObject.addProperty("text", diagramElement.getText());
+		textObject.addProperty("text", diagramElement.getCorrectedText());
 		// Create Attrs
 		JsonObject attrsObject = new JsonObject();
 		attrsObject.add("text", textObject);

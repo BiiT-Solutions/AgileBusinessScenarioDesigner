@@ -1,24 +1,23 @@
-package com.biit.abcd.webpages.elements.decisiontable;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.webpages.components.SelectionTreeObjectTableWindow;
 import com.vaadin.ui.Component;
 
-public class AddNewAnswerValue extends SelectionTreeObjectTableWindow {
+public class SelectAnswerWindow extends SelectTreeObjectTableWindow {
 	private static final long serialVersionUID = -5510653106309311210L;
 
-	public AddNewAnswerValue(Question question) {
+	public SelectAnswerWindow(Question question) {
 		super(question, false);
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_CONDITION_CAPTION));
 	}
 
 	@Override
 	public Component generateContent(TreeObject treeObject) {
-		setTable(new FormAnswerTable());
+		setTable(new SelectFormAnswerTable());
 		getTable().setSizeFull();
 		if (treeObject instanceof Question) {
 			getTable().setRootElement(treeObject);
@@ -29,7 +28,7 @@ public class AddNewAnswerValue extends SelectionTreeObjectTableWindow {
 	}
 
 	public Answer getSelectedTableValue() {
-		return ((FormAnswerTable) getTable()).getValue();
+		return ((SelectFormAnswerTable) getTable()).getValue();
 	}
 
 }

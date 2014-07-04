@@ -13,6 +13,7 @@ public class DiagramRuleSerializer extends DiagramObjectSerializerCommon<Diagram
 
 	@Override
 	public JsonElement serialize(DiagramRule element, Type type, JsonSerializationContext context) {
+		//TODO rule is not done.
 		final JsonObject jsonObject = new JsonObject();
 		return serialize(element, jsonObject, context);
 	}

@@ -117,6 +117,14 @@ public enum ThemeIcon {
 	REMOVE_ROW("appbar.table.delete.row.svg"),
 
 	EXPRESSION_EDITOR_PAGE("appbar.page.expression.svg"),
+	
+	EXPRESSION_EDITOR_TAB_FUNCTIONS("appbar.cell.function.svg"),
+	
+	EXPRESSION_EDITOR_TAB_MATHS("appbar.calculator.svg"),
+	
+	EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS("appbar.tag.svg"),
+	
+	EXPRESSION_EDITOR_TAB_FORM_VARIABLES("appbar.form.variables.svg"),
 
 	SETTINGS("appbar.lines.horizontal.4.svg"),
 
@@ -140,9 +148,9 @@ public enum ThemeIcon {
 
 	GLOBAL_VARIABLES_REMOVE_VARIABLE("appbar.notification.remove.svg"),
 
-	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.svg"),
+	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.watch.svg"),
 
-	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.remove.svg"),
+	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.remove.watch.svg"),
 
 	FORM_VARIABLES("appbar.form.variables.svg"),
 

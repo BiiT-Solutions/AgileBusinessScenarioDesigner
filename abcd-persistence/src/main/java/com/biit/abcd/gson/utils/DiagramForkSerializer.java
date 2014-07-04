@@ -17,6 +17,8 @@ public class DiagramForkSerializer extends DiagramObjectSerializerCommon<Diagram
 		//Set the current name of the question.
 		if(element.getQuestion()!=null){
 			element.getBiitText().setText(element.getQuestion().getName());
+		}else{
+			element.getBiitText().setText("Fork");
 		}
 		return serialize(element, jsonObject, context);
 	}
