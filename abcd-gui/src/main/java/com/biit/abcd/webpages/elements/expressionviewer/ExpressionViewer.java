@@ -20,11 +20,13 @@ import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
 import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -44,6 +46,7 @@ public class ExpressionViewer extends CssLayout {
 		setImmediate(true);
 		expressionOfElement = new HashMap<>();
 		setStyleName(CLASSNAME);
+		addKeyController();
 	}
 
 	private void updateExpression() {
@@ -241,25 +244,44 @@ public class ExpressionViewer extends CssLayout {
 		return selectedExpression;
 	}
 
+	private void selectNextExpression() {
+		if (getSelectedExpression() != null) {
+			// Select next expression.
+			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+			selectExpressionByIndex(index);
+		}
+	}
+
+	private void selectPreviousExpression() {
+		if (getSelectedExpression() != null) {
+			// Select next expression.
+			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) - 1;
+			selectExpressionByIndex(index);
+		}
+	}
+
+	private void selectExpressionByIndex(int index) {
+		Expression selected = null;
+		if (index >= 0) {
+			if (index < formExpression.getExpressions().size()) {
+				selected = formExpression.getExpressions().get(index);
+			} else if (!formExpression.getExpressions().isEmpty()) {
+				selected = formExpression.getExpressions().get(formExpression.getExpressions().size() - 1);
+			}
+		} else {
+			selectExpressionByIndex(0);
+		}
+		if (selected != null) {
+			setSelectedExpression(selected);
+		}
+	}
+
 	public void removeSelectedExpression() {
 		if (getSelectedExpression() != null) {
 			int index = formExpression.getExpressions().indexOf(getSelectedExpression());
 			formExpression.getExpressions().remove(getSelectedExpression());
-			Expression selected = null;
-
-			// Select next expression.
-			if (index >= 0) {
-				if (index < formExpression.getExpressions().size()) {
-					selected = formExpression.getExpressions().get(index);
-				} else if (!formExpression.getExpressions().isEmpty()) {
-					selected = formExpression.getExpressions().get(formExpression.getExpressions().size() - 1);
-				}
-			}
-
 			updateExpression();
-			if (selected != null) {
-				setSelectedExpression(selected);
-			}
+			selectExpressionByIndex(index);
 		}
 	}
 
@@ -319,5 +341,37 @@ public class ExpressionViewer extends CssLayout {
 		checkerLayout.setComponentAlignment(evaluatorOutput, Alignment.TOP_RIGHT);
 
 		return checkerLayout;
+	}
+
+	/**
+	 * Add all keyboard defined actions.
+	 */
+	private void addKeyController() {
+		this.addShortcutListener(new ShortcutListener("DELETE_SHORTCUT", KeyCode.DELETE, null) {
+			private static final long serialVersionUID = -71562151456777493L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				removeSelectedExpression();
+			}
+		});
+
+		this.addShortcutListener(new ShortcutListener("SELECT_NEXT", KeyCode.ARROW_RIGHT, null) {
+			private static final long serialVersionUID = 7663105045629599269L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				selectNextExpression();
+			}
+		});
+
+		this.addShortcutListener(new ShortcutListener("SELECT_PREVIOUS", KeyCode.ARROW_LEFT, null) {
+			private static final long serialVersionUID = 8453120978479798559L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				selectPreviousExpression();
+			}
+		});
 	}
 }
