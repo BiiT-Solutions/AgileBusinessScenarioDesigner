@@ -294,7 +294,9 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_MIN("expression.button.min"),
 	EXPRESSION_BUTTON_ABS("expression.button.abs"),
 	EXPRESSION_BUTTON_ROUND("expression.button.round"),
-	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"), 
+	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"),
+	EXPRESSION_BUTTON_IN("expression.button.in"),
+	EXPRESSION_BUTTON_BETWEEN("expression.button.between"),
 	
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE("expression.form.variable.addvariable"),

@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 
 /**
@@ -79,7 +80,7 @@ public class FormExpression extends Expression {
 	}
 
 	public ExpressionEvaluator getExpressionEvaluator() {
-		ExpressionEvaluator evaluator = new ExpressionEvaluator(getExpression());
+		ExpressionChecker evaluator = new ExpressionChecker(getExpression());
 		// Define variables.
 		for (Expression expression : expressions) {
 			if ((expression instanceof ExpressionValueFormCustomVariable)

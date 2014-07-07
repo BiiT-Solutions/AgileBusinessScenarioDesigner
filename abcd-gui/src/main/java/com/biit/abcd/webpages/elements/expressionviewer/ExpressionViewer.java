@@ -373,5 +373,6 @@ public class ExpressionViewer extends CssLayout {
 				selectPreviousExpression();
 			}
 		});
+
 	}
 }
