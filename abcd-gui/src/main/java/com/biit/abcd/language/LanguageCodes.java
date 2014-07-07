@@ -294,7 +294,9 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_MIN("expression.button.min"),
 	EXPRESSION_BUTTON_ABS("expression.button.abs"),
 	EXPRESSION_BUTTON_ROUND("expression.button.round"),
-	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"), 
+	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"),
+	EXPRESSION_BUTTON_IN("expression.button.in"),
+	EXPRESSION_BUTTON_BETWEEN("expression.button.between"),
 	
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE("expression.form.variable.addvariable"),
@@ -307,6 +309,10 @@ public enum LanguageCodes {
 	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption"),
 	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION("json.diagram.properties.link.field.null.caption"),
 	
+	DROOLS_RULES_EDITOR_TABLE_NAME("drools.rules.editor.table.name"),
+	DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME("drools.rules.editor.tablecolumn.name"),	
+	DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE("drools.rules.editor.tablecolumn.update"),
+	DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD("drools.rules.editor.name.textField");
 	WINDOW_EDIT_TABLE_CELL_LABEL("window.edit.table.cell.label");
 	
 	

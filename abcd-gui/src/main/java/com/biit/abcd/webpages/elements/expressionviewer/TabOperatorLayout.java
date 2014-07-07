@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
@@ -9,7 +10,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -19,13 +24,21 @@ import com.vaadin.ui.GridLayout;
 public class TabOperatorLayout extends TabLayout {
 	private static final long serialVersionUID = -6980953550185164306L;
 	private static final int GRID_COLUMNS = 3;
+	private GridLayout expLayout;
 
 	public TabOperatorLayout() {
+		expLayout = new GridLayout(GRID_COLUMNS, 4);
+		expLayout.setWidth("100%");
+
 		createMathOperators();
-		createFunctionsOperators();
+		createMathFunctionsOperators();
 		createBaseTab();
 		createLogicalOperators();
+		createLogicalFunctionsOperators();
+		createInputField();
 
+		addComponent(expLayout);
+		setComponentAlignment(expLayout, Alignment.MIDDLE_CENTER);
 	}
 
 	private void createMathOperators() {
@@ -89,29 +102,15 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		GridLayout exprAtomicMathLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprAtomicMathLayout.setWidth("100%");
-		exprAtomicMathLayout.addComponent(plusButton);
-		exprAtomicMathLayout.addComponent(minusButton);
-		exprAtomicMathLayout.addComponent(multButton);
-		exprAtomicMathLayout.addComponent(divButton);
-		exprAtomicMathLayout.addComponent(moduleButton);
-		exprAtomicMathLayout.addComponent(potButton);
-		addComponent(exprAtomicMathLayout);
-		setComponentAlignment(exprAtomicMathLayout, Alignment.MIDDLE_CENTER);
-
+		expLayout.addComponent(plusButton);
+		expLayout.addComponent(minusButton);
+		expLayout.addComponent(multButton);
+		expLayout.addComponent(divButton);
+		expLayout.addComponent(moduleButton);
+		expLayout.addComponent(potButton);
 	}
 
-	private void createFunctionsOperators() {
-		Button notButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT),
-				new ClickListener() {
-					private static final long serialVersionUID = -3339234972234970277L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-
-					}
-				});
+	private void createMathFunctionsOperators() {
 
 		Button maxButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MAX),
 				new ClickListener() {
@@ -165,28 +164,50 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
-		Button commaButton = createButton(",", new ClickListener() {
-			private static final long serialVersionUID = -8611397253545833133L;
+		expLayout.addComponent(maxButton);
+		expLayout.addComponent(minimumButton);
+		expLayout.addComponent(absoluteButton);
+		expLayout.addComponent(sqrtButton);
+		expLayout.addComponent(roundButton);
+	}
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				ExpressionSymbol exprValue = new ExpressionSymbol();
-				exprValue.setValue(AvailableSymbol.COMMA);
-				addExpression(exprValue);
-			}
-		});
+	private void createLogicalFunctionsOperators() {
+		Button notButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
 
-		GridLayout exprFunctionLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprFunctionLayout.setWidth("100%");
-		exprFunctionLayout.addComponent(notButton);
-		exprFunctionLayout.addComponent(maxButton);
-		exprFunctionLayout.addComponent(minimumButton);
-		exprFunctionLayout.addComponent(absoluteButton);
-		exprFunctionLayout.addComponent(sqrtButton);
-		exprFunctionLayout.addComponent(roundButton);
-		exprFunctionLayout.addComponent(commaButton);
-		addComponent(exprFunctionLayout);
-		setComponentAlignment(exprFunctionLayout, Alignment.MIDDLE_CENTER);
+					@Override
+					public void buttonClick(ClickEvent event) {
+
+					}
+				});
+		Button inButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_IN),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						ExpressionFunction exprValue = new ExpressionFunction();
+						exprValue.setValue(AvailableFunction.IN);
+						addExpression(exprValue);
+					}
+				});
+
+		Button betweenButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_BETWEEN),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						ExpressionFunction exprValue = new ExpressionFunction();
+						exprValue.setValue(AvailableFunction.BETWEEN);
+						addExpression(exprValue);
+					}
+				});
+
+		expLayout.addComponent(notButton);
+		expLayout.addComponent(inButton);
+		expLayout.addComponent(betweenButton);
 	}
 
 	private void createBaseTab() {
@@ -227,14 +248,20 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		GridLayout exprBaseLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprBaseLayout.setWidth("100%");
-		exprBaseLayout.addComponent(leftBracketButton);
-		exprBaseLayout.addComponent(rightBracketButton);
-		exprBaseLayout.addComponent(assignButton);
+		Button commaButton = createButton(",", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
 
-		addComponent(exprBaseLayout);
-		setComponentAlignment(exprBaseLayout, Alignment.MIDDLE_CENTER);
+			@Override
+			public void buttonClick(ClickEvent event) {
+				ExpressionSymbol exprValue = new ExpressionSymbol();
+				exprValue.setValue(AvailableSymbol.COMMA);
+				addExpression(exprValue);
+			}
+		});
+		expLayout.addComponent(leftBracketButton);
+		expLayout.addComponent(rightBracketButton);
+		expLayout.addComponent(assignButton);
+		expLayout.addComponent(commaButton);
 	}
 
 	private void createLogicalOperators() {
@@ -318,19 +345,51 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		GridLayout exprLogicLayout = new GridLayout(GRID_COLUMNS, 4);
-		exprLogicLayout.setWidth("100%");
-		exprLogicLayout.addComponent(andButton);
-		exprLogicLayout.addComponent(orButton);
-		exprLogicLayout.addComponent(greaterThanButton);
-		exprLogicLayout.addComponent(greaterEqualsButton);
-		exprLogicLayout.addComponent(lessThanButton);
-		exprLogicLayout.addComponent(lessEqualsButton);
-		exprLogicLayout.addComponent(equalsButton);
-		exprLogicLayout.addComponent(distinctButton);
+		expLayout.addComponent(andButton);
+		expLayout.addComponent(orButton);
+		expLayout.addComponent(greaterThanButton);
+		expLayout.addComponent(greaterEqualsButton);
+		expLayout.addComponent(lessThanButton);
+		expLayout.addComponent(lessEqualsButton);
+		expLayout.addComponent(equalsButton);
+		expLayout.addComponent(distinctButton);
+	}
 
-		addComponent(exprLogicLayout);
-		setComponentAlignment(exprLogicLayout, Alignment.MIDDLE_CENTER);
+	private void createInputField() {
+		Button inputButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_INPUT),
+				new ClickListener() {
+					private static final long serialVersionUID = -3339234972234970277L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						StringInputWindow stringInputWindow = new StringInputWindow(
+								ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+						stringInputWindow.setCaption(ServerTranslate
+								.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+						stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								String value = ((StringInputWindow) window).getValue();
+								if (value == null || value.isEmpty()) {
+									MessageManager.showError(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+								} else {
+									ExpressionValueString exprValue = new ExpressionValueString(value);
+									addExpression(exprValue);
+									window.close();
+								}
+							}
+						});
+						stringInputWindow.showCentered();
+					}
+				});
+
+		inputButton.setWidth("100%");
+		GridLayout expLayout = new GridLayout(1, 1);
+		expLayout.setWidth("100%");
+		expLayout.addComponent(inputButton);
+		addComponent(expLayout);
+		setComponentAlignment(expLayout, Alignment.MIDDLE_CENTER);
 	}
 
 	private Button createButton(String caption, ClickListener listener) {

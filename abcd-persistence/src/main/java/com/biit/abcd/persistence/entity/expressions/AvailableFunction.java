@@ -13,6 +13,10 @@ public enum AvailableFunction {
 	ABS("ABS("),
 
 	SQRT("SQRT("),
+	
+	IN("IN("),
+	
+	BETWEEN("BETWEEN("),
 
 	ROUND("ROUND(");
 
