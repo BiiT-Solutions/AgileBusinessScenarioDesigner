@@ -5,11 +5,6 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
-import com.vaadin.event.ShortcutListener;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.VerticalLayout;
 
 /**
