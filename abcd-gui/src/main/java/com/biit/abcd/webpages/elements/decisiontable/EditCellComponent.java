@@ -21,6 +21,7 @@ public class EditCellComponent extends CustomComponent {
 	private IconButton editButton, removeButton;
 	private Label textLabel;
 	private boolean selectValue;
+	private boolean onlyEdit = false;
 
 	public EditCellComponent() {
 		selectValue = false;
@@ -58,7 +59,9 @@ public class EditCellComponent extends CustomComponent {
 
 	private void addButtons() {
 		if (editButton.getParent() == null) {
-			rootLayout.addComponent(removeButton, 0);
+			if(!isOnlyEdit()){
+				rootLayout.addComponent(removeButton, 0);
+			}
 			rootLayout.addComponent(editButton, 0);
 		}
 	}
@@ -66,7 +69,9 @@ public class EditCellComponent extends CustomComponent {
 	private void removeButtons() {
 		if (editButton.getParent() != null) {
 			rootLayout.removeComponent(editButton);
-			rootLayout.removeComponent(removeButton);
+			if(!isOnlyEdit()){
+				rootLayout.removeComponent(removeButton);
+			}
 		}
 	}
 
@@ -104,5 +109,17 @@ public class EditCellComponent extends CustomComponent {
 		} else {
 			setLabel(treeObject.toString());
 		}
+	}
+	
+	/**
+	 * Disables/Enables the delete button
+	 * @param onlyEdit
+	 */
+	public void setOnlyEdit(boolean onlyEdit){
+		this.onlyEdit = onlyEdit;
+	}
+	
+	private boolean isOnlyEdit(){
+		return onlyEdit;
 	}
 }
