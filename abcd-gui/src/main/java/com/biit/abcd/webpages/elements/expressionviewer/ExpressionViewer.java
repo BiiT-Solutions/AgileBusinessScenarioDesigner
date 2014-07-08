@@ -292,8 +292,7 @@ public class ExpressionViewer extends CssLayout {
 	 * @param newElement
 	 */
 	public void addElementToSelected(Expression newElement) {
-		if (formExpression != null && formExpression.getExpressions() != null
-				&& !formExpression.getExpressions().isEmpty()) {
+		if (formExpression != null) {
 			int index = 0;
 			if (getSelectedExpression() != null) {
 				index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
