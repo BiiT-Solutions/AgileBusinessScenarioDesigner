@@ -40,7 +40,7 @@ public class VariableDataTable extends Table {
 	@SuppressWarnings("unchecked")
 	public Item addItem(VariableData variableData) {
 		Item item = super.addItem(variableData);
-		item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue().toString());
+		item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.toString());
 		item.getItemProperty(Properties.VARIABLE_VALID_FROM).setValue(
 				DateManager.convertDateToString(variableData.getValidFrom(), DateManager.DATE_FORMAT_SIMPLE));
 		
@@ -70,10 +70,10 @@ public class VariableDataTable extends Table {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void updateItem(VariableData selectedValue) {
-		Item item = getItem(selectedValue);
+	public void updateItem(VariableData variableData) {
+		Item item = getItem(variableData);
 		if(item != null){
-			item.getItemProperty(Properties.VARIABLE_VALUE).setValue(selectedValue.getValue().toString());
+			item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.toString());
 		}
 	}
 }

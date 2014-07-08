@@ -25,7 +25,7 @@ public class GlobalVariable extends StorableObject {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "GLOBAL_VARIABLE_DATA_SET")
 	private List<VariableData> data;
-	
+
 	public GlobalVariable() {
 		data = new ArrayList<VariableData>();
 	}
@@ -54,36 +54,40 @@ public class GlobalVariable extends StorableObject {
 	private void setFormat(AnswerFormat format) {
 		this.format = format;
 	}
-	
-	public void updateValues(GlobalVariable newVariable){
+
+	public void updateValues(GlobalVariable newVariable) {
 		setName(newVariable.getName());
 	}
-	
+
 	/**
-	 * Creates a new variable data and adds it to the global variable 
-	 * @param value: the value of the variable data
-	 * @param validFrom: starting time of the variable
-	 * @param validTo: finishing time of the variable
+	 * Creates a new variable data and adds it to the global variable
+	 * 
+	 * @param value
+	 *            : the value of the variable data
+	 * @param validFrom
+	 *            : starting time of the variable
+	 * @param validTo
+	 *            : finishing time of the variable
 	 * @throws NotValidTypeInVariableData
 	 */
-	public void addVariableData(Object value, Timestamp validFrom, Timestamp validTo) throws NotValidTypeInVariableData{
+	public void addVariableData(Object value, Timestamp validFrom, Timestamp validTo) throws NotValidTypeInVariableData {
 		VariableData variableData = getNewInstanceVariableData();
 		variableData.setValue(value);
 		variableData.setValidFrom(validFrom);
 		variableData.setValidTo(validTo);
 		getData().add(variableData);
 	}
-	
-	private VariableData getNewInstanceVariableData(){
+
+	private VariableData getNewInstanceVariableData() {
 		switch (format) {
-		case TEXT:
-			return new VariableDataText();
+		case DATE:
+			return new VariableDataDate();
 		case NUMBER:
 			return new VariableDataNumber();
 		case POSTAL_CODE:
 			return new VariableDataPostalCode();
 		default:
-			return new VariableDataDate();
+			return new VariableDataText();
 		}
 	}
 }

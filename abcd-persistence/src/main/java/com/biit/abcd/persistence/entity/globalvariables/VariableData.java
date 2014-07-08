@@ -20,7 +20,9 @@ public abstract class VariableData extends StorableObject {
 	private Timestamp validTo;
 
 	public abstract Object getValue();
+
 	public abstract void setValue(Object value) throws NotValidTypeInVariableData;
+
 	public abstract boolean checkType(Object value);
 
 	public Timestamp getValidFrom() {
@@ -38,13 +40,20 @@ public abstract class VariableData extends StorableObject {
 	public void setValidTo(Timestamp validTo) {
 		this.validTo = validTo;
 	}
+
 	public boolean updateValues(VariableData editedVariable) throws NotValidTypeInVariableData {
 		Object aux = editedVariable.getValue();
-		if(aux != null){
+		if (aux != null) {
 			setValue(editedVariable.getValue());
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return getValue().toString();
+	}
+
 }

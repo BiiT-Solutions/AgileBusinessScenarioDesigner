@@ -31,7 +31,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	private DateField validFrom;
 	private DateField validTo;
 	private AnswerFormat format;
-	
+
 	public VariableDataWindow(AnswerFormat format, String title) {
 		super();
 		setHeight(HEIGHT);
@@ -69,7 +69,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		valueField.setWidth(FIELD_WIDTH);
 		validFrom.setWidth(FIELD_WIDTH);
 		validTo.setWidth(FIELD_WIDTH);
-		
+
 		formLayout.addComponent(valueField);
 		formLayout.addComponent(validFrom);
 		formLayout.addComponent(validTo);
@@ -82,7 +82,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 
 	public VariableData getValue() {
 		VariableData variableData = createVariable();
-		if (valueField.getValue() == null  || !isValueFieldTypeCorrect()) {
+		if (valueField.getValue() == null || !isValueFieldTypeCorrect()) {
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALUE_MISSING);
 			return null;
 		}
@@ -102,13 +102,13 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		} catch (NotValidTypeInVariableData e) {
 			MessageManager.showError(e.getMessage());
 		}
-		
+
 		variableData.setValidFrom(new Timestamp(validFrom.getValue().getTime()));
-		
-		if (validTo == null || validTo.getValue() == null){
+
+		if (validTo == null || validTo.getValue() == null) {
 			// Value set to infinite (null)
 			variableData.setValidTo(null);
-		}else{
+		} else {
 			variableData.setValidTo(new Timestamp(validTo.getValue().getTime()));
 		}
 		return variableData;
@@ -117,34 +117,31 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	public void setValidFromEditable(boolean editable) {
 		validFrom.setEnabled(editable);
 	}
-	
+
 	public void setValidFromValue(Date newDate) {
 		validFrom.setValue(newDate);
 	}
-	
-	public void setValue(VariableData variable){
-		if(variable instanceof VariableDataText){
-			((TextField)valueField).setValue(((VariableDataText)variable).getValue());
-		}
-		else if(variable instanceof VariableDataNumber){
-			((TextField)valueField).setValue(((VariableDataNumber)variable).getValue().toString());
-		}
-		else if(variable instanceof VariableDataPostalCode){
-			((TextField)valueField).setValue(((VariableDataPostalCode)variable).getValue());
-		}
-		else if(variable instanceof VariableDataDate){
-			((DateField)valueField).setValue(((VariableDataDate)variable).getValue());
+
+	public void setValue(VariableData variable) {
+		if (variable instanceof VariableDataText) {
+			((TextField) valueField).setValue(variable.toString());
+		} else if (variable instanceof VariableDataNumber) {
+			((TextField) valueField).setValue(variable.toString());
+		} else if (variable instanceof VariableDataPostalCode) {
+			((TextField) valueField).setValue(variable.toString());
+		} else if (variable instanceof VariableDataDate) {
+			((DateField) valueField).setValue(((VariableDataDate) variable).getValue());
 		}
 		validFrom.setValue(variable.getValidFrom());
 		validTo.setValue(variable.getValidTo());
 	}
-	
-	public void disableValueFromTo(){
+
+	public void disableValueFromTo() {
 		validFrom.setEnabled(false);
 		validTo.setEnabled(false);
 	}
-	
-	public VariableData createVariable(){
+
+	public VariableData createVariable() {
 		switch (format) {
 		case TEXT:
 			return new VariableDataText();
@@ -156,9 +153,8 @@ public class VariableDataWindow extends AcceptCancelWindow {
 			return new VariableDataDate();
 		}
 	}
-	
-	
-	private boolean isValueFieldTypeCorrect(){
+
+	private boolean isValueFieldTypeCorrect() {
 		switch (format) {
 		case NUMBER:
 			try {
