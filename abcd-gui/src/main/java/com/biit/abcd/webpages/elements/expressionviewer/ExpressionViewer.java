@@ -292,25 +292,30 @@ public class ExpressionViewer extends CssLayout {
 	 * @param newElement
 	 */
 	public void addElementToSelected(Expression newElement) {
-		int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
-		if (newElement instanceof ExpressionSymbol) {
-			// Brackets are added before selected expression in some cases.
-			if (((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true
-			// Brackets always at right position in '<', '>', ... symbols.
-					&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
-					// Brackets always at right position in '=' symbol.
-					&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
-							.getValue().equals(AvailableOperator.ASSIGNATION))) {
-				index--;
+		// Checks if there is at least one expression
+		if(formExpression != null){
+			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+			if (newElement instanceof ExpressionSymbol) {
+				// Brackets are added before selected expression in some cases.
+				if (((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true
+						// Brackets always at right position in '<', '>', ... symbols.
+						&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
+						// Brackets always at right position in '=' symbol.
+						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
+								.getValue().equals(AvailableOperator.ASSIGNATION))) {
+					index--;
+				}
 			}
+			if (index >= 0 && index < formExpression.getExpressions().size()) {
+				formExpression.getExpressions().add(index, newElement);
+			} else {
+				formExpression.getExpressions().add(newElement);
+			}
+			updateExpression();
+			setSelectedExpression(newElement);
+		}else{
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_EXPRESSION_TABLE_EMPTY);
 		}
-		if (index >= 0 && index < formExpression.getExpressions().size()) {
-			formExpression.getExpressions().add(index, newElement);
-		} else {
-			formExpression.getExpressions().add(newElement);
-		}
-		updateExpression();
-		setSelectedExpression(newElement);
 	}
 
 	public FormExpression getFormExpression() {

@@ -53,6 +53,7 @@ public enum LanguageCodes {
 	WARNING_VARIABLE_DATA_VALID_TO_MISSING("warning.variable.data.valid.to.missing"),
 	WARNING_VARIABLE_DATA_VALID_RANGE_WRONG("warning.variable.data.valid.range.wrong"),
 	WARNING_VARIABLE_NAME_WRONG("warning.variable.name.wrong"),
+	WARNING_EXPRESSION_TABLE_EMPTY("warning.expression.table.empty"),
 	
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	
