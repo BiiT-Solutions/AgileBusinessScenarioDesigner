@@ -10,6 +10,8 @@ import javax.persistence.Table;
 
 import com.biit.abcd.gson.utils.DiagramCalculationDeserializer;
 import com.biit.abcd.gson.utils.DiagramCalculationSerializer;
+import com.biit.abcd.gson.utils.DiagramChildDeserializer;
+import com.biit.abcd.gson.utils.DiagramChildSerializer;
 import com.biit.abcd.gson.utils.DiagramElementDeserializer;
 import com.biit.abcd.gson.utils.DiagramElementSerializer;
 import com.biit.abcd.gson.utils.DiagramForkDeserializer;
@@ -96,6 +98,7 @@ public abstract class DiagramElement extends DiagramObject {
 			gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkDeserializer());
+			gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramSink.class, new DiagramSinkDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramSource.class, new DiagramSourceDeserializer());
@@ -115,6 +118,7 @@ public abstract class DiagramElement extends DiagramObject {
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramSink.class, new DiagramSinkSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramSource.class, new DiagramSourceSerializer());

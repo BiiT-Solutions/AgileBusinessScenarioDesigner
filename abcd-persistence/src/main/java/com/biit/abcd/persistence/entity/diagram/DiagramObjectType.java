@@ -5,6 +5,7 @@ public enum DiagramObjectType {
 	SOURCE("biit.SourceNode"),
 	SINK("biit.SinkNode"),	
 	FORK("biit.ForkNode"),
+	DIAGRAM_CHILD("biit.Diagram"),
 	RULE("biit.RuleNode"),
 	TABLE("biit.TableNode"),
 	CALCULATION("biit.CalculationNode"),

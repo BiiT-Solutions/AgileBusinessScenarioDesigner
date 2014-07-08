@@ -213,7 +213,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	// TODO
 	private void refreshDecisionTable() {
 		decisionTable.removeAll();
-		if(getSelectedTableRule()!=null){
+		if (getSelectedTableRule() != null) {
 			decisionTable.setTableRule(getSelectedTableRule());
 		}
 	}
@@ -251,6 +251,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		UserSessionHandler.getFormController().getForm().getTableRules()
 				.remove(tableSelectionMenu.getSelectedTableRule());
 		tableSelectionMenu.removeSelectedRow();
+	}
+
+	public void selectComponent(TableRule element) {
+		tableSelectionMenu.setSelectedTableRule(element);
 	}
 
 }

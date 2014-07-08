@@ -151,4 +151,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 		tableSelectExpression.sort();
 	}
 
+	public void selectComponent(FormExpression element) {
+		tableSelectExpression.setSelectedExpression(element);
+	}
+
 }

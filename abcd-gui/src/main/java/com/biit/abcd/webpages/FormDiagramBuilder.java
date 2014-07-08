@@ -2,25 +2,31 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.SelectDiagramTable;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramUpdated;
-import com.biit.abcd.webpages.elements.diagrambuilder.DiagramBuilderTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
+import com.biit.abcd.webpages.elements.diagrambuilder.JumpToListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.WindowNewDiagram;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -32,7 +38,7 @@ import com.vaadin.ui.UI;
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
 
-	private DiagramBuilderTable diagramBuilderTable;
+	private SelectDiagramTable diagramBuilderTable;
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
 	private JsonPropertiesComponent propertiesContainer;
@@ -54,7 +60,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		propertiesContainer = new JsonPropertiesComponent();
 		propertiesContainer.setSizeFull();
 
-		diagramBuilderTable = new DiagramBuilderTable();
+		diagramBuilderTable = new SelectDiagramTable();
 		diagramBuilderTable.setSizeFull();
 		diagramBuilderTable.setImmediate(true);
 		diagramBuilderTable.setSelectable(true);
@@ -103,11 +109,42 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				propertiesContainer.updatePropertiesComponent(object);
 			}
 		});
+		diagramBuilder.addJumpToListener(new JumpToListener() {
+
+			@Override
+			public void jumpTo(Object element) {
+				// TODO
+				if (element == null) {
+					return;
+				}
+				if (element instanceof Question) {
+					ApplicationFrame.navigateTo(WebMap.TREE_DESIGNER);
+					FormDesigner formDesigner = (FormDesigner) ((ApplicationFrame) UI.getCurrent()).getCurrentView();
+					formDesigner.selectComponent((TreeObject) element);
+				}
+				if (element instanceof TableRule) {
+					ApplicationFrame.navigateTo(WebMap.DECISSION_TABLE_EDITOR);
+					DecisionTableEditor decisionTable = (DecisionTableEditor) ((ApplicationFrame) UI.getCurrent())
+							.getCurrentView();
+					decisionTable.selectComponent((TableRule) element);
+				}
+				if (element instanceof FormExpression) {
+					ApplicationFrame.navigateTo(WebMap.EXPRESSION_EDITOR);
+					ExpressionEditor expressionEditor = (ExpressionEditor) ((ApplicationFrame) UI.getCurrent())
+							.getCurrentView();
+					expressionEditor.selectComponent((FormExpression) element);
+				}
+				if (element instanceof Diagram) {
+					selectComponent((Diagram) element);
+				}
+			}
+
+		});
 		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
 
 			@Override
 			public void propertyUpdate(Object element) {
-				//Switch limitation with instanceof.
+				// Switch limitation with instanceof.
 				if (element instanceof DiagramLink) {
 					// If we are updating a link, then we must update all the
 					// links from the same source.
@@ -147,6 +184,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		initDiagrams();
 		initUpperMenu();
+	}
+
+	protected void selectComponent(Diagram element) {
+		diagramBuilderTable.setValue(element);
 	}
 
 	private void initDiagrams() {
@@ -268,15 +309,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					// Wait until the diagram has been updated.
 					try {
 						List<DiagramObject> diagObjects = diagramBuilder.getDiagram().getDiagramObjects();
-						if(diagObjects.size() > 0){
-							System.out.println("first element biitText: "
-									+ ((DiagramElement) diagramBuilder.getDiagram().getDiagramObjects().get(0))
-											.getBiitText());
-							System.out.println("test: " + diagram + " " + diagram.getDiagramObjects().get(0).getParent());
-						}
-							UserSessionHandler.getFormController().save();
-							MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
-						
+						UserSessionHandler.getFormController().save();
+						MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+
 					} catch (Exception e) {
 						MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 						AbcdLogger.errorMessage(FormDiagramBuilder.class.getName(), e);

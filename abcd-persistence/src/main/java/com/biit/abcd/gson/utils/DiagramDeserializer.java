@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
@@ -35,6 +36,7 @@ public class DiagramDeserializer implements JsonDeserializer<Diagram> {
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
 		gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationDeserializer());
 		gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkDeserializer());
+		gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildDeserializer());
 		gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleDeserializer());
 		gsonBuilder.registerTypeAdapter(DiagramSink.class, new DiagramSinkDeserializer());
 		gsonBuilder.registerTypeAdapter(DiagramSource.class, new DiagramSourceDeserializer());

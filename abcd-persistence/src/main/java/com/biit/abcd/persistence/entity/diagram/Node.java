@@ -1,10 +1,6 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.StorableObject;
@@ -21,7 +17,6 @@ public class Node extends StorableObject {
 	private String selector;
 	@Expose
 	private String port;
-
 
 	public String getJointjsId() {
 		return jointjsId;
@@ -45,5 +40,13 @@ public class Node extends StorableObject {
 
 	public void setPort(String port) {
 		this.port = port;
+	}
+
+	public void update(Node object) {
+		if (object != null) {
+			jointjsId = object.jointjsId;
+			selector = object.selector;
+			port = object.port;
+		}
 	}
 }

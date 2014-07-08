@@ -15,6 +15,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.biit.abcd.gson.utils.DiagramCalculationSerializer;
+import com.biit.abcd.gson.utils.DiagramChildSerializer;
 import com.biit.abcd.gson.utils.DiagramDeserializer;
 import com.biit.abcd.gson.utils.DiagramElementSerializer;
 import com.biit.abcd.gson.utils.DiagramForkSerializer;
@@ -88,6 +89,7 @@ public class Diagram extends StorableObject {
 		gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramSink.class, new DiagramSinkSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramSource.class, new DiagramSourceSerializer());
@@ -138,8 +140,8 @@ public class Diagram extends StorableObject {
 	}
 
 	public DiagramObject findDiagramObjectByJointJsId(String jointJsId) {
-		for(DiagramObject element: diagramElements){
-			if(element.getJointjsId().equals(jointJsId)){
+		for (DiagramObject element : diagramElements) {
+			if (element.getJointjsId().equals(jointJsId)) {
 				return element;
 			}
 		}
@@ -148,20 +150,32 @@ public class Diagram extends StorableObject {
 
 	/**
 	 * Retrieves all links of a specific Diagram Element.
+	 * 
 	 * @param source
 	 * @return
 	 */
 	public List<DiagramLink> getOutgoingLinks(DiagramElement source) {
 		List<DiagramLink> links = new ArrayList<>();
-		for(DiagramObject element: diagramElements){
-			if(element instanceof DiagramLink){
+		for (DiagramObject element : diagramElements) {
+			if (element instanceof DiagramLink) {
 				DiagramLink link = (DiagramLink) element;
-				if(link.getSource().getJointjsId().equals(source.getJointjsId())){
+				if (link.getSource().getJointjsId().equals(source.getJointjsId())) {
 					links.add(link);
 				}
 			}
 		}
 		return links;
+	}
+	
+	public List<Diagram> getChildDiagrams(){
+		List<Diagram> childDiagrams = new ArrayList<Diagram>();
+		for(DiagramObject object: diagramElements){
+			if(object instanceof DiagramChild){
+				DiagramChild diagramChild = (DiagramChild) object;
+				childDiagrams.add(diagramChild.getChildDiagram());
+			}
+		}
+		return childDiagrams;
 	}
 
 }

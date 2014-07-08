@@ -180,6 +180,9 @@ public class DiagramLink extends DiagramObject {
 			}
 
 			List<DiagramLink> links = getParent().getOutgoingLinks((DiagramElement) forkSource);
+			if(links.size()==1){
+				return false;
+			}
 			int numOfEmptyLinks = 0;
 			for (DiagramLink link : links) {
 				if (link.isAnswerEmpty()) {
@@ -228,5 +231,42 @@ public class DiagramLink extends DiagramObject {
 		answer = null;
 		answerExpression = null;
 		setText("");
+	}
+
+	@Override
+	public void update(DiagramObject object) {
+		super.update(object);
+		if (object instanceof DiagramLink) {
+			DiagramLink link = (DiagramLink) object;
+
+			if (link.getAnswer() != null) {
+				answer = link.getAnswer();
+			}
+			if (link.getAnswerExpression() != null) {
+				answerExpression = new String(link.getAnswerExpression());
+			}
+
+			if (source == null) {
+				source = new Node();
+			}
+			source.update(link.getSource());
+
+			if (target == null) {
+				target = new Node();
+			}
+			target.update(link.getTarget());
+
+			if (link.getText() != null) {
+				text = new String(link.getText());
+			}
+			smooth = link.isSmooth();
+			manhattan = link.isManhattan();
+			if (link.getAttrs() != null) {
+				attrs = new String(link.getAttrs());
+			}
+			if (link.getVertices() != null) {
+				vertices = new String(link.getVertices());
+			}
+		}
 	}
 }

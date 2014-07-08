@@ -5,12 +5,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
-import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
-import com.biit.jointjs.diagram.builder.server.ElementPickedListener;
+import com.biit.jointjs.diagram.builder.server.listeners.DoubleClickListener;
+import com.biit.jointjs.diagram.builder.server.listeners.ElementActionListener;
+import com.biit.jointjs.diagram.builder.server.listeners.ElementPickedListener;
 
 public class AbcdDiagramBuilder extends DiagramBuilder {
 
@@ -19,11 +27,31 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	private Diagram diagram;
 	private HashMap<String, DiagramObject> diagramElements;
 	private List<DiagramObjectPickedListener> listeners;
+	private List<JumpToListener> jumpToListeners;
 
 	public AbcdDiagramBuilder() {
 		super();
 		diagramElements = new HashMap<>();
 		listeners = new ArrayList<AbcdDiagramBuilder.DiagramObjectPickedListener>();
+		jumpToListeners = new ArrayList<JumpToListener>();
+
+		addElementActionListener(new ElementActionListener() {
+
+			@Override
+			public void updateElement(String jsonString) {
+				updateObjectOfDiagram(jsonString);
+			}
+
+			@Override
+			public void removeElement(String jsonString) {
+				removeObjectOfDiagram(jsonString);
+			}
+
+			@Override
+			public void addElement(String jsonString) {
+				addObjectToDiagram(jsonString);
+			}
+		});
 		addElementPickedListener(new ElementPickedListener() {
 
 			@Override
@@ -32,15 +60,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					fireDiagramObjectPickedListeners(null);
 					return;
 				}
-				DiagramElement tempElement = DiagramElement.fromJson(jsonString);
-				if (diagramElements.containsKey(tempElement.getJointjsId())) {
-					DiagramElement currentElement = (DiagramElement) diagramElements.get(tempElement.getJointjsId());
-					fireDiagramObjectPickedListeners(currentElement);
-				} else {
-					diagram.addDiagramObject(tempElement);
-					diagramElements.put(tempElement.getJointjsId(), tempElement);
-					fireDiagramObjectPickedListeners(tempElement);
-				}
+				DiagramObject element = getObjectOfDiagram(jsonString);
+				fireDiagramObjectPickedListeners(element);
 			}
 
 			@Override
@@ -49,16 +70,122 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					fireDiagramObjectPickedListeners(null);
 					return;
 				}
-				DiagramLink tempLink = DiagramLink.fromJson(jsonString);
-				if (diagramElements.containsKey(tempLink.getJointjsId())) {
-					fireDiagramObjectPickedListeners(diagramElements.get(tempLink.getJointjsId()));
-				} else {
-					diagram.addDiagramObject(tempLink);
-					diagramElements.put(tempLink.getJointjsId(), tempLink);
-					fireDiagramObjectPickedListeners(tempLink);
+				DiagramObject element = getObjectOfDiagram(jsonString);
+				fireDiagramObjectPickedListeners(element);
+			}
+		});
+		addDoubleClickListener(new DoubleClickListener() {
+
+			@Override
+			public void doubleClick(String jsonString) {
+				DiagramObject object = getObjectOfDiagram(jsonString);
+				switch (object.getType()) {
+				case CALCULATION:
+					if (((DiagramCalculation) object).getFormExpression() != null) {
+						fireJumpToListener(((DiagramCalculation) object).getFormExpression());
+					} else {
+						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
+								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
+					}
+					break;
+				case FORK:
+					if (((DiagramFork) object).getQuestion() != null) {
+						fireJumpToListener(((DiagramFork) object).getQuestion());
+					} else {
+						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
+								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
+					}
+					break;
+				case DIAGRAM_CHILD:
+					if (((DiagramChild) object).getChildDiagram() != null) {
+						fireJumpToListener(((DiagramChild) object).getChildDiagram());
+					} else {
+						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
+								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
+					}
+					break;
+				case RULE:
+					// TODO rules not defined.
+					break;
+				case SINK:
+					if (((DiagramSink) object).getFormExpression() != null) {
+						fireJumpToListener(((DiagramSink) object).getFormExpression());
+					}
+					break;
+				case TABLE:
+					if (((DiagramTable) object).getTable() != null) {
+						fireJumpToListener(((DiagramTable) object).getTable());
+					} else {
+						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
+								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
+					}
+					break;
+				default:
+					break;
 				}
 			}
 		});
+	}
+
+	/**
+	 * Gets Element of diagram from a json String. If it doesn't exist on the
+	 * diagram, we add it first.
+	 * 
+	 * @param jsonString
+	 * @return
+	 */
+	private DiagramObject getObjectOfDiagram(String jsonString) {
+		DiagramObject tempElement = DiagramObject.fromJson(jsonString);
+		if (diagramElements.containsKey(tempElement.getJointjsId())) {
+			DiagramObject currentElement = diagramElements.get(tempElement.getJointjsId());
+			return currentElement;
+		} else {
+			addObjectToDiagram(tempElement);
+			return tempElement;
+		}
+	}
+
+	/**
+	 * Add a new Diagram object to the diagram if it doesn't exist.
+	 * 
+	 * @param element
+	 */
+	private void addObjectToDiagram(DiagramObject element) {
+		System.out.println("Add object to diagram");
+		if (!diagramElements.containsKey(element.getJointjsId())) {
+			diagram.addDiagramObject(element);
+			System.out.println("Parent: " + element.getParent());
+			diagramElements.put(element.getJointjsId(), element);
+		}
+	}
+
+	/**
+	 * Add a new Diagram object to the diagram if it doesn't exist.
+	 * 
+	 * @param element
+	 */
+	private void addObjectToDiagram(String jsonString) {
+		DiagramObject element = DiagramObject.fromJson(jsonString);
+		addObjectToDiagram(element);
+	}
+
+	private void removeObjectOfDiagram(String jsonString) {
+		DiagramObject element = DiagramObject.fromJson(jsonString);
+		if (diagramElements.containsKey(element.getJointjsId())) {
+			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
+			diagram.getDiagramObjects().remove(originalElement);
+			diagramElements.remove(element.getJointjsId());
+		}
+	}
+
+	private void updateObjectOfDiagram(String jsonString) {
+		DiagramObject element = DiagramObject.fromJson(jsonString);
+		System.out.println("Update object to diagram");
+		System.out.println(jsonString);
+		if (diagramElements.containsKey(element.getJointjsId())) {
+			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
+			originalElement.update(element);
+		}
 	}
 
 	public void setDiagram(Diagram diagram) {
@@ -153,6 +280,20 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			updateCellJson(((DiagramObject) element).toJson());
 		} else {
 			updateLinkJson(((DiagramObject) element).toJson());
+		}
+	}
+
+	public void addJumpToListener(JumpToListener jumpToListener) {
+		jumpToListeners.add(jumpToListener);
+	}
+
+	public void removeJumpToListener(JumpToListener jumpToListener) {
+		jumpToListeners.remove(jumpToListener);
+	}
+
+	public void fireJumpToListener(Object object) {
+		for (JumpToListener listener : jumpToListeners) {
+			listener.jumpTo(object);
 		}
 	}
 }

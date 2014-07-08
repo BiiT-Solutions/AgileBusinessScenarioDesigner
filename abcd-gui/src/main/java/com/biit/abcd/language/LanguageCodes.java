@@ -122,6 +122,8 @@ public enum LanguageCodes {
 	FORM_DIAGRAM_BUILDER_TABLE_DIAGRAM_UPDATE("formDiagramBuilder.table.diagramUpdate"),
 	FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_CAPTION("formDiagramBuilder.new.diagram.caption"),
 	FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_TEXTFIELD("formDiagramBuilder.new.diagram.textField"),
+	FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED("formDiagramBuilder.element.not.assigned"),
+	FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION("formDiagramBuilder.element.not.assigned.description"),
 	
 	TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION("treeObjectProperties.common.form.caption"),
 	TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION("treeObjectProperties.answer.form.caption"),
@@ -171,6 +173,7 @@ public enum LanguageCodes {
 	ERROR_SELECT_TABLE("error.select.table"),
 	ERROR_SELECT_EXPRESSION("error.select.expression"),
 	ERROR_SELECT_ANSWER("error.select.answer"),
+	ERROR_SELECT_DIAGRAM("error.select.diagram"),
 	
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),

@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.elements.diagrambuilder;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -7,14 +7,14 @@ import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 
-public class DiagramBuilderTable extends Table {
+public class SelectDiagramTable extends Table {
 	private static final long serialVersionUID = -2420087674159328133L;
 
 	enum MenuProperties {
 		DIAGRAM_NAME, UPDATE_TIME;
 	};
 
-	public DiagramBuilderTable() {
+	public SelectDiagramTable() {
 		initContainerProperties();
 	}
 
@@ -50,5 +50,13 @@ public class DiagramBuilderTable extends Table {
 		item.getItemProperty(MenuProperties.DIAGRAM_NAME).setValue(diagram.getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
 				DateManager.convertDateToString(diagram.getUpdateTime()));
+	}
+	
+	public void addRow(Diagram diagram){
+		addDiagram(diagram);
+	}
+
+	public Diagram getSelectedDiagram() {
+		return (Diagram) getValue();
 	}
 }
