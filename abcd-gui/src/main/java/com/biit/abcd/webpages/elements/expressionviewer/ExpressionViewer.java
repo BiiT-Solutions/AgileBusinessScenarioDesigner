@@ -292,15 +292,13 @@ public class ExpressionViewer extends CssLayout {
 	 * @param newElement
 	 */
 	public void addElementToSelected(Expression newElement) {
-		if (formExpression != null) {
-			int index = 0;
-			if (getSelectedExpression() != null) {
-				index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
-			}
+		// Checks if there is at least one expression
+		if(formExpression != null){
+			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
 			if (newElement instanceof ExpressionSymbol) {
 				// Brackets are added before selected expression in some cases.
 				if (((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true
-				// Brackets always at right position in '<', '>', ... symbols.
+						// Brackets always at right position in '<', '>', ... symbols.
 						&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
 						// Brackets always at right position in '=' symbol.
 						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
@@ -315,6 +313,8 @@ public class ExpressionViewer extends CssLayout {
 			}
 			updateExpression();
 			setSelectedExpression(newElement);
+		}else{
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_EXPRESSION_TABLE_EMPTY);
 		}
 	}
 
