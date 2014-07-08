@@ -76,7 +76,7 @@ public enum ThemeIcon {
 	
 	TREE_DESIGNER_GROUP_LOOP("appbar.loop.svg"),
 
-	DIAGRAM_BUILDER_PAGE("appbar.diagram.svg"),
+	DIAGRAM_BUILDER_PAGE("appbar.form.diagram.svg"),
 
 	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg"),
 
