@@ -14,13 +14,14 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.abcd.persistence.utils.ITableCellEditable;
 
 /**
  * Specific rules created for managing decision tables.
  */
 @Entity
 @Table(name = "RULE_DECISION_TABLE")
-public class TableRule extends StorableObject {
+public class TableRule extends StorableObject implements ITableCellEditable{
 
 	private String name;
 

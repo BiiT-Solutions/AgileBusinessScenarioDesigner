@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.utils.ITableCellEditable;
 import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 
@@ -18,7 +19,7 @@ import com.biit.jexeval.ExpressionEvaluator;
  */
 @Entity
 @Table(name = "EXPRESSION_FORMS_EXPRESSION")
-public class FormExpression extends Expression {
+public class FormExpression extends Expression implements ITableCellEditable{
 
 	private String name;
 

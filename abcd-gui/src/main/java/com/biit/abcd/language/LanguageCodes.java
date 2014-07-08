@@ -157,6 +157,7 @@ public enum LanguageCodes {
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
 	ERROR_REPEATED_TABLE_RULE_NAME("error.tablerule.repeatedName"),
 	ERROR_REPEATED_EXPRESSION_NAME("error.expression.repeatedName"),
+	ERROR_REPEATED_DROOLS_RULE_NAME("error.drools.rule.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),

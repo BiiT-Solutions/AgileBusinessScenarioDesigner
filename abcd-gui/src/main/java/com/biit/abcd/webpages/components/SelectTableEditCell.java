@@ -2,8 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
-import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.utils.ITableCellEditable;
 import com.biit.abcd.webpages.elements.decisiontable.EditCellComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -27,10 +26,8 @@ public class SelectTableEditCell extends EditCellComponent {
 		if (object == null) {
 			setLabel(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
 		} else {
-			if(object instanceof TableRule){
-				setLabel(((TableRule)object).getName());
-			}else if(object instanceof FormExpression){
-				setLabel(((FormExpression)object).getName());
+			if(object instanceof ITableCellEditable){
+				setLabel(((ITableCellEditable)object).getName());
 			}
 		}
 	}
