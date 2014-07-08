@@ -33,6 +33,7 @@ public class GlobalVariablesTable extends Table {
 		item.getItemProperty(Properties.VARIABLE_NAME).setValue(globalVariable.getName());
 		item.getItemProperty(Properties.VARIABLE_TYPE).setValue(
 				ServerTranslate.translate(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
+		setValue(globalVariable);
 		return item;
 	}
 
