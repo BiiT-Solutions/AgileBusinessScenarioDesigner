@@ -1,18 +1,23 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.webpages.FormDesigner;
+import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.components.SelectQuestionWindow;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.UI;
 
 public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<DiagramFork> {
 	private static final long serialVersionUID = -5767909479835775870L;
@@ -27,7 +32,8 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 	public void setElementAbstract(DiagramFork element) {
 		instance = element;
 
-		fieldWithSearchButton = new FieldWithSearchButton(ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION));
+		fieldWithSearchButton = new FieldWithSearchButton(
+				ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION));
 		fieldWithSearchButton.setNullCaption("Fork");
 		fieldWithSearchButton.setValue(null);
 		if (instance.getQuestion() != null) {
@@ -67,16 +73,30 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 			}
 		});
 
-		FormLayout categoryForm = new FormLayout();
-		categoryForm.setWidth(null);
-		categoryForm.addComponent(fieldWithSearchButton);
+		FormLayout forkForm = new FormLayout();
+		forkForm.setWidth(null);
+		forkForm.addComponent(fieldWithSearchButton);
 
-		addTab(categoryForm, "TODO - JsonDiagramProperties Fork", true, 0);
+		Button button = new Button("Saltar a la question", new ClickListener() {
+			private static final long serialVersionUID = 8941843101304281590L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if (instance.getQuestion() != null) {
+					ApplicationFrame.navigateTo(WebMap.TREE_DESIGNER);
+					FormDesigner formDesigner = (FormDesigner) ((ApplicationFrame) UI.getCurrent()).getCurrentView();
+					formDesigner.selectComponent(instance.getQuestion());
+				}
+			}
+		});
+		forkForm.addComponent(button);
+
+		addTab(forkForm, "TODO - JsonDiagramProperties Fork", true, 0);
 	}
 
 	@Override
 	public void updateElement() {
-		//All the updates are done in the field directly.
+		// All the updates are done in the field directly.
 	}
 
 	@Override

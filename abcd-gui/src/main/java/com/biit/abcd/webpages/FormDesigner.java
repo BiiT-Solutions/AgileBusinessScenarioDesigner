@@ -464,5 +464,13 @@ public class FormDesigner extends FormWebPageComponent {
 			updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
 		}
 	}
+	
+	public void selectComponent(TreeObject element){
+		if(formTreeTable.getItem(element)!=null){
+			formTreeTable.setValue(element);
+		}else{
+			MessageManager.showWarning(LanguageCodes.WARNING_ELEMENT_NOT_FOUND, LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
+		}
+	}
 
 }
