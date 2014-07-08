@@ -33,6 +33,7 @@ public class GlobalVariablesTable extends Table {
 		item.getItemProperty(Properties.VARIABLE_NAME).setValue(globalVariable.getName());
 		item.getItemProperty(Properties.VARIABLE_TYPE).setValue(
 				ServerTranslate.translate(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
+		setValue(globalVariable);
 		return item;
 	}
 
@@ -57,5 +58,15 @@ public class GlobalVariablesTable extends Table {
 			globalVariables.add((GlobalVariable) item);
 		}
 		return globalVariables;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void updateItem(GlobalVariable itemEdited){
+		Item item = getItem(itemEdited);
+		if(item != null){
+			item.getItemProperty(Properties.VARIABLE_NAME).setValue(itemEdited.getName());
+			item.getItemProperty(Properties.VARIABLE_TYPE).setValue(
+					ServerTranslate.translate(AnswerFormatUi.getFromAnswerFormat(itemEdited.getFormat()).getLanguageCode()));
+		}
 	}
 }

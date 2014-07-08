@@ -21,9 +21,12 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
 import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -43,6 +46,7 @@ public class ExpressionViewer extends CssLayout {
 		setImmediate(true);
 		expressionOfElement = new HashMap<>();
 		setStyleName(CLASSNAME);
+		addKeyController();
 	}
 
 	private void updateExpression() {
@@ -240,25 +244,44 @@ public class ExpressionViewer extends CssLayout {
 		return selectedExpression;
 	}
 
+	private void selectNextExpression() {
+		if (getSelectedExpression() != null) {
+			// Select next expression.
+			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+			selectExpressionByIndex(index);
+		}
+	}
+
+	private void selectPreviousExpression() {
+		if (getSelectedExpression() != null) {
+			// Select next expression.
+			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) - 1;
+			selectExpressionByIndex(index);
+		}
+	}
+
+	private void selectExpressionByIndex(int index) {
+		Expression selected = null;
+		if (index >= 0) {
+			if (index < formExpression.getExpressions().size()) {
+				selected = formExpression.getExpressions().get(index);
+			} else if (!formExpression.getExpressions().isEmpty()) {
+				selected = formExpression.getExpressions().get(formExpression.getExpressions().size() - 1);
+			}
+		} else {
+			selectExpressionByIndex(0);
+		}
+		if (selected != null) {
+			setSelectedExpression(selected);
+		}
+	}
+
 	public void removeSelectedExpression() {
 		if (getSelectedExpression() != null) {
 			int index = formExpression.getExpressions().indexOf(getSelectedExpression());
 			formExpression.getExpressions().remove(getSelectedExpression());
-			Expression selected = null;
-
-			// Select next expression.
-			if (index >= 0) {
-				if (index < formExpression.getExpressions().size()) {
-					selected = formExpression.getExpressions().get(index);
-				} else if (!formExpression.getExpressions().isEmpty()) {
-					selected = formExpression.getExpressions().get(formExpression.getExpressions().size() - 1);
-				}
-			}
-
 			updateExpression();
-			if (selected != null) {
-				setSelectedExpression(selected);
-			}
+			selectExpressionByIndex(index);
 		}
 	}
 
@@ -269,25 +292,30 @@ public class ExpressionViewer extends CssLayout {
 	 * @param newElement
 	 */
 	public void addElementToSelected(Expression newElement) {
-		int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
-		if (newElement instanceof ExpressionSymbol) {
-			// Brackets are added before selected expression in some cases.
-			if (((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true
-			// Brackets always at right position in '<', '>', ... symbols.
-					&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
-					// Brackets always at right position in '=' symbol.
-					&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
-							.getValue().equals(AvailableOperator.ASSIGNATION))) {
-				index--;
+		// Checks if there is at least one expression
+		if(formExpression != null){
+			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+			if (newElement instanceof ExpressionSymbol) {
+				// Brackets are added before selected expression in some cases.
+				if (((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true
+						// Brackets always at right position in '<', '>', ... symbols.
+						&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
+						// Brackets always at right position in '=' symbol.
+						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
+								.getValue().equals(AvailableOperator.ASSIGNATION))) {
+					index--;
+				}
 			}
+			if (index >= 0 && index < formExpression.getExpressions().size()) {
+				formExpression.getExpressions().add(index, newElement);
+			} else {
+				formExpression.getExpressions().add(newElement);
+			}
+			updateExpression();
+			setSelectedExpression(newElement);
+		}else{
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_EXPRESSION_TABLE_EMPTY);
 		}
-		if (index >= 0 && index < formExpression.getExpressions().size()) {
-			formExpression.getExpressions().add(index, newElement);
-		} else {
-			formExpression.getExpressions().add(newElement);
-		}
-		updateExpression();
-		setSelectedExpression(newElement);
 	}
 
 	public FormExpression getFormExpression() {
@@ -300,7 +328,6 @@ public class ExpressionViewer extends CssLayout {
 			evaluatorOutput.setStyleName("expression-valid");
 			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			AbcdLogger.debug(ExpressionViewer.class.getName(), e.getMessage());
 			evaluatorOutput.setStyleName("expression-invalid");
 			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
@@ -319,5 +346,38 @@ public class ExpressionViewer extends CssLayout {
 		checkerLayout.setComponentAlignment(evaluatorOutput, Alignment.TOP_RIGHT);
 
 		return checkerLayout;
+	}
+
+	/**
+	 * Add all keyboard defined actions.
+	 */
+	private void addKeyController() {
+		this.addShortcutListener(new ShortcutListener("DELETE_SHORTCUT", KeyCode.DELETE, null) {
+			private static final long serialVersionUID = -71562151456777493L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				removeSelectedExpression();
+			}
+		});
+
+		this.addShortcutListener(new ShortcutListener("SELECT_NEXT", KeyCode.ARROW_RIGHT, null) {
+			private static final long serialVersionUID = 7663105045629599269L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				selectNextExpression();
+			}
+		});
+
+		this.addShortcutListener(new ShortcutListener("SELECT_PREVIOUS", KeyCode.ARROW_LEFT, null) {
+			private static final long serialVersionUID = 8453120978479798559L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				selectPreviousExpression();
+			}
+		});
+
 	}
 }

@@ -32,7 +32,7 @@ public class VariableDataTable extends Table {
 			for (VariableData data : variable.getData()) {
 				addItem(data);
 			}
-		}else{
+		} else {
 			removeAllItems();
 		}
 	}
@@ -40,17 +40,18 @@ public class VariableDataTable extends Table {
 	@SuppressWarnings("unchecked")
 	public Item addItem(VariableData variableData) {
 		Item item = super.addItem(variableData);
-		item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue());
+		item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.toString());
 		item.getItemProperty(Properties.VARIABLE_VALID_FROM).setValue(
 				DateManager.convertDateToString(variableData.getValidFrom(), DateManager.DATE_FORMAT_SIMPLE));
-		
-		if(variableData.getValidTo() == null){
+
+		if (variableData.getValidTo() == null) {
 			// Value set to infinite (null)
 			item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(null);
-		}else{
+		} else {
 			item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(
 					DateManager.convertDateToString(variableData.getValidTo(), DateManager.DATE_FORMAT_SIMPLE));
 		}
+		setValue(variableData);
 		return item;
 	}
 
@@ -60,5 +61,20 @@ public class VariableDataTable extends Table {
 			return addItem((VariableData) itemId);
 		}
 		return null;
+	}
+
+	public VariableData getSelectedVariableData() {
+		if (getValue() != null) {
+			return (VariableData) getValue();
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void updateItem(VariableData variableData) {
+		Item item = getItem(variableData);
+		if (item != null) {
+			item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.toString());
+		}
 	}
 }

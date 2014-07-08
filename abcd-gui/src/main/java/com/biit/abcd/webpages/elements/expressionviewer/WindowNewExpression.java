@@ -8,10 +8,10 @@ import com.biit.abcd.webpages.ExpressionEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
 import com.vaadin.ui.TextField;
 
-public class WindoNewExpression extends WindowCreateNewObject {
+public class WindowNewExpression extends WindowCreateNewObject {
 	private static final long serialVersionUID = -466962195753116776L;
 
-	public WindoNewExpression(ExpressionEditor parentWindow, LanguageCodes windowCaption,
+	public WindowNewExpression(ExpressionEditor parentWindow, LanguageCodes windowCaption,
 			LanguageCodes inputFieldCaption) {
 		super(parentWindow, windowCaption, inputFieldCaption);
 	}

@@ -53,6 +53,7 @@ public enum LanguageCodes {
 	WARNING_VARIABLE_DATA_VALID_TO_MISSING("warning.variable.data.valid.to.missing"),
 	WARNING_VARIABLE_DATA_VALID_RANGE_WRONG("warning.variable.data.valid.range.wrong"),
 	WARNING_VARIABLE_NAME_WRONG("warning.variable.name.wrong"),
+	WARNING_EXPRESSION_TABLE_EMPTY("warning.expression.table.empty"),
 	WARNING_ELEMENT_NOT_FOUND("warning.element.not.found"), 
 	WARNING_ELEMENT_NOT_FOUND_DESCRIPTION("warning.element.not.found.description"),
 	
@@ -159,6 +160,7 @@ public enum LanguageCodes {
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
 	ERROR_REPEATED_TABLE_RULE_NAME("error.tablerule.repeatedName"),
 	ERROR_REPEATED_EXPRESSION_NAME("error.expression.repeatedName"),
+	ERROR_REPEATED_DROOLS_RULE_NAME("error.drools.rule.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
@@ -227,7 +229,9 @@ public enum LanguageCodes {
 	SETTINGS_CLOSE("settings.close"),
 	
 	GLOBAL_VARIABLE_ADD_WINDOW_TITLE("global.variable.window.title"),
+	GLOBAL_VARIABLE_EDIT_WINDOW_TITLE("global.variable.edit.window.title"),
 	GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE("global.variable.value.window.title"),
+	GLOBAL_VARIABLE_VALUE_EDIT_WINDOW_TITLE("global.variable.value.edit.window.title"),
 	GLOBAL_VARIABLE_NAME("global.variable.name"),
 	GLOBAL_VARIABLE_VALUE("global.variable.value"),
 	GLOBAL_VARIABLE_TYPE("global.variable.type"),
@@ -238,10 +242,14 @@ public enum LanguageCodes {
 	GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP("global.variables.table.add.variable.tooltip"),
 	GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_CAPTION("global.variables.table.remove.variable.caption"),
 	GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_TOOLTIP("global.variables.table.remove.variable.tooltip"),
+	GLOBAL_VARIABLES_TABLE_EDIT_VARIABLE_CAPTION("global.variables.table.edit.variable.caption"),
+	GLOBAL_VARIABLES_TABLE_EDIT_VARIABLE_TOOLTIP("global.variables.table.edit.variable.tooltip"),
 	GLOBAL_VARIABLES_TABLE_ADD_DATA_CAPTION("global.variables.table.add.data.caption"),
 	GLOBAL_VARIABLES_TABLE_ADD_DATA_TOOLTIP("global.variables.table.add.data.tooltip"),
 	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_CAPTION("global.variables.table.remove.data.caption"),
 	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip"),
+	GLOBAL_VARIABLES_TABLE_EDIT_DATA_CAPTION("global.variables.table.edit.data.caption"),
+	GLOBAL_VARIABLES_TABLE_EDIT_DATA_TOOLTIP("global.variables.table.edit.data.tooltip"),
 	
 	RULE_EDITOR_WHEN_LABEL("window.when.label"),
 	RULE_EDITOR_THEN_LABEL("window.then.label"),
@@ -290,7 +298,12 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_MIN("expression.button.min"),
 	EXPRESSION_BUTTON_ABS("expression.button.abs"),
 	EXPRESSION_BUTTON_ROUND("expression.button.round"),
-	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"), 
+	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"),
+	EXPRESSION_BUTTON_IN("expression.button.in"),
+	EXPRESSION_BUTTON_BETWEEN("expression.button.between"),
+	
+	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
+	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE("expression.form.variable.addvariable"),
 	
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_CAPTION("json.diagram.properties.calculation.expression.caption"),
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION("json.diagram.properties.calculation.expression.null.caption"),
@@ -298,7 +311,13 @@ public enum LanguageCodes {
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION("json.diagram.properties.sink.expression.caption"), 
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION("json.diagram.properties.sink.expression.null.caption"),
 	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption"),
-	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION("json.diagram.properties.link.field.null.caption");
+	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION("json.diagram.properties.link.field.null.caption"),
+	
+	DROOLS_RULES_EDITOR_TABLE_NAME("drools.rules.editor.table.name"),
+	DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME("drools.rules.editor.tablecolumn.name"),	
+	DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE("drools.rules.editor.tablecolumn.update"),
+	DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD("drools.rules.editor.name.textField"),
+	WINDOW_EDIT_TABLE_CELL_LABEL("window.edit.table.cell.label");
 	
 	
 	

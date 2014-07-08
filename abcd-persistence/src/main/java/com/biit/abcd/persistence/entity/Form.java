@@ -18,6 +18,7 @@ import javax.persistence.UniqueConstraint;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.UserGroup;
 
@@ -41,21 +42,24 @@ public class Form extends TreeObject {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<CustomVariable> customVariables;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<FormExpression> expressions;
+	private List<FormExpression> formExpressions;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<Rule> rules;
 
 	public Form() {
 		diagrams = new ArrayList<>();
 		tableRules = new ArrayList<>();
 		customVariables = new ArrayList<>();
-		expressions = new ArrayList<>();
+		formExpressions = new ArrayList<>();
 		setName(DEFAULT_NAME);
 	}
 
 	/**
-	 * Gets all children of the form. This annotations are in the method because
-	 * overwrites the TreeObject. Forms' children must use FetchType.LAZY.
+	 * Gets all children of the form. This annotations are in the method because overwrites the TreeObject. Forms'
+	 * children must use FetchType.LAZY.
 	 */
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
@@ -135,12 +139,12 @@ public class Form extends TreeObject {
 	public void setAvailableTo(Timestamp availableTo) {
 		this.availableTo = availableTo;
 	}
-	
-	public void addDiagram(Diagram diagram){
+
+	public void addDiagram(Diagram diagram) {
 		diagrams.add(diagram);
 	}
-	
-	public void removeDiagram(Diagram diagram){
+
+	public void removeDiagram(Diagram diagram) {
 		diagrams.remove(diagram);
 	}
 
@@ -188,11 +192,19 @@ public class Form extends TreeObject {
 	}
 
 	public List<FormExpression> getFormExpressions() {
-		return expressions;
+		return formExpressions;
 	}
 
 	public void setFormExpressions(List<FormExpression> expressions) {
-		this.expressions = expressions;
+		this.formExpressions = expressions;
+	}
+
+	public List<Rule> getRules() {
+		return rules;
+	}
+
+	public void setRules(List<Rule> rules) {
+		this.rules = rules;
 	}
 
 }

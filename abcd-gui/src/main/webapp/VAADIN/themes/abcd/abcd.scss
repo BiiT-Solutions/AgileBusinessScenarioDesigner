@@ -707,5 +707,11 @@ $open-sans-pathPrefix: "./fonts/";
 		background-color: #ddd;
 	}
 	
+	div.v-button.v-widget.v-expression-button-selector.v-button-v-expression-button-selector {
+		overflow:hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	
 	
 }

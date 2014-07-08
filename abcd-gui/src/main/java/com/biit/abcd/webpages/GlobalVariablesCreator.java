@@ -9,6 +9,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
+import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -89,28 +90,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				VariableWindow window = new VariableWindow(ServerTranslate
-						.translate(LanguageCodes.GLOBAL_VARIABLE_ADD_WINDOW_TITLE));
-				window.addAcceptAcctionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						GlobalVariable value = ((VariableWindow) window).getValue();
-						if (value != null) {
-							variableTable.addItem(value);
-							variableTable.setValue(value);
-						}
-						window.close();
-					}
-				});
-				window.addCloseListener(new CloseListener() {
-					private static final long serialVersionUID = -1957065660286348445L;
-					@Override
-					public void windowClose(CloseEvent e) {
-						createValueDataWindow();						
-					}
-				});
-				
-				window.showCentered();
+				createVariableWindow();
 			}
 		});
 		upperMenu.addRemoveVariableButtonClickListener(new ClickListener() {
@@ -127,6 +107,16 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				}
 			}
 		});
+
+		upperMenu.addEditVariableButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 6386920185257203923L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				createEditVariableWindow();
+			}
+		});
+
 		upperMenu.addAddValueButtonClickListener(new ClickListener() {
 			private static final long serialVersionUID = 2087675518126425145L;
 
@@ -143,10 +133,11 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				Object selectedVariable = variableDataTable.getValue();
 				if (selectedVariable != null) {
 					// Check if the value is the last of the list, if not, it can't be deleted
-					if(isLastValueOfVariableList(((GlobalVariable) variableTable.getValue()).getData(), selectedVariable)){
+					if (isLastValueOfVariableList(((GlobalVariable) variableTable.getValue()).getData(),
+							selectedVariable)) {
 						variableDataTable.removeItem(selectedVariable);
 						((GlobalVariable) variableTable.getValue()).getData().remove(selectedVariable);
-					}else {
+					} else {
 						MessageManager.showWarning(LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID_TITLE,
 								LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID);
 					}
@@ -156,28 +147,89 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				}
 			}
 		});
-				
+
+		upperMenu.addEditValueButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -589339616429194896L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				createEditValueDataWindow();
+			}
+		});
+
 		return upperMenu;
 	}
 
-	private void createValueDataWindow(){
+	private void createVariableWindow() {
+		VariableWindow window = new VariableWindow(
+				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_ADD_WINDOW_TITLE));
+		window.addAcceptAcctionListener(new AcceptActionListener() {
+			@Override
+			public void acceptAction(AcceptCancelWindow window) {
+				GlobalVariable value = ((VariableWindow) window).getValue();
+				if (value != null) {
+					variableTable.addItem(value);
+					variableTable.setValue(value);
+				}
+				window.close();
+			}
+		});
+		window.addCloseListener(new CloseListener() {
+			private static final long serialVersionUID = -1957065660286348445L;
+
+			@Override
+			public void windowClose(CloseEvent e) {
+				createValueDataWindow();
+			}
+		});
+
+		window.showCentered();
+	}
+
+	private void createEditVariableWindow() {
+		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
+
+		if (variable != null) {
+			VariableWindow window = new VariableWindow(
+					ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_EDIT_WINDOW_TITLE));
+			window.setValue(variable);
+			window.disableTypeEdition();
+
+			window.addAcceptAcctionListener(new AcceptActionListener() {
+				@Override
+				public void acceptAction(AcceptCancelWindow window) {
+					GlobalVariable editedVariable = ((VariableWindow) window).getValue();
+					if (editedVariable != null) {
+						// Update the internal value
+						variable.updateValues(editedVariable);
+						// Update the view of the value
+						variableTable.updateItem(variable);
+					}
+					window.close();
+				}
+			});
+			window.showCentered();
+		}
+	}
+
+	private void createValueDataWindow() {
 		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
 
 		if (variable != null) {
 			// Check if the previous value has "value to" set to infinite
-			if(isLastValueToInfinite(variable)){
+			if (isLastValidToInfinite(variable)) {
 				MessageManager.showWarning(LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INFINITE_VALUE_TITLE,
 						LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INFINITE_VALUE);
-			}else{
+			} else {
 				VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
 						ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE));
 
 				// If the global variable has values, we manage the
 				// "value from"/"value to" properties
 				List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
-				if(auxVariableList.size() > 0){
+				if (auxVariableList.size() > 0) {
 					// Set the "value from" value related to the previous one
-					VariableData auxVariableData = auxVariableList.get(auxVariableList.size()-1);
+					VariableData auxVariableData = auxVariableList.get(auxVariableList.size() - 1);
 					Date auxDate = new Date(auxVariableData.getValidTo().getTime());
 					variableDataWindow.setValidFromValue(DateManager.incrementDateOneDay(auxDate));
 					// Disable the "value from" data field
@@ -200,27 +252,63 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			}
 		}
 	}
-	
-	private boolean isLastValueOfVariableList(List<VariableData> variableDataList, Object selectedVariable){
+
+	private void createEditValueDataWindow() {
+		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
+
+		if (variable != null) {
+			final VariableData selectedValue = variableDataTable.getSelectedVariableData();
+			if (selectedValue != null) {
+
+				VariableDataWindow variableDataWindow = new VariableDataWindow(variable.getFormat(),
+						ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_EDIT_WINDOW_TITLE));
+
+				variableDataWindow.setValue(selectedValue);
+				variableDataWindow.disableValueFromTo();
+
+				variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						VariableData editedVariable = ((VariableDataWindow) window).getValue();
+						if (editedVariable != null) {
+							try {
+								// Update the internal value
+								if (selectedValue.updateValues(editedVariable)) {
+									// Update the view of the value
+									variableDataTable.updateItem(selectedValue);
+								}
+							} catch (NotValidTypeInVariableData e) {
+								MessageManager.showError(e.getMessage());
+							}
+						}
+						window.close();
+					}
+				});
+				variableDataWindow.showCentered();
+			}
+		}
+	}
+
+	private boolean isLastValueOfVariableList(List<VariableData> variableDataList, Object selectedVariable) {
 		int variableListSize = variableDataList.size();
 		int valuePosition = variableDataList.indexOf(selectedVariable);
-		if(variableListSize == (valuePosition+1)){
-			return true;	
+		if (variableListSize == (valuePosition + 1)) {
+			return true;
 		}
-		return false;	
-	}
-	
-	private boolean isLastValueToInfinite(GlobalVariable variable){
-		List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
-		if(auxVariableList.size() > 0){
-			VariableData auxVariableData = auxVariableList.get(auxVariableList.size()-1);
-			if(auxVariableData.getValidTo() == null){
-				return true;
-			}
-		}		
 		return false;
 	}
-	
+
+	private boolean isLastValidToInfinite(GlobalVariable variable) {
+		List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
+		if (auxVariableList.size() > 0) {
+			VariableData auxVariableData = auxVariableList.get(auxVariableList.size() - 1);
+			if (auxVariableData.getValidTo() == null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
 		// TODO Auto-generated method stub

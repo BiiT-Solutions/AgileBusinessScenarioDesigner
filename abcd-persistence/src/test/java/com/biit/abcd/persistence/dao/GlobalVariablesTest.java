@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.abcd.persistence.entity.globalvariables.VariableData;
+import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -24,6 +24,12 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	private static final String BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME = "Variable with data";
 	private static final String VARIABLE_DATA_VALUE_1 = "Value1";
 	private static final String VARIABLE_DATA_VALUE_2 = "Value2";
+	private static final Double VARIABLE_DATA_VALUE_3 = 3.7;
+	private static final Double VARIABLE_DATA_VALUE_4 = 46.2;
+	private static final Timestamp VARIABLE_DATA_VALUE_5 = new Timestamp((new Date().getTime() / 1000) * 1000);
+	private static final Timestamp VARIABLE_DATA_VALUE_6 = new Timestamp((new Date().getTime() / 1000) * 1000);
+	private static final String VARIABLE_DATA_VALUE_7 = "1234AD";
+	private static final String VARIABLE_DATA_VALUE_8 = "6543FD";
 	// Mysql database cannot store miliseconds. We round it first.
 	private static final Timestamp VARIABLE_DATA_VALID_FROM = new Timestamp((new Date().getTime() / 1000) * 1000);
 	private static final Timestamp VARIABLE_DATA_VALID_TO = new Timestamp(VARIABLE_DATA_VALID_FROM.getTime()
@@ -39,9 +45,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 
 	@Test(groups = { "globalVariablesDao" })
 	public void storeBasicVariables() throws NotValidFormException {
-		GlobalVariable globalVariable = new GlobalVariable();
+		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_NAME);
-		globalVariable.setFormat(AnswerFormat.TEXT);
 
 		globalVariablesDao.makePersistent(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 1);
@@ -55,22 +60,12 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	}
 
 	@Test(groups = { "globalVariablesDao" })
-	public void storeBasicVariablesWithData() throws NotValidFormException {
-		GlobalVariable globalVariable = new GlobalVariable();
+	public void storeBasicVariablesWithTextData() throws NotValidFormException, NotValidTypeInVariableData {
+		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		globalVariable.setFormat(AnswerFormat.TEXT);
-
-		VariableData variableData1 = new VariableData();
-		variableData1.setValue(VARIABLE_DATA_VALUE_1);
-		variableData1.setValidFrom(VARIABLE_DATA_VALID_FROM);
-		variableData1.setValidTo(VARIABLE_DATA_VALID_TO);
-		globalVariable.getData().add(variableData1);
-
-		VariableData variableData2 = new VariableData();
-		variableData2.setValue(VARIABLE_DATA_VALUE_2);
-		variableData2.setValidFrom(VARIABLE_DATA_VALID_TO);
-		variableData2.setValidTo(VARIABLE_DATA_VALID_TO_2);
-		globalVariable.getData().add(variableData2);
+		
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_1, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_2, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
 
 		globalVariablesDao.makePersistent(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 1);
@@ -84,6 +79,90 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
 		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
 		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_2);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
+
+		globalVariablesDao.makeTransient(globalVariable);
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
+		Assert.assertEquals(variableDataDao.getRowCount(), 0);
+	}
+	
+	@Test(groups = { "globalVariablesDao" })
+	public void storeBasicVariablesWithNumberData() throws NotValidFormException, NotValidTypeInVariableData {
+		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.NUMBER);
+		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
+		
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_3, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_4, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
+
+		globalVariablesDao.makePersistent(globalVariable);
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 1);
+		Assert.assertEquals(variableDataDao.getRowCount(), 2);
+
+		List<GlobalVariable> persistedList = globalVariablesDao.getAll();
+		Assert.assertEquals(persistedList.size(), 1);
+		Assert.assertEquals(persistedList.get(0).getName(), BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
+		Assert.assertEquals(persistedList.get(0).getData().size(), 2);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValue(), VARIABLE_DATA_VALUE_3);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_4);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
+
+		globalVariablesDao.makeTransient(globalVariable);
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
+		Assert.assertEquals(variableDataDao.getRowCount(), 0);
+	}
+	
+	@Test(groups = { "globalVariablesDao" })
+	public void storeBasicVariablesWithDateData() throws NotValidFormException, NotValidTypeInVariableData {
+		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.DATE);
+		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
+		
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_5, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_6, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
+
+		globalVariablesDao.makePersistent(globalVariable);
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 1);
+		Assert.assertEquals(variableDataDao.getRowCount(), 2);
+
+		List<GlobalVariable> persistedList = globalVariablesDao.getAll();
+		Assert.assertEquals(persistedList.size(), 1);
+		Assert.assertEquals(persistedList.get(0).getName(), BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
+		Assert.assertEquals(persistedList.get(0).getData().size(), 2);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValue(), VARIABLE_DATA_VALUE_5);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_6);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
+
+		globalVariablesDao.makeTransient(globalVariable);
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
+		Assert.assertEquals(variableDataDao.getRowCount(), 0);
+	}
+	
+	@Test(groups = { "globalVariablesDao" })
+	public void storeBasicVariablesWithPostalCodeData() throws NotValidFormException, NotValidTypeInVariableData {
+		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.POSTAL_CODE);
+		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
+		
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_7, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_8, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
+
+		globalVariablesDao.makePersistent(globalVariable);
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 1);
+		Assert.assertEquals(variableDataDao.getRowCount(), 2);
+
+		List<GlobalVariable> persistedList = globalVariablesDao.getAll();
+		Assert.assertEquals(persistedList.size(), 1);
+		Assert.assertEquals(persistedList.get(0).getName(), BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
+		Assert.assertEquals(persistedList.get(0).getData().size(), 2);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValue(), VARIABLE_DATA_VALUE_7);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
+		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_8);
 		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
 		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
 
