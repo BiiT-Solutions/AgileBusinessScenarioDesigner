@@ -129,9 +129,13 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				decisionTable.addColumnPair();
-				if (decisionTable.getColumns().size() == 2 && decisionTable.getTableRules().isEmpty()) {
-					decisionTable.addRow();
+				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+				if (tableSelectionMenu.getSelectedTableRule() != null) {
+					decisionTable.addColumnPair();
+					if (decisionTable.getColumns().size() == 2 && decisionTable.getTableRules().isEmpty()) {
+						decisionTable.addRow();
+					}
+					tableRule.setUpdateTime();
 				}
 			}
 		});
@@ -141,7 +145,11 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				decisionTable.removeSelectedColumns();
+				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+				if (tableSelectionMenu.getSelectedTableRule() != null) {
+					decisionTable.removeSelectedColumns();
+					tableRule.setUpdateTime();
+				}
 			}
 		});
 
@@ -150,8 +158,10 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
 				if (tableSelectionMenu.getSelectedTableRule() != null) {
 					decisionTable.addRow();
+					tableRule.setUpdateTime();
 				}
 			}
 		});
@@ -161,7 +171,11 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				decisionTable.removeSelectedRows();
+				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+				if (tableSelectionMenu.getSelectedTableRule() != null) {
+					decisionTable.removeSelectedRows();
+					tableRule.setUpdateTime();
+				}
 			}
 		});
 
@@ -202,17 +216,6 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		if(getSelectedTableRule()!=null){
 			decisionTable.setTableRule(getSelectedTableRule());
 		}
-		// if (getSelectedTableRule() != null) {
-		// for (Question question :
-		// getSelectedTableRule().getConditionsHeader()) {
-		// decisionTable.addColumn(question);
-		// }
-		//
-		// // Add table rows.
-		// for (TableRuleRow tableRuleRow : getSelectedTableRule().getRules()) {
-		// decisionTable.addRow(tableRuleRow);
-		// }
-		// }
 	}
 
 	@Override

@@ -313,6 +313,7 @@ public enum LanguageCodes {
 	DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME("drools.rules.editor.tablecolumn.name"),	
 	DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE("drools.rules.editor.tablecolumn.update"),
 	DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD("drools.rules.editor.name.textField");
+	WINDOW_EDIT_TABLE_CELL_LABEL("window.edit.table.cell.label");
 	
 	
 	
