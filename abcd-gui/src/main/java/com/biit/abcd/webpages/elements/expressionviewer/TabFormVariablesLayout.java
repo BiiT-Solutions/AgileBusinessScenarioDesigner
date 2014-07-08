@@ -71,6 +71,7 @@ public class TabFormVariablesLayout extends TabLayout {
 		});
 		addComponent(addVariableButton);
 		setComponentAlignment(addVariableButton, Alignment.TOP_RIGHT);
+		setFormVariableSelectionValues();
 
 	}
 

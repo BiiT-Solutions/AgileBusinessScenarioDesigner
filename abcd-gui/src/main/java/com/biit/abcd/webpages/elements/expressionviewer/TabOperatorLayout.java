@@ -14,34 +14,74 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AccordionMultiple;
 import com.biit.abcd.webpages.components.StringInputWindow;
+import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.VerticalLayout;
 
 public class TabOperatorLayout extends TabLayout {
 	private static final long serialVersionUID = -6980953550185164306L;
 	private static final int GRID_COLUMNS = 3;
-	private GridLayout expLayout;
 
 	public TabOperatorLayout() {
-		expLayout = new GridLayout(GRID_COLUMNS, 4);
-		expLayout.setWidth("100%");
+		AccordionMultiple accordion = new AccordionMultiple();
+		
+		VerticalLayout matLayout = new VerticalLayout();
+		GridLayout inputLayout = new GridLayout(1, 1);
+		inputLayout.setWidth("100%");
+		createInputField(inputLayout);
+//		addComponent(inputLayout);
+//		setComponentAlignment(inputLayout, Alignment.MIDDLE_CENTER);
 
-		createMathOperators();
-		createMathFunctionsOperators();
-		createBaseTab();
-		createLogicalOperators();
-		createLogicalFunctionsOperators();
-		createInputField();
+		GridLayout operatorLayout = new GridLayout(GRID_COLUMNS, 4);
+		operatorLayout.setWidth("100%");
 
-		addComponent(expLayout);
-		setComponentAlignment(expLayout, Alignment.MIDDLE_CENTER);
+		createMathOperators(operatorLayout);
+		createMathFunctionsOperators(operatorLayout);
+		createBaseTab(operatorLayout);
+		
+		matLayout.addComponent(inputLayout);
+		matLayout.addComponent(operatorLayout);
+
+//		addComponent(operatorLayout);
+//		setComponentAlignment(operatorLayout, Alignment.MIDDLE_CENTER);
+		accordion.addTab(matLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_MATH), true);
+
+		GridLayout logicalLayout = new GridLayout(GRID_COLUMNS, 4);
+		logicalLayout.setWidth("100%");
+		createLogicalOperators(logicalLayout);
+		createLogicalFunctionsOperators(logicalLayout);
+
+//		addComponent(logicalLayout);
+//		setComponentAlignment(logicalLayout, Alignment.MIDDLE_CENTER);
+		
+		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
+		addComponent(accordion);
+		setComponentAlignment(accordion, Alignment.MIDDLE_CENTER);
+		this.setMargin(false);
 	}
 
-	private void createMathOperators() {
+	private void createMathOperators(AbstractLayout layout) {
+		Button assignButton = createButton("=", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
+				try {
+					exprValue.setValue(AvailableOperator.ASSIGNATION);
+					addExpression(exprValue);
+				} catch (NotValidOperatorInExpression e) {
+
+				}
+			}
+		});
+
 		Button plusButton = createButton("+", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
@@ -102,15 +142,16 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		expLayout.addComponent(plusButton);
-		expLayout.addComponent(minusButton);
-		expLayout.addComponent(multButton);
-		expLayout.addComponent(divButton);
-		expLayout.addComponent(moduleButton);
-		expLayout.addComponent(potButton);
+		layout.addComponent(assignButton);
+		layout.addComponent(plusButton);
+		layout.addComponent(minusButton);
+		layout.addComponent(multButton);
+		layout.addComponent(divButton);
+		layout.addComponent(moduleButton);
+		layout.addComponent(potButton);
 	}
 
-	private void createMathFunctionsOperators() {
+	private void createMathFunctionsOperators(AbstractLayout layout) {
 
 		Button maxButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MAX),
 				new ClickListener() {
@@ -164,14 +205,14 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
-		expLayout.addComponent(maxButton);
-		expLayout.addComponent(minimumButton);
-		expLayout.addComponent(absoluteButton);
-		expLayout.addComponent(sqrtButton);
-		expLayout.addComponent(roundButton);
+		layout.addComponent(maxButton);
+		layout.addComponent(minimumButton);
+		layout.addComponent(absoluteButton);
+		layout.addComponent(sqrtButton);
+		layout.addComponent(roundButton);
 	}
 
-	private void createLogicalFunctionsOperators() {
+	private void createLogicalFunctionsOperators(AbstractLayout layout) {
 		Button notButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_NOT),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
@@ -205,12 +246,12 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
-		expLayout.addComponent(notButton);
-		expLayout.addComponent(inButton);
-		expLayout.addComponent(betweenButton);
+		layout.addComponent(notButton);
+		layout.addComponent(inButton);
+		layout.addComponent(betweenButton);
 	}
 
-	private void createBaseTab() {
+	private void createBaseTab(AbstractLayout layout) {
 		Button leftBracketButton = createButton("(", new ClickListener() {
 			private static final long serialVersionUID = -3339234972234970277L;
 
@@ -233,21 +274,6 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		Button assignButton = createButton("=", new ClickListener() {
-			private static final long serialVersionUID = -8611397253545833133L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
-				try {
-					exprValue.setValue(AvailableOperator.ASSIGNATION);
-					addExpression(exprValue);
-				} catch (NotValidOperatorInExpression e) {
-
-				}
-			}
-		});
-
 		Button commaButton = createButton(",", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
@@ -258,13 +284,12 @@ public class TabOperatorLayout extends TabLayout {
 				addExpression(exprValue);
 			}
 		});
-		expLayout.addComponent(leftBracketButton);
-		expLayout.addComponent(rightBracketButton);
-		expLayout.addComponent(assignButton);
-		expLayout.addComponent(commaButton);
+		layout.addComponent(leftBracketButton);
+		layout.addComponent(rightBracketButton);
+		layout.addComponent(commaButton);
 	}
 
-	private void createLogicalOperators() {
+	private void createLogicalOperators(AbstractLayout layout) {
 		Button andButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AND),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
@@ -345,17 +370,17 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		expLayout.addComponent(andButton);
-		expLayout.addComponent(orButton);
-		expLayout.addComponent(greaterThanButton);
-		expLayout.addComponent(greaterEqualsButton);
-		expLayout.addComponent(lessThanButton);
-		expLayout.addComponent(lessEqualsButton);
-		expLayout.addComponent(equalsButton);
-		expLayout.addComponent(distinctButton);
+		layout.addComponent(andButton);
+		layout.addComponent(orButton);
+		layout.addComponent(greaterThanButton);
+		layout.addComponent(greaterEqualsButton);
+		layout.addComponent(lessThanButton);
+		layout.addComponent(lessEqualsButton);
+		layout.addComponent(equalsButton);
+		layout.addComponent(distinctButton);
 	}
 
-	private void createInputField() {
+	private void createInputField(AbstractLayout layout) {
 		Button inputButton = new Button(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_INPUT),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;
@@ -385,11 +410,8 @@ public class TabOperatorLayout extends TabLayout {
 				});
 
 		inputButton.setWidth("100%");
-		GridLayout expLayout = new GridLayout(1, 1);
-		expLayout.setWidth("100%");
-		expLayout.addComponent(inputButton);
-		addComponent(expLayout);
-		setComponentAlignment(expLayout, Alignment.MIDDLE_CENTER);
+		layout.setWidth("100%");
+		layout.addComponent(inputButton);
 	}
 
 	private Button createButton(String caption, ClickListener listener) {
