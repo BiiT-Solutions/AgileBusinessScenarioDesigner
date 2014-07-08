@@ -41,5 +41,13 @@ public class VariableDataNumber extends VariableData{
 		}else
 			return false;
 	}
+	
+	/**
+	 * Removes trailling zeros. 
+	 */
+	@Override
+	public String toString(){
+		return getValue().toString().indexOf(".") < 0 ? getValue().toString() : getValue().toString().replaceAll("0*$", "").replaceAll("\\.$", "");
+	}
 
 }
