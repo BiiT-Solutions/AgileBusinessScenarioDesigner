@@ -10,7 +10,7 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.components.SelectDroolsRule;
+import com.biit.abcd.webpages.components.SelectDroolsRuleEditable;
 import com.biit.abcd.webpages.elements.droolsrule.DroolsRuleEditorUpperMenu;
 import com.biit.abcd.webpages.elements.droolsrule.WindowNewRule;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
@@ -24,9 +24,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -1017932957756165996L;
 	private ExpressionEditorComponent ruleExpressionEditorComponent;
 	private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
-	private SelectDroolsRule tableSelectRule;
-
-	// private ExpressionTreeTable thenTable;
+	private SelectDroolsRuleEditable tableSelectRule;
 
 	public DroolsRuleEditor() {
 		super();
@@ -41,7 +39,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		collapsibleLayout.setSizeFull();
 
 		// Create menu
-		tableSelectRule = new SelectDroolsRule();
+		tableSelectRule = new SelectDroolsRuleEditable();
 		tableSelectRule.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -7103550436798085895L;
 
