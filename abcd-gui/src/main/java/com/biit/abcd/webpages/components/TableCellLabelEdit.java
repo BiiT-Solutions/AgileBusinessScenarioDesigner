@@ -20,8 +20,8 @@ public class TableCellLabelEdit extends Table {
 		TABLE_NAME, UPDATE_TIME;
 	};
 
-	public TableCellLabelEdit() {
-		initContainerProperties();
+	public TableCellLabelEdit(LanguageCodes header1, LanguageCodes header2) {
+		initContainerProperties(header1, header2);
 	}
 	
 	public void update(List<Object> objects) {
@@ -31,17 +31,17 @@ public class TableCellLabelEdit extends Table {
 		}
 	}
 
-	private void initContainerProperties() {
+	private void initContainerProperties(LanguageCodes header1, LanguageCodes header2) {
 		setSelectable(true);
 		setImmediate(true);
 		setMultiSelect(false);
 		setSizeFull();
 		
 		addContainerProperty(MenuProperties.TABLE_NAME, Component.class, null,
-				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME), null, Align.LEFT);
+				ServerTranslate.translate(header1), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
-				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_UPDATE), null, Align.LEFT);
+				ServerTranslate.translate(header2), null, Align.LEFT);
 		
 		cellRowSelector = new CellRowSelector();
 		addItemClickListener(cellRowSelector);

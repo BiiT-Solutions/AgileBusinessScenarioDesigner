@@ -10,7 +10,7 @@ import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.components.SelectExpressionTable;
+import com.biit.abcd.webpages.components.SelectExpressionTableEditable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.WindowNewExpression;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
@@ -24,7 +24,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
-	private SelectExpressionTable tableSelectExpression;
+	private SelectExpressionTableEditable tableSelectExpression;
 
 	public ExpressionEditor() {
 		super();
@@ -39,7 +39,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		collapsibleLayout.setSizeFull();
 
 		// Create menu
-		tableSelectExpression = new SelectExpressionTable();
+		tableSelectExpression = new SelectExpressionTableEditable();
 		tableSelectExpression.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -7103550436798085895L;
 

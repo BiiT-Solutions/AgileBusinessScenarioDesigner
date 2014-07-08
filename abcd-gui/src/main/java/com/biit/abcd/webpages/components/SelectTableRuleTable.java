@@ -1,32 +1,70 @@
 package com.biit.abcd.webpages.components;
 
-import com.biit.abcd.MessageManager;
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.elements.decisiontable.EditCellComponent;
+import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Table;
 
-public class SelectTableRuleTable extends TableCellLabelEdit {
+public class SelectTableRuleTable extends Table {
 	private static final long serialVersionUID = -5723571725991709050L;
 
+	enum MenuProperties {
+		TABLE_NAME, UPDATE_TIME;
+	};
 
 	public SelectTableRuleTable() {
-		super();
+		initContainerProperties();
 	}
-	
+
+	private void initContainerProperties() {
+		setSelectable(true);
+		setImmediate(true);
+		setMultiSelect(false);
+		setSizeFull();
+		
+		addContainerProperty(MenuProperties.TABLE_NAME, TableRule.class, "",
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME), null, Align.LEFT);
+
+		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_UPDATE), null, Align.LEFT);
+		
+		setColumnCollapsingAllowed(true);
+		setColumnCollapsible(MenuProperties.TABLE_NAME, false);
+		setColumnCollapsible(MenuProperties.UPDATE_TIME, true);
+		setColumnCollapsed(MenuProperties.UPDATE_TIME, true);
+
+		this.setColumnExpandRatio(MenuProperties.TABLE_NAME, 1);
+		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
+		
+		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
+		setSortAscending(false);
+		sort();
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public void addRow(TableRule tableRule) {
+		Item item = addItem(tableRule);
+		item.getItemProperty(MenuProperties.TABLE_NAME).setValue(tableRule);
+		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(tableRule.getUpdateTime()));
+	}
+
+	public void removeSelectedRow() {
+		TableRule tableRule = (TableRule) getValue();
+		if (tableRule != null) {
+			removeItem(tableRule);
+		}
+	}
+
 	public void update(Form form) {
 		this.removeAllItems();
 		for (TableRule tableRule : form.getTableRules()) {
 			addRow(tableRule);
 		}
 	}
-	
+
 	public TableRule getSelectedTableRule() {
 		return (TableRule) getValue();
 	}
@@ -34,46 +72,5 @@ public class SelectTableRuleTable extends TableCellLabelEdit {
 	public void setSelectedTableRule(TableRule tableRule) {
 		setValue(tableRule);
 	}
-	
-	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
-		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
-		if (editCellComponent != null) {
-			editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((TableRule) itemId));
-		}
-		return null;
-	}
-	
-	private class CellEditButtonClickListener implements ClickListener {
-		private static final long serialVersionUID = -4186477224806988479L;
-		private TableRule tableRule;
 
-		public CellEditButtonClickListener(TableRule tableRule) {
-			this.tableRule = tableRule;
-		}
-
-		@Override
-		public void buttonClick(ClickEvent event) {
-			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
-
-			newTableCellEditWindow.setValue(tableRule.getName());
-			newTableCellEditWindow.showCentered();
-			newTableCellEditWindow.addAcceptAcctionListener(new AcceptActionListener() {
-				@Override
-				public void acceptAction(AcceptCancelWindow window) {
-					for (TableRule existingTableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
-						if (existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
-							MessageManager.showError(LanguageCodes.ERROR_REPEATED_TABLE_RULE_NAME);
-							return;
-						}
-					}
-					tableRule.setName(newTableCellEditWindow.getValue());
-					tableRule.setUpdateTime();
-					updateItemTableRuleInGui(tableRule);
-					newTableCellEditWindow.close();
-				}
-			});
-		}
-	}
 }

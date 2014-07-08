@@ -1,22 +1,62 @@
 package com.biit.abcd.webpages.components;
 
-import com.biit.abcd.MessageManager;
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.Rule;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.elements.decisiontable.EditCellComponent;
+import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Table;
 
-public class SelectDroolsRule extends TableCellLabelEdit {
+public class SelectDroolsRule extends Table {
 	private static final long serialVersionUID = 3348987098295904893L;
 
+	enum MenuProperties {
+		RULE_NAME, UPDATE_TIME;
+	};
+
 	public SelectDroolsRule() {
-		super();
+		initContainerProperties();
+	}
+
+	private void initContainerProperties() {
+		setSelectable(true);
+		setImmediate(true);
+		setMultiSelect(false);
+		setSizeFull();
+
+		addContainerProperty(MenuProperties.RULE_NAME, String.class, "",
+				ServerTranslate.translate(LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME), null, Align.LEFT);
+
+		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
+				ServerTranslate.translate(LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE), null, Align.LEFT);
+
+		setColumnCollapsingAllowed(true);
+		setColumnCollapsible(MenuProperties.RULE_NAME, false);
+		setColumnCollapsible(MenuProperties.UPDATE_TIME, true);
+		setColumnCollapsed(MenuProperties.UPDATE_TIME, true);
+
+		this.setColumnExpandRatio(MenuProperties.RULE_NAME, 1);
+		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
+
+		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
+		setSortAscending(false);
+		sort();
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public void addRow(Rule rule) {
+		Item item = addItem(rule);
+		item.getItemProperty(MenuProperties.RULE_NAME).setValue(rule.getName());
+		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
+				DateManager.convertDateToString(rule.getUpdateTime()));
+	}
+
+	public void removeSelectedRow() {
+		Rule rule = (Rule) getValue();
+		if (rule != null) {
+			removeItem(rule);
+		}
 	}
 
 	public void update(Form form) {
@@ -32,47 +72,5 @@ public class SelectDroolsRule extends TableCellLabelEdit {
 
 	public void setSelectedExpression(Rule rule) {
 		setValue(rule);
-	}
-	
-	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
-		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
-		if (editCellComponent != null) {
-			editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((Rule) itemId));
-		}
-		return null;
-	}
-	
-	private class CellEditButtonClickListener implements ClickListener {
-		private static final long serialVersionUID = -4186477224806988479L;
-		private Rule rule;
-
-		public CellEditButtonClickListener(Rule rule) {
-			this.rule = rule;
-		}
-
-		@Override
-		public void buttonClick(ClickEvent event) {
-			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
-
-			newTableCellEditWindow.setValue(rule.getName());
-			newTableCellEditWindow.showCentered();
-			newTableCellEditWindow.addAcceptAcctionListener(new AcceptActionListener() {
-				@Override
-				public void acceptAction(AcceptCancelWindow window) {
-					for (Rule existingDroolsRule : UserSessionHandler.getFormController().getForm().getRules()) {
-						if (existingDroolsRule.getName().equals(newTableCellEditWindow.getValue())) {
-							MessageManager.showError(LanguageCodes.ERROR_REPEATED_DROOLS_RULE_NAME);
-							return;
-						}
-					}
-					rule.setName(newTableCellEditWindow.getValue());
-					rule.setUpdateTime();
-					updateItemTableRuleInGui(rule);
-					newTableCellEditWindow.close();
-				}
-			});
-		}
 	}
 }
