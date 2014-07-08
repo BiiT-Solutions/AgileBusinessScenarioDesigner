@@ -16,7 +16,7 @@ public class SelectExpressionTable extends TableCellLabelEdit {
 	private static final long serialVersionUID = 3348987098295904893L;
 
 	public SelectExpressionTable() {
-		super();
+		super(ServerTranslate.translate(LanguageCodes.FORM_EXPRESSION_TABLE_NAME));
 	}
 
 	public void update(Form form) {
@@ -33,7 +33,7 @@ public class SelectExpressionTable extends TableCellLabelEdit {
 	public void setSelectedExpression(FormExpression expression) {
 		setValue(expression);
 	}
-	
+
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
 		if (editCellComponent != null) {
@@ -41,7 +41,7 @@ public class SelectExpressionTable extends TableCellLabelEdit {
 		}
 		return null;
 	}
-	
+
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private FormExpression formExpression;
@@ -53,15 +53,15 @@ public class SelectExpressionTable extends TableCellLabelEdit {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
+					ServerTranslate.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
 
 			newTableCellEditWindow.setValue(formExpression.getName());
 			newTableCellEditWindow.showCentered();
 			newTableCellEditWindow.addAcceptAcctionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					for (FormExpression existingTableRule : UserSessionHandler.getFormController().getForm().getFormExpressions()) {
+					for (FormExpression existingTableRule : UserSessionHandler.getFormController().getForm()
+							.getFormExpressions()) {
 						if (existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 							return;

@@ -15,18 +15,17 @@ import com.vaadin.ui.Button.ClickListener;
 public class SelectTableRuleTable extends TableCellLabelEdit {
 	private static final long serialVersionUID = -5723571725991709050L;
 
-
 	public SelectTableRuleTable() {
-		super();
+		super(ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME));
 	}
-	
+
 	public void update(Form form) {
 		this.removeAllItems();
 		for (TableRule tableRule : form.getTableRules()) {
 			addRow(tableRule);
 		}
 	}
-	
+
 	public TableRule getSelectedTableRule() {
 		return (TableRule) getValue();
 	}
@@ -34,7 +33,7 @@ public class SelectTableRuleTable extends TableCellLabelEdit {
 	public void setSelectedTableRule(TableRule tableRule) {
 		setValue(tableRule);
 	}
-	
+
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
 		if (editCellComponent != null) {
@@ -42,7 +41,7 @@ public class SelectTableRuleTable extends TableCellLabelEdit {
 		}
 		return null;
 	}
-	
+
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private TableRule tableRule;
@@ -54,8 +53,7 @@ public class SelectTableRuleTable extends TableCellLabelEdit {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
+					ServerTranslate.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
 
 			newTableCellEditWindow.setValue(tableRule.getName());
 			newTableCellEditWindow.showCentered();
