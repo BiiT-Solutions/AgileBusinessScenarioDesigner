@@ -157,6 +157,7 @@ public enum LanguageCodes {
 	ERROR_REPEATED_FORM_NAME("error.form.repeatedName"),
 	ERROR_REPEATED_TABLE_RULE_NAME("error.tablerule.repeatedName"),
 	ERROR_REPEATED_EXPRESSION_NAME("error.expression.repeatedName"),
+	ERROR_REPEATED_DROOLS_RULE_NAME("error.drools.rule.repeatedName"),
 	ERROR_PORTLET_NOT_INSTALLED("error.portletNotInstalled"),
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
@@ -312,7 +313,7 @@ public enum LanguageCodes {
 	DROOLS_RULES_EDITOR_TABLE_NAME("drools.rules.editor.table.name"),
 	DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME("drools.rules.editor.tablecolumn.name"),	
 	DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE("drools.rules.editor.tablecolumn.update"),
-	DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD("drools.rules.editor.name.textField");
+	DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD("drools.rules.editor.name.textField"),
 	WINDOW_EDIT_TABLE_CELL_LABEL("window.edit.table.cell.label");
 	
 	

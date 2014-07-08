@@ -13,7 +13,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
 public class TableCellLabelEdit extends Table {
-	private static final long serialVersionUID = -5723571725991709050L;
+	private static final long serialVersionUID = 6868344288061962557L;
 	private CellRowSelector cellRowSelector;
 
 	enum MenuProperties {
@@ -72,23 +72,6 @@ public class TableCellLabelEdit extends Table {
 		if (row != null) {
 			removeItem(row);
 		}
-	}
-
-//	public abstract void update(Object object);
-	
-//	public void update(Form form) {
-//		this.removeAllItems();
-//		for (TableRule tableRule : form.getTableRules()) {
-//			addRow(tableRule);
-//		}
-//	}
-
-	public Object getSelectedCell() {
-		return (Object) getValue();
-	}
-
-	public void setSelectedValue(Object object) {
-		setValue(object);
 	}
 	
 	@SuppressWarnings("unchecked")

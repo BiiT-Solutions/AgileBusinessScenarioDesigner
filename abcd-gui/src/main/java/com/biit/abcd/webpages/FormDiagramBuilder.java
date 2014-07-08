@@ -267,12 +267,16 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				public void updated(Diagram diagram) {
 					// Wait until the diagram has been updated.
 					try {
-						System.out.println("first element biitText: "
-								+ ((DiagramElement) diagramBuilder.getDiagram().getDiagramObjects().get(0))
-										.getBiitText());
-						System.out.println("test: " + diagram + " " + diagram.getDiagramObjects().get(0).getParent());
-						UserSessionHandler.getFormController().save();
-						MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+						List<DiagramObject> diagObjects = diagramBuilder.getDiagram().getDiagramObjects();
+						if(diagObjects.size() > 0){
+							System.out.println("first element biitText: "
+									+ ((DiagramElement) diagramBuilder.getDiagram().getDiagramObjects().get(0))
+											.getBiitText());
+							System.out.println("test: " + diagram + " " + diagram.getDiagramObjects().get(0).getParent());
+						}
+							UserSessionHandler.getFormController().save();
+							MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+						
 					} catch (Exception e) {
 						MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 						AbcdLogger.errorMessage(FormDiagramBuilder.class.getName(), e);

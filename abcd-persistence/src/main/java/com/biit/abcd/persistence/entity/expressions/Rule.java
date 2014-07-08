@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.abcd.persistence.utils.ITableCellEditable;
 
 /**
  * Defines a drools rule.
@@ -17,7 +18,7 @@ import com.biit.abcd.persistence.entity.StorableObject;
  */
 @Entity
 @Table(name = "RULE")
-public class Rule extends StorableObject {
+public class Rule extends StorableObject implements ITableCellEditable{
 	
 	private String name;
 
