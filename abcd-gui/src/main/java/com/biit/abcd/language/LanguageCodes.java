@@ -266,7 +266,6 @@ public enum LanguageCodes {
 	MENU_EXPRESSIONS_ADD("form.expressions.menu.add"),
 	MENU_EXPRESSIONS_REMOVE("form.expressions.menu.remove"),
 	
-	
 	EXPRESSION_PROPERTIES_CONTROLS("expression.properties.controls"),
 	EXPRESSION_PROPERTIES_GENERIC("expression.properties.generic"),
 	EXPRESSION_PROPERTIES_FORM("expression.properties.form"),

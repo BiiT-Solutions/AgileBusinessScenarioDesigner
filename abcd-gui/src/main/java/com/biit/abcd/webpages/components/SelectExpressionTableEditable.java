@@ -16,7 +16,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 	private static final long serialVersionUID = 3348987098295904893L;
 
 	public SelectExpressionTableEditable() {
-		super();
+		super(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_NAME, LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE);
 	}
 
 	public void update(Form form) {

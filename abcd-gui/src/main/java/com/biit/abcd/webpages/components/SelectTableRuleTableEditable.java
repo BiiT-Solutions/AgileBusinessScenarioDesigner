@@ -16,7 +16,7 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 	private static final long serialVersionUID = -4379803887335057366L;
 
 	public SelectTableRuleTableEditable() {
-		super();
+		super(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME, LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_UPDATE);
 	}
 	
 	public void update(Form form) {

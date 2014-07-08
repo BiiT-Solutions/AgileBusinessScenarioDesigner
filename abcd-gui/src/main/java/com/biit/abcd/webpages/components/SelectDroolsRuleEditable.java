@@ -16,7 +16,7 @@ public class SelectDroolsRuleEditable extends TableCellLabelEdit {
 	private static final long serialVersionUID = 3348987098295904893L;
 
 	public SelectDroolsRuleEditable() {
-		super();
+		super(LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME, LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE);
 	}
 
 	public void update(Form form) {
