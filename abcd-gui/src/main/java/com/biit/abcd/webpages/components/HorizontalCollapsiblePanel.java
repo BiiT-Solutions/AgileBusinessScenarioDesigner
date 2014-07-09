@@ -92,12 +92,12 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	}
 
 	public void setVisibleMenu(CollapseMenuTab tab) {
+		visibleTab = tab;
 		if (!isCollapsed()) {
 			menuLayout.removeAllComponents();
 			menuLayout.addComponent(tab.getComponent());
 			updateMenuButtons();
 		}
-		visibleTab = tab;
 	}
 
 	public CollapseMenuTab createMenuTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
