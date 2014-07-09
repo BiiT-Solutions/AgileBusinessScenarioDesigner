@@ -188,10 +188,12 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		this.diagram = diagram;
 		if (diagram != null) {
 			// Initialize the map of diagramElements.
+			setEnabled(true);
 			diagramElements = createMapOfDiagramObjects(diagram);
 			fromJson(diagram.toJson());
 		} else {
 			clear();
+			setEnabled(false);
 		}
 	}
 

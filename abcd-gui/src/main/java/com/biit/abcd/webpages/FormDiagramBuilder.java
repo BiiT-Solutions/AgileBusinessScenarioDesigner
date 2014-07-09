@@ -75,25 +75,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					diagramBuilder.updateDiagram(new DiagramUpdated() {
 						@Override
 						public void updated(Diagram diagram) {
-							if (currentDiagram == null) {
-								diagramBuilder.setEnabled(false);
-								diagramBuilder.setDiagram(null);
-							} else {
-								diagramBuilder.setEnabled(true);
-								diagramBuilder.clear();
-								diagramBuilder.setDiagram(currentDiagram);
-							}
+							diagramBuilder.setDiagram(currentDiagram);
 						}
 					});
 				} else {
-					if (currentDiagram == null) {
-						diagramBuilder.setEnabled(false);
-						diagramBuilder.setDiagram(null);
-					} else {
-						diagramBuilder.setEnabled(true);
-						diagramBuilder.clear();
-						diagramBuilder.setDiagram(currentDiagram);
-					}
+					diagramBuilder.setDiagram(currentDiagram);
 				}
 			}
 		});
@@ -192,9 +178,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private void initDiagrams() {
 		List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
 		diagramBuilderTable.addRows(diagrams);
-
-		diagramBuilderTable.setValue(null);
-		diagramBuilder.setEnabled(false);
+		diagramBuilderTable.selectFirstRow();
 	}
 
 	private void initUpperMenu() {

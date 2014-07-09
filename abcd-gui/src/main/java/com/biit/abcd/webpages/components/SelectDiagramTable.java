@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
@@ -42,8 +43,6 @@ public class SelectDiagramTable extends TreeTable {
 
 		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
 		setSortAscending(false);
-		sort();
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -72,6 +71,15 @@ public class SelectDiagramTable extends TreeTable {
 			for(Diagram childDiagram :childDiagrams){
 				setParent(childDiagram, diagram);
 			}			
+		}
+		sort();
+	}
+	
+	public void selectFirstRow(){
+		Collection<?> ids = getItemIds();
+		if(!ids.isEmpty()){
+			Object object = ids.iterator().next();
+			setValue(object);
 		}
 	}
 
