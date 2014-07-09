@@ -22,7 +22,6 @@ import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.components.SelectDiagramTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
-import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramUpdated;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
 import com.biit.abcd.webpages.elements.diagrambuilder.JumpToListener;
@@ -71,16 +70,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				final Diagram currentDiagram = (Diagram) event.getProperty().getValue();
 				propertiesContainer.updatePropertiesComponent(null);
 
-				if (diagramBuilder.getDiagram() != null) {
-					diagramBuilder.updateDiagram(new DiagramUpdated() {
-						@Override
-						public void updated(Diagram diagram) {
-							diagramBuilder.setDiagram(currentDiagram);
-						}
-					});
-				} else {
-					diagramBuilder.setDiagram(currentDiagram);
-				}
+				diagramBuilder.setDiagram(currentDiagram);
 			}
 		});
 
@@ -284,31 +274,13 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	private void save() {
-		if (diagramBuilder.getDiagram() != null) {
-			diagramBuilder.updateDiagram(new DiagramUpdated() {
-				@Override
-				public void updated(Diagram diagram) {
-					// Wait until the diagram has been updated.
-					try {
-						UserSessionHandler.getFormController().save();
-						MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
-
-					} catch (Exception e) {
-						MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-						AbcdLogger.errorMessage(FormDiagramBuilder.class.getName(), e);
-					}
-				}
-			});
-		} else {
-			try {
-				UserSessionHandler.getFormController().save();
-				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
-			} catch (Exception e) {
-				MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-				AbcdLogger.errorMessage(FormDiagramBuilder.class.getName(), e);
-			}
+		try {
+			UserSessionHandler.getFormController().save();
+			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+		} catch (Exception e) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			AbcdLogger.errorMessage(FormDiagramBuilder.class.getName(), e);
 		}
-
 	}
 
 	public void addDiagram(Diagram newDiagram) {
