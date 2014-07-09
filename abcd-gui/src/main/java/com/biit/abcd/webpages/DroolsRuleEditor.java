@@ -35,7 +35,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		updateButtons(true);
 
 		// Create container
-		HorizontalCollapsiblePanel collapsibleLayout = new HorizontalCollapsiblePanel();
+		HorizontalCollapsiblePanel collapsibleLayout = new HorizontalCollapsiblePanel(false);
 		collapsibleLayout.setSizeFull();
 
 		// Create menu
@@ -49,7 +49,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 			}
 
 		});
-		collapsibleLayout.setMenu(tableSelectRule);
+		collapsibleLayout.createMenu(tableSelectRule);
 
 		// Create content
 		ruleExpressionEditorComponent = new ExpressionEditorComponent();

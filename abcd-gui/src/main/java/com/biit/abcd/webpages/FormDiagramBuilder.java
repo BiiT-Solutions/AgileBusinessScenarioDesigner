@@ -50,7 +50,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	protected void initContent() {
 		updateButtons(true);
 
-		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
+		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel(false);
 		rootLayout.setSizeFull();
 
 		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
@@ -176,7 +176,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		rootDiagramBuilder.addComponent(propertiesContainer);
 		rootDiagramBuilder.setExpandRatio(propertiesContainer, 0.20f);
 
-		rootLayout.setMenu(diagramBuilderTable);
+		rootLayout.createMenu(diagramBuilderTable);
 		rootLayout.setContent(rootDiagramBuilder);
 
 		getWorkingAreaLayout().addComponent(rootLayout);

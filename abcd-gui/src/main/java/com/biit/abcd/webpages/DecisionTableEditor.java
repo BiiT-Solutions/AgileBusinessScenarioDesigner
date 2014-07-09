@@ -36,7 +36,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		updateButtons(true);
 
 		// Create container
-		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel();
+		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel(false);
 		rootLayout.setSizeFull();
 
 		// Create menu
@@ -50,7 +50,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 
 		});
-		rootLayout.setMenu(tableSelectionMenu);
+		rootLayout.createMenu(tableSelectionMenu);
 
 		// Create content
 		decisionTable = new DecisionTableQuestionAnswerConditionComponent();

@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.Iterator;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.vaadin.ui.Button.ClickEvent;
@@ -7,7 +9,6 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 public class HorizontalCollapsiblePanel extends CustomComponent {
@@ -20,11 +21,11 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	private VerticalLayout menuLayout;
 	private VerticalLayout buttonMenu;
 	private CssLayout rootLayout;
-	private HorizontalLayout titleLayout;
 	private Component content;
-	private Component menu;
+	private CollapseButtonTab visibleTab;
+	private boolean collapsed;
 
-	public HorizontalCollapsiblePanel() {
+	public HorizontalCollapsiblePanel(boolean collapsed) {
 		rootLayout = new CssLayout();
 		rootLayout.setSizeFull();
 
@@ -42,6 +43,61 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 
 		setSizeFull();
 		setCompositionRoot(rootLayout);
+
+		setCollapsed(collapsed);
+	}
+
+	public void setCollapsed(boolean collapsed) {
+		this.collapsed = collapsed;
+		updateLeftMenuState();
+		updateMenuButtons();
+	}
+
+	private void updateMenuButtons() {
+		if (collapsed) {
+			Iterator<Component> itr = buttonMenu.iterator();
+			while (itr.hasNext()) {
+				CollapseButtonTab tab = (CollapseButtonTab) itr.next();
+				tab.setValue(false);
+			}
+		} else {
+			Iterator<Component> itr = buttonMenu.iterator();
+			while (itr.hasNext()) {
+				CollapseButtonTab tab = (CollapseButtonTab) itr.next();
+				if (tab.equals(visibleTab)) {
+					tab.setValue(true);
+				} else {
+					tab.setValue(false);
+				}
+			}
+		}
+	}
+
+	private boolean isCollapsed() {
+		return collapsed;
+	}
+
+	private void updateLeftMenuState() {
+		menuLayout.removeAllComponents();
+		if (!collapsed) {
+			if (visibleTab != null) {
+				menuLayout.addComponent(visibleTab.getComponent());
+			}
+			menuLayout.setWidth(menuWidth);
+			menuLayout.setStyleName(CLASSNAME_OPENED);
+		} else {
+			menuLayout.setWidth(menuWidthClosed);
+			menuLayout.setStyleName(CLASSNAME_CLOSED);
+		}
+	}
+
+	public void setVisibleMenu(CollapseButtonTab tab) {
+		if (!isCollapsed()) {
+			menuLayout.removeAllComponents();
+			menuLayout.addComponent(tab.getComponent());
+			updateMenuButtons();
+		}
+		visibleTab = tab;
 	}
 
 	public CollapseButtonTab createMenuTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
@@ -53,15 +109,18 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// menuLayout.removeAllComponents();
-				menuLayout.setWidth(menuWidthClosed);
-				menuLayout.setStyleName(CLASSNAME_CLOSED);
-				if (!collapseButtonTab.isValue()) {
-					menuLayout.addComponent(collapseButtonTab.getComponent());
-					menuLayout.setWidth(menuWidth);
-					menuLayout.setStyleName(CLASSNAME_OPENED);
+				if (isCollapsed()) {
+					// The menu is collapsed, then expand and show your
+					// component.
+					setVisibleMenu(collapseButtonTab);
+					setCollapsed(false);
+				} else {
+					if (collapseButtonTab.equals(visibleTab)) {
+						setCollapsed(true);
+					} else {
+						setVisibleMenu(collapseButtonTab);
+					}
 				}
-				collapseButtonTab.setValue(!collapseButtonTab.isValue());
 			}
 		});
 
@@ -73,10 +132,11 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		content.setSizeFull();
 	}
 
-	public void setMenu(Component component) {
-		menu = component;
-		buttonMenu.addComponent(createMenuTab(component, ThemeIcon.LEFT_MENU_COLLAPSE, ThemeIcon.LEFT_MENU_EXPAND,
-				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP));
+	public void createMenu(Component component) {
+		CollapseButtonTab tab = createMenuTab(component, ThemeIcon.LEFT_MENU_COLLAPSE, ThemeIcon.LEFT_MENU_EXPAND,
+				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP);
+		buttonMenu.addComponent(tab);
+		setVisibleMenu(tab);
 	}
 
 	@Override
@@ -97,7 +157,6 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		private LanguageCodes enabledTooltip;
 		private LanguageCodes disabledTooltip;
 		private Component component;
-		private boolean currentValue;
 
 		public CollapseButtonTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
 				LanguageCodes enabledTooltip, LanguageCodes disabledTooltip) {
@@ -108,12 +167,10 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 			this.disabledTooltip = disabledTooltip;
 
 			setImmediate(true);
-			setValue(false);
 			this.component = component;
 		}
 
 		public void setValue(boolean enabled) {
-			currentValue = enabled;
 			if (enabled) {
 				setStyleName(CLASSNAME_ENABLED);
 				setIcon(this.enabledIcon);
@@ -123,10 +180,6 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 				setIcon(this.disabledIcon);
 				setDescription(ServerTranslate.translate(disabledTooltip));
 			}
-		}
-
-		public boolean isValue() {
-			return currentValue;
 		}
 
 		public Component getComponent() {

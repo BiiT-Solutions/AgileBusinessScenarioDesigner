@@ -35,7 +35,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		updateButtons(true);
 
 		// Create container
-		HorizontalCollapsiblePanel collapsibleLayout = new HorizontalCollapsiblePanel();
+		HorizontalCollapsiblePanel collapsibleLayout = new HorizontalCollapsiblePanel(false);
 		collapsibleLayout.setSizeFull();
 
 		// Create menu
@@ -49,7 +49,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 			}
 
 		});
-		collapsibleLayout.setMenu(tableSelectExpression);
+		collapsibleLayout.createMenu(tableSelectExpression);
 
 		// Create content
 		expressionEditorComponent = new ExpressionEditorComponent();
