@@ -22,7 +22,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	private VerticalLayout buttonMenu;
 	private CssLayout rootLayout;
 	private Component content;
-	private CollapseButtonTab visibleTab;
+	private CollapseMenuTab visibleTab;
 	private boolean collapsed;
 
 	public HorizontalCollapsiblePanel(boolean collapsed) {
@@ -57,13 +57,13 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		if (collapsed) {
 			Iterator<Component> itr = buttonMenu.iterator();
 			while (itr.hasNext()) {
-				CollapseButtonTab tab = (CollapseButtonTab) itr.next();
+				CollapseMenuTab tab = (CollapseMenuTab) itr.next();
 				tab.setValue(false);
 			}
 		} else {
 			Iterator<Component> itr = buttonMenu.iterator();
 			while (itr.hasNext()) {
-				CollapseButtonTab tab = (CollapseButtonTab) itr.next();
+				CollapseMenuTab tab = (CollapseMenuTab) itr.next();
 				if (tab.equals(visibleTab)) {
 					tab.setValue(true);
 				} else {
@@ -91,7 +91,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		}
 	}
 
-	public void setVisibleMenu(CollapseButtonTab tab) {
+	public void setVisibleMenu(CollapseMenuTab tab) {
 		if (!isCollapsed()) {
 			menuLayout.removeAllComponents();
 			menuLayout.addComponent(tab.getComponent());
@@ -100,9 +100,9 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		visibleTab = tab;
 	}
 
-	public CollapseButtonTab createMenuTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
+	public CollapseMenuTab createMenuTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
 			LanguageCodes enabledTooltip, LanguageCodes disabledTooltip) {
-		final CollapseButtonTab collapseButtonTab = new CollapseButtonTab(component, enabledIcon, disabledIcon,
+		final CollapseMenuTab collapseButtonTab = new CollapseMenuTab(component, enabledIcon, disabledIcon,
 				enabledTooltip, disabledTooltip);
 		collapseButtonTab.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -754510955831311296L;
@@ -133,7 +133,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 	}
 
 	public void createMenu(Component component) {
-		CollapseButtonTab tab = createMenuTab(component, ThemeIcon.LEFT_MENU_COLLAPSE, ThemeIcon.LEFT_MENU_EXPAND,
+		CollapseMenuTab tab = createMenuTab(component, ThemeIcon.LEFT_MENU_COLLAPSE, ThemeIcon.LEFT_MENU_EXPAND,
 				LanguageCodes.COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP, LanguageCodes.COLLAPSABLE_PANEL_EXPAND_TOOLTIP);
 		buttonMenu.addComponent(tab);
 		setVisibleMenu(tab);
@@ -148,7 +148,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		rootLayout.markAsDirty();
 	}
 
-	private class CollapseButtonTab extends IconButton {
+	private class CollapseMenuTab extends IconButton {
 		private static final long serialVersionUID = -443120664603138986L;
 		private static final String CLASSNAME_ENABLED = "v-button-tab-enabled";
 		private static final String CLASSNAME_DISABLED = "v-button-tab-disabled";
@@ -158,7 +158,7 @@ public class HorizontalCollapsiblePanel extends CustomComponent {
 		private LanguageCodes disabledTooltip;
 		private Component component;
 
-		public CollapseButtonTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
+		public CollapseMenuTab(Component component, ThemeIcon enabledIcon, ThemeIcon disabledIcon,
 				LanguageCodes enabledTooltip, LanguageCodes disabledTooltip) {
 			super(disabledIcon, IconSize.MEDIUM, disabledTooltip);
 			this.enabledIcon = enabledIcon;
