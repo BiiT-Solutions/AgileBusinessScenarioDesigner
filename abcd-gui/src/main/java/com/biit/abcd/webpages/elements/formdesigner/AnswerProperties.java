@@ -33,6 +33,7 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 	@Override
 	protected void updateConcreteFormElement() {
 		instance.setName(answerTechnicalLabel.getValue());
+		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	@Override

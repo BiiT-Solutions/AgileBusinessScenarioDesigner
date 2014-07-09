@@ -88,6 +88,8 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 		instance.setName(questionTechnicalLabel.getValue());
 		instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
 		instance.setAnswerType((AnswerType) answerType.getValue());
+		
+		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	@Override

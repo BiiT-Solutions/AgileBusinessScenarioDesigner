@@ -79,6 +79,8 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		updateConcreteFormElement();
 		// Update common ui fields.
 		initCommonPropertiesValues(getTreeObjectInstance());
+		
+		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	protected abstract void updateConcreteFormElement();
