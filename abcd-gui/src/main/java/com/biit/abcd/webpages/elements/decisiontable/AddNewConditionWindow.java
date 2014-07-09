@@ -24,7 +24,11 @@ public class AddNewConditionWindow extends SelectTreeObjectTableWindow {
 	}
 
 	public Question getSelectedQuestion() {
-		return (Question) getTable().getValue();
+		if(getTable().getValue() instanceof Question) {
+			return (Question) getTable().getValue();
+		} else {
+			return null;
+		}
 	}
 
 	public Set<Question> getSelectedQuestions() {
@@ -52,7 +56,7 @@ public class AddNewConditionWindow extends SelectTreeObjectTableWindow {
 		getTable().setMultiSelect(isMultiselect());
 		getTable().setSizeFull();
 		if (treeObject instanceof Form) {
-			getTable().setRootElement((Form) treeObject);
+			getTable().setRootElement(treeObject);
 			getTable().setSelectable(true);
 		}
 

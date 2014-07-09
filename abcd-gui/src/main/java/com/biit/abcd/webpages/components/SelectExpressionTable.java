@@ -4,7 +4,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
@@ -46,7 +46,7 @@ public class SelectExpressionTable extends Table {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public void addRow(FormExpression expression) {
+	public void addRow(Expressions expression) {
 		Item item = addItem(expression);
 		item.getItemProperty(MenuProperties.EXPRESSION_NAME).setValue(expression.getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
@@ -62,16 +62,16 @@ public class SelectExpressionTable extends Table {
 
 	public void update(Form form) {
 		this.removeAllItems();
-		for (FormExpression expression : form.getFormExpressions()) {
+		for (Expressions expression : form.getFormExpressions()) {
 			addRow(expression);
 		}
 	}
 
-	public FormExpression getSelectedExpression() {
-		return (FormExpression) getValue();
+	public Expressions getSelectedExpression() {
+		return (Expressions) getValue();
 	}
 
-	public void setSelectedExpression(FormExpression expression) {
+	public void setSelectedExpression(Expressions expression) {
 		setValue(expression);
 	}
 }

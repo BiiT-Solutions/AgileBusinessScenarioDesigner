@@ -6,7 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 
 @Entity
@@ -14,7 +14,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressio
 public class ActionExpression extends Action {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private FormExpression expression;
+	private Expressions expression;
 
 	@Override
 	public String toString() {
@@ -27,14 +27,14 @@ public class ActionExpression extends Action {
 	}
 
 	@Override
-	public FormExpression getExpression() {
+	public Expressions getExpression() {
 		return expression;
 	}
 
 	@Override
 	public void setExpression(Object expression) throws NotValidExpression {
-		if (expression instanceof FormExpression) {
-			this.expression = (FormExpression) expression;
+		if (expression instanceof Expressions) {
+			this.expression = (Expressions) expression;
 		} else {
 			throw new NotValidExpression("Inserted expression of class '" + expression.getClass() + "' is not valid.");
 		}

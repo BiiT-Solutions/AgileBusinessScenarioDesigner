@@ -5,7 +5,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.EditCellComponent;
 import com.vaadin.data.Item;
@@ -21,32 +21,32 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 
 	public void update(Form form) {
 		this.removeAllItems();
-		for (FormExpression expression : form.getFormExpressions()) {
+		for (Expressions expression : form.getFormExpressions()) {
 			addRow(expression);
 		}
 	}
 
-	public FormExpression getSelectedExpression() {
-		return (FormExpression) getValue();
+	public Expressions getSelectedExpression() {
+		return (Expressions) getValue();
 	}
 
-	public void setSelectedExpression(FormExpression expression) {
+	public void setSelectedExpression(Expressions expression) {
 		setValue(expression);
 	}
 	
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
 		if (editCellComponent != null) {
-			editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((FormExpression) itemId));
+			editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((Expressions) itemId));
 		}
 		return null;
 	}
 	
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
-		private FormExpression formExpression;
+		private Expressions formExpression;
 
-		public CellEditButtonClickListener(FormExpression formExpression) {
+		public CellEditButtonClickListener(Expressions formExpression) {
 			this.formExpression = formExpression;
 		}
 
@@ -61,7 +61,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 			newTableCellEditWindow.addAcceptAcctionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					for (FormExpression existingTableRule : UserSessionHandler.getFormController().getForm().getFormExpressions()) {
+					for (Expressions existingTableRule : UserSessionHandler.getFormController().getForm().getFormExpressions()) {
 						if (existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 							return;

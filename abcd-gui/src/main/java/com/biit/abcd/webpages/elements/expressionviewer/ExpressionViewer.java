@@ -16,7 +16,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -36,7 +36,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ExpressionViewer extends CssLayout {
 	private static final long serialVersionUID = -3032370197806581430L;
 	public static String CLASSNAME = "v-expression-viewer";
-	private FormExpression formExpression;
+	private Expressions formExpression;
 	private Expression selectedExpression = null;
 	private VerticalLayout rootLayout;
 	private HashMap<ExpressionElement, Expression> expressionOfElement;
@@ -55,7 +55,7 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
-	public void updateExpression(FormExpression formExpression) {
+	public void updateExpression(Expressions formExpression) {
 		// rootLayout.removeAllComponents();
 		removeAllComponents();
 		expressionOfElement = new HashMap<>();
@@ -318,7 +318,7 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
-	public FormExpression getFormExpression() {
+	public Expressions getFormExpression() {
 		return formExpression;
 	}
 
