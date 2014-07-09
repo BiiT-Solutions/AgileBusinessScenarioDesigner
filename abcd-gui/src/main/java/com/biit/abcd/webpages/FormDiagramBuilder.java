@@ -41,6 +41,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
 	private JsonPropertiesComponent propertiesContainer;
+	private DiagramTableValueChange diagramTableValueChange;
 
 	public FormDiagramBuilder() {
 		super();
@@ -63,17 +64,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		diagramBuilderTable.setSizeFull();
 		diagramBuilderTable.setImmediate(true);
 		diagramBuilderTable.setSelectable(true);
-		diagramBuilderTable.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = 8142953635201344140L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				final Diagram currentDiagram = (Diagram) event.getProperty().getValue();
-				propertiesContainer.updatePropertiesComponent(null);
-
-				diagramBuilder.setDiagram(currentDiagram);
-			}
-		});
+		diagramTableValueChange = new DiagramTableValueChange();
 
 		diagramBuilder = new AbcdDiagramBuilder();
 		diagramBuilder.setSizeFull();
@@ -117,7 +108,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		});
 		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
-
 			@Override
 			public void propertyUpdate(Object element) {
 				// Switch limitation with instanceof.
@@ -145,11 +135,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				}
 				if (element instanceof DiagramChild) {
 					DiagramChild diagramChild = (DiagramChild) element;
-					if (diagramChild.getChildDiagram() != null) {
-						initializeDiagramsTable();
-						diagramBuilderTable.setValue(diagramChild.getParent());
-					}
 					diagramBuilder.updateChangesToDiagram(diagramChild);
+
+					initializeDiagramsTable();
+					diagramBuilderTable.setValue(diagramChild.getParent());
+					
 					return;
 				}
 				// Anyone else
@@ -177,9 +167,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	private void initializeDiagramsTable() {
 		List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
+		diagramBuilderTable.removeValueChangeListener(diagramTableValueChange);
 		diagramBuilderTable.setValue(null);
 		diagramBuilderTable.removeAllItems();
 		diagramBuilderTable.addRows(diagrams);
+		diagramBuilderTable.addValueChangeListener(diagramTableValueChange);
 	}
 
 	private void initializeDiagramsTableAndSelectFirst() {
@@ -306,5 +298,16 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	public void sortTableMenu() {
 		diagramBuilderTable.sort();
+	}
+
+	private class DiagramTableValueChange implements ValueChangeListener {
+		private static final long serialVersionUID = 8142953635201344140L;
+
+		@Override
+		public void valueChange(ValueChangeEvent event) {
+			final Diagram currentDiagram = (Diagram) event.getProperty().getValue();
+			propertiesContainer.updatePropertiesComponent(null);
+			diagramBuilder.setDiagram(currentDiagram);
+		}
 	}
 }
