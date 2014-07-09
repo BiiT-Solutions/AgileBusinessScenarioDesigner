@@ -29,10 +29,7 @@ public class SelectDiagramWindow extends AcceptCancelWindow {
 		
 		selectDiagramTable = new SelectDiagramTable();
 		selectDiagramTable.setSizeFull();
-		
-		for (Diagram expression : UserSessionHandler.getFormController().getForm().getDiagrams()){
-			selectDiagramTable.addRow(expression);
-		}
+		selectDiagramTable.addRows(UserSessionHandler.getFormController().getForm().getDiagrams());
 		
 		rootLayout.addComponent(selectDiagramTable);
 

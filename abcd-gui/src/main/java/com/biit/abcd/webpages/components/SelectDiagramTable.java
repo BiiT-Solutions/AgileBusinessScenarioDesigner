@@ -1,13 +1,15 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.List;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.Item;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.TreeTable;
 
-public class SelectDiagramTable extends Table {
+public class SelectDiagramTable extends TreeTable {
 	private static final long serialVersionUID = -2420087674159328133L;
 
 	enum MenuProperties {
@@ -50,10 +52,27 @@ public class SelectDiagramTable extends Table {
 		item.getItemProperty(MenuProperties.DIAGRAM_NAME).setValue(diagram.getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
 				DateManager.convertDateToString(diagram.getUpdateTime()));
+		setChildrenAllowed(diagram, false);
 	}
-	
-	public void addRow(Diagram diagram){
+
+	public void addRow(Diagram diagram) {
 		addDiagram(diagram);
+	}
+
+	public void addRows(List<Diagram> diagrams){
+		for(Diagram diagram: diagrams){
+			addRow(diagram);
+		}
+		for(Diagram diagram: diagrams){
+			List<Diagram> childDiagrams = diagram.getChildDiagrams();
+			if(!childDiagrams.isEmpty()){
+				setChildrenAllowed(diagram, true);
+				setCollapsed(diagram, false);
+			}
+			for(Diagram childDiagram :childDiagrams){
+				setParent(childDiagram, diagram);
+			}			
+		}
 	}
 
 	public Diagram getSelectedDiagram() {

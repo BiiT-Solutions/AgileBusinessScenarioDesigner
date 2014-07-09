@@ -10,17 +10,16 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.expressions.FormExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.security.DActivity;
-import com.biit.abcd.webpages.components.SelectDiagramTable;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
+import com.biit.abcd.webpages.components.SelectDiagramTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramUpdated;
@@ -192,9 +191,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	private void initDiagrams() {
 		List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
-		for (Diagram diagram : diagrams) {
-			diagramBuilderTable.addDiagram(diagram);
-		}
+		diagramBuilderTable.addRows(diagrams);
+
 		diagramBuilderTable.setValue(null);
 		diagramBuilder.setEnabled(false);
 	}
@@ -308,7 +306,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				public void updated(Diagram diagram) {
 					// Wait until the diagram has been updated.
 					try {
-						List<DiagramObject> diagObjects = diagramBuilder.getDiagram().getDiagramObjects();
 						UserSessionHandler.getFormController().save();
 						MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 

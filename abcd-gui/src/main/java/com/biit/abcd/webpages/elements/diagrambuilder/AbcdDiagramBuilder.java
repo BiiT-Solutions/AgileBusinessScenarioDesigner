@@ -151,10 +151,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	 * @param element
 	 */
 	private void addObjectToDiagram(DiagramObject element) {
-		System.out.println("Add object to diagram");
 		if (!diagramElements.containsKey(element.getJointjsId())) {
 			diagram.addDiagramObject(element);
-			System.out.println("Parent: " + element.getParent());
 			diagramElements.put(element.getJointjsId(), element);
 		}
 	}
@@ -180,8 +178,6 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	private void updateObjectOfDiagram(String jsonString) {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
-		System.out.println("Update object to diagram");
-		System.out.println(jsonString);
 		if (diagramElements.containsKey(element.getJointjsId())) {
 			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
 			originalElement.update(element);
@@ -205,16 +201,13 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	private HashMap<String, DiagramObject> createMapOfDiagramObjects(Diagram newDiagram) {
 		HashMap<String, DiagramObject> newDiagramElements = new HashMap<>();
-		System.out.println("Current diagram objects");
 		for (DiagramObject element : newDiagram.getDiagramObjects()) {
 			newDiagramElements.put(element.getJointjsId(), element);
-			System.out.println("Id: " + element.getJointjsId() + " " + element.getType().getJsonType());
 		}
 		return newDiagramElements;
 	}
 
 	public void updateDiagram(final DiagramUpdated callback) {
-		System.out.println("Update started");
 		toJson(new DiagramBuilderJsonGenerationListener() {
 
 			@Override
@@ -245,7 +238,6 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 						diagramElements.put(object.getJointjsId(), object);
 					}
 				}
-				System.out.println("Update ended");
 				if (callback != null) {
 					callback.updated(diagram);
 				}
