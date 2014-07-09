@@ -1,7 +1,7 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.vaadin.ui.CustomComponent;
@@ -95,7 +95,7 @@ public class ExpressionEditorComponent extends CustomComponent {
 		return tabMenu;
 	}
 
-	public void refreshExpressionEditor(FormExpression selectedExpression) {
+	public void refreshExpressionEditor(Expressions selectedExpression) {
 		expressionViewer.removeAllComponents();
 		if (selectedExpression != null) {
 			// Add table rows.

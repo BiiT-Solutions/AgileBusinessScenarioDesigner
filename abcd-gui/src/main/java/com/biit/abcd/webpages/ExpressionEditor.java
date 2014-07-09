@@ -6,7 +6,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
@@ -112,7 +112,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
-	private FormExpression getSelectedExpression() {
+	private Expressions getSelectedExpression() {
 		return tableSelectExpression.getSelectedExpression();
 	}
 
@@ -142,7 +142,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		tableSelectExpression.removeSelectedRow();
 	}
 
-	public void addExpressionToMenu(FormExpression expression) {
+	public void addExpressionToMenu(Expressions expression) {
 		tableSelectExpression.addRow(expression);
 		tableSelectExpression.setSelectedExpression(expression);
 	}
@@ -151,7 +151,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		tableSelectExpression.sort();
 	}
 
-	public void selectComponent(FormExpression element) {
+	public void selectComponent(Expressions element) {
 		tableSelectExpression.setSelectedExpression(element);
 	}
 

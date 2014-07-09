@@ -1,7 +1,7 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.persistence.entity.expressions.FormExpression;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
@@ -30,7 +30,7 @@ public class SelectExpressionWindow extends AcceptCancelWindow {
 		selectExpressionTable = new SelectExpressionTable();
 		selectExpressionTable.setSizeFull();
 		
-		for (FormExpression expression : UserSessionHandler.getFormController().getForm().getFormExpressions()){
+		for (Expressions expression : UserSessionHandler.getFormController().getForm().getFormExpressions()){
 			selectExpressionTable.addRow(expression);
 		}
 		
@@ -39,7 +39,7 @@ public class SelectExpressionWindow extends AcceptCancelWindow {
 		return rootLayout;
 	}
 	
-	public FormExpression getSelectedExpression(){
+	public Expressions getSelectedExpression(){
 		return selectExpressionTable.getSelectedExpression();
 	}
 }

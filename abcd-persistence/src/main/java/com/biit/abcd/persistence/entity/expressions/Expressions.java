@@ -19,7 +19,7 @@ import com.biit.jexeval.ExpressionEvaluator;
  */
 @Entity
 @Table(name = "EXPRESSION_FORMS_EXPRESSION")
-public class FormExpression extends Expression implements ITableCellEditable{
+public class Expressions extends Expression implements ITableCellEditable{
 
 	private String name;
 
@@ -27,7 +27,7 @@ public class FormExpression extends Expression implements ITableCellEditable{
 	@OrderColumn(name = "expression_index")
 	private List<Expression> expressions;
 
-	public FormExpression() {
+	public Expressions() {
 		expressions = new ArrayList<>();
 	}
 
