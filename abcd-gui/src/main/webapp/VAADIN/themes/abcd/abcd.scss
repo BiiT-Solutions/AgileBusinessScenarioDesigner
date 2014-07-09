@@ -121,6 +121,24 @@ $open-sans-pathPrefix: "./fonts/";
 }
 @font-face {
     font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.ttf') format('truetype');
+	font-weight: 800;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
     src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.eot');
     src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'),
          url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.woff') format('woff'),
@@ -696,6 +714,11 @@ $open-sans-pathPrefix: "./fonts/";
 		display:inline-block;
 		font-weight:bold;
 		color:#1C86C2;
+	}
+	
+	.v-expression-element .v-label.v-widget.v-has-width {
+		font-size: 16px !important;
+		font-weight: 600 !important;
 	}
 	
 	.v-csslayout.v-expression-element.v-csslayout-v-expression-element.expression-selected {

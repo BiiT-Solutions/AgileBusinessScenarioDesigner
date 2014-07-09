@@ -10,6 +10,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
@@ -142,6 +143,15 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					diagramBuilder.updateChangesToDiagram(currentFork);
 					return;
 				}
+				if (element instanceof DiagramChild) {
+					DiagramChild diagramChild = (DiagramChild) element;
+					if (diagramChild.getChildDiagram() != null) {
+						initializeDiagramsTable();
+						diagramBuilderTable.setValue(diagramChild.getParent());
+					}
+					diagramBuilder.updateChangesToDiagram(diagramChild);
+					return;
+				}
 				// Anyone else
 				diagramBuilder.updateChangesToDiagram((DiagramObject) element);
 			}
@@ -157,7 +167,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
-		initDiagrams();
+		initializeDiagramsTableAndSelectFirst();
 		initUpperMenu();
 	}
 
@@ -165,9 +175,15 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		diagramBuilderTable.setValue(element);
 	}
 
-	private void initDiagrams() {
+	private void initializeDiagramsTable() {
 		List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
+		diagramBuilderTable.setValue(null);
+		diagramBuilderTable.removeAllItems();
 		diagramBuilderTable.addRows(diagrams);
+	}
+
+	private void initializeDiagramsTableAndSelectFirst() {
+		initializeDiagramsTable();
 		diagramBuilderTable.selectFirstRow();
 	}
 
