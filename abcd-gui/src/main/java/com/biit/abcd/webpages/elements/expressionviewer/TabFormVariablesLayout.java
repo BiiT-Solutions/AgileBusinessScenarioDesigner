@@ -5,6 +5,7 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
@@ -92,6 +93,7 @@ public class TabFormVariablesLayout extends TabLayout {
 				setFormVariableSelectionValues();
 			}
 		});
+		formQuestionTable.collapseFrom(Category.class);
 	}
 
 	private void initializeVariableSelection() {
