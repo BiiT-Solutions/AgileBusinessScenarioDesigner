@@ -25,13 +25,8 @@ public abstract class Expression extends StorableObject {
 	 */
 	protected abstract String getExpression();
 
-	protected String generateNullLabelCaption(String value) {
-		return "<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">" + value
-				+ "</div>";
-	}
-
 	@Override
 	public String toString() {
-		return getExpressionTableString();
+		return getExpression();
 	}
 }

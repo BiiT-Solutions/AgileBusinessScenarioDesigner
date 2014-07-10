@@ -40,7 +40,7 @@ public class TreeObjectTable extends TreeTable {
 		setImmediate(true);
 	}
 
-	private void initContainerProperties() {
+	protected void initContainerProperties() {
 		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
 				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
@@ -63,7 +63,7 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void addItem(TreeObject element, TreeObject parent) {
 		if (element != null) {
-			TreeObjectWithIconComponent treeObjectIcon = createElementWithIcon(element);
+			Object treeObjectIcon = createElementWithIcon(element);
 			Item item = addItem((Object) element);
 			if (parent != null) {
 				setChildrenAllowed(parent, true);
@@ -100,7 +100,7 @@ public class TreeObjectTable extends TreeTable {
 			}
 
 			// Update element.
-			TreeObjectWithIconComponent treeObjectIcon = createElementWithIcon(element);
+			Object treeObjectIcon = createElementWithIcon(element);
 			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
 		}
 	}
@@ -140,7 +140,7 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	public void addItemAfter(Object previousItemId, TreeObject element, TreeObject parent) {
 		if (element != null) {
-			TreeObjectWithIconComponent treeObjectIcon = createElementWithIcon(element);
+			Object treeObjectIcon = createElementWithIcon(element);
 			Item item = addItemAfter(previousItemId, (Object) element);
 			if (parent != null) {
 				setChildrenAllowed(parent, true);
@@ -168,7 +168,7 @@ public class TreeObjectTable extends TreeTable {
 		return name;
 	}
 
-	private static ThemeIcon getIcon(TreeObject element) {
+	protected static ThemeIcon getIcon(TreeObject element) {
 		if (element instanceof Question) {
 			Question question = (Question) element;
 			switch (question.getAnswerType()) {
@@ -250,7 +250,7 @@ public class TreeObjectTable extends TreeTable {
 		return false;
 	}
 
-	private TreeObjectWithIconComponent createElementWithIcon(final TreeObject element) {
+	protected Object createElementWithIcon(final TreeObject element) {
 		final TreeObjectTable thisObject = this;
 		TreeObjectWithIconComponent treeObjectWithIconComponent = new TreeObjectWithIconComponent(element,
 				getIcon(element), element.getName());

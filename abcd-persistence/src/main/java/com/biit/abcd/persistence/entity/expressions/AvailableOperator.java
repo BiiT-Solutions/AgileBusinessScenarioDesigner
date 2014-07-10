@@ -30,7 +30,9 @@ public enum AvailableOperator {
 
 	DIVISION("/", "/"),
 
-	MODULE("%", "%");
+	MODULE("%", "%"), 
+	
+	POW("^", "^");
 
 	private String value;
 	private String caption;

@@ -11,15 +11,16 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 
 /**
- * Defines any logical operator. 
- *
+ * Defines any logical operator.
+ * 
  */
 @Entity
 @Table(name = "EXPRESSION_OPERATOR_LOGIC")
 public class ExpressionOperatorLogic extends ExpressionOperator {
 	private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<AvailableOperator>(Arrays.asList(
-			AvailableOperator.NULL, AvailableOperator.AND, AvailableOperator.OR, AvailableOperator.EQUALS, AvailableOperator.NOT_EQUALS,
-			AvailableOperator.LESS_EQUALS, AvailableOperator.LESS_THAN, AvailableOperator.GREATER_EQUALS, AvailableOperator.GREATER_THAN));
+			AvailableOperator.NULL, AvailableOperator.AND, AvailableOperator.OR, AvailableOperator.EQUALS,
+			AvailableOperator.NOT_EQUALS, AvailableOperator.LESS_EQUALS, AvailableOperator.LESS_THAN,
+			AvailableOperator.GREATER_EQUALS, AvailableOperator.GREATER_THAN));
 
 	public ExpressionOperatorLogic() {
 		super();
@@ -29,11 +30,6 @@ public class ExpressionOperatorLogic extends ExpressionOperator {
 			// This should never happen
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
-	}
-
-	@Override
-	public String getValueNullCaption() {
-		return generateNullLabelCaption("logic-join");
 	}
 
 	@Override
