@@ -274,7 +274,7 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels.
+	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
 	 * 
 	 * @param collapseFrom
 	 */
