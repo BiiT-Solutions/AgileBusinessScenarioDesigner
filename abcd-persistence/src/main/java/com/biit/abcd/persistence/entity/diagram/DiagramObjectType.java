@@ -9,6 +9,7 @@ public enum DiagramObjectType {
 	RULE("biit.RuleNode"),
 	TABLE("biit.TableNode"),
 	CALCULATION("biit.CalculationNode"),
+	REPEAT("biit.BaseRepeatNode"),
 	LINK("link");
 	
 	private String jsonTypeName;

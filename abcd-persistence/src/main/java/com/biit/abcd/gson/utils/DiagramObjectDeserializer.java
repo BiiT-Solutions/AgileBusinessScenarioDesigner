@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRepeat;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
@@ -44,6 +45,8 @@ public class DiagramObjectDeserializer implements JsonDeserializer<DiagramObject
 			return context.deserialize(json, DiagramSource.class);
 		case TABLE:
 			return context.deserialize(json, DiagramTable.class);
+		case REPEAT:
+			return context.deserialize(json, DiagramRepeat.class);
 		}
 
 		// If reaches this point then the type is unknown.

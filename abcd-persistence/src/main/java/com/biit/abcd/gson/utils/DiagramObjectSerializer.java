@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRepeat;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
@@ -39,6 +40,8 @@ public class DiagramObjectSerializer implements JsonSerializer<DiagramObject> {
 			return context.serialize(diagramElement, DiagramSource.class);
 		case TABLE:
 			return context.serialize(diagramElement, DiagramTable.class);
+		case REPEAT:
+			return context.serialize(diagramElement, DiagramRepeat.class);
 		}
 
 		return null;
