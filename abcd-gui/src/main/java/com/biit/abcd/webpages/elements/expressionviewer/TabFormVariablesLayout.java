@@ -10,7 +10,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
+import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
@@ -21,7 +21,7 @@ import com.vaadin.ui.ListSelect;
 
 public class TabFormVariablesLayout extends TabLayout {
 	private static final long serialVersionUID = 3488733953726761594L;
-	private FormQuestionTable formQuestionTable;
+	private TreeObjectTable formQuestionTable;
 	private ListSelect variableSelection;
 	private Button addTreeObjectButton, addVariableButton;
 
@@ -76,7 +76,7 @@ public class TabFormVariablesLayout extends TabLayout {
 	}
 
 	private void initializeFormQuestionTable() {
-		formQuestionTable = new FormQuestionTable();
+		formQuestionTable = new TreeObjectTable();
 		formQuestionTable.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
 		formQuestionTable.setSizeFull();
 		formQuestionTable.setRootElement((Form) UserSessionHandler.getFormController().getForm());
