@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,26 +37,33 @@ import com.vaadin.ui.VerticalLayout;
 public class ExpressionViewer extends CssLayout {
 	private static final long serialVersionUID = -3032370197806581430L;
 	public static String CLASSNAME = "v-expression-viewer";
-	private Expressions formExpression;
+	private Expressions expressions;
 	private Expression selectedExpression = null;
 	private VerticalLayout rootLayout;
+	// Used for storing the relationship.
 	private HashMap<ExpressionElement, Expression> expressionOfElement;
 	private Label evaluatorOutput;
+	// If this editor has the focus.
+	private boolean focused;
+	private List<LayoutClickedListener> clickedListeners;
+
+	public interface LayoutClickedListener {
+		public void clickedAction(ExpressionViewer viewer);
+	}
 
 	public ExpressionViewer() {
 		setImmediate(true);
 		expressionOfElement = new HashMap<>();
 		setStyleName(CLASSNAME);
 		addKeyController();
+		clickedListeners = new ArrayList<LayoutClickedListener>();
 	}
 
 	private void updateExpression() {
-		if (formExpression != null) {
-			updateExpression(formExpression);
-		}
+		updateExpression(expressions);
 	}
 
-	public void updateExpression(Expressions formExpression) {
+	public void updateExpression(Expressions expressions) {
 		// rootLayout.removeAllComponents();
 		removeAllComponents();
 		expressionOfElement = new HashMap<>();
@@ -65,8 +73,9 @@ public class ExpressionViewer extends CssLayout {
 		rootLayout.setSpacing(false);
 		rootLayout.setImmediate(true);
 		rootLayout.setSizeFull();
+		addClickController();
 
-		this.formExpression = formExpression;
+		this.expressions = expressions;
 
 		// Evaluator
 		HorizontalLayout evaluatorLayout = createEvaluatorLayout();
@@ -78,7 +87,11 @@ public class ExpressionViewer extends CssLayout {
 		lineLayout.setImmediate(true);
 		lineLayout.setSizeUndefined();
 
-		addExpressions(lineLayout, formExpression.getExpressions());
+		if (expressions != null) {
+			addExpressions(lineLayout, expressions);
+		} else {
+			selectedExpression = null;
+		}
 
 		rootLayout.addComponent(evaluatorLayout);
 		// If expand ratio is 0, component is not shown.
@@ -94,8 +107,8 @@ public class ExpressionViewer extends CssLayout {
 		updateEvaluator();
 	}
 
-	private void addExpressions(HorizontalLayout lineLayout, List<Expression> expressions) {
-		for (Expression expression : expressions) {
+	private void addExpressions(HorizontalLayout lineLayout, Expressions expressions) {
+		for (Expression expression : expressions.getExpressions()) {
 			addExpression(lineLayout, expression);
 		}
 	}
@@ -117,7 +130,7 @@ public class ExpressionViewer extends CssLayout {
 								ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
 										expression);
 								operatorWindow.showCentered();
-								operatorWindow.addAcceptAcctionListener(new AcceptActionListener() {
+								operatorWindow.addAcceptActionListener(new AcceptActionListener() {
 									@Override
 									public void acceptAction(AcceptCancelWindow window) {
 										try {
@@ -140,7 +153,7 @@ public class ExpressionViewer extends CssLayout {
 								stringInputWindow.setCaption(ServerTranslate
 										.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
 								stringInputWindow.setValue(((ExpressionValueString) expression).getValue());
-								stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+								stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
 									@Override
 									public void acceptAction(AcceptCancelWindow window) {
 										String value = ((StringInputWindow) window).getValue();
@@ -162,7 +175,7 @@ public class ExpressionViewer extends CssLayout {
 								SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
 								globalWindow.showCentered();
 								globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getVariable());
-								globalWindow.addAcceptAcctionListener(new AcceptActionListener() {
+								globalWindow.addAcceptActionListener(new AcceptActionListener() {
 									@Override
 									public void acceptAction(AcceptCancelWindow window) {
 										GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window)
@@ -183,7 +196,7 @@ public class ExpressionViewer extends CssLayout {
 								SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
 								variableWindow.showCentered();
 								variableWindow.setvalue((ExpressionValueFormCustomVariable) expression);
-								variableWindow.addAcceptAcctionListener(new AcceptActionListener() {
+								variableWindow.addAcceptActionListener(new AcceptActionListener() {
 									@Override
 									public void acceptAction(AcceptCancelWindow window) {
 										ExpressionValueFormCustomVariable formReference = ((SelectFormElementVariableWindow) window)
@@ -229,7 +242,8 @@ public class ExpressionViewer extends CssLayout {
 				HorizontalLayout lineLayout = (HorizontalLayout) rootLayout.getComponent(i);
 				for (int j = 0; j < lineLayout.getComponentCount(); j++) {
 					if (lineLayout.getComponent(j) instanceof ExpressionElement) {
-						if (expressionOfElement.get(lineLayout.getComponent(j)).equals(selectedExpression)) {
+						if (isFocused()
+								&& expressionOfElement.get(lineLayout.getComponent(j)).equals(selectedExpression)) {
 							lineLayout.getComponent(j).addStyleName("expression-selected");
 						} else {
 							lineLayout.getComponent(j).removeStyleName("expression-selected");
@@ -245,17 +259,17 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	private void selectNextExpression() {
-		if (getSelectedExpression() != null) {
+		if (isFocused() && getSelectedExpression() != null) {
 			// Select next expression.
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+			int index = expressions.getExpressions().indexOf(getSelectedExpression()) + 1;
 			selectExpressionByIndex(index);
 		}
 	}
 
 	private void selectPreviousExpression() {
-		if (getSelectedExpression() != null) {
+		if (isFocused() && getSelectedExpression() != null) {
 			// Select next expression.
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) - 1;
+			int index = expressions.getExpressions().indexOf(getSelectedExpression()) - 1;
 			selectExpressionByIndex(index);
 		}
 	}
@@ -263,10 +277,10 @@ public class ExpressionViewer extends CssLayout {
 	private void selectExpressionByIndex(int index) {
 		Expression selected = null;
 		if (index >= 0) {
-			if (index < formExpression.getExpressions().size()) {
-				selected = formExpression.getExpressions().get(index);
-			} else if (!formExpression.getExpressions().isEmpty()) {
-				selected = formExpression.getExpressions().get(formExpression.getExpressions().size() - 1);
+			if (index < expressions.getExpressions().size()) {
+				selected = expressions.getExpressions().get(index);
+			} else if (!expressions.getExpressions().isEmpty()) {
+				selected = expressions.getExpressions().get(expressions.getExpressions().size() - 1);
 			}
 		} else {
 			selectExpressionByIndex(0);
@@ -277,9 +291,9 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	public void removeSelectedExpression() {
-		if (getSelectedExpression() != null) {
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression());
-			formExpression.getExpressions().remove(getSelectedExpression());
+		if (isFocused() && getSelectedExpression() != null) {
+			int index = expressions.getExpressions().indexOf(getSelectedExpression());
+			expressions.getExpressions().remove(getSelectedExpression());
 			updateExpression();
 			selectExpressionByIndex(index);
 		}
@@ -293,12 +307,12 @@ public class ExpressionViewer extends CssLayout {
 	 */
 	public void addElementToSelected(Expression newElement) {
 		// Checks if there is at least one expression
-		if(formExpression != null){
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+		if (expressions != null) {
+			int index = expressions.getExpressions().indexOf(getSelectedExpression()) + 1;
 			if (newElement instanceof ExpressionSymbol) {
 				// Brackets are added before selected expression in some cases.
 				if (((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true
-						// Brackets always at right position in '<', '>', ... symbols.
+				// Brackets always at right position in '<', '>', ... symbols.
 						&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
 						// Brackets always at right position in '=' symbol.
 						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
@@ -306,25 +320,25 @@ public class ExpressionViewer extends CssLayout {
 					index--;
 				}
 			}
-			if (index >= 0 && index < formExpression.getExpressions().size()) {
-				formExpression.getExpressions().add(index, newElement);
+			if (index >= 0 && index < expressions.getExpressions().size()) {
+				expressions.getExpressions().add(index, newElement);
 			} else {
-				formExpression.getExpressions().add(newElement);
+				expressions.getExpressions().add(newElement);
 			}
 			updateExpression();
 			setSelectedExpression(newElement);
-		}else{
+		} else {
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_EXPRESSION_TABLE_EMPTY);
 		}
 	}
 
-	public Expressions getFormExpression() {
-		return formExpression;
+	public Expressions getExpressions() {
+		return expressions;
 	}
 
 	private void updateEvaluator() {
 		try {
-			formExpression.getExpressionEvaluator().eval();
+			expressions.getExpressionEvaluator().eval();
 			evaluatorOutput.setStyleName("expression-valid");
 			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
 		} catch (Exception e) {
@@ -378,6 +392,38 @@ public class ExpressionViewer extends CssLayout {
 				selectPreviousExpression();
 			}
 		});
-
 	}
+
+	private void addClickController() {
+		final ExpressionViewer thisWindow = this;
+		if (rootLayout != null) {
+			rootLayout.addLayoutClickListener(new LayoutClickListener() {
+				private static final long serialVersionUID = -4305606865801828692L;
+
+				@Override
+				public void layoutClick(LayoutClickEvent event) {
+					for (LayoutClickedListener listener : clickedListeners) {
+						listener.clickedAction(thisWindow);
+					}
+				}
+			});
+		}
+	}
+
+	public boolean isFocused() {
+		return focused;
+	}
+
+	public void setFocused(boolean focused) {
+		this.focused = focused;
+	}
+
+	public void addLayoutClickedListener(LayoutClickedListener listener) {
+		clickedListeners.add(listener);
+	}
+
+	public void removeLayoutClickedListener(LayoutClickedListener listener) {
+		clickedListeners.remove(listener);
+	}
+
 }

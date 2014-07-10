@@ -58,7 +58,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 
 			newTableCellEditWindow.setValue(formExpression.getName());
 			newTableCellEditWindow.showCentered();
-			newTableCellEditWindow.addAcceptAcctionListener(new AcceptActionListener() {
+			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					for (Expressions existingTableRule : UserSessionHandler.getFormController().getForm().getFormExpressions()) {

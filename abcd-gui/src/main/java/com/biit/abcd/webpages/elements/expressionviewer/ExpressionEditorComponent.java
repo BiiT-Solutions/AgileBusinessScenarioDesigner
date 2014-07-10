@@ -1,7 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.vaadin.ui.CustomComponent;
@@ -13,11 +12,18 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * Component for editing an expression. Is composed by a viewer and a properties menu in tabs.
  */
-public class ExpressionEditorComponent extends CustomComponent {
+public abstract class ExpressionEditorComponent extends CustomComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
 	private HorizontalLayout rootLayout;
-	private ExpressionViewer expressionViewer;
+
 	private TabSheet tabMenu;
+
+	public abstract VerticalLayout createViewersLayout();
+
+	/**
+	 * Visual CSS for enabled/disabled viewer.
+	 */
+	public abstract void updateSelectionStyles();
 
 	public ExpressionEditorComponent() {
 		rootLayout = new HorizontalLayout();
@@ -25,17 +31,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 		rootLayout.setMargin(false);
 		rootLayout.setSpacing(true);
 
-		VerticalLayout viewLayout = new VerticalLayout();
-		viewLayout.setSizeFull();
-		viewLayout.setMargin(false);
-		viewLayout.setSpacing(false);
-
 		tabMenu = createTabMenu();
 
-		expressionViewer = new ExpressionViewer();
-		expressionViewer.setSizeFull();
-
-		viewLayout.addComponent(expressionViewer);
+		VerticalLayout viewLayout = createViewersLayout();
 
 		rootLayout.addComponent(viewLayout);
 		// rootLayout.addComponent(expressionEditorProperties);
@@ -56,7 +54,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 
 			@Override
 			public void elementAdded(Object newElement) {
-				expressionViewer.addElementToSelected((Expression) newElement);
+				if (getSelectedViewer() != null) {
+					getSelectedViewer().addElementToSelected((Expression) newElement);
+				}
 			}
 
 		});
@@ -70,7 +70,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 
 			@Override
 			public void elementAdded(Object newElement) {
-				expressionViewer.addElementToSelected((Expression) newElement);
+				if (getSelectedViewer() != null) {
+					getSelectedViewer().addElementToSelected((Expression) newElement);
+				}
 			}
 
 		});
@@ -84,7 +86,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 
 			@Override
 			public void elementAdded(Object newElement) {
-				expressionViewer.addElementToSelected((Expression) newElement);
+				if (getSelectedViewer() != null) {
+					getSelectedViewer().addElementToSelected((Expression) newElement);
+				}
 			}
 
 		});
@@ -95,12 +99,9 @@ public class ExpressionEditorComponent extends CustomComponent {
 		return tabMenu;
 	}
 
-	public void refreshExpressionEditor(Expressions selectedExpression) {
-		expressionViewer.removeAllComponents();
-		if (selectedExpression != null) {
-			// Add table rows.
-			expressionViewer.updateExpression(selectedExpression);
-		}
-	}
-
+	/**
+	 * A Expression editor can have more than one viewer. When user click into a viewer, this one gains the focus and is
+	 * selected.
+	 */
+	public abstract ExpressionViewer getSelectedViewer();
 }

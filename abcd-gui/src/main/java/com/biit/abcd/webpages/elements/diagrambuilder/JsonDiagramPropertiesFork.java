@@ -40,7 +40,7 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final SelectQuestionWindow questionWindow = new SelectQuestionWindow();
-				questionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				questionWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {

@@ -114,19 +114,19 @@ public class AcceptCancelWindow extends Window {
 		super.setContent(rootLayout);
 	}
 
-	public void addAcceptAcctionListener(AcceptActionListener listener) {
+	public void addAcceptActionListener(AcceptActionListener listener) {
 		acceptListeners.add(listener);
 	}
 
-	public void removeAcceptAcctionListener(AcceptActionListener listener) {
+	public void removeAcceptActionListener(AcceptActionListener listener) {
 		acceptListeners.remove(listener);
 	}
 
-	public void addCancelAcctionListener(CancelActionListener listener) {
+	public void addCancelActionListener(CancelActionListener listener) {
 		cancelListeners.add(listener);
 	}
 
-	public void removeAcceptAcctionListener(CancelActionListener listener) {
+	public void removeAcceptActionListener(CancelActionListener listener) {
 		cancelListeners.remove(listener);
 	}
 

@@ -58,7 +58,7 @@ public class SelectDroolsRuleEditable extends TableCellLabelEdit {
 
 			newTableCellEditWindow.setValue(rule.getName());
 			newTableCellEditWindow.showCentered();
-			newTableCellEditWindow.addAcceptAcctionListener(new AcceptActionListener() {
+			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					for (Rule existingDroolsRule : UserSessionHandler.getFormController().getForm().getRules()) {

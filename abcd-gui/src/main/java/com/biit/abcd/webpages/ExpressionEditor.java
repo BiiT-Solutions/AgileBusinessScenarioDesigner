@@ -12,6 +12,7 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectExpressionTableEditable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.WindowNewExpression;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -52,7 +53,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		collapsibleLayout.createMenu(tableSelectExpression);
 
 		// Create content
-		expressionEditorComponent = new ExpressionEditorComponent();
+		expressionEditorComponent = new SimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 		collapsibleLayout.setContent(expressionEditorComponent);
 
@@ -117,7 +118,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 	}
 
 	private void refreshExpressionEditor() {
-		expressionEditorComponent.refreshExpressionEditor(getSelectedExpression());
+		((SimpleExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(getSelectedExpression());
+		expressionEditorComponent.updateSelectionStyles();
 	}
 
 	private void save() {
@@ -140,6 +142,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		UserSessionHandler.getFormController().getForm().getFormExpressions()
 				.remove(tableSelectExpression.getSelectedExpression());
 		tableSelectExpression.removeSelectedRow();
+		refreshExpressionEditor();
 	}
 
 	public void addExpressionToMenu(Expressions expression) {

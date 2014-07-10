@@ -58,7 +58,7 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 
 			newTableCellEditWindow.setValue(tableRule.getName());
 			newTableCellEditWindow.showCentered();
-			newTableCellEditWindow.addAcceptAcctionListener(new AcceptActionListener() {
+			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					for (TableRule existingTableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {

@@ -37,7 +37,7 @@ public class JsonDiagramPropertiesTable extends PropertiesForClassComponent<Diag
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final SelectTableWindow tableWindow = new SelectTableWindow();
-				tableWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				tableWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {

@@ -41,7 +41,7 @@ public class ChangeExpressionOperatorWindow extends AcceptCancelWindow {
 		operatorComboBox.setSizeFull();
 		layout.addComponent(operatorComboBox);
 		layout.setSizeFull();
-		layout.setMargin(true);
+		layout.setMargin(false);
 		return layout;
 	}
 

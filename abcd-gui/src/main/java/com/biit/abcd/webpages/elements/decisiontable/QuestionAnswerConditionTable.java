@@ -240,7 +240,7 @@ public class QuestionAnswerConditionTable extends Table {
 			if (questionAnswer.getQuestion() != null) {
 				newConditionWindow.setTreeObjectSelected(questionAnswer.getQuestion());
 			}
-			newConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+			newConditionWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
@@ -274,7 +274,7 @@ public class QuestionAnswerConditionTable extends Table {
 				if (questionAnswer.getAnswer() != null) {
 					newAnswerValueWindow.setTreeObjectSelected(questionAnswer.getAnswer());
 				}
-				newAnswerValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				newAnswerValueWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						Answer selectedanswer = ((SelectAnswerWindow) window).getSelectedTableValue();

@@ -391,7 +391,7 @@ public class TabOperatorLayout extends TabLayout {
 								ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
 						stringInputWindow.setCaption(ServerTranslate
 								.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
-						stringInputWindow.addAcceptAcctionListener(new AcceptActionListener() {
+						stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								String value = ((StringInputWindow) window).getValue();

@@ -11,11 +11,10 @@ import com.vaadin.ui.TextField;
 public class WindowNewRule extends WindowCreateNewObject {
 	private static final long serialVersionUID = 449099000293784033L;
 
-	public WindowNewRule(DroolsRuleEditor parentWindow, LanguageCodes windowCaption,
-			LanguageCodes inputFieldCaption) {
+	public WindowNewRule(DroolsRuleEditor parentWindow, LanguageCodes windowCaption, LanguageCodes inputFieldCaption) {
 		super(parentWindow, windowCaption, inputFieldCaption);
 	}
-	
+
 	@Override
 	public void acceptAction(TextField inputTextField) {
 		for (Rule rule : UserSessionHandler.getFormController().getForm().getRules()) {
