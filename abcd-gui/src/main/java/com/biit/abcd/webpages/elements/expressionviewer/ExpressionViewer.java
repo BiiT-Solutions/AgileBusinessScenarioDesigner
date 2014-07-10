@@ -55,7 +55,6 @@ public class ExpressionViewer extends CssLayout {
 		setImmediate(true);
 		expressionOfElement = new HashMap<>();
 		setStyleName(CLASSNAME);
-		addKeyController();
 		clickedListeners = new ArrayList<LayoutClickedListener>();
 	}
 
@@ -258,7 +257,7 @@ public class ExpressionViewer extends CssLayout {
 		return selectedExpression;
 	}
 
-	private void selectNextExpression() {
+	protected void selectNextExpression() {
 		if (isFocused() && getSelectedExpression() != null) {
 			// Select next expression.
 			int index = expressions.getExpressions().indexOf(getSelectedExpression()) + 1;
@@ -266,7 +265,7 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
-	private void selectPreviousExpression() {
+	protected void selectPreviousExpression() {
 		if (isFocused() && getSelectedExpression() != null) {
 			// Select next expression.
 			int index = expressions.getExpressions().indexOf(getSelectedExpression()) - 1;
@@ -360,38 +359,6 @@ public class ExpressionViewer extends CssLayout {
 		checkerLayout.setComponentAlignment(evaluatorOutput, Alignment.TOP_RIGHT);
 
 		return checkerLayout;
-	}
-
-	/**
-	 * Add all keyboard defined actions.
-	 */
-	private void addKeyController() {
-		this.addShortcutListener(new ShortcutListener("DELETE_SHORTCUT", KeyCode.DELETE, null) {
-			private static final long serialVersionUID = -71562151456777493L;
-
-			@Override
-			public void handleAction(Object sender, Object target) {
-				removeSelectedExpression();
-			}
-		});
-
-		this.addShortcutListener(new ShortcutListener("SELECT_NEXT", KeyCode.ARROW_RIGHT, null) {
-			private static final long serialVersionUID = 7663105045629599269L;
-
-			@Override
-			public void handleAction(Object sender, Object target) {
-				selectNextExpression();
-			}
-		});
-
-		this.addShortcutListener(new ShortcutListener("SELECT_PREVIOUS", KeyCode.ARROW_LEFT, null) {
-			private static final long serialVersionUID = 8453120978479798559L;
-
-			@Override
-			public void handleAction(Object sender, Object target) {
-				selectPreviousExpression();
-			}
-		});
 	}
 
 	private void addClickController() {

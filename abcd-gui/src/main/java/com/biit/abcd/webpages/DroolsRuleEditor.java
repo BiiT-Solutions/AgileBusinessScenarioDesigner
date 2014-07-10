@@ -97,7 +97,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 						new WindowNewRule(thisPage, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
 								LanguageCodes.DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD));
 			}
-
 		});
 
 		droolsRuleEditorUpperMenu.addRemoveRuleButtonClickListener(new ClickListener() {

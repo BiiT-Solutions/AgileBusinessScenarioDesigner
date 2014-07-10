@@ -3,6 +3,8 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ThemeIcon;
+import com.vaadin.event.ShortcutListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
@@ -42,6 +44,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 		rootLayout.setExpandRatio(tabMenu, 0.20f);
 
 		setCompositionRoot(rootLayout);
+		addKeyController();
 	}
 
 	private TabSheet createTabMenu() {
@@ -104,4 +107,36 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 	 * selected.
 	 */
 	public abstract ExpressionViewer getSelectedViewer();
+
+	/**
+	 * Add all keyboard defined actions.
+	 */
+	private void addKeyController() {
+		this.addShortcutListener(new ShortcutListener("DELETE_SHORTCUT", KeyCode.DELETE, null) {
+			private static final long serialVersionUID = -71562151456777493L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				getSelectedViewer().removeSelectedExpression();
+			}
+		});
+
+		this.addShortcutListener(new ShortcutListener("SELECT_NEXT", KeyCode.ARROW_RIGHT, null) {
+			private static final long serialVersionUID = 7663105045629599269L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				getSelectedViewer().selectNextExpression();
+			}
+		});
+
+		this.addShortcutListener(new ShortcutListener("SELECT_PREVIOUS", KeyCode.ARROW_LEFT, null) {
+			private static final long serialVersionUID = 8453120978479798559L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				getSelectedViewer().selectPreviousExpression();
+			}
+		});
+	}
 }
