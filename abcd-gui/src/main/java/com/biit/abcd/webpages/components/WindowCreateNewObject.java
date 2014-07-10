@@ -2,6 +2,8 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -38,6 +40,14 @@ public abstract class WindowCreateNewObject extends Window {
 
 		final TextField inputTextField = new TextField(ServerTranslate.translate(inputFieldCaption));
 		inputTextField.setWidth("100%");
+		inputTextField.addShortcutListener(new ShortcutListener("Enter as Accept", ShortcutAction.KeyCode.ENTER, null) {
+			private static final long serialVersionUID = -9055249857540860785L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				acceptAction(inputTextField);
+			}
+		});
 
 		mainLayout.addComponent(inputTextField);
 		mainLayout.setExpandRatio(inputTextField, 1.0f);
@@ -77,7 +87,7 @@ public abstract class WindowCreateNewObject extends Window {
 		mainLayout.setMargin(true);
 		mainLayout.setSpacing(true);
 		mainLayout.setSizeFull();
-		
+
 		inputTextField.focus();
 
 		return mainLayout;

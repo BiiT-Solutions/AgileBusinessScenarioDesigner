@@ -273,4 +273,21 @@ public class TreeObjectTable extends TreeTable {
 		return treeObjectWithIconComponent;
 	}
 
+	/**
+	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
+	 * 
+	 * @param collapseFrom
+	 */
+	public void collapseFrom(Class<?> collapseFrom) {
+		for (Object item : getItemIds()) {
+			if (item.getClass() == collapseFrom) {
+				this.setCollapsed(item, true);
+			} else {
+				if (this.getParent(item) != null && this.isCollapsed(this.getParent(item))) {
+					this.setCollapsed(item, true);
+				}
+			}
+		}
+	}
+
 }

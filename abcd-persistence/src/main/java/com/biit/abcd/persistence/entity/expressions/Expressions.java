@@ -19,7 +19,7 @@ import com.biit.jexeval.ExpressionEvaluator;
  */
 @Entity
 @Table(name = "EXPRESSION_FORMS_EXPRESSION")
-public class Expressions extends Expression implements ITableCellEditable{
+public class Expressions extends Expression implements ITableCellEditable {
 
 	private String name;
 
@@ -72,9 +72,9 @@ public class Expressions extends Expression implements ITableCellEditable{
 			// Dots are not allowed in the Evaluator Expression.
 			if ((expression instanceof ExpressionValueFormCustomVariable)
 					|| (expression instanceof ExpressionValueGlobalConstant)) {
-				result += expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "") + " ";
+				result += filterVariables(expression);
 			} else {
-				result += expression.getExpression() + " ";
+				result += expression.getExpression();
 			}
 		}
 		return result.trim();
@@ -87,13 +87,22 @@ public class Expressions extends Expression implements ITableCellEditable{
 			if ((expression instanceof ExpressionValueFormCustomVariable)
 					|| (expression instanceof ExpressionValueGlobalConstant)) {
 				// Dots are not allowed.
-				String varName = expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "");
+				String varName = filterVariables(expression);
 				// Value is not needed for evaluation.
 				String value = "1";
 				evaluator.with(varName, value);
 			}
 		}
 		return evaluator;
+	}
 
+	/**
+	 * Some characters are not allowed in the Expression Evaluator.
+	 * 
+	 * @param expression
+	 * @return
+	 */
+	private String filterVariables(Expression expression) {
+		return expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "");
 	}
 }
