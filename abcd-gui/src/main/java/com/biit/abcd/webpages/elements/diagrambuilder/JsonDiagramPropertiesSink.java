@@ -39,7 +39,7 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final SelectExpressionWindow formExpressionWindow = new SelectExpressionWindow();
-				formExpressionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				formExpressionWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {

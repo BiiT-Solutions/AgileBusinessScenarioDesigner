@@ -45,7 +45,7 @@ public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassCompone
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final SelectDiagramWindow selectAnswerWindow = new SelectDiagramWindow();
-				selectAnswerWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				selectAnswerWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {

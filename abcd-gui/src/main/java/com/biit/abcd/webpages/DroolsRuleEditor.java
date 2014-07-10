@@ -11,6 +11,7 @@ import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectDroolsRuleEditable;
+import com.biit.abcd.webpages.elements.droolsrule.ConditionActionEditor;
 import com.biit.abcd.webpages.elements.droolsrule.DroolsRuleEditorUpperMenu;
 import com.biit.abcd.webpages.elements.droolsrule.WindowNewRule;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
@@ -52,7 +53,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		collapsibleLayout.createMenu(tableSelectRule);
 
 		// Create content
-		ruleExpressionEditorComponent = new ExpressionEditorComponent();
+		ruleExpressionEditorComponent = new ConditionActionEditor();
 		ruleExpressionEditorComponent.setSizeFull();
 		collapsibleLayout.setContent(ruleExpressionEditorComponent);
 
@@ -92,8 +93,9 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().addWindow(new WindowNewRule(thisPage, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
-						LanguageCodes.DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD));
+				UI.getCurrent().addWindow(
+						new WindowNewRule(thisPage, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
+								LanguageCodes.DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD));
 			}
 
 		});
@@ -116,11 +118,8 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	}
 
 	private void refreshRuleEditor() {
-		// thenTable.removeAll();
-		if (getSelectedRule() != null) {
-			// Add table rows.
-			// thenTable.addExpression(getSelectedRule());
-		}
+		((ConditionActionEditor) ruleExpressionEditorComponent).refreshRuleEditor(getSelectedRule());
+		ruleExpressionEditorComponent.updateSelectionStyles();
 	}
 
 	private void save() {
@@ -141,6 +140,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	private void removeSelectedRule() {
 		UserSessionHandler.getFormController().getForm().getRules().remove(tableSelectRule.getSelectedRule());
 		tableSelectRule.removeSelectedRow();
+		refreshRuleEditor();
 	}
 
 	public void addRuleToTableMenu(Rule rule) {

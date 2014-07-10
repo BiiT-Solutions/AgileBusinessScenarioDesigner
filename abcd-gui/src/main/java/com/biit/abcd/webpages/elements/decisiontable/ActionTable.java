@@ -118,7 +118,7 @@ public class ActionTable extends Table {
 						.getActions().get(0));
 
 				newActionValueWindow.showCentered();
-				newActionValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						try {

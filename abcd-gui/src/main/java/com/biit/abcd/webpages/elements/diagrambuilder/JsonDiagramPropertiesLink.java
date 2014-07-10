@@ -89,7 +89,7 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final SelectAnswerWindow selectAnswerWindow = new SelectAnswerWindow(question);
-				selectAnswerWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				selectAnswerWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {

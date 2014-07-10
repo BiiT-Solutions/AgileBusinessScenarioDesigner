@@ -163,7 +163,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	private void createVariableWindow() {
 		VariableWindow window = new VariableWindow(
 				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_ADD_WINDOW_TITLE));
-		window.addAcceptAcctionListener(new AcceptActionListener() {
+		window.addAcceptActionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				GlobalVariable value = ((VariableWindow) window).getValue();
@@ -195,7 +195,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			window.setValue(variable);
 			window.disableTypeEdition();
 
-			window.addAcceptAcctionListener(new AcceptActionListener() {
+			window.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					GlobalVariable editedVariable = ((VariableWindow) window).getValue();
@@ -236,7 +236,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 					variableDataWindow.setValidFromEditable(false);
 				}
 
-				variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				variableDataWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						VariableData variableData = ((VariableDataWindow) window).getValue();
@@ -266,7 +266,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				variableDataWindow.setValue(selectedValue);
 				variableDataWindow.disableValueFromTo();
 
-				variableDataWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				variableDataWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						VariableData editedVariable = ((VariableDataWindow) window).getValue();

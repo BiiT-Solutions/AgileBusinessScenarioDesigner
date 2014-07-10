@@ -11,6 +11,7 @@ import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
@@ -36,9 +37,8 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		VerticalLayout layout = new VerticalLayout();
 
 		// Create content
-		expressionEditorComponent = new ExpressionEditorComponent();
+		expressionEditorComponent = new SimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
-		
 
 		if (action.getExpression() == null) {
 			expression = new Expressions();
@@ -48,7 +48,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		} else {
 			expression = action.getExpression();
 		}
-		expressionEditorComponent.refreshExpressionEditor(expression);
+		((SimpleExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(expression);
 
 		layout.addComponent(expressionEditorComponent);
 		layout.setSizeFull();

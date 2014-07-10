@@ -20,7 +20,7 @@ public abstract class ChangeValuePortClickListener implements FormulaPortClickLi
 		if(fireOnlyAtDoubleClick && !clickEvent.isDoubleClick()){
 			return;
 		}
-		windowEditor.addAcceptAcctionListener(new AcceptActionListener() {
+		windowEditor.addAcceptActionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				formulaPort.setValue(windowEditor.getValue());
