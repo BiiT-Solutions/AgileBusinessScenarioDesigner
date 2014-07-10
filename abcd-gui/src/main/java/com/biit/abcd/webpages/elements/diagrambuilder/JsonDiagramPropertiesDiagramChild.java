@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
@@ -51,6 +52,18 @@ public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassCompone
 					public void acceptAction(AcceptCancelWindow window) {
 						Diagram diagram = selectAnswerWindow.getSelectedDiagram();
 						if (diagram != null) {
+							
+							if(diagram.equals(instance.getParent())){
+								MessageManager.showError(LanguageCodes.ERROR_SAME_DIAGRAM);
+								return;
+							}
+							
+							Diagram parentDiagram = UserSessionHandler.getFormController().getForm().getDiagramParent(diagram);
+							if(parentDiagram!=null){
+								MessageManager.showError(LanguageCodes.ERROR_DIAGRAM_IS_IN_USE);
+								return;
+							}
+							
 							instance.setChildDiagram(diagram);
 							fieldWithSearchButton.setValue(diagram, diagram.getName());
 							selectAnswerWindow.close();

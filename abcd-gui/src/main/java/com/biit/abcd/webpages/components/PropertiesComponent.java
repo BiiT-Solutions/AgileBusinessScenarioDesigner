@@ -20,12 +20,14 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	private HashMap<Class<?>, PropertiesForClassComponent<?>> propertiesComponents;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
 	private List<ElementAddedListener> elementAddedListener;
+	private boolean fireListeners;
 
 	public PropertiesComponent() {
 
 		propertiesComponents = new HashMap<Class<?>, PropertiesForClassComponent<?>>();
 		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
 		elementAddedListener = new ArrayList<ElementAddedListener>();
+		fireListeners = true;
 
 		rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
@@ -101,8 +103,10 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	}
 
 	protected void firePropertyUpdateListener(Object element) {
-		for (PropertieUpdateListener listener : propertyUpdateListeners) {
-			listener.propertyUpdate(element);
+		if (fireListeners) {
+			for (PropertieUpdateListener listener : propertyUpdateListeners) {
+				listener.propertyUpdate(element);
+			}
 		}
 	}
 
@@ -130,5 +134,9 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	@Override
 	public void setTabIndex(int tabIndex) {
 		// Does nothing
+	}
+
+	public void setFireListeners(boolean fireListeners) {
+		this.fireListeners = fireListeners;
 	}
 }

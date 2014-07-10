@@ -181,7 +181,10 @@ public enum LanguageCodes {
 	ERROR_DATABASE_DUPLICATED_VARIABLE("error.database.duplicatedvariable"),
 	ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION("error.database.duplicatedvariablecatpion"),
 	
-	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"),
+	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"), 
+	ERROR_SAME_DIAGRAM("error.same.diagram"),
+	ERROR_DIAGRAM_IS_IN_USE("error.diagram.is.in.use"),
+	
 	
 	INFO_DATA_STORED("info.data.store"),
 	

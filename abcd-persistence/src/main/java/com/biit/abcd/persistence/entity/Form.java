@@ -207,4 +207,22 @@ public class Form extends TreeObject {
 		this.rules = rules;
 	}
 
+	/**
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root
+	 * diagram.
+	 * 
+	 * @param diagram
+	 */
+	public Diagram getDiagramParent(Diagram diagram) {
+		for (Diagram parentDiagram : getDiagrams()) {
+			List<Diagram> childDiagrams = parentDiagram.getChildDiagrams();
+			for (Diagram childDiagram : childDiagrams) {
+				if (childDiagram.equals(diagram)) {
+					return parentDiagram;
+				}
+			}
+		}
+		return null;
+	}
+
 }
