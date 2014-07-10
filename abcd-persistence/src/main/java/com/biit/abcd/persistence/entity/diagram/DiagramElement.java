@@ -20,6 +20,8 @@ import com.biit.abcd.gson.utils.DiagramLinkDeserializer;
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
 import com.biit.abcd.gson.utils.DiagramObjectDeserializer;
 import com.biit.abcd.gson.utils.DiagramObjectSerializer;
+import com.biit.abcd.gson.utils.DiagramRepeatDeserializer;
+import com.biit.abcd.gson.utils.DiagramRepeatSerializer;
 import com.biit.abcd.gson.utils.DiagramRuleDeserializer;
 import com.biit.abcd.gson.utils.DiagramRuleSerializer;
 import com.biit.abcd.gson.utils.DiagramSinkDeserializer;
@@ -105,6 +107,7 @@ public abstract class DiagramElement extends DiagramObject {
 			gsonBuilder.registerTypeAdapter(DiagramTable.class, new DiagramTableDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementDeserializer());
+			gsonBuilder.registerTypeAdapter(DiagramRepeat.class, new DiagramRepeatDeserializer());
 			Gson gson = gsonBuilder.create();
 			DiagramElement object = gson.fromJson(jsonString, DiagramElement.class);
 			return object;
@@ -125,6 +128,7 @@ public abstract class DiagramElement extends DiagramObject {
 		gsonBuilder.registerTypeAdapter(DiagramTable.class, new DiagramTableSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramRepeat.class, new DiagramRepeatSerializer());
 		Gson gson = gsonBuilder.create();
 		String json = gson.toJson(this);
 		return json;

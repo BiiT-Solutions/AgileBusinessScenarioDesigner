@@ -139,7 +139,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 					initializeDiagramsTable();
 					diagramBuilderTable.setValue(diagramChild.getParent());
-					
 					return;
 				}
 				// Anyone else
@@ -306,8 +305,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		@Override
 		public void valueChange(ValueChangeEvent event) {
 			final Diagram currentDiagram = (Diagram) event.getProperty().getValue();
+			propertiesContainer.setFireListeners(false);
 			propertiesContainer.updatePropertiesComponent(null);
 			diagramBuilder.setDiagram(currentDiagram);
+			propertiesContainer.setFireListeners(true);
 		}
 	}
 }
