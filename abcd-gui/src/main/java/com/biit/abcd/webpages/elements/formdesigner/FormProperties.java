@@ -59,6 +59,7 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 		if (availableTo.getValue() != null) {
 			instance.setAvailableTo(new Timestamp(((Date) availableTo.getValue()).getTime()));
 		}
+		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	@Override

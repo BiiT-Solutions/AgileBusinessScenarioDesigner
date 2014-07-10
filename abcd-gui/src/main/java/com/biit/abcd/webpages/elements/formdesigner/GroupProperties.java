@@ -39,6 +39,8 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 	protected void updateConcreteFormElement() {
 		instance.setName(groupTechnicalLabel.getValue());
 		instance.setRepetable(groupIsRepeatable.getValue());
+		
+		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	@Override

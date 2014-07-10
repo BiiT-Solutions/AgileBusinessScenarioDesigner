@@ -166,13 +166,15 @@ public class Diagram extends StorableObject {
 		}
 		return links;
 	}
-	
-	public List<Diagram> getChildDiagrams(){
+
+	public List<Diagram> getChildDiagrams() {
 		List<Diagram> childDiagrams = new ArrayList<Diagram>();
-		for(DiagramObject object: diagramElements){
-			if(object instanceof DiagramChild){
+		for (DiagramObject object : diagramElements) {
+			if (object instanceof DiagramChild) {
 				DiagramChild diagramChild = (DiagramChild) object;
-				childDiagrams.add(diagramChild.getChildDiagram());
+				if (diagramChild.getChildDiagram() != null) {
+					childDiagrams.add(diagramChild.getChildDiagram());
+				}
 			}
 		}
 		return childDiagrams;

@@ -33,6 +33,7 @@ public class CategoryProperties extends GenericFormElementProperties<Category> {
 	@Override
 	protected void updateConcreteFormElement() {
 		instance.setName(categoryLabel.getValue());
+		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	@Override

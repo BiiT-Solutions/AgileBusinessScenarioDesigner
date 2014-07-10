@@ -58,8 +58,8 @@ public class Form extends TreeObject {
 	}
 
 	/**
-	 * Gets all children of the form. This annotations are in the method because overwrites the TreeObject. Forms'
-	 * children must use FetchType.LAZY.
+	 * Gets all children of the form. This annotations are in the method because
+	 * overwrites the TreeObject. Forms' children must use FetchType.LAZY.
 	 */
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
