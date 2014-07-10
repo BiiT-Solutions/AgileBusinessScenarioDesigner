@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,7 @@ import com.biit.abcd.persistence.entity.Answer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "DIAGRAM_LINKS")
@@ -180,7 +182,7 @@ public class DiagramLink extends DiagramObject {
 			}
 
 			List<DiagramLink> links = getParent().getOutgoingLinks((DiagramElement) forkSource);
-			if(links.size()==1){
+			if (links.size() == 1) {
 				return false;
 			}
 			int numOfEmptyLinks = 0;
@@ -232,10 +234,31 @@ public class DiagramLink extends DiagramObject {
 		answerExpression = null;
 		setText("");
 	}
+	
+	@Override
+	public void setCreatedBy(User user) {
+		super.setCreatedBy(user);
+		source.setCreatedBy(user);
+		target.setCreatedBy(user);
+	}
+	
+	@Override
+	public void setUpdatedBy(User user){
+		super.setUpdatedBy(user);
+		source.setUpdatedBy(user);
+		target.setUpdatedBy(user);
+	}
+	
+	@Override
+	public void setUpdateTime(Timestamp dateUpdated){
+		super.setUpdateTime(dateUpdated);
+		source.setUpdateTime(dateUpdated);
+		target.setUpdateTime(dateUpdated);
+	}
 
 	@Override
-	public void update(DiagramObject object) {
-		super.update(object);
+	public void update(DiagramObject object, User user) {
+		super.update(object, user);
 		if (object instanceof DiagramLink) {
 			DiagramLink link = (DiagramLink) object;
 

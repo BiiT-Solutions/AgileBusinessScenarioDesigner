@@ -33,6 +33,7 @@ import com.biit.abcd.persistence.entity.StorableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "DIAGRAM_OBJECTS")
@@ -83,9 +84,11 @@ public abstract class DiagramObject extends StorableObject {
 		this.embeds = embeds;
 	}
 
-	public void update(DiagramObject object) {
+	public void update(DiagramObject object, User user) {
 		embeds = object.embeds;
 		z = object.z;
+		setUpdatedBy(user);
+		setUpdateTime();
 	}
 
 	public Diagram getParent() {

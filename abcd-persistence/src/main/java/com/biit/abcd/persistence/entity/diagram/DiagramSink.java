@@ -25,7 +25,7 @@ public class DiagramSink  extends DiagramElement{
 	public DiagramSink() {
 		super();
 		DiagramBiitText biitText = new DiagramBiitText();
-		biitText.setText("Sink");
+		biitText.setText("End");
 		setBiitText(biitText);
 	}
 }

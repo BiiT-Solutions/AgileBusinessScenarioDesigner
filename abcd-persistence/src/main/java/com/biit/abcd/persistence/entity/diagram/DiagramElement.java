@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,6 +34,7 @@ import com.biit.abcd.gson.utils.DiagramTableSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "DIAGRAM_ELEMENTS")
@@ -135,8 +137,8 @@ public abstract class DiagramElement extends DiagramObject {
 	}
 
 	@Override
-	public void update(DiagramObject object) {
-		super.update(object);
+	public void update(DiagramObject object, User user) {
+		super.update(object,user);
 		if (object instanceof DiagramElement) {
 			DiagramElement element = (DiagramElement) object;
 
@@ -168,5 +170,23 @@ public abstract class DiagramElement extends DiagramObject {
 
 	public List<DiagramLink> getOutgoingLinks() {
 		return getParent().getOutgoingLinks(this);
+	}
+	
+	@Override
+	public void setCreatedBy(User user) {
+		super.setCreatedBy(user);
+		biitText.setCreatedBy(user);
+	}
+	
+	@Override
+	public void setUpdatedBy(User user){
+		super.setUpdatedBy(user);
+		biitText.setUpdatedBy(user);
+	}
+	
+	@Override
+	public void setUpdateTime(Timestamp dateUpdated){
+		super.setUpdateTime(dateUpdated);
+		biitText.setUpdateTime(dateUpdated);
 	}
 }

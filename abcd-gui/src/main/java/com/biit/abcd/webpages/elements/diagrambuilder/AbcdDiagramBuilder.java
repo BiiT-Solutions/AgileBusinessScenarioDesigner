@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
@@ -153,6 +154,11 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	private void addObjectToDiagram(DiagramObject element) {
 		if (!diagramElements.containsKey(element.getJointjsId())) {
 			diagram.addDiagramObject(element);
+			element.setCreatedBy(UserSessionHandler.getUser());
+			element.setUpdatedBy(UserSessionHandler.getUser());
+			element.setUpdateTime();
+			diagram.setUpdatedBy(UserSessionHandler.getUser());
+			diagram.setUpdateTime();
 			diagramElements.put(element.getJointjsId(), element);
 		}
 	}
@@ -172,6 +178,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		if (diagramElements.containsKey(element.getJointjsId())) {
 			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
 			diagram.getDiagramObjects().remove(originalElement);
+			diagram.setUpdatedBy(UserSessionHandler.getUser());
+			diagram.setUpdateTime();
 			diagramElements.remove(element.getJointjsId());
 		}
 	}
@@ -180,7 +188,9 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
 		if (diagramElements.containsKey(element.getJointjsId())) {
 			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
-			originalElement.update(element);
+			originalElement.update(element,UserSessionHandler.getUser());
+			diagram.setUpdatedBy(UserSessionHandler.getUser());
+			diagram.setUpdateTime();
 		}
 	}
 
@@ -233,7 +243,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					if (diagramElements.containsKey(object.getJointjsId())) {
 						// Already exist, update
 						DiagramObject currentValue = diagramElements.get(object.getJointjsId());
-						currentValue.update(object);
+						currentValue.update(object,UserSessionHandler.getUser());
 					} else {
 						// Doesn't exist, insert
 						diagram.addDiagramObject(object);
