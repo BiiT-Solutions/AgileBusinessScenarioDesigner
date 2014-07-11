@@ -4,17 +4,17 @@
 		<groups>
 			<run>
 				<include name="expressionEvaluator" />
-				<exclude name="hierarchyTest" />
-				<exclude name="formDao" />
-				<exclude name="categoryDao" />
-				<exclude name="groupDao" />
-				<exclude name="questionDao" />
-				<exclude name="answerDao" />
-				<exclude name="diagramDao" />
-				<exclude name="jsonParser" />
-				<exclude name="formCustomVariablesDao" />
-				<exclude name="globalVariablesDao" />
-				<exclude name="tableRulesDao" />
+				<include name="hierarchyTest" />
+				<include name="formDao" />
+				<include name="categoryDao" />
+				<include name="groupDao" />
+				<include name="questionDao" />
+				<include name="answerDao" />
+				<include name="diagramDao" />
+				<include name="jsonParser" />
+				<include name="formCustomVariablesDao" />
+				<include name="globalVariablesDao" />
+				<include name="tableRulesDao" />
 			</run>
 		</groups>
 		<classes>

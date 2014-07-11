@@ -1,5 +1,6 @@
 package com.biit.jexeval;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -11,20 +12,32 @@ import com.biit.abcd.persistence.entity.expressions.DateUnit;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.jexeval.exceptions.ExpressionException;
 
 public class ExpressionTest {
 
 	@Test(groups = { "expressionEvaluator" })
 	public void testInFunction() {
-		// ExpressionChecker e = new ExpressionChecker("x in(1,2,3)");
-		// Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
+		ExpressionChecker e = new ExpressionChecker("x in(1,2,3)");
+		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
+	}
+
+	@Test(groups = { "expressionEvaluator" }, expectedExceptions = ExpressionException.class)
+	public void testIncorrectInFunction() {
+		ExpressionChecker e = new ExpressionChecker("x + in(1,2,3)");
+		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
 	}
 
 	@Test(groups = { "expressionEvaluator" })
 	public void testBetweenFunction() {
-		// ExpressionChecker e = new ExpressionChecker("x between(0, 10)");
-		//
-		// Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
+		ExpressionChecker e = new ExpressionChecker("x between(0, 10)");
+		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
+	}
+
+	@Test(groups = { "expressionEvaluator" }, expectedExceptions = ExpressionException.class)
+	public void testIncorrectBetweenFunction() {
+		ExpressionChecker e = new ExpressionChecker("x + between(0, 10)");
+		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
 	}
 
 	@Test(groups = { "expressionEvaluator" })
