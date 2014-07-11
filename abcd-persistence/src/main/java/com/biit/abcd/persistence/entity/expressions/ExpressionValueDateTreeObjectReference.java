@@ -24,11 +24,17 @@ public class ExpressionValueDateTreeObjectReference extends ExpressionValueTreeO
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		if (unit != null) {
-			return super.getExpressionTableString() + " (" + unit.getAbbreviature() + ")";
+			return super.getRepresentation() + " (" + unit.getAbbreviature() + ")";
 		}
-		return super.getExpressionTableString();
+		return super.getRepresentation();
+	}
+
+	@Override
+	protected String getExpression() {
+		//Ignore units for evaluation.
+		return super.getRepresentation();
 	}
 
 }

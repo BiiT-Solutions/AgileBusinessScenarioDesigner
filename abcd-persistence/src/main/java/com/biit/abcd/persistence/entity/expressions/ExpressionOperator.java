@@ -28,7 +28,7 @@ public abstract class ExpressionOperator extends Expression {
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		if (currentValue == null || currentValue == AvailableOperator.NULL) {
 			return " ";
 		} else {

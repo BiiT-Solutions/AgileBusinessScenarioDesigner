@@ -19,7 +19,7 @@ public class ExpressionFunction extends Expression {
 	private AvailableFunction value;
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		return value.getValue();
 	}
 

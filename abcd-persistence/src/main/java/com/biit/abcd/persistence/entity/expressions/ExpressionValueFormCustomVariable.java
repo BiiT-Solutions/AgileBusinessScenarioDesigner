@@ -32,7 +32,7 @@ public class ExpressionValueFormCustomVariable extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		String expressionString = new String();
 		expressionString += question.getName();
 		if (variable != null) {
@@ -59,7 +59,7 @@ public class ExpressionValueFormCustomVariable extends ExpressionValue {
 
 	@Override
 	protected String getExpression() {
-		return getExpressionTableString();
+		return getRepresentation();
 	}
 
 }

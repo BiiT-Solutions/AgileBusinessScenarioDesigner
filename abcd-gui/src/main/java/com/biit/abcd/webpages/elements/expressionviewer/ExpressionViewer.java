@@ -111,7 +111,7 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	public void addExpression(HorizontalLayout lineLayout, final Expression expression) {
-		final ExpressionElement expressionElement = new ExpressionElement(expression.getExpressionTableString(),
+		final ExpressionElement expressionElement = new ExpressionElement(expression.getRepresentation(),
 				new LayoutClickListener() {
 					private static final long serialVersionUID = -4305606865801828692L;
 

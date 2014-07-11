@@ -52,10 +52,10 @@ public class Expressions extends Expression implements ITableCellEditable {
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		String result = "";
 		for (Expression expression : expressions) {
-			result += expression.getExpressionTableString() + " ";
+			result += expression.getRepresentation() + " ";
 		}
 		return result.trim();
 	}
@@ -68,13 +68,14 @@ public class Expressions extends Expression implements ITableCellEditable {
 	@Override
 	protected String getExpression() {
 		String result = "";
-		for (Expression expression : expressions) {
+		for (int i = 0; i < expressions.size(); i++) {
 			// Dots are not allowed in the Evaluator Expression.
-			if ((expression instanceof ExpressionValueFormCustomVariable)
-					|| (expression instanceof ExpressionValueGlobalConstant)) {
-				result += filterVariables(expression);
+			if ((expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
+				result += filterVariables(expressions.get(i));
 			} else {
-				result += expression.getExpression();
+				result += expressions.get(i).getExpression();
 			}
 		}
 		return result.trim();
@@ -82,15 +83,20 @@ public class Expressions extends Expression implements ITableCellEditable {
 
 	public ExpressionEvaluator getExpressionEvaluator() {
 		ExpressionChecker evaluator = new ExpressionChecker(getExpression());
+		List<String> definedVariables = new ArrayList<>();
 		// Define variables.
-		for (Expression expression : expressions) {
-			if ((expression instanceof ExpressionValueFormCustomVariable)
-					|| (expression instanceof ExpressionValueGlobalConstant)) {
+		for (int i = 0; i < expressions.size(); i++) {
+			if ((expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				// Dots are not allowed.
-				String varName = filterVariables(expression);
-				// Value is not needed for evaluation.
-				String value = "1";
-				evaluator.with(varName, value);
+				String varName = filterVariables(expressions.get(i));
+				// Do not repeat variable declaration.
+				if (!definedVariables.contains(varName)) {
+					// Value is not needed for evaluation.
+					String value = "1";
+					evaluator.with(varName, value);
+				}
 			}
 		}
 		return evaluator;

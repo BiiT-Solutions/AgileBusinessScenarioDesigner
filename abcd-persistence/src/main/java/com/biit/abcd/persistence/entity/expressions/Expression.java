@@ -16,7 +16,12 @@ import com.biit.abcd.persistence.entity.StorableObject;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Expression extends StorableObject {
 
-	public abstract String getExpressionTableString();
+	/**
+	 * Returns a text representation of the Expression
+	 * 
+	 * @return
+	 */
+	public abstract String getRepresentation();
 
 	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.

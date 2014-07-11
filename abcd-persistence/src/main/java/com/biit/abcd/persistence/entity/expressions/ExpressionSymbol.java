@@ -21,7 +21,7 @@ public class ExpressionSymbol extends Expression {
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		if (value == null) {
 			return "";
 		} else {
@@ -39,6 +39,6 @@ public class ExpressionSymbol extends Expression {
 
 	@Override
 	protected String getExpression() {
-		return getExpressionTableString();
+		return getRepresentation();
 	}
 }

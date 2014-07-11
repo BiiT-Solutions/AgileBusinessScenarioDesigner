@@ -27,7 +27,7 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		return DateManager.convertDateToString(value);
 	}
 

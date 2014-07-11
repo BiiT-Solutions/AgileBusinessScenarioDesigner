@@ -26,8 +26,8 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpressionTableString() {
-		return value.getExpressionTableString();
+	public String getRepresentation() {
+		return value.getRepresentation();
 	}
 
 	public Expression getValue() {

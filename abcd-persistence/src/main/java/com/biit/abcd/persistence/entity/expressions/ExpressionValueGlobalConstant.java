@@ -28,7 +28,7 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		String expressionString = new String();
 		if (constant != null) {
 			expressionString += constant.getName();
@@ -46,7 +46,7 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 
 	@Override
 	protected String getExpression() {
-		return getExpressionTableString();
+		return getRepresentation();
 	}
 
 }

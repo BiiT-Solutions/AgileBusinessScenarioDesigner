@@ -24,7 +24,7 @@ public class ExpressionValueNumber extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpressionTableString() {
+	public String getRepresentation() {
 		return "" + value;
 	}
 

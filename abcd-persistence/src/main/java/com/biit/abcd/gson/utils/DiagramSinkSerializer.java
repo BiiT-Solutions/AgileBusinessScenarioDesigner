@@ -15,7 +15,7 @@ public class DiagramSinkSerializer extends DiagramObjectSerializerCommon<Diagram
 	public JsonElement serialize(DiagramSink element, Type type, JsonSerializationContext context) {
 		
 		if(element.getFormExpression()!=null){
-			element.getBiitText().setText(element.getFormExpression().getExpressionTableString());
+			element.getBiitText().setText(element.getFormExpression().getRepresentation());
 		}else{
 			element.getBiitText().setText("End");
 		}
