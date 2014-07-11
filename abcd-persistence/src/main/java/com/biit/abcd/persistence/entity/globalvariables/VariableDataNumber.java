@@ -43,7 +43,7 @@ public class VariableDataNumber extends VariableData{
 	}
 	
 	/**
-	 * Removes trailling zeros. 
+	 * Removes trailing zeros. 
 	 */
 	@Override
 	public String toString(){

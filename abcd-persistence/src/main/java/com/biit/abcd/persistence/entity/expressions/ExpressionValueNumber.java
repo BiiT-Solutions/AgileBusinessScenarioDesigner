@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 /**
  * Defines values as a double.
- *
+ * 
  */
 @Entity
 @Table(name = "EXPRESSION_VALUE_NUMBER")
@@ -25,7 +25,7 @@ public class ExpressionValueNumber extends ExpressionValue {
 
 	@Override
 	public String getRepresentation() {
-		return "" + value;
+		return getValueWithoutTrailingZeroes();
 	}
 
 	public double getValue() {
@@ -38,7 +38,13 @@ public class ExpressionValueNumber extends ExpressionValue {
 
 	@Override
 	protected String getExpression() {
-		return new Double(value).toString();
+		return getValueWithoutTrailingZeroes();
+	}
+
+	private String getValueWithoutTrailingZeroes() {
+		Double convertedValue = new Double(value);
+		return convertedValue.toString().indexOf(".") < 0 ? convertedValue.toString() : convertedValue.toString()
+				.replaceAll("0*$", "").replaceAll("\\.$", "");
 	}
 
 }
