@@ -3,13 +3,20 @@ package com.biit.abcd.core;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
+import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.User;
 
 public class FormController {
 	private User user;
 	private Form form;
+	private TreeObject lastAccessTreeObject;
+	private Diagram lastAccessDiagram;
+	private Expressions lastAccessExpression;
+	private TableRule lastAccessTable;
 
 	private IFormDao formDao;
 
@@ -80,4 +87,35 @@ public class FormController {
 		return user;
 	}
 
+	public TreeObject getLastAccessTreeObject() {
+		return lastAccessTreeObject;
+	}
+
+	public void setLastAccessTreeObject(TreeObject lastAccessTreeObject) {
+		this.lastAccessTreeObject = lastAccessTreeObject;
+	}
+
+	public Diagram getLastAccessDiagram() {
+		return lastAccessDiagram;
+	}
+
+	public void setLastAccessDiagram(Diagram lastAccessDiagram) {
+		this.lastAccessDiagram = lastAccessDiagram;
+	}
+
+	public Expressions getLastAccessExpression() {
+		return lastAccessExpression;
+	}
+
+	public void setLastAccessExpression(Expressions lastAccessExpression) {
+		this.lastAccessExpression = lastAccessExpression;
+	}
+
+	public TableRule getLastAccessTable() {
+		return lastAccessTable;
+	}
+
+	public void setLastAccessTable(TableRule lastAccessTable) {
+		this.lastAccessTable = lastAccessTable;
+	}
 }

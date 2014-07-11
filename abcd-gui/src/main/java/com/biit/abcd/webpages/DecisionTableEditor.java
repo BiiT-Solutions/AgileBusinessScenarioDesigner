@@ -46,6 +46,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
+				UserSessionHandler.getFormController().setLastAccessTable(tableSelectionMenu.getSelectedTableRule());
 				refreshDecisionTable();
 			}
 
@@ -80,10 +81,14 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		}
 		sortTableMenu();
 
-		// Select the first one if available.
-		if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
-			tableSelectionMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm().getTableRules()
-					.get(0));
+		// Select the last access object or the first one
+		if (UserSessionHandler.getFormController().getLastAccessTable() != null) {
+			tableSelectionMenu.setSelectedTableRule(UserSessionHandler.getFormController().getLastAccessTable());
+		} else {
+			if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
+				tableSelectionMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm()
+						.getTableRules().get(0));
+			}
 		}
 
 		refreshDecisionTable();
