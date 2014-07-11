@@ -16,6 +16,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
@@ -163,6 +164,35 @@ public class ExpressionViewer extends CssLayout {
 											window.close();
 											updateExpression();
 											setSelectedExpression(expression);
+										}
+									}
+								});
+								stringInputWindow.showCentered();
+								// For Numbers
+							} else if (expression instanceof ExpressionValueNumber) {
+								StringInputWindow stringInputWindow = new StringInputWindow(
+										ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+								stringInputWindow.setCaption(ServerTranslate
+										.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+								stringInputWindow.setValue(((ExpressionValueNumber) expression).getValue().toString());
+								stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
+									@Override
+									public void acceptAction(AcceptCancelWindow window) {
+										String value = ((StringInputWindow) window).getValue();
+										if (value == null || value.isEmpty()) {
+											MessageManager.showError(ServerTranslate
+													.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+										} else {
+											// Update expression
+											try {
+												Double doubleValue = Double.parseDouble(value);
+												((ExpressionValueNumber) expression).setValue(doubleValue);
+												window.close();
+												updateExpression();
+												setSelectedExpression(expression);
+											} catch (NumberFormatException nfe) {
+												// Do nothing. Force to put a correct value.
+											}
 										}
 									}
 								});

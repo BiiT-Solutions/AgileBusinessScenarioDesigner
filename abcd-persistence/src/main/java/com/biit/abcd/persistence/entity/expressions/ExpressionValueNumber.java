@@ -28,8 +28,8 @@ public class ExpressionValueNumber extends ExpressionValue {
 		return getValueWithoutTrailingZeroes();
 	}
 
-	public double getValue() {
-		return value;
+	public Double getValue() {
+		return new Double(value);
 	}
 
 	public void setValue(double value) {
