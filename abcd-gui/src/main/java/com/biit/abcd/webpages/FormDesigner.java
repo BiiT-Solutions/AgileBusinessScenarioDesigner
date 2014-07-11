@@ -85,10 +85,12 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
-		formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
-		if (formTreeTable.getTreeObjectSelected() != null) {
-			updateUpperMenu(formTreeTable.getTreeObjectSelected());
-		}
+		
+		if(UserSessionHandler.getFormController().getLastAccessTreeObject()!=null ){
+			selectComponent(UserSessionHandler.getFormController().getLastAccessTreeObject());
+		}else{
+			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
+		}		
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {
@@ -460,6 +462,9 @@ public class FormDesigner extends FormWebPageComponent {
 
 		@Override
 		public void valueChange(ValueChangeEvent event) {
+			if(formTreeTable.getTreeObjectSelected()!=null){
+				UserSessionHandler.getFormController().setLastAccessTreeObject(formTreeTable.getTreeObjectSelected());
+			}
 			updateUpperMenu(formTreeTable.getTreeObjectSelected());
 			updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
 		}

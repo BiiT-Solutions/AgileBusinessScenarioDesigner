@@ -175,7 +175,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	private void initializeDiagramsTableAndSelectFirst() {
 		initializeDiagramsTable();
-		diagramBuilderTable.selectFirstRow();
+		if (UserSessionHandler.getFormController().getLastAccessDiagram() != null) {
+			diagramBuilderTable.setValue(UserSessionHandler.getFormController().getLastAccessDiagram());
+		} else {
+			diagramBuilderTable.selectFirstRow();
+		}
 	}
 
 	private void initUpperMenu() {
@@ -309,6 +313,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			propertiesContainer.updatePropertiesComponent(null);
 			diagramBuilder.setDiagram(currentDiagram);
 			propertiesContainer.setFireListeners(true);
+			UserSessionHandler.getFormController().setLastAccessDiagram(currentDiagram);
 		}
 	}
 }

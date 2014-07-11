@@ -46,6 +46,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
+				UserSessionHandler.getFormController().setLastAccessExpression(getSelectedExpression());
 				refreshExpressionEditor();
 			}
 
@@ -66,10 +67,15 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 		sortTableMenu();
 
-		// Select the first one if available.
-		if (UserSessionHandler.getFormController().getForm().getFormExpressions().size() > 0) {
-			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-					.getFormExpressions().get(0));
+		if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
+			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController()
+					.getLastAccessExpression());
+		} else {
+			// Select the first one if available.
+			if (UserSessionHandler.getFormController().getForm().getFormExpressions().size() > 0) {
+				tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
+						.getFormExpressions().get(0));
+			}
 		}
 		refreshExpressionEditor();
 	}
