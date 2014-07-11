@@ -307,6 +307,11 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_IN("expression.button.in"),
 	EXPRESSION_BUTTON_BETWEEN("expression.button.between"),
 	
+	EXPRESSION_DATE_DAY("expression.date.day"),
+	EXPRESSION_DATE_MONTH("expression.date.month"),
+	EXPRESSION_DATE_YEAR("expression.date.year"),
+	EXPRESSION_DATE_CAPTION("expression.date.caption"),
+	
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE("expression.form.variable.addvariable"),
 	

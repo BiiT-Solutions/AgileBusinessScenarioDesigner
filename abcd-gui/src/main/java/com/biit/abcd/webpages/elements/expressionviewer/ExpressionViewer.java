@@ -26,8 +26,6 @@ import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
 import com.biit.abcd.webpages.components.StringInputWindow;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -58,7 +56,7 @@ public class ExpressionViewer extends CssLayout {
 		clickedListeners = new ArrayList<LayoutClickedListener>();
 	}
 
-	private void updateExpression() {
+	public void updateExpression() {
 		updateExpression(expressions);
 	}
 

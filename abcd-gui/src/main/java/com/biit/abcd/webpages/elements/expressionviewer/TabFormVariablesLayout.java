@@ -7,19 +7,25 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.TreeObjectTableMultiSelect;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ListSelect;
@@ -34,6 +40,10 @@ public class TabFormVariablesLayout extends TabLayout {
 		createFormVariablesElements();
 	}
 
+	/**
+	 * We can select more than one element, then we add expressions separated by commas. If we select a date question or
+	 * variable, then we also must select the unit for the date expression.
+	 */
 	private void createFormVariablesElements() {
 		initializeFormQuestionTable();
 		this.setSpacing(true);
@@ -51,10 +61,35 @@ public class TabFormVariablesLayout extends TabLayout {
 					// We need to create an expression list separated by commas.
 					for (int i = 0; i < getSelectedFormElements().size(); i++) {
 						// Add element.
-						ExpressionValueTreeObjectReference formReference = new ExpressionValueTreeObjectReference();
+						final ExpressionValueTreeObjectReference formReference;
+						// Detect if it is a date question to add units
+						if ((getSelectedFormElements().get(i) instanceof Question)
+								&& (((Question) getSelectedFormElements().get(i)).getAnswerFormat()) != null
+								&& ((Question) getSelectedFormElements().get(i)).getAnswerFormat().equals(
+										AnswerFormat.DATE)) {
+							formReference = new ExpressionValueDateTreeObjectReference();
+							// Create a window for selecting the unit and assign it to the expression.
+							WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
+									.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
+
+							windowDate.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									((ExpressionValueDateTreeObjectReference) formReference)
+											.setUnit(((WindowSelectDateUnit) window).getValue());
+									// Fire listeners to force thre refresh of GUI.
+									updateExpression(formReference);
+									window.close();
+								}
+							});
+							UI.getCurrent().addWindow(windowDate);
+						} else {
+							// Standard element, create a normal expression.
+							formReference = new ExpressionValueTreeObjectReference();
+						}
 						formReference.setReference(getSelectedFormElements().get(i));
 						addExpression(formReference);
-						// Add comma if needed.
+						// Add comma if more than one element.
 						if (i < getSelectedFormElements().size() - 1) {
 							ExpressionSymbol exprValue = new ExpressionSymbol();
 							exprValue.setValue(AvailableSymbol.COMMA);
