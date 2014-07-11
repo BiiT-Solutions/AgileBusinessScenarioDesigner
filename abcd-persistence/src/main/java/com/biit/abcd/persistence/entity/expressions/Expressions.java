@@ -70,7 +70,8 @@ public class Expressions extends Expression implements ITableCellEditable {
 		String result = "";
 		for (int i = 0; i < expressions.size(); i++) {
 			// Dots are not allowed in the Evaluator Expression.
-			if ((expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+			if ((expressions.get(i) instanceof ExpressionValueString)
+					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				result += filterVariables(expressions.get(i));
@@ -86,7 +87,8 @@ public class Expressions extends Expression implements ITableCellEditable {
 		List<String> definedVariables = new ArrayList<>();
 		// Define variables.
 		for (int i = 0; i < expressions.size(); i++) {
-			if ((expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+			if ((expressions.get(i) instanceof ExpressionValueString)
+					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				// Dots are not allowed.

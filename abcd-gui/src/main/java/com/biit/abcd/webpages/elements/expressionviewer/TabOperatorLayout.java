@@ -10,6 +10,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -369,8 +370,16 @@ public class TabOperatorLayout extends TabLayout {
 									MessageManager.showError(ServerTranslate
 											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
 								} else {
-									ExpressionValueString exprValue = new ExpressionValueString(value);
-									addExpression(exprValue);
+									// Is a number.
+									try {
+										Double valueAsDouble = Double.parseDouble(value);
+										ExpressionValueNumber exprValue = new ExpressionValueNumber(valueAsDouble);
+										addExpression(exprValue);
+										// Is a string.
+									} catch (NumberFormatException nfe) {
+										ExpressionValueString exprValue = new ExpressionValueString(value);
+										addExpression(exprValue);
+									}
 									window.close();
 								}
 							}
