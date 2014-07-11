@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.ExpressionEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
 import com.vaadin.ui.TextField;
@@ -18,18 +18,18 @@ public class WindowNewExpression extends WindowCreateNewObject {
 
 	@Override
 	public void acceptAction(TextField inputTextField) {
-		for (Expressions existingExpressions : UserSessionHandler.getFormController().getForm().getFormExpressions()) {
+		for (ExpressionChain existingExpressions : UserSessionHandler.getFormController().getForm().getExpressionChain()) {
 			if (existingExpressions.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 				return;
 			}
 		}
-		Expressions expression = new Expressions();
+		ExpressionChain expression = new ExpressionChain();
 		expression.setName(inputTextField.getValue());
 		expression.setCreatedBy(UserSessionHandler.getUser());
 		expression.setUpdatedBy(UserSessionHandler.getUser());
 		expression.setUpdateTime();
-		UserSessionHandler.getFormController().getForm().getFormExpressions().add(expression);
+		UserSessionHandler.getFormController().getForm().getExpressionChain().add(expression);
 		((ExpressionEditor) getParentWindow()).addExpressionToMenu(expression);
 		((ExpressionEditor) getParentWindow()).sortTableMenu();
 		close();

@@ -14,7 +14,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
@@ -95,11 +95,11 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 							.getCurrentView();
 					decisionTable.selectComponent((TableRule) element);
 				}
-				if (element instanceof Expressions) {
+				if (element instanceof ExpressionChain) {
 					ApplicationFrame.navigateTo(WebMap.EXPRESSION_EDITOR);
 					ExpressionEditor expressionEditor = (ExpressionEditor) ((ApplicationFrame) UI.getCurrent())
 							.getCurrentView();
-					expressionEditor.selectComponent((Expressions) element);
+					expressionEditor.selectComponent((ExpressionChain) element);
 				}
 				if (element instanceof Diagram) {
 					selectComponent((Diagram) element);

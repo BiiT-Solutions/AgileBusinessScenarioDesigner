@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.UserGroup;
@@ -44,7 +44,7 @@ public class Form extends TreeObject {
 	private List<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<Expressions> formExpressions;
+	private List<ExpressionChain> expressionChain;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Rule> rules;
@@ -53,7 +53,7 @@ public class Form extends TreeObject {
 		diagrams = new ArrayList<>();
 		tableRules = new ArrayList<>();
 		customVariables = new ArrayList<>();
-		formExpressions = new ArrayList<>();
+		expressionChain = new ArrayList<>();
 		setName(DEFAULT_NAME);
 	}
 
@@ -191,12 +191,12 @@ public class Form extends TreeObject {
 		this.customVariables.addAll(customVariables);
 	}
 
-	public List<Expressions> getFormExpressions() {
-		return formExpressions;
+	public List<ExpressionChain> getExpressionChain() {
+		return expressionChain;
 	}
 
-	public void setFormExpressions(List<Expressions> expressions) {
-		this.formExpressions = expressions;
+	public void setExpressionChain(List<ExpressionChain> expressions) {
+		this.expressionChain = expressions;
 	}
 
 	public List<Rule> getRules() {

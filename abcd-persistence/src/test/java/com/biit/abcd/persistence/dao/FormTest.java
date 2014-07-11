@@ -19,9 +19,10 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.ActionString;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -35,6 +36,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String TABLE_RULE_FORM = "Table Rule Form";
 	private final static String OTHER_FORM = "Other Form";
 	private final static String CATEGORY_LABEL = "Category1";
+	private final static String CONDITION_EXPRESSION = "Question=Question1 AND Answer=Yes";
 	private final static String ACTION_EXPRESSION = "Score=3";
 
 	@Autowired
@@ -243,10 +245,12 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 		TableRuleRow tableRuleRow = new TableRuleRow();
 
-		QuestionAndAnswerCondition condition = new QuestionAndAnswerCondition();
-		condition.setQuestion(question1);
-		condition.setAnswer(answer1);
+		//		QuestionAndAnswerCondition condition = new QuestionAndAnswerCondition();
+		//		condition.setQuestion(question1);
+		//		condition.setAnswer(answer1);
 
+		ExpressionChain condition = new ExpressionChain();
+		condition.addExpression(new ExpressionValueString(CONDITION_EXPRESSION));
 		tableRuleRow.getConditions().add(condition);
 		tableRuleRow.addAction(new ActionString());
 		tableRuleRow.getActions().get(0).setExpression(ACTION_EXPRESSION);
@@ -261,17 +265,15 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
 
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getAnswer(),
-				answer1);
-		Assert.assertEquals(
-				retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getQuestion(), question1);
+		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getExpressionTableString(),
+				CONDITION_EXPRESSION);
 		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
 				ACTION_EXPRESSION);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = { "storeFormDiagram", "storeOtherFormWithSameLabelCategory",
-			"storeFormTableRule" })
+	"storeFormTableRule" })
 	public void removeForms() {
 		formDao.removeAll();
 		Assert.assertEquals(formDao.getRowCount(), 0);

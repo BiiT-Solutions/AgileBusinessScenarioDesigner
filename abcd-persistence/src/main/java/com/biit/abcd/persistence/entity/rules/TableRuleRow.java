@@ -7,13 +7,15 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 
 /**
  * Specific rules created for managing decision tables.
@@ -22,9 +24,8 @@ import com.biit.abcd.persistence.entity.StorableObject;
 @Table(name = "RULE_DECISION_TABLE_ROW")
 public class TableRuleRow extends StorableObject {
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
-	@OrderColumn(name = "condition_index")
-	private List<QuestionAndAnswerCondition> conditions;
+	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
+	private ExpressionChain conditions;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
@@ -33,20 +34,24 @@ public class TableRuleRow extends StorableObject {
 	private List<Action> actions;
 
 	public TableRuleRow() {
-		conditions = new ArrayList<>();
+		conditions = new ExpressionChain();
 		actions = new ArrayList<>();
 	}
 
-	public void addCondition(QuestionAndAnswerCondition questionAndAnswerValue) {
-		conditions.add(questionAndAnswerValue);
+	public void addCondition(Expression expression) {
+		conditions.addExpression(expression);
 	}
 
-	public void removeCondition(QuestionAndAnswerCondition questionAndAnswerValue) {
-		conditions.remove(questionAndAnswerValue);
+	public void removeCondition(Expression expression) {
+		conditions.removeExpression(expression);
 	}
 
-	public List<QuestionAndAnswerCondition> getConditions() {
-		return conditions;
+	public List<Expression> getConditions() {
+		return conditions.getExpressions();
+	}
+
+	public void removeConditions() {
+		conditions.removeAllExpressions();
 	}
 
 	public void addAction(Action action) {
@@ -61,5 +66,4 @@ public class TableRuleRow extends StorableObject {
 	public String toString() {
 		return conditions.toString();
 	}
-
 }

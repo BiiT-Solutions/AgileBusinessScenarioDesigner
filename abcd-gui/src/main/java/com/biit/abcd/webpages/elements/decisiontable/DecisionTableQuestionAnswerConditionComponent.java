@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.vaadin.data.Item;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
@@ -17,7 +18,7 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 	private static final long serialVersionUID = 2314989763962134814L;
 
 	private HorizontalLayout rootLayout;
-	private QuestionAnswerConditionTable conditionTable;
+	private RuleExpressionConditionTable conditionTable;
 	private ActionTable actionTable;
 	private TableRule tableRule;
 
@@ -28,10 +29,9 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 		rootLayout.setImmediate(true);
 		rootLayout.setSpacing(true);
 
-		conditionTable = new QuestionAnswerConditionTable();
+		conditionTable = new RuleExpressionConditionTable();
 		conditionTable.setSizeFull();
 		conditionTable.addCellSelectionListener(new CellSelectionListener() {
-
 			@Override
 			public void cellSelectionChanged(CellRowSelector selector) {
 				actionTable.selectRows(selector.getSelectedRows(), false);
@@ -51,9 +51,9 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 		conditionTable.setId("main-table");
 		actionTable.setId("freeze-pane");
 		JavaScript
-				.getCurrent()
-				.execute(
-						"var t=document.getElementById('main-table').children[1]; var fp=document.getElementById('freeze-pane').children[1]; fp.addEventListener('scroll', function() {t.scrollTop=fp.scrollTop;}, false);");
+		.getCurrent()
+		.execute(
+				"var t=document.getElementById('main-table').children[1]; var fp=document.getElementById('freeze-pane').children[1]; fp.addEventListener('scroll', function() {t.scrollTop=fp.scrollTop;}, false);");
 
 		rootLayout.addComponent(conditionTable);
 		rootLayout.addComponent(actionTable);
@@ -68,7 +68,6 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 	public void removeAll() {
 		conditionTable.removeAll();
 		actionTable.removeAllItems();
-		// decisionTableRules = new ArrayList<>();
 	}
 
 	public void addColumnPair() {
@@ -77,10 +76,10 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 			return;
 		}
 		conditionTable.addColumnPair();
-		for (TableRuleRow tableRuleRow : getTableRules()) {
-			// New column is filled up with empty values for all existing rows.
-			tableRuleRow.getConditions().add(new QuestionAndAnswerCondition());
-		}
+		//		for (TableRuleRow tableRuleRow : getTableRules()) {
+		//			// New column is filled up with empty values for all existing rows.
+		//			tableRuleRow.getConditions().add(new ExpressionChain());
+		//		}
 	}
 
 	public void addRow() {
@@ -147,23 +146,43 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 		return tableRule;
 	}
 
-	@SuppressWarnings("unused")
 	public void setTableRule(TableRule tableRule) {
 		this.tableRule = tableRule;
+		System.out.println("SET TABLE RULE START: " + this.tableRule);
+		conditionTable.removeAll();
 		// Add columns.
 		if (!tableRule.getRules().isEmpty()) {
-			for (QuestionAndAnswerCondition questionAndAnswerCondition : tableRule.getRules().get(0).getConditions()) {
+			List<Expression> conditions = tableRule.getRules().get(0).getConditions();
+			for (int i = 0; i<conditions.size(); i+=2) {
 				conditionTable.addColumnPair();
 			}
+			System.out.println("SET TABLE RULE MIDDLE: " + this.tableRule);
 			// Add rows.
 			for (TableRuleRow tableRuleRow : tableRule.getRules()) {
 				addRow(tableRuleRow);
 			}
 		}
-
+		System.out.println("SET TABLE RULE END: " + this.tableRule);
 	}
 
 	public Collection<?> getColumns() {
 		return conditionTable.getContainerPropertyIds();
+	}
+
+	@SuppressWarnings("unchecked")
+	public void updateDecisionTableGUI(){
+		Collection<?> rowsId = conditionTable.getItemIds();
+		for(Object rowId : rowsId){
+			Item row = conditionTable.getItem(rowId);
+			int i = 0;
+			for (Expression expressionValue : ((TableRuleRow)rowId).getConditions()) {
+				ExpressionEditCell cellValue = ((ExpressionEditCell) row.getItemProperty(i).getValue());
+				if (cellValue != null) {
+					cellValue.setLabel(expressionValue.getExpressionTableString());
+					row.getItemProperty(i).setValue(cellValue);
+				}
+				i++;
+			}
+		}
 	}
 }

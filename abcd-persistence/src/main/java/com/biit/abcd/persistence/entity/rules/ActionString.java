@@ -7,7 +7,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressio
 
 @Entity
 @Table(name = "RULE_ACTION_STRING")
-public class ActionString extends Action {
+public class ActionString extends Action{
 	private static final int MAX_CHARACTERS_TO_SHOW = 25;
 
 	private String expression = "";
@@ -27,7 +27,7 @@ public class ActionString extends Action {
 
 	@Override
 	public boolean undefined() {
-		return (getExpression() == null || getExpression().length() == 0);
+		return ((getExpression() == null) || (getExpression().length() == 0));
 	}
 
 	@Override

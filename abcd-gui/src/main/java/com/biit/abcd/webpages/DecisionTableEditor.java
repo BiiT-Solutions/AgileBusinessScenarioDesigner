@@ -43,7 +43,6 @@ public class DecisionTableEditor extends FormWebPageComponent {
 		tableSelectionMenu = new SelectTableRuleTableEditable();
 		tableSelectionMenu.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -7103550436798085895L;
-
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				UserSessionHandler.getFormController().setLastAccessTable(tableSelectionMenu.getSelectedTableRule());
@@ -77,6 +76,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 
 		// Add tables
 		for (TableRule tableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
+			System.out.println(tableRule);
 			addTableRuleToMenu(tableRule);
 		}
 		sortTableMenu();
@@ -91,7 +91,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 			}
 		}
 
-		refreshDecisionTable();
+		//		refreshDecisionTable();
 	}
 
 	private void initUpperMenu() {
@@ -137,7 +137,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
 				if (tableSelectionMenu.getSelectedTableRule() != null) {
 					decisionTable.addColumnPair();
-					if (decisionTable.getColumns().size() == 2 && decisionTable.getTableRules().isEmpty()) {
+					if ((decisionTable.getColumns().size() == 2) && decisionTable.getTableRules().isEmpty()) {
 						decisionTable.addRow();
 					}
 					tableRule.setUpdateTime();
@@ -219,8 +219,12 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	private void refreshDecisionTable() {
 		decisionTable.removeAll();
 		if (getSelectedTableRule() != null) {
+
+			System.out.println("SELECTED TABLE RULE: " + getSelectedTableRule());
+
 			decisionTable.setTableRule(getSelectedTableRule());
 		}
+		decisionTable.updateDecisionTableGUI();
 	}
 
 	@Override
@@ -254,7 +258,7 @@ public class DecisionTableEditor extends FormWebPageComponent {
 	 */
 	private void removeSelectedTable() {
 		UserSessionHandler.getFormController().getForm().getTableRules()
-				.remove(tableSelectionMenu.getSelectedTableRule());
+		.remove(tableSelectionMenu.getSelectedTableRule());
 		tableSelectionMenu.removeSelectedRow();
 	}
 

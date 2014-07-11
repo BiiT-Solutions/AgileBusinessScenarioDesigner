@@ -6,7 +6,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
@@ -119,7 +119,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
-	private Expressions getSelectedExpression() {
+	private ExpressionChain getSelectedExpression() {
 		return tableSelectExpression.getSelectedExpression();
 	}
 
@@ -145,13 +145,13 @@ public class ExpressionEditor extends FormWebPageComponent {
 	}
 
 	private void removeSelectedExpression() {
-		UserSessionHandler.getFormController().getForm().getFormExpressions()
+		UserSessionHandler.getFormController().getForm().getExpressionChain()
 				.remove(tableSelectExpression.getSelectedExpression());
 		tableSelectExpression.removeSelectedRow();
 		refreshExpressionEditor();
 	}
 
-	public void addExpressionToMenu(Expressions expression) {
+	public void addExpressionToMenu(ExpressionChain expression) {
 		tableSelectExpression.addRow(expression);
 		tableSelectExpression.setSelectedExpression(expression);
 	}
@@ -160,7 +160,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		tableSelectExpression.sort();
 	}
 
-	public void selectComponent(Expressions element) {
+	public void selectComponent(ExpressionChain element) {
 		tableSelectExpression.setSelectedExpression(element);
 	}
 

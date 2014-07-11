@@ -17,9 +17,10 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.ActionString;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -28,6 +29,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	private final static String DUMMY_FORM = "Form with table rules";
+	private final static String CONDITION_EXPRESSION = "Question=Question1 AND Answer=Yes";
 	private final static String BASIC_ACTION = "System.out.println( \"Hello world!\");";
 
 	@Autowired
@@ -104,9 +106,9 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		tableRuleRow.addAction(action);
 
 		// Set into the rule.
-		QuestionAndAnswerCondition condition = new QuestionAndAnswerCondition();
-		condition.setQuestion(question);
-		condition.setAnswer(answer2);
+		ExpressionChain condition = new ExpressionChain();
+		//		condition.addExpression(new ExpressionValueString(CONDITION_EXPRESSION));
+		condition.addExpression(new ExpressionValueTreeObjectReference(question));
 		tableRuleRow.getConditions().add(condition);
 		tableRule.getRules().add(tableRuleRow);
 
@@ -121,9 +123,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
 				BASIC_ACTION);
 		Assert.assertEquals(
-				retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getQuestion(), question);
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getAnswer(),
-				answer2);
+				((ExpressionValueTreeObjectReference)((ExpressionChain)retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0)).getExpressions().get(0)).getReference(), question);
 	}
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = { "storeTableRule" })

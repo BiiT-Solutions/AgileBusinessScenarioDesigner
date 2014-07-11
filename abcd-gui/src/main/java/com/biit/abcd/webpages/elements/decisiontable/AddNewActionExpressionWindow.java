@@ -4,7 +4,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
@@ -19,7 +19,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
 	private SelectFormAnswerTable formAnswerTable;
 	private ExpressionEditorComponent expressionEditorComponent;
-	private Expressions expression;
+	private ExpressionChain expression;
 
 	public AddNewActionExpressionWindow(Action action) throws NotValidExpression {
 		super();
@@ -41,7 +41,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		expressionEditorComponent.setSizeFull();
 
 		if (action.getExpression() == null) {
-			expression = new Expressions();
+			expression = new ExpressionChain();
 			expression.setCreatedBy(UserSessionHandler.getUser());
 			expression.setUpdatedBy(UserSessionHandler.getUser());
 			expression.setUpdateTime();
@@ -60,7 +60,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		return formAnswerTable.getValue();
 	}
 
-	public Expressions getExpression() {
+	public ExpressionChain getExpression() {
 		return expression;
 	}
 }

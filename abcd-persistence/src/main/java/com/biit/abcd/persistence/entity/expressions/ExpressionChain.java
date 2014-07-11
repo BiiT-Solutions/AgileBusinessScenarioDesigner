@@ -18,8 +18,8 @@ import com.biit.jexeval.ExpressionEvaluator;
  * A concatenation of expressions: values, operators, ... that defines a more complex expression.
  */
 @Entity
-@Table(name = "EXPRESSION_FORMS_EXPRESSION")
-public class Expressions extends Expression implements ITableCellEditable {
+@Table(name = "EXPRESSIONS_CHAIN")
+public class ExpressionChain extends Expression implements ITableCellEditable{
 
 	private String name;
 
@@ -27,12 +27,16 @@ public class Expressions extends Expression implements ITableCellEditable {
 	@OrderColumn(name = "expression_index")
 	private List<Expression> expressions;
 
-	public Expressions() {
+	public ExpressionChain() {
 		expressions = new ArrayList<>();
 	}
 
 	public List<Expression> getExpressions() {
 		return expressions;
+	}
+
+	public boolean removeExpression(Expression expression) {
+		return expressions.remove(expression);
 	}
 
 	public void setExpressions(List<Expression> expressions) {
@@ -43,10 +47,16 @@ public class Expressions extends Expression implements ITableCellEditable {
 		this.expressions.add(expression);
 	}
 
+	public void removeAllExpressions() {
+		this.expressions.clear();
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -72,9 +82,9 @@ public class Expressions extends Expression implements ITableCellEditable {
 			// Dots are not allowed in the Evaluator Expression.
 			if ((expression instanceof ExpressionValueFormCustomVariable)
 					|| (expression instanceof ExpressionValueGlobalConstant)) {
-				result += filterVariables(expression);
+				result += expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "") + " ";
 			} else {
-				result += expression.getExpression();
+				result += expression.getExpression() + " ";
 			}
 		}
 		return result.trim();
@@ -87,7 +97,7 @@ public class Expressions extends Expression implements ITableCellEditable {
 			if ((expression instanceof ExpressionValueFormCustomVariable)
 					|| (expression instanceof ExpressionValueGlobalConstant)) {
 				// Dots are not allowed.
-				String varName = filterVariables(expression);
+				String varName = expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "");
 				// Value is not needed for evaluation.
 				String value = "1";
 				evaluator.with(varName, value);
@@ -96,13 +106,8 @@ public class Expressions extends Expression implements ITableCellEditable {
 		return evaluator;
 	}
 
-	/**
-	 * Some characters are not allowed in the Expression Evaluator.
-	 * 
-	 * @param expression
-	 * @return
-	 */
-	private String filterVariables(Expression expression) {
-		return expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "");
+	@Override
+	public String toString(){
+		return getName() + expressions;
 	}
 }

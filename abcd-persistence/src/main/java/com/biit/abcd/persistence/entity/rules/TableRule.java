@@ -5,14 +5,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.utils.ITableCellEditable;
 
@@ -25,11 +23,6 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 
 	private String name;
 
-	//A list of columns of the table (NOT IMPLEMENTED YET)
-	@ManyToMany(cascade = CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Question> conditionsHeader;
-
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
@@ -38,7 +31,6 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 
 	public TableRule() {
 		rules = new ArrayList<>();
-		conditionsHeader = new ArrayList<>();
 	}
 
 	public List<TableRuleRow> getRules() {
@@ -50,22 +42,20 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 		this.rules.addAll(rules);
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return getName();
-	}
 
-	public void setConditionsHeader(List<Question> conditions) {
-		this.conditionsHeader.clear();
-		this.conditionsHeader.addAll(conditions);
+		return getName() + rules;
 	}
 
 }
