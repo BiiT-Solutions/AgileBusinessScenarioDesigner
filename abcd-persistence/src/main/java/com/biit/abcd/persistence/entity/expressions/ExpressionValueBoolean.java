@@ -37,7 +37,7 @@ public class ExpressionValueBoolean extends ExpressionValue {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		if (value) {
 			return "1";
 		} else {

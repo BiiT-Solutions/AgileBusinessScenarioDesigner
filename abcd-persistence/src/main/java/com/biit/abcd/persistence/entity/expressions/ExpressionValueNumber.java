@@ -37,7 +37,7 @@ public class ExpressionValueNumber extends ExpressionValue {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		return getValueWithoutTrailingZeroes();
 	}
 

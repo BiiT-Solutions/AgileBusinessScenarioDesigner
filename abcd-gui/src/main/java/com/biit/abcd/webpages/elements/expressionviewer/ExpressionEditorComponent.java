@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
 import com.biit.abcd.webpages.components.ThemeIcon;

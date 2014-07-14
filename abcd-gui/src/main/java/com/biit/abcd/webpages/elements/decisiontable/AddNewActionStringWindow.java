@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.rules.Action;
+import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.vaadin.ui.Component;
@@ -15,7 +15,7 @@ public class AddNewActionStringWindow extends AcceptCancelWindow {
 	private SelectFormAnswerTable formAnswerTable;
 	private TextArea textArea;
 
-	public AddNewActionStringWindow(Action action) {
+	public AddNewActionStringWindow(ActionExpression action) {
 		super();
 		setWidth("50%");
 		setHeight("75%");
@@ -24,10 +24,10 @@ public class AddNewActionStringWindow extends AcceptCancelWindow {
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
 	}
 
-	public Component generateContent(Action action) {
+	public Component generateContent(ActionExpression action) {
 		VerticalLayout layout = new VerticalLayout();
 		textArea = new TextArea(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDITOR_ACTION_EDITOR_TEXTAREA_CAPTION));
-		textArea.setValue((String) action.getExpression());
+		textArea.setValue(action.getExpressionAsString());
 		textArea.setSizeFull();
 		layout.addComponent(textArea);
 		layout.setSizeFull();

@@ -18,8 +18,8 @@ import com.biit.jexeval.ExpressionEvaluator;
  * A concatenation of expressions: values, operators, ... that defines a more complex expression.
  */
 @Entity
-@Table(name = "EXPRESSION_FORMS_EXPRESSION")
-public class Expressions extends Expression implements ITableCellEditable {
+@Table(name = "EXPRESSIONS_CHAIN")
+public class ExpressionChain extends Expression implements ITableCellEditable{
 
 	private String name;
 
@@ -27,12 +27,16 @@ public class Expressions extends Expression implements ITableCellEditable {
 	@OrderColumn(name = "expression_index")
 	private List<Expression> expressions;
 
-	public Expressions() {
+	public ExpressionChain() {
 		expressions = new ArrayList<>();
 	}
 
 	public List<Expression> getExpressions() {
 		return expressions;
+	}
+
+	public boolean removeExpression(Expression expression) {
+		return expressions.remove(expression);
 	}
 
 	public void setExpressions(List<Expression> expressions) {
@@ -43,10 +47,16 @@ public class Expressions extends Expression implements ITableCellEditable {
 		this.expressions.add(expression);
 	}
 
+	public void removeAllExpressions() {
+		this.expressions.clear();
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -66,7 +76,7 @@ public class Expressions extends Expression implements ITableCellEditable {
 	 * @return
 	 */
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		String result = "";
 		for (int i = 0; i < expressions.size(); i++) {
 			// Dots are not allowed in the Evaluator Expression.
@@ -102,6 +112,11 @@ public class Expressions extends Expression implements ITableCellEditable {
 			}
 		}
 		return evaluator;
+	}
+
+	@Override
+	public String toString(){
+		return getName() + expressions;
 	}
 
 	/**

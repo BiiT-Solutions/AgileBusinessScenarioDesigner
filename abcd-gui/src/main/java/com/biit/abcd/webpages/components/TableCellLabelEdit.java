@@ -23,7 +23,7 @@ public class TableCellLabelEdit extends Table {
 	public TableCellLabelEdit(LanguageCodes header1, LanguageCodes header2) {
 		initContainerProperties(header1, header2);
 	}
-	
+
 	public void update(List<Object> objects) {
 		this.removeAllItems();
 		for (Object value : objects) {
@@ -36,17 +36,17 @@ public class TableCellLabelEdit extends Table {
 		setImmediate(true);
 		setMultiSelect(false);
 		setSizeFull();
-		
+
 		addContainerProperty(MenuProperties.TABLE_NAME, Component.class, null,
 				ServerTranslate.translate(header1), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
 				ServerTranslate.translate(header2), null, Align.LEFT);
-		
+
 		cellRowSelector = new CellRowSelector();
 		addItemClickListener(cellRowSelector);
 		setCellStyleGenerator(cellRowSelector);
-		
+
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsible(MenuProperties.TABLE_NAME, false);
 		setColumnCollapsible(MenuProperties.UPDATE_TIME, true);
@@ -54,7 +54,7 @@ public class TableCellLabelEdit extends Table {
 
 		this.setColumnExpandRatio(MenuProperties.TABLE_NAME, 1);
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
-		
+
 		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
 		setSortAscending(false);
 		sort();
@@ -66,14 +66,14 @@ public class TableCellLabelEdit extends Table {
 			updateItemTableRuleInGui((StorableObject)object);
 		}
 	}
-	
+
 	public void removeSelectedRow() {
-		Object row = (Object) getValue();
+		Object row = getValue();
 		if (row != null) {
 			removeItem(row);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		if (item.getItemProperty(MenuProperties.TABLE_NAME).getValue() == null) {
@@ -85,7 +85,7 @@ public class TableCellLabelEdit extends Table {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Updates a row of the table.
 	 * 

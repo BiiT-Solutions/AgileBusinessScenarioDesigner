@@ -1,6 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.vaadin.ui.VerticalLayout;
 
 public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
@@ -36,7 +36,7 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 		return expressionViewer;
 	}
 
-	public void refreshExpressionEditor(Expressions selectedExpression) {
+	public void refreshExpressionEditor(ExpressionChain selectedExpression) {
 		if (expressionViewer != null) {
 			expressionViewer.removeAllComponents();
 			if (selectedExpression != null) {

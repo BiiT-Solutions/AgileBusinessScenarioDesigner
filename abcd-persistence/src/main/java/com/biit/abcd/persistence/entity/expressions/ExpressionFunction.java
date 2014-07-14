@@ -23,17 +23,17 @@ public class ExpressionFunction extends Expression {
 		return value.getValue();
 	}
 
-	@Override
-	protected String getExpression() {
-		return value.getValue();
-	}
-
 	public AvailableFunction getValue() {
 		return value;
 	}
 
 	public void setValue(AvailableFunction function) {
 		this.value = function;
+	}
+
+	@Override
+	public String getExpression() {
+		return value.getValue();
 	}
 
 }

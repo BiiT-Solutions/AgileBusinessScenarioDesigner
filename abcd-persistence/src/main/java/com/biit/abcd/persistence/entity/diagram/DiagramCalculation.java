@@ -5,14 +5,14 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 
 @Entity
 @Table(name = "DIAGRAM_CALCULATION")
 public class DiagramCalculation extends DiagramElement {
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Expressions formExpression;
+	private ExpressionChain formExpression;
 
 	public DiagramCalculation() {
 		super();
@@ -21,11 +21,11 @@ public class DiagramCalculation extends DiagramElement {
 		setBiitText(biitText);
 	}
 
-	public Expressions getFormExpression() {
+	public ExpressionChain getFormExpression() {
 		return formExpression;
 	}
 
-	public void setFormExpression(Expressions formExpression) {
+	public void setFormExpression(ExpressionChain formExpression) {
 		this.formExpression = formExpression;
 	}
 }

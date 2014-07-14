@@ -5,15 +5,15 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.ITableCellEditable;
 
 /**
@@ -25,11 +25,6 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 
 	private String name;
 
-	//A list of columns of the table (NOT IMPLEMENTED YET)
-	@ManyToMany(cascade = CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Question> conditionsHeader;
-
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
@@ -38,7 +33,6 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 
 	public TableRule() {
 		rules = new ArrayList<>();
-		conditionsHeader = new ArrayList<>();
 	}
 
 	public List<TableRuleRow> getRules() {
@@ -50,22 +44,55 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 		this.rules.addAll(rules);
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return getName();
+		return getName() + rules;
 	}
 
-	public void setConditionsHeader(List<Question> conditions) {
-		this.conditionsHeader.clear();
-		this.conditionsHeader.addAll(conditions);
+	public TableRuleRow addRow() {
+		TableRuleRow row = new TableRuleRow();
+		row.addAction(new ActionExpression());
+		getRules().add(row);
+		if(getRules().size()>1) {
+			for(int i=0; i<getConditionNumber(); i++){
+				row.addCondition(new ExpressionValueTreeObjectReference());
+			}
+		}
+		return row;
 	}
 
+	public void addEmptyExpressionPair(){
+		for(TableRuleRow row : getRules()){
+			row.addCondition(new ExpressionValueTreeObjectReference());
+			row.addCondition(new ExpressionValueTreeObjectReference());
+		}
+	}
+
+	public void removeRule(TableRuleRow rule) {
+		rules.remove(rule);
+	}
+
+	public void removeConditions(TableRuleRow row, List<Expression> values){
+		for (Expression value : values) {
+			row.getConditions().remove(value);
+		}
+	}
+
+	public int getConditionNumber(){
+		if(getRules().size()>0) {
+			return getRules().get(0).getConditionNumber();
+		}else{
+			return 0;
+		}
+	}
 }

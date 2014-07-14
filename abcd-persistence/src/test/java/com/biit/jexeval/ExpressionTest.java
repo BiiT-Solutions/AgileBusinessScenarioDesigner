@@ -9,9 +9,9 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.DateUnit;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
 import com.biit.jexeval.exceptions.ExpressionException;
 
 public class ExpressionTest {
@@ -45,7 +45,7 @@ public class ExpressionTest {
 		TreeObject question = new Question();
 		question.setName("Question1");
 
-		Expressions expressions = new Expressions();
+		ExpressionChain expressions = new ExpressionChain();
 		ExpressionValueDateTreeObjectReference dateTreeVariable = new ExpressionValueDateTreeObjectReference();
 		dateTreeVariable.setReference(question);
 		dateTreeVariable.setUnit(DateUnit.YEARS);
@@ -62,7 +62,7 @@ public class ExpressionTest {
 		CustomVariable variable = new CustomVariable(null, "var1", CustomVariableType.DATE,
 				CustomVariableScope.QUESTION);
 
-		Expressions expressions = new Expressions();
+		ExpressionChain expressions = new ExpressionChain();
 		ExpressionValueDateFormCustomVariable dateVariable = new ExpressionValueDateFormCustomVariable(question,
 				variable);
 		dateVariable.setUnit(DateUnit.MONTHS);

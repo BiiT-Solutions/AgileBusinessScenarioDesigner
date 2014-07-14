@@ -39,9 +39,10 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		this.value = value;
 	}
 
+	// TODO Check later
 	@Override
-	protected String getExpression() {
-		return value.toString();
+	public String getExpression() {
+		return DateManager.convertDateToString(value);
 	}
 
 }

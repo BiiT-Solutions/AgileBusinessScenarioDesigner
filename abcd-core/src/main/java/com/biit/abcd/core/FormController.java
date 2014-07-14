@@ -9,7 +9,7 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.User;
@@ -19,7 +19,7 @@ public class FormController {
 	private Form form;
 	private TreeObject lastAccessTreeObject;
 	private Diagram lastAccessDiagram;
-	private Expressions lastAccessExpression;
+	private ExpressionChain lastAccessExpression;
 	private TableRule lastAccessTable;
 
 	private IFormDao formDao;
@@ -55,14 +55,14 @@ public class FormController {
 	}
 
 	public void remove(TreeObject treeObject) throws DependencyExistException {
-		if (getForm() != null && treeObject != null && treeObject.getParent() != null) {
+		if ((getForm() != null) && (treeObject != null) && (treeObject.getParent() != null)) {
 			treeObject.remove();
 		}
 	}
 
 	public void moveUp(TreeObject treeObject) throws ChildrenNotFoundException {
 		if (getForm() != null) {
-			if (treeObject.getParent() != null && treeObject.getParent().getChildren().indexOf(treeObject) > 0) {
+			if ((treeObject.getParent() != null) && (treeObject.getParent().getChildren().indexOf(treeObject) > 0)) {
 				treeObject.getParent().switchChildren(treeObject.getParent().getChildren().indexOf(treeObject),
 						treeObject.getParent().getChildren().indexOf(treeObject) - 1, user);
 			}
@@ -71,8 +71,8 @@ public class FormController {
 
 	public void moveDown(TreeObject object) throws ChildrenNotFoundException {
 		if (getForm() != null) {
-			if (object.getParent() != null
-					&& object.getParent().getChildren().indexOf(object) < object.getParent().getChildren().size() - 1) {
+			if ((object.getParent() != null)
+					&& (object.getParent().getChildren().indexOf(object) < (object.getParent().getChildren().size() - 1))) {
 				object.getParent().switchChildren(object.getParent().getChildren().indexOf(object),
 						object.getParent().getChildren().indexOf(object) + 1, user);
 			}
@@ -107,11 +107,11 @@ public class FormController {
 		this.lastAccessDiagram = lastAccessDiagram;
 	}
 
-	public Expressions getLastAccessExpression() {
+	public ExpressionChain getLastAccessExpression() {
 		return lastAccessExpression;
 	}
 
-	public void setLastAccessExpression(Expressions lastAccessExpression) {
+	public void setLastAccessExpression(ExpressionChain lastAccessExpression) {
 		this.lastAccessExpression = lastAccessExpression;
 	}
 

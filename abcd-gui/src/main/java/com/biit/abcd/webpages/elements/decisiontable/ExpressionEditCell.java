@@ -3,10 +3,10 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-public class QuestionValueEditCell extends EditCellComponent {
+public class ExpressionEditCell extends EditCellComponent {
 	private static final long serialVersionUID = -3553182337703247712L;
 
-	public QuestionValueEditCell() {
+	public ExpressionEditCell() {
 		super();
 		setLabel(" ");
 		setCellBehaviour();

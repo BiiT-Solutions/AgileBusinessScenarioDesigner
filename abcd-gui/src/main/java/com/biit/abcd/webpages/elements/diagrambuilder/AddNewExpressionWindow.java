@@ -4,7 +4,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
@@ -16,9 +16,9 @@ public class AddNewExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
 	private SelectFormAnswerTable formAnswerTable;
 	private ExpressionEditorComponent expressionEditorComponent;
-	private Expressions expression;
+	private ExpressionChain expression;
 
-	public AddNewExpressionWindow(Expressions expression) {
+	public AddNewExpressionWindow(ExpressionChain expression) {
 		super();
 		setWidth("90%");
 		setHeight("90%");
@@ -27,7 +27,7 @@ public class AddNewExpressionWindow extends AcceptCancelWindow {
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
 	}
 
-	public Component generateContent(Expressions expression) {
+	public Component generateContent(ExpressionChain expression) {
 		VerticalLayout layout = new VerticalLayout();
 
 		// Create content
@@ -35,7 +35,7 @@ public class AddNewExpressionWindow extends AcceptCancelWindow {
 		expressionEditorComponent.setSizeFull();
 
 		if (expression == null) {
-			this.expression = new Expressions();
+			this.expression = new ExpressionChain();
 			this.expression.setCreatedBy(UserSessionHandler.getUser());
 			this.expression.setUpdatedBy(UserSessionHandler.getUser());
 			this.expression.setUpdateTime();
@@ -54,7 +54,7 @@ public class AddNewExpressionWindow extends AcceptCancelWindow {
 		return formAnswerTable.getValue();
 	}
 
-	public Expressions getExpression() {
+	public ExpressionChain getExpression() {
 		return expression;
 	}
 }

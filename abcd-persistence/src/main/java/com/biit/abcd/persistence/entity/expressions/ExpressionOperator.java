@@ -59,7 +59,7 @@ public abstract class ExpressionOperator extends Expression {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		return currentValue.getValue();
 	}
 

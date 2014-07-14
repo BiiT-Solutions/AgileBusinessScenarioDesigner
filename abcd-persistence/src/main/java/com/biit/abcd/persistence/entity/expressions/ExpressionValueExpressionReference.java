@@ -39,7 +39,7 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		return value.getExpression();
 	}
 

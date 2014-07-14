@@ -13,9 +13,14 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject reference;
-	
+
 	public ExpressionValueTreeObjectReference() {
 		super();
+	}
+
+	public ExpressionValueTreeObjectReference(TreeObject reference) {
+		super();
+		this.reference = reference;
 	}
 
 	public TreeObject getReference() {
@@ -28,12 +33,12 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 
 	@Override
 	public String getRepresentation() {
-		return reference.toString();
+		return ""+reference;
 	}
 
 	@Override
 	protected String getExpression() {
 		return getRepresentation();
 	}
-	
+
 }
