@@ -13,7 +13,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 
 /**
  * Generic class for creating operators logical and mathematical.
- *
+ * 
  */
 @Entity
 @Table(name = "EXPRESSION_OPERATOR")
@@ -27,12 +27,28 @@ public abstract class ExpressionOperator extends Expression {
 		super();
 	}
 
+	@Override
+	public String getRepresentation() {
+		if (currentValue == null || currentValue == AvailableOperator.NULL) {
+			return " ";
+		} else {
+			return " " + currentValue.getCaption() + " ";
+		}
+	}
+
 	public abstract List<AvailableOperator> getAcceptedValues();
 
 	public AvailableOperator getValue() {
 		return currentValue;
 	}
 
+	/**
+	 * Set a value.
+	 * 
+	 * @param exprOpvalue
+	 * @throws NotValidOperatorInExpression
+	 *             If this exception is launched, check ALLOWED_OPERATORS of the class.
+	 */
 	public void setValue(AvailableOperator exprOpvalue) throws NotValidOperatorInExpression {
 		if (getAcceptedValues().contains(exprOpvalue)) {
 			currentValue = exprOpvalue;

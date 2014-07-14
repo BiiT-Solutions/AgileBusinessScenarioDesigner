@@ -26,6 +26,11 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		this.setValue(value);
 	}
 
+	@Override
+	public String getRepresentation() {
+		return DateManager.convertDateToString(value);
+	}
+
 	public Timestamp getValue() {
 		return value;
 	}

@@ -24,10 +24,10 @@ import com.biit.abcd.webpages.elements.decisiontable.AddNewActionExpressionWindo
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.ClearActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.ClearExpressionListener;
-import com.biit.abcd.webpages.elements.decisiontable.DEPRECATED_ActionTable;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.biit.abcd.webpages.elements.decisiontable.EditActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.EditExpressionListener;
+import com.biit.abcd.webpages.elements.decisiontable.NewActionTable;
 import com.biit.abcd.webpages.elements.decisiontable.NewDecisionTable;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -390,7 +390,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			}
 		} catch (NotValidExpression e1) {
 			MessageManager.showError(e1.getMessage());
-			AbcdLogger.errorMessage(DEPRECATED_ActionTable.class.getName(), e1);
+			AbcdLogger.errorMessage(NewActionTable.class.getName(), e1);
 		}
 	}
 

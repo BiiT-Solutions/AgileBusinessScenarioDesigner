@@ -72,7 +72,7 @@ public class ConditionActionEditor extends ExpressionEditorComponent {
 
 	@Override
 	public void updateSelectionStyles() {
-		if (actionViewer.getFormExpression() != null) {
+		if (actionViewer.getExpressions() != null) {
 			if (selectedViewer != actionViewer) {
 				actionViewer.addStyleName("expression-unselected");
 				conditionViewer.removeStyleName("expression-unselected");

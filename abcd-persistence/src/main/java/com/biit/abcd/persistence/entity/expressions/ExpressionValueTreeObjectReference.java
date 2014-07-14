@@ -32,8 +32,13 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpression() {
-		return "" + reference;
+	public String getRepresentation() {
+		return ""+reference;
+	}
+
+	@Override
+	protected String getExpression() {
+		return getRepresentation();
 	}
 
 }

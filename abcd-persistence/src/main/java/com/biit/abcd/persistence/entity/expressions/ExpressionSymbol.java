@@ -20,6 +20,15 @@ public class ExpressionSymbol extends Expression {
 		super();
 	}
 
+	@Override
+	public String getRepresentation() {
+		if (value == null) {
+			return "";
+		} else {
+			return value.getValue();
+		}
+	}
+
 	public void setValue(AvailableSymbol value) {
 		this.value = value;
 	}
@@ -29,11 +38,7 @@ public class ExpressionSymbol extends Expression {
 	}
 
 	@Override
-	public String getExpression() {
-		if (value == null) {
-			return "";
-		} else {
-			return value.getValue();
-		}
+	protected String getExpression() {
+		return getRepresentation();
 	}
 }

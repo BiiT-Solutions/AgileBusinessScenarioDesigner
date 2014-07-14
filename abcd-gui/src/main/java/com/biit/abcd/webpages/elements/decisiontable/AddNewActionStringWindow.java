@@ -27,7 +27,7 @@ public class AddNewActionStringWindow extends AcceptCancelWindow {
 	public Component generateContent(ActionExpression action) {
 		VerticalLayout layout = new VerticalLayout();
 		textArea = new TextArea(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDITOR_ACTION_EDITOR_TEXTAREA_CAPTION));
-		textArea.setValue(action.getExpression());
+		textArea.setValue(action.getExpressionAsString());
 		textArea.setSizeFull();
 		layout.addComponent(textArea);
 		layout.setSizeFull();

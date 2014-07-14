@@ -31,7 +31,12 @@ public class ExpressionValueString extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpression() {
+	public String getRepresentation() {
+		return value;
+	}
+
+	@Override
+	protected String getExpression() {
 		return value;
 	}
 

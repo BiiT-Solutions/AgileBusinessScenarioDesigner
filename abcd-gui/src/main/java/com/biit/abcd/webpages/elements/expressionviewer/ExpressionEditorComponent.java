@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.components.ElementAddedListener;
+import com.biit.abcd.webpages.components.ElementUpdatedListener;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -64,6 +65,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			}
 
 		});
+
 		Tab tab1 = tabMenu.addTab(operatorLayout);
 		tab1.setDescription("");
 		tab1.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
@@ -79,6 +81,16 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 				}
 			}
 
+		});
+		//Adding units to dates need to refresh the GUI.
+		formVariablesLayout.addUpdateElementListener(new ElementUpdatedListener() {
+			@Override
+			public void elementUpdated(Object newElement) {
+				if (getSelectedViewer() != null) {
+					// Update all gui to reflech changes.
+					getSelectedViewer().updateExpression();
+				}
+			}
 		});
 		Tab tab2 = tabMenu.addTab(formVariablesLayout);
 		tab2.setDescription("");

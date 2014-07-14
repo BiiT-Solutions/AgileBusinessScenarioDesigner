@@ -17,8 +17,9 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 @Table(name = "EXPRESSION_OPERATOR_MATH")
 public class ExpressionOperatorMath extends ExpressionOperator {
 	private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<AvailableOperator>(Arrays.asList(
-			AvailableOperator.NULL, AvailableOperator.ASSIGNATION, AvailableOperator.PLUS, AvailableOperator.MINUS, AvailableOperator.MULTIPLICATION,
-			AvailableOperator.DIVISION, AvailableOperator.MODULE));
+			AvailableOperator.NULL, AvailableOperator.ASSIGNATION, AvailableOperator.PLUS, AvailableOperator.MINUS,
+			AvailableOperator.MULTIPLICATION, AvailableOperator.DIVISION, AvailableOperator.MODULE,
+			AvailableOperator.POW));
 
 	public ExpressionOperatorMath() {
 		super();

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -111,7 +113,29 @@ public class AcceptCancelWindow extends Window {
 			}
 		});
 
+		setKeys(rootLayout);
+
 		super.setContent(rootLayout);
+	}
+
+	private void setKeys(VerticalLayout rootLayout) {
+		rootLayout.addShortcutListener(new ShortcutListener("Enter as Accept", ShortcutAction.KeyCode.ENTER, null) {
+			private static final long serialVersionUID = -9055249857540860785L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				fireAcceptActionListeners();
+			}
+		});
+
+		rootLayout.addShortcutListener(new ShortcutListener("Esc as cancel", ShortcutAction.KeyCode.ESCAPE, null) {
+			private static final long serialVersionUID = -9055249857540860785L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				fireCancelActionListeners();
+			}
+		});
 	}
 
 	public void addAcceptActionListener(AcceptActionListener listener) {

@@ -31,6 +31,16 @@ public class ExpressionValueFormCustomVariable extends ExpressionValue {
 		this.variable = variable;
 	}
 
+	@Override
+	public String getRepresentation() {
+		String expressionString = new String();
+		expressionString += question.getName();
+		if (variable != null) {
+			expressionString += "." + variable.getName();
+		}
+		return expressionString;
+	}
+
 	public CustomVariable getVariable() {
 		return variable;
 	}
@@ -48,13 +58,8 @@ public class ExpressionValueFormCustomVariable extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpression() {
-		String expressionString = new String();
-		expressionString += question.getName();
-		if (variable != null) {
-			expressionString += "." + variable.getName();
-		}
-		return expressionString;
+	protected String getExpression() {
+		return getRepresentation();
 	}
 
 }

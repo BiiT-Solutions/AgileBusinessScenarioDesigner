@@ -19,7 +19,7 @@ public class ActionExpression extends StorableObject {
 
 	@Override
 	public String toString() {
-		return getExpression();
+		return getExpressionAsString();
 	}
 
 	public boolean undefined() {
@@ -38,9 +38,9 @@ public class ActionExpression extends StorableObject {
 		}
 	}
 
-	public String getExpression() {
+	public String getExpressionAsString() {
 		if (getExpressionChain() != null) {
-			return getExpressionChain().getExpression();
+			return getExpressionChain().getRepresentation();
 		}
 		return "";
 	}

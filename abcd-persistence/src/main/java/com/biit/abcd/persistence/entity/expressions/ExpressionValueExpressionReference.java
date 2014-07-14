@@ -25,6 +25,11 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 		this.setValue(value);
 	}
 
+	@Override
+	public String getRepresentation() {
+		return value.getRepresentation();
+	}
+
 	public Expression getValue() {
 		return value;
 	}

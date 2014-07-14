@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -35,7 +36,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ExpressionViewer extends CssLayout {
 	private static final long serialVersionUID = -3032370197806581430L;
 	public static String CLASSNAME = "v-expression-viewer";
-	private ExpressionChain formExpression;
+	private ExpressionChain expressions;
 	private Expression selectedExpression = null;
 	private VerticalLayout rootLayout;
 	// Used for storing the relationship.
@@ -56,11 +57,11 @@ public class ExpressionViewer extends CssLayout {
 		clickedListeners = new ArrayList<LayoutClickedListener>();
 	}
 
-	private void updateExpression() {
-		updateExpression(formExpression);
+	public void updateExpression() {
+		updateExpression(expressions);
 	}
 
-	public void updateExpression(ExpressionChain formExpression) {
+	public void updateExpression(ExpressionChain expressions) {
 		// rootLayout.removeAllComponents();
 		removeAllComponents();
 		expressionOfElement = new HashMap<>();
@@ -72,7 +73,7 @@ public class ExpressionViewer extends CssLayout {
 		rootLayout.setSizeFull();
 		addClickController();
 
-		this.formExpression = formExpression;
+		this.expressions = expressions;
 
 		// Evaluator
 		HorizontalLayout evaluatorLayout = createEvaluatorLayout();
@@ -84,8 +85,8 @@ public class ExpressionViewer extends CssLayout {
 		lineLayout.setImmediate(true);
 		lineLayout.setSizeUndefined();
 
-		if (formExpression != null) {
-			addExpressions(lineLayout, formExpression);
+		if (expressions != null) {
+			addExpressions(lineLayout, expressions);
 		} else {
 			selectedExpression = null;
 		}
@@ -104,14 +105,14 @@ public class ExpressionViewer extends CssLayout {
 		updateEvaluator();
 	}
 
-	private void addExpressions(HorizontalLayout lineLayout, ExpressionChain expressionChain) {
-		for (Expression expression : expressionChain.getExpressions()) {
+	private void addExpressions(HorizontalLayout lineLayout, ExpressionChain expressions) {
+		for (Expression expression : expressions.getExpressions()) {
 			addExpression(lineLayout, expression);
 		}
 	}
 
 	public void addExpression(HorizontalLayout lineLayout, final Expression expression) {
-		final ExpressionElement expressionElement = new ExpressionElement(expression.getExpression(),
+		final ExpressionElement expressionElement = new ExpressionElement(expression.getRepresentation(),
 				new LayoutClickListener() {
 			private static final long serialVersionUID = -4305606865801828692L;
 
@@ -163,6 +164,35 @@ public class ExpressionViewer extends CssLayout {
 									window.close();
 									updateExpression();
 									setSelectedExpression(expression);
+								}
+							}
+						});
+						stringInputWindow.showCentered();
+						// For Numbers
+					} else if (expression instanceof ExpressionValueNumber) {
+						StringInputWindow stringInputWindow = new StringInputWindow(
+								ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+						stringInputWindow.setCaption(ServerTranslate
+								.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+						stringInputWindow.setValue(((ExpressionValueNumber) expression).getValue().toString());
+						stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								String value = ((StringInputWindow) window).getValue();
+								if ((value == null) || value.isEmpty()) {
+									MessageManager.showError(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+								} else {
+									// Update expression
+									try {
+										Double doubleValue = Double.parseDouble(value);
+										((ExpressionValueNumber) expression).setValue(doubleValue);
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									} catch (NumberFormatException nfe) {
+										// Do nothing. Force to put a correct value.
+									}
 								}
 							}
 						});
@@ -258,7 +288,7 @@ public class ExpressionViewer extends CssLayout {
 	protected void selectNextExpression() {
 		if (isFocused() && (getSelectedExpression() != null)) {
 			// Select next expression.
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+			int index = expressions.getExpressions().indexOf(getSelectedExpression()) + 1;
 			selectExpressionByIndex(index);
 		}
 	}
@@ -266,7 +296,7 @@ public class ExpressionViewer extends CssLayout {
 	protected void selectPreviousExpression() {
 		if (isFocused() && (getSelectedExpression() != null)) {
 			// Select next expression.
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) - 1;
+			int index = expressions.getExpressions().indexOf(getSelectedExpression()) - 1;
 			selectExpressionByIndex(index);
 		}
 	}
@@ -274,10 +304,10 @@ public class ExpressionViewer extends CssLayout {
 	private void selectExpressionByIndex(int index) {
 		Expression selected = null;
 		if (index >= 0) {
-			if (index < formExpression.getExpressions().size()) {
-				selected = formExpression.getExpressions().get(index);
-			} else if (!formExpression.getExpressions().isEmpty()) {
-				selected = formExpression.getExpressions().get(formExpression.getExpressions().size() - 1);
+			if (index < expressions.getExpressions().size()) {
+				selected = expressions.getExpressions().get(index);
+			} else if (!expressions.getExpressions().isEmpty()) {
+				selected = expressions.getExpressions().get(expressions.getExpressions().size() - 1);
 			}
 		} else {
 			selectExpressionByIndex(0);
@@ -289,8 +319,8 @@ public class ExpressionViewer extends CssLayout {
 
 	public void removeSelectedExpression() {
 		if (isFocused() && (getSelectedExpression() != null)) {
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression());
-			formExpression.getExpressions().remove(getSelectedExpression());
+			int index = expressions.getExpressions().indexOf(getSelectedExpression());
+			expressions.getExpressions().remove(getSelectedExpression());
 			updateExpression();
 			selectExpressionByIndex(index);
 		}
@@ -304,8 +334,8 @@ public class ExpressionViewer extends CssLayout {
 	 */
 	public void addElementToSelected(Expression newElement) {
 		// Checks if there is at least one expression
-		if (formExpression != null) {
-			int index = formExpression.getExpressions().indexOf(getSelectedExpression()) + 1;
+		if (expressions != null) {
+			int index = expressions.getExpressions().indexOf(getSelectedExpression()) + 1;
 			if (newElement instanceof ExpressionSymbol) {
 				// Brackets are added before selected expression in some cases.
 				if ((((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true)
@@ -317,10 +347,10 @@ public class ExpressionViewer extends CssLayout {
 					index--;
 				}
 			}
-			if ((index >= 0) && (index < formExpression.getExpressions().size())) {
-				formExpression.getExpressions().add(index, newElement);
+			if ((index >= 0) && (index < expressions.getExpressions().size())) {
+				expressions.getExpressions().add(index, newElement);
 			} else {
-				formExpression.getExpressions().add(newElement);
+				expressions.getExpressions().add(newElement);
 			}
 			updateExpression();
 			setSelectedExpression(newElement);
@@ -329,13 +359,13 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
-	public ExpressionChain getFormExpression() {
-		return formExpression;
+	public ExpressionChain getExpressions() {
+		return expressions;
 	}
 
 	private void updateEvaluator() {
 		try {
-			formExpression.getExpressionEvaluator().eval();
+			expressions.getExpressionEvaluator().eval();
 			evaluatorOutput.setStyleName("expression-valid");
 			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
 		} catch (Exception e) {

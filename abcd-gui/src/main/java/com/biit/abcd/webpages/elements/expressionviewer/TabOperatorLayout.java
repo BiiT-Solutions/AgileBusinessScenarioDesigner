@@ -10,6 +10,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -30,13 +31,13 @@ public class TabOperatorLayout extends TabLayout {
 
 	public TabOperatorLayout() {
 		AccordionMultiple accordion = new AccordionMultiple();
-		
+
 		VerticalLayout matLayout = new VerticalLayout();
 		GridLayout inputLayout = new GridLayout(1, 1);
 		inputLayout.setWidth("100%");
 		createInputField(inputLayout);
-//		addComponent(inputLayout);
-//		setComponentAlignment(inputLayout, Alignment.MIDDLE_CENTER);
+		// addComponent(inputLayout);
+		// setComponentAlignment(inputLayout, Alignment.MIDDLE_CENTER);
 
 		GridLayout operatorLayout = new GridLayout(GRID_COLUMNS, 4);
 		operatorLayout.setWidth("100%");
@@ -44,12 +45,12 @@ public class TabOperatorLayout extends TabLayout {
 		createMathOperators(operatorLayout);
 		createMathFunctionsOperators(operatorLayout);
 		createBaseTab(operatorLayout);
-		
+
 		matLayout.addComponent(inputLayout);
 		matLayout.addComponent(operatorLayout);
 
-//		addComponent(operatorLayout);
-//		setComponentAlignment(operatorLayout, Alignment.MIDDLE_CENTER);
+		// addComponent(operatorLayout);
+		// setComponentAlignment(operatorLayout, Alignment.MIDDLE_CENTER);
 		accordion.addTab(matLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_MATH), true);
 
 		GridLayout logicalLayout = new GridLayout(GRID_COLUMNS, 4);
@@ -57,9 +58,9 @@ public class TabOperatorLayout extends TabLayout {
 		createLogicalOperators(logicalLayout);
 		createLogicalFunctionsOperators(logicalLayout);
 
-//		addComponent(logicalLayout);
-//		setComponentAlignment(logicalLayout, Alignment.MIDDLE_CENTER);
-		
+		// addComponent(logicalLayout);
+		// setComponentAlignment(logicalLayout, Alignment.MIDDLE_CENTER);
+
 		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
 		addComponent(accordion);
 		setComponentAlignment(accordion, Alignment.MIDDLE_CENTER);
@@ -72,13 +73,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
-				try {
-					exprValue.setValue(AvailableOperator.ASSIGNATION);
-					addExpression(exprValue);
-				} catch (NotValidOperatorInExpression e) {
-
-				}
+				addMathematicalExpression(AvailableOperator.ASSIGNATION);
 			}
 		});
 
@@ -87,13 +82,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
-				try {
-					exprValue.setValue(AvailableOperator.PLUS);
-					addExpression(exprValue);
-				} catch (NotValidOperatorInExpression e) {
-
-				}
+				addMathematicalExpression(AvailableOperator.PLUS);
 			}
 		});
 
@@ -102,7 +91,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addMathematicalExpression(AvailableOperator.MINUS);
 			}
 		});
 
@@ -111,7 +100,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addMathematicalExpression(AvailableOperator.MULTIPLICATION);
 			}
 		});
 
@@ -120,7 +109,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addMathematicalExpression(AvailableOperator.DIVISION);
 			}
 		});
 
@@ -129,7 +118,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addMathematicalExpression(AvailableOperator.MODULE);
 			}
 		});
 
@@ -138,7 +127,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addMathematicalExpression(AvailableOperator.POW);
 			}
 		});
 
@@ -159,9 +148,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ExpressionFunction exprValue = new ExpressionFunction();
-						exprValue.setValue(AvailableFunction.MAX);
-						addExpression(exprValue);
+						addFunctionExpression(AvailableFunction.MAX);
 					}
 				});
 
@@ -171,7 +158,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						addFunctionExpression(AvailableFunction.MIN);
 					}
 				});
 
@@ -181,7 +168,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						addFunctionExpression(AvailableFunction.ABS);
 					}
 				});
 
@@ -191,7 +178,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						addFunctionExpression(AvailableFunction.SQRT);
 					}
 				});
 
@@ -201,7 +188,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						addFunctionExpression(AvailableFunction.ROUND);
 					}
 				});
 
@@ -219,7 +206,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						addFunctionExpression(AvailableFunction.NOT);
 					}
 				});
 		Button inButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_IN),
@@ -228,9 +215,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ExpressionFunction exprValue = new ExpressionFunction();
-						exprValue.setValue(AvailableFunction.IN);
-						addExpression(exprValue);
+						addFunctionExpression(AvailableFunction.IN);
 					}
 				});
 
@@ -240,9 +225,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ExpressionFunction exprValue = new ExpressionFunction();
-						exprValue.setValue(AvailableFunction.BETWEEN);
-						addExpression(exprValue);
+						addFunctionExpression(AvailableFunction.BETWEEN);
 					}
 				});
 
@@ -257,9 +240,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExpressionSymbol exprValue = new ExpressionSymbol();
-				exprValue.setValue(AvailableSymbol.LEFT_BRACKET);
-				addExpression(exprValue);
+				addSymbolExpression(AvailableSymbol.LEFT_BRACKET);
 			}
 		});
 
@@ -268,9 +249,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExpressionSymbol exprValue = new ExpressionSymbol();
-				exprValue.setValue(AvailableSymbol.RIGHT_BRACKET);
-				addExpression(exprValue);
+				addSymbolExpression(AvailableSymbol.RIGHT_BRACKET);
 			}
 		});
 
@@ -279,9 +258,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExpressionSymbol exprValue = new ExpressionSymbol();
-				exprValue.setValue(AvailableSymbol.COMMA);
-				addExpression(exprValue);
+				addSymbolExpression(AvailableSymbol.COMMA);
 			}
 		});
 		layout.addComponent(leftBracketButton);
@@ -296,13 +273,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ExpressionOperatorLogic exprValue = new ExpressionOperatorLogic();
-						try {
-							exprValue.setValue(AvailableOperator.AND);
-							addExpression(exprValue);
-						} catch (NotValidOperatorInExpression e) {
-
-						}
+						addLogicalExpression(AvailableOperator.AND);
 					}
 				});
 
@@ -312,7 +283,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-
+						addLogicalExpression(AvailableOperator.OR);
 					}
 				});
 
@@ -321,7 +292,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addLogicalExpression(AvailableOperator.GREATER_THAN);
 			}
 		});
 
@@ -330,7 +301,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addLogicalExpression(AvailableOperator.GREATER_EQUALS);
 			}
 		});
 
@@ -339,7 +310,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addLogicalExpression(AvailableOperator.LESS_THAN);
 			}
 		});
 
@@ -348,7 +319,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addLogicalExpression(AvailableOperator.LESS_EQUALS);
 			}
 		});
 
@@ -357,7 +328,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addLogicalExpression(AvailableOperator.EQUALS);
 			}
 		});
 
@@ -366,7 +337,7 @@ public class TabOperatorLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				addLogicalExpression(AvailableOperator.NOT_EQUALS);
 			}
 		});
 
@@ -399,8 +370,16 @@ public class TabOperatorLayout extends TabLayout {
 									MessageManager.showError(ServerTranslate
 											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
 								} else {
-									ExpressionValueString exprValue = new ExpressionValueString(value);
-									addExpression(exprValue);
+									// Is a number.
+									try {
+										Double valueAsDouble = Double.parseDouble(value);
+										ExpressionValueNumber exprValue = new ExpressionValueNumber(valueAsDouble);
+										addExpression(exprValue);
+										// Is a string.
+									} catch (NumberFormatException nfe) {
+										ExpressionValueString exprValue = new ExpressionValueString(value);
+										addExpression(exprValue);
+									}
 									window.close();
 								}
 							}
@@ -421,4 +400,34 @@ public class TabOperatorLayout extends TabLayout {
 		return button;
 	}
 
+	private void addMathematicalExpression(AvailableOperator operator) {
+		ExpressionOperatorMath exprValue = new ExpressionOperatorMath();
+		try {
+			exprValue.setValue(operator);
+			addExpression(exprValue);
+		} catch (NotValidOperatorInExpression e) {
+		}
+	}
+
+	private void addFunctionExpression(AvailableFunction function) {
+		ExpressionFunction exprValue = new ExpressionFunction();
+		exprValue.setValue(function);
+		addExpression(exprValue);
+	}
+
+	private void addSymbolExpression(AvailableSymbol symbol) {
+		ExpressionSymbol exprValue = new ExpressionSymbol();
+		exprValue.setValue(symbol);
+		addExpression(exprValue);
+	}
+
+	private void addLogicalExpression(AvailableOperator operator) {
+		ExpressionOperatorLogic exprValue = new ExpressionOperatorLogic();
+		try {
+			exprValue.setValue(operator);
+			addExpression(exprValue);
+		} catch (NotValidOperatorInExpression e) {
+
+		}
+	}
 }

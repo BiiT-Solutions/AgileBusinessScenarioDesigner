@@ -17,11 +17,18 @@ import com.biit.abcd.persistence.entity.StorableObject;
 public abstract class Expression extends StorableObject {
 
 	/**
+	 * Returns a text representation of the Expression
+	 * 
+	 * @return
+	 */
+	public abstract String getRepresentation();
+
+	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
 	 * 
 	 * @return
 	 */
-	public abstract String getExpression();
+	protected abstract String getExpression();
 
 	@Override
 	public String toString() {

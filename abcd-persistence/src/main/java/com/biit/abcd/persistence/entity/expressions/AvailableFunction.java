@@ -5,6 +5,8 @@ package com.biit.abcd.persistence.entity.expressions;
  *
  */
 public enum AvailableFunction {
+	
+	NOT("NOT("),
 
 	MAX("MAX("),
 

@@ -24,7 +24,7 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 
 	@Override
 	public void updateSelectionStyles() {
-		if (expressionViewer.getFormExpression() == null) {
+		if (expressionViewer.getExpressions() == null) {
 			expressionViewer.addStyleName("expression-unselected");
 		} else {
 			expressionViewer.removeStyleName("expression-unselected");

@@ -192,7 +192,7 @@ public class NewConditionTable extends Table {
 		for (final Object propertyId : getContainerPropertyIds()) {
 			if(decisionRule.getConditions().size()>0){
 				ExpressionValueTreeObjectReference treeObject = (ExpressionValueTreeObjectReference)decisionRule.getConditions().get((Integer)propertyId);
-				((ExpressionEditCell)item.getItemProperty(propertyId).getValue()).setLabel(treeObject.getExpression());
+				((ExpressionEditCell)item.getItemProperty(propertyId).getValue()).setLabel(treeObject.getRepresentation());
 			}
 		}
 	}

@@ -19,7 +19,7 @@ public class ExpressionFunction extends Expression {
 	private AvailableFunction value;
 
 	@Override
-	public String getExpression() {
+	public String getRepresentation() {
 		return value.getValue();
 	}
 
@@ -29,6 +29,11 @@ public class ExpressionFunction extends Expression {
 
 	public void setValue(AvailableFunction function) {
 		this.value = function;
+	}
+
+	@Override
+	public String getExpression() {
+		return value.getValue();
 	}
 
 }

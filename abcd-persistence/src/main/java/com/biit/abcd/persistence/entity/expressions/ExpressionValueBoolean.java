@@ -23,6 +23,11 @@ public class ExpressionValueBoolean extends ExpressionValue {
 		this.setValue(value);
 	}
 
+	@Override
+	public String getRepresentation() {
+		return "" + value;
+	}
+
 	public boolean getValue() {
 		return value;
 	}
