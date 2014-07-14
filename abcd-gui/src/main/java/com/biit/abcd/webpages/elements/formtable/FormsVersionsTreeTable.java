@@ -18,7 +18,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
-import com.biit.abcd.webpages.components.FormTreeTableCellStyleGenerator;
+import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.vaadin.data.Item;
@@ -105,7 +105,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.MODIFIED_BY, 1.2f);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.MODIFICATION_DATE, 1);
 
-		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
+		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
 	}
 
 	/**

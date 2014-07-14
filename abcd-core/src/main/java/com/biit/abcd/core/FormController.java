@@ -1,5 +1,8 @@
 package com.biit.abcd.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
@@ -7,6 +10,7 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.biit.abcd.persistence.entity.expressions.Expressions;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.liferay.portal.model.User;
 
@@ -117,5 +121,24 @@ public class FormController {
 
 	public void setLastAccessTable(TableRule lastAccessTable) {
 		this.lastAccessTable = lastAccessTable;
+	}
+
+	/**
+	 * Gets rules with treeObject as the common element for all the references
+	 * in the rule.
+	 * 
+	 * @param treeObject
+	 * @return
+	 */
+	public List<Rule> getRulesAssignedToTreeObject(TreeObject treeObject) {
+		List<Rule> assignedRules = new ArrayList<>();
+
+		List<Rule> rules = getForm().getRules();
+		for (Rule rule : rules) {
+			if (rule.isAssignedTo(treeObject)) {
+				assignedRules.add(rule);
+			}
+		}
+		return assignedRules;
 	}
 }

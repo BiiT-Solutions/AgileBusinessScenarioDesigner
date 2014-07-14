@@ -150,4 +150,8 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	public void sortTableMenu() {
 		tableSelectRule.sort();
 	}
+
+	public void selectComponent(Rule rule) {
+		tableSelectRule.setValue(rule);
+	}
 }

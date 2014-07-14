@@ -20,7 +20,7 @@ public class TreeObjectTableMultiSelect extends TreeObjectTable {
 	protected void initContainerProperties() {
 		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, String.class, null,
 				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
-		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
+		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
 	}
 
 	/**

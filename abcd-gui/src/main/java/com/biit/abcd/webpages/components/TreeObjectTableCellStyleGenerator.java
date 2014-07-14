@@ -14,7 +14,7 @@ import com.vaadin.ui.Table.CellStyleGenerator;
  * row depending on the itemId.
  * 
  */
-public class FormTreeTableCellStyleGenerator implements CellStyleGenerator {
+public class TreeObjectTableCellStyleGenerator implements CellStyleGenerator {
 	private static final long serialVersionUID = 2280270027613134315L;
 
 	@Override

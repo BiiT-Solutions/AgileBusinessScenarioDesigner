@@ -43,7 +43,7 @@ public class TreeObjectTable extends TreeTable {
 	protected void initContainerProperties() {
 		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
 				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
-		setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
+		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
 	}
 
 	private void loadTreeObject(TreeObject element, TreeObject parent) {

@@ -3,7 +3,9 @@ package com.biit.abcd.persistence.entity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -53,8 +55,9 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	/**
-	 * Gets all children of the treeObject. These annotations are in the method because must been overwritten by the
-	 * Form object. All objects but forms must be FetchType.EAGER.
+	 * Gets all children of the treeObject. These annotations are in the method
+	 * because must been overwritten by the Form object. All objects but forms
+	 * must be FetchType.EAGER.
 	 */
 	public List<TreeObject> getChildren() {
 		if (children == null) {
@@ -166,7 +169,8 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	/**
-	 * This element or any of its children has a dependency. Checks if it is used in a TableRule, Diagram or Expression. 
+	 * This element or any of its children has a dependency. Checks if it is
+	 * used in a TableRule, Diagram or Expression.
 	 */
 	public void checkDependencies() throws DependencyExistException {
 		Form form = getForm();
@@ -181,12 +185,12 @@ public abstract class TreeObject extends StorableObject {
 					}
 				}
 			}
-			
-			//Checks dependencies with Diagram
-			//TODO
-			
-			//Checks dependencies with Expressions
-			//TODO
+
+			// Checks dependencies with Diagram
+			// TODO
+
+			// Checks dependencies with Expressions
+			// TODO
 		}
 		for (TreeObject child : getChildren()) {
 			child.checkDependencies();
@@ -406,6 +410,53 @@ public abstract class TreeObject extends StorableObject {
 		super.setUpdatedBy(updatedBy);
 		if (getParent() != null) {
 			getParent().setUpdatedBy(updatedBy);
+		}
+	}
+
+	/**
+	 * Gets the common tree object for a set of treeObjects
+	 * 
+	 * @param treeObjects
+	 * @return
+	 */
+	public static TreeObject getCommonTreeObject(Set<TreeObject> treeObjects) {
+		if (treeObjects == null || treeObjects.isEmpty()) {
+			return null;
+		}
+
+		Set<TreeObject> temp = new HashSet<>(treeObjects);
+
+		// Get the current least common level
+		int commonMinLevel = temp.iterator().next().getLevel();
+		for (TreeObject object : temp) {
+			if (commonMinLevel > object.getLevel()) {
+				commonMinLevel = object.getLevel();
+			}
+		}
+		while (temp.size() > 1) {
+			// Now we take only the elements in the common level or parents that
+			// are in the common level.
+			Set<TreeObject> nextTemp = new HashSet<>();
+			for (TreeObject object : temp) {
+				TreeObject candidate = object;
+				while (candidate.getLevel() > commonMinLevel) {
+					candidate = candidate.getParent();
+				}
+				nextTemp.add(candidate);
+			}
+			temp = nextTemp;
+
+			//Reduce the level and execute the loop to get Battle Royale.
+			commonMinLevel--;
+		}
+		return temp.iterator().next();
+	}
+
+	public int getLevel() {
+		if (parent == null) {
+			return 0;
+		} else {
+			return parent.getLevel() + 1;
 		}
 	}
 }
