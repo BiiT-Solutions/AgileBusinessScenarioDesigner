@@ -61,7 +61,7 @@ public class Rule extends StorableObject implements ITableCellEditable {
 	}
 
 	private Set<TreeObject> getReferencedTreeObjects() {
-		Expressions condition = getCondition();
+		ExpressionChain condition = getCondition();
 		List<Expression> expressions = condition.getExpressions();
 		Set<TreeObject> references = new HashSet<>();
 		for (Expression expression : expressions) {

@@ -25,7 +25,7 @@ import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
-import com.biit.abcd.persistence.entity.rules.QuestionAndAnswerCondition;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.liferay.portal.model.User;
@@ -178,10 +178,8 @@ public abstract class TreeObject extends StorableObject {
 			// Check dependencies with TableRules.
 			for (TableRule tableRule : form.getTableRules()) {
 				for (TableRuleRow row : tableRule.getRules()) {
-					for (QuestionAndAnswerCondition condition : row.getConditions()) {
-						if (condition.getQuestion().equals(this) || condition.getAnswer().equals(this)) {
-							throw new DependencyExistException("A rule table uses this element.");
-						}
+					for (Expression condition : row.getConditions()) {
+						//TODO checks agains table rule.	
 					}
 				}
 			}
@@ -446,7 +444,7 @@ public abstract class TreeObject extends StorableObject {
 			}
 			temp = nextTemp;
 
-			//Reduce the level and execute the loop to get Battle Royale.
+			// Reduce the level and execute the loop to get Battle Royale.
 			commonMinLevel--;
 		}
 		return temp.iterator().next();
