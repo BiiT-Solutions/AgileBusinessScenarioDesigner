@@ -19,10 +19,9 @@ import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
-import com.biit.abcd.persistence.entity.rules.ActionString;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -37,7 +36,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String OTHER_FORM = "Other Form";
 	private final static String CATEGORY_LABEL = "Category1";
 	private final static String CONDITION_EXPRESSION = "Question=Question1 AND Answer=Yes";
-	private final static String ACTION_EXPRESSION = "Score=3";
+	//	private final static String ACTION_EXPRESSION = "Score=3";
 
 	@Autowired
 	private IFormDao formDao;
@@ -252,8 +251,6 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		ExpressionChain condition = new ExpressionChain();
 		condition.addExpression(new ExpressionValueString(CONDITION_EXPRESSION));
 		tableRuleRow.getConditions().add(condition);
-		tableRuleRow.addAction(new ActionString());
-		tableRuleRow.getActions().get(0).setExpression(ACTION_EXPRESSION);
 
 		tableRule.getRules().add(tableRuleRow);
 
@@ -265,10 +262,8 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
 
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0).getExpressionTableString(),
-				CONDITION_EXPRESSION);
-		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
-				ACTION_EXPRESSION);
+		//		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
+		//				ACTION_EXPRESSION);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
 	}
 

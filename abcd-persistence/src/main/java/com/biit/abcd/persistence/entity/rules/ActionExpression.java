@@ -6,44 +6,41 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 
 @Entity
 @Table(name = "RULE_ACTION_EXPRESSION")
-public class ActionExpression extends Action {
+public class ActionExpression extends StorableObject {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private ExpressionChain expression;
+	private ExpressionChain expressionChain;
 
 	@Override
 	public String toString() {
-		return getExpressionAsString();
+		return getExpression();
 	}
 
-	@Override
 	public boolean undefined() {
-		return getExpression() == null;
+		return getExpressionChain() == null;
 	}
 
-	@Override
-	public ExpressionChain getExpression() {
-		return expression;
+	public ExpressionChain getExpressionChain() {
+		return expressionChain;
 	}
 
-	@Override
-	public void setExpression(Object expression) throws NotValidExpression {
+	public void setExpressionChain(Object expression) throws NotValidExpression {
 		if (expression instanceof ExpressionChain) {
-			this.expression = (ExpressionChain) expression;
+			this.expressionChain = (ExpressionChain) expression;
 		} else {
 			throw new NotValidExpression("Inserted expression of class '" + expression.getClass() + "' is not valid.");
 		}
 	}
 
-	@Override
-	public String getExpressionAsString() {
-		if (getExpression() != null) {
-			return getExpression().getExpressionTableString();
+	public String getExpression() {
+		if (getExpressionChain() != null) {
+			return getExpressionChain().getExpression();
 		}
 		return "";
 	}

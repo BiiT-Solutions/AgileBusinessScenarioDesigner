@@ -12,6 +12,8 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.ITableCellEditable;
 
 /**
@@ -54,8 +56,43 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 
 	@Override
 	public String toString() {
-
 		return getName() + rules;
 	}
 
+	public TableRuleRow addRow() {
+		TableRuleRow row = new TableRuleRow();
+		row.addAction(new ActionExpression());
+		getRules().add(row);
+		if(getRules().size()>1) {
+			for(int i=0; i<getConditionNumber(); i++){
+				row.addCondition(new ExpressionValueTreeObjectReference());
+			}
+		}
+		return row;
+	}
+
+	public void addEmptyExpressionPair(){
+		for(TableRuleRow row : getRules()){
+			row.addCondition(new ExpressionValueTreeObjectReference());
+			row.addCondition(new ExpressionValueTreeObjectReference());
+		}
+	}
+
+	public void removeRule(TableRuleRow rule) {
+		rules.remove(rule);
+	}
+
+	public void removeConditions(TableRuleRow row, List<Expression> values){
+		for (Expression value : values) {
+			row.getConditions().remove(value);
+		}
+	}
+
+	public int getConditionNumber(){
+		if(getRules().size()>0) {
+			return getRules().get(0).getConditionNumber();
+		}else{
+			return 0;
+		}
+	}
 }

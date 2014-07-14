@@ -5,17 +5,17 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IActionDao;
-import com.biit.abcd.persistence.entity.rules.Action;
+import com.biit.abcd.persistence.entity.rules.ActionExpression;
 
 @Repository
-public class ActionDao extends GenericDao<Action> implements IActionDao {
+public class ActionDao extends GenericDao<ActionExpression> implements IActionDao {
 
 	public ActionDao() {
-		super(Action.class);
+		super(ActionExpression.class);
 	}
 
 	@Override
-	protected void initializeSets(List<Action> elements) {
+	protected void initializeSets(List<ActionExpression> elements) {
 
 	}
 

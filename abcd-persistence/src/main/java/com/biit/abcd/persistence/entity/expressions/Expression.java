@@ -16,22 +16,15 @@ import com.biit.abcd.persistence.entity.StorableObject;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Expression extends StorableObject {
 
-	public abstract String getExpressionTableString();
-
 	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
 	 * 
 	 * @return
 	 */
-	protected abstract String getExpression();
-
-	protected String generateNullLabelCaption(String value) {
-		return "<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">" + value
-				+ "</div>";
-	}
+	public abstract String getExpression();
 
 	@Override
 	public String toString() {
-		return getExpressionTableString();
+		return getExpression();
 	}
 }

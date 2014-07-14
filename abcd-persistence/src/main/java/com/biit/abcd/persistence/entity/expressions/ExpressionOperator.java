@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 
 /**
- * Generic class for creating operators logical and mathematical. 
+ * Generic class for creating operators logical and mathematical.
  *
  */
 @Entity
@@ -25,17 +25,6 @@ public abstract class ExpressionOperator extends Expression {
 
 	public ExpressionOperator() {
 		super();
-	}
-
-	public abstract String getValueNullCaption();
-
-	@Override
-	public String getExpressionTableString() {
-		if (currentValue == null || currentValue == AvailableOperator.NULL) {
-			return " " + getValueNullCaption() + " ";
-		} else {
-			return " " + currentValue.getCaption() + " ";
-		}
 	}
 
 	public abstract List<AvailableOperator> getAcceptedValues();
@@ -54,7 +43,7 @@ public abstract class ExpressionOperator extends Expression {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		return currentValue.getValue();
 	}
 

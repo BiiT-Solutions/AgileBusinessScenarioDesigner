@@ -23,11 +23,6 @@ public class ExpressionValueNumber extends ExpressionValue {
 		this.setValue(value);
 	}
 
-	@Override
-	public String getExpressionTableString() {
-		return "" + value;
-	}
-
 	public double getValue() {
 		return value;
 	}
@@ -37,7 +32,7 @@ public class ExpressionValueNumber extends ExpressionValue {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		return new Double(value).toString();
 	}
 

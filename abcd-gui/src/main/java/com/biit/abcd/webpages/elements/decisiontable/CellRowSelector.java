@@ -37,40 +37,33 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		Table table = (Table) event.getComponent();
 		if (table != null) {
 
-				if (event.isShiftKey()) {
-					selectAreaFromCursorToNewPosition(table, event.getItemId(), event.getPropertyId());
-					return;
-				}
-				if (event.isCtrlKey()) {
-					changeSelectionStateOfCell(table, new Cell(event.getItemId(), event.getPropertyId()));
-					return;
-				}
-				if (event.isAltKey()) {
-					return;
-				}
-				
-				Object o = table.getItem(event.getItemId());
-				Object o2 = table.getValue();
-
-						
-						
-				if (!event.isDoubleClick()) {
-					// Simple click (Select cell)
-					setCursorTo(table, event.getItemId(), event.getPropertyId());
-				} else {
-					// Select row
-					// if the table is a mix of cell editors and Strings, this call will fail
-					// The if condition fixes the problem
-					if(isMixedTable()){
-						setCursorTo(table, event.getItemId(), event.getPropertyId());
-					}else{
-						selectRow(table, event.getItemId(), event.getPropertyId());
-					}
-				}
-
-				table.focus();
-				// UI.getCurrent().setFocusedComponent(table);
+			if (event.isShiftKey()) {
+				selectAreaFromCursorToNewPosition(table, event.getItemId(), event.getPropertyId());
+				return;
 			}
+			if (event.isCtrlKey()) {
+				changeSelectionStateOfCell(table, new Cell(event.getItemId(), event.getPropertyId()));
+				return;
+			}
+			if (event.isAltKey()) {
+				return;
+			}
+
+			if (!event.isDoubleClick()) {
+				// Simple click (Select cell)
+				setCursorTo(table, event.getItemId(), event.getPropertyId());
+			} else {
+				// Select row
+				// if the table is a mix of cell editors and Strings, this call will fail
+				// The if condition fixes the problem
+				if(isMixedTable()){
+					setCursorTo(table, event.getItemId(), event.getPropertyId());
+				}else{
+					selectRow(table, event.getItemId(), event.getPropertyId());
+				}
+			}
+			table.focus();
+		}
 	}
 
 	public void selectAreaFromCursorToNewPosition(Table table, Object row, Object col) {
@@ -163,7 +156,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 	public void setCursorTo(Table table, Object row, Object col) {
 		startSelectionCell = null;
 		cleanSelection(table, false);
-		if (row != null && col != null) {
+		if ((row != null) && (col != null)) {
 			cursorCell = new Cell(row, col);
 			selectedCells.add(cursorCell);
 		}
@@ -173,7 +166,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 
 	public void selectRow(Table table, Object row, Object col) {
 		cleanSelection(table, false);
-		if (row != null && col != null) {
+		if ((row != null) && (col != null)) {
 			cursorCell = new Cell(row, col);
 			Iterator<?> colItr = table.getContainerPropertyIds().iterator();
 			while (colItr.hasNext()) {
@@ -193,7 +186,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		for (Cell cell : selectedCells) {
 			try {
 				((EditCellComponent) table.getItem(cell.getRow()).getItemProperty(cell.getCol()).getValue())
-						.select(false);
+				.select(false);
 			} catch (Exception e) {
 
 			}
@@ -277,7 +270,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 	@Override
 	public void handleAction(Action action, Object sender, Object target) {
 	}
-	
+
 	// Fixes the error created when creating a mixed table
 	/**
 	 * Allows having a table with Cell Editors and Strings
@@ -286,7 +279,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 	public void setMixedTable(boolean value){
 		this.mixedTable = value;
 	}
-	
+
 	public boolean isMixedTable(){
 		return mixedTable;
 	}

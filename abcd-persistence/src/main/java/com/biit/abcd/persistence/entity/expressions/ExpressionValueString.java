@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Defines a value as string. 
+ * Defines a value as string.
  *
  */
 @Entity
@@ -31,12 +31,7 @@ public class ExpressionValueString extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpressionTableString() {
-		return value;
-	}
-
-	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		return value;
 	}
 

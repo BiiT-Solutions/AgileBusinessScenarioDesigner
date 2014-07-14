@@ -32,17 +32,8 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	}
 
 	@Override
-	public String getExpressionTableString() {
-		if(reference != null) {
-			return reference.toString();
-		} else {
-			return "--Empty--";
-		}
-	}
-
-	@Override
-	protected String getExpression() {
-		return getExpressionTableString();
+	public String getExpression() {
+		return "" + reference;
 	}
 
 }

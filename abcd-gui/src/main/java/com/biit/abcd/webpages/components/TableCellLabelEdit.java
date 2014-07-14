@@ -62,7 +62,6 @@ public class TableCellLabelEdit extends Table {
 
 	public void addRow(Object object) {
 		if (object != null) {
-			System.out.println(object.getClass().getSimpleName());
 			setDefaultNewItemPropertyValues(object, super.addItem(object));
 			updateItemTableRuleInGui((StorableObject)object);
 		}

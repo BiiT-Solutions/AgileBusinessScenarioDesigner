@@ -25,11 +25,6 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 		this.setValue(value);
 	}
 
-	@Override
-	public String getExpressionTableString() {
-		return value.getExpressionTableString();
-	}
-
 	public Expression getValue() {
 		return value;
 	}
@@ -39,7 +34,7 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		return value.getExpression();
 	}
 

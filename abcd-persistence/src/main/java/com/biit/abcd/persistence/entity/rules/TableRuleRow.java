@@ -31,7 +31,7 @@ public class TableRuleRow extends StorableObject {
 	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Action> actions;
+	private List<ActionExpression> actions;
 
 	public TableRuleRow() {
 		conditions = new ExpressionChain();
@@ -54,16 +54,20 @@ public class TableRuleRow extends StorableObject {
 		conditions.removeAllExpressions();
 	}
 
-	public void addAction(Action action) {
+	public void addAction(ActionExpression action) {
 		actions.add(action);
 	}
 
-	public List<Action> getActions() {
+	public List<ActionExpression> getActions() {
 		return actions;
 	}
 
 	@Override
 	public String toString() {
 		return conditions.toString();
+	}
+
+	public int getConditionNumber(){
+		return conditions.getExpressions().size();
 	}
 }

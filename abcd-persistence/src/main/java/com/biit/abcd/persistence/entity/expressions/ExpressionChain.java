@@ -61,22 +61,13 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 		this.name = name;
 	}
 
-	@Override
-	public String getExpressionTableString() {
-		String result = "";
-		for (Expression expression : expressions) {
-			result += expression.getExpressionTableString() + " ";
-		}
-		return result.trim();
-	}
-
 	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
 	 * 
 	 * @return
 	 */
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		String result = "";
 		for (Expression expression : expressions) {
 			// Dots are not allowed in the Evaluator Expression.

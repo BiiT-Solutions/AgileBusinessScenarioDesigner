@@ -9,17 +9,17 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class DiagramSinkSerializer extends DiagramObjectSerializerCommon<DiagramSink> implements
-		JsonSerializer<DiagramSink> {
+JsonSerializer<DiagramSink> {
 
 	@Override
 	public JsonElement serialize(DiagramSink element, Type type, JsonSerializationContext context) {
-		
+
 		if(element.getFormExpression()!=null){
-			element.getBiitText().setText(element.getFormExpression().getExpressionTableString());
+			element.getBiitText().setText(element.getFormExpression().getExpression());
 		}else{
 			element.getBiitText().setText("End");
 		}
-		
+
 		final JsonObject jsonObject = new JsonObject();
 		return serialize(element, jsonObject, context);
 	}

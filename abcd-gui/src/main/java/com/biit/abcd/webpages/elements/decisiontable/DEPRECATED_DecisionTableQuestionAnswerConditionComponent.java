@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -14,22 +13,22 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 
-public class DecisionTableQuestionAnswerConditionComponent extends CustomComponent {
+public class DEPRECATED_DecisionTableQuestionAnswerConditionComponent extends CustomComponent {
 	private static final long serialVersionUID = 2314989763962134814L;
 
 	private HorizontalLayout rootLayout;
-	private RuleExpressionConditionTable conditionTable;
-	private ActionTable actionTable;
+	private DEPRECATED_RuleExpressionConditionTable conditionTable;
+	private DEPRECATED_ActionTable actionTable;
 	private TableRule tableRule;
 
-	public DecisionTableQuestionAnswerConditionComponent() {
+	public DEPRECATED_DecisionTableQuestionAnswerConditionComponent() {
 
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
 		rootLayout.setSpacing(true);
 
-		conditionTable = new RuleExpressionConditionTable();
+		conditionTable = new DEPRECATED_RuleExpressionConditionTable();
 		conditionTable.setSizeFull();
 		conditionTable.addCellSelectionListener(new CellSelectionListener() {
 			@Override
@@ -38,7 +37,7 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 			}
 		});
 
-		actionTable = new ActionTable();
+		actionTable = new DEPRECATED_ActionTable();
 		actionTable.setSizeFull();
 		actionTable.addCellSelectionListener(new CellSelectionListener() {
 
@@ -132,7 +131,7 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 		List<TableRuleRow> notEmptyRows = new ArrayList<>();
 		// Row is useful if at least has one action defined.
 		for (TableRuleRow row : getTableRules()) {
-			for (Action action : row.getActions()) {
+			for (ActionExpression action : row.getActions()) {
 				if (!action.undefined()) {
 					notEmptyRows.add(row);
 					break;
@@ -178,7 +177,7 @@ public class DecisionTableQuestionAnswerConditionComponent extends CustomCompone
 			for (Expression expressionValue : ((TableRuleRow)rowId).getConditions()) {
 				ExpressionEditCell cellValue = ((ExpressionEditCell) row.getItemProperty(i).getValue());
 				if (cellValue != null) {
-					cellValue.setLabel(expressionValue.getExpressionTableString());
+					cellValue.setLabel(expressionValue.getExpression());
 					row.getItemProperty(i).setValue(cellValue);
 				}
 				i++;

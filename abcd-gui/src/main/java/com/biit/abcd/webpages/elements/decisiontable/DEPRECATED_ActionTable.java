@@ -8,7 +8,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
-import com.biit.abcd.persistence.entity.rules.Action;
+import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -22,7 +22,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
-public class ActionTable extends Table {
+public class DEPRECATED_ActionTable extends Table {
 	private static final long serialVersionUID = -8737505874064899775L;
 	private CellRowSelector cellRowSelector;
 
@@ -30,7 +30,7 @@ public class ActionTable extends Table {
 		ACTION
 	};
 
-	public ActionTable() {
+	public DEPRECATED_ActionTable() {
 		setImmediate(true);
 		setSizeFull();
 		addContainerProperty(Columns.ACTION, Component.class, null,
@@ -82,7 +82,7 @@ public class ActionTable extends Table {
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener((TableRuleRow) itemId));
 				editCellComponent
-						.addRemoveButtonClickListener(new CellDeleteButtonClickListener((TableRuleRow) itemId));
+				.addRemoveButtonClickListener(new CellDeleteButtonClickListener((TableRuleRow) itemId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
 			}
 		}
@@ -96,10 +96,10 @@ public class ActionTable extends Table {
 	private void updateItemActionInGui(TableRuleRow rule) {
 		Item row = getItem(rule);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) row.getItemProperty(Columns.ACTION).getValue());
-		if (rule.getActions() != null && !rule.getActions().isEmpty()) {
+		if ((rule.getActions() != null) && !rule.getActions().isEmpty()) {
 			actionValue.setLabel(rule.getActions().get(0));
 		} else {
-			actionValue.setLabel((Action) null);
+			actionValue.setLabel((ActionExpression) null);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class ActionTable extends Table {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						try {
-							rule.getActions().get(0).setExpression(newActionValueWindow.getExpression());
+							rule.getActions().get(0).setExpressionChain(newActionValueWindow.getExpressionChain());
 							updateItemActionInGui(rule);
 							newActionValueWindow.close();
 						} catch (NotValidExpression e) {
@@ -132,7 +132,7 @@ public class ActionTable extends Table {
 				});
 			} catch (NotValidExpression e1) {
 				MessageManager.showError(e1.getMessage());
-				AbcdLogger.errorMessage(ActionTable.class.getName(), e1);
+				AbcdLogger.errorMessage(DEPRECATED_ActionTable.class.getName(), e1);
 			}
 		}
 	}
@@ -148,7 +148,7 @@ public class ActionTable extends Table {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
-				rule.getActions().get(0).setExpression("");
+				rule.getActions().get(0).setExpressionChain("");
 				updateItemActionInGui(rule);
 			} catch (NotValidExpression e) {
 				MessageManager.showError(e.getMessage());

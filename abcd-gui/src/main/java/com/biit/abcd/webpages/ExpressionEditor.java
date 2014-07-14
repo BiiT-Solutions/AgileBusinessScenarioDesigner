@@ -72,9 +72,9 @@ public class ExpressionEditor extends FormWebPageComponent {
 					.getLastAccessExpression());
 		} else {
 			// Select the first one if available.
-			if (UserSessionHandler.getFormController().getForm().getFormExpressions().size() > 0) {
+			if (UserSessionHandler.getFormController().getForm().getExpressionChain().size() > 0) {
 				tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-						.getFormExpressions().get(0));
+						.getExpressionChain().get(0));
 			}
 		}
 		refreshExpressionEditor();
@@ -146,7 +146,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	private void removeSelectedExpression() {
 		UserSessionHandler.getFormController().getForm().getExpressionChain()
-				.remove(tableSelectExpression.getSelectedExpression());
+		.remove(tableSelectExpression.getSelectedExpression());
 		tableSelectExpression.removeSelectedRow();
 		refreshExpressionEditor();
 	}

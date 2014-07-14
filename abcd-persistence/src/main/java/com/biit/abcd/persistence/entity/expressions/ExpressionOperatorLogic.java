@@ -11,7 +11,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 
 /**
- * Defines any logical operator. 
+ * Defines any logical operator.
  *
  */
 @Entity
@@ -29,11 +29,6 @@ public class ExpressionOperatorLogic extends ExpressionOperator {
 			// This should never happen
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
-	}
-
-	@Override
-	public String getValueNullCaption() {
-		return generateNullLabelCaption("logic-join");
 	}
 
 	@Override

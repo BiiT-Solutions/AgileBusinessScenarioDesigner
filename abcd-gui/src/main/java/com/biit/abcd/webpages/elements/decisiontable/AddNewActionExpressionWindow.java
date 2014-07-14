@@ -6,7 +6,6 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
-import com.biit.abcd.persistence.entity.rules.Action;
 import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
@@ -19,16 +18,16 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
 	private SelectFormAnswerTable formAnswerTable;
 	private ExpressionEditorComponent expressionEditorComponent;
-	private ExpressionChain expression;
+	private ExpressionChain expressionChain;
 
-	public AddNewActionExpressionWindow(Action action) throws NotValidExpression {
+	public AddNewActionExpressionWindow(ActionExpression action) throws NotValidExpression {
 		super();
 		if (!(action instanceof ActionExpression)) {
 			throw new NotValidExpression("Only Action Expressions allowed.");
 		}
 		setWidth("90%");
 		setHeight("90%");
-		setContent(generateContent((ActionExpression) action));
+		setContent(generateContent(action));
 		setResizable(false);
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
 	}
@@ -40,15 +39,15 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		expressionEditorComponent = new SimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 
-		if (action.getExpression() == null) {
-			expression = new ExpressionChain();
-			expression.setCreatedBy(UserSessionHandler.getUser());
-			expression.setUpdatedBy(UserSessionHandler.getUser());
-			expression.setUpdateTime();
+		if (action.getExpressionChain() == null) {
+			expressionChain = new ExpressionChain();
+			expressionChain.setCreatedBy(UserSessionHandler.getUser());
+			expressionChain.setUpdatedBy(UserSessionHandler.getUser());
+			expressionChain.setUpdateTime();
 		} else {
-			expression = action.getExpression();
+			expressionChain = action.getExpressionChain();
 		}
-		((SimpleExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(expression);
+		((SimpleExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(expressionChain);
 
 		layout.addComponent(expressionEditorComponent);
 		layout.setSizeFull();
@@ -60,7 +59,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		return formAnswerTable.getValue();
 	}
 
-	public ExpressionChain getExpression() {
-		return expression;
+	public ExpressionChain getExpressionChain() {
+		return expressionChain;
 	}
 }

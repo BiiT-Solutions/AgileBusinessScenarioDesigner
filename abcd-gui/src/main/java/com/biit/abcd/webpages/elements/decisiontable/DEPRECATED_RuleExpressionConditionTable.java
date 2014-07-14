@@ -27,14 +27,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Table;
 
-public class RuleExpressionConditionTable extends Table {
+public class DEPRECATED_RuleExpressionConditionTable extends Table {
 	private static final long serialVersionUID = -963052429591605697L;
 	private static final int rowHeaderWidth = 32;
 
 	private Table thisTable;
 	private CellRowSelector cellRowSelector;
 
-	public RuleExpressionConditionTable() {
+	public DEPRECATED_RuleExpressionConditionTable() {
 		thisTable = this;
 
 		setRowHeaderMode(RowHeaderMode.INDEX);
@@ -141,7 +141,7 @@ public class RuleExpressionConditionTable extends Table {
 			setDefaultNewItemPropertyValues(rule, super.addItem(rule));
 			System.out.println("rule not null");
 			System.out.println("FIRST EXPRESSION: " + rule.getConditions().get(0)
-					.getExpressionTableString());
+					.getExpression());
 			updateItem(rule);
 		}
 	}
@@ -219,12 +219,12 @@ public class RuleExpressionConditionTable extends Table {
 		int i = 0;
 		for (Expression expressionValue : rule.getConditions()) {
 			System.out.println("Expression class: " + expressionValue.getClass());
-			System.out.println("Expression reference: " + expressionValue.getExpressionTableString());
+			System.out.println("Expression reference: " + expressionValue.getExpression());
 			ExpressionEditCell cellValue = ((ExpressionEditCell) row.getItemProperty(i).getValue());
 			System.out.println("kiwi-cellValue " + cellValue);
 			if (cellValue != null) {
-				System.out.println(expressionValue.getExpressionTableString());
-				cellValue.setLabel(expressionValue.getExpressionTableString());
+				System.out.println(expressionValue.getExpression());
+				cellValue.setLabel(expressionValue.getExpression());
 				row.getItemProperty(i).setValue(cellValue);
 			}
 			i++;
@@ -274,7 +274,7 @@ public class RuleExpressionConditionTable extends Table {
 			if (questionValue.getReference() != null) {
 				newConditionWindow.setTreeObjectSelected(questionValue.getReference());
 			}
-			newConditionWindow.addAcceptAcctionListener(new AcceptActionListener() {
+			newConditionWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
@@ -316,7 +316,7 @@ public class RuleExpressionConditionTable extends Table {
 				if (answerValue.getReference() != null) {
 					newAnswerValueWindow.setTreeObjectSelected(answerValue.getReference());
 				}
-				newAnswerValueWindow.addAcceptAcctionListener(new AcceptActionListener() {
+				newAnswerValueWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						Answer selectedanswer = ((SelectAnswerWindow) window).getSelectedTableValue();

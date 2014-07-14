@@ -27,15 +27,6 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 		this.constant = constant;
 	}
 
-	@Override
-	public String getExpressionTableString() {
-		String expressionString = new String();
-		if (constant != null) {
-			expressionString += constant.getName();
-		}
-		return expressionString;
-	}
-
 	public GlobalVariable getVariable() {
 		return constant;
 	}
@@ -45,8 +36,12 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 	}
 
 	@Override
-	protected String getExpression() {
-		return getExpressionTableString();
+	public String getExpression() {
+		String expressionString = new String();
+		if (constant != null) {
+			expressionString += constant.getName();
+		}
+		return expressionString;
 	}
 
 }

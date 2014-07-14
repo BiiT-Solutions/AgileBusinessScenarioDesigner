@@ -20,35 +20,37 @@ public class Rule extends StorableObject implements ITableCellEditable {
 	private String name;
 
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	private Expressions condition;
+	private ExpressionChain condition;
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	private Expressions actions;
+	private ExpressionChain actions;
 
 	public Rule() {
-		setActions(new Expressions());
-		setCondition(new Expressions());
+		setActions(new ExpressionChain());
+		setCondition(new ExpressionChain());
 	}
 
-	public Expressions getCondition() {
+	public ExpressionChain getCondition() {
 		return condition;
 	}
 
-	public void setCondition(Expressions condition) {
+	public void setCondition(ExpressionChain condition) {
 		this.condition = condition;
 	}
 
-	public Expressions getActions() {
+	public ExpressionChain getActions() {
 		return actions;
 	}
 
-	public void setActions(Expressions actions) {
+	public void setActions(ExpressionChain actions) {
 		this.actions = actions;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}

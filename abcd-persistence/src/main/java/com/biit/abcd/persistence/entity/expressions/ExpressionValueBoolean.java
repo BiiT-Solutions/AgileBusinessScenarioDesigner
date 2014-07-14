@@ -23,11 +23,6 @@ public class ExpressionValueBoolean extends ExpressionValue {
 		this.setValue(value);
 	}
 
-	@Override
-	public String getExpressionTableString() {
-		return "" + value;
-	}
-
 	public boolean getValue() {
 		return value;
 	}
@@ -37,7 +32,7 @@ public class ExpressionValueBoolean extends ExpressionValue {
 	}
 
 	@Override
-	protected String getExpression() {
+	public String getExpression() {
 		if (value) {
 			return "1";
 		} else {
