@@ -26,6 +26,7 @@ public class FormController {
 	private ExpressionChain lastAccessExpression;
 	private TableRule lastAccessTable;
 	private List<TableRuleRow> copiedRows;
+	private Rule lastAccessRule;
 
 	private IFormDao formDao;
 
@@ -145,6 +146,14 @@ public class FormController {
 			}
 		}
 		return assignedRules;
+	}
+
+	public Rule getLastAccessRule() {
+		return lastAccessRule;
+	}
+
+	public void setLastAccessRule(Rule lastAccessRule) {
+		this.lastAccessRule = lastAccessRule;
 	}
 
 	public void copyTableRuleRows(final TableRule origin, Collection<TableRuleRow> rowsToCopy) {

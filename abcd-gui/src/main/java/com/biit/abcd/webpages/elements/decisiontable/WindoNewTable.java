@@ -29,7 +29,7 @@ public class WindoNewTable extends WindowCreateNewObject {
 		tableRule.setUpdatedBy(UserSessionHandler.getUser());
 		tableRule.setUpdateTime();
 		UserSessionHandler.getFormController().getForm().getTableRules().add(tableRule);
-		((DecisionTableEditor) getParentWindow()).addTableRuleToMenu(tableRule);
+		((DecisionTableEditor) getParentWindow()).addTablefromWindow(tableRule);
 		((DecisionTableEditor) getParentWindow()).sortTableMenu();
 		close();
 	}

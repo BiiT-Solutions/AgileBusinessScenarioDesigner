@@ -46,6 +46,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
+				UserSessionHandler.getFormController().setLastAccessRule(getSelectedRule());
 				refreshRuleEditor();
 			}
 
@@ -68,11 +69,18 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 		sortTableMenu();
 
-		// Select the first one if available.
-		if (UserSessionHandler.getFormController().getForm().getRules().size() > 0) {
-			tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getForm().getRules().get(0));
+		// Select the last access object or the first one
+		if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
+			System.out.println("RULE RETRIEVED:  " + UserSessionHandler.getFormController().getLastAccessRule().getName());
+			tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getLastAccessRule());
 		}
-		refreshRuleEditor();
+		else {
+			// Select the first one if available.
+			if (UserSessionHandler.getFormController().getForm().getRules().size() > 0) {
+				tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getForm().getRules().get(0));
+			}
+		}
+		//		refreshRuleEditor();
 	}
 
 	private void initUpperMenu() {
@@ -142,9 +150,13 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		refreshRuleEditor();
 	}
 
-	public void addRuleToTableMenu(Rule rule) {
+	public void addRulefromWindow(Rule rule) {
 		tableSelectRule.addRow(rule);
 		tableSelectRule.setSelectedExpression(rule);
+	}
+
+	public void addRuleToTableMenu(Rule rule) {
+		tableSelectRule.addRow(rule);
 	}
 
 	public void sortTableMenu() {

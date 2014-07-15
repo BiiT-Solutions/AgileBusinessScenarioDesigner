@@ -20,7 +20,7 @@ public class WindowNewDiagram extends WindowCreateNewObject {
 
 	@Override
 	public void acceptAction(TextField inputTextField) {
-		if (inputTextField.getValue() != null && !inputTextField.getValue().isEmpty()) {
+		if ((inputTextField.getValue() != null) && !inputTextField.getValue().isEmpty()) {
 			List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
 			for (Diagram diagram : diagrams) {
 				if (diagram.getName().equals(inputTextField.getValue())) {
@@ -33,7 +33,6 @@ public class WindowNewDiagram extends WindowCreateNewObject {
 			Diagram newDiagram = new Diagram(UserSessionHandler.getFormController().getForm(),
 					inputTextField.getValue());
 			UserSessionHandler.getFormController().getForm().addDiagram(newDiagram);
-
 			((FormDiagramBuilder) getParentWindow()).addDiagram(newDiagram);
 			((FormDiagramBuilder) getParentWindow()).sortTableMenu();
 			close();
