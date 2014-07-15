@@ -90,7 +90,7 @@ public class TableRule extends StorableObject implements ITableCellEditable {
 	public void addEmptyExpressionPair() {
 		for (TableRuleRow row : getRules()) {
 			row.addCondition(new ExpressionValueTreeObjectReference());
-			row.addCondition(new ExpressionValueTreeObjectReference());
+			row.addCondition(new AnswerExpression());
 		}
 	}
 

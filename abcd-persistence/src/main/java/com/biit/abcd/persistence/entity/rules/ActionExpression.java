@@ -44,7 +44,6 @@ public class ActionExpression extends StorableObject {
 		}
 		return "";
 	}
-
 	public ActionExpression generateCopy() {
 		ActionExpression copy = new ActionExpression();
 		copy.expressionChain = expressionChain.generateCopy();

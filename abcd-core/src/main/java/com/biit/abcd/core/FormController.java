@@ -158,7 +158,7 @@ public class FormController {
 			}
 		});
 		copiedRows = new ArrayList<TableRuleRow>();
-		for (TableRuleRow rowToCopy : rowsToCopy) {
+		for (TableRuleRow rowToCopy : listOfRowsToCopy) {
 			copiedRows.add(rowToCopy.generateCopy());
 		}
 	}

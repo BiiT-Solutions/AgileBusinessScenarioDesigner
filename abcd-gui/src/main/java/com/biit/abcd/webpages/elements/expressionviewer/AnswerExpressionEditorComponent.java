@@ -3,12 +3,13 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.vaadin.ui.VerticalLayout;
 
-public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
+public class AnswerExpressionEditorComponent extends ExpressionEditorComponent {
+
 	private static final long serialVersionUID = -9034167340581462576L;
 	private ExpressionViewer expressionViewer;
 
-	public SimpleExpressionEditorComponent() {
-		super(false);
+	public AnswerExpressionEditorComponent(boolean simpleOperatorTab) {
+		super(simpleOperatorTab);
 	}
 
 	@Override
