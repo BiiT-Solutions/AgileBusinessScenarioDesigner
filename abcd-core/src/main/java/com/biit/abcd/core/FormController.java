@@ -21,6 +21,7 @@ public class FormController {
 	private Diagram lastAccessDiagram;
 	private ExpressionChain lastAccessExpression;
 	private TableRule lastAccessTable;
+	private Rule lastAccessRule;
 
 	private IFormDao formDao;
 
@@ -140,5 +141,13 @@ public class FormController {
 			}
 		}
 		return assignedRules;
+	}
+
+	public Rule getLastAccessRule() {
+		return lastAccessRule;
+	}
+
+	public void setLastAccessRule(Rule lastAccessRule) {
+		this.lastAccessRule = lastAccessRule;
 	}
 }

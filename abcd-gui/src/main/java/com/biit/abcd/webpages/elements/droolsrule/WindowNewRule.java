@@ -29,7 +29,7 @@ public class WindowNewRule extends WindowCreateNewObject {
 		rule.setUpdatedBy(UserSessionHandler.getUser());
 		rule.setUpdateTime();
 		UserSessionHandler.getFormController().getForm().getRules().add(rule);
-		((DroolsRuleEditor) getParentWindow()).addRuleToTableMenu(rule);
+		((DroolsRuleEditor) getParentWindow()).addRulefromWindow(rule);
 		((DroolsRuleEditor) getParentWindow()).sortTableMenu();
 		close();
 	}
