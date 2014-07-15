@@ -72,7 +72,8 @@ public class JsonDiagramPropertiesCalculation extends PropertiesForClassComponen
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(fieldWithSearchButton);
 
-		addTab(categoryForm, "TODO - JsonDiagramProperties Fork", true, 0);
+		addTab(categoryForm, ServerTranslate
+				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_FORM_NODE_CAPTION), true, 0);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.biit.abcd.language;
 
 public enum LanguageCodes {
-	
+
 	ACCEPT_BUTTON_CAPTION("accept.button.caption"),
 	ACCEPT_BUTTON_TOOLTIP("accept.button.tooltip"),
 	CANCEL_BUTTON_CAPTION("cancel.button.caption"),
@@ -12,34 +12,34 @@ public enum LanguageCodes {
 	EDIT_BUTTON_TOOLTIP("edit.button.tooltip"),
 	DELETE_BUTTON_CAPTION("delete.button.caption"),
 	DELETE_BUTTON_TOOLTIP("delete.button.tooltip"),
-	
+
 	LOGIN_CAPTION_EMAIL("login.caption.email"),
 	LOGIN_CAPTION_PASSWORD("login.caption.password"),
 	LOGIN_CAPTION_SIGN_IN("login.caption.signIn"),
 	LOGIN_ERROR_EMAIL("login.error.email"),
 	LOGIN_ERROR_PASSWORD("login.error.password"),
 	LOGIN_ERROR_USER("error.login.user"),
-	
+
 	ABOUT_US_CAPTION("aboutUs.caption"),
 	ABOUT_US_TOOL_NAME("aboutUs.toolName"),
 	ABOUT_US_TOOL_PURPOUSE("aboutUs.toolPurpouse"),
 	ABOUT_US_VERSION("aboutUs.version"),
 	ABOUT_US_BIIT("aboutUs.biit"),
 	ABOUT_US_REPORT("aboutUs.report"),
-	
+
 	MENU_SAVE("menu.save"),
 	MENU_MOVE_UP("menu.moveup"),
-	MENU_MOVE_DOWN("menu.movedown"), 
-	
+	MENU_MOVE_DOWN("menu.movedown"),
+
 	COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP("collapsable.panel.collapse.tooltip"),
 	COLLAPSABLE_PANEL_EXPAND_TOOLTIP("collapsable.panel.expand.tooltip"),
-	
+
 	FORM_TREE_PROPERTY_NAME("form.tree.property.name"),
 	FORM_TREE_PROPERTY_RULES("form.tree.property.rules"),
-	
+
 	INFO_USER_LOG("info.userLog"),
 	INFO_USER_SESSION_EXPIRED("info.userSessionExpired"),
-	
+
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
 	WARNING_SELECT_VARIABLE_TO_DELETE("warning.select.variable.to.delete"),
@@ -54,11 +54,11 @@ public enum LanguageCodes {
 	WARNING_VARIABLE_DATA_VALID_RANGE_WRONG("warning.variable.data.valid.range.wrong"),
 	WARNING_VARIABLE_NAME_WRONG("warning.variable.name.wrong"),
 	WARNING_EXPRESSION_TABLE_EMPTY("warning.expression.table.empty"),
-	WARNING_ELEMENT_NOT_FOUND("warning.element.not.found"), 
+	WARNING_ELEMENT_NOT_FOUND("warning.element.not.found"),
 	WARNING_ELEMENT_NOT_FOUND_DESCRIPTION("warning.element.not.found.description"),
-	
+
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
-	
+
 	FORM_TABLE_COLUMN_NAME("formTable.column.name"),
 	FORM_TABLE_COLUMN_VERSION("formTable.column.version"),
 	FORM_TABLE_COLUMN_ACCESS("formTable.column.access"),
@@ -71,16 +71,16 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_MODIFICATIONDATE("formTable.column.modificationDate"),
 	FORM_TABLE_COLLAPSIBLE_CELL_EXPAND_TOOLTIP("formTable.collapsible.cell.expand.tooltip"),
 	FORM_TABLE_COLLAPSIBLE_CELL_CONTRACT_TOOLTIP("formTable.collapsible.cell.contract.tooltip"),
-	
+
 	TREE_DESIGNER_CATEGORY_ADD("treeDesigner.category.add"),
 	TREE_DESIGNER_GROUP_ADD("treeDesigner.group.add"),
 	TREE_DESIGNER_QUESTION_ADD("treeDesigner.question.add"),
 	TREE_DESIGNER_ANSWER_ADD("treeDesigner.answer.add"),
 	TREE_DESIGNER_ELEMENT_REMOVE("treeDesigner.element.remove"),
-	
+
 	TREE_DESIGNER_WARNING_NO_UPDATE("warning.element.not.editable"),
 	TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION("warning.element.not.editable.description"),
-	
+
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
 	BOTTOM_MENU_FORM_VARIABLES("page.bottommenu.formVariables"),
@@ -88,16 +88,16 @@ public enum LanguageCodes {
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	BOTTOM_MENU_DROOLS_TABLE_EDITOR("page.bottommenu.droolsTableEditor"),
 	BOTTOM_MENU_EXPRESSION_EDITOR("page.bottommenu.calculusEditor"),
-	
+
 	TOP_MENU_SETTINGS_TOOLTIP("page.topmenu.settings.tooltip"),
-	
+
 	WINDOW_NEWFORM_WINDOW_TITLE("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_NAME_TEXTFIELD("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
-	
-	
+
+
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_CAPTION("formDiagramBuilder.upper.newDiagram.caption"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_TOOLTIP("formDiagramBuilder.upper.newDiagram.tooltip"),
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_DELETE_DIAGRAM_CAPTION("formDiagramBuilder.upper.deleteDiagram.caption"),
@@ -124,7 +124,7 @@ public enum LanguageCodes {
 	FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_TEXTFIELD("formDiagramBuilder.new.diagram.textField"),
 	FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED("formDiagramBuilder.element.not.assigned"),
 	FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION("formDiagramBuilder.element.not.assigned.description"),
-	
+
 	TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION("treeObjectProperties.common.form.caption"),
 	TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION("treeObjectProperties.answer.form.caption"),
 	TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION("treeObjectProperties.question.form.caption"),
@@ -141,15 +141,15 @@ public enum LanguageCodes {
 	FORM_PROPERTIES_VERSION("formProperties.version"),
 	CATEGORY_PROPERTIES_LABEL("categoryProperties.label"),
 	GROUP_PROPERTIES_REPEAT("groupProperties.repeat"),
-	PROPERTIES_TECHNICAL_NAME("properties.technicalName"), 
+	PROPERTIES_TECHNICAL_NAME("properties.technicalName"),
 	PROPERTIES_QUESTION_ANSWER_TYPE("properties.question.answer_type"),
-	PROPERTIES_QUESTION_ANSWER_FORMAT("properties.question.answer_format"), 
-	
+	PROPERTIES_QUESTION_ANSWER_FORMAT("properties.question.answer_format"),
+
 	MENU_RULE_ADD_CAPTION("menu.rule.add.caption"),
 	MENU_RULE_ADD_TOOLTIP("menu.rule.add.tooltip"),
 	MENU_RULE_REMOVE_CAPTION("menu.rule.remove.caption"),
 	MENU_RULE_REMOVE_TOOLTIP("menu.rule.remove.tooltip"),
-	
+
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_USER_NOACCESS("error.user.noaccess"),
 	ERROR_ACCESS("error.access"),
@@ -174,42 +174,42 @@ public enum LanguageCodes {
 	ERROR_SELECT_EXPRESSION("error.select.expression"),
 	ERROR_SELECT_ANSWER("error.select.answer"),
 	ERROR_SELECT_DIAGRAM("error.select.diagram"),
-	
+
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
-	
+
 	ERROR_DATABASE_DUPLICATED_VARIABLE("error.database.duplicatedvariable"),
 	ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION("error.database.duplicatedvariablecatpion"),
-	
-	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"), 
+
+	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"),
 	ERROR_SAME_DIAGRAM("error.same.diagram"),
 	ERROR_DIAGRAM_IS_IN_USE("error.diagram.is.in.use"),
-	
-	
+
+
 	INFO_DATA_STORED("info.data.store"),
-	
+
 	ANSWER_TYPE_INPUT("answer.type.input"),
 	ANSWER_TYPE_RADIO("answer.type.radio"),
 	MULTI_CHECKBOX("answer.type.multi.checkbox"),
-	
+
 	ANSWER_FORMAT_POSTAL_CODE("answer.format.postal.code"),
 	ANSWER_FORMAT_TEXT("answer.format.text"),
 	ANSWER_FORMAT_DATE("answer.format.date"),
 	ANSWER_FORMAT_NUMBER("answer.format.number"),
-	
+
 	ACTION_TABLE_HEADER_ACTION("action.table.header.action"),
 	CONDITION_TABLE_HEADER_QUESTION_CONDITION("condition.table.header.condition.question"),
-	CONDITION_TABLE_HEADER_ANSWER_CONDITION("condition.table.header.condition.answer"), 
-	
+	CONDITION_TABLE_HEADER_ANSWER_CONDITION("condition.table.header.condition.answer"),
+
 	WARNING_NO_QUESTION_SELECTED_CAPTION("condition.table.noquestion.caption"),
 	WARNING_NO_QUESTION_SELECTED_BODY("condition.table.noquestion.body"),
-	
+
 	CONDITION_TABLE_EDITOR_ADD_TABLE("condition.table.editor.button.add.table"),
 	CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP("condition.table.editor.button.add.table.tooltip"),
 	CONDITION_TABLE_EDITOR_REMOVE_TABLE("condition.table.editor.button.remove.table"),
 	CONDITION_TABLE_EDITOR_REMOVE_TABLE_TOOLTIP("condition.table.editor.button.remove.table.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION("condition.table.editor.button.save.caption"),
-	CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP("condition.table.editor.button.save.tooltip"), 
+	CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP("condition.table.editor.button.save.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_CAPTION("condition.table.editor.button.add.column.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_ADD_COLUMN_TOOLTIP("condition.table.editor.button.add.column.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_REMOVE_COLUMN_CAPTION("condition.table.editor.button.remove.column.caption"),
@@ -223,17 +223,17 @@ public enum LanguageCodes {
 	CONDITION_TABLE_EDIT_CONDITION_CAPTION("condition.window.edit.caption"),
 	CONDITION_TABLE_EDIT_ACTION_CAPTION("action.window.edit.caption"),
 	CONDITION_TABLE_NULL_VALUE("condition.table.null.value"),
-	
+
 	WINDOW_NEW_TABLE_NAME_TEXTFIELD("windowNewTable.name.textField"),
 	WINDOW_NEW_EXPRESSION_TEXTFIELD("windowNewExpression.name.textField"),
-	
+
 	FORM_QUESTION_TABLE_HEADER_QUESTION_NAME("form.question.table.header.question.name"),
-	
+
 	SETTINGS_TITLE("settings.title"),
 	SETTINGS_GLOBAL_CONSTANTS("settings.global.constants"),
 	SETTINGS_LOG_OUT("settings.log.out"),
 	SETTINGS_CLOSE("settings.close"),
-	
+
 	GLOBAL_VARIABLE_ADD_WINDOW_TITLE("global.variable.window.title"),
 	GLOBAL_VARIABLE_EDIT_WINDOW_TITLE("global.variable.edit.window.title"),
 	GLOBAL_VARIABLE_VALUE_ADD_WINDOW_TITLE("global.variable.value.window.title"),
@@ -243,7 +243,7 @@ public enum LanguageCodes {
 	GLOBAL_VARIABLE_TYPE("global.variable.type"),
 	GLOBAL_VARIABLE_VALID_FROM("global.variable.valid.from"),
 	GLOBAL_VARIABLE_VALID_TO("global.variable.valid.to"),
-	
+
 	GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_CAPTION("global.variables.table.add.variable.caption"),
 	GLOBAL_VARIABLES_TABLE_ADD_VARIABLE_TOOLTIP("global.variables.table.add.variable.tooltip"),
 	GLOBAL_VARIABLES_TABLE_REMOVE_VARIABLE_CAPTION("global.variables.table.remove.variable.caption"),
@@ -256,10 +256,10 @@ public enum LanguageCodes {
 	GLOBAL_VARIABLES_TABLE_REMOVE_DATA_TOOLTIP("global.variables.table.remove.data.tooltip"),
 	GLOBAL_VARIABLES_TABLE_EDIT_DATA_CAPTION("global.variables.table.edit.data.caption"),
 	GLOBAL_VARIABLES_TABLE_EDIT_DATA_TOOLTIP("global.variables.table.edit.data.tooltip"),
-	
+
 	RULE_EDITOR_WHEN_LABEL("window.when.label"),
 	RULE_EDITOR_THEN_LABEL("window.then.label"),
-	
+
 	FORM_VARIABLE_ADD("form.variables.add"),
 	FORM_VARIABLE_REMOVE("form.variables.remove"),
 	FORM_VARIABLE_TABLE_COLUMN_NAME("form.variables.tablecolumn.name"),
@@ -267,13 +267,13 @@ public enum LanguageCodes {
 	FORM_VARIABLE_COLUMN_NAME("form.variables.column.name"),
 	FORM_VARIABLE_COLUMN_TYPE("form.variables.column.type"),
 	FORM_VARIABLE_SCOPE("form.variables.column.scope"),
-	
+
 	FORM_EXPRESSION_TABLE_NAME("form.expressions.table.name"),
-	FORM_EXPRESSIONS_TABLE_COLUMN_NAME("form.expressions.tablecolumn.name"),	
+	FORM_EXPRESSIONS_TABLE_COLUMN_NAME("form.expressions.tablecolumn.name"),
 	FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE("form.variables.tablecolumn.update"),
 	MENU_EXPRESSIONS_ADD("form.expressions.menu.add"),
 	MENU_EXPRESSIONS_REMOVE("form.expressions.menu.remove"),
-	
+
 	EXPRESSION_PROPERTIES_CONTROLS("expression.properties.controls"),
 	EXPRESSION_PROPERTIES_GENERIC("expression.properties.generic"),
 	EXPRESSION_PROPERTIES_FORM("expression.properties.form"),
@@ -286,8 +286,8 @@ public enum LanguageCodes {
 	EXPRESSION_GLOBAL_CONSTANT_WINDOW_LIST("expression.global.constant.window.list"),
 	EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION("expression.form.variable.window.caption"),
 	EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS("expression.form.variable.window.elements"),
-	EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES("expression.form.variable.window.variables"),	
-	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value"),	
+	EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES("expression.form.variable.window.variables"),
+	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value"),
 	EXPRESSION_CHECKER_VALID("expression.checker.valid"),
 	EXPRESSION_CHECKER_INVALID("expression.checker.invalid"),
 	EXPRESSION_CHANGE_OPERATOR_WINDOW_CAPTION("expression.operator.window.caption"),
@@ -306,40 +306,48 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"),
 	EXPRESSION_BUTTON_IN("expression.button.in"),
 	EXPRESSION_BUTTON_BETWEEN("expression.button.between"),
-	
+
 	EXPRESSION_DATE_DAY("expression.date.day"),
 	EXPRESSION_DATE_MONTH("expression.date.month"),
 	EXPRESSION_DATE_YEAR("expression.date.year"),
 	EXPRESSION_DATE_CAPTION("expression.date.caption"),
-	
+
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE("expression.form.variable.addvariable"),
-	
+
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_CAPTION("json.diagram.properties.calculation.expression.caption"),
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION("json.diagram.properties.calculation.expression.null.caption"),
-	JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION("json.diagram.properties.fork.question.caption"), 
-	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION("json.diagram.properties.sink.expression.caption"), 
+	JSON_DIAGRAM_PROPERTIES_FORK_QUESTION_CAPTION("json.diagram.properties.fork.question.caption"),
+	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION("json.diagram.properties.sink.expression.caption"),
 	JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION("json.diagram.properties.sink.expression.null.caption"),
 	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION("json.diagram.properties.link.input.field.caption"),
 	JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION("json.diagram.properties.link.field.null.caption"),
-	
+
+	JSON_DIAGRAM_PROPERTIES_DIAGRAM_CHILD_NODE_CAPTION("json.diagram.properties.diagram.child.node.caption"),
+	JSON_DIAGRAM_PROPERTIES_FORM_NODE_CAPTION("json.diagram.properties.form.node.caption"),
+	JSON_DIAGRAM_PROPERTIES_FORK_NODE_CAPTION("json.diagram.properties.fork.node.caption"),
+	JSON_DIAGRAM_PROPERTIES_SINK_NODE_CAPTION("json.diagram.properties.sink.node.caption"),
+	JSON_DIAGRAM_PROPERTIES_SOURCE_NODE_CAPTION("json.diagram.properties.source.node.caption"),
+	JSON_DIAGRAM_PROPERTIES_TABLE_NODE_CAPTION("json.diagram.properties.table.node.caption"),
+
+
 	DROOLS_RULES_EDITOR_TABLE_NAME("drools.rules.editor.table.name"),
-	DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME("drools.rules.editor.tablecolumn.name"),	
+	DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME("drools.rules.editor.tablecolumn.name"),
 	DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE("drools.rules.editor.tablecolumn.update"),
 	DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD("drools.rules.editor.name.textField"),
 	DROOLS_RULES_EDITOR_CONDITION_LAYOUT_CAPTION("drools.rules.condition.layout.caption"),
 	DROOLS_RULES_EDITOR_ACTION_LAYOUT_CAPTION("drools.rules.action.layout.caption"),
-	
+
 	WINDOW_EDIT_TABLE_CELL_LABEL("window.edit.table.cell.label");
-	
-	
-	
+
+
+
 	private String value;
-	
+
 	private LanguageCodes(String value){
 		this.value = value;
 	}
-	
+
 	@Override
 	public String toString(){
 		return value;
