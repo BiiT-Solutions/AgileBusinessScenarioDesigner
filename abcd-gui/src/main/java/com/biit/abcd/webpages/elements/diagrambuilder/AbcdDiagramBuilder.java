@@ -14,6 +14,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
@@ -106,7 +107,12 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					}
 					break;
 				case RULE:
-					// TODO rules not defined.
+					if (((DiagramRule) object).getRule() != null) {
+						fireJumpToListener(((DiagramRule) object).getRule());
+					}else {
+						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
+								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
+					}
 					break;
 				case SINK:
 					if (((DiagramSink) object).getFormExpression() != null) {

@@ -21,6 +21,7 @@ import com.biit.abcd.gson.utils.DiagramElementSerializer;
 import com.biit.abcd.gson.utils.DiagramForkSerializer;
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
 import com.biit.abcd.gson.utils.DiagramObjectSerializer;
+import com.biit.abcd.gson.utils.DiagramRepeatSerializer;
 import com.biit.abcd.gson.utils.DiagramRuleSerializer;
 import com.biit.abcd.gson.utils.DiagramSerializer;
 import com.biit.abcd.gson.utils.DiagramSinkSerializer;
@@ -96,6 +97,7 @@ public class Diagram extends StorableObject implements ITableCellEditable {
 		gsonBuilder.registerTypeAdapter(DiagramSource.class, new DiagramSourceSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramTable.class, new DiagramTableSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramRepeat.class, new DiagramRepeatSerializer());
 		Gson gson = gsonBuilder.create();
 		String json = gson.toJson(this);
 		return json;

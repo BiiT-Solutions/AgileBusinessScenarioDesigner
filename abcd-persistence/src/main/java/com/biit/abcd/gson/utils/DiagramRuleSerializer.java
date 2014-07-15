@@ -13,8 +13,13 @@ public class DiagramRuleSerializer extends DiagramObjectSerializerCommon<Diagram
 
 	@Override
 	public JsonElement serialize(DiagramRule element, Type type, JsonSerializationContext context) {
-		//TODO rule is not done.
 		final JsonObject jsonObject = new JsonObject();
+		// Set the current name of the rule.
+		if (element.getRule() != null) {
+			element.getBiitText().setText(element.getRule().getName());
+		} else {
+			element.getBiitText().setText("Rule");
+		}
 		return serialize(element, jsonObject, context);
 	}
 }

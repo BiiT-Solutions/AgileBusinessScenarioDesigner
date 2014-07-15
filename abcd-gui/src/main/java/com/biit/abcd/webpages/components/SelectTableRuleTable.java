@@ -25,7 +25,7 @@ public class SelectTableRuleTable extends Table {
 		setMultiSelect(false);
 		setSizeFull();
 		
-		addContainerProperty(MenuProperties.TABLE_NAME, TableRule.class, "",
+		addContainerProperty(MenuProperties.TABLE_NAME, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
@@ -47,7 +47,7 @@ public class SelectTableRuleTable extends Table {
 	@SuppressWarnings({ "unchecked" })
 	public void addRow(TableRule tableRule) {
 		Item item = addItem(tableRule);
-		item.getItemProperty(MenuProperties.TABLE_NAME).setValue(tableRule);
+		item.getItemProperty(MenuProperties.TABLE_NAME).setValue(tableRule.getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(tableRule.getUpdateTime()));
 	}
 

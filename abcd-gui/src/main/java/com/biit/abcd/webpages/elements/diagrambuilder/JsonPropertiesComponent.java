@@ -14,5 +14,6 @@ public class JsonPropertiesComponent extends PropertiesComponent {
 		registerPropertiesComponent(new JsonDiagramPropertiesTable());
 		registerPropertiesComponent(new JsonDiagramPropertiesCalculation());
 		registerPropertiesComponent(new JsonDiagramPropertiesLink());
+		registerPropertiesComponent(new JsonDiagramPropertiesRule());
 	}
 }
