@@ -50,7 +50,6 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	private NewDecisionTable decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableRuleTableEditable tableSelectionMenu;
-	private int i = 0;
 
 	public DecisionTableEditor() {
 		super();
@@ -72,7 +71,6 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				UserSessionHandler.getFormController().setLastAccessTable(tableSelectionMenu.getSelectedTableRule());
-				i++;
 				refreshDecisionTable();
 			}
 		});

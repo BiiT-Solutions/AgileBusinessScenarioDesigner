@@ -32,7 +32,8 @@ public class JsonDiagramPropertiesSource extends PropertiesForClassComponent<Dia
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(diagramElementLabel);
 
-		addTab(categoryForm, "TODO - JsonDiagramProperties Source", true, 0);
+		addTab(categoryForm, ServerTranslate
+				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SOURCE_NODE_CAPTION), true, 0);
 	}
 
 	@Override

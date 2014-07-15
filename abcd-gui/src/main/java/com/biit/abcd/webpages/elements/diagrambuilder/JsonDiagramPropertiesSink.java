@@ -71,7 +71,8 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(fieldWithSearchButton);
 
-		addTab(categoryForm, "TODO - JsonDiagramProperties Sink", true, 0);
+		addTab(categoryForm, ServerTranslate
+				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SINK_NODE_CAPTION), true, 0);
 	}
 
 	@Override

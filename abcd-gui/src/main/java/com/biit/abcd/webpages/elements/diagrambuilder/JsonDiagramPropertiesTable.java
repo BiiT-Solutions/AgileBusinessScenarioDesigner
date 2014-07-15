@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -69,7 +70,8 @@ public class JsonDiagramPropertiesTable extends PropertiesForClassComponent<Diag
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(fieldWithSearchButton);
 
-		addTab(categoryForm, "TODO - JsonDiagramProperties Table", true, 0);
+		addTab(categoryForm, ServerTranslate
+				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_TABLE_NODE_CAPTION), true, 0);
 	}
 
 	@Override

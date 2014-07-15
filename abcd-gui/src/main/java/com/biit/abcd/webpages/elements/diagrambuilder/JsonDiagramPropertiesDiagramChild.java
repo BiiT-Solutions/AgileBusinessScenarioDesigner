@@ -52,18 +52,18 @@ public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassCompone
 					public void acceptAction(AcceptCancelWindow window) {
 						Diagram diagram = selectAnswerWindow.getSelectedDiagram();
 						if (diagram != null) {
-							
+
 							if(diagram.equals(instance.getParent())){
 								MessageManager.showError(LanguageCodes.ERROR_SAME_DIAGRAM);
 								return;
 							}
-							
+
 							Diagram parentDiagram = UserSessionHandler.getFormController().getForm().getDiagramParent(diagram);
 							if(parentDiagram!=null){
 								MessageManager.showError(LanguageCodes.ERROR_DIAGRAM_IS_IN_USE);
 								return;
 							}
-							
+
 							instance.setChildDiagram(diagram);
 							fieldWithSearchButton.setValue(diagram, diagram.getName());
 							selectAnswerWindow.close();
@@ -87,7 +87,7 @@ public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassCompone
 		});
 		childForm.addComponent(fieldWithSearchButton);
 
-		addTab(childForm, "TODO - diagramChildProperties", true, 0);
+		addTab(childForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_DIAGRAM_CHILD_NODE_CAPTION), true, 0);
 	}
 
 	@Override
