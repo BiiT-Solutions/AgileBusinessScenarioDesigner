@@ -28,13 +28,14 @@ import com.biit.abcd.gson.utils.DiagramSourceSerializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.abcd.persistence.utils.ITableCellEditable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
 @Table(name = "DIAGRAM")
-public class Diagram extends StorableObject {
+public class Diagram extends StorableObject implements ITableCellEditable {
 
 	private String name;
 
