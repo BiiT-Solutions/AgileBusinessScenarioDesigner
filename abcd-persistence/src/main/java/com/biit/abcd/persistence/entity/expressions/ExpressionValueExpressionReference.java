@@ -43,4 +43,16 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 		return value.getExpression();
 	}
 
+	/**
+	 * This Generate copy assumes that the expression is not a "live reference"
+	 * to the form, but just a expression stored on database only, thus we clone
+	 * it also.
+	 */
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueExpressionReference copy = new ExpressionValueExpressionReference();
+		copy.value = value.generateCopy();
+		return copy;
+	}
+
 }

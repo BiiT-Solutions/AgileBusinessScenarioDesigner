@@ -41,4 +41,11 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		return getRepresentation();
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueTreeObjectReference copy = new ExpressionValueTreeObjectReference();
+		copy.reference = reference;
+		return copy;
+	}
+
 }

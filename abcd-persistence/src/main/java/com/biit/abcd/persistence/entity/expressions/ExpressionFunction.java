@@ -36,4 +36,10 @@ public class ExpressionFunction extends Expression {
 		return value.getValue();
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionFunction copy = new ExpressionFunction();
+		copy.value = value;
+		return copy;
+	}
 }

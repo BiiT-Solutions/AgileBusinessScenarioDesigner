@@ -34,4 +34,6 @@ public abstract class Expression extends StorableObject {
 	public String toString() {
 		return getExpression();
 	}
+
+	public abstract Expression generateCopy();
 }

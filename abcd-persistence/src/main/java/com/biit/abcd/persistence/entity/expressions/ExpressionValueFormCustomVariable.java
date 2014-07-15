@@ -62,4 +62,12 @@ public class ExpressionValueFormCustomVariable extends ExpressionValue {
 		return getRepresentation();
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueFormCustomVariable copy = new ExpressionValueFormCustomVariable();
+		copy.question = question;
+		copy.variable = variable;
+		return copy;
+	}
+
 }

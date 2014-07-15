@@ -45,4 +45,11 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		return DateManager.convertDateToString(value);
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueTimestamp copy = new ExpressionValueTimestamp();
+		copy.value = new Timestamp(value.getTime());
+		return copy;
+	}
+
 }

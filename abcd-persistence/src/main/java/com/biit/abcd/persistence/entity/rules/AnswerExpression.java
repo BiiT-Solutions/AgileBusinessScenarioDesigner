@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
@@ -26,10 +27,9 @@ public class AnswerExpression extends ExpressionValueTreeObjectReference {
 	}
 
 	public void setExpressionChain(Object expression) throws NotValidExpression {
-		if(expression == null){
+		if (expression == null) {
 			this.expressionChain = null;
-		}
-		else if (expression instanceof ExpressionChain) {
+		} else if (expression instanceof ExpressionChain) {
 			this.expressionChain = (ExpressionChain) expression;
 		} else {
 			throw new NotValidExpression("Inserted expression of class '" + expression.getClass() + "' is not valid.");
@@ -43,10 +43,9 @@ public class AnswerExpression extends ExpressionValueTreeObjectReference {
 
 	@Override
 	public String toString() {
-		if(getReference() != null){
+		if (getReference() != null) {
 			return "" + getReference();
-		}
-		else if (getExpressionChain() != null) {
+		} else if (getExpressionChain() != null) {
 			return getExpressionChain().getRepresentation();
 		}
 		return "null";
@@ -58,5 +57,16 @@ public class AnswerExpression extends ExpressionValueTreeObjectReference {
 			return getExpressionChain().getExpression();
 		}
 		return "null";
+	}
+
+	@Override
+	public Expression generateCopy() {
+		AnswerExpression copy = new AnswerExpression();
+		copy.setReference(getReference());
+		if (expressionChain != null) {
+			copy.expressionChain = expressionChain.generateCopy();
+		}
+
+		return copy;
 	}
 }

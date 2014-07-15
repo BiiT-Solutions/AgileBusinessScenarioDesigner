@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
@@ -35,11 +36,15 @@ import com.biit.abcd.webpages.elements.decisiontable.NewDecisionTable;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.event.ShortcutAction.ModifierKey;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
-public class DecisionTableEditor extends FormWebPageComponent implements EditExpressionListener, ClearExpressionListener, EditActionListener, ClearActionListener {
+public class DecisionTableEditor extends FormWebPageComponent implements EditExpressionListener,
+		ClearExpressionListener, EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
 
 	private NewDecisionTable decisionTable;
@@ -62,6 +67,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		tableSelectionMenu = new SelectTableRuleTableEditable();
 		tableSelectionMenu.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -7103550436798085895L;
+
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				UserSessionHandler.getFormController().setLastAccessTable(tableSelectionMenu.getSelectedTableRule());
@@ -101,6 +107,22 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 						.getTableRules().get(0));
 			}
 		}
+		addShortcutListener(new ShortcutListener("copy", KeyCode.C, new int[] { ModifierKey.CTRL }) {
+			private static final long serialVersionUID = -368776333862758815L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				copy();
+			}
+		});
+		addShortcutListener(new ShortcutListener("paste", KeyCode.V, new int[] { ModifierKey.CTRL }) {
+			private static final long serialVersionUID = -368776333862758815L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				paste();
+			}
+		});
 		refreshDecisionTable();
 	}
 
@@ -190,9 +212,25 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				}
 			}
 		});
+		
+		decisionTableEditorUpperMenu.addCopyRowsClickListener(new ClickListener() {
+			private static final long serialVersionUID = -189428121286122030L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				copy();
+			}
+		});
+		decisionTableEditorUpperMenu.addPasteRowsClickListener(new ClickListener() {
+			private static final long serialVersionUID = 4749689189249879942L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				paste();
+			}
+		});
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
-
 
 	/**
 	 * Saves all form information.
@@ -250,7 +288,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	 */
 	private void removeSelectedTable() {
 		UserSessionHandler.getFormController().getForm().getTableRules()
-		.remove(tableSelectionMenu.getSelectedTableRule());
+				.remove(tableSelectionMenu.getSelectedTableRule());
 		tableSelectionMenu.removeSelectedRow();
 	}
 
@@ -258,7 +296,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		tableSelectionMenu.setSelectedTableRule(element);
 	}
 
-	private void addNewCondition(TableRule tableRule){
+	private void addNewCondition(TableRule tableRule) {
 		if ((decisionTable.getColumns().size() == 0) && (tableRule.getRules().isEmpty())) {
 			addNewRow(tableRule);
 		}
@@ -266,24 +304,24 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		decisionTable.update(tableRule);
 	}
 
-	private void addNewColumnPair(TableRule tableRule){
+	private void addNewColumnPair(TableRule tableRule) {
 		tableRule.addEmptyExpressionPair();
 		decisionTable.update(tableRule);
 	}
 
-	private void removeCondition(TableRule tableRule){
+	private void removeCondition(TableRule tableRule) {
 		decisionTable.removeSelectedColumns(tableRule);
 		decisionTable.update(tableRule);
 	}
 
-	private void addNewRow(TableRule tableRule){
+	private void addNewRow(TableRule tableRule) {
 		TableRuleRow row = tableRule.addRow();
 		decisionTable.addRow(row);
 	}
 
-	private void removeRow(TableRule tableRule){
+	private void removeRow(TableRule tableRule) {
 		decisionTable.removeSelectedRows(tableRule);
-		if(decisionTable.getTableSize(tableRule) == 0){
+		if (decisionTable.getTableSize(tableRule) == 0) {
 			addNewRow(tableRule);
 			addNewColumnPair(tableRule);
 		}
@@ -292,25 +330,26 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	@Override
 	public void editExpression(TableRuleRow row, Object propertyId) {
-		if(((Integer)propertyId % 2) == 0){
+		if (((Integer) propertyId % 2) == 0) {
 			newEditQuestionWindow(row, propertyId);
-		}else{
+		} else {
 			newEditAnswerWindow(row, propertyId);
 		}
 	}
 
 	@Override
 	public void clearExpression(TableRuleRow row, Object propertyId) {
-		if(((Integer)propertyId % 2) == 0){
+		if (((Integer) propertyId % 2) == 0) {
 			removeQuestion(row, propertyId);
-		}else{
+		} else {
 			removeAnswer(row, propertyId);
 		}
 	}
 
-	private void newEditQuestionWindow(TableRuleRow row, Object propertyId){
+	private void newEditQuestionWindow(TableRuleRow row, Object propertyId) {
 		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getExpressionValue(row, propertyId);
-		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getNextExpressionValue(row, propertyId);
+		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getNextExpressionValue(row,
+				propertyId);
 
 		final AddNewConditionWindow newConditionWindow = new AddNewConditionWindow(UserSessionHandler
 				.getFormController().getForm(), false);
@@ -339,8 +378,9 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		newConditionWindow.showCentered();
 	}
 
-	private void newEditAnswerWindow(TableRuleRow row, Object propertyId){
-		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getPreviousExpressionValue(row, propertyId);
+	private void newEditAnswerWindow(TableRuleRow row, Object propertyId) {
+		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getPreviousExpressionValue(row,
+				propertyId);
 		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getExpressionValue(row, propertyId);
 
 		//TODO
@@ -420,8 +460,9 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	@Override
 	public void editAction(final TableRuleRow row) {
 		try {
-			if(!row.getActions().isEmpty()){
-				final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row.getActions().get(0));
+			if (!row.getActions().isEmpty()) {
+				final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row
+						.getActions().get(0));
 
 				newActionValueWindow.showCentered();
 				newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -429,7 +470,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 					public void acceptAction(AcceptCancelWindow window) {
 						try {
 							ExpressionChain expChain = newActionValueWindow.getExpressionChain();
-							if(expChain != null){
+							if (expChain != null) {
 								row.getActions().get(0).setExpressionChain(expChain);
 								decisionTable.update(getSelectedTableRule());
 							}
@@ -454,5 +495,27 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		} catch (NotValidExpression e) {
 			MessageManager.showError(e.getMessage());
 		}
+	}
+
+	public void copy() {
+		if(getSelectedTableRule()==null){
+			MessageManager.showWarning(LanguageCodes.DECISION_TABLE_COPY_ROW_NOT_PERFORMED_CAPTION, LanguageCodes.DECISION_TABLE_COPY_TABLE_NOT_SELECTED);
+			return;
+		}
+		Collection<TableRuleRow> rows = decisionTable.getSelectedRules();
+		if(rows.isEmpty()){
+			MessageManager.showWarning(LanguageCodes.DECISION_TABLE_COPY_ROW_NOT_PERFORMED_CAPTION, LanguageCodes.DECISION_TABLE_COPY_NO_SELECTED_ELEMENTS);
+			return;
+		}
+		UserSessionHandler.getFormController().copyTableRuleRows(getSelectedTableRule(),rows);
+	}
+
+	public void paste() {
+		if(getSelectedTableRule()==null){
+			MessageManager.showWarning(LanguageCodes.DECISION_TABLE_PASTE_ROW_NOT_PERFORMED_CAPTION, LanguageCodes.DECISION_TABLE_COPY_TABLE_NOT_SELECTED);
+			return;
+		}
+		UserSessionHandler.getFormController().pasteTableRuleRowsAsNew(getSelectedTableRule());
+		decisionTable.update(getSelectedTableRule());
 	}
 }

@@ -49,4 +49,10 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 		return getRepresentation();
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueGlobalConstant copy = new ExpressionValueGlobalConstant();
+		copy.constant = constant;
+		return copy;
+	}
 }

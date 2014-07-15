@@ -47,4 +47,11 @@ public class ExpressionValueNumber extends ExpressionValue {
 				.replaceAll("0*$", "").replaceAll("\\.$", "");
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueNumber copy = new ExpressionValueNumber();
+		copy.value = value;
+		return copy;
+	}
+
 }

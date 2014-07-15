@@ -16,6 +16,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 
 /**
  * Specific rules created for managing decision tables.
@@ -69,5 +70,21 @@ public class TableRuleRow extends StorableObject {
 
 	public int getConditionNumber(){
 		return conditions.getExpressions().size();
+	}
+
+	public TableRuleRow generateCopy() {
+		TableRuleRow copy = new TableRuleRow();
+		copy.conditions = conditions.generateCopy();
+		for(ActionExpression action: actions){
+			ActionExpression actionCopy = action.generateCopy();
+			copy.actions.add(actionCopy);
+		}
+		
+		return copy;
+	}
+	
+	public void addEmptyExpressionPair(){
+		addCondition(new ExpressionValueTreeObjectReference());
+		addCondition(new AnswerExpression());
 	}
 }

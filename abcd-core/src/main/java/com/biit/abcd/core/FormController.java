@@ -1,6 +1,9 @@
 package com.biit.abcd.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.biit.abcd.persistence.dao.IFormDao;
@@ -12,6 +15,7 @@ import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.liferay.portal.model.User;
 
 public class FormController {
@@ -21,6 +25,7 @@ public class FormController {
 	private Diagram lastAccessDiagram;
 	private ExpressionChain lastAccessExpression;
 	private TableRule lastAccessTable;
+	private List<TableRuleRow> copiedRows;
 	private Rule lastAccessRule;
 
 	private IFormDao formDao;
@@ -149,5 +154,39 @@ public class FormController {
 
 	public void setLastAccessRule(Rule lastAccessRule) {
 		this.lastAccessRule = lastAccessRule;
+	}
+
+	public void copyTableRuleRows(final TableRule origin, Collection<TableRuleRow> rowsToCopy) {
+		List<TableRuleRow> listOfRowsToCopy = new ArrayList<TableRuleRow>(rowsToCopy);
+		Collections.sort(listOfRowsToCopy, new Comparator<TableRuleRow>() {
+			@Override
+			public int compare(TableRuleRow arg0, TableRuleRow arg1) {
+				Integer rule0 = origin.getRules().indexOf(arg0);
+				Integer rule1 = origin.getRules().indexOf(arg1);
+				return rule0.compareTo(rule1);
+			}
+		});
+		copiedRows = new ArrayList<TableRuleRow>();
+		for (TableRuleRow rowToCopy : listOfRowsToCopy) {
+			copiedRows.add(rowToCopy.generateCopy());
+		}
+	}
+
+	public void pasteTableRuleRowsAsNew(TableRule selectedTableRule) {
+		if (copiedRows == null || copiedRows.isEmpty()) {
+			return;
+		}
+		List<TableRuleRow> rowsToPaste = getNewInstanceOfCopiedElements();
+		for (TableRuleRow rowToPaste : rowsToPaste) {
+			selectedTableRule.addRow(rowToPaste);
+		}		
+	}
+
+	private List<TableRuleRow> getNewInstanceOfCopiedElements() {
+		List<TableRuleRow> newCopiedRows = new ArrayList<TableRuleRow>();
+		for (TableRuleRow row : copiedRows) {
+			newCopiedRows.add(row.generateCopy());
+		}
+		return newCopiedRows;
 	}
 }
