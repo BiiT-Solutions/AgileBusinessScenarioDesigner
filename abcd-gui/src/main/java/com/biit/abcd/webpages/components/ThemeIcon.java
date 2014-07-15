@@ -59,21 +59,21 @@ public enum ThemeIcon {
 	TREE_DESIGNER_ADD_GROUP("appbar.group.add.svg"),
 
 	TREE_DESIGNER_ADD_ANSWER("appbar.answer.add.svg"),
-	
+
 	TREE_DESIGNER_QUESTION_DATE("appbar.calendar.31.svg"),
-	
+
 	TREE_DESIGNER_QUESTION_TEXT("appbar.interface.textbox.squared.svg"),
-	
+
 	TREE_DESIGNER_QUESTION_NUMBER("appbar.interface.textbox.number.svg"),
-	
+
 	TREE_DESIGNER_QUESTION_CHECKLIST("appbar.checkmark.svg"),
-	
+
 	TREE_DESIGNER_QUESTION_RADIOBUTTON("appbar.radiobutton.svg"),
-	
+
 	TREE_DESIGNER_QUESTION_DROPDOWN("appbar.interface.dropdown.svg"),
-	
+
 	TREE_DESIGNER_QUESTION_POSTALCODE("appbar.email.hardedge.svg"),
-	
+
 	TREE_DESIGNER_GROUP_LOOP("appbar.loop.svg"),
 
 	DIAGRAM_BUILDER_PAGE("appbar.form.diagram.svg"),
@@ -116,14 +116,18 @@ public enum ThemeIcon {
 
 	REMOVE_ROW("appbar.table.delete.row.svg"),
 
+	COPY_ROW("appbar.table.copy.row.svg"),
+
+	PASTE_ROW("appbar.table.paste.row.svg"),
+
 	EXPRESSION_EDITOR_PAGE("appbar.page.expression.svg"),
-	
+
 	EXPRESSION_EDITOR_TAB_FUNCTIONS("appbar.cell.function.svg"),
-	
+
 	EXPRESSION_EDITOR_TAB_MATHS("appbar.calculator.svg"),
-	
+
 	EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS("appbar.tag.svg"),
-	
+
 	EXPRESSION_EDITOR_TAB_FORM_VARIABLES("appbar.form.variables.svg"),
 
 	SETTINGS("appbar.lines.horizontal.4.svg"),
@@ -133,9 +137,9 @@ public enum ThemeIcon {
 	REMOVE_ITEM_LIST("appbar.list.delete.svg"),
 
 	RULE_EDITOR_ADD_QUESTION("appbar.input.question.svg"),
-	
+
 	RULE_ADD("appbar.rule.add.svg"),
-	
+
 	RULE_REMOVE("appbar.rule.remove.svg"),
 
 	EXPRESSION_ADD("appbar.expression.add.svg"),
@@ -147,13 +151,13 @@ public enum ThemeIcon {
 	GLOBAL_VARIABLES_ADD_VARIABLE("appbar.notification.add.svg"),
 
 	GLOBAL_VARIABLES_REMOVE_VARIABLE("appbar.notification.remove.svg"),
-	
+
 	GLOBAL_VARIABLES_EDIT_VARIABLE("appbar.notification.edit.svg"),
 
 	GLOBAL_VARIABLES_ADD_VALUE("appbar.interface.textbox.watch.add.svg"),
 
 	GLOBAL_VARIABLES_REMOVE_VALUE("appbar.interface.textbox.watch.remove.svg"),
-	
+
 	GLOBAL_VARIABLES_EDIT_VALUE("appbar.interface.textbox.watch.edit.svg"),
 
 	FORM_VARIABLES("appbar.form.variables.svg"),
