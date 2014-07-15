@@ -10,6 +10,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
+@Deprecated
 public class AddNewActionStringWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
 	private SelectFormAnswerTable formAnswerTable;

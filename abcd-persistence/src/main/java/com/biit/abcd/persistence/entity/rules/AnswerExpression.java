@@ -6,21 +6,16 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 
 @Entity
-@Table(name = "RULE_ACTION_EXPRESSION")
-public class ActionExpression extends StorableObject {
+@Table(name = "RULE_ANSWER_EXPRESSION")
+public class AnswerExpression extends ExpressionValueTreeObjectReference {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private ExpressionChain expressionChain;
-
-	@Override
-	public String toString() {
-		return getExpressionAsString();
-	}
 
 	public boolean undefined() {
 		return getExpressionChain() == null;
@@ -31,17 +26,37 @@ public class ActionExpression extends StorableObject {
 	}
 
 	public void setExpressionChain(Object expression) throws NotValidExpression {
-		if (expression instanceof ExpressionChain) {
+		if(expression == null){
+			this.expressionChain = null;
+		}
+		else if (expression instanceof ExpressionChain) {
 			this.expressionChain = (ExpressionChain) expression;
 		} else {
 			throw new NotValidExpression("Inserted expression of class '" + expression.getClass() + "' is not valid.");
 		}
 	}
 
-	public String getExpressionAsString() {
-		if (getExpressionChain() != null) {
+	@Override
+	public String getRepresentation() {
+		return toString();
+	}
+
+	@Override
+	public String toString() {
+		if(getReference() != null){
+			return "" + getReference();
+		}
+		else if (getExpressionChain() != null) {
 			return getExpressionChain().getRepresentation();
 		}
-		return "";
+		return "null";
+	}
+
+	@Override
+	protected String getExpression() {
+		if (getExpressionChain() != null) {
+			return getExpressionChain().getExpression();
+		}
+		return "null";
 	}
 }

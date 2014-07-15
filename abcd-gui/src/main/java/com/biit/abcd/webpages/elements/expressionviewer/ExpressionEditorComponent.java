@@ -1,12 +1,11 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
 import com.biit.abcd.webpages.components.ThemeIcon;
-import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
@@ -20,7 +19,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
 	private HorizontalLayout rootLayout;
 
-	private TabSheet tabMenu;
+	protected TabSheet tabMenu;
 
 	public abstract VerticalLayout createViewersLayout();
 
@@ -29,13 +28,17 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 	 */
 	public abstract void updateSelectionStyles();
 
-	public ExpressionEditorComponent() {
+	/**
+	 * Boolean used to create the simplified version of the operator tab
+	 * @param simpleOperatorTab
+	 */
+	public ExpressionEditorComponent(boolean simpleOperatorTab) {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(false);
 		rootLayout.setSpacing(true);
 
-		tabMenu = createTabMenu();
+		tabMenu = createTabMenu(simpleOperatorTab);
 
 		VerticalLayout viewLayout = createViewersLayout();
 
@@ -49,12 +52,17 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 		addKeyController();
 	}
 
-	private TabSheet createTabMenu() {
+	private TabSheet createTabMenu(boolean simpleOperatorTab) {
 		TabSheet tabMenu = new TabSheet();
 		tabMenu.setHeight("100%");
 
-		// First tab.
-		TabOperatorLayout operatorLayout = new TabOperatorLayout();
+		TabLayout operatorLayout;
+		if(simpleOperatorTab){
+			operatorLayout = new AnswerTabOperatorLayout();
+		}else{
+			operatorLayout = new TabOperatorLayout();
+		}
+		;
 		operatorLayout.addNewElementListener(new ElementAddedListener() {
 
 			@Override

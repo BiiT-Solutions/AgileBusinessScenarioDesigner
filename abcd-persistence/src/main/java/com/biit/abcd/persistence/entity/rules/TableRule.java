@@ -65,7 +65,11 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 		getRules().add(row);
 		if(getRules().size()>1) {
 			for(int i=0; i<getConditionNumber(); i++){
-				row.addCondition(new ExpressionValueTreeObjectReference());
+				if((i%2)==0) {
+					row.addCondition(new ExpressionValueTreeObjectReference());
+				} else {
+					row.addCondition(new AnswerExpression());
+				}
 			}
 		}
 		return row;
@@ -74,7 +78,7 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 	public void addEmptyExpressionPair(){
 		for(TableRuleRow row : getRules()){
 			row.addCondition(new ExpressionValueTreeObjectReference());
-			row.addCondition(new ExpressionValueTreeObjectReference());
+			row.addCondition(new AnswerExpression());
 		}
 	}
 

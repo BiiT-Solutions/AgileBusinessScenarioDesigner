@@ -16,6 +16,10 @@ public class ConditionActionEditor extends ExpressionEditorComponent {
 	private ExpressionViewer actionViewer;
 	private ExpressionViewer selectedViewer;
 
+	public ConditionActionEditor() {
+		super(false);
+	}
+
 	@Override
 	public VerticalLayout createViewersLayout() {
 		VerticalLayout viewLayout = new VerticalLayout();
