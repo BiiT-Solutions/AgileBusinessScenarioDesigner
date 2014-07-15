@@ -41,4 +41,11 @@ public class ExpressionSymbol extends Expression {
 	protected String getExpression() {
 		return getRepresentation();
 	}
+
+	@Override
+	public Expression generateCopy() {
+		ExpressionSymbol copy = new ExpressionSymbol();
+		copy.value = value;
+		return copy;
+	}
 }

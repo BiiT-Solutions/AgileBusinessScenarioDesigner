@@ -36,5 +36,13 @@ public class ExpressionValueDateTreeObjectReference extends ExpressionValueTreeO
 		//Ignore units for evaluation.
 		return super.getRepresentation();
 	}
+	
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueDateTreeObjectReference copy = new ExpressionValueDateTreeObjectReference();
+		copy.setReference(getReference());
+		copy.unit = unit;
+		return copy;
+	}
 
 }

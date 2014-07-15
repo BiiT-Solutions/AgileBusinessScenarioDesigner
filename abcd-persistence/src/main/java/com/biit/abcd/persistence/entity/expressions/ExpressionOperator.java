@@ -63,4 +63,15 @@ public abstract class ExpressionOperator extends Expression {
 		return currentValue.getValue();
 	}
 
+	@Override
+	public Expression generateCopy() {
+		try {
+			ExpressionOperator copy = this.getClass().newInstance();
+			copy.currentValue = currentValue;
+			return copy;
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}		
+		return null;
+	}
 }

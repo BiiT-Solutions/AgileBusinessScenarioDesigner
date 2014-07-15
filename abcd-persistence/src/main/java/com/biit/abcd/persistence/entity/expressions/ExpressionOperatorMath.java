@@ -35,5 +35,5 @@ public class ExpressionOperatorMath extends ExpressionOperator {
 	public List<AvailableOperator> getAcceptedValues() {
 		return ALLOWED_OPERATORS;
 	}
-
+	
 }

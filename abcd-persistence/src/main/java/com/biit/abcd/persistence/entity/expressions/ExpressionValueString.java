@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 /**
  * Defines a value as string.
- *
+ * 
  */
 @Entity
 @Table(name = "EXPRESSION_VALUE_STRING")
@@ -40,4 +40,10 @@ public class ExpressionValueString extends ExpressionValue {
 		return value;
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueString copy = new ExpressionValueString();
+		copy.value = new String(value);
+		return copy;
+	}
 }

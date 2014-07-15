@@ -21,12 +21,13 @@ import com.biit.abcd.persistence.utils.ITableCellEditable;
  */
 @Entity
 @Table(name = "RULE_DECISION_TABLE")
-public class TableRule extends StorableObject implements ITableCellEditable{
+public class TableRule extends StorableObject implements ITableCellEditable {
 
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
+	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot
+	// simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<TableRuleRow> rules;
@@ -62,17 +63,32 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 	public TableRuleRow addRow() {
 		TableRuleRow row = new TableRuleRow();
 		row.addAction(new ActionExpression());
-		getRules().add(row);
-		if(getRules().size()>1) {
-			for(int i=0; i<getConditionNumber(); i++){
-				row.addCondition(new ExpressionValueTreeObjectReference());
+		return addRow(row);
+	}
+
+	/**
+	 * When you add a new row, the table or the row is resized to allow the
+	 * operation
+	 * 
+	 * @param row
+	 * @return
+	 */
+	public TableRuleRow addRow(TableRuleRow row) {
+		if (!getRules().isEmpty()) {
+			while (row.getConditionNumber() < getConditionNumber()) {
+				row.addEmptyExpressionPair();
 			}
+			while (row.getConditionNumber() > getConditionNumber()) {
+				addEmptyExpressionPair();
+			}
+
 		}
+		getRules().add(row);
 		return row;
 	}
 
-	public void addEmptyExpressionPair(){
-		for(TableRuleRow row : getRules()){
+	public void addEmptyExpressionPair() {
+		for (TableRuleRow row : getRules()) {
 			row.addCondition(new ExpressionValueTreeObjectReference());
 			row.addCondition(new ExpressionValueTreeObjectReference());
 		}
@@ -82,16 +98,16 @@ public class TableRule extends StorableObject implements ITableCellEditable{
 		rules.remove(rule);
 	}
 
-	public void removeConditions(TableRuleRow row, List<Expression> values){
+	public void removeConditions(TableRuleRow row, List<Expression> values) {
 		for (Expression value : values) {
 			row.getConditions().remove(value);
 		}
 	}
 
-	public int getConditionNumber(){
-		if(getRules().size()>0) {
+	public int getConditionNumber() {
+		if (getRules().size() > 0) {
 			return getRules().get(0).getConditionNumber();
-		}else{
+		} else {
 			return 0;
 		}
 	}

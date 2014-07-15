@@ -47,5 +47,14 @@ public class ExpressionValueDateFormCustomVariable extends ExpressionValueFormCu
 		// Ignore units for evaluation.
 		return super.getRepresentation();
 	}
+	
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueDateFormCustomVariable copy = new ExpressionValueDateFormCustomVariable();
+		copy.setQuestion(getQuestion());
+		copy.setVariable(getVariable());
+		copy.unit = unit;
+		return copy;
+	}
 
 }

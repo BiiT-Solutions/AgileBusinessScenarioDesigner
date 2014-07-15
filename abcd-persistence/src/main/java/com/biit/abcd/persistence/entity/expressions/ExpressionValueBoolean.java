@@ -45,4 +45,11 @@ public class ExpressionValueBoolean extends ExpressionValue {
 		}
 	}
 
+	@Override
+	public Expression generateCopy() {
+		ExpressionValueBoolean copy = new ExpressionValueBoolean();
+		copy.value = value;
+		return copy;
+	}
+
 }

@@ -128,4 +128,13 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 	private String filterVariables(Expression expression) {
 		return expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "");
 	}
+
+	public ExpressionChain generateCopy() {
+		ExpressionChain copy = new ExpressionChain();
+		for(Expression expression: expressions){
+			Expression copyExpression = expression.generateCopy();
+			copy.expressions.add(copyExpression);
+		}
+		return copy;
+	}
 }

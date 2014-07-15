@@ -175,4 +175,8 @@ public class NewDecisionTable extends CustomComponent {
 	public void removeClearActionListener(ClearActionListener listener){
 		actionTable.removeClearActionListener(listener);
 	}
+
+	public Collection<TableRuleRow> getSelectedRules() {
+		return conditionTable.getSelectedRules();
+	}
 }
