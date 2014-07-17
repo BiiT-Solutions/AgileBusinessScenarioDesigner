@@ -118,21 +118,19 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			public void propertyUpdate(Object element) {
 				// Switch limitation with instanceof.
 				if (element instanceof DiagramLink) {
-					// If we are updating a link, then we must update all the
-					// links from the same source.
+					// If we are updating a link, then we must update the source
 					DiagramLink currentLink = (DiagramLink) element;
-					List<DiagramLink> links = currentLink.getSourceElement().getOutgoingLinks();
-					for (DiagramLink link : links) {
-						diagramBuilder.updateChangesToDiagram(link);
+					DiagramObject source = currentLink.getSourceElement();
+					if (source != null) {
+						propertyUpdate(source);
 					}
 					return;
 				}
 				if (element instanceof DiagramFork) {
 					DiagramFork currentFork = (DiagramFork) element;
 					List<DiagramLink> links = currentFork.getOutgoingLinks();
-					for (DiagramLink link : links) {
-						link.clear();
-					}
+					// TODO add a checking to know if it is valid and change
+					// color or something
 					for (DiagramLink link : links) {
 						diagramBuilder.updateChangesToDiagram(link);
 					}

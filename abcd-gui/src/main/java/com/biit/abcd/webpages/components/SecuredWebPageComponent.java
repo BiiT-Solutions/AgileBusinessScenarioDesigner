@@ -6,6 +6,7 @@ import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.WebMap;
@@ -54,6 +55,9 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 				}
 			}
 		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			AbcdLogger.errorMessage(this.getClass().getName(), npe);
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.getLoginPage());
 		}
 	}

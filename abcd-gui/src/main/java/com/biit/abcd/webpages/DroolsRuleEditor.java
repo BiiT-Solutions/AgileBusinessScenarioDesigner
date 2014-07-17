@@ -71,7 +71,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 		// Select the last access object or the first one
 		if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
-			System.out.println("RULE RETRIEVED:  " + UserSessionHandler.getFormController().getLastAccessRule().getName());
 			tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getLastAccessRule());
 		}
 		else {
@@ -80,7 +79,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 				tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getForm().getRules().get(0));
 			}
 		}
-		//		refreshRuleEditor();
+		refreshRuleEditor();
 	}
 
 	private void initUpperMenu() {

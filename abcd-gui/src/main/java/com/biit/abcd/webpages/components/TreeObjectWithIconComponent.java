@@ -28,6 +28,7 @@ public class TreeObjectWithIconComponent extends CustomComponent {
 		this.themeIcon = icon;
 
 		addStyleName(CLASSNAME);
+		setImmediate(true);
 
 		rootLayout = new CssLayout();
 		rootLayout.setWidth(null);
@@ -49,6 +50,13 @@ public class TreeObjectWithIconComponent extends CustomComponent {
 
 		setCompositionRoot(rootLayout);
 		setSizeUndefined();
+	}
+
+	@Override
+	public void detach() {
+		if (rootLayout.isConnectorEnabled()) {
+			rootLayout.detach();
+		}
 	}
 
 	public void addLayoutClickListener(LayoutClickListener listener) {

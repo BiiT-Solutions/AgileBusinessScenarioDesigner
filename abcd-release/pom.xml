@@ -61,10 +61,11 @@
 											tofile="${temporal-folder}/${simple-project}/${project.parent.artifactId}-${project.parent.version}.war"
 											overwrite="true" />
 										<!-- copy database scripts -->
-										<copy todir="${temporal-folder}/${simple-project}/database/"
-											overwrite="true">
+										<!-- 
+										<copy todir="${temporal-folder}/${simple-project}/database/"overwrite="true">
 											<fileset dir="./database" includes="**/*" />
 										</copy>
+										-->
 										<!-- create the final file -->
 										<zip basedir="${temporal-folder}/${simple-project}/"
 											destfile="../${destination-file}-${project.version}.zip" />

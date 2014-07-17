@@ -13,6 +13,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
@@ -177,6 +178,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	private void addObjectToDiagram(String jsonString) {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
 		addObjectToDiagram(element);
+		
+		updateLinkVisualization(element);
 	}
 
 	private void removeObjectOfDiagram(String jsonString) {
@@ -197,6 +200,17 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			originalElement.update(element,UserSessionHandler.getUser());
 			diagram.setUpdatedBy(UserSessionHandler.getUser());
 			diagram.setUpdateTime();
+		}
+	}
+	
+	private void updateLinkVisualization(DiagramObject object){
+		if(object instanceof DiagramLink){
+			DiagramObject source = ((DiagramLink) object).getSourceElement();
+			if(source instanceof DiagramFork){
+				for(DiagramLink link : ((DiagramFork) source).getOutgoingLinks()){
+					updateChangesToDiagram(link);
+				}
+			}
 		}
 	}
 

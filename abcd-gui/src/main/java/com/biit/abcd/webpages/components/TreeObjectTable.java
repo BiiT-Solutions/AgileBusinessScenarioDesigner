@@ -44,6 +44,14 @@ public class TreeObjectTable extends TreeTable {
 		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
 				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
+		addDetachListener(new DetachListener() {
+			private static final long serialVersionUID = 4038929661806639780L;
+
+			@Override
+			public void detach(DetachEvent event) {
+				removeAllItems();
+			}
+		});
 	}
 
 	private void loadTreeObject(TreeObject element, TreeObject parent) {
@@ -56,7 +64,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -86,7 +95,8 @@ public class TreeObjectTable extends TreeTable {
 			} catch (DependencyExistException e) {
 				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
 						LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
-				// Impossible to remove children. Set as previous value (still stored at the icon).
+				// Impossible to remove children. Set as previous value (still
+				// stored at the icon).
 				TreeObjectWithIconComponent treeObjectIcon = (TreeObjectWithIconComponent) item.getItemProperty(
 						TreeObjectTableProperties.ELEMENT_NAME).getValue();
 				switch (treeObjectIcon.getThemeIcon()) {
@@ -132,8 +142,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
-	 * members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -154,8 +164,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
-	 * {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't
+	 * be defined, then raises a {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -261,11 +271,10 @@ public class TreeObjectTable extends TreeTable {
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
 				// Select table row if the element is clicked.
-				if (thisObject.getValue() != element) {
-					thisObject.setValue(element);
-				} else {
-					// Unselect with second click.
+				if (event.isDoubleClick()) {
 					thisObject.setValue(null);
+				} else {
+					thisObject.setValue(element);
 				}
 			}
 		});
@@ -274,7 +283,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
+	 * Collapse the tree in a specific hierarchy level to inner levels. The
+	 * level is specified by a class.
 	 * 
 	 * @param collapseFrom
 	 */

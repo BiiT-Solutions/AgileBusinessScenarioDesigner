@@ -23,7 +23,6 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 	private static final long serialVersionUID = 6308407654774598230L;
 	private DiagramLink instance;
 	private FormLayout linkForm;
-	private TextField diagramElementLabel;
 	private TextField inputFieldValue;
 	private FieldWithSearchButton fieldWithSearchButton;
 
@@ -47,21 +46,10 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 					setSelectAnswer(fork.getQuestion());
 				}
 			}
-		} else {
-			setDiagramElementLabel();
+
+			addTab(linkForm, "TODO - diagramLinkExprProperties", true, 0);
 		}
 
-		addTab(linkForm, "TODO - diagramLinkExprProperties", true, 0);
-	}
-
-	private void setDiagramElementLabel() {
-		diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		if (instance.getText() == null) {
-			diagramElementLabel.setValue("");
-		} else {
-			diagramElementLabel.setValue(instance.getText());
-		}
-		linkForm.addComponent(diagramElementLabel);
 	}
 
 	private void setInputFieldValue() {
@@ -78,7 +66,8 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 	private void setSelectAnswer(final Question question) {
 		fieldWithSearchButton = new FieldWithSearchButton(
 				ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION));
-		fieldWithSearchButton.setNullCaption(ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION));
+		fieldWithSearchButton.setNullCaption(ServerTranslate
+				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
 		if (instance.getAnswer() != null) {
 			fieldWithSearchButton.setValue(instance.getAnswer(), instance.getAnswer().getName());
@@ -94,13 +83,13 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						Answer answer = selectAnswerWindow.getSelectedTableValue();
-						if(answer!=null){
+						if (answer != null) {
 							instance.setAnswer(answer);
 							instance.setText(answer.getName());
 							fieldWithSearchButton.setValue(answer, answer.getName());
 							selectAnswerWindow.close();
 							firePropertyUpdateListener(instance);
-						}else{
+						} else {
 							MessageManager.showError(LanguageCodes.ERROR_SELECT_ANSWER);
 						}
 					}
@@ -121,24 +110,18 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 		linkForm.addComponent(fieldWithSearchButton);
 	}
 
-	private void updateDiagramElementLabel() {
-		instance.setText(diagramElementLabel.getValue());
-	}
-
 	@Override
 	public void updateElement() {
 		DiagramElement element = instance.getSourceElement();
 		if (element instanceof DiagramFork) {
 			DiagramFork fork = (DiagramFork) element;
-			if(fork.getQuestion()!=null){
-				if(fork.getQuestion().getAnswerType()==AnswerType.INPUT){
+			if (fork.getQuestion() != null) {
+				if (fork.getQuestion().getAnswerType() == AnswerType.INPUT) {
 					instance.setAnswerExpression(inputFieldValue.getValue());
 				}
 			}
-		} else {
-			updateDiagramElementLabel();
+			firePropertyUpdateListener(instance);
 		}
-		firePropertyUpdateListener(instance);
 	}
 
 	@Override
