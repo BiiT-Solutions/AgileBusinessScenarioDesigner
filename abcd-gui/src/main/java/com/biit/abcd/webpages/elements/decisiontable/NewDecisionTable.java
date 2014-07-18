@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import java.util.Collection;
 
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
@@ -16,7 +16,7 @@ public class NewDecisionTable extends CustomComponent {
 	private NewConditionTable conditionTable;
 	private NewActionTable actionTable;
 
-	public NewDecisionTable(){
+	public NewDecisionTable() {
 		super();
 
 		rootLayout = new HorizontalLayout();
@@ -46,9 +46,9 @@ public class NewDecisionTable extends CustomComponent {
 		conditionTable.setId("main-table");
 		actionTable.setId("freeze-pane");
 		JavaScript
-		.getCurrent()
-		.execute(
-				"var t=document.getElementById('main-table').children[1]; var fp=document.getElementById('freeze-pane').children[1]; fp.addEventListener('scroll', function() {t.scrollTop=fp.scrollTop;}, false);");
+				.getCurrent()
+				.execute(
+						"var t=document.getElementById('main-table').children[1]; var fp=document.getElementById('freeze-pane').children[1]; fp.addEventListener('scroll', function() {t.scrollTop=fp.scrollTop;}, false);");
 
 		rootLayout.addComponent(conditionTable);
 		rootLayout.addComponent(actionTable);
@@ -88,23 +88,23 @@ public class NewDecisionTable extends CustomComponent {
 		conditionTable.removeColumns(selectedTableRule, conditionTable.getSelectedColumns());
 	}
 
-	public void update(TableRule selectedTableRule){
-		if(selectedTableRule != null){
+	public void update(TableRule selectedTableRule) {
+		if (selectedTableRule != null) {
 			removeAll();
 			updateColumns(selectedTableRule);
 			updateRows(selectedTableRule);
 		}
 	}
 
-
 	/**
 	 * Add all the necessary columns
+	 * 
 	 * @param selectedTableRule
 	 */
-	public void updateColumns(TableRule selectedTableRule){
-		if(!selectedTableRule.getRules().isEmpty()){
+	public void updateColumns(TableRule selectedTableRule) {
+		if (!selectedTableRule.getRules().isEmpty()) {
 			int columns = selectedTableRule.getConditionNumber();
-			for(int i=0; i<(columns/2); i++){
+			for (int i = 0; i < (columns / 2); i++) {
 				conditionTable.addEmptyColumnPair();
 			}
 		}
@@ -112,15 +112,16 @@ public class NewDecisionTable extends CustomComponent {
 
 	/**
 	 * Add the necessary rows and fills them
+	 * 
 	 * @param selectedTableRule
 	 */
-	public void updateRows(TableRule selectedTableRule){
-		for(TableRuleRow row : selectedTableRule.getRules()){
+	public void updateRows(TableRule selectedTableRule) {
+		for (TableRuleRow row : selectedTableRule.getRules()) {
 			addRow(row);
 		}
 	}
 
-	public int getTableSize(TableRule selectedTableRule){
+	public int getTableSize(TableRule selectedTableRule) {
 		return selectedTableRule.getRules().size();
 	}
 
@@ -128,23 +129,23 @@ public class NewDecisionTable extends CustomComponent {
 	// Expression functions
 	// ********************
 
-	public ExpressionValueTreeObjectReference getPreviousExpressionValue(TableRuleRow row, Object propertyId){
-		return (ExpressionValueTreeObjectReference) conditionTable.getPreviousExpressionValue(row, propertyId);
+	public Expression getPreviousExpressionValue(TableRuleRow row, Object propertyId) {
+		return conditionTable.getPreviousExpressionValue(row, propertyId);
 	}
 
-	public ExpressionValueTreeObjectReference getNextExpressionValue(TableRuleRow row, Object propertyId) {
-		return (ExpressionValueTreeObjectReference) conditionTable.getNextExpressionValue(row, propertyId);
+	public Expression getNextExpressionValue(TableRuleRow row, Object propertyId) {
+		return conditionTable.getNextExpressionValue(row, propertyId);
 	}
 
-	public ExpressionValueTreeObjectReference getExpressionValue(TableRuleRow row, Object propertyId){
-		return (ExpressionValueTreeObjectReference) conditionTable.getExpressionValue(row, propertyId);
+	public Expression getExpressionValue(TableRuleRow row, Object propertyId) {
+		return conditionTable.getExpressionValue(row, propertyId);
 	}
 
 	// *************************************
 	// Condition and Action tables listeners
 	// *************************************
 
-	public void addEditExpressionListener(EditExpressionListener listener){
+	public void addEditExpressionListener(EditExpressionListener listener) {
 		conditionTable.addEditExpressionListener(listener);
 	}
 
@@ -152,7 +153,7 @@ public class NewDecisionTable extends CustomComponent {
 		conditionTable.removeEditExpressionListener(listener);
 	}
 
-	public void addClearExpressionListener(ClearExpressionListener listener){
+	public void addClearExpressionListener(ClearExpressionListener listener) {
 		conditionTable.addClearExpressionListener(listener);
 	}
 
@@ -160,19 +161,19 @@ public class NewDecisionTable extends CustomComponent {
 		conditionTable.removeClearExpressionListener(listener);
 	}
 
-	public void addEditActionListener(EditActionListener listener){
+	public void addEditActionListener(EditActionListener listener) {
 		actionTable.addEditActionListener(listener);
 	}
 
-	public void removeEditActionListener(EditActionListener listener){
+	public void removeEditActionListener(EditActionListener listener) {
 		actionTable.removeEditActionListener(listener);
 	}
 
-	public void addClearActionListener(ClearActionListener listener){
+	public void addClearActionListener(ClearActionListener listener) {
 		actionTable.addClearActionListener(listener);
 	}
 
-	public void removeClearActionListener(ClearActionListener listener){
+	public void removeClearActionListener(ClearActionListener listener) {
 		actionTable.removeClearActionListener(listener);
 	}
 

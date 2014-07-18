@@ -9,7 +9,6 @@ import java.util.Set;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.data.Item;
@@ -29,7 +28,7 @@ public class NewConditionTable extends Table {
 	private List<EditExpressionListener> editExpressionListeners;
 	private List<ClearExpressionListener> clearExpressionListeners;
 
-	public NewConditionTable(){
+	public NewConditionTable() {
 		super();
 
 		editExpressionListeners = new ArrayList<EditExpressionListener>();
@@ -68,41 +67,41 @@ public class NewConditionTable extends Table {
 		int columnId = getContainerPropertyIds().size();
 		addContainerProperty(columnId, ExpressionEditCell.class, null,
 				ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_HEADER_QUESTION_CONDITION), null, Align.CENTER);
-		addContainerProperty(columnId+1, ExpressionEditCell.class, null,
+		addContainerProperty(columnId + 1, ExpressionEditCell.class, null,
 				ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_HEADER_ANSWER_CONDITION), null, Align.CENTER);
 	}
 
-	private class CellEditButtonClickListener implements ClickListener{
+	private class CellEditButtonClickListener implements ClickListener {
 
 		private static final long serialVersionUID = 8366131692308964272L;
 		private Object row;
 		private Object propertyId;
 
-		public CellEditButtonClickListener(Object itemId, Object propertyId){
+		public CellEditButtonClickListener(Object itemId, Object propertyId) {
 			this.row = itemId;
 			this.propertyId = propertyId;
 		}
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			fireEditExpressionListeners((TableRuleRow)row, propertyId);
+			fireEditExpressionListeners((TableRuleRow) row, propertyId);
 		}
 	}
 
-	private class CellClearButtonClickListener implements ClickListener{
+	private class CellClearButtonClickListener implements ClickListener {
 
 		private static final long serialVersionUID = 2915483408521823465L;
 		private Object row;
 		private Object propertyId;
 
-		public CellClearButtonClickListener(Object row, Object propertyId){
+		public CellClearButtonClickListener(Object row, Object propertyId) {
 			this.row = row;
 			this.propertyId = propertyId;
 		}
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			fireClearExpressionListeners((TableRuleRow)row, propertyId);
+			fireClearExpressionListeners((TableRuleRow) row, propertyId);
 		}
 	}
 
@@ -176,10 +175,8 @@ public class NewConditionTable extends Table {
 		for (final Object propertyId : getContainerPropertyIds()) {
 			if (item.getItemProperty(propertyId).getValue() == null) {
 				ExpressionEditCell editCellComponent = new ExpressionEditCell();
-				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(
-						itemId, propertyId));
-				editCellComponent.addRemoveButtonClickListener(new CellClearButtonClickListener(
-						itemId, propertyId));
+				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId, propertyId));
+				editCellComponent.addRemoveButtonClickListener(new CellClearButtonClickListener(itemId, propertyId));
 				// Propagate element click.
 				editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId, propertyId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);
@@ -187,12 +184,12 @@ public class NewConditionTable extends Table {
 		}
 	}
 
-	public void updateRow(TableRuleRow decisionRule){
+	public void updateRow(TableRuleRow decisionRule) {
 		Item item = getItem(decisionRule);
 		for (final Object propertyId : getContainerPropertyIds()) {
-			if(decisionRule.getConditions().size()>0){
-				ExpressionValueTreeObjectReference treeObject = (ExpressionValueTreeObjectReference)decisionRule.getConditions().get((Integer)propertyId);
-				((ExpressionEditCell)item.getItemProperty(propertyId).getValue()).setLabel(treeObject.getRepresentation());
+			if (decisionRule.getConditions().size() > 0) {
+				Expression expression = decisionRule.getConditions().get((Integer) propertyId);
+				((ExpressionEditCell) item.getItemProperty(propertyId).getValue()).setLabel(expression.getRepresentation());
 			}
 		}
 	}
@@ -215,12 +212,11 @@ public class NewConditionTable extends Table {
 
 	public void removeColumns(TableRule selectedTableRule, Collection<Integer> columnIds) {
 		// To remove the expression related
-		if((columnIds.size() == 1)){
-			if((columnIds.iterator().next() % 2) == 0){
-				columnIds.add(columnIds.iterator().next()+1);
-			}
-			else{
-				columnIds.add(columnIds.iterator().next()-1);
+		if ((columnIds.size() == 1)) {
+			if ((columnIds.iterator().next() % 2) == 0) {
+				columnIds.add(columnIds.iterator().next() + 1);
+			} else {
+				columnIds.add(columnIds.iterator().next() - 1);
 			}
 		}
 		for (Object object : getItemIds()) {
@@ -256,7 +252,7 @@ public class NewConditionTable extends Table {
 
 	public Expression getNextExpressionValue(TableRuleRow row, Object propertyId) {
 		int index = ((Integer) propertyId) + 1;
-		if(index>=row.getConditions().size()){
+		if (index >= row.getConditions().size()) {
 			return null;
 		} else {
 			return row.getConditions().get(index);
@@ -271,7 +267,7 @@ public class NewConditionTable extends Table {
 	// Listeners managers
 	// ******************
 
-	public void addEditExpressionListener(EditExpressionListener listener){
+	public void addEditExpressionListener(EditExpressionListener listener) {
 		editExpressionListeners.add(listener);
 	}
 
@@ -285,7 +281,7 @@ public class NewConditionTable extends Table {
 		}
 	}
 
-	public void addClearExpressionListener(ClearExpressionListener listener){
+	public void addClearExpressionListener(ClearExpressionListener listener) {
 		clearExpressionListeners.add(listener);
 	}
 

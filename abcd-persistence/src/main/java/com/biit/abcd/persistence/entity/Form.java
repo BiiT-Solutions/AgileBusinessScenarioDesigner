@@ -54,6 +54,7 @@ public class Form extends TreeObject {
 		tableRules = new ArrayList<>();
 		customVariables = new ArrayList<>();
 		expressionChain = new ArrayList<>();
+		rules = new ArrayList<>();
 		setName(DEFAULT_NAME);
 	}
 

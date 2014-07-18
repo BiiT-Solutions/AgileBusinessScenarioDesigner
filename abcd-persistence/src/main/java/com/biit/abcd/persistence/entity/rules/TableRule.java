@@ -13,6 +13,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.ITableCellEditable;
 
@@ -90,7 +91,7 @@ public class TableRule extends StorableObject implements ITableCellEditable {
 	public void addEmptyExpressionPair() {
 		for (TableRuleRow row : getRules()) {
 			row.addCondition(new ExpressionValueTreeObjectReference());
-			row.addCondition(new AnswerExpression());
+			row.addCondition(new ExpressionChain());
 		}
 	}
 

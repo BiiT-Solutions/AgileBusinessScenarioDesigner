@@ -402,7 +402,7 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveUp() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if (selected.getParent() != null && selected.getParent().getChildren().indexOf(selected) > 0) {
+			if (selected!=null && selected.getParent() != null && selected.getParent().getChildren().indexOf(selected) > 0) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
@@ -427,7 +427,7 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveDown() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if (selected.getParent() != null
+			if (selected!=null && selected.getParent() != null
 					&& selected.getParent().getChildren().indexOf(selected) < selected.getParent().getChildren().size() - 1) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),

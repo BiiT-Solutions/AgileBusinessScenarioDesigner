@@ -13,7 +13,6 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
-import com.biit.abcd.persistence.entity.rules.AnswerExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.security.DActivity;
@@ -347,10 +346,9 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void newEditQuestionWindow(final TableRuleRow row, Object propertyId) {
-		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getExpressionValue(row, propertyId);
-		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getNextExpressionValue(row,
+		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable.getExpressionValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getNextExpressionValue(row,
 				propertyId);
-		final int answerPosition = (Integer) propertyId + 1;
 
 		final AddNewConditionWindow newConditionWindow = new AddNewConditionWindow(UserSessionHandler
 				.getFormController().getForm(), false);
@@ -361,117 +359,134 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		newConditionWindow.addAcceptActionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
+				Question originalQuestion = (Question) questionExpression.getReference();
 				Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
-				if (selectedQuestion == null) {
-					row.getConditions().set(answerPosition, null);
-				} else {
-					if (selectedQuestion.getAnswerType().equals(AnswerType.INPUT)) {
-						if (answerExpression instanceof ExpressionValueTreeObjectReference) {
-							row.getConditions().set(answerPosition, new AnswerExpression());
-						}
-					} else {
-						if (answerExpression instanceof AnswerExpression) {
-							row.getConditions().set(answerPosition, new ExpressionValueTreeObjectReference(null));
-						}
-					}
+
+				if ((originalQuestion.getAnswerType() == AnswerType.INPUT && selectedQuestion.getAnswerType() != AnswerType.INPUT)
+						|| (originalQuestion.getAnswerType() != AnswerType.INPUT && selectedQuestion.getAnswerType() == AnswerType.INPUT)) {
+					answerExpression.removeAllExpressions();
 				}
+				// if (selectedQuestion == null) {
+				// row.getConditions().set(answerPosition, null);
+				// } else {
+				// if
+				// (selectedQuestion.getAnswerType().equals(AnswerType.INPUT))
+				// {
+				// if (answerExpression instanceof
+				// ExpressionValueTreeObjectReference) {
+				// row.getConditions().set(answerPosition, new
+				// AnswerExpression());
+				// }
+				// } else {
+				// if (answerExpression instanceof AnswerExpression) {
+				// row.getConditions().set(answerPosition, new
+				// ExpressionValueTreeObjectReference(null));
+				// }
+				// }
+				// }
 				questionExpression.setReference(selectedQuestion);
 				decisionTable.update(getSelectedTableRule());
 				newConditionWindow.close();
-				
-//				if (answerExpression instanceof AnswerExpression) {
-//					// TODO
-//				} else {
-//					ExpressionValueTreeObjectReference answerTreeObject = answerExpression;
-//					Answer answerToQuestion = (Answer) answerTreeObject.getReference();
-//					if ((selectedQuestion == null) || (!selectedQuestion.contains(answerToQuestion))) {
-//						answerTreeObject.setReference(null);
-//					}
-//				}
-				
+
+				// if (answerExpression instanceof AnswerExpression) {
+				// // TODO
+				// } else {
+				// ExpressionValueTreeObjectReference answerTreeObject =
+				// answerExpression;
+				// Answer answerToQuestion = (Answer)
+				// answerTreeObject.getReference();
+				// if ((selectedQuestion == null) ||
+				// (!selectedQuestion.contains(answerToQuestion))) {
+				// answerTreeObject.setReference(null);
+				// }
+				// }
+
 			}
 		});
 		newConditionWindow.showCentered();
 	}
 
 	private void newEditAnswerWindow(TableRuleRow row, Object propertyId) {
-		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getPreviousExpressionValue(row,
-				propertyId);
-		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getExpressionValue(row, propertyId);
-
-		// TODO
-		if (questionExpression.getReference() != null) {
-			Question question = (Question) questionExpression.getReference();
-			if (question.getAnswerType().equals(AnswerType.INPUT)) {
-				final AnswerExpression answerChain = (AnswerExpression) answerExpression;
-				try {
-					final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
-							answerChain);
-					newActionValueWindow.showCentered();
-					newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
-						@Override
-						public void acceptAction(AcceptCancelWindow window) {
-							try {
-								ExpressionChain expChain = newActionValueWindow.getExpressionChain();
-								if (expChain != null) {
-									answerChain.setExpressionChain(expChain);
-									decisionTable.update(getSelectedTableRule());
-								}
-								newActionValueWindow.close();
-							} catch (NotValidExpression e) {
-								MessageManager.showError(e.getMessage());
-							}
-						}
-					});
-
-				} catch (NotValidExpression e1) {
-					MessageManager.showError(e1.getMessage());
-					AbcdLogger.errorMessage(NewDecisionTable.class.getName(), e1);
-				}
-			} else {
-
-				final ExpressionValueTreeObjectReference answerTreeObject = answerExpression;
-				final SelectAnswerWindow newAnswerValueWindow = new SelectAnswerWindow(question);
-				if (answerTreeObject.getReference() != null) {
-					newAnswerValueWindow.setTreeObjectSelected(answerTreeObject.getReference());
-				}
-				newAnswerValueWindow.addAcceptActionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						Answer selectedanswer = ((SelectAnswerWindow) window).getSelectedTableValue();
-						answerTreeObject.setReference(selectedanswer);
-						decisionTable.update(getSelectedTableRule());
-						newAnswerValueWindow.close();
-					}
-				});
-				newAnswerValueWindow.showCentered();
-			}
-		} else {
-			MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
-					LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
-		}
+		//TODO
+//		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getPreviousExpressionValue(row,
+//				propertyId);
+//		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getExpressionValue(row, propertyId);
+//
+//		// TODO
+//		if (questionExpression.getReference() != null) {
+//			Question question = (Question) questionExpression.getReference();
+//			if (question.getAnswerType().equals(AnswerType.INPUT)) {
+//				final AnswerExpression answerChain = (AnswerExpression) answerExpression;
+//				try {
+//					final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
+//							answerChain);
+//					newActionValueWindow.showCentered();
+//					newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
+//						@Override
+//						public void acceptAction(AcceptCancelWindow window) {
+//							try {
+//								ExpressionChain expChain = newActionValueWindow.getExpressionChain();
+//								if (expChain != null) {
+//									answerChain.setExpressionChain(expChain);
+//									decisionTable.update(getSelectedTableRule());
+//								}
+//								newActionValueWindow.close();
+//							} catch (NotValidExpression e) {
+//								MessageManager.showError(e.getMessage());
+//							}
+//						}
+//					});
+//
+//				} catch (NotValidExpression e1) {
+//					MessageManager.showError(e1.getMessage());
+//					AbcdLogger.errorMessage(NewDecisionTable.class.getName(), e1);
+//				}
+//			} else {
+//
+//				final ExpressionValueTreeObjectReference answerTreeObject = answerExpression;
+//				final SelectAnswerWindow newAnswerValueWindow = new SelectAnswerWindow(question);
+//				if (answerTreeObject.getReference() != null) {
+//					newAnswerValueWindow.setTreeObjectSelected(answerTreeObject.getReference());
+//				}
+//				newAnswerValueWindow.addAcceptActionListener(new AcceptActionListener() {
+//					@Override
+//					public void acceptAction(AcceptCancelWindow window) {
+//						Answer selectedanswer = ((SelectAnswerWindow) window).getSelectedTableValue();
+//						answerTreeObject.setReference(selectedanswer);
+//						decisionTable.update(getSelectedTableRule());
+//						newAnswerValueWindow.close();
+//					}
+//				});
+//				newAnswerValueWindow.showCentered();
+//			}
+//		} else {
+//			MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
+//					LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
+//		}
 	}
 
 	private void removeQuestion(TableRuleRow row, Object propertyId) {
-		ExpressionValueTreeObjectReference questionExpression = decisionTable.getExpressionValue(row, propertyId);
-		questionExpression.setReference(null);
-		removeAnswer(row, (Integer) propertyId + 1);
-		decisionTable.update(getSelectedTableRule());
+		//TODO
+//		ExpressionValueTreeObjectReference questionExpression = decisionTable.getExpressionValue(row, propertyId);
+//		questionExpression.setReference(null);
+//		removeAnswer(row, (Integer) propertyId + 1);
+//		decisionTable.update(getSelectedTableRule());
 	}
 
 	private void removeAnswer(TableRuleRow row, Object propertyId) {
-		ExpressionValueTreeObjectReference answerExpression = decisionTable.getExpressionValue(row, propertyId);
-		if (answerExpression instanceof AnswerExpression) {
-			AnswerExpression answerInput = (AnswerExpression) answerExpression;
-			try {
-				answerInput.setExpressionChain(null);
-			} catch (NotValidExpression e) {
-				e.printStackTrace();
-			}
-		} else {
-			answerExpression.setReference(null);
-		}
-		decisionTable.update(getSelectedTableRule());
+		//TODO
+//		ExpressionValueTreeObjectReference answerExpression = decisionTable.getExpressionValue(row, propertyId);
+//		if (answerExpression instanceof AnswerExpression) {
+//			AnswerExpression answerInput = (AnswerExpression) answerExpression;
+//			try {
+//				answerInput.setExpressionChain(null);
+//			} catch (NotValidExpression e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			answerExpression.setReference(null);
+//		}
+//		decisionTable.update(getSelectedTableRule());
 	}
 
 	@Override

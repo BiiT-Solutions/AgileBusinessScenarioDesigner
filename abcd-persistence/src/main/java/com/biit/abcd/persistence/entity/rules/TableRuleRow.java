@@ -85,6 +85,6 @@ public class TableRuleRow extends StorableObject {
 	
 	public void addEmptyExpressionPair(){
 		addCondition(new ExpressionValueTreeObjectReference());
-		addCondition(new AnswerExpression());
+		addCondition(new ExpressionChain());
 	}
 }

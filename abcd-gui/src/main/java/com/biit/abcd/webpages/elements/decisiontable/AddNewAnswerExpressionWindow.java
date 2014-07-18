@@ -1,18 +1,10 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
-import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
-import com.biit.abcd.persistence.entity.rules.AnswerExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
-import com.biit.abcd.webpages.elements.expressionviewer.AnswerExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.VerticalLayout;
 
 public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 7699690992550597244L;
@@ -20,6 +12,8 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionChain expressionChain;
 
+	//TODO
+/*
 	public AddNewAnswerExpressionWindow(AnswerExpression answer) throws NotValidExpression {
 		super();
 		if (!(answer instanceof AnswerExpression)) {
@@ -53,7 +47,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		layout.setSizeFull();
 		layout.setMargin(true);
 		return layout;
-	}
+	}*/
 
 	public Answer getSelectedTableValue() {
 		return formAnswerTable.getValue();
