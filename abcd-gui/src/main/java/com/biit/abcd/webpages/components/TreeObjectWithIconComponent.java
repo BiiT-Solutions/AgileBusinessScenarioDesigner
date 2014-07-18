@@ -99,4 +99,9 @@ public class TreeObjectWithIconComponent extends CustomComponent {
 		return themeIcon;
 	}
 
+	public void update(TreeObject element) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -346,10 +346,11 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		}
 	}
 
-	private void newEditQuestionWindow(TableRuleRow row, Object propertyId) {
+	private void newEditQuestionWindow(final TableRuleRow row, Object propertyId) {
 		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getExpressionValue(row, propertyId);
 		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getNextExpressionValue(row,
 				propertyId);
+		final int answerPosition = (Integer) propertyId + 1;
 
 		final AddNewConditionWindow newConditionWindow = new AddNewConditionWindow(UserSessionHandler
 				.getFormController().getForm(), false);
@@ -361,18 +362,33 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
-				if (answerExpression instanceof AnswerExpression) {
-					// TODO
+				if (selectedQuestion == null) {
+					row.getConditions().set(answerPosition, null);
 				} else {
-					ExpressionValueTreeObjectReference answerTreeObject = answerExpression;
-					Answer answerToQuestion = (Answer) answerTreeObject.getReference();
-					if ((selectedQuestion == null) || (!selectedQuestion.contains(answerToQuestion))) {
-						answerTreeObject.setReference(null);
+					if (selectedQuestion.getAnswerType().equals(AnswerType.INPUT)) {
+						if (answerExpression instanceof ExpressionValueTreeObjectReference) {
+							row.getConditions().set(answerPosition, new AnswerExpression());
+						}
+					} else {
+						if (answerExpression instanceof AnswerExpression) {
+							row.getConditions().set(answerPosition, new ExpressionValueTreeObjectReference(null));
+						}
 					}
 				}
 				questionExpression.setReference(selectedQuestion);
 				decisionTable.update(getSelectedTableRule());
 				newConditionWindow.close();
+				
+//				if (answerExpression instanceof AnswerExpression) {
+//					// TODO
+//				} else {
+//					ExpressionValueTreeObjectReference answerTreeObject = answerExpression;
+//					Answer answerToQuestion = (Answer) answerTreeObject.getReference();
+//					if ((selectedQuestion == null) || (!selectedQuestion.contains(answerToQuestion))) {
+//						answerTreeObject.setReference(null);
+//					}
+//				}
+				
 			}
 		});
 		newConditionWindow.showCentered();

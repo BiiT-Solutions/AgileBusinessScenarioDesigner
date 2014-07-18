@@ -7,11 +7,9 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.webpages.components.ComponentCellRule;
 import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.vaadin.data.Item;
-import com.vaadin.server.PaintException;
-import com.vaadin.server.PaintTarget;
-import com.vaadin.server.Resource;
 import com.vaadin.ui.Component;
 
 public class FormTreeTable extends TreeObjectTable {
@@ -32,8 +30,10 @@ public class FormTreeTable extends TreeObjectTable {
 		super.addItem(element, parent);
 		if (element != null) {
 			List<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
-			FormTreeTableRuleComponent rulesComponent = getRulesComponent(assignedRules);		
-			
+			ComponentCellRule rulesComponent = new ComponentCellRule();
+			rulesComponent.update(assignedRules);
+			rulesComponent.registerTouchCallBack(this, element);
+
 			Item item = getItem(element);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
 		}
@@ -46,27 +46,22 @@ public class FormTreeTable extends TreeObjectTable {
 		Item item = getItem(element);
 		if (item != null) {
 			List<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
-			FormTreeTableRuleComponent rulesComponent = getRulesComponent(assignedRules);			
-			
+			ComponentCellRule rulesComponent = getRulesComponent(assignedRules);
+			rulesComponent.update(assignedRules);
+
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
 		}
 	}
-	
-	public FormTreeTableRuleComponent getRulesComponent(List<Rule> rules){
-		if(rules.isEmpty()){
-			return null;
-		}else{
-			FormTreeTableRuleComponent component = new FormTreeTableRuleComponent();
-			for(Rule rule: rules){
-				component.addRuleReference(rule);
-			}
-			return component;
-		}
+
+	public ComponentCellRule getRulesComponent(List<Rule> rules) {
+		ComponentCellRule component = new ComponentCellRule();
+		component.update(rules);
+		return component;
 	}
-	
-	public String getRulesAsText(List<Rule> rules){
+
+	public String getRulesAsText(List<Rule> rules) {
 		String ruleText = new String();
-		for(Rule rule: rules){
+		for (Rule rule : rules) {
 			ruleText += rule.getName();
 		}
 		return ruleText;

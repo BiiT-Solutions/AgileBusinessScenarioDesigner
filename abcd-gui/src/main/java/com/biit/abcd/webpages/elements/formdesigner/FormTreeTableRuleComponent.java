@@ -7,6 +7,9 @@ import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcon;
+import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.event.LayoutEvents.LayoutClickNotifier;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CssLayout;
@@ -14,7 +17,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 
-public class FormTreeTableRuleComponent extends CustomComponent {
+public class FormTreeTableRuleComponent extends CustomComponent implements LayoutClickNotifier {
 	private static final long serialVersionUID = -1481676401269063469L;
 	private static final String classname = "v-form-tree-table-rule-component";
 
@@ -25,7 +28,9 @@ public class FormTreeTableRuleComponent extends CustomComponent {
 
 		rootLayout = new CssLayout();
 		rootLayout.setWidth(null);
+		rootLayout.setImmediate(true);
 		setWidth(null);
+		setImmediate(true);
 
 		setCompositionRoot(rootLayout);
 	}
@@ -43,8 +48,30 @@ public class FormTreeTableRuleComponent extends CustomComponent {
 			}
 		});
 		rootLayout.addComponent(button);
-		Label label = new Label(rule.getName());
+		Label label = new Label(rule.getName(), ContentMode.HTML);
 		label.setWidth(null);
 		rootLayout.addComponent(label);
+	}
+
+	@Override
+	public void addLayoutClickListener(LayoutClickListener listener) {
+		rootLayout.addLayoutClickListener(listener);
+	}
+
+	@Override
+	@Deprecated
+	public void addListener(LayoutClickListener listener) {
+		addLayoutClickListener(listener);
+	}
+
+	@Override
+	public void removeLayoutClickListener(LayoutClickListener listener) {
+		rootLayout.removeLayoutClickListener(listener);
+	}
+
+	@Override
+	@Deprecated
+	public void removeListener(LayoutClickListener listener) {
+		removeLayoutClickListener(listener);
 	}
 }

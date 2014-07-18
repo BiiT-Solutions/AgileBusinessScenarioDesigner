@@ -11,14 +11,11 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
-import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
-import com.vaadin.event.LayoutEvents.LayoutClickEvent;
-import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
 
@@ -44,14 +41,6 @@ public class TreeObjectTable extends TreeTable {
 		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
 				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
-		addDetachListener(new DetachListener() {
-			private static final long serialVersionUID = 4038929661806639780L;
-
-			@Override
-			public void detach(DetachEvent event) {
-				removeAllItems();
-			}
-		});
 	}
 
 	private void loadTreeObject(TreeObject element, TreeObject parent) {
@@ -85,7 +74,6 @@ public class TreeObjectTable extends TreeTable {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void updateItem(TreeObject element) {
 		Item item = getItem(element);
 		if (item != null) {
@@ -95,23 +83,14 @@ public class TreeObjectTable extends TreeTable {
 			} catch (DependencyExistException e) {
 				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
 						LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
-				// Impossible to remove children. Set as previous value (still
-				// stored at the icon).
-				TreeObjectWithIconComponent treeObjectIcon = (TreeObjectWithIconComponent) item.getItemProperty(
-						TreeObjectTableProperties.ELEMENT_NAME).getValue();
-				switch (treeObjectIcon.getThemeIcon()) {
-				case TREE_DESIGNER_QUESTION_CHECKLIST:
-					((Question) element).setAnswerType(AnswerType.MULTI_CHECKBOX);
-					break;
-				default:
-					((Question) element).setAnswerType(AnswerType.RADIO);
-					break;
-				}
+				// Impossible to remove children.
+				return;
 			}
 
-			// Update element.
-			Object treeObjectIcon = createElementWithIcon(element);
-			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
+			// Update
+			ComponentCellTreeObject cell = (ComponentCellTreeObject) item.getItemProperty(
+					TreeObjectTableProperties.ELEMENT_NAME).getValue();
+			cell.update(element);
 		}
 	}
 
@@ -178,36 +157,6 @@ public class TreeObjectTable extends TreeTable {
 		return name;
 	}
 
-	protected static ThemeIcon getIcon(TreeObject element) {
-		if (element instanceof Question) {
-			Question question = (Question) element;
-			switch (question.getAnswerType()) {
-			case MULTI_CHECKBOX:
-				return ThemeIcon.TREE_DESIGNER_QUESTION_CHECKLIST;
-			case RADIO:
-				return ThemeIcon.TREE_DESIGNER_QUESTION_RADIOBUTTON;
-			case INPUT:
-				switch (question.getAnswerFormat()) {
-				case DATE:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_DATE;
-				case NUMBER:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_NUMBER;
-				case POSTAL_CODE:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_POSTALCODE;
-				case TEXT:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_TEXT;
-				}
-			}
-		} else if (element instanceof Group) {
-			Group group = (Group) element;
-			if (group.isRepetable()) {
-				return ThemeIcon.TREE_DESIGNER_GROUP_LOOP;
-			}
-		}
-
-		return null;
-	}
-
 	public void setRootElement(TreeObject root) {
 		this.removeAllItems();
 		select(null);
@@ -261,25 +210,11 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	protected Object createElementWithIcon(final TreeObject element) {
-		final TreeObjectTable thisObject = this;
-		TreeObjectWithIconComponent treeObjectWithIconComponent = new TreeObjectWithIconComponent(element,
-				getIcon(element), element.getName());
+		ComponentCellTreeObject cell = new ComponentCellTreeObject();
+		cell.update(element);
+		cell.registerTouchCallBack(this, element);
 
-		treeObjectWithIconComponent.addLayoutClickListener(new LayoutClickListener() {
-			private static final long serialVersionUID = 1176852269853300260L;
-
-			@Override
-			public void layoutClick(LayoutClickEvent event) {
-				// Select table row if the element is clicked.
-				if (event.isDoubleClick()) {
-					thisObject.setValue(null);
-				} else {
-					thisObject.setValue(element);
-				}
-			}
-		});
-
-		return treeObjectWithIconComponent;
+		return cell;
 	}
 
 	/**

@@ -28,6 +28,7 @@ import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -38,6 +39,7 @@ public class FormDesigner extends FormWebPageComponent {
 	private FormDesignerPropertiesComponent propertiesComponent;
 	private FormDesignerUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
+	private boolean tableIsGoingToDetach;
 
 	public FormDesigner() {
 		updateButtons(true);
@@ -45,6 +47,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
+		tableIsGoingToDetach = false;
 		this.upperMenu = initUpperMenu();
 		setUpperMenu(upperMenu);
 
@@ -61,6 +64,9 @@ public class FormDesigner extends FormWebPageComponent {
 		propertiesComponent.addPropertyUpdateListener(new PropertieUpdateListener() {
 			@Override
 			public void propertyUpdate(Object element) {
+				if(tableIsGoingToDetach){
+					return;
+				}
 				formTreeTable.updateItem((TreeObject) element);
 				updateUpperMenu(formTreeTable.getTreeObjectSelected());
 			}
@@ -85,6 +91,15 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
+		
+		formTreeTable.addDetachListener(new DetachListener() {
+			
+			@Override
+			public void detach(DetachEvent event) {
+				tableIsGoingToDetach = true;
+				formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
+			}
+		});
 		
 		if(UserSessionHandler.getFormController().getLastAccessTreeObject()!=null ){
 			selectComponent(UserSessionHandler.getFormController().getLastAccessTreeObject());
