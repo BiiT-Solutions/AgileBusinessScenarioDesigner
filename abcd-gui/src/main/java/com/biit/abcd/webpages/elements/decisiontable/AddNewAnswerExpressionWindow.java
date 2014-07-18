@@ -74,7 +74,6 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	}
 
 	public ExpressionChain getExpressionChain() {
-		System.out.println("Expression chain? "+expressionChain);
 		return expressionChain;
 	}
 }

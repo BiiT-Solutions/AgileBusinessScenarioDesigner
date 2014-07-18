@@ -11,7 +11,6 @@ import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.security.DActivity;
@@ -28,7 +27,6 @@ import com.biit.abcd.webpages.elements.decisiontable.ClearExpressionListener;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.biit.abcd.webpages.elements.decisiontable.EditActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.EditExpressionListener;
-import com.biit.abcd.webpages.elements.decisiontable.NewActionTable;
 import com.biit.abcd.webpages.elements.decisiontable.NewDecisionTable;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -364,7 +362,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				if (originalQuestion != null) {
 					if ((originalQuestion.getAnswerType() == AnswerType.INPUT && selectedQuestion.getAnswerType() != AnswerType.INPUT)
 							|| (originalQuestion.getAnswerType() != AnswerType.INPUT && selectedQuestion
-									.getAnswerType() == AnswerType.INPUT) || (!originalQuestion.equals(selectedQuestion))) {
+									.getAnswerType() == AnswerType.INPUT)
+							|| (!originalQuestion.equals(selectedQuestion))) {
 						answerExpression.removeAllExpressions();
 					}
 				}
@@ -404,9 +403,10 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void removeQuestion(TableRuleRow row, Object propertyId) {
-		ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable.getExpressionValue(row, propertyId);
+		ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+				.getExpressionValue(row, propertyId);
 		questionExpression.setReference(null);
-		//Removes and updates the table.
+		// Removes and updates the table.
 		removeAnswer(row, (Integer) propertyId + 1);
 	}
 
@@ -418,42 +418,29 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	@Override
 	public void editAction(final TableRuleRow row) {
-		try {
-			if (!row.getActions().isEmpty()) {
-				final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row
-						.getActions().get(0));
+		if (row.getAction() != null) {
+			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row.getAction());
 
-				newActionValueWindow.showCentered();
-				newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						try {
-							ExpressionChain expChain = newActionValueWindow.getExpressionChain();
-							if (expChain != null) {
-								row.getActions().get(0).setExpressionChain(expChain);
-								decisionTable.update(getSelectedTableRule());
-							}
-							newActionValueWindow.close();
-						} catch (NotValidExpression e) {
-							MessageManager.showError(e.getMessage());
-						}
+			newActionValueWindow.showCentered();
+			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
+				@Override
+				public void acceptAction(AcceptCancelWindow window) {
+					ExpressionChain expChain = newActionValueWindow.getExpressionChain();
+
+					if (expChain != null) {
+						row.getAction().setExpressions(expChain.getExpressions());
+						decisionTable.update(getSelectedTableRule());
 					}
-				});
-			}
-		} catch (NotValidExpression e1) {
-			MessageManager.showError(e1.getMessage());
-			AbcdLogger.errorMessage(NewActionTable.class.getName(), e1);
+					newActionValueWindow.close();
+				}
+			});
 		}
 	}
 
 	@Override
 	public void removeAction(TableRuleRow row) {
-		try {
-			row.getActions().get(0).setExpressionChain("");
-			decisionTable.update(getSelectedTableRule());
-		} catch (NotValidExpression e) {
-			MessageManager.showError(e.getMessage());
-		}
+		row.getAction().removeAllExpressions();
+		decisionTable.update(getSelectedTableRule());
 	}
 
 	public void copy() {

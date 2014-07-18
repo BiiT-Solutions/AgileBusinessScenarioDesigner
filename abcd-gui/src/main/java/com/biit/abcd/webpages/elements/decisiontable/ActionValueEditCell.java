@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.rules.ActionExpression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -21,7 +21,7 @@ public class ActionValueEditCell extends EditCellComponent {
 		});
 	}
 
-	public void setLabel(ActionExpression action) {
+	public void setLabel(ExpressionChain action) {
 		if ((action == null) || (action.toString().length() == 0)) {
 			setLabel("<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">"
 					+ ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE) + "</div>");

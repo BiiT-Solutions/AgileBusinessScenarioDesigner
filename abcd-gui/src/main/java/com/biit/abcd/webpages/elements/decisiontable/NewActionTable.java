@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
@@ -59,10 +58,10 @@ public class NewActionTable extends Table {
 	public void updateRow(TableRuleRow row){
 		Item rowItem = getItem(row);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) rowItem.getItemProperty(Columns.ACTION).getValue());
-		if ((row.getActions() != null) && !row.getActions().isEmpty()) {
-			actionValue.setLabel(row.getActions().get(0));
+		if (row.getAction() != null) {
+			actionValue.setLabel(row.getAction().getExpression());
 		} else {
-			actionValue.setLabel((ActionExpression) null);
+			actionValue.setLabel("null");
 		}
 	}
 

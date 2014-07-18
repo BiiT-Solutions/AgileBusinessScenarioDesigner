@@ -63,7 +63,6 @@ public class TableRule extends StorableObject implements ITableCellEditable {
 
 	public TableRuleRow addRow() {
 		TableRuleRow row = new TableRuleRow();
-		row.addAction(new ActionExpression());
 		return addRow(row);
 	}
 

@@ -1,12 +1,9 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
-import com.biit.abcd.persistence.entity.rules.ActionExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
@@ -20,11 +17,9 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionChain expressionChain;
 
-	public AddNewActionExpressionWindow(ActionExpression action) throws NotValidExpression {
+	public AddNewActionExpressionWindow(ExpressionChain action) {
 		super();
-		if (!(action instanceof ActionExpression)) {
-			throw new NotValidExpression("Only Action Expressions allowed.");
-		}
+
 		setWidth("90%");
 		setHeight("90%");
 		setContent(generateContent(action));
@@ -32,21 +27,15 @@ public class AddNewActionExpressionWindow extends AcceptCancelWindow {
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_ACTION_CAPTION));
 	}
 
-	public Component generateContent(ActionExpression action) {
+	public Component generateContent(ExpressionChain action) {
 		VerticalLayout layout = new VerticalLayout();
 
 		// Create content
 		expressionEditorComponent = new SimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 
-		if (action.getExpressionChain() == null) {
-			expressionChain = new ExpressionChain();
-			expressionChain.setCreatedBy(UserSessionHandler.getUser());
-			expressionChain.setUpdatedBy(UserSessionHandler.getUser());
-			expressionChain.setUpdateTime();
-		} else {
-			expressionChain = action.getExpressionChain();
-		}
+		expressionChain = action.generateCopy();
+
 		((SimpleExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(expressionChain);
 
 		layout.addComponent(expressionEditorComponent);
