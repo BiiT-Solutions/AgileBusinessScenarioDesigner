@@ -22,11 +22,11 @@ public class ActionValueEditCell extends EditCellComponent {
 	}
 
 	public void setLabel(ActionExpression action) {
-		if ((action == null) || (action.getExpressionAsString().length() == 0)) {
+		if ((action == null) || (action.toString().length() == 0)) {
 			setLabel("<div style=\"background-color: rgb(179, 46, 46); color: rgb(255,255,255); display: inline;\">"
 					+ ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE) + "</div>");
 		} else {
-			setLabel(action.getExpressionAsString());
+			setLabel(action.toString());
 		}
 	}
 

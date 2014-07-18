@@ -7,7 +7,6 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -20,7 +19,6 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.components.SelectAnswerWindow;
 import com.biit.abcd.webpages.components.SelectTableRuleTableEditable;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewActionExpressionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
@@ -346,9 +344,10 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void newEditQuestionWindow(final TableRuleRow row, Object propertyId) {
-		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable.getExpressionValue(row, propertyId);
-		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getNextExpressionValue(row,
-				propertyId);
+		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+				.getExpressionValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) decisionTable
+				.getNextExpressionValue(row, propertyId);
 
 		final AddNewConditionWindow newConditionWindow = new AddNewConditionWindow(UserSessionHandler
 				.getFormController().getForm(), false);
@@ -362,44 +361,17 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				Question originalQuestion = (Question) questionExpression.getReference();
 				Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
 
-				if ((originalQuestion.getAnswerType() == AnswerType.INPUT && selectedQuestion.getAnswerType() != AnswerType.INPUT)
-						|| (originalQuestion.getAnswerType() != AnswerType.INPUT && selectedQuestion.getAnswerType() == AnswerType.INPUT)) {
-					answerExpression.removeAllExpressions();
+				if (originalQuestion != null) {
+					if ((originalQuestion.getAnswerType() == AnswerType.INPUT && selectedQuestion.getAnswerType() != AnswerType.INPUT)
+							|| (originalQuestion.getAnswerType() != AnswerType.INPUT && selectedQuestion
+									.getAnswerType() == AnswerType.INPUT) || (!originalQuestion.equals(selectedQuestion))) {
+						answerExpression.removeAllExpressions();
+					}
 				}
-				// if (selectedQuestion == null) {
-				// row.getConditions().set(answerPosition, null);
-				// } else {
-				// if
-				// (selectedQuestion.getAnswerType().equals(AnswerType.INPUT))
-				// {
-				// if (answerExpression instanceof
-				// ExpressionValueTreeObjectReference) {
-				// row.getConditions().set(answerPosition, new
-				// AnswerExpression());
-				// }
-				// } else {
-				// if (answerExpression instanceof AnswerExpression) {
-				// row.getConditions().set(answerPosition, new
-				// ExpressionValueTreeObjectReference(null));
-				// }
-				// }
-				// }
+
 				questionExpression.setReference(selectedQuestion);
 				decisionTable.update(getSelectedTableRule());
 				newConditionWindow.close();
-
-				// if (answerExpression instanceof AnswerExpression) {
-				// // TODO
-				// } else {
-				// ExpressionValueTreeObjectReference answerTreeObject =
-				// answerExpression;
-				// Answer answerToQuestion = (Answer)
-				// answerTreeObject.getReference();
-				// if ((selectedQuestion == null) ||
-				// (!selectedQuestion.contains(answerToQuestion))) {
-				// answerTreeObject.setReference(null);
-				// }
-				// }
 
 			}
 		});
@@ -407,86 +379,41 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void newEditAnswerWindow(TableRuleRow row, Object propertyId) {
-		//TODO
-//		final ExpressionValueTreeObjectReference questionExpression = decisionTable.getPreviousExpressionValue(row,
-//				propertyId);
-//		final ExpressionValueTreeObjectReference answerExpression = decisionTable.getExpressionValue(row, propertyId);
-//
-//		// TODO
-//		if (questionExpression.getReference() != null) {
-//			Question question = (Question) questionExpression.getReference();
-//			if (question.getAnswerType().equals(AnswerType.INPUT)) {
-//				final AnswerExpression answerChain = (AnswerExpression) answerExpression;
-//				try {
-//					final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
-//							answerChain);
-//					newActionValueWindow.showCentered();
-//					newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
-//						@Override
-//						public void acceptAction(AcceptCancelWindow window) {
-//							try {
-//								ExpressionChain expChain = newActionValueWindow.getExpressionChain();
-//								if (expChain != null) {
-//									answerChain.setExpressionChain(expChain);
-//									decisionTable.update(getSelectedTableRule());
-//								}
-//								newActionValueWindow.close();
-//							} catch (NotValidExpression e) {
-//								MessageManager.showError(e.getMessage());
-//							}
-//						}
-//					});
-//
-//				} catch (NotValidExpression e1) {
-//					MessageManager.showError(e1.getMessage());
-//					AbcdLogger.errorMessage(NewDecisionTable.class.getName(), e1);
-//				}
-//			} else {
-//
-//				final ExpressionValueTreeObjectReference answerTreeObject = answerExpression;
-//				final SelectAnswerWindow newAnswerValueWindow = new SelectAnswerWindow(question);
-//				if (answerTreeObject.getReference() != null) {
-//					newAnswerValueWindow.setTreeObjectSelected(answerTreeObject.getReference());
-//				}
-//				newAnswerValueWindow.addAcceptActionListener(new AcceptActionListener() {
-//					@Override
-//					public void acceptAction(AcceptCancelWindow window) {
-//						Answer selectedanswer = ((SelectAnswerWindow) window).getSelectedTableValue();
-//						answerTreeObject.setReference(selectedanswer);
-//						decisionTable.update(getSelectedTableRule());
-//						newAnswerValueWindow.close();
-//					}
-//				});
-//				newAnswerValueWindow.showCentered();
-//			}
-//		} else {
-//			MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
-//					LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
-//		}
+		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+				.getPreviousExpressionValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getExpressionValue(row, propertyId);
+
+		if (questionExpression.getReference() != null) {
+			Question question = (Question) questionExpression.getReference();
+			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(question,
+					answerExpression);
+			newActionValueWindow.showCentered();
+			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
+				@Override
+				public void acceptAction(AcceptCancelWindow window) {
+					ExpressionChain expChain = newActionValueWindow.getExpressionChain();
+					answerExpression.setExpressions(expChain.getExpressions());
+					decisionTable.update(getSelectedTableRule());
+					newActionValueWindow.close();
+				}
+			});
+		} else {
+			MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
+					LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
+		}
 	}
 
 	private void removeQuestion(TableRuleRow row, Object propertyId) {
-		//TODO
-//		ExpressionValueTreeObjectReference questionExpression = decisionTable.getExpressionValue(row, propertyId);
-//		questionExpression.setReference(null);
-//		removeAnswer(row, (Integer) propertyId + 1);
-//		decisionTable.update(getSelectedTableRule());
+		ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable.getExpressionValue(row, propertyId);
+		questionExpression.setReference(null);
+		//Removes and updates the table.
+		removeAnswer(row, (Integer) propertyId + 1);
 	}
 
 	private void removeAnswer(TableRuleRow row, Object propertyId) {
-		//TODO
-//		ExpressionValueTreeObjectReference answerExpression = decisionTable.getExpressionValue(row, propertyId);
-//		if (answerExpression instanceof AnswerExpression) {
-//			AnswerExpression answerInput = (AnswerExpression) answerExpression;
-//			try {
-//				answerInput.setExpressionChain(null);
-//			} catch (NotValidExpression e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			answerExpression.setReference(null);
-//		}
-//		decisionTable.update(getSelectedTableRule());
+		ExpressionChain expressionChain = (ExpressionChain) decisionTable.getExpressionValue(row, propertyId);
+		expressionChain.removeAllExpressions();
+		decisionTable.update(getSelectedTableRule());
 	}
 
 	@Override

@@ -40,7 +40,8 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 	}
 
 	public void setExpressions(List<Expression> expressions) {
-		this.expressions = expressions;
+		removeAllExpressions();
+		this.expressions.addAll(expressions);
 	}
 
 	public void addExpression(Expression expression) {
@@ -63,6 +64,10 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 
 	@Override
 	public String getRepresentation() {
+		if(expressions.isEmpty()){
+			return "null";
+		}
+		
 		String result = "";
 		for (Expression expression : expressions) {
 			result += expression.getRepresentation() + " ";
