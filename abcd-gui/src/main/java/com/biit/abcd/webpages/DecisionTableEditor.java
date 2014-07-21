@@ -383,9 +383,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getExpressionValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
-			Question question = (Question) questionExpression.getReference();
-			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(question,
-					answerExpression);
+			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
+					questionExpression, answerExpression);
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override

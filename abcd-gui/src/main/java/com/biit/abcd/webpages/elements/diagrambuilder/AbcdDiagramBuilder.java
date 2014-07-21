@@ -92,8 +92,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					}
 					break;
 				case FORK:
-					if (((DiagramFork) object).getQuestion() != null) {
-						fireJumpToListener(((DiagramFork) object).getQuestion());
+					if (((DiagramFork) object).getReference() != null) {
+						fireJumpToListener(((DiagramFork) object).getReference());
 					} else {
 						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
 								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);

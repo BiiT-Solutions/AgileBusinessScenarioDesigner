@@ -7,14 +7,13 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.security.DActivity;
@@ -84,10 +83,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				if (element == null) {
 					return;
 				}
-				if (element instanceof Question) {
+				if (element instanceof ExpressionValueTreeObjectReference) {
 					ApplicationFrame.navigateTo(WebMap.TREE_DESIGNER);
 					FormDesigner formDesigner = (FormDesigner) ((ApplicationFrame) UI.getCurrent()).getCurrentView();
-					formDesigner.selectComponent((TreeObject) element);
+					formDesigner.selectComponent(((ExpressionValueTreeObjectReference) element).getReference());
 				}
 				if (element instanceof TableRule) {
 					ApplicationFrame.navigateTo(WebMap.DECISSION_TABLE_EDITOR);
@@ -113,6 +112,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			}
 
 		});
+		// Diagram builder starts as disabled until a diagram is selected.
+		diagramBuilder.setEnabled(false);
+
 		propertiesContainer.addPropertyUpdateListener(new PropertieUpdateListener() {
 			@Override
 			public void propertyUpdate(Object element) {
