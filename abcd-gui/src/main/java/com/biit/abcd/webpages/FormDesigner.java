@@ -8,6 +8,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
@@ -28,7 +29,6 @@ import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -91,21 +91,22 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
-		
+
 		formTreeTable.addDetachListener(new DetachListener() {
-			
+			private static final long serialVersionUID = -9057209239644161482L;
+
 			@Override
 			public void detach(DetachEvent event) {
 				tableIsGoingToDetach = true;
 				formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
 			}
 		});
-		
+
 		if(UserSessionHandler.getFormController().getLastAccessTreeObject()!=null ){
 			selectComponent(UserSessionHandler.getFormController().getLastAccessTreeObject());
 		}else{
 			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
-		}		
+		}
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {
@@ -289,8 +290,8 @@ public class FormDesigner extends FormWebPageComponent {
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
 					TreeObject parent = null;
-					if (formTreeTable.getTreeObjectSelected() instanceof Category
-							|| formTreeTable.getTreeObjectSelected() instanceof Group) {
+					if ((formTreeTable.getTreeObjectSelected() instanceof Category)
+							|| (formTreeTable.getTreeObjectSelected() instanceof Group)) {
 						parent = formTreeTable.getTreeObjectSelected();
 						// If selected a question, we consider the same that
 						// selecting the question's parent.
@@ -362,9 +363,13 @@ public class FormDesigner extends FormWebPageComponent {
 			try {
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+			} catch (DuplicatedVariableException e) {
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+
 			} catch (ConstraintViolationException cve) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_CATEGORY,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION);
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
 			}
 		}
 	}
@@ -402,7 +407,7 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveUp() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if (selected!=null && selected.getParent() != null && selected.getParent().getChildren().indexOf(selected) > 0) {
+			if ((selected!=null) && (selected.getParent() != null) && (selected.getParent().getChildren().indexOf(selected) > 0)) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
@@ -427,8 +432,8 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveDown() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if (selected!=null && selected.getParent() != null
-					&& selected.getParent().getChildren().indexOf(selected) < selected.getParent().getChildren().size() - 1) {
+			if ((selected!=null) && (selected.getParent() != null)
+					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren().size() - 1))) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
@@ -448,7 +453,7 @@ public class FormDesigner extends FormWebPageComponent {
 	public void removeSelected() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if (selected != null && selected.getParent() != null) {
+			if ((selected != null) && (selected.getParent() != null)) {
 				try {
 					selected.remove();
 					removeElementFromUI(selected);
@@ -466,7 +471,7 @@ public class FormDesigner extends FormWebPageComponent {
 		for (TreeObject child : element.getChildren()) {
 			removeElementFromUI(child);
 		}
-		if (element.getParent() != null && element.getParent().getChildren().isEmpty()) {
+		if ((element.getParent() != null) && element.getParent().getChildren().isEmpty()) {
 			// formTreeTable.setChildrenAllowed(element.getParent(), false);
 		}
 		formTreeTable.removeItem(element);
@@ -484,7 +489,7 @@ public class FormDesigner extends FormWebPageComponent {
 			updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
 		}
 	}
-	
+
 	public void selectComponent(TreeObject element){
 		if(formTreeTable.getItem(element)!=null){
 			formTreeTable.setValue(element);

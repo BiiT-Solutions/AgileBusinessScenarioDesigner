@@ -88,6 +88,7 @@ public enum LanguageCodes {
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	BOTTOM_MENU_DROOLS_TABLE_EDITOR("page.bottommenu.droolsTableEditor"),
 	BOTTOM_MENU_EXPRESSION_EDITOR("page.bottommenu.calculusEditor"),
+	BOTTOM_MENU_DROOLS_EXPORTER("page.bottommenu.droolsExporter"),
 
 	TOP_MENU_SETTINGS_TOOLTIP("page.topmenu.settings.tooltip"),
 
@@ -339,18 +340,18 @@ public enum LanguageCodes {
 	DROOLS_RULES_EDITOR_ACTION_LAYOUT_CAPTION("drools.rules.action.layout.caption"),
 
 	WINDOW_EDIT_TABLE_CELL_LABEL("window.edit.table.cell.label"),
-	
+
 	DECISION_TABLE_COPY_ROW_NOT_PERFORMED_CAPTION("decision.table.copy.row.not.performed.caption"),
 	DECISION_TABLE_COPY_TABLE_NOT_SELECTED("decision.table.table.not.selected"),
-	DECISION_TABLE_COPY_NO_SELECTED_ELEMENTS("decision.table.copy.no.selected.elements"), 
-	DECISION_TABLE_PASTE_ROW_NOT_PERFORMED_CAPTION("decision.table.paste.row.not.performed.caption"), 
+	DECISION_TABLE_COPY_NO_SELECTED_ELEMENTS("decision.table.copy.no.selected.elements"),
+	DECISION_TABLE_PASTE_ROW_NOT_PERFORMED_CAPTION("decision.table.paste.row.not.performed.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_CAPTION("condition.table.editor.button.copy.rows.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_TOOLTIP("condition.table.editor.button.copy.rows.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_CAPTION("condition.table.editor.button.paste.rows.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_TOOLTIP("condition.table.editor.button.paste.rows.tooltip");
-	
-	
-	
+
+
+
 	private String value;
 
 	private LanguageCodes(String value){
