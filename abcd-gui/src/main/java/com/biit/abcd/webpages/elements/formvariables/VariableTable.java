@@ -1,8 +1,5 @@
 package com.biit.abcd.webpages.elements.formvariables;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -47,8 +44,6 @@ public class VariableTable extends Table {
 		setColumnExpandRatio(FormVariablesProperties.VARIABLE_NAME, 1);
 		setColumnExpandRatio(FormVariablesProperties.TYPE, 1);
 		setColumnExpandRatio(FormVariablesProperties.SCOPE, 1);
-
-		// setCellStyleGenerator(new FormTreeTableCellStyleGenerator());
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -57,9 +52,11 @@ public class VariableTable extends Table {
 		TextField nameTextField = createTextField(customVariable);
 		nameTextField.setValue(customVariable.getName());
 		item.getItemProperty(FormVariablesProperties.VARIABLE_NAME).setValue(nameTextField);
+
 		ComboBox typeComboBox = createTypeComboBox(customVariable);
 		typeComboBox.setValue(customVariable.getType());
 		item.getItemProperty(FormVariablesProperties.TYPE).setValue(typeComboBox);
+
 		ComboBox scopeComboBox = createScopeComboBox(customVariable);
 		scopeComboBox.setValue(customVariable.getScope());
 		item.getItemProperty(FormVariablesProperties.SCOPE).setValue(scopeComboBox);
@@ -69,12 +66,13 @@ public class VariableTable extends Table {
 		CustomVariable variable = (CustomVariable) getValue();
 		if (variable != null) {
 			removeItem(variable);
+			UserSessionHandler.getFormController().getForm().getCustomVariables().remove(variable);
 		}
 	}
 
 	public TextField createTextField(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
-		TextField nameTextField = new TextField();
+		final TextField nameTextField = new TextField();
 		nameTextField.addFocusListener(new FocusListener() {
 			private static final long serialVersionUID = -7714530380809948035L;
 
@@ -83,12 +81,20 @@ public class VariableTable extends Table {
 				thisTable.select(customVariable);
 			}
 		});
+		nameTextField.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 8130288971788878223L;
+			@Override
+			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+				customVariable.setName(nameTextField.getValue());
+				updateInfo(customVariable);
+			}
+		});
 		return nameTextField;
 	}
 
 	public ComboBox createTypeComboBox(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
-		ComboBox typeComboBox = new ComboBox();
+		final ComboBox typeComboBox = new ComboBox();
 		for (CustomVariableType variableType : CustomVariableType.values()) {
 			typeComboBox.addItem(variableType);
 			typeComboBox.setItemCaption(variableType, ServerTranslate.translate(variableType.getTranslationCode()));
@@ -102,12 +108,20 @@ public class VariableTable extends Table {
 				thisTable.select(customVariable);
 			}
 		});
+		typeComboBox.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = -4030501323342468951L;
+			@Override
+			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+				customVariable.setType((CustomVariableType)typeComboBox.getValue());
+				updateInfo(customVariable);
+			}
+		});
 		return typeComboBox;
 	}
 
 	public ComboBox createScopeComboBox(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
-		ComboBox scopeComboBox = new ComboBox();
+		final ComboBox scopeComboBox = new ComboBox();
 		for (CustomVariableScope variablesScope : CustomVariableScope.values()) {
 			scopeComboBox.addItem(variablesScope);
 			scopeComboBox.setItemCaption(variablesScope, ServerTranslate.translate(variablesScope.getTranslationCode()));
@@ -121,34 +135,43 @@ public class VariableTable extends Table {
 				thisTable.select(customVariable);
 			}
 		});
+		scopeComboBox.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 2144580236318623636L;
+
+			@Override
+			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+				customVariable.setScope((CustomVariableScope)scopeComboBox.getValue());
+				updateInfo(customVariable);
+			}
+		});
 		return scopeComboBox;
 	}
 
-	public List<CustomVariable> getCustomVariables() {
-		List<CustomVariable> customVariables = new ArrayList<>();
-		for (Object itemId : getItemIds()) {
-			CustomVariable customVariable = (CustomVariable) itemId;
-			String newName = (String) ((TextField) getItem(itemId).getItemProperty(
-					FormVariablesProperties.VARIABLE_NAME).getValue()).getValue();
-			if (!newName.equals(customVariable.getName())) {
-				updateInfo(customVariable);
-				customVariable.setName(newName);
-			}
-			CustomVariableType newType = (CustomVariableType) ((ComboBox) getItem(itemId).getItemProperty(
-					FormVariablesProperties.TYPE).getValue()).getValue();
-			if (!newType.equals(customVariable.getType())) {
-				updateInfo(customVariable);
-				customVariable.setType(newType);
-			}
-			CustomVariableScope newScope = (CustomVariableScope) ((ComboBox) getItem(itemId).getItemProperty(
-					FormVariablesProperties.SCOPE).getValue()).getValue();
-			if (!newScope.equals(customVariable.getScope())) {
-				customVariable.setScope(newScope);
-			}
-			customVariables.add(customVariable);
-		}
-		return customVariables;
-	}
+	//	public List<CustomVariable> getCustomVariables() {
+	//		List<CustomVariable> customVariables = new ArrayList<>();
+	//		for (Object itemId : getItemIds()) {
+	//			CustomVariable customVariable = (CustomVariable) itemId;
+	//			String newName = ((TextField) getItem(itemId).getItemProperty(
+	//					FormVariablesProperties.VARIABLE_NAME).getValue()).getValue();
+	//			if (!newName.equals(customVariable.getName())) {
+	//				updateInfo(customVariable);
+	//				customVariable.setName(newName);
+	//			}
+	//			CustomVariableType newType = (CustomVariableType) ((ComboBox) getItem(itemId).getItemProperty(
+	//					FormVariablesProperties.TYPE).getValue()).getValue();
+	//			if (!newType.equals(customVariable.getType())) {
+	//				updateInfo(customVariable);
+	//				customVariable.setType(newType);
+	//			}
+	//			CustomVariableScope newScope = (CustomVariableScope) ((ComboBox) getItem(itemId).getItemProperty(
+	//					FormVariablesProperties.SCOPE).getValue()).getValue();
+	//			if (!newScope.equals(customVariable.getScope())) {
+	//				customVariable.setScope(newScope);
+	//			}
+	//			customVariables.add(customVariable);
+	//		}
+	//		return customVariables;
+	//	}
 
 	private void updateInfo(CustomVariable customVariable) {
 		customVariable.setUpdatedBy(UserSessionHandler.getUser().getUserId());

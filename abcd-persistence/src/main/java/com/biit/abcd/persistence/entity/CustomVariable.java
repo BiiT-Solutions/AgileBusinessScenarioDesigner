@@ -68,4 +68,16 @@ public class CustomVariable extends StorableObject {
 		this.form = form;
 	}
 
+	/**
+	 * Returns true if the custom variable compared has the same name and scope
+	 * @param otherVariable
+	 * @return
+	 */
+	public boolean duplicatedCustomVariable(CustomVariable otherVariable){
+		if(getName().equals(otherVariable.getName()) && getScope().equals(otherVariable.getScope())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

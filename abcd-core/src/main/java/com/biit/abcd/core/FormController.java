@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
@@ -27,6 +29,7 @@ public class FormController {
 	private TableRule lastAccessTable;
 	private List<TableRuleRow> copiedRows;
 	private Rule lastAccessRule;
+	private boolean saveAllowed = true;
 
 	private IFormDao formDao;
 
@@ -39,10 +42,25 @@ public class FormController {
 		this.user = user;
 	}
 
-	public void save() {
-		if (getForm() != null) {
+	public void save() throws DuplicatedVariableException {
+		checkDuplicatedVariables();
+		if (saveAllowed && (getForm() != null)) {
 			formDao.makePersistent(getForm());
 		}
+	}
+
+	public void checkDuplicatedVariables() throws DuplicatedVariableException{
+		List<CustomVariable> customVariablesList = getForm().getCustomVariables();
+		for(int i=0; i<(customVariablesList.size()-1); i++){
+			CustomVariable cv = customVariablesList.get(i);
+			for(int j=i+1; j<(getForm().getCustomVariables().size()); j++){
+				if(cv.duplicatedCustomVariable(getForm().getCustomVariables().get(j))){
+					saveAllowed = false;
+					throw new DuplicatedVariableException("Duplicated variable in form variables.");
+				}
+			}
+		}
+		saveAllowed = true;
 	}
 
 	public void remove() {
@@ -173,13 +191,13 @@ public class FormController {
 	}
 
 	public void pasteTableRuleRowsAsNew(TableRule selectedTableRule) {
-		if (copiedRows == null || copiedRows.isEmpty()) {
+		if ((copiedRows == null) || copiedRows.isEmpty()) {
 			return;
 		}
 		List<TableRuleRow> rowsToPaste = getNewInstanceOfCopiedElements();
 		for (TableRuleRow rowToPaste : rowsToPaste) {
 			selectedTableRule.addRow(rowToPaste);
-		}		
+		}
 	}
 
 	private List<TableRuleRow> getNewInstanceOfCopiedElements() {

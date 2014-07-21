@@ -6,6 +6,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -69,6 +70,7 @@ public class FormVariables extends FormWebPageComponent {
 						"", CustomVariableType.STRING, CustomVariableScope.FORM);
 				customVariable.setCreatedBy(UserSessionHandler.getUser().getUserId());
 				addNewVariable(customVariable);
+				UserSessionHandler.getFormController().getForm().getCustomVariables().add(customVariable);
 			}
 		});
 
@@ -85,7 +87,7 @@ public class FormVariables extends FormWebPageComponent {
 	}
 
 	private void addNewVariable(CustomVariable customVariable) {
-		if (variableTable != null && customVariable != null) {
+		if ((variableTable != null) && (customVariable != null)) {
 			variableTable.addRow(customVariable);
 		}
 	}
@@ -97,11 +99,14 @@ public class FormVariables extends FormWebPageComponent {
 	}
 
 	private void save() {
-		if (UserSessionHandler.getFormController().getForm() != null) {
+		if (UserSessionHandler.getFormController() != null) {
 			try {
-				UserSessionHandler.getFormController().getForm().setCustomVariables(variableTable.getCustomVariables());
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+			} catch (DuplicatedVariableException e) {
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
