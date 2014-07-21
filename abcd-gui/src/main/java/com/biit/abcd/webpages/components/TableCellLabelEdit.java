@@ -1,14 +1,19 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.utils.DateManager;
+import com.biit.abcd.webpages.elements.decisiontable.Cell;
 import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector;
 import com.biit.abcd.webpages.elements.decisiontable.EditCellComponent;
 import com.vaadin.data.Item;
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
+import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
@@ -79,6 +84,14 @@ public class TableCellLabelEdit extends Table {
 		if (item.getItemProperty(MenuProperties.TABLE_NAME).getValue() == null) {
 			EditCellComponent editCellComponent = new SelectTableEditCell();
 			editCellComponent.setOnlyEdit(true);
+			editCellComponent.addLayoutClickListener(new LayoutClickListener() {
+				private static final long serialVersionUID = -4750839674064167369L;
+
+				@Override
+				public void layoutClick(LayoutClickEvent event) {
+					setValue(itemId);
+				}
+			});
 			item.getItemProperty(MenuProperties.TABLE_NAME).setValue(editCellComponent);
 			item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(((StorableObject)itemId).getUpdateTime()));
 			return editCellComponent;
@@ -98,5 +111,18 @@ public class TableCellLabelEdit extends Table {
 				.getItemProperty(MenuProperties.TABLE_NAME).getValue());
 		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(object.getUpdateTime()));
 		tableCell.setLabel(object);
+	}
+	
+	@Override
+	public void setValue(Object itemId) {
+		if (itemId != null) {
+			Set<Cell> cells = new HashSet<Cell>();
+			for (Object colId : getContainerPropertyIds()) {
+				Cell tempCell = new Cell(itemId, colId);
+				cells.add(tempCell);
+			}
+			cellRowSelector.setCurrentSelectedCells(this, cells, null, false);
+		}
+		super.setValue(itemId);
 	}
 }

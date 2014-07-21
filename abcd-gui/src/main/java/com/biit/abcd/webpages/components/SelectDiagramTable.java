@@ -1,7 +1,9 @@
 package com.biit.abcd.webpages.components;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -11,9 +13,12 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.elements.decisiontable.Cell;
 import com.biit.abcd.webpages.elements.decisiontable.CellRowSelector;
 import com.biit.abcd.webpages.elements.decisiontable.EditCellComponent;
 import com.vaadin.data.Item;
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
+import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -21,6 +26,7 @@ import com.vaadin.ui.TreeTable;
 
 public class SelectDiagramTable extends TreeTable {
 	private static final long serialVersionUID = -2420087674159328133L;
+
 	private CellRowSelector cellRowSelector;
 
 	enum MenuProperties {
@@ -60,13 +66,22 @@ public class SelectDiagramTable extends TreeTable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void addDiagram(Diagram diagram) {
+	public void addDiagram(final Diagram diagram) {
 		Item item = addItem(diagram);
 		EditCellComponent editCellComponent = new SelectTableEditCell();
 		editCellComponent.setOnlyEdit(true);
 		item.getItemProperty(MenuProperties.DIAGRAM_NAME).setValue(editCellComponent);
-		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString((diagram.getUpdateTime())));
+		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
+				DateManager.convertDateToString((diagram.getUpdateTime())));
 		editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(diagram));
+		editCellComponent.addLayoutClickListener(new LayoutClickListener() {
+			private static final long serialVersionUID = -4750839674064167369L;
+
+			@Override
+			public void layoutClick(LayoutClickEvent event) {
+				setValue(diagram);
+			}
+		});
 		setChildrenAllowed(diagram, false);
 		updateItemInGui(diagram);
 	}
@@ -76,26 +91,26 @@ public class SelectDiagramTable extends TreeTable {
 		updateItemInGui(diagram);
 	}
 
-	public void addRows(List<Diagram> diagrams){
-		for(Diagram diagram: diagrams){
+	public void addRows(List<Diagram> diagrams) {
+		for (Diagram diagram : diagrams) {
 			addRow(diagram);
 		}
-		for(Diagram diagram: diagrams){
+		for (Diagram diagram : diagrams) {
 			List<Diagram> childDiagrams = diagram.getChildDiagrams();
-			if(!childDiagrams.isEmpty()){
+			if (!childDiagrams.isEmpty()) {
 				setChildrenAllowed(diagram, true);
 				setCollapsed(diagram, false);
 			}
-			for(Diagram childDiagram :childDiagrams){
+			for (Diagram childDiagram : childDiagrams) {
 				setParent(childDiagram, diagram);
 			}
 		}
 		sort();
 	}
 
-	public void selectFirstRow(){
+	public void selectFirstRow() {
 		Collection<?> ids = getItemIds();
-		if(!ids.isEmpty()){
+		if (!ids.isEmpty()) {
 			Object object = ids.iterator().next();
 			setValue(object);
 		}
@@ -108,9 +123,10 @@ public class SelectDiagramTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	protected void updateItemInGui(Diagram diagram) {
 		Item row = getItem(diagram);
-		SelectTableEditCell tableCell = ((SelectTableEditCell) row
-				.getItemProperty(MenuProperties.DIAGRAM_NAME).getValue());
-		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(diagram.getUpdateTime()));
+		SelectTableEditCell tableCell = ((SelectTableEditCell) row.getItemProperty(MenuProperties.DIAGRAM_NAME)
+				.getValue());
+		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
+				DateManager.convertDateToString(diagram.getUpdateTime()));
 		tableCell.setLabel(diagram);
 	}
 
@@ -125,8 +141,7 @@ public class SelectDiagramTable extends TreeTable {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
+					ServerTranslate.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
 
 			newTableCellEditWindow.setValue(diagram.getName());
 			newTableCellEditWindow.showCentered();
@@ -146,5 +161,18 @@ public class SelectDiagramTable extends TreeTable {
 				}
 			});
 		}
+	}
+
+	@Override
+	public void setValue(Object itemId) {
+		if (itemId != null) {
+			Set<Cell> cells = new HashSet<Cell>();
+			for (Object colId : getContainerPropertyIds()) {
+				Cell tempCell = new Cell(itemId, colId);
+				cells.add(tempCell);
+			}
+			cellRowSelector.setCurrentSelectedCells(this, cells, null, false);
+		}
+		super.setValue(itemId);
 	}
 }
