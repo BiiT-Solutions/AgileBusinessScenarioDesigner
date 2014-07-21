@@ -65,10 +65,6 @@ public class Rule extends StorableObject implements ITableCellEditable {
 		List<Expression> expressions = condition.getExpressions();
 		Set<TreeObject> references = new HashSet<>();
 		for (Expression expression : expressions) {
-			if (expression instanceof ExpressionValueFormCustomVariable) {
-				references.add(((ExpressionValueFormCustomVariable) expression).getQuestion());
-				continue;
-			}
 			if (expression instanceof ExpressionValueTreeObjectReference) {
 				references.add(((ExpressionValueTreeObjectReference) expression).getReference());
 				continue;

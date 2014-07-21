@@ -15,8 +15,8 @@ public class DiagramForkSerializer extends DiagramObjectSerializerCommon<Diagram
 	public JsonElement serialize(DiagramFork element, Type type, JsonSerializationContext context) {
 		final JsonObject jsonObject = new JsonObject();
 		//Set the current name of the question.
-		if(element.getQuestion()!=null){
-			element.getBiitText().setText(element.getQuestion().getName());
+		if(element.getReference()!=null){
+			element.getBiitText().setText(element.getReference().getRepresentation());
 		}else{
 			element.getBiitText().setText("Fork");
 		}

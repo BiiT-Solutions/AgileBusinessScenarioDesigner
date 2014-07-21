@@ -51,7 +51,7 @@ public class ExpressionValueDateFormCustomVariable extends ExpressionValueFormCu
 	@Override
 	public Expression generateCopy() {
 		ExpressionValueDateFormCustomVariable copy = new ExpressionValueDateFormCustomVariable();
-		copy.setQuestion(getQuestion());
+		copy.setReference(getReference());
 		copy.setVariable(getVariable());
 		copy.unit = unit;
 		return copy;

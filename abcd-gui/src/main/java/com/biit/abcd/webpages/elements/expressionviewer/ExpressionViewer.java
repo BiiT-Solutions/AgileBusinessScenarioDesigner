@@ -230,8 +230,7 @@ public class ExpressionViewer extends CssLayout {
 										.getValue();
 								if (formReference != null) {
 									// Update the already existing expression.
-									((ExpressionValueFormCustomVariable) expression).setQuestion(formReference
-											.getQuestion());
+									((ExpressionValueFormCustomVariable) expression).setReference(formReference.getReference());
 									((ExpressionValueFormCustomVariable) expression).setVariable(formReference
 											.getVariable());
 									window.close();

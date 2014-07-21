@@ -123,7 +123,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 	}
 
 	public void setvalue(ExpressionValueFormCustomVariable expression) {
-		formQuestionTable.setValue(expression.getQuestion());
+		formQuestionTable.setValue(expression.getReference());
 		variableSelection.setValue(expression.getVariable());
 	}
 

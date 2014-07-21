@@ -7,13 +7,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.gson.utils.DiagramLinkDeserializer;
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
-import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -23,16 +22,13 @@ import com.liferay.portal.model.User;
 @Table(name = "DIAGRAM_LINKS")
 public class DiagramLink extends DiagramObject {
 
-	// This can change if later this wants to be changed to an expression that
-	// unifies both elements.
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Answer answer;
-	@Column(length = 1000000)
-	private String answerExpression;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private ExpressionChain expressionChain;
 
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Node source;
+
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Node target;
@@ -48,6 +44,11 @@ public class DiagramLink extends DiagramObject {
 	private String attrs;
 	@Column(length = 1000000)
 	private String vertices;
+
+	public DiagramLink() {
+		super();
+		expressionChain = new ExpressionChain();
+	}
 
 	public Node getSource() {
 		return source;
@@ -121,27 +122,6 @@ public class DiagramLink extends DiagramObject {
 		return vertices;
 	}
 
-	public Answer getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(Answer answer) {
-		this.answer = answer;
-	}
-
-	public String getAnswerExpression() {
-		return answerExpression;
-	}
-
-	public void setAnswerExpression(String answerExpression) {
-		this.answerExpression = answerExpression;
-	}
-
-	public void clearAnswerAndAnswerExpression() {
-		setAnswer(null);
-		setAnswerExpression(new String());
-	}
-
 	public static DiagramLink fromJson(String jsonString) {
 		if (jsonString != null) {
 			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
@@ -202,7 +182,7 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	private boolean isAnswerEmpty() {
-		if (answer == null && (answerExpression == null || answerExpression.isEmpty())) {
+		if (expressionChain == null || expressionChain.getExpressions().isEmpty()) {
 			return true;
 		}
 		return false;
@@ -218,10 +198,10 @@ public class DiagramLink extends DiagramObject {
 					return "";
 				}
 			} else {
-				if (getAnswer() != null) {
-					return getAnswer().getName();
+				if (expressionChain != null) {
+					return expressionChain.getExpression();
 				} else {
-					return getAnswerExpression();
+					return "";
 				}
 			}
 		} else {
@@ -230,27 +210,26 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	public void clear() {
-		answer = null;
-		answerExpression = null;
+		expressionChain = null;
 		setText("");
 	}
-	
+
 	@Override
 	public void setCreatedBy(User user) {
 		super.setCreatedBy(user);
 		source.setCreatedBy(user);
 		target.setCreatedBy(user);
 	}
-	
+
 	@Override
-	public void setUpdatedBy(User user){
+	public void setUpdatedBy(User user) {
 		super.setUpdatedBy(user);
 		source.setUpdatedBy(user);
 		target.setUpdatedBy(user);
 	}
-	
+
 	@Override
-	public void setUpdateTime(Timestamp dateUpdated){
+	public void setUpdateTime(Timestamp dateUpdated) {
 		super.setUpdateTime(dateUpdated);
 		source.setUpdateTime(dateUpdated);
 		target.setUpdateTime(dateUpdated);
@@ -262,11 +241,8 @@ public class DiagramLink extends DiagramObject {
 		if (object instanceof DiagramLink) {
 			DiagramLink link = (DiagramLink) object;
 
-			if (link.getAnswer() != null) {
-				answer = link.getAnswer();
-			}
-			if (link.getAnswerExpression() != null) {
-				answerExpression = new String(link.getAnswerExpression());
+			if (!link.expressionChain.getExpressions().isEmpty()) {
+				expressionChain = link.expressionChain;
 			}
 
 			if (source == null) {
@@ -291,5 +267,20 @@ public class DiagramLink extends DiagramObject {
 				vertices = new String(link.getVertices());
 			}
 		}
+	}
+
+	public ExpressionChain getExpressionChain() {
+		return expressionChain;
+	}
+
+	/**
+	 * Avoid this method. Expression chain is a OneToOne relationship and
+	 * currently Hibernate doesn't handle correctly the Orphan removal. Use
+	 * setExpressions of ExpressionChain.
+	 * 
+	 * @param expressionChain
+	 */
+	public void setExpressionChain(ExpressionChain expressionChain) {
+		this.expressionChain = expressionChain;
 	}
 }

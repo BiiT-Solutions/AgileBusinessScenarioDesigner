@@ -5,6 +5,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
@@ -21,14 +22,21 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionChain expressionChain;
 
-	public AddNewAnswerExpressionWindow(Question question, ExpressionChain expressionChain) {
+	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
 		this.expressionChain = expressionChain.generateCopy();
 
-		if (question.getAnswerType() != AnswerType.INPUT) {
-			setContent(generateTable(question));
-		} else {
+		if (reference instanceof ExpressionValueFormCustomVariable) {
+			// Custom variable
 			setContent(generateExpression());
+		} else {
+			// Question
+			Question question = (Question) reference.getReference();
+			if (question.getAnswerType() != AnswerType.INPUT) {
+				setContent(generateTable(question));
+			} else {
+				setContent(generateExpression());
+			}
 		}
 
 		setResizable(false);
@@ -47,10 +55,19 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				expressionChain.removeAllExpressions();
-				expressionChain.addExpression(new ExpressionValueTreeObjectReference(answerTable.getValue()));
+				if (answerTable.getValue() != null) {
+					expressionChain.addExpression(new ExpressionValueTreeObjectReference(answerTable.getValue()));
+				}
 			}
 		});
 		answerTable.setSizeFull();
+		if (!expressionChain.getExpressions().isEmpty()
+				&& expressionChain.getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
+			answerTable.setValue(((ExpressionValueTreeObjectReference) expressionChain.getExpressions().get(0))
+					.getReference());
+		} else {
+			answerTable.setValue(null);
+		}
 
 		return answerTable;
 	}

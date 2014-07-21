@@ -28,7 +28,6 @@ import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -93,7 +92,8 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
 		
 		formTreeTable.addDetachListener(new DetachListener() {
-			
+			private static final long serialVersionUID = -9057209239644161482L;
+
 			@Override
 			public void detach(DetachEvent event) {
 				tableIsGoingToDetach = true;
