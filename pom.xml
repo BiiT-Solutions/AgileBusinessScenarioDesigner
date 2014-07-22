@@ -47,6 +47,7 @@
 		<liferay-authentication-client.version>0.5.0</liferay-authentication-client.version>
 		<jointjs-widget.version>0.1.2-WIDGET</jointjs-widget.version>
 		<jexeval.version>1.0.2</jexeval.version>
+		<drools.version>6.1.0.CR2</drools.version>
 	</properties>
 
 	<dependencies>

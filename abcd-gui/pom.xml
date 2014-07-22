@@ -136,6 +136,21 @@
 			<artifactId>spring-core</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.biit</groupId>
+			<artifactId>drools-parser</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-core</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-compiler</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
