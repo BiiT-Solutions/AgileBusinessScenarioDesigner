@@ -39,7 +39,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
 public class DecisionTableEditor extends FormWebPageComponent implements EditExpressionListener,
-		ClearExpressionListener, EditActionListener, ClearActionListener {
+ClearExpressionListener, EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
 
 	private NewDecisionTable decisionTable;
@@ -283,7 +283,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	 */
 	private void removeSelectedTable() {
 		UserSessionHandler.getFormController().getForm().getTableRules()
-				.remove(tableSelectionMenu.getSelectedTableRule());
+		.remove(tableSelectionMenu.getSelectedTableRule());
 		tableSelectionMenu.removeSelectedRow();
 	}
 
@@ -360,10 +360,10 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
 
 				if (originalQuestion != null) {
-					if ((originalQuestion.getAnswerType() == AnswerType.INPUT && selectedQuestion.getAnswerType() != AnswerType.INPUT)
-							|| (originalQuestion.getAnswerType() != AnswerType.INPUT && selectedQuestion
-									.getAnswerType() == AnswerType.INPUT)
-							|| (!originalQuestion.equals(selectedQuestion))) {
+					if (((originalQuestion.getAnswerType() == AnswerType.INPUT) && (selectedQuestion.getAnswerType() != AnswerType.INPUT))
+							|| ((originalQuestion.getAnswerType() != AnswerType.INPUT) && (selectedQuestion
+									.getAnswerType() == AnswerType.INPUT))
+									|| (!originalQuestion.equals(selectedQuestion))) {
 						answerExpression.removeAllExpressions();
 					}
 				}

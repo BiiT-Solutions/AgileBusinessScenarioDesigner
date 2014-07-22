@@ -9,8 +9,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVar
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
-import com.biit.abcd.webpages.elements.expressionviewer.AnswerExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
@@ -62,7 +62,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		});
 		answerTable.setSizeFull();
 		if (!expressionChain.getExpressions().isEmpty()
-				&& expressionChain.getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
+				&& (expressionChain.getExpressions().get(0) instanceof ExpressionValueTreeObjectReference)) {
 			answerTable.setValue(((ExpressionValueTreeObjectReference) expressionChain.getExpressions().get(0))
 					.getReference());
 		} else {
@@ -79,10 +79,11 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		VerticalLayout layout = new VerticalLayout();
 
 		// Create content
-		expressionEditorComponent = new AnswerExpressionEditorComponent(true);
+		//		expressionEditorComponent = new AnswerExpressionEditorComponent(true);
+		expressionEditorComponent = new SimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 
-		((AnswerExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(expressionChain);
+		((SimpleExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(expressionChain);
 
 		layout.addComponent(expressionEditorComponent);
 		layout.setSizeFull();
