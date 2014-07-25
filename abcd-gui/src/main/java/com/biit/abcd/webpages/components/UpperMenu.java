@@ -1,8 +1,13 @@
 package com.biit.abcd.webpages.components;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
+import com.biit.drools.FormKieDroolsNoDRLFile;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -19,7 +24,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 
 	private HorizontalLayout upperRootLayout;
 	private HorizontalLayout oldRootLayoutContainer;
-	private IconButton formManagerButton, settingsButton;
+	private IconButton formManagerButton, settingsButton, droolsExporterButton;
 
 	public UpperMenu() {
 		super();
@@ -27,6 +32,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 		setContractIcons(true, BUTTON_WIDTH);
 	}
 
+	@Override
 	protected void initHorizontalButtonGroup() {
 		super.initHorizontalButtonGroup();
 
@@ -40,17 +46,17 @@ public class UpperMenu extends HorizontalButtonGroup {
 		// Add FormManager button.
 		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcon.FORM_MANAGER_PAGE,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
-					private static final long serialVersionUID = 4002268252434768032L;
+			private static final long serialVersionUID = 4002268252434768032L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-					}
-				});
+			@Override
+			public void buttonClick(ClickEvent event) {
+				ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+			}
+		});
 		formManagerButton.setEnabled(true);
 		formManagerButton.setHeight("100%");
 		formManagerButton.setWidth(BUTTON_WIDTH);
-		
+
 		CssLayout separator = new CssLayout();
 		separator.setHeight("100%");
 		separator.setWidth(SEPARATOR_WIDTH);
@@ -58,16 +64,32 @@ public class UpperMenu extends HorizontalButtonGroup {
 
 		settingsButton = new IconButton(LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, ThemeIcon.SETTINGS,
 				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, IconSize.BIG, new ClickListener() {
-					private static final long serialVersionUID = 3450355943436017152L;
+			private static final long serialVersionUID = 3450355943436017152L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						SettingsWindow settings = new SettingsWindow();
-						settings.showRelativeToComponent(settingsButton);
-					}
-				});
+			@Override
+			public void buttonClick(ClickEvent event) {
+				SettingsWindow settings = new SettingsWindow();
+				settings.showRelativeToComponent(settingsButton);
+			}
+		});
 		settingsButton.setHeight("100%");
 		settingsButton.setWidth(BUTTON_WIDTH);
+
+		droolsExporterButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EXPORTER, ThemeIcon.FORM_MANAGER_PAGE,
+				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
+			private static final long serialVersionUID = 4002268252434768032L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);
+				new FormKieDroolsNoDRLFile().go(UserSessionHandler.getFormController().getForm());
+				ps.close();
+			}
+		});
+		droolsExporterButton.setEnabled(true);
+		droolsExporterButton.setHeight("100%");
+		droolsExporterButton.setWidth(BUTTON_WIDTH);
 
 		Component currentRootLayout = getCompositionRoot();
 
@@ -80,8 +102,10 @@ public class UpperMenu extends HorizontalButtonGroup {
 		upperRootLayout.addComponent(separator);
 		upperRootLayout.addComponent(formManagerButton);
 		upperRootLayout.addComponent(settingsButton);
+		upperRootLayout.addComponent(droolsExporterButton);
 		upperRootLayout.setExpandRatio(oldRootLayoutContainer, 1.0f);
 		upperRootLayout.setExpandRatio(separator, 0.0f);
+		upperRootLayout.setExpandRatio(droolsExporterButton, 0.0f);
 		upperRootLayout.setExpandRatio(settingsButton, 0.0f);
 		upperRootLayout.setExpandRatio(formManagerButton, 0.0f);
 

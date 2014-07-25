@@ -32,9 +32,11 @@ public class ExpressionValueFormCustomVariable extends ExpressionValueTreeObject
 	@Override
 	public String getRepresentation() {
 		String expressionString = new String();
-		expressionString += getReference().getName();
-		if (variable != null) {
-			expressionString += "." + variable.getName();
+		if(getReference() != null){
+			expressionString += getReference().getName();
+			if (variable != null) {
+				expressionString += "." + variable.getName();
+			}
 		}
 		return expressionString;
 	}
