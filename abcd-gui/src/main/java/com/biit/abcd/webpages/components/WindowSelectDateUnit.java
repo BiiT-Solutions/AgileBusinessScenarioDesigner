@@ -1,9 +1,8 @@
-package com.biit.abcd.webpages.elements.expressionviewer;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.DateUnit;
-import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;

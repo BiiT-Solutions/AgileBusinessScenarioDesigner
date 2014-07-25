@@ -2,6 +2,7 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -62,22 +63,27 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 		initUpperMenu();
 
-		// Add tables
-		tableSelectExpression.update(UserSessionHandler.getFormController().getForm());
+		if (UserSessionHandler.getFormController().getForm() != null) {
+			// Add tables
+			tableSelectExpression.update(UserSessionHandler.getFormController().getForm());
 
-		sortTableMenu();
+			sortTableMenu();
 
-		if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
-			tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController()
-					.getLastAccessExpression());
-		} else {
-			// Select the first one if available.
-			if (UserSessionHandler.getFormController().getForm().getExpressionChain().size() > 0) {
-				tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-						.getExpressionChain().get(0));
+			if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
+				tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController()
+						.getLastAccessExpression());
+			} else {
+				// Select the first one if available.
+				if (UserSessionHandler.getFormController().getForm().getExpressionChain().size() > 0) {
+					tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
+							.getExpressionChain().get(0));
+				}
 			}
+			refreshExpressionEditor();
+		}else{
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
-		refreshExpressionEditor();
 	}
 
 	private void initUpperMenu() {
@@ -146,7 +152,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	private void removeSelectedExpression() {
 		UserSessionHandler.getFormController().getForm().getExpressionChain()
-		.remove(tableSelectExpression.getSelectedExpression());
+				.remove(tableSelectExpression.getSelectedExpression());
 		tableSelectExpression.removeSelectedRow();
 		refreshExpressionEditor();
 	}

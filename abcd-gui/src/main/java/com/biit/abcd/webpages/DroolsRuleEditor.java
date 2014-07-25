@@ -2,6 +2,7 @@ package com.biit.abcd.webpages;
 
 import java.util.List;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -62,24 +63,29 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 		initUpperMenu();
 
-		// Add expressions
-		for (Rule rule : UserSessionHandler.getFormController().getForm().getRules()) {
-			addRuleToTableMenu(rule);
-		}
-
-		sortTableMenu();
-
-		// Select the last access object or the first one
-		if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
-			tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getLastAccessRule());
-		}
-		else {
-			// Select the first one if available.
-			if (UserSessionHandler.getFormController().getForm().getRules().size() > 0) {
-				tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getForm().getRules().get(0));
+		if (UserSessionHandler.getFormController().getForm() != null) {
+			// Add expressions
+			for (Rule rule : UserSessionHandler.getFormController().getForm().getRules()) {
+				addRuleToTableMenu(rule);
 			}
+
+			sortTableMenu();
+
+			// Select the last access object or the first one
+			if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
+				tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getLastAccessRule());
+			} else {
+				// Select the first one if available.
+				if (UserSessionHandler.getFormController().getForm().getRules().size() > 0) {
+					tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getForm().getRules()
+							.get(0));
+				}
+			}
+			refreshRuleEditor();
+		}else{
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
-		refreshRuleEditor();
 	}
 
 	private void initUpperMenu() {

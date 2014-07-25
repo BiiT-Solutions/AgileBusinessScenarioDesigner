@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
@@ -47,6 +48,13 @@ public class FormDesigner extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
+		//If there is no form, then go back to form manager.
+		if (UserSessionHandler.getFormController().getForm() == null) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+			return;
+		}		
+		
 		tableIsGoingToDetach = false;
 		this.upperMenu = initUpperMenu();
 		setUpperMenu(upperMenu);

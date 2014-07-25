@@ -3,13 +3,18 @@ package com.biit.abcd.webpages;
 import java.util.Collection;
 import java.util.List;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.DateUnit;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -19,6 +24,7 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectTableRuleTableEditable;
+import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewActionExpressionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
@@ -39,7 +45,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
 public class DecisionTableEditor extends FormWebPageComponent implements EditExpressionListener,
-ClearExpressionListener, EditActionListener, ClearActionListener {
+		ClearExpressionListener, EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
 
 	private NewDecisionTable decisionTable;
@@ -52,6 +58,13 @@ ClearExpressionListener, EditActionListener, ClearActionListener {
 
 	@Override
 	protected void initContent() {
+		// If there is no form, then go back to form manager.
+		if (UserSessionHandler.getFormController().getForm() == null) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+			return;
+		}
+
 		updateButtons(true);
 
 		// Create container
@@ -283,7 +296,7 @@ ClearExpressionListener, EditActionListener, ClearActionListener {
 	 */
 	private void removeSelectedTable() {
 		UserSessionHandler.getFormController().getForm().getTableRules()
-		.remove(tableSelectionMenu.getSelectedTableRule());
+				.remove(tableSelectionMenu.getSelectedTableRule());
 		tableSelectionMenu.removeSelectedRow();
 	}
 
@@ -341,7 +354,7 @@ ClearExpressionListener, EditActionListener, ClearActionListener {
 		}
 	}
 
-	private void newEditQuestionWindow(final TableRuleRow row, Object propertyId) {
+	private void newEditQuestionWindow(final TableRuleRow row, final Object propertyId) {
 		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
 				.getExpressionValue(row, propertyId);
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable
@@ -356,25 +369,64 @@ ClearExpressionListener, EditActionListener, ClearActionListener {
 		newConditionWindow.addAcceptActionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
-				Question originalQuestion = (Question) questionExpression.getReference();
-				Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
+				final Question originalQuestion = (Question) questionExpression.getReference();
+				final Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
 
-				if (originalQuestion != null) {
-					if (((originalQuestion.getAnswerType() == AnswerType.INPUT) && (selectedQuestion.getAnswerType() != AnswerType.INPUT))
-							|| ((originalQuestion.getAnswerType() != AnswerType.INPUT) && (selectedQuestion
-									.getAnswerType() == AnswerType.INPUT))
-									|| (!originalQuestion.equals(selectedQuestion))) {
-						answerExpression.removeAllExpressions();
+				if (selectedQuestion != null) {
+					newConditionWindow.close();
+					if (selectedQuestion.getAnswerFormat() == AnswerFormat.DATE) {
+						// Create a window for selecting the unit and assign it
+						// to the expression.
+						final WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
+								.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
+						windowDate.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								removeAnswerExpressionIfNeeded(originalQuestion, selectedQuestion, answerExpression);
+								whatever(row, (Integer) propertyId, selectedQuestion,windowDate.getValue());
+								window.close();
+							}
+						});
+						windowDate.showCentered();
+					} else {
+						removeAnswerExpressionIfNeeded(originalQuestion, selectedQuestion, answerExpression);
+						whatever(row, (Integer) propertyId, selectedQuestion);
 					}
+				} else {
+					MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
 				}
-
-				questionExpression.setReference(selectedQuestion);
-				decisionTable.update(getSelectedTableRule());
-				newConditionWindow.close();
-
 			}
 		});
 		newConditionWindow.showCentered();
+	}
+
+	private void removeAnswerExpressionIfNeeded(Question originalQuestion, Question selectedQuestion,
+			ExpressionChain answerExpression) {
+		if (originalQuestion != null && selectedQuestion != null) {
+			if (((originalQuestion.getAnswerType() == AnswerType.INPUT) && (selectedQuestion.getAnswerType() != AnswerType.INPUT))
+					|| ((originalQuestion.getAnswerType() != AnswerType.INPUT) && (selectedQuestion.getAnswerType() == AnswerType.INPUT))
+					|| (!originalQuestion.equals(selectedQuestion))) {
+				answerExpression.removeAllExpressions();
+			}
+		}
+	}
+
+	private void whatever(TableRuleRow row, Integer propertyId, Question selectedQuestion) {
+		ExpressionValueTreeObjectReference reference;
+
+		reference = new ExpressionValueTreeObjectReference(selectedQuestion);
+
+		row.setExpression(propertyId, reference);
+		decisionTable.update(getSelectedTableRule());
+	}
+	
+	private void whatever(TableRuleRow row, Integer propertyId, Question selectedQuestion, DateUnit dateUnit) {
+		ExpressionValueTreeObjectReference reference;
+
+		reference = new ExpressionValueDateTreeObjectReference(selectedQuestion,dateUnit);
+
+		row.setExpression(propertyId, reference);
+		decisionTable.update(getSelectedTableRule());
 	}
 
 	private void newEditAnswerWindow(TableRuleRow row, Object propertyId) {

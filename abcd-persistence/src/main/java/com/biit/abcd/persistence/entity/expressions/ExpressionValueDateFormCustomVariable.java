@@ -21,9 +21,14 @@ public class ExpressionValueDateFormCustomVariable extends ExpressionValueFormCu
 	public ExpressionValueDateFormCustomVariable() {
 		super();
 	}
-
+	
 	public ExpressionValueDateFormCustomVariable(TreeObject question, CustomVariable variable) {
 		super(question, variable);
+	}
+
+	public ExpressionValueDateFormCustomVariable(TreeObject question, CustomVariable variable,DateUnit unit) {
+		super(question, variable);
+		setUnit(unit);
 	}
 
 	public synchronized DateUnit getUnit() {

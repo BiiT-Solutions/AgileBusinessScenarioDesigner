@@ -21,6 +21,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjec
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.TreeObjectTableMultiSelect;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -73,7 +74,6 @@ public class TabFormVariablesLayout extends TabLayout {
 							// Create a window for selecting the unit and assign it to the expression.
 							WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
 									.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
-
 							windowDate.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {
@@ -84,7 +84,7 @@ public class TabFormVariablesLayout extends TabLayout {
 									window.close();
 								}
 							});
-							UI.getCurrent().addWindow(windowDate);
+							windowDate.showCentered();
 						} else {
 							// Standard element, create a normal expression.
 							formReference = new ExpressionValueTreeObjectReference();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
@@ -39,7 +40,10 @@ public class FormVariables extends FormWebPageComponent {
 
 		getWorkingAreaLayout().addComponent(variableTable);
 
-		if (UserSessionHandler.getFormController().getForm() != null) {
+		if (UserSessionHandler.getFormController().getForm() == null) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+		} else {
 			if (variableTable != null) {
 				for (CustomVariable customVariable : UserSessionHandler.getFormController().getForm()
 						.getCustomVariables()) {

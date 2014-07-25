@@ -75,4 +75,9 @@ public class TableRuleRow extends StorableObject {
 		addCondition(new ExpressionValueTreeObjectReference());
 		addCondition(new ExpressionChain());
 	}
+	
+	public void setExpression(int position, Expression expression){
+		//TODO exception if bad expression?
+		getConditions().set(position, expression);
+	}
 }

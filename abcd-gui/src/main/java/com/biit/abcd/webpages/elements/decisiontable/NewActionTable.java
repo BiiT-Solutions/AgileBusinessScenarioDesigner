@@ -24,6 +24,7 @@ public class NewActionTable extends Table {
 	private CellRowSelector cellRowSelector;
 	private List<EditActionListener> editActionListeners;
 	private List<ClearActionListener> clearActionListeners;
+	private int CHARACTER_LIMIT = 25;
 
 	enum Columns {
 		ACTION
@@ -59,7 +60,11 @@ public class NewActionTable extends Table {
 		Item rowItem = getItem(row);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) rowItem.getItemProperty(Columns.ACTION).getValue());
 		if (row.getAction() != null) {
-			actionValue.setLabel(row.getAction().getExpression());
+			String representation = row.getAction().getRepresentation();
+			if(representation.length()>CHARACTER_LIMIT){
+				representation = "..."+representation.substring(representation.length()-CHARACTER_LIMIT, representation.length());
+			}
+			actionValue.setLabel(representation);
 		} else {
 			actionValue.setLabel("null");
 		}

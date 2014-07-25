@@ -140,6 +140,10 @@ public class NewDecisionTable extends CustomComponent {
 	public Expression getExpressionValue(TableRuleRow row, Object propertyId) {
 		return conditionTable.getExpressionValue(row, propertyId);
 	}
+	
+	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression){
+		conditionTable.setExpressionValue(row, propertyId, expression);
+	}
 
 	// *************************************
 	// Condition and Action tables listeners

@@ -5,6 +5,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.TreeObject;
+
 /**
  * Date expressions must define the unit to be applied in functions. I.e. Between(0Y, 18Y)
  */
@@ -21,6 +23,15 @@ public class ExpressionValueDateTreeObjectReference extends ExpressionValueTreeO
 
 	public synchronized void setUnit(DateUnit unit) {
 		this.unit = unit;
+	}
+	
+	public ExpressionValueDateTreeObjectReference(){
+		super();
+	}
+	
+	public ExpressionValueDateTreeObjectReference(TreeObject reference, DateUnit dateUnit) {
+		setReference(reference);
+		setUnit(dateUnit);
 	}
 
 	@Override

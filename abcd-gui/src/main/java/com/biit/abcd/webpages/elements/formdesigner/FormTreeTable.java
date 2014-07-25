@@ -6,6 +6,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.webpages.components.ComponentCellRule;
 import com.biit.abcd.webpages.components.TreeObjectTable;
@@ -30,10 +31,9 @@ public class FormTreeTable extends TreeObjectTable {
 		super.addItem(element, parent);
 		if (element != null) {
 			List<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
-			ComponentCellRule rulesComponent = new ComponentCellRule();
-			rulesComponent.update(assignedRules);
-			rulesComponent.registerTouchCallBack(this, element);
+			List<ExpressionChain> expressionChains = UserSessionHandler.getFormController().getFormExpressionChainsAssignedToTreeObject(element);
 
+			ComponentCellRule rulesComponent = getRulesComponent(element,assignedRules,expressionChains);
 			Item item = getItem(element);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
 		}
@@ -46,16 +46,17 @@ public class FormTreeTable extends TreeObjectTable {
 		Item item = getItem(element);
 		if (item != null) {
 			List<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
-			ComponentCellRule rulesComponent = getRulesComponent(assignedRules);
-			rulesComponent.update(assignedRules);
-
+			List<ExpressionChain> expressionChains = UserSessionHandler.getFormController().getFormExpressionChainsAssignedToTreeObject(element);
+			
+			ComponentCellRule rulesComponent = getRulesComponent(element,assignedRules,expressionChains);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
 		}
 	}
 
-	public ComponentCellRule getRulesComponent(List<Rule> rules) {
+	public ComponentCellRule getRulesComponent(TreeObject element,List<Rule> rules, List<ExpressionChain> expressionChains) {
 		ComponentCellRule component = new ComponentCellRule();
-		component.update(rules);
+		component.update(rules,expressionChains);
+		component.registerTouchCallBack(this, element);
 		return component;
 	}
 

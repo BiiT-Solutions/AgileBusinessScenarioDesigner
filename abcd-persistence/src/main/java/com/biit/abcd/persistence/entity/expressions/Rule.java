@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -60,24 +59,13 @@ public class Rule extends StorableObject implements ITableCellEditable {
 		this.name = name;
 	}
 
-	private Set<TreeObject> getReferencedTreeObjects() {
-		ExpressionChain condition = getCondition();
-		List<Expression> expressions = condition.getExpressions();
-		Set<TreeObject> references = new HashSet<>();
-		for (Expression expression : expressions) {
-			if (expression instanceof ExpressionValueTreeObjectReference) {
-				references.add(((ExpressionValueTreeObjectReference) expression).getReference());
-				continue;
-			}
-		}
-		return references;
-	}
-
 	public boolean isAssignedTo(TreeObject treeObject) {
-		Set<TreeObject> references = getReferencedTreeObjects();
+		Set<TreeObject> references = new HashSet<>();
+		references.addAll(getCondition().getReferencedTreeObjects());
+		references.addAll(getActions().getReferencedTreeObjects());
 		if (!references.isEmpty()) {
 			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
-			if(commonTreeObject.equals(treeObject)){
+			if (commonTreeObject.equals(treeObject)) {
 				return true;
 			}
 		}

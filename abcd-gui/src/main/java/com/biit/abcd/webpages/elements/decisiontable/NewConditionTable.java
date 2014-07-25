@@ -249,6 +249,10 @@ public class NewConditionTable extends Table {
 	public Expression getExpressionValue(TableRuleRow row, Object propertyId) {
 		return row.getConditions().get((Integer) propertyId);
 	}
+	
+	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression){
+		row.getConditions().set(((Integer) propertyId),expression);
+	}
 
 	public Expression getNextExpressionValue(TableRuleRow row, Object propertyId) {
 		int index = ((Integer) propertyId) + 1;
