@@ -41,6 +41,7 @@ public class FormManager extends FormWebPageComponent {
 		rootLayout.setMargin(true);
 		getWorkingAreaLayout().addComponent(rootLayout);
 		formTable.selectLastUsedForm();
+		UserSessionHandler.getFormController().setForm(getForm());
 		updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 	}
 
