@@ -7,7 +7,7 @@ import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.drools.FormKieDroolsNoDRLFile;
+import com.biit.drools.Form2DroolsNoDrl;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -83,7 +83,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 			public void buttonClick(ClickEvent event) {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				PrintStream ps = new PrintStream(baos);
-				new FormKieDroolsNoDRLFile().go(UserSessionHandler.getFormController().getForm());
+				new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm());
 				ps.close();
 			}
 		});
