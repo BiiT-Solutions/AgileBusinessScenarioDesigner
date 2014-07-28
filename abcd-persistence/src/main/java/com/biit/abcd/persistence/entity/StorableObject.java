@@ -19,8 +19,12 @@ import com.liferay.portal.model.User;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class StorableObject {
 
+	// GenerationType.Table stores into hibernate_sequence the name of the table as a VARCHAR(255) when using
+	// "hibernate.id.new_generator_mappings" property. If using utf8mb4, the VARCHAR(255) needs 1000 bytes, that this is
+	// forbidden due to MySQL only allows a max of 767 bytes in a unique key. If "hibernate.id.new_generator_mappings"
+	// is not set, GenerationType.AUTO causes Cannot use identity column key generation with <union-subclass> error.
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 
@@ -131,7 +135,7 @@ public abstract class StorableObject {
 			return false;
 		return true;
 	}
-	
+
 	public void resetIds() {
 		setId(null);
 	}
