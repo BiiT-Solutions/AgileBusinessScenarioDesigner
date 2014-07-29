@@ -12,9 +12,8 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.expressions.DateUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -383,7 +382,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								removeAnswerExpressionIfNeeded(originalQuestion, selectedQuestion, answerExpression);
-								whatever(row, (Integer) propertyId, selectedQuestion,windowDate.getValue());
+								whatever(row, (Integer) propertyId, selectedQuestion, windowDate.getValue());
 								window.close();
 							}
 						});
@@ -419,11 +418,11 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		row.setExpression(propertyId, reference);
 		decisionTable.update(getSelectedTableRule());
 	}
-	
-	private void whatever(TableRuleRow row, Integer propertyId, Question selectedQuestion, DateUnit dateUnit) {
+
+	private void whatever(TableRuleRow row, Integer propertyId, Question selectedQuestion, QuestionUnit unit) {
 		ExpressionValueTreeObjectReference reference;
 
-		reference = new ExpressionValueDateTreeObjectReference(selectedQuestion,dateUnit);
+		reference = new ExpressionValueTreeObjectReference(selectedQuestion, unit);
 
 		row.setExpression(propertyId, reference);
 		decisionTable.update(getSelectedTableRule());
