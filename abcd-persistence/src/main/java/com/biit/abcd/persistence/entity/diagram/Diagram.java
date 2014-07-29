@@ -1,13 +1,13 @@
 package com.biit.abcd.persistence.entity.diagram;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,7 +27,6 @@ import com.biit.abcd.gson.utils.DiagramSerializer;
 import com.biit.abcd.gson.utils.DiagramSinkSerializer;
 import com.biit.abcd.gson.utils.DiagramSourceSerializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.utils.ITableCellEditable;
 import com.google.gson.Gson;
@@ -40,9 +39,6 @@ public class Diagram extends StorableObject implements ITableCellEditable {
 
 	private String name;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Form form;
-
 	@SerializedName("cells")
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "ELEMENTS_OF_DIAGRAM")
@@ -53,18 +49,9 @@ public class Diagram extends StorableObject implements ITableCellEditable {
 		diagramElements = new ArrayList<>();
 	}
 
-	public Diagram(Form form, String name) {
-		this.form = form;
+	public Diagram(String name) {
 		this.name = name;
 		diagramElements = new ArrayList<>();
-	}
-
-	public Form getForm() {
-		return form;
-	}
-
-	public void setForm(Form form) {
-		this.form = form;
 	}
 
 	public static Diagram fromJson(String jsonString) {
@@ -104,13 +91,33 @@ public class Diagram extends StorableObject implements ITableCellEditable {
 	}
 
 	/**
-	 * Function to get the list of diagram object elements. Do not add elements
-	 * to this list, use the appropriate functions.
+	 * Function to get the list of diagram object elements. Do not add elements to this list, use the appropriate
+	 * functions.
 	 * 
 	 * @return
 	 */
 	public List<DiagramObject> getDiagramObjects() {
+		return Collections.unmodifiableList(diagramElements);
+	}
+
+	/**
+	 * Only for using with hibernate.
+	 * 
+	 * @return
+	 */
+	public List<DiagramObject> getDiagramObjectForInitializeSet() {
 		return diagramElements;
+	}
+
+	public void removeDiagramObject(DiagramObject object) {
+		diagramElements.remove(object);
+		// Some orphan removal are not working correctly. Force it!
+		if (object instanceof DiagramFork) {
+			((DiagramFork) object).setReference(null);
+		}
+		if (object instanceof DiagramLink) {
+			((DiagramLink) object).setExpressionChain(null);
+		}
 	}
 
 	public void setDiagramObjects(List<DiagramObject> objects) {

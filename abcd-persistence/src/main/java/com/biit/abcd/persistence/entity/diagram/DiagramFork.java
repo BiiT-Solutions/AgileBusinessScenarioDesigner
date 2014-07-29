@@ -21,6 +21,7 @@ public class DiagramFork extends DiagramElement {
 		DiagramBiitText biitText = new DiagramBiitText();
 		biitText.setText("Fork");
 		setBiitText(biitText);
+		reference = new ExpressionValueTreeObjectReference();
 	}
 
 	public ExpressionValueTreeObjectReference getReference() {

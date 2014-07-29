@@ -36,7 +36,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String OTHER_FORM = "Other Form";
 	private final static String CATEGORY_LABEL = "Category1";
 	private final static String CONDITION_EXPRESSION = "Question=Question1 AND Answer=Yes";
-	//	private final static String ACTION_EXPRESSION = "Score=3";
+	// private final static String ACTION_EXPRESSION = "Score=3";
 
 	@Autowired
 	private IFormDao formDao;
@@ -201,7 +201,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Form form = new Form();
 		form.setName(DIAGRAM_FORM);
 
-		Diagram diagram = new Diagram(form, DUMMY_DIAGRAM);
+		Diagram diagram = new Diagram(DUMMY_DIAGRAM);
 		form.getDiagrams().add(diagram);
 
 		formDao.makePersistent(form);
@@ -244,9 +244,9 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 		TableRuleRow tableRuleRow = new TableRuleRow();
 
-		//		QuestionAndAnswerCondition condition = new QuestionAndAnswerCondition();
-		//		condition.setQuestion(question1);
-		//		condition.setAnswer(answer1);
+		// QuestionAndAnswerCondition condition = new QuestionAndAnswerCondition();
+		// condition.setQuestion(question1);
+		// condition.setAnswer(answer1);
 
 		ExpressionChain condition = new ExpressionChain();
 		condition.addExpression(new ExpressionValueString(CONDITION_EXPRESSION));
@@ -262,13 +262,13 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
 
-		//		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
-		//				ACTION_EXPRESSION);
+		// Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
+		// ACTION_EXPRESSION);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = { "storeFormDiagram", "storeOtherFormWithSameLabelCategory",
-	"storeFormTableRule" })
+			"storeFormTableRule" })
 	public void removeForms() {
 		formDao.removeAll();
 		Assert.assertEquals(formDao.getRowCount(), 0);
