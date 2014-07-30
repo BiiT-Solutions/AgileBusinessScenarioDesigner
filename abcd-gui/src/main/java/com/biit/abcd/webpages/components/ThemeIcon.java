@@ -116,9 +116,9 @@ public enum ThemeIcon {
 
 	REMOVE_ROW("appbar.table.delete.row.svg"),
 
-	COPY_ROW("appbar.table.copy.row.svg"),
+	COPY_ROW("appbar.page.copy.svg"),
 
-	PASTE_ROW("appbar.table.paste.row.svg"),
+	PASTE_ROW("appbar.clipboard.paste.svg"),
 
 	EXPRESSION_EDITOR_PAGE("appbar.page.expression.svg"),
 
