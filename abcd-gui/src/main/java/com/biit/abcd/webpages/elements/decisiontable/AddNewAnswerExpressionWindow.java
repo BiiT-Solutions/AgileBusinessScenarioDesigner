@@ -5,7 +5,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
@@ -26,7 +26,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		super();
 		this.expressionChain = expressionChain.generateCopy();
 
-		if (reference instanceof ExpressionValueFormCustomVariable) {
+		if (reference instanceof ExpressionValueCustomVariable) {
 			// Custom variable
 			setContent(generateExpression());
 		} else {

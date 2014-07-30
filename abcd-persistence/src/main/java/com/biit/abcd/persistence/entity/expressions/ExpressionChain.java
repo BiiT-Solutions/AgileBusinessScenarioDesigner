@@ -92,7 +92,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 			// Dots are not allowed in the Evaluator Expression.
 			if ((expressions.get(i) instanceof ExpressionValueString)
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				result += filterVariables(expressions.get(i));
 			} else {
@@ -109,7 +109,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 		for (int i = 0; i < expressions.size(); i++) {
 			if ((expressions.get(i) instanceof ExpressionValueString)
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				// Dots are not allowed.
 				String varName = filterVariables(expressions.get(i));

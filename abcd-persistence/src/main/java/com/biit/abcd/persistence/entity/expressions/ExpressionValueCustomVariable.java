@@ -13,20 +13,27 @@ import com.biit.abcd.persistence.entity.TreeObject;
  *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_FORM_CUSTOM_VARIABLE")
-public class ExpressionValueFormCustomVariable extends ExpressionValueTreeObjectReference {
+@Table(name = "EXPRESSION_VALUE_CUSTOM_VARIABLE")
+public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectReference {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private CustomVariable variable;
 
-	protected ExpressionValueFormCustomVariable() {
+	protected ExpressionValueCustomVariable() {
 		super();
 	}
 
-	public ExpressionValueFormCustomVariable(TreeObject reference, CustomVariable variable) {
+	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable) {
 		super();
 		setReference(reference);
 		this.variable = variable;
+	}
+
+	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit) {
+		super();
+		setReference(reference);
+		setUnit(dateUnit);
+		this.variable = variable;		
 	}
 
 	@Override
@@ -54,7 +61,7 @@ public class ExpressionValueFormCustomVariable extends ExpressionValueTreeObject
 
 	@Override
 	public Expression generateCopy() {
-		ExpressionValueFormCustomVariable copy = new ExpressionValueFormCustomVariable();
+		ExpressionValueCustomVariable copy = new ExpressionValueCustomVariable();
 		copy.setReference(getReference());
 		copy.variable = variable;
 		return copy;

@@ -14,11 +14,9 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
-import com.biit.abcd.persistence.entity.expressions.DateUnit;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateFormCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
@@ -49,18 +47,18 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 		firePropertyUpdateListener(instance);
 	}
 
-	private void setNewDateReference(TreeObject reference, DateUnit dateUnit) {
-		instance.setReference(new ExpressionValueDateTreeObjectReference(reference, dateUnit));
+	private void setNewDateReference(TreeObject reference, QuestionUnit dateUnit) {
+		instance.setReference(new ExpressionValueTreeObjectReference(reference, dateUnit));
 		firePropertyUpdateListener(instance);
 	}
 
 	private void setNewReferenceCustomVariable(TreeObject treeObjectRefence, CustomVariable variable) {
-		instance.setReference(new ExpressionValueFormCustomVariable(treeObjectRefence, variable));
+		instance.setReference(new ExpressionValueCustomVariable(treeObjectRefence, variable));
 		firePropertyUpdateListener(instance);
 	}
 
-	private void setNewDateReferenceCustomVariable(TreeObject reference, CustomVariable variable, DateUnit dateUnit) {
-		instance.setReference(new ExpressionValueDateFormCustomVariable(reference, variable, dateUnit));
+	private void setNewDateReferenceCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit) {
+		instance.setReference(new ExpressionValueCustomVariable(reference, variable, dateUnit));
 		firePropertyUpdateListener(instance);
 	}
 
@@ -92,8 +90,8 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 						windowDate.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								DateUnit dateUnit = windowDate.getValue();
-								setNewDateReference(reference, dateUnit);
+								QuestionUnit unit = windowDate.getValue();
+								setNewDateReference(reference, unit);
 								window.close();
 							}
 						});
@@ -126,14 +124,14 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 						windowDate.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								DateUnit dateUnit = windowDate.getValue();
-								setNewDateReferenceCustomVariable(reference, variable, dateUnit);
+								QuestionUnit unit = windowDate.getValue();
+								setNewDateReferenceCustomVariable(reference, variable, unit);
 								window.close();
 							}
 						});
 						windowDate.showCentered();
 					} else {
-						setNewReferenceCustomVariable(reference,variable);
+						setNewReferenceCustomVariable(reference, variable);
 					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_VARIABLE);

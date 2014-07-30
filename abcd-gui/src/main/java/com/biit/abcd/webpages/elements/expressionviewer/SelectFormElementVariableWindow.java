@@ -8,7 +8,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.elements.decisiontable.FormQuestionTable;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -114,15 +114,15 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		}
 	}
 
-	public ExpressionValueFormCustomVariable getValue() {
+	public ExpressionValueCustomVariable getValue() {
 		if (formQuestionTable.getValue() == null || variableSelection.getValue() == null) {
 			return null;
 		}
-		return new ExpressionValueFormCustomVariable((TreeObject) formQuestionTable.getValue(),
+		return new ExpressionValueCustomVariable((TreeObject) formQuestionTable.getValue(),
 				(CustomVariable) variableSelection.getValue());
 	}
 
-	public void setvalue(ExpressionValueFormCustomVariable expression) {
+	public void setvalue(ExpressionValueCustomVariable expression) {
 		formQuestionTable.setValue(expression.getReference());
 		variableSelection.setValue(expression.getVariable());
 	}
