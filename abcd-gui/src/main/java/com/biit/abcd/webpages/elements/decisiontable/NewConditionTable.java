@@ -189,7 +189,8 @@ public class NewConditionTable extends Table {
 		for (final Object propertyId : getContainerPropertyIds()) {
 			if (decisionRule.getConditions().size() > 0) {
 				Expression expression = decisionRule.getConditions().get((Integer) propertyId);
-				((ExpressionEditCell) item.getItemProperty(propertyId).getValue()).setLabel(expression.getRepresentation());
+				((ExpressionEditCell) item.getItemProperty(propertyId).getValue()).setLabel(expression
+						.getRepresentation());
 			}
 		}
 	}
@@ -249,9 +250,9 @@ public class NewConditionTable extends Table {
 	public Expression getExpressionValue(TableRuleRow row, Object propertyId) {
 		return row.getConditions().get((Integer) propertyId);
 	}
-	
-	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression){
-		row.getConditions().set(((Integer) propertyId),expression);
+
+	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression) {
+		row.getConditions().set(((Integer) propertyId), expression);
 	}
 
 	public Expression getNextExpressionValue(TableRuleRow row, Object propertyId) {

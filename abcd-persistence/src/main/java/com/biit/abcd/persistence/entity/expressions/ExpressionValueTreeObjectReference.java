@@ -53,14 +53,14 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	@Override
 	public String getRepresentation() {
 		if (unit != null) {
-			return reference.toString() + " (" + unit.getAbbreviature() + ")";
+			return reference + " (" + unit.getAbbreviature() + ")";
 		}
-		return reference.toString();
+		return "" + reference;
 	}
 
 	@Override
 	protected String getExpression() {
-		return reference.toString();
+		return "" + reference;
 	}
 
 	@Override
