@@ -4,10 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.drools.Form2DroolsNoDrl;
+import com.biit.abcd.core.drools.facts.inputform.exceptions.ExpressionInvalidException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.drools.Form2DroolsNoDrl;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -83,7 +85,11 @@ public class UpperMenu extends HorizontalButtonGroup {
 			public void buttonClick(ClickEvent event) {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				PrintStream ps = new PrintStream(baos);
-				new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm());
+				try {
+					new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm());
+				} catch (ExpressionInvalidException e) {
+					MessageManager.showError(e.getMessage());
+				}
 				ps.close();
 			}
 		});

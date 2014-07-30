@@ -1,6 +1,6 @@
 package com.biit.abcd.core.drools.facts.interfaces;
 
-public interface ICommonAttributes extends ICustomVariables {
+public interface ICommonAttributes {
 
 	void setTag(String tag);
 

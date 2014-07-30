@@ -2,17 +2,15 @@ package com.biit.abcd.core.drools.rules;
 
 import java.util.HashMap;
 
-import com.biit.abcd.persistence.entity.CustomVariableScope;
-
-public class VariablesMap {
+public class GlobalVariablesMap {
 
 	// Store the form variables: Scope | Name | Value
-	private HashMap<CustomVariableScope, HashMap<String, Object>> formVariables;
-	private static VariablesMap INSTANCE = new VariablesMap();
+	private HashMap<String, HashMap<String, Object>> formVariables;
+	private static GlobalVariablesMap INSTANCE = new GlobalVariablesMap();
 
-	private VariablesMap(){}
+	private GlobalVariablesMap(){}
 
-	public static VariablesMap getInstance(){
+	public static GlobalVariablesMap getInstance(){
 		return INSTANCE;
 	}
 
@@ -21,18 +19,18 @@ public class VariablesMap {
 		throw new CloneNotSupportedException();
 	}
 
-	public HashMap<String, Object> getVariablesFromScope(CustomVariableScope scope){
+	public HashMap<String, Object> getVariablesFromScope(String scope){
 		if(formVariables == null){
-			formVariables = new HashMap<CustomVariableScope, HashMap<String,Object>>();
+			formVariables = new HashMap<String, HashMap<String,Object>>();
 			return null;
 		} else {
 			return formVariables.get(scope);
 		}
 	}
 
-	public void addVariableValue(CustomVariableScope scope, String variable, Object value){
+	public void setVariableValue(String scope, String variable, Object value){
 		if(formVariables == null){
-			formVariables = new HashMap<CustomVariableScope, HashMap<String,Object>>();
+			formVariables = new HashMap<String, HashMap<String,Object>>();
 		}
 		if(formVariables.get(scope) == null){
 			HashMap<String, Object> nameValue = new HashMap<String, Object>();
@@ -43,7 +41,7 @@ public class VariablesMap {
 		}
 	}
 
-	public Object getVariableValue(CustomVariableScope scope, String name){
+	public Object getVariableValue(String scope, String name){
 		if((formVariables != null) && (formVariables.get(scope) != null)) {
 			return formVariables.get(scope).get(name);
 		}

@@ -3,7 +3,9 @@ package com.biit.abcd.core.drools;
 import java.io.PrintStream;
 import java.util.Arrays;
 
-import com.biit.abcd.core.drools.rules.FormToDroolsRulesParser;
+import com.biit.abcd.core.drools.facts.inputform.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
+import com.biit.abcd.core.drools.rules.FormParser;
 import com.biit.abcd.persistence.entity.Form;
 
 @SuppressWarnings("rawtypes")
@@ -11,24 +13,30 @@ public class Form2DroolsNoDrl {
 
 	private KieManager km;
 
-	public void parse(Form form) {
+	public void parse(Form form) throws ExpressionInvalidException {
 		km = new KieManager();
 
-		FormToDroolsRulesParser formRules = new FormToDroolsRulesParser(form);
-		System.out.println(formRules.getRules());
+		FormParser formRules;
+		try {
+			formRules = new FormParser(form);
+			System.out.println(formRules.getRules());
+			km.buildSessionRules(formRules.getRules());
+			km.setGlobalVariables(Arrays.asList(getGlobalVar(System.out)));
 
-		km.buildSessionRules(formRules.getRules());
-		km.setGlobalVariables(Arrays.asList(getGlobalVar(System.out)));
+		} catch (ExpressionInvalidException e) {
+			throw e;
+		}
 	}
 
-	//	public void go(XMLForm form){
-	//		km.setFacts(form);
-	//		km.execute();
-	//	}
+	public void go(ISubmittedForm form){
+		km.setFacts(Arrays.asList(form));
+		km.execute();
+	}
 
 	private DroolsGlobalVariable getGlobalVar(PrintStream out){
 		return new DroolsGlobalVariable<PrintStream>("out", out);
 	}
+
 
 	//	private String getTestRules() {
 	//		String r1 = "" +

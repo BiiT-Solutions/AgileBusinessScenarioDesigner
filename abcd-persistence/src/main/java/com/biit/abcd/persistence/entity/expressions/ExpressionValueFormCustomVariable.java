@@ -19,7 +19,7 @@ public class ExpressionValueFormCustomVariable extends ExpressionValueTreeObject
 	@ManyToOne(fetch = FetchType.EAGER)
 	private CustomVariable variable;
 
-	protected ExpressionValueFormCustomVariable() {
+	public ExpressionValueFormCustomVariable() {
 		super();
 	}
 

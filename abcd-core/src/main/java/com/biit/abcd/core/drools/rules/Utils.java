@@ -7,9 +7,7 @@ public class Utils {
 	}
 
 	public static String getWhenRuleString(){
-		String str = "when\n" +
-				"	$form : SubmittedForm()\n";
-		return str;
+		return "when\n";
 	}
 
 	public static String getThenRuleString(){

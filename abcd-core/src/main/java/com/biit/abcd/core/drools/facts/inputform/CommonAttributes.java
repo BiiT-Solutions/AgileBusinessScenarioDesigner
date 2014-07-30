@@ -2,7 +2,6 @@ package com.biit.abcd.core.drools.facts.inputform;
 
 import com.biit.abcd.core.drools.facts.interfaces.ICommonAttributes;
 
-
 public abstract class CommonAttributes implements ICommonAttributes {
 
 	// Tasg of the Orbeon form
@@ -15,18 +14,22 @@ public abstract class CommonAttributes implements ICommonAttributes {
 		return tag;
 	}
 
+	@Override
 	public String getTag() {
 		return tag;
 	}
 
+	@Override
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
 
+	@Override
 	public String getText() {
 		return text;
 	}
 
+	@Override
 	public void setText(String text) {
 		this.text = text;
 	}

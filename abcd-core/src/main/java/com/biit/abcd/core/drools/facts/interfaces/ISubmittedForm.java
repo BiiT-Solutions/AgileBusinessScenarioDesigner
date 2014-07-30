@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
 
-public interface IInputForm extends ICustomVariables{
+public interface ISubmittedForm {
 
 	String getFormName();
 

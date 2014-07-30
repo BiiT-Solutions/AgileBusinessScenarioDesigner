@@ -67,7 +67,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 		if(expressions.isEmpty()){
 			return "null";
 		}
-		
+
 		String result = "";
 		for (Expression expression : expressions) {
 			result += expression.getRepresentation() + " ";
@@ -89,7 +89,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
-				result += filterVariables(expressions.get(i));
+				result += filterVariables(expressions.get(i)) + " ";
 			} else {
 				result += expressions.get(i).getExpression();
 			}

@@ -3,9 +3,11 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
+				<include name="orbeon" />
 			</run>
 		</groups>
 		<classes>
+			<class name="com.biit.abcd.core.drools.facts.DecisionTableTest" />
 		</classes>
 	</test>
 </suite>

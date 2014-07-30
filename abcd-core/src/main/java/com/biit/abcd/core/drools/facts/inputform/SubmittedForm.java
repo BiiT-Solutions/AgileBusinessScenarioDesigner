@@ -1,30 +1,31 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
 import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.IInputForm;
-import com.biit.abcd.core.drools.rules.VariablesMap;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
+import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 
 /**
  * Basic implementation of an Orbeon Form that includes categories and questions.
  * 
  */
-public class InputForm implements IInputForm {
+public class SubmittedForm implements ISubmittedForm {
 
 	private String formName;
 	private String applicationName;
 	private List<ICategory> categories;
+	private HashMap<Object, HashMap<String, Double>> formVariables;
 
-	public InputForm(String applicationName, String formName) {
+	public SubmittedForm(String applicationName, String formName) {
 		this.formName = formName;
 		this.applicationName = applicationName;
 		setCategories(new ArrayList<ICategory>());
 	}
 
+	@Override
 	public List<ICategory> getCategories() {
 		return categories;
 	}
@@ -33,30 +34,36 @@ public class InputForm implements IInputForm {
 		this.categories = categories;
 	}
 
+	@Override
 	public void addCategory(ICategory category) {
 		if (categories == null) {
 			setCategories(new ArrayList<ICategory>());
 		}
+		((Category)category).setParent(this);
 		categories.add(category);
 	}
 
+	@Override
 	public ICategory getCategory(String categoryText) throws CategoryDoesNotExistException {
 		for (ICategory category : getCategories()) {
-			if (category.getText().equals(categoryText)) {
+			if (category.getTag().equals(categoryText)) {
 				return category;
 			}
 		}
 		throw new CategoryDoesNotExistException("Category '" + categoryText + "' does not exists.");
 	}
 
+	@Override
 	public String getFormName() {
 		return formName;
 	}
 
+	@Override
 	public String getApplicationName() {
 		return applicationName;
 	}
 
+	@Override
 	public String getId() {
 		if ((getApplicationName() != null) && (getFormName() != null)) {
 			return getApplicationName() + "/" + getFormName();
@@ -69,11 +76,40 @@ public class InputForm implements IInputForm {
 		return getFormName();
 	}
 
-	public Object getCustomVariable() {
-		return VariablesMap.getInstance().getVariableValue(CustomVariableScope.FORM, getFormName());
+	public Double getVariableValue(Object treeObject, String varName){
+		if((formVariables == null) || (formVariables.get(treeObject) == null)){
+			return null;
+		}
+		return formVariables.get(treeObject).get(varName);
 	}
 
-	public void setCustomVariable(Object value) {
-		VariablesMap.getInstance().addVariableValue(CustomVariableScope.FORM, getFormName(), value);
+	public void setVariableValue(Object treeObject, String varName, Double value){
+		if(formVariables == null){
+			formVariables = new HashMap<Object, HashMap<String, Double>>();
+		}
+		if(formVariables.get(treeObject) == null){
+			formVariables.put(treeObject, new HashMap<String, Double>());
+		}
+		formVariables.get(treeObject).put(varName, value);
+	}
+
+	public boolean hasScoreSet(Object treeObject){
+		if((formVariables == null) || (formVariables.get(treeObject) == null)){
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean isScoreSet() {
+		if (getVariableValue(this, getFormName()) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isScoreNotSet() {
+		return !isScoreSet();
 	}
 }

@@ -11,16 +11,18 @@ import org.kie.api.builder.Message.Level;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
+import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
+
 @SuppressWarnings("rawtypes")
 public class KieManager {
 
 	private List<DroolsGlobalVariable> globalVariables;
-	private List<Object> facts;
+	private List<ISubmittedForm> facts;
 	private KieServices ks;
 
 	public KieManager(){
 		globalVariables = new ArrayList<DroolsGlobalVariable>();
-		facts = new ArrayList<Object>();
+		facts = new ArrayList<ISubmittedForm>();
 	}
 
 	public List<DroolsGlobalVariable> getGlobalVariables() {
@@ -31,12 +33,12 @@ public class KieManager {
 		this.globalVariables = globalVariables;
 	}
 
-	public List<Object> getFacts() {
+	public List<ISubmittedForm> getFacts() {
 		return facts;
 	}
 
-	public void setFacts(List<Object> facts) {
-		this.facts = facts;
+	public void setFacts(List<ISubmittedForm> list) {
+		this.facts = list;
 	}
 
 	public void buildSessionRules(String rules){
@@ -56,7 +58,7 @@ public class KieManager {
 	 * @param globalVars
 	 * @param facts
 	 */
-	public void startKie(List<DroolsGlobalVariable> globalVars, List<Object> facts){
+	public void startKie(List<DroolsGlobalVariable> globalVars, List<ISubmittedForm> facts){
 		KieRepository kr = ks.getRepository();
 		KieContainer kContainer = ks.newKieContainer(kr.getDefaultReleaseId());
 		KieSession kSession = kContainer.newKieSession();
@@ -86,8 +88,8 @@ public class KieManager {
 	}
 
 	// Insert any number of facts in the drools session
-	private void insertFacts(KieSession kSession, List<Object> facts){
-		for(Object fact : facts){
+	private void insertFacts(KieSession kSession, List<ISubmittedForm> facts){
+		for(ISubmittedForm fact : facts){
 			kSession.insert(fact);
 		}
 	};

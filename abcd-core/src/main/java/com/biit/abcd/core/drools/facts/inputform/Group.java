@@ -4,24 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.exceptions.QuestionDoesNotExistException;
+import com.biit.abcd.core.drools.facts.interfaces.ICategory;
 import com.biit.abcd.core.drools.facts.interfaces.IGroup;
 import com.biit.abcd.core.drools.facts.interfaces.IQuestion;
-import com.biit.abcd.core.drools.rules.VariablesMap;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
 
 public class Group extends CommonAttributes implements IGroup {
 
 	private List<IQuestion> questions;
+	private ICategory parent;
 
 	public Group(String tag){
 		setTag(tag);
 		setQuestions(new ArrayList<IQuestion>());
 	}
 
+	@Override
 	public List<IQuestion> getQuestions() {
 		return questions;
 	}
 
+	@Override
 	public IQuestion getQuestion(String tag) throws QuestionDoesNotExistException {
 		for (IQuestion question : getQuestions()) {
 			if (question.getTag().equals(tag)) {
@@ -35,6 +37,7 @@ public class Group extends CommonAttributes implements IGroup {
 		this.questions = questions;
 	}
 
+	@Override
 	public void addQuestions(List<IQuestion> questions) {
 		if (this.questions == null) {
 			setQuestions(new ArrayList<IQuestion>());
@@ -49,13 +52,24 @@ public class Group extends CommonAttributes implements IGroup {
 		questions.add(question);
 	}
 
-	@Override
-	public Object getCustomVariable() {
-		return VariablesMap.getInstance().getVariableValue(CustomVariableScope.GROUP, getTag());
+	public ICategory getParent() {
+		return parent;
 	}
 
-	@Override
-	public void setCustomVariable(Object value) {
-		VariablesMap.getInstance().addVariableValue(CustomVariableScope.GROUP, getTag(), value);
+	public void setParent(ICategory parent) {
+		this.parent = parent;
+	}
+
+	public boolean isScoreSet() {
+		// Retrieve the form which will have the variables
+		if(((SubmittedForm)((Category)getParent()).getParent()).hasScoreSet(this)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isScoreNotSet() {
+		return !isScoreSet();
 	}
 }
