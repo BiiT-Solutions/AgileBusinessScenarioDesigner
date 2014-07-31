@@ -6,16 +6,22 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.components.TreeObjectTableSingleSelect;
+import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
@@ -36,6 +42,26 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 		super(DiagramFork.class);
 	}
 
+	private void setNewReference(TreeObject treeObjectRefence) {
+		instance.setReference(new ExpressionValueTreeObjectReference(treeObjectRefence));
+		firePropertyUpdateListener(instance);
+	}
+
+	private void setNewDateReference(TreeObject reference, QuestionUnit dateUnit) {
+		instance.setReference(new ExpressionValueTreeObjectReference(reference, dateUnit));
+		firePropertyUpdateListener(instance);
+	}
+
+	private void setNewReferenceCustomVariable(TreeObject treeObjectRefence, CustomVariable variable) {
+		instance.setReference(new ExpressionValueCustomVariable(treeObjectRefence, variable));
+		firePropertyUpdateListener(instance);
+	}
+
+	private void setNewDateReferenceCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit) {
+		instance.setReference(new ExpressionValueCustomVariable(reference, variable, dateUnit));
+		firePropertyUpdateListener(instance);
+	}
+
 	@Override
 	public void setElementAbstract(DiagramFork element) {
 		instance = element;
@@ -53,10 +79,26 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				TreeObject reference = (TreeObject) treeObjectTable.getValue();
+				final TreeObject reference = (TreeObject) treeObjectTable.getValue();
+
 				if (reference != null && (reference instanceof Question)) {
-					instance.setReference(new ExpressionValueTreeObjectReference(reference));
-					firePropertyUpdateListener(instance);
+					if (((Question) reference).getAnswerFormat() == AnswerFormat.DATE) {
+						// Create a window for selecting the unit and assign it
+						// to the expression.
+						final WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
+								.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
+						windowDate.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								QuestionUnit unit = windowDate.getValue();
+								setNewDateReference(reference, unit);
+								window.close();
+							}
+						});
+						windowDate.showCentered();
+					} else {
+						setNewReference(reference);
+					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
 				}
@@ -70,11 +112,27 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				TreeObject reference = (TreeObject) treeObjectTable.getValue();
-				CustomVariable variable = (CustomVariable) variableSelection.getValue();
+				final TreeObject reference = (TreeObject) treeObjectTable.getValue();
+				final CustomVariable variable = (CustomVariable) variableSelection.getValue();
 				if (variable != null) {
-					instance.setReference(new ExpressionValueFormCustomVariable(reference, variable));
-					firePropertyUpdateListener(instance);
+					if (variable.getType() == CustomVariableType.DATE) {
+						// Create a window for selecting the unit and assign it
+						// to the expression.
+						final WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
+								.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
+
+						windowDate.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								QuestionUnit unit = windowDate.getValue();
+								setNewDateReferenceCustomVariable(reference, variable, unit);
+								window.close();
+							}
+						});
+						windowDate.showCentered();
+					} else {
+						setNewReferenceCustomVariable(reference, variable);
+					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_VARIABLE);
 				}

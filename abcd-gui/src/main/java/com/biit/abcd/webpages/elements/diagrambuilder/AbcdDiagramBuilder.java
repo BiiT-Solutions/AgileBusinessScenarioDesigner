@@ -186,7 +186,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
 		if (diagramElements.containsKey(element.getJointjsId())) {
 			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
-			diagram.getDiagramObjects().remove(originalElement);
+			diagram.removeDiagramObject(originalElement);
 			diagram.setUpdatedBy(UserSessionHandler.getUser());
 			diagram.setUpdateTime();
 			diagramElements.remove(element.getJointjsId());
@@ -254,7 +254,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					String key = itr.next();
 					if (!newElements.containsKey(key)) {
 						DiagramObject objectToRemove = diagramElements.get(key);
-						diagram.getDiagramObjects().remove(objectToRemove);
+						diagram.removeDiagramObject(objectToRemove);
 						itr.remove();
 					}
 				}

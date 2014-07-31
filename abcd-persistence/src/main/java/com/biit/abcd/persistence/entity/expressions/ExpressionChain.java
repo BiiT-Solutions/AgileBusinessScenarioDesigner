@@ -1,7 +1,9 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,16 +12,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.utils.ITableCellEditable;
 import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more
+ * complex expression.
  */
 @Entity
 @Table(name = "EXPRESSIONS_CHAIN")
-public class ExpressionChain extends Expression implements ITableCellEditable{
+public class ExpressionChain extends Expression implements ITableCellEditable {
 
 	private String name;
 
@@ -64,7 +68,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 
 	@Override
 	public String getRepresentation() {
-		if(expressions.isEmpty()){
+		if (expressions.isEmpty()) {
 			return "null";
 		}
 
@@ -76,7 +80,8 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * Returns the expression in string format that can be evaluated by a
+	 * Expression Evaluator.
 	 * 
 	 * @return
 	 */
@@ -87,7 +92,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 			// Dots are not allowed in the Evaluator Expression.
 			if ((expressions.get(i) instanceof ExpressionValueString)
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				result += filterVariables(expressions.get(i)) + " ";
 			} else {
@@ -104,7 +109,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 		for (int i = 0; i < expressions.size(); i++) {
 			if ((expressions.get(i) instanceof ExpressionValueString)
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueFormCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				// Dots are not allowed.
 				String varName = filterVariables(expressions.get(i));
@@ -120,7 +125,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return getName() + expressions;
 	}
 
@@ -137,13 +142,36 @@ public class ExpressionChain extends Expression implements ITableCellEditable{
 	@Override
 	public ExpressionChain generateCopy() {
 		ExpressionChain copy = new ExpressionChain();
-		if(name!=null){
+		if (name != null) {
 			copy.name = new String(name);
 		}
-		for(Expression expression: expressions){
+		for (Expression expression : expressions) {
 			Expression copyExpression = expression.generateCopy();
 			copy.expressions.add(copyExpression);
 		}
 		return copy;
+	}
+
+	protected Set<TreeObject> getReferencedTreeObjects() {
+		List<Expression> expressions = getExpressions();
+		Set<TreeObject> references = new HashSet<>();
+		for (Expression expression : expressions) {
+			if (expression instanceof ExpressionValueTreeObjectReference) {
+				references.add(((ExpressionValueTreeObjectReference) expression).getReference());
+				continue;
+			}
+		}
+		return references;
+	}
+	
+	public boolean isAssignedTo(TreeObject treeObject) {
+		Set<TreeObject> references = getReferencedTreeObjects();
+		if (!references.isEmpty()) {
+			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
+			if(commonTreeObject.equals(treeObject)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

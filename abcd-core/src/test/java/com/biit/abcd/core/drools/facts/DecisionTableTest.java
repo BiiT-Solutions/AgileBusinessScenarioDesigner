@@ -26,7 +26,7 @@ import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
@@ -113,7 +113,7 @@ public class DecisionTableTest {
 		answer1Row1ExpChain.addExpression(answer1Row1);
 		// Create action
 		ExpressionChain actionRow1ExpChain = new ExpressionChain();
-		ExpressionValueFormCustomVariable actionElement1Row1 = new ExpressionValueFormCustomVariable();
+		ExpressionValueCustomVariable actionElement1Row1 = new ExpressionValueCustomVariable();
 		actionElement1Row1.setReference(question);
 		CustomVariable customVar = new CustomVariable(form, "qScore", CustomVariableType.STRING, CustomVariableScope.QUESTION);
 		actionElement1Row1.setVariable(customVar);

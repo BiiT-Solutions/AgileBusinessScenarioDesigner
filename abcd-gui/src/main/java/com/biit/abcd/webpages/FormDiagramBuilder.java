@@ -49,6 +49,13 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
+		//If there is no form, then go back to form manager.
+		if (UserSessionHandler.getFormController().getForm() == null) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+			return;
+		}
+		
 		updateButtons(true);
 
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel(false);
@@ -171,12 +178,17 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	private void initializeDiagramsTable() {
-		List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
-		diagramBuilderTable.removeValueChangeListener(diagramTableValueChange);
-		diagramBuilderTable.setValue(null);
-		diagramBuilderTable.removeAllItems();
-		diagramBuilderTable.addRows(diagrams);
-		diagramBuilderTable.addValueChangeListener(diagramTableValueChange);
+		if (UserSessionHandler.getFormController().getForm() == null) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+		} else {
+			List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
+			diagramBuilderTable.removeValueChangeListener(diagramTableValueChange);
+			diagramBuilderTable.setValue(null);
+			diagramBuilderTable.removeAllItems();
+			diagramBuilderTable.addRows(diagrams);
+			diagramBuilderTable.addValueChangeListener(diagramTableValueChange);
+		}
 	}
 
 	private void initializeDiagramsTableAndSelectFirst() {

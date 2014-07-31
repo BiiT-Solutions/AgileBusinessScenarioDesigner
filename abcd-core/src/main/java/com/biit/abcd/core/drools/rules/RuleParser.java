@@ -10,7 +10,7 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 
@@ -149,11 +149,11 @@ public class RuleParser {
 		// Actions
 		List<Expression> actionExpressions = action.getExpressions();
 		if (actionExpressions.size() == 3) {
-			if ((actionExpressions.get(0) instanceof ExpressionValueFormCustomVariable)
+			if ((actionExpressions.get(0) instanceof ExpressionValueCustomVariable)
 					&& (actionExpressions.get(1) instanceof ExpressionOperatorMath)
 					&& (actionExpressions.get(2) instanceof ExpressionValueNumber)) {
 				// Assume the expression is: CustomVariable = Value
-				ExpressionValueFormCustomVariable var = (ExpressionValueFormCustomVariable) actionExpressions.get(0);
+				ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) actionExpressions.get(0);
 				ExpressionValueNumber val = (ExpressionValueNumber) actionExpressions.get(2);
 				// If there is more than one question, the action could be
 				// linked to any of the questions and we need to know what it is
@@ -175,14 +175,14 @@ public class RuleParser {
 			}
 		}
 		if (actionExpressions.size() == 5) {
-			if ((actionExpressions.get(0) instanceof ExpressionValueFormCustomVariable)
+			if ((actionExpressions.get(0) instanceof ExpressionValueCustomVariable)
 					&& (actionExpressions.get(1) instanceof ExpressionOperatorMath)
-					&& (actionExpressions.get(2) instanceof ExpressionValueFormCustomVariable)
+					&& (actionExpressions.get(2) instanceof ExpressionValueCustomVariable)
 					&& (actionExpressions.get(3) instanceof ExpressionOperatorMath)
 					&& (actionExpressions.get(4) instanceof ExpressionValueNumber)) {
 				// Assume the expression is: CustomVariable = CustomVariable (+ | - | * | /) Value
-				ExpressionValueFormCustomVariable var1 = (ExpressionValueFormCustomVariable) actionExpressions.get(0);
-				ExpressionValueFormCustomVariable var2 = (ExpressionValueFormCustomVariable) actionExpressions.get(2);
+				ExpressionValueCustomVariable var1 = (ExpressionValueCustomVariable) actionExpressions.get(0);
+				ExpressionValueCustomVariable var2 = (ExpressionValueCustomVariable) actionExpressions.get(2);
 				ExpressionOperatorMath operator = (ExpressionOperatorMath) actionExpressions.get(3);
 				ExpressionValueNumber value = (ExpressionValueNumber) actionExpressions.get(4);
 				// If there is more than one question, the action could be

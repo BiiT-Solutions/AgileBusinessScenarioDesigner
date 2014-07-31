@@ -16,13 +16,12 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateFormCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.TreeObjectTableMultiSelect;
+import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
@@ -43,8 +42,9 @@ public class TabFormVariablesLayout extends TabLayout {
 	}
 
 	/**
-	 * We can select more than one element, then we add expressions separated by commas. If we select a date question or
-	 * variable, then we also must select the unit for the date expression.
+	 * We can select more than one element, then we add expressions separated by
+	 * commas. If we select a date question or variable, then we also must
+	 * select the unit for the date expression.
 	 */
 	private void createFormVariablesElements() {
 		initializeFormQuestionTable();
@@ -63,31 +63,26 @@ public class TabFormVariablesLayout extends TabLayout {
 					// We need to create an expression list separated by commas.
 					for (int i = 0; i < getSelectedFormElements().size(); i++) {
 						// Add element.
-						final ExpressionValueTreeObjectReference formReference;
+						final ExpressionValueTreeObjectReference formReference= new ExpressionValueTreeObjectReference();
 						// Detect if it is a date question to add units
 						if ((getSelectedFormElements().get(i) instanceof Question)
 								&& (((Question) getSelectedFormElements().get(i)).getAnswerFormat()) != null
 								&& ((Question) getSelectedFormElements().get(i)).getAnswerFormat().equals(
 										AnswerFormat.DATE)) {
-							formReference = new ExpressionValueDateTreeObjectReference();
 							// Create a window for selecting the unit and assign it to the expression.
 							WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
 									.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
-
 							windowDate.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {
-									((ExpressionValueDateTreeObjectReference) formReference)
+									((ExpressionValueTreeObjectReference) formReference)
 											.setUnit(((WindowSelectDateUnit) window).getValue());
 									// Fire listeners to force thre refresh of GUI.
 									updateExpression(formReference);
 									window.close();
 								}
 							});
-							UI.getCurrent().addWindow(windowDate);
-						} else {
-							// Standard element, create a normal expression.
-							formReference = new ExpressionValueTreeObjectReference();
+							windowDate.showCentered();
 						}
 						formReference.setReference(getSelectedFormElements().get(i));
 						addExpression(formReference);
@@ -117,12 +112,12 @@ public class TabFormVariablesLayout extends TabLayout {
 					// Multiple elements must be separated by commas.
 					for (int i = 0; i < getSelectedFormElements().size(); i++) {
 						// Add element.
-						final ExpressionValueFormCustomVariable formVariableReference;
+						final ExpressionValueCustomVariable formVariableReference;
 						// Detect if it is a date question to add units
 						if (((CustomVariable) variableSelection.getValue()).getType() != null
 								&& ((CustomVariable) variableSelection.getValue()).getType().equals(
 										CustomVariableType.DATE)) {
-							formVariableReference = new ExpressionValueDateFormCustomVariable(getSelectedFormElements()
+							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements()
 									.get(i), (CustomVariable) variableSelection.getValue());
 							// Create a window for selecting the unit and assign it to the expression.
 							WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
@@ -131,7 +126,7 @@ public class TabFormVariablesLayout extends TabLayout {
 							windowDate.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {
-									((ExpressionValueDateFormCustomVariable) formVariableReference)
+									((ExpressionValueCustomVariable) formVariableReference)
 											.setUnit(((WindowSelectDateUnit) window).getValue());
 									// Fire listeners to force thre refresh of GUI.
 									updateExpression(formVariableReference);
@@ -140,7 +135,7 @@ public class TabFormVariablesLayout extends TabLayout {
 							});
 							UI.getCurrent().addWindow(windowDate);
 						} else {
-							formVariableReference = new ExpressionValueFormCustomVariable(getSelectedFormElements()
+							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements()
 									.get(i), (CustomVariable) variableSelection.getValue());
 						}
 						addExpression(formVariableReference);
@@ -208,21 +203,22 @@ public class TabFormVariablesLayout extends TabLayout {
 		}
 	}
 
-	public List<ExpressionValueFormCustomVariable> getValues() {
+	public List<ExpressionValueCustomVariable> getValues() {
 		if (getSelectedFormElements().isEmpty() || variableSelection.getValue() == null) {
 			return null;
 		}
 
-		List<ExpressionValueFormCustomVariable> variables = new ArrayList<>();
+		List<ExpressionValueCustomVariable> variables = new ArrayList<>();
 		for (TreeObject object : getSelectedFormElements()) {
-			variables.add(new ExpressionValueFormCustomVariable(object, (CustomVariable) variableSelection.getValue()));
+			variables.add(new ExpressionValueCustomVariable(object, (CustomVariable) variableSelection.getValue()));
 		}
 
 		return variables;
 	}
 
 	/**
-	 * Returns the selected list of element. All elements must be of the same class.
+	 * Returns the selected list of element. All elements must be of the same
+	 * class.
 	 * 
 	 * @return
 	 */
@@ -246,7 +242,7 @@ public class TabFormVariablesLayout extends TabLayout {
 		return selected;
 	}
 
-	public void setvalue(ExpressionValueFormCustomVariable expression) {
+	public void setvalue(ExpressionValueCustomVariable expression) {
 		formQuestionTable.setValue(expression.getReference());
 		variableSelection.setValue(expression.getVariable());
 	}

@@ -3,7 +3,6 @@ package com.biit.abcd.webpages.elements.formulaeditor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -15,7 +14,7 @@ public abstract class FormulaExpressionComponent extends CustomComponent {
 	private static final String CLASSNAME = "v-formulaExpressionComponent";
 	private static final String CLASSNAME_ROOT_LAYOUT = "v-formulaExpressionComponentRoot-layout";
 	private static final String CLASSNAME_LAYOUT = "v-formulaExpressionComponent-layout";
-	private static final String CLASSNAME_SECOND_LINE="v-second-line";
+	private static final String CLASSNAME_SECOND_LINE = "v-second-line";
 
 	private CssLayout rootLayout;
 	private CssLayout fileLayout;
@@ -37,9 +36,9 @@ public abstract class FormulaExpressionComponent extends CustomComponent {
 	public void addLine() {
 		fileLayout = new CssLayout();
 		fileLayout.addStyleName(CLASSNAME_LAYOUT);
-		if(rootLayout.getComponentCount()!=0){
-			fileLayout.addStyleName(CLASSNAME_LAYOUT+" "+CLASSNAME_SECOND_LINE);
-		}		
+		if (rootLayout.getComponentCount() != 0) {
+			fileLayout.addStyleName(CLASSNAME_LAYOUT + " " + CLASSNAME_SECOND_LINE);
+		}
 		fileLayout.setWidth(null);
 		fileLayout.setHeight(null);
 
@@ -61,8 +60,8 @@ public abstract class FormulaExpressionComponent extends CustomComponent {
 	protected void addPort(FormulaPortComponent port) {
 		fileLayout.addComponent(port);
 	}
-	
-	protected List<CssLayout> getLines(){
+
+	protected List<CssLayout> getLines() {
 		List<CssLayout> lines = new ArrayList<CssLayout>();
 		Iterator<Component> itr = rootLayout.iterator();
 		while (itr.hasNext()) {
@@ -74,7 +73,7 @@ public abstract class FormulaExpressionComponent extends CustomComponent {
 	protected List<FormulaPortComponent> getPorts() {
 		List<FormulaPortComponent> ports = new ArrayList<FormulaPortComponent>();
 		List<CssLayout> lines = getLines();
-		for(CssLayout line: lines){
+		for (CssLayout line : lines) {
 			Iterator<Component> itr = line.iterator();
 			while (itr.hasNext()) {
 				Component component = itr.next();
@@ -100,14 +99,14 @@ public abstract class FormulaExpressionComponent extends CustomComponent {
 
 	public boolean isChildComponent(Component clickedComponent) {
 		Iterator<Component> layoutItr = rootLayout.iterator();
-		while(layoutItr.hasNext()){
-			CssLayout layout = (CssLayout)layoutItr.next();
-			if(layout.getComponentIndex(clickedComponent)!=-1){
+		while (layoutItr.hasNext()) {
+			CssLayout layout = (CssLayout) layoutItr.next();
+			if (layout.getComponentIndex(clickedComponent) != -1) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public abstract Type getReturnType();
 }

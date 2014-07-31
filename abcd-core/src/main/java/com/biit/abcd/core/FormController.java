@@ -27,8 +27,8 @@ public class FormController {
 	private Diagram lastAccessDiagram;
 	private ExpressionChain lastAccessExpression;
 	private TableRule lastAccessTable;
-	private List<TableRuleRow> copiedRows;
 	private Rule lastAccessRule;
+	private List<TableRuleRow> copiedRows;
 	private boolean saveAllowed = true;
 
 	private IFormDao formDao;
@@ -49,12 +49,12 @@ public class FormController {
 		}
 	}
 
-	public void checkDuplicatedVariables() throws DuplicatedVariableException{
+	public void checkDuplicatedVariables() throws DuplicatedVariableException {
 		List<CustomVariable> customVariablesList = getForm().getCustomVariables();
-		for(int i=0; i<(customVariablesList.size()-1); i++){
+		for (int i = 0; i < (customVariablesList.size() - 1); i++) {
 			CustomVariable cv = customVariablesList.get(i);
-			for(int j=i+1; j<(getForm().getCustomVariables().size()); j++){
-				if(cv.duplicatedCustomVariable(getForm().getCustomVariables().get(j))){
+			for (int j = i + 1; j < (getForm().getCustomVariables().size()); j++) {
+				if (cv.duplicatedCustomVariable(getForm().getCustomVariables().get(j))) {
 					saveAllowed = false;
 					throw new DuplicatedVariableException("Duplicated variable in form variables.");
 				}
@@ -109,6 +109,7 @@ public class FormController {
 
 	public void setForm(Form form) {
 		this.form = form;
+		clearWorkVariables();
 	}
 
 	public User getUser() {
@@ -165,6 +166,23 @@ public class FormController {
 		}
 		return assignedRules;
 	}
+	
+	/**
+	 * Gets expressionChains that reference to a particular element.
+	 * @param element
+	 * @return
+	 */
+	public List<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
+		List<ExpressionChain> expressionChains = new ArrayList<>();
+		
+		List<ExpressionChain> expressions = getForm().getExpressionChain();
+		for(ExpressionChain expression: expressions){
+			if(expression.isAssignedTo(element)){
+				expressionChains.add(expression);
+			}
+		}		
+		return expressionChains;
+	}
 
 	public Rule getLastAccessRule() {
 		return lastAccessRule;
@@ -206,5 +224,14 @@ public class FormController {
 			newCopiedRows.add(row.generateCopy());
 		}
 		return newCopiedRows;
+	}
+
+	private void clearWorkVariables() {
+		lastAccessTreeObject = null;
+		lastAccessDiagram = null;
+		lastAccessExpression = null;
+		lastAccessTable = null;
+		lastAccessRule = null;
+		copiedRows = null;
 	}
 }

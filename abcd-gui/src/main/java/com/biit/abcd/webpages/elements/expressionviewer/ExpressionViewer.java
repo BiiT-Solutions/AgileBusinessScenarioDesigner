@@ -15,7 +15,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueFormCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
@@ -219,19 +219,19 @@ public class ExpressionViewer extends CssLayout {
 							}
 						});
 						// Form variables.
-					} else if (expression instanceof ExpressionValueFormCustomVariable) {
+					} else if (expression instanceof ExpressionValueCustomVariable) {
 						SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
 						variableWindow.showCentered();
-						variableWindow.setvalue((ExpressionValueFormCustomVariable) expression);
+						variableWindow.setvalue((ExpressionValueCustomVariable) expression);
 						variableWindow.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								ExpressionValueFormCustomVariable formReference = ((SelectFormElementVariableWindow) window)
+								ExpressionValueCustomVariable formReference = ((SelectFormElementVariableWindow) window)
 										.getValue();
 								if (formReference != null) {
 									// Update the already existing expression.
-									((ExpressionValueFormCustomVariable) expression).setReference(formReference.getReference());
-									((ExpressionValueFormCustomVariable) expression).setVariable(formReference
+									((ExpressionValueCustomVariable) expression).setReference(formReference.getReference());
+									((ExpressionValueCustomVariable) expression).setVariable(formReference
 											.getVariable());
 									window.close();
 									updateExpression();

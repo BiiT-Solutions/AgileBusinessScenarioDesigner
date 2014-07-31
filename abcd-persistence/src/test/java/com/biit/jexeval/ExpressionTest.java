@@ -8,10 +8,10 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.expressions.DateUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateFormCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueDateTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.jexeval.exceptions.ExpressionException;
 
 public class ExpressionTest {
@@ -46,9 +46,9 @@ public class ExpressionTest {
 		question.setName("Question1");
 
 		ExpressionChain expressions = new ExpressionChain();
-		ExpressionValueDateTreeObjectReference dateTreeVariable = new ExpressionValueDateTreeObjectReference();
+		ExpressionValueTreeObjectReference dateTreeVariable = new ExpressionValueTreeObjectReference();
 		dateTreeVariable.setReference(question);
-		dateTreeVariable.setUnit(DateUnit.YEARS);
+		dateTreeVariable.setUnit(QuestionUnit.YEARS);
 		expressions.addExpression(dateTreeVariable);
 		// No exception launch.
 		expressions.getExpressionEvaluator().eval();
@@ -63,9 +63,8 @@ public class ExpressionTest {
 				CustomVariableScope.QUESTION);
 
 		ExpressionChain expressions = new ExpressionChain();
-		ExpressionValueDateFormCustomVariable dateVariable = new ExpressionValueDateFormCustomVariable(question,
-				variable);
-		dateVariable.setUnit(DateUnit.MONTHS);
+		ExpressionValueCustomVariable dateVariable = new ExpressionValueCustomVariable(question, variable);
+		dateVariable.setUnit(QuestionUnit.MONTHS);
 		expressions.addExpression(dateVariable);
 		// No exception launch.
 		expressions.getExpressionEvaluator().eval();

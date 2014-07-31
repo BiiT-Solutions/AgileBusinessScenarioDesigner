@@ -160,8 +160,8 @@ public class TreeObjectTable extends TreeTable {
 	public void setRootElement(TreeObject root) {
 		this.removeAllItems();
 		select(null);
-		loadTreeObject(root, null);
 		if (root != null) {
+			loadTreeObject(root, null);
 			try {
 				setCollapsed(root, false);
 			} catch (Exception e) {

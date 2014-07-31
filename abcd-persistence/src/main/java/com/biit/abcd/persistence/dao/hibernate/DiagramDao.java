@@ -28,7 +28,7 @@ public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 	protected void initializeSets(List<Diagram> elements) {
 		for (Diagram diagram : elements) {
 			// Initializes the sets for lazy-loading (within the same session)
-			Hibernate.initialize(diagram.getDiagramObjects());
+			Hibernate.initialize(diagram.getDiagramObjectForInitializeSet());
 		}
 	}
 

@@ -48,8 +48,11 @@
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.show_sql">false</prop>
+				<!-- New ID creator -->
+				<prop key="hibernate.id.new_generator_mappings">true</prop>
 				<!-- Create table if not exists -->
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.id.new_generator_mappings">true</prop>
 				<!-- Get default data -->
 				<!--
 				<prop key="hibernate.hbm2ddl.import_files">

@@ -30,8 +30,7 @@ public class WindowNewDiagram extends WindowCreateNewObject {
 			}
 
 			// If is a valid string and there is no other diagram with the same name, then add it.
-			Diagram newDiagram = new Diagram(UserSessionHandler.getFormController().getForm(),
-					inputTextField.getValue());
+			Diagram newDiagram = new Diagram(inputTextField.getValue());
 			UserSessionHandler.getFormController().getForm().addDiagram(newDiagram);
 			((FormDiagramBuilder) getParentWindow()).addDiagram(newDiagram);
 			((FormDiagramBuilder) getParentWindow()).sortTableMenu();
