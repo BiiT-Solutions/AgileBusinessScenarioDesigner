@@ -49,6 +49,7 @@ public class Group extends CommonAttributes implements IGroup {
 		if (questions == null) {
 			setQuestions(new ArrayList<IQuestion>());
 		}
+		((Question)question).setParent(this);
 		questions.add(question);
 	}
 

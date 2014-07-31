@@ -45,13 +45,16 @@ public class Category extends CommonAttributes implements ICategory {
 		if (this.groups == null) {
 			setGroups(new ArrayList<IGroup>());
 		}
-		this.groups.addAll(groups);
+		for(IGroup group: groups) {
+			addGroup(group);
+		}
 	}
 
 	public void addGroup(IGroup group) {
 		if (groups == null) {
 			setGroups(new ArrayList<IGroup>());
 		}
+		((Group)group).setParent(this);
 		groups.add(group);
 	}
 
@@ -64,7 +67,17 @@ public class Category extends CommonAttributes implements ICategory {
 		if (this.questions == null) {
 			setQuestions(new ArrayList<IQuestion>());
 		}
-		this.questions.addAll(questions);
+		for(IQuestion question: questions) {
+			addQuestion(question);
+		}
+	}
+
+	public void addQuestion(IQuestion question) {
+		if (questions == null) {
+			setQuestions(new ArrayList<IQuestion>());
+		}
+		((Question)question).setParent(this);
+		questions.add(question);
 	}
 
 	@Override
