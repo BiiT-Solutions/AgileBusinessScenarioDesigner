@@ -12,7 +12,6 @@ import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
 import com.biit.abcd.core.drools.facts.inputform.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.facts.inputform.exceptions.QuestionDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonImporter;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 import com.biit.abcd.persistence.entity.Answer;
@@ -38,22 +37,22 @@ public class DecisionTableTest {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
 	private final static String DOCUMENT_ID = "7912c3f8b7328253dd7647cf507455a795367f49";
-	//	private final static Integer QUESTION_ORDER = 24;
+	private final static String xmlFile = "<form xmlns:xxi=\"http://orbeon.org/oxf/xml/xinclude\" xmlns:xh=\"http://www.w3.org/1999/xhtml\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xmlns:ev=\"http://www.w3.org/2001/xml-events\" xmlns:saxon=\"http://saxon.sf.net/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:fb=\"http://orbeon.org/oxf/xml/form-builder\" xmlns:xxf=\"http://orbeon.org/oxf/xml/xforms\" xmlns:xbl=\"http://www.w3.org/ns/xbl\" xmlns:version=\"java:org.orbeon.oxf.common.Version\" xmlns:sql=\"http://orbeon.org/oxf/xml/sql\" xmlns:p=\"http://www.orbeon.com/oxf/pipeline\" xmlns:fr=\"http://orbeon.org/oxf/xml/form-runner\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xf=\"http://www.w3.org/2002/xforms\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exf=\"http://www.exforms.org/exf/1-0\"><Financien><Inkomen>RuimVoldoende</Inkomen><Inkomen2>three</Inkomen2></Financien></form>";
 
 	private String xmlText;
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
+	//	@Test(groups = { "orbeon" })
+	//	public void getXml() throws MalformedURLException, DocumentException {
+	//		orbeonImporter = new OrbeonSubmittedAnswerImporter();
+	//		xmlText = OrbeonImporter.getXml(APP, FORM, DOCUMENT_ID);
+	//		Assert.assertNotNull(xmlText);
+	//	};
 	@Test(groups = { "orbeon" })
-	public void getXml() throws MalformedURLException, DocumentException {
-		orbeonImporter = new OrbeonSubmittedAnswerImporter();
-		xmlText = OrbeonImporter.getXml(APP, FORM, DOCUMENT_ID);
-		Assert.assertNotNull(xmlText);
-	};
-	@Test(groups = { "orbeon" }, dependsOnMethods = { "getXml" })
 	public void readXml() throws MalformedURLException, DocumentException {
 		form = new SubmittedForm(APP, FORM);
-		orbeonImporter.readXml(xmlText, form);
+		orbeonImporter.readXml(xmlFile, form);
 		Assert.assertNotNull(form);
 		Assert.assertFalse(form.getCategories().isEmpty());
 	}
