@@ -21,6 +21,7 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -43,12 +44,12 @@ public class DecisionTableTest {
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
-	//	@Test(groups = { "orbeon" })
-	//	public void getXml() throws MalformedURLException, DocumentException {
-	//		orbeonImporter = new OrbeonSubmittedAnswerImporter();
-	//		xmlText = OrbeonImporter.getXml(APP, FORM, DOCUMENT_ID);
-	//		Assert.assertNotNull(xmlText);
-	//	};
+	// @Test(groups = { "orbeon" })
+	// public void getXml() throws MalformedURLException, DocumentException {
+	// orbeonImporter = new OrbeonSubmittedAnswerImporter();
+	// xmlText = OrbeonImporter.getXml(APP, FORM, DOCUMENT_ID);
+	// Assert.assertNotNull(xmlText);
+	// };
 	@Test(groups = { "orbeon" })
 	public void readXml() throws MalformedURLException, DocumentException {
 		form = new SubmittedForm(APP, FORM);
@@ -57,13 +58,15 @@ public class DecisionTableTest {
 		Assert.assertFalse(form.getCategories().isEmpty());
 	}
 
-	//	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
-	//	public void translateFormCategories() throws MalformedURLException, DocumentException, CategoryNameWithoutTranslation {
-	//		OrbeonCategoryTranslator.getInstance().readXml(form);
-	//	}
+	// @Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
+	// public void translateFormCategories() throws MalformedURLException, DocumentException,
+	// CategoryNameWithoutTranslation {
+	// OrbeonCategoryTranslator.getInstance().readXml(form);
+	// }
 
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
-	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException, NotValidOperatorInExpression {
+	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException,
+			NotValidOperatorInExpression, FieldTooLongException {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		Form vaadinForm = createSimpleTestForm();
 		formDrools.parse(vaadinForm);
@@ -71,7 +74,8 @@ public class DecisionTableTest {
 
 		try {
 			Assert.assertEquals("RuimVoldoende", form.getCategory("Financien").getQuestion("Inkomen").getValue());
-			Assert.assertEquals(5.0, ((SubmittedForm) form).getVariableValue(form.getCategory("Financien").getQuestion("Inkomen"), "qScore"));
+			Assert.assertEquals(5.0, ((SubmittedForm) form).getVariableValue(
+					form.getCategory("Financien").getQuestion("Inkomen"), "qScore"));
 		} catch (QuestionDoesNotExistException | CategoryDoesNotExistException e) {
 			e.printStackTrace();
 		}
@@ -79,12 +83,14 @@ public class DecisionTableTest {
 
 	/**
 	 * Create the form structure. Form used to create the drools rules
-	 *
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
+	 * @throws FieldTooLongException
 	 */
-	private Form createSimpleTestForm() throws NotValidChildException, NotValidOperatorInExpression {
+	private Form createSimpleTestForm() throws NotValidChildException, NotValidOperatorInExpression,
+			FieldTooLongException {
 		Form form = new Form();
 		form.setName("Test form");
 		Category category = new Category();
@@ -114,7 +120,8 @@ public class DecisionTableTest {
 		ExpressionChain actionRow1ExpChain = new ExpressionChain();
 		ExpressionValueCustomVariable actionElement1Row1 = new ExpressionValueCustomVariable();
 		actionElement1Row1.setReference(question);
-		CustomVariable customVar = new CustomVariable(form, "qScore", CustomVariableType.STRING, CustomVariableScope.QUESTION);
+		CustomVariable customVar = new CustomVariable(form, "qScore", CustomVariableType.STRING,
+				CustomVariableScope.QUESTION);
 		actionElement1Row1.setVariable(customVar);
 		ExpressionOperatorMath actionElement2Row1 = new ExpressionOperatorMath();
 		actionElement2Row1.setValue(AvailableOperator.ASSIGNATION);
