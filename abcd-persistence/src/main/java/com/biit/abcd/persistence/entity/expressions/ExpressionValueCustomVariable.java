@@ -10,7 +10,7 @@ import com.biit.abcd.persistence.entity.TreeObject;
 
 /**
  * Defines a value as a already defined form custom variable.
- *
+ * 
  */
 @Entity
 @Table(name = "EXPRESSION_VALUE_CUSTOM_VARIABLE")
@@ -41,7 +41,11 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 		String expressionString = new String();
 		expressionString += getReference().getName();
 		if (variable != null) {
-			expressionString += "." + variable.getName();
+			if (getUnit() != null) {
+				expressionString += "." + variable.getName() + " (" + getUnit().getAbbreviature() + ")";
+			} else {
+				expressionString += "." + variable.getName();
+			}
 		}
 		return expressionString;
 	}
@@ -56,7 +60,12 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 
 	@Override
 	protected String getExpression() {
-		return getRepresentation();
+		String expressionString = new String();
+		expressionString += getReference().getName();
+		if (variable != null) {
+			expressionString += "." + variable.getName();
+		}
+		return expressionString;
 	}
 
 	@Override
