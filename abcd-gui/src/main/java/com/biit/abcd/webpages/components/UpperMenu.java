@@ -10,6 +10,7 @@ import com.biit.abcd.core.drools.Form2DroolsNoDrl;
 import com.biit.abcd.core.drools.facts.inputform.exceptions.ExpressionInvalidException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -48,13 +49,22 @@ public class UpperMenu extends HorizontalButtonGroup {
 		// Add FormManager button.
 		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcon.FORM_MANAGER_PAGE,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
-			private static final long serialVersionUID = 4002268252434768032L;
+					private static final long serialVersionUID = 4002268252434768032L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+								windowAccept.close();
+							}
+						});
+
+					}
+				});
 		formManagerButton.setEnabled(true);
 		formManagerButton.setHeight("100%");
 		formManagerButton.setWidth(BUTTON_WIDTH);
@@ -66,33 +76,33 @@ public class UpperMenu extends HorizontalButtonGroup {
 
 		settingsButton = new IconButton(LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, ThemeIcon.SETTINGS,
 				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, IconSize.BIG, new ClickListener() {
-			private static final long serialVersionUID = 3450355943436017152L;
+					private static final long serialVersionUID = 3450355943436017152L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				SettingsWindow settings = new SettingsWindow();
-				settings.showRelativeToComponent(settingsButton);
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						SettingsWindow settings = new SettingsWindow();
+						settings.showRelativeToComponent(settingsButton);
+					}
+				});
 		settingsButton.setHeight("100%");
 		settingsButton.setWidth(BUTTON_WIDTH);
 
 		droolsExporterButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EXPORTER, ThemeIcon.FORM_MANAGER_PAGE,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
-			private static final long serialVersionUID = 4002268252434768032L;
+					private static final long serialVersionUID = 4002268252434768032L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				PrintStream ps = new PrintStream(baos);
-				try {
-					new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm());
-				} catch (ExpressionInvalidException e) {
-					MessageManager.showError(e.getMessage());
-				}
-				ps.close();
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						PrintStream ps = new PrintStream(baos);
+						try {
+							new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm());
+						} catch (ExpressionInvalidException e) {
+							MessageManager.showError(e.getMessage());
+						}
+						ps.close();
+					}
+				});
 		droolsExporterButton.setEnabled(true);
 		droolsExporterButton.setHeight("100%");
 		droolsExporterButton.setWidth(BUTTON_WIDTH);

@@ -58,6 +58,7 @@ public enum LanguageCodes {
 	WARNING_ELEMENT_NOT_FOUND_DESCRIPTION("warning.element.not.found.description"),
 	WARNING_NAME_TOO_LONG("warning.element.name.too.long"),
 	WARNING_NAME_TOO_LONG_DESCRIPTION("warning.element.name.too.long.description"),
+	WARNING_LOST_UNSAVED_DATA("warning.unsaved.data.will.be.lost"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 
