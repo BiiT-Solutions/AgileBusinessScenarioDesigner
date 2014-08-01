@@ -18,6 +18,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
@@ -59,7 +60,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "testEmptyDatabase")
-	public void storeDummyForm() {
+	public void storeDummyForm() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM);
 		formDao.makePersistent(form);
@@ -80,7 +81,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "removeDummyForm")
-	public void storeFormWithCategory() throws NotValidChildException {
+	public void storeFormWithCategory() throws NotValidChildException, FieldTooLongException {
 		form = new Form();
 		form.setName(FULL_FORM);
 		Category category = new Category();
@@ -120,7 +121,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	// }
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
-	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException {
+	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException, FieldTooLongException {
 		Form form2 = new Form();
 		form2.setName(OTHER_FORM);
 		Category category = new Category();
@@ -134,7 +135,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeFormWithCategory")
-	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException {
+	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException {
 		Category category2 = new Category();
 		category2.setName("Category2");
 		form.addChild(category2);
@@ -197,7 +198,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
-	public void storeFormDiagram() throws NotValidChildException {
+	public void storeFormDiagram() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
 		form.setName(DIAGRAM_FORM);
 
@@ -212,7 +213,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "formDao" }, dependsOnMethods = "storeOtherFormWithSameLabelCategory")
-	public void storeFormTableRule() throws NotValidChildException, NotValidExpression {
+	public void storeFormTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException {
 		Form form = new Form();
 		form.setName(TABLE_RULE_FORM);
 

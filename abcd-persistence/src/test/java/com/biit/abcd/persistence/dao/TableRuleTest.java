@@ -15,6 +15,7 @@ import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
@@ -45,7 +46,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	}
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "testEmptyDatabase")
-	public void storeDummyTableRule() throws NotValidFormException {
+	public void storeDummyTableRule() throws NotValidFormException, FieldTooLongException {
 		Form basicForm = new Form();
 		basicForm.setName(DUMMY_FORM);
 
@@ -66,7 +67,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	}
 
 	@Test(groups = { "tableRulesDao" }, dependsOnMethods = "storeDummyTableRule")
-	public void storeTableRule() throws NotValidChildException, NotValidExpression {
+	public void storeTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException {
 		// Define form.
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v2");

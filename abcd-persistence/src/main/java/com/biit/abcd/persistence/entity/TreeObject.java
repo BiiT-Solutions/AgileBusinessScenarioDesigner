@@ -23,6 +23,7 @@ import com.biit.abcd.annotation.AutoLoggerLevel;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -38,6 +39,8 @@ import com.liferay.portal.model.User;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class TreeObject extends StorableObject {
 
+	// MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~185. Form name is unique.
+	@Column(length = 185)
 	private String name;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
@@ -55,9 +58,8 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	/**
-	 * Gets all children of the treeObject. These annotations are in the method
-	 * because must been overwritten by the Form object. All objects but forms
-	 * must be FetchType.EAGER.
+	 * Gets all children of the treeObject. These annotations are in the method because must been overwritten by the
+	 * Form object. All objects but forms must be FetchType.EAGER.
 	 */
 	public List<TreeObject> getChildren() {
 		if (children == null) {
@@ -169,8 +171,7 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	/**
-	 * This element or any of its children has a dependency. Checks if it is
-	 * used in a TableRule, Diagram or Expression.
+	 * This element or any of its children has a dependency. Checks if it is used in a TableRule, Diagram or Expression.
 	 */
 	public void checkDependencies() throws DependencyExistException {
 		Form form = getForm();
@@ -179,7 +180,7 @@ public abstract class TreeObject extends StorableObject {
 			for (TableRule tableRule : form.getTableRules()) {
 				for (TableRuleRow row : tableRule.getRules()) {
 					for (Expression condition : row.getConditions()) {
-						//TODO checks agains table rule.	
+						// TODO checks agains table rule.
 					}
 				}
 			}
@@ -367,7 +368,10 @@ public abstract class TreeObject extends StorableObject {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) throws FieldTooLongException {
+		if (name.length() > 185) {
+			throw new FieldTooLongException("Name is limited to 185 characters due to database restrictions. ");
+		}
 		this.name = name;
 	}
 

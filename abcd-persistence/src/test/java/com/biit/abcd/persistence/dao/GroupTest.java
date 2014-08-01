@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +31,7 @@ public class GroupTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "groupDao" }, dependsOnMethods = "testEmptyDatabase")
-	public void storeDummyGroup() {
+	public void storeDummyGroup() throws FieldTooLongException {
 		Group group = new Group();
 		group.setName(DUMMY_GROUP);
 		groupDao.makePersistent(group);
@@ -44,7 +45,7 @@ public class GroupTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "groupDao" }, dependsOnMethods = "testEmptyDatabase")
-	public void storeGroupWithQuestion() throws NotValidChildException {
+	public void storeGroupWithQuestion() throws NotValidChildException, FieldTooLongException {
 		Group group = new Group();
 		group.setName(GROUP_WITH_QUESTIONS);
 		Question question = new Question();

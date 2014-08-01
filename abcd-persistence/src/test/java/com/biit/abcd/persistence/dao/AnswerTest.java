@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.InvalidAnswerFormatException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,7 +32,7 @@ public class AnswerTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "answerDao" }, dependsOnMethods = "testEmptyDatabase")
-	public void storeDummyAnswer() {
+	public void storeDummyAnswer() throws FieldTooLongException {
 		Answer answer = new Answer();
 		answer.setName(DUMMY_ANSWER);
 		answerDao.makePersistent(answer);
@@ -52,7 +53,7 @@ public class AnswerTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test(groups = { "answerDao" }, dependsOnMethods = "removeDummyAnswer")
-	public void storeAnswerInputField() throws InvalidAnswerFormatException {
+	public void storeAnswerInputField() throws InvalidAnswerFormatException, FieldTooLongException {
 		Answer answer = new Answer();
 		answer.setName(ANSWER_INPUT_FIELD);
 		answer.setAnswerType(AnswerType.INPUT);
@@ -68,7 +69,7 @@ public class AnswerTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(answers.get(0).getAnswerType(), AnswerType.INPUT);
 		Assert.assertEquals(answers.get(0).getAnswerFormat(), AnswerFormat.TEXT);
 	}
-	
+
 	@Test(groups = { "answerDao" }, dependsOnMethods = "getAnswerInputField")
 	public void removeAnswer() {
 		List<Answer> answers = answerDao.getAll();

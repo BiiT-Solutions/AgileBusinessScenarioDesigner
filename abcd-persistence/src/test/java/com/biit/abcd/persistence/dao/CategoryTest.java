@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Group;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +31,7 @@ public class CategoryTest extends AbstractTransactionalTestNGSpringContextTests 
 	}
 
 	@Test(groups = { "categoryDao" }, dependsOnMethods = "testEmptyDatabase")
-	public void storeDummyCategory() {
+	public void storeDummyCategory() throws FieldTooLongException {
 		Category category = new Category();
 		category.setName(DUMMY_CATEGORY);
 		categoryDao.makePersistent(category);
@@ -51,7 +52,7 @@ public class CategoryTest extends AbstractTransactionalTestNGSpringContextTests 
 	}
 
 	@Test(groups = { "categoryDao" }, dependsOnMethods = "removeDummyCategory")
-	public void storeCategoryWithGroup() throws NotValidChildException {
+	public void storeCategoryWithGroup() throws NotValidChildException, FieldTooLongException {
 		Category category = new Category();
 		category.setName(CATEGORY_WITH_GROUP);
 		Group group = new Group();
@@ -63,7 +64,7 @@ public class CategoryTest extends AbstractTransactionalTestNGSpringContextTests 
 		Assert.assertEquals(retrievedCategory.getId(), category.getId());
 		Assert.assertEquals(retrievedCategory.getChildren().size(), 1);
 	}
-	
+
 	@Test(groups = { "answerDao" }, dependsOnMethods = "storeCategoryWithGroup")
 	public void removeCategory() {
 		List<Category> categories = categoryDao.getAll();

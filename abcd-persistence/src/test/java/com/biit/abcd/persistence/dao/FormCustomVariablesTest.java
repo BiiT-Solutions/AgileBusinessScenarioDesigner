@@ -12,6 +12,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,7 +35,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "testEmptyDatabase")
-	public void storeDummyVariables() throws NotValidFormException {
+	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException {
 		basicForm = new Form();
 		basicForm.setName(DUMMY_FORM);
 
@@ -46,7 +47,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
-	public void storeIntegerVariables() {
+	public void storeIntegerVariables() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v2");
 
@@ -66,7 +67,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
-	public void storeStringVariables() {
+	public void storeStringVariables() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v3");
 
@@ -86,7 +87,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
-	public void storeDateVariables() {
+	public void storeDateVariables() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v4");
 		formDao.makePersistent(form);

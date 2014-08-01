@@ -20,7 +20,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 	public void setElement(Object element) {
 		super.setElement(element);
 		initCommonProperties(element);
-		
+
 	}
 
 	protected void initCommonProperties(Object element) {
@@ -32,7 +32,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		updatedBy.setEnabled(false);
 		updateTime = new TextField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
 		updateTime.setEnabled(false);
-		//init values;
+		// init values;
 		initCommonPropertiesValues((TreeObject) element);
 
 		FormLayout commonProperties = new FormLayout();
@@ -43,7 +43,8 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		commonProperties.addComponent(updatedBy);
 		commonProperties.addComponent(updateTime);
 
-		addTab(commonProperties, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION), false);
+		addTab(commonProperties, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION),
+				false);
 	}
 
 	protected void initCommonPropertiesValues(TreeObject element) {
@@ -79,7 +80,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		updateConcreteFormElement();
 		// Update common ui fields.
 		initCommonPropertiesValues(getTreeObjectInstance());
-		
+
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 

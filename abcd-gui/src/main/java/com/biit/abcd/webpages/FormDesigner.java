@@ -21,6 +21,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
@@ -48,13 +49,13 @@ public class FormDesigner extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
-		//If there is no form, then go back to form manager.
+		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
-		}		
-		
+		}
+
 		tableIsGoingToDetach = false;
 		this.upperMenu = initUpperMenu();
 		setUpperMenu(upperMenu);
@@ -72,7 +73,7 @@ public class FormDesigner extends FormWebPageComponent {
 		propertiesComponent.addPropertyUpdateListener(new PropertieUpdateListener() {
 			@Override
 			public void propertyUpdate(Object element) {
-				if(tableIsGoingToDetach){
+				if (tableIsGoingToDetach) {
 					return;
 				}
 				formTreeTable.updateItem((TreeObject) element);
@@ -110,9 +111,9 @@ public class FormDesigner extends FormWebPageComponent {
 			}
 		});
 
-		if(UserSessionHandler.getFormController().getLastAccessTreeObject()!=null ){
+		if (UserSessionHandler.getFormController().getLastAccessTreeObject() != null) {
 			selectComponent(UserSessionHandler.getFormController().getLastAccessTreeObject());
-		}else{
+		} else {
 			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
 		}
 	}
@@ -235,7 +236,11 @@ public class FormDesigner extends FormWebPageComponent {
 				} else {
 					getForm().addChild(newCategory);
 				}
-				newCategory.setName(newCategory.getDefaultName(getForm(), getForm().getChildren().size()));
+				try {
+					newCategory.setName(newCategory.getDefaultName(getForm(), getForm().getChildren().size()));
+				} catch (FieldTooLongException e) {
+					// Default name is never so long.
+				}
 				addCategoryToUI(newCategory);
 			} catch (NotValidChildException e) {
 				// Not possible.
@@ -276,7 +281,11 @@ public class FormDesigner extends FormWebPageComponent {
 						container = formTreeTable.getTreeObjectSelected().getCategory();
 					}
 					if (container != null) {
-						newGroup.setName(newGroup.getDefaultName(container, 1));
+						try {
+							newGroup.setName(newGroup.getDefaultName(container, 1));
+						} catch (FieldTooLongException e) {
+							// Default name is never so long.
+						}
 						addElementToUI(newGroup, container);
 						container.addChild(newGroup);
 					}
@@ -309,7 +318,11 @@ public class FormDesigner extends FormWebPageComponent {
 						parent = formTreeTable.getTreeObjectSelected().getParent().getParent();
 					}
 					if (parent != null) {
-						newQuestion.setName(newQuestion.getDefaultName(parent, 1));
+						try {
+							newQuestion.setName(newQuestion.getDefaultName(parent, 1));
+						} catch (FieldTooLongException e) {
+							// Default name is never so long.
+						}
 						addElementToUI(newQuestion, parent);
 						parent.addChild(newQuestion);
 					}
@@ -338,7 +351,11 @@ public class FormDesigner extends FormWebPageComponent {
 						parent = formTreeTable.getTreeObjectSelected().getParent();
 					}
 					if (parent != null) {
-						newAnswer.setName(newAnswer.getDefaultName(parent, 1));
+						try {
+							newAnswer.setName(newAnswer.getDefaultName(parent, 1));
+						} catch (FieldTooLongException e) {
+							// Default name is never so long.
+						}
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
@@ -415,7 +432,8 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveUp() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if ((selected!=null) && (selected.getParent() != null) && (selected.getParent().getChildren().indexOf(selected) > 0)) {
+			if ((selected != null) && (selected.getParent() != null)
+					&& (selected.getParent().getChildren().indexOf(selected) > 0)) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
@@ -440,8 +458,10 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveDown() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if ((selected!=null) && (selected.getParent() != null)
-					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren().size() - 1))) {
+			if ((selected != null)
+					&& (selected.getParent() != null)
+					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren()
+							.size() - 1))) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
@@ -490,7 +510,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 		@Override
 		public void valueChange(ValueChangeEvent event) {
-			if(formTreeTable.getTreeObjectSelected()!=null){
+			if (formTreeTable.getTreeObjectSelected() != null) {
 				UserSessionHandler.getFormController().setLastAccessTreeObject(formTreeTable.getTreeObjectSelected());
 			}
 			updateUpperMenu(formTreeTable.getTreeObjectSelected());
@@ -498,11 +518,12 @@ public class FormDesigner extends FormWebPageComponent {
 		}
 	}
 
-	public void selectComponent(TreeObject element){
-		if(formTreeTable.getItem(element)!=null){
+	public void selectComponent(TreeObject element) {
+		if (formTreeTable.getItem(element) != null) {
 			formTreeTable.setValue(element);
-		}else{
-			MessageManager.showWarning(LanguageCodes.WARNING_ELEMENT_NOT_FOUND, LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
+		} else {
+			MessageManager.showWarning(LanguageCodes.WARNING_ELEMENT_NOT_FOUND,
+					LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
 		}
 	}
 

@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
@@ -44,11 +45,10 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 
 	@Autowired
 	private IDiagramDao diagramDao;
-	
+
 	@Autowired
 	private IExpressionValueTreeObjectReferenceDao expressionValueTreeObjectReferenceDao;
 
-	
 	@Test(groups = { "ruleDao" })
 	public void removeBasicRule() {
 		// Rule already has two chains inside.
@@ -61,8 +61,8 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
 	}
 
-	@Test(groups = { "ruleDao" }, dependsOnMethods={"removeBasicRule"})
-	public void removeRuleOfForm() {
+	@Test(groups = { "ruleDao" }, dependsOnMethods = { "removeBasicRule" })
+	public void removeRuleOfForm() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM);
 		// Rule already has two chains inside.
@@ -79,8 +79,8 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
 	}
 
-	@Test(groups = { "diagramDao" }, dependsOnMethods={"removeRuleOfForm"})
-	public void removeDiagram() throws NotValidChildException {
+	@Test(groups = { "diagramDao" }, dependsOnMethods = { "removeRuleOfForm" })
+	public void removeDiagram() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
 		form.setName(FULL_FORM);
 
@@ -120,37 +120,37 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		DiagramSource start = new DiagramSource();
 		diagram.addDiagramObject(start);
 		form.addDiagram(diagram);
-		
+
 		DiagramFork fork = new DiagramFork();
 		ExpressionValueTreeObjectReference expression = new ExpressionValueTreeObjectReference(question1);
 		fork.setReference(expression);
 		diagram.addDiagramObject(fork);
-		
+
 		DiagramLink link1 = new DiagramLink();
 		ExpressionChain selectAnswer1 = new ExpressionChain();
 		selectAnswer1.addExpression(new ExpressionValueTreeObjectReference(answer1));
 		link1.setExpressionChain(selectAnswer1);
 		diagram.addDiagramObject(link1);
-		
+
 		DiagramLink link2 = new DiagramLink();
 		ExpressionChain selectAnswer2 = new ExpressionChain();
 		selectAnswer2.addExpression(new ExpressionValueTreeObjectReference(answer2));
 		link2.setExpressionChain(selectAnswer2);
 		diagram.addDiagramObject(link2);
-		
+
 		formDao.makePersistent(form);
 		Assert.assertEquals(formDao.getRowCount(), 1);
 		Assert.assertEquals(diagramDao.getRowCount(), 1);
 		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 3);
-		
+
 		formDao.makeTransient(form);
 		Assert.assertEquals(formDao.getRowCount(), 0);
 		Assert.assertEquals(diagramDao.getRowCount(), 0);
 		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 0);
 	}
-	
-	@Test(groups = { "diagramDao" }, dependsOnMethods={"removeDiagram"})
-	public void changeTreeObjectReference() throws NotValidChildException {
+
+	@Test(groups = { "diagramDao" }, dependsOnMethods = { "removeDiagram" })
+	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
 		form.setName(FULL_FORM);
 
@@ -190,37 +190,36 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		DiagramSource start = new DiagramSource();
 		diagram.addDiagramObject(start);
 		form.addDiagram(diagram);
-		
+
 		DiagramFork fork = new DiagramFork();
 		ExpressionValueTreeObjectReference expression = new ExpressionValueTreeObjectReference(question1);
 		fork.setReference(expression);
 		diagram.addDiagramObject(fork);
-		
+
 		DiagramLink link1 = new DiagramLink();
 		ExpressionChain selectAnswer1 = new ExpressionChain();
 		selectAnswer1.addExpression(new ExpressionValueTreeObjectReference(answer1));
 		link1.setExpressionChain(selectAnswer1);
 		diagram.addDiagramObject(link1);
-		
+
 		DiagramLink link2 = new DiagramLink();
 		ExpressionChain selectAnswer2 = new ExpressionChain();
 		selectAnswer2.addExpression(new ExpressionValueTreeObjectReference(answer2));
 		link2.setExpressionChain(selectAnswer2);
 		diagram.addDiagramObject(link2);
-		
+
 		formDao.makePersistent(form);
 		Assert.assertEquals(formDao.getRowCount(), 1);
 		Assert.assertEquals(diagramDao.getRowCount(), 1);
 		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 3);
-		
+
 		fork.setReference(new ExpressionValueTreeObjectReference(question2));
 		formDao.makePersistent(form);
-		
+
 		formDao.makeTransient(form);
 		Assert.assertEquals(formDao.getRowCount(), 0);
 		Assert.assertEquals(diagramDao.getRowCount(), 0);
 		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 0);
 	}
-
 
 }
