@@ -19,7 +19,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 	@ManyToOne(fetch = FetchType.EAGER)
 	private CustomVariable variable;
 
-	protected ExpressionValueCustomVariable() {
+	public ExpressionValueCustomVariable() {
 		super();
 	}
 
@@ -33,7 +33,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 		super();
 		setReference(reference);
 		setUnit(dateUnit);
-		this.variable = variable;		
+		this.variable = variable;
 	}
 
 	@Override
