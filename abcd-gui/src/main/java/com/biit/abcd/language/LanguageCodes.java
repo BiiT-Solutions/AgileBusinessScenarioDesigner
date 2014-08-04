@@ -56,6 +56,9 @@ public enum LanguageCodes {
 	WARNING_EXPRESSION_TABLE_EMPTY("warning.expression.table.empty"),
 	WARNING_ELEMENT_NOT_FOUND("warning.element.not.found"),
 	WARNING_ELEMENT_NOT_FOUND_DESCRIPTION("warning.element.not.found.description"),
+	WARNING_NAME_TOO_LONG("warning.element.name.too.long"),
+	WARNING_NAME_TOO_LONG_DESCRIPTION("warning.element.name.too.long.description"),
+	WARNING_LOST_UNSAVED_DATA("warning.unsaved.data.will.be.lost"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 
@@ -186,7 +189,6 @@ public enum LanguageCodes {
 	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"),
 	ERROR_SAME_DIAGRAM("error.same.diagram"),
 	ERROR_DIAGRAM_IS_IN_USE("error.diagram.is.in.use"),
-
 
 	INFO_DATA_STORED("info.data.store"),
 

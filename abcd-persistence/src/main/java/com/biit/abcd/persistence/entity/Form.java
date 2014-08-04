@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
@@ -55,7 +56,11 @@ public class Form extends TreeObject {
 		customVariables = new ArrayList<>();
 		expressionChain = new ArrayList<>();
 		rules = new ArrayList<>();
-		setName(DEFAULT_NAME);
+		try {
+			setName(DEFAULT_NAME);
+		} catch (FieldTooLongException ftle) {
+			// Default name is not so long.
+		}
 	}
 
 	public Form(String name) {
@@ -68,8 +73,8 @@ public class Form extends TreeObject {
 	}
 
 	/**
-	 * Gets all children of the form. This annotations are in the method because
-	 * overwrites the TreeObject. Forms' children must use FetchType.LAZY.
+	 * Gets all children of the form. This annotations are in the method because overwrites the TreeObject. Forms'
+	 * children must use FetchType.LAZY.
 	 */
 	@Override
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
@@ -232,8 +237,7 @@ public class Form extends TreeObject {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root
-	 * diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
 	 * 
 	 * @param diagram
 	 */

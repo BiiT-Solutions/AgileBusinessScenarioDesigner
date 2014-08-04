@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.AnswerTypeUi;
 import com.biit.abcd.language.LanguageCodes;
@@ -8,6 +9,7 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.ComboBox;
@@ -44,7 +46,8 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 		questionForm.addComponent(answerType);
 		questionForm.addComponent(answerFormat);
 
-		addTab(questionForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION), true, 0);
+		addTab(questionForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_QUESTION_FORM_CAPTION),
+				true, 0);
 	}
 
 	private void initializeSelectionLists() {
@@ -62,7 +65,8 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 		answerType.setImmediate(true);
 		for (AnswerTypeUi answerTypeUi : AnswerTypeUi.values()) {
 			answerType.addItem(answerTypeUi.getAnswerType());
-			answerType.setItemCaption(answerTypeUi.getAnswerType(), ServerTranslate.translate(answerTypeUi.getLanguageCode()));
+			answerType.setItemCaption(answerTypeUi.getAnswerType(),
+					ServerTranslate.translate(answerTypeUi.getLanguageCode()));
 		}
 		answerType.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -6322255129871221711L;
@@ -85,10 +89,20 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		instance.setName(questionTechnicalLabel.getValue());
+		try {
+			instance.setName(questionTechnicalLabel.getValue());
+		} catch (FieldTooLongException e) {
+			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+			try {
+				instance.setName(questionTechnicalLabel.getValue().substring(0, 185));
+			} catch (FieldTooLongException e1) {
+				// Impossible.
+			}
+		}
 		instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
 		instance.setAnswerType((AnswerType) answerType.getValue());
-		
+
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 

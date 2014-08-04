@@ -42,9 +42,8 @@ public class TabFormVariablesLayout extends TabLayout {
 	}
 
 	/**
-	 * We can select more than one element, then we add expressions separated by
-	 * commas. If we select a date question or variable, then we also must
-	 * select the unit for the date expression.
+	 * We can select more than one element, then we add expressions separated by commas. If we select a date question or
+	 * variable, then we also must select the unit for the date expression.
 	 */
 	private void createFormVariablesElements() {
 		initializeFormQuestionTable();
@@ -63,7 +62,8 @@ public class TabFormVariablesLayout extends TabLayout {
 					// We need to create an expression list separated by commas.
 					for (int i = 0; i < getSelectedFormElements().size(); i++) {
 						// Add element.
-						final ExpressionValueTreeObjectReference formReference= new ExpressionValueTreeObjectReference();
+						final ExpressionValueTreeObjectReference formReference = new ExpressionValueTreeObjectReference();
+						formReference.setReference(getSelectedFormElements().get(i));
 						// Detect if it is a date question to add units
 						if ((getSelectedFormElements().get(i) instanceof Question)
 								&& (((Question) getSelectedFormElements().get(i)).getAnswerFormat()) != null
@@ -77,15 +77,15 @@ public class TabFormVariablesLayout extends TabLayout {
 								public void acceptAction(AcceptCancelWindow window) {
 									((ExpressionValueTreeObjectReference) formReference)
 											.setUnit(((WindowSelectDateUnit) window).getValue());
-									// Fire listeners to force thre refresh of GUI.
-									updateExpression(formReference);
+									// Fire listeners to force the refresh of GUI.
+									addExpression(formReference);
 									window.close();
 								}
 							});
 							windowDate.showCentered();
+						} else {
+							addExpression(formReference);
 						}
-						formReference.setReference(getSelectedFormElements().get(i));
-						addExpression(formReference);
 						// Add comma if more than one element.
 						if (i < getSelectedFormElements().size() - 1) {
 							ExpressionSymbol exprValue = new ExpressionSymbol();
@@ -117,8 +117,8 @@ public class TabFormVariablesLayout extends TabLayout {
 						if (((CustomVariable) variableSelection.getValue()).getType() != null
 								&& ((CustomVariable) variableSelection.getValue()).getType().equals(
 										CustomVariableType.DATE)) {
-							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements()
-									.get(i), (CustomVariable) variableSelection.getValue());
+							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements().get(i),
+									(CustomVariable) variableSelection.getValue());
 							// Create a window for selecting the unit and assign it to the expression.
 							WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
 									.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
@@ -130,15 +130,16 @@ public class TabFormVariablesLayout extends TabLayout {
 											.setUnit(((WindowSelectDateUnit) window).getValue());
 									// Fire listeners to force thre refresh of GUI.
 									updateExpression(formVariableReference);
+									addExpression(formVariableReference);
 									window.close();
 								}
 							});
 							UI.getCurrent().addWindow(windowDate);
 						} else {
-							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements()
-									.get(i), (CustomVariable) variableSelection.getValue());
+							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements().get(i),
+									(CustomVariable) variableSelection.getValue());
+							addExpression(formVariableReference);
 						}
-						addExpression(formVariableReference);
 						// Add comma if needed.
 						if (i < getSelectedFormElements().size() - 1) {
 							ExpressionSymbol exprValue = new ExpressionSymbol();
@@ -217,8 +218,7 @@ public class TabFormVariablesLayout extends TabLayout {
 	}
 
 	/**
-	 * Returns the selected list of element. All elements must be of the same
-	 * class.
+	 * Returns the selected list of element. All elements must be of the same class.
 	 * 
 	 * @return
 	 */

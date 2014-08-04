@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -41,7 +42,7 @@ public class ExpressionTest {
 	}
 
 	@Test(groups = { "expressionEvaluator" })
-	public void testDateTreeObject() {
+	public void testDateTreeObject() throws FieldTooLongException {
 		TreeObject question = new Question();
 		question.setName("Question1");
 
@@ -55,7 +56,7 @@ public class ExpressionTest {
 	}
 
 	@Test(groups = { "expressionEvaluator" })
-	public void testDateVariables() {
+	public void testDateVariables() throws FieldTooLongException {
 		TreeObject question = new Question();
 		question.setName("Question1");
 

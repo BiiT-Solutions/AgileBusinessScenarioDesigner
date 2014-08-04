@@ -1,9 +1,11 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -37,7 +39,17 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		instance.setName(groupTechnicalLabel.getValue());
+		try {
+			instance.setName(groupTechnicalLabel.getValue());
+		} catch (FieldTooLongException e) {
+			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+			try {
+				instance.setName(groupTechnicalLabel.getValue().substring(0, 185));
+			} catch (FieldTooLongException e1) {
+				// Impossible.
+			}
+		}
 		instance.setRepetable(groupIsRepeatable.getValue());
 		
 		firePropertyUpdateListener(getTreeObjectInstance());

@@ -23,6 +23,7 @@ import com.biit.abcd.annotation.AutoLoggerLevel;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -38,6 +39,8 @@ import com.liferay.portal.model.User;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class TreeObject extends StorableObject {
 
+	// MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~185. Form name is unique.
+	@Column(length = 185)
 	private String name;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
@@ -55,9 +58,8 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	/**
-	 * Gets all children of the treeObject. These annotations are in the method
-	 * because must been overwritten by the Form object. All objects but forms
-	 * must be FetchType.EAGER.
+	 * Gets all children of the treeObject. These annotations are in the method because must been overwritten by the
+	 * Form object. All objects but forms must be FetchType.EAGER.
 	 */
 	public List<TreeObject> getChildren() {
 		if (children == null) {
@@ -73,7 +75,7 @@ public abstract class TreeObject extends StorableObject {
 		}
 		if (!getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if ((child.getParent() != null) && (child.getParent() != this)) {
+			if (child.getParent() != null && child.getParent() != this) {
 				child.getParent().getChildren().remove(child);
 			}
 			getChildren().add(index, child);
@@ -93,24 +95,18 @@ public abstract class TreeObject extends StorableObject {
 		}
 	}
 
-	public void addChildren(List<TreeObject> children) throws NotValidChildException{
-		for(TreeObject child : children) {
-			addChild(child);
-		}
-	}
-
 	@AutoLogger(AutoLoggerLevel.DEBUG)
 	public void addChild(TreeObject child) throws NotValidChildException {
 		if (getChildren() == null) {
 			setChildren(new ArrayList<TreeObject>());
 		}
-		if ((getAllowedChilds() == null) || !getAllowedChilds().contains(child.getClass())) {
+		if (getAllowedChilds() == null || !getAllowedChilds().contains(child.getClass())) {
 			throw new NotValidChildException("Class '" + this.getClass().getName() + "' does not allows instances of '"
 					+ child.getClass().getName() + "' as child.");
 		}
 		if (!getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if ((child.getParent() != null) && (child.getParent() != this)) {
+			if (child.getParent() != null && child.getParent() != this) {
 				child.getParent().getChildren().remove(child);
 			}
 			getChildren().add(child);
@@ -175,8 +171,7 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	/**
-	 * This element or any of its children has a dependency. Checks if it is
-	 * used in a TableRule, Diagram or Expression.
+	 * This element or any of its children has a dependency. Checks if it is used in a TableRule, Diagram or Expression.
 	 */
 	public void checkDependencies() throws DependencyExistException {
 		Form form = getForm();
@@ -185,7 +180,7 @@ public abstract class TreeObject extends StorableObject {
 			for (TableRule tableRule : form.getTableRules()) {
 				for (TableRuleRow row : tableRule.getRules()) {
 					for (Expression condition : row.getConditions()) {
-						//TODO checks agains table rule.
+						// TODO checks agains table rule.
 					}
 				}
 			}
@@ -202,7 +197,7 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public void removeChild(int index) throws ChildrenNotFoundException, DependencyExistException {
-		if ((getChildren() == null) || (getChildren().size() < index)) {
+		if (getChildren() == null || getChildren().size() < index) {
 			throw new ChildrenNotFoundException("Index out of bounds. Index " + index + " is invalid.");
 		} else {
 			getChildren().get(index).checkDependencies();
@@ -211,8 +206,8 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public void switchChildren(int indexChild1, int indexChild2, User user) throws ChildrenNotFoundException {
-		if (((indexChild1 >= 0) && (indexChild1 < getChildren().size()))
-				&& ((indexChild2 >= 0) && (indexChild2 < getChildren().size()))) {
+		if ((indexChild1 >= 0 && indexChild1 < getChildren().size())
+				&& (indexChild2 >= 0 && indexChild2 < getChildren().size())) {
 			Collections.swap(getChildren(), indexChild1, indexChild2);
 			// Update elements date modification.
 			if (user != null) {
@@ -229,7 +224,7 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public TreeObject getChild(int index) throws ChildrenNotFoundException {
-		if ((getChildren() == null) || (getChildren().size() < index)) {
+		if (getChildren() == null || getChildren().size() < index) {
 			throw new ChildrenNotFoundException("Index out of bounds. Index " + index + " is invalid.");
 		} else {
 			return getChildren().get(index);
@@ -259,7 +254,7 @@ public abstract class TreeObject extends StorableObject {
 		// Update parents.
 		for (TreeObject child : children) {
 			// Remove the child from previous parent.
-			if ((child.getParent() != null) && (child.getParent() != this)) {
+			if (child.getParent() != null && child.getParent() != this) {
 				child.getParent().getChildren().remove(child);
 			}
 			try {
@@ -373,7 +368,10 @@ public abstract class TreeObject extends StorableObject {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) throws FieldTooLongException {
+		if (name.length() > 185) {
+			throw new FieldTooLongException("Name is limited to 185 characters due to database restrictions. ");
+		}
 		this.name = name;
 	}
 
@@ -393,7 +391,7 @@ public abstract class TreeObject extends StorableObject {
 				questions.add((Question) child);
 				continue;
 			}
-			if ((child instanceof Category) || (child instanceof Group)) {
+			if (child instanceof Category || child instanceof Group) {
 				questions.addAll(child.getQuestions());
 				continue;
 			}
@@ -424,7 +422,7 @@ public abstract class TreeObject extends StorableObject {
 	 * @return
 	 */
 	public static TreeObject getCommonTreeObject(Set<TreeObject> treeObjects) {
-		if ((treeObjects == null) || treeObjects.isEmpty()) {
+		if (treeObjects == null || treeObjects.isEmpty()) {
 			return null;
 		}
 

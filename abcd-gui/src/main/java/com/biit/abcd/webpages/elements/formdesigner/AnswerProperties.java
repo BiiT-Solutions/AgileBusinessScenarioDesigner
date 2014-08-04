@@ -1,9 +1,11 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
@@ -32,7 +34,17 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		instance.setName(answerTechnicalLabel.getValue());
+		try {
+			instance.setName(answerTechnicalLabel.getValue());
+		} catch (FieldTooLongException e) {
+			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+			try {
+				instance.setName(answerTechnicalLabel.getValue().substring(0, 185));
+			} catch (FieldTooLongException e1) {
+				// Impossible.
+			}
+		}
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
