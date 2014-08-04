@@ -58,6 +58,15 @@ public class Form extends TreeObject {
 		setName(DEFAULT_NAME);
 	}
 
+	public Form(String name) {
+		diagrams = new ArrayList<>();
+		tableRules = new ArrayList<>();
+		customVariables = new ArrayList<>();
+		expressionChain = new ArrayList<>();
+		rules = new ArrayList<>();
+		setName(name);
+	}
+
 	/**
 	 * Gets all children of the form. This annotations are in the method because
 	 * overwrites the TreeObject. Forms' children must use FetchType.LAZY.

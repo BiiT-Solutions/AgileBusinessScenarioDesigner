@@ -1,6 +1,10 @@
 package com.biit.abcd.core.drools.facts;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import junit.framework.Assert;
 
@@ -10,10 +14,13 @@ import org.testng.annotations.Test;
 import com.biit.abcd.core.drools.Form2DroolsNoDrl;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryNameWithoutTranslation;
 import com.biit.abcd.core.drools.facts.inputform.exceptions.QuestionDoesNotExistException;
+import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonCategoryTranslator;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -32,46 +39,52 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
-public class DecisionTableTest {
+public class SimpleDecisionTableTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
 	private final static String DOCUMENT_ID = "7912c3f8b7328253dd7647cf507455a795367f49";
-	private final static String xmlFile = "<form xmlns:xxi=\"http://orbeon.org/oxf/xml/xinclude\" xmlns:xh=\"http://www.w3.org/1999/xhtml\" xmlns:xi=\"http://www.w3.org/2001/XInclude\" xmlns:ev=\"http://www.w3.org/2001/xml-events\" xmlns:saxon=\"http://saxon.sf.net/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:fb=\"http://orbeon.org/oxf/xml/form-builder\" xmlns:xxf=\"http://orbeon.org/oxf/xml/xforms\" xmlns:xbl=\"http://www.w3.org/ns/xbl\" xmlns:version=\"java:org.orbeon.oxf.common.Version\" xmlns:sql=\"http://orbeon.org/oxf/xml/sql\" xmlns:p=\"http://www.orbeon.com/oxf/pipeline\" xmlns:fr=\"http://orbeon.org/oxf/xml/form-runner\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xf=\"http://www.w3.org/2002/xforms\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exf=\"http://www.exforms.org/exf/1-0\"><Financien><Inkomen>RuimVoldoende</Inkomen><Inkomen2>three</Inkomen2></Financien></form>";
 
-	private String xmlText;
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
-	//	@Test(groups = { "orbeon" })
-	//	public void getXml() throws MalformedURLException, DocumentException {
-	//		orbeonImporter = new OrbeonSubmittedAnswerImporter();
-	//		xmlText = OrbeonImporter.getXml(APP, FORM, DOCUMENT_ID);
-	//		Assert.assertNotNull(xmlText);
-	//	};
+	// @Test(groups = { "orbeon" })
+	// public void getXml() throws MalformedURLException, DocumentException {
+	// orbeonImporter = new OrbeonSubmittedAnswerImporter();
+	// xmlText = OrbeonImporter.getXml(APP, FORM, DOCUMENT_ID);
+	// Assert.assertNotNull(xmlText);
+	// };
+
 	@Test(groups = { "orbeon" })
-	public void readXml() throws MalformedURLException, DocumentException {
-		form = new SubmittedForm(APP, FORM);
-		orbeonImporter.readXml(xmlFile, form);
-		Assert.assertNotNull(form);
-		Assert.assertFalse(form.getCategories().isEmpty());
+	public void readXml() throws DocumentException, IOException {
+		this.form = new SubmittedForm(APP, FORM);
+		// Charset could be StandardCharsets.UTF_8, but we leave the default one
+		String xmlFile = readFile("./src/test/resources/decisionTableTest.xml", Charset.defaultCharset());
+		this.orbeonImporter.readXml(xmlFile, this.form);
+		Assert.assertNotNull(this.form);
+		Assert.assertFalse(this.form.getCategories().isEmpty());
 	}
 
-	//	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
-	//	public void translateFormCategories() throws MalformedURLException, DocumentException, CategoryNameWithoutTranslation {
-	//		OrbeonCategoryTranslator.getInstance().readXml(form);
-	//	}
-
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
-	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException, NotValidOperatorInExpression {
+	public void translateFormCategories() throws MalformedURLException, DocumentException,
+			CategoryNameWithoutTranslation {
+		OrbeonCategoryTranslator.getInstance().readXml(this.form);
+	}
+
+	@Test(groups = { "rules" }, dependsOnMethods = { "readXml" })
+	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException,
+			NotValidOperatorInExpression, RuleInvalidException {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
-		Form vaadinForm = createSimpleTestForm();
+		Form vaadinForm = this.createSimpleTestForm();
 		formDrools.parse(vaadinForm);
-		formDrools.go(form);
+		formDrools.go(this.form);
 
 		try {
-			Assert.assertEquals("RuimVoldoende", form.getCategory("Financien").getQuestion("Inkomen").getValue());
-			Assert.assertEquals(5.0, ((SubmittedForm) form).getVariableValue(form.getCategory("Financien").getQuestion("Inkomen"), "qScore"));
+			Assert.assertEquals("RuimVoldoende", this.form.getCategory("Financien").getQuestion("Inkomen").getValue());
+			Assert.assertEquals(
+					5.0,
+					((SubmittedForm) this.form).getVariableValue(
+							this.form.getCategory("Financien").getQuestion("Inkomen"), "qScore"));
 		} catch (QuestionDoesNotExistException | CategoryDoesNotExistException e) {
 			e.printStackTrace();
 		}
@@ -114,7 +127,8 @@ public class DecisionTableTest {
 		ExpressionChain actionRow1ExpChain = new ExpressionChain();
 		ExpressionValueCustomVariable actionElement1Row1 = new ExpressionValueCustomVariable();
 		actionElement1Row1.setReference(question);
-		CustomVariable customVar = new CustomVariable(form, "qScore", CustomVariableType.STRING, CustomVariableScope.QUESTION);
+		CustomVariable customVar = new CustomVariable(form, "qScore", CustomVariableType.STRING,
+				CustomVariableScope.QUESTION);
 		actionElement1Row1.setVariable(customVar);
 		ExpressionOperatorMath actionElement2Row1 = new ExpressionOperatorMath();
 		actionElement2Row1.setValue(AvailableOperator.ASSIGNATION);
@@ -130,6 +144,11 @@ public class DecisionTableTest {
 		tableRule.getRules().add(tableRuleRow1);
 		form.getTableRules().add(tableRule);
 		return form;
+	}
+
+	static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
 	}
 
 }

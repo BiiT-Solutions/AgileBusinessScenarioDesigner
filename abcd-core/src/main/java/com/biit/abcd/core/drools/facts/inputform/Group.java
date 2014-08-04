@@ -14,18 +14,18 @@ public class Group extends CommonAttributes implements IGroup {
 	private ICategory parent;
 
 	public Group(String tag){
-		setTag(tag);
-		setQuestions(new ArrayList<IQuestion>());
+		this.setTag(tag);
+		this.setQuestions(new ArrayList<IQuestion>());
 	}
 
 	@Override
 	public List<IQuestion> getQuestions() {
-		return questions;
+		return this.questions;
 	}
 
 	@Override
 	public IQuestion getQuestion(String tag) throws QuestionDoesNotExistException {
-		for (IQuestion question : getQuestions()) {
+		for (IQuestion question : this.getQuestions()) {
 			if (question.getTag().equals(tag)) {
 				return question;
 			}
@@ -40,37 +40,41 @@ public class Group extends CommonAttributes implements IGroup {
 	@Override
 	public void addQuestions(List<IQuestion> questions) {
 		if (this.questions == null) {
-			setQuestions(new ArrayList<IQuestion>());
+			this.setQuestions(new ArrayList<IQuestion>());
 		}
 		this.questions.addAll(questions);
 	}
 
 	public void addQuestion(IQuestion question) {
-		if (questions == null) {
-			setQuestions(new ArrayList<IQuestion>());
+		if (this.questions == null) {
+			this.setQuestions(new ArrayList<IQuestion>());
 		}
 		((Question)question).setParent(this);
-		questions.add(question);
+		this.questions.add(question);
 	}
 
 	public ICategory getParent() {
-		return parent;
+		return this.parent;
 	}
 
 	public void setParent(ICategory parent) {
 		this.parent = parent;
 	}
 
-	public boolean isScoreSet() {
+	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
-		if(((SubmittedForm)((Category)getParent()).getParent()).hasScoreSet(this)) {
+		if(((SubmittedForm)((Category)this.getParent()).getParent()).hasScoreSet(this, varName)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean isScoreNotSet() {
-		return !isScoreSet();
+	public boolean isScoreNotSet(String varName) {
+		return !this.isScoreSet(varName);
+	}
+
+	public Object getVariableValue(String varName){
+		return ((SubmittedForm)((Category)this.getParent()).getParent()).getVariableValue(this, varName);
 	}
 }

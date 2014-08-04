@@ -20,12 +20,17 @@ public class ExpressionSymbol extends Expression {
 		super();
 	}
 
+	public ExpressionSymbol(AvailableSymbol symbol){
+		super();
+		this.setValue(symbol);
+	}
+
 	@Override
 	public String getRepresentation() {
-		if (value == null) {
+		if (this.value == null) {
 			return "";
 		} else {
-			return value.getValue();
+			return this.value.getValue();
 		}
 	}
 
@@ -39,13 +44,13 @@ public class ExpressionSymbol extends Expression {
 
 	@Override
 	protected String getExpression() {
-		return getRepresentation();
+		return this.getRepresentation();
 	}
 
 	@Override
 	public Expression generateCopy() {
 		ExpressionSymbol copy = new ExpressionSymbol();
-		copy.value = value;
+		copy.value = this.value;
 		return copy;
 	}
 }

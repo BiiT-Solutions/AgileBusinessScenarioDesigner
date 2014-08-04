@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -29,12 +30,28 @@ public class Rule extends StorableObject implements ITableCellEditable {
 	private ExpressionChain actions;
 
 	public Rule() {
-		setActions(new ExpressionChain());
-		setCondition(new ExpressionChain());
+		this.setCondition(new ExpressionChain());
+		this.setActions(new ExpressionChain());
+	}
+
+	public Rule(String name) {
+		this.setCondition(new ExpressionChain());
+		this.setActions(new ExpressionChain());
+		this.setName(name);
+	}
+
+	public Rule(String name, ExpressionChain conditions, ExpressionChain actions) {
+		this.setCondition(conditions);
+		this.setActions(actions);
+		this.setName(name);
 	}
 
 	public ExpressionChain getCondition() {
-		return condition;
+		return this.condition;
+	}
+
+	public List<Expression> getConditions() {
+		return this.condition.getExpressions();
 	}
 
 	public void setCondition(ExpressionChain condition) {
@@ -42,7 +59,7 @@ public class Rule extends StorableObject implements ITableCellEditable {
 	}
 
 	public ExpressionChain getActions() {
-		return actions;
+		return this.actions;
 	}
 
 	public void setActions(ExpressionChain actions) {
@@ -51,7 +68,7 @@ public class Rule extends StorableObject implements ITableCellEditable {
 
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
@@ -61,8 +78,8 @@ public class Rule extends StorableObject implements ITableCellEditable {
 
 	public boolean isAssignedTo(TreeObject treeObject) {
 		Set<TreeObject> references = new HashSet<>();
-		references.addAll(getCondition().getReferencedTreeObjects());
-		references.addAll(getActions().getReferencedTreeObjects());
+		references.addAll(this.getCondition().getReferencedTreeObjects());
+		references.addAll(this.getActions().getReferencedTreeObjects());
 		if (!references.isEmpty()) {
 			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
 			if (commonTreeObject.equals(treeObject)) {

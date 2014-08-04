@@ -18,13 +18,19 @@ public class ExpressionFunction extends Expression {
 	@Enumerated(EnumType.STRING)
 	private AvailableFunction value;
 
+	public ExpressionFunction(){}
+
+	public ExpressionFunction(AvailableFunction function){
+		this.value = function;
+	}
+
 	@Override
 	public String getRepresentation() {
-		return value.getValue();
+		return this.value.getValue();
 	}
 
 	public AvailableFunction getValue() {
-		return value;
+		return this.value;
 	}
 
 	public void setValue(AvailableFunction function) {
@@ -33,13 +39,13 @@ public class ExpressionFunction extends Expression {
 
 	@Override
 	public String getExpression() {
-		return value.getValue();
+		return this.value.getValue();
 	}
 
 	@Override
 	public Expression generateCopy() {
 		ExpressionFunction copy = new ExpressionFunction();
-		copy.value = value;
+		copy.value = this.value;
 		return copy;
 	}
 }

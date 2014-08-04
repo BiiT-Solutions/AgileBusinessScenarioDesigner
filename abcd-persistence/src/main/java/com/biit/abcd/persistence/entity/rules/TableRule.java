@@ -37,6 +37,11 @@ public class TableRule extends StorableObject implements ITableCellEditable {
 		rules = new ArrayList<>();
 	}
 
+	public TableRule(String name) {
+		rules = new ArrayList<>();
+		setName(name);
+	}
+
 	public List<TableRuleRow> getRules() {
 		return rules;
 	}

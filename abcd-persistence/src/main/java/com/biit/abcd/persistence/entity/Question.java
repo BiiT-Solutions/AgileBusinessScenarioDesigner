@@ -25,6 +25,10 @@ public class Question extends TreeObject {
 	public Question() {
 	}
 
+	public Question(String name) {
+		setName(name);
+	}
+
 	@Override
 	protected List<Class<?>> getAllowedChilds() {
 		return ALLOWED_CHILDS;
@@ -46,7 +50,7 @@ public class Question extends TreeObject {
 		if (parent != null) {
 			name = DEFAULT_QUESTION_TECHNICAL_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
-				if (child instanceof Question && ((Question) child).getName() != null
+				if ((child instanceof Question) && (((Question) child).getName() != null)
 						&& ((Question) child).getName().equals(name)) {
 					return getDefaultName(parent, startingIndex + 1);
 				}

@@ -10,24 +10,24 @@ import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 
 /**
  * Basic implementation of an Orbeon Form that includes categories and questions.
- * 
+ *
  */
 public class SubmittedForm implements ISubmittedForm {
 
 	private String formName;
 	private String applicationName;
 	private List<ICategory> categories;
-	private HashMap<Object, HashMap<String, Double>> formVariables;
+	private HashMap<Object, HashMap<String, Object>> formVariables;
 
 	public SubmittedForm(String applicationName, String formName) {
 		this.formName = formName;
 		this.applicationName = applicationName;
-		setCategories(new ArrayList<ICategory>());
+		this.setCategories(new ArrayList<ICategory>());
 	}
 
 	@Override
 	public List<ICategory> getCategories() {
-		return categories;
+		return this.categories;
 	}
 
 	public void setCategories(List<ICategory> categories) {
@@ -36,17 +36,17 @@ public class SubmittedForm implements ISubmittedForm {
 
 	@Override
 	public void addCategory(ICategory category) {
-		if (categories == null) {
-			setCategories(new ArrayList<ICategory>());
+		if (this.categories == null) {
+			this.setCategories(new ArrayList<ICategory>());
 		}
 		((Category)category).setParent(this);
-		categories.add(category);
+		this.categories.add(category);
 	}
 
 	@Override
 	public ICategory getCategory(String categoryText) throws CategoryDoesNotExistException {
-		for (ICategory category : getCategories()) {
-			if (category.getTag().equals(categoryText)) {
+		for (ICategory category : this.getCategories()) {
+			if (category.getText().equals(categoryText)) {
 				return category;
 			}
 		}
@@ -55,46 +55,46 @@ public class SubmittedForm implements ISubmittedForm {
 
 	@Override
 	public String getFormName() {
-		return formName;
+		return this.formName;
 	}
 
 	@Override
 	public String getApplicationName() {
-		return applicationName;
+		return this.applicationName;
 	}
 
 	@Override
 	public String getId() {
-		if ((getApplicationName() != null) && (getFormName() != null)) {
-			return getApplicationName() + "/" + getFormName();
+		if ((this.getApplicationName() != null) && (this.getFormName() != null)) {
+			return this.getApplicationName() + "/" + this.getFormName();
 		}
 		return null;
 	}
 
 	@Override
 	public String toString() {
-		return getFormName();
+		return this.getFormName();
 	}
 
-	public Double getVariableValue(Object treeObject, String varName){
-		if((formVariables == null) || (formVariables.get(treeObject) == null)){
+	public	Object getVariableValue(Object treeObject, String varName){
+		if((this.formVariables == null) || (this.formVariables.get(treeObject) == null)){
 			return null;
 		}
-		return formVariables.get(treeObject).get(varName);
+		return this.formVariables.get(treeObject).get(varName);
 	}
 
-	public void setVariableValue(Object treeObject, String varName, Double value){
-		if(formVariables == null){
-			formVariables = new HashMap<Object, HashMap<String, Double>>();
+	public void setVariableValue(Object treeObject, String varName, Object value){
+		if(this.formVariables == null){
+			this.formVariables = new HashMap<Object, HashMap<String, Object>>();
 		}
-		if(formVariables.get(treeObject) == null){
-			formVariables.put(treeObject, new HashMap<String, Double>());
+		if(this.formVariables.get(treeObject) == null){
+			this.formVariables.put(treeObject, new HashMap<String, Object>());
 		}
-		formVariables.get(treeObject).put(varName, value);
+		this.formVariables.get(treeObject).put(varName, value);
 	}
 
-	public boolean hasScoreSet(Object treeObject){
-		if((formVariables == null) || (formVariables.get(treeObject) == null)){
+	public boolean hasScoreSet(Object treeObject, String varName){
+		if((this.formVariables == null) || (this.formVariables.get(treeObject) == null) || (this.formVariables.get(treeObject).get(varName) == null)){
 			return false;
 		} else {
 			return true;
@@ -102,7 +102,7 @@ public class SubmittedForm implements ISubmittedForm {
 	}
 
 	public boolean isScoreSet() {
-		if (getVariableValue(this, getFormName()) != null) {
+		if (this.getVariableValue(this, this.getFormName()) != null) {
 			return true;
 		} else {
 			return false;
@@ -110,6 +110,6 @@ public class SubmittedForm implements ISubmittedForm {
 	}
 
 	public boolean isScoreNotSet() {
-		return !isScoreSet();
+		return !this.isScoreSet();
 	}
 }

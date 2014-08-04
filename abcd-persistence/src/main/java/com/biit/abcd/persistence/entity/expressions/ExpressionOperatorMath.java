@@ -31,9 +31,19 @@ public class ExpressionOperatorMath extends ExpressionOperator {
 		}
 	}
 
+	public ExpressionOperatorMath(AvailableOperator operator) {
+		super();
+		try {
+			setValue(operator);
+		} catch (NotValidOperatorInExpression e) {
+			// This should never happen
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+
 	@Override
 	public List<AvailableOperator> getAcceptedValues() {
 		return ALLOWED_OPERATORS;
 	}
-	
+
 }

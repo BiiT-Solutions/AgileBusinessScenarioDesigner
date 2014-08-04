@@ -18,6 +18,10 @@ public class Category extends TreeObject {
 	public Category() {
 	}
 
+	public Category(String name) {
+		setName(name);
+	}
+
 	@Override
 	protected List<Class<?>> getAllowedChilds() {
 		return ALLOWED_CHILDS;
@@ -39,7 +43,7 @@ public class Category extends TreeObject {
 		if (parent != null) {
 			name = DEFAULT_CATEGORY_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
-				if (child instanceof Category && ((Category) child).getName() != null
+				if ((child instanceof Category) && (((Category) child).getName() != null)
 						&& ((Category) child).getName().equals(name)) {
 					return getDefaultName(parent, startingIndex + 1);
 				}
