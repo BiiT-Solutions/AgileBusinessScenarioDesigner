@@ -12,7 +12,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 
 /**
  * Defines any logical operator.
- * 
+ *
  */
 @Entity
 @Table(name = "EXPRESSION_OPERATOR_LOGIC")
@@ -25,7 +25,17 @@ public class ExpressionOperatorLogic extends ExpressionOperator {
 	public ExpressionOperatorLogic() {
 		super();
 		try {
-			setValue(AvailableOperator.NULL);
+			this.setValue(AvailableOperator.NULL);
+		} catch (NotValidOperatorInExpression e) {
+			// This should never happen
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+
+	public ExpressionOperatorLogic(AvailableOperator operator) {
+		super();
+		try {
+			this.setValue(operator);
 		} catch (NotValidOperatorInExpression e) {
 			// This should never happen
 			AbcdLogger.errorMessage(this.getClass().getName(), e);

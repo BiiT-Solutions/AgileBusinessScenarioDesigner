@@ -32,24 +32,50 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
-		expressions = new ArrayList<>();
+		this.expressions = new ArrayList<>();
+	}
+
+	public ExpressionChain(String name) {
+		this.expressions = new ArrayList<>();
+		this.setName(name);
+	}
+
+	public ExpressionChain(Expression ...expressions){
+		this.expressions = new ArrayList<>();
+		for(Expression expression : expressions){
+			this.addExpression(expression);
+		}
+	}
+
+	public ExpressionChain(String name, Expression ...expressions) {
+		this.expressions = new ArrayList<>();
+		this.setName(name);
+		for(Expression expression : expressions){
+			this.addExpression(expression);
+		}
 	}
 
 	public List<Expression> getExpressions() {
-		return expressions;
+		return this.expressions;
 	}
 
 	public boolean removeExpression(Expression expression) {
-		return expressions.remove(expression);
+		return this.expressions.remove(expression);
 	}
 
 	public void setExpressions(List<Expression> expressions) {
-		removeAllExpressions();
+		this.removeAllExpressions();
 		this.expressions.addAll(expressions);
 	}
 
 	public void addExpression(Expression expression) {
 		this.expressions.add(expression);
+	}
+
+	public void addExpressions(Expression ...expressions) {
+		for(Expression expression : expressions){
+			this.addExpression(expression);
+		}
 	}
 
 	public void removeAllExpressions() {
@@ -58,7 +84,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
@@ -68,12 +94,12 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 
 	@Override
 	public String getRepresentation() {
-		if (expressions.isEmpty()) {
+		if (this.expressions.isEmpty()) {
 			return "null";
 		}
 
 		String result = "";
-		for (Expression expression : expressions) {
+		for (Expression expression : this.expressions) {
 			result += expression.getRepresentation() + " ";
 		}
 		return result.trim();
@@ -88,31 +114,31 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 	@Override
 	public String getExpression() {
 		String result = "";
-		for (int i = 0; i < expressions.size(); i++) {
+		for (int i = 0; i < this.expressions.size(); i++) {
 			// Dots are not allowed in the Evaluator Expression.
-			if ((expressions.get(i) instanceof ExpressionValueString)
-					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
-					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
-				result += filterVariables(expressions.get(i)) + " ";
+			if ((this.expressions.get(i) instanceof ExpressionValueString)
+					|| (this.expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+					|| (this.expressions.get(i) instanceof ExpressionValueCustomVariable)
+					|| (this.expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
+				result += this.filterVariables(this.expressions.get(i)) + " ";
 			} else {
-				result += expressions.get(i).getExpression();
+				result += this.expressions.get(i).getExpression();
 			}
 		}
 		return result.trim();
 	}
 
 	public ExpressionEvaluator getExpressionEvaluator() {
-		ExpressionChecker evaluator = new ExpressionChecker(getExpression());
+		ExpressionChecker evaluator = new ExpressionChecker(this.getExpression());
 		List<String> definedVariables = new ArrayList<>();
 		// Define variables.
-		for (int i = 0; i < expressions.size(); i++) {
-			if ((expressions.get(i) instanceof ExpressionValueString)
-					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
-					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
+		for (int i = 0; i < this.expressions.size(); i++) {
+			if ((this.expressions.get(i) instanceof ExpressionValueString)
+					|| (this.expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+					|| (this.expressions.get(i) instanceof ExpressionValueCustomVariable)
+					|| (this.expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				// Dots are not allowed.
-				String varName = filterVariables(expressions.get(i));
+				String varName = this.filterVariables(this.expressions.get(i));
 				// Do not repeat variable declaration.
 				if (!definedVariables.contains(varName)) {
 					// Value is not needed for evaluation.
@@ -126,7 +152,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 
 	@Override
 	public String toString() {
-		return getName() + expressions;
+		return this.getName() + this.expressions;
 	}
 
 	/**
@@ -142,10 +168,10 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 	@Override
 	public ExpressionChain generateCopy() {
 		ExpressionChain copy = new ExpressionChain();
-		if (name != null) {
-			copy.name = new String(name);
+		if (this.name != null) {
+			copy.name = new String(this.name);
 		}
-		for (Expression expression : expressions) {
+		for (Expression expression : this.expressions) {
 			Expression copyExpression = expression.generateCopy();
 			copy.expressions.add(copyExpression);
 		}
@@ -153,7 +179,7 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 	}
 
 	protected Set<TreeObject> getReferencedTreeObjects() {
-		List<Expression> expressions = getExpressions();
+		List<Expression> expressions = this.getExpressions();
 		Set<TreeObject> references = new HashSet<>();
 		for (Expression expression : expressions) {
 			if (expression instanceof ExpressionValueTreeObjectReference) {
@@ -163,9 +189,9 @@ public class ExpressionChain extends Expression implements ITableCellEditable {
 		}
 		return references;
 	}
-	
+
 	public boolean isAssignedTo(TreeObject treeObject) {
-		Set<TreeObject> references = getReferencedTreeObjects();
+		Set<TreeObject> references = this.getReferencedTreeObjects();
 		if (!references.isEmpty()) {
 			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
 			if(commonTreeObject.equals(treeObject)){

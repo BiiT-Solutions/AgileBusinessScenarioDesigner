@@ -4,10 +4,13 @@
 		<groups>
 			<run>
 				<include name="orbeon" />
+				<include name="rules" />
 			</run>
 		</groups>
 		<classes>
-			<class name="com.biit.abcd.core.drools.facts.DecisionTableTest" />
+			<!--  <class name="com.biit.abcd.core.drools.facts.SimpleDecisionTableTest" /> -->
+			<!--  <class name="com.biit.abcd.core.drools.facts.ExpressionTest" /> -->
+			<class name="com.biit.abcd.core.drools.facts.DhszwTest" />
 		</classes>
 	</test>
 </suite>

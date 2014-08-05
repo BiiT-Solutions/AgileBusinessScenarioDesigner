@@ -17,18 +17,18 @@ public class Category extends CommonAttributes implements ICategory {
 	private ISubmittedForm parent;
 
 	public Category(String tag) {
-		setTag(tag);
-		setGroups(new ArrayList<IGroup>());
+		this.setTag(tag);
+		this.setGroups(new ArrayList<IGroup>());
 	}
 
 	@Override
 	public List<IGroup> getGroups() {
-		return groups;
+		return this.groups;
 	}
 
 	@Override
 	public IGroup getGroup(String tag) throws GroupDoesNotExistException {
-		for (IGroup group : getGroups()) {
+		for (IGroup group : this.getGroups()) {
 			if (group.getTag().equals(tag)) {
 				return group;
 			}
@@ -43,19 +43,19 @@ public class Category extends CommonAttributes implements ICategory {
 	@Override
 	public void addGroups(List<IGroup> groups) {
 		if (this.groups == null) {
-			setGroups(new ArrayList<IGroup>());
+			this.setGroups(new ArrayList<IGroup>());
 		}
 		for(IGroup group: groups) {
-			addGroup(group);
+			this.addGroup(group);
 		}
 	}
 
 	public void addGroup(IGroup group) {
-		if (groups == null) {
-			setGroups(new ArrayList<IGroup>());
+		if (this.groups == null) {
+			this.setGroups(new ArrayList<IGroup>());
 		}
 		((Group)group).setParent(this);
-		groups.add(group);
+		this.groups.add(group);
 	}
 
 	public void setQuestions(List<IQuestion> questions) {
@@ -65,29 +65,29 @@ public class Category extends CommonAttributes implements ICategory {
 	@Override
 	public void addQuestions(List<IQuestion> questions) {
 		if (this.questions == null) {
-			setQuestions(new ArrayList<IQuestion>());
+			this.setQuestions(new ArrayList<IQuestion>());
 		}
 		for(IQuestion question: questions) {
-			addQuestion(question);
+			this.addQuestion(question);
 		}
 	}
 
 	public void addQuestion(IQuestion question) {
-		if (questions == null) {
-			setQuestions(new ArrayList<IQuestion>());
+		if (this.questions == null) {
+			this.setQuestions(new ArrayList<IQuestion>());
 		}
 		((Question)question).setParent(this);
-		questions.add(question);
+		this.questions.add(question);
 	}
 
 	@Override
 	public List<IQuestion> getQuestions() {
-		return questions;
+		return this.questions;
 	}
 
 	@Override
 	public IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException {
-		for (IQuestion question : getQuestions()) {
+		for (IQuestion question : this.getQuestions()) {
 			if (question.getTag().equals(questionTag)) {
 				return question;
 			}
@@ -100,19 +100,23 @@ public class Category extends CommonAttributes implements ICategory {
 	}
 
 	public ISubmittedForm getParent(){
-		return parent;
+		return this.parent;
 	}
 
-	public boolean isScoreSet() {
+	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
-		if(((SubmittedForm)getParent()).hasScoreSet(this)) {
+		if(((SubmittedForm)this.getParent()).hasScoreSet(this, varName)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean isScoreNotSet() {
-		return !isScoreSet();
+	public boolean isScoreNotSet(String varName) {
+		return !this.isScoreSet(varName);
+	}
+
+	public Object getVariableValue(String varName){
+		return ((SubmittedForm)this.getParent()).getVariableValue(this, varName);
 	}
 }

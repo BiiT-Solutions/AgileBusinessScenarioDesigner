@@ -1,11 +1,11 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 /**
- * Already defined functions. Used in JExVal. 
+ * Already defined functions. Used in JExVal.
  *
  */
 public enum AvailableFunction {
-	
+
 	NOT("NOT("),
 
 	MAX("MAX("),
@@ -15,12 +15,14 @@ public enum AvailableFunction {
 	ABS("ABS("),
 
 	SQRT("SQRT("),
-	
+
 	IN("IN("),
-	
+
 	BETWEEN("BETWEEN("),
 
-	ROUND("ROUND(");
+	ROUND("ROUND("),
+
+	AVG("AVG(");
 
 	private String value;
 

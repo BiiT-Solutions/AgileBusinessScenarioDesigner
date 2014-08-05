@@ -10,6 +10,10 @@ public class Utils {
 		return "when\n";
 	}
 
+	public static String getAttributes() {
+		return "";
+	}
+
 	public static String getThenRuleString(){
 		return "then\n";
 	}

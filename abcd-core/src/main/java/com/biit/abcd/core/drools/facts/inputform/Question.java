@@ -16,27 +16,6 @@ public class Question extends CommonAttributes implements IQuestion {
 		this.tag = tag;
 	}
 
-	public boolean isScoreSet() {
-		// Retrieve the form which will have the variables
-		if(getParent() instanceof IGroup){
-			if(((SubmittedForm)((Category)((Group)getParent()).getParent()).getParent()).hasScoreSet(this)) {
-				return true;
-			} else {
-				return false;
-			}
-		}else{
-			if(((SubmittedForm)((Category)getParent()).getParent()).hasScoreSet(this)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-
-	public boolean isScoreNotSet() {
-		return !isScoreSet();
-	}
-
 	@Override
 	public void setValue(String value){
 		this.value = value;
@@ -46,16 +25,16 @@ public class Question extends CommonAttributes implements IQuestion {
 	public Object getValue(){
 		Object parsedValue = null;
 		try{
-			parsedValue = Double.parseDouble(value);
+			parsedValue = Double.parseDouble(this.value);
 		}catch(Exception e){
-			parsedValue = value;
+			parsedValue = this.value;
 		}
 		return parsedValue;
 	}
 
 	@Override
 	public String getTag() {
-		return tag;
+		return this.tag;
 	}
 
 	@Override
@@ -64,7 +43,7 @@ public class Question extends CommonAttributes implements IQuestion {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -80,10 +59,43 @@ public class Question extends CommonAttributes implements IQuestion {
 	}
 
 	public Object getParent(){
-		if(groupParent != null) {
-			return groupParent;
+		if(this.groupParent != null) {
+			return this.groupParent;
 		} else {
-			return categoryParent;
+			return this.categoryParent;
+		}
+	}
+
+	public boolean isScoreSet(String varName) {
+		// Retrieve the form which will have the variables
+		if(this.getParent() instanceof IGroup){
+			if(((SubmittedForm)((Category)((Group)this.getParent()).getParent()).getParent()).hasScoreSet(this, varName)) {
+				return true;
+			} else {
+				return false;
+			}
+		}else{
+			if(((SubmittedForm)((Category)this.getParent()).getParent()).hasScoreSet(this, varName)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	public boolean isScoreNotSet(String varName) {
+		return !this.isScoreSet(varName);
+	}
+
+	public boolean isScoreNotSet() {
+		return !this.isScoreSet("");
+	}
+
+	public Object getVariableValue(String varName){
+		if(this.getParent() instanceof IGroup){
+			return ((SubmittedForm)((Category)((Group)this.getParent()).getParent()).getParent()).getVariableValue(this, varName);
+		}else{
+			return ((SubmittedForm)((Category)this.getParent()).getParent()).getVariableValue(this, varName);
 		}
 	}
 }

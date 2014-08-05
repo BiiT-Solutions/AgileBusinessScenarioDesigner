@@ -15,7 +15,6 @@ import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryNameWithoutT
 import com.biit.abcd.core.drools.facts.interfaces.ICategory;
 import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 
-
 public class OrbeonCategoryTranslator {
 	private final static String CATEGORY_PREFIX = "category-";
 	private HashMap<String, HashMap<String, String>> formTagsToName;
@@ -23,8 +22,8 @@ public class OrbeonCategoryTranslator {
 	private static OrbeonCategoryTranslator instance = new OrbeonCategoryTranslator();
 
 	private OrbeonCategoryTranslator() {
-		formTagsToName = new HashMap<String, HashMap<String, String>>();
-		formsXml = new HashMap<String, String>();
+		this.formTagsToName = new HashMap<String, HashMap<String, String>>();
+		this.formsXml = new HashMap<String, String>();
 	}
 
 	public static OrbeonCategoryTranslator getInstance() {
@@ -47,7 +46,7 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readFormCategoryTranslations(ISubmittedForm form) throws MalformedURLException,
 	DocumentException, CategoryNameWithoutTranslation {
-		return translateXml(form, getXml(form.getApplicationName(), form.getFormName()));
+		return this.translateXml(form, this.getXml(form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
@@ -70,7 +69,8 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readFormCategoryTranslations(String protocol, String server, int port,
 			ISubmittedForm form) throws MalformedURLException, DocumentException, CategoryNameWithoutTranslation {
-		return translateXml(form, getXml(protocol, server, port, form.getApplicationName(), form.getFormName()));
+		return this.translateXml(form,
+				this.getXml(protocol, server, port, form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class OrbeonCategoryTranslator {
 	 */
 	public String getXml(String orbeonApplication, String orbeonFormName) throws MalformedURLException,
 	DocumentException {
-		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(), OrbeonConfigurationReader
+		return this.getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(), OrbeonConfigurationReader
 				.getInstance().getOrbeonServer(), OrbeonConfigurationReader.getInstance().getOrbeonPort(),
 				orbeonApplication, orbeonFormName);
 	}
@@ -109,8 +109,8 @@ public class OrbeonCategoryTranslator {
 	public String getXml(String protocol, String server, int port, String orbeonApplication, String orbeonFormName)
 			throws MalformedURLException, DocumentException {
 
-		if (formsXml.get(getId(orbeonApplication, orbeonFormName)) != null) {
-			return formsXml.get(getId(orbeonApplication, orbeonFormName));
+		if (this.formsXml.get(this.getId(orbeonApplication, orbeonFormName)) != null) {
+			return this.formsXml.get(this.getId(orbeonApplication, orbeonFormName));
 		}
 
 		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
@@ -120,7 +120,7 @@ public class OrbeonCategoryTranslator {
 		final Document xmlResponse = xmlReader.read(new URL(xmlURL));
 		if (xmlResponse != null) {
 			String xml = xmlResponse.asXML();
-			formsXml.put(getId(orbeonApplication, orbeonFormName), xml);
+			this.formsXml.put(this.getId(orbeonApplication, orbeonFormName), xml);
 			return xml;
 		}
 		return null;
@@ -137,9 +137,9 @@ public class OrbeonCategoryTranslator {
 	@SuppressWarnings("unchecked")
 	public HashMap<String, String> translateXml(ISubmittedForm form, String xmlText) throws DocumentException,
 	CategoryNameWithoutTranslation {
-		if (formTagsToName.get(form.getId()) != null) {
-			updateForm(form);
-			return formTagsToName.get(form.getId());
+		if (this.formTagsToName.get(form.getId()) != null) {
+			this.updateForm(form);
+			return this.formTagsToName.get(form.getId());
 		}
 
 		HashMap<String, String> tagsToName = new HashMap<String, String>();
@@ -159,8 +159,8 @@ public class OrbeonCategoryTranslator {
 			}
 		}
 
-		formTagsToName.put(form.getId(), tagsToName);
-		updateForm(form);
+		this.formTagsToName.put(form.getId(), tagsToName);
+		this.updateForm(form);
 
 		return tagsToName;
 	}
@@ -185,7 +185,8 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readXml(String protocol, String server, int port, ISubmittedForm form)
 			throws DocumentException, MalformedURLException, CategoryNameWithoutTranslation {
-		return translateXml(form, getXml(protocol, server, port, form.getApplicationName(), form.getFormName()));
+		return this.translateXml(form,
+				this.getXml(protocol, server, port, form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
@@ -204,12 +205,25 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readXml(ISubmittedForm form) throws DocumentException, MalformedURLException,
 	CategoryNameWithoutTranslation {
-		return translateXml(form, getXml(form.getApplicationName(), form.getFormName()));
+		return this.translateXml(form, this.getXml(form.getApplicationName(), form.getFormName()));
+	}
+
+	/**
+	 * Create a relationship between category tags and its names.
+	 * @param form
+	 * @return
+	 * @throws DocumentException
+	 * @throws MalformedURLException
+	 * @throws CategoryNameWithoutTranslation
+	 */
+	public HashMap<String, String> readXml(ISubmittedForm form, String formStructure) throws DocumentException, MalformedURLException,
+	CategoryNameWithoutTranslation {
+		return this.translateXml(form, formStructure);
 	}
 
 	public String getCategoryName(ISubmittedForm form, String categoryTag) throws CategoryNameWithoutTranslation {
-		if (formTagsToName.get(form.getId()) != null) {
-			return formTagsToName.get(form.getId()).get(categoryTag);
+		if (this.formTagsToName.get(form.getId()) != null) {
+			return this.formTagsToName.get(form.getId()).get(categoryTag);
 		}
 		throw new CategoryNameWithoutTranslation(
 				"Category translations not initialized. Call 'readXml()' method first.");
@@ -223,9 +237,9 @@ public class OrbeonCategoryTranslator {
 	 *             if any category hasn't be updated.
 	 */
 	private void updateForm(ISubmittedForm form) throws CategoryNameWithoutTranslation {
-		if (formTagsToName.get(form.getId()) != null) {
+		if (this.formTagsToName.get(form.getId()) != null) {
 			for (ICategory category : form.getCategories()) {
-				String text = formTagsToName.get(form.getId()).get(category.getTag());
+				String text = this.formTagsToName.get(form.getId()).get(category.getTag());
 				if (text != null) {
 					category.setText(text);
 				} else {

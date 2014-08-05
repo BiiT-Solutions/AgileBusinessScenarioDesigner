@@ -27,8 +27,17 @@ public class TableRuleRow extends StorableObject {
 	private ExpressionChain action;
 
 	public TableRuleRow() {
-		conditions = new ExpressionChain();
-		action = new ExpressionChain();
+		this.conditions = new ExpressionChain();
+		this.action = new ExpressionChain();
+	}
+
+	// Simple (Question : Answer => Action) builder
+	public TableRuleRow(Expression question, Expression answer, ExpressionChain action){
+		this.conditions = new ExpressionChain();
+		this.action = new ExpressionChain();
+		getConditions().add(question);
+		getConditions().add(answer);
+		getAction().setExpressions(action.getExpressions());
 	}
 
 	public void addCondition(Expression expression) {
@@ -75,7 +84,7 @@ public class TableRuleRow extends StorableObject {
 		addCondition(new ExpressionValueTreeObjectReference());
 		addCondition(new ExpressionChain());
 	}
-	
+
 	public void setExpression(int position, Expression expression){
 		//TODO exception if bad expression?
 		getConditions().set(position, expression);
