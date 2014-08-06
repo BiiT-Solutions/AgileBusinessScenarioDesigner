@@ -9,6 +9,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
+
 @Entity
 @Table(name = "TREE_QUESTIONS")
 public class Question extends TreeObject {
@@ -25,8 +27,8 @@ public class Question extends TreeObject {
 	public Question() {
 	}
 
-	public Question(String name) {
-		setName(name);
+	public Question(String name) throws FieldTooLongException {
+		this.setName(name);
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class Question extends TreeObject {
 
 	/**
 	 * Creates a default Question technical name, different for each Question of the same parent.
-	 * 
+	 *
 	 * @param startingIndex
 	 * @return
 	 */
@@ -52,7 +54,7 @@ public class Question extends TreeObject {
 			for (TreeObject child : parent.getChildren()) {
 				if ((child instanceof Question) && (((Question) child).getName() != null)
 						&& ((Question) child).getName().equals(name)) {
-					return getDefaultName(parent, startingIndex + 1);
+					return this.getDefaultName(parent, startingIndex + 1);
 				}
 			}
 		} else {
@@ -63,11 +65,11 @@ public class Question extends TreeObject {
 
 	@Override
 	public String toString() {
-		return getName();
+		return this.getName();
 	}
 
 	public AnswerType getAnswerType() {
-		return answerType;
+		return this.answerType;
 	}
 
 	public void setAnswerType(AnswerType answerType) {
@@ -75,7 +77,7 @@ public class Question extends TreeObject {
 	}
 
 	public AnswerFormat getAnswerFormat() {
-		return answerFormat;
+		return this.answerFormat;
 	}
 
 	public void setAnswerFormat(AnswerFormat answerFormat) {

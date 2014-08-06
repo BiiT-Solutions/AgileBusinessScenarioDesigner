@@ -29,7 +29,7 @@ public class ExpressionParser {
 		String newRule = "";
 		String expressionName = expressionChain.getName();
 
-		RuleChecker.checkExpressionValid(expressionChain);
+//		RuleChecker.checkExpressionValid(expressionChain);
 		newRule += Utils.getStartRuleString(expressionName);
 		newRule += Utils.getAttributes();
 		newRule += Utils.getWhenRuleString();
@@ -51,8 +51,7 @@ public class ExpressionParser {
 		if ((expressionList.get(0) instanceof ExpressionValueCustomVariable)
 				&& (expressionList.get(1) instanceof ExpressionOperatorMath)
 				&& (expressionList.get(2) instanceof ExpressionFunction)) {
-			// We will have some expression of type Category.score = (Min | Max
-			// | Avg) of some values
+			// We will have some expression of type Category.score = (Min | Max | Avg) of some values
 			ruleCore += "	$form : SubmittedForm()\n";
 
 			variableToCalculate = (ExpressionValueCustomVariable) expressionList.get(0);
@@ -124,12 +123,14 @@ public class ExpressionParser {
 		ruleCore += Utils.getThenRuleString();
 
 		// RHS
-		ruleCore += "	$form.setVariableValue("
-				+ getVariableScope(variableToCalculate.getVariable().getScope())
-				+ ", '" + variableToCalculate.getVariable().getName()
-				+ "', $sol);\n";
+		if(variableToCalculate != null){
+			ruleCore += "	$form.setVariableValue("
+					+ getVariableScope(variableToCalculate.getVariable().getScope())
+					+ ", '" + variableToCalculate.getVariable().getName()
+					+ "', $sol);\n";
 
-		ruleCore += "	System.out.println(\"Result: \" + $sol);\n";
+			ruleCore += "	System.out.println(\"Result: \" + $sol);\n";
+		}
 		return ruleCore;
 	}
 

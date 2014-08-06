@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.InvalidAnswerFormatException;
 
 @Entity
@@ -21,8 +22,8 @@ public class Answer extends TreeObject {
 	public Answer() {
 	}
 
-	public Answer(String name) {
-		setName(name);
+	public Answer(String name) throws FieldTooLongException {
+		this.setName(name);
 	}
 
 	@Override
@@ -36,7 +37,7 @@ public class Answer extends TreeObject {
 	}
 
 	public AnswerType getAnswerType() {
-		return answerType;
+		return this.answerType;
 	}
 
 	public void setAnswerType(AnswerType answerType) {
@@ -44,11 +45,11 @@ public class Answer extends TreeObject {
 	}
 
 	public AnswerFormat getAnswerFormat() {
-		return answerFormat;
+		return this.answerFormat;
 	}
 
 	public void setAnswerFormat(AnswerFormat answerFormat) throws InvalidAnswerFormatException {
-		if (answerType.equals(AnswerType.INPUT)) {
+		if (this.answerType.equals(AnswerType.INPUT)) {
 			if (answerFormat == null) {
 				throw new InvalidAnswerFormatException("Input fields must define an answer format.");
 			}
@@ -62,7 +63,7 @@ public class Answer extends TreeObject {
 
 	/**
 	 * Creates a default Answer technical name, different for each Answer of the same Question.
-	 * 
+	 *
 	 * @param startingIndex
 	 * @return
 	 */
@@ -73,7 +74,7 @@ public class Answer extends TreeObject {
 			for (TreeObject child : parent.getChildren()) {
 				if ((child instanceof Answer) && (((Answer) child).getName() != null)
 						&& ((Answer) child).getName().equals(name)) {
-					return getDefaultName(parent, startingIndex + 1);
+					return this.getDefaultName(parent, startingIndex + 1);
 				}
 			}
 		} else {
@@ -84,7 +85,7 @@ public class Answer extends TreeObject {
 
 	@Override
 	public String toString() {
-		return getName();
+		return this.getName();
 	}
 
 }

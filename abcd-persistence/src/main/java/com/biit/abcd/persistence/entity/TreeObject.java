@@ -54,7 +54,7 @@ public abstract class TreeObject extends StorableObject {
 	private TreeObject parent;
 
 	public TreeObject() {
-		setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+		this.setCreationTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 	}
 
 	/**
@@ -62,23 +62,29 @@ public abstract class TreeObject extends StorableObject {
 	 * Form object. All objects but forms must be FetchType.EAGER.
 	 */
 	public List<TreeObject> getChildren() {
-		if (children == null) {
-			children = new ArrayList<>();
+		if (this.children == null) {
+			this.children = new ArrayList<>();
 		}
-		return children;
+		return this.children;
+	}
+
+	public void addChildren(List<TreeObject> children) throws NotValidChildException {
+		for (TreeObject child : children) {
+			this.addChild(child);
+		}
 	}
 
 	public void addChild(int index, TreeObject child) throws NotValidChildException {
-		if (!getAllowedChilds().contains(child.getClass())) {
+		if (!this.getAllowedChilds().contains(child.getClass())) {
 			throw new NotValidChildException("Class '" + this.getClass().getName() + "' does not allows instances of '"
 					+ child.getClass().getName() + "' as childs.");
 		}
-		if (!getChildren().contains(child)) {
+		if (!this.getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if (child.getParent() != null && child.getParent() != this) {
+			if ((child.getParent() != null) && (child.getParent() != this)) {
 				child.getParent().getChildren().remove(child);
 			}
-			getChildren().add(index, child);
+			this.getChildren().add(index, child);
 			try {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
@@ -89,27 +95,27 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public void updateChildrenSortSeqs() {
-		for (int i = 0; i < getChildren().size(); i++) {
-			getChildren().get(i).setSortSeq(i);
-			getChildren().get(i).updateChildrenSortSeqs();
+		for (int i = 0; i < this.getChildren().size(); i++) {
+			this.getChildren().get(i).setSortSeq(i);
+			this.getChildren().get(i).updateChildrenSortSeqs();
 		}
 	}
 
 	@AutoLogger(AutoLoggerLevel.DEBUG)
 	public void addChild(TreeObject child) throws NotValidChildException {
-		if (getChildren() == null) {
-			setChildren(new ArrayList<TreeObject>());
+		if (this.getChildren() == null) {
+			this.setChildren(new ArrayList<TreeObject>());
 		}
-		if (getAllowedChilds() == null || !getAllowedChilds().contains(child.getClass())) {
+		if ((this.getAllowedChilds() == null) || !this.getAllowedChilds().contains(child.getClass())) {
 			throw new NotValidChildException("Class '" + this.getClass().getName() + "' does not allows instances of '"
 					+ child.getClass().getName() + "' as child.");
 		}
-		if (!getChildren().contains(child)) {
+		if (!this.getChildren().contains(child)) {
 			// Remove the child from previous parent.
-			if (child.getParent() != null && child.getParent() != this) {
+			if ((child.getParent() != null) && (child.getParent() != this)) {
 				child.getParent().getChildren().remove(child);
 			}
-			getChildren().add(child);
+			this.getChildren().add(child);
 			try {
 				child.setParent(this);
 			} catch (NotValidParentException e) {
@@ -120,7 +126,7 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public boolean contains(TreeObject child) {
-		return contains(child, getChildren());
+		return this.contains(child, this.getChildren());
 	}
 
 	private boolean contains(TreeObject treeObject, List<TreeObject> children) {
@@ -136,10 +142,10 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public void remove() throws DependencyExistException {
-		checkDependencies();
-		if (getParent() != null) {
+		this.checkDependencies();
+		if (this.getParent() != null) {
 			try {
-				getParent().removeChild(this);
+				this.getParent().removeChild(this);
 			} catch (Exception e) {
 				AbcdLogger.severe(this.getClass().getName(), "Element not removed correctly");
 				e.printStackTrace();
@@ -149,12 +155,12 @@ public abstract class TreeObject extends StorableObject {
 
 	public void removeChild(TreeObject elementToRemove) throws ChildrenNotFoundException, DependencyExistException {
 		boolean removed = false;
-		if (getChildren().contains(elementToRemove)) {
+		if (this.getChildren().contains(elementToRemove)) {
 			elementToRemove.checkDependencies();
-			getChildren().remove(elementToRemove);
+			this.getChildren().remove(elementToRemove);
 			removed = true;
 		} else {
-			for (TreeObject child : getChildren()) {
+			for (TreeObject child : this.getChildren()) {
 				try {
 					child.removeChild(elementToRemove);
 					// Removed, not continue searching.
@@ -174,7 +180,7 @@ public abstract class TreeObject extends StorableObject {
 	 * This element or any of its children has a dependency. Checks if it is used in a TableRule, Diagram or Expression.
 	 */
 	public void checkDependencies() throws DependencyExistException {
-		Form form = getForm();
+		Form form = this.getForm();
 		if (form != null) {
 			// Check dependencies with TableRules.
 			for (TableRule tableRule : form.getTableRules()) {
@@ -191,28 +197,28 @@ public abstract class TreeObject extends StorableObject {
 			// Checks dependencies with Expressions
 			// TODO
 		}
-		for (TreeObject child : getChildren()) {
+		for (TreeObject child : this.getChildren()) {
 			child.checkDependencies();
 		}
 	}
 
 	public void removeChild(int index) throws ChildrenNotFoundException, DependencyExistException {
-		if (getChildren() == null || getChildren().size() < index) {
+		if ((this.getChildren() == null) || (this.getChildren().size() < index)) {
 			throw new ChildrenNotFoundException("Index out of bounds. Index " + index + " is invalid.");
 		} else {
-			getChildren().get(index).checkDependencies();
-			getChildren().remove(index);
+			this.getChildren().get(index).checkDependencies();
+			this.getChildren().remove(index);
 		}
 	}
 
 	public void switchChildren(int indexChild1, int indexChild2, User user) throws ChildrenNotFoundException {
-		if ((indexChild1 >= 0 && indexChild1 < getChildren().size())
-				&& (indexChild2 >= 0 && indexChild2 < getChildren().size())) {
-			Collections.swap(getChildren(), indexChild1, indexChild2);
+		if (((indexChild1 >= 0) && (indexChild1 < this.getChildren().size()))
+				&& ((indexChild2 >= 0) && (indexChild2 < this.getChildren().size()))) {
+			Collections.swap(this.getChildren(), indexChild1, indexChild2);
 			// Update elements date modification.
 			if (user != null) {
-				getChildren().get(indexChild1).setUpdatedBy(user.getUserId());
-				getChildren().get(indexChild2).setUpdatedBy(user.getUserId());
+				this.getChildren().get(indexChild1).setUpdatedBy(user.getUserId());
+				this.getChildren().get(indexChild2).setUpdatedBy(user.getUserId());
 			}
 		} else {
 			if (indexChild1 > indexChild2) {
@@ -224,10 +230,10 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public TreeObject getChild(int index) throws ChildrenNotFoundException {
-		if (getChildren() == null || getChildren().size() < index) {
+		if ((this.getChildren() == null) || (this.getChildren().size() < index)) {
 			throw new ChildrenNotFoundException("Index out of bounds. Index " + index + " is invalid.");
 		} else {
-			return getChildren().get(index);
+			return this.getChildren().get(index);
 		}
 	}
 
@@ -236,7 +242,7 @@ public abstract class TreeObject extends StorableObject {
 	public void setChildren(List<TreeObject> children) throws NotValidChildException {
 		// Only allowed classes can be a child.
 		for (TreeObject child : children) {
-			if (!getAllowedChilds().contains(child.getClass())) {
+			if (!this.getAllowedChilds().contains(child.getClass())) {
 				throw new NotValidChildException("Class '" + this.getClass().getName()
 						+ "' does not allows instances of '" + child.getClass().getName() + "' as childs.");
 			}
@@ -254,7 +260,7 @@ public abstract class TreeObject extends StorableObject {
 		// Update parents.
 		for (TreeObject child : children) {
 			// Remove the child from previous parent.
-			if (child.getParent() != null && child.getParent() != this) {
+			if ((child.getParent() != null) && (child.getParent() != this)) {
 				child.getParent().getChildren().remove(child);
 			}
 			try {
@@ -270,7 +276,7 @@ public abstract class TreeObject extends StorableObject {
 		if (parent == null) {
 			this.parent = null;
 		} else {
-			if (!getAllowedParents().contains(parent.getClass())) {
+			if (!this.getAllowedParents().contains(parent.getClass())) {
 				throw new NotValidParentException("Class '" + this.getClass().getName()
 						+ "' does not allows instances of '" + parent.getClass().getName() + "' as parent.");
 			}
@@ -279,71 +285,71 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public TreeObject getParent() {
-		return parent;
+		return this.parent;
 	}
 
 	/**
 	 * Gets the category in which this element is included.
-	 * 
+	 *
 	 * @return
 	 */
 	public Category getCategory() {
 		if (this instanceof Category) {
 			return (Category) this;
 		}
-		while (getParent() != null) {
-			if (getParent() instanceof Category) {
-				return (Category) getParent();
+		while (this.getParent() != null) {
+			if (this.getParent() instanceof Category) {
+				return (Category) this.getParent();
 			}
-			return getParent().getCategory();
+			return this.getParent().getCategory();
 		}
 		return null;
 	}
 
 	/**
 	 * Gets the inner group where this element is included.
-	 * 
+	 *
 	 * @return
 	 */
 	public Group getGroup() {
 		if (this instanceof Group) {
 			return (Group) this;
 		}
-		while (getParent() != null) {
-			if (getParent() instanceof Group) {
-				return (Group) getParent();
+		while (this.getParent() != null) {
+			if (this.getParent() instanceof Group) {
+				return (Group) this.getParent();
 			}
-			return getParent().getGroup();
+			return this.getParent().getGroup();
 		}
 		return null;
 	}
 
 	/**
 	 * Gets the inner group where this element is included.
-	 * 
+	 *
 	 * @return
 	 */
 	public Form getForm() {
 		if (this instanceof Form) {
 			return (Form) this;
 		}
-		while (getParent() != null) {
-			if (getParent() instanceof Form) {
-				return (Form) getParent();
+		while (this.getParent() != null) {
+			if (this.getParent() instanceof Form) {
+				return (Form) this.getParent();
 			}
-			return getParent().getForm();
+			return this.getParent().getForm();
 		}
 		return null;
 	}
 
 	/**
 	 * Return the last element in order of this category.
-	 * 
+	 *
 	 * @return
 	 */
 	public TreeObject getLastElement() {
-		if (getChildren().size() > 0) {
-			return getChildren().get(getChildren().size() - 1).getLastElement();
+		if (this.getChildren().size() > 0) {
+			return this.getChildren().get(this.getChildren().size() - 1).getLastElement();
 		}
 		return this;
 	}
@@ -351,13 +357,13 @@ public abstract class TreeObject extends StorableObject {
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		for (TreeObject child : getChildren()) {
+		for (TreeObject child : this.getChildren()) {
 			child.resetIds();
 		}
 	}
 
 	public long getSortSeq() {
-		return sortSeq;
+		return this.sortSeq;
 	}
 
 	public void setSortSeq(long sortSeq) {
@@ -365,7 +371,7 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) throws FieldTooLongException {
@@ -377,7 +383,7 @@ public abstract class TreeObject extends StorableObject {
 
 	/**
 	 * Function to return the list of questions that a TreeObject contains.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Question> getQuestions() {
@@ -386,12 +392,12 @@ public abstract class TreeObject extends StorableObject {
 			questions.add((Question) this);
 			return questions;
 		}
-		for (TreeObject child : getChildren()) {
+		for (TreeObject child : this.getChildren()) {
 			if (child instanceof Question) {
 				questions.add((Question) child);
 				continue;
 			}
-			if (child instanceof Category || child instanceof Group) {
+			if ((child instanceof Category) || (child instanceof Group)) {
 				questions.addAll(child.getQuestions());
 				continue;
 			}
@@ -402,27 +408,27 @@ public abstract class TreeObject extends StorableObject {
 	@Override
 	public void setUpdateTime(Timestamp dateUpdated) {
 		super.setUpdateTime(dateUpdated);
-		if (getParent() != null) {
-			getParent().setUpdateTime(dateUpdated);
+		if (this.getParent() != null) {
+			this.getParent().setUpdateTime(dateUpdated);
 		}
 	}
 
 	@Override
 	public void setUpdatedBy(Long updatedBy) {
 		super.setUpdatedBy(updatedBy);
-		if (getParent() != null) {
-			getParent().setUpdatedBy(updatedBy);
+		if (this.getParent() != null) {
+			this.getParent().setUpdatedBy(updatedBy);
 		}
 	}
 
 	/**
 	 * Gets the common tree object for a set of treeObjects
-	 * 
+	 *
 	 * @param treeObjects
 	 * @return
 	 */
 	public static TreeObject getCommonTreeObject(Set<TreeObject> treeObjects) {
-		if (treeObjects == null || treeObjects.isEmpty()) {
+		if ((treeObjects == null) || treeObjects.isEmpty()) {
 			return null;
 		}
 
@@ -455,10 +461,10 @@ public abstract class TreeObject extends StorableObject {
 	}
 
 	public int getLevel() {
-		if (parent == null) {
+		if (this.parent == null) {
 			return 0;
 		} else {
-			return parent.getLevel() + 1;
+			return this.parent.getLevel() + 1;
 		}
 	}
 }

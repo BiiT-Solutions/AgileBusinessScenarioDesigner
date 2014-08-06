@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
+
 @Entity
 @Table(name = "TREE_CATEGORIES")
 public class Category extends TreeObject {
@@ -18,8 +20,8 @@ public class Category extends TreeObject {
 	public Category() {
 	}
 
-	public Category(String name) {
-		setName(name);
+	public Category(String name) throws FieldTooLongException {
+		this.setName(name);
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class Category extends TreeObject {
 
 	/**
 	 * Creates a default Category name, different for each category of the same form.
-	 * 
+	 *
 	 * @param startingIndex
 	 * @return
 	 */
@@ -45,7 +47,7 @@ public class Category extends TreeObject {
 			for (TreeObject child : parent.getChildren()) {
 				if ((child instanceof Category) && (((Category) child).getName() != null)
 						&& ((Category) child).getName().equals(name)) {
-					return getDefaultName(parent, startingIndex + 1);
+					return this.getDefaultName(parent, startingIndex + 1);
 				}
 			}
 		} else {
@@ -56,7 +58,6 @@ public class Category extends TreeObject {
 
 	@Override
 	public String toString() {
-		return getName();
+		return this.getName();
 	}
-
 }

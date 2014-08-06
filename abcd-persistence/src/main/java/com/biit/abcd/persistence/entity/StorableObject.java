@@ -37,7 +37,7 @@ public abstract class StorableObject {
 	private Long updatedBy = null;
 
 	// A unique Id created with the object used to compare persisted objects and in memory objects.
-	//MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~185. 
+	//MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~185.
 	@Column(unique = true, nullable = false, updatable = false, length=185)
 	private String comparationId;
 
@@ -68,7 +68,7 @@ public abstract class StorableObject {
 	}
 
 	public void setUpdateTime() {
-		setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+		this.setUpdateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
 	}
 
 	public Timestamp getUpdateTime() {
@@ -90,16 +90,16 @@ public abstract class StorableObject {
 
 	public void setCreatedBy(User user) {
 		if (user != null) {
-			this.createdBy = user.getUserId();
+			createdBy = user.getUserId();
 		}
 	}
 
 	public void setCreationTime(Timestamp dateCreated) {
-		this.creationTime = dateCreated;
+		creationTime = dateCreated;
 	}
 
 	public void setUpdateTime(Timestamp dateUpdated) {
-		this.updateTime = dateUpdated;
+		updateTime = dateUpdated;
 	}
 
 	public void setUpdatedBy(Long updatedBy) {
@@ -108,7 +108,7 @@ public abstract class StorableObject {
 
 	public void setUpdatedBy(User user) {
 		if (user != null) {
-			this.updatedBy = user.getUserId();
+			updatedBy = user.getUserId();
 		}
 	}
 
@@ -116,24 +116,29 @@ public abstract class StorableObject {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((comparationId == null) ? 0 : comparationId.hashCode());
+		result = (prime * result) + ((comparationId == null) ? 0 : comparationId.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
+		}
 		StorableObject other = (StorableObject) obj;
 		if (comparationId == null) {
-			if (other.comparationId != null)
+			if (other.comparationId != null) {
 				return false;
-		} else if (!comparationId.equals(other.comparationId))
+			}
+		} else if (!comparationId.equals(other.comparationId)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -141,4 +146,7 @@ public abstract class StorableObject {
 		setId(null);
 	}
 
+	public String getComparationId(){
+		return comparationId.replaceAll("-", "");
+	}
 }

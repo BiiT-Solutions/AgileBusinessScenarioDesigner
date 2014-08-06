@@ -1,0 +1,55 @@
+Financiën	1	Geen inkomsten. Hoge, groeiende schulden.
+Financiën	2	Onvoldoende inkomsten en/of spontaan of ongepast uitgeven. Groeiende schulden.
+Financiën	3	Komt met inkomsten aan basisbehoeften tegemoet en/of gepast uitgeven. Eventuele schulden zijn ten minste stabiel en/of bewindvoering/inkomstenbeheer.
+Financiën	4	Komt aan basis behoeften tegemoet zonder uitkering. Beheert evntuele schulden zelf en deze verminderen.
+Financiën	5	Inkomsten zijn ruim voldoende, goed financieel beheer. Heeft met inkomen mogeijkheid om te sparen.
+Dagbesteding	1	Geen dagbesteding en veroorzaakt overlast.
+Dagbesteding	2	Geen dagbesteding, maar geen overlast.
+Dagbesteding	3	Laagdrempelige dagbesteding of arbeidsactivering.
+Dagbesteding	4	Hoogdrempelige dagbesteding of arbeidstoeleiding of tijdelijk werk en/of volgt opleiding voor startkwalificatie (havo, vwo of mbo-2).
+Dagbesteding	5	Vast werk en/of volgt opleiding hoger dan startkwalificatie (havo, vwo, of mbo-2).
+Huisvesting	1	Dakloos en/of in nachtopvang.
+Huisvesting	2	Voor wonen ongeschikte huisvesting en/of hypotheek/huur is niet betaalbaar en/of dreigende huisuitzetting.
+Huisvesting	3	In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.
+Huisvesting	4	Huishouden heeft veilige, toereikende huisvesting en (huur) contract met bepalingen en/of gedeeltelijk autonome huisvesting.
+Huisvesting	5	Huishouden heeft veilige, toereikende huisvesting en regulier (huur)contract en/of autonome huisvesting.
+Huiselijke relaties	1	Sprake van huiselijk geweld, kindermishandeling of verwaarlozing.
+Huiselijke relaties	2	Leden van het huishouden gaan niet goed met elkaar om en/of potentieel huiselijk geweld, kindermishandeling of verwaarlozing.
+Huiselijke relaties	3	Leden van het huishouden erkennen problemen en proberen negatief gedrag te veranderen.
+Huiselijke relaties	4	Relationele problemen tussen leden van het huishouden zijn niet (meer) aanwezig en/of woont alleen.
+Huiselijke relaties	5	Communicatie tussen leden van het huishouden is consistent open. Leden van het huishouden ondersteunen elkaar.
+Geestelijke gezondheid	1	Een gevaar voor zichzelf of anderen en/of terugkerende suïcide-ideatie. Ernstige moeilijkheden in het dagelijks leven door geestelijke stoornis.
+Geestelijke gezondheid	2	Aanhoudende geestelijke gezondheidsproblemen die het gedrag kunnen beinvloeden, maar geen gevaar voor zichzelf/anderen. Moeilijkheden in het dagelijks functioneren door symptomen en/of geen behandeling.
+Geestelijke gezondheid	3	Milde symptomen kunnen aanwezig en/of enkel matige functioneringsmoeilijkheden door geestelijke problemen en/of behandeltrouw is minimaal.
+Geestelijke gezondheid	4	Minimale symptomen die voorspelbare reactie zijn op stressoren in het leven en/of marginale beperking van functioneren en/of goede behandeltrouw.
+Geestelijke gezondheid	5	Symptomen zijn afwezig of zeldzaam. Goed of superieur functioneren in een groot aantal diverse activiteiten. Niet meer dan de dagelijkse beslommeringen of zorgen.
+Lichamelijke gezondheid	1	Heeft direct medische aandacht nodig. Een noodgeval/kritieke situatie.
+Lichamelijke gezondheid	2	Een (direct/chronische) medische aandoening die regelmatige behandelingen vereist wordt niet behandeld. Matige beperking van (lichamelijke) activiteiten t.g.v. een lichamelijk gezondheidsprobleem.
+Lichamelijke gezondheid	3	Een (chronische) medische aandoening wordt behandeld maar behandeltrouw is minimaal. De lichamelijke gezondheidsproblemen leiden tot een lichte beperking in mobiliteit en activiteit.
+Lichamelijke gezondheid	4	Erkent behoefte aan hulp voor de (chronische) medische aandoening. Goede behandeltrouw.
+Lichamelijke gezondheid	5	Er zijn geen directe of voortdurende medische problemen.
+Alcohol-, drugs-, game- of gokverslaving	1	Voldoet aan criteria voor ernstig misbruik/verslaving. Resulterende problemen zijn zo ernstig dat institutionalisering of hospitalisatie noodzakelijk is.
+Alcohol-, drugs-, game- of gokverslaving	2	Voldoet aan criteria voor verslaving. Preoccupatie met gebruiken en/of bemachtigen van middelen. Onthoudingsverschijnselen of afkickontwijkend gedrag zichtbaar. Gebruik resulteert in ontwijken of verwaarlozen van essentiële activiteiten van het dagelijkse
+Alcohol-, drugs-, game- of gokverslaving	3	Gebruik binnen de laatste 30 dagen. Aanwijzingen voor aan middelengebruik gerelateerde sociale, werkgerelateerde, emotionele of fysieke problemen. Gebruik interfereert niet met essentiele activiteiten van het dagelijks leven en/of behandeltrouw is
+Alcohol-, drugs-, game- of gokverslaving	4	Client heeft gedurende de laatste 30 dagen gebruikt maar er zijn geen sociale, werkgerelateerde, emotionele of fysieke problemen ten gevolge van het gebruik zichtbaar. Geen aantoonbaar voortdurend of gevaarlijk middelengebruik en/of goede behandeltrouw
+Alcohol-, drugs-, game- of gokverslaving	5	Geen middelengebruik/misbruik in de laatste 30 dagen.
+Activiteiten dagelijks leven	1	Ernstige beperkingen op alle of bijna alle gebieden van zelfzorg en complexe activiteiten.
+Activiteiten dagelijks leven	2	Belangrijk probleem op één of meer gebieden van zelfzorg (eten, wassen, aankleden, naar toilet gaan) en meerdere complexe activiteiten worden niet uitgevoerd.
+Activiteiten dagelijks leven	3	Voorziet in de meeste, maar niet alle basis behoeften van het dagelijks leven en de zelfzorg is op peil, maar één of meer complexe activiteiten worden niet uitgevoerd.
+Activiteiten dagelijks leven	4	Voorziet in alle basisbehoeften van het dagelijks leven en alleen ondergeschikte problemen (bijvoorbeeld slordig zijn, gedesorganiseerd)
+Activiteiten dagelijks leven	5	Geen problemen van deze aard en functioneert goed op alle gebieden.
+Sociaal netwerk	1	Gebrek aan noodzakelijke steun van familie/vrienden en geen contacten buiten een eventuele foute vriendenkring of ernstig sociaal isolement.
+Sociaal netwerk	2	Familie/vrienden hebben niet de vaardigheden/mogelijkheden om te helpen en nauwelijks contacten buiten eventuele foute vriendenkring. Blijvend, belangrijk probleem als gevolg van actief of passief terugtrekken uit sociale relaties 
+Sociaal netwerk	3	Enige steun van familie/vrienden en enige contacten buiten eventuele foute vriendenkring. Duidelijk probleem in maken of onderhouden van ondersteunende relaties 
+Sociaal netwerk	4	Voldoende steun van familie/vrienden en weinig contacten met eventuele foute vrienden.
+Sociaal netwerk	5	Gezond sociaal netwerk en geen foute vrienden.
+Maatschappelijke participatie	1	Niet van toepassing door crisissituatie en/of in “overlevingsmodus”
+Maatschappelijke participatie	2	Maatschappelijk geïsoleerd en/of geen sociale vaardigheden en/of gebrek aan motivatie om deel te nemen.
+Maatschappelijke participatie	3	Nauwelijks participerend in maatschappij en/of gebrek aan vaardigheden om betrokken te raken.
+Maatschappelijke participatie	4	Enige maatschappelijke participatie (bijv. adviesgroep, steungroep) maar er zijn hindernissen zoals mobiliteit, discipline of kinderopvang.
+Maatschappelijke participatie	5	Actief participerend in de maatschappij.
+Justitie	1	Zeer regelmatig (maandelijks) contact met politie en/of openstaande zaken bij justitie.
+Justitie	2	Regelmatig (meerdere keren per jaar) contact met politie en/of lopende zaken bij justitie.
+Justitie	3	Incidenteel (eens per jaar) contact met politie en/of voorwaardelijke straf of -invrijheidstelling.
+Justitie	4	Zelden (minder dan eens per jaar) contact politie/justitie en/of strafblad.
+Justitie	5	Geen contact met politie. Geen strafblad.

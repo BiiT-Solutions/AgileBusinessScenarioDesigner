@@ -39,8 +39,9 @@ public class FormParser {
 			}
 			// Third parse the rules defined in the rule editor
 			if(!this.form.getRules().isEmpty()){
+				RuleParser ruleParser = new RuleParser();
 				for(Rule rule: this.form.getRules()){
-					this.rules += RuleParser.parse(rule);
+					this.rules += ruleParser.parse(rule);
 				}
 			}
 		}

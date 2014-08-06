@@ -98,4 +98,21 @@ public class Question extends CommonAttributes implements IQuestion {
 			return ((SubmittedForm)((Category)this.getParent()).getParent()).getVariableValue(this, varName);
 		}
 	}
+
+	public Number getNumberVariableValue(String varName){
+		if(this.getParent() instanceof IGroup){
+			return ((SubmittedForm)((Category)((Group)this.getParent()).getParent()).getParent()).getNumberVariableValue(this, varName);
+		}else{
+			return ((SubmittedForm)((Category)this.getParent()).getParent()).getNumberVariableValue(this, varName);
+		}
+	}
+
+	public void setVariableValue(String varName, Object value){
+		if(this.getParent() instanceof IGroup){
+			((SubmittedForm)((Category)((Group)this.getParent()).getParent()).getParent()).setVariableValue(this, varName, value);
+		}else{
+			((SubmittedForm)((Category)this.getParent()).getParent()).setVariableValue(this, varName, value);
+		}
+
+	}
 }

@@ -119,4 +119,12 @@ public class Category extends CommonAttributes implements ICategory {
 	public Object getVariableValue(String varName){
 		return ((SubmittedForm)this.getParent()).getVariableValue(this, varName);
 	}
+
+	public Number getNumberVariableValue(String varName){
+		return ((SubmittedForm)this.getParent()).getNumberVariableValue(this, varName);
+	}
+
+	public void setVariableValue(String varName, Object value){
+		((SubmittedForm)this.getParent()).setVariableValue(this, varName, value);
+	}
 }

@@ -77,4 +77,12 @@ public class Group extends CommonAttributes implements IGroup {
 	public Object getVariableValue(String varName){
 		return ((SubmittedForm)((Category)this.getParent()).getParent()).getVariableValue(this, varName);
 	}
+
+	public Number getNumberVariableValue(String varName){
+		return ((SubmittedForm)((Category)this.getParent()).getParent()).getNumberVariableValue(this, varName);
+	}
+
+	public void setVariableValue(String varName, Object value){
+		((SubmittedForm)((Category)this.getParent()).getParent()).setVariableValue(this, varName, value);
+	}
 }
