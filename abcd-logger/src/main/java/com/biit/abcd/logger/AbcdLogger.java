@@ -56,7 +56,9 @@ public class AbcdLogger {
 	 * @param message
 	 */
 	private static void debug(String message) {
-		logger.debug(message);
+		if (isDebugEnabled()) {
+			logger.debug(message);
+		}
 	}
 
 	/**
