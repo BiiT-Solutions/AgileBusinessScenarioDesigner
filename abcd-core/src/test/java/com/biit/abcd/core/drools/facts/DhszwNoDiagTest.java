@@ -47,7 +47,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
-public class DhszwTest {
+public class DhszwNoDiagTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";

@@ -8,7 +8,7 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 	private ExpressionViewer expressionViewer;
 
 	public SimpleExpressionEditorComponent() {
-		super(false);
+		super();
 	}
 
 	@Override

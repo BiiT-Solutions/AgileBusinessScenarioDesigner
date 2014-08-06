@@ -15,14 +15,14 @@ import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.utils.ITableCellEditable;
+import com.biit.abcd.persistence.utils.INameAttribute;
 
 /**
  * Specific rules created for managing decision tables.
  */
 @Entity
 @Table(name = "RULE_DECISION_TABLE")
-public class TableRule extends StorableObject implements ITableCellEditable {
+public class TableRule extends StorableObject implements INameAttribute {
 
 	private String name;
 

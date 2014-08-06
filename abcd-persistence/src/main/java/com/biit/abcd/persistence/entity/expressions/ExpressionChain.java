@@ -13,7 +13,7 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.utils.ITableCellEditable;
+import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 
@@ -23,7 +23,7 @@ import com.biit.jexeval.ExpressionEvaluator;
  */
 @Entity
 @Table(name = "EXPRESSIONS_CHAIN")
-public class ExpressionChain extends Expression implements ITableCellEditable {
+public class ExpressionChain extends Expression implements INameAttribute {
 
 	private String name;
 

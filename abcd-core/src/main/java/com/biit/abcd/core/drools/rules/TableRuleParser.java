@@ -8,18 +8,20 @@ public class TableRuleParser {
 
 	public static String parse(TableRule tableRule) throws ExpressionInvalidException {
 		String newRules = "";
-		String tableRuleName = tableRule.getName();
-		int i = 0;
+		if (tableRule != null) {
+			String tableRuleName = tableRule.getName();
+			int i = 0;
 
-		// One rule for each row
-		for (TableRuleRow row : tableRule.getRules()) {
-			//			RuleChecker.checkRowExpressionValid(row, i + 1);
-			newRules += Utils.getStartRuleString(tableRuleName + "_row_" + i);
-			newRules += Utils.getAttributes();
-			newRules += Utils.getWhenRuleString();
-			newRules += createRule(row);
-			newRules += Utils.getEndRuleString();
-			i++;
+			// One rule for each row
+			for (TableRuleRow row : tableRule.getRules()) {
+				// RuleChecker.checkRowExpressionValid(row, i + 1);
+				newRules += Utils.getStartRuleString(tableRuleName + "_row_" + i);
+				newRules += Utils.getAttributes();
+				newRules += Utils.getWhenRuleString();
+				newRules += createRule(row);
+				newRules += Utils.getEndRuleString();
+				i++;
+			}
 		}
 		return newRules;
 	}

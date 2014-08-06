@@ -32,13 +32,13 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 	 * Boolean used to create the simplified version of the operator tab
 	 * @param simpleOperatorTab
 	 */
-	public ExpressionEditorComponent(boolean simpleOperatorTab) {
+	public ExpressionEditorComponent() {
 		rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(false);
 		rootLayout.setSpacing(true);
 
-		tabMenu = createTabMenu(simpleOperatorTab);
+		tabMenu = createTabMenu();
 
 		VerticalLayout viewLayout = createViewersLayout();
 
@@ -52,17 +52,12 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 		addKeyController();
 	}
 
-	private TabSheet createTabMenu(boolean simpleOperatorTab) {
+	private TabSheet createTabMenu() {
 		TabSheet tabMenu = new TabSheet();
 		tabMenu.setHeight("100%");
 
 		TabLayout operatorLayout;
-		if(simpleOperatorTab){
-			operatorLayout = new AnswerTabOperatorLayout();
-		}else{
-			operatorLayout = new TabOperatorLayout();
-		}
-		;
+		operatorLayout = new TabOperatorLayout();
 		operatorLayout.addNewElementListener(new ElementAddedListener() {
 
 			@Override
@@ -133,7 +128,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 	 * Add all keyboard defined actions.
 	 */
 	private void addKeyController() {
-		this.addShortcutListener(new ShortcutListener("DELETE_SHORTCUT", KeyCode.DELETE, null) {
+		addShortcutListener(new ShortcutListener("DELETE_SHORTCUT", KeyCode.DELETE, null) {
 			private static final long serialVersionUID = -71562151456777493L;
 
 			@Override
@@ -142,7 +137,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			}
 		});
 
-		this.addShortcutListener(new ShortcutListener("SELECT_NEXT", KeyCode.ARROW_RIGHT, null) {
+		addShortcutListener(new ShortcutListener("SELECT_NEXT", KeyCode.ARROW_RIGHT, null) {
 			private static final long serialVersionUID = 7663105045629599269L;
 
 			@Override
@@ -151,7 +146,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			}
 		});
 
-		this.addShortcutListener(new ShortcutListener("SELECT_PREVIOUS", KeyCode.ARROW_LEFT, null) {
+		addShortcutListener(new ShortcutListener("SELECT_PREVIOUS", KeyCode.ARROW_LEFT, null) {
 			private static final long serialVersionUID = 8453120978479798559L;
 
 			@Override

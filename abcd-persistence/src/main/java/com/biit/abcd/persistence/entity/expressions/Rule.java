@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.utils.ITableCellEditable;
+import com.biit.abcd.persistence.utils.INameAttribute;
 
 /**
  * Defines a drools rule.
@@ -20,7 +20,7 @@ import com.biit.abcd.persistence.utils.ITableCellEditable;
  */
 @Entity
 @Table(name = "RULE")
-public class Rule extends StorableObject implements ITableCellEditable {
+public class Rule extends StorableObject implements INameAttribute {
 
 	private String name;
 

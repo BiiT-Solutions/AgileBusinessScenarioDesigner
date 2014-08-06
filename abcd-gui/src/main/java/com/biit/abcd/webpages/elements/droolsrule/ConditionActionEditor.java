@@ -17,7 +17,7 @@ public class ConditionActionEditor extends ExpressionEditorComponent {
 	private ExpressionViewer selectedViewer;
 
 	public ConditionActionEditor() {
-		super(false);
+		super();
 	}
 
 	@Override

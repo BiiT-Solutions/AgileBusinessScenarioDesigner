@@ -156,10 +156,6 @@ public class RuleParser {
 		TreeObject scope = var.getReference();
 		String varName = var.getVariable().getName();
 
-		System.out.println("SCOPE: " + scope.toString());
-		System.out.println("SCOPE ID: " + scope.getComparationId().toString());
-		System.out.println("VAR NAME: " + varName);
-
 		if(scope instanceof Form) {
 			this.treeObjectDroolsname.put(scope, scope.getComparationId().toString());
 			ruleCore += "	$"+scope.getComparationId().toString()+" : SubmittedForm( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+")\n";

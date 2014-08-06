@@ -65,7 +65,7 @@ public abstract class DiagramObject extends StorableObject {
 	}
 
 	public void setJointjsId(String id) {
-		this.jointjsId = id;
+		jointjsId = id;
 	}
 
 	public int getZ() {
