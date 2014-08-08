@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.facts;
+package com.biit.abcd.core.drools.test;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -27,6 +27,16 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
 import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
@@ -46,8 +56,9 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.persistence.utils.IdGenerator;
 
-public class DhszwDiagTest {
+public class RulesTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
@@ -55,7 +66,6 @@ public class DhszwDiagTest {
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
-	@Test(groups = { "orbeon" })
 	public void readXml() throws DocumentException, IOException {
 		this.form = new SubmittedForm(APP, FORM);
 		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", Charset.defaultCharset());
@@ -64,20 +74,29 @@ public class DhszwDiagTest {
 		Assert.assertFalse(this.form.getCategories().isEmpty());
 	}
 
-	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
 		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
-	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
+	@Test(groups = { "rules" })
 	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException {
+	NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
+		// Load the rules
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
-		Form vaadinForm = this.createCompleteDhszwForm();
+		Form vaadinForm = this.createDhszwForm();
 		formDrools.parse(vaadinForm);
+
+		// Load the submitted form
+		this.readXml();
+		this.translateFormCategories();
 		formDrools.go(this.form);
-		Assert.assertEquals("Geen contact met politie. Geen strafblad.", ((SubmittedForm) this.form).getVariableValue(this.form.getCategory("Justitie"), "cScoreText"));
+
+		// Check the created variables
+		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form.getCategory("Justitie");
+		Assert.assertEquals("Geen contact met politie. Geen strafblad.", testCat1.getVariableValue("cScoreText"));
+		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form.getCategory("Huisvesting");
+		Assert.assertEquals("In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.", testCat2.getVariableValue("cScoreText"));
 	}
 
 	static String readFile(String path, Charset encoding) throws IOException {
@@ -86,9 +105,7 @@ public class DhszwDiagTest {
 	}
 
 	/**
-	 * Create the form structure. Creates to simple assignation rules in the
-	 * table rule and one expression with max func Form used to create the
-	 * drools rules
+	 * Create the form structure.
 	 *
 	 * @return
 	 * @throws NotValidChildException
@@ -97,7 +114,7 @@ public class DhszwDiagTest {
 	 * @throws FieldTooLongException
 	 * @throws IOException
 	 */
-	private Form createCompleteDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
+	private Form createDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
 			ChildrenNotFoundException, FieldTooLongException, IOException {
 
 		// Create the form
@@ -197,10 +214,140 @@ public class DhszwDiagTest {
 							new ExpressionValueString(lineSplit[2]))));
 			ruleNumber++;
 		}
+
+		Diagram mainDiagram = new Diagram("main");
+
+		DiagramSource diagramStartNode = new DiagramSource();
+		diagramStartNode.setJointjsId(IdGenerator.createId());
+		diagramStartNode.setType(DiagramObjectType.SOURCE);
+		Node nodeSource = new Node(diagramStartNode.getJointjsId());
+
+		DiagramTable diagramTableRuleNode = new DiagramTable();
+		diagramTableRuleNode.setTable(tableRule);
+		diagramTableRuleNode.setJointjsId(IdGenerator.createId());
+		diagramTableRuleNode.setType(DiagramObjectType.TABLE);
+		Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
+
+		// Creation of a subdiagram with all the expressions
+		DiagramChild subExpressionDiagramNode = new DiagramChild();
+		subExpressionDiagramNode.setChildDiagram(this.createExpressionsSubdiagram(form));
+		subExpressionDiagramNode.setJointjsId(IdGenerator.createId());
+		subExpressionDiagramNode.setType(DiagramObjectType.DIAGRAM_CHILD);
+		Node nodeSubExpressionDiagram = new Node(subExpressionDiagramNode.getJointjsId());
+
+		// Creation of a subdiagram with all the rules
+		DiagramChild subRuleDiagramNode = new DiagramChild();
+		subRuleDiagramNode.setChildDiagram(this.createRulesSubdiagram(form));
+		subRuleDiagramNode.setJointjsId(IdGenerator.createId());
+		subRuleDiagramNode.setType(DiagramObjectType.DIAGRAM_CHILD);
+		Node nodeSubRuleDiagram = new Node(subRuleDiagramNode.getJointjsId());
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+
+		DiagramLink startTable = new DiagramLink(nodeSource, nodeTable);
+		startTable.setJointjsId(IdGenerator.createId());
+		startTable.setType(DiagramObjectType.LINK);
+		DiagramLink tableExpression = new DiagramLink(nodeTable, nodeSubExpressionDiagram);
+		tableExpression.setJointjsId(IdGenerator.createId());
+		tableExpression.setType(DiagramObjectType.LINK);
+		DiagramLink expressionSubdiagram = new DiagramLink(nodeSubExpressionDiagram, nodeSubRuleDiagram);
+		expressionSubdiagram.setJointjsId(IdGenerator.createId());
+		expressionSubdiagram.setType(DiagramObjectType.LINK);
+		DiagramLink subdiagramEnd = new DiagramLink(nodeSubRuleDiagram, nodeSink);
+		subdiagramEnd.setJointjsId(IdGenerator.createId());
+		subdiagramEnd.setType(DiagramObjectType.LINK);
+
+		mainDiagram.addDiagramObject(diagramStartNode);
+		mainDiagram.addDiagramObject(diagramTableRuleNode);
+		mainDiagram.addDiagramObject(subExpressionDiagramNode);
+		mainDiagram.addDiagramObject(subRuleDiagramNode);
+		mainDiagram.addDiagramObject(diagramEndNode);
+		mainDiagram.addDiagramObject(startTable);
+		mainDiagram.addDiagramObject(tableExpression);
+		mainDiagram.addDiagramObject(expressionSubdiagram);
+		mainDiagram.addDiagramObject(subdiagramEnd);
+
+		form.addDiagram(mainDiagram);
+
 		return form;
 	}
 
-	public Category getCategoryFromForm(Form form, String catName){
+	private Diagram createExpressionsSubdiagram(Form form){
+		Diagram subDiagram = new Diagram("expressionDiagram");
+		for(ExpressionChain expressionChain : form.getExpressionChain()){
+
+			DiagramSource diagramSource = new DiagramSource();
+			diagramSource.setJointjsId(IdGenerator.createId());
+			diagramSource.setType(DiagramObjectType.SOURCE);
+			Node nodeSource = new Node(diagramSource.getJointjsId());
+
+			DiagramCalculation diagramExpression = new DiagramCalculation();
+			diagramExpression.setFormExpression(expressionChain);
+			diagramExpression.setJointjsId(IdGenerator.createId());
+			diagramExpression.setType(DiagramObjectType.CALCULATION);
+			Node nodeRule = new Node(diagramExpression.getJointjsId());
+
+			DiagramSink diagramSink = new DiagramSink();
+			diagramSink.setJointjsId(IdGenerator.createId());
+			diagramSink.setType(DiagramObjectType.SINK);
+			Node nodeSink = new Node(diagramSink.getJointjsId());
+
+			DiagramLink diagramLinkSourceRule = new DiagramLink(nodeSource, nodeRule);
+			diagramLinkSourceRule.setJointjsId(IdGenerator.createId());
+			diagramLinkSourceRule.setType(DiagramObjectType.LINK);
+			DiagramLink diagramLinkRuleSink = new DiagramLink(nodeRule, nodeSink);
+			diagramLinkRuleSink.setJointjsId(IdGenerator.createId());
+			diagramLinkRuleSink.setType(DiagramObjectType.LINK);
+
+			subDiagram.addDiagramObject(diagramSource);
+			subDiagram.addDiagramObject(diagramExpression);
+			subDiagram.addDiagramObject(diagramSink);
+			subDiagram.addDiagramObject(diagramLinkSourceRule);
+			subDiagram.addDiagramObject(diagramLinkRuleSink);
+		}
+		return subDiagram;
+	}
+
+	private Diagram createRulesSubdiagram(Form form){
+		Diagram subDiagram = new Diagram("ruleDiagram");
+		for(Rule rule : form.getRules()){
+
+			DiagramSource diagramSource = new DiagramSource();
+			diagramSource.setJointjsId(IdGenerator.createId());
+			diagramSource.setType(DiagramObjectType.SOURCE);
+			Node nodeSource = new Node(diagramSource.getJointjsId());
+
+			DiagramRule diagramRule = new DiagramRule();
+			diagramRule.setRule(rule);
+			diagramRule.setJointjsId(IdGenerator.createId());
+			diagramRule.setType(DiagramObjectType.RULE);
+			Node nodeRule = new Node(diagramRule.getJointjsId());
+
+			DiagramSink diagramSink = new DiagramSink();
+			diagramSink.setJointjsId(IdGenerator.createId());
+			diagramSink.setType(DiagramObjectType.SINK);
+			Node nodeSink = new Node(diagramSink.getJointjsId());
+
+			DiagramLink diagramLinkSourceRule = new DiagramLink(nodeSource, nodeRule);
+			diagramLinkSourceRule.setJointjsId(IdGenerator.createId());
+			diagramLinkSourceRule.setType(DiagramObjectType.LINK);
+			DiagramLink diagramLinkRuleSink = new DiagramLink(nodeRule, nodeSink);
+			diagramLinkRuleSink.setJointjsId(IdGenerator.createId());
+			diagramLinkRuleSink.setType(DiagramObjectType.LINK);
+
+			subDiagram.addDiagramObject(diagramSource);
+			subDiagram.addDiagramObject(diagramRule);
+			subDiagram.addDiagramObject(diagramSink);
+			subDiagram.addDiagramObject(diagramLinkSourceRule);
+			subDiagram.addDiagramObject(diagramLinkRuleSink);
+		}
+		return subDiagram;
+	}
+
+	private Category getCategoryFromForm(Form form, String catName){
 		for(TreeObject child : form.getChildren()){
 			if((child instanceof Category) && child.getName().equals(catName)){
 				return (Category) child;

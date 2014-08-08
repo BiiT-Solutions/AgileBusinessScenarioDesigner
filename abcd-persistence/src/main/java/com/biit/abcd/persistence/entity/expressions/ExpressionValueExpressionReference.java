@@ -22,12 +22,16 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 
 	public ExpressionValueExpressionReference(Expression value) {
 		super();
-		this.setValue(value);
+		setValue(value);
 	}
 
 	@Override
 	public String getRepresentation() {
-		return value.getRepresentation();
+		if (value == null) {
+			return "";
+		} else {
+			return value.getRepresentation();
+		}
 	}
 
 	public Expression getValue() {

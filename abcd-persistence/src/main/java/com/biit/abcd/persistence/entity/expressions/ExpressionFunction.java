@@ -21,31 +21,35 @@ public class ExpressionFunction extends Expression {
 	public ExpressionFunction(){}
 
 	public ExpressionFunction(AvailableFunction function){
-		this.value = function;
+		value = function;
 	}
 
 	@Override
 	public String getRepresentation() {
-		return this.value.getValue();
+		if (value == null) {
+			return "";
+		} else {
+			return value.getValue();
+		}
 	}
 
 	public AvailableFunction getValue() {
-		return this.value;
+		return value;
 	}
 
 	public void setValue(AvailableFunction function) {
-		this.value = function;
+		value = function;
 	}
 
 	@Override
 	public String getExpression() {
-		return this.value.getValue();
+		return value.getValue();
 	}
 
 	@Override
 	public Expression generateCopy() {
 		ExpressionFunction copy = new ExpressionFunction();
-		copy.value = this.value;
+		copy.value = value;
 		return copy;
 	}
 }

@@ -29,7 +29,7 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 
 	@Override
 	public String getRepresentation() {
-		String expressionString = new String();
+		String expressionString = "";
 		if (constant != null) {
 			expressionString += constant.getName();
 		}
@@ -41,7 +41,7 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 	}
 
 	public void setVariable(GlobalVariable variable) {
-		this.constant = variable;
+		constant = variable;
 	}
 
 	@Override

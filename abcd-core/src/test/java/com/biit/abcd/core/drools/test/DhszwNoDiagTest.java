@@ -1,12 +1,10 @@
-package com.biit.abcd.core.drools.facts;
+package com.biit.abcd.core.drools.test;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.junit.Assert;
@@ -49,7 +47,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
-public class SimpleDhszwTest {
+public class DhszwNoDiagTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
@@ -76,9 +74,15 @@ public class SimpleDhszwTest {
 	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
-		Form vaadinForm = this.createDhszwForm();
+		Form vaadinForm = this.createCompleteDhszwForm();
 		formDrools.parse(vaadinForm);
 		formDrools.go(this.form);
+		Assert.assertEquals("Geen contact met politie. Geen strafblad.", ((SubmittedForm) this.form).getVariableValue(this.form.getCategory("Justitie"), "cScoreText"));
+	}
+
+	static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
 	}
 
 	/**
@@ -93,45 +97,11 @@ public class SimpleDhszwTest {
 	 * @throws FieldTooLongException
 	 * @throws IOException
 	 */
-	private Form createDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
+	private Form createCompleteDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
 			ChildrenNotFoundException, FieldTooLongException, IOException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
-		// Create a category
-		Category category = new Category("Financiën");
-		form.addChild(category);
-
-		// Create the questions
-		List<String> questionsName = Arrays.asList("Financien.Inkomen", "Financien.Bron", "Financien.Schulden",
-				"Financien.Uitgaven", "Financien.Beheer");
-		List<TreeObject> questionList = new ArrayList<TreeObject>(questionsName.size());
-		for (String questionName : questionsName) {
-			questionList.add(new Question(questionName));
-		}
-		category.addChildren(questionList);
-
-		// Create the answers
-		List<Integer> answersNumber = Arrays.asList(4, 3, 5, 4, 5);
-		List<String> answersName = Arrays.asList("Financien.Inkomen.RuimVoldoende",
-				"Financien.Inkomen.NetVoldoendeZonderUitkering", "Financien.Inkomen.Onvoldoende",
-				"Financien.Inkomen.Geen", "Inkomsten.Bron.Werk", "Inkomsten.Bron.Uitkering", "Inkomsten.Bron.Anders",
-				"Financien.Schulden.Sparen", "Financien.Schulden.NietSparenGeenSchulden", "Financien.Schulden.NemenAf",
-				"Financien.Schulden.BlijvenGelijk", "Financien.Schulden.NemenToe",
-				"Financien.Uitgaven.OnverstandigGeen", "Financien.Uitgaven.OnverstandigWelVeroorloven",
-				"Financien.Uitgaven.OnverstandigSomsNietVeroorloven", "Financien.Uitgaven.OnverstandigRegelmatigNiet",
-				"Financien.Beheer.VolledigInzicht", "Financien.Beheer.RedelijkInzicht",
-				"Financien.Beheer.WelEensVerrast", "Financien.Beheer.VeelVerrassingen",
-				"Financien.Beheer.GeenOplossing");
-
-		int answerNumber = 0;
-		for (int iQuestion = 0; iQuestion < questionList.size(); iQuestion++) {
-			TreeObject question = questionList.get(iQuestion);
-			for (int iAnswer = 0; iAnswer < answersNumber.get(iQuestion); iAnswer++) {
-				question.addChild(new Answer(answersName.get(answerNumber)));
-				answerNumber++;
-			}
-		}
 
 		// Create the custom variables
 		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
@@ -143,75 +113,108 @@ public class SimpleDhszwTest {
 
 		// Create the tableRule
 		TableRule tableRule = new TableRule("BaseTable");
-		List<Double> values = Arrays.asList(5., 4., 2., 1., 5., 3., 1., 5., 4., 4., 3., 2., 5., 5., 3., 2., 5., 4., 3.,
-				2., 1.);
 
-		int valueIndex = 0;
-		for (TreeObject question : questionList) {
-			for (TreeObject answer : question.getChildren()) {
-				// Create and add row to table rule
-				tableRule.getRules().add(
-						new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
-								new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-								new ExpressionValueCustomVariable(question, customVarQuestion),
-								new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-										values.get(valueIndex)))));
-				valueIndex++;
+		String lastCategory = "";
+		Category category = null;
+		String lastQuestion = "";
+		Question question = null;
+		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"), StandardCharsets.UTF_8)) {
+			// [0] = category, [1] = question, [2] = answer, [3] = value
+			String[] lineSplit = line.split("\t");
+			if(!lastCategory.equals(lineSplit[0])){
+				// Create a category
+				category = new Category(lineSplit[0]);
+				form.addChild(category);
+				lastCategory = lineSplit[0];
 			}
+			if(!lastQuestion.equals(lineSplit[1])){
+				// Create a question
+				question = new Question(lineSplit[1]);
+				category.addChild(question);
+				lastQuestion = lineSplit[1];
+			}
+			Answer answer = new Answer(lineSplit[2]);
+			question.addChild(answer);
+
+			tableRule.getRules().add(
+					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
+							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
+							new ExpressionValueCustomVariable(question, customVarQuestion),
+							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
+									Double.parseDouble(lineSplit[3])))));
 		}
+
 		// Add the rows and the table to the form
 		form.getTableRules().add(tableRule);
 
-		ExpressionChain testExpressionChain = new ExpressionChain("FinancienScore");
-		testExpressionChain.addExpression(new ExpressionValueCustomVariable(category, customVarCategory));
-		testExpressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		testExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.MIN));
-		int i = 0;
-		for (TreeObject question : questionList) {
-			testExpressionChain.addExpression(new ExpressionValueCustomVariable(question, customVarQuestion));
-			if (i < (questionList.size() - 1)) {
-				// So the last expression of the rule before the bracket is not
-				// a comma
-				testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
+		// Creation of the accumulate expressions
+		int accumExp = 1;
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/accumulations"),
+				StandardCharsets.UTF_8)) {
+			// [0] = category, [1] = function, [2] = questions
+			String[] lineSplit = line.split("\t");
+
+			ExpressionChain testExpressionChain = new ExpressionChain(lineSplit[0] + "Score_" + accumExp);
+			testExpressionChain.addExpression(new ExpressionValueCustomVariable(this.getCategoryFromForm(form,
+					lineSplit[0]), customVarCategory));
+			testExpressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+			if (lineSplit[1].equals("min")) {
+				testExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.MIN));
 			}
-			i++;
+			// Each position is a question
+			String[] questionSplit = lineSplit[2].split("::");
+			int i = 0;
+			for (String questionString : questionSplit) {
+				testExpressionChain.addExpression(new ExpressionValueCustomVariable(this.getQuestionFromCategory(
+						this.getCategoryFromForm(form, lineSplit[0]), questionString), customVarQuestion));
+				if (i < (questionSplit.length - 1)) {
+					// So the last expression of the rule before the bracket is
+					// not
+					// a comma
+					testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
+				}
+				i++;
+			}
+			testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			form.getExpressionChain().add(testExpressionChain);
+			accumExp++;
 		}
-		testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		form.getExpressionChain().add(testExpressionChain);
 
-
-		// Create new rules to set the text based on the score of the category
-		List<String> ruleNames = Arrays.asList(
-				"FinancienText1",
-				"FinancienText2",
-				"FinancienText3",
-				"FinancienText4",
-				"FinancienText5");
-		List<Double> ruleScores = Arrays.asList(1., 2., 3., 4., 5.);
-		List<String> messages = Arrays.asList(
-				"Geen inkomsten. Hoge, groeiende schulden.",
-				"Onvoldoende inkomsten en/of spontaan of ongepast uitgeven. Groeiende schulden.",
-				"Komt met inkomsten aan basisbehoeften tegemoet en/of gepast uitgeven. Eventuele schulden zijn ten minste stabiel en/of bewindvoering/inkomstenbeheer.",
-				"Komt aan basis behoeften tegemoet zonder uitkering. Beheert evntuele schulden zelf en deze verminderen.",
-				"Inkomsten zijn ruim voldoende, goed financieel beheer. Heeft met inkomen mogeijkheid om te sparen.");
-		for(int iMessage=0; iMessage<messages.size(); iMessage++){
+		// Creation of the result rules
+		int ruleNumber = 1;
+		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/returnedText"), StandardCharsets.UTF_8)) {
+			// [0] = category, [1] = score, [2] = text
+			String[] lineSplit = line.split("\t");
 			form.getRules().add(new Rule(
-					ruleNames.get(iMessage),
+					"ruleText"+ruleNumber,
 					new ExpressionChain(
-							new ExpressionValueCustomVariable(category, customVarCategory),
+							new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarCategory),
 							new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-							new ExpressionValueNumber(ruleScores.get(iMessage))),
+							new ExpressionValueNumber(Double.parseDouble(lineSplit[1]))),
 					new ExpressionChain(
-							new ExpressionValueCustomVariable(category, customVarTextCategory),
+							new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarTextCategory),
 							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-							new ExpressionValueString(messages.get(iMessage)))));
+							new ExpressionValueString(lineSplit[2]))));
+			ruleNumber++;
 		}
-
 		return form;
 	}
 
-	static String readFile(String path, Charset encoding) throws IOException {
-		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return new String(encoded, encoding);
+	public Category getCategoryFromForm(Form form, String catName){
+		for(TreeObject child : form.getChildren()){
+			if((child instanceof Category) && child.getName().equals(catName)){
+				return (Category) child;
+			}
+		}
+		return null;
+	}
+
+	private Question getQuestionFromCategory(Category category, String questionName){
+		for(Question question : category.getQuestions()){
+			if(question.getName().equals(questionName)) {
+				return question;
+			}
+		}
+		return null;
 	}
 }

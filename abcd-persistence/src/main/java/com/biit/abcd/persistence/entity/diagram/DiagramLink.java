@@ -50,6 +50,13 @@ public class DiagramLink extends DiagramObject {
 		expressionChain = new ExpressionChain();
 	}
 
+	public DiagramLink(Node source, Node target) {
+		super();
+		expressionChain = new ExpressionChain();
+		setSource(source);
+		setTarget(target);
+	}
+
 	public Node getSource() {
 		return source;
 	}
@@ -161,7 +168,7 @@ public class DiagramLink extends DiagramObject {
 				throw new RuntimeException("Diagram Link isOthers used without diagram.");
 			}
 
-			List<DiagramLink> links = getParent().getOutgoingLinks((DiagramElement) forkSource);
+			List<DiagramLink> links = getParent().getOutgoingLinks(forkSource);
 			if (links.size() == 1) {
 				return false;
 			}
@@ -182,7 +189,7 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	private boolean isAnswerEmpty() {
-		if (expressionChain == null || expressionChain.getExpressions().isEmpty()) {
+		if ((expressionChain == null) || expressionChain.getExpressions().isEmpty()) {
 			return true;
 		}
 		return false;

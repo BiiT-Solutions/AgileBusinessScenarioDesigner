@@ -22,15 +22,15 @@ public class ExpressionSymbol extends Expression {
 
 	public ExpressionSymbol(AvailableSymbol symbol){
 		super();
-		this.setValue(symbol);
+		setValue(symbol);
 	}
 
 	@Override
 	public String getRepresentation() {
-		if (this.value == null) {
+		if (value == null) {
 			return "";
 		} else {
-			return this.value.getValue();
+			return value.getValue();
 		}
 	}
 
@@ -39,18 +39,18 @@ public class ExpressionSymbol extends Expression {
 	}
 
 	public AvailableSymbol getValue() {
-		return this.value;
+		return value;
 	}
 
 	@Override
 	protected String getExpression() {
-		return this.getRepresentation();
+		return getRepresentation();
 	}
 
 	@Override
 	public Expression generateCopy() {
 		ExpressionSymbol copy = new ExpressionSymbol();
-		copy.value = this.value;
+		copy.value = value;
 		return copy;
 	}
 }

@@ -10,10 +10,10 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 @Entity
 @Table(name = "DIAGRAM_RULE")
 public class DiagramRule extends DiagramElement{
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Rule rule;
-	
+
 	public Rule getRule() {
 		return rule;
 	}

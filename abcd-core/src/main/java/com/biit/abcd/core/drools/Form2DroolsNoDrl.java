@@ -1,29 +1,37 @@
 package com.biit.abcd.core.drools;
 
-import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.List;
 
 import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 import com.biit.abcd.core.drools.rules.FormParser;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 
-@SuppressWarnings("rawtypes")
 public class Form2DroolsNoDrl {
 
 	private KieManager km;
 
+	/**
+	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
+	 * This method doesn't create any global variables
+	 * @param form form to be parsed
+	 * @throws ExpressionInvalidException
+	 * @throws RuleInvalidException
+	 */
 	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException {
 		if(!form.getChildren().isEmpty()) {
 			this.km = new KieManager();
-
 			FormParser formRules;
 			try {
+				// Creation of the rules
 				formRules = new FormParser(form);
 				System.out.println(formRules.getRules());
+				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
-				this.km.setGlobalVariables(Arrays.asList(this.getGlobalVar(System.out)));
 
 			} catch (ExpressionInvalidException e) {
 				throw e;
@@ -31,36 +39,41 @@ public class Form2DroolsNoDrl {
 		}
 	}
 
+	/**
+	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
+	 * This method creates the global constants defined in the globalVariables array
+	 * @param form form to be parsed
+	 * @param globalVariables array  with the global constants to be created
+	 * @throws ExpressionInvalidException
+	 * @throws RuleInvalidException
+	 */
+	public void parse(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException, RuleInvalidException {
+		if(!form.getChildren().isEmpty()) {
+			this.km = new KieManager();
+			FormParser formRules;
+			try {
+				// Creation of the rules
+				formRules = new FormParser(form, globalVariables);
+//				System.out.println(formRules.getRules());
+				// Load the rules in memory
+				this.km.buildSessionRules(formRules.getRules());
+				// Creation of the global constants
+				this.km.setGlobalVariables(formRules.getGlobalVariables());
+
+			} catch (ExpressionInvalidException e) {
+				throw e;
+			}
+		}
+	}
+
+	/**
+	 * Loads the (Submitted)form as facts of the knowledge base of the drools engine. <br>
+	 * It also starts the engine execution by firing all the rules inside the engine.
+	 * @param form
+	 */
 	public void go(ISubmittedForm form){
 		this.km.setFacts(Arrays.asList(form));
 		this.km.execute();
 	}
-
-	private DroolsGlobalVariable getGlobalVar(PrintStream out){
-		return new DroolsGlobalVariable<PrintStream>("out", out);
-	}
-
-
-	//	private String getTestRules() {
-	//		String r1 = "" +
-	//
-	//				"rule \"rule 8\" when \n" +
-	//				"	$f : Form()\n" +
-	//				"	$tr : TableRule() from $f.getTableRules()\n" +
-	//				"	$trr : TableRuleRow() from $tr.getRules()\n" +
-	//				// Get questions
-	//				"	$qTo : ExpressionValueTreeObjectReference() from $trr.getConditions()\n" +
-	//				"	$qr : Question( name == \"Question1\") from $qTo.reference\n" +
-	//				// Get BETWEEN Answer
-	//				"	$ec : ExpressionChain() from $trr.getConditions()\n" +
-	//				"	$ef : ExpressionFunction( getValue().equals(AvailableFunction.BETWEEN)) from $ec.getExpressions()\n" +
-	//				"	$minValue : Expression() from $ec.getExpressions().get(1)\n" +
-	//				"	$maxValue : Expression() from $ec.getExpressions().get(3)\n" +
-	//				"	$ar : Answer( name == \"Answer1\") from $aTo.reference\n" +
-	//				"then\n" +
-	//				"	out.println( \"Answers:\" + $minValue.toString()); \n" +
-	//				"end \n";
-	//
-	//		return r1;
-	//	}
 }

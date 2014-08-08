@@ -18,6 +18,13 @@ public class Node extends StorableObject {
 	@Expose
 	private String port;
 
+	public Node() {
+	}
+
+	public Node(String jointjsId) {
+		setJointjsId(jointjsId);
+	}
+
 	public String getJointjsId() {
 		return jointjsId;
 	}

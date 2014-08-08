@@ -1,24 +1,24 @@
 package com.biit.abcd.core.drools;
 
-public class DroolsGlobalVariable<T> {
+public class DroolsGlobalVariable {
 
 	private String name;
-	private T value;
+	private Object value;
 
-	public DroolsGlobalVariable(String name, T value) {
+	public DroolsGlobalVariable(String name, Object value) {
 		this.name = name;
 		this.value = value;
 	}
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public T getValue() {
-		return value;
+	public Object getValue() {
+		return this.value;
 	}
-	public void setValue(T value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 

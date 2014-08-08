@@ -23,12 +23,16 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 
 	public ExpressionValueTimestamp(Timestamp value) {
 		super();
-		this.setValue(value);
+		setValue(value);
 	}
 
 	@Override
 	public String getRepresentation() {
-		return DateManager.convertDateToString(value);
+		if (value != null) {
+			return DateManager.convertDateToString(value);
+		} else {
+			return "";
+		}
 	}
 
 	public Timestamp getValue() {
@@ -42,7 +46,11 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 	// TODO Check later
 	@Override
 	public String getExpression() {
-		return DateManager.convertDateToString(value);
+		if (value != null) {
+			return DateManager.convertDateToString(value);
+		} else {
+			return "";
+		}
 	}
 
 	@Override
