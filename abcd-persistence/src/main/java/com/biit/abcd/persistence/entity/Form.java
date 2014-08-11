@@ -111,6 +111,11 @@ public class Form extends TreeObject {
 		this.version++;
 		// Force to be stored as a new record
 		this.resetIds();
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
 		for (Diagram diagram : this.getDiagrams()) {
 			diagram.resetIds();
 		}
@@ -119,6 +124,12 @@ public class Form extends TreeObject {
 		}
 		for (CustomVariable customVariable : this.getCustomVariables()) {
 			customVariable.resetIds();
+		}
+		for (ExpressionChain expression : this.getExpressionChain()) {
+			expression.resetIds();
+		}
+		for (Rule rule : this.getRules()) {
+			rule.resetIds();
 		}
 	}
 
@@ -188,7 +199,7 @@ public class Form extends TreeObject {
 
 	/**
 	 * Get Custom variables for a specific tree Object.
-	 *
+	 * 
 	 * @param treeObject
 	 * @return
 	 */
@@ -204,11 +215,12 @@ public class Form extends TreeObject {
 
 	/**
 	 * Looks for the custom variable with the specified scope and name.
+	 * 
 	 * @return the custom variable or null if not found
 	 */
-	public CustomVariable getCustomVariable(String name, String scope){
+	public CustomVariable getCustomVariable(String name, String scope) {
 		for (CustomVariable customVariable : this.getCustomVariables()) {
-			if(customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
+			if (customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
 				return customVariable;
 			}
 		}
@@ -238,7 +250,7 @@ public class Form extends TreeObject {
 
 	/**
 	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
-	 *
+	 * 
 	 * @param diagram
 	 */
 	public Diagram getDiagramParent(Diagram diagram) {
