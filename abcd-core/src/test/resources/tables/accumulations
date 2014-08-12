@@ -1,4 +1,4 @@
-Financiën	min	Financien.Inkomen::Financien.Bron::Financien.Schulden::Financien.Uitgaven::Financien.Beheer
+Financiën	min	Financien.Inkomen::Financien.Schulden::Financien.Uitgaven::Financien.Beheer::Financien.Beheer.Hulp
 Dagbesteding	min	Dagbesteding.Werk::Dagbesteding.Ondersteuning::Dagbesteding.Bezigheid::Dagbesteding.Overlast
 Huisvesting	min	Veiligheid::Huisvesting.Gebruik::Huisvesting.Contract::Huisvesting.Contract2::Huisvesting.Huur::Huisvesting.Huur2
 Huiselijke relaties	min	Gezin.Samenstelling::Gezin.Samengaan::Gezin.Druk::Gezin.Geweld
@@ -6,6 +6,6 @@ Geestelijke gezondheid	min	Geestelijk.Aandoening::Geestelijk.Functioneren::Geest
 Lichamelijke gezondheid	min	Lichamelijk.Aandoeningen::Lichamelijk.Behandeling
 Alcohol-, drugs-, game- of gokverslaving	min	Verslaving.Aanwezig::Verslaving.Behandeltrouw::Verslaving.Behandeltrouw2::Verslaving.Effect
 Activiteiten dagelijks leven	min	ADL.Huishouden::ADL.Organiseren::ADL.Persoonlijk
-Sociaal netwerk	min	Sociaal.Familie::Sociaal.VriendenS::Sociaal.VriendenR::Scociaal.Veiligheid::Sociaal.Veiligheid.Reden::Sociaal.Beleving
+Sociaal netwerk	min	Sociaal.Familie::Sociaal.VriendenS::Sociaal.VriendenR::Sociaal.Beleving
 Maatschappelijke participatie	min	Participatie.Participatie::Participatie.Beperkingen
 Justitie	min	Justitie.Strafblad::Justitie.Politie

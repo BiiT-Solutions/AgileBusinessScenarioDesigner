@@ -1,5 +1,8 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import com.biit.abcd.core.drools.facts.interfaces.ICategory;
 import com.biit.abcd.core.drools.facts.interfaces.IGroup;
 import com.biit.abcd.core.drools.facts.interfaces.IQuestion;
@@ -25,10 +28,19 @@ public class Question extends CommonAttributes implements IQuestion {
 	public Object getValue(){
 		Object parsedValue = null;
 		try{
+//			System.out.println("TRY DOUBLE");
 			parsedValue = Double.parseDouble(this.value);
 		}catch(Exception e){
-			parsedValue = this.value;
+			try {
+//				System.out.println("TRY DATE");
+				parsedValue = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this.value);
+			} catch (Exception e1) {
+//				System.out.println("STRING");
+				parsedValue = this.value;
+			}
 		}
+//		System.out.println("PARSED VALUE: " + parsedValue);
+//		System.out.println("PARSED VALUE CLASS: " + parsedValue.getClass());
 		return parsedValue;
 	}
 

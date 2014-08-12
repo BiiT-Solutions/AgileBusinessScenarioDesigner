@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
+
 @Entity
 @Table(name = "TREE_GROUPS")
 public class Group extends TreeObject {
@@ -19,6 +21,10 @@ public class Group extends TreeObject {
 	private boolean repetable;
 
 	public Group() {
+	}
+
+	public Group(String name) throws FieldTooLongException {
+		setName(name);
 	}
 
 	@Override
@@ -50,7 +56,7 @@ public class Group extends TreeObject {
 		if (parent != null) {
 			name = DEFAULT_GROUP_TECHNICAL_NAME + startingIndex;
 			for (TreeObject child : parent.getChildren()) {
-				if (child instanceof Group && ((Group) child).getName() != null
+				if ((child instanceof Group) && (((Group) child).getName() != null)
 						&& ((Group) child).getName().equals(name)) {
 					return getDefaultName(parent, startingIndex + 1);
 				}

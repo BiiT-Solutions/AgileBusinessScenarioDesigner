@@ -38,6 +38,8 @@ public class FormParser {
 		if (this.form != null) {
 			this.rules = "package com.biit.drools \n";
 			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
+			this.rules += "import com.biit.abcd.core.drools.utils.* \n";
+			this.rules += "import java.util.Date \n";
 			this.rules += "import java.util.List \n";
 			// Creation of the global variables
 			if((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
@@ -46,7 +48,6 @@ public class FormParser {
 
 			// Follow the diagram to parse and launch the rules
 			List<Diagram> diagrams = this.form.getDiagrams();
-
 			if (diagrams != null) {
 				// Look for the root diagrams
 				List<Diagram> rootDiagrams = new ArrayList<Diagram>();

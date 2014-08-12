@@ -1,5 +1,8 @@
 package com.biit.abcd.core.drools;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,15 +24,17 @@ public class Form2DroolsNoDrl {
 	 * @param form form to be parsed
 	 * @throws ExpressionInvalidException
 	 * @throws RuleInvalidException
+	 * @throws IOException
 	 */
-	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException {
+	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException, IOException {
 		if(!form.getChildren().isEmpty()) {
 			this.km = new KieManager();
 			FormParser formRules;
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form);
-				System.out.println(formRules.getRules());
+//				System.out.println(formRules.getRules());
+				Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 
