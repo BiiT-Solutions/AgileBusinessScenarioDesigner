@@ -12,7 +12,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 public class RuleChecker {
 
 	/**
-	 * Chesck if the expression is valid using the jexeval, if not valid,
+	 * Checks if the expression is valid using the jexeval, if not valid,
 	 * returns without parsing any rules and sends an exception
 	 *
 	 * @param row

@@ -52,15 +52,17 @@ public class Form2DroolsNoDrl {
 	 * @param globalVariables array  with the global constants to be created
 	 * @throws ExpressionInvalidException
 	 * @throws RuleInvalidException
+	 * @throws IOException
 	 */
-	public void parse(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException, RuleInvalidException {
+	public void parse(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException, RuleInvalidException, IOException {
 		if(!form.getChildren().isEmpty()) {
 			this.km = new KieManager();
 			FormParser formRules;
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form, globalVariables);
-//				System.out.println(formRules.getRules());
+				System.out.println(formRules.getRules());
+//				Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 				// Creation of the global constants

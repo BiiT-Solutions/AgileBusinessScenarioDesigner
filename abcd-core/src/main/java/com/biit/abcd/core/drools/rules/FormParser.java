@@ -42,7 +42,7 @@ public class FormParser {
 			this.rules += "import java.util.Date \n";
 			this.rules += "import java.util.List \n";
 			// Creation of the global variables
-			if((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
+			if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
 				this.rules += this.parseGlobalVariables();
 			}
 
@@ -87,9 +87,9 @@ public class FormParser {
 	}
 
 	/**
-	 * Creates the global constants for the drools session
-	 * Also stores in memory the value to be inserted before the facts
-	 *
+	 * Creates the global constants for the drools session Also stores in memory the value to be inserted before the
+	 * facts
+	 * 
 	 * @return The global constants in drools
 	 */
 	private String parseGlobalVariables() {
@@ -100,20 +100,20 @@ public class FormParser {
 			for (GlobalVariable globalVariable : this.globalVariables) {
 				// First check if the data inside the variable has a valid date
 				List<VariableData> varDataList = globalVariable.getData();
-				if((varDataList != null) && !varDataList.isEmpty()){
-					for(VariableData variableData : varDataList){
+				if ((varDataList != null) && !varDataList.isEmpty()) {
+					for (VariableData variableData : varDataList) {
 
 						Timestamp currentTime = new Timestamp(new Date().getTime());
 						Timestamp initTime = variableData.getValidFrom();
 						Timestamp endTime = variableData.getValidTo();
 						// Sometimes endtime can be null, meaning that the variable data has no ending time
-						if((currentTime.after(initTime) &&(endTime == null))
-								|| (currentTime.after(initTime) && currentTime.before(endTime))){
+						if ((currentTime.after(initTime) && (endTime == null))
+								|| (currentTime.after(initTime) && currentTime.before(endTime))) {
 							globalConstants += this.globalVariableString(globalVariable);
 							this.droolsGlobalVariables.add(new DroolsGlobalVariable(globalVariable.getName(),
 									variableData.getValue()));
 
-//							this.globalVariableValues.put(globalVariable, variableData.getValue());
+							// this.globalVariableValues.put(globalVariable, variableData.getValue());
 							break;
 						}
 					}
@@ -123,22 +123,22 @@ public class FormParser {
 		return globalConstants;
 	}
 
-	private String globalVariableString(GlobalVariable globalVariable){
-		switch (globalVariable.getFormat()){
+	private String globalVariableString(GlobalVariable globalVariable) {
+		switch (globalVariable.getFormat()) {
 		case DATE:
-			return "global java.util.Date " + globalVariable.getName()+"\n";
+			return "global java.util.Date " + globalVariable.getName() + "\n";
 		case TEXT:
-			return "global java.lang.String " + globalVariable.getName()+"\n";
+			return "global java.lang.String " + globalVariable.getName() + "\n";
 		case POSTAL_CODE:
-			return "global java.lang.String " + globalVariable.getName()+"\n";
+			return "global java.lang.String " + globalVariable.getName() + "\n";
 		case NUMBER:
-			return "global java.lang.Number " + globalVariable.getName()+"\n";
+			return "global java.lang.Number " + globalVariable.getName() + "\n";
 		default:
 			return "";
 		}
 	}
 
-	public List<DroolsGlobalVariable> getGlobalVariables(){
+	public List<DroolsGlobalVariable> getGlobalVariables() {
 		return this.droolsGlobalVariables;
 	}
 

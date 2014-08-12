@@ -73,7 +73,7 @@ public class GenericParser {
 //		}
 
 		// Condition of type (something AND something AND ...) or (something OR something OR ...)
-		// No combinations of ANDs and ORs doesn't allowed (for the moment)
+		// Currently no combinations of ANDs and ORs are allowed
 		if(conditions.size() > 6){
 			int startAndConditionIndex = 0;
 			int endAndConditionIndex = 0;
