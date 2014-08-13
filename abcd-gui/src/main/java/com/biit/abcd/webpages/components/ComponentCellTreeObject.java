@@ -22,15 +22,17 @@ public class ComponentCellTreeObject extends ComponentCell {
 			case RADIO:
 				return ThemeIcon.TREE_DESIGNER_QUESTION_RADIOBUTTON;
 			case INPUT:
-				switch (question.getAnswerFormat()) {
-				case DATE:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_DATE;
-				case NUMBER:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_NUMBER;
-				case POSTAL_CODE:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_POSTALCODE;
-				case TEXT:
-					return ThemeIcon.TREE_DESIGNER_QUESTION_TEXT;
+				if (question.getAnswerFormat() != null) {
+					switch (question.getAnswerFormat()) {
+					case DATE:
+						return ThemeIcon.TREE_DESIGNER_QUESTION_DATE;
+					case NUMBER:
+						return ThemeIcon.TREE_DESIGNER_QUESTION_NUMBER;
+					case POSTAL_CODE:
+						return ThemeIcon.TREE_DESIGNER_QUESTION_POSTALCODE;
+					case TEXT:
+						return ThemeIcon.TREE_DESIGNER_QUESTION_TEXT;
+					}
 				}
 			}
 		} else if (element instanceof Group) {
