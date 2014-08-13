@@ -383,7 +383,7 @@ public class DhszwTest {
 	}
 
 	private Category getCategoryFromForm(Form form, String catName) {
-		for (TreeObject child : form.getChildren()) {
+		for (TreeObject child : form.getAll(Category.class)) {
 			if ((child instanceof Category) && child.getName().equals(catName)) {
 				return (Category) child;
 			}
@@ -392,7 +392,7 @@ public class DhszwTest {
 	}
 
 	private Question getQuestionFromCategory(Category category, String questionName) {
-		for (BaseQuestion question : category.getQuestions()) {
+		for (TreeObject question : category.getAll(Question.class)) {
 			if (question.getName().equals(questionName)) {
 				return (Question) question;
 			}

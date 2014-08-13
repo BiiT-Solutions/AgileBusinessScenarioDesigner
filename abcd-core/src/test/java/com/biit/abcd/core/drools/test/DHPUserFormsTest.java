@@ -32,7 +32,6 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -43,9 +42,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -62,6 +58,12 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.BaseQuestion;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
+import com.biit.form.exceptions.NotValidChildException;
 
 public class DHPUserFormsTest {
 
@@ -95,7 +97,8 @@ public class DHPUserFormsTest {
 	@Test(groups = { "rules" })
 	public void completeZrmTest() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
+			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			InvalidAnswerFormatException {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		Form vaadinForm = this.createZrmForm();
 		// Load the submitted form
@@ -113,19 +116,19 @@ public class DHPUserFormsTest {
 	}
 
 	/**
-	 * Create the form structure. Creates to simple assignation rules in the
-	 * table rule and one expression with max func Form used to create the
-	 * drools rules
-	 *
+	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
+	 * Form used to create the drools rules
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
 	 * @throws ChildrenNotFoundException
 	 * @throws FieldTooLongException
 	 * @throws IOException
+	 * @throws InvalidAnswerFormatException
 	 */
 	private Form createZrmForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -631,7 +634,7 @@ public class DHPUserFormsTest {
 	}
 
 	private Category getCategoryFromForm(Form form, String catName) {
-		for (TreeObject child : form.getChildren()) {
+		for (TreeObject child : form.getAll(Category.class)) {
 			if ((child instanceof Category) && child.getName().equals(catName)) {
 				return (Category) child;
 			}
@@ -640,9 +643,9 @@ public class DHPUserFormsTest {
 	}
 
 	private Question getQuestionFromCategory(Category category, String questionName) {
-		for (Question question : category.getQuestions()) {
+		for (TreeObject question : category.getAll(Question.class)) {
 			if (question.getName().equals(questionName)) {
-				return question;
+				return (Question) question;
 			}
 		}
 		return null;

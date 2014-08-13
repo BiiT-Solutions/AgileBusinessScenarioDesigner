@@ -31,7 +31,6 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -42,9 +41,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -61,6 +57,11 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
+import com.biit.form.exceptions.NotValidChildException;
 
 public class ZrmFormTest {
 
@@ -87,7 +88,9 @@ public class ZrmFormTest {
 
 	@Test(groups = { "rules" })
 	public void completeZrmTest() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
+			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
+			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			InvalidAnswerFormatException {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		Form vaadinForm = this.createZrmForm();
 		formDrools.parse(vaadinForm);
@@ -96,8 +99,9 @@ public class ZrmFormTest {
 		this.translateFormCategories();
 		formDrools.go(this.form);
 
-		for(ICategory category : this.form.getCategories()){
-			System.out.println("Category name: " + category.getText() + " || Category score: " + ((com.biit.abcd.core.drools.facts.inputform.Category)category).getVariableValue("cScore"));
+		for (ICategory category : this.form.getCategories()) {
+			System.out.println("Category name: " + category.getText() + " || Category score: "
+					+ ((com.biit.abcd.core.drools.facts.inputform.Category) category).getVariableValue("cScore"));
 		}
 	}
 
@@ -107,19 +111,19 @@ public class ZrmFormTest {
 	}
 
 	/**
-	 * Create the form structure. Creates to simple assignation rules in the
-	 * table rule and one expression with max func Form used to create the
-	 * drools rules
-	 *
+	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
+	 * Form used to create the drools rules
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
 	 * @throws ChildrenNotFoundException
 	 * @throws FieldTooLongException
 	 * @throws IOException
+	 * @throws InvalidAnswerFormatException
 	 */
 	private Form createZrmForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -137,8 +141,8 @@ public class ZrmFormTest {
 				CustomVariableScope.QUESTION);
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-//		CustomVariable customVarTextCategory = new CustomVariable(form, "cScoreText", CustomVariableType.STRING,
-//				CustomVariableScope.CATEGORY);
+		// CustomVariable customVarTextCategory = new CustomVariable(form, "cScoreText", CustomVariableType.STRING,
+		// CustomVariableScope.CATEGORY);
 
 		// Create the tableRule
 		TableRule baseTableRule = new TableRule("BaseTable");
@@ -173,88 +177,89 @@ public class ZrmFormTest {
 		Answer answer42Rul4 = null;
 		Answer answer43Rul4 = null;
 		Answer answer44Rul4 = null;
-		Answer answer45Rul4= null;
+		Answer answer45Rul4 = null;
 		Answer answer51Rul5 = null;
 		Answer answer52Rul5 = null;
 		Answer answer53Rul5 = null;
 		Answer answer54Rul5 = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"), StandardCharsets.UTF_8)) {
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"),
+				StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = question, [2] = answer, [3] = value
 			String[] lineSplit = line.split("\t");
-			if(!lastCategory.equals(lineSplit[0])){
+			if (!lastCategory.equals(lineSplit[0])) {
 				// Create a category
 				category = new Category(lineSplit[0]);
-				if(lineSplit[0].equals("Financiën")){
+				if (lineSplit[0].equals("Financiën")) {
 					categoryFin = category;
-				}else if(lineSplit[0].equals("Geestelijke gezondheid")){
+				} else if (lineSplit[0].equals("Geestelijke gezondheid")) {
 					categoryGee = category;
-				}else if(lineSplit[0].equals("Lichamelijke gezondheid")){
+				} else if (lineSplit[0].equals("Lichamelijke gezondheid")) {
 					categoryLich = category;
 				}
 				form.addChild(category);
 				lastCategory = lineSplit[0];
 			}
-			if(!lastQuestion.equals(lineSplit[1])){
+			if (!lastQuestion.equals(lineSplit[1])) {
 				// Create a question
 				question = new Question(lineSplit[1]);
 				category.addChild(question);
 				lastQuestion = lineSplit[1];
-				if(lineSplit[1].equals("Geestelijk.Behandeling")){
+				if (lineSplit[1].equals("Geestelijk.Behandeling")) {
 					questionRul11 = question;
-				}else if(lineSplit[1].equals("Geestelijk.Functioneren")){
+				} else if (lineSplit[1].equals("Geestelijk.Functioneren")) {
 					questionRul12 = question;
-				}else if(lineSplit[1].equals("Lichamelijk.Behandeling")){
+				} else if (lineSplit[1].equals("Lichamelijk.Behandeling")) {
 					questionRul21 = question;
-				}else if(lineSplit[1].equals("Lichamelijk.Aandoeningen")){
+				} else if (lineSplit[1].equals("Lichamelijk.Aandoeningen")) {
 					questionRul22 = question;
-				}else if(lineSplit[1].equals("Verslaving.Behandeltrouw")){
+				} else if (lineSplit[1].equals("Verslaving.Behandeltrouw")) {
 					questionRul31 = question;
-				}else if(lineSplit[1].equals("Verslaving.Aanwezig")){
+				} else if (lineSplit[1].equals("Verslaving.Aanwezig")) {
 					questionRul32 = question;
-				}else if(lineSplit[1].equals("Sociaal.Familie")){
+				} else if (lineSplit[1].equals("Sociaal.Familie")) {
 					questionRul41 = question;
-				}else if(lineSplit[1].equals("Sociaal.VriendenS")){
+				} else if (lineSplit[1].equals("Sociaal.VriendenS")) {
 					questionRul42 = question;
-				}else if(lineSplit[1].equals("Sociaal.Beleving")){
+				} else if (lineSplit[1].equals("Sociaal.Beleving")) {
 					questionRul43 = question;
-				}else if(lineSplit[1].equals("Financien.Beheer.Hulp")){
+				} else if (lineSplit[1].equals("Financien.Beheer.Hulp")) {
 					questionRul51 = question;
-				}else if(lineSplit[1].equals("Financien.Beheer")){
+				} else if (lineSplit[1].equals("Financien.Beheer")) {
 					questionRul52 = question;
 				}
 			}
 			Answer answer = new Answer(lineSplit[2]);
-			if(lineSplit[2].equals("Geestelijk.Behandeling.Arts")){
+			if (lineSplit[2].equals("Geestelijk.Behandeling.Arts")) {
 				answer11Rul1 = answer;
-			}else if(lineSplit[2].equals("Geestelijk.Behandeling.Regelmatig")){
+			} else if (lineSplit[2].equals("Geestelijk.Behandeling.Regelmatig")) {
 				answer12Rul1 = answer;
-			}else if(lineSplit[2].equals("Geestelijk.Functioneren.Regelmatig")){
+			} else if (lineSplit[2].equals("Geestelijk.Functioneren.Regelmatig")) {
 				answer13Rul1 = answer;
-			}else if(lineSplit[2].equals("Lichamelijk.Behandeling.Regelmatig")){
+			} else if (lineSplit[2].equals("Lichamelijk.Behandeling.Regelmatig")) {
 				answer21Rul2 = answer;
-			}else if(lineSplit[2].equals("Lichamelijk.Aandoeningen.Meerdere")){
+			} else if (lineSplit[2].equals("Lichamelijk.Aandoeningen.Meerdere")) {
 				answer22Rul2 = answer;
-			}else if(lineSplit[2].equals("Verslaving.Behandeltrouw.Intensief")){
+			} else if (lineSplit[2].equals("Verslaving.Behandeltrouw.Intensief")) {
 				answer31Rul3 = answer;
-			}else if(lineSplit[2].equals("Verslaving.Aanwezig.Wel")){
+			} else if (lineSplit[2].equals("Verslaving.Aanwezig.Wel")) {
 				answer32Rul3 = answer;
-			}else if(lineSplit[2].equals("Sociaal.Familie.Geen")){
+			} else if (lineSplit[2].equals("Sociaal.Familie.Geen")) {
 				answer41Rul4 = answer;
-			}else if(lineSplit[2].equals("Sociaal.Familie.Nooit")){
+			} else if (lineSplit[2].equals("Sociaal.Familie.Nooit")) {
 				answer42Rul4 = answer;
-			}else if(lineSplit[2].equals("Sociaal.VriendenS.Nooit")){
+			} else if (lineSplit[2].equals("Sociaal.VriendenS.Nooit")) {
 				answer43Rul4 = answer;
-			}else if(lineSplit[2].equals("Sociaal.VriendenS.Geen")){
+			} else if (lineSplit[2].equals("Sociaal.VriendenS.Geen")) {
 				answer44Rul4 = answer;
-			}else if(lineSplit[2].equals("Sociaal.Beleving.Eenzaam")){
+			} else if (lineSplit[2].equals("Sociaal.Beleving.Eenzaam")) {
 				answer45Rul4 = answer;
-			}else if(lineSplit[2].equals("Financien.Beheer.Hulp.Ja")){
+			} else if (lineSplit[2].equals("Financien.Beheer.Hulp.Ja")) {
 				answer51Rul5 = answer;
-			}else if(lineSplit[2].equals("Financien.Beheer.WelEensVerrast")){
+			} else if (lineSplit[2].equals("Financien.Beheer.WelEensVerrast")) {
 				answer52Rul5 = answer;
-			}else if(lineSplit[2].equals("Financien.Beheer.VeelVerrassingen")){
+			} else if (lineSplit[2].equals("Financien.Beheer.VeelVerrassingen")) {
 				answer53Rul5 = answer;
-			}else if(lineSplit[2].equals("Financien.Beheer.Spoorbijster")){
+			} else if (lineSplit[2].equals("Financien.Beheer.Spoorbijster")) {
 				answer54Rul5 = answer;
 			}
 			question.addChild(answer);
@@ -262,104 +267,72 @@ public class ZrmFormTest {
 			baseTableRule.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
 							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-							new ExpressionValueCustomVariable(question, customVarQuestion),
-							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-									Double.parseDouble(lineSplit[3])))));
+							new ExpressionValueCustomVariable(question, customVarQuestion), new ExpressionOperatorMath(
+									AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+									.parseDouble(lineSplit[3])))));
 		}
 
 		// Add the rows and the table to the form
 		form.getTableRules().add(baseTableRule);
 
-
 		// Create Rules for the questions
 		Rule rul1 = new Rule("QuestionException1",
-				//  When Q11 IN(A11, A12) AND Q12==A13 Then Q12.qScore += 1
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(questionRul11),
-						new ExpressionFunction(AvailableFunction.IN),
-						new ExpressionValueTreeObjectReference(answer11Rul1),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueTreeObjectReference(answer12Rul1),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-						new ExpressionOperatorLogic(AvailableOperator.AND),
-						new ExpressionValueTreeObjectReference(questionRul12),
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueTreeObjectReference(answer13Rul1)
-						),
-				new ExpressionChain(
+		// When Q11 IN(A11, A12) AND Q12==A13 Then Q12.qScore += 1
+				new ExpressionChain(new ExpressionValueTreeObjectReference(questionRul11), new ExpressionFunction(
+						AvailableFunction.IN), new ExpressionValueTreeObjectReference(answer11Rul1),
+						new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
+								answer12Rul1), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+						new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionValueTreeObjectReference(
+								questionRul12), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+						new ExpressionValueTreeObjectReference(answer13Rul1)), new ExpressionChain(
 						new ExpressionValueCustomVariable(questionRul12, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(questionRul12, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.PLUS),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(
+								questionRul12, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.PLUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul1);
 		this.questionExceptionRules.add(rul1);
 
 		Rule rul2 = new Rule("QuestionException2",
-				//  When Q21 == A21 AND Q22==A22 Then Q22.qScore += 1
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(questionRul21),
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueTreeObjectReference(answer21Rul2),
-						new ExpressionOperatorLogic(AvailableOperator.AND),
-						new ExpressionValueTreeObjectReference(questionRul22),
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueTreeObjectReference(answer22Rul2)
-						),
-				new ExpressionChain(
+		// When Q21 == A21 AND Q22==A22 Then Q22.qScore += 1
+				new ExpressionChain(new ExpressionValueTreeObjectReference(questionRul21), new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(answer21Rul2),
+						new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionValueTreeObjectReference(
+								questionRul22), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+						new ExpressionValueTreeObjectReference(answer22Rul2)), new ExpressionChain(
 						new ExpressionValueCustomVariable(questionRul22, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(questionRul22, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.PLUS),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(
+								questionRul22, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.PLUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul2);
 		this.questionExceptionRules.add(rul2);
 
 		Rule rul3 = new Rule("QuestionException3",
-				//  When Q31 == A31 AND Q32==A32 Then Q32.qScore += 1
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(questionRul31),
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueTreeObjectReference(answer31Rul3),
-						new ExpressionOperatorLogic(AvailableOperator.AND),
-						new ExpressionValueTreeObjectReference(questionRul32),
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueTreeObjectReference(answer32Rul3)
-						),
-				new ExpressionChain(
+		// When Q31 == A31 AND Q32==A32 Then Q32.qScore += 1
+				new ExpressionChain(new ExpressionValueTreeObjectReference(questionRul31), new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(answer31Rul3),
+						new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionValueTreeObjectReference(
+								questionRul32), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+						new ExpressionValueTreeObjectReference(answer32Rul3)), new ExpressionChain(
 						new ExpressionValueCustomVariable(questionRul32, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(questionRul32, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.PLUS),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(
+								questionRul32, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.PLUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul3);
 		this.questionExceptionRules.add(rul3);
 
-		Rule rul4 = new Rule("QuestionException4",
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(questionRul41),
-						new ExpressionFunction(AvailableFunction.IN),
-						new ExpressionValueTreeObjectReference(answer41Rul4),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueTreeObjectReference(answer42Rul4),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-						new ExpressionOperatorLogic(AvailableOperator.AND),
-						new ExpressionValueTreeObjectReference(questionRul42),
-						new ExpressionFunction(AvailableFunction.IN),
-						new ExpressionValueTreeObjectReference(answer43Rul4),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueTreeObjectReference(answer44Rul4),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-						new ExpressionOperatorLogic(AvailableOperator.AND),
-						new ExpressionValueTreeObjectReference(questionRul43),
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueTreeObjectReference(answer45Rul4)
-						),
-				new ExpressionChain(
-						new ExpressionValueCustomVariable(questionRul43, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(questionRul43, customVarQuestion),
-						new ExpressionOperatorMath(AvailableOperator.MINUS),
+		Rule rul4 = new Rule("QuestionException4", new ExpressionChain(new ExpressionValueTreeObjectReference(
+				questionRul41), new ExpressionFunction(AvailableFunction.IN), new ExpressionValueTreeObjectReference(
+				answer41Rul4), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
+				answer42Rul4), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
+				AvailableOperator.AND), new ExpressionValueTreeObjectReference(questionRul42), new ExpressionFunction(
+				AvailableFunction.IN), new ExpressionValueTreeObjectReference(answer43Rul4), new ExpressionSymbol(
+				AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(answer44Rul4), new ExpressionSymbol(
+				AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.AND),
+				new ExpressionValueTreeObjectReference(questionRul43), new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(answer45Rul4)),
+				new ExpressionChain(new ExpressionValueCustomVariable(questionRul43, customVarQuestion),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(
+								questionRul43, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.MINUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul4);
 		this.questionExceptionRules.add(rul4);
@@ -398,117 +371,78 @@ public class ZrmFormTest {
 
 		// TODO
 		// Create rules for the categories
-		Rule rul5 = new Rule("CategoryException1",
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(questionRul51),
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueTreeObjectReference(answer51Rul5),
-						new ExpressionOperatorLogic(AvailableOperator.AND),
-						new ExpressionValueTreeObjectReference(questionRul52),
-						new ExpressionFunction(AvailableFunction.IN),
-						new ExpressionValueTreeObjectReference(answer52Rul5),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueTreeObjectReference(answer53Rul5),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueTreeObjectReference(answer54Rul5),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-						),
-				new ExpressionChain(
-						new ExpressionValueCustomVariable(categoryFin, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueNumber(3.)));
+		Rule rul5 = new Rule("CategoryException1", new ExpressionChain(new ExpressionValueTreeObjectReference(
+				questionRul51), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				new ExpressionValueTreeObjectReference(answer51Rul5),
+				new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionValueTreeObjectReference(
+						questionRul52), new ExpressionFunction(AvailableFunction.IN),
+				new ExpressionValueTreeObjectReference(answer52Rul5), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(answer53Rul5), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(answer54Rul5), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)), new ExpressionChain(new ExpressionValueCustomVariable(
+				categoryFin, customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(3.)));
 		form.getRules().add(rul5);
 		this.categoryExceptionRules.add(rul5);
 
-		Rule rul6 = new Rule("CategoryException2",
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(birthDateQuest),
-						new ExpressionFunction(AvailableFunction.BETWEEN),
-						new ExpressionValueNumber(0.),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueNumber(17.),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-						),
-				new ExpressionChain(
-						new ExpressionValueCustomVariable(categoryFin, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(categoryFin, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.MINUS),
-						new ExpressionValueNumber(2.)));
+		Rule rul6 = new Rule("CategoryException2", new ExpressionChain(new ExpressionValueTreeObjectReference(
+				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(0.),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(17.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)), new ExpressionChain(new ExpressionValueCustomVariable(
+				categoryFin, customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueCustomVariable(categoryFin, customVarCategory), new ExpressionOperatorMath(
+						AvailableOperator.MINUS), new ExpressionValueNumber(2.)));
 		form.getRules().add(rul6);
 		this.categoryExceptionRules.add(rul6);
 
-		Rule rul65 = new Rule("CategoryException2.5",
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(birthDateQuest),
-						new ExpressionFunction(AvailableFunction.BETWEEN),
-						new ExpressionValueNumber(18.),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueNumber(27.),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-						),
-				new ExpressionChain(
-						new ExpressionValueCustomVariable(categoryFin, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(categoryFin, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.MINUS),
-						new ExpressionValueNumber(1.)));
+		Rule rul65 = new Rule("CategoryException2.5", new ExpressionChain(new ExpressionValueTreeObjectReference(
+				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(18.),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(27.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)), new ExpressionChain(new ExpressionValueCustomVariable(
+				categoryFin, customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueCustomVariable(categoryFin, customVarCategory), new ExpressionOperatorMath(
+						AvailableOperator.MINUS), new ExpressionValueNumber(1.)));
 		form.getRules().add(rul65);
 		this.categoryExceptionRules.add(rul65);
 
-		Rule rul7 = new Rule("CategoryException3",
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(birthDateQuest),
-						new ExpressionFunction(AvailableFunction.BETWEEN),
-						new ExpressionValueNumber(80.),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueNumber(150.),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-						),
-				new ExpressionChain(
-						new ExpressionValueCustomVariable(categoryGee, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(categoryGee, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.MINUS),
-						new ExpressionValueNumber(1.)));
+		Rule rul7 = new Rule("CategoryException3", new ExpressionChain(new ExpressionValueTreeObjectReference(
+				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(80.),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(150.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)), new ExpressionChain(new ExpressionValueCustomVariable(
+				categoryGee, customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueCustomVariable(categoryGee, customVarCategory), new ExpressionOperatorMath(
+						AvailableOperator.MINUS), new ExpressionValueNumber(1.)));
 		form.getRules().add(rul7);
 		this.categoryExceptionRules.add(rul7);
 
-		Rule rul8 = new Rule("CategoryException4",
-				new ExpressionChain(
-						new ExpressionValueTreeObjectReference(birthDateQuest),
-						new ExpressionFunction(AvailableFunction.BETWEEN),
-						new ExpressionValueNumber(80.),
-						new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueNumber(150.),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-						),
-				new ExpressionChain(
-						new ExpressionValueCustomVariable(categoryLich, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-						new ExpressionValueCustomVariable(categoryLich, customVarCategory),
-						new ExpressionOperatorMath(AvailableOperator.MINUS),
-						new ExpressionValueNumber(1.)));
+		Rule rul8 = new Rule("CategoryException4", new ExpressionChain(new ExpressionValueTreeObjectReference(
+				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(80.),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(150.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)), new ExpressionChain(new ExpressionValueCustomVariable(
+				categoryLich, customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueCustomVariable(categoryLich, customVarCategory), new ExpressionOperatorMath(
+						AvailableOperator.MINUS), new ExpressionValueNumber(1.)));
 		form.getRules().add(rul8);
 		this.categoryExceptionRules.add(rul8);
 
-//		// Creation of the result rules
-//		int ruleNumber = 1;
-//		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/returnedText"), StandardCharsets.UTF_8)) {
-//			// [0] = category, [1] = score, [2] = text
-//			String[] lineSplit = line.split("\t");
-//			form.getRules().add(new Rule(
-//					"ruleText"+ruleNumber,
-//					new ExpressionChain(
-//							new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarCategory),
-//							new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-//							new ExpressionValueNumber(Double.parseDouble(lineSplit[1]))),
-//					new ExpressionChain(
-//							new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarTextCategory),
-//							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-//							new ExpressionValueString(lineSplit[2]))));
-//			ruleNumber++;
-//		}
+		// // Creation of the result rules
+		// int ruleNumber = 1;
+		// for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/returnedText"),
+		// StandardCharsets.UTF_8)) {
+		// // [0] = category, [1] = score, [2] = text
+		// String[] lineSplit = line.split("\t");
+		// form.getRules().add(new Rule(
+		// "ruleText"+ruleNumber,
+		// new ExpressionChain(
+		// new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarCategory),
+		// new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+		// new ExpressionValueNumber(Double.parseDouble(lineSplit[1]))),
+		// new ExpressionChain(
+		// new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarTextCategory),
+		// new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+		// new ExpressionValueString(lineSplit[2]))));
+		// ruleNumber++;
+		// }
 
 		Diagram mainDiagram = new Diagram("main");
 		// Start
@@ -562,7 +496,6 @@ public class ZrmFormTest {
 		expressionCategory.setJointjsId(IdGenerator.createId());
 		expressionCategory.setType(DiagramObjectType.LINK);
 
-
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramTableRuleNode);
 		mainDiagram.addDiagramObject(subQuestionRuleDiagramNode);
@@ -581,9 +514,9 @@ public class ZrmFormTest {
 		return form;
 	}
 
-	private Diagram createQuestionExceptionRulesSubdiagram(Form form){
+	private Diagram createQuestionExceptionRulesSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("ruleQuestionDiagram");
-		for(Rule rule : this.questionExceptionRules){
+		for (Rule rule : this.questionExceptionRules) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
@@ -617,9 +550,9 @@ public class ZrmFormTest {
 		return subDiagram;
 	}
 
-	private Diagram createExpressionsSubdiagram(Form form){
+	private Diagram createExpressionsSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("expressionDiagram");
-		for(ExpressionChain expressionChain : form.getExpressionChain()){
+		for (ExpressionChain expressionChain : form.getExpressionChain()) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
@@ -653,9 +586,9 @@ public class ZrmFormTest {
 		return subDiagram;
 	}
 
-	private Diagram createCategoryExceptionRulesSubdiagram(Form form){
+	private Diagram createCategoryExceptionRulesSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("ruleCategoryDiagram");
-		for(Rule rule : this.categoryExceptionRules){
+		for (Rule rule : this.categoryExceptionRules) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
@@ -689,19 +622,19 @@ public class ZrmFormTest {
 		return subDiagram;
 	}
 
-	private Category getCategoryFromForm(Form form, String catName){
-		for(TreeObject child : form.getChildren()){
-			if((child instanceof Category) && child.getName().equals(catName)){
+	private Category getCategoryFromForm(Form form, String catName) {
+		for (TreeObject child : form.getAll(Category.class)) {
+			if ((child instanceof Category) && child.getName().equals(catName)) {
 				return (Category) child;
 			}
 		}
 		return null;
 	}
 
-	private Question getQuestionFromCategory(Category category, String questionName){
-		for(Question question : category.getQuestions()){
-			if(question.getName().equals(questionName)) {
-				return question;
+	private Question getQuestionFromCategory(Category category, String questionName) {
+		for (TreeObject question : category.getAll(Question.class)) {
+			if (question.getName().equals(questionName)) {
+				return (Question) question;
 			}
 		}
 		return null;

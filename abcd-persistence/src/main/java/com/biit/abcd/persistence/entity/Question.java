@@ -21,7 +21,7 @@ public class Question extends BaseQuestion {
 	}
 
 	public Question(String name) throws FieldTooLongException {
-		this.setName(name);
+		super(name);
 	}
 
 	public AnswerType getAnswerType() {

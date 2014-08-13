@@ -43,6 +43,7 @@ public class Form extends BaseForm {
 	private List<Rule> rules;
 
 	public Form() {
+		super();
 		this.diagrams = new ArrayList<>();
 		this.tableRules = new ArrayList<>();
 		this.customVariables = new ArrayList<>();
@@ -56,12 +57,12 @@ public class Form extends BaseForm {
 	}
 
 	public Form(String name) throws FieldTooLongException {
+		super(name);
 		this.diagrams = new ArrayList<>();
 		this.tableRules = new ArrayList<>();
 		this.customVariables = new ArrayList<>();
 		this.expressionChain = new ArrayList<>();
 		this.rules = new ArrayList<>();
-		this.setName(name);
 	}
 
 	@Override
