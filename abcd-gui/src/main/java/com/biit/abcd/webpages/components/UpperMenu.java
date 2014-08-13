@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.components;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import com.biit.abcd.ApplicationFrame;
@@ -96,9 +97,9 @@ public class UpperMenu extends HorizontalButtonGroup {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				PrintStream ps = new PrintStream(baos);
 				try {
-							new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm(),
-									UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
-				} catch (ExpressionInvalidException | RuleInvalidException e) {
+					new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm(),
+							UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
+						} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

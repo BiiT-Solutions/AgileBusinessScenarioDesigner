@@ -15,6 +15,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -74,9 +75,16 @@ public class DiagramParser extends GenericParser{
 			}
 			break;
 		case FORK:
-			this.forkConditions = this.parseFork((DiagramFork) node);
-			for(String forkCond: this.forkConditions) {
-				System.out.println("FORK CONDITION: " + forkCond);
+			this.forkConditions = this.parseFork((DiagramFork) node, extraConditions);
+//			for(String forkCond: this.forkConditions) {
+//				System.out.println("FORK CONDITION: " + forkCond);
+//			}
+			break;
+		case SINK:
+			DiagramSink sinkExpressionNode = (DiagramSink) node;
+			if(sinkExpressionNode.getFormExpression() != null) {
+				ExpressionParser expParser = new ExpressionParser();
+				this.newRule += expParser.parse(sinkExpressionNode.getFormExpression(), extraConditions);
 			}
 			break;
 		default:
@@ -98,7 +106,34 @@ public class DiagramParser extends GenericParser{
 	 * A fork and its outgoing links define a condition that a question or a score must fulfill
 	 * @return
 	 */
-	private List<String> parseFork(DiagramFork forkNode){
+//	private List<String> parseFork(DiagramFork forkNode){
+//		List<String> forkConditions = new ArrayList<String>();
+//		// Get the element to be checked
+//		ExpressionValueTreeObjectReference expVal = forkNode.getReference();
+//		// The variable is checked against a score
+//		if(expVal instanceof ExpressionValueCustomVariable){
+//			// TODO
+//		}
+//		else {
+//			// For each outgoing link a new condition is created
+//			for(DiagramLink outLink : forkNode.getOutgoingLinks()){
+//				// Creation of the conditions to be parsed
+//				List<Expression> conditions = Arrays.asList(expVal, outLink.getExpressionChain());
+//				// Parse the conditions using the generic parser
+//				String childrenCondition = this.createDroolsRule(conditions, null);
+//				// Add the condition of the fork path to the array of conditions
+//				forkConditions.add(childrenCondition);
+//			}
+//		}
+//		return forkConditions;
+//	}
+
+	/**
+	 * A fork adds some extra condition or conditions to the rules that happen after <br>
+	 * A fork and its outgoing links define a condition that a question or a score must fulfill
+	 * @return
+	 */
+	private List<String> parseFork(DiagramFork forkNode, String extraConditions){
 		List<String> forkConditions = new ArrayList<String>();
 		// Get the element to be checked
 		ExpressionValueTreeObjectReference expVal = forkNode.getReference();
@@ -112,7 +147,13 @@ public class DiagramParser extends GenericParser{
 				// Creation of the conditions to be parsed
 				List<Expression> conditions = Arrays.asList(expVal, outLink.getExpressionChain());
 				// Parse the conditions using the generic parser
-				String childrenCondition = this.createDroolsRule(conditions, null);
+
+//				System.out.println("Conditions size : " + conditions.size());
+//				for(Expression expression : conditions){
+//					System.out.println("Expression class: " + expression.getClass());
+//				}
+
+				String childrenCondition = this.createDroolsRule(conditions, null, extraConditions);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
 			}

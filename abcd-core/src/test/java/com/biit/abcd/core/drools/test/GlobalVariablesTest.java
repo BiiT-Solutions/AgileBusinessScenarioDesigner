@@ -30,7 +30,7 @@ import com.biit.form.exceptions.NotValidChildException;
 public class GlobalVariablesTest {
 
 	@Test(groups = { "rules" })
-	public void testGlobVarsInDroolsEngine() throws ExpressionInvalidException, RuleInvalidException, FieldTooLongException, NotValidTypeInVariableData, NotValidChildException  {
+	public void testGlobVarsInDroolsEngine() throws ExpressionInvalidException, RuleInvalidException, FieldTooLongException, NotValidTypeInVariableData, NotValidChildException, IOException  {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		formDrools.parse(this.createBasicForm(), this.createGlobalvariables());
 		// Empty form to force the engine to load the global variables values
