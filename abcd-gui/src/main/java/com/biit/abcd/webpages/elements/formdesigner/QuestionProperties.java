@@ -104,8 +104,12 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 		try {
 			instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
 		} catch (InvalidAnswerFormatException e) {
-			// Not possible.
-			e.printStackTrace();
+			// Not input fields must remove any answer format
+			try {
+				instance.setAnswerFormat(null);
+			} catch (InvalidAnswerFormatException e1) {
+				// Do nothing.
+			}
 		}
 		instance.setAnswerType((AnswerType) answerType.getValue());
 
