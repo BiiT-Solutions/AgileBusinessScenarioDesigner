@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.NotValidParentException;
 import com.liferay.portal.model.UserGroup;
 
 public class RootForm extends Form {
@@ -20,7 +20,7 @@ public class RootForm extends Form {
 	}
 
 	@Override
-	protected List<Class<?>> getAllowedChilds() {
+	protected List<Class<?>> getAllowedChildren() {
 		return ALLOWED_CHILDS;
 	}
 

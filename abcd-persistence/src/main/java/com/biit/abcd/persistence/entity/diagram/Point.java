@@ -3,7 +3,7 @@ package com.biit.abcd.persistence.entity.diagram;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.persistence.entity.StorableObject;
 import com.google.gson.annotations.Expose;
 
 @Entity

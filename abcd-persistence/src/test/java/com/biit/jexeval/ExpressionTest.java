@@ -7,41 +7,42 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.jexeval.exceptions.ExpressionException;
 
+@Test(groups = { "expressionEvaluator" })
 public class ExpressionTest {
 
-	@Test(groups = { "expressionEvaluator" })
+	@Test
 	public void testInFunction() {
 		ExpressionChecker e = new ExpressionChecker("x in(1,2,3)");
 		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
 	}
 
-	@Test(groups = { "expressionEvaluator" }, expectedExceptions = ExpressionException.class)
+	@Test(expectedExceptions = ExpressionException.class)
 	public void testIncorrectInFunction() {
 		ExpressionChecker e = new ExpressionChecker("x + in(1,2,3)");
 		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
 	}
 
-	@Test(groups = { "expressionEvaluator" })
+	@Test
 	public void testBetweenFunction() {
 		ExpressionChecker e = new ExpressionChecker("x between(0, 10)");
 		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
 	}
 
-	@Test(groups = { "expressionEvaluator" }, expectedExceptions = ExpressionException.class)
+	@Test(expectedExceptions = ExpressionException.class)
 	public void testIncorrectBetweenFunction() {
 		ExpressionChecker e = new ExpressionChecker("x + between(0, 10)");
 		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
 	}
 
-	@Test(groups = { "expressionEvaluator" })
+	@Test
 	public void testDateTreeObject() throws FieldTooLongException {
 		TreeObject question = new Question();
 		question.setName("Question1");
@@ -55,7 +56,7 @@ public class ExpressionTest {
 		expressions.getExpressionEvaluator().eval();
 	}
 
-	@Test(groups = { "expressionEvaluator" })
+	@Test
 	public void testDateVariables() throws FieldTooLongException {
 		TreeObject question = new Question();
 		question.setName("Question1");

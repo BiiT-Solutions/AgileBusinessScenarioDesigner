@@ -1,7 +1,79 @@
 
+    create table BaseAnswer (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label varchar(255),
+        name varchar(185),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        primary key (ID)
+    );
+
+    create table BaseCategory (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label varchar(255),
+        name varchar(185),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        primary key (ID)
+    );
+
+    create table BaseForm (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label varchar(255),
+        name varchar(185),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        version integer,
+        primary key (ID)
+    );
+
+    create table BaseGroup (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label varchar(255),
+        name varchar(185),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        repetable bit not null,
+        primary key (ID)
+    );
+
+    create table BaseQuestion (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label varchar(255),
+        name varchar(185),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        primary key (ID)
+    );
+
     create table DIAGRAM (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -12,7 +84,7 @@
 
     create table DIAGRAM_BIIT_TEXT (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -27,7 +99,7 @@
 
     create table DIAGRAM_CALCULATION (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -48,7 +120,7 @@
 
     create table DIAGRAM_CHILD (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -69,7 +141,7 @@
 
     create table DIAGRAM_FORK (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -94,7 +166,7 @@
 
     create table DIAGRAM_LINKS (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -117,7 +189,7 @@
 
     create table DIAGRAM_NODES (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -130,7 +202,7 @@
 
     create table DIAGRAM_POINTS (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -142,7 +214,7 @@
 
     create table DIAGRAM_REPEAT (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -162,7 +234,7 @@
 
     create table DIAGRAM_RULE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -183,7 +255,7 @@
 
     create table DIAGRAM_SINK (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -204,7 +276,7 @@
 
     create table DIAGRAM_SIZES (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -216,7 +288,7 @@
 
     create table DIAGRAM_SOURCE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -236,7 +308,7 @@
 
     create table DIAGRAM_TABLE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -262,7 +334,7 @@
 
     create table EXPRESSIONS_CHAIN (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -280,7 +352,7 @@
 
     create table EXPRESSION_FUNCTION (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -291,7 +363,7 @@
 
     create table EXPRESSION_OPERATOR_LOGIC (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -302,7 +374,7 @@
 
     create table EXPRESSION_OPERATOR_MATH (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -313,7 +385,7 @@
 
     create table EXPRESSION_SYMBOL (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -324,7 +396,7 @@
 
     create table EXPRESSION_VALUE_BOOLEAN (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -335,7 +407,7 @@
 
     create table EXPRESSION_VALUE_CUSTOM_VARIABLE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -348,7 +420,7 @@
 
     create table EXPRESSION_VALUE_EXPRESSION_REFERENCE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -359,7 +431,7 @@
 
     create table EXPRESSION_VALUE_GLOBAL_VARIABLE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -370,7 +442,7 @@
 
     create table EXPRESSION_VALUE_NUMBER (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -381,7 +453,7 @@
 
     create table EXPRESSION_VALUE_STRING (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -392,7 +464,7 @@
 
     create table EXPRESSION_VALUE_TIMESTAMP (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -403,7 +475,7 @@
 
     create table EXPRESSION_VALUE_TREE_OBJECT_REFERENCE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -415,7 +487,7 @@
 
     create table FORM_CUSTOM_VARIABLES (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -429,7 +501,7 @@
 
     create table GLOBAL_VARIABLES (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -441,7 +513,7 @@
 
     create table GLOBAL_VARIABLE_DATA_DATE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -454,7 +526,7 @@
 
     create table GLOBAL_VARIABLE_DATA_NUMBER (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -467,7 +539,7 @@
 
     create table GLOBAL_VARIABLE_DATA_POSTALCODE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -485,7 +557,7 @@
 
     create table GLOBAL_VARIABLE_DATA_TEXT (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -497,13 +569,13 @@
     );
 
     create table PARENT_OF_CHILDREN (
-        TREE_OBJECTS_ID bigint not null,
+        TreeObject_ID bigint not null,
         children_ID bigint not null
     );
 
     create table RULE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -516,7 +588,7 @@
 
     create table RULE_DECISION_TABLE (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -527,7 +599,7 @@
 
     create table RULE_DECISION_TABLE_ROW (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
@@ -544,26 +616,26 @@
 
     create table TREE_ANSWERS (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
+        label varchar(255),
         name varchar(185),
         sortSeq bigint not null,
         parent_ID bigint,
-        answerFormat integer,
-        answerType integer,
         primary key (ID)
     );
 
     create table TREE_CATEGORIES (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
+        label varchar(255),
         name varchar(185),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -572,17 +644,18 @@
 
     create table TREE_FORMS (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
+        label varchar(255),
         name varchar(185),
         sortSeq bigint not null,
         parent_ID bigint,
+        version integer,
         availableFrom datetime not null,
         availableTo datetime,
-        version integer,
         primary key (ID)
     );
 
@@ -613,11 +686,12 @@
 
     create table TREE_GROUPS (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
+        label varchar(255),
         name varchar(185),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -627,11 +701,12 @@
 
     create table TREE_QUESTIONS (
         ID bigint not null,
-        comparationId varchar(185) not null,
+        comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
+        label varchar(255),
         name varchar(185),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -639,6 +714,39 @@
         answerType varchar(255),
         primary key (ID)
     );
+
+    alter table BaseAnswer 
+        add constraint UK_76lq0gmnjriqwvt0axvjt4h8s  unique (ID);
+
+    alter table BaseAnswer 
+        add constraint UK_djol5d7vg4wvgutb2l6cj5p3y  unique (comparationId);
+
+    alter table BaseCategory 
+        add constraint UK_ey647aoo30r3uqxirrm3v7jwa  unique (ID);
+
+    alter table BaseCategory 
+        add constraint UK_l6dm3qlnaolwpi2k56utdasqr  unique (comparationId);
+
+    alter table BaseForm 
+        add constraint UK_3n8x6f9irekyp7of2b7gibpio  unique (name, version);
+
+    alter table BaseForm 
+        add constraint UK_9mtlfju71ni1foihstunmc72e  unique (ID);
+
+    alter table BaseForm 
+        add constraint UK_g7segt6l5tegemkbp78vk02bc  unique (comparationId);
+
+    alter table BaseGroup 
+        add constraint UK_2jv9tjr1cl5ijdaueliw7ye25  unique (ID);
+
+    alter table BaseGroup 
+        add constraint UK_2ps7c6cq37l6c3672phkxkhc1  unique (comparationId);
+
+    alter table BaseQuestion 
+        add constraint UK_45n10petyj45qbfliy3nruklb  unique (ID);
+
+    alter table BaseQuestion 
+        add constraint UK_3m9ci7rb0u3owmafk0xh5w8bp  unique (comparationId);
 
     alter table DIAGRAM 
         add constraint UK_ay7p6glr0lgh40gyms8advd6y  unique (ID);
@@ -890,13 +998,13 @@
         add constraint UK_lxhltjmdib7s0qhylpqagu3qm  unique (comparationId);
 
     alter table TREE_FORMS 
-        add constraint UK_59cv8u9v3kckrnbt63cdxya75  unique (name, version);
-
-    alter table TREE_FORMS 
         add constraint UK_sqmslpiklr6yoh5mdndj1xqy4  unique (ID);
 
     alter table TREE_FORMS 
         add constraint UK_t7shqct5neaftl77sb3o2dw3b  unique (comparationId);
+
+    alter table TREE_FORMS 
+        add constraint UK_59cv8u9v3kckrnbt63cdxya75  unique (name, version);
 
     alter table TREE_FORMS_DIAGRAM 
         add constraint UK_k84u538xoyit1rhl5333c4erl  unique (diagrams_ID);

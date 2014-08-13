@@ -12,7 +12,6 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
@@ -22,6 +21,7 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.components.TreeObjectTableSingleSelect;
 import com.biit.abcd.webpages.components.WindowSelectDateUnit;
+import com.biit.form.TreeObject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;

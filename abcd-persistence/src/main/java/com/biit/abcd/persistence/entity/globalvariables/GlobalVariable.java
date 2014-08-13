@@ -12,8 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.AnswerFormat;
-import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.persistence.entity.StorableObject;
 
 @Entity
 @Table(name = "GLOBAL_VARIABLES")

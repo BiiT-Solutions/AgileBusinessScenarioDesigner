@@ -7,8 +7,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.persistence.entity.StorableObject;
 
 @Entity
 @Table(name = "GLOBAL_VARIABLE_DATA")

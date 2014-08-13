@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.biit.persistence.entity.StorableObject;
+
 /**
  * Sets all user defined custom variables that will be used in drools conditions and action.
  */

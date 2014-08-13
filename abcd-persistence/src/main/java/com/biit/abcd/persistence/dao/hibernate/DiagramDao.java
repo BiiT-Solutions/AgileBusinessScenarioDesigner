@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
 public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {

@@ -7,7 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.form.TreeObject;
 
 @Entity
 @Table(name = "EXPRESSION_VALUE_TREE_OBJECT_REFERENCE")

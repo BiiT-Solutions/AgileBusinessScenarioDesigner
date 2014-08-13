@@ -10,9 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.StorableObject;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.utils.INameAttribute;
+import com.biit.form.TreeObject;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines a drools rule.

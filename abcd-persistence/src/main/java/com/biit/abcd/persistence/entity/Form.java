@@ -2,34 +2,26 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.liferay.portal.model.UserGroup;
+import com.biit.form.BaseForm;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
-@Table(name = "TREE_FORMS", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
-public class Form extends TreeObject {
-	private static final String DEFAULT_NAME = "New Form";
-	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
-
-	private Integer version = 1;
+@Table(name = "TREE_FORMS")
+public class Form extends BaseForm {
 
 	@Column(nullable = false)
 	private Timestamp availableFrom;
@@ -72,47 +64,6 @@ public class Form extends TreeObject {
 		this.setName(name);
 	}
 
-	/**
-	 * Gets all children of the form. This annotations are in the method because overwrites the TreeObject. Forms'
-	 * children must use FetchType.LAZY.
-	 */
-	@Override
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
-	@OrderColumn(name = "children_index")
-	public List<TreeObject> getChildren() {
-		return super.getChildren();
-	}
-
-	@Override
-	protected List<Class<?>> getAllowedChilds() {
-		return ALLOWED_CHILDS;
-	}
-
-	@Override
-	protected List<Class<?>> getAllowedParents() {
-		return null;
-	}
-
-	@Override
-	public void setParent(TreeObject parent) throws NotValidParentException {
-		throw new NotValidParentException("Forms cannot have a parent.");
-	}
-
-	public Integer getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	public void increaseVersion() {
-		this.version++;
-		// Force to be stored as a new record
-		this.resetIds();
-	}
-
 	@Override
 	public void resetIds() {
 		super.resetIds();
@@ -131,16 +82,6 @@ public class Form extends TreeObject {
 		for (Rule rule : this.getRules()) {
 			rule.resetIds();
 		}
-	}
-
-	public UserGroup getUserGroup() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String toString() {
-		return this.getName();
 	}
 
 	@Override

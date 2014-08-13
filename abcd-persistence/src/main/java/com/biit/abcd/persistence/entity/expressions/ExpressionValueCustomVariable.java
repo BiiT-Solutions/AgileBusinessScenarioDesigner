@@ -6,7 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.form.TreeObject;
 
 /**
  * Defines a value as a already defined form custom variable.

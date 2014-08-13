@@ -5,11 +5,11 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.webpages.components.ComponentCellRule;
 import com.biit.abcd.webpages.components.TreeObjectTable;
+import com.biit.form.TreeObject;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Component;
 

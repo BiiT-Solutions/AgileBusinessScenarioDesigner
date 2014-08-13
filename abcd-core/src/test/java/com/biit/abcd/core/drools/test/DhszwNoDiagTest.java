@@ -26,10 +26,6 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -46,6 +42,11 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.form.BaseQuestion;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.NotValidChildException;
 
 public class DhszwNoDiagTest {
 
@@ -72,12 +73,14 @@ public class DhszwNoDiagTest {
 
 	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
 	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException {
+			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
+			IOException, CategoryDoesNotExistException {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		Form vaadinForm = this.createCompleteDhszwForm();
 		formDrools.parse(vaadinForm);
 		formDrools.go(this.form);
-		Assert.assertEquals("Geen contact met politie. Geen strafblad.", ((SubmittedForm) this.form).getVariableValue(this.form.getCategory("Justitie"), "cScoreText"));
+		Assert.assertEquals("Geen contact met politie. Geen strafblad.",
+				((SubmittedForm) this.form).getVariableValue(this.form.getCategory("Justitie"), "cScoreText"));
 	}
 
 	static String readFile(String path, Charset encoding) throws IOException {
@@ -86,10 +89,9 @@ public class DhszwNoDiagTest {
 	}
 
 	/**
-	 * Create the form structure. Creates to simple assignation rules in the
-	 * table rule and one expression with max func Form used to create the
-	 * drools rules
-	 *
+	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
+	 * Form used to create the drools rules
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
@@ -118,16 +120,17 @@ public class DhszwNoDiagTest {
 		Category category = null;
 		String lastQuestion = "";
 		Question question = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"), StandardCharsets.UTF_8)) {
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"),
+				StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = question, [2] = answer, [3] = value
 			String[] lineSplit = line.split("\t");
-			if(!lastCategory.equals(lineSplit[0])){
+			if (!lastCategory.equals(lineSplit[0])) {
 				// Create a category
 				category = new Category(lineSplit[0]);
 				form.addChild(category);
 				lastCategory = lineSplit[0];
 			}
-			if(!lastQuestion.equals(lineSplit[1])){
+			if (!lastQuestion.equals(lineSplit[1])) {
 				// Create a question
 				question = new Question(lineSplit[1]);
 				category.addChild(question);
@@ -139,9 +142,9 @@ public class DhszwNoDiagTest {
 			tableRule.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
 							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-							new ExpressionValueCustomVariable(question, customVarQuestion),
-							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-									Double.parseDouble(lineSplit[3])))));
+							new ExpressionValueCustomVariable(question, customVarQuestion), new ExpressionOperatorMath(
+									AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+									.parseDouble(lineSplit[3])))));
 		}
 
 		// Add the rows and the table to the form
@@ -182,37 +185,35 @@ public class DhszwNoDiagTest {
 
 		// Creation of the result rules
 		int ruleNumber = 1;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/returnedText"), StandardCharsets.UTF_8)) {
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/returnedText"),
+				StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = score, [2] = text
 			String[] lineSplit = line.split("\t");
-			form.getRules().add(new Rule(
-					"ruleText"+ruleNumber,
-					new ExpressionChain(
-							new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarCategory),
-							new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-							new ExpressionValueNumber(Double.parseDouble(lineSplit[1]))),
-					new ExpressionChain(
-							new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarTextCategory),
-							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-							new ExpressionValueString(lineSplit[2]))));
+			form.getRules().add(
+					new Rule("ruleText" + ruleNumber, new ExpressionChain(new ExpressionValueCustomVariable(this
+							.getCategoryFromForm(form, lineSplit[0]), customVarCategory), new ExpressionOperatorLogic(
+							AvailableOperator.EQUALS), new ExpressionValueNumber(Double.parseDouble(lineSplit[1]))),
+							new ExpressionChain(new ExpressionValueCustomVariable(this.getCategoryFromForm(form,
+									lineSplit[0]), customVarTextCategory), new ExpressionOperatorMath(
+									AvailableOperator.ASSIGNATION), new ExpressionValueString(lineSplit[2]))));
 			ruleNumber++;
 		}
 		return form;
 	}
 
-	public Category getCategoryFromForm(Form form, String catName){
-		for(TreeObject child : form.getChildren()){
-			if((child instanceof Category) && child.getName().equals(catName)){
+	public Category getCategoryFromForm(Form form, String catName) {
+		for (TreeObject child : form.getChildren()) {
+			if ((child instanceof Category) && child.getName().equals(catName)) {
 				return (Category) child;
 			}
 		}
 		return null;
 	}
 
-	private Question getQuestionFromCategory(Category category, String questionName){
-		for(Question question : category.getQuestions()){
-			if(question.getName().equals(questionName)) {
-				return question;
+	private Question getQuestionFromCategory(Category category, String questionName) {
+		for (BaseQuestion question : category.getQuestions()) {
+			if (question.getName().equals(questionName)) {
+				return (Question) question;
 			}
 		}
 		return null;

@@ -18,17 +18,17 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.DependencyExistException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.elements.formdesigner.FormDesignerPropertiesComponent;
 import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.NotValidChildException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -222,7 +222,7 @@ public class FormDesigner extends FormWebPageComponent {
 			setCreator(newCategory);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
-					Category selectedCategory = formTreeTable.getTreeObjectSelected().getCategory();
+					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getCategory();
 					if (selectedCategory == null) {
 						getForm().addChild(newCategory);
 					} else {
@@ -255,7 +255,7 @@ public class FormDesigner extends FormWebPageComponent {
 	 */
 	private void addCategoryToUI(Category category) {
 		if (formTreeTable.getTreeObjectSelected() != null) {
-			Category selectedCategory = formTreeTable.getTreeObjectSelected().getCategory();
+			Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getCategory();
 			if (selectedCategory != null) {
 				TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
 				formTreeTable.addItemAfter(getLastElementOfCategory, category, getForm());

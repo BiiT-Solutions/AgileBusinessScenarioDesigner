@@ -35,9 +35,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
@@ -48,6 +45,9 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.NotValidChildException;
 
 /**
  * Checks the correct creation and execution of table rules <br>

@@ -2,10 +2,10 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcon;
+import com.biit.form.TreeObject;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button.ClickListener;

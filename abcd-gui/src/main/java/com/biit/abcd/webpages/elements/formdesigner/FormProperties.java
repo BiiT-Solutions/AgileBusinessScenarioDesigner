@@ -6,7 +6,7 @@ import java.util.Date;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.form.TreeObject;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;

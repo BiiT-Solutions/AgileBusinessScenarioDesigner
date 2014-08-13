@@ -1,7 +1,7 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.form.TreeObject;
 import com.vaadin.ui.TreeTable;
 
 public class SelectFormAnswerTable extends TreeObjectTable {

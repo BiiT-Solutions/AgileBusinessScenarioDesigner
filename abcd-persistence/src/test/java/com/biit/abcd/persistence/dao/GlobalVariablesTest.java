@@ -13,12 +13,13 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.AnswerFormat;
-import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.form.exceptions.NotValidFormException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
+@Test(groups = { "globalVariablesDao" })
 public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContextTests {
 	private static final String BASIC_GLOBAL_VARIABLE_NAME = "Variable";
 	private static final String BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME = "Variable with data";
@@ -43,7 +44,7 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	@Autowired
 	private IVariableDataDao variableDataDao;
 
-	@Test(groups = { "globalVariablesDao" })
+	@Test
 	public void storeBasicVariables() throws NotValidFormException {
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_NAME);
@@ -59,11 +60,12 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 	}
 
-	@Test(groups = { "globalVariablesDao" })
+	@Test
 	public void storeBasicVariablesWithTextData() throws NotValidFormException, NotValidTypeInVariableData {
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		
+
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_1, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_2, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
 
@@ -86,12 +88,13 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		Assert.assertEquals(variableDataDao.getRowCount(), 0);
 	}
-	
-	@Test(groups = { "globalVariablesDao" })
+
+	@Test
 	public void storeBasicVariablesWithNumberData() throws NotValidFormException, NotValidTypeInVariableData {
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.NUMBER);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		
+
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_3, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_4, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
 
@@ -114,15 +117,16 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		Assert.assertEquals(variableDataDao.getRowCount(), 0);
 	}
-	
-	@Test(groups = { "globalVariablesDao" })
+
+	@Test
 	public void storeBasicVariablesWithDateData() throws NotValidFormException, NotValidTypeInVariableData {
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.DATE);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		
+
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_5, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_6, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
-
+		
 		globalVariablesDao.makePersistent(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 1);
 		Assert.assertEquals(variableDataDao.getRowCount(), 2);
@@ -142,12 +146,13 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		Assert.assertEquals(variableDataDao.getRowCount(), 0);
 	}
-	
-	@Test(groups = { "globalVariablesDao" })
+
+	@Test
 	public void storeBasicVariablesWithPostalCodeData() throws NotValidFormException, NotValidTypeInVariableData {
+		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.POSTAL_CODE);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		
+
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_7, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_8, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
 

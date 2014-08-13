@@ -12,11 +12,12 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidFormException;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.NotValidFormException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
+@Test(groups = { "formCustomVariablesDao" })
 public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Form with custom variables";
 
@@ -26,17 +27,9 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	@Autowired
 	private IFormDao formDao;
 
-	private Form basicForm;
-
-	@Test(groups = { "formCustomVariablesDao" })
-	public void testEmptyDatabase() {
-		// Read
-		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 0);
-	}
-
-	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "testEmptyDatabase")
+	@Test
 	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException {
-		basicForm = new Form();
+		Form basicForm = new Form();
 		basicForm.setName(DUMMY_FORM);
 
 		CustomVariable formCustomVariables = new CustomVariable();
@@ -44,9 +37,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		formDao.makePersistent(basicForm);
 
 		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 1);
+		formDao.makeTransient(basicForm);
+		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 0);
 	}
 
-	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
+	@Test
 	public void storeIntegerVariables() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v2");
@@ -64,9 +59,10 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getName(), "Score");
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.NUMBER);
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getScope(), CustomVariableScope.CATEGORY);
+		formDao.makeTransient(form);
 	}
 
-	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
+	@Test
 	public void storeStringVariables() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v3");
@@ -84,9 +80,10 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getName(), "Name");
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.STRING);
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getScope(), CustomVariableScope.QUESTION);
+		formDao.makeTransient(form);
 	}
 
-	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = "storeDummyVariables")
+	@Test
 	public void storeDateVariables() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM + "_v4");
@@ -105,14 +102,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getName(), "CreationDate");
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.DATE);
 		Assert.assertEquals(inForm.getCustomVariables().get(0).getScope(), CustomVariableScope.FORM);
-	}
-
-	@Test(groups = { "formCustomVariablesDao" }, dependsOnMethods = { "storeIntegerVariables", "storeStringVariables",
-			"storeDateVariables" })
-	public void removeDummyVariables() {
-		formDao.removeAll();
-		Assert.assertEquals(formDao.getRowCount(), 0);
-		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 0);
+		formDao.makeTransient(form);
 	}
 
 }

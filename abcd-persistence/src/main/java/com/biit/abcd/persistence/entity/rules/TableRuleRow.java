@@ -8,10 +8,10 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.StorableObject;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Specific rules created for managing decision tables.

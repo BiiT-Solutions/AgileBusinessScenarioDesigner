@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.form.TreeObject;
 
 public class ComponentCellTreeObject extends ComponentCell {
 	private static final long serialVersionUID = 76595396879136434L;
