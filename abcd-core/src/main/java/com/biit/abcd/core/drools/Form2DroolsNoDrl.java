@@ -22,9 +22,6 @@ import com.biit.abcd.core.drools.rules.FormParser;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -139,8 +136,8 @@ public class Form2DroolsNoDrl {
 	}
 
 	public ISubmittedForm testZrmSubmittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
-			throws ExpressionInvalidException, NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException,
+			throws ExpressionInvalidException, NotValidOperatorInExpression,
+			RuleInvalidException, IOException,
 			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
 
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
