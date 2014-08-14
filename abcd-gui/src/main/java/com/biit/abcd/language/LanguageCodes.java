@@ -91,7 +91,6 @@ public enum LanguageCodes {
 	BOTTOM_MENU_DROOLS_EDITOR("page.bottommenu.droolsEditor"),
 	BOTTOM_MENU_DROOLS_TABLE_EDITOR("page.bottommenu.droolsTableEditor"),
 	BOTTOM_MENU_EXPRESSION_EDITOR("page.bottommenu.calculusEditor"),
-	BOTTOM_MENU_DROOLS_EXPORTER("page.bottommenu.droolsExporter"),
 
 	TOP_MENU_SETTINGS_TOOLTIP("page.topmenu.settings.tooltip"),
 
@@ -235,6 +234,7 @@ public enum LanguageCodes {
 
 	SETTINGS_TITLE("settings.title"),
 	SETTINGS_GLOBAL_CONSTANTS("settings.global.constants"),
+	SETTINGS_DROOLS_ENGINE("settings.drools.engine"),
 	SETTINGS_LOG_OUT("settings.log.out"),
 	SETTINGS_CLOSE("settings.close"),
 

@@ -49,6 +49,7 @@
 		<jointjs-widget.version>0.1.2-WIDGET</jointjs-widget.version>
 		<jexeval.version>1.0.2</jexeval.version>
 		<drools.version>6.1.0.CR2</drools.version>
+		<biit-common-utils.version>0.1.0</biit-common-utils.version>
 		<form-structure.version>0.0.1</form-structure.version>
 		<root.directory>${project.basedir}</root.directory>
 	</properties>

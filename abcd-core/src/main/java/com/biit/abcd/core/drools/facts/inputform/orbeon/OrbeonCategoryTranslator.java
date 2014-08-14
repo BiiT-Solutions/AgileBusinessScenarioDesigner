@@ -3,6 +3,7 @@ package com.biit.abcd.core.drools.facts.inputform.orbeon;
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Read the form answers of a orbeon form.
-	 * 
+	 *
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -51,7 +52,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Read the form answers of a orbeon form.
-	 * 
+	 *
 	 * @param server
 	 *            The IP of the server that hosts the orbeon web application.
 	 * @param port
@@ -75,7 +76,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Gets the XML of a orbeon application.
-	 * 
+	 *
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -95,7 +96,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Gets the XML of a orbeon application.
-	 * 
+	 *
 	 * @server orbeon server IP.
 	 * @port orbeon server port.
 	 * @param orbeonApplication
@@ -128,7 +129,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param xmlText
 	 * @return
 	 * @throws DocumentException
@@ -144,7 +145,9 @@ public class OrbeonCategoryTranslator {
 
 		HashMap<String, String> tagsToName = new HashMap<String, String>();
 		SAXReader xmlReader = new SAXReader();
-		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes()));
+		byte[] xmlBytes = xmlText.getBytes(Charset.defaultCharset());
+		ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(xmlBytes);
+		final Document xmlResponse = xmlReader.read(arrayInputStream);
 		final Node formElement = xmlResponse.getRootElement();
 		// Categories resource has de id "fr-form-resources".
 		Node resourcesSection = formElement.selectSingleNode("//xf:instance[@id='fr-form-resources']");
@@ -167,7 +170,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param server
 	 *            The IP of the server that hosts the orbeon web application.
 	 * @param port
@@ -191,7 +194,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -231,7 +234,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Update all categories of a form with the user text.
-	 * 
+	 *
 	 * @param form
 	 * @throws CategoryNameWithoutTranslation
 	 *             if any category hasn't be updated.

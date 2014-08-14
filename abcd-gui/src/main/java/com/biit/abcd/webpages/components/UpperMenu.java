@@ -1,14 +1,6 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
 import com.biit.abcd.ApplicationFrame;
-import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.drools.Form2DroolsNoDrl;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -28,7 +20,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 
 	private HorizontalLayout upperRootLayout;
 	private HorizontalLayout oldRootLayoutContainer;
-	private IconButton formManagerButton, settingsButton, droolsExporterButton;
+	private IconButton formManagerButton, settingsButton;
 
 	public UpperMenu() {
 		super();
@@ -88,28 +80,6 @@ public class UpperMenu extends HorizontalButtonGroup {
 		settingsButton.setHeight("100%");
 		settingsButton.setWidth(BUTTON_WIDTH);
 
-		droolsExporterButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_EXPORTER, ThemeIcon.FORM_MANAGER_PAGE,
-				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
-			private static final long serialVersionUID = 4002268252434768032L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				PrintStream ps = new PrintStream(baos);
-				try {
-					new Form2DroolsNoDrl().parse(UserSessionHandler.getFormController().getForm(),
-							UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
-						} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				ps.close();
-			}
-		});
-		droolsExporterButton.setEnabled(true);
-		droolsExporterButton.setHeight("100%");
-		droolsExporterButton.setWidth(BUTTON_WIDTH);
-
 		Component currentRootLayout = getCompositionRoot();
 
 		// First we change the composition root (vaadin component must be not in
@@ -121,10 +91,8 @@ public class UpperMenu extends HorizontalButtonGroup {
 		upperRootLayout.addComponent(separator);
 		upperRootLayout.addComponent(formManagerButton);
 		upperRootLayout.addComponent(settingsButton);
-		upperRootLayout.addComponent(droolsExporterButton);
 		upperRootLayout.setExpandRatio(oldRootLayoutContainer, 1.0f);
 		upperRootLayout.setExpandRatio(separator, 0.0f);
-		upperRootLayout.setExpandRatio(droolsExporterButton, 0.0f);
 		upperRootLayout.setExpandRatio(settingsButton, 0.0f);
 		upperRootLayout.setExpandRatio(formManagerButton, 0.0f);
 
