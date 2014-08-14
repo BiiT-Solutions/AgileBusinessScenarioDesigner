@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>abcd-core</artifactId>
 	<packaging>jar</packaging>
 	<name>Agile Business sCenario Designer Tool (Core)</name>
-
 	<parent>
 		<groupId>com.biit.abcd</groupId>
 		<artifactId>abcd-tool</artifactId>
 		<version>0.6.0</version>
 	</parent>
-	
 	<!-- JBOSS repository -->
 	<repositories>
 		<repository>
@@ -27,13 +23,18 @@
 			</releases>
 		</repository>
 	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>abcd-persistence</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
+		</dependency>
+		<!-- File access -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
 		</dependency>
 		<!-- For SpringContextHelper -->
 		<dependency>
@@ -48,7 +49,7 @@
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!--  Drools -->
+		<!-- Drools -->
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-core</artifactId>
@@ -61,14 +62,12 @@
 			<version>${drools.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>${org.testng.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -94,7 +93,6 @@
 			<version>1.1.6</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -109,7 +107,9 @@
 					</suiteXmlFiles>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
+	<properties>
+		<commons-io.version>2.4</commons-io.version>
+	</properties>
 </project>

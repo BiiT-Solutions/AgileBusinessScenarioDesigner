@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>abcd-gui</artifactId>
 	<packaging>war</packaging>
 	<name>Agile Business sCenario Designer Tool (GUI)</name>
-
 	<parent>
 		<groupId>com.biit.abcd</groupId>
 		<artifactId>abcd-tool</artifactId>
 		<version>0.6.0</version>
 	</parent>
-
 	<properties>
 		<maven-war-plugin.version>2.3</maven-war-plugin.version>
 		<jetty.port>8081</jetty.port>
 	</properties>
-
 	<repositories>
 		<repository>
 			<id>vaadin-addons</id>
@@ -34,7 +30,6 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>vaadin-snapshots</id>
@@ -47,8 +42,6 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
-
 	<dependencies>
 		<!-- Vaadin plugins -->
 		<!-- JointJs Calendar Widget -->
@@ -136,6 +129,7 @@
 			<artifactId>spring-core</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
+		<!-- Drools dependency -->
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-core</artifactId>
@@ -147,7 +141,6 @@
 			<version>${drools.version}</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -217,9 +210,9 @@
 					<!-- <runTarget>mobilemail</runTarget> -->
 					<!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This 
 						way compatible with Vaadin eclipse plugin. -->
-					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets
+					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets 
 					</webappDirectory>
-					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets
+					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets 
 					</hostedWebapp>
 					<noServer>true</noServer>
 					<!-- Remove draftCompile when project is ready -->
@@ -263,11 +256,9 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>com.vaadin</groupId>
-										<artifactId>
-											vaadin-maven-plugin
+										<artifactId> vaadin-maven-plugin 
 										</artifactId>
-										<versionRange>
-											[${vaadin.version},)
+										<versionRange> [${vaadin.version},) 
 										</versionRange>
 										<goals>
 											<goal>clean</goal>
