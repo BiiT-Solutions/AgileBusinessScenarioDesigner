@@ -49,11 +49,6 @@ public class Form extends BaseForm {
 		this.customVariables = new ArrayList<>();
 		this.expressionChain = new ArrayList<>();
 		this.rules = new ArrayList<>();
-		try {
-			this.setName(DEFAULT_NAME);
-		} catch (FieldTooLongException ftle) {
-			// Default name is not so long.
-		}
 	}
 
 	public Form(String name) throws FieldTooLongException {
