@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import java.util.Set;
 
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.form.TreeObject;
 import com.vaadin.ui.Component;
 
 public abstract class SelectTreeObjectTableWindow extends AcceptCancelWindow {

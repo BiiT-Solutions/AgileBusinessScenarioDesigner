@@ -18,15 +18,17 @@ public class JpaSchemaExporter {
 	private static final String DEFAULT_DATABASE_PORT = "3306";
 	private static final String DEFAULT_DATABASE_USER = "testuser";
 	private static final String DEFAULT_DATABASE_PASSWORD = "asd123";
-	private static final String PACKET_TO_SCAN = "com.biit.abcd.persistence.entity";
+	private static final String PACKET_TO_SCAN[] = {"com.biit.abcd.persistence.entity"};
 	private static final String DEFAULT_OUTPUT_DIRECTORY = "../abcd-release/database/";
 	private Configuration cfg;
 
-	public JpaSchemaExporter(String packageName) {
+	public JpaSchemaExporter(String[] packagesName) {
 		cfg = new Configuration();
 		try {
-			for (Class clazz : getClasses(packageName)) {
-				cfg.addAnnotatedClass(clazz);
+			for (int i = 0; i < packagesName.length; i++) {
+				for (Class clazz : getClasses(packagesName[i])) {
+					cfg.addAnnotatedClass(clazz);
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

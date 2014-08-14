@@ -17,11 +17,11 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.NotValidChildException;
 
 /**
  * Test that one to one entities are removed correctly using orphanremove=true
@@ -29,8 +29,9 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
+@Test(groups = { "orphan" })
 public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTests {
-	private final static String DUMMY_FORM = "Dummy Form";
+	private final static String DUMMY_FORM = "Dummy Form with Orphan";
 	private final static String FULL_FORM = "Full Form";
 	private final static String DUMMY_DIAGRAM = "Dummy DIAGRAM";
 
@@ -49,8 +50,9 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	@Autowired
 	private IExpressionValueTreeObjectReferenceDao expressionValueTreeObjectReferenceDao;
 
-	@Test(groups = { "ruleDao" })
+	@Test
 	public void removeBasicRule() {
+		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
 		// Rule already has two chains inside.
 		Rule rule = new Rule();
 		ruleDao.makePersistent(rule);
@@ -61,7 +63,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
 	}
 
-	@Test(groups = { "ruleDao" }, dependsOnMethods = { "removeBasicRule" })
+	@Test
 	public void removeRuleOfForm() throws FieldTooLongException {
 		Form form = new Form();
 		form.setName(DUMMY_FORM);
@@ -70,7 +72,6 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		form.getRules().add(rule);
 
 		formDao.makePersistent(form);
-		Assert.assertEquals(formDao.getRowCount(), 1);
 		Assert.assertEquals(ruleDao.getRowCount(), 1);
 		Assert.assertEquals(expressionChainDao.getRowCount(), 2);
 
@@ -79,7 +80,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
 	}
 
-	@Test(groups = { "diagramDao" }, dependsOnMethods = { "removeRuleOfForm" })
+	@Test
 	public void removeDiagram() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
 		form.setName(FULL_FORM);
@@ -149,7 +150,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 0);
 	}
 
-	@Test(groups = { "diagramDao" }, dependsOnMethods = { "removeDiagram" })
+	@Test
 	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
 		form.setName(FULL_FORM);

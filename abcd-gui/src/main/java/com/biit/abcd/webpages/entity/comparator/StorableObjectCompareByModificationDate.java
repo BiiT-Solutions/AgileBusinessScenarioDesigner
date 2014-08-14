@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.entity.comparator;
 
 import java.util.Comparator;
 
-import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.persistence.entity.StorableObject;
 
 public class StorableObjectCompareByModificationDate implements Comparator<StorableObject> {
 

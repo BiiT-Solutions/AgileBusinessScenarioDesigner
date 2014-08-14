@@ -2,34 +2,26 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidParentException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.liferay.portal.model.UserGroup;
+import com.biit.form.BaseForm;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
-@Table(name = "TREE_FORMS", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
-public class Form extends TreeObject {
-	private static final String DEFAULT_NAME = "New Form";
-	private static final List<Class<?>> ALLOWED_CHILDS = new ArrayList<Class<?>>(Arrays.asList(Category.class));
-
-	private Integer version = 1;
+@Table(name = "TREE_FORMS")
+public class Form extends BaseForm {
 
 	@Column(nullable = false)
 	private Timestamp availableFrom;
@@ -51,66 +43,26 @@ public class Form extends TreeObject {
 	private List<Rule> rules;
 
 	public Form() {
+		super();
 		this.diagrams = new ArrayList<>();
 		this.tableRules = new ArrayList<>();
 		this.customVariables = new ArrayList<>();
 		this.expressionChain = new ArrayList<>();
 		this.rules = new ArrayList<>();
-		try {
-			this.setName(DEFAULT_NAME);
-		} catch (FieldTooLongException ftle) {
-			// Default name is not so long.
-		}
 	}
 
 	public Form(String name) throws FieldTooLongException {
+		super(name);
 		this.diagrams = new ArrayList<>();
 		this.tableRules = new ArrayList<>();
 		this.customVariables = new ArrayList<>();
 		this.expressionChain = new ArrayList<>();
 		this.rules = new ArrayList<>();
-		this.setName(name);
-	}
-
-	/**
-	 * Gets all children of the form. This annotations are in the method because overwrites the TreeObject. Forms'
-	 * children must use FetchType.LAZY.
-	 */
-	@Override
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "CHILDRENS_RELATIONSHIP")
-	@OrderColumn(name = "children_index")
-	public List<TreeObject> getChildren() {
-		return super.getChildren();
 	}
 
 	@Override
-	protected List<Class<?>> getAllowedChilds() {
-		return ALLOWED_CHILDS;
-	}
-
-	@Override
-	protected List<Class<?>> getAllowedParents() {
-		return null;
-	}
-
-	@Override
-	public void setParent(TreeObject parent) throws NotValidParentException {
-		throw new NotValidParentException("Forms cannot have a parent.");
-	}
-
-	public Integer getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	public void increaseVersion() {
-		this.version++;
-		// Force to be stored as a new record
-		this.resetIds();
+	public void resetIds() {
+		super.resetIds();
 		for (Diagram diagram : this.getDiagrams()) {
 			diagram.resetIds();
 		}
@@ -120,16 +72,12 @@ public class Form extends TreeObject {
 		for (CustomVariable customVariable : this.getCustomVariables()) {
 			customVariable.resetIds();
 		}
-	}
-
-	public UserGroup getUserGroup() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String toString() {
-		return this.getName();
+		for (ExpressionChain expression : this.getExpressionChain()) {
+			expression.resetIds();
+		}
+		for (Rule rule : this.getRules()) {
+			rule.resetIds();
+		}
 	}
 
 	@Override
@@ -188,7 +136,7 @@ public class Form extends TreeObject {
 
 	/**
 	 * Get Custom variables for a specific tree Object.
-	 *
+	 * 
 	 * @param treeObject
 	 * @return
 	 */
@@ -204,11 +152,12 @@ public class Form extends TreeObject {
 
 	/**
 	 * Looks for the custom variable with the specified scope and name.
+	 * 
 	 * @return the custom variable or null if not found
 	 */
-	public CustomVariable getCustomVariable(String name, String scope){
+	public CustomVariable getCustomVariable(String name, String scope) {
 		for (CustomVariable customVariable : this.getCustomVariables()) {
-			if(customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
+			if (customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
 				return customVariable;
 			}
 		}
@@ -238,7 +187,7 @@ public class Form extends TreeObject {
 
 	/**
 	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
-	 *
+	 * 
 	 * @param diagram
 	 */
 	public Diagram getDiagramParent(Diagram diagram) {

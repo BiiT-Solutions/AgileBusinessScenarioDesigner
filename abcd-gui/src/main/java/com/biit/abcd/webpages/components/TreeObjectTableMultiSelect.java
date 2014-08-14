@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.TreeObject;
+import com.biit.form.TreeObject;
 
 /**
  * This object is a variation of TreeObjectTable that can use multiselect. The icon is removed due to is not possible to

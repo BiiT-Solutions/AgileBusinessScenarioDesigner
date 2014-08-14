@@ -6,9 +6,9 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
+import com.biit.form.exceptions.FieldTooLongException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.TextField;
 

@@ -29,7 +29,7 @@ import com.biit.abcd.gson.utils.DiagramSourceDeserializer;
 import com.biit.abcd.gson.utils.DiagramSourceSerializer;
 import com.biit.abcd.gson.utils.DiagramTableDeserializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
-import com.biit.abcd.persistence.entity.StorableObject;
+import com.biit.persistence.entity.StorableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;

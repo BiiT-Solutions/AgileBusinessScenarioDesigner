@@ -8,8 +8,9 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.ComboBox;
@@ -100,7 +101,16 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 				// Impossible.
 			}
 		}
-		instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
+		try {
+			instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
+		} catch (InvalidAnswerFormatException e) {
+			// Not input fields must remove any answer format
+			try {
+				instance.setAnswerFormat(null);
+			} catch (InvalidAnswerFormatException e1) {
+				// Do nothing.
+			}
+		}
 		instance.setAnswerType((AnswerType) answerType.getValue());
 
 		firePropertyUpdateListener(getTreeObjectInstance());

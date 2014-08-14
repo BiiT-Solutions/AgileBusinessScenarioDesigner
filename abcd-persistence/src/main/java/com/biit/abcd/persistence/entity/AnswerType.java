@@ -7,4 +7,8 @@ public enum AnswerType {
 
 	// Uses answer format.
 	INPUT;
+
+	public boolean isInputField() {
+		return this.equals(AnswerType.INPUT);
+	}
 }

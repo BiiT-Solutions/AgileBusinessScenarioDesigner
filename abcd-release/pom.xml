@@ -16,13 +16,11 @@
 	
 	<properties>
 		<shap.root>${basedir}/..</shap.root>
-		<destination-file>${parent.artifactId}</destination-file>
+		<destination-file>${project.parent.artifactId}</destination-file>
 		<temporal-folder>tmp</temporal-folder>
 		<war-file.source>../abcd-gui/target/</war-file.source>
 		<documentation.source>./documentation</documentation.source>
 		<documentation.destination>./${temporal-folder}/documentation</documentation.destination>
-		<simple-project>simple</simple-project>
-		<abcd-project>abcd</abcd-project>
 	</properties>
 	
 	<!-- 'mvn install -Prelease' generates a ZIP file ready to distribute to 
@@ -52,22 +50,18 @@
 
 										<!-- create tmp folder -->
 										<mkdir dir="${temporal-folder}" />
-										<mkdir dir="${temporal-folder}/${simple-project}" />
-										<mkdir dir="${temporal-folder}/${abcd-project}" />
 
 										<!-- ZIP project -->
 										<copy
 											file="${war-file.source}/${project.parent.artifactId}-${project.parent.version}.war"
-											tofile="${temporal-folder}/${simple-project}/${project.parent.artifactId}-${project.parent.version}.war"
+											tofile="${temporal-folder}/${project.parent.artifactId}-${project.parent.version}.war"
 											overwrite="true" />
 										<!-- copy database scripts -->
-										<!-- 
-										<copy todir="${temporal-folder}/${simple-project}/database/"overwrite="true">
+										<copy todir="${temporal-folder}/database/"overwrite="true">
 											<fileset dir="./database" includes="**/*" />
 										</copy>
-										-->
 										<!-- create the final file -->
-										<zip basedir="${temporal-folder}/${simple-project}/"
+										<zip basedir="${temporal-folder}/"
 											destfile="../${destination-file}-${project.version}.zip" />
 
 									</target>

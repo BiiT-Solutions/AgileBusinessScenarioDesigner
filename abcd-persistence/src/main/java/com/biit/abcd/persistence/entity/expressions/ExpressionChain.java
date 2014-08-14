@@ -12,8 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.TreeObject;
 import com.biit.abcd.persistence.utils.INameAttribute;
+import com.biit.form.TreeObject;
 import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 

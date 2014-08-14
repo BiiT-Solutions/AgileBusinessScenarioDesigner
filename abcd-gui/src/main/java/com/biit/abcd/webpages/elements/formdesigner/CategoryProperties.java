@@ -4,8 +4,8 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Category;
-import com.biit.abcd.persistence.entity.TreeObject;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.FieldTooLongException;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 

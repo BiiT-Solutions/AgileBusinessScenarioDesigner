@@ -11,9 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.form.persistence.dao.hibernate.TreeObjectDao;
 
 @Repository
-public class FormDao extends GenericDao<Form> implements IFormDao {
+public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 
 	public FormDao() {
 		super(Form.class);
@@ -22,7 +23,8 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 	@Override
 	protected void initializeSets(List<Form> forms) {
 		for (Form form : forms) {
-			// Initializes the sets for lazy-loading (within the same session)
+			// Initializes the sets for lazy-loading (within the same session)+
+			Hibernate.initialize(form.getChildren());
 			Hibernate.initialize(form.getChildren());
 			Hibernate.initialize(form.getDiagrams());
 			Hibernate.initialize(form.getTableRules());
@@ -61,9 +63,7 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 			initializeSets(results);
 			session.getTransaction().commit();
 			if (!results.isEmpty()) {
-				Form form = (Form) results.get(0);
-				sortChildren(form);
-				return form;
+				return (Form) results.get(0);
 			}
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
@@ -71,5 +71,4 @@ public class FormDao extends GenericDao<Form> implements IFormDao {
 		}
 		return null;
 	}
-
 }

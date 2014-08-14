@@ -36,9 +36,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -53,6 +50,10 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
+import com.biit.form.exceptions.NotValidChildException;
 
 public class DiagramDateTest {
 
@@ -79,7 +80,8 @@ public class DiagramDateTest {
 
 	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
 	public void testTableRuleLoadAndExecution() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
+			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
+			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, InvalidAnswerFormatException {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		Form vaadinForm = this.createDiagramTestForm();
 		formDrools.parse(vaadinForm);
@@ -87,19 +89,19 @@ public class DiagramDateTest {
 	}
 
 	/**
-	 * Create the form structure. Creates to simple assignation rules in the
-	 * table rule and one expression with max func Form used to create the
-	 * drools rules
-	 *
+	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
+	 * Form used to create the drools rules
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
 	 * @throws ChildrenNotFoundException
 	 * @throws FieldTooLongException
 	 * @throws IOException
+	 * @throws InvalidAnswerFormatException
 	 */
 	private Form createDiagramTestForm() throws NotValidChildException, NotValidOperatorInExpression,
-	ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -115,16 +117,16 @@ public class DiagramDateTest {
 		Category category1 = null;
 		String lastQuestion1 = "";
 		Question question1 = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/table1"), StandardCharsets.UTF_8)) {
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/table1"), StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = question, [2] = answer, [3] = value
 			String[] lineSplit = line.split("\t");
-			if(!lastCategory1.equals(lineSplit[0])){
+			if (!lastCategory1.equals(lineSplit[0])) {
 				// Create a category
 				category1 = new Category(lineSplit[0]);
 				form.addChild(category1);
 				lastCategory1 = lineSplit[0];
 			}
-			if(!lastQuestion1.equals(lineSplit[1])){
+			if (!lastQuestion1.equals(lineSplit[1])) {
 				// Create a question
 				question1 = new Question(lineSplit[1]);
 				category1.addChild(question1);
@@ -136,9 +138,9 @@ public class DiagramDateTest {
 			tableRule1.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question1), new ExpressionChain(
 							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-									new ExpressionValueCustomVariable(question1, customVarQuestion),
-									new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-											Double.parseDouble(lineSplit[3])))));
+							new ExpressionValueCustomVariable(question1, customVarQuestion),
+							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+									.parseDouble(lineSplit[3])))));
 		}
 
 		// Add the rows and the table to the form
@@ -151,16 +153,16 @@ public class DiagramDateTest {
 		Category category2 = null;
 		String lastQuestion2 = "";
 		Question question2 = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/table2"), StandardCharsets.UTF_8)) {
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/table2"), StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = question, [2] = answer, [3] = value
 			String[] lineSplit = line.split("\t");
-			if(!lastCategory2.equals(lineSplit[0])){
+			if (!lastCategory2.equals(lineSplit[0])) {
 				// Create a category
 				category2 = new Category(lineSplit[0]);
 				form.addChild(category2);
 				lastCategory2 = lineSplit[0];
 			}
-			if(!lastQuestion2.equals(lineSplit[1])){
+			if (!lastQuestion2.equals(lineSplit[1])) {
 				// Create a question
 				question2 = new Question(lineSplit[1]);
 				category2.addChild(question2);
@@ -172,9 +174,9 @@ public class DiagramDateTest {
 			tableRule2.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question2), new ExpressionChain(
 							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-									new ExpressionValueCustomVariable(question2, customVarQuestion),
-									new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-											Double.parseDouble(lineSplit[3])))));
+							new ExpressionValueCustomVariable(question2, customVarQuestion),
+							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+									.parseDouble(lineSplit[3])))));
 		}
 
 		// Add the rows and the table to the form
@@ -183,14 +185,14 @@ public class DiagramDateTest {
 		Question forkQuestion = new Question("Aanvrager.Geboortedatum");
 		forkQuestion.setAnswerType(AnswerType.INPUT);
 		forkQuestion.setAnswerFormat(AnswerFormat.DATE);
-//		Answer forkAnswer1 = new Answer("Dagbesteding.Werk.Vast");
-//		Answer forkAnswer2 = new Answer("Dagbesteding.Werk.Tijdelijk");
-//		Answer forkAnswer3 = new Answer("Dagbesteding.Werk.OpleidingHoger");
-//		forkQuestion.addChild(forkAnswer1);
-//		forkQuestion.addChild(forkAnswer2);
-//		forkQuestion.addChild(forkAnswer3);
-//		Group forkGroup = new Group("Aanvrager");
-//		forkGroup.addChild(forkQuestion);
+		// Answer forkAnswer1 = new Answer("Dagbesteding.Werk.Vast");
+		// Answer forkAnswer2 = new Answer("Dagbesteding.Werk.Tijdelijk");
+		// Answer forkAnswer3 = new Answer("Dagbesteding.Werk.OpleidingHoger");
+		// forkQuestion.addChild(forkAnswer1);
+		// forkQuestion.addChild(forkAnswer2);
+		// forkQuestion.addChild(forkAnswer3);
+		// Group forkGroup = new Group("Aanvrager");
+		// forkGroup.addChild(forkQuestion);
 		Category forkCategory = new Category("Persoonsgegevens");
 		forkCategory.addChild(forkQuestion);
 		form.addChild(forkCategory);
@@ -216,11 +218,11 @@ public class DiagramDateTest {
 		diagramTableRuleNode1.setType(DiagramObjectType.TABLE);
 		Node nodeTable1 = new Node(diagramTableRuleNode1.getJointjsId());
 
-//		DiagramTable diagramTableRuleNode2 = new DiagramTable();
-//		diagramTableRuleNode2.setTable(tableRule2);
-//		diagramTableRuleNode2.setJointjsId(IdGenerator.createId());
-//		diagramTableRuleNode2.setType(DiagramObjectType.TABLE);
-//		Node nodeTable2 = new Node(diagramTableRuleNode2.getJointjsId());
+		// DiagramTable diagramTableRuleNode2 = new DiagramTable();
+		// diagramTableRuleNode2.setTable(tableRule2);
+		// diagramTableRuleNode2.setJointjsId(IdGenerator.createId());
+		// diagramTableRuleNode2.setType(DiagramObjectType.TABLE);
+		// Node nodeTable2 = new Node(diagramTableRuleNode2.getJointjsId());
 
 		DiagramLink startForkLink = new DiagramLink(nodeSource, nodeFork);
 		startForkLink.setJointjsId(IdGenerator.createId());
@@ -229,30 +231,27 @@ public class DiagramDateTest {
 		DiagramLink forkTable1Link = new DiagramLink(nodeFork, nodeTable1);
 		forkTable1Link.setJointjsId(IdGenerator.createId());
 		forkTable1Link.setType(DiagramObjectType.LINK);
-//		forkTable1Link.setExpressionChain(new ExpressionChain(
-//				new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
-//				new ExpressionValueNumber(18.)
-//				));
-		forkTable1Link.setExpressionChain(new ExpressionChain(
-				new ExpressionFunction(AvailableFunction.BETWEEN),
-				new ExpressionValueNumber(0.),
-				new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueNumber(18.),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-				));
-//		DiagramLink forkTable2Link = new DiagramLink(nodeFork, nodeTable2);
-//		forkTable2Link.setJointjsId(IdGenerator.createId());
-//		forkTable2Link.setType(DiagramObjectType.LINK);
-//		forkTable2Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(forkQuestion.getChild(0))));
+		// forkTable1Link.setExpressionChain(new ExpressionChain(
+		// new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
+		// new ExpressionValueNumber(18.)
+		// ));
+		forkTable1Link.setExpressionChain(new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN),
+				new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+						18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// DiagramLink forkTable2Link = new DiagramLink(nodeFork, nodeTable2);
+		// forkTable2Link.setJointjsId(IdGenerator.createId());
+		// forkTable2Link.setType(DiagramObjectType.LINK);
+		// forkTable2Link.setExpressionChain(new ExpressionChain(new
+		// ExpressionValueTreeObjectReference(forkQuestion.getChild(0))));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramForkNode);
 		mainDiagram.addDiagramObject(diagramTableRuleNode1);
-//		mainDiagram.addDiagramObject(diagramTableRuleNode2);
+		// mainDiagram.addDiagramObject(diagramTableRuleNode2);
 
 		mainDiagram.addDiagramObject(startForkLink);
 		mainDiagram.addDiagramObject(forkTable1Link);
-//		mainDiagram.addDiagramObject(forkTable2Link);
+		// mainDiagram.addDiagramObject(forkTable2Link);
 
 		form.addDiagram(mainDiagram);
 
