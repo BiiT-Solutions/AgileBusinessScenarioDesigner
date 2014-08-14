@@ -11,6 +11,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
+import com.biit.abcd.logger.AbcdLogger;
+
 @SuppressWarnings("rawtypes")
 public class JpaSchemaExporter {
 	private static final String DATABASE_NAME = "abcd";
@@ -18,7 +20,7 @@ public class JpaSchemaExporter {
 	private static final String DEFAULT_DATABASE_PORT = "3306";
 	private static final String DEFAULT_DATABASE_USER = "testuser";
 	private static final String DEFAULT_DATABASE_PASSWORD = "asd123";
-	private static final String PACKET_TO_SCAN[] = {"com.biit.abcd.persistence.entity"};
+	private static final String PACKET_TO_SCAN[] = { "com.biit.abcd.persistence.entity" };
 	private static final String DEFAULT_OUTPUT_DIRECTORY = "../abcd-release/database/";
 	private Configuration cfg;
 
@@ -31,8 +33,7 @@ public class JpaSchemaExporter {
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			AbcdLogger.errorMessage(JpaSchemaExporter.class.getName(), e);
 		}
 	}
 
@@ -103,7 +104,7 @@ public class JpaSchemaExporter {
 		cfg.setProperty("hibernate.show_sql", "false");
 		SchemaExport export = new SchemaExport(cfg);
 		export.setDelimiter(";");
-		export.setOutputFile(directory + File.separator+"create_" + dialect.name().toLowerCase() + ".sql");
+		export.setOutputFile(directory + File.separator + "create_" + dialect.name().toLowerCase() + ".sql");
 		export.setFormat(true);
 		export.execute(true, false, false, onlyCreation);
 	}

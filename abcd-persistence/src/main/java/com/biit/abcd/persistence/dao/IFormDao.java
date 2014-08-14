@@ -5,8 +5,4 @@ import com.biit.form.persistence.dao.IBaseFormDao;
 
 public interface IFormDao extends IBaseFormDao<Form> {
 
-	int getLastVersion(Form form);
-
-	Form getForm(String name);
-
 }
