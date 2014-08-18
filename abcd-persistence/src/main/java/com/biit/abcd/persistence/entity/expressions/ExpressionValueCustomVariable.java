@@ -29,11 +29,26 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 		this.variable = variable;
 	}
 
+	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, boolean editable) {
+		super();
+		setReference(reference);
+		this.variable = variable;
+		setEditable(editable);
+	}
+
 	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit) {
 		super();
 		setReference(reference);
 		setUnit(dateUnit);
 		this.variable = variable;
+	}
+
+	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit, boolean editable) {
+		super();
+		setReference(reference);
+		setUnit(dateUnit);
+		this.variable = variable;
+		setEditable(editable);
 	}
 
 	@Override
@@ -73,6 +88,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 		ExpressionValueCustomVariable copy = new ExpressionValueCustomVariable();
 		copy.setReference(getReference());
 		copy.variable = variable;
+		copy.setEditable(isEditable());
 		return copy;
 	}
 

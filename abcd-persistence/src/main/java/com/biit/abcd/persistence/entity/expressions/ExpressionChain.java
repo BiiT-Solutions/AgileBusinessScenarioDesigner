@@ -78,6 +78,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		}
 	}
 
+	public void addExpressions(List<Expression> expressions) {
+		for(Expression expression : expressions){
+			addExpression(expression);
+		}
+	}
+
 	public void removeAllExpressions() {
 		expressions.clear();
 	}

@@ -2,9 +2,14 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
@@ -59,6 +64,19 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						ExpressionChain expressionChain = addNewAnswerExpressionWindow.getExpressionChain();
+						// Add the question element if it's not an input
+						// question
+						{
+							Expression auxExp = instance.getExpressionChain().getExpressions().get(0);
+							if ((auxExp instanceof ExpressionValueTreeObjectReference)
+									&& !(auxExp instanceof ExpressionValueCustomVariable)
+									&& (((ExpressionValueTreeObjectReference) auxExp).getReference() instanceof Question)
+									&& !((Question) ((ExpressionValueTreeObjectReference) auxExp).getReference())
+											.getAnswerType().equals(AnswerType.INPUT)) {
+								expressionChain.getExpressions().add(0,
+										instance.getExpressionChain().getExpressions().get(0));
+							}
+						}
 						instance.getExpressionChain().setExpressions(expressionChain.getExpressions());
 						updateText();
 						addNewAnswerExpressionWindow.close();
@@ -72,18 +90,19 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				Expression auxExp = instance.getExpressionChain().getExpressions().get(0);
 				instance.getExpressionChain().removeAllExpressions();
+				instance.addExpressionToExpressionChain(auxExp);
 				updateText();
 			}
 		});
 		linkForm.addComponent(fieldWithSearchButton);
 	}
 
-	public void updateText(){
+	public void updateText() {
 		if ((instance.getExpressionChain() != null) && !instance.getExpressionChain().getExpressions().isEmpty()) {
-			fieldWithSearchButton.setValue(instance.getExpressionChain(), instance.getExpressionChain()
-					.getRepresentation());
-		}else{
+			fieldWithSearchButton.setValue(instance.getExpressionChain(), instance.getTextWithoutFirstExpression());
+		} else {
 			fieldWithSearchButton.setValue(null);
 		}
 		firePropertyUpdateListener(instance);
@@ -98,5 +117,4 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(instance);
 	}
-
 }

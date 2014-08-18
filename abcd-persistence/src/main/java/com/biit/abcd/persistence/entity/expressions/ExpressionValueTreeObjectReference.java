@@ -28,10 +28,23 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		this.reference = reference;
 	}
 
+	public ExpressionValueTreeObjectReference(TreeObject reference, boolean editable) {
+		super();
+		this.reference = reference;
+		setEditable(editable);
+	}
+
 	public ExpressionValueTreeObjectReference(TreeObject reference, QuestionUnit unit) {
 		super();
 		this.reference = reference;
 		this.unit = unit;
+	}
+
+	public ExpressionValueTreeObjectReference(TreeObject reference, QuestionUnit unit, boolean editable) {
+		super();
+		this.reference = reference;
+		this.unit = unit;
+		setEditable(editable);
 	}
 
 	public TreeObject getReference() {
@@ -68,6 +81,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		ExpressionValueTreeObjectReference copy = new ExpressionValueTreeObjectReference();
 		copy.reference = reference;
 		copy.unit = unit;
+		copy.setEditable(isEditable());
 		return copy;
 	}
 

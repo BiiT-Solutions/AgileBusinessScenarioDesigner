@@ -9,23 +9,25 @@ import com.biit.persistence.entity.StorableObject;
 
 /**
  * Basic class for defining an expression. Any other expression must inherit from this class.
- * 
+ *
  */
 @Entity
 @Table(name = "expression_basic")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Expression extends StorableObject {
 
+	private boolean isEditable = true;
+
 	/**
 	 * Returns a text representation of the Expression
-	 * 
+	 *
 	 * @return
 	 */
 	public abstract String getRepresentation();
 
 	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract String getExpression();
@@ -36,4 +38,13 @@ public abstract class Expression extends StorableObject {
 	}
 
 	public abstract Expression generateCopy();
+
+	public boolean isEditable() {
+		return isEditable;
+	}
+
+	public void setEditable(boolean isEditable) {
+		this.isEditable = isEditable;
+	}
+
 }
