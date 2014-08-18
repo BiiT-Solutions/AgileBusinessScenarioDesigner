@@ -45,7 +45,6 @@ public class GenericParser {
 		}
 		if(conditions != null) {
 			ruleCore += this.parseConditions(conditions);
-//			ruleCore = this.removeDuplicateLines(ruleCore);
 		}
 		if(actions != null) {
 			// Expression rule
