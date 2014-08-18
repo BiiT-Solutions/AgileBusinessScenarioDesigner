@@ -20,7 +20,7 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
-@Table(name = "TREE_FORMS")
+@Table(name = "tree_forms")
 public class Form extends BaseForm {
 
 	@Column(nullable = false)
@@ -44,52 +44,52 @@ public class Form extends BaseForm {
 
 	public Form() {
 		super();
-		this.diagrams = new ArrayList<>();
-		this.tableRules = new ArrayList<>();
-		this.customVariables = new ArrayList<>();
-		this.expressionChain = new ArrayList<>();
-		this.rules = new ArrayList<>();
+		diagrams = new ArrayList<>();
+		tableRules = new ArrayList<>();
+		customVariables = new ArrayList<>();
+		expressionChain = new ArrayList<>();
+		rules = new ArrayList<>();
 	}
 
 	public Form(String name) throws FieldTooLongException {
 		super(name);
-		this.diagrams = new ArrayList<>();
-		this.tableRules = new ArrayList<>();
-		this.customVariables = new ArrayList<>();
-		this.expressionChain = new ArrayList<>();
-		this.rules = new ArrayList<>();
+		diagrams = new ArrayList<>();
+		tableRules = new ArrayList<>();
+		customVariables = new ArrayList<>();
+		expressionChain = new ArrayList<>();
+		rules = new ArrayList<>();
 	}
 
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		for (Diagram diagram : this.getDiagrams()) {
+		for (Diagram diagram : getDiagrams()) {
 			diagram.resetIds();
 		}
-		for (TableRule tableRule : this.getTableRules()) {
+		for (TableRule tableRule : getTableRules()) {
 			tableRule.resetIds();
 		}
 		for (CustomVariable customVariable : this.getCustomVariables()) {
 			customVariable.resetIds();
 		}
-		for (ExpressionChain expression : this.getExpressionChain()) {
+		for (ExpressionChain expression : getExpressionChain()) {
 			expression.resetIds();
 		}
-		for (Rule rule : this.getRules()) {
+		for (Rule rule : getRules()) {
 			rule.resetIds();
 		}
 	}
 
 	@Override
 	public void setCreationTime(Timestamp dateCreated) {
-		if (this.availableFrom == null) {
-			this.availableFrom = dateCreated;
+		if (availableFrom == null) {
+			availableFrom = dateCreated;
 		}
 		super.setCreationTime(dateCreated);
 	}
 
 	public Timestamp getAvailableFrom() {
-		return this.availableFrom;
+		return availableFrom;
 	}
 
 	public void setAvailableFrom(Timestamp availableFrom) {
@@ -97,7 +97,7 @@ public class Form extends BaseForm {
 	}
 
 	public Timestamp getAvailableTo() {
-		return this.availableTo;
+		return availableTo;
 	}
 
 	public void setAvailableTo(Timestamp availableTo) {
@@ -105,15 +105,15 @@ public class Form extends BaseForm {
 	}
 
 	public void addDiagram(Diagram diagram) {
-		this.diagrams.add(diagram);
+		diagrams.add(diagram);
 	}
 
 	public void removeDiagram(Diagram diagram) {
-		this.diagrams.remove(diagram);
+		diagrams.remove(diagram);
 	}
 
 	public List<Diagram> getDiagrams() {
-		return this.diagrams;
+		return diagrams;
 	}
 
 	public void setDiagrams(List<Diagram> diagrams) {
@@ -122,7 +122,7 @@ public class Form extends BaseForm {
 	}
 
 	public List<TableRule> getTableRules() {
-		return this.tableRules;
+		return tableRules;
 	}
 
 	public void setTableRules(List<TableRule> tableRules) {
@@ -131,18 +131,18 @@ public class Form extends BaseForm {
 	}
 
 	public List<CustomVariable> getCustomVariables() {
-		return this.customVariables;
+		return customVariables;
 	}
 
 	/**
 	 * Get Custom variables for a specific tree Object.
-	 * 
+	 *
 	 * @param treeObject
 	 * @return
 	 */
 	public List<CustomVariable> getCustomVariables(TreeObject treeObject) {
 		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
-		for (CustomVariable customVariable : this.customVariables) {
+		for (CustomVariable customVariable : customVariables) {
 			if (customVariable.getScope().getScope().equals(treeObject.getClass())) {
 				customVariablesInThisElement.add(customVariable);
 			}
@@ -152,7 +152,7 @@ public class Form extends BaseForm {
 
 	/**
 	 * Looks for the custom variable with the specified scope and name.
-	 * 
+	 *
 	 * @return the custom variable or null if not found
 	 */
 	public CustomVariable getCustomVariable(String name, String scope) {
@@ -170,15 +170,15 @@ public class Form extends BaseForm {
 	}
 
 	public List<ExpressionChain> getExpressionChain() {
-		return this.expressionChain;
+		return expressionChain;
 	}
 
 	public void setExpressionChain(List<ExpressionChain> expressions) {
-		this.expressionChain = expressions;
+		expressionChain = expressions;
 	}
 
 	public List<Rule> getRules() {
-		return this.rules;
+		return rules;
 	}
 
 	public void setRules(List<Rule> rules) {
@@ -187,11 +187,11 @@ public class Form extends BaseForm {
 
 	/**
 	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
-	 * 
+	 *
 	 * @param diagram
 	 */
 	public Diagram getDiagramParent(Diagram diagram) {
-		for (Diagram parentDiagram : this.getDiagrams()) {
+		for (Diagram parentDiagram : getDiagrams()) {
 			List<Diagram> childDiagrams = parentDiagram.getChildDiagrams();
 			for (Diagram childDiagram : childDiagrams) {
 				if (childDiagram.equals(diagram)) {

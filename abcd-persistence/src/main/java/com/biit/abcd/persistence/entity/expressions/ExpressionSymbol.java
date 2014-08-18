@@ -10,7 +10,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "EXPRESSION_SYMBOL")
+@Table(name = "expression_symbol")
 public class ExpressionSymbol extends Expression {
 
 	@Enumerated(EnumType.STRING)

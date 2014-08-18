@@ -6,11 +6,11 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 
 @Entity
-@Table(name = "GLOBAL_VARIABLE_DATA_NUMBER")
+@Table(name = "global_variable_data_number")
 public class VariableDataNumber extends VariableData{
 
 	private Double value;
-	
+
 	@Override
 	public Double getValue() {
 		return value;
@@ -20,10 +20,11 @@ public class VariableDataNumber extends VariableData{
 	public void setValue(Object value) throws NotValidTypeInVariableData{
 		if(!checkType(value)){
 			throw new NotValidTypeInVariableData("The type '" + value.getClass()
-					+ "' is not allowed in this variable."); 
+					+ "' is not allowed in this variable.");
 		}
 	}
-	
+
+	@Override
 	public boolean checkType(Object value){
 		Double aux = null;
 		if(value instanceof String){
@@ -32,18 +33,20 @@ public class VariableDataNumber extends VariableData{
 			}
 			catch(Exception e){
 			}
-		}else
+		} else {
 			aux = (Double)value;
-		
+		}
+
 		if(aux instanceof Double){
 			this.value = aux;
 			return true;
-		}else
+		} else {
 			return false;
+		}
 	}
-	
+
 	/**
-	 * Removes trailing zeros. 
+	 * Removes trailing zeros.
 	 */
 	@Override
 	public String toString(){

@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 
 @Entity
-@Table(name = "DIAGRAM_CALCULATION")
+@Table(name = "diagram_calculation")
 public class DiagramCalculation extends DiagramElement {
 
 	@ManyToOne(fetch = FetchType.EAGER)

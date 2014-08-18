@@ -11,7 +11,7 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 import com.biit.persistence.entity.StorableObject;
 
 @Entity
-@Table(name = "GLOBAL_VARIABLE_DATA")
+@Table(name = "global_variable_data")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class VariableData extends StorableObject {
 

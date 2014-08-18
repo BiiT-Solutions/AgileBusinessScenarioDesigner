@@ -90,7 +90,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			@Override
 			public void elementUpdated(Object newElement) {
 				if (getSelectedViewer() != null) {
-					// Update all gui to reflech changes.
+					// Update all GUI to reflect changes.
 					getSelectedViewer().updateExpression();
 				}
 			}

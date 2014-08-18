@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 
 @Entity
-@Table(name = "GLOBAL_VARIABLE_DATA_DATE")
+@Table(name = "global_variable_data_date")
 public class VariableDataDate extends VariableData {
 
 	private Timestamp value;
@@ -28,11 +28,13 @@ public class VariableDataDate extends VariableData {
 		}
 	}
 
+	@Override
 	public boolean checkType(Object value) {
-		if (value instanceof Date)
+		if (value instanceof Date) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 }

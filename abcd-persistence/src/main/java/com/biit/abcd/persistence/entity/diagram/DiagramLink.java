@@ -19,7 +19,7 @@ import com.google.gson.annotations.Expose;
 import com.liferay.portal.model.User;
 
 @Entity
-@Table(name = "DIAGRAM_LINKS")
+@Table(name = "diagram_links")
 public class DiagramLink extends DiagramObject {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -284,7 +284,7 @@ public class DiagramLink extends DiagramObject {
 	 * Avoid this method. Expression chain is a OneToOne relationship and
 	 * currently Hibernate doesn't handle correctly the Orphan removal. Use
 	 * setExpressions of ExpressionChain.
-	 * 
+	 *
 	 * @param expressionChain
 	 */
 	public void setExpressionChain(ExpressionChain expressionChain) {

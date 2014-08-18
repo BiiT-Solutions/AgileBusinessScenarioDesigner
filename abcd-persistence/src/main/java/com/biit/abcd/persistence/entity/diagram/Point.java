@@ -7,7 +7,7 @@ import com.biit.persistence.entity.StorableObject;
 import com.google.gson.annotations.Expose;
 
 @Entity
-@Table(name = "DIAGRAM_POINTS")
+@Table(name = "diagram_points")
 public class Point extends StorableObject {
 
 	@Expose

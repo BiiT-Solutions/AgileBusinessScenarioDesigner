@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import com.biit.form.TreeObject;
 
 @Entity
-@Table(name = "EXPRESSION_VALUE_TREE_OBJECT_REFERENCE")
+@Table(name = "expression_value_tree_object_reference")
 public class ExpressionValueTreeObjectReference extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)

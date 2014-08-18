@@ -36,7 +36,7 @@ import com.google.gson.annotations.Expose;
 import com.liferay.portal.model.User;
 
 @Entity
-@Table(name = "DIAGRAM_OBJECTS")
+@Table(name = "diagram_objects")
 public abstract class DiagramObject extends StorableObject {
 
 	@ManyToOne(fetch = FetchType.EAGER)

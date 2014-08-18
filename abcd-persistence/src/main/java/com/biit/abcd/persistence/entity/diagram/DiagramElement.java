@@ -37,7 +37,7 @@ import com.google.gson.annotations.Expose;
 import com.liferay.portal.model.User;
 
 @Entity
-@Table(name = "DIAGRAM_ELEMENTS")
+@Table(name = "diagram_elements")
 public abstract class DiagramElement extends DiagramObject {
 
 	@Expose
@@ -149,7 +149,7 @@ public abstract class DiagramElement extends DiagramObject {
 			position.setY(element.getPosition().getY());
 			angle = element.getAngle();
 
-			if (biitText == null && element.biitText != null) {
+			if ((biitText == null) && (element.biitText != null)) {
 				biitText = element.biitText;
 			} else {
 				if (element.getBiitText().getText() != null) {
@@ -171,19 +171,19 @@ public abstract class DiagramElement extends DiagramObject {
 	public List<DiagramLink> getOutgoingLinks() {
 		return getParent().getOutgoingLinks(this);
 	}
-	
+
 	@Override
 	public void setCreatedBy(User user) {
 		super.setCreatedBy(user);
 		biitText.setCreatedBy(user);
 	}
-	
+
 	@Override
 	public void setUpdatedBy(User user){
 		super.setUpdatedBy(user);
 		biitText.setUpdatedBy(user);
 	}
-	
+
 	@Override
 	public void setUpdateTime(Timestamp dateUpdated){
 		super.setUpdateTime(dateUpdated);

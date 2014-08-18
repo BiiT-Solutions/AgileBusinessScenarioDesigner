@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "DIAGRAM_SOURCE")
+@Table(name = "diagram_source")
 public class DiagramSource extends DiagramElement {
 
 	public DiagramSource() {

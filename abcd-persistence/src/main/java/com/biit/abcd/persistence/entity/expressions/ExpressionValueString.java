@@ -5,10 +5,10 @@ import javax.persistence.Table;
 
 /**
  * Defines a value as string.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_STRING")
+@Table(name = "expression_value_string")
 public class ExpressionValueString extends ExpressionValue {
 
 	private String value;

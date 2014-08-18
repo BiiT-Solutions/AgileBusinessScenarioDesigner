@@ -10,10 +10,10 @@ import com.biit.form.TreeObject;
 
 /**
  * Defines a value as a already defined form custom variable.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_CUSTOM_VARIABLE")
+@Table(name = "expression_value_custom_variable")
 public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectReference {
 
 	@ManyToOne(fetch = FetchType.EAGER)

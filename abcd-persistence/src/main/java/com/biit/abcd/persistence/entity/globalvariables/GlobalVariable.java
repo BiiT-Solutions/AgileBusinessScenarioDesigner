@@ -16,7 +16,7 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 import com.biit.persistence.entity.StorableObject;
 
 @Entity
-@Table(name = "GLOBAL_VARIABLES")
+@Table(name = "global_variables")
 public class GlobalVariable extends StorableObject {
 
 	private String name;
@@ -61,7 +61,7 @@ public class GlobalVariable extends StorableObject {
 
 	/**
 	 * Creates a new variable data and adds it to the global variable
-	 * 
+	 *
 	 * @param value
 	 *            : the value of the variable data
 	 * @param validFrom

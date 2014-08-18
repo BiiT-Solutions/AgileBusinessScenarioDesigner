@@ -16,10 +16,10 @@ import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines a drools rule.
- * 
+ *
  */
 @Entity
-@Table(name = "RULE")
+@Table(name = "rule")
 public class Rule extends StorableObject implements INameAttribute {
 
 	private String name;
@@ -30,28 +30,28 @@ public class Rule extends StorableObject implements INameAttribute {
 	private ExpressionChain actions;
 
 	public Rule() {
-		this.setCondition(new ExpressionChain());
-		this.setActions(new ExpressionChain());
+		setCondition(new ExpressionChain());
+		setActions(new ExpressionChain());
 	}
 
 	public Rule(String name) {
-		this.setCondition(new ExpressionChain());
-		this.setActions(new ExpressionChain());
-		this.setName(name);
+		setCondition(new ExpressionChain());
+		setActions(new ExpressionChain());
+		setName(name);
 	}
 
 	public Rule(String name, ExpressionChain conditions, ExpressionChain actions) {
-		this.setCondition(conditions);
-		this.setActions(actions);
-		this.setName(name);
+		setCondition(conditions);
+		setActions(actions);
+		setName(name);
 	}
 
 	public ExpressionChain getCondition() {
-		return this.condition;
+		return condition;
 	}
 
 	public List<Expression> getConditions() {
-		return this.condition.getExpressions();
+		return condition.getExpressions();
 	}
 
 	public void setCondition(ExpressionChain condition) {
@@ -59,7 +59,7 @@ public class Rule extends StorableObject implements INameAttribute {
 	}
 
 	public ExpressionChain getActions() {
-		return this.actions;
+		return actions;
 	}
 
 	public void setActions(ExpressionChain actions) {
@@ -68,7 +68,7 @@ public class Rule extends StorableObject implements INameAttribute {
 
 	@Override
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public class Rule extends StorableObject implements INameAttribute {
 
 	public boolean isAssignedTo(TreeObject treeObject) {
 		Set<TreeObject> references = new HashSet<>();
-		references.addAll(this.getCondition().getReferencedTreeObjects());
-		references.addAll(this.getActions().getReferencedTreeObjects());
+		references.addAll(getCondition().getReferencedTreeObjects());
+		references.addAll(getActions().getReferencedTreeObjects());
 		if (!references.isEmpty()) {
 			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
 			if (commonTreeObject.equals(treeObject)) {

@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
 @Entity
-@Table(name = "DIAGRAM_RULE")
+@Table(name = "diagram_rule")
 public class DiagramRule extends DiagramElement{
 
 	@ManyToOne(fetch = FetchType.EAGER)

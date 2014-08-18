@@ -7,7 +7,7 @@ import com.biit.form.BaseGroup;
 import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
-@Table(name = "TREE_GROUPS")
+@Table(name = "tree_groups")
 public class Group extends BaseGroup {
 
 	public Group() {

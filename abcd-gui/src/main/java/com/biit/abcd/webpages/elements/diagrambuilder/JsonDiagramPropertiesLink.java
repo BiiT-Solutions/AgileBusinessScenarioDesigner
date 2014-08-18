@@ -36,10 +36,8 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 			if (fork.getReference() != null) {
 				setSelectAnswerExpression(fork);
 			}
-
 			addTab(linkForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
 		}
-
 	}
 
 	private void setSelectAnswerExpression(final DiagramFork fork) {

@@ -12,7 +12,7 @@ import com.biit.persistence.entity.StorableObject;
  * 
  */
 @Entity
-@Table(name = "EXPRESSION_BASIC")
+@Table(name = "expression_basic")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Expression extends StorableObject {
 

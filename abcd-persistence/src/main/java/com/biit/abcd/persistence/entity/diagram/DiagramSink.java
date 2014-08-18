@@ -8,12 +8,12 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 
 @Entity
-@Table(name = "DIAGRAM_SINK")
+@Table(name = "diagram_sink")
 public class DiagramSink  extends DiagramElement{
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ExpressionChain formExpression;
-	
+
 	public ExpressionChain getFormExpression() {
 		return formExpression;
 	}

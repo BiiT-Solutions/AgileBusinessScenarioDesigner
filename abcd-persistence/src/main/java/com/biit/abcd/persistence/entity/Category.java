@@ -7,7 +7,7 @@ import com.biit.form.BaseCategory;
 import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
-@Table(name = "TREE_CATEGORIES")
+@Table(name = "tree_categories")
 public class Category extends BaseCategory {
 
 	public Category() {

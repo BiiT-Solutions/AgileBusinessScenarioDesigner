@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-@Table(name = "DIAGRAM_BIIT_TEXT")
+@Table(name = "diagram_biit_text")
 public class DiagramBiitText extends StorableObject {
 
 	@Expose
