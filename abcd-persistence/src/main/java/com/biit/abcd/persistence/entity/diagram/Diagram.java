@@ -41,7 +41,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	@SerializedName("cells")
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "ELEMENTS_OF_DIAGRAM")
+	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DiagramObject> diagramElements;
 

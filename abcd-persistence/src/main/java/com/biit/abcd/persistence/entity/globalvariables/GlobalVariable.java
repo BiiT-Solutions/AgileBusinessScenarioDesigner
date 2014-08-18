@@ -23,7 +23,7 @@ public class GlobalVariable extends StorableObject {
 	private AnswerFormat format;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "GLOBAL_VARIABLE_DATA_SET")
+	@JoinTable(name = "global_variable_data_set")
 	private List<VariableData> data;
 
 	public GlobalVariable() {
