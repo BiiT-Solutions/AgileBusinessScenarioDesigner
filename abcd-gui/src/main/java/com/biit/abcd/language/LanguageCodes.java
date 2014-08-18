@@ -330,9 +330,11 @@ public enum LanguageCodes {
 	JSON_DIAGRAM_PROPERTIES_DIAGRAM_CHILD_NODE_CAPTION("json.diagram.properties.diagram.child.node.caption"),
 	JSON_DIAGRAM_PROPERTIES_FORM_NODE_CAPTION("json.diagram.properties.form.node.caption"),
 	JSON_DIAGRAM_PROPERTIES_FORK_NODE_CAPTION("json.diagram.properties.fork.node.caption"),
+	JSON_DIAGRAM_PROPERTIES_LINK_CAPTION("json.diagram.properties.link.caption"),
 	JSON_DIAGRAM_PROPERTIES_SINK_NODE_CAPTION("json.diagram.properties.sink.node.caption"),
 	JSON_DIAGRAM_PROPERTIES_SOURCE_NODE_CAPTION("json.diagram.properties.source.node.caption"),
 	JSON_DIAGRAM_PROPERTIES_TABLE_NODE_CAPTION("json.diagram.properties.table.node.caption"),
+	JSON_DIAGRAM_PROPERTIES_RULE_NODE_CAPTION("json.diagram.properties.rule.node.caption"),
 
 
 	DROOLS_RULES_EDITOR_TABLE_NAME("drools.rules.editor.table.name"),

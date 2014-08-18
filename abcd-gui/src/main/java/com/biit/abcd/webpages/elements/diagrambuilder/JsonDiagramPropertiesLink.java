@@ -37,7 +37,7 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 				setSelectAnswerExpression(fork);
 			}
 
-			addTab(linkForm, "TODO - diagramLinkExprProperties", true, 0);
+			addTab(linkForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
 		}
 
 	}
@@ -80,9 +80,9 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 		});
 		linkForm.addComponent(fieldWithSearchButton);
 	}
-	
+
 	public void updateText(){
-		if (instance.getExpressionChain() != null && !instance.getExpressionChain().getExpressions().isEmpty()) {
+		if ((instance.getExpressionChain() != null) && !instance.getExpressionChain().getExpressions().isEmpty()) {
 			fieldWithSearchButton.setValue(instance.getExpressionChain(), instance.getExpressionChain()
 					.getRepresentation());
 		}else{
