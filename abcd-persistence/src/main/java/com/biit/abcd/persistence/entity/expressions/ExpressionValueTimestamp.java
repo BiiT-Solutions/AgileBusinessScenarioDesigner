@@ -9,10 +9,10 @@ import com.biit.abcd.persistence.utils.DateManager;
 
 /**
  * Defines a value as a timestamp.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_TIMESTAMP")
+@Table(name = "expression_value_timestamp")
 public class ExpressionValueTimestamp extends ExpressionValue {
 
 	private Timestamp value;

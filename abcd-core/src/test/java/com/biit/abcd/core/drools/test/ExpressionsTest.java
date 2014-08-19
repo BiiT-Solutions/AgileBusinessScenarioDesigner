@@ -49,11 +49,11 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
-import com.biit.form.BaseQuestion;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.NotValidChildException;
+
 
 public class ExpressionsTest {
 
@@ -101,7 +101,7 @@ public class ExpressionsTest {
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
 	 * Form used to create the drools rules
-	 * 
+	 *
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
@@ -180,8 +180,7 @@ public class ExpressionsTest {
 						this.getCategoryFromForm(form, lineSplit[0]), questionString), customVarQuestion));
 				if (i < (questionSplit.length - 1)) {
 					// So the last expression of the rule before the bracket is
-					// not
-					// a comma
+					// not a comma
 					testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 				}
 				i++;

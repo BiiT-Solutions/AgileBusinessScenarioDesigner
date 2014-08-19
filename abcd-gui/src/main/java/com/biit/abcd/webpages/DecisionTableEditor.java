@@ -12,9 +12,9 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.security.DActivity;
@@ -267,7 +267,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	/**
 	 * Gets the currently selected table.
-	 * 
+	 *
 	 * @return
 	 */
 	private TableRule getSelectedTableRule() {
@@ -327,10 +327,14 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void removeRow(TableRule tableRule) {
+		int conditions = decisionTable.getColumns().size() / 2;
+
 		decisionTable.removeSelectedRows(tableRule);
 		if (decisionTable.getTableSize(tableRule) == 0) {
 			addNewRow(tableRule);
-			addNewColumnPair(tableRule);
+			for (int i = 0; i < conditions; i++) {
+				addNewColumnPair(tableRule);
+			}
 		}
 		decisionTable.update(tableRule);
 	}
@@ -401,7 +405,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	private void removeAnswerExpressionIfNeeded(Question originalQuestion, Question selectedQuestion,
 			ExpressionChain answerExpression) {
-		if (originalQuestion != null && selectedQuestion != null) {
+		if ((originalQuestion != null) && (selectedQuestion != null)) {
 			if (((originalQuestion.getAnswerType() == AnswerType.INPUT) && (selectedQuestion.getAnswerType() != AnswerType.INPUT))
 					|| ((originalQuestion.getAnswerType() != AnswerType.INPUT) && (selectedQuestion.getAnswerType() == AnswerType.INPUT))
 					|| (!originalQuestion.equals(selectedQuestion))) {

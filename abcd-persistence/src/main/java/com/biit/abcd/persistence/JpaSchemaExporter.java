@@ -139,7 +139,7 @@ public class JpaSchemaExporter {
 		if (args.length == 0) {
 			directory = DEFAULT_OUTPUT_DIRECTORY;
 		} else {
-			directory = args[0];
+			directory = args[0] + File.separator;
 		}
 
 		String user;

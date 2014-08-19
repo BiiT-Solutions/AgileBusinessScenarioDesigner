@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-@Table(name = "DIAGRAM_NODES")
+@Table(name = "diagram_nodes")
 public class Node extends StorableObject {
 	@Expose
 	@SerializedName("id")

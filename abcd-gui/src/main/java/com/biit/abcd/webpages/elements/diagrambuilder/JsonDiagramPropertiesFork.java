@@ -10,9 +10,9 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
@@ -44,21 +44,33 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 
 	private void setNewReference(TreeObject treeObjectRefence) {
 		instance.setReference(new ExpressionValueTreeObjectReference(treeObjectRefence));
+		for (DiagramLink outLink : instance.getOutgoingLinks()) {
+			outLink.resetExpressions(new ExpressionValueTreeObjectReference(treeObjectRefence, false));
+		}
 		firePropertyUpdateListener(instance);
 	}
 
 	private void setNewDateReference(TreeObject reference, QuestionUnit dateUnit) {
 		instance.setReference(new ExpressionValueTreeObjectReference(reference, dateUnit));
+		for (DiagramLink outLink : instance.getOutgoingLinks()) {
+			outLink.resetExpressions(new ExpressionValueTreeObjectReference(reference, dateUnit, false));
+		}
 		firePropertyUpdateListener(instance);
 	}
 
 	private void setNewReferenceCustomVariable(TreeObject treeObjectRefence, CustomVariable variable) {
 		instance.setReference(new ExpressionValueCustomVariable(treeObjectRefence, variable));
+		for (DiagramLink outLink : instance.getOutgoingLinks()) {
+			outLink.resetExpressions(new ExpressionValueCustomVariable(treeObjectRefence, variable, false));
+		}
 		firePropertyUpdateListener(instance);
 	}
 
 	private void setNewDateReferenceCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit) {
 		instance.setReference(new ExpressionValueCustomVariable(reference, variable, dateUnit));
+		for (DiagramLink outLink : instance.getOutgoingLinks()) {
+			outLink.resetExpressions(new ExpressionValueCustomVariable(reference, variable, dateUnit, false));
+		}
 		firePropertyUpdateListener(instance);
 	}
 
@@ -81,7 +93,7 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 			public void buttonClick(ClickEvent event) {
 				final TreeObject reference = (TreeObject) treeObjectTable.getValue();
 
-				if (reference != null && (reference instanceof Question)) {
+				if ((reference != null) && (reference instanceof Question)) {
 					if (((Question) reference).getAnswerFormat() == AnswerFormat.DATE) {
 						// Create a window for selecting the unit and assign it
 						// to the expression.
@@ -155,7 +167,7 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 		treeObjectTable = new TreeObjectTableSingleSelect();
 		treeObjectTable.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
 		treeObjectTable.setSizeFull();
-		treeObjectTable.setRootElement((Form) UserSessionHandler.getFormController().getForm());
+		treeObjectTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		treeObjectTable.setSelectable(true);
 		treeObjectTable.setNullSelectionAllowed(false);
 		treeObjectTable.setImmediate(true);
@@ -192,7 +204,7 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 					variableSelection.addItem(customvariable);
 					variableSelection.setItemCaption(customvariable, customvariable.getName());
 				}
-				if (customVariables != null && !customVariables.isEmpty()) {
+				if ((customVariables != null) && !customVariables.isEmpty()) {
 					variableSelection.setValue(customVariables.get(0));
 				}
 			}
@@ -208,5 +220,4 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(instance);
 	}
-
 }

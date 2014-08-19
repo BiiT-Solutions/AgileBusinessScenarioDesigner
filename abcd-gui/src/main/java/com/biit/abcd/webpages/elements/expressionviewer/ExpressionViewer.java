@@ -114,138 +114,146 @@ public class ExpressionViewer extends CssLayout {
 	public void addExpression(HorizontalLayout lineLayout, final Expression expression) {
 		final ExpressionElement expressionElement = new ExpressionElement(expression.getRepresentation(),
 				new LayoutClickListener() {
-			private static final long serialVersionUID = -4305606865801828692L;
+					private static final long serialVersionUID = -4305606865801828692L;
 
-			@Override
-			public void layoutClick(LayoutClickEvent event) {
-				setSelectedExpression(expression);
-				// Double click open operator popup.
+					@Override
+					public void layoutClick(LayoutClickEvent event) {
+						setSelectedExpression(expression);
+						// Double click open operator popup.
 
-				if (event.isDoubleClick()) {
-					// For Operators.
-					if (expression instanceof ExpressionOperator) {
+						if (event.isDoubleClick()) {
+							// For Operators.
+							if (expression.isEditable()) {
+								if (expression instanceof ExpressionOperator) {
 
-						ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
-								expression);
-						operatorWindow.showCentered();
-						operatorWindow.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								try {
-									((ExpressionOperator) expression)
-									.setValue(((ChangeExpressionOperatorWindow) window).getOperator());
-									window.close();
-									updateExpression();
-									setSelectedExpression(expression);
-								} catch (NotValidOperatorInExpression e) {
-									e.printStackTrace();
-									// Not possible
-								}
+									ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
+											expression);
+									operatorWindow.showCentered();
+									operatorWindow.addAcceptActionListener(new AcceptActionListener() {
+										@Override
+										public void acceptAction(AcceptCancelWindow window) {
+											try {
+												((ExpressionOperator) expression)
+														.setValue(((ChangeExpressionOperatorWindow) window)
+																.getOperator());
+												window.close();
+												updateExpression();
+												setSelectedExpression(expression);
+											} catch (NotValidOperatorInExpression e) {
+												e.printStackTrace();
+												// Not possible
+											}
 
-							}
-						});
-						// For Strings.
-					} else if (expression instanceof ExpressionValueString) {
-						StringInputWindow stringInputWindow = new StringInputWindow(
-								ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
-						stringInputWindow.setCaption(ServerTranslate
-								.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
-						stringInputWindow.setValue(((ExpressionValueString) expression).getValue());
-						stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								String value = ((StringInputWindow) window).getValue();
-								if ((value == null) || value.isEmpty()) {
-									MessageManager.showError(ServerTranslate
-											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-								} else {
-									// Update expression
-									((ExpressionValueString) expression).setValue(value);
-									window.close();
-									updateExpression();
-									setSelectedExpression(expression);
+										}
+									});
+									// For Strings.
+								} else if (expression instanceof ExpressionValueString) {
+									StringInputWindow stringInputWindow = new StringInputWindow(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+									stringInputWindow.setCaption(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+									stringInputWindow.setValue(((ExpressionValueString) expression).getValue());
+									stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
+										@Override
+										public void acceptAction(AcceptCancelWindow window) {
+											String value = ((StringInputWindow) window).getValue();
+											if ((value == null) || value.isEmpty()) {
+												MessageManager.showError(ServerTranslate
+														.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+											} else {
+												// Update expression
+												((ExpressionValueString) expression).setValue(value);
+												window.close();
+												updateExpression();
+												setSelectedExpression(expression);
+											}
+										}
+									});
+									stringInputWindow.showCentered();
+									// For Numbers
+								} else if (expression instanceof ExpressionValueNumber) {
+									StringInputWindow stringInputWindow = new StringInputWindow(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+									stringInputWindow.setCaption(ServerTranslate
+											.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+									stringInputWindow.setValue(((ExpressionValueNumber) expression).getValue()
+											.toString());
+									stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
+										@Override
+										public void acceptAction(AcceptCancelWindow window) {
+											String value = ((StringInputWindow) window).getValue();
+											if ((value == null) || value.isEmpty()) {
+												MessageManager.showError(ServerTranslate
+														.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+											} else {
+												// Update expression
+												try {
+													Double doubleValue = Double.parseDouble(value);
+													((ExpressionValueNumber) expression).setValue(doubleValue);
+													window.close();
+													updateExpression();
+													setSelectedExpression(expression);
+												} catch (NumberFormatException nfe) {
+													// Do nothing. Force to put
+													// a correct value.
+												}
+											}
+										}
+									});
+									stringInputWindow.showCentered();
+									// For Global constants
+								} else if (expression instanceof ExpressionValueGlobalConstant) {
+									SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
+									globalWindow.showCentered();
+									globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getVariable());
+									globalWindow.addAcceptActionListener(new AcceptActionListener() {
+										@Override
+										public void acceptAction(AcceptCancelWindow window) {
+											GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window)
+													.getValue();
+											if (globalVariable != null) {
+												((ExpressionValueGlobalConstant) expression)
+														.setVariable(globalVariable);
+												window.close();
+												updateExpression();
+												setSelectedExpression(expression);
+											} else {
+												MessageManager.showError(ServerTranslate
+														.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+											}
+										}
+									});
+									// Form variables.
+								} else if (expression instanceof ExpressionValueCustomVariable) {
+									SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
+									variableWindow.showCentered();
+									variableWindow.setvalue((ExpressionValueCustomVariable) expression);
+									variableWindow.addAcceptActionListener(new AcceptActionListener() {
+										@Override
+										public void acceptAction(AcceptCancelWindow window) {
+											ExpressionValueCustomVariable formReference = ((SelectFormElementVariableWindow) window)
+													.getValue();
+											if (formReference != null) {
+												// Update the already existing
+												// expression.
+												((ExpressionValueCustomVariable) expression).setReference(formReference
+														.getReference());
+												((ExpressionValueCustomVariable) expression).setVariable(formReference
+														.getVariable());
+												window.close();
+												updateExpression();
+												setSelectedExpression(expression);
+											} else {
+												MessageManager.showError(ServerTranslate
+														.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+											}
+										}
+									});
 								}
 							}
-						});
-						stringInputWindow.showCentered();
-						// For Numbers
-					} else if (expression instanceof ExpressionValueNumber) {
-						StringInputWindow stringInputWindow = new StringInputWindow(
-								ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
-						stringInputWindow.setCaption(ServerTranslate
-								.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
-						stringInputWindow.setValue(((ExpressionValueNumber) expression).getValue().toString());
-						stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								String value = ((StringInputWindow) window).getValue();
-								if ((value == null) || value.isEmpty()) {
-									MessageManager.showError(ServerTranslate
-											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-								} else {
-									// Update expression
-									try {
-										Double doubleValue = Double.parseDouble(value);
-										((ExpressionValueNumber) expression).setValue(doubleValue);
-										window.close();
-										updateExpression();
-										setSelectedExpression(expression);
-									} catch (NumberFormatException nfe) {
-										// Do nothing. Force to put a correct value.
-									}
-								}
-							}
-						});
-						stringInputWindow.showCentered();
-						// For Global constants
-					} else if (expression instanceof ExpressionValueGlobalConstant) {
-						SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
-						globalWindow.showCentered();
-						globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getVariable());
-						globalWindow.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window)
-										.getValue();
-								if (globalVariable != null) {
-									((ExpressionValueGlobalConstant) expression).setVariable(globalVariable);
-									window.close();
-									updateExpression();
-									setSelectedExpression(expression);
-								} else {
-									MessageManager.showError(ServerTranslate
-											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-								}
-							}
-						});
-						// Form variables.
-					} else if (expression instanceof ExpressionValueCustomVariable) {
-						SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
-						variableWindow.showCentered();
-						variableWindow.setvalue((ExpressionValueCustomVariable) expression);
-						variableWindow.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								ExpressionValueCustomVariable formReference = ((SelectFormElementVariableWindow) window)
-										.getValue();
-								if (formReference != null) {
-									// Update the already existing expression.
-									((ExpressionValueCustomVariable) expression).setReference(formReference.getReference());
-									((ExpressionValueCustomVariable) expression).setVariable(formReference
-											.getVariable());
-									window.close();
-									updateExpression();
-									setSelectedExpression(expression);
-								} else {
-									MessageManager.showError(ServerTranslate
-											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-								}
-							}
-						});
+						}
 					}
-				}
-			}
-		});
+				});
 
 		expressionOfElement.put(expressionElement, expression);
 
@@ -269,7 +277,8 @@ public class ExpressionViewer extends CssLayout {
 				for (int j = 0; j < lineLayout.getComponentCount(); j++) {
 					if (lineLayout.getComponent(j) instanceof ExpressionElement) {
 						if (isFocused()
-								&& expressionOfElement.get(lineLayout.getComponent(j)).equals(selectedExpression)) {
+								&& expressionOfElement.get(lineLayout.getComponent(j)).equals(selectedExpression)
+								&& selectedExpression.isEditable()) {
 							lineLayout.getComponent(j).addStyleName("expression-selected");
 						} else {
 							lineLayout.getComponent(j).removeStyleName("expression-selected");
@@ -317,7 +326,7 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	public void removeSelectedExpression() {
-		if (isFocused() && (getSelectedExpression() != null)) {
+		if (isFocused() && (getSelectedExpression() != null) && getSelectedExpression().isEditable()) {
 			int index = expressions.getExpressions().indexOf(getSelectedExpression());
 			expressions.getExpressions().remove(getSelectedExpression());
 			updateExpression();
@@ -326,9 +335,9 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	/**
-	 * Adds a new element in the position of the selected element. Depending of the element, can be inserted after or
-	 * before.
-	 * 
+	 * Adds a new element in the position of the selected element. Depending of
+	 * the element, can be inserted after or before.
+	 *
 	 * @param newElement
 	 */
 	public void addElementToSelected(Expression newElement) {
@@ -338,7 +347,7 @@ public class ExpressionViewer extends CssLayout {
 			if (newElement instanceof ExpressionSymbol) {
 				// Brackets are added before selected expression in some cases.
 				if ((((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true)
-						// Brackets always at right position in '<', '>', ... symbols.
+				// Brackets always at right position in '<', '>', ... symbols.
 						&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
 						// Brackets always at right position in '=' symbol.
 						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())

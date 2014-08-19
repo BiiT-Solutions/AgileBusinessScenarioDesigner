@@ -8,7 +8,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_BOOLEAN")
+@Table(name = "expression_value_boolean")
 public class ExpressionValueBoolean extends ExpressionValue {
 
 	private boolean value;
@@ -20,7 +20,7 @@ public class ExpressionValueBoolean extends ExpressionValue {
 
 	public ExpressionValueBoolean(boolean value) {
 		super();
-		this.setValue(value);
+		setValue(value);
 	}
 
 	@Override

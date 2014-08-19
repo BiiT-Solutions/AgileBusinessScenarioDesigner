@@ -21,7 +21,7 @@ import com.biit.persistence.entity.StorableObject;
  * Specific rules created for managing decision tables.
  */
 @Entity
-@Table(name = "RULE_DECISION_TABLE")
+@Table(name = "rule_decision_table")
 public class TableRule extends StorableObject implements INameAttribute {
 
 	private String name;
@@ -74,7 +74,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 	/**
 	 * When you add a new row, the table or the row is resized to allow the
 	 * operation
-	 * 
+	 *
 	 * @param row
 	 * @return
 	 */

@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 
 @Entity
-@Table(name = "DIAGRAM_FORK")
+@Table(name = "diagram_fork")
 public class DiagramFork extends DiagramElement {
 
 	// Due to bug (https://hibernate.atlassian.net/browse/HHH-5559) orphanRemoval is not working correctly in @OneToOne.
@@ -28,7 +28,7 @@ public class DiagramFork extends DiagramElement {
 	}
 
 	public ExpressionValueTreeObjectReference getReference() {
-		if (reference == null || reference.isEmpty()) {
+		if ((reference == null) || reference.isEmpty()) {
 			return null;
 		}
 		return reference.get(0);

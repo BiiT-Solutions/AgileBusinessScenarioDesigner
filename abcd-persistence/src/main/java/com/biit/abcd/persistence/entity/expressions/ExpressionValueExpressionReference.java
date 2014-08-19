@@ -7,10 +7,10 @@ import javax.persistence.Table;
 
 /**
  * Defines a value as another existing expression.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_EXPRESSION_REFERENCE")
+@Table(name = "expression_value_expression_reference")
 public class ExpressionValueExpressionReference extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)

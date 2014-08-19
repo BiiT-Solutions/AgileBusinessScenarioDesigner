@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 
 @Entity
-@Table(name = "GLOBAL_VARIABLE_DATA_TEXT")
+@Table(name = "global_variable_data_text")
 public class VariableDataText extends VariableData {
 
 	private String value;
@@ -25,11 +25,13 @@ public class VariableDataText extends VariableData {
 		}
 	}
 
+	@Override
 	public boolean checkType(Object value) {
-		if (value instanceof String)
+		if (value instanceof String) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 }

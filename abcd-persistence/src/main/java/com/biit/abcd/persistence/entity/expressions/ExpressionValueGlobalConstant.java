@@ -9,10 +9,10 @@ import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 
 /**
  * Defines a value as a already defined Global Constant.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_GLOBAL_VARIABLE")
+@Table(name = "expression_value_global_variable")
 public class ExpressionValueGlobalConstant extends ExpressionValue {
 
 	@ManyToOne(fetch = FetchType.EAGER)

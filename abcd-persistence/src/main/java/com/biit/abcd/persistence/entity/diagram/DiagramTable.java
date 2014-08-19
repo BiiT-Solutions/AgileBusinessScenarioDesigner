@@ -8,12 +8,12 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 
 @Entity
-@Table(name = "DIAGRAM_TABLE")
+@Table(name = "diagram_table")
 public class DiagramTable extends DiagramElement{
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TableRule table;
-	
+
 	public DiagramTable() {
 		super();
 		DiagramBiitText biitText = new DiagramBiitText();

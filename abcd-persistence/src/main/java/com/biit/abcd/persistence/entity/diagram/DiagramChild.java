@@ -6,7 +6,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "DIAGRAM_CHILD")
+@Table(name = "diagram_child")
 public class DiagramChild extends DiagramElement {
 
 	@OneToOne(fetch = FetchType.EAGER)

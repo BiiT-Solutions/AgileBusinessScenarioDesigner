@@ -14,7 +14,7 @@ import com.biit.persistence.entity.StorableObject;
  * Sets all user defined custom variables that will be used in drools conditions and action.
  */
 @Entity
-@Table(name = "FORM_CUSTOM_VARIABLES", uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name", "scope" }) })
+@Table(name = "form_custom_variables", uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name", "scope" }) })
 public class CustomVariable extends StorableObject {
 
 	// Used mainly for unique constraint.

@@ -5,10 +5,10 @@ import javax.persistence.Table;
 
 /**
  * Defines values as a double.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_NUMBER")
+@Table(name = "expression_value_number")
 public class ExpressionValueNumber extends ExpressionValue {
 
 	private double value;
@@ -20,7 +20,7 @@ public class ExpressionValueNumber extends ExpressionValue {
 
 	public ExpressionValueNumber(double value) {
 		super();
-		this.setValue(value);
+		setValue(value);
 	}
 
 	@Override

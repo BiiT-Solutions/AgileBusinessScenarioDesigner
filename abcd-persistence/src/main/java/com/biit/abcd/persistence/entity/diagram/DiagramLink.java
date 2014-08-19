@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity.diagram;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.gson.utils.DiagramLinkDeserializer;
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,7 +21,7 @@ import com.google.gson.annotations.Expose;
 import com.liferay.portal.model.User;
 
 @Entity
-@Table(name = "DIAGRAM_LINKS")
+@Table(name = "diagram_links")
 public class DiagramLink extends DiagramObject {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -191,6 +193,10 @@ public class DiagramLink extends DiagramObject {
 	private boolean isAnswerEmpty() {
 		if ((expressionChain == null) || expressionChain.getExpressions().isEmpty()) {
 			return true;
+		}else if(hasSourceFork()) {
+			if(expressionChain.getExpressions().size()<=1){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -206,7 +212,8 @@ public class DiagramLink extends DiagramObject {
 				}
 			} else {
 				if (expressionChain != null) {
-					return expressionChain.getExpression();
+					return getTextWithoutFirstExpression();
+//					return expressionChain.getExpression();
 				} else {
 					return "";
 				}
@@ -284,10 +291,38 @@ public class DiagramLink extends DiagramObject {
 	 * Avoid this method. Expression chain is a OneToOne relationship and
 	 * currently Hibernate doesn't handle correctly the Orphan removal. Use
 	 * setExpressions of ExpressionChain.
-	 * 
+	 *
 	 * @param expressionChain
 	 */
 	public void setExpressionChain(ExpressionChain expressionChain) {
 		this.expressionChain = expressionChain;
+	}
+
+	public void resetExpressions(Expression expression){
+		getExpressionChain().setExpressions(Arrays.asList(expression));
+	}
+
+	public void addExpressionToExpressionChain(Expression expression){
+		getExpressionChain().addExpression(expression);
+	}
+
+	public String getTextWithoutFirstExpression(){
+		List<Expression> auxExps = expressionChain.getExpressions();
+		if(auxExps.size()>0){
+			List<Expression> expressions = auxExps.subList(1, auxExps.size());
+			if (expressions.isEmpty()) {
+				if (isOthers()) {
+					return "others";
+				} else {
+					return "";
+				}
+			}
+			String result = "";
+			for (Expression expression : expressions) {
+				result += expression.getRepresentation() + " ";
+			}
+			return result.trim();
+		}
+		return "";
 	}
 }

@@ -70,7 +70,7 @@ public class JsonDiagramPropertiesRule extends PropertiesForClassComponent<Diagr
 		forkForm.setWidth(null);
 		forkForm.addComponent(fieldWithSearchButton);
 
-		addTab(forkForm, "TODO - JsonDiagramProperties Rule", true, 0);
+		addTab(forkForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_RULE_NODE_CAPTION), true, 0);
 	}
 
 	@Override

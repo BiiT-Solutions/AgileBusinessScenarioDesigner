@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 
 @Entity
-@Table(name = "GLOBAL_VARIABLE_DATA_POSTALCODE")
+@Table(name = "global_variable_data_postalcode")
 public class VariableDataPostalCode extends VariableData {
 
 	private String postalCode;
@@ -19,17 +19,19 @@ public class VariableDataPostalCode extends VariableData {
 	@Override
 	public void setValue(Object value) throws NotValidTypeInVariableData {
 		if (checkType(value)) {
-			this.postalCode = (String) value;
+			postalCode = (String) value;
 		} else {
 			throw new NotValidTypeInVariableData("The type '" + value.getClass() + "' is not allowed in this variable.");
 		}
 	}
 
+	@Override
 	public boolean checkType(Object value) {
-		if (value instanceof String)
+		if (value instanceof String) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 }

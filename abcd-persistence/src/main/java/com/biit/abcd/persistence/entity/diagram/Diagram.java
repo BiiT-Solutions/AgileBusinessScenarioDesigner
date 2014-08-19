@@ -34,14 +34,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-@Table(name = "DIAGRAM")
+@Table(name = "diagram")
 public class Diagram extends StorableObject implements INameAttribute {
 
 	private String name;
 
 	@SerializedName("cells")
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "ELEMENTS_OF_DIAGRAM")
+	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DiagramObject> diagramElements;
 
@@ -93,7 +93,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	/**
 	 * Function to get the list of diagram object elements. Do not add elements to this list, use the appropriate
 	 * functions.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<DiagramObject> getDiagramObjects() {
@@ -102,7 +102,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	/**
 	 * Only for using with hibernate.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<DiagramObject> getDiagramObjectForInitializeSet() {
@@ -121,7 +121,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	}
 
 	public void setDiagramObjects(List<DiagramObject> objects) {
-		this.diagramElements.clear();
+		diagramElements.clear();
 		addDiagramObjects(objects);
 	}
 
@@ -141,10 +141,12 @@ public class Diagram extends StorableObject implements INameAttribute {
 		}
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -160,7 +162,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	/**
 	 * Retrieves all links of a specific Diagram Element.
-	 * 
+	 *
 	 * @param source
 	 * @return
 	 */

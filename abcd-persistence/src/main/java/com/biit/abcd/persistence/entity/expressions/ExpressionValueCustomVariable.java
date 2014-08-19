@@ -10,10 +10,10 @@ import com.biit.form.TreeObject;
 
 /**
  * Defines a value as a already defined form custom variable.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE_CUSTOM_VARIABLE")
+@Table(name = "expression_value_custom_variable")
 public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectReference {
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -29,11 +29,26 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 		this.variable = variable;
 	}
 
+	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, boolean editable) {
+		super();
+		setReference(reference);
+		this.variable = variable;
+		setEditable(editable);
+	}
+
 	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit) {
 		super();
 		setReference(reference);
 		setUnit(dateUnit);
 		this.variable = variable;
+	}
+
+	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit, boolean editable) {
+		super();
+		setReference(reference);
+		setUnit(dateUnit);
+		this.variable = variable;
+		setEditable(editable);
 	}
 
 	@Override
@@ -73,6 +88,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 		ExpressionValueCustomVariable copy = new ExpressionValueCustomVariable();
 		copy.setReference(getReference());
 		copy.variable = variable;
+		copy.setEditable(isEditable());
 		return copy;
 	}
 

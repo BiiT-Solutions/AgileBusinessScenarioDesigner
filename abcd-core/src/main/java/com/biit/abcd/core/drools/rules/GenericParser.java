@@ -45,7 +45,6 @@ public class GenericParser {
 		}
 		if(conditions != null) {
 			ruleCore += this.parseConditions(conditions);
-//			ruleCore = this.removeDuplicateLines(ruleCore);
 		}
 		if(actions != null) {
 			// Expression rule
@@ -254,14 +253,14 @@ public class GenericParser {
 			if((treeObject2 != null)){
 				// Check the parent of the question
 				TreeObject questionParent = question.getParent();
-				this.putTreeObjectName(question, question.getComparationId().toString());
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
 				if (questionParent instanceof Category){
 					droolsConditions += this.simpleCategoryConditions((Category) questionParent);
 				}else if(questionParent instanceof Group){
 					droolsConditions += this.simpleGroupConditions((Group) questionParent);
 				}
-				this.putTreeObjectName(question, question.getComparationId().toString());
-				droolsConditions += "	$"+question.getComparationId().toString()+" : Question( getValue() == '" + treeObject2.getName() + "') from $"+questionParent.getComparationId().toString()+".getQuestions()\n";
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+				droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( getValue() == '" + treeObject2.getName() + "') from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 			}
 
 			// TODO
@@ -349,7 +348,7 @@ public class GenericParser {
 		String droolsConditions = "";
 		if((value1 != null) && (value2 != null)){
 			TreeObject questionParent = question.getParent();
-			this.putTreeObjectName(question, question.getComparationId().toString());
+			this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
 			// Check the parent of the question
 			if (questionParent instanceof Category){
 				droolsConditions += this.simpleCategoryConditions((Category) questionParent);
@@ -363,13 +362,13 @@ public class GenericParser {
 					String instanceOfDate = "getValue() instanceof Date";
 					String greatEqualsDate = "getValue() <= DateUtils.returnCurrentDateMinusYears("+value1.intValue()+")";
 					String lessEqualsDate = "getValue() >= DateUtils.returnCurrentDateMinusYears("+value2.intValue()+")";
-					droolsConditions += "	$"+question.getComparationId().toString()+" : Question( "+instanceOfDate+", " + greatEqualsDate  + ", " + lessEqualsDate + ") from $" + questionParent.getComparationId().toString() + ".getQuestions()\n";
+					droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( "+instanceOfDate+", " + greatEqualsDate  + ", " + lessEqualsDate + ") from $" + questionParent.getComparationIdNoDash().toString() + ".getQuestions()\n";
 				default:
 					break;
 				}
 				break;
 			default:
-				droolsConditions += "	$"+question.getComparationId().toString()+" : Question( getValue() >= '" + value1 + "' || <= '" + value2 + "') from $" + questionParent.getComparationId().toString() + ".getQuestions()\n";
+				droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( getValue() >= '" + value1 + "' || <= '" + value2 + "') from $" + questionParent.getComparationIdNoDash().toString() + ".getQuestions()\n";
 				break;
 			}
 
@@ -417,13 +416,13 @@ public class GenericParser {
 		if(!inValues.isEmpty()){
 			// Check the parent of the question
 			TreeObject questionParent = question.getParent();
-			this.putTreeObjectName(question, question.getComparationId().toString());
+			this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
 			if (questionParent instanceof Category){
 				droolsConditions += this.simpleCategoryConditions((Category) questionParent);
 			}else if(questionParent instanceof Group){
 				droolsConditions += this.simpleGroupConditions((Group) questionParent);
 			}
-			droolsConditions += "	$"+question.getComparationId().toString()+" : Question( getValue() in( " + inValues + " )) from $"+questionParent.getComparationId().toString()+".getQuestions()\n";
+			droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( getValue() in( " + inValues + " )) from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 		}
 		return droolsConditions;
 	}
@@ -443,30 +442,30 @@ public class GenericParser {
 		String varName = var.getVariable().getName();
 
 		if(scope instanceof Form) {
-			this.putTreeObjectName(scope, scope.getComparationId().toString());
-			ruleCore += "	$"+scope.getComparationId().toString()+" : SubmittedForm( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+")\n";
+			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
+			ruleCore += "	$"+scope.getComparationIdNoDash().toString()+" : SubmittedForm( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+")\n";
 
 		} else if (scope instanceof Category) {
 			TreeObject form = scope.getParent();
-			this.putTreeObjectName(scope, scope.getComparationId().toString());
+			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
 			ruleCore += this.simpleFormCondition((Form)form);
-			ruleCore += "	$"+scope.getComparationId().toString()+" : Category( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+") from $"+form.getComparationId().toString()+".getCategory('" + scope.getName() + "')\n";
+			ruleCore += "	$"+scope.getComparationIdNoDash().toString()+" : Category( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+") from $"+form.getComparationIdNoDash().toString()+".getCategory('" + scope.getName() + "')\n";
 
 		} else if (scope instanceof Group) {
 			TreeObject category = scope.getParent();
-			this.putTreeObjectName(scope, scope.getComparationId().toString());
+			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
 			ruleCore += this.simpleCategoryConditions((Category)category);
-			ruleCore += "	$"+scope.getComparationId().toString()+" : Group( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+" ) from $"+category.getComparationId().toString()+".getGroup('" + scope.getName() + "')\n";
+			ruleCore += "	$"+scope.getComparationIdNoDash().toString()+" : Group( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+" ) from $"+category.getComparationIdNoDash().toString()+".getGroup('" + scope.getName() + "')\n";
 
 		} else if (scope instanceof Question) {
 			TreeObject questionParent = scope.getParent();
-			this.putTreeObjectName(scope, scope.getComparationId().toString());
+			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
 			if (questionParent instanceof Category){
 				ruleCore += this.simpleCategoryConditions((Category) questionParent);
 			}else if(questionParent instanceof Group){
 				ruleCore += this.simpleGroupConditions((Group) questionParent);
 			}
-			ruleCore += "	$"+scope.getComparationId().toString()+" : Question( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+" ) from $"+questionParent.getComparationId().toString()+".getQuestions()\n";
+			ruleCore += "	$"+scope.getComparationIdNoDash().toString()+" : Question( isScoreSet('"+varName+"'), getNumberVariableValue('"+varName+"') == "+valueNumber.getValue()+" ) from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 		}
 		return ruleCore;
 	}
@@ -674,11 +673,11 @@ public class GenericParser {
 		// Finish the line of the condition
 		ruleCore = ruleCore.substring(0, ruleCore.length() - 3);
 		if (scopeClass.equals("Question")) {
-			ruleCore += ") from $" + parent.getComparationId().toString() + ".getQuestions())\n";
+			ruleCore += ") from $" + parent.getComparationIdNoDash().toString() + ".getQuestions())\n";
 		} else if (scopeClass.equals("Group")) {
-			ruleCore += ") from $" + parent.getComparationId().toString() + ".getGroups())\n";
+			ruleCore += ") from $" + parent.getComparationIdNoDash().toString() + ".getGroups())\n";
 		} else if (scopeClass.equals("Category")) {
-			ruleCore += ") from $" + parent.getComparationId().toString() + ".getCategories())\n";
+			ruleCore += ") from $" + parent.getComparationIdNoDash().toString() + ".getCategories())\n";
 		}
 
 		String getVarValue = "getVariableValue('" + cVar.getName() + "')";
@@ -719,8 +718,8 @@ public class GenericParser {
 
 	private String simpleFormCondition(Form form){
 //		if(this.getTreeObjectName(form)== null){
-			this.putTreeObjectName(form, form.getComparationId().toString());
-			return "	$"+form.getComparationId().toString()+" : SubmittedForm()\n";
+			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
+			return "	$"+form.getComparationIdNoDash().toString()+" : SubmittedForm()\n";
 //		}
 //		return "";
 	}
@@ -731,8 +730,8 @@ public class GenericParser {
 		conditions += this.simpleFormCondition(form);
 
 		//		if(this.getTreeObjectName(category)== null){
-			this.putTreeObjectName(category, category.getComparationId().toString());
-			conditions += "	$"+category.getComparationId().toString()+" : Category() from $"+form.getComparationId().toString()+".getCategory('" + category.getName() + "')\n";
+			this.putTreeObjectName(category, category.getComparationIdNoDash().toString());
+			conditions += "	$"+category.getComparationIdNoDash().toString()+" : Category() from $"+form.getComparationIdNoDash().toString()+".getCategory('" + category.getName() + "')\n";
 //		}
 		return conditions;
 	}
@@ -741,8 +740,8 @@ public class GenericParser {
 		Category category = (Category) group.getParent();
 		conditions += this.simpleCategoryConditions(category);
 //		if(this.getTreeObjectName(group)== null){
-			this.putTreeObjectName(group, group.getComparationId().toString());
-			conditions += "	$"+group.getComparationId().toString()+" : Group() from $"+category.getComparationId().toString()+".getGroup('" + group.getName() + "')\n";
+			this.putTreeObjectName(group, group.getComparationIdNoDash().toString());
+			conditions += "	$"+group.getComparationIdNoDash().toString()+" : Group() from $"+category.getComparationIdNoDash().toString()+".getGroup('" + group.getName() + "')\n";
 //		}
 		return conditions;
 	}
@@ -753,16 +752,16 @@ public class GenericParser {
 			Category category = (Category) questionParent;
 			conditions += this.simpleCategoryConditions(category);
 //			if(this.getTreeObjectName(question)== null){
-				this.putTreeObjectName(question, question.getComparationId().toString());
-				conditions += "	$"+question.getComparationId().toString()+" : Question( getTag() == '" + question.getName() + "') from $"+category.getComparationId().toString()+".getQuestions()\n";
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+				conditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( getTag() == '" + question.getName() + "') from $"+category.getComparationIdNoDash().toString()+".getQuestions()\n";
 //			}
 
 		}else if(questionParent instanceof Group){
 			Group group = (Group) questionParent;
 			conditions += this.simpleGroupConditions(group);
 //			if(this.getTreeObjectName(question)== null){
-				this.putTreeObjectName(question, question.getComparationId().toString());
-				conditions += "	$"+question.getComparationId().toString()+" : Question( getTag() == '" + question.getName() + "') from $"+group.getComparationId().toString()+".getQuestions()\n";
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+				conditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( getTag() == '" + question.getName() + "') from $"+group.getComparationIdNoDash().toString()+".getQuestions()\n";
 //			}
 		}
 		return conditions;
@@ -831,7 +830,7 @@ public class GenericParser {
 		// TODO fix the condition, the diagram creates another type of expression
 		if(answerExpressions.get(1) instanceof ExpressionValueNumber){
 			Double years = ((ExpressionValueNumber)answerExpressions.get(1)).getValue();
-			droolsConditions += "	$"+question.getComparationId().toString()+" : Question(getValue() instanceof Date, getValue() <= DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationId().toString()+".getQuestions()\n";
+			droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question(getValue() instanceof Date, getValue() <= DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 		}
 		return droolsConditions;
 	}
@@ -847,7 +846,7 @@ public class GenericParser {
 		// TODO fix the condition, the diagram creates another type of expression
 		if(answerExpressions.get(1) instanceof ExpressionValueNumber){
 			Double years = ((ExpressionValueNumber)answerExpressions.get(1)).getValue();
-			droolsConditions += "	$"+question.getComparationId().toString()+" : Question(getValue() instanceof Date, getValue() < DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationId().toString()+".getQuestions()\n";
+			droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question(getValue() instanceof Date, getValue() < DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 		}
 		return droolsConditions;
 	}
@@ -863,7 +862,7 @@ public class GenericParser {
 		// TODO fix the condition, the diagram creates another type of expression
 		if(answerExpressions.get(1) instanceof ExpressionValueNumber){
 			Double years = ((ExpressionValueNumber)answerExpressions.get(1)).getValue();
-			droolsConditions += "	$"+question.getComparationId().toString()+" : Question(getValue() instanceof Date, getValue() >= DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationId().toString()+".getQuestions()\n";
+			droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question(getValue() instanceof Date, getValue() >= DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 		}
 		return droolsConditions;
 	}
@@ -879,7 +878,7 @@ public class GenericParser {
 		// TODO fix the condition, the diagram creates another type of expression
 		if(answerExpressions.get(1) instanceof ExpressionValueNumber){
 			Double years = ((ExpressionValueNumber)answerExpressions.get(1)).getValue();
-			droolsConditions += "	$"+question.getComparationId().toString()+" : Question(getValue() instanceof Date, getValue() > DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationId().toString()+".getQuestions()\n";
+			droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question(getValue() instanceof Date, getValue() > DateUtils.returnCurrentDateMinusYears("+years.intValue()+")) from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 		}
 		return droolsConditions;
 	}

@@ -4,11 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Defines a particular value in a expression. 
+ * Defines a particular value in a expression.
  *
  */
 @Entity
-@Table(name = "EXPRESSION_VALUE")
+@Table(name = "expression_value")
 public abstract class ExpressionValue extends Expression {
 
 }

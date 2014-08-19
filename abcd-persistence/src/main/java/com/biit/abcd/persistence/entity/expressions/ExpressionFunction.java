@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * User for defining functions as MAX, MIN, AVERAGE, ABS, ...
  */
 @Entity
-@Table(name = "EXPRESSION_FUNCTION")
+@Table(name = "expression_function")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ExpressionFunction extends Expression {
 

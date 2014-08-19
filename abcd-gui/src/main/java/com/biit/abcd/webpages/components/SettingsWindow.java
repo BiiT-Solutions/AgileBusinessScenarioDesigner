@@ -14,9 +14,6 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.exceptions.ChildrenNotFoundException;
-import com.biit.abcd.persistence.entity.exceptions.FieldTooLongException;
-import com.biit.abcd.persistence.entity.exceptions.NotValidChildException;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -83,10 +80,8 @@ public class SettingsWindow extends PopupWindow {
 									droolsWindow.close();
 
 								} catch (ExpressionInvalidException | RuleInvalidException | IOException
-										| NotValidChildException | NotValidOperatorInExpression
-										| ChildrenNotFoundException | FieldTooLongException
-										| CategoryDoesNotExistException | DocumentException
-										| CategoryNameWithoutTranslation e) {
+										| NotValidOperatorInExpression | CategoryDoesNotExistException
+										| DocumentException | CategoryNameWithoutTranslation e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}

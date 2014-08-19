@@ -13,10 +13,10 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 
 /**
  * Generic class for creating operators logical and mathematical.
- * 
+ *
  */
 @Entity
-@Table(name = "EXPRESSION_OPERATOR")
+@Table(name = "expression_operator")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class ExpressionOperator extends Expression {
 
@@ -29,7 +29,7 @@ public abstract class ExpressionOperator extends Expression {
 
 	@Override
 	public String getRepresentation() {
-		if (currentValue == null || currentValue == AvailableOperator.NULL) {
+		if ((currentValue == null) || (currentValue == AvailableOperator.NULL)) {
 			return " ";
 		} else {
 			return " " + currentValue.getCaption() + " ";
@@ -44,7 +44,7 @@ public abstract class ExpressionOperator extends Expression {
 
 	/**
 	 * Set a value.
-	 * 
+	 *
 	 * @param exprOpvalue
 	 * @throws NotValidOperatorInExpression
 	 *             If this exception is launched, check ALLOWED_OPERATORS of the class.
@@ -71,7 +71,7 @@ public abstract class ExpressionOperator extends Expression {
 			return copy;
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
-		}		
+		}
 		return null;
 	}
 }

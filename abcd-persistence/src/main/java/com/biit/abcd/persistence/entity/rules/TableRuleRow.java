@@ -17,7 +17,7 @@ import com.biit.persistence.entity.StorableObject;
  * Specific rules created for managing decision tables.
  */
 @Entity
-@Table(name = "RULE_DECISION_TABLE_ROW")
+@Table(name = "rule_decision_table_row")
 public class TableRuleRow extends StorableObject {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -27,13 +27,13 @@ public class TableRuleRow extends StorableObject {
 	private ExpressionChain action;
 
 	public TableRuleRow() {
-		this.conditions = new ExpressionChain();
-		this.action = new ExpressionChain();
+		conditions = new ExpressionChain();
+		action = new ExpressionChain();
 	}
 
 	// Simple (Question : Answer => Action) builder
 	public TableRuleRow(Expression question, Expression answer, ExpressionChain action){
-		this.conditions = new ExpressionChain();
+		conditions = new ExpressionChain();
 		this.action = new ExpressionChain();
 		getConditions().add(question);
 		getConditions().add(answer);
