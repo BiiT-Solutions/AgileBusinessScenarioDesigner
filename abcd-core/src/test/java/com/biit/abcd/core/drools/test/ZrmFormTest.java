@@ -65,8 +65,9 @@ import com.biit.form.exceptions.NotValidChildException;
 
 public class ZrmFormTest {
 
-	private final static String APP = "Application1";
-	private final static String FORM = "Form1";
+	private final static String APP = "WebForms";
+	private final static String FORM = "De_Haagse_Passage_v2";
+	private final static String DOCUMENT_ID = "370023c797b9b9b691ed0e64a559f6adb7971df5";
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -86,6 +87,14 @@ public class ZrmFormTest {
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
+//	private ISubmittedForm loadForm() throws MalformedURLException, DocumentException, CategoryNameWithoutTranslation {
+//		ISubmittedForm form = new SubmittedForm(APP, FORM);
+//		this.orbeonImporter.readXml(OrbeonImporter.getXml(APP, FORM, DOCUMENT_ID), form);
+//		// Translate form
+//		OrbeonCategoryTranslator.getInstance().readXml(form);
+//		return form;
+//	}
+
 	@Test(groups = { "rules" })
 	public void completeZrmTest() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
@@ -98,6 +107,7 @@ public class ZrmFormTest {
 		this.readXml();
 		this.translateFormCategories();
 		formDrools.go(this.form);
+//		formDrools.go(this.loadForm());
 
 		for (ICategory category : this.form.getCategories()) {
 			System.out.println("Category name: " + category.getText() + " || Category score: "
@@ -113,7 +123,7 @@ public class ZrmFormTest {
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
 	 * Form used to create the drools rules
-	 * 
+	 *
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression

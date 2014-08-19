@@ -5,7 +5,9 @@ public enum QuestionUnit {
 
 	MONTHS("M"),
 
-	YEARS("Y");
+	YEARS("Y"),
+
+	DATE("DT");
 
 	String abbreviature;
 

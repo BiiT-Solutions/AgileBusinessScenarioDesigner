@@ -50,6 +50,9 @@ public class WindowSelectDateUnit extends AcceptCancelWindow {
 			case YEARS:
 				caption = ServerTranslate.translate(LanguageCodes.EXPRESSION_DATE_YEAR);
 				break;
+			case DATE:
+				caption = ServerTranslate.translate(LanguageCodes.EXPRESSION_DATE_DATE);
+				break;
 			}
 			unitSelector.setItemCaption(unit, caption);
 			unitSelector.setValue(unit);
