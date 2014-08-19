@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import com.biit.abcd.core.drools.rules.FormParser;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.utils.file.FileReader;
@@ -31,11 +29,8 @@ public class Form2DroolsNoDrl {
 
 	private KieManager km;
 	// To store the info of the submitted form
-	private String formInfo = null;
 	private ISubmittedForm submittedForm;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
-	private List<Rule> questionExceptionRules = new ArrayList<Rule>();
-	private List<Rule> categoryExceptionRules = new ArrayList<Rule>();
 
 	/**
 	 * Parses the vaadin form and loads the rules generated in the drools
@@ -57,7 +52,7 @@ public class Form2DroolsNoDrl {
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form);
-				// System.out.println(formRules.getRules());
+//				 System.out.println(formRules.getRules());
 //				Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());

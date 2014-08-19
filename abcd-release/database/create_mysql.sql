@@ -71,11 +71,6 @@
         primary key (ID)
     );
 
-    create table PARENT_OF_CHILDREN (
-        TreeObject_ID bigint not null,
-        children_ID bigint not null
-    );
-
     create table diagram (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -586,6 +581,11 @@
         primary key (ID)
     );
 
+    create table parent_of_children (
+        TreeObject_ID bigint not null,
+        children_ID bigint not null
+    );
+
     create table rule (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -760,9 +760,6 @@
 
     alter table BaseQuestion 
         add constraint UK_3m9ci7rb0u3owmafk0xh5w8bp  unique (comparationId);
-
-    alter table PARENT_OF_CHILDREN 
-        add constraint UK_oj9m32v898q47n973v4c4hmgi  unique (children_ID);
 
     alter table diagram 
         add constraint UK_cqcepkojqmp1r8a42yb1hh1c4  unique (ID);
@@ -976,6 +973,9 @@
 
     alter table global_variables 
         add constraint UK_kr7p6k3u1po5mbamq95rvh6gj  unique (comparationId);
+
+    alter table parent_of_children 
+        add constraint UK_3awgy2uyqhop13ni86af4ufgv  unique (children_ID);
 
     alter table rule 
         add constraint UK_8rqluiaunf9galin639sd894c  unique (ID);
