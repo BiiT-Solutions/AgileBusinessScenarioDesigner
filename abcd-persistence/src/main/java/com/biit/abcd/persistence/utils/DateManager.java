@@ -1,13 +1,10 @@
 package com.biit.abcd.persistence.utils;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
-import antlr.Utils;
 
 public class DateManager {
 	public final static String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -31,7 +28,7 @@ public class DateManager {
 		Date date = new Date(time.getTime());
 		return convertDateToString(date);
 	}
-	
+
 //	public static Date convertStringToDate(String date){
 //		try {
 //			return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault() ).parse(date);
@@ -40,7 +37,7 @@ public class DateManager {
 //			e.printStackTrace();
 //		}
 //	}
-	
+
 	public static Date incrementDateOneDay(Date date){
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);

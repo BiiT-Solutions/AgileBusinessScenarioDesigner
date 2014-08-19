@@ -91,7 +91,7 @@ public class DiagramDateTest {
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
 	 * Form used to create the drools rules
-	 * 
+	 *
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
@@ -235,7 +235,8 @@ public class DiagramDateTest {
 		// new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
 		// new ExpressionValueNumber(18.)
 		// ));
-		forkTable1Link.setExpressionChain(new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN),
+		forkTable1Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(forkQuestion),
+				new ExpressionFunction(AvailableFunction.BETWEEN),
 				new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
 						18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
 		// DiagramLink forkTable2Link = new DiagramLink(nodeFork, nodeTable2);

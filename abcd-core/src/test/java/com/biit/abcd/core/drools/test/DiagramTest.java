@@ -213,12 +213,12 @@ public class DiagramTest {
 		DiagramLink forkTable1Link = new DiagramLink(nodeFork, nodeTable1);
 		forkTable1Link.setJointjsId(IdGenerator.createId());
 		forkTable1Link.setType(DiagramObjectType.LINK);
-		forkTable1Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(question2.getChild(1))));
+		forkTable1Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(question2), new ExpressionValueTreeObjectReference(question2.getChild(1))));
 
 		DiagramLink forkTable2Link = new DiagramLink(nodeFork, nodeTable2);
 		forkTable2Link.setJointjsId(IdGenerator.createId());
 		forkTable2Link.setType(DiagramObjectType.LINK);
-		forkTable2Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(question2.getChild(0))));
+		forkTable2Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(question2), new ExpressionValueTreeObjectReference(question2.getChild(0))));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramForkNode);

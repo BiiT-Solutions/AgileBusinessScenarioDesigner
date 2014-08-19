@@ -60,7 +60,6 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
-import com.biit.form.BaseQuestion;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.FieldTooLongException;
@@ -109,7 +108,7 @@ public class DhszwTest {
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
 	 * Form used to create the drools rules
-	 * 
+	 *
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression

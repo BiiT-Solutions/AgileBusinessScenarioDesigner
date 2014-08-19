@@ -53,7 +53,6 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
-import com.biit.form.BaseQuestion;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.FieldTooLongException;
@@ -112,7 +111,7 @@ public class RulesTest {
 
 	/**
 	 * Create the form structure.
-	 * 
+	 *
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression

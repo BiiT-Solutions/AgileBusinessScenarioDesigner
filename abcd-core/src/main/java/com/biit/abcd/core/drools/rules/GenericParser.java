@@ -121,6 +121,18 @@ public class GenericParser {
 				return this.questionAnswerEqualsCondition((Question)questionObject, answerExpressions);
 			}
 		}
+		// Condition of type (Question | Answer)
+		if((conditions.size() == 2) &&
+				(conditions.get(0) instanceof ExpressionValueTreeObjectReference) &&
+				(conditions.get(1) instanceof ExpressionValueTreeObjectReference)){
+			TreeObject questionObject = ((ExpressionValueTreeObjectReference)conditions.get(0)).getReference();
+			if((questionObject != null) && (questionObject instanceof Question)) {
+				return this.questionAnswerEqualsCondition((Question)questionObject, (ExpressionValueTreeObjectReference)conditions.get(1));
+
+//				List<Expression> answerExpressions = ((ExpressionChain)conditions.get(1)).getExpressions();
+//				return this.questionAnswerEqualsCondition((Question)questionObject, answerExpressions);
+			}
+		}
 		// Condition of type (cat.score == value)
 		else if((conditions.size() == 3) &&
 				(conditions.get(0) instanceof ExpressionValueCustomVariable) &&
@@ -248,20 +260,7 @@ public class GenericParser {
 //		System.out.println("ANSWER CLASSS: " + answerExpression.getClass());
 
 		if(answerExpression instanceof ExpressionValueTreeObjectReference){
-			ExpressionValueTreeObjectReference expVal2 = (ExpressionValueTreeObjectReference) answerExpressions.get(0);
-			TreeObject treeObject2 = expVal2.getReference();
-			if((treeObject2 != null)){
-				// Check the parent of the question
-				TreeObject questionParent = question.getParent();
-				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
-				if (questionParent instanceof Category){
-					droolsConditions += this.simpleCategoryConditions((Category) questionParent);
-				}else if(questionParent instanceof Group){
-					droolsConditions += this.simpleGroupConditions((Group) questionParent);
-				}
-				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
-				droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( getValue() == '" + treeObject2.getName() + "') from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
-			}
+			droolsConditions += this.questionAnswerEqualsCondition(question, (ExpressionValueTreeObjectReference)answerExpression);
 
 			// TODO
 		}else if(answerExpression instanceof ExpressionFunction){
@@ -311,6 +310,24 @@ public class GenericParser {
 			default:
 				break;
 			}
+		}
+		return droolsConditions;
+	}
+
+	private String questionAnswerEqualsCondition(Question question, ExpressionValueTreeObjectReference answer){
+		String droolsConditions = "";
+		TreeObject treeObject2 = answer.getReference();
+		if((treeObject2 != null)){
+			// Check the parent of the question
+			TreeObject questionParent = question.getParent();
+			this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+			if (questionParent instanceof Category){
+				droolsConditions += this.simpleCategoryConditions((Category) questionParent);
+			}else if(questionParent instanceof Group){
+				droolsConditions += this.simpleGroupConditions((Group) questionParent);
+			}
+			this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+			droolsConditions += "	$"+question.getComparationIdNoDash().toString()+" : Question( getValue() == '" + treeObject2.getName() + "') from $"+questionParent.getComparationIdNoDash().toString()+".getQuestions()\n";
 		}
 		return droolsConditions;
 	}

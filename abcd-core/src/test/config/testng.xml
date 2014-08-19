@@ -15,7 +15,7 @@
 			<class name="com.biit.abcd.core.drools.test.DiagramTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramDateTest" /> 
 			<class name="com.biit.abcd.core.drools.test.ZrmFormTest" />
-			<!-- <class name="com.biit.abcd.core.drools.test.DiagramORTest" />  -->
+			<!-- <class name="com.biit.abcd.core.drools.test.DiagramORTest" />   -->
 			<!-- Test dependent of the orbeon server, may not work in all machines -->
 			<!-- <class name="com.biit.abcd.core.drools.test.DHPUserFormsTest" /> -->
 		</classes>

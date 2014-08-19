@@ -13,7 +13,6 @@ import org.kie.api.runtime.KieSession;
 
 import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 
-@SuppressWarnings("rawtypes")
 public class KieManager {
 
 	private List<DroolsGlobalVariable> globalVariables;
@@ -21,12 +20,12 @@ public class KieManager {
 	private KieServices ks;
 
 	public KieManager(){
-		globalVariables = new ArrayList<DroolsGlobalVariable>();
-		facts = new ArrayList<ISubmittedForm>();
+		this.globalVariables = new ArrayList<DroolsGlobalVariable>();
+		this.facts = new ArrayList<ISubmittedForm>();
 	}
 
 	public List<DroolsGlobalVariable> getGlobalVariables() {
-		return globalVariables;
+		return this.globalVariables;
 	}
 
 	public void setGlobalVariables(List<DroolsGlobalVariable> globalVariables) {
@@ -34,7 +33,7 @@ public class KieManager {
 	}
 
 	public List<ISubmittedForm> getFacts() {
-		return facts;
+		return this.facts;
 	}
 
 	public void setFacts(List<ISubmittedForm> list) {
@@ -42,14 +41,14 @@ public class KieManager {
 	}
 
 	public void buildSessionRules(String rules){
-		ks = KieServices.Factory.get();
-		KieFileSystem kfs = ks.newKieFileSystem();
-		createRules(kfs, rules);
-		build(ks, kfs);
+		this.ks = KieServices.Factory.get();
+		KieFileSystem kfs = this.ks.newKieFileSystem();
+		this.createRules(kfs, rules);
+		this.build(this.ks, kfs);
 	}
 
 	public void execute(){
-		startKie(globalVariables, facts);
+		this.startKie(this.globalVariables, this.facts);
 	}
 
 	/**
@@ -59,11 +58,11 @@ public class KieManager {
 	 * @param facts
 	 */
 	public void startKie(List<DroolsGlobalVariable> globalVars, List<ISubmittedForm> facts){
-		KieRepository kr = ks.getRepository();
-		KieContainer kContainer = ks.newKieContainer(kr.getDefaultReleaseId());
+		KieRepository kr = this.ks.getRepository();
+		KieContainer kContainer = this.ks.newKieContainer(kr.getDefaultReleaseId());
 		KieSession kSession = kContainer.newKieSession();
-		setGlobalVariables(kSession, globalVars);
-		insertFacts(kSession, facts);
+		this.setGlobalVariables(kSession, globalVars);
+		this.insertFacts(kSession, facts);
 		kSession.fireAllRules();
 	}
 

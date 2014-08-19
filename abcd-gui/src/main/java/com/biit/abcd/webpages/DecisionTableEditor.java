@@ -386,14 +386,14 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								removeAnswerExpressionIfNeeded(originalQuestion, selectedQuestion, answerExpression);
-								whatever(row, (Integer) propertyId, selectedQuestion, windowDate.getValue());
+								setQuestionDateExpression(row, (Integer) propertyId, selectedQuestion, windowDate.getValue());
 								window.close();
 							}
 						});
 						windowDate.showCentered();
 					} else {
 						removeAnswerExpressionIfNeeded(originalQuestion, selectedQuestion, answerExpression);
-						whatever(row, (Integer) propertyId, selectedQuestion);
+						setQuestionExpression(row, (Integer) propertyId, selectedQuestion);
 					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
@@ -414,21 +414,13 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		}
 	}
 
-	private void whatever(TableRuleRow row, Integer propertyId, Question selectedQuestion) {
-		ExpressionValueTreeObjectReference reference;
-
-		reference = new ExpressionValueTreeObjectReference(selectedQuestion);
-
-		row.setExpression(propertyId, reference);
+	private void setQuestionExpression(TableRuleRow row, Integer propertyId, Question selectedQuestion) {
+		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedQuestion));
 		decisionTable.update(getSelectedTableRule());
 	}
 
-	private void whatever(TableRuleRow row, Integer propertyId, Question selectedQuestion, QuestionUnit unit) {
-		ExpressionValueTreeObjectReference reference;
-
-		reference = new ExpressionValueTreeObjectReference(selectedQuestion, unit);
-
-		row.setExpression(propertyId, reference);
+	private void setQuestionDateExpression(TableRuleRow row, Integer propertyId, Question selectedQuestion, QuestionUnit unit) {
+		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedQuestion, unit));
 		decisionTable.update(getSelectedTableRule());
 	}
 

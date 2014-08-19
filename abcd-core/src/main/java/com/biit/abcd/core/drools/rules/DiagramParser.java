@@ -1,7 +1,6 @@
 package com.biit.abcd.core.drools.rules;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -18,7 +17,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
-import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 
@@ -123,9 +121,15 @@ public class DiagramParser extends GenericParser {
 		} else {
 			// For each outgoing link a new condition is created
 			for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
-				List<Expression> conditions = Arrays.asList(expVal, outLink.getExpressionChain());
+//				List<Expression> conditions = Arrays.asList(expVal, outLink.getExpressionChain());
 				// Parse the conditions using the generic parser
-				String childrenCondition = this.createDroolsRule(conditions, null, extraConditions);
+//				String childrenCondition = this.createDroolsRule(conditions, null, extraConditions);
+//				System.out.println(outLink.getExpressionChain());
+//				System.out.println(outLink.getExpressionChain().getExpressions().size());
+//				for(Expression exp : outLink.getExpressionChain().getExpressions()){
+//					System.out.println("Expression class: " + exp.getClass());
+//				}
+				String childrenCondition = this.createDroolsRule(outLink.getExpressionChain().getExpressions(), null, extraConditions);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
 			}
