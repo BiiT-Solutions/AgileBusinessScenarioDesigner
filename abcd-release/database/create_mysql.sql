@@ -42,21 +42,6 @@
         primary key (ID)
     );
 
-    create table BaseGroup (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        label varchar(255),
-        name varchar(185),
-        sortSeq bigint not null,
-        parent_ID bigint,
-        repetable bit not null,
-        primary key (ID)
-    );
-
     create table BaseQuestion (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -68,6 +53,21 @@
         name varchar(185),
         sortSeq bigint not null,
         parent_ID bigint,
+        primary key (ID)
+    );
+
+    create table BaseRepeatableGroup (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label varchar(255),
+        name varchar(185),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        repetable bit not null,
         primary key (ID)
     );
 
@@ -749,17 +749,17 @@
     alter table BaseForm 
         add constraint UK_g7segt6l5tegemkbp78vk02bc  unique (comparationId);
 
-    alter table BaseGroup 
-        add constraint UK_2jv9tjr1cl5ijdaueliw7ye25  unique (ID);
-
-    alter table BaseGroup 
-        add constraint UK_2ps7c6cq37l6c3672phkxkhc1  unique (comparationId);
-
     alter table BaseQuestion 
         add constraint UK_45n10petyj45qbfliy3nruklb  unique (ID);
 
     alter table BaseQuestion 
         add constraint UK_3m9ci7rb0u3owmafk0xh5w8bp  unique (comparationId);
+
+    alter table BaseRepeatableGroup 
+        add constraint UK_ng1m1qsmuu6hbqdtgvcaolu13  unique (ID);
+
+    alter table BaseRepeatableGroup 
+        add constraint UK_m1efhcrjm0sx5fx5e7i9xjl0v  unique (comparationId);
 
     alter table diagram 
         add constraint UK_cqcepkojqmp1r8a42yb1hh1c4  unique (ID);
