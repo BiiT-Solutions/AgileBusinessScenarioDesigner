@@ -117,8 +117,7 @@ public class FormToDroolsExporter {
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		// Load the structure file of the ZRM form
-		// TODO
+		// Load the structure file of the form
 //		String xmlStructure = readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(),
 //				Charset.defaultCharset());
 //		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm, xmlStructure);
