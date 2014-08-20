@@ -10,14 +10,14 @@ import org.apache.log4j.Logger;
  * Defines basic log behavior. Uses log4j.properties.
  */
 public class AbcdLogger {
-	private static final Logger logger = Logger.getLogger("com.biit.abcd");
+	private static final Logger logger = Logger.getLogger(AbcdLogger.class);
 
 	private AbcdLogger() {
 	}
 
 	/**
 	 * Events that have business meaning (i.e. creating category, deleting form, ...). To follow user actions.
-	 * 
+	 *
 	 * @param message
 	 */
 	private static void info(String message) {
@@ -33,7 +33,7 @@ public class AbcdLogger {
 
 	/**
 	 * Shows not critical errors. I.e. Email address not found, permissions not allowed for this user, ...
-	 * 
+	 *
 	 * @param message
 	 */
 	private static void warning(String message) {
@@ -42,7 +42,7 @@ public class AbcdLogger {
 
 	/**
 	 * Shows not critical errors. I.e. Email address not found, permissions not allowed for this user, ...
-	 * 
+	 *
 	 * @param message
 	 */
 	public static void warning(String className, String message) {
@@ -52,7 +52,7 @@ public class AbcdLogger {
 	/**
 	 * For following the trace of the execution. I.e. Knowing if the application access to a method, opening database
 	 * connection, etc.
-	 * 
+	 *
 	 * @param message
 	 */
 	private static void debug(String message) {
@@ -72,7 +72,7 @@ public class AbcdLogger {
 	/**
 	 * To log any not expected error that can cause application malfuncionality. I.e. couldn't open database connection,
 	 * etc..
-	 * 
+	 *
 	 * @param message
 	 */
 	private static void severe(String message) {
@@ -81,7 +81,7 @@ public class AbcdLogger {
 
 	/**
 	 * To log any not expected error that can cause application malfuncionality.
-	 * 
+	 *
 	 * @param message
 	 */
 	public static void severe(String className, String message) {
@@ -90,7 +90,7 @@ public class AbcdLogger {
 
 	/**
 	 * Used for debugging when accessing to a method.
-	 * 
+	 *
 	 * @param className
 	 * @param method
 	 */
@@ -100,7 +100,7 @@ public class AbcdLogger {
 
 	/**
 	 * Used for debugging when exiting from a method.
-	 * 
+	 *
 	 * @param className
 	 * @param method
 	 */
@@ -110,7 +110,7 @@ public class AbcdLogger {
 
 	/**
 	 * To log java exceptions and log also the stack trace.
-	 * 
+	 *
 	 * @param className
 	 * @param throwable
 	 */

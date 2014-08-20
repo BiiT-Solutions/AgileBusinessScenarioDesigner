@@ -1,8 +1,10 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.FieldTooLongException;
@@ -39,19 +41,28 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 
 	@Override
 	protected void updateConcreteFormElement() {
+		String instanceName = instance.getName();
 		try {
 			instance.setName(groupTechnicalLabel.getValue());
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has modified the Group '" + instanceName + "' property 'Name' to '" + instance.getName()
+					+ "'.");
 		} catch (FieldTooLongException e) {
 			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
 					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 			try {
 				instance.setName(groupTechnicalLabel.getValue().substring(0, 185));
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has modified the Group '" + instanceName + "' property 'Name' to '" + instance.getName()
+						+ "' (Name too long).");
 			} catch (FieldTooLongException e1) {
 				// Impossible.
 			}
 		}
 		instance.setRepetable(groupIsRepeatable.getValue());
-		
+		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+				+ "'Group '" + instance.getName() + "' value 'Repeat' set to '" + groupIsRepeatable.getValue() + "'.");
+
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 

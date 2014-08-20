@@ -4,6 +4,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -53,13 +54,14 @@ public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassCompone
 						Diagram diagram = selectAnswerWindow.getSelectedDiagram();
 						if (diagram != null) {
 
-							if(diagram.equals(instance.getParent())){
+							if (diagram.equals(instance.getParent())) {
 								MessageManager.showError(LanguageCodes.ERROR_SAME_DIAGRAM);
 								return;
 							}
 
-							Diagram parentDiagram = UserSessionHandler.getFormController().getForm().getDiagramParent(diagram);
-							if(parentDiagram!=null){
+							Diagram parentDiagram = UserSessionHandler.getFormController().getForm()
+									.getDiagramParent(diagram);
+							if (parentDiagram != null) {
 								MessageManager.showError(LanguageCodes.ERROR_DIAGRAM_IS_IN_USE);
 								return;
 							}
@@ -68,6 +70,11 @@ public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassCompone
 							fieldWithSearchButton.setValue(diagram, diagram.getName());
 							selectAnswerWindow.close();
 							firePropertyUpdateListener(instance);
+
+							AbcdLogger.info(this.getClass().getName(),
+									"User '" + UserSessionHandler.getUser().getEmailAddress()
+											+ "' added Child diagram " + instance.getChildDiagram().getName()
+											+ " to Diagram node with ID:" + instance.getId() + "'.");
 						} else {
 							MessageManager.showError(LanguageCodes.ERROR_SELECT_DIAGRAM);
 						}
@@ -83,11 +90,14 @@ public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassCompone
 			public void buttonClick(ClickEvent event) {
 				instance.setChildDiagram(null);
 				firePropertyUpdateListener(instance);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' removed diagram from Diagram node with ID:" + instance.getId() + "'.");
 			}
 		});
 		childForm.addComponent(fieldWithSearchButton);
 
-		addTab(childForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_DIAGRAM_CHILD_NODE_CAPTION), true, 0);
+		addTab(childForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_DIAGRAM_CHILD_NODE_CAPTION),
+				true, 0);
 	}
 
 	@Override

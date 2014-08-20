@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
@@ -13,7 +15,8 @@ import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Component for editing an expression. Is composed by a viewer and a properties menu in tabs.
+ * Component for editing an expression. Is composed by a viewer and a properties
+ * menu in tabs.
  */
 public abstract class ExpressionEditorComponent extends CustomComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
@@ -30,6 +33,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 
 	/**
 	 * Boolean used to create the simplified version of the operator tab
+	 *
 	 * @param simpleOperatorTab
 	 */
 	public ExpressionEditorComponent() {
@@ -64,6 +68,10 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			public void elementAdded(Object newElement) {
 				if (getSelectedViewer() != null) {
 					getSelectedViewer().addElementToSelected((Expression) newElement);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
+							+ " with 'Value: " + newElement + "'.");
 				}
 			}
 
@@ -81,11 +89,15 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			public void elementAdded(Object newElement) {
 				if (getSelectedViewer() != null) {
 					getSelectedViewer().addElementToSelected((Expression) newElement);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
+							+ " with 'Value: " + newElement + "'.");
 				}
 			}
 
 		});
-		//Adding units to dates need to refresh the GUI.
+		// Adding units to dates need to refresh the GUI.
 		formVariablesLayout.addUpdateElementListener(new ElementUpdatedListener() {
 			@Override
 			public void elementUpdated(Object newElement) {
@@ -107,6 +119,10 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			public void elementAdded(Object newElement) {
 				if (getSelectedViewer() != null) {
 					getSelectedViewer().addElementToSelected((Expression) newElement);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
+							+ " with 'Value: " + newElement + "'.");
 				}
 			}
 
@@ -119,8 +135,8 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 	}
 
 	/**
-	 * A Expression editor can have more than one viewer. When user click into a viewer, this one gains the focus and is
-	 * selected.
+	 * A Expression editor can have more than one viewer. When user click into a
+	 * viewer, this one gains the focus and is selected.
 	 */
 	public abstract ExpressionViewer getSelectedViewer();
 
@@ -133,7 +149,11 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 
 			@Override
 			public void handleAction(Object sender, Object target) {
+				Expression expression = getSelectedViewer().getSelectedExpression();
 				getSelectedViewer().removeSelectedExpression();
+
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has deleted the Expression " + expression.getRepresentation() + "'.");
 			}
 		});
 

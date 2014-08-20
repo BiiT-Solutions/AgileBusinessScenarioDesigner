@@ -52,8 +52,17 @@ public class SettingsWindow extends PopupWindow {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
-						close();
+
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
+								windowAccept.close();
+								close();
+							}
+						});
 					}
 				});
 		Button droolsEngineButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_DROOLS_ENGINE),

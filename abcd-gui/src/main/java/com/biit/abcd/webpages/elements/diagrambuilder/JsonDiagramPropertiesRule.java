@@ -1,8 +1,10 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -47,6 +49,9 @@ public class JsonDiagramPropertiesRule extends PropertiesForClassComponent<Diagr
 							fieldWithSearchButton.setValue(ruleWindow.getValue(), ruleWindow.getValue().getName());
 							instance.setRule(ruleWindow.getValue());
 							firePropertyUpdateListener(instance);
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' added rule "
+									+ instance.getRule().getName() + " to Rule node with ID:" + instance.getId() + "'.");
 							window.close();
 						} else {
 							MessageManager.showError(LanguageCodes.ERROR_SELECT_TABLE);
@@ -62,6 +67,8 @@ public class JsonDiagramPropertiesRule extends PropertiesForClassComponent<Diagr
 			@Override
 			public void buttonClick(ClickEvent event) {
 				instance.setRule(null);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' removed rule from Rule node with ID:" + instance.getId() + "'.");
 				firePropertyUpdateListener(instance);
 			}
 		});

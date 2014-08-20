@@ -1,7 +1,9 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
@@ -40,6 +42,9 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 			DiagramFork fork = (DiagramFork) element.getSourceElement();
 			if (fork.getReference() != null) {
 				setSelectAnswerExpression(fork);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' added expression " + instance.getExpressionChain().getRepresentation()
+						+ " to Link with ID:" + instance.getId() + "'.");
 			}
 			addTab(linkForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
 		}
@@ -94,6 +99,8 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 				instance.getExpressionChain().removeAllExpressions();
 				instance.addExpressionToExpressionChain(auxExp);
 				updateText();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' removed expression from Link with ID:" + instance.getId() + "'.");
 			}
 		});
 		linkForm.addComponent(fieldWithSearchButton);

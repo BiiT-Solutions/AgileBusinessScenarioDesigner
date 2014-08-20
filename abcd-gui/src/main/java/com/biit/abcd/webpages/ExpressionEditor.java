@@ -80,7 +80,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 				}
 			}
 			refreshExpressionEditor();
-		}else{
+		} else {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
@@ -117,9 +117,11 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				ExpressionChain expChain = getSelectedExpression();
 				removeSelectedExpression();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has removed a " + expChain.getClass() + " with 'Name: " + expChain.getName() + "'.");
 			}
-
 		});
 
 		setUpperMenu(decisionTableEditorUpperMenu);

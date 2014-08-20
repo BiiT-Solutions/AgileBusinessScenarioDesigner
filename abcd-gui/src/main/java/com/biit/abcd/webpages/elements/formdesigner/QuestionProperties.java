@@ -1,10 +1,12 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.AnswerTypeUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
@@ -90,28 +92,43 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 
 	@Override
 	protected void updateConcreteFormElement() {
+		String instanceName = instance.getName();
 		try {
 			instance.setName(questionTechnicalLabel.getValue());
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has modified the Question '" + instanceName + "' property 'Name' to '" + instance.getName() + "'.");
 		} catch (FieldTooLongException e) {
 			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
 					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 			try {
 				instance.setName(questionTechnicalLabel.getValue().substring(0, 185));
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has modified the Question '" + instanceName + "' property 'Name' to '" + instance.getName()
+						+ "' (Name too long).");
 			} catch (FieldTooLongException e1) {
 				// Impossible.
 			}
 		}
 		try {
 			instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
+			AbcdLogger.info(this.getClass().getName(),
+					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Question '"
+							+ instance.getName() + "' property 'AnswerType' to '" + instance.getAnswerFormat() + "'.");
 		} catch (InvalidAnswerFormatException e) {
 			// Not input fields must remove any answer format
 			try {
 				instance.setAnswerFormat(null);
+				AbcdLogger.info(this.getClass().getName(),
+						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Question '"
+								+ instance.getName() + "' property 'AnswerType' to '" + null + "'.");
 			} catch (InvalidAnswerFormatException e1) {
 				// Do nothing.
 			}
 		}
 		instance.setAnswerType((AnswerType) answerType.getValue());
+		AbcdLogger.info(this.getClass().getName(),
+				"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has set the Question '"
+						+ instance.getName() + "' property 'AnswerFormat' to '" + instance.getAnswerType() + "'.");
 
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}

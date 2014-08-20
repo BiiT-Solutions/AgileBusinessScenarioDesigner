@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.webpages.DecisionTableEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
@@ -31,6 +32,10 @@ public class WindoNewTable extends WindowCreateNewObject {
 		UserSessionHandler.getFormController().getForm().getTableRules().add(tableRule);
 		((DecisionTableEditor) getParentWindow()).addTablefromWindow(tableRule);
 		((DecisionTableEditor) getParentWindow()).sortTableMenu();
+
+		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+				+ "' has created a " + tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
+
 		close();
 	}
 

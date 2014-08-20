@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.droolsrule;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.webpages.DroolsRuleEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
@@ -31,6 +32,10 @@ public class WindowNewRule extends WindowCreateNewObject {
 		UserSessionHandler.getFormController().getForm().getRules().add(rule);
 		((DroolsRuleEditor) getParentWindow()).addRulefromWindow(rule);
 		((DroolsRuleEditor) getParentWindow()).sortTableMenu();
+
+		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+				+ "' has created a " + rule.getClass() + " with 'Name: " + rule.getName() + "'.");
+
 		close();
 	}
 }

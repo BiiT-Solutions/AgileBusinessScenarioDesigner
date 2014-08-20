@@ -49,13 +49,13 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
-		//If there is no form, then go back to form manager.
+		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
 		}
-		
+
 		updateButtons(true);
 
 		HorizontalCollapsiblePanel rootLayout = new HorizontalCollapsiblePanel(false);
@@ -81,6 +81,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			public void diagramObjectPicked(DiagramObject object) {
 				propertiesContainer.focus();
 				propertiesContainer.updatePropertiesComponent(object);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' Element " + object + " picked in Diagram: '" + diagramBuilder.getDiagram().getName()
+						+ "'.");
 			}
 		});
 		diagramBuilder.addJumpToListener(new JumpToListener() {
@@ -94,24 +97,39 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					ApplicationFrame.navigateTo(WebMap.TREE_DESIGNER);
 					FormDesigner formDesigner = (FormDesigner) ((ApplicationFrame) UI.getCurrent()).getCurrentView();
 					formDesigner.selectComponent(((ExpressionValueTreeObjectReference) element).getReference());
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' jumped to " + WebMap.TREE_DESIGNER
+							+ " from Diagram: '" + diagramBuilder.getDiagram().getName() + "'.");
 				}
 				if (element instanceof TableRule) {
 					ApplicationFrame.navigateTo(WebMap.DECISSION_TABLE_EDITOR);
 					DecisionTableEditor decisionTable = (DecisionTableEditor) ((ApplicationFrame) UI.getCurrent())
 							.getCurrentView();
 					decisionTable.selectComponent((TableRule) element);
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' jumped to "
+							+ WebMap.DECISSION_TABLE_EDITOR + " from Diagram: '"
+							+ diagramBuilder.getDiagram().getName() + "'.");
 				}
 				if (element instanceof ExpressionChain) {
 					ApplicationFrame.navigateTo(WebMap.EXPRESSION_EDITOR);
 					ExpressionEditor expressionEditor = (ExpressionEditor) ((ApplicationFrame) UI.getCurrent())
 							.getCurrentView();
 					expressionEditor.selectComponent((ExpressionChain) element);
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' jumped to "
+							+ WebMap.EXPRESSION_EDITOR + " from Diagram: '" + diagramBuilder.getDiagram().getName()
+							+ "'.");
 				}
 				if (element instanceof Rule) {
 					ApplicationFrame.navigateTo(WebMap.DROOLS_RULE_EDITOR);
 					DroolsRuleEditor ruleEditor = (DroolsRuleEditor) ((ApplicationFrame) UI.getCurrent())
 							.getCurrentView();
 					ruleEditor.selectComponent((Rule) element);
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' jumped to "
+							+ WebMap.DROOLS_RULE_EDITOR + " from Diagram: '" + diagramBuilder.getDiagram().getName()
+							+ "'.");
 				}
 				if (element instanceof Diagram) {
 					selectComponent((Diagram) element);
@@ -175,6 +193,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	protected void selectComponent(Diagram element) {
 		diagramBuilderTable.setValue(element);
+		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+				+ "' Selected diagram: " + diagramBuilder.getDiagram().getName() + "'.");
 	}
 
 	private void initializeDiagramsTable() {
@@ -218,7 +238,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				Diagram diagram = (Diagram) diagramBuilderTable.getValue();
 				deleteDiagram();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has deleted a " + diagram.getClass() + " with 'Name: " + diagram.getName() + "'.");
 			}
 		});
 		diagramBuilderUpperMenu.addClearButtonClickListener(new ClickListener() {
@@ -227,6 +250,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				diagramBuilder.clear();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has cleared Diagram '" + diagramBuilder.getDiagram().getName() + "'.");
 			}
 		});
 		diagramBuilderUpperMenu.addSaveButtonClickListener(new ClickListener() {
@@ -243,6 +268,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				diagramBuilder.undo();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' 'Undo' action in Diagram '" + diagramBuilder.getDiagram().getName() + "'.");
 			}
 		});
 		diagramBuilderUpperMenu.addRedoButtonClickListener(new ClickListener() {
@@ -251,6 +278,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				diagramBuilder.redo();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' 'Redo' action in Diagram '" + diagramBuilder.getDiagram().getName() + "'.");
 			}
 		});
 		diagramBuilderUpperMenu.addToFrontButtonClickListener(new ClickListener() {
@@ -259,6 +288,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				diagramBuilder.toFront();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' 'To Front' action in Diagram '" + diagramBuilder.getDiagram().getName() + "'.");
 			}
 		});
 		diagramBuilderUpperMenu.addToBackButtonClickListener(new ClickListener() {
@@ -267,6 +298,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				diagramBuilder.toBack();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' 'To Back' action in Diagram '" + diagramBuilder.getDiagram().getName() + "'.");
 			}
 		});
 		diagramBuilderUpperMenu.addToSvgButtonClickListener(new ClickListener() {
@@ -275,6 +308,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				diagramBuilder.openAsSvg();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' 'Svg' action in Diagram '" + diagramBuilder.getDiagram().getName() + "'.");
 			}
 		});
 		diagramBuilderUpperMenu.addToPngButtonClickListener(new ClickListener() {
@@ -283,6 +318,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				diagramBuilder.openAsPng();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' 'Png' action in Diagram '" + diagramBuilder.getDiagram().getName() + "'.");
 			}
 		});
 

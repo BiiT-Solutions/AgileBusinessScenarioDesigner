@@ -6,6 +6,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -104,12 +105,20 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 							public void acceptAction(AcceptCancelWindow window) {
 								QuestionUnit unit = windowDate.getValue();
 								setNewDateReference(reference, unit);
+								AbcdLogger.info(this.getClass().getName(),
+										"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+												+ instance.getReference().getRepresentation() + " in Fork with ID:"
+												+ instance.getId() + "'.");
 								window.close();
 							}
 						});
 						windowDate.showCentered();
 					} else {
 						setNewReference(reference);
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+								+ instance.getReference().getRepresentation() + " in Fork with ID:" + instance.getId()
+								+ "'.");
 					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
@@ -138,12 +147,20 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 							public void acceptAction(AcceptCancelWindow window) {
 								QuestionUnit unit = windowDate.getValue();
 								setNewDateReferenceCustomVariable(reference, variable, unit);
+								AbcdLogger.info(this.getClass().getName(),
+										"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+												+ instance.getReference().getRepresentation() + " in Fork with ID:"
+												+ instance.getId() + "'.");
 								window.close();
 							}
 						});
 						windowDate.showCentered();
 					} else {
 						setNewReferenceCustomVariable(reference, variable);
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+								+ instance.getReference().getRepresentation() + " in Fork with ID:" + instance.getId()
+								+ "'.");
 					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_VARIABLE);

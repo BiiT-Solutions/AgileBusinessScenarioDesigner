@@ -1,8 +1,10 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -47,6 +49,10 @@ public class JsonDiagramPropertiesTable extends PropertiesForClassComponent<Diag
 									.getSelectedTableRule().getName());
 							instance.setTable(tableWindow.getSelectedTableRule());
 							firePropertyUpdateListener(instance);
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' added 'Table rule' "
+									+ instance.getTable().getName() + " to Table node with ID:" + instance.getId()
+									+ "'.");
 							window.close();
 						} else {
 							MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
@@ -62,6 +68,8 @@ public class JsonDiagramPropertiesTable extends PropertiesForClassComponent<Diag
 			@Override
 			public void buttonClick(ClickEvent event) {
 				instance.setTable(null);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' removed 'Table rule' from Table node with ID:" + instance.getId() + "'.");
 				firePropertyUpdateListener(instance);
 			}
 		});
@@ -70,13 +78,13 @@ public class JsonDiagramPropertiesTable extends PropertiesForClassComponent<Diag
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(fieldWithSearchButton);
 
-		addTab(categoryForm, ServerTranslate
-				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_TABLE_NODE_CAPTION), true, 0);
+		addTab(categoryForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_TABLE_NODE_CAPTION), true,
+				0);
 	}
 
 	@Override
 	protected void updateElement() {
-		//All the updates are done in the field action directly.
+		// All the updates are done in the field action directly.
 	}
 
 	@Override

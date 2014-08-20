@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.ExpressionEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
@@ -18,7 +19,8 @@ public class WindowNewExpression extends WindowCreateNewObject {
 
 	@Override
 	public void acceptAction(TextField inputTextField) {
-		for (ExpressionChain existingExpressions : UserSessionHandler.getFormController().getForm().getExpressionChain()) {
+		for (ExpressionChain existingExpressions : UserSessionHandler.getFormController().getForm()
+				.getExpressionChain()) {
 			if (existingExpressions.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 				return;
@@ -32,6 +34,10 @@ public class WindowNewExpression extends WindowCreateNewObject {
 		UserSessionHandler.getFormController().getForm().getExpressionChain().add(expression);
 		((ExpressionEditor) getParentWindow()).addExpressionToMenu(expression);
 		((ExpressionEditor) getParentWindow()).sortTableMenu();
+
+		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+				+ "' has created a " + expression.getClass() + " with 'Name: " + expression.getName() + "'.");
+
 		close();
 	}
 

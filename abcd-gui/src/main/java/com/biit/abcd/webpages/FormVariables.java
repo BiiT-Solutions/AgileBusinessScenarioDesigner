@@ -9,6 +9,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -30,7 +31,7 @@ public class FormVariables extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
-		this.upperMenu = initUpperMenu();
+		upperMenu = initUpperMenu();
 		setUpperMenu(upperMenu);
 
 		variableTable = new VariableTable();
@@ -75,6 +76,10 @@ public class FormVariables extends FormWebPageComponent {
 				customVariable.setCreatedBy(UserSessionHandler.getUser().getUserId());
 				addNewVariable(customVariable);
 				UserSessionHandler.getFormController().getForm().getCustomVariables().add(customVariable);
+
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has created a " + customVariable.getClass() + " with 'Name: " + customVariable.getName()
+						+ " - Type: " + customVariable.getType() + " - Scope: " + customVariable.getScope() + "'.");
 			}
 		});
 
@@ -83,7 +88,11 @@ public class FormVariables extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				CustomVariable customVariable = (CustomVariable) variableTable.getValue();
 				removeSelectedVariable();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has removed a " + customVariable.getClass() + " with 'Name: " + customVariable.getName()
+						+ " - Type: " + customVariable.getType() + " - Scope: " + customVariable.getScope() + "'.");
 			}
 		});
 

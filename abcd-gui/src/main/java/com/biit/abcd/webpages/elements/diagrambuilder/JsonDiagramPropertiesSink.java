@@ -1,8 +1,10 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -28,7 +30,8 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 
 		fieldWithSearchButton = new FieldWithSearchButton(
 				ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_CAPTION));
-		fieldWithSearchButton.setNullCaption(ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION));
+		fieldWithSearchButton.setNullCaption(ServerTranslate
+				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
 		if (instance.getFormExpression() != null) {
 			fieldWithSearchButton.setValue(instance.getFormExpression(), instance.getFormExpression().getName());
@@ -48,6 +51,10 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 									formExpressionWindow.getSelectedExpression().getName());
 							instance.setFormExpression(formExpressionWindow.getSelectedExpression());
 							firePropertyUpdateListener(instance);
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' added expression "
+									+ instance.getFormExpression().getRepresentation() + " to Sink node with ID:"
+									+ instance.getId() + "'.");
 							window.close();
 						} else {
 							MessageManager.showError(LanguageCodes.ERROR_SELECT_EXPRESSION);
@@ -64,6 +71,8 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 			public void buttonClick(ClickEvent event) {
 				instance.setFormExpression(null);
 				firePropertyUpdateListener(instance);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' removed expression from Sink node with ID:" + instance.getId() + "'.");
 			}
 		});
 
@@ -71,8 +80,8 @@ public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<Diagr
 		categoryForm.setWidth(null);
 		categoryForm.addComponent(fieldWithSearchButton);
 
-		addTab(categoryForm, ServerTranslate
-				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SINK_NODE_CAPTION), true, 0);
+		addTab(categoryForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SINK_NODE_CAPTION), true,
+				0);
 	}
 
 	@Override

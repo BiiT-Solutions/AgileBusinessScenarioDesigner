@@ -1,12 +1,13 @@
 package com.biit.abcd.webpages;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
@@ -132,7 +133,8 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			public void buttonClick(ClickEvent event) {
 				Object selectedVariable = variableDataTable.getValue();
 				if (selectedVariable != null) {
-					// Check if the value is the last of the list, if not, it can't be deleted
+					// Check if the value is the last of the list, if not, it
+					// can't be deleted
 					if (isLastValueOfVariableList(((GlobalVariable) variableTable.getValue()).getData(),
 							selectedVariable)) {
 						variableDataTable.removeItem(selectedVariable);
@@ -171,6 +173,11 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 					variableTable.addItem(value);
 					variableTable.setValue(value);
 				}
+				AbcdLogger.info(
+						this.getClass().getName(),
+						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+								+ value.getClass() + " with 'Name: " + value.getName() + " - Type: " + value.getFormat()
+								+ "'.");
 				window.close();
 			}
 		});
@@ -205,6 +212,11 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						// Update the view of the value
 						variableTable.updateItem(variable);
 					}
+					AbcdLogger.info(
+							this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has edited a "
+									+ variable.getClass() + " with 'Name: " + variable.getName() + " - Type: " + variable.getFormat()
+									+ "'.");
 					window.close();
 				}
 			});
@@ -242,9 +254,14 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						VariableData variableData = ((VariableDataWindow) window).getValue();
 						if (variableData != null) {
 							// Add item.
-							variableDataTable.addItem((VariableData) variableData);
+							variableDataTable.addItem(variableData);
 							((GlobalVariable) variableTable.getValue()).getData().add(variableData);
 						}
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+										+ variableData.getClass() + " with 'Value: " + variableData.getValue()
+										+ " - Valid from: " + variableData.getValidFrom() + " - Valid to: "
+										+ variableData.getValidTo() + "'.");
 						window.close();
 					}
 				});
@@ -281,6 +298,11 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 								MessageManager.showError(e.getMessage());
 							}
 						}
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has edited a "
+										+ selectedValue.getClass() + " with 'Value: " + selectedValue.getValue()
+										+ " - Valid from: " + selectedValue.getValidFrom() + " - Valid to: "
+										+ selectedValue.getValidTo() + "'.");
 						window.close();
 					}
 				});

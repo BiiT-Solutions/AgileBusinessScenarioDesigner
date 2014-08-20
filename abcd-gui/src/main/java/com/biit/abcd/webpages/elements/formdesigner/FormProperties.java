@@ -1,10 +1,11 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.TreeObject;
 import com.vaadin.ui.DateField;
@@ -54,10 +55,18 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 	@Override
 	protected void updateConcreteFormElement() {
 		if (availableFrom.getValue() != null) {
-			instance.setAvailableFrom(new Timestamp(((Date) availableFrom.getValue()).getTime()));
+			instance.setAvailableFrom(new Timestamp(availableFrom.getValue().getTime()));
+			AbcdLogger.info(
+					this.getClass().getName(),
+					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
+							+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom() + "'.");
 		}
 		if (availableTo.getValue() != null) {
-			instance.setAvailableTo(new Timestamp(((Date) availableTo.getValue()).getTime()));
+			instance.setAvailableTo(new Timestamp(availableTo.getValue().getTime()));
+			AbcdLogger.info(
+					this.getClass().getName(),
+					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
+							+ instance.getName() + "' property 'Valid To' to '" + instance.getAvailableTo() + "'.");
 		}
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}

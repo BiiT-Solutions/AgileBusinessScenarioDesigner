@@ -57,7 +57,7 @@ public class FormDesigner extends FormWebPageComponent {
 		}
 
 		tableIsGoingToDetach = false;
-		this.upperMenu = initUpperMenu();
+		upperMenu = initUpperMenu();
 		setUpperMenu(upperMenu);
 
 		treeTableValueChangeListener = new TreeTableValueChangeListener();
@@ -242,6 +242,8 @@ public class FormDesigner extends FormWebPageComponent {
 					// Default name is never so long.
 				}
 				addCategoryToUI(newCategory);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has created a " + newCategory.getClass() + " with 'Name: " + newCategory.getName() + "'.");
 			} catch (NotValidChildException e) {
 				// Not possible.
 			}
@@ -250,7 +252,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Adds a Category to the UI. The parent always will be the form.
-	 * 
+	 *
 	 * @param category
 	 */
 	private void addCategoryToUI(Category category) {
@@ -288,6 +290,9 @@ public class FormDesigner extends FormWebPageComponent {
 						}
 						addElementToUI(newGroup, container);
 						container.addChild(newGroup);
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+										+ newGroup.getClass() + " with 'Name: " + newGroup.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -325,6 +330,10 @@ public class FormDesigner extends FormWebPageComponent {
 						}
 						addElementToUI(newQuestion, parent);
 						parent.addChild(newQuestion);
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+										+ newQuestion.getClass() + " with 'Name: " + newQuestion.getName()
+										+ " - Type: " + newQuestion.getAnswerType() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -359,6 +368,9 @@ public class FormDesigner extends FormWebPageComponent {
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+										+ newAnswer.getClass() + " with 'Name: " + newAnswer.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -369,7 +381,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Adds an element in the tree using the parent as root.
-	 * 
+	 *
 	 * @param child
 	 * @param parent
 	 */
@@ -401,7 +413,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Updates the creator of the object and its parents.
-	 * 
+	 *
 	 * @param treeObject
 	 */
 	private void setCreator(TreeObject treeObject) {
@@ -414,7 +426,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Updates the updater of the object and its parents.
-	 * 
+	 *
 	 * @param treeObject
 	 */
 	private void setUpdater(TreeObject treeObject) {
@@ -426,7 +438,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Moves the selected element up if possible.
-	 * 
+	 *
 	 * @return true if the element has been moved.
 	 */
 	public boolean moveUp() {
@@ -441,6 +453,12 @@ public class FormDesigner extends FormWebPageComponent {
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
+
+					AbcdLogger.info(
+							this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved up a "
+									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+
 					return true;
 				} catch (ChildrenNotFoundException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -452,7 +470,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Moves the selected element down if possible.
-	 * 
+	 *
 	 * @return true if the element has been moved.
 	 */
 	public boolean moveDown() {
@@ -469,6 +487,11 @@ public class FormDesigner extends FormWebPageComponent {
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
+
+					AbcdLogger.info(this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved down a "
+									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+
 					return true;
 				} catch (ChildrenNotFoundException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -485,6 +508,10 @@ public class FormDesigner extends FormWebPageComponent {
 				try {
 					selected.remove();
 					removeElementFromUI(selected);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + selected.getClass()
+							+ " from the Form, with 'Name: " + selected.getName() + "'.");
 				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
 					MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,

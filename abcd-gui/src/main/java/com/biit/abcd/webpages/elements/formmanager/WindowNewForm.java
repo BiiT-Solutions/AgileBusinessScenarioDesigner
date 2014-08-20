@@ -4,6 +4,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.FormManager;
@@ -28,7 +29,7 @@ public class WindowNewForm extends WindowCreateNewObject {
 	@Override
 	public void acceptAction(TextField inputTextField) {
 		if (formDao.getForm(inputTextField.getValue()) == null) {
-			form = new Form();		
+			form = new Form();
 			try {
 				form.setName(inputTextField.getValue());
 			} catch (FieldTooLongException e) {
@@ -39,10 +40,14 @@ public class WindowNewForm extends WindowCreateNewObject {
 				} catch (FieldTooLongException e1) {
 					// Impossible.
 				}
-			}			
+			}
 			form.setCreatedBy(UserSessionHandler.getUser());
 			form.setUpdatedBy(UserSessionHandler.getUser());
 			((FormManager) getParentWindow()).addNewForm(form);
+			AbcdLogger.info(
+					this.getClass().getName(),
+					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+							+ form.getClass() + " with 'Name: " + form.getName() + "'.");
 			close();
 		} else {
 			MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);

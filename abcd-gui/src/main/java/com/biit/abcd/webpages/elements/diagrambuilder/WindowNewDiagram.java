@@ -5,6 +5,7 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.webpages.FormDiagramBuilder;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
@@ -34,6 +35,8 @@ public class WindowNewDiagram extends WindowCreateNewObject {
 			UserSessionHandler.getFormController().getForm().addDiagram(newDiagram);
 			((FormDiagramBuilder) getParentWindow()).addDiagram(newDiagram);
 			((FormDiagramBuilder) getParentWindow()).sortTableMenu();
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has created a " + newDiagram.getClass() + " with 'Name: " + newDiagram.getName() + "'.");
 			close();
 		} else {
 			MessageManager.showError(LanguageCodes.ERROR_NAME_NOT_VALID);

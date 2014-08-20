@@ -42,6 +42,8 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 		// Create menu
 		tableSelectRule = new SelectDroolsRuleEditable();
+		tableSelectRule.setWidth("100%");
+		tableSelectRule.setHeight("100%");
 		tableSelectRule.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -7103550436798085895L;
 
@@ -82,7 +84,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 				}
 			}
 			refreshRuleEditor();
-		}else{
+		} else {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
@@ -117,7 +119,10 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				Rule rule = tableSelectRule.getSelectedRule();
 				removeSelectedRule();
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has removed a " + rule.getClass() + " with 'Name: " + rule.getName() + "'.");
 			}
 
 		});

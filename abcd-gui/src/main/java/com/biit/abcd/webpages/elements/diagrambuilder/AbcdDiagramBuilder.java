@@ -8,6 +8,7 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -64,6 +65,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					return;
 				}
 				DiagramObject element = getObjectOfDiagram(jsonString);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' Diagram element: " + element.getClass() + " picked'.");
 				fireDiagramObjectPickedListeners(element);
 			}
 
@@ -74,6 +77,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					return;
 				}
 				DiagramObject element = getObjectOfDiagram(jsonString);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' Diagram link: " + element.getClass() + " picked'.");
 				fireDiagramObjectPickedListeners(element);
 			}
 		});
@@ -110,7 +115,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 				case RULE:
 					if (((DiagramRule) object).getRule() != null) {
 						fireJumpToListener(((DiagramRule) object).getRule());
-					}else {
+					} else {
 						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
 								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
 					}
@@ -138,7 +143,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	/**
 	 * Gets Element of diagram from a json String. If it doesn't exist on the
 	 * diagram, we add it first.
-	 * 
+	 *
 	 * @param jsonString
 	 * @return
 	 */
@@ -155,7 +160,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	/**
 	 * Add a new Diagram object to the diagram if it doesn't exist.
-	 * 
+	 *
 	 * @param element
 	 */
 	private void addObjectToDiagram(DiagramObject element) {
@@ -172,14 +177,16 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	/**
 	 * Add a new Diagram object to the diagram if it doesn't exist.
-	 * 
+	 *
 	 * @param element
 	 */
 	private void addObjectToDiagram(String jsonString) {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
 		addObjectToDiagram(element);
-		
 		updateLinkVisualization(element);
+
+		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+				+ "' Diagram element: " + element.getClass() + " added'.");
 	}
 
 	private void removeObjectOfDiagram(String jsonString) {
@@ -190,6 +197,9 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			diagram.setUpdatedBy(UserSessionHandler.getUser());
 			diagram.setUpdateTime();
 			diagramElements.remove(element.getJointjsId());
+
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' Diagram element: " + element.getClass() + " removed'.");
 		}
 	}
 
@@ -197,17 +207,17 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
 		if (diagramElements.containsKey(element.getJointjsId())) {
 			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
-			originalElement.update(element,UserSessionHandler.getUser());
+			originalElement.update(element, UserSessionHandler.getUser());
 			diagram.setUpdatedBy(UserSessionHandler.getUser());
 			diagram.setUpdateTime();
 		}
 	}
-	
-	private void updateLinkVisualization(DiagramObject object){
-		if(object instanceof DiagramLink){
+
+	private void updateLinkVisualization(DiagramObject object) {
+		if (object instanceof DiagramLink) {
 			DiagramObject source = ((DiagramLink) object).getSourceElement();
-			if(source instanceof DiagramFork){
-				for(DiagramLink link : ((DiagramFork) source).getOutgoingLinks()){
+			if (source instanceof DiagramFork) {
+				for (DiagramLink link : ((DiagramFork) source).getOutgoingLinks()) {
 					updateChangesToDiagram(link);
 				}
 			}
@@ -263,7 +273,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					if (diagramElements.containsKey(object.getJointjsId())) {
 						// Already exist, update
 						DiagramObject currentValue = diagramElements.get(object.getJointjsId());
-						currentValue.update(object,UserSessionHandler.getUser());
+						currentValue.update(object, UserSessionHandler.getUser());
 					} else {
 						// Doesn't exist, insert
 						diagram.addDiagramObject(object);
@@ -301,9 +311,9 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	public void updateChangesToDiagram(DiagramObject element) {
 		if (element instanceof DiagramElement) {
-			updateCellJson(((DiagramObject) element).toJson());
+			updateCellJson(element.toJson());
 		} else {
-			updateLinkJson(((DiagramObject) element).toJson());
+			updateLinkJson(element.toJson());
 		}
 	}
 
