@@ -2,9 +2,9 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.core.drools.facts.inputform.Category;
 import com.biit.abcd.core.drools.facts.inputform.Question;
-import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.IQuestion;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.IQuestion;
+import com.biit.orbeon.form.ISubmittedForm;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
 import com.vaadin.ui.VerticalLayout;

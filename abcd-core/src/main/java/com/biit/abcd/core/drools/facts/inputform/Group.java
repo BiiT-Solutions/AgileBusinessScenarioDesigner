@@ -3,10 +3,10 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.exceptions.QuestionDoesNotExistException;
-import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.IGroup;
-import com.biit.abcd.core.drools.facts.interfaces.IQuestion;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.IGroup;
+import com.biit.orbeon.form.IQuestion;
+import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 public class Group extends CommonAttributes implements IGroup {
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.Form2DroolsNoDrl;
+import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -31,10 +31,10 @@ public class GlobalVariablesTest {
 
 	@Test(groups = { "rules" })
 	public void testGlobVarsInDroolsEngine() throws ExpressionInvalidException, RuleInvalidException, FieldTooLongException, NotValidTypeInVariableData, NotValidChildException, IOException  {
-		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		formDrools.parse(this.createBasicForm(), this.createGlobalvariables());
 		// Empty form to force the engine to load the global variables values
-		formDrools.go(new SubmittedForm("", ""));
+		formDrools.runDroolsRules(new SubmittedForm("", ""));
 	}
 
 	static String readFile(String path, Charset encoding) throws IOException {

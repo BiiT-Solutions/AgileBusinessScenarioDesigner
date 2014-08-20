@@ -55,7 +55,6 @@ public class UpperMenu extends HorizontalButtonGroup {
 						windowAccept.close();
 					}
 				});
-
 			}
 		});
 		formManagerButton.setEnabled(true);

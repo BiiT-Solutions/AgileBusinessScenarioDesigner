@@ -1,10 +1,10 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
-import com.biit.abcd.core.drools.facts.interfaces.ICommonAttributes;
+import com.biit.orbeon.form.ICommonAttributes;
 
 public abstract class CommonAttributes implements ICommonAttributes {
 
-	// Tasg of the Orbeon form
+	// Tags of the Orbeon form
 	private String tag;
 	// The real name of the element
 	private String text;

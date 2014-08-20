@@ -10,14 +10,9 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.Form2DroolsNoDrl;
+import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryNameWithoutTranslation;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.QuestionDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonCategoryTranslator;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Answer;
@@ -54,6 +49,11 @@ import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.orbeon.OrbeonCategoryTranslator;
+import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
+import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 public class DiagramDateTest {
 
@@ -73,7 +73,7 @@ public class DiagramDateTest {
 	}
 
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
-	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
+	public void translateFormCategories() throws DocumentException, IOException, CategoryNameWithoutTranslation {
 		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
@@ -82,10 +82,10 @@ public class DiagramDateTest {
 	public void testTableRuleLoadAndExecution() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, InvalidAnswerFormatException {
-		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createDiagramTestForm();
 		formDrools.parse(vaadinForm);
-		formDrools.go(this.form);
+		formDrools.runDroolsRules(this.form);
 	}
 
 	/**
