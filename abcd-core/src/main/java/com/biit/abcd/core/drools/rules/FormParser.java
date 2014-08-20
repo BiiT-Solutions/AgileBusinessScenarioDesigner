@@ -41,6 +41,7 @@ public class FormParser {
 			this.rules += "import com.biit.abcd.core.drools.utils.* \n";
 			this.rules += "import java.util.Date \n";
 			this.rules += "import java.util.List \n";
+			this.rules += "import com.biit.abcd.logger.AbcdLogger \n";
 			// Creation of the global variables
 			if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
 				this.rules += this.parseGlobalVariables();

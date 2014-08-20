@@ -586,14 +586,18 @@ public class GenericParser {
 			ExpressionValueString valueString = (ExpressionValueString) actions.get(2);
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
 					+ var.getVariable().getName() + "', '" + valueString.getValue() + "');\n";
-			ruleCore += "	System.out.println( \"Variable set (" + var.getReference().getName() + ", "
+			// ruleCore += "	System.out.println( \"Variable set (" + var.getReference().getName() + ", "
+			// + var.getVariable().getName() + ", " + valueString.getValue() + ")\");\n";
+			ruleCore += "   AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
 					+ var.getVariable().getName() + ", " + valueString.getValue() + ")\");\n";
 
 		} else if (actions.get(2) instanceof ExpressionValueNumber) {
 			ExpressionValueNumber valueNumber = (ExpressionValueNumber) actions.get(2);
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
 					+ var.getVariable().getName() + "', " + valueNumber.getValue() + ");\n";
-			ruleCore += "	System.out.println( \"Variable set (" + var.getReference().getName() + ", "
+			// ruleCore += "	System.out.println( \"Variable set (" + var.getReference().getName() + ", "
+			// + var.getVariable().getName() + ", " + valueNumber.getValue() + ")\");\n";
+			ruleCore += "   AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
 					+ var.getVariable().getName() + ", " + valueNumber.getValue() + ")\");\n";
 		}
 		return ruleCore;
@@ -628,8 +632,10 @@ public class GenericParser {
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('" + customVarName
 					+ "', " + "(Double)$" + this.getTreeObjectName(var2.getReference()) + ".getNumberVariableValue('"
 					+ customVarName + "') " + operator.getValue() + " " + valueNumber.getValue() + ");\n";
-			ruleCore += "	System.out.println( \"Variable updated (" + var.getReference().getName() + ", "
-					+ customVarName + ", " + operator.getValue() + valueNumber.getValue() + ")\");\n";
+			// ruleCore += "	System.out.println( \"Variable updated (" + var.getReference().getName() + ", "
+			// + customVarName + ", " + operator.getValue() + valueNumber.getValue() + ")\");\n";
+			ruleCore += "   AbcdLogger.debug(\"DroolsRule\", \"Variable updated (" + var.getReference().getName()
+					+ ", " + customVarName + ", " + operator.getValue() + valueNumber.getValue() + ")\");\n";
 
 		} else if (actions.get(2) instanceof ExpressionValueNumber) {
 			ExpressionValueNumber valueNumber = (ExpressionValueNumber) actions.get(2);
@@ -640,7 +646,9 @@ public class GenericParser {
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('" + customVarName
 					+ "', " + "(Double)$" + this.getTreeObjectName(var2.getReference()) + ".getNumberVariableValue('"
 					+ customVarName + "') " + operator.getValue() + " " + valueNumber.getValue() + ");\n";
-			ruleCore += "	System.out.println( \"Variable updated (" + var.getReference().getName() + ", "
+//			ruleCore += "	System.out.println( \"Variable updated (" + var.getReference().getName() + ", "
+//					+ customVarName + ", " + operator.getValue() + valueNumber.getValue() + ")\");\n";
+			ruleCore += "   AbcdLogger.debug(\"DroolsRule\", \"Variable updated (" + var.getReference().getName() + ", "
 					+ customVarName + ", " + operator.getValue() + valueNumber.getValue() + ")\");\n";
 
 		}
@@ -739,7 +747,9 @@ public class GenericParser {
 		if (variableToCalculate != null) {
 			ruleCore += "	$" + this.getTreeObjectName(variableToCalculate.getReference()) + ".setVariableValue('"
 					+ variableToCalculate.getVariable().getName() + "', $sol);\n";
-			ruleCore += "	System.out.println(\"Variable set (" + variableToCalculate.getReference().getName() + ", "
+//			ruleCore += "	System.out.println(\"Variable set (" + variableToCalculate.getReference().getName() + ", "
+//					+ variableToCalculate.getVariable().getName() + ", \" + $sol +\")\");\n";
+			ruleCore += "   AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + variableToCalculate.getReference().getName() + ", "
 					+ variableToCalculate.getVariable().getName() + ", \" + $sol +\")\");\n";
 		}
 		return ruleCore;

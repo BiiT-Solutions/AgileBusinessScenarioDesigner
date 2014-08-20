@@ -10,7 +10,7 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.Form2DroolsNoDrl;
+import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -84,7 +84,7 @@ public class RulesTest {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
 		// Load the rules
-		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createDhszwForm();
 		formDrools.parse(vaadinForm);
 

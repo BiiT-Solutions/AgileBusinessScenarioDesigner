@@ -25,7 +25,7 @@ import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 
-public class Form2DroolsNoDrl {
+public class FormToDroolsExporter {
 
 	private KieManager km;
 	// To store the info of the submitted form

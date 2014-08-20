@@ -7,10 +7,7 @@ import org.dom4j.DocumentException;
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.drools.Form2DroolsNoDrl;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryNameWithoutTranslation;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
+import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.language.LanguageCodes;
@@ -19,6 +16,9 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -79,7 +79,7 @@ public class SettingsWindow extends PopupWindow {
 								String formInfo = droolsWindow.getFormInfo();
 
 								try {
-									submittedForm = new Form2DroolsNoDrl().testZrmSubmittedForm(UserSessionHandler
+									submittedForm = new FormToDroolsExporter().testZrmSubmittedForm(UserSessionHandler
 											.getFormController().getForm(), UserSessionHandler
 											.getGlobalVariablesController().getGlobalVariables(), formInfo);
 									final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(

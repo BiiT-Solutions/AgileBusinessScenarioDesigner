@@ -12,7 +12,7 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.Form2DroolsNoDrl;
+import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -68,7 +68,7 @@ public class ZrmFormTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
-	private final static String FORM_ID = "c5f3ca9c7594df99a32cce4cd061aac4f290d41d";
+	private final static String FORM_ID = "d0d4c2e0120867a4663a660437c517d5afbed550";
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -88,13 +88,16 @@ public class ZrmFormTest {
 		OrbeonCategoryTranslator.getInstance().readXml(form, xmlStructure);
 	}
 
+	/**
+	 * This test must be disabled due to uses orbeon specific document id. 
+	 */
 	@Test(groups = { "rulesWithOrbeon" })
 	public void completeZrmTest() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			InvalidAnswerFormatException {
 		form = new SubmittedForm("WebForms", "De_Haagse_Passage_v2");
-		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = createZrmForm();
 		formDrools.parse(vaadinForm);
 		// Load the submitted form
@@ -115,7 +118,7 @@ public class ZrmFormTest {
 			ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException,
 			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			InvalidAnswerFormatException {
-		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = createZrmForm();
 		formDrools.parse(vaadinForm);
 		// Load the submitted form

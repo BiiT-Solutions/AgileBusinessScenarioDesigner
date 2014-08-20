@@ -3,7 +3,7 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="orbeon" />
+				<exclude name="orbeon" />
 				<include name="rules" />
 				<exclude name="rulesWithOrbeon" />
 			</run>
