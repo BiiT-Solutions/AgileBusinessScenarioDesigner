@@ -470,14 +470,6 @@ $open-sans-pathPrefix: "./fonts/";
 		border-right: 1px solid #c2c3c4;
 	}
 	
-	.v-table-column-selector {
-		background: url("appbar.chevron.down.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
-	    display: block;
-	    height: 16px;
-	    opacity: 0.7;
-	    width: 16px;
-	}
-	
 	/* Property container */
 	
 	.v-customcomponent.v-properties-container {
@@ -756,6 +748,22 @@ $open-sans-pathPrefix: "./fonts/";
 	.v-form-tree-table-rule-component.v-customcomponent-v-form-tree-table-rule-component > .v-csslayout {
 		padding: 0px;
 		display: inline-flex;
+	}
+	
+	.v-table-column-selector {
+	    background: url("appbar.dimension.arrow.line.width.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
+	    display: block;
+	    height: 16px;
+	    opacity: 0.7;
+	    width: 16px;
+	}
+	
+	.v-table-column-selector:active {
+	    background: url("appbar.dimension.arrow.line.width.pressed.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
+	    display: block;
+	    height: 16px;
+	    opacity: 0.7;
+	    width: 16px;
 	}
 	
 }
