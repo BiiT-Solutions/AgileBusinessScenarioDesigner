@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.dom4j.DocumentException;
 
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.Form2DroolsNoDrl;
 import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
@@ -14,6 +15,7 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -52,8 +54,15 @@ public class SettingsWindow extends PopupWindow {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
-						close();
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
+								close();
+							}
+						});
 					}
 				});
 		Button droolsEngineButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_DROOLS_ENGINE),
@@ -73,17 +82,19 @@ public class SettingsWindow extends PopupWindow {
 									submittedForm = new Form2DroolsNoDrl().testZrmSubmittedForm(UserSessionHandler
 											.getFormController().getForm(), UserSessionHandler
 											.getGlobalVariablesController().getGlobalVariables(), formInfo);
-
 									final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 											submittedForm);
 									droolsResultWindow.showCentered();
 									droolsWindow.close();
-
 								} catch (ExpressionInvalidException | RuleInvalidException | IOException
-										| NotValidOperatorInExpression | CategoryDoesNotExistException
-										| DocumentException | CategoryNameWithoutTranslation e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+										| NotValidOperatorInExpression e) {
+									MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								} catch (CategoryDoesNotExistException | DocumentException
+										| CategoryNameWithoutTranslation e) {
+									MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
+											e.getMessage());
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 								}
 							}
 						});
@@ -97,8 +108,15 @@ public class SettingsWindow extends PopupWindow {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
-						close();
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+								close();
+							}
+						});
 					}
 				});
 		Button closeButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_CLOSE), new ClickListener() {

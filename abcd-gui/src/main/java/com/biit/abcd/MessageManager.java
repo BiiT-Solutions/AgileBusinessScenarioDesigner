@@ -27,6 +27,10 @@ public class MessageManager {
 		showError(ServerTranslate.translate(caption), ServerTranslate.translate(description));
 	}
 
+	public static void showError(LanguageCodes caption, String description) {
+		showError(ServerTranslate.translate(caption), description);
+	}
+
 	public static void showError(String caption) {
 		showMessage(caption, "", Notification.Type.ERROR_MESSAGE, Position.TOP_CENTER);
 	}

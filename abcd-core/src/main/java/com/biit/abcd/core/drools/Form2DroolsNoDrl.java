@@ -33,12 +33,10 @@ public class Form2DroolsNoDrl {
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools
-	 * engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly
-	 * defined. <br>
+	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
 	 * This method doesn't create any global variables
-	 *
+	 * 
 	 * @param form
 	 *            form to be parsed
 	 * @throws ExpressionInvalidException
@@ -46,14 +44,14 @@ public class Form2DroolsNoDrl {
 	 * @throws IOException
 	 */
 	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException, IOException {
-		if (!form.getChildren().isEmpty()) {
+		if (form != null && !form.getChildren().isEmpty()) {
 			this.km = new KieManager();
 			FormParser formRules;
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form);
-//				 System.out.println(formRules.getRules());
-//				Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
+				// System.out.println(formRules.getRules());
+				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 
@@ -64,13 +62,10 @@ public class Form2DroolsNoDrl {
 	}
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools
-	 * engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly
-	 * defined. <br>
-	 * This method creates the global constants defined in the globalVariables
-	 * array
-	 *
+	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
+	 * This method creates the global constants defined in the globalVariables array
+	 * 
 	 * @param form
 	 *            form to be parsed
 	 * @param globalVariables
@@ -102,11 +97,9 @@ public class Form2DroolsNoDrl {
 	}
 
 	/**
-	 * Loads the (Submitted)form as facts of the knowledge base of the drools
-	 * engine. <br>
-	 * It also starts the engine execution by firing all the rules inside the
-	 * engine.
-	 *
+	 * Loads the (Submitted)form as facts of the knowledge base of the drools engine. <br>
+	 * It also starts the engine execution by firing all the rules inside the engine.
+	 * 
 	 * @param form
 	 */
 	public void go(ISubmittedForm form) {
@@ -118,21 +111,22 @@ public class Form2DroolsNoDrl {
 		// [0]=App name, [1]=Form name, [2]=Doc id
 		String[] infoArray = formInfo.split("::");
 		this.submittedForm = new SubmittedForm(infoArray[0], infoArray[1]);
-		this.orbeonImporter.readXml(OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]), this.submittedForm);
+		this.orbeonImporter
+				.readXml(OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]), this.submittedForm);
 		Assert.assertNotNull(this.submittedForm);
 		Assert.assertFalse(this.submittedForm.getCategories().isEmpty());
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
 		// Load the structure file of the ZRM form
-		String xmlStructure = readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(), Charset.defaultCharset());
+		String xmlStructure = readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(),
+				Charset.defaultCharset());
 		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm, xmlStructure);
-//		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
+		// OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
 	}
 
 	public ISubmittedForm testZrmSubmittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
-			throws ExpressionInvalidException, NotValidOperatorInExpression,
-			RuleInvalidException, IOException,
+			throws ExpressionInvalidException, NotValidOperatorInExpression, RuleInvalidException, IOException,
 			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
 
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();

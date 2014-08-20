@@ -188,6 +188,9 @@ public enum LanguageCodes {
 	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"),
 	ERROR_SAME_DIAGRAM("error.same.diagram"),
 	ERROR_DIAGRAM_IS_IN_USE("error.diagram.is.in.use"),
+	
+	ERROR_DROOLS_INVALID_RULE("error.drools.invalid"),
+	ERROR_ORBEON_IMPORTER_INVALID_FORM("error.orbeonimporter.invalid.form"),
 
 	INFO_DATA_STORED("info.data.store"),
 
@@ -350,6 +353,7 @@ public enum LanguageCodes {
 	DECISION_TABLE_COPY_TABLE_NOT_SELECTED("decision.table.table.not.selected"),
 	DECISION_TABLE_COPY_NO_SELECTED_ELEMENTS("decision.table.copy.no.selected.elements"),
 	DECISION_TABLE_PASTE_ROW_NOT_PERFORMED_CAPTION("decision.table.paste.row.not.performed.caption"),
+	
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_CAPTION("condition.table.editor.button.copy.rows.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_TOOLTIP("condition.table.editor.button.copy.rows.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_CAPTION("condition.table.editor.button.paste.rows.caption"),
