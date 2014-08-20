@@ -57,7 +57,6 @@ public class TableRuleTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
-	private final static String CHARSET = "UTF-8";
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
