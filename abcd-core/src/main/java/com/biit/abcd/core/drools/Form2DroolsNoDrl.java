@@ -11,19 +11,19 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryNameWithoutTranslation;
-import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonCategoryTranslator;
-import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonImporter;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 import com.biit.abcd.core.drools.rules.FormParser;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.utils.file.FileReader;
+import com.biit.orbeon.OrbeonCategoryTranslator;
+import com.biit.orbeon.OrbeonImporter;
+import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 
 public class Form2DroolsNoDrl {
 
@@ -53,7 +53,7 @@ public class Form2DroolsNoDrl {
 				// System.out.println(formRules.getRules());
 				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
-				this.km.buildSessionRules(formRules.getRules());
+				km.buildSessionRules(formRules.getRules());
 
 			} catch (ExpressionInvalidException e) {
 				throw e;
@@ -82,7 +82,7 @@ public class Form2DroolsNoDrl {
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form, globalVariables);
-				System.out.println(formRules.getRules());
+				AbcdLogger.debug(this.getClass().getName(), formRules.getRules());
 				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"),
 				// formRules.getRules().getBytes());
 				// Load the rules in memory
@@ -97,48 +97,46 @@ public class Form2DroolsNoDrl {
 	}
 
 	/**
-	 * Loads the (Submitted)form as facts of the knowledge base of the drools engine. <br>
+	 * Loads the (Submitted) form as facts of the knowledge base of the drools engine. <br>
 	 * It also starts the engine execution by firing all the rules inside the engine.
 	 * 
 	 * @param form
 	 */
-	public void go(ISubmittedForm form) {
-		this.km.setFacts(Arrays.asList(form));
-		this.km.execute();
+	public void runDroolsRules(ISubmittedForm form) {
+		km.setFacts(Arrays.asList(form));
+		km.execute();
 	}
 
 	public void readXml(String formInfo) throws DocumentException, IOException {
 		// [0]=App name, [1]=Form name, [2]=Doc id
 		String[] infoArray = formInfo.split("::");
-		this.submittedForm = new SubmittedForm(infoArray[0], infoArray[1]);
-		this.orbeonImporter
-				.readXml(OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]), this.submittedForm);
+		submittedForm = new SubmittedForm(infoArray[0], infoArray[1]);
+		orbeonImporter.readXml(OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]), this.submittedForm);
 		Assert.assertNotNull(this.submittedForm);
 		Assert.assertFalse(this.submittedForm.getCategories().isEmpty());
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
 		// Load the structure file of the ZRM form
-		String xmlStructure = readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(),
-				Charset.defaultCharset());
-		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm, xmlStructure);
-		// OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
+		// TODO
+//		String xmlStructure = readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(),
+//				Charset.defaultCharset());
+//		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm, xmlStructure);
+		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
 	}
 
 	public ISubmittedForm testZrmSubmittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
 			throws ExpressionInvalidException, NotValidOperatorInExpression, RuleInvalidException, IOException,
 			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
-
-		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		// Load the submitted form
-		formDrools.parse(vaadinForm);
-		this.readXml(formInfo);
-		this.translateFormCategories();
-		formDrools.go(this.submittedForm);
-		return this.submittedForm;
+		parse(vaadinForm);
+		readXml(formInfo);
+		translateFormCategories();
+		runDroolsRules(submittedForm);
+		return submittedForm;
 	}
 
-	static String readFile(String path, Charset encoding) throws IOException {
+	private static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 	}

@@ -3,55 +3,39 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.IGroup;
-import com.biit.abcd.core.drools.facts.interfaces.IQuestion;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.IGroup;
+import com.biit.orbeon.form.IQuestion;
 
 public class Question extends CommonAttributes implements IQuestion {
 
-	private String value;
-	private String tag;
+	private String answer;
 	private String name;
 	private IGroup groupParent;
 	private ICategory categoryParent;
 
 	public Question(String tag){
-		this.tag = tag;
+		setTag(tag);
 	}
 
 	@Override
-	public void setValue(String value){
-		this.value = value;
+	public void setAnswer(String answer){
+		this.answer = answer;
 	}
 
 	@Override
-	public Object getValue(){
+	public Object getAnswer(){
 		Object parsedValue = null;
 		try{
-//			System.out.println("TRY DOUBLE");
-			parsedValue = Double.parseDouble(this.value);
+			parsedValue = Double.parseDouble(this.answer);
 		}catch(Exception e){
 			try {
-//				System.out.println("TRY DATE");
-				parsedValue = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this.value);
+				parsedValue = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this.answer);
 			} catch (Exception e1) {
-//				System.out.println("STRING");
-				parsedValue = this.value;
+				parsedValue = this.answer;
 			}
 		}
-//		System.out.println("PARSED VALUE: " + parsedValue);
-//		System.out.println("PARSED VALUE CLASS: " + parsedValue.getClass());
 		return parsedValue;
-	}
-
-	@Override
-	public String getTag() {
-		return this.tag;
-	}
-
-	@Override
-	public void setTag(String tag) {
-		this.tag = tag;
 	}
 
 	public String getName() {

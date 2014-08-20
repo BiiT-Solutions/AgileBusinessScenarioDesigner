@@ -5,6 +5,7 @@
 			<run>
 				<include name="orbeon" />
 				<include name="rules" />
+				<exclude name="rulesWithOrbeon" />
 			</run>
 		</groups>
 		<classes>

@@ -14,14 +14,10 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.Form2DroolsNoDrl;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryNameWithoutTranslation;
-import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonCategoryTranslator;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
-import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -62,11 +58,17 @@ import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.orbeon.OrbeonCategoryTranslator;
+import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 
 public class ZrmFormTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
+	private final static String FORM_ID = "c5f3ca9c7594df99a32cce4cd061aac4f290d41d";
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -74,33 +76,55 @@ public class ZrmFormTest {
 	private List<Rule> categoryExceptionRules = new ArrayList<Rule>();
 
 	public void readXml() throws DocumentException, IOException {
-		this.form = new SubmittedForm(APP, FORM);
+		form = new SubmittedForm(APP, FORM);
 		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", Charset.defaultCharset());
-		this.orbeonImporter.readXml(xmlFile, this.form);
-		Assert.assertNotNull(this.form);
-		Assert.assertFalse(this.form.getCategories().isEmpty());
+		orbeonImporter.readXml(xmlFile, form);
+		Assert.assertNotNull(form);
+		Assert.assertFalse(form.getCategories().isEmpty());
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
 		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
-		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
+		OrbeonCategoryTranslator.getInstance().readXml(form, xmlStructure);
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "rulesWithOrbeon" })
 	public void completeZrmTest() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			InvalidAnswerFormatException {
+		form = new SubmittedForm("WebForms", "De_Haagse_Passage_v2");
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
-		Form vaadinForm = this.createZrmForm();
+		Form vaadinForm = createZrmForm();
 		formDrools.parse(vaadinForm);
 		// Load the submitted form
-		this.readXml();
-		this.translateFormCategories();
-		formDrools.go(this.form);
+		orbeonImporter.readFormAnswers(form, FORM_ID);
+		//Translate Categories names.
+		OrbeonCategoryTranslator.getInstance().readXml(form);
 
-		for (ICategory category : this.form.getCategories()) {
-			System.out.println("Category name: " + category.getText() + " || Category score: "
+		formDrools.runDroolsRules(form);
+
+		for (ICategory category : form.getCategories()) {
+			AbcdLogger.debug(this.getClass().getName(), "Category name: " + category.getText() + " || Category score: "
+					+ ((com.biit.abcd.core.drools.facts.inputform.Category) category).getVariableValue("cScore"));
+		}
+	}
+
+	@Test(groups = { "rules" })
+	public void basicZrmTest() throws ExpressionInvalidException, NotValidChildException, NotValidOperatorInExpression,
+			ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException,
+			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			InvalidAnswerFormatException {
+		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
+		Form vaadinForm = createZrmForm();
+		formDrools.parse(vaadinForm);
+		// Load the submitted form
+		readXml();
+		translateFormCategories();
+		formDrools.runDroolsRules(form);
+
+		for (ICategory category : form.getCategories()) {
+			AbcdLogger.debug(this.getClass().getName(), "Category name: " + category.getText() + " || Category score: "
 					+ ((com.biit.abcd.core.drools.facts.inputform.Category) category).getVariableValue("cScore"));
 		}
 	}
@@ -290,7 +314,7 @@ public class ZrmFormTest {
 								questionRul12, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.PLUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul1);
-		this.questionExceptionRules.add(rul1);
+		questionExceptionRules.add(rul1);
 
 		Rule rul2 = new Rule("QuestionException2",
 		// When Q21 == A21 AND Q22==A22 Then Q22.qScore += 1
@@ -304,7 +328,7 @@ public class ZrmFormTest {
 								questionRul22, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.PLUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul2);
-		this.questionExceptionRules.add(rul2);
+		questionExceptionRules.add(rul2);
 
 		Rule rul3 = new Rule("QuestionException3",
 		// When Q31 == A31 AND Q32==A32 Then Q32.qScore += 1
@@ -318,7 +342,7 @@ public class ZrmFormTest {
 								questionRul32, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.PLUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul3);
-		this.questionExceptionRules.add(rul3);
+		questionExceptionRules.add(rul3);
 
 		Rule rul4 = new Rule("QuestionException4", new ExpressionChain(new ExpressionValueTreeObjectReference(
 				questionRul41), new ExpressionFunction(AvailableFunction.IN), new ExpressionValueTreeObjectReference(
@@ -335,7 +359,7 @@ public class ZrmFormTest {
 								questionRul43, customVarQuestion), new ExpressionOperatorMath(AvailableOperator.MINUS),
 						new ExpressionValueNumber(1.)));
 		form.getRules().add(rul4);
-		this.questionExceptionRules.add(rul4);
+		questionExceptionRules.add(rul4);
 
 		// Creation of the accumulate expressions
 		int accumExp = 1;
@@ -345,8 +369,8 @@ public class ZrmFormTest {
 			String[] lineSplit = line.split("\t");
 
 			ExpressionChain testExpressionChain = new ExpressionChain(lineSplit[0] + "Score_" + accumExp);
-			testExpressionChain.addExpression(new ExpressionValueCustomVariable(this.getCategoryFromForm(form,
-					lineSplit[0]), customVarCategory));
+			testExpressionChain.addExpression(new ExpressionValueCustomVariable(
+					getCategoryFromForm(form, lineSplit[0]), customVarCategory));
 			testExpressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 			if (lineSplit[1].equals("min")) {
 				testExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.MIN));
@@ -355,8 +379,8 @@ public class ZrmFormTest {
 			String[] questionSplit = lineSplit[2].split("::");
 			int i = 0;
 			for (String questionString : questionSplit) {
-				testExpressionChain.addExpression(new ExpressionValueCustomVariable(this.getQuestionFromCategory(
-						this.getCategoryFromForm(form, lineSplit[0]), questionString), customVarQuestion));
+				testExpressionChain.addExpression(new ExpressionValueCustomVariable(getQuestionFromCategory(
+						getCategoryFromForm(form, lineSplit[0]), questionString), customVarQuestion));
 				if (i < (questionSplit.length - 1)) {
 					// So the last expression of the rule before the bracket is
 					// not a comma
@@ -383,7 +407,7 @@ public class ZrmFormTest {
 				categoryFin, customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(3.)));
 		form.getRules().add(rul5);
-		this.categoryExceptionRules.add(rul5);
+		categoryExceptionRules.add(rul5);
 
 		Rule rul6 = new Rule("CategoryException2", new ExpressionChain(new ExpressionValueTreeObjectReference(
 				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(0.),
@@ -393,7 +417,7 @@ public class ZrmFormTest {
 				new ExpressionValueCustomVariable(categoryFin, customVarCategory), new ExpressionOperatorMath(
 						AvailableOperator.MINUS), new ExpressionValueNumber(2.)));
 		form.getRules().add(rul6);
-		this.categoryExceptionRules.add(rul6);
+		categoryExceptionRules.add(rul6);
 
 		Rule rul65 = new Rule("CategoryException2.5", new ExpressionChain(new ExpressionValueTreeObjectReference(
 				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(18.),
@@ -403,7 +427,7 @@ public class ZrmFormTest {
 				new ExpressionValueCustomVariable(categoryFin, customVarCategory), new ExpressionOperatorMath(
 						AvailableOperator.MINUS), new ExpressionValueNumber(1.)));
 		form.getRules().add(rul65);
-		this.categoryExceptionRules.add(rul65);
+		categoryExceptionRules.add(rul65);
 
 		Rule rul7 = new Rule("CategoryException3", new ExpressionChain(new ExpressionValueTreeObjectReference(
 				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(80.),
@@ -413,7 +437,7 @@ public class ZrmFormTest {
 				new ExpressionValueCustomVariable(categoryGee, customVarCategory), new ExpressionOperatorMath(
 						AvailableOperator.MINUS), new ExpressionValueNumber(1.)));
 		form.getRules().add(rul7);
-		this.categoryExceptionRules.add(rul7);
+		categoryExceptionRules.add(rul7);
 
 		Rule rul8 = new Rule("CategoryException4", new ExpressionChain(new ExpressionValueTreeObjectReference(
 				birthDateQuest), new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(80.),
@@ -423,7 +447,7 @@ public class ZrmFormTest {
 				new ExpressionValueCustomVariable(categoryLich, customVarCategory), new ExpressionOperatorMath(
 						AvailableOperator.MINUS), new ExpressionValueNumber(1.)));
 		form.getRules().add(rul8);
-		this.categoryExceptionRules.add(rul8);
+		categoryExceptionRules.add(rul8);
 
 		// // Creation of the result rules
 		// int ruleNumber = 1;
@@ -434,11 +458,11 @@ public class ZrmFormTest {
 		// form.getRules().add(new Rule(
 		// "ruleText"+ruleNumber,
 		// new ExpressionChain(
-		// new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarCategory),
+		// new ExpressionValueCustomVariable(getCategoryFromForm(form, lineSplit[0]), customVarCategory),
 		// new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 		// new ExpressionValueNumber(Double.parseDouble(lineSplit[1]))),
 		// new ExpressionChain(
-		// new ExpressionValueCustomVariable(this.getCategoryFromForm(form, lineSplit[0]), customVarTextCategory),
+		// new ExpressionValueCustomVariable(getCategoryFromForm(form, lineSplit[0]), customVarTextCategory),
 		// new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 		// new ExpressionValueString(lineSplit[2]))));
 		// ruleNumber++;
@@ -458,19 +482,19 @@ public class ZrmFormTest {
 		Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
 		// Creation of a subdiagram with the rules modifying the questions
 		DiagramChild subQuestionRuleDiagramNode = new DiagramChild();
-		subQuestionRuleDiagramNode.setChildDiagram(this.createQuestionExceptionRulesSubdiagram(form));
+		subQuestionRuleDiagramNode.setChildDiagram(createQuestionExceptionRulesSubdiagram(form));
 		subQuestionRuleDiagramNode.setJointjsId(IdGenerator.createId());
 		subQuestionRuleDiagramNode.setType(DiagramObjectType.DIAGRAM_CHILD);
 		Node nodeQuestionRuleDiagram = new Node(subQuestionRuleDiagramNode.getJointjsId());
 		// Creation of a subdiagram with all the expressions to calculate the minimum score of the categories
 		DiagramChild subExpressionDiagramNode = new DiagramChild();
-		subExpressionDiagramNode.setChildDiagram(this.createExpressionsSubdiagram(form));
+		subExpressionDiagramNode.setChildDiagram(createExpressionsSubdiagram(form));
 		subExpressionDiagramNode.setJointjsId(IdGenerator.createId());
 		subExpressionDiagramNode.setType(DiagramObjectType.DIAGRAM_CHILD);
 		Node nodeSubExpressionDiagram = new Node(subExpressionDiagramNode.getJointjsId());
 		// Creation of a subdiagram with the rules modifying the categories
 		DiagramChild subCategoryRuleDiagramNode = new DiagramChild();
-		subCategoryRuleDiagramNode.setChildDiagram(this.createCategoryExceptionRulesSubdiagram(form));
+		subCategoryRuleDiagramNode.setChildDiagram(createCategoryExceptionRulesSubdiagram(form));
 		subCategoryRuleDiagramNode.setJointjsId(IdGenerator.createId());
 		subCategoryRuleDiagramNode.setType(DiagramObjectType.DIAGRAM_CHILD);
 		Node nodeSubCategoryRuleDiagram = new Node(subCategoryRuleDiagramNode.getJointjsId());
@@ -516,7 +540,7 @@ public class ZrmFormTest {
 
 	private Diagram createQuestionExceptionRulesSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("ruleQuestionDiagram");
-		for (Rule rule : this.questionExceptionRules) {
+		for (Rule rule : questionExceptionRules) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
@@ -588,7 +612,7 @@ public class ZrmFormTest {
 
 	private Diagram createCategoryExceptionRulesSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("ruleCategoryDiagram");
-		for (Rule rule : this.categoryExceptionRules) {
+		for (Rule rule : categoryExceptionRules) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());

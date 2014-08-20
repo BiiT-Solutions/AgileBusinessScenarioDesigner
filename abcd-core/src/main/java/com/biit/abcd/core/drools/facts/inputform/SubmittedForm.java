@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
-import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 
 /**
  * Basic implementation of an Orbeon Form that includes categories and questions.

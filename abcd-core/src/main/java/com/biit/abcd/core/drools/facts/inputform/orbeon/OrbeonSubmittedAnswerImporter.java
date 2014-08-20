@@ -3,9 +3,10 @@ package com.biit.abcd.core.drools.facts.inputform.orbeon;
 import com.biit.abcd.core.drools.facts.inputform.Category;
 import com.biit.abcd.core.drools.facts.inputform.Question;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.IQuestion;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
+import com.biit.orbeon.OrbeonImporter;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.IQuestion;
+import com.biit.orbeon.form.ISubmittedForm;
 
 /**
  * Reads data from Orbeon Form.

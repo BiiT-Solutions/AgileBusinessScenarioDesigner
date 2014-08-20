@@ -34,7 +34,7 @@ public class GlobalVariablesTest {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		formDrools.parse(this.createBasicForm(), this.createGlobalvariables());
 		// Empty form to force the engine to load the global variables values
-		formDrools.go(new SubmittedForm("", ""));
+		formDrools.runDroolsRules(new SubmittedForm("", ""));
 	}
 
 	static String readFile(String path, Charset encoding) throws IOException {

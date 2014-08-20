@@ -12,13 +12,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.Form2DroolsNoDrl;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.CategoryNameWithoutTranslation;
-import com.biit.abcd.core.drools.facts.inputform.exceptions.QuestionDoesNotExistException;
-import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonCategoryTranslator;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
-import com.biit.abcd.core.drools.facts.interfaces.ICategory;
-import com.biit.abcd.core.drools.facts.interfaces.ISubmittedForm;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Answer;
@@ -48,6 +42,12 @@ import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.orbeon.OrbeonCategoryTranslator;
+import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
+import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 /**
  * Checks the correct creation and execution of table rules <br>
@@ -82,7 +82,7 @@ public class TableRuleTest {
 		Form2DroolsNoDrl formDrools = new Form2DroolsNoDrl();
 		Form vaadinForm = this.createRuleTestForm();
 		formDrools.parse(vaadinForm);
-		formDrools.go(this.form);
+		formDrools.runDroolsRules(this.form);
 
 		// Check the results of the drools execution
 		ICategory testCat1 = this.form.getCategory("Alcohol-, drugs-, game- of gokverslaving");
