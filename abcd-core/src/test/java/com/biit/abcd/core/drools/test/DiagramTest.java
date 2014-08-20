@@ -55,11 +55,12 @@ public class DiagramTest {
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
+	private final static Charset baseCharset =  StandardCharsets.UTF_8;
 
 	@Test(groups = { "orbeon" })
 	public void readXml() throws DocumentException, IOException {
 		this.form = new SubmittedForm(APP, FORM);
-		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", Charset.defaultCharset());
+		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", baseCharset);
 		this.orbeonImporter.readXml(xmlFile, this.form);
 		Assert.assertNotNull(this.form);
 		Assert.assertFalse(this.form.getCategories().isEmpty());
@@ -67,7 +68,7 @@ public class DiagramTest {
 
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
+		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", baseCharset);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 

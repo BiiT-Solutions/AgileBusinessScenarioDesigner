@@ -56,23 +56,23 @@ import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 
 
 public class ExpressionsTest {
-
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
+	private final static Charset baseCharset =  StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
 	public void readXml() throws DocumentException, IOException {
 		this.form = new SubmittedForm(APP, FORM);
-		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", Charset.defaultCharset());
+		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", baseCharset);
 		this.orbeonImporter.readXml(xmlFile, this.form);
 		Assert.assertNotNull(this.form);
 		Assert.assertFalse(this.form.getCategories().isEmpty());
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
+		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", baseCharset);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 

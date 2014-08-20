@@ -56,9 +56,9 @@ import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 public class DiagramDateTest {
-
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
+	private final static Charset baseCharset =  StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -66,7 +66,7 @@ public class DiagramDateTest {
 	@Test(groups = { "orbeon" })
 	public void readXml() throws DocumentException, IOException {
 		this.form = new SubmittedForm(APP, FORM);
-		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", Charset.defaultCharset());
+		String xmlFile = readFile("./src/test/resources/dhszwTest.xml",  StandardCharsets.UTF_8);
 		this.orbeonImporter.readXml(xmlFile, this.form);
 		Assert.assertNotNull(this.form);
 		Assert.assertFalse(this.form.getCategories().isEmpty());
@@ -74,7 +74,7 @@ public class DiagramDateTest {
 
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
 	public void translateFormCategories() throws DocumentException, IOException, CategoryNameWithoutTranslation {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
+		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml",  StandardCharsets.UTF_8);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 

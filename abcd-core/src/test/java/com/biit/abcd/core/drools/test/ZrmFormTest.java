@@ -70,6 +70,7 @@ public class ZrmFormTest {
 	private final static String FORM = "De_Haagse_Passage_v2";
 	private final static String DOCUMENT_ID = "370023c797b9b9b691ed0e64a559f6adb7971df5";
 	private final static String FORM_ID = "d0d4c2e0120867a4663a660437c517d5afbed550";
+	private final static Charset baseCharset =  StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -78,14 +79,14 @@ public class ZrmFormTest {
 
 	public void readXml() throws DocumentException, IOException {
 		form = new SubmittedForm(APP, FORM);
-		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", Charset.defaultCharset());
+		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", baseCharset);
 		orbeonImporter.readXml(xmlFile, form);
 		Assert.assertNotNull(form);
 		Assert.assertFalse(form.getCategories().isEmpty());
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
+		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml",  baseCharset);
 		OrbeonCategoryTranslator.getInstance().readXml(form, xmlStructure);
 	}
 

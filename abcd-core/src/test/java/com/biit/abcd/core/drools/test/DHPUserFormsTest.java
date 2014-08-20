@@ -89,7 +89,7 @@ public class DHPUserFormsTest {
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", Charset.defaultCharset());
+		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml",  StandardCharsets.UTF_8);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
