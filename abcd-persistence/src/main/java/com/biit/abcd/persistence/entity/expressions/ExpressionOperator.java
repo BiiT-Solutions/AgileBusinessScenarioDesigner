@@ -10,6 +10,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
 
 /**
  * Generic class for creating operators logical and mathematical.
@@ -18,7 +19,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 @Entity
 @Table(name = "expression_operator")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ExpressionOperator extends Expression {
+public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator>{
 
 	@Enumerated(EnumType.STRING)
 	private AvailableOperator currentValue;
@@ -38,6 +39,7 @@ public abstract class ExpressionOperator extends Expression {
 
 	public abstract List<AvailableOperator> getAcceptedValues();
 
+	@Override
 	public AvailableOperator getValue() {
 		return currentValue;
 	}
@@ -49,6 +51,7 @@ public abstract class ExpressionOperator extends Expression {
 	 * @throws NotValidOperatorInExpression
 	 *             If this exception is launched, check ALLOWED_OPERATORS of the class.
 	 */
+	@Override
 	public void setValue(AvailableOperator exprOpvalue) throws NotValidOperatorInExpression {
 		if (getAcceptedValues().contains(exprOpvalue)) {
 			currentValue = exprOpvalue;
