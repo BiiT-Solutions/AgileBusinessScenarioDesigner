@@ -7,13 +7,15 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
+
 /**
  * User for defining functions as MAX, MIN, AVERAGE, ABS, ...
  */
 @Entity
 @Table(name = "expression_function")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class ExpressionFunction extends Expression {
+public class ExpressionFunction extends Expression implements IExpressionType<AvailableFunction> {
 
 	@Enumerated(EnumType.STRING)
 	private AvailableFunction value;
@@ -33,10 +35,12 @@ public class ExpressionFunction extends Expression {
 		}
 	}
 
+	@Override
 	public AvailableFunction getValue() {
 		return value;
 	}
 
+	@Override
 	public void setValue(AvailableFunction function) {
 		value = function;
 	}

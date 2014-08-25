@@ -5,13 +5,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
+
 /**
  * Defines a special symbol as '(', ')', or ','
  *
  */
 @Entity
 @Table(name = "expression_symbol")
-public class ExpressionSymbol extends Expression {
+public class ExpressionSymbol extends Expression implements IExpressionType<AvailableSymbol>{
 
 	@Enumerated(EnumType.STRING)
 	private AvailableSymbol value;
@@ -34,10 +36,12 @@ public class ExpressionSymbol extends Expression {
 		}
 	}
 
+	@Override
 	public void setValue(AvailableSymbol value) {
 		this.value = value;
 	}
 
+	@Override
 	public AvailableSymbol getValue() {
 		return value;
 	}

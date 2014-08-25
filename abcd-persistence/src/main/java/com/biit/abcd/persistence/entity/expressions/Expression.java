@@ -46,5 +46,4 @@ public abstract class Expression extends StorableObject {
 	public void setEditable(boolean isEditable) {
 		this.isEditable = isEditable;
 	}
-
 }
