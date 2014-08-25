@@ -60,7 +60,7 @@ public class SettingsWindow extends PopupWindow {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
-								close();
+								windowAccept.close();
 							}
 						});
 					}
@@ -114,7 +114,7 @@ public class SettingsWindow extends PopupWindow {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
-								close();
+								windowAccept.close();
 							}
 						});
 					}
