@@ -55,6 +55,13 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		}
 	}
 
+	public ExpressionChain(List<Expression> expressions) {
+		this.expressions = new ArrayList<>();
+		for(Expression expression : expressions){
+			addExpression(expression);
+		}
+	}
+
 	public List<Expression> getExpressions() {
 		return expressions;
 	}

@@ -1,6 +1,12 @@
 package com.biit.abcd.core.drools.rules;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -21,12 +27,36 @@ public class TableRuleParser extends GenericParser {
 				newRules += Utils.getStartRuleString(tableRuleName + "_row_" + i);
 				newRules += Utils.getAttributes();
 				newRules += Utils.getWhenRuleString();
-				newRules += this.createDroolsRule(row.getConditions(), row.getAction().getExpressions(),
-						extraConditions);
+				newRules += this.createDroolsRule(this.preParseConditions(row.getConditions()), row.getAction()
+						.getExpressions(), extraConditions);
 				newRules += Utils.getEndRuleString();
 				i++;
 			}
 		}
 		return newRules;
+	}
+
+	/**
+	 * Adds the logic expressions that the table don't add
+	 *
+	 * @param conditions
+	 * @return
+	 */
+	private List<Expression> preParseConditions(List<Expression> conditions) {
+		List<Expression> preParsedConditions = new ArrayList<Expression>();
+
+		int index = 0;
+		// For each pair of conditions adds an AND, and between each pair adds
+		// an EQUALS
+		for (Expression condition : conditions) {
+			if (((index != 0) && ((index % 2) == 0))) {
+				preParsedConditions.add(new ExpressionOperatorLogic(AvailableOperator.AND));
+			} else if ((index % 2) != 0) {
+				preParsedConditions.add(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+			}
+			preParsedConditions.add(condition);
+			index++;
+		}
+		return preParsedConditions;
 	}
 }

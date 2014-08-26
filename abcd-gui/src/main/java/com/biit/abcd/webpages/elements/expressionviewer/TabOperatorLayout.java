@@ -192,11 +192,22 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
+		Button averageButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AVG),
+				new ClickListener() {
+					private static final long serialVersionUID = -1931977283394000885L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.AVG);
+					}
+				});
+
 		layout.addComponent(maxButton);
 		layout.addComponent(minimumButton);
 		layout.addComponent(absoluteButton);
 		layout.addComponent(sqrtButton);
 		layout.addComponent(roundButton);
+		layout.addComponent(averageButton);
 	}
 
 	private void createLogicalFunctionsOperators(AbstractLayout layout) {
@@ -229,9 +240,20 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
+		Button allButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ALL),
+				new ClickListener() {
+					private static final long serialVersionUID = -3017436915684829479L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.ALL);
+					}
+				});
+
 		layout.addComponent(notButton);
 		layout.addComponent(inButton);
 		layout.addComponent(betweenButton);
+		layout.addComponent(allButton);
 	}
 
 	private void createBaseTab(AbstractLayout layout) {
@@ -366,7 +388,7 @@ public class TabOperatorLayout extends TabLayout {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								String value = ((StringInputWindow) window).getValue();
-								if (value == null || value.isEmpty()) {
+								if ((value == null) || value.isEmpty()) {
 									MessageManager.showError(ServerTranslate
 											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
 								} else {

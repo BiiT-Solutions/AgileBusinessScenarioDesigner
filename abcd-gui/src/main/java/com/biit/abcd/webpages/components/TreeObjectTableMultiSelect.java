@@ -10,6 +10,7 @@ import com.biit.form.TreeObject;
  */
 public class TreeObjectTableMultiSelect extends TreeObjectTable {
 	private static final long serialVersionUID = -820060659335684751L;
+	private static final String ELEMENT_NAME = "Name";
 
 	public TreeObjectTableMultiSelect() {
 		super();

@@ -131,6 +131,25 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 		tab3.setDescription("");
 		tab3.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
 
+		// Fourth Tab
+		TabFormFunctionAllScopeLayout formVariablesScopeLayout = new TabFormFunctionAllScopeLayout();
+		formVariablesScopeLayout.addNewElementListener(new ElementAddedListener() {
+			@Override
+			public void elementAdded(Object newElement) {
+				if (getSelectedViewer() != null) {
+					getSelectedViewer().addElementToSelected((Expression) newElement);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
+							+ " with 'Value: " + newElement + "'.");
+				}
+			}
+
+		});
+		Tab tab4 = tabMenu.addTab(formVariablesScopeLayout);
+		tab4.setDescription("");
+		tab4.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
+
 		return tabMenu;
 	}
 

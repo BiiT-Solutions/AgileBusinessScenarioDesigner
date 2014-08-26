@@ -188,7 +188,7 @@ public enum LanguageCodes {
 	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"),
 	ERROR_SAME_DIAGRAM("error.same.diagram"),
 	ERROR_DIAGRAM_IS_IN_USE("error.diagram.is.in.use"),
-	
+
 	ERROR_DROOLS_INVALID_RULE("error.drools.invalid"),
 	ERROR_ORBEON_IMPORTER_INVALID_FORM("error.orbeonimporter.invalid.form"),
 
@@ -313,6 +313,8 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_SQRT("expression.button.sqrt"),
 	EXPRESSION_BUTTON_IN("expression.button.in"),
 	EXPRESSION_BUTTON_BETWEEN("expression.button.between"),
+	EXPRESSION_BUTTON_AVG("expression.button.average"),
+	EXPRESSION_BUTTON_ALL("expression.button.all"),
 
 	EXPRESSION_DATE_DAY("expression.date.day"),
 	EXPRESSION_DATE_MONTH("expression.date.month"),
@@ -354,7 +356,7 @@ public enum LanguageCodes {
 	DECISION_TABLE_COPY_TABLE_NOT_SELECTED("decision.table.table.not.selected"),
 	DECISION_TABLE_COPY_NO_SELECTED_ELEMENTS("decision.table.copy.no.selected.elements"),
 	DECISION_TABLE_PASTE_ROW_NOT_PERFORMED_CAPTION("decision.table.paste.row.not.performed.caption"),
-	
+
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_CAPTION("condition.table.editor.button.copy.rows.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_TOOLTIP("condition.table.editor.button.copy.rows.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_CAPTION("condition.table.editor.button.paste.rows.caption"),

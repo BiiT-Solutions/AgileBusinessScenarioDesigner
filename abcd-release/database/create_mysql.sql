@@ -479,6 +479,20 @@
         primary key (ID)
     );
 
+    create table expression_value_tree_object_set_variable (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        isEditable bit not null,
+        unit varchar(255),
+        reference_ID bigint,
+        variable_ID bigint,
+        primary key (ID)
+    );
+
     create table expressions_chain (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -712,6 +726,17 @@
         primary key (ID)
     );
 
+    create table tree_object_set_variable (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        scope varchar(255),
+        primary key (ID)
+    );
+
     create table tree_questions (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -923,6 +948,12 @@
     alter table expression_value_tree_object_reference 
         add constraint UK_an3mu4deq3muvltuwdawkfbhc  unique (comparationId);
 
+    alter table expression_value_tree_object_set_variable 
+        add constraint UK_qc2p8bk2r5wuujqt606lnc3nl  unique (ID);
+
+    alter table expression_value_tree_object_set_variable 
+        add constraint UK_sjn8dfp11bdbhhysiahbdqa7y  unique (comparationId);
+
     alter table expressions_chain 
         add constraint UK_l2k0vcoohq76m4cl2k8g3y9hc  unique (ID);
 
@@ -1039,6 +1070,12 @@
 
     alter table tree_groups 
         add constraint UK_sno2xl7o9nxmt3xh48ywus36u  unique (comparationId);
+
+    alter table tree_object_set_variable 
+        add constraint UK_fya96xniqcwe4wk9fexdv6cmr  unique (ID);
+
+    alter table tree_object_set_variable 
+        add constraint UK_h3e6wxhnbp225xvwkm4thm1j4  unique (comparationId);
 
     alter table tree_questions 
         add constraint UK_9lkt55st6up2vyh38lrmu0dc5  unique (ID);
@@ -1270,6 +1307,11 @@
         add constraint FK_42woqe4atagm0r4oxgcnk6qwo 
         foreign key (constant_ID) 
         references global_variables (ID);
+
+    alter table expression_value_tree_object_set_variable 
+        add constraint FK_ikd8gvkiviy5ria4cnh69lmwr 
+        foreign key (variable_ID) 
+        references tree_object_set_variable (ID);
 
     alter table expressions_chain_expression_basic 
         add constraint FK_5u04lt24nd5qdcqdc9s5htsy8 

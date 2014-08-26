@@ -30,10 +30,12 @@ public class FormToDroolsExporter {
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
+	 * Parses the vaadin form and loads the rules generated in the drools
+	 * engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly
+	 * defined. <br>
 	 * This method doesn't create any global variables
-	 * 
+	 *
 	 * @param form
 	 *            form to be parsed
 	 * @throws ExpressionInvalidException
@@ -41,16 +43,17 @@ public class FormToDroolsExporter {
 	 * @throws IOException
 	 */
 	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException, IOException {
-		if (form != null && !form.getChildren().isEmpty()) {
+		if ((form != null) && !form.getChildren().isEmpty()) {
 			this.km = new KieManager();
 			FormParser formRules;
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form);
 				// System.out.println(formRules.getRules());
-				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
+				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"),
+				// formRules.getRules().getBytes());
 				// Load the rules in memory
-				km.buildSessionRules(formRules.getRules());
+				this.km.buildSessionRules(formRules.getRules());
 
 			} catch (ExpressionInvalidException e) {
 				throw e;
@@ -59,10 +62,13 @@ public class FormToDroolsExporter {
 	}
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
-	 * This method creates the global constants defined in the globalVariables array
-	 * 
+	 * Parses the vaadin form and loads the rules generated in the drools
+	 * engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly
+	 * defined. <br>
+	 * This method creates the global constants defined in the globalVariables
+	 * array
+	 *
 	 * @param form
 	 *            form to be parsed
 	 * @param globalVariables
@@ -94,30 +100,35 @@ public class FormToDroolsExporter {
 	}
 
 	/**
-	 * Loads the (Submitted) form as facts of the knowledge base of the drools engine. <br>
-	 * It also starts the engine execution by firing all the rules inside the engine.
-	 * 
+	 * Loads the (Submitted) form as facts of the knowledge base of the drools
+	 * engine. <br>
+	 * It also starts the engine execution by firing all the rules inside the
+	 * engine.
+	 *
 	 * @param form
 	 */
 	public void runDroolsRules(ISubmittedForm form) {
-		km.setFacts(Arrays.asList(form));
-		km.execute();
+		this.km.setFacts(Arrays.asList(form));
+		this.km.execute();
 	}
 
 	public void readXml(String formInfo) throws DocumentException, IOException {
 		// [0]=App name, [1]=Form name, [2]=Doc id
 		String[] infoArray = formInfo.split("::");
-		submittedForm = new SubmittedForm(infoArray[0], infoArray[1]);
-		orbeonImporter.readXml(OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]), this.submittedForm);
+		this.submittedForm = new SubmittedForm(infoArray[0], infoArray[1]);
+		this.orbeonImporter
+				.readXml(OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]), this.submittedForm);
 		Assert.assertNotNull(this.submittedForm);
 		Assert.assertFalse(this.submittedForm.getCategories().isEmpty());
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
 		// Load the structure file of the form
-//		String xmlStructure = readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(),
-//				Charset.defaultCharset());
-//		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm, xmlStructure);
+		// String xmlStructure =
+		// readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(),
+		// Charset.defaultCharset());
+		// OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm,
+		// xmlStructure);
 		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
 	}
 
@@ -125,10 +136,10 @@ public class FormToDroolsExporter {
 			throws ExpressionInvalidException, NotValidOperatorInExpression, RuleInvalidException, IOException,
 			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
 		// Load the submitted form
-		parse(vaadinForm);
-		readXml(formInfo);
-		translateFormCategories();
-		runDroolsRules(submittedForm);
-		return submittedForm;
+		this.parse(vaadinForm);
+		this.readXml(formInfo);
+		this.translateFormCategories();
+		this.runDroolsRules(this.submittedForm);
+		return this.submittedForm;
 	}
 }

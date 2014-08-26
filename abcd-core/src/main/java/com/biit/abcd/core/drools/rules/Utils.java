@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Utils {
 
-	public static String getStartRuleString(String name){
+	public static String getStartRuleString(String name) {
 		return "rule \"" + name + "\"\n";
 	}
 
-	public static String getWhenRuleString(){
+	public static String getWhenRuleString() {
 		return "when\n";
 	}
 
@@ -17,11 +17,11 @@ public class Utils {
 		return "";
 	}
 
-	public static String getThenRuleString(){
+	public static String getThenRuleString() {
 		return "then\n";
 	}
 
-	public static String getEndRuleString(){
+	public static String getEndRuleString() {
 		return "\nend\n";
 	}
 
@@ -34,52 +34,84 @@ public class Utils {
 	 * @param ruleCore
 	 * @return
 	 */
-	public static String removeDuplicateLines(String ruleCore){
+	public static String removeDuplicateLines(String ruleCore) {
 		// Parse the resulting rule to delete lines that are equal
 		String[] auxSplit = ruleCore.split("\n");
 		List<String> auxRule = new ArrayList<String>();
-		for(int i=0; i<auxSplit.length; i++){
-			if(i!= 0){
+		for (int i = 0; i < auxSplit.length; i++) {
+			if (i != 0) {
 				boolean stringRepeated = false;
-				for(int j=0; j<auxRule.size(); j++){
-					if(auxRule.get(j).equals(auxSplit[i])){
+				for (int j = 0; j < auxRule.size(); j++) {
+					if (auxRule.get(j).equals("(") && auxRule.get(j).equals(")") && auxRule.get(j).equals(auxSplit[i])) {
 						stringRepeated = true;
 						break;
 					}
 				}
-				if(!stringRepeated){
+				if (!stringRepeated) {
 					auxRule.add(auxSplit[i]);
 				}
-			}else{
+			} else {
 				auxRule.add(auxSplit[i]);
 			}
 		}
-		// Parse the resulting rule to add an index to separate equal assignation
-		// Example $cat : ... \n $cat : ... \n will be converted to $cat : ... \n $cat1 : ... \n
+		// Parse the resulting rule to add an index to separate equal
+		// assignation
+		// Example $cat : ... \n $cat : ... \n will be converted to $cat : ...
+		// \n $cat1 : ... \n
 		// (Separated from the previous to make it more understandable)
 		String previousVariable = "";
 		String auxRuleCore = "";
 		int indexVariable = 1;
 
 		for (String auxPart : auxRule) {
-			if(!auxPart.contains("accumulate(") &&
-					!auxPart.contains("then")){
+			if (!auxPart.contains("accumulate(") && !auxPart.contains("then") && !auxPart.contains("(")
+					&& !auxPart.contains(")")) {
 				String[] auxRuleArray = auxPart.split(" : ");
-				if(auxRuleArray[0].equals(previousVariable)){
+				if (auxRuleArray[0].equals(previousVariable)) {
 					auxRuleArray[0] = auxRuleArray[0] + indexVariable;
 					indexVariable++;
-				}else{
+				} else {
 					previousVariable = auxRuleArray[0];
 				}
-				if(auxRuleArray.length>1) {
+				if (auxRuleArray.length > 1) {
 					auxRuleCore += auxRuleArray[0] + " : " + auxRuleArray[1] + "\n";
-				}else{
+				} else {
 					auxRuleCore += auxRuleArray[0];
 				}
-			}else{
-				auxRuleCore += auxPart+"\n";
+			} else {
+				auxRuleCore += auxPart + "\n";
 			}
 		}
 		return auxRuleCore;
+	}
+
+	/**
+	 * Due to the independent parsing of the conditions of the rule, sometimes
+	 * the algorithm generates repeated rules <br>
+	 * This method the lines that are equals in the rule<br>
+	 * It should be used before sending the rules to the engine <br>
+	 *
+	 * @param ruleCore
+	 * @return
+	 */
+	public static String newRemoveDuplicateLines(String ruleCore) {
+		StringBuilder result = new StringBuilder();
+		// Parse the resulting rule to delete lines that are equal
+		String[] auxSplit = ruleCore.split("\n");
+		for (int i = 0; i < auxSplit.length; i++) {
+			if ((auxSplit[i] != null)) {
+				String compareTo = auxSplit[i];
+				for (int j = i + 1; j < auxSplit.length; j++) {
+					if ((auxSplit[j] != null) && !auxSplit[i].equals("and") && !auxSplit[i].equals("(")
+							&& !auxSplit[i].equals(")")) {
+						if (auxSplit[j].equals(compareTo)) {
+							auxSplit[j] = null;
+						}
+					}
+				}
+				result.append(compareTo + "\n");
+			}
+		}
+		return result.toString();
 	}
 }

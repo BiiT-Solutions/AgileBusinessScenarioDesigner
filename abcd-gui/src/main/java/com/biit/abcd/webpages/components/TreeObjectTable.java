@@ -26,30 +26,30 @@ import com.vaadin.ui.TreeTable;
  * 
  */
 public class TreeObjectTable extends TreeTable {
-	private static final long serialVersionUID = -6949123334668973540L;
-
 	protected enum TreeObjectTableProperties {
 		ELEMENT_NAME
-	};
+	}
+
+	private static final long serialVersionUID = -6949123334668973540L;;
+
+	/**
+	 * Gets Name property to show form a TreeObject element. If the name can't
+	 * be defined, then raises a {@link UnsupportedOperationException}
+	 * 
+	 * @param element
+	 * @return
+	 */
+	public static String getItemName(TreeObject element) {
+		String name = element.getName();
+		if (name == null) {
+			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
+		}
+		return name;
+	}
 
 	public TreeObjectTable() {
 		initContainerProperties();
 		setImmediate(true);
-	}
-
-	protected void initContainerProperties() {
-		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
-				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
-		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
-	}
-
-	private void loadTreeObject(TreeObject element, TreeObject parent) {
-		addItem(element, parent);
-
-		List<TreeObject> children = element.getChildren();
-		for (TreeObject child : children) {
-			loadTreeObject(child, element);
-		}
 	}
 
 	/**
@@ -74,23 +74,97 @@ public class TreeObjectTable extends TreeTable {
 		}
 	}
 
-	public void updateItem(TreeObject element) {
-		Item item = getItem(element);
-		if (item != null) {
-			// Remove children if are not valid.
-			try {
-				removeChildren(element);
-			} catch (DependencyExistException e) {
-				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-						LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
-				// Impossible to remove children.
-				return;
+	/**
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
+	 * 
+	 * @param element
+	 */
+	@SuppressWarnings("unchecked")
+	public void addItemAfter(Object previousItemId, TreeObject element, TreeObject parent) {
+		if (element != null) {
+			Object treeObjectIcon = createElementWithIcon(element);
+			Item item = addItemAfter(previousItemId, (Object) element);
+			if (parent != null) {
+				setChildrenAllowed(parent, true);
+				setParent(element, parent);
+				setCollapsed(parent, false);
 			}
+			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
+			setValue(element);
+			setChildrenAllowed(element, false);
+		}
+	}
 
-			// Update
-			ComponentCellTreeObject cell = (ComponentCellTreeObject) item.getItemProperty(
-					TreeObjectTableProperties.ELEMENT_NAME).getValue();
-			cell.update(element);
+	/**
+	 * Collapse the tree in a specific hierarchy level to inner levels. The
+	 * level is specified by a class.
+	 * 
+	 * @param collapseFrom
+	 */
+	public void collapseFrom(Class<?> collapseFrom) {
+		for (Object item : getItemIds()) {
+			if (item.getClass() == collapseFrom) {
+				this.setCollapsed(item, true);
+			} else {
+				if (this.getParent(item) != null && this.isCollapsed(this.getParent(item))) {
+					this.setCollapsed(item, true);
+				}
+			}
+		}
+	}
+
+	protected Object createElementWithIcon(final TreeObject element) {
+		ComponentCellTreeObject cell = new ComponentCellTreeObject();
+		cell.update(element);
+		cell.registerTouchCallBack(this, element);
+
+		return cell;
+	}
+
+	@Override
+	public Collection<?> getSortableContainerPropertyIds() {
+		return Collections.EMPTY_LIST;
+	}
+
+	public TreeObject getTreeObjectSelected() {
+		Object value = super.getValue();
+		if (value instanceof TreeObject) {
+			return (TreeObject) value;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<TreeObject> getTreeObjectsSelected() {
+		Object value = super.getValue();
+		if (value instanceof Set<?>) {
+			Set<Object> setObject = (Set<Object>) value;
+			Set<TreeObject> setTreeObject = new HashSet<TreeObject>();
+			for (Object obj : setObject) {
+				setTreeObject.add((TreeObject) obj);
+			}
+			return setTreeObject;
+		}
+		return null;
+	}
+
+	protected void initContainerProperties() {
+		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
+				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
+		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
+	}
+
+	public boolean isElementFiltered(Object itemId) {
+		return false;
+	}
+
+	private void loadTreeObject(TreeObject element, TreeObject parent) {
+		addItem(element, parent);
+
+		List<TreeObject> children = element.getChildren();
+		for (TreeObject child : children) {
+			loadTreeObject(child, element);
 		}
 	}
 
@@ -120,43 +194,6 @@ public class TreeObjectTable extends TreeTable {
 		}
 	}
 
-	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
-	 * 
-	 * @param element
-	 */
-	@SuppressWarnings("unchecked")
-	public void addItemAfter(Object previousItemId, TreeObject element, TreeObject parent) {
-		if (element != null) {
-			Object treeObjectIcon = createElementWithIcon(element);
-			Item item = addItemAfter(previousItemId, (Object) element);
-			if (parent != null) {
-				setChildrenAllowed(parent, true);
-				setParent(element, parent);
-				setCollapsed(parent, false);
-			}
-			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
-			setValue(element);
-			setChildrenAllowed(element, false);
-		}
-	}
-
-	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't
-	 * be defined, then raises a {@link UnsupportedOperationException}
-	 * 
-	 * @param element
-	 * @return
-	 */
-	public static String getItemName(TreeObject element) {
-		String name = element.getName();
-		if (name == null) {
-			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
-		}
-		return name;
-	}
-
 	public void setRootElement(TreeObject root) {
 		this.removeAllItems();
 		select(null);
@@ -170,68 +207,31 @@ public class TreeObjectTable extends TreeTable {
 		}
 	}
 
-	public TreeObject getTreeObjectSelected() {
-		Object value = super.getValue();
-		if (value instanceof TreeObject) {
-			return (TreeObject) value;
-		}
-		return null;
+	public void setTreeObjectSelected(TreeObject treeObject) {
+		super.setValue(treeObject);
 	}
 
 	public void setTreeObjectsSelected(Set<TreeObject> treeObjects) {
 		super.setValue(treeObjects);
 	}
 
-	public void setTreeObjectSelected(TreeObject treeObject) {
-		super.setValue(treeObject);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Set<TreeObject> getTreeObjectsSelected() {
-		Object value = super.getValue();
-		if (value instanceof Set<?>) {
-			Set<Object> setObject = (Set<Object>) value;
-			Set<TreeObject> setTreeObject = new HashSet<TreeObject>();
-			for (Object obj : setObject) {
-				setTreeObject.add((TreeObject) obj);
+	public void updateItem(TreeObject element) {
+		Item item = getItem(element);
+		if (item != null) {
+			// Remove children if are not valid.
+			try {
+				removeChildren(element);
+			} catch (DependencyExistException e) {
+				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+						LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+				// Impossible to remove children.
+				return;
 			}
-			return setTreeObject;
-		}
-		return null;
-	}
 
-	@Override
-	public Collection<?> getSortableContainerPropertyIds() {
-		return Collections.EMPTY_LIST;
-	}
-
-	public boolean isElementFiltered(Object itemId) {
-		return false;
-	}
-
-	protected Object createElementWithIcon(final TreeObject element) {
-		ComponentCellTreeObject cell = new ComponentCellTreeObject();
-		cell.update(element);
-		cell.registerTouchCallBack(this, element);
-
-		return cell;
-	}
-
-	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels. The
-	 * level is specified by a class.
-	 * 
-	 * @param collapseFrom
-	 */
-	public void collapseFrom(Class<?> collapseFrom) {
-		for (Object item : getItemIds()) {
-			if (item.getClass() == collapseFrom) {
-				this.setCollapsed(item, true);
-			} else {
-				if (this.getParent(item) != null && this.isCollapsed(this.getParent(item))) {
-					this.setCollapsed(item, true);
-				}
-			}
+			// Update
+			ComponentCellTreeObject cell = (ComponentCellTreeObject) item.getItemProperty(
+					TreeObjectTableProperties.ELEMENT_NAME).getValue();
+			cell.update(element);
 		}
 	}
 

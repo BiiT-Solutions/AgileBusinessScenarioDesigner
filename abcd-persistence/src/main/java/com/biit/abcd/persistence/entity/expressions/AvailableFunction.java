@@ -22,7 +22,9 @@ public enum AvailableFunction {
 
 	ROUND("ROUND("),
 
-	AVG("AVG(");
+	AVG("AVG("),
+
+	ALL("ALL(");
 
 	private String value;
 
