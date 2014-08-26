@@ -115,6 +115,7 @@ public class SettingsWindow extends PopupWindow {
 							public void acceptAction(AcceptCancelWindow window) {
 								ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
 								windowAccept.close();
+								close();
 							}
 						});
 					}
