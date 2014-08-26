@@ -5,20 +5,20 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.TreeObjectSetVariable;
+import com.biit.abcd.persistence.entity.GenericTreeObjectVariable;
 
 @Entity
-@Table(name = "expression_value_tree_object_set_variable")
-public class ExpressionValueTreeObjectSetVariable extends ExpressionValueTreeObjectReference {
+@Table(name = "expression_value_generic_tree_object_variable")
+public class ExpressionValueGenericTreeObjectVariable extends ExpressionValueTreeObjectReference {
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private TreeObjectSetVariable variable;
+	private GenericTreeObjectVariable variable;
 
-	public ExpressionValueTreeObjectSetVariable() {
+	public ExpressionValueGenericTreeObjectVariable() {
 		super();
 	}
 
-	public ExpressionValueTreeObjectSetVariable(TreeObjectSetVariable variable) {
+	public ExpressionValueGenericTreeObjectVariable(GenericTreeObjectVariable variable) {
 		super();
 		this.variable = variable;
 	}
@@ -32,11 +32,11 @@ public class ExpressionValueTreeObjectSetVariable extends ExpressionValueTreeObj
 		return expressionString;
 	}
 
-	public TreeObjectSetVariable getVariable() {
+	public GenericTreeObjectVariable getVariable() {
 		return variable;
 	}
 
-	public void setVariable(TreeObjectSetVariable variable) {
+	public void setVariable(GenericTreeObjectVariable variable) {
 		this.variable = variable;
 	}
 
@@ -51,7 +51,7 @@ public class ExpressionValueTreeObjectSetVariable extends ExpressionValueTreeObj
 
 	@Override
 	public Expression generateCopy() {
-		ExpressionValueTreeObjectSetVariable copy = new ExpressionValueTreeObjectSetVariable();
+		ExpressionValueGenericTreeObjectVariable copy = new ExpressionValueGenericTreeObjectVariable();
 		copy.variable = variable;
 		copy.setEditable(isEditable());
 		return copy;

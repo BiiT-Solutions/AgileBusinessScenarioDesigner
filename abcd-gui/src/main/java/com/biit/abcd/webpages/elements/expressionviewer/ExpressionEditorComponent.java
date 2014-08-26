@@ -132,7 +132,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 		tab3.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
 
 		// Fourth Tab
-		TabFormFunctionAllScopeLayout formVariablesScopeLayout = new TabFormFunctionAllScopeLayout();
+		TabFormGenericTreeObjectLayout formVariablesScopeLayout = new TabFormGenericTreeObjectLayout();
 		formVariablesScopeLayout.addNewElementListener(new ElementAddedListener() {
 			@Override
 			public void elementAdded(Object newElement) {

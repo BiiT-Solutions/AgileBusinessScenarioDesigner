@@ -294,6 +294,8 @@ public enum LanguageCodes {
 	EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION("expression.form.variable.window.caption"),
 	EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS("expression.form.variable.window.elements"),
 	EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES("expression.form.variable.window.variables"),
+	EXPRESSION_FORM_VARIABLE_WINDOW_GENERIC_ELEMENTS("expression.form.variable.window.generic.elements"),
+	EXPRESSION_FORM_VARIABLE_WINDOW_GENERIC_VARIABLES("expression.form.variable.window.generic.variables"),
 	EXPRESSION_ERROR_INCORRECT_INPUT_VALUE("expression.error.incorrect.input.value"),
 	EXPRESSION_CHECKER_VALID("expression.checker.valid"),
 	EXPRESSION_CHECKER_INVALID("expression.checker.invalid"),
@@ -324,6 +326,8 @@ public enum LanguageCodes {
 
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE("expression.form.variable.addvariable"),
+	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_GENERIC_ELEMENT("expression.form.variable.addgenericelement"),
+	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_GENERIC_VARIABLE("expression.form.variable.addgenericvariable"),
 
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_CAPTION("json.diagram.properties.calculation.expression.caption"),
 	JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION("json.diagram.properties.calculation.expression.null.caption"),

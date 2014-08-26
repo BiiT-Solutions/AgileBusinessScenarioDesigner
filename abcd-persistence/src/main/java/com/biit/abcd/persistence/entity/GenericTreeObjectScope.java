@@ -1,7 +1,7 @@
 package com.biit.abcd.persistence.entity;
 
 
-public enum TreeObjectSetScope {
+public enum GenericTreeObjectScope {
 
 	CATEGORY(Category.class, "Categories"),
 
@@ -14,7 +14,7 @@ public enum TreeObjectSetScope {
 	private Class<?> scope;
 	private String name;
 
-	private TreeObjectSetScope(Class<?> scope, String name) {
+	private GenericTreeObjectScope(Class<?> scope, String name) {
 		this.scope = scope;
 		this.name = name;
 	}

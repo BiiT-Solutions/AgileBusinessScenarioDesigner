@@ -9,24 +9,24 @@ import com.biit.persistence.entity.StorableObject;
 
 
 @Entity
-@Table(name = "tree_object_set_variable")
-public class TreeObjectSetVariable extends StorableObject {
+@Table(name = "generic_tree_objec_variable")
+public class GenericTreeObjectVariable extends StorableObject {
 
 	@Enumerated(EnumType.STRING)
-	private TreeObjectSetScope scope;
+	private GenericTreeObjectScope scope;
 
-	public TreeObjectSetVariable() {
+	public GenericTreeObjectVariable() {
 	}
 
-	public TreeObjectSetVariable(TreeObjectSetScope scope) {
+	public GenericTreeObjectVariable(GenericTreeObjectScope scope) {
 		this.scope = scope;
 	}
 
-	public TreeObjectSetScope getScope() {
+	public GenericTreeObjectScope getScope() {
 		return scope;
 	}
 
-	public void setScope(TreeObjectSetScope scope) {
+	public void setScope(GenericTreeObjectScope scope) {
 		this.scope = scope;
 	}
 }
