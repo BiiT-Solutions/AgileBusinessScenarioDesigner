@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.form.BaseRepeatableGroup;
+import com.biit.form.TreeObject;
 import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
@@ -16,5 +17,9 @@ public class Group extends BaseRepeatableGroup {
 
 	public Group(String name) throws FieldTooLongException {
 		super(name);
+	}
+
+	@Override
+	protected void copyData(TreeObject object) {
 	}
 }

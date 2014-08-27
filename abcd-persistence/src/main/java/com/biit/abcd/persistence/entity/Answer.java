@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.form.BaseAnswer;
+import com.biit.form.TreeObject;
 import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
@@ -17,4 +18,7 @@ public class Answer extends BaseAnswer {
 		super(name);
 	}
 
+	@Override
+	protected void copyData(TreeObject object) {
+	}
 }

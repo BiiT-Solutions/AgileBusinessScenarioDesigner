@@ -6,8 +6,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.biit.form.BaseQuestion;
+import com.biit.form.TreeObject;
 import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
+import com.biit.form.exceptions.NotValidTreeObjectException;
 
 @Entity
 @Table(name = "tree_questions")
@@ -47,5 +49,15 @@ public class Question extends BaseQuestion {
 			}
 		}
 		this.answerFormat = answerFormat;
+	}
+
+	@Override
+	protected void copyData(TreeObject object) throws NotValidTreeObjectException {
+		if(object instanceof Question) {
+			answerType = ((Question) object).getAnswerType();
+			answerFormat = ((Question) object).getAnswerFormat();
+		}else{
+			throw new NotValidTreeObjectException("Question can only be copied from another question.");
+		}
 	}
 }

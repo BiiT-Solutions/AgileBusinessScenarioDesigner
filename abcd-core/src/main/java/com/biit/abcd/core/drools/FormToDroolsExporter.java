@@ -28,6 +28,7 @@ public class FormToDroolsExporter {
 	// To store the info of the submitted form
 	private ISubmittedForm submittedForm;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
+	private String droolsRules = "";
 
 	/**
 	 * Parses the vaadin form and loads the rules generated in the drools
@@ -49,6 +50,7 @@ public class FormToDroolsExporter {
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form);
+				this.droolsRules = formRules.getRules();
 				// System.out.println(formRules.getRules());
 				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"),
 				// formRules.getRules().getBytes());
@@ -85,6 +87,7 @@ public class FormToDroolsExporter {
 			try {
 				// Creation of the rules
 				formRules = new FormParser(form, globalVariables);
+				this.droolsRules = formRules.getRules();
 				AbcdLogger.debug(this.getClass().getName(), formRules.getRules());
 				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"),
 				// formRules.getRules().getBytes());
@@ -141,5 +144,9 @@ public class FormToDroolsExporter {
 		this.translateFormCategories();
 		this.runDroolsRules(this.submittedForm);
 		return this.submittedForm;
+	}
+
+	public String getGeneratedRules(){
+		return this.droolsRules;
 	}
 }

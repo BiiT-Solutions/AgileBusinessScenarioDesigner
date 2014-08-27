@@ -142,6 +142,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 			UserSessionHandler.getFormController().reload();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
+			System.out.println(e);
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(DecisionTableEditor.class.getName(), e);
 		}

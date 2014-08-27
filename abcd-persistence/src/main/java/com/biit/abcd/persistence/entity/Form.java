@@ -151,6 +151,22 @@ public class Form extends BaseForm {
 	}
 
 	/**
+	 * Get Custom variables for a generic tree Object.
+	 *
+	 * @param treeObject
+	 * @return
+	 */
+	public List<CustomVariable> getCustomVariables(Class<?> treeObjectClass) {
+		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
+		for (CustomVariable customVariable : customVariables) {
+			if (customVariable.getScope().getScope().equals(treeObjectClass)) {
+				customVariablesInThisElement.add(customVariable);
+			}
+		}
+		return customVariablesInThisElement;
+	}
+
+	/**
 	 * Looks for the custom variable with the specified scope and name.
 	 *
 	 * @return the custom variable or null if not found

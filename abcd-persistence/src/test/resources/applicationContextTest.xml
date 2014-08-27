@@ -52,6 +52,8 @@
 				<prop key="hibernate.id.new_generator_mappings">true</prop>
 				<!-- Create table if not exists -->
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<!-- Get default data -->
+				<!--<prop key="hibernate.hbm2ddl.import_files">initial_data.sql</prop>-->
 				<!-- Unnecesary to open and close sessions -->
 				<prop key="hibernate.current_session_context_class">thread</prop>
 			</props>
