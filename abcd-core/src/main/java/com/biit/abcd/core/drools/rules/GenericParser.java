@@ -69,18 +69,7 @@ public class GenericParser {
 
 	private String parseConditions(List<Expression> conditions) {
 
-//		System.out.println("CONDITIONS: " + conditions);
-
-		// List<Expression> conditions2 = new ArrayList<Expression>();
-		// // Fix condition of type (Question | Answer)
-		// if ((conditions.size() == 2) && (conditions.get(0) instanceof
-		// ExpressionValueTreeObjectReference)
-		// && (conditions.get(1) instanceof ExpressionChain)) {
-		// conditions2.add(conditions.get(0));
-		// conditions2.add(new
-		// ExpressionOperatorLogic(AvailableOperator.EQUALS));
-		// conditions2.add(conditions.get(1));
-		// }
+		System.out.println("CONDITIONS: " + conditions);
 
 		Parser parser = new ExpressionChainParser(conditions);
 		ITreeElement resultVisitor = null;
@@ -89,8 +78,7 @@ public class GenericParser {
 			ITreeElementVisitor treePrint = new TreeElementDroolsVisitor();
 			resultVisitor.accept(treePrint);
 
-			// System.out.println("TEST CHAIN: " +
-			// resultVisitor.getExpressionChain());
+			System.out.println("PARSED CHAIN: " + resultVisitor.getExpressionChain());
 		} catch (ParseException ex) {
 			System.out.println("ERROR PARSING: " + ex.getMessage());
 		}
@@ -227,7 +215,7 @@ public class GenericParser {
 	private String processParserResult(ExpressionChain parsedExpression) {
 		// All the expressions should pass this condition
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
-//			System.out.println("TEST CHAIN: " + parsedExpression);
+			System.out.println("PARSED EXPRESSION LIST: " + parsedExpression);
 			List<Expression> expressions = parsedExpression.getExpressions();
 
 			// Operator EQUALS
@@ -248,14 +236,24 @@ public class GenericParser {
 		List<Expression> operatorLeft = ((ExpressionChain) expressions.get(0)).getExpressions();
 		List<Expression> operatorRight = ((ExpressionChain) expressions.get(2)).getExpressions();
 
+		System.out.println("LEFT: " + operatorLeft.get(0).getClass());
+		System.out.println("RIGHT: " + operatorRight.get(0).getClass());
+
 		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
 				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueTreeObjectReference)) {
 			TreeObject treeObject1 = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
 			TreeObject treeObject2 = ((ExpressionValueTreeObjectReference) operatorRight.get(0)).getReference();
-			// QUESTION == ANSWER
+			// Question == Answer
 			if ((treeObject1 instanceof Question) && (treeObject2 instanceof Answer)) {
 				return this.questionAnswerEqualsCondition((Question) treeObject1, (Answer) treeObject2);
 			}
+		}
+		// TreeObject.score == ValueNumber
+		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
+				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueNumber)) {
+
+			return this.treeObjectScoreEqualsValueNumber((ExpressionValueCustomVariable) operatorLeft.get(0),
+					(ExpressionValueNumber) operatorRight.get(0));
 		}
 		return "";
 	}
@@ -604,10 +602,8 @@ public class GenericParser {
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
-	private String scoreEqualsCondition(List<Expression> conditions) {
+	private String treeObjectScoreEqualsValueNumber(ExpressionValueCustomVariable var, ExpressionValueNumber valueNumber) {
 		String ruleCore = "";
-		ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) conditions.get(0);
-		ExpressionValueNumber valueNumber = (ExpressionValueNumber) conditions.get(2);
 
 		TreeObject scope = var.getReference();
 		String varName = var.getVariable().getName();
