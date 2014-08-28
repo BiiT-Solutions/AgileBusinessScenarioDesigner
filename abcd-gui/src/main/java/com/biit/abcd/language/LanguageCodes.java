@@ -316,7 +316,9 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_IN("expression.button.in"),
 	EXPRESSION_BUTTON_BETWEEN("expression.button.between"),
 	EXPRESSION_BUTTON_AVG("expression.button.average"),
-	EXPRESSION_BUTTON_ALL("expression.button.all"),
+	EXPRESSION_BUTTON_IF("expression.button.if"),
+	EXPRESSION_BUTTON_PMT("expression.button.pmt"),
+	EXPRESSION_BUTTON_SUM("expression.button.sum"),
 
 	EXPRESSION_DATE_DAY("expression.date.day"),
 	EXPRESSION_DATE_MONTH("expression.date.month"),

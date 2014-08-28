@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
 import java.util.Collection;
+import java.util.Set;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -36,7 +37,6 @@ public class NewDecisionTable extends CustomComponent {
 		actionTable = new NewActionTable();
 		actionTable.setSizeFull();
 		actionTable.addCellSelectionListener(new CellSelectionListener() {
-
 			@Override
 			public void cellSelectionChanged(CellRowSelector selector) {
 				conditionTable.selectRows(selector.getSelectedRows(), false);
@@ -84,21 +84,28 @@ public class NewDecisionTable extends CustomComponent {
 		}
 	}
 
+	private void setSelectedRows(Set<Object> selectedRows) {
+		conditionTable.selectRows(selectedRows, false);
+		actionTable.selectRows(selectedRows, false);
+	}
+
 	public void removeSelectedColumns(TableRule selectedTableRule) {
 		conditionTable.removeColumns(selectedTableRule, conditionTable.getSelectedColumns());
 	}
 
 	public void update(TableRule selectedTableRule) {
+		Set<Object> selectedRows = conditionTable.getCellRowSelector().getSelectedRows();
 		if (selectedTableRule != null) {
 			removeAll();
 			updateColumns(selectedTableRule);
 			updateRows(selectedTableRule);
 		}
+		setSelectedRows(selectedRows);
 	}
 
 	/**
 	 * Add all the necessary columns
-	 * 
+	 *
 	 * @param selectedTableRule
 	 */
 	public void updateColumns(TableRule selectedTableRule) {
@@ -112,7 +119,7 @@ public class NewDecisionTable extends CustomComponent {
 
 	/**
 	 * Add the necessary rows and fills them
-	 * 
+	 *
 	 * @param selectedTableRule
 	 */
 	public void updateRows(TableRule selectedTableRule) {
@@ -140,8 +147,8 @@ public class NewDecisionTable extends CustomComponent {
 	public Expression getExpressionValue(TableRuleRow row, Object propertyId) {
 		return conditionTable.getExpressionValue(row, propertyId);
 	}
-	
-	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression){
+
+	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression) {
 		conditionTable.setExpressionValue(row, propertyId, expression);
 	}
 

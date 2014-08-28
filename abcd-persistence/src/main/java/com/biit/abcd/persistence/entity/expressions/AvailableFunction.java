@@ -24,7 +24,11 @@ public enum AvailableFunction {
 
 	AVG("AVG("),
 
-	ALL("ALL(");
+	IF("IF("),
+
+	PMT("PMT("),
+
+	SUM("SUM(");
 
 	private String value;
 

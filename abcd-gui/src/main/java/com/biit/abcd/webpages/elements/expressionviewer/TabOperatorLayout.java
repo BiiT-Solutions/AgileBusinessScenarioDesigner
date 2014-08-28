@@ -202,12 +202,34 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
+		Button pmtButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_PMT),
+				new ClickListener() {
+					private static final long serialVersionUID = 3549151891823532732L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.PMT);
+					}
+				});
+
+		Button sumButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_SUM),
+				new ClickListener() {
+					private static final long serialVersionUID = -6814913505575268218L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.SUM);
+					}
+				});
+
 		layout.addComponent(maxButton);
 		layout.addComponent(minimumButton);
 		layout.addComponent(absoluteButton);
 		layout.addComponent(sqrtButton);
 		layout.addComponent(roundButton);
 		layout.addComponent(averageButton);
+		layout.addComponent(pmtButton);
+		layout.addComponent(sumButton);
 	}
 
 	private void createLogicalFunctionsOperators(AbstractLayout layout) {
@@ -240,20 +262,20 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
-		Button allButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ALL),
+		Button ifButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_IF),
 				new ClickListener() {
-					private static final long serialVersionUID = -3017436915684829479L;
+					private static final long serialVersionUID = -1236836190814617814L;
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						addFunctionExpression(AvailableFunction.ALL);
+						addFunctionExpression(AvailableFunction.IF);
 					}
 				});
 
 		layout.addComponent(notButton);
 		layout.addComponent(inButton);
 		layout.addComponent(betweenButton);
-		layout.addComponent(allButton);
+		layout.addComponent(ifButton);
 	}
 
 	private void createBaseTab(AbstractLayout layout) {

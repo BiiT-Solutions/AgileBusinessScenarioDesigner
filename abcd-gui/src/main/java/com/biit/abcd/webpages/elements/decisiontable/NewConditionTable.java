@@ -78,7 +78,7 @@ public class NewConditionTable extends Table {
 		private Object propertyId;
 
 		public CellEditButtonClickListener(Object itemId, Object propertyId) {
-			this.row = itemId;
+			row = itemId;
 			this.propertyId = propertyId;
 		}
 
@@ -113,7 +113,7 @@ public class NewConditionTable extends Table {
 		private Object propertyId;
 
 		public LayoutClickPropagator(Table conditiontable, Item item, Object itemId, Object propertyId) {
-			this.conditionTable = conditiontable;
+			conditionTable = conditiontable;
 			this.item = item;
 			this.itemId = itemId;
 			this.propertyId = propertyId;
@@ -201,6 +201,10 @@ public class NewConditionTable extends Table {
 			rules.add((TableRuleRow) cell.getRow());
 		}
 		return rules;
+	}
+
+	public CellRowSelector getCellRowSelector() {
+		return cellRowSelector;
 	}
 
 	public Collection<Integer> getSelectedColumns() {
