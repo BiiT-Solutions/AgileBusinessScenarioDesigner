@@ -5,8 +5,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.BaseQuestion;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
@@ -53,11 +55,16 @@ public class Question extends BaseQuestion {
 
 	@Override
 	protected void copyData(TreeObject object) throws NotValidTreeObjectException {
-		if(object instanceof Question) {
+		if (object instanceof Question) {
 			answerType = ((Question) object).getAnswerType();
 			answerFormat = ((Question) object).getAnswerFormat();
-		}else{
+		} else {
 			throw new NotValidTreeObjectException("Question can only be copied from another question.");
 		}
+	}
+
+	@Override
+	public void checkDependencies() throws DependencyExistException {
+		CheckDependencies.checkDependencies(this);
 	}
 }

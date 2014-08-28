@@ -3,8 +3,10 @@ package com.biit.abcd.persistence.entity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.BaseAnswer;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.FieldTooLongException;
 
 @Entity
@@ -20,5 +22,10 @@ public class Answer extends BaseAnswer {
 
 	@Override
 	protected void copyData(TreeObject object) {
+	}
+
+	@Override
+	public void checkDependencies() throws DependencyExistException {
+		CheckDependencies.checkDependencies(this);
 	}
 }

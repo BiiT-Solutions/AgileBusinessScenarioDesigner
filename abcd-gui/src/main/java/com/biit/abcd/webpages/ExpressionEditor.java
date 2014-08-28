@@ -9,6 +9,9 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectExpressionTableEditable;
@@ -117,10 +120,19 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExpressionChain expChain = getSelectedExpression();
-				removeSelectedExpression();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has removed a " + expChain.getClass() + " with 'Name: " + expChain.getName() + "'.");
+				final AlertMessageWindow windowAccept = new AlertMessageWindow(
+						LanguageCodes.WARNING_EXPRESSION_DELETION);
+				windowAccept.addAcceptActionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						ExpressionChain expChain = getSelectedExpression();
+						removeSelectedExpression();
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+										+ expChain.getClass() + " with 'Name: " + expChain.getName() + "'.");
+						windowAccept.close();
+					}
+				});
 			}
 		});
 

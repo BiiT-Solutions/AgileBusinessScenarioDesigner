@@ -9,6 +9,9 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectDroolsRuleEditable;
@@ -119,12 +122,19 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Rule rule = tableSelectRule.getSelectedRule();
-				removeSelectedRule();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has removed a " + rule.getClass() + " with 'Name: " + rule.getName() + "'.");
+				final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_RULE_DELETION);
+				windowAccept.addAcceptActionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						Rule rule = tableSelectRule.getSelectedRule();
+						removeSelectedRule();
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + rule.getClass()
+								+ " with 'Name: " + rule.getName() + "'.");
+						windowAccept.close();
+					}
+				});
 			}
-
 		});
 
 		setUpperMenu(droolsRuleEditorUpperMenu);

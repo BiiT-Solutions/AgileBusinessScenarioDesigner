@@ -17,6 +17,9 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
@@ -238,10 +241,18 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Diagram diagram = (Diagram) diagramBuilderTable.getValue();
-				deleteDiagram();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has deleted a " + diagram.getClass() + " with 'Name: " + diagram.getName() + "'.");
+				final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_DIAGRAM_DELETION);
+				windowAccept.addAcceptActionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						Diagram diagram = (Diagram) diagramBuilderTable.getValue();
+						deleteDiagram();
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has deleted a "
+										+ diagram.getClass() + " with 'Name: " + diagram.getName() + "'.");
+						windowAccept.close();
+					}
+				});
 			}
 		});
 		diagramBuilderUpperMenu.addClearButtonClickListener(new ClickListener() {

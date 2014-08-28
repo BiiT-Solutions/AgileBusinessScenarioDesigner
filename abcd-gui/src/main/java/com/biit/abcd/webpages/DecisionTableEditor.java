@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectTableRuleTableEditable;
@@ -164,12 +165,19 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
-				removeSelectedTable();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has removed a " + tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
+				final AlertMessageWindow windowAccept = new AlertMessageWindow(
+						LanguageCodes.WARNING_TABLE_RULE_DELETION);
+				windowAccept.addAcceptActionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+						removeSelectedTable();
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has removed a " + tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
+						windowAccept.close();
+					}
+				});
 			}
-
 		});
 
 		decisionTableEditorUpperMenu.addNewConditionButtonClickListener(new ClickListener() {
@@ -319,6 +327,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	private void removeSelectedTable() {
 		UserSessionHandler.getFormController().getForm().getTableRules()
 				.remove(tableSelectionMenu.getSelectedTableRule());
+		decisionTable.removeAll();
 		tableSelectionMenu.removeSelectedRow();
 	}
 

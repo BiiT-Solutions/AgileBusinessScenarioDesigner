@@ -52,6 +52,10 @@ public class TableRuleRow extends StorableObject {
 		return conditions.getExpressions();
 	}
 
+	public ExpressionChain getConditionsChain() {
+		return conditions;
+	}
+
 	public void removeConditions() {
 		conditions.removeAllExpressions();
 	}

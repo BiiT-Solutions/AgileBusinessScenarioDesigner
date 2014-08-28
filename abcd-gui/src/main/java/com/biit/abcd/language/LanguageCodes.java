@@ -59,6 +59,10 @@ public enum LanguageCodes {
 	WARNING_NAME_TOO_LONG("warning.element.name.too.long"),
 	WARNING_NAME_TOO_LONG_DESCRIPTION("warning.element.name.too.long.description"),
 	WARNING_LOST_UNSAVED_DATA("warning.unsaved.data.will.be.lost"),
+	WARNING_TABLE_RULE_DELETION("warning.table.rule.deletion"),
+	WARNING_RULE_DELETION("warning.rule.deletion"),
+	WARNING_EXPRESSION_DELETION("warning.expression.deletion"),
+	WARNING_DIAGRAM_DELETION("warning.diagram.deletion"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 
