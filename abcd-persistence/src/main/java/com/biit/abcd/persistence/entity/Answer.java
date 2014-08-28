@@ -26,6 +26,6 @@ public class Answer extends BaseAnswer {
 
 	@Override
 	public void checkDependencies() throws DependencyExistException {
-		CheckDependencies.checkDependencies(this);
+		CheckDependencies.checkTreeObjectDependencies(this);
 	}
 }

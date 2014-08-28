@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -36,6 +37,7 @@ import com.biit.abcd.webpages.elements.decisiontable.EditExpressionListener;
 import com.biit.abcd.webpages.elements.decisiontable.NewDecisionTable;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -171,10 +173,20 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
-						removeSelectedTable();
-						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has removed a " + tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
-						windowAccept.close();
+						try {
+							CheckDependencies.checkTableRuleDependencies(UserSessionHandler.getFormController()
+									.getForm(), tableRule);
+							removeSelectedTable();
+							AbcdLogger.info(this.getClass().getName(),
+									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+											+ tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
+							windowAccept.close();
+						} catch (DependencyExistException e) {
+							// Forbid the remove action if exist dependency.
+							MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+									LanguageCodes.TABLE_RULE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
+						}
+
 					}
 				});
 			}

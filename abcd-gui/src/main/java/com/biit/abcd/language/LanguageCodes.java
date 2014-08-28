@@ -87,6 +87,9 @@ public enum LanguageCodes {
 
 	TREE_DESIGNER_WARNING_NO_UPDATE("warning.element.not.editable"),
 	TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION("warning.element.not.editable.description"),
+	EXPRESSION_DESIGNER_WARNING_CANNOT_REMOVE_EXPRESSION("warning.expression.not.removable"),
+	RULE_DESIGNER_WARNING_CANNOT_REMOVE_RULE("warning.rule.not.removable"),
+	TABLE_RULE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE("warning.tablerule.not.removable"),
 
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),

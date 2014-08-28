@@ -65,6 +65,6 @@ public class Question extends BaseQuestion {
 
 	@Override
 	public void checkDependencies() throws DependencyExistException {
-		CheckDependencies.checkDependencies(this);
+		CheckDependencies.checkTreeObjectDependencies(this);
 	}
 }

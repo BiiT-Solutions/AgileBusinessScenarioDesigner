@@ -27,6 +27,6 @@ public class Group extends BaseRepeatableGroup {
 
 	@Override
 	public void checkDependencies() throws DependencyExistException {
-		CheckDependencies.checkDependencies(this);
+		CheckDependencies.checkTreeObjectDependencies(this);
 	}
 }

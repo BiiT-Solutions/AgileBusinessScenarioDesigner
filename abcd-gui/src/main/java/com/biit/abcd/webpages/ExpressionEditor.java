@@ -8,6 +8,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -19,6 +20,7 @@ import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponen
 import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.WindowNewExpression;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
+import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -126,11 +128,19 @@ public class ExpressionEditor extends FormWebPageComponent {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						ExpressionChain expChain = getSelectedExpression();
-						removeSelectedExpression();
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-										+ expChain.getClass() + " with 'Name: " + expChain.getName() + "'.");
-						windowAccept.close();
+						try {
+							CheckDependencies.checkExpressionDependencies(UserSessionHandler.getFormController().getForm(),
+									expChain);
+							removeSelectedExpression();
+							AbcdLogger.info(this.getClass().getName(),
+									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+											+ expChain.getClass() + " with 'Name: " + expChain.getName() + "'.");
+							windowAccept.close();
+						} catch (DependencyExistException e) {
+							// Forbid the remove action if exist dependency.
+							MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+									LanguageCodes.EXPRESSION_DESIGNER_WARNING_CANNOT_REMOVE_EXPRESSION);
+						}
 					}
 				});
 			}

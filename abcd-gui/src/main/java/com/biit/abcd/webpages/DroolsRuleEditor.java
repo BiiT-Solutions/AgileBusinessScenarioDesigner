@@ -8,6 +8,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -19,6 +20,7 @@ import com.biit.abcd.webpages.elements.droolsrule.ConditionActionEditor;
 import com.biit.abcd.webpages.elements.droolsrule.DroolsRuleEditorUpperMenu;
 import com.biit.abcd.webpages.elements.droolsrule.WindowNewRule;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
+import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -127,11 +129,19 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						Rule rule = tableSelectRule.getSelectedRule();
-						removeSelectedRule();
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + rule.getClass()
-								+ " with 'Name: " + rule.getName() + "'.");
-						windowAccept.close();
+						try {
+							CheckDependencies.checkRulesDependencies(UserSessionHandler.getFormController().getForm(),
+									rule);
+							removeSelectedRule();
+							AbcdLogger.info(this.getClass().getName(),
+									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+											+ rule.getClass() + " with 'Name: " + rule.getName() + "'.");
+							windowAccept.close();
+						} catch (DependencyExistException e) {
+							// Forbid the remove action if exist dependency.
+							MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+									LanguageCodes.RULE_DESIGNER_WARNING_CANNOT_REMOVE_RULE);
+						}
 					}
 				});
 			}
