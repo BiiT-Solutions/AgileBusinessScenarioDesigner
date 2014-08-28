@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.prattparser.expressions;
 
 import java.util.List;
 
+import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -11,11 +12,13 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
  */
 public class CallExpression implements ITreeElement {
 
-	private final ITreeElement function;
+	private final ITreeElement leftElement;
+	private final ExpressionToken function;
 	private final List<ITreeElement> args;
 
-	public CallExpression(ITreeElement function, List<ITreeElement> args) {
-		this.function = function;
+	public CallExpression(ExpressionToken token, ITreeElement leftElement, List<ITreeElement> args) {
+		this.function = token;
+		this.leftElement = leftElement;
 		this.args = args;
 	}
 
@@ -25,7 +28,7 @@ public class CallExpression implements ITreeElement {
 	}
 
 	public ITreeElement getFunction() {
-		return this.function;
+		return this.leftElement;
 	}
 
 	public List<ITreeElement> getArgs() {
@@ -34,7 +37,7 @@ public class CallExpression implements ITreeElement {
 
 	@Override
 	public ExpressionChain getExpressionChain() {
-		ExpressionChain expChain = new ExpressionChain(this.function.getExpressionChain());
+		ExpressionChain expChain = new ExpressionChain(this.leftElement.getExpressionChain(), this.function.getExpression());
 		for(ITreeElement treeElem : this.args){
 			expChain.addExpressions(treeElem.getExpressionChain());
 		}

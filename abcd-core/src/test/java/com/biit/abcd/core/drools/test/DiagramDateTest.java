@@ -58,7 +58,6 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 public class DiagramDateTest {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
-	private final static Charset baseCharset =  StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -86,6 +85,13 @@ public class DiagramDateTest {
 		Form vaadinForm = this.createDiagramTestForm();
 		formDrools.parse(vaadinForm);
 		formDrools.runDroolsRules(this.form);
+
+		// Check the results of the drools execution
+		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+				.getCategory("Financiën");
+		com.biit.abcd.core.drools.facts.inputform.Question testQuestion1 = (com.biit.abcd.core.drools.facts.inputform.Question) testCat1
+				.getQuestion("Financien.Inkomen");
+		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
 	}
 
 	/**

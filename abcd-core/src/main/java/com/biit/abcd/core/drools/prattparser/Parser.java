@@ -46,7 +46,7 @@ public class Parser {
 		}
 
 //		 for (Entry<String, ExpressionTokenType> entry :
-//		 mPunctuators.entrySet()) {
+//		 this.mPunctuators.entrySet()) {
 //		 System.out.println("Punctuator KEY: " + entry.getKey() + " TYPE: " +
 //		 entry.getValue() + " CLASS: "
 //		 + entry.getKey().getClass());

@@ -8,7 +8,7 @@ public enum ExpressionTokenType {
 	NULL, AND, OR, EQUALS, NOT_EQUALS, GREATER_THAN, GREATER_EQUALS, LESS_THAN, ASSIGNATION, PLUS, MINUS, MULTIPLICATION, DIVISION, MODULE, POW,
 	// Available symbols
 	RIGHT_BRACKET, LEFT_BRACKET, COMMA,
-
+	// Special types for the parser, end of file and generic name
 	EOF, NAME;
 
 	/**
@@ -47,6 +47,8 @@ public enum ExpressionTokenType {
 			return "!=";
 		case BETWEEN:
 			return "BETWEEN(";
+		case IN:
+			return "IN(";
 		default:
 			return null;
 		}

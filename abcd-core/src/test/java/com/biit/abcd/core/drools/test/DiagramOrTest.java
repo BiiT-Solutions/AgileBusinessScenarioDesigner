@@ -34,6 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -55,7 +56,7 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 public class DiagramOrTest {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
-	private final static Charset baseCharset =  StandardCharsets.UTF_8;
+	private final static Charset baseCharset = StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -77,7 +78,8 @@ public class DiagramOrTest {
 
 	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
 	public void testTableRuleLoadAndExecution() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
+			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
+			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createDiagramTestForm();
 		formDrools.parse(vaadinForm);
@@ -97,7 +99,7 @@ public class DiagramOrTest {
 	 * @throws IOException
 	 */
 	private Form createDiagramTestForm() throws NotValidChildException, NotValidOperatorInExpression,
-	ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -113,16 +115,16 @@ public class DiagramOrTest {
 		Category category1 = null;
 		String lastQuestion1 = "";
 		Question question1 = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/table1"), StandardCharsets.UTF_8)) {
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/table1"), StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = question, [2] = answer, [3] = value
 			String[] lineSplit = line.split("\t");
-			if(!lastCategory1.equals(lineSplit[0])){
+			if (!lastCategory1.equals(lineSplit[0])) {
 				// Create a category
 				category1 = new Category(lineSplit[0]);
 				form.addChild(category1);
 				lastCategory1 = lineSplit[0];
 			}
-			if(!lastQuestion1.equals(lineSplit[1])){
+			if (!lastQuestion1.equals(lineSplit[1])) {
 				// Create a question
 				question1 = new Question(lineSplit[1]);
 				category1.addChild(question1);
@@ -134,9 +136,9 @@ public class DiagramOrTest {
 			tableRule1.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question1), new ExpressionChain(
 							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-									new ExpressionValueCustomVariable(question1, customVarQuestion),
-									new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-											Double.parseDouble(lineSplit[3])))));
+							new ExpressionValueCustomVariable(question1, customVarQuestion),
+							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+									.parseDouble(lineSplit[3])))));
 		}
 
 		// Add the rows and the table to the form
@@ -149,16 +151,16 @@ public class DiagramOrTest {
 		Category category2 = null;
 		String lastQuestion2 = "";
 		Question question2 = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/table2"), StandardCharsets.UTF_8)) {
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/table2"), StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = question, [2] = answer, [3] = value
 			String[] lineSplit = line.split("\t");
-			if(!lastCategory2.equals(lineSplit[0])){
+			if (!lastCategory2.equals(lineSplit[0])) {
 				// Create a category
 				category2 = new Category(lineSplit[0]);
 				form.addChild(category2);
 				lastCategory2 = lineSplit[0];
 			}
-			if(!lastQuestion2.equals(lineSplit[1])){
+			if (!lastQuestion2.equals(lineSplit[1])) {
 				// Create a question
 				question2 = new Question(lineSplit[1]);
 				category2.addChild(question2);
@@ -170,9 +172,9 @@ public class DiagramOrTest {
 			tableRule2.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question2), new ExpressionChain(
 							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-									new ExpressionValueCustomVariable(question2, customVarQuestion),
-									new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-											Double.parseDouble(lineSplit[3])))));
+							new ExpressionValueCustomVariable(question2, customVarQuestion),
+							new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+									.parseDouble(lineSplit[3])))));
 		}
 
 		// Add the rows and the table to the form
@@ -223,30 +225,23 @@ public class DiagramOrTest {
 		DiagramLink forkTable1Link = new DiagramLink(nodeFork, nodeTable1);
 		forkTable1Link.setJointjsId(IdGenerator.createId());
 		forkTable1Link.setType(DiagramObjectType.LINK);
-		forkTable1Link.setExpressionChain(new ExpressionChain(
-				new ExpressionFunction(AvailableFunction.BETWEEN),
-				new ExpressionValueNumber(0.),
-				new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueNumber(18.),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-				));
-//		forkTable1Link.setExpressionChain(new ExpressionChain(
-//				new ExpressionFunction(AvailableFunction.BETWEEN),
-//				new ExpressionValueNumber(0.),
-//				new ExpressionSymbol(AvailableSymbol.COMMA),
-//				new ExpressionValueNumber(18.),
-//				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-//				new ExpressionOperatorLogic(AvailableOperator.OR),
-//				new ExpressionFunction(AvailableFunction.BETWEEN),
-//				new ExpressionValueNumber(25.),
-//				new ExpressionSymbol(AvailableSymbol.COMMA),
-//				new ExpressionValueNumber(30.),
-//				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)
-//				));
+
+		// WARNING : The functions like AND, OR, etc are parsed as calls in the
+		// Pratt parser. Calls always need a left operator, so a reference must
+		// be there to ensure that the parser works correctly
+		forkTable1Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(forkQuestion),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(0.), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(18.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.OR),
+				new ExpressionValueTreeObjectReference(forkQuestion),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(25.),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(30.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)));
 		DiagramLink forkTable2Link = new DiagramLink(nodeFork, nodeTable2);
 		forkTable2Link.setJointjsId(IdGenerator.createId());
 		forkTable2Link.setType(DiagramObjectType.LINK);
-		forkTable2Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(forkQuestion.getChild(0))));
+		forkTable2Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(forkQuestion
+				.getChild(0))));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramForkNode);

@@ -109,7 +109,13 @@ public class Utils {
 						}
 					}
 				}
-				result.append(compareTo + "\n");
+				// In the last row, remove the ands (if any)
+				if ((i < (auxSplit.length - 1)) && (auxSplit[i + 1] != null) && auxSplit[i + 1].equals("then")
+						&& compareTo.endsWith("and")) {
+					result.append(compareTo.substring(0, compareTo.length() - 3) + "\n");
+				} else {
+					result.append(compareTo + "\n");
+				}
 			}
 		}
 		return result.toString();

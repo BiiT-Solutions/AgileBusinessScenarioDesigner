@@ -15,7 +15,9 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
  */
 public class CallParselet implements InfixParselet {
 
+	@Override
 	public ITreeElement parse(Parser parser, ITreeElement left, ExpressionToken token) {
+
 		// Parse the comma-separated arguments until we hit, ")".
 		List<ITreeElement> args = new ArrayList<ITreeElement>();
 
@@ -27,7 +29,7 @@ public class CallParselet implements InfixParselet {
 			parser.consume(ExpressionTokenType.RIGHT_BRACKET);
 		}
 
-		return new CallExpression(left, args);
+		return new CallExpression(token, left, args);
 	}
 
 	@Override
