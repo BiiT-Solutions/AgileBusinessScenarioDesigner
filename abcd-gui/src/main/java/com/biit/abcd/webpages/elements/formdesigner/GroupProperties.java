@@ -29,7 +29,7 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 		groupTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getName());
 		groupIsRepeatable = new CheckBox(ServerTranslate.translate(LanguageCodes.GROUP_PROPERTIES_REPEAT));
-		groupIsRepeatable.setValue(instance.isRepetable());
+		groupIsRepeatable.setValue(instance.isRepeatable());
 
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
@@ -59,7 +59,7 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 				// Impossible.
 			}
 		}
-		instance.setRepetable(groupIsRepeatable.getValue());
+		instance.setRepeatable(groupIsRepeatable.getValue());
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "'Group '" + instance.getName() + "' value 'Repeat' set to '" + groupIsRepeatable.getValue() + "'.");
 

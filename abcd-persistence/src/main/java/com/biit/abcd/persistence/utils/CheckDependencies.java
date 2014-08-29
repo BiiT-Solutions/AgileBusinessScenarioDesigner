@@ -24,7 +24,7 @@ public class CheckDependencies {
 
 	public static void checkTreeObjectDependencies(TreeObject treeObject) throws DependencyExistException {
 		if (treeObject != null) {
-			Form form = (Form) treeObject.getForm();
+			Form form = (Form) treeObject.getAncestor(Form.class);
 			if (form != null) {
 				// Check the table rules
 				for (TableRule tableRule : form.getTableRules()) {
@@ -54,7 +54,7 @@ public class CheckDependencies {
 
 	/**
 	 * Check dependencies inside the expression chain hierarchy
-	 *
+	 * 
 	 * @param expressionChain
 	 * @throws DependencyExistException
 	 */
@@ -77,12 +77,11 @@ public class CheckDependencies {
 
 	/**
 	 * Look for tree object dependencies inside the diagram<br>
-	 * Only three node types can create new dependencies that hasn't been
-	 * checked yet:<br>
+	 * Only three node types can create new dependencies that hasn't been checked yet:<br>
 	 * - DiagramLink<br>
 	 * - DiagramFork<br>
 	 * - DiagramChild: to check internal dependencies<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -113,7 +112,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for table rule dependencies inside the diagram<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -141,7 +140,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for rule dependencies inside the diagram<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -169,7 +168,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for rule dependencies inside the diagram<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -178,12 +177,13 @@ public class CheckDependencies {
 		List<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjectsList) {
 			if (diagramObject instanceof DiagramCalculation) {
-				if (((DiagramCalculation) diagramObject).getFormExpression().equals(expressionChain)){
-					throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName() + ", with name: "
-							+ expressionChain.getName() + " referenced in the form.");
+				if (((DiagramCalculation) diagramObject).getFormExpression().equals(expressionChain)) {
+					throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName()
+							+ ", with name: " + expressionChain.getName() + " referenced in the form.");
 				}
 			} else if (diagramObject instanceof DiagramChild) {
-				checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getChildDiagram(), expressionChain);
+				checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getChildDiagram(),
+						expressionChain);
 			}
 		}
 	}

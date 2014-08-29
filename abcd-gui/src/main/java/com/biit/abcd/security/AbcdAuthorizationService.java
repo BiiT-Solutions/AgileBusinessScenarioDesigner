@@ -253,7 +253,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	 * @return
 	 */
 	private boolean isInFormGroup(Form form, User user) {
-		if (form == null || form.getGroup() == null) {
+		if (form == null || form.getUserGroup() == null) {
 			return true;
 		}
 		// Some administrators can access to any form.
