@@ -7,9 +7,20 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
-        unit varchar(255),
-        reference_ID bigint,
+        type varchar(255),
         variable_ID bigint,
+        primary key (ID)
+    );
+
+    create table expression_value_generic_variable (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        isEditable bit not null,
+        type varchar(255),
         primary key (ID)
     );
 
@@ -25,22 +36,17 @@
     alter table expression_value_generic_custom_variable 
         add constraint UK_72ucvxvkp3dgy4ci55hda72p5  unique (comparationId);
 
-    alter table form_custom_variables 
-        drop constraint UK_2pj0qoh0ntvs9laf9sh42rqap;
+    alter table expression_value_generic_variable 
+        drop constraint UK_cqsa891g9cu7egmcxep74o4gh;
 
-    alter table form_custom_variables 
-        add constraint UK_2pj0qoh0ntvs9laf9sh42rqap  unique (form, name, scope);
+    alter table expression_value_generic_variable 
+        add constraint UK_cqsa891g9cu7egmcxep74o4gh  unique (ID);
 
-    alter table generic_tree_object_variable 
-        drop constraint UK_8p2ila1hcx266jhxtkygthqvb;
+    alter table expression_value_generic_variable 
+        drop constraint UK_1qdyf7b9pdbtg7ugajlcbuy99;
 
-    alter table generic_tree_object_variable 
-        add constraint UK_8p2ila1hcx266jhxtkygthqvb  unique (type);
-
-    alter table expression_value_generic_custom_variable 
-        add constraint FK_mur266gqhqw4alh8k227cv1hd 
-        foreign key (reference_ID) 
-        references generic_tree_object_variable (ID);
+    alter table expression_value_generic_variable 
+        add constraint UK_1qdyf7b9pdbtg7ugajlcbuy99  unique (comparationId);
 
     alter table expression_value_generic_custom_variable 
         add constraint FK_4u49ngxh67i7rqxx3xb7379yi 

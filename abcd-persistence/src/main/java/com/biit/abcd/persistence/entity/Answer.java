@@ -7,7 +7,7 @@ import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.BaseAnswer;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.DependencyExistException;
-import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @Entity
 @Table(name = "tree_answers")

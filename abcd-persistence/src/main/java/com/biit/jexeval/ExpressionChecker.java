@@ -31,6 +31,30 @@ public class ExpressionChecker extends ExpressionEvaluator {
 				return BigDecimal.ONE;
 			}
 		});
+		addFunction(new Function("AVG") {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				return BigDecimal.ONE;
+			}
+		});
+		addFunction(new Function("IF") {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				return BigDecimal.ONE;
+			}
+		});
+		addFunction(new Function("PMT") {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				return BigDecimal.ONE;
+			}
+		});
+		addFunction(new Function("SUM") {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				return BigDecimal.ONE;
+			}
+		});
 	}
 
 	/**

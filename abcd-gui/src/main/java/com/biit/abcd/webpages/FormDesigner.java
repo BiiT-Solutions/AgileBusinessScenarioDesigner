@@ -27,8 +27,8 @@ import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
-import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -222,7 +222,8 @@ public class FormDesigner extends FormWebPageComponent {
 			setCreator(newCategory);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
-					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getCategory();
+					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(
+							Category.class);
 					if (selectedCategory == null) {
 						getForm().addChild(newCategory);
 					} else {
@@ -252,12 +253,12 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Adds a Category to the UI. The parent always will be the form.
-	 *
+	 * 
 	 * @param category
 	 */
 	private void addCategoryToUI(Category category) {
 		if (formTreeTable.getTreeObjectSelected() != null) {
-			Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getCategory();
+			Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(Category.class);
 			if (selectedCategory != null) {
 				TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
 				formTreeTable.addItemAfter(getLastElementOfCategory, category, getForm());
@@ -278,9 +279,9 @@ public class FormDesigner extends FormWebPageComponent {
 			setCreator(newGroup);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
-					TreeObject container = formTreeTable.getTreeObjectSelected().getGroup();
+					TreeObject container = formTreeTable.getTreeObjectSelected().getAncestor(Group.class);
 					if (container == null) {
-						container = formTreeTable.getTreeObjectSelected().getCategory();
+						container = formTreeTable.getTreeObjectSelected().getAncestor(Category.class);
 					}
 					if (container != null) {
 						try {
@@ -381,7 +382,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Adds an element in the tree using the parent as root.
-	 *
+	 * 
 	 * @param child
 	 * @param parent
 	 */
@@ -413,7 +414,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Updates the creator of the object and its parents.
-	 *
+	 * 
 	 * @param treeObject
 	 */
 	private void setCreator(TreeObject treeObject) {
@@ -426,7 +427,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Updates the updater of the object and its parents.
-	 *
+	 * 
 	 * @param treeObject
 	 */
 	private void setUpdater(TreeObject treeObject) {
@@ -438,7 +439,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Moves the selected element up if possible.
-	 *
+	 * 
 	 * @return true if the element has been moved.
 	 */
 	public boolean moveUp() {
@@ -470,7 +471,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	/**
 	 * Moves the selected element down if possible.
-	 *
+	 * 
 	 * @return true if the element has been moved.
 	 */
 	public boolean moveDown() {

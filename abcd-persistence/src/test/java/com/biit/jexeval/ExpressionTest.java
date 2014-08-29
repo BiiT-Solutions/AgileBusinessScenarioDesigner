@@ -12,8 +12,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.form.TreeObject;
-import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.jexeval.exceptions.ExpressionException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @Test(groups = { "expressionEvaluator" })
 public class ExpressionTest {

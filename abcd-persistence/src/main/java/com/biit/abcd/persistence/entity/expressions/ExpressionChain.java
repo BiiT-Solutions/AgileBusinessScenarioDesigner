@@ -18,8 +18,7 @@ import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more
- * complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more complex expression.
  */
 @Entity
 @Table(name = "expressions_chain")
@@ -40,24 +39,24 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		setName(name);
 	}
 
-	public ExpressionChain(Expression ...expressions){
+	public ExpressionChain(Expression... expressions) {
 		this.expressions = new ArrayList<>();
-		for(Expression expression : expressions){
+		for (Expression expression : expressions) {
 			addExpression(expression);
 		}
 	}
 
-	public ExpressionChain(String name, Expression ...expressions) {
+	public ExpressionChain(String name, Expression... expressions) {
 		this.expressions = new ArrayList<>();
 		setName(name);
-		for(Expression expression : expressions){
+		for (Expression expression : expressions) {
 			addExpression(expression);
 		}
 	}
 
 	public ExpressionChain(List<Expression> expressions) {
 		this.expressions = new ArrayList<>();
-		for(Expression expression : expressions){
+		for (Expression expression : expressions) {
 			addExpression(expression);
 		}
 	}
@@ -79,14 +78,14 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		expressions.add(expression);
 	}
 
-	public void addExpressions(Expression ...expressions) {
-		for(Expression expression : expressions){
+	public void addExpressions(Expression... expressions) {
+		for (Expression expression : expressions) {
 			addExpression(expression);
 		}
 	}
 
 	public void addExpressions(List<Expression> expressions) {
-		for(Expression expression : expressions){
+		for (Expression expression : expressions) {
 			addExpression(expression);
 		}
 	}
@@ -119,9 +118,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a
-	 * Expression Evaluator.
-	 *
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * 
 	 * @return
 	 */
 	@Override
@@ -149,7 +147,9 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			if ((expressions.get(i) instanceof ExpressionValueString)
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
-					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
+					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)
+					|| (expressions.get(i) instanceof ExpressionValueGenericCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueGenericVariable)) {
 				// Dots are not allowed.
 				String varName = filterVariables(expressions.get(i));
 				// Do not repeat variable declaration.
@@ -170,12 +170,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	/**
 	 * Some characters are not allowed in the Expression Evaluator.
-	 *
+	 * 
 	 * @param expression
 	 * @return
 	 */
 	private String filterVariables(Expression expression) {
-		return expression.getExpression().replace(" ", "_").replace(".", "_").replace(":", "");
+		return expression.getExpression().replaceAll("[^a-zA-Z0-9_]", "_");
 	}
 
 	@Override
@@ -207,7 +207,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		Set<TreeObject> references = getReferencedTreeObjects();
 		if (!references.isEmpty()) {
 			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
-			if(commonTreeObject.equals(treeObject)){
+			if (commonTreeObject.equals(treeObject)) {
 				return true;
 			}
 		}

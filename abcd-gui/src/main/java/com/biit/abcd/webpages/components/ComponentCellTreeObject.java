@@ -37,7 +37,7 @@ public class ComponentCellTreeObject extends ComponentCell {
 			}
 		} else if (element instanceof Group) {
 			Group group = (Group) element;
-			if (group.isRepetable()) {
+			if (group.isRepeatable()) {
 				return ThemeIcon.TREE_DESIGNER_GROUP_LOOP;
 			}
 		}

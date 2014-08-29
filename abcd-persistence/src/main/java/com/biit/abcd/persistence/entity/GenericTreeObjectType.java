@@ -12,13 +12,13 @@ public enum GenericTreeObjectType {
 	QUESTION_GROUP(Question.class, "Questions", "Group.Questions");
 
 	private Class<?> scope;
-	private String treeTableName;
-	private String expressionCaption;
+	private String tableName;
+	private String expressionName;
 
-	private GenericTreeObjectType(Class<?> scope, String treeTableName, String expressionCaption) {
+	private GenericTreeObjectType(Class<?> scope, String tableName, String expressionName) {
 		this.scope = scope;
-		this.treeTableName = treeTableName;
-		this.expressionCaption = expressionCaption;
+		this.tableName = tableName;
+		this.expressionName = expressionName;
 	}
 
 	public Class<?> getScope() {
@@ -26,11 +26,11 @@ public enum GenericTreeObjectType {
 	}
 
 	public String getTableName() {
-		return treeTableName;
+		return tableName;
 	}
 
 	public String getExpressionName() {
-		return expressionCaption;
+		return expressionName;
 	}
 
 	@Override

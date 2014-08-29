@@ -10,7 +10,7 @@ import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 
 /**
  * Defines a value as a already defined form custom variable.
- *
+ * 
  */
 @Entity
 @Table(name = "expression_value_generic_custom_variable")
@@ -57,7 +57,7 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 	protected String getExpression() {
 		String expressionString = new String();
 		if ((getType() != null) && (variable != null)) {
-			expressionString += getType().getExpressionName() + "." + variable.getName();
+			expressionString += getType().getExpressionName().replace(".", "_") + "_" + variable.getName();
 		}
 		return expressionString;
 	}

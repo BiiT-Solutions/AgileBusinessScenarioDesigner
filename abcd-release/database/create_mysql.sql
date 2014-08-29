@@ -661,7 +661,7 @@
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
-        repetable bit not null,
+        repeatable bit not null,
         primary key (ID)
     );
 
