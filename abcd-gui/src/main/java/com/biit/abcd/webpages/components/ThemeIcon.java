@@ -130,6 +130,8 @@ public enum ThemeIcon {
 
 	EXPRESSION_EDITOR_TAB_FORM_VARIABLES("appbar.form.variables.svg"),
 
+	EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES("appbar.form.variables.svg"),
+
 	SETTINGS("appbar.lines.horizontal.4.svg"),
 
 	ADD_ITEM_LIST("appbar.list.add.svg"),
