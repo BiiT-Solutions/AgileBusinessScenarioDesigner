@@ -44,7 +44,7 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 	protected String getExpression() {
 		String expressionString = new String();
 		if (type != null) {
-			expressionString += type.getExpressionName();
+			expressionString += type.getExpressionName().replace(".", "_");
 		}
 		return expressionString;
 	}
