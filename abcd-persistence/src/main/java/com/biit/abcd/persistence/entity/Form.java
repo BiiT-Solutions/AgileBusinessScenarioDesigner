@@ -17,7 +17,7 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.form.BaseForm;
 import com.biit.form.TreeObject;
-import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @Entity
 @Table(name = "tree_forms")

@@ -40,13 +40,13 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.ChildrenNotFoundException;
-import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class DiagramTest {
 

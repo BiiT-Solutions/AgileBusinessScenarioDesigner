@@ -15,9 +15,9 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
-import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.persistence.dao.IBaseQuestionDao;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })

@@ -7,7 +7,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.form.TreeObject;
-import com.biit.form.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;

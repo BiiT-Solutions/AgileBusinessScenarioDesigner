@@ -20,8 +20,8 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
-import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 /**
  * Tests the correct creation of the global variables <br>

@@ -21,20 +21,17 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.form.exceptions.FieldTooLongException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.exceptions.NotValidFormException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 @Test(groups = { "tableRulesDao" })
 public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests {
-
 	private final static String DUMMY_FORM = "Form with table rules";
 	private final static String TABLE_RULE_FORM = "Table Rule Form";
 	private final static String CONDITION_EXPRESSION = "Question=Question1 AND Answer=Yes";
-//	private final static String CONDITION_EXPRESSION = "Question=Question1 AND Answer=Yes";
-//	private final static String BASIC_ACTION = "System.out.println( \"Hello world!\");";
 
 	@Autowired
 	private ITableRuleDao tableRuleDao;
@@ -64,7 +61,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 		List<TableRule> tableRules = tableRuleDao.getAll();
 		Assert.assertEquals(tableRules.size(), 1);
-		
+
 		formDao.makeTransient(form);
 	}
 
@@ -94,37 +91,9 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		answer3.setName("Answer3");
 		question.addChild(answer3);
 
-		// Define rule elements
-//		TableRule tableRule = new TableRule();
-//		TableRuleRow tableRuleRow = new TableRuleRow();
-
-		//		ActionString action = new ActionString();
-		//		action.setExpression(BASIC_ACTION);
-		//		tableRuleRow.addAction(action);
-		//
-		//		// Set into the rule.
-		//		ExpressionChain condition = new ExpressionChain();
-		//		//		condition.addExpression(new ExpressionValueString(CONDITION_EXPRESSION));
-		//		condition.addExpression(new ExpressionValueTreeObjectReference(question));
-		//		tableRuleRow.getConditions().add(condition);
-		//		tableRule.getRules().add(tableRuleRow);
-		//
-		//		form.getTableRules().add(tableRule);
-		//
-		//		formDao.makePersistent(form);
-		//
-		//		Form retrievedForm = formDao.getForm(DUMMY_FORM + "_v2");
-		//		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
-		//		Assert.assertEquals(tableRuleDao.getRowCount(), 2);
-		//		Assert.assertEquals(tableRuleRowDao.getRowCount(), 2);
-		//		Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
-		//				BASIC_ACTION);
-		//		Assert.assertEquals(
-		//				((ExpressionValueTreeObjectReference)((ExpressionChain)retrievedForm.getTableRules().get(0).getRules().get(0).getConditions().get(0)).getExpressions().get(0)).getReference(), question);
-		
 		formDao.makeTransient(form);
 	}
-	
+
 	@Test
 	public void storeFormTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException {
 		Form form = new Form();
@@ -172,8 +141,6 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
 
-		// Assert.assertEquals(retrievedForm.getTableRules().get(0).getRules().get(0).getActions().get(0).getExpression(),
-		// ACTION_EXPRESSION);
 		Assert.assertEquals(tableRuleDao.getRowCount(), 1);
 		formDao.makeTransient(form);
 	}
