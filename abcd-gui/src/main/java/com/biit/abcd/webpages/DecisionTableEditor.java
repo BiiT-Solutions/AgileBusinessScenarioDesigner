@@ -10,9 +10,13 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
-import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -28,7 +32,7 @@ import com.biit.abcd.webpages.components.SelectTableRuleTableEditable;
 import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewActionExpressionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
-import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionWindow;
+import com.biit.abcd.webpages.elements.decisiontable.AddNewQuestionEditorWindow;
 import com.biit.abcd.webpages.elements.decisiontable.ClearActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.ClearExpressionListener;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
@@ -402,73 +406,156 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void newEditQuestionWindow(final TableRuleRow row, final Object propertyId) {
-		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
-				.getExpressionValue(row, propertyId);
+//		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+//				.getExpressionValue(row, propertyId);
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable
 				.getNextExpressionValue(row, propertyId);
 
-		final AddNewConditionWindow newConditionWindow = new AddNewConditionWindow(UserSessionHandler
+		final AddNewQuestionEditorWindow newQuestionConditionWindow = new AddNewQuestionEditorWindow(UserSessionHandler
 				.getFormController().getForm(), false);
 
-		if (questionExpression.getReference() != null) {
-			newConditionWindow.setTreeObjectSelected(questionExpression.getReference());
-		}
-		newConditionWindow.addAcceptActionListener(new AcceptActionListener() {
+		// if (questionExpression.getReference() != null) {
+		// newQuestionConditionWindow.setTreeObjectSelected(questionExpression.getReference());
+		// }
+		newQuestionConditionWindow.addAcceptActionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
-				final Question originalQuestion = (Question) questionExpression.getReference();
-				final Question selectedQuestion = ((AddNewConditionWindow) window).getSelectedQuestion();
+				// final Question originalQuestion = (Question)
+				// questionExpression.getReference();
+				final Object selectedElement = ((AddNewQuestionEditorWindow) window).getSelectedCondition();
+				if (selectedElement != null) {
+					System.out.println("SELECTED ELEMENT: " + selectedElement + " - Class: "
+							+ selectedElement.getClass());
+					newQuestionConditionWindow.close();
+					if (selectedElement instanceof Question) {
+						final Question selectedQuestion = (Question) selectedElement;
+						if (selectedQuestion.getAnswerFormat() == AnswerFormat.DATE) {
+							// Create a window for selecting the unit and assign
+							// it to the expression.
+							final WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
+									.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
+							windowDate.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									// removeAnswerExpressionIfNeeded(originalQuestion,
+									// selectedQuestion, answerExpression);
+									answerExpression.removeAllExpressions();
+									setQuestionDateExpression(row, (Integer) propertyId, selectedQuestion,
+											windowDate.getValue());
+									AbcdLogger.info(this.getClass().getName(), "User '"
+											+ UserSessionHandler.getUser().getEmailAddress() + "' has added Question '"
+											+ selectedQuestion.getName() + "' to Table rule '"
+											+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+									window.close();
+								}
+							});
+							windowDate.showCentered();
+						} else {
+							answerExpression.removeAllExpressions();
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' has added Question '"
+									+ selectedQuestion.getName() + "' to Table rule '"
+									+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+							setTreeObjectExpression(row, (Integer) propertyId, selectedQuestion);
+						}
 
-				if (selectedQuestion != null) {
-					newConditionWindow.close();
-					if (selectedQuestion.getAnswerFormat() == AnswerFormat.DATE) {
-						// Create a window for selecting the unit and assign it
-						// to the expression.
-						final WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
-								.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
-						windowDate.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								removeAnswerExpressionIfNeeded(originalQuestion, selectedQuestion, answerExpression);
-								setQuestionDateExpression(row, (Integer) propertyId, selectedQuestion,
-										windowDate.getValue());
-								AbcdLogger.info(this.getClass().getName(), "User '"
-										+ UserSessionHandler.getUser().getEmailAddress() + "' has added Question '"
-										+ selectedQuestion.getName() + "' to Table rule '"
-										+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
-								window.close();
-							}
-						});
-						windowDate.showCentered();
-					} else {
-						removeAnswerExpressionIfNeeded(originalQuestion, selectedQuestion, answerExpression);
+					} else if (selectedElement instanceof TreeObject) {
+						TreeObject treeObject = (TreeObject) selectedElement;
+						answerExpression.removeAllExpressions();
 						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Question '"
-								+ selectedQuestion.getName() + "' to Table rule '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the tree object '"
+								+ treeObject.getName() + "' to Table rule '"
 								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
-						setQuestionExpression(row, (Integer) propertyId, selectedQuestion);
+						setTreeObjectExpression(row, (Integer) propertyId, treeObject);
+
+					} else if (selectedElement instanceof ExpressionValueCustomVariable) {
+						ExpressionValueCustomVariable customVariable = (ExpressionValueCustomVariable) selectedElement;
+						TreeObject treeObject = customVariable.getReference();
+						answerExpression.removeAllExpressions();
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the custom variable '"
+								+ customVariable.getRepresentation() + "' to Table rule '"
+								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+						setCustomVariableExpression(row, (Integer) propertyId, treeObject, customVariable.getVariable());
+
+					} else if (selectedElement instanceof GenericTreeObjectType) {
+						GenericTreeObjectType genericType = (GenericTreeObjectType) selectedElement;
+						answerExpression.removeAllExpressions();
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the generic type '"
+								+ genericType.getExpressionName() + "' to Table rule '"
+								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+						setGenericTreeObjectExpression(row, (Integer) propertyId, genericType);
+
+					} else if (selectedElement instanceof ExpressionValueGenericCustomVariable) {
+						ExpressionValueGenericCustomVariable customVariable = (ExpressionValueGenericCustomVariable) selectedElement;
+						GenericTreeObjectType genericTO = customVariable.getType();
+						answerExpression.removeAllExpressions();
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the custom variable '"
+								+ customVariable.getRepresentation() + "' to Table rule '"
+								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+						setGenericCustomVariableExpression(row, (Integer) propertyId, genericTO,
+								customVariable.getVariable());
 					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
 				}
 			}
 		});
-		newConditionWindow.showCentered();
+		newQuestionConditionWindow.showCentered();
 	}
 
-	private void removeAnswerExpressionIfNeeded(Question originalQuestion, Question selectedQuestion,
-			ExpressionChain answerExpression) {
-		if ((originalQuestion != null) && (selectedQuestion != null)) {
-			if (((originalQuestion.getAnswerType() == AnswerType.INPUT) && (selectedQuestion.getAnswerType() != AnswerType.INPUT))
-					|| ((originalQuestion.getAnswerType() != AnswerType.INPUT) && (selectedQuestion.getAnswerType() == AnswerType.INPUT))
-					|| (!originalQuestion.equals(selectedQuestion))) {
-				answerExpression.removeAllExpressions();
-			}
-		}
+	/**
+	 * Sets a tree object as an expression inside the table
+	 *
+	 * @param row
+	 * @param propertyId
+	 * @param selectedObject
+	 */
+	private void setTreeObjectExpression(TableRuleRow row, Integer propertyId, TreeObject selectedObject) {
+		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedObject));
+		decisionTable.update(getSelectedTableRule());
 	}
 
-	private void setQuestionExpression(TableRuleRow row, Integer propertyId, Question selectedQuestion) {
-		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedQuestion));
+	/**
+	 * Sets a custom variable as an expression inside the table
+	 *
+	 * @param row
+	 * @param propertyId
+	 * @param treeObject
+	 * @param customVariable
+	 */
+	private void setCustomVariableExpression(TableRuleRow row, Integer propertyId, TreeObject treeObject,
+			CustomVariable customVariable) {
+		row.setExpression(propertyId, new ExpressionValueCustomVariable(treeObject, customVariable));
+		decisionTable.update(getSelectedTableRule());
+	}
+
+	/**
+	 * Sets a custom variable as an expression inside the table
+	 *
+	 * @param row
+	 * @param propertyId
+	 * @param treeObject
+	 * @param customVariable
+	 */
+	private void setGenericTreeObjectExpression(TableRuleRow row, Integer propertyId, GenericTreeObjectType genericType) {
+		row.setExpression(propertyId, new ExpressionValueGenericVariable(genericType));
+		decisionTable.update(getSelectedTableRule());
+	}
+
+	/**
+	 * Sets a custom variable as an expression inside the table
+	 *
+	 * @param row
+	 * @param propertyId
+	 * @param treeObject
+	 * @param customVariable
+	 */
+	private void setGenericCustomVariableExpression(TableRuleRow row, Integer propertyId,
+			GenericTreeObjectType genericType, CustomVariable customVariable) {
+		row.setExpression(propertyId, new ExpressionValueGenericCustomVariable(genericType, customVariable));
 		decisionTable.update(getSelectedTableRule());
 	}
 

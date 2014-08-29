@@ -7,177 +7,88 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.AnswerFormat;
-import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.biit.abcd.webpages.components.TreeObjectTableMultiSelect;
-import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.biit.form.TreeObject;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ListSelect;
-import com.vaadin.ui.UI;
 
-public class TabFormVariablesLayout extends TabLayout {
+public abstract class TabFormVariablesLayout extends TabLayout {
 	private static final long serialVersionUID = 3488733953726761594L;
-	private TreeObjectTableMultiSelect formQuestionTable;
+	private TreeObjectTable formQuestionTable;
 	private ListSelect variableSelection;
-	private Button addTreeObjectButton, addVariableButton;
 
-	public TabFormVariablesLayout() {
-		createFormVariablesElements();
-	}
-
-	/**
-	 * We can select more than one element, then we add expressions separated by commas. If we select a date question or
-	 * variable, then we also must select the unit for the date expression.
-	 */
-	private void createFormVariablesElements() {
-		initializeFormQuestionTable();
-		this.setSpacing(true);
-		formQuestionTable.setPageLength(10);
-		addComponent(formQuestionTable);
-		setExpandRatio(formQuestionTable, 0.5f);
-		addTreeObjectButton = new Button(
-				ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT));
-		addTreeObjectButton.addClickListener(new ClickListener() {
-			private static final long serialVersionUID = -4754466212065015629L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				if (!getSelectedFormElements().isEmpty()) {
-					// We need to create an expression list separated by commas.
-					for (int i = 0; i < getSelectedFormElements().size(); i++) {
-						// Add element.
-						final ExpressionValueTreeObjectReference formReference = new ExpressionValueTreeObjectReference();
-						formReference.setReference(getSelectedFormElements().get(i));
-						// Detect if it is a date question to add units
-						if ((getSelectedFormElements().get(i) instanceof Question)
-								&& (((Question) getSelectedFormElements().get(i)).getAnswerFormat()) != null
-								&& ((Question) getSelectedFormElements().get(i)).getAnswerFormat().equals(
-										AnswerFormat.DATE)) {
-							// Create a window for selecting the unit and assign it to the expression.
-							WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
-									.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
-							windowDate.addAcceptActionListener(new AcceptActionListener() {
-								@Override
-								public void acceptAction(AcceptCancelWindow window) {
-									((ExpressionValueTreeObjectReference) formReference)
-											.setUnit(((WindowSelectDateUnit) window).getValue());
-									// Fire listeners to force the refresh of GUI.
-									addExpression(formReference);
-									window.close();
-								}
-							});
-							windowDate.showCentered();
-						} else {
-							addExpression(formReference);
-						}
-						// Add comma if more than one element.
-						if (i < getSelectedFormElements().size() - 1) {
-							ExpressionSymbol exprValue = new ExpressionSymbol();
-							exprValue.setValue(AvailableSymbol.COMMA);
-							addExpression(exprValue);
-						}
-					}
-				}
-			}
-		});
-		addComponent(addTreeObjectButton);
-		setComponentAlignment(addTreeObjectButton, Alignment.TOP_RIGHT);
+	protected void createCustomVariablesComponent() {
 		initializeVariableSelection();
 		addComponent(variableSelection);
 		setExpandRatio(variableSelection, 0.5f);
-		addVariableButton = new Button(
-				ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE));
-		addVariableButton.addClickListener(new ClickListener() {
-			private static final long serialVersionUID = 305156770292048868L;
+		setFormVariableSelectionValues();
+	}
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				if (variableSelection.getValue() != null && !getSelectedFormElements().isEmpty()) {
-					// Multiple elements must be separated by commas.
-					for (int i = 0; i < getSelectedFormElements().size(); i++) {
-						// Add element.
-						final ExpressionValueCustomVariable formVariableReference;
-						// Detect if it is a date question to add units
-						if (((CustomVariable) variableSelection.getValue()).getType() != null
-								&& ((CustomVariable) variableSelection.getValue()).getType().equals(
-										CustomVariableType.DATE)) {
-							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements().get(i),
-									(CustomVariable) variableSelection.getValue());
-							// Create a window for selecting the unit and assign it to the expression.
-							WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
-									.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
+	protected void createFormElementsComponent() {
+		initializeFormQuestionTable();
+		setSpacing(true);
+		formQuestionTable.setPageLength(8);
+		addComponent(formQuestionTable);
+		setExpandRatio(formQuestionTable, 0.5f);
+	}
 
-							windowDate.addAcceptActionListener(new AcceptActionListener() {
-								@Override
-								public void acceptAction(AcceptCancelWindow window) {
-									((ExpressionValueCustomVariable) formVariableReference)
-											.setUnit(((WindowSelectDateUnit) window).getValue());
-									// Fire listeners to force thre refresh of GUI.
-									updateExpression(formVariableReference);
-									addExpression(formVariableReference);
-									window.close();
-								}
-							});
-							UI.getCurrent().addWindow(windowDate);
-						} else {
-							formVariableReference = new ExpressionValueCustomVariable(getSelectedFormElements().get(i),
-									(CustomVariable) variableSelection.getValue());
-							addExpression(formVariableReference);
-						}
-						// Add comma if needed.
-						if (i < getSelectedFormElements().size() - 1) {
-							ExpressionSymbol exprValue = new ExpressionSymbol();
-							exprValue.setValue(AvailableSymbol.COMMA);
-							addExpression(exprValue);
-						}
-					}
+	public TreeObjectTable getFormQuestionTable() {
+		return formQuestionTable;
+	}
+
+	/**
+	 * Returns the selected list of element. All elements must be of the same
+	 * class.
+	 *
+	 * @return
+	 */
+	public List<TreeObject> getSelectedFormElements() {
+		List<TreeObject> selected = new ArrayList<>();
+		if (formQuestionTable instanceof TreeObjectTableMultiSelect) {
+			if (((((Collection<?>) formQuestionTable.getValue()) == null) || ((Collection<?>) formQuestionTable
+					.getValue()).isEmpty())) {
+				return selected;
+			}
+			Class<?> firstClass = null;
+			for (Object object : ((Collection<?>) formQuestionTable.getValue())) {
+				// First object select the class of the accepted elements.
+				if (firstClass == null) {
+					firstClass = object.getClass();
+				}
+				// Only add elements that have the same class.
+				if (object.getClass() == firstClass) {
+					selected.add((TreeObject) object);
 				}
 			}
-
-		});
-		addComponent(addVariableButton);
-		setComponentAlignment(addVariableButton, Alignment.TOP_RIGHT);
-		setFormVariableSelectionValues();
-
-	}
-
-	private void initializeFormQuestionTable() {
-		formQuestionTable = new TreeObjectTableMultiSelect();
-		formQuestionTable.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
-		formQuestionTable.setSizeFull();
-		formQuestionTable.setRootElement((Form) UserSessionHandler.getFormController().getForm());
-		formQuestionTable.setSelectable(true);
-		formQuestionTable.setNullSelectionAllowed(false);
-		formQuestionTable.setImmediate(true);
-		formQuestionTable.setValue(UserSessionHandler.getFormController().getForm());
-		formQuestionTable.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = 4088237440489679127L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				setFormVariableSelectionValues();
+		} else {
+			if (formQuestionTable.getValue() == null) {
+				return selected;
 			}
-		});
-		formQuestionTable.collapseFrom(Category.class);
+			selected.add((TreeObject) formQuestionTable.getValue());
+		}
+		return selected;
 	}
 
-	private void initializeVariableSelection() {
+	public List<ExpressionValueCustomVariable> getValues() {
+		if (getSelectedFormElements().isEmpty() || (variableSelection.getValue() == null)) {
+			return null;
+		}
+		List<ExpressionValueCustomVariable> variables = new ArrayList<>();
+		for (TreeObject object : getSelectedFormElements()) {
+			variables.add(new ExpressionValueCustomVariable(object, (CustomVariable) variableSelection.getValue()));
+		}
+		return variables;
+	}
+
+	public ListSelect getVariableSelection() {
+		return variableSelection;
+	}
+
+	protected abstract void initializeFormQuestionTable();
+
+	protected void initializeVariableSelection() {
 		variableSelection = new ListSelect();
 		variableSelection
 				.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
@@ -186,7 +97,11 @@ public class TabFormVariablesLayout extends TabLayout {
 		variableSelection.setImmediate(true);
 	}
 
-	private void setFormVariableSelectionValues() {
+	public void setFormQuestionTable(TreeObjectTable formQuestionTable) {
+		this.formQuestionTable = formQuestionTable;
+	}
+
+	protected void setFormVariableSelectionValues() {
 		if (variableSelection != null) {
 			variableSelection.setValue(null);
 			variableSelection.removeAllItems();
@@ -197,62 +112,20 @@ public class TabFormVariablesLayout extends TabLayout {
 					variableSelection.addItem(customvariable);
 					variableSelection.setItemCaption(customvariable, customvariable.getName());
 				}
-				if (customVariables != null && !customVariables.isEmpty()) {
-					variableSelection.setValue(customVariables.get(0));
-				}
+				// if ((customVariables != null) && !customVariables.isEmpty())
+				// {
+				// variableSelection.setValue(customVariables.get(0));
+				// }
 			}
 		}
 	}
 
-	public List<ExpressionValueCustomVariable> getValues() {
-		if (getSelectedFormElements().isEmpty() || variableSelection.getValue() == null) {
-			return null;
-		}
-
-		List<ExpressionValueCustomVariable> variables = new ArrayList<>();
-		for (TreeObject object : getSelectedFormElements()) {
-			variables.add(new ExpressionValueCustomVariable(object, (CustomVariable) variableSelection.getValue()));
-		}
-
-		return variables;
-	}
-
-	/**
-	 * Returns the selected list of element. All elements must be of the same class.
-	 * 
-	 * @return
-	 */
-	private List<TreeObject> getSelectedFormElements() {
-		if ((((Collection<?>) formQuestionTable.getValue()) == null || ((Collection<?>) formQuestionTable.getValue())
-				.isEmpty())) {
-			return new ArrayList<>();
-		}
-		List<TreeObject> selected = new ArrayList<>();
-		Class<?> firstClass = null;
-		for (Object object : ((Collection<?>) formQuestionTable.getValue())) {
-			// First object select the class of the accepted elements.
-			if (firstClass == null) {
-				firstClass = object.getClass();
-			}
-			// Only add elements that have the same class.
-			if (object.getClass() == firstClass) {
-				selected.add((TreeObject) object);
-			}
-		}
-		return selected;
-	}
-
-	public void setvalue(ExpressionValueCustomVariable expression) {
+	public void setValue(ExpressionValueCustomVariable expression) {
 		formQuestionTable.setValue(expression.getReference());
 		variableSelection.setValue(expression.getVariable());
 	}
 
-	public void addTreeObjectButtonClickListener(ClickListener clickListener) {
-		addTreeObjectButton.addClickListener(clickListener);
+	public void setVariableSelection(ListSelect variableSelection) {
+		this.variableSelection = variableSelection;
 	}
-
-	public void addVariableButtonClickListener(ClickListener clickListener) {
-		addVariableButton.addClickListener(clickListener);
-	}
-
 }

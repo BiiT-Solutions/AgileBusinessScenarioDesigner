@@ -5,24 +5,18 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
+import com.biit.abcd.webpages.components.TabEditorComponent;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.VerticalLayout;
 
 /**
  * Component for editing an expression. Is composed by a viewer and a properties
  * menu in tabs.
  */
-public abstract class ExpressionEditorComponent extends CustomComponent {
+public abstract class ExpressionEditorComponent extends TabEditorComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
-	private HorizontalLayout rootLayout;
-
-	protected TabSheet tabMenu;
 
 	public abstract VerticalLayout createViewersLayout();
 
@@ -31,35 +25,23 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 	 */
 	public abstract void updateSelectionStyles();
 
-	/**
-	 * Boolean used to create the simplified version of the operator tab
-	 *
-	 * @param simpleOperatorTab
-	 */
 	public ExpressionEditorComponent() {
-		rootLayout = new HorizontalLayout();
-		rootLayout.setSizeFull();
-		rootLayout.setMargin(false);
-		rootLayout.setSpacing(true);
-
-		tabMenu = createTabMenu();
+		super();
+		initTabs();
 
 		VerticalLayout viewLayout = createViewersLayout();
 
-		rootLayout.addComponent(viewLayout);
-		// rootLayout.addComponent(expressionEditorProperties);
-		rootLayout.addComponent(tabMenu);
-		rootLayout.setExpandRatio(viewLayout, 0.80f);
-		rootLayout.setExpandRatio(tabMenu, 0.20f);
+		getRootLayout().addComponent(viewLayout);
+		getRootLayout().addComponent(getTabSheet());
+		getRootLayout().setExpandRatio(viewLayout, 0.80f);
+		getRootLayout().setExpandRatio(getTabSheet(), 0.20f);
 
-		setCompositionRoot(rootLayout);
+		setCompositionRoot(getRootLayout());
 		addKeyController();
 	}
 
-	private TabSheet createTabMenu() {
-		TabSheet tabMenu = new TabSheet();
-		tabMenu.setHeight("100%");
-
+	public void initTabs(){
+		// First Tab
 		TabLayout operatorLayout;
 		operatorLayout = new TabOperatorLayout();
 		operatorLayout.addNewElementListener(new ElementAddedListener() {
@@ -74,15 +56,11 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 							+ " with 'Value: " + newElement + "'.");
 				}
 			}
-
 		});
-
-		Tab tab1 = tabMenu.addTab(operatorLayout);
-		tab1.setDescription("");
-		tab1.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
+		setTab(operatorLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
 
 		// Second Tab
-		TabFormVariablesLayout formVariablesLayout = new TabFormVariablesLayout();
+		TabFormVariablesLayout formVariablesLayout = new ExpressionTabFormVariablesLayout();
 		formVariablesLayout.addNewElementListener(new ElementAddedListener() {
 
 			@Override
@@ -95,7 +73,6 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 							+ " with 'Value: " + newElement + "'.");
 				}
 			}
-
 		});
 		// Adding units to dates need to refresh the GUI.
 		formVariablesLayout.addUpdateElementListener(new ElementUpdatedListener() {
@@ -107,9 +84,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 				}
 			}
 		});
-		Tab tab2 = tabMenu.addTab(formVariablesLayout);
-		tab2.setDescription("");
-		tab2.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
+		setTab(formVariablesLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
 
 		// Third tab
 		TabGlobalConstantsLayout globalConstantLayout = new TabGlobalConstantsLayout();
@@ -127,9 +102,7 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 			}
 
 		});
-		Tab tab3 = tabMenu.addTab(globalConstantLayout);
-		tab3.setDescription("");
-		tab3.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
+		setTab(globalConstantLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
 
 		// Fourth Tab
 		TabFormGenericTreeObjectLayout formVariablesScopeLayout = new TabFormGenericTreeObjectLayout();
@@ -144,13 +117,8 @@ public abstract class ExpressionEditorComponent extends CustomComponent {
 							+ " with 'Value: " + newElement + "'.");
 				}
 			}
-
 		});
-		Tab tab4 = tabMenu.addTab(formVariablesScopeLayout);
-		tab4.setDescription("");
-		tab4.setIcon(ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
-
-		return tabMenu;
+		setTab(formVariablesScopeLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
 	}
 
 	/**

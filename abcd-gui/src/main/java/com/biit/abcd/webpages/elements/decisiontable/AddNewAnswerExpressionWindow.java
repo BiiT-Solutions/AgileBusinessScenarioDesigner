@@ -79,7 +79,6 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		VerticalLayout layout = new VerticalLayout();
 
 		// Create content
-		//		expressionEditorComponent = new AnswerExpressionEditorComponent(true);
 		expressionEditorComponent = new SimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 
