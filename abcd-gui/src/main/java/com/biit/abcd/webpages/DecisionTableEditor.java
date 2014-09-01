@@ -424,8 +424,6 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				// questionExpression.getReference();
 				final Object selectedElement = ((AddNewQuestionEditorWindow) window).getSelectedCondition();
 				if (selectedElement != null) {
-					System.out.println("SELECTED ELEMENT: " + selectedElement + " - Class: "
-							+ selectedElement.getClass());
 					newQuestionConditionWindow.close();
 					if (selectedElement instanceof Question) {
 						final Question selectedQuestion = (Question) selectedElement;

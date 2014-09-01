@@ -24,31 +24,18 @@ import com.biit.jexeval.ExpressionEvaluator;
 @Table(name = "expressions_chain")
 public class ExpressionChain extends Expression implements INameAttribute {
 
-	private String name;
-
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "expression_index")
 	private List<Expression> expressions;
+
+	private String name;
 
 	public ExpressionChain() {
 		expressions = new ArrayList<>();
 	}
 
-	public ExpressionChain(String name) {
-		expressions = new ArrayList<>();
-		setName(name);
-	}
-
 	public ExpressionChain(Expression... expressions) {
 		this.expressions = new ArrayList<>();
-		for (Expression expression : expressions) {
-			addExpression(expression);
-		}
-	}
-
-	public ExpressionChain(String name, Expression... expressions) {
-		this.expressions = new ArrayList<>();
-		setName(name);
 		for (Expression expression : expressions) {
 			addExpression(expression);
 		}
@@ -61,21 +48,29 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		}
 	}
 
-	public List<Expression> getExpressions() {
-		return expressions;
+	public ExpressionChain(String name) {
+		expressions = new ArrayList<>();
+		setName(name);
 	}
 
-	public boolean removeExpression(Expression expression) {
-		return expressions.remove(expression);
-	}
-
-	public void setExpressions(List<Expression> expressions) {
-		removeAllExpressions();
-		this.expressions.addAll(expressions);
+	public ExpressionChain(String name, Expression... expressions) {
+		this.expressions = new ArrayList<>();
+		setName(name);
+		for (Expression expression : expressions) {
+			addExpression(expression);
+		}
 	}
 
 	public void addExpression(Expression expression) {
 		expressions.add(expression);
+	}
+
+	public void addExpression(int index, Expression expression) {
+		expressions.add(index, expression);
+	}
+
+	public Expression removeFirstExpression(){
+		return expressions.remove(0);
 	}
 
 	public void addExpressions(Expression... expressions) {
@@ -90,36 +85,32 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		}
 	}
 
-	public void removeAllExpressions() {
-		expressions.clear();
+	/**
+	 * Some characters are not allowed in the Expression Evaluator.
+	 *
+	 * @param expression
+	 * @return
+	 */
+	private String filterVariables(Expression expression) {
+		return expression.getExpression().replaceAll("[^a-zA-Z0-9_]", "_");
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String getRepresentation() {
-		if (expressions.isEmpty()) {
-			return "null";
+	public ExpressionChain generateCopy() {
+		ExpressionChain copy = new ExpressionChain();
+		if (name != null) {
+			copy.name = new String(name);
 		}
-
-		String result = "";
 		for (Expression expression : expressions) {
-			result += expression.getRepresentation() + " ";
+			Expression copyExpression = expression.generateCopy();
+			copy.expressions.add(copyExpression);
 		}
-		return result.trim();
+		return copy;
 	}
 
 	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -163,32 +154,13 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		return evaluator;
 	}
 
-	@Override
-	public String toString() {
-		return getName() + expressions;
-	}
-
-	/**
-	 * Some characters are not allowed in the Expression Evaluator.
-	 * 
-	 * @param expression
-	 * @return
-	 */
-	private String filterVariables(Expression expression) {
-		return expression.getExpression().replaceAll("[^a-zA-Z0-9_]", "_");
+	public List<Expression> getExpressions() {
+		return expressions;
 	}
 
 	@Override
-	public ExpressionChain generateCopy() {
-		ExpressionChain copy = new ExpressionChain();
-		if (name != null) {
-			copy.name = new String(name);
-		}
-		for (Expression expression : expressions) {
-			Expression copyExpression = expression.generateCopy();
-			copy.expressions.add(copyExpression);
-		}
-		return copy;
+	public String getName() {
+		return name;
 	}
 
 	protected Set<TreeObject> getReferencedTreeObjects() {
@@ -203,6 +175,19 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		return references;
 	}
 
+	@Override
+	public String getRepresentation() {
+		if (expressions.isEmpty()) {
+			return "null";
+		}
+
+		String result = "";
+		for (Expression expression : expressions) {
+			result += expression.getRepresentation() + " ";
+		}
+		return result.trim();
+	}
+
 	public boolean isAssignedTo(TreeObject treeObject) {
 		Set<TreeObject> references = getReferencedTreeObjects();
 		if (!references.isEmpty()) {
@@ -212,5 +197,28 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			}
 		}
 		return false;
+	}
+
+	public void removeAllExpressions() {
+		expressions.clear();
+	}
+
+	public boolean removeExpression(Expression expression) {
+		return expressions.remove(expression);
+	}
+
+	public void setExpressions(List<Expression> expressions) {
+		removeAllExpressions();
+		this.expressions.addAll(expressions);
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return getName() + expressions;
 	}
 }

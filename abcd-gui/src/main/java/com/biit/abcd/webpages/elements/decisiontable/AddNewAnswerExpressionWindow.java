@@ -11,6 +11,7 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
+import com.biit.form.TreeObject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
@@ -24,21 +25,27 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
+		// Add the question to the expression
+		reference.setEditable(false);
+		expressionChain.addExpression(0, reference);
 		this.expressionChain = expressionChain.generateCopy();
 
 		if (reference instanceof ExpressionValueCustomVariable) {
 			// Custom variable
 			setContent(generateExpression());
 		} else {
-			// Question
-			Question question = (Question) reference.getReference();
-			if (question.getAnswerType() != AnswerType.INPUT) {
-				setContent(generateTable(question));
-			} else {
-				setContent(generateExpression());
+			TreeObject treeObject = reference.getReference();
+			if (treeObject != null) {
+				if (treeObject instanceof Question) {
+					Question question = (Question) treeObject;
+					if (question.getAnswerType() != AnswerType.INPUT) {
+						setContent(generateTable(question));
+					}
+				} else {
+					setContent(generateExpression());
+				}
 			}
 		}
-
 		setResizable(false);
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_CONDITION_CAPTION));
 	}
@@ -91,6 +98,9 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	}
 
 	public ExpressionChain getExpressionChain() {
+		ExpressionValueTreeObjectReference reference = (ExpressionValueTreeObjectReference) expressionChain
+				.removeFirstExpression();
+		reference.setEditable(true);
 		return expressionChain;
 	}
 }
