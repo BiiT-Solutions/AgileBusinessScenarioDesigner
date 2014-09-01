@@ -36,11 +36,9 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		} else {
 			TreeObject treeObject = reference.getReference();
 			if (treeObject != null) {
-				if (treeObject instanceof Question) {
+				if ((treeObject instanceof Question) && (((Question) treeObject).getAnswerType() != AnswerType.INPUT)) {
 					Question question = (Question) treeObject;
-					if (question.getAnswerType() != AnswerType.INPUT) {
-						setContent(generateTable(question));
-					}
+					setContent(generateTable(question));
 				} else {
 					setContent(generateExpression());
 				}
