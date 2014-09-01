@@ -3,7 +3,10 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import java.util.List;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -18,7 +21,10 @@ public class TabGlobalConstantsLayout extends TabLayout {
 	}
 
 	private void createGlobalConstantsElements(List<GlobalVariable> globalVariables) {
-		this.removeAllComponents();
+		removeAllComponents();
+		// Add the system date variable
+		addSystemDate();
+		// Add the other variables
 		if (globalVariables != null) {
 			for (GlobalVariable globalVariable : globalVariables) {
 				addItem(globalVariable);
@@ -37,7 +43,27 @@ public class TabGlobalConstantsLayout extends TabLayout {
 			}
 		});
 		globalVariableButton.setWidth("100%");
-		//This style hides text overflow.
+		// This style hides text overflow.
+		globalVariableButton.addStyleName("v-expression-button-selector");
+		addComponent(globalVariableButton);
+		setComponentAlignment(globalVariableButton, Alignment.MIDDLE_CENTER);
+	}
+
+	private void addSystemDate() {
+
+		Button globalVariableButton = new Button(
+				ServerTranslate.translate(LanguageCodes.EXPRESSION_STRING_GLOBAL_VARIABLE_SYSTEM_DATE),
+				new ClickListener() {
+					private static final long serialVersionUID = 6377436020520436619L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						ExpressionValueTimestamp exprValue = new ExpressionValueTimestamp(true);
+						addExpression(exprValue);
+					}
+				});
+		globalVariableButton.setWidth("100%");
+		// This style hides text overflow.
 		globalVariableButton.addStyleName("v-expression-button-selector");
 		addComponent(globalVariableButton);
 		setComponentAlignment(globalVariableButton, Alignment.MIDDLE_CENTER);

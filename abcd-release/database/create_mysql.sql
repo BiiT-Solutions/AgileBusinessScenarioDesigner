@@ -415,6 +415,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        systemDate bit not null,
         value datetime,
         primary key (ID)
     );

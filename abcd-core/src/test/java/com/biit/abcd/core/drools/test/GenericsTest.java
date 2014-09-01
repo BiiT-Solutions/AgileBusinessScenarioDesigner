@@ -21,43 +21,48 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class GenericsTest {
-
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
+	private final static Charset baseCharset = StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
-	private final static Charset baseCharset =  StandardCharsets.UTF_8;
 
-	@Test(groups = { "orbeon" })
 	public void readXml() throws DocumentException, IOException {
 		this.form = new SubmittedForm(APP, FORM);
 		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", baseCharset);
@@ -66,19 +71,31 @@ public class GenericsTest {
 		Assert.assertFalse(this.form.getCategories().isEmpty());
 	}
 
-	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
 		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", baseCharset);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
-	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
-	public void testTableRuleLoadAndExecution() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
+	@Test(groups = { "rules" })
+	public void testExpressions() throws ExpressionInvalidException, NotValidChildException,
+			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
+			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
+		// Load the rules
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		Form vaadinForm = this.createDiagramTestForm();
+		Form vaadinForm = this.createDhszwForm();
 		formDrools.parse(vaadinForm);
+		// Load the submitted form
+		this.readXml();
+		this.translateFormCategories();
 		formDrools.runDroolsRules(this.form);
+
+		// Check the results of the drools execution
+		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+				.getCategory("Alcohol-, drugs-, game- of gokverslaving");
+		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+				.getCategory("Huisvesting");
+		Assert.assertEquals(1.0, testCat1.getNumberVariableValue("cScore"));
+		Assert.assertEquals(3.0, testCat2.getNumberVariableValue("cScore"));
 	}
 
 	/**
@@ -93,8 +110,8 @@ public class GenericsTest {
 	 * @throws FieldTooLongException
 	 * @throws IOException
 	 */
-	private Form createDiagramTestForm() throws NotValidChildException, NotValidOperatorInExpression,
-	ChildrenNotFoundException, FieldTooLongException, IOException {
+	private Form createDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
+			ChildrenNotFoundException, FieldTooLongException, IOException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -102,80 +119,87 @@ public class GenericsTest {
 		// Create the custom variables
 		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
 				CustomVariableScope.QUESTION);
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY);
 
 		// Create the tableRule
-		TableRule tableRule1 = new TableRule("BaseTable1");
+		TableRule tableRule = new TableRule("BaseTable");
 
-		String lastCategory1 = "";
-		Category category1 = null;
-		String lastQuestion1 = "";
-		Question question1 = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/table1"), StandardCharsets.UTF_8)) {
+		String lastCategory = "";
+		Category category = null;
+		String lastQuestion = "";
+		Question question = null;
+		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"),
+				StandardCharsets.UTF_8)) {
 			// [0] = category, [1] = question, [2] = answer, [3] = value
 			String[] lineSplit = line.split("\t");
-			if(!lastCategory1.equals(lineSplit[0])){
+			if (!lastCategory.equals(lineSplit[0])) {
 				// Create a category
-				category1 = new Category(lineSplit[0]);
-				form.addChild(category1);
-				lastCategory1 = lineSplit[0];
+				category = new Category(lineSplit[0]);
+				form.addChild(category);
+				lastCategory = lineSplit[0];
 			}
-			if(!lastQuestion1.equals(lineSplit[1])){
+			if (!lastQuestion.equals(lineSplit[1])) {
 				// Create a question
-				question1 = new Question(lineSplit[1]);
-				category1.addChild(question1);
-				lastQuestion1 = lineSplit[1];
+				question = new Question(lineSplit[1]);
+				category.addChild(question);
+				lastQuestion = lineSplit[1];
 			}
 			Answer answer = new Answer(lineSplit[2]);
-			question1.addChild(answer);
+			question.addChild(answer);
 
-			tableRule1.getRules().add(
-					new TableRuleRow(new ExpressionValueTreeObjectReference(question1), new ExpressionChain(
+			tableRule.getRules().add(
+					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
 							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-									new ExpressionValueCustomVariable(question1, customVarQuestion),
-									new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-											Double.parseDouble(lineSplit[3])))));
+							new ExpressionValueCustomVariable(question, customVarQuestion), new ExpressionOperatorMath(
+									AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+									.parseDouble(lineSplit[3])))));
 		}
 
 		// Add the rows and the table to the form
-		form.getTableRules().add(tableRule1);
+		form.getTableRules().add(tableRule);
 
-		// Create the tableRule
-		TableRule tableRule2 = new TableRule("BaseTable2");
+		// // Creation of the accumulate expressions
+		// int accumExp = 1;
+		// for (String line :
+		// Files.readAllLines(Paths.get("./src/test/resources/tables/accumulations"),
+		// StandardCharsets.UTF_8)) {
+		// // [0] = category, [1] = function, [2] = questions
+		// String[] lineSplit = line.split("\t");
+		//
+		// ExpressionChain testExpressionChain = new
+		// ExpressionChain(lineSplit[0] + "Score_" + accumExp);
+		// testExpressionChain.addExpression(new
+		// ExpressionValueCustomVariable(this.getCategoryFromForm(form,
+		// lineSplit[0]), customVarCategory));
+		// testExpressionChain.addExpression(new
+		// ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		// if (lineSplit[1].equals("min")) {
+		// testExpressionChain.addExpression(new
+		// ExpressionFunction(AvailableFunction.MIN));
+		// }
+		// // Each position is a question
+		// String[] questionSplit = lineSplit[2].split("::");
+		// int i = 0;
+		// for (String questionString : questionSplit) {
+		// testExpressionChain.addExpression(new
+		// ExpressionValueCustomVariable(this.getQuestionFromCategory(
+		// this.getCategoryFromForm(form, lineSplit[0]), questionString),
+		// customVarQuestion));
+		// if (i < (questionSplit.length - 1)) {
+		// // So the last expression of the rule before the bracket is
+		// // not a comma
+		// testExpressionChain.addExpression(new
+		// ExpressionSymbol(AvailableSymbol.COMMA));
+		// }
+		// i++;
+		// }
+		// testExpressionChain.addExpression(new
+		// ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		// form.getExpressionChain().add(testExpressionChain);
+		// accumExp++;
+		// }
 
-		String lastCategory2 = "";
-		Category category2 = null;
-		String lastQuestion2 = "";
-		Question question2 = null;
-		for(String line: Files.readAllLines(Paths.get("./src/test/resources/tables/table2"), StandardCharsets.UTF_8)) {
-			// [0] = category, [1] = question, [2] = answer, [3] = value
-			String[] lineSplit = line.split("\t");
-			if(!lastCategory2.equals(lineSplit[0])){
-				// Create a category
-				category2 = new Category(lineSplit[0]);
-				form.addChild(category2);
-				lastCategory2 = lineSplit[0];
-			}
-			if(!lastQuestion2.equals(lineSplit[1])){
-				// Create a question
-				question2 = new Question(lineSplit[1]);
-				category2.addChild(question2);
-				lastQuestion2 = lineSplit[1];
-			}
-			Answer answer = new Answer(lineSplit[2]);
-			question2.addChild(answer);
-
-			tableRule2.getRules().add(
-					new TableRuleRow(new ExpressionValueTreeObjectReference(question2), new ExpressionChain(
-							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-									new ExpressionValueCustomVariable(question2, customVarQuestion),
-									new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(
-											Double.parseDouble(lineSplit[3])))));
-		}
-
-		// Add the rows and the table to the form
-		form.getTableRules().add(tableRule2);
-
-		// Creation of a simple diagram to load the table rule
 		Diagram mainDiagram = new Diagram("main");
 
 		DiagramSource diagramStartNode = new DiagramSource();
@@ -183,61 +207,108 @@ public class GenericsTest {
 		diagramStartNode.setType(DiagramObjectType.SOURCE);
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
-		DiagramFork diagramForkNode = new DiagramFork();
-		diagramForkNode.setJointjsId(IdGenerator.createId());
-		diagramForkNode.setType(DiagramObjectType.FORK);
-		// Question Justitie.Politie, Answer in test form Justitie.Politie.Nooit
-		diagramForkNode.setReference(new ExpressionValueTreeObjectReference(question2));
-		Node nodeFork = new Node(diagramForkNode.getJointjsId());
+		DiagramTable diagramTableRuleNode = new DiagramTable();
+		diagramTableRuleNode.setTable(tableRule);
+		diagramTableRuleNode.setJointjsId(IdGenerator.createId());
+		diagramTableRuleNode.setType(DiagramObjectType.TABLE);
+		Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
 
-		DiagramTable diagramTableRuleNode1 = new DiagramTable();
-		diagramTableRuleNode1.setTable(tableRule1);
-		diagramTableRuleNode1.setJointjsId(IdGenerator.createId());
-		diagramTableRuleNode1.setType(DiagramObjectType.TABLE);
-		Node nodeTable1 = new Node(diagramTableRuleNode1.getJointjsId());
+		// CREATE GENERIC EXPRESSION
+		DiagramCalculation diagramExpressionNode = new DiagramCalculation();
+		diagramExpressionNode.setFormExpression(new ExpressionChain(new ExpressionValueGenericCustomVariable(
+				GenericTreeObjectType.CATEGORY, customVarCategory), new ExpressionOperatorMath(
+				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, customVarQuestion),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		diagramExpressionNode.setJointjsId(IdGenerator.createId());
+		diagramExpressionNode.setType(DiagramObjectType.CALCULATION);
+		Node nodeExpression = new Node(diagramExpressionNode.getJointjsId());
 
-		DiagramTable diagramTableRuleNode2 = new DiagramTable();
-		diagramTableRuleNode2.setTable(tableRule2);
-		diagramTableRuleNode2.setJointjsId(IdGenerator.createId());
-		diagramTableRuleNode2.setType(DiagramObjectType.TABLE);
-		Node nodeTable2 = new Node(diagramTableRuleNode2.getJointjsId());
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
 
-//		DiagramSink diagramEndNode = new DiagramSink();
-//		diagramEndNode.setJointjsId(IdGenerator.createId());
-//		diagramEndNode.setType(DiagramObjectType.SINK);
-//		Node nodeSink = new Node(diagramEndNode.getJointjsId());
-
-		DiagramLink startForkLink = new DiagramLink(nodeSource, nodeFork);
-		startForkLink.setJointjsId(IdGenerator.createId());
-		startForkLink.setType(DiagramObjectType.LINK);
-
-		DiagramLink forkTable1Link = new DiagramLink(nodeFork, nodeTable1);
-		forkTable1Link.setJointjsId(IdGenerator.createId());
-		forkTable1Link.setType(DiagramObjectType.LINK);
-		forkTable1Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(question2), new ExpressionValueTreeObjectReference(question2.getChild(1))));
-
-		DiagramLink forkTable2Link = new DiagramLink(nodeFork, nodeTable2);
-		forkTable2Link.setJointjsId(IdGenerator.createId());
-		forkTable2Link.setType(DiagramObjectType.LINK);
-		forkTable2Link.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(question2), new ExpressionValueTreeObjectReference(question2.getChild(0))));
+		DiagramLink startTable = new DiagramLink(nodeSource, nodeTable);
+		startTable.setJointjsId(IdGenerator.createId());
+		startTable.setType(DiagramObjectType.LINK);
+		DiagramLink tableExpression = new DiagramLink(nodeTable, nodeExpression);
+		tableExpression.setJointjsId(IdGenerator.createId());
+		tableExpression.setType(DiagramObjectType.LINK);
+		DiagramLink subdiagramEnd = new DiagramLink(nodeExpression, nodeSink);
+		subdiagramEnd.setJointjsId(IdGenerator.createId());
+		subdiagramEnd.setType(DiagramObjectType.LINK);
 
 		mainDiagram.addDiagramObject(diagramStartNode);
-		mainDiagram.addDiagramObject(diagramForkNode);
-		mainDiagram.addDiagramObject(diagramTableRuleNode1);
-		mainDiagram.addDiagramObject(diagramTableRuleNode2);
-//		mainDiagram.addDiagramObject(diagramEndNode);
-
-		mainDiagram.addDiagramObject(startForkLink);
-		mainDiagram.addDiagramObject(forkTable1Link);
-		mainDiagram.addDiagramObject(forkTable2Link);
+		mainDiagram.addDiagramObject(diagramTableRuleNode);
+		mainDiagram.addDiagramObject(diagramExpressionNode);
+		mainDiagram.addDiagramObject(diagramEndNode);
+		mainDiagram.addDiagramObject(startTable);
+		mainDiagram.addDiagramObject(tableExpression);
+		mainDiagram.addDiagramObject(subdiagramEnd);
 
 		form.addDiagram(mainDiagram);
 
 		return form;
 	}
 
+	// private Diagram createExpressionsSubdiagram(Form form) {
+	// Diagram subDiagram = new Diagram("expressionDiagram");
+	// for (ExpressionChain expressionChain : form.getExpressionChain()) {
+	//
+	// DiagramSource diagramSource = new DiagramSource();
+	// diagramSource.setJointjsId(IdGenerator.createId());
+	// diagramSource.setType(DiagramObjectType.SOURCE);
+	// Node nodeSource = new Node(diagramSource.getJointjsId());
+	//
+	// DiagramCalculation diagramExpression = new DiagramCalculation();
+	// diagramExpression.setFormExpression(expressionChain);
+	// diagramExpression.setJointjsId(IdGenerator.createId());
+	// diagramExpression.setType(DiagramObjectType.CALCULATION);
+	// Node nodeRule = new Node(diagramExpression.getJointjsId());
+	//
+	// DiagramSink diagramSink = new DiagramSink();
+	// diagramSink.setJointjsId(IdGenerator.createId());
+	// diagramSink.setType(DiagramObjectType.SINK);
+	// Node nodeSink = new Node(diagramSink.getJointjsId());
+	//
+	// DiagramLink diagramLinkSourceRule = new DiagramLink(nodeSource,
+	// nodeRule);
+	// diagramLinkSourceRule.setJointjsId(IdGenerator.createId());
+	// diagramLinkSourceRule.setType(DiagramObjectType.LINK);
+	// DiagramLink diagramLinkRuleSink = new DiagramLink(nodeRule, nodeSink);
+	// diagramLinkRuleSink.setJointjsId(IdGenerator.createId());
+	// diagramLinkRuleSink.setType(DiagramObjectType.LINK);
+	//
+	// subDiagram.addDiagramObject(diagramSource);
+	// subDiagram.addDiagramObject(diagramExpression);
+	// subDiagram.addDiagramObject(diagramSink);
+	// subDiagram.addDiagramObject(diagramLinkSourceRule);
+	// subDiagram.addDiagramObject(diagramLinkRuleSink);
+	// }
+	// return subDiagram;
+	// }
+
 	static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
+	}
+
+	private Category getCategoryFromForm(Form form, String catName) {
+		for (TreeObject child : form.getAll(Category.class)) {
+			if ((child instanceof Category) && child.getName().equals(catName)) {
+				return (Category) child;
+			}
+		}
+		return null;
+	}
+
+	private Question getQuestionFromCategory(Category category, String questionName) {
+		for (TreeObject question : category.getAll(Question.class)) {
+			if (question.getName().equals(questionName)) {
+				return (Question) question;
+			}
+		}
+		return null;
 	}
 }

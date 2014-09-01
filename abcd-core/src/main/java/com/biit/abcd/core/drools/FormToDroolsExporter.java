@@ -1,6 +1,8 @@
 package com.biit.abcd.core.drools;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,8 +54,7 @@ public class FormToDroolsExporter {
 				formRules = new FormParser(form);
 				this.droolsRules = formRules.getRules();
 //				System.out.println(formRules.getRules());
-				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"),
-				// formRules.getRules().getBytes());
+				Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 

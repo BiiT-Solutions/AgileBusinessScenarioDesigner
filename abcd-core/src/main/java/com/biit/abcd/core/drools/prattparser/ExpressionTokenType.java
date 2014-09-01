@@ -49,6 +49,8 @@ public enum ExpressionTokenType {
 			return "BETWEEN(";
 		case IN:
 			return "IN(";
+		case MIN:
+			return "MIN(";
 		default:
 			return null;
 		}

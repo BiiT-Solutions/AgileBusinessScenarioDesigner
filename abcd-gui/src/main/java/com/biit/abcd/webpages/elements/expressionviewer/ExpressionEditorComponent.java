@@ -86,7 +86,23 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 		});
 		setTab(formVariablesLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
 
-		// Third tab
+		// Third Tab
+		TabFormGenericTreeObjectLayout formVariablesScopeLayout = new TabFormGenericTreeObjectLayout();
+		formVariablesScopeLayout.addNewElementListener(new ElementAddedListener() {
+			@Override
+			public void elementAdded(Object newElement) {
+				if (getSelectedViewer() != null) {
+					getSelectedViewer().addElementToSelected((Expression) newElement);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
+							+ " with 'Value: " + newElement + "'.");
+				}
+			}
+		});
+		setTab(formVariablesScopeLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
+
+		// Fourth tab
 		TabGlobalConstantsLayout globalConstantLayout = new TabGlobalConstantsLayout();
 		globalConstantLayout.addNewElementListener(new ElementAddedListener() {
 
@@ -103,22 +119,6 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 
 		});
 		setTab(globalConstantLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
-
-		// Fourth Tab
-		TabFormGenericTreeObjectLayout formVariablesScopeLayout = new TabFormGenericTreeObjectLayout();
-		formVariablesScopeLayout.addNewElementListener(new ElementAddedListener() {
-			@Override
-			public void elementAdded(Object newElement) {
-				if (getSelectedViewer() != null) {
-					getSelectedViewer().addElementToSelected((Expression) newElement);
-
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
-							+ " with 'Value: " + newElement + "'.");
-				}
-			}
-		});
-		setTab(formVariablesScopeLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
 	}
 
 	/**

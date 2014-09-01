@@ -1,5 +1,6 @@
 package com.biit.abcd.core.drools.rules;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import com.biit.abcd.core.drools.prattparser.Parser;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementDroolsVisitor;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -27,6 +29,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
@@ -35,6 +38,7 @@ import com.biit.form.TreeObject;
 public class GenericParser {
 
 	private HashMap<TreeObject, String> treeObjectDroolsname;
+	private boolean cleaningNeeded = true;
 
 	public GenericParser() {
 		this.treeObjectDroolsname = new HashMap<TreeObject, String>();
@@ -66,7 +70,9 @@ public class GenericParser {
 				ruleCore += this.parseActions(actions);
 			}
 		}
-		ruleCore = Utils.newRemoveDuplicateLines(ruleCore);
+		if (this.cleaningNeeded) {
+			ruleCore = Utils.newRemoveDuplicateLines(ruleCore);
+		}
 		return ruleCore;
 	}
 
@@ -211,11 +217,12 @@ public class GenericParser {
 	}
 
 	private String processParserResult(ExpressionChain parsedExpression) {
-		// All the expressions without functions should pass this condition
+		// All the expressions without functions should pass this condition and
+		// some generic functions too
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();
 
-			// Operator EQUALS
+			// Operators
 			if (expressions.get(1) instanceof ExpressionOperatorLogic) {
 				switch (((ExpressionOperatorLogic) expressions.get(1)).getValue()) {
 				case EQUALS:
@@ -230,6 +237,14 @@ public class GenericParser {
 					return this.questionGeGtLeLtAnswer(expressions, AvailableOperator.LESS_EQUALS);
 				case LESS_THAN:
 					return this.questionGeGtLeLtAnswer(expressions, AvailableOperator.LESS_THAN);
+				default:
+					break;
+				}
+			} else if (expressions.get(1) instanceof ExpressionFunction) {
+				switch (((ExpressionFunction) expressions.get(1)).getValue()) {
+				case MIN:
+					// return this.genericMinFunction(expressions);
+					break;
 				default:
 					break;
 				}
@@ -338,13 +353,22 @@ public class GenericParser {
 	 * @return RHS of the rule, and sometimes a modified LHS
 	 */
 	private String parseExpressions(List<Expression> actions, String extraConditions) {
+		System.out.println("PARSING EXPRESSION: " + actions);
 		// A.k.a Expression
 		// Action type => cat.score = min(q1.score, q2.score, ...)
 		if ((actions.get(0) instanceof ExpressionValueCustomVariable)
 				&& (actions.get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
 				&& (actions.get(2) instanceof ExpressionFunction)) {
+			System.out.println("PARSING NORMAL EXPRESSIONS");
 			return this.assignationFunctionAction(actions, extraConditions);
+
+		} else if ((actions.get(0) instanceof ExpressionValueGenericCustomVariable)
+				&& (actions.get(1) instanceof ExpressionOperatorMath)
+				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
+				&& (actions.get(2) instanceof ExpressionFunction)) {
+			System.out.println("PARSING GENERIC EXPRESSIONS");
+			return this.genericAssignationFunctionAction(actions, extraConditions);
 		}
 		return "";
 	}
@@ -996,6 +1020,9 @@ public class GenericParser {
 	 * @return the rule
 	 */
 	private String assignationFunctionAction(List<Expression> actions, String extraConditions) {
+
+		System.out.println("ACTIONS :" + actions);
+
 		String ruleCore = "";
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
@@ -1006,15 +1033,15 @@ public class GenericParser {
 		ExpressionValueCustomVariable variableToCalculate = (ExpressionValueCustomVariable) actions.get(0);
 		// The rule is different if the variable to assign is a Form, a Category
 		// or a Group
-		TreeObject treeObject = variableToCalculate.getReference();
-		if (treeObject instanceof Form) {
-			ruleCore += this.simpleFormCondition((Form) treeObject);
+		TreeObject leftTreeObject = variableToCalculate.getReference();
+		if (leftTreeObject instanceof Form) {
+			ruleCore += this.simpleFormCondition((Form) leftTreeObject);
 
-		} else if (treeObject instanceof Category) {
-			ruleCore += this.simpleCategoryConditions((Category) treeObject);
+		} else if (leftTreeObject instanceof Category) {
+			ruleCore += this.simpleCategoryConditions((Category) leftTreeObject);
 
-		} else if (treeObject instanceof Group) {
-			ruleCore += this.simpleGroupConditions((Group) treeObject);
+		} else if (leftTreeObject instanceof Group) {
+			ruleCore += this.simpleGroupConditions((Group) leftTreeObject);
 		}
 
 		int varIndex = 1;
@@ -1044,6 +1071,50 @@ public class GenericParser {
 					ruleCore += "== '" + to.getName() + "' || ";
 				}
 				varIndex++;
+			}
+			// Generic variable inside the function
+			else if (expression instanceof ExpressionValueGenericCustomVariable) {
+				ExpressionValueGenericCustomVariable aux = (ExpressionValueGenericCustomVariable) expression;
+				List<TreeObject> treeObjects = new ArrayList<TreeObject>();
+				cVar = aux.getVariable();
+				switch (aux.getType()) {
+				case CATEGORY:
+					scopeClass = "Category";
+					for (TreeObject to : leftTreeObject.getChildren()) {
+						if (to instanceof Category) {
+							treeObjects.add(to);
+						}
+					}
+					break;
+				case GROUP:
+					scopeClass = "Group";
+					for (TreeObject to : leftTreeObject.getChildren()) {
+						if (to instanceof Group) {
+							treeObjects.add(to);
+						}
+					}
+					break;
+				case QUESTION_CATEGORY:
+				case QUESTION_GROUP:
+					scopeClass = "Question";
+					for (TreeObject to : leftTreeObject.getChildren()) {
+						if (to instanceof Question) {
+							treeObjects.add(to);
+						}
+					}
+					break;
+				}
+				int genericVarIndex = 1;
+				for (TreeObject to : treeObjects) {
+					if (genericVarIndex == 1) {
+						ruleCore += "	$var : List() from collect( " + scopeClass + "(isScoreSet('" + cVar.getName()
+								+ "'), getTag() == '" + to.getName() + "' || ";
+					} else {
+						ruleCore += "== '" + to.getName() + "' || ";
+					}
+					genericVarIndex++;
+					parent = to.getParent();
+				}
 			}
 		}
 		// Finish the line of the condition
@@ -1083,6 +1154,85 @@ public class GenericParser {
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 					+ variableToCalculate.getReference().getName() + ", " + variableToCalculate.getVariable().getName()
 					+ ", \" + $sol +\")\");\n";
+		}
+		return ruleCore;
+	}
+
+	/**
+	 * Generic expression parser.<br>
+	 * Works like the expression parser but allows generic variables <br>
+	 *
+	 * @param actions
+	 *            the expression being parsed
+	 * @param extraConditions
+	 * @return the rule
+	 */
+	private String genericAssignationFunctionAction(List<Expression> actions, String extraConditions) {
+		String ruleCore = "";
+//		if (extraConditions != null) {
+//			ruleCore += extraConditions;
+//		}
+		// LHS
+//		// We will have some expression of type Category.score = (Min | Max |
+//		// Avg) of some values
+//		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) actions
+//				.get(0);
+		// we have to generate a set of rules defined by the generic variable
+		ruleCore += this.genericRuleSet(actions, extraConditions);
+		// switch (genericVarToCalculate.getType()) {
+		// case CATEGORY:
+		// ruleCore += this.genericCategoryRuleSet(actions, extraConditions);
+		// default:
+		// break;
+		// }
+		this.cleaningNeeded = false;
+		return ruleCore;
+	}
+
+	/**
+	 * Creates a set of expressions and passes it back to the expression parser
+	 *
+	 * @param expressions
+	 * @param extraConditions
+	 * @return
+	 */
+	// TODO
+	private String genericRuleSet(List<Expression> expressions, String extraConditions) {
+		String ruleCore = "";
+		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) expressions
+				.get(0);
+
+		List<TreeObject> treeObjects = new ArrayList<TreeObject>();
+		switch (genericVarToCalculate.getType()) {
+		case CATEGORY:
+			treeObjects.addAll(genericVarToCalculate.getVariable().getForm().getChildren());
+			break;
+		case GROUP:
+			for(TreeObject category : genericVarToCalculate.getVariable().getForm().getChildren()){
+				treeObjects.addAll(category.getChildren());
+			}
+			break;
+		default:
+			break;
+		}
+
+		// For each category, we generate the expression to create a new rule
+		if(treeObjects != null) {
+			for (TreeObject category : treeObjects) {
+				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
+						genericVarToCalculate.getVariable());
+				// Remove the generic
+				expressions.remove(0);
+				// Add the specific
+				expressions.add(0, expValCat);
+
+				try {
+					ruleCore += new ExpressionParser().parse(expressions, extraConditions);
+					System.out.println(ruleCore);
+				} catch (ExpressionInvalidException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return ruleCore;
 	}
@@ -1300,4 +1450,7 @@ public class GenericParser {
 				+ ".getQuestions()\n";
 	}
 
+	// private String genericMinFunction(List<Expression> expressions) {
+	//
+	// }
 }

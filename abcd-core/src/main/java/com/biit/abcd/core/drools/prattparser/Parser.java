@@ -9,8 +9,11 @@ import java.util.Map;
 import com.biit.abcd.core.drools.prattparser.parselets.InfixParselet;
 import com.biit.abcd.core.drools.prattparser.parselets.PrefixParselet;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
 
@@ -45,25 +48,39 @@ public class Parser {
 			}
 		}
 
-//		 for (Entry<String, ExpressionTokenType> entry :
-//		 this.mPunctuators.entrySet()) {
-//		 System.out.println("Punctuator KEY: " + entry.getKey() + " TYPE: " +
-//		 entry.getValue() + " CLASS: "
-//		 + entry.getKey().getClass());
-//		 }
+		// for (Entry<String, ExpressionTokenType> entry :
+		// this.mPunctuators.entrySet()) {
+		// System.out.println("Punctuator KEY: " + entry.getKey() + " TYPE: " +
+		// entry.getValue() + " CLASS: "
+		// + entry.getKey().getClass());
+		// }
 
-		for (Expression expression : tokens) {
+		for (int expIndex = 0; expIndex < tokens.size(); expIndex++) {
+			Expression expression = tokens.get(expIndex);
+//			System.out.println("EXPRESSION : " + expression);
+//			System.out.println("EXPRESSION CLASS : " + expression.getClass());
+			if ((expression instanceof ExpressionOperatorMath)
+					&& ((ExpressionOperatorMath) expression).getValue().equals(AvailableOperator.ASSIGNATION)
+					&& ((expIndex + 1) <= tokens.size())) {
+				Expression auxExp = tokens.get(expIndex + 1);
+				if (auxExp instanceof ExpressionFunction) {
+					// We skip the assignation, because the function needs to be
+					// an infix operator
+					continue;
+				}
+			}
 			// If it is an operator
 			if (expression instanceof IExpressionType<?>) {
-				String expressionType = ((IExpressionType<?>) expression).getValue().toString();
+				// System.out.println("EXPRESSION TYPE : " + expression);
 
-//				System.out.println("EXPRESSION TYPE: " + expressionType);
+				String expressionType = ((IExpressionType<?>) expression).getValue().toString();
 
 				if (this.mPunctuators.containsKey(expressionType)) {
 					expTokenList.add(new ExpressionToken(this.mPunctuators.get(expressionType), expression));
 				}
 			} else if (expression instanceof ExpressionChain) {
-//				System.out.println("INTERNAL EXPRESSION CHAIN: " + ((ExpressionChain) expression).getExpressions());
+				// System.out.println("INTERNAL EXPRESSION CHAIN: " +
+				// ((ExpressionChain) expression).getExpressions());
 
 				this.preParsing(((ExpressionChain) expression).getExpressions());
 			} else {
@@ -90,7 +107,12 @@ public class Parser {
 
 	public ITreeElement parseExpression(int precedence) {
 		ExpressionToken token = this.consume();
+
+		// System.out.println("TOKEN CONSUMED 1: " + token);
+
 		PrefixParselet prefix = this.mPrefixParselets.get(token.getType());
+
+		// System.out.println("TOKEN CONSUMED 2: " + prefix);
 
 		if (prefix == null) {
 			throw new ParseException("Could not parse \"" + token.toString() + "\".");
@@ -101,7 +123,11 @@ public class Parser {
 		while (precedence < this.getPrecedence()) {
 			token = this.consume();
 
+			// System.out.println("TOKEN CONSUMED 3: " + token);
+
 			InfixParselet infix = this.mInfixParselets.get(token.getType());
+
+			// System.out.println("TOKEN CONSUMED 4: " + infix);
 			left = infix.parse(this, left, token);
 		}
 		return left;
