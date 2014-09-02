@@ -52,6 +52,7 @@
 		<biit-common-utils.version>0.1.0</biit-common-utils.version>
 		<form-structure.version>0.1.2</form-structure.version>
 		<orbeon-form-reader.version>0.2.0</orbeon-form-reader.version>
+		<apache-poi.version>3.10.1</apache-poi.version>
 		<root.directory>${project.basedir}</root.directory>
 	</properties>
 

@@ -1,15 +1,16 @@
 package com.biit.abcd.core.drools.rules;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.poi.ss.formula.functions.FinanceLib;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionChainParser;
 import com.biit.abcd.core.drools.prattparser.ParseException;
 import com.biit.abcd.core.drools.prattparser.Parser;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
-import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
-import com.biit.abcd.core.drools.prattparser.visitor.TreeElementDroolsVisitor;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
@@ -53,6 +54,7 @@ public class GenericParser {
 	}
 
 	public String createDroolsRule(List<Expression> conditions, List<Expression> actions, String extraConditions) {
+		// TODO
 		String ruleCore = "";
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
@@ -78,11 +80,11 @@ public class GenericParser {
 
 	private String parseConditions(List<Expression> conditions) {
 		Parser parser = new ExpressionChainParser(conditions);
-		ITreeElement resultVisitor = null;
+		ITreeElement result = null;
 		try {
-			resultVisitor = parser.parseExpression();
-			ITreeElementVisitor treePrint = new TreeElementDroolsVisitor();
-			resultVisitor.accept(treePrint);
+			result = parser.parseExpression();
+			// ITreeElementVisitor treePrint = new TreeElementDroolsVisitor();
+			// resultVisitor.accept(treePrint);
 		} catch (ParseException ex) {
 			AbcdLogger.errorMessage(this.getClass().getName(), ex);
 		}
@@ -92,7 +94,7 @@ public class GenericParser {
 		// engine. The expression chain has AST (abstract syntax tree) form
 		// *******************************************************************************************************
 
-		return this.processParserResult(resultVisitor.getExpressionChain());
+		return this.processParserResult(result.getExpressionChain());
 
 		// // Condition of type (something AND something AND ...) or (something
 		// OR
@@ -317,19 +319,26 @@ public class GenericParser {
 	 * @return RHS of the rule, and sometimes a modified LHS
 	 */
 	private String parseActions(List<Expression> actions) {
+		Parser parser = new ExpressionChainParser(actions);
+		ITreeElement result = null;
+		try {
+			result = parser.parseExpression();
+		} catch (ParseException ex) {
+			AbcdLogger.errorMessage(this.getClass().getName(), ex);
+		}
+
 		// Action type => (cat.scoreText = "someText") || (cat.score =
 		// someValue)
-		if ((actions.size() == 3)
-				&& (actions.get(0) instanceof ExpressionValueCustomVariable)
+		if ((actions.get(0) instanceof ExpressionValueCustomVariable)
 				&& (actions.get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
-				&& ((actions.get(2) instanceof ExpressionValueString) || (actions.get(2) instanceof ExpressionValueNumber))) {
-			return this.assignationAction(actions);
+				&& ((actions.get(2) instanceof ExpressionValueString)
+						|| (actions.get(2) instanceof ExpressionValueNumber) || (actions.get(2) instanceof ExpressionFunction))) {
 
+			return this.assignationAction(result.getExpressionChain());
 		}
 		// Action type => cat.scoreText = cat.scoreText + 1
-		else if ((actions.size() == 5)
-				&& (actions.get(0) instanceof ExpressionValueCustomVariable)
+		else if ((actions.get(0) instanceof ExpressionValueCustomVariable)
 				&& (actions.get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
 				&& ((actions.get(2) instanceof ExpressionValueCustomVariable) || (actions.get(2) instanceof ExpressionValueNumber))
@@ -353,21 +362,25 @@ public class GenericParser {
 	 * @return RHS of the rule, and sometimes a modified LHS
 	 */
 	private String parseExpressions(List<Expression> actions, String extraConditions) {
-		System.out.println("PARSING EXPRESSION: " + actions);
 		// A.k.a Expression
 		// Action type => cat.score = min(q1.score, q2.score, ...)
 		if ((actions.get(0) instanceof ExpressionValueCustomVariable)
 				&& (actions.get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
 				&& (actions.get(2) instanceof ExpressionFunction)) {
-			System.out.println("PARSING NORMAL EXPRESSIONS");
-			return this.assignationFunctionAction(actions, extraConditions);
+			switch (((ExpressionFunction) actions.get(2)).getValue()) {
+			case MAX:
+			case MIN:
+			case AVG:
+				return this.maxMinAvgAssignationFunctionAction(actions, extraConditions);
+			case PMT:
+				return this.pmtAssignationFunctionAction(actions, extraConditions);
+			}
 
 		} else if ((actions.get(0) instanceof ExpressionValueGenericCustomVariable)
 				&& (actions.get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
 				&& (actions.get(2) instanceof ExpressionFunction)) {
-			System.out.println("PARSING GENERIC EXPRESSIONS");
 			return this.genericAssignationFunctionAction(actions, extraConditions);
 		}
 		return "";
@@ -913,7 +926,8 @@ public class GenericParser {
 	}
 
 	/**
-	 * Parse actions like => Score = stringValue || Score = numberValue <br>
+	 * Parse actions like => Score = stringValue || Score = numberValue || Score
+	 * = Function (parameters ...)<br>
 	 * Create drools rule like => setVariableValue(scopeOfVariable,
 	 * variableName, stringVariableValue )
 	 *
@@ -930,19 +944,77 @@ public class GenericParser {
 
 		ruleCore += Utils.getThenRuleString();
 
-		if (actions.get(2) instanceof ExpressionValueString) {
-			ExpressionValueString valueString = (ExpressionValueString) actions.get(2);
+		if ((actions.get(2) instanceof ExpressionValueString) || (actions.get(2) instanceof ExpressionValueNumber)) {
+			ExpressionValue value = (ExpressionValue) actions.get(2);
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
-					+ var.getVariable().getName() + "', '" + valueString.getValue() + "');\n";
+					+ var.getVariable().getName() + "', " + value.getValue() + ");\n";
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
-					+ var.getVariable().getName() + ", " + valueString.getValue() + ")\");\n";
+					+ var.getVariable().getName() + ", " + value.getValue() + ")\");\n";
+		} else if (actions.get(2) instanceof ExpressionFunction) {
+			switch (((ExpressionFunction) actions.get(2)).getValue()) {
+			case PMT:
+				String value = this.calculatePMT(actions.subList(3, 6));
+				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
+						+ var.getVariable().getName() + "', " + value + ");\n";
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
+						+ var.getVariable().getName() + ", " + value + ")\");\n";
+				break;
+			default:
+				break;
+			}
+		}
+		return ruleCore;
+	}
 
-		} else if (actions.get(2) instanceof ExpressionValueNumber) {
-			ExpressionValueNumber valueNumber = (ExpressionValueNumber) actions.get(2);
-			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
-					+ var.getVariable().getName() + "', " + valueNumber.getValue() + ");\n";
-			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
-					+ var.getVariable().getName() + ", " + valueNumber.getValue() + ")\");\n";
+	/**
+	 * Parse actions like => Score = stringValue || Score = numberValue || Score
+	 * = Function (parameters ...)<br>
+	 * Create drools rule like => setVariableValue(scopeOfVariable,
+	 * variableName, stringVariableValue )
+	 *
+	 * @param actions
+	 *            the action of the rule being parsed
+	 * @return the RHS of the rule
+	 */
+	private String assignationAction(ExpressionChain actionChain) {
+		String ruleCore = "";
+		List<Expression> actions = actionChain.getExpressions();
+		ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) ((ExpressionChain) actions.get(0))
+				.getExpressions().get(0);
+		// Check if the reference exists in the rule, if not, it creates a new
+		// reference
+		ruleCore += this.checkVariableAssignation(var);
+
+		ruleCore += Utils.getThenRuleString();
+
+		Object auxVal = actions.get(1);
+		if ((auxVal instanceof ExpressionChain)) {
+			auxVal = ((ExpressionChain) auxVal).getExpressions().get(0);
+			ExpressionValue value = (ExpressionValue) auxVal;
+			if (auxVal instanceof ExpressionValueString) {
+				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
+						+ var.getVariable().getName() + "', '" + value.getValue() + "');\n";
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
+						+ var.getVariable().getName() + ", " + value.getValue() + ")\");\n";
+
+			} else if (auxVal instanceof ExpressionValueNumber) {
+				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
+						+ var.getVariable().getName() + "', " + value.getValue() + ");\n";
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
+						+ var.getVariable().getName() + ", " + value.getValue() + ")\");\n";
+			}
+		} else if (auxVal instanceof ExpressionFunction) {
+			switch (((ExpressionFunction) auxVal).getValue()) {
+			case PMT:
+				String value = this.calculatePMT(actions.subList(2, 5));
+				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
+						+ var.getVariable().getName() + "', " + value + ");\n";
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
+						+ var.getVariable().getName() + ", " + value + ")\");\n";
+				break;
+			default:
+				break;
+			}
 		}
 		return ruleCore;
 	}
@@ -1019,10 +1091,7 @@ public class GenericParser {
 	 * @param extraConditions
 	 * @return the rule
 	 */
-	private String assignationFunctionAction(List<Expression> actions, String extraConditions) {
-
-		System.out.println("ACTIONS :" + actions);
-
+	private String maxMinAvgAssignationFunctionAction(List<Expression> actions, String extraConditions) {
 		String ruleCore = "";
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
@@ -1158,6 +1227,70 @@ public class GenericParser {
 		return ruleCore;
 	}
 
+	private String pmtAssignationFunctionAction(List<Expression> actions, String extraConditions) {
+		String ruleCore = "";
+		if (extraConditions != null) {
+			ruleCore += extraConditions;
+		}
+		ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) actions.get(0);
+		// Check if the reference exists in the rule, if not, it creates a new
+		// reference
+		ruleCore += this.checkVariableAssignation(var);
+
+		ruleCore += Utils.getThenRuleString();
+
+		ExpressionFunction auxFunc = (ExpressionFunction) actions.get(2);
+		switch (auxFunc.getValue()) {
+		case PMT:
+			actions = Arrays.asList(actions.get(3), actions.get(5), actions.get(7));
+			String value = this.calculatePMT(actions);
+			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
+					+ var.getVariable().getName() + "', " + value + ");\n";
+			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
+					+ var.getVariable().getName() + ", " + value + ")\");\n";
+			break;
+		default:
+			break;
+		}
+		return ruleCore;
+	}
+
+	/**
+	 * Receives a list with the three parameters needed to calculate the PMT
+	 * function, (Rate, Months, Present value)<br>
+	 * We make use of the Apache POI lib<br>
+	 * For more information:
+	 * http://poi.apache.org/apidocs/org/apache/poi/ss/formula
+	 * /functions/FinanceLib.html
+	 *
+	 * @param actions
+	 * @return
+	 */
+	private String calculatePMT(List<Expression> actions) {
+		String pmt = "";
+		Double rate = null;
+		Double months = null;
+		Double presentValue = null;
+		if (actions.get(0) instanceof ExpressionChain) {
+			rate = (((ExpressionValueNumber) ((ExpressionChain) actions.get(0)).getExpressions().get(0)).getValue() / 100.) / 12.;
+			months = ((ExpressionValueNumber) ((ExpressionChain) actions.get(1)).getExpressions().get(0)).getValue();
+			presentValue = ((ExpressionValueNumber) ((ExpressionChain) actions.get(2)).getExpressions().get(0))
+					.getValue();
+		} else {
+			rate = (((ExpressionValueNumber) actions.get(0)).getValue() / 100.) / 12.;
+			months = ((ExpressionValueNumber) actions.get(1)).getValue();
+			presentValue = ((ExpressionValueNumber) actions.get(2)).getValue();
+		}
+		// Rate, months, present value, future value, beginning of the period
+		if (((rate != null) & (months != null)) || (presentValue != null)) {
+			Double pmtVal = FinanceLib.pmt(rate, months, presentValue, 0, false);
+			// pmt = String.valueOf(pmtVal);
+			pmt = String.format("%.2f", pmtVal);
+			pmt = pmt.replace(",", ".");
+		}
+		return pmt;
+	}
+
 	/**
 	 * Generic expression parser.<br>
 	 * Works like the expression parser but allows generic variables <br>
@@ -1169,14 +1302,15 @@ public class GenericParser {
 	 */
 	private String genericAssignationFunctionAction(List<Expression> actions, String extraConditions) {
 		String ruleCore = "";
-//		if (extraConditions != null) {
-//			ruleCore += extraConditions;
-//		}
+		// if (extraConditions != null) {
+		// ruleCore += extraConditions;
+		// }
 		// LHS
-//		// We will have some expression of type Category.score = (Min | Max |
-//		// Avg) of some values
-//		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) actions
-//				.get(0);
+		// // We will have some expression of type Category.score = (Min | Max |
+		// // Avg) of some values
+		// ExpressionValueGenericCustomVariable genericVarToCalculate =
+		// (ExpressionValueGenericCustomVariable) actions
+		// .get(0);
 		// we have to generate a set of rules defined by the generic variable
 		ruleCore += this.genericRuleSet(actions, extraConditions);
 		// switch (genericVarToCalculate.getType()) {
@@ -1208,7 +1342,7 @@ public class GenericParser {
 			treeObjects.addAll(genericVarToCalculate.getVariable().getForm().getChildren());
 			break;
 		case GROUP:
-			for(TreeObject category : genericVarToCalculate.getVariable().getForm().getChildren()){
+			for (TreeObject category : genericVarToCalculate.getVariable().getForm().getChildren()) {
 				treeObjects.addAll(category.getChildren());
 			}
 			break;
@@ -1217,7 +1351,7 @@ public class GenericParser {
 		}
 
 		// For each category, we generate the expression to create a new rule
-		if(treeObjects != null) {
+		if (treeObjects != null) {
 			for (TreeObject category : treeObjects) {
 				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
 						genericVarToCalculate.getVariable());
@@ -1228,7 +1362,7 @@ public class GenericParser {
 
 				try {
 					ruleCore += new ExpressionParser().parse(expressions, extraConditions);
-					System.out.println(ruleCore);
+//					System.out.println(ruleCore);
 				} catch (ExpressionInvalidException e) {
 					e.printStackTrace();
 				}

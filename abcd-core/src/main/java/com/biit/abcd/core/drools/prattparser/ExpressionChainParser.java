@@ -41,6 +41,7 @@ public class ExpressionChainParser extends Parser {
 		this.register(ExpressionTokenType.BETWEEN, new CallParselet());
 		this.register(ExpressionTokenType.IN, new CallParselet());
 		this.register(ExpressionTokenType.MIN, new CallParselet());
+		this.register(ExpressionTokenType.PMT, new CallParselet());
 
 		// Register the simple operator parselets.
 		this.prefix(ExpressionTokenType.PLUS, Precedence.PREFIX);

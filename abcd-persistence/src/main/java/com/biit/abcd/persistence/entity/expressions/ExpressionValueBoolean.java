@@ -28,7 +28,12 @@ public class ExpressionValueBoolean extends ExpressionValue {
 		return "" + value;
 	}
 
-	public boolean getValue() {
+//	public T getValue() {
+//		return value;
+//	}
+
+	@Override
+	public Object getValue() {
 		return value;
 	}
 

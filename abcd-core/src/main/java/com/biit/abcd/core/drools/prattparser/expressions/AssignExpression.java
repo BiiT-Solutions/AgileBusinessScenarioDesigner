@@ -13,7 +13,6 @@ public class AssignExpression implements ITreeElement {
 	private final ITreeElement rightElement;
 	private final Expression expression;
 
-
 	public AssignExpression(NameExpression expression, ITreeElement right) {
 		this.name = expression.getName();
 		this.expression = expression.getExpressionChain();

@@ -1,5 +1,6 @@
 package com.biit.abcd.core.drools.test;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionChainParser;
@@ -20,6 +21,7 @@ import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -59,118 +61,86 @@ public class PrattParserTest {
 		ExpressionValueGenericCustomVariable expValGenericQuestScore = new ExpressionValueGenericCustomVariable(
 				GenericTreeObjectType.QUESTION_CATEGORY, qVar);
 
-		// // Simple TreeObject equals TreeObject (e.g. Q1 == A1)
-		// String actual = parseDrools(new ExpressionChain(expValQ1,
-		// new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQ1A1));
-		// Assert.assertEquals(actual, "null[null[Q1], ==, null[Q1A1]]");
-		//
-		// // Simple TreeObject.Score equals ValueNumber (e.g. Cat1.score == 10)
-		// actual = parseDrools(new ExpressionChain(expValCVar, new
-		// ExpressionOperatorLogic(AvailableOperator.EQUALS),
-		// expValNumber));
-		// Assert.assertEquals(actual,
-		// "null[null[categoryTest.catVar], ==, null[5]]");
-		//
-		// // Simple AND condition
-		// actual = parseDrools(new ExpressionChain(expValQ1, new
-		// ExpressionOperatorLogic(AvailableOperator.AND), expValQ1));
-		// Assert.assertEquals(actual, "null[null[Q1], &&, null[Q1]]");
-		//
-		// // Simple OR condition
-		// actual = parseDrools(new ExpressionChain(expValQ1, new
-		// ExpressionOperatorLogic(AvailableOperator.OR), expValQ1));
-		// Assert.assertEquals(actual, "null[null[Q1], ||, null[Q1]]");
-		//
-		// // AND|OR conditions combination
-		// actual = parseDrools(new ExpressionChain(expValQ1, new
-		// ExpressionOperatorLogic(AvailableOperator.EQUALS),
-		// expValQ1A1, new ExpressionOperatorLogic(AvailableOperator.OR),
-		// expValQ1, new ExpressionOperatorLogic(
-		// AvailableOperator.EQUALS), expValQ1A1, new
-		// ExpressionOperatorLogic(AvailableOperator.AND),
-		// expValQ1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-		// expValQ1A1));
-		// Assert.assertEquals(actual,
-		// "null[null[null[Q1], ==, null[Q1A1]], ||, null[null[null[Q1], ==, null[Q1A1]], &&, null[null[Q1], ==, null[Q1A1]]]]");
-		//
-		// // Simple TreeObject Between Function (e.g. Q1 between(0, 18))
-		// actual = parseDrools(new ExpressionChain(expValQ1, new
-		// ExpressionFunction(AvailableFunction.BETWEEN),
-		// new ExpressionValueNumber(0.), new
-		// ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
-		// 18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		// Assert.assertEquals(actual,
-		// "null[null[Q1], BETWEEN(, null[0], null[18]]");
-		//
-		// // Simple CustomVariable Between Function (e.g. Q1 between(0, 18))
-		// actual = parseDrools(new ExpressionChain(expValCVar, new
-		// ExpressionFunction(AvailableFunction.BETWEEN),
-		// new ExpressionValueNumber(0.), new
-		// ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
-		// 18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		// Assert.assertEquals(actual,
-		// "null[null[categoryTest.catVar], BETWEEN(, null[0], null[18]]");
-		//
-		// // IN function (e.g. Q IN(A, A, A) AND Q==A)
-		// actual = parseDrools(new ExpressionChain(expValQ1, new
-		// ExpressionFunction(AvailableFunction.IN), expValQ1A1,
-		// new ExpressionSymbol(AvailableSymbol.COMMA), expValQ1A2, new
-		// ExpressionSymbol(AvailableSymbol.COMMA),
-		// expValQ1A2, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new
-		// ExpressionOperatorLogic(
-		// AvailableOperator.AND), expValQ1, new
-		// ExpressionOperatorLogic(AvailableOperator.EQUALS),
-		// expValQ1A1));
-		// Assert.assertEquals(actual,
-		// "null[null[null[Q1], IN(, null[Q1A1], null[Q1A2], null[Q1A2]], &&, null[null[Q1], ==, null[Q1A1]]]");
-		//
-		// // AND function (e.g. Q==A AND Q==A)
-		// actual = parseDrools(new ExpressionChain(expValQ1, new
-		// ExpressionOperatorLogic(AvailableOperator.EQUALS),
-		// expValQ1A1, new ExpressionOperatorLogic(AvailableOperator.AND),
-		// expValQ1, new ExpressionOperatorLogic(
-		// AvailableOperator.EQUALS), expValQ1A1));
-		// Assert.assertEquals(actual,
-		// "null[null[null[Q1], ==, null[Q1A1]], &&, null[null[Q1], ==, null[Q1A1]]]");
-		//
-		// // Q IN (A1, A2) AND Q IN (A1, A2) AND Q==A
-		// actual = parseDrools(new ExpressionChain(expValQ1, new
-		// ExpressionFunction(AvailableFunction.IN), expValQ1A1,
-		// new ExpressionSymbol(AvailableSymbol.COMMA), expValQ1A2, new
-		// ExpressionSymbol(
-		// AvailableSymbol.RIGHT_BRACKET), new
-		// ExpressionOperatorLogic(AvailableOperator.AND), expValQ1,
-		// new ExpressionFunction(AvailableFunction.IN), expValQ1A1, new
-		// ExpressionSymbol(AvailableSymbol.COMMA),
-		// expValQ1A2, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new
-		// ExpressionOperatorLogic(
-		// AvailableOperator.AND), expValQ1, new
-		// ExpressionOperatorLogic(AvailableOperator.EQUALS),
-		// expValQ1A1));
-		// Assert.assertEquals(actual,
-		// "null[null[null[null[Q1], IN(, null[Q1A1], null[Q1A2]], "
-		// + "&&, null[null[Q1], IN(, null[Q1A1], null[Q1A2]]], " +
-		// "&&, null[null[Q1], ==, null[Q1A1]]]");
-		//
-		String actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), expValQVar,
-				new ExpressionSymbol(AvailableSymbol.COMMA), expValQVar, new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET)));
+		// Simple TreeObject equals TreeObject (e.g. Q1 == A1)
+		String actual = parseDrools(new ExpressionChain(expValQ1,
+				new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQ1A1));
+		Assert.assertEquals(actual, "null[null[Q1], ==, null[Q1A1]]");
 
-//		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-//				expValQVar));
-		//
-		// System.out.println(actual);
+		// Simple TreeObject.Score equals ValueNumber (e.g. Cat1.score == 10)
+		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				expValNumber));
+		Assert.assertEquals(actual, "null[null[categoryTest.catVar], ==, null[5]]");
 
-		 // Generics test
-		 actual = parseDrools(new ExpressionChain(expValGenericCatScore, new
-				 ExpressionOperatorMath(
-		 AvailableOperator.ASSIGNATION), new
-		 ExpressionFunction(AvailableFunction.MIN), expValGenericQuestScore,
-		 new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// Simple AND condition
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionOperatorLogic(AvailableOperator.AND), expValQ1));
+		Assert.assertEquals(actual, "null[null[Q1], &&, null[Q1]]");
 
-		 System.out.println(actual);
+		// Simple OR condition
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionOperatorLogic(AvailableOperator.OR), expValQ1));
+		Assert.assertEquals(actual, "null[null[Q1], ||, null[Q1]]");
 
+		// AND|OR conditions combination
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				expValQ1A1, new ExpressionOperatorLogic(AvailableOperator.OR), expValQ1, new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), expValQ1A1, new ExpressionOperatorLogic(AvailableOperator.AND),
+				expValQ1, new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQ1A1));
+		Assert.assertEquals(actual,
+				"null[null[null[Q1], ==, null[Q1A1]], ||, null[null[null[Q1], ==, null[Q1A1]], &&, null[null[Q1], ==, null[Q1A1]]]]");
+
+		// Simple TreeObject Between Function (e.g. Q1 between(0, 18))
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionFunction(AvailableFunction.BETWEEN),
+				new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+						18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, "null[null[Q1], BETWEEN(, null[0], null[18]]");
+
+		// Simple CustomVariable Between Function (e.g. Q1 between(0, 18))
+		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionFunction(AvailableFunction.BETWEEN),
+				new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+						18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, "null[null[categoryTest.catVar], BETWEEN(, null[0], null[18]]");
+
+		// IN function (e.g. Q IN(A, A, A) AND Q==A)
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionFunction(AvailableFunction.IN), expValQ1A1,
+				new ExpressionSymbol(AvailableSymbol.COMMA), expValQ1A2, new ExpressionSymbol(AvailableSymbol.COMMA),
+				expValQ1A2, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
+						AvailableOperator.AND), expValQ1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				expValQ1A1));
+		Assert.assertEquals(actual,
+				"null[null[null[Q1], IN(, null[Q1A1], null[Q1A2], null[Q1A2]], &&, null[null[Q1], ==, null[Q1A1]]]");
+
+		// AND function (e.g. Q==A AND Q==A)
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				expValQ1A1, new ExpressionOperatorLogic(AvailableOperator.AND), expValQ1, new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), expValQ1A1));
+		Assert.assertEquals(actual, "null[null[null[Q1], ==, null[Q1A1]], &&, null[null[Q1], ==, null[Q1A1]]]");
+
+		// Q IN (A1, A2) AND Q IN (A1, A2) AND Q==A
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionFunction(AvailableFunction.IN), expValQ1A1,
+				new ExpressionSymbol(AvailableSymbol.COMMA), expValQ1A2, new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.AND), expValQ1,
+				new ExpressionFunction(AvailableFunction.IN), expValQ1A1, new ExpressionSymbol(AvailableSymbol.COMMA),
+				expValQ1A2, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
+						AvailableOperator.AND), expValQ1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				expValQ1A1));
+		Assert.assertEquals(actual, "null[null[null[null[Q1], IN(, null[Q1A1], null[Q1A2]], "
+				+ "&&, null[null[Q1], IN(, null[Q1A1], null[Q1A2]]], " + "&&, null[null[Q1], ==, null[Q1A1]]]");
+
+		// Cat.score = Min(q.score, q.score)
+		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), expValQVar, new ExpressionSymbol(AvailableSymbol.COMMA),
+				expValQVar, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, "null[null[categoryTest.catVar], MIN(, null[Q1.questVar], null[Q1.questVar]]");
+
+		// Cat.score = Quest.score
+		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				expValQVar));
+		Assert.assertEquals(actual, "null[null[categoryTest.catVar], null[Q1.questVar]]");
+
+		// Generics test
+		actual = parseDrools(new ExpressionChain(expValGenericCatScore, new ExpressionOperatorMath(
+				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), expValGenericQuestScore,
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, "null[null[Categories_catVar], MIN(, null[Category_Questions_questVar]]");
 	}
 
 	/**

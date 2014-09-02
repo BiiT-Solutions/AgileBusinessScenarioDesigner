@@ -57,4 +57,9 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 		return copy;
 	}
 
+	@Override
+	public Object getValue() {
+		return getType();
+	}
+
 }
