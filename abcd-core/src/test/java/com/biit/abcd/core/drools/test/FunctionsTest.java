@@ -95,8 +95,8 @@ public class FunctionsTest {
 		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
 				.getCategory("Justitie");
 
-		Assert.assertEquals(-185.26, testCat1.getNumberVariableValue("cScore"));
-		Assert.assertEquals(-3226.72, testCat2.getNumberVariableValue("cScore"));
+		Assert.assertEquals(185.26, testCat1.getNumberVariableValue("cScore"));
+		Assert.assertEquals(3226.72, testCat2.getNumberVariableValue("cScore"));
 	}
 
 	/**
