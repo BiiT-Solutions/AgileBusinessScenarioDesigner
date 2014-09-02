@@ -54,6 +54,7 @@ public class GenericParser {
 	}
 
 	public String createDroolsRule(List<Expression> conditions, List<Expression> actions, String extraConditions) {
+		this.treeObjectDroolsname.clear();
 		// TODO
 		String ruleCore = "";
 		if (extraConditions != null) {
@@ -221,6 +222,9 @@ public class GenericParser {
 	private String processParserResult(ExpressionChain parsedExpression) {
 		// All the expressions without functions should pass this condition and
 		// some generic functions too
+
+		// System.out.println("PARSED EXPRESSION: " + parsedExpression);
+
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();
 
@@ -232,12 +236,16 @@ public class GenericParser {
 				case AND:
 					return this.andOperator(expressions);
 				case GREATER_EQUALS:
+					// System.out.println("GE");
 					return this.questionGeGtLeLtAnswer(expressions, AvailableOperator.GREATER_EQUALS);
 				case GREATER_THAN:
+					// System.out.println("GT");
 					return this.questionGeGtLeLtAnswer(expressions, AvailableOperator.GREATER_THAN);
 				case LESS_EQUALS:
+					// System.out.println("LE");
 					return this.questionGeGtLeLtAnswer(expressions, AvailableOperator.LESS_EQUALS);
 				case LESS_THAN:
+					// System.out.println("LT");
 					return this.questionGeGtLeLtAnswer(expressions, AvailableOperator.LESS_THAN);
 				default:
 					break;
@@ -286,8 +294,8 @@ public class GenericParser {
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
 				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueNumber)) {
 
-			return this.treeObjectScoreEqualsValueNumber((ExpressionValueCustomVariable) operatorLeft.get(0),
-					(ExpressionValueNumber) operatorRight.get(0));
+			return this.treeObjectScoreLogicOperatorValueNumber((ExpressionValueCustomVariable) operatorLeft.get(0),
+					(ExpressionOperatorLogic) expressions.get(1), (ExpressionValueNumber) operatorRight.get(0));
 		}
 		return "";
 	}
@@ -818,14 +826,15 @@ public class GenericParser {
 	// }
 
 	/**
-	 * Parse conditions like => Score == value. <br>
+	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
 	 * Create drools rule like => Category(isScoreSet('cScore'),
 	 * getVariablevalue('cScore') == value )
 	 *
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
-	private String treeObjectScoreEqualsValueNumber(ExpressionValueCustomVariable var, ExpressionValueNumber valueNumber) {
+	private String treeObjectScoreLogicOperatorValueNumber(ExpressionValueCustomVariable var,
+			ExpressionOperatorLogic operator, ExpressionValueNumber valueNumber) {
 		String ruleCore = "";
 
 		TreeObject scope = var.getReference();
@@ -834,23 +843,26 @@ public class GenericParser {
 		if (scope instanceof Form) {
 			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') == " + valueNumber.getValue() + ")\n";
+					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+					+ valueNumber.getValue() + ") and\n";
 
 		} else if (scope instanceof Category) {
 			TreeObject form = scope.getParent();
 			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
 			ruleCore += this.simpleFormCondition((Form) form);
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Category( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') == " + valueNumber.getValue() + ") from $"
-					+ form.getComparationIdNoDash().toString() + ".getCategory('" + scope.getName() + "')\n";
+					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+					+ valueNumber.getValue() + ") from $" + form.getComparationIdNoDash().toString() + ".getCategory('"
+					+ scope.getName() + "') and\n";
 
 		} else if (scope instanceof Group) {
 			TreeObject category = scope.getParent();
 			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
 			ruleCore += this.simpleCategoryConditions((Category) category);
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Group( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') == " + valueNumber.getValue() + " ) from $"
-					+ category.getComparationIdNoDash().toString() + ".getGroup('" + scope.getName() + "')\n";
+					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+					+ valueNumber.getValue() + " ) from $" + category.getComparationIdNoDash().toString()
+					+ ".getGroup('" + scope.getName() + "') and\n";
 
 		} else if (scope instanceof Question) {
 			TreeObject questionParent = scope.getParent();
@@ -861,8 +873,9 @@ public class GenericParser {
 				ruleCore += this.simpleGroupConditions((Group) questionParent);
 			}
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Question( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') == " + valueNumber.getValue() + " ) from $"
-					+ questionParent.getComparationIdNoDash().toString() + ".getQuestions()\n";
+					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+					+ valueNumber.getValue() + " ) from $" + questionParent.getComparationIdNoDash().toString()
+					+ ".getQuestions() and\n";
 		}
 		return ruleCore;
 	}
@@ -925,46 +938,53 @@ public class GenericParser {
 		return ruleCore;
 	}
 
-//	/**
-//	 * Parse actions like => Score = stringValue || Score = numberValue || Score
-//	 * = Function (parameters ...)<br>
-//	 * Create drools rule like => setVariableValue(scopeOfVariable,
-//	 * variableName, stringVariableValue )
-//	 *
-//	 * @param actions
-//	 *            the action of the rule being parsed
-//	 * @return the RHS of the rule
-//	 */
-//	private String assignationAction(List<Expression> actions) {
-//		String ruleCore = "";
-//		ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) actions.get(0);
-//		// Check if the reference exists in the rule, if not, it creates a new
-//		// reference
-//		ruleCore += this.checkVariableAssignation(var);
-//
-//		ruleCore += Utils.getThenRuleString();
-//
-//		if ((actions.get(2) instanceof ExpressionValueString) || (actions.get(2) instanceof ExpressionValueNumber)) {
-//			ExpressionValue value = (ExpressionValue) actions.get(2);
-//			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
-//					+ var.getVariable().getName() + "', " + value.getValue() + ");\n";
-//			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
-//					+ var.getVariable().getName() + ", " + value.getValue() + ")\");\n";
-//		} else if (actions.get(2) instanceof ExpressionFunction) {
-//			switch (((ExpressionFunction) actions.get(2)).getValue()) {
-//			case PMT:
-//				String value = this.calculatePMT(actions.subList(3, 6));
-//				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
-//						+ var.getVariable().getName() + "', " + value + ");\n";
-//				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
-//						+ var.getVariable().getName() + ", " + value + ")\");\n";
-//				break;
-//			default:
-//				break;
-//			}
-//		}
-//		return ruleCore;
-//	}
+	// /**
+	// * Parse actions like => Score = stringValue || Score = numberValue ||
+	// Score
+	// * = Function (parameters ...)<br>
+	// * Create drools rule like => setVariableValue(scopeOfVariable,
+	// * variableName, stringVariableValue )
+	// *
+	// * @param actions
+	// * the action of the rule being parsed
+	// * @return the RHS of the rule
+	// */
+	// private String assignationAction(List<Expression> actions) {
+	// String ruleCore = "";
+	// ExpressionValueCustomVariable var = (ExpressionValueCustomVariable)
+	// actions.get(0);
+	// // Check if the reference exists in the rule, if not, it creates a new
+	// // reference
+	// ruleCore += this.checkVariableAssignation(var);
+	//
+	// ruleCore += Utils.getThenRuleString();
+	//
+	// if ((actions.get(2) instanceof ExpressionValueString) || (actions.get(2)
+	// instanceof ExpressionValueNumber)) {
+	// ExpressionValue value = (ExpressionValue) actions.get(2);
+	// ruleCore += "	$" + this.getTreeObjectName(var.getReference()) +
+	// ".setVariableValue('"
+	// + var.getVariable().getName() + "', " + value.getValue() + ");\n";
+	// ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" +
+	// var.getReference().getName() + ", "
+	// + var.getVariable().getName() + ", " + value.getValue() + ")\");\n";
+	// } else if (actions.get(2) instanceof ExpressionFunction) {
+	// switch (((ExpressionFunction) actions.get(2)).getValue()) {
+	// case PMT:
+	// String value = this.calculatePMT(actions.subList(3, 6));
+	// ruleCore += "	$" + this.getTreeObjectName(var.getReference()) +
+	// ".setVariableValue('"
+	// + var.getVariable().getName() + "', " + value + ");\n";
+	// ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" +
+	// var.getReference().getName() + ", "
+	// + var.getVariable().getName() + ", " + value + ")\");\n";
+	// break;
+	// default:
+	// break;
+	// }
+	// }
+	// return ruleCore;
+	// }
 
 	/**
 	 * Parse actions like => Score = stringValue || Score = numberValue || Score
@@ -1375,11 +1395,11 @@ public class GenericParser {
 	}
 
 	private String simpleFormCondition(Form form) {
-		// if(this.getTreeObjectName(form)== null){
-		this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
-		return "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm() and\n";
-		// }
-		// return "";
+		if (this.getTreeObjectName(form) == null) {
+			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
+			return "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm() and\n";
+		}
+		return "";
 	}
 
 	private String simpleCategoryConditions(Category category) {
@@ -1387,11 +1407,11 @@ public class GenericParser {
 		Form form = (Form) category.getParent();
 		conditions += this.simpleFormCondition(form);
 
-		// if(this.getTreeObjectName(category)== null){
-		this.putTreeObjectName(category, category.getComparationIdNoDash().toString());
-		conditions += "	$" + category.getComparationIdNoDash().toString() + " : Category() from $"
-				+ form.getComparationIdNoDash().toString() + ".getCategory('" + category.getName() + "') and\n";
-		// }
+		if (this.getTreeObjectName(category) == null) {
+			this.putTreeObjectName(category, category.getComparationIdNoDash().toString());
+			conditions += "	$" + category.getComparationIdNoDash().toString() + " : Category() from $"
+					+ form.getComparationIdNoDash().toString() + ".getCategory('" + category.getName() + "') and\n";
+		}
 		return conditions;
 	}
 
@@ -1399,11 +1419,12 @@ public class GenericParser {
 		String conditions = "";
 		Category category = (Category) group.getParent();
 		conditions += this.simpleCategoryConditions(category);
-		// if(this.getTreeObjectName(group)== null){
-		this.putTreeObjectName(group, group.getComparationIdNoDash().toString());
-		conditions += "	$" + group.getComparationIdNoDash().toString() + " : Group() from $"
-				+ category.getComparationIdNoDash().toString() + ".getGroup('" + group.getName() + "') and\n";
-		// }
+
+		if (this.getTreeObjectName(group) == null) {
+			this.putTreeObjectName(group, group.getComparationIdNoDash().toString());
+			conditions += "	$" + group.getComparationIdNoDash().toString() + " : Group() from $"
+					+ category.getComparationIdNoDash().toString() + ".getGroup('" + group.getName() + "') and\n";
+		}
 		return conditions;
 	}
 
@@ -1413,22 +1434,24 @@ public class GenericParser {
 		if (questionParent instanceof Category) {
 			Category category = (Category) questionParent;
 			conditions += this.simpleCategoryConditions(category);
-			// if(this.getTreeObjectName(question)== null){
-			this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
-			conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
-					+ question.getName() + "') from $" + category.getComparationIdNoDash().toString()
-					+ ".getQuestions()\n";
-			// }
+
+			if (this.getTreeObjectName(question) == null) {
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+				conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
+						+ question.getName() + "') from $" + category.getComparationIdNoDash().toString()
+						+ ".getQuestions()\n";
+			}
 
 		} else if (questionParent instanceof Group) {
 			Group group = (Group) questionParent;
 			conditions += this.simpleGroupConditions(group);
-			// if(this.getTreeObjectName(question)== null){
-			this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
-			conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
-					+ question.getName() + "') from $" + group.getComparationIdNoDash().toString()
-					+ ".getQuestions()\n";
-			// }
+
+			if (this.getTreeObjectName(question) == null) {
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+				conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
+						+ question.getName() + "') from $" + group.getComparationIdNoDash().toString()
+						+ ".getQuestions()\n";
+			}
 		}
 		return conditions;
 	}
@@ -1495,48 +1518,59 @@ public class GenericParser {
 		String droolsConditions = "";
 		List<Expression> operatorLeft = ((ExpressionChain) conditions.get(0)).getExpressions();
 		TreeObject leftReference = null;
-		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)) {
+		if ((operatorLeft.size() == 1) && !(operatorLeft.get(0) instanceof ExpressionValueCustomVariable)) {
 			leftReference = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
-		}
-		if (leftReference != null) {
-			List<Expression> firstExpressionValue = ((ExpressionChain) conditions.get(2)).getExpressions();
-			if ((firstExpressionValue.size() == 1) && (firstExpressionValue.get(0) instanceof ExpressionValueNumber)) {
-				// Get the values of the between expression
-				Double value = ((ExpressionValueNumber) firstExpressionValue.get(0)).getValue();
+			if (leftReference != null) {
+				List<Expression> firstExpressionValue = ((ExpressionChain) conditions.get(2)).getExpressions();
+				if ((firstExpressionValue.size() == 1)
+						&& (firstExpressionValue.get(0) instanceof ExpressionValueNumber)) {
+					// Get the values of the between expression
+					Double value = ((ExpressionValueNumber) firstExpressionValue.get(0)).getValue();
 
-				if (value != null) {
-					TreeObject leftReferenceParent = leftReference.getParent();
-					this.putTreeObjectName(leftReference, leftReference.getComparationIdNoDash().toString());
-					// Check the parent
-					if (leftReferenceParent instanceof Form) {
-						droolsConditions += this.simpleFormCondition((Form) leftReferenceParent);
-					} else if (leftReferenceParent instanceof Category) {
-						droolsConditions += this.simpleCategoryConditions((Category) leftReferenceParent);
-					} else if (leftReferenceParent instanceof Group) {
-						droolsConditions += this.simpleGroupConditions((Group) leftReferenceParent);
-					}
-					if (leftReference instanceof Question) {
-						Question leftQuestion = (Question) leftReference;
-						if (leftQuestion.getAnswerType().equals(AnswerType.INPUT)
-								&& leftQuestion.getAnswerFormat().equals(AnswerFormat.DATE)) {
-							switch (operator) {
-							case GREATER_EQUALS:
-								return this.questionValueDateGreaterEqualsAnswer(leftReferenceParent, leftQuestion,
-										value);
-							case GREATER_THAN:
-								return this
-										.questionValueDateGreaterThanAnswer(leftReferenceParent, leftQuestion, value);
-							case LESS_EQUALS:
-								return this.questionValueDateLessEqualsAnswer(leftReferenceParent, leftQuestion, value);
-							case LESS_THAN:
-								return this.questionValueDateLessThanAnswer(leftReferenceParent, leftQuestion, value);
-							default:
-								break;
+					if (value != null) {
+						TreeObject leftReferenceParent = leftReference.getParent();
+						this.putTreeObjectName(leftReference, leftReference.getComparationIdNoDash().toString());
+						// Check the parent
+						if (leftReferenceParent instanceof Form) {
+							droolsConditions += this.simpleFormCondition((Form) leftReferenceParent);
+						} else if (leftReferenceParent instanceof Category) {
+							droolsConditions += this.simpleCategoryConditions((Category) leftReferenceParent);
+						} else if (leftReferenceParent instanceof Group) {
+							droolsConditions += this.simpleGroupConditions((Group) leftReferenceParent);
+						}
+						if (leftReference instanceof Question) {
+							Question leftQuestion = (Question) leftReference;
+							if (leftQuestion.getAnswerType().equals(AnswerType.INPUT)
+									&& leftQuestion.getAnswerFormat().equals(AnswerFormat.DATE)) {
+								switch (operator) {
+								case GREATER_EQUALS:
+									return this.questionValueDateGreaterEqualsAnswer(leftReferenceParent, leftQuestion,
+											value);
+								case GREATER_THAN:
+									return this.questionValueDateGreaterThanAnswer(leftReferenceParent, leftQuestion,
+											value);
+								case LESS_EQUALS:
+									return this.questionValueDateLessEqualsAnswer(leftReferenceParent, leftQuestion,
+											value);
+								case LESS_THAN:
+									return this.questionValueDateLessThanAnswer(leftReferenceParent, leftQuestion,
+											value);
+								default:
+									break;
+								}
 							}
 						}
 					}
 				}
 			}
+		} else {
+			// System.out.println(conditions);
+			ExpressionValueCustomVariable customVariable = (ExpressionValueCustomVariable) ((ExpressionChain) conditions
+					.get(0)).getExpressions().get(0);
+			ExpressionValueNumber valueNumber = (ExpressionValueNumber) ((ExpressionChain) conditions.get(2))
+					.getExpressions().get(0);
+			droolsConditions += this.treeObjectScoreLogicOperatorValueNumber(customVariable,
+					(ExpressionOperatorLogic) conditions.get(1), valueNumber);
 		}
 		return droolsConditions;
 	}

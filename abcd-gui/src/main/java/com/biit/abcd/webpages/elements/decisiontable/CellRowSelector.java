@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.ItemClickEvent;
@@ -54,11 +56,12 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 				setCursorTo(table, event.getItemId(), event.getPropertyId());
 			} else {
 				// Select row
-				// if the table is a mix of cell editors and Strings, this call will fail
+				// if the table is a mix of cell editors and Strings, this call
+				// will fail
 				// The if condition fixes the problem
-				if(isMixedTable()){
+				if (isMixedTable()) {
 					setCursorTo(table, event.getItemId(), event.getPropertyId());
-				}else{
+				} else {
 					selectRow(table, event.getItemId(), event.getPropertyId());
 				}
 			}
@@ -105,7 +108,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 
 	public void setCurrentSelectedCells(Table table, Set<Cell> cells, Cell cursorCell, boolean propagate) {
 		cleanSelection(table, false);
-		this.selectedCells = cells;
+		selectedCells = cells;
 		this.cursorCell = cursorCell;
 		if (propagate) {
 			fireCellSelectionListener();
@@ -186,7 +189,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		for (Cell cell : selectedCells) {
 			try {
 				((EditCellComponent) table.getItem(cell.getRow()).getItemProperty(cell.getCol()).getValue())
-				.select(false);
+						.select(false);
 			} catch (Exception e) {
 
 			}
@@ -201,11 +204,24 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		cleanSelection(table, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected void paintSelection(Table table) {
 		for (Cell cell : selectedCells) {
-			Object aux = table.getItem(cell.getRow()).getItemProperty(cell.getCol()).getValue();
-			if(aux instanceof EditCellComponent){
-				((EditCellComponent) aux).select(true);
+			Object row = cell.getRow();
+			if (row != null) {
+				Item item = table.getItem(row);
+				if (item != null) {
+					Object column = cell.getCol();
+					if (column != null) {
+						Property property = item.getItemProperty(column);
+						if (property != null) {
+							Object aux = property.getValue();
+							if ((aux != null) && (aux instanceof EditCellComponent)) {
+								((EditCellComponent) aux).select(true);
+							}
+						}
+					}
+				}
 			}
 		}
 		table.refreshRowCache();
@@ -274,13 +290,15 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 	// Fixes the error created when creating a mixed table
 	/**
 	 * Allows having a table with Cell Editors and Strings
-	 * @param value : true to set the table as mixed
+	 *
+	 * @param value
+	 *            : true to set the table as mixed
 	 */
-	public void setMixedTable(boolean value){
-		this.mixedTable = value;
+	public void setMixedTable(boolean value) {
+		mixedTable = value;
 	}
 
-	public boolean isMixedTable(){
+	public boolean isMixedTable() {
 		return mixedTable;
 	}
 }
