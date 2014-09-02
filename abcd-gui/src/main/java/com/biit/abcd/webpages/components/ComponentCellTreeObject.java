@@ -18,20 +18,20 @@ public class ComponentCellTreeObject extends ComponentCell {
 			Question question = (Question) element;
 			switch (question.getAnswerType()) {
 			case MULTI_CHECKBOX:
-				return ThemeIcon.TREE_DESIGNER_QUESTION_CHECKLIST;
+				return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_CHECKLIST;
 			case RADIO:
-				return ThemeIcon.TREE_DESIGNER_QUESTION_RADIOBUTTON;
+				return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_RADIOBUTTON;
 			case INPUT:
 				if (question.getAnswerFormat() != null) {
 					switch (question.getAnswerFormat()) {
 					case DATE:
-						return ThemeIcon.TREE_DESIGNER_QUESTION_DATE;
+						return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_DATE;
 					case NUMBER:
-						return ThemeIcon.TREE_DESIGNER_QUESTION_NUMBER;
+						return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_NUMBER;
 					case POSTAL_CODE:
-						return ThemeIcon.TREE_DESIGNER_QUESTION_POSTALCODE;
+						return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_POSTALCODE;
 					case TEXT:
-						return ThemeIcon.TREE_DESIGNER_QUESTION_TEXT;
+						return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_TEXT;
 					}
 				}
 			}
