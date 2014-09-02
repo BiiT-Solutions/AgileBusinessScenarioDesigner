@@ -97,31 +97,31 @@ public class TableRuleTest {
 		Assert.assertEquals(5.0, testQuestion2.getNumberVariableValue("qScore"));
 	}
 
-//	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
-//	public void testTableRuleSeveralConditionsLoadAndExecution() throws ExpressionInvalidException,
-//			NotValidChildException, NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException,
-//			FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
-//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-//		Form vaadinForm = this.createRuleTestSeveralConditionsForm();
-//		formDrools.parse(vaadinForm);
-//		formDrools.runDroolsRules(this.form);
-//
-//		ICategory testCat1 = this.form.getCategory("Sociaal netwerk");
-//		com.biit.abcd.core.drools.facts.inputform.Question testQuestion1 = (com.biit.abcd.core.drools.facts.inputform.Question) testCat1
-//				.getQuestion("Sociaal.Familie");
-//
-//		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
-//	}
-//
-//	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
-//	public void testTableRuleSpecialConditions() throws ExpressionInvalidException, NotValidChildException,
-//			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-//			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
-//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-//		Form vaadinForm = this.createRuleTestSpecialConditionsForm();
-//		formDrools.parse(vaadinForm);
-//		formDrools.runDroolsRules(this.form);
-//	}
+	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
+	public void testTableRuleSeveralConditionsLoadAndExecution() throws ExpressionInvalidException,
+			NotValidChildException, NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException,
+			FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		Form vaadinForm = this.createRuleTestSeveralConditionsForm();
+		formDrools.parse(vaadinForm);
+		formDrools.runDroolsRules(this.form);
+
+		ICategory testCat1 = this.form.getCategory("Sociaal netwerk");
+		com.biit.abcd.core.drools.facts.inputform.Question testQuestion1 = (com.biit.abcd.core.drools.facts.inputform.Question) testCat1
+				.getQuestion("Sociaal.Familie");
+
+		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
+	}
+
+	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
+	public void testTableRuleSpecialConditions() throws ExpressionInvalidException, NotValidChildException,
+			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
+			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		Form vaadinForm = this.createRuleTestSpecialConditionsForm();
+		formDrools.parse(vaadinForm);
+		formDrools.runDroolsRules(this.form);
+	}
 
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the
