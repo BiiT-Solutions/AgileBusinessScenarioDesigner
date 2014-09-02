@@ -5,7 +5,7 @@ public enum ExpressionTokenType {
 	// Available functions
 	NOT, MAX, MIN, ABS, SQRT, IN, BETWEEN, ROUND, AVG, PMT,
 	// Available operators
-	NULL, AND, OR, EQUALS, NOT_EQUALS, GREATER_THAN, GREATER_EQUALS, LESS_THAN, ASSIGNATION, PLUS, MINUS, MULTIPLICATION, DIVISION, MODULE, POW,
+	NULL, AND, OR, EQUALS, NOT_EQUALS, GREATER_THAN, GREATER_EQUALS, LESS_THAN, LESS_EQUALS, ASSIGNATION, PLUS, MINUS, MULTIPLICATION, DIVISION, MODULE, POW,
 	// Available symbols
 	RIGHT_BRACKET, LEFT_BRACKET, COMMA,
 	// Special types for the parser, end of file and generic name
@@ -53,6 +53,14 @@ public enum ExpressionTokenType {
 			return "MIN(";
 		case PMT:
 			return "PMT(";
+		case GREATER_THAN:
+			return ">";
+		case GREATER_EQUALS:
+			return ">=";
+		case LESS_THAN:
+			return "<";
+		case LESS_EQUALS:
+			return "<=";
 		default:
 			return null;
 		}

@@ -60,6 +60,10 @@ public class ExpressionChainParser extends Parser {
 		this.infixLeft(ExpressionTokenType.OR, Precedence.LOGIC_OR);
 		this.infixLeft(ExpressionTokenType.EQUALS, Precedence.COMP_EQ_NEQ);
 		this.infixLeft(ExpressionTokenType.NOT_EQUALS, Precedence.COMP_EQ_NEQ);
+		this.infixLeft(ExpressionTokenType.GREATER_THAN, Precedence.COMP_LT_GT);
+		this.infixLeft(ExpressionTokenType.GREATER_EQUALS, Precedence.COMP_LT_GT);
+		this.infixLeft(ExpressionTokenType.LESS_THAN, Precedence.COMP_LT_GT);
+		this.infixLeft(ExpressionTokenType.LESS_EQUALS, Precedence.COMP_LT_GT);
 		this.infixRight(ExpressionTokenType.POW, Precedence.EXPONENT);
 	}
 

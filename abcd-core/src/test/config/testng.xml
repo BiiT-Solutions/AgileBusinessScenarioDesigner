@@ -22,7 +22,7 @@
 			<class name="com.biit.abcd.core.drools.test.GenericsTest" />
 			<class name="com.biit.abcd.core.drools.test.FunctionsTest" />
 			<!-- Test dependent of the orbeon server, may not work in all machines -->
-			<!-- <class name="com.biit.abcd.core.drools.test.DHPUserFormsTest" /> -->
+			<!-- <class name="com.biit.abcd.core.drools.test.DHPUserFormsTest" />-->
 		</classes>
 	</test>
 </suite>

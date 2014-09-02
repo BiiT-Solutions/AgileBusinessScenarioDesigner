@@ -6,7 +6,9 @@ import java.util.List;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
@@ -45,18 +47,20 @@ public class TableRuleParser extends GenericParser {
 	private List<Expression> preParseConditions(List<Expression> conditions) {
 		List<Expression> preParsedConditions = new ArrayList<Expression>();
 
-		int index = 0;
 		// For each pair of conditions adds an AND, and between each pair adds
 		// an EQUALS
-		for (Expression condition : conditions) {
+		for (int index = 0; index < conditions.size(); index++) {
+			Expression condition = conditions.get(index);
 			if (((index != 0) && ((index % 2) == 0))) {
 				preParsedConditions.add(new ExpressionOperatorLogic(AvailableOperator.AND));
 			} else if ((index % 2) != 0) {
-				preParsedConditions.add(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+				if (((ExpressionChain) condition).getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
+					preParsedConditions.add(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+				}
 			}
 			preParsedConditions.add(condition);
-			index++;
 		}
+		// System.out.println("PRE PARSED CONDITIONS: " + preParsedConditions);
 		return preParsedConditions;
 	}
 }
