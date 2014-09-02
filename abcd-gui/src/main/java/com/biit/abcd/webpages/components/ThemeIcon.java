@@ -4,19 +4,19 @@ import com.vaadin.server.ThemeResource;
 
 public enum ThemeIcon {
 
-	ACCEPT("appbar.check.svg"),
+	ACCEPT("button.accept.svg"),
 
-	CANCEL("appbar.close.svg"),
+	CANCEL("button.cancel.svg"),
 
 	ADD("appbar.add.svg"),
 
-	DELETE("appbar.delete.svg"),
+	DELETE("element.delete.svg"),
 
-	EDIT("appbar.edit.svg"),
+	EDIT("element.edit.svg"),
 
 	LINK("appbar.link.svg"),
 
-	SAVE("appbar.save.svg"),
+	SAVE("form.save.svg"),
 
 	CONFIGURE("appbar.settings.svg"),
 
@@ -34,9 +34,9 @@ public enum ThemeIcon {
 
 	USER("appbar.user.svg"),
 
-	EXPAND("appbar.section.expand.svg"),
+	ELEMENT_EXPAND("element.expand.svg"),
 
-	COLLAPSE("appbar.section.collapse.svg"),
+	ELEMENT_COLLAPSE("element.collapse.svg"),
 
 	LEFT_MENU_COLLAPSE("appbar.layout.collapse.left.variant.svg"),
 
@@ -46,37 +46,37 @@ public enum ThemeIcon {
 
 	RIGHT_MENU_EXPAND("appbar.layout.expand.left.variant.svg"),
 
-	FORM_MANAGER_PAGE("appbar.cabinet.files.svg"),
+	FORM_MANAGER_PAGE("page.form.manager.svg"),
 
-	FORM_MANAGER_ADD_FORM("appbar.page.add.svg"),
+	FORM_MANAGER_ADD_FORM("form.create.svg"),
 
-	TREE_DESIGNER_PAGE("appbar.page.edit.svg"),
+	TREE_DESIGNER_PAGE("page.form.edit.svg"),
 
-	TREE_DESIGNER_ADD_CATEGORY("appbar.category.add.svg"),
+	TREE_DESIGNER_ADD_CATEGORY("form.category.add.svg"),
 
-	TREE_DESIGNER_ADD_QUESTION("appbar.question.add.svg"),
+	TREE_DESIGNER_ADD_QUESTION("form.question.add.svg"),
 
-	TREE_DESIGNER_ADD_GROUP("appbar.group.add.svg"),
+	TREE_DESIGNER_ADD_GROUP("form.group.add.svg"),
 
-	TREE_DESIGNER_ADD_ANSWER("appbar.answer.add.svg"),
+	TREE_DESIGNER_ADD_ANSWER("form.answer.add.svg"),
 
-	TREE_DESIGNER_QUESTION_DATE("appbar.calendar.31.svg"),
+	TREE_DESIGNER_QUESTION_TYPE_DATE("question.calendar.31.svg"),
 
-	TREE_DESIGNER_QUESTION_TEXT("appbar.interface.textbox.squared.svg"),
+	TREE_DESIGNER_QUESTION_TYPE_TEXT("question.textbox.letters.svg"),
 
-	TREE_DESIGNER_QUESTION_NUMBER("appbar.interface.textbox.number.svg"),
+	TREE_DESIGNER_QUESTION_TYPE_NUMBER("question.textbox.numbers.svg"),
 
-	TREE_DESIGNER_QUESTION_CHECKLIST("appbar.checkmark.svg"),
+	TREE_DESIGNER_QUESTION_TYPE_CHECKLIST("question.checkmark.svg"),
 
-	TREE_DESIGNER_QUESTION_RADIOBUTTON("appbar.radiobutton.svg"),
+	TREE_DESIGNER_QUESTION_TYPE_RADIOBUTTON("question.radiobutton.svg"),
 
-	TREE_DESIGNER_QUESTION_DROPDOWN("appbar.interface.dropdown.svg"),
+	TREE_DESIGNER_QUESTION_TYPE_DROPDOWN("question.dropdown.svg"),
 
-	TREE_DESIGNER_QUESTION_POSTALCODE("appbar.email.hardedge.svg"),
+	TREE_DESIGNER_QUESTION_TYPE_POSTALCODE("question.postcode.svg"),
 
-	TREE_DESIGNER_GROUP_LOOP("appbar.loop.svg"),
+	TREE_DESIGNER_GROUP_LOOP("group.loop.svg"),
 
-	DIAGRAM_BUILDER_PAGE("appbar.form.diagram.svg"),
+	DIAGRAM_BUILDER_PAGE("page.form.diagram.svg"),
 
 	DROOLS_RULE_EDITOR_PAGE("appbar.page.code.svg"),
 
@@ -98,9 +98,9 @@ public enum ThemeIcon {
 
 	TO_FRONT("appbar.toFront.svg"),
 
-	MOVE_UP("appbar.chevron.up.svg"),
+	MOVE_UP("element.move.up.svg"),
 
-	MOVE_DOWN("appbar.chevron.down.svg"),
+	MOVE_DOWN("element.move.down.svg"),
 
 	TABLE("appbar.table.svg"),
 
@@ -132,7 +132,7 @@ public enum ThemeIcon {
 
 	EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES("appbar.page.svg"),
 
-	SETTINGS("appbar.lines.horizontal.4.svg"),
+	SETTINGS("menu.lines.horizontal.svg"),
 
 	ADD_ITEM_LIST("appbar.list.add.svg"),
 

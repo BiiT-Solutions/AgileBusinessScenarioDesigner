@@ -92,10 +92,10 @@ public class AccordionMultiple extends CustomComponent {
 		}
 
 		private HorizontalLayout createTabBar(String caption) {
-			expandImage = new Image(null, ThemeIcon.EXPAND.getThemeResource());
+			expandImage = new Image(null, ThemeIcon.ELEMENT_EXPAND.getThemeResource());
 			expandImage.setWidth(ICON_SIZE);
 			expandImage.setHeight(ICON_SIZE);
-			collapseImage = new Image(null, ThemeIcon.COLLAPSE.getThemeResource());
+			collapseImage = new Image(null, ThemeIcon.ELEMENT_COLLAPSE.getThemeResource());
 			collapseImage.setWidth(ICON_SIZE);
 			collapseImage.setHeight(ICON_SIZE);
 

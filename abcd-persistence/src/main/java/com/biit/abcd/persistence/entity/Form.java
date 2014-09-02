@@ -18,6 +18,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.form.BaseForm;
 import com.biit.form.TreeObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.liferay.portal.model.UserGroup;
 
 @Entity
 @Table(name = "tree_forms")
@@ -136,7 +137,7 @@ public class Form extends BaseForm {
 
 	/**
 	 * Get Custom variables for a specific tree Object.
-	 *
+	 * 
 	 * @param treeObject
 	 * @return
 	 */
@@ -152,7 +153,7 @@ public class Form extends BaseForm {
 
 	/**
 	 * Get Custom variables for a generic tree Object.
-	 *
+	 * 
 	 * @param treeObject
 	 * @return
 	 */
@@ -168,7 +169,7 @@ public class Form extends BaseForm {
 
 	/**
 	 * Looks for the custom variable with the specified scope and name.
-	 *
+	 * 
 	 * @return the custom variable or null if not found
 	 */
 	public CustomVariable getCustomVariable(String name, String scope) {
@@ -203,7 +204,7 @@ public class Form extends BaseForm {
 
 	/**
 	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
-	 *
+	 * 
 	 * @param diagram
 	 */
 	public Diagram getDiagramParent(Diagram diagram) {
@@ -215,6 +216,11 @@ public class Form extends BaseForm {
 				}
 			}
 		}
+		return null;
+	}
+
+	public UserGroup getUserGroup() {
+		// TODO
 		return null;
 	}
 }

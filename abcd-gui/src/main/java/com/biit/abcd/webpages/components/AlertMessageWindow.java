@@ -9,8 +9,7 @@ public class AlertMessageWindow extends AcceptCancelWindow {
 
 	public AlertMessageWindow(LanguageCodes code) {
 		super();
-		setContent(new Label(ServerTranslate.translate(code)));
-		showCentered();
+		setContent(new Label(ServerTranslate.translate(code)));		
 		setModal(true);
 		setWidth("300px");
 		setHeight("180px");
