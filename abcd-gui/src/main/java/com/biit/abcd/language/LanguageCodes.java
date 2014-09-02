@@ -308,6 +308,7 @@ public enum LanguageCodes {
 	EXPRESSION_CHECKER_INVALID("expression.checker.invalid"),
 	EXPRESSION_CHANGE_OPERATOR_WINDOW_CAPTION("expression.operator.window.caption"),
 	EXPRESSION_CHANGE_OPERATOR_WINDOW_COMBOBOX("expression.operator.window.combobox"),
+	EXPRESSION_STRING_GLOBAL_VARIABLE_SYSTEM_DATE("expression.string.global.variable.system.date"),
 
 	EXPRESSION_BUTTON_AND("expression.button.and"),
 	EXPRESSION_BUTTON_OR("expression.button.or"),

@@ -21,12 +21,12 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
@@ -39,9 +39,10 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -54,7 +55,7 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-public class GenericsTest {
+public class FunctionsTest {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
 	private final static Charset baseCharset = StandardCharsets.UTF_8;
@@ -90,11 +91,12 @@ public class GenericsTest {
 
 		// Check the results of the drools execution
 		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-				.getCategory("Alcohol-, drugs-, game- of gokverslaving");
+				.getCategory("Financiën");
 		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-				.getCategory("Huisvesting");
-		Assert.assertEquals(1.0, testCat1.getNumberVariableValue("cScore"));
-		Assert.assertEquals(3.0, testCat2.getNumberVariableValue("cScore"));
+				.getCategory("Justitie");
+
+		Assert.assertEquals(-185.26, testCat1.getNumberVariableValue("cScore"));
+		Assert.assertEquals(-3226.72, testCat2.getNumberVariableValue("cScore"));
 	}
 
 	/**
@@ -114,6 +116,9 @@ public class GenericsTest {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
+
+		Category categoryFin = null;
+		Category categoryJus = null;
 
 		// Create the custom variables
 		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
@@ -135,6 +140,11 @@ public class GenericsTest {
 			if (!lastCategory.equals(lineSplit[0])) {
 				// Create a category
 				category = new Category(lineSplit[0]);
+				if (lineSplit[0].equals("Financiën")) {
+					categoryFin = category;
+				}else if (lineSplit[0].equals("Justitie")) {
+					categoryJus = category;
+				}
 				form.addChild(category);
 				lastCategory = lineSplit[0];
 			}
@@ -172,15 +182,28 @@ public class GenericsTest {
 		Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
 
 		// CREATE GENERIC EXPRESSION
-		DiagramCalculation diagramExpressionNode = new DiagramCalculation();
-		diagramExpressionNode.setFormExpression(new ExpressionChain(new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.CATEGORY, customVarCategory), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, customVarQuestion),
+		DiagramCalculation diagramPmtExpressionNode = new DiagramCalculation();
+		diagramPmtExpressionNode.setFormExpression(new ExpressionChain("PMT_Expression",
+				new ExpressionValueCustomVariable(categoryJus, customVarCategory), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.PMT),
+				new ExpressionValueNumber(10), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+						36), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(100000),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		diagramExpressionNode.setJointjsId(IdGenerator.createId());
-		diagramExpressionNode.setType(DiagramObjectType.CALCULATION);
-		Node nodeExpression = new Node(diagramExpressionNode.getJointjsId());
+		diagramPmtExpressionNode.setJointjsId(IdGenerator.createId());
+		diagramPmtExpressionNode.setType(DiagramObjectType.CALCULATION);
+		Node nodeExpression = new Node(diagramPmtExpressionNode.getJointjsId());
+
+		DiagramRule diagramPmtRuleNode = new DiagramRule();
+		diagramPmtRuleNode.setRule(new Rule("PMT_Rule", new ExpressionChain(new ExpressionValueString("")),
+				new ExpressionChain(new ExpressionValueCustomVariable(categoryFin, customVarCategory),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+								AvailableFunction.PMT), new ExpressionValueNumber(10), new ExpressionSymbol(
+								AvailableSymbol.COMMA), new ExpressionValueNumber(72), new ExpressionSymbol(
+								AvailableSymbol.COMMA), new ExpressionValueNumber(10000), new ExpressionSymbol(
+								AvailableSymbol.RIGHT_BRACKET))));
+		diagramPmtRuleNode.setJointjsId(IdGenerator.createId());
+		diagramPmtRuleNode.setType(DiagramObjectType.RULE);
+		Node nodeRule = new Node(diagramPmtRuleNode.getJointjsId());
 
 		DiagramSink diagramEndNode = new DiagramSink();
 		diagramEndNode.setJointjsId(IdGenerator.createId());
@@ -193,16 +216,21 @@ public class GenericsTest {
 		DiagramLink tableExpression = new DiagramLink(nodeTable, nodeExpression);
 		tableExpression.setJointjsId(IdGenerator.createId());
 		tableExpression.setType(DiagramObjectType.LINK);
-		DiagramLink subdiagramEnd = new DiagramLink(nodeExpression, nodeSink);
+		DiagramLink expressionRule = new DiagramLink(nodeExpression, nodeRule);
+		tableExpression.setJointjsId(IdGenerator.createId());
+		tableExpression.setType(DiagramObjectType.LINK);
+		DiagramLink subdiagramEnd = new DiagramLink(nodeRule, nodeSink);
 		subdiagramEnd.setJointjsId(IdGenerator.createId());
 		subdiagramEnd.setType(DiagramObjectType.LINK);
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramTableRuleNode);
-		mainDiagram.addDiagramObject(diagramExpressionNode);
+		mainDiagram.addDiagramObject(diagramPmtExpressionNode);
+		mainDiagram.addDiagramObject(diagramPmtRuleNode);
 		mainDiagram.addDiagramObject(diagramEndNode);
 		mainDiagram.addDiagramObject(startTable);
 		mainDiagram.addDiagramObject(tableExpression);
+		mainDiagram.addDiagramObject(expressionRule);
 		mainDiagram.addDiagramObject(subdiagramEnd);
 
 		form.addDiagram(mainDiagram);

@@ -1,0 +1,2491 @@
+package com.biit.drools 
+import com.biit.abcd.core.drools.facts.inputform.* 
+import com.biit.abcd.core.drools.utils.* 
+import java.util.Date 
+import java.util.List 
+import com.biit.abcd.logger.AbcdLogger 
+rule "BaseTable_row_0"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$3cd2b357cd454cadb5b1afab4b375ed8 : Question( getAnswer() == 'Financien.Inkomen.RuimVoldoende') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$3cd2b357cd454cadb5b1afab4b375ed8.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Inkomen, qScore, 5.0)");
+
+end
+rule "BaseTable_row_1"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$3cd2b357cd454cadb5b1afab4b375ed8 : Question( getAnswer() == 'Financien.Inkomen.NetVoldoendeZonderUitkering') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$3cd2b357cd454cadb5b1afab4b375ed8.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Inkomen, qScore, 4.0)");
+
+end
+rule "BaseTable_row_2"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$3cd2b357cd454cadb5b1afab4b375ed8 : Question( getAnswer() == 'Financien.Inkomen.VoldoendeMetUitkering') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$3cd2b357cd454cadb5b1afab4b375ed8.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Inkomen, qScore, 3.0)");
+
+end
+rule "BaseTable_row_3"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$3cd2b357cd454cadb5b1afab4b375ed8 : Question( getAnswer() == 'Financien.Inkomen.Onvoldoende') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$3cd2b357cd454cadb5b1afab4b375ed8.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Inkomen, qScore, 2.0)");
+
+end
+rule "BaseTable_row_4"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$3cd2b357cd454cadb5b1afab4b375ed8 : Question( getAnswer() == 'Financien.Inkomen.Geen') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$3cd2b357cd454cadb5b1afab4b375ed8.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Inkomen, qScore, 1.0)");
+
+end
+rule "BaseTable_row_5"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$ee9d30fed25740929d92d4371d667a1b : Question( getAnswer() == 'Financien.Schulden.Sparen') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$ee9d30fed25740929d92d4371d667a1b.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Schulden, qScore, 5.0)");
+
+end
+rule "BaseTable_row_6"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$ee9d30fed25740929d92d4371d667a1b : Question( getAnswer() == 'Financien.Schulden.NietSparenGeenSchulden') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$ee9d30fed25740929d92d4371d667a1b.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Schulden, qScore, 4.0)");
+
+end
+rule "BaseTable_row_7"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$ee9d30fed25740929d92d4371d667a1b : Question( getAnswer() == 'Financien.Schulden.NemenAf') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$ee9d30fed25740929d92d4371d667a1b.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Schulden, qScore, 4.0)");
+
+end
+rule "BaseTable_row_8"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$ee9d30fed25740929d92d4371d667a1b : Question( getAnswer() == 'Financien.Schulden.BlijvenGelijk') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$ee9d30fed25740929d92d4371d667a1b.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Schulden, qScore, 3.0)");
+
+end
+rule "BaseTable_row_9"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$ee9d30fed25740929d92d4371d667a1b : Question( getAnswer() == 'Financien.Schulden.NemenToe') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$ee9d30fed25740929d92d4371d667a1b.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Schulden, qScore, 2.0)");
+
+end
+rule "BaseTable_row_10"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$e766681ab8cc47c18756216df4c12340 : Question( getAnswer() == 'Financien.UItgaven.OnverstandigGeen') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$e766681ab8cc47c18756216df4c12340.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Uitgaven, qScore, 5.0)");
+
+end
+rule "BaseTable_row_11"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$e766681ab8cc47c18756216df4c12340 : Question( getAnswer() == 'Financien.Uitgaven.OnverstandigWelVeroorloven') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$e766681ab8cc47c18756216df4c12340.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Uitgaven, qScore, 5.0)");
+
+end
+rule "BaseTable_row_12"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$e766681ab8cc47c18756216df4c12340 : Question( getAnswer() == 'Financien.Uitgaven.OnverstandigSomsNietVeroorloven') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$e766681ab8cc47c18756216df4c12340.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Uitgaven, qScore, 3.0)");
+
+end
+rule "BaseTable_row_13"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$e766681ab8cc47c18756216df4c12340 : Question( getAnswer() == 'Financien.Uitgaven.OnverstandigRegelmatigNiet') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$e766681ab8cc47c18756216df4c12340.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Uitgaven, qScore, 2.0)");
+
+end
+rule "BaseTable_row_14"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$85a00866eef94422ba9b5d5c55a18f23 : Question( getAnswer() == 'Financien.Beheer.VolledigInzicht') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$85a00866eef94422ba9b5d5c55a18f23.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Beheer, qScore, 5.0)");
+
+end
+rule "BaseTable_row_15"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$85a00866eef94422ba9b5d5c55a18f23 : Question( getAnswer() == 'Financien.Beheer.RedelijkInzicht') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$85a00866eef94422ba9b5d5c55a18f23.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Beheer, qScore, 4.0)");
+
+end
+rule "BaseTable_row_16"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$85a00866eef94422ba9b5d5c55a18f23 : Question( getAnswer() == 'Financien.Beheer.WelEensVerrast') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$85a00866eef94422ba9b5d5c55a18f23.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Beheer, qScore, 3.0)");
+
+end
+rule "BaseTable_row_17"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$85a00866eef94422ba9b5d5c55a18f23 : Question( getAnswer() == 'Financien.Beheer.VeelVerrassingen') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$85a00866eef94422ba9b5d5c55a18f23.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Beheer, qScore, 2.0)");
+
+end
+rule "BaseTable_row_18"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$85a00866eef94422ba9b5d5c55a18f23 : Question( getAnswer() == 'Financien.Beheer.Spoorbijster') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$85a00866eef94422ba9b5d5c55a18f23.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Beheer, qScore, 1.0)");
+
+end
+rule "BaseTable_row_19"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$2e1bd25d98af4e85abc0d011b106eba2 : Question( getAnswer() == 'Financien.Beheer.Hulp.Ja') from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()
+)
+then
+	$2e1bd25d98af4e85abc0d011b106eba2.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financien.Beheer.Hulp, qScore, 3.0)");
+
+end
+rule "BaseTable_row_20"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$3ca9fcb0784042099d8f3660a049e2b3 : Question( getAnswer() == 'Dagbesteding.Werk.Vast') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$3ca9fcb0784042099d8f3660a049e2b3.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Werk, qScore, 5.0)");
+
+end
+rule "BaseTable_row_21"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$3ca9fcb0784042099d8f3660a049e2b3 : Question( getAnswer() == 'Dagbesteding.Werk.Tijdelijk') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$3ca9fcb0784042099d8f3660a049e2b3.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Werk, qScore, 4.0)");
+
+end
+rule "BaseTable_row_22"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$3ca9fcb0784042099d8f3660a049e2b3 : Question( getAnswer() == 'Dagbesteding.Werk.Bijbaan') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$3ca9fcb0784042099d8f3660a049e2b3.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Werk, qScore, 4.0)");
+
+end
+rule "BaseTable_row_23"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$3ca9fcb0784042099d8f3660a049e2b3 : Question( getAnswer() == 'Dagbesteding.Werk.OpleidingHoger') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$3ca9fcb0784042099d8f3660a049e2b3.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Werk, qScore, 5.0)");
+
+end
+rule "BaseTable_row_24"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$3ca9fcb0784042099d8f3660a049e2b3 : Question( getAnswer() == 'Dagbesteding.Werk.Opleidng Voor') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$3ca9fcb0784042099d8f3660a049e2b3.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Werk, qScore, 4.0)");
+
+end
+rule "BaseTable_row_25"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$3ca9fcb0784042099d8f3660a049e2b3 : Question( getAnswer() == 'Dagbesteding.Werk.Stage') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$3ca9fcb0784042099d8f3660a049e2b3.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Werk, qScore, 4.0)");
+
+end
+rule "BaseTable_row_26"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$3ca9fcb0784042099d8f3660a049e2b3 : Question( getAnswer() == 'Dagbesteding.Werk.Niets') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$3ca9fcb0784042099d8f3660a049e2b3.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Werk, qScore, 3.0)");
+
+end
+rule "BaseTable_row_27"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f : Question( getAnswer() == 'Dagbesteding.Ondersteuning.Werk') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Ondersteuning, qScore, 3.0)");
+
+end
+rule "BaseTable_row_28"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f : Question( getAnswer() == 'Dagbesteding.Ondersteuning.Ritme') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Ondersteuning, qScore, 3.0)");
+
+end
+rule "BaseTable_row_29"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f : Question( getAnswer() == 'Dagbesteding.Ondersteuning.WilWel') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Ondersteuning, qScore, 2.0)");
+
+end
+rule "BaseTable_row_30"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f : Question( getAnswer() == 'Dagbesteding.Ondersteuning.WilNiet') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$5e8b9c4d77dd47b8987a2f960a6cfd7f.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Ondersteuning, qScore, 2.0)");
+
+end
+rule "BaseTable_row_31"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$2e9453e31793469181e1c693b7a29a94 : Question( getAnswer() == 'Dagbesteding.Bezigheid.Goed') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$2e9453e31793469181e1c693b7a29a94.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Bezigheid, qScore, 5.0)");
+
+end
+rule "BaseTable_row_32"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$2e9453e31793469181e1c693b7a29a94 : Question( getAnswer() == 'Dagbesteding.Bezigheid.Redelijk') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$2e9453e31793469181e1c693b7a29a94.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Bezigheid, qScore, 3.0)");
+
+end
+rule "BaseTable_row_33"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$2e9453e31793469181e1c693b7a29a94 : Question( getAnswer() == 'Dagbesteding.Bezigheid.Onvoldoende') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$2e9453e31793469181e1c693b7a29a94.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Bezigheid, qScore, 1.0)");
+
+end
+rule "BaseTable_row_34"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$90b79646167c4b24bb8078aab6d53cf6 : Question( getAnswer() == 'Dagbesteding.Overlast.Geen') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$90b79646167c4b24bb8078aab6d53cf6.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Overlast, qScore, 5.0)");
+
+end
+rule "BaseTable_row_35"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$90b79646167c4b24bb8078aab6d53cf6 : Question( getAnswer() == 'Dagbesteding.Overlast.Wel') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$90b79646167c4b24bb8078aab6d53cf6.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Overlast, qScore, 2.0)");
+
+end
+rule "BaseTable_row_36"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$90b79646167c4b24bb8078aab6d53cf6 : Question( getAnswer() == 'Dagbesteding.Overlast.Buren') from $79cf0977e36d482c9232c776dbeefb59.getQuestions()
+)
+then
+	$90b79646167c4b24bb8078aab6d53cf6.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding.Overlast, qScore, 1.0)");
+
+end
+rule "BaseTable_row_37"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$478629184bb042bda8fe41ff7daf53fc : Question( getAnswer() == 'Huisvesting.Veilig.Ja') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$478629184bb042bda8fe41ff7daf53fc.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Veiligheid, qScore, 5.0)");
+
+end
+rule "BaseTable_row_38"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$478629184bb042bda8fe41ff7daf53fc : Question( getAnswer() == 'Huisvesting.Veilig.Gebreken') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$478629184bb042bda8fe41ff7daf53fc.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Veiligheid, qScore, 4.0)");
+
+end
+rule "BaseTable_row_39"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$478629184bb042bda8fe41ff7daf53fc : Question( getAnswer() == 'Huisvesting.Veilig.Achterstallig') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$478629184bb042bda8fe41ff7daf53fc.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Veiligheid, qScore, 3.0)");
+
+end
+rule "BaseTable_row_40"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$478629184bb042bda8fe41ff7daf53fc : Question( getAnswer() == 'Huisvesting.Veilig.Woninguitzetting') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$478629184bb042bda8fe41ff7daf53fc.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Veiligheid, qScore, 2.0)");
+
+end
+rule "BaseTable_row_41"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$478629184bb042bda8fe41ff7daf53fc : Question( getAnswer() == 'Huisvesting.Veilig.Ongeschikt') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$478629184bb042bda8fe41ff7daf53fc.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Veiligheid, qScore, 2.0)");
+
+end
+rule "BaseTable_row_42"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$478629184bb042bda8fe41ff7daf53fc : Question( getAnswer() == 'Huisvesting.Veilig.Dakloos') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$478629184bb042bda8fe41ff7daf53fc.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Veiligheid, qScore, 2.0)");
+
+end
+rule "BaseTable_row_43"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$df2b76ddbd7d4ca8a41685b23b9567ad : Question( getAnswer() == 'Huisvesting.Gebruik.Groot') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$df2b76ddbd7d4ca8a41685b23b9567ad.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Gebruik, qScore, 5.0)");
+
+end
+rule "BaseTable_row_44"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$df2b76ddbd7d4ca8a41685b23b9567ad : Question( getAnswer() == 'Huisvesting.Gebruik.Goed') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$df2b76ddbd7d4ca8a41685b23b9567ad.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Gebruik, qScore, 5.0)");
+
+end
+rule "BaseTable_row_45"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$df2b76ddbd7d4ca8a41685b23b9567ad : Question( getAnswer() == 'Huisvesting.Gebruik.Lichamelijk') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$df2b76ddbd7d4ca8a41685b23b9567ad.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Gebruik, qScore, 2.0)");
+
+end
+rule "BaseTable_row_46"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$df2b76ddbd7d4ca8a41685b23b9567ad : Question( getAnswer() == 'Huisvesting.Gebruik.Past') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$df2b76ddbd7d4ca8a41685b23b9567ad.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Gebruik, qScore, 3.0)");
+
+end
+rule "BaseTable_row_47"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$df2b76ddbd7d4ca8a41685b23b9567ad : Question( getAnswer() == 'Huisvesting.Gebruik.TeKlein') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$df2b76ddbd7d4ca8a41685b23b9567ad.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Gebruik, qScore, 2.0)");
+
+end
+rule "BaseTable_row_48"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$176b6012cc504cdfa9a178054dbfb8b9 : Question( getAnswer() == 'Huisvesting.Contract.Vast') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$176b6012cc504cdfa9a178054dbfb8b9.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract, qScore, 5.0)");
+
+end
+rule "BaseTable_row_49"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$176b6012cc504cdfa9a178054dbfb8b9 : Question( getAnswer() == 'Huisvesting.Contract.Tijdelijk') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$176b6012cc504cdfa9a178054dbfb8b9.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract, qScore, 4.0)");
+
+end
+rule "BaseTable_row_50"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$176b6012cc504cdfa9a178054dbfb8b9 : Question( getAnswer() == 'Huisvesting.Contract.Ouders') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$176b6012cc504cdfa9a178054dbfb8b9.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract, qScore, 3.0)");
+
+end
+rule "BaseTable_row_51"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$176b6012cc504cdfa9a178054dbfb8b9 : Question( getAnswer() == 'Huisvesting.Contract.Samenwonend') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$176b6012cc504cdfa9a178054dbfb8b9.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract, qScore, 3.0)");
+
+end
+rule "BaseTable_row_52"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$176b6012cc504cdfa9a178054dbfb8b9 : Question( getAnswer() == 'Huisvesting.Contract.Onderhuur') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$176b6012cc504cdfa9a178054dbfb8b9.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract, qScore, 3.0)");
+
+end
+rule "BaseTable_row_53"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$176b6012cc504cdfa9a178054dbfb8b9 : Question( getAnswer() == 'Huisvesting.Contract.Logeren') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$176b6012cc504cdfa9a178054dbfb8b9.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract, qScore, 2.0)");
+
+end
+rule "BaseTable_row_54"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$176b6012cc504cdfa9a178054dbfb8b9 : Question( getAnswer() == 'Huisvesting.Contract.Straat') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$176b6012cc504cdfa9a178054dbfb8b9.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract, qScore, 1.0)");
+
+end
+rule "BaseTable_row_55"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7af821b2174c481296eabe763f2960cf : Question( getAnswer() == 'Huisvesting.Contract.Tijdelijk') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7af821b2174c481296eabe763f2960cf.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract2, qScore, 5.0)");
+
+end
+rule "BaseTable_row_56"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7af821b2174c481296eabe763f2960cf : Question( getAnswer() == 'Huisvesting.Contract.Ouders') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7af821b2174c481296eabe763f2960cf.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract2, qScore, 4.0)");
+
+end
+rule "BaseTable_row_57"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7af821b2174c481296eabe763f2960cf : Question( getAnswer() == 'Huisvesting.Contract.Samenwonend') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7af821b2174c481296eabe763f2960cf.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract2, qScore, 3.0)");
+
+end
+rule "BaseTable_row_58"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7af821b2174c481296eabe763f2960cf : Question( getAnswer() == 'Huisvesting.Contract.Onderhuur') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7af821b2174c481296eabe763f2960cf.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract2, qScore, 3.0)");
+
+end
+rule "BaseTable_row_59"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7af821b2174c481296eabe763f2960cf : Question( getAnswer() == 'Huisvesting.Contract.Logeren') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7af821b2174c481296eabe763f2960cf.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract2, qScore, 3.0)");
+
+end
+rule "BaseTable_row_60"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$baaf51033f2c4e97be0cef5d668ff690 : Question( getAnswer() == 'Huisvesting.Contract.Logeren') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$baaf51033f2c4e97be0cef5d668ff690.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract3, qScore, 2.0)");
+
+end
+rule "BaseTable_row_61"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$baaf51033f2c4e97be0cef5d668ff690 : Question( getAnswer() == 'Huisvesting.Contract.Straat') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$baaf51033f2c4e97be0cef5d668ff690.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Contract3, qScore, 1.0)");
+
+end
+rule "BaseTable_row_62"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7f7e9bf9da3e4ca09b7741a73e7e3025 : Question( getAnswer() == 'Huisvesting.Huur.Betaalbaar') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7f7e9bf9da3e4ca09b7741a73e7e3025.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Huur, qScore, 5.0)");
+
+end
+rule "BaseTable_row_63"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7f7e9bf9da3e4ca09b7741a73e7e3025 : Question( getAnswer() == 'Huisvesting.Huur.Duur') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7f7e9bf9da3e4ca09b7741a73e7e3025.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Huur, qScore, 3.0)");
+
+end
+rule "BaseTable_row_64"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7f7e9bf9da3e4ca09b7741a73e7e3025 : Question( getAnswer() == 'Huisvesting.Huur.Achterstand') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7f7e9bf9da3e4ca09b7741a73e7e3025.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Huur, qScore, 2.0)");
+
+end
+rule "BaseTable_row_65"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7f7e9bf9da3e4ca09b7741a73e7e3025 : Question( getAnswer() == 'Huisvesting.Huur.Problemen') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7f7e9bf9da3e4ca09b7741a73e7e3025.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Huur, qScore, 2.0)");
+
+end
+rule "BaseTable_row_66"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$7f7e9bf9da3e4ca09b7741a73e7e3025 : Question( getAnswer() == 'Huisvesting.Huur.NietBetalen') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$7f7e9bf9da3e4ca09b7741a73e7e3025.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Huur, qScore, 1.0)");
+
+end
+rule "BaseTable_row_67"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$ba0ebba9a88a49f3aa1f6908c66fef08 : Question( getAnswer() == 'Huisvesting.Huur.Problemen') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$ba0ebba9a88a49f3aa1f6908c66fef08.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Huur2, qScore, 2.0)");
+
+end
+rule "BaseTable_row_68"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$ba0ebba9a88a49f3aa1f6908c66fef08 : Question( getAnswer() == 'Huisvesting.Huur,NietBetalen') from $310af10dd69b46c98918dad086737db2.getQuestions()
+)
+then
+	$ba0ebba9a88a49f3aa1f6908c66fef08.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting.Huur2, qScore, 1.0)");
+
+end
+rule "BaseTable_row_69"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6e72f753f9aa4d2b84ed46654ee864b7 : Question( getAnswer() == 'Gezin.Samenstelling.Alleen') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6e72f753f9aa4d2b84ed46654ee864b7.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samenstelling, qScore, 4.0)");
+
+end
+rule "BaseTable_row_70"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6e72f753f9aa4d2b84ed46654ee864b7 : Question( getAnswer() == 'Gezin.Samenstelling.Ouders') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6e72f753f9aa4d2b84ed46654ee864b7.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samenstelling, qScore, 5.0)");
+
+end
+rule "BaseTable_row_71"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6e72f753f9aa4d2b84ed46654ee864b7 : Question( getAnswer() == 'Gezin.Samenstelling.Alleen+') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6e72f753f9aa4d2b84ed46654ee864b7.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samenstelling, qScore, 5.0)");
+
+end
+rule "BaseTable_row_72"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6e72f753f9aa4d2b84ed46654ee864b7 : Question( getAnswer() == 'Gezin.Samensteling.Gehuwd') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6e72f753f9aa4d2b84ed46654ee864b7.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samenstelling, qScore, 5.0)");
+
+end
+rule "BaseTable_row_73"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6e72f753f9aa4d2b84ed46654ee864b7 : Question( getAnswer() == 'Gezin.Samenstelling.Gehuwd+') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6e72f753f9aa4d2b84ed46654ee864b7.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samenstelling, qScore, 5.0)");
+
+end
+rule "BaseTable_row_74"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6bbbde9527ac4e35aea366654f2f0db0 : Question( getAnswer() == 'Gezin.Samengaan.Harmonie') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6bbbde9527ac4e35aea366654f2f0db0.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samengaan, qScore, 5.0)");
+
+end
+rule "BaseTable_row_75"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6bbbde9527ac4e35aea366654f2f0db0 : Question( getAnswer() == 'Gezin.Samengaan.ProblemenVoorbij') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6bbbde9527ac4e35aea366654f2f0db0.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samengaan, qScore, 4.0)");
+
+end
+rule "BaseTable_row_76"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6bbbde9527ac4e35aea366654f2f0db0 : Question( getAnswer() == 'Gezin.Samengaan.ProblemenHanteerbaar') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6bbbde9527ac4e35aea366654f2f0db0.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samengaan, qScore, 3.0)");
+
+end
+rule "BaseTable_row_77"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6bbbde9527ac4e35aea366654f2f0db0 : Question( getAnswer() == 'Gezin.Samengaan.Ontlopen') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6bbbde9527ac4e35aea366654f2f0db0.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samengaan, qScore, 2.0)");
+
+end
+rule "BaseTable_row_78"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$6bbbde9527ac4e35aea366654f2f0db0 : Question( getAnswer() == 'Gezin.Samengaan.VeelProblemen') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$6bbbde9527ac4e35aea366654f2f0db0.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Samengaan, qScore, 1.0)");
+
+end
+rule "BaseTable_row_79"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$27d3752c60464747af9db4cb7a524eec : Question( getAnswer() == 'Gezin.Druk.Geen') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$27d3752c60464747af9db4cb7a524eec.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Druk, qScore, 5.0)");
+
+end
+rule "BaseTable_row_80"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$27d3752c60464747af9db4cb7a524eec : Question( getAnswer() == 'Gezin.Druk.Draagbaar') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$27d3752c60464747af9db4cb7a524eec.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Druk, qScore, 3.0)");
+
+end
+rule "BaseTable_row_81"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$27d3752c60464747af9db4cb7a524eec : Question( getAnswer() == 'Gezin.Druk.Groot') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$27d3752c60464747af9db4cb7a524eec.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Druk, qScore, 2.0)");
+
+end
+rule "BaseTable_row_82"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$27d3752c60464747af9db4cb7a524eec : Question( getAnswer() == 'Gezin.Druk.Verwaarlozing') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$27d3752c60464747af9db4cb7a524eec.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Druk, qScore, 1.0)");
+
+end
+rule "BaseTable_row_83"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$27d3752c60464747af9db4cb7a524eec : Question( getAnswer() == 'Gezin.Druk.Hanteerbaar') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$27d3752c60464747af9db4cb7a524eec.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Druk, qScore, 3.0)");
+
+end
+rule "BaseTable_row_84"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$27d3752c60464747af9db4cb7a524eec : Question( getAnswer() == 'Gezin.Druk.Onhanteerbaar') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$27d3752c60464747af9db4cb7a524eec.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Druk, qScore, 2.0)");
+
+end
+rule "BaseTable_row_85"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.Geen') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 5.0)");
+
+end
+rule "BaseTable_row_86"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.Geschreeuw') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 3.0)");
+
+end
+rule "BaseTable_row_87"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.Soms') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 1.0)");
+
+end
+rule "BaseTable_row_88"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.Regelmatig') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 1.0)");
+
+end
+rule "BaseTable_row_89"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.Tik?') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 2.0)");
+
+end
+rule "BaseTable_row_90"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.Intimideren') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 3.0)");
+
+end
+rule "BaseTable_row_91"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.CorrigerendeTik') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 1.0)");
+
+end
+rule "BaseTable_row_92"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$de8de95bd65b490d8bb99fb4cc0687e0 : Question( getAnswer() == 'Gezin.Geweld.TikGoed') from $91b28b61c16b484a8e813b57411a93f3.getQuestions()
+)
+then
+	$de8de95bd65b490d8bb99fb4cc0687e0.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Gezin.Geweld, qScore, 1.0)");
+
+end
+rule "BaseTable_row_93"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$25894215258642ed91c0c7702424dc9f : Question( getAnswer() == 'Geestelijk.Aandoening.Geen') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$25894215258642ed91c0c7702424dc9f.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Aandoening, qScore, 5.0)");
+
+end
+rule "BaseTable_row_94"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$25894215258642ed91c0c7702424dc9f : Question( getAnswer() == 'Geestelijk.Aandoening.Soms') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$25894215258642ed91c0c7702424dc9f.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Aandoening, qScore, 4.0)");
+
+end
+rule "BaseTable_row_95"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$25894215258642ed91c0c7702424dc9f : Question( getAnswer() == 'Geestelijk.Aandoening.Vaak') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$25894215258642ed91c0c7702424dc9f.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Aandoening, qScore, 3.0)");
+
+end
+rule "BaseTable_row_96"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$25894215258642ed91c0c7702424dc9f : Question( getAnswer() == 'Geestelijk.Aandoening.Altijd') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$25894215258642ed91c0c7702424dc9f.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Aandoening, qScore, 2.0)");
+
+end
+rule "BaseTable_row_97"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$25894215258642ed91c0c7702424dc9f : Question( getAnswer() == 'Geestelijk.Aandoening.Zelfmoord') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$25894215258642ed91c0c7702424dc9f.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Aandoening, qScore, 1.0)");
+
+end
+rule "BaseTable_row_98"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$8e6506c92eed4463a15dd92c419ffe42 : Question( getAnswer() == 'Geestelijk.Functioneren.Goed') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$8e6506c92eed4463a15dd92c419ffe42.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Functioneren, qScore, 5.0)");
+
+end
+rule "BaseTable_row_99"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$8e6506c92eed4463a15dd92c419ffe42 : Question( getAnswer() == 'Geestelijk.Functioneren.AfEnToe') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$8e6506c92eed4463a15dd92c419ffe42.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Functioneren, qScore, 4.0)");
+
+end
+rule "BaseTable_row_100"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$8e6506c92eed4463a15dd92c419ffe42 : Question( getAnswer() == 'Geestelijk.Functioneren.Regelmatig') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$8e6506c92eed4463a15dd92c419ffe42.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Functioneren, qScore, 3.0)");
+
+end
+rule "BaseTable_row_101"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$8e6506c92eed4463a15dd92c419ffe42 : Question( getAnswer() == 'Geestelijk.Functioneren.Aanhoudend') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$8e6506c92eed4463a15dd92c419ffe42.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Functioneren, qScore, 2.0)");
+
+end
+rule "BaseTable_row_102"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$8e6506c92eed4463a15dd92c419ffe42 : Question( getAnswer() == 'Geestelijk.Functioneren.Gevaar') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$8e6506c92eed4463a15dd92c419ffe42.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Functioneren, qScore, 1.0)");
+
+end
+rule "BaseTable_row_103"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$d85fcd120a9b4260a81ff603ce261552 : Question( getAnswer() == 'Geestelijk.Behandeling.Geen') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$d85fcd120a9b4260a81ff603ce261552.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Behandeling, qScore, 5.0)");
+
+end
+rule "BaseTable_row_104"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$d85fcd120a9b4260a81ff603ce261552 : Question( getAnswer() == 'Geestelijk.Behandeling.Arts') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$d85fcd120a9b4260a81ff603ce261552.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Behandeling, qScore, 4.0)");
+
+end
+rule "BaseTable_row_105"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$d85fcd120a9b4260a81ff603ce261552 : Question( getAnswer() == 'Geestelijk.Behandeling.Regelmatig') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$d85fcd120a9b4260a81ff603ce261552.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Behandeling, qScore, 4.0)");
+
+end
+rule "BaseTable_row_106"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$d85fcd120a9b4260a81ff603ce261552 : Question( getAnswer() == 'Geestelijk.Behandeling.Vergeten') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$d85fcd120a9b4260a81ff603ce261552.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Behandeling, qScore, 2.0)");
+
+end
+rule "BaseTable_row_107"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$d85fcd120a9b4260a81ff603ce261552 : Question( getAnswer() == 'Geestelijk.Behandeling.Kosten') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$d85fcd120a9b4260a81ff603ce261552.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Behandeling, qScore, 1.0)");
+
+end
+rule "BaseTable_row_108"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$d85fcd120a9b4260a81ff603ce261552 : Question( getAnswer() == 'Geestelijk.Behandeling.VergeetVaak') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$d85fcd120a9b4260a81ff603ce261552.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Behandeling, qScore, 1.0)");
+
+end
+rule "BaseTable_row_109"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$d85fcd120a9b4260a81ff603ce261552 : Question( getAnswer() == 'Geestelijk.Behandeling.Moeten') from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()
+)
+then
+	$d85fcd120a9b4260a81ff603ce261552.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijk.Behandeling, qScore, 1.0)");
+
+end
+rule "BaseTable_row_110"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$2d18ddc3a2614b08a1b07cb23e15f326 : Question( getAnswer() == 'Licahmelijk.Aandoeningen.Gezond') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$2d18ddc3a2614b08a1b07cb23e15f326.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Aandoeningen, qScore, 5.0)");
+
+end
+rule "BaseTable_row_111"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$2d18ddc3a2614b08a1b07cb23e15f326 : Question( getAnswer() == 'Lichamelijk.Aandoeningen.Enkele') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$2d18ddc3a2614b08a1b07cb23e15f326.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Aandoeningen, qScore, 4.0)");
+
+end
+rule "BaseTable_row_112"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$2d18ddc3a2614b08a1b07cb23e15f326 : Question( getAnswer() == 'Lichamelijk.Aandoeningen.Meerdere') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$2d18ddc3a2614b08a1b07cb23e15f326.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Aandoeningen, qScore, 3.0)");
+
+end
+rule "BaseTable_row_113"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$2d18ddc3a2614b08a1b07cb23e15f326 : Question( getAnswer() == 'Lichamelijk.Aandoeningen.Ernstig') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$2d18ddc3a2614b08a1b07cb23e15f326.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Aandoeningen, qScore, 2.0)");
+
+end
+rule "BaseTable_row_114"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$2d18ddc3a2614b08a1b07cb23e15f326 : Question( getAnswer() == 'Lichamelijk.Aandoeningen.NietFunctioneren') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$2d18ddc3a2614b08a1b07cb23e15f326.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Aandoeningen, qScore, 1.0)");
+
+end
+rule "BaseTable_row_115"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$65580759a9b049a68021e66e794bf584 : Question( getAnswer() == 'Lichamelijk.Behandeling.Geen') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$65580759a9b049a68021e66e794bf584.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Behandeling, qScore, 5.0)");
+
+end
+rule "BaseTable_row_116"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$65580759a9b049a68021e66e794bf584 : Question( getAnswer() == 'Lichamelijk.Behandeling.NietNoodzakelijk') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$65580759a9b049a68021e66e794bf584.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Behandeling, qScore, 4.0)");
+
+end
+rule "BaseTable_row_117"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$65580759a9b049a68021e66e794bf584 : Question( getAnswer() == 'Lichamelijk.Behandeling.Regelmatig') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$65580759a9b049a68021e66e794bf584.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Behandeling, qScore, 4.0)");
+
+end
+rule "BaseTable_row_118"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$65580759a9b049a68021e66e794bf584 : Question( getAnswer() == 'Lichamelijk.Behandeling.Vergeet') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$65580759a9b049a68021e66e794bf584.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Behandeling, qScore, 2.0)");
+
+end
+rule "BaseTable_row_119"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$65580759a9b049a68021e66e794bf584 : Question( getAnswer() == 'Lichamelijk.Behandeling.NogNiet') from $209d0d89061e454995f6e0e885434c37.getQuestions()
+)
+then
+	$65580759a9b049a68021e66e794bf584.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijk.Behandeling, qScore, 1.0)");
+
+end
+rule "BaseTable_row_120"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.Geen') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 5.0)");
+
+end
+rule "BaseTable_row_121"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.30niet') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 5.0)");
+
+end
+rule "BaseTable_row_122"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.Wel') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 3.0)");
+
+end
+rule "BaseTable_row_123"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.Afgekickt') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 4.0)");
+
+end
+rule "BaseTable_row_124"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.Afkicken+') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 3.0)");
+
+end
+rule "BaseTable_row_125"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.Afkicken-') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 2.0)");
+
+end
+rule "BaseTable_row_126"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.Afkicken.Wil+') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 2.0)");
+
+end
+rule "BaseTable_row_127"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$a523abe93ea44f9e89344619e3a4d55a : Question( getAnswer() == 'Verslaving.Aanwezig.Afkicken.Wil-') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$a523abe93ea44f9e89344619e3a4d55a.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Aanwezig, qScore, 1.0)");
+
+end
+rule "BaseTable_row_128"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$faa3130915234b58ab0c1ebab2958fc1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.NietNodig') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$faa3130915234b58ab0c1ebab2958fc1.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw, qScore, 5.0)");
+
+end
+rule "BaseTable_row_129"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$faa3130915234b58ab0c1ebab2958fc1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.Terugval') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$faa3130915234b58ab0c1ebab2958fc1.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw, qScore, 4.0)");
+
+end
+rule "BaseTable_row_130"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$faa3130915234b58ab0c1ebab2958fc1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.Intensief') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$faa3130915234b58ab0c1ebab2958fc1.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw, qScore, 4.0)");
+
+end
+rule "BaseTable_row_131"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$faa3130915234b58ab0c1ebab2958fc1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.Afzeggen') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$faa3130915234b58ab0c1ebab2958fc1.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw, qScore, 3.0)");
+
+end
+rule "BaseTable_row_132"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$faa3130915234b58ab0c1ebab2958fc1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.WeetNiet') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$faa3130915234b58ab0c1ebab2958fc1.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw, qScore, 3.0)");
+
+end
+rule "BaseTable_row_133"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$faa3130915234b58ab0c1ebab2958fc1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.WilNiet') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$faa3130915234b58ab0c1ebab2958fc1.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw, qScore, 1.0)");
+
+end
+rule "BaseTable_row_134"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$0452ac7a6a1842e6bad57ace8b2c9ad1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.NietNodig') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$0452ac7a6a1842e6bad57ace8b2c9ad1.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw2, qScore, 2.0)");
+
+end
+rule "BaseTable_row_135"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$0452ac7a6a1842e6bad57ace8b2c9ad1 : Question( getAnswer() == 'Verslaving.Behandeltrouw.Terugval') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$0452ac7a6a1842e6bad57ace8b2c9ad1.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw2, qScore, 1.0)");
+
+end
+rule "BaseTable_row_136"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$fd19fa48f9814288955a9e5a97d4c7ef : Question( getAnswer() == 'Verslaving.Behandeltrouw.Intensief') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$fd19fa48f9814288955a9e5a97d4c7ef.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw3, qScore, 3.0)");
+
+end
+rule "BaseTable_row_137"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$fd19fa48f9814288955a9e5a97d4c7ef : Question( getAnswer() == 'Verslaving.Behandeltrouw.Afzeggen') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$fd19fa48f9814288955a9e5a97d4c7ef.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Behandeltrouw3, qScore, 4.0)");
+
+end
+rule "BaseTable_row_138"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$11945634388d48f59469a3eb36fa5fd7 : Question( getAnswer() == 'Verslaving.Effect.Geen') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$11945634388d48f59469a3eb36fa5fd7.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Effect, qScore, 5.0)");
+
+end
+rule "BaseTable_row_139"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$11945634388d48f59469a3eb36fa5fd7 : Question( getAnswer() == 'Verslaving.Effect.RecentGeen') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$11945634388d48f59469a3eb36fa5fd7.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Effect, qScore, 4.0)");
+
+end
+rule "BaseTable_row_140"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$11945634388d48f59469a3eb36fa5fd7 : Question( getAnswer() == 'Verslaving.Effect.RecentWel') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$11945634388d48f59469a3eb36fa5fd7.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Effect, qScore, 2.0)");
+
+end
+rule "BaseTable_row_141"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$11945634388d48f59469a3eb36fa5fd7 : Question( getAnswer() == 'Verslaving.Effect.Zorgelijk') from $7926b588fcb340f58c8226d6600cf913.getQuestions()
+)
+then
+	$11945634388d48f59469a3eb36fa5fd7.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Verslaving.Effect, qScore, 1.0)");
+
+end
+rule "BaseTable_row_142"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$7e0c58a95fc8409b91100958f229b35c : Question( getAnswer() == 'ADL.Huishouden.Alles') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$7e0c58a95fc8409b91100958f229b35c.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Huishouden, qScore, 5.0)");
+
+end
+rule "BaseTable_row_143"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$7e0c58a95fc8409b91100958f229b35c : Question( getAnswer() == 'ADL.Huishouden.Bijna+') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$7e0c58a95fc8409b91100958f229b35c.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Huishouden, qScore, 4.0)");
+
+end
+rule "BaseTable_row_144"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$7e0c58a95fc8409b91100958f229b35c : Question( getAnswer() == 'ADL.Huishouden.Niets+') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$7e0c58a95fc8409b91100958f229b35c.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Huishouden, qScore, 3.0)");
+
+end
+rule "BaseTable_row_145"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$7e0c58a95fc8409b91100958f229b35c : Question( getAnswer() == 'ADL.Huishouden.Niets-') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$7e0c58a95fc8409b91100958f229b35c.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Huishouden, qScore, 2.0)");
+
+end
+rule "BaseTable_row_146"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$2574d764f7264c869b3a02c327784e1c : Question( getAnswer() == 'ADL.Organiseren.Zelf') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$2574d764f7264c869b3a02c327784e1c.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Organiseren, qScore, 5.0)");
+
+end
+rule "BaseTable_row_147"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$2574d764f7264c869b3a02c327784e1c : Question( getAnswer() == 'ADL.Organiseren.Oplosbaar') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$2574d764f7264c869b3a02c327784e1c.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Organiseren, qScore, 4.0)");
+
+end
+rule "BaseTable_row_148"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$2574d764f7264c869b3a02c327784e1c : Question( getAnswer() == 'ADL.Organiseren.WatHulp') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$2574d764f7264c869b3a02c327784e1c.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Organiseren, qScore, 3.0)");
+
+end
+rule "BaseTable_row_149"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$2574d764f7264c869b3a02c327784e1c : Question( getAnswer() == 'ADL.Organiseren.Hulp') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$2574d764f7264c869b3a02c327784e1c.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Organiseren, qScore, 2.0)");
+
+end
+rule "BaseTable_row_150"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$2574d764f7264c869b3a02c327784e1c : Question( getAnswer() == 'ADL.Organiseren.Hulpeloos') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$2574d764f7264c869b3a02c327784e1c.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Organiseren, qScore, 1.0)");
+
+end
+rule "BaseTable_row_151"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$0d45b6015fad4a5eb7863f23994da02f : Question( getAnswer() == 'ADL.Persoonlijk.Zelf') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$0d45b6015fad4a5eb7863f23994da02f.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Persoonlijk, qScore, 5.0)");
+
+end
+rule "BaseTable_row_152"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$0d45b6015fad4a5eb7863f23994da02f : Question( getAnswer() == 'ADL.Persoonlijk.Zelf-') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$0d45b6015fad4a5eb7863f23994da02f.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Persoonlijk, qScore, 4.0)");
+
+end
+rule "BaseTable_row_153"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$0d45b6015fad4a5eb7863f23994da02f : Question( getAnswer() == 'ADL.Persoonlijk.Moeite') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$0d45b6015fad4a5eb7863f23994da02f.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Persoonlijk, qScore, 3.0)");
+
+end
+rule "BaseTable_row_154"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$0d45b6015fad4a5eb7863f23994da02f : Question( getAnswer() == 'ADL.Persoonlijk.Niet+') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$0d45b6015fad4a5eb7863f23994da02f.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Persoonlijk, qScore, 2.0)");
+
+end
+rule "BaseTable_row_155"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$0d45b6015fad4a5eb7863f23994da02f : Question( getAnswer() == 'ADL.Persoonlijk.Niet-') from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()
+)
+then
+	$0d45b6015fad4a5eb7863f23994da02f.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (ADL.Persoonlijk, qScore, 1.0)");
+
+end
+rule "BaseTable_row_156"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$2287d641567340b8883bd12c8516e4c4 : Question( getAnswer() == 'Sociaal.Familie.GoedSteun+') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$2287d641567340b8883bd12c8516e4c4.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Familie, qScore, 5.0)");
+
+end
+rule "BaseTable_row_157"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$2287d641567340b8883bd12c8516e4c4 : Question( getAnswer() == 'Sociaal.Familie.GoedSteun-') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$2287d641567340b8883bd12c8516e4c4.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Familie, qScore, 1.0)");
+
+end
+rule "BaseTable_row_158"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$2287d641567340b8883bd12c8516e4c4 : Question( getAnswer() == 'Sociaal.Familie.Regelmatig') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$2287d641567340b8883bd12c8516e4c4.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Familie, qScore, 4.0)");
+
+end
+rule "BaseTable_row_159"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$2287d641567340b8883bd12c8516e4c4 : Question( getAnswer() == 'Sociaal.Familie.Weinig') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$2287d641567340b8883bd12c8516e4c4.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Familie, qScore, 3.0)");
+
+end
+rule "BaseTable_row_160"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$2287d641567340b8883bd12c8516e4c4 : Question( getAnswer() == 'Sociaal.Familie.Nooit') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$2287d641567340b8883bd12c8516e4c4.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Familie, qScore, 2.0)");
+
+end
+rule "BaseTable_row_161"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$2287d641567340b8883bd12c8516e4c4 : Question( getAnswer() == 'Sociaal.Familie.Geen') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$2287d641567340b8883bd12c8516e4c4.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Familie, qScore, 1.0)");
+
+end
+rule "BaseTable_row_162"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$b896ea2f891f40afa3677b9a0e424277 : Question( getAnswer() == 'Sociaal.VriendenS.RegelmatigSteun+') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$b896ea2f891f40afa3677b9a0e424277.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenS, qScore, 5.0)");
+
+end
+rule "BaseTable_row_163"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$b896ea2f891f40afa3677b9a0e424277 : Question( getAnswer() == 'Sociaal.VriendenS.RegelmatigSteun-') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$b896ea2f891f40afa3677b9a0e424277.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenS, qScore, 1.0)");
+
+end
+rule "BaseTable_row_164"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$b896ea2f891f40afa3677b9a0e424277 : Question( getAnswer() == 'Sociaal.VriendenS.Weinig') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$b896ea2f891f40afa3677b9a0e424277.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenS, qScore, 3.0)");
+
+end
+rule "BaseTable_row_165"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$b896ea2f891f40afa3677b9a0e424277 : Question( getAnswer() == 'Sociaal.VriendenS.Nooit') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$b896ea2f891f40afa3677b9a0e424277.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenS, qScore, 2.0)");
+
+end
+rule "BaseTable_row_166"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$b896ea2f891f40afa3677b9a0e424277 : Question( getAnswer() == 'Sociaal.VriendenS.Geen') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$b896ea2f891f40afa3677b9a0e424277.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenS, qScore, 1.0)");
+
+end
+rule "BaseTable_row_167"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$572645fa436e48cf82e57c7bf0e07d4a : Question( getAnswer() == 'Sociaal.VriendenR.Geen') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$572645fa436e48cf82e57c7bf0e07d4a.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenR, qScore, 5.0)");
+
+end
+rule "BaseTable_row_168"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$572645fa436e48cf82e57c7bf0e07d4a : Question( getAnswer() == 'Sociaal.VriendenR.Een') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$572645fa436e48cf82e57c7bf0e07d4a.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenR, qScore, 4.0)");
+
+end
+rule "BaseTable_row_169"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$572645fa436e48cf82e57c7bf0e07d4a : Question( getAnswer() == 'Sociaal.VriendenR.Hoofdzakelijk') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$572645fa436e48cf82e57c7bf0e07d4a.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.VriendenR, qScore, 2.0)");
+
+end
+rule "BaseTable_row_170"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$91bad22e4d3344bea5fc6633c5e0e24b : Question( getAnswer() == 'Sociaal.Beleving.Tevreden') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$91bad22e4d3344bea5fc6633c5e0e24b.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Beleving, qScore, 5.0)");
+
+end
+rule "BaseTable_row_171"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$91bad22e4d3344bea5fc6633c5e0e24b : Question( getAnswer() == 'Sociaal.Beleving.Minder') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$91bad22e4d3344bea5fc6633c5e0e24b.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Beleving, qScore, 3.0)");
+
+end
+rule "BaseTable_row_172"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$91bad22e4d3344bea5fc6633c5e0e24b : Question( getAnswer() == 'Sociaal.Beleving.Ontevreden') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$91bad22e4d3344bea5fc6633c5e0e24b.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Beleving, qScore, 3.0)");
+
+end
+rule "BaseTable_row_173"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$91bad22e4d3344bea5fc6633c5e0e24b : Question( getAnswer() == 'Sociaal.Beleving.Moeizaam') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$91bad22e4d3344bea5fc6633c5e0e24b.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Beleving, qScore, 2.0)");
+
+end
+rule "BaseTable_row_174"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$91bad22e4d3344bea5fc6633c5e0e24b : Question( getAnswer() == 'Sociaal.Beleving.TrekTerug') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$91bad22e4d3344bea5fc6633c5e0e24b.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Beleving, qScore, 2.0)");
+
+end
+rule "BaseTable_row_175"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$91bad22e4d3344bea5fc6633c5e0e24b : Question( getAnswer() == 'Sociaal.Beleving.Eenzaam') from $f5c3dc5626d94788812157645307cd62.getQuestions()
+)
+then
+	$91bad22e4d3344bea5fc6633c5e0e24b.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal.Beleving, qScore, 2.0)");
+
+end
+rule "BaseTable_row_176"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$4f2bfea9beeb431f957a810edbc85c3c : Question( getAnswer() == 'Participatie.Participatie.3+') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$4f2bfea9beeb431f957a810edbc85c3c.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Participatie, qScore, 5.0)");
+
+end
+rule "BaseTable_row_177"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$4f2bfea9beeb431f957a810edbc85c3c : Question( getAnswer() == 'Participatie.Participatie.2') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$4f2bfea9beeb431f957a810edbc85c3c.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Participatie, qScore, 4.0)");
+
+end
+rule "BaseTable_row_178"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$4f2bfea9beeb431f957a810edbc85c3c : Question( getAnswer() == 'Participatie.Participatie.1') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$4f2bfea9beeb431f957a810edbc85c3c.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Participatie, qScore, 4.0)");
+
+end
+rule "BaseTable_row_179"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$4f2bfea9beeb431f957a810edbc85c3c : Question( getAnswer() == 'Participatie.Participatie.0') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$4f2bfea9beeb431f957a810edbc85c3c.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Participatie, qScore, 4.0)");
+
+end
+rule "BaseTable_row_180"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$2a5a405f6cd34d44ae2cba0e1c325aec : Question( getAnswer() == 'Participatie.Beperkingen.Geen') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$2a5a405f6cd34d44ae2cba0e1c325aec.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Beperkingen, qScore, 5.0)");
+
+end
+rule "BaseTable_row_181"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$2a5a405f6cd34d44ae2cba0e1c325aec : Question( getAnswer() == 'Participatie.Beperkingen.Vervoer') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$2a5a405f6cd34d44ae2cba0e1c325aec.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Beperkingen, qScore, 4.0)");
+
+end
+rule "BaseTable_row_182"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$2a5a405f6cd34d44ae2cba0e1c325aec : Question( getAnswer() == 'Participatie.Beperkingen.Kinderen') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$2a5a405f6cd34d44ae2cba0e1c325aec.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Beperkingen, qScore, 4.0)");
+
+end
+rule "BaseTable_row_183"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$2a5a405f6cd34d44ae2cba0e1c325aec : Question( getAnswer() == 'Participatie.Beperkingen.BeperktZin') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$2a5a405f6cd34d44ae2cba0e1c325aec.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Beperkingen, qScore, 4.0)");
+
+end
+rule "BaseTable_row_184"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$2a5a405f6cd34d44ae2cba0e1c325aec : Question( getAnswer() == 'Participatie.Beperkingen.Vaardigheden') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$2a5a405f6cd34d44ae2cba0e1c325aec.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Beperkingen, qScore, 3.0)");
+
+end
+rule "BaseTable_row_185"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$2a5a405f6cd34d44ae2cba0e1c325aec : Question( getAnswer() == 'Participatie.Beperkingen.GeenZin') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$2a5a405f6cd34d44ae2cba0e1c325aec.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Beperkingen, qScore, 2.0)");
+
+end
+rule "BaseTable_row_186"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$2a5a405f6cd34d44ae2cba0e1c325aec : Question( getAnswer() == 'Participatie.Beperkingen.LooptOver') from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()
+)
+then
+	$2a5a405f6cd34d44ae2cba0e1c325aec.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Participatie.Beperkingen, qScore, 1.0)");
+
+end
+rule "BaseTable_row_187"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$566de07fb1e643a0a05b4df04a508b16 : Question( getAnswer() == 'Justitie.Strafblad.Geen') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$566de07fb1e643a0a05b4df04a508b16.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Strafblad, qScore, 5.0)");
+
+end
+rule "BaseTable_row_188"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$566de07fb1e643a0a05b4df04a508b16 : Question( getAnswer() == 'Justitie.Strafblad.Vergrijpen') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$566de07fb1e643a0a05b4df04a508b16.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Strafblad, qScore, 4.0)");
+
+end
+rule "BaseTable_row_189"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$566de07fb1e643a0a05b4df04a508b16 : Question( getAnswer() == 'Justitie.Strafblad.Vrijheidsstraf') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$566de07fb1e643a0a05b4df04a508b16.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Strafblad, qScore, 3.0)");
+
+end
+rule "BaseTable_row_190"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$566de07fb1e643a0a05b4df04a508b16 : Question( getAnswer() == 'Justitie.Strafblad.Actueel') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$566de07fb1e643a0a05b4df04a508b16.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Strafblad, qScore, 1.0)");
+
+end
+rule "BaseTable_row_191"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$4e6020cb4828423cb631bc54e5368824 : Question( getAnswer() == 'Jusitie.Politie.Nooit') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$4e6020cb4828423cb631bc54e5368824.setVariableValue('qScore', 5.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Politie, qScore, 5.0)");
+
+end
+rule "BaseTable_row_192"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$4e6020cb4828423cb631bc54e5368824 : Question( getAnswer() == 'Justitie.Politie.Zelden') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$4e6020cb4828423cb631bc54e5368824.setVariableValue('qScore', 4.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Politie, qScore, 4.0)");
+
+end
+rule "BaseTable_row_193"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$4e6020cb4828423cb631bc54e5368824 : Question( getAnswer() == 'Justitie.Politie.Incidenteel') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$4e6020cb4828423cb631bc54e5368824.setVariableValue('qScore', 3.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Politie, qScore, 3.0)");
+
+end
+rule "BaseTable_row_194"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$4e6020cb4828423cb631bc54e5368824 : Question( getAnswer() == 'Justitie.Politie.Regelmatig') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$4e6020cb4828423cb631bc54e5368824.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Politie, qScore, 2.0)");
+
+end
+rule "BaseTable_row_195"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$4e6020cb4828423cb631bc54e5368824 : Question( getAnswer() == 'Justitie.Politie.Overlast') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$4e6020cb4828423cb631bc54e5368824.setVariableValue('qScore', 2.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Politie, qScore, 2.0)");
+
+end
+rule "BaseTable_row_196"
+when
+(
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$4e6020cb4828423cb631bc54e5368824 : Question( getAnswer() == 'Justitie.Politie.Vaak') from $6adbf3a69e27494387a062207cc99ff3.getQuestions()
+)
+then
+	$4e6020cb4828423cb631bc54e5368824.setVariableValue('qScore', 1.0);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie.Politie, qScore, 1.0)");
+
+end
+rule "9a2c577daed24fbb952b21f12fc57f73"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ddbf69a6b1fb439eb8ad9b60b927357f : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Financiën') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Financien.Inkomen' || == 'Financien.Schulden' || == 'Financien.Uitgaven' || == 'Financien.Beheer' || == 'Financien.Beheer.Hulp' ) from $ddbf69a6b1fb439eb8ad9b60b927357f.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$ddbf69a6b1fb439eb8ad9b60b927357f.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Financiën, cScore, " + $sol +")");
+
+end
+rule "0163002036f14154b15cbaa6fdac3ca6"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$79cf0977e36d482c9232c776dbeefb59 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Dagbesteding') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Dagbesteding.Werk' || == 'Dagbesteding.Ondersteuning' || == 'Dagbesteding.Bezigheid' || == 'Dagbesteding.Overlast' ) from $79cf0977e36d482c9232c776dbeefb59.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$79cf0977e36d482c9232c776dbeefb59.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Dagbesteding, cScore, " + $sol +")");
+
+end
+rule "3e407d69cc294ffca4b66b4fb085c2fa"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$310af10dd69b46c98918dad086737db2 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huisvesting') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Veiligheid' || == 'Huisvesting.Gebruik' || == 'Huisvesting.Contract' || == 'Huisvesting.Contract2' || == 'Huisvesting.Contract3' || == 'Huisvesting.Huur' || == 'Huisvesting.Huur2' ) from $310af10dd69b46c98918dad086737db2.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$310af10dd69b46c98918dad086737db2.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huisvesting, cScore, " + $sol +")");
+
+end
+rule "623d8a29dd73460895912e08e1650691"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$91b28b61c16b484a8e813b57411a93f3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Huiselijke relaties') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Gezin.Samenstelling' || == 'Gezin.Samengaan' || == 'Gezin.Druk' || == 'Gezin.Geweld' ) from $91b28b61c16b484a8e813b57411a93f3.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$91b28b61c16b484a8e813b57411a93f3.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Huiselijke relaties, cScore, " + $sol +")");
+
+end
+rule "75e8da5ecdf34ca883395bb1d12fabcc"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$a70c28225dfa40b48d7a44ac5557873d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Geestelijke gezondheid') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Geestelijk.Aandoening' || == 'Geestelijk.Functioneren' || == 'Geestelijk.Behandeling' ) from $a70c28225dfa40b48d7a44ac5557873d.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$a70c28225dfa40b48d7a44ac5557873d.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Geestelijke gezondheid, cScore, " + $sol +")");
+
+end
+rule "ad14382457f64644a1a991148bc2086e"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$209d0d89061e454995f6e0e885434c37 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Lichamelijke gezondheid') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Lichamelijk.Aandoeningen' || == 'Lichamelijk.Behandeling' ) from $209d0d89061e454995f6e0e885434c37.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$209d0d89061e454995f6e0e885434c37.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Lichamelijke gezondheid, cScore, " + $sol +")");
+
+end
+rule "302c7381edb74f41912c10b6d60faa7b"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$7926b588fcb340f58c8226d6600cf913 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Alcohol-, drugs-, game- of gokverslaving') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Verslaving.Aanwezig' || == 'Verslaving.Behandeltrouw' || == 'Verslaving.Behandeltrouw2' || == 'Verslaving.Behandeltrouw3' || == 'Verslaving.Effect' ) from $7926b588fcb340f58c8226d6600cf913.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$7926b588fcb340f58c8226d6600cf913.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Alcohol-, drugs-, game- of gokverslaving, cScore, " + $sol +")");
+
+end
+rule "26f36467427346b7978e52cf3d2446e6"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$ca37cdf4e1d44c92bbcc889ed567357d : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Activiteiten dagelijks leven') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'ADL.Huishouden' || == 'ADL.Organiseren' || == 'ADL.Persoonlijk' ) from $ca37cdf4e1d44c92bbcc889ed567357d.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$ca37cdf4e1d44c92bbcc889ed567357d.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Activiteiten dagelijks leven, cScore, " + $sol +")");
+
+end
+rule "b3a54d16e2464c6e813f959fda83dae6"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$f5c3dc5626d94788812157645307cd62 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Sociaal netwerk') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Sociaal.Familie' || == 'Sociaal.VriendenS' || == 'Sociaal.VriendenR' || == 'Sociaal.Beleving' ) from $f5c3dc5626d94788812157645307cd62.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$f5c3dc5626d94788812157645307cd62.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Sociaal netwerk, cScore, " + $sol +")");
+
+end
+rule "12c9772cdcd14609b60841d25ed77391"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Maatschappelijke participatie') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Participatie.Participatie' || == 'Participatie.Beperkingen' ) from $9e52c19c09ac41f4a26e7d5d58e6b3dc.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$9e52c19c09ac41f4a26e7d5d58e6b3dc.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Maatschappelijke participatie, cScore, " + $sol +")");
+
+end
+rule "9f0927baa297414295d668ea9cff6fa4"
+when
+	$96aca788ac164075935831aa4b8ce210 : SubmittedForm() and
+	$6adbf3a69e27494387a062207cc99ff3 : Category() from $96aca788ac164075935831aa4b8ce210.getCategory('Justitie') and
+	$var : List() from collect( Question(isScoreSet('qScore'), getTag() == 'Justitie.Strafblad' || == 'Justitie.Politie' ) from $6adbf3a69e27494387a062207cc99ff3.getQuestions()) 
+	accumulate( Question($value : getVariableValue('qScore')) from $var; $sol : min($value)) 
+then
+	$6adbf3a69e27494387a062207cc99ff3.setVariableValue('cScore', $sol);
+	AbcdLogger.debug("DroolsRule", "Variable set (Justitie, cScore, " + $sol +")");
+
+end

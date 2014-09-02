@@ -63,6 +63,8 @@ public class SettingsWindow extends PopupWindow {
 								windowAccept.close();
 							}
 						});
+						windowAccept.showCentered();
+						close();
 					}
 				});
 		Button droolsEngineButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_DROOLS_ENGINE),
@@ -115,9 +117,10 @@ public class SettingsWindow extends PopupWindow {
 							public void acceptAction(AcceptCancelWindow window) {
 								ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
 								windowAccept.close();
-								close();
 							}
 						});
+						windowAccept.showCentered();
+						close();
 					}
 				});
 		Button closeButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_CLOSE), new ClickListener() {

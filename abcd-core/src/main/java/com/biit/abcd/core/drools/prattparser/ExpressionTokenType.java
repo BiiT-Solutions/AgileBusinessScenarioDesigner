@@ -3,7 +3,7 @@ package com.biit.abcd.core.drools.prattparser;
 public enum ExpressionTokenType {
 
 	// Available functions
-	NOT, MAX, MIN, ABS, SQRT, IN, BETWEEN, ROUND, AVG,
+	NOT, MAX, MIN, ABS, SQRT, IN, BETWEEN, ROUND, AVG, PMT,
 	// Available operators
 	NULL, AND, OR, EQUALS, NOT_EQUALS, GREATER_THAN, GREATER_EQUALS, LESS_THAN, ASSIGNATION, PLUS, MINUS, MULTIPLICATION, DIVISION, MODULE, POW,
 	// Available symbols
@@ -49,6 +49,10 @@ public enum ExpressionTokenType {
 			return "BETWEEN(";
 		case IN:
 			return "IN(";
+		case MIN:
+			return "MIN(";
+		case PMT:
+			return "PMT(";
 		default:
 			return null;
 		}

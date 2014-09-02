@@ -11,4 +11,5 @@ import javax.persistence.Table;
 @Table(name = "expression_value")
 public abstract class ExpressionValue extends Expression {
 
+	public abstract Object getValue();
 }

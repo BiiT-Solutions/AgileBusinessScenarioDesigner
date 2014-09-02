@@ -85,4 +85,9 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		return copy;
 	}
 
+	@Override
+	public Object getValue() {
+		return getReference();
+	}
+
 }

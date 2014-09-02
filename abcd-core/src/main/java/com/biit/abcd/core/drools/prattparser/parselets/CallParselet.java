@@ -18,6 +18,8 @@ public class CallParselet implements InfixParselet {
 	@Override
 	public ITreeElement parse(Parser parser, ITreeElement left, ExpressionToken token) {
 
+//		System.out.println("CALL PARSELET: " + token);
+
 		// Parse the comma-separated arguments until we hit, ")".
 		List<ITreeElement> args = new ArrayList<ITreeElement>();
 

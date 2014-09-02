@@ -14,6 +14,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
@@ -21,8 +22,10 @@ import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.exceptions.NotValidChildException;
@@ -43,12 +46,20 @@ public class PrattParserTest {
 		question.addChild(answer2);
 		CustomVariable cVar = new CustomVariable(form, "catVar", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
+		CustomVariable qVar = new CustomVariable(form, "questVar", CustomVariableType.NUMBER,
+				CustomVariableScope.QUESTION);
 
 		ExpressionValueTreeObjectReference expValQ1 = new ExpressionValueTreeObjectReference(question);
 		ExpressionValueTreeObjectReference expValQ1A1 = new ExpressionValueTreeObjectReference(answer1);
 		ExpressionValueTreeObjectReference expValQ1A2 = new ExpressionValueTreeObjectReference(answer2);
 		ExpressionValueCustomVariable expValCVar = new ExpressionValueCustomVariable(category, cVar);
+		ExpressionValueCustomVariable expValQVar = new ExpressionValueCustomVariable(question, qVar);
 		ExpressionValueNumber expValNumber = new ExpressionValueNumber(5.);
+		// Generics
+		ExpressionValueGenericCustomVariable expValGenericCatScore = new ExpressionValueGenericCustomVariable(
+				GenericTreeObjectType.CATEGORY, cVar);
+		ExpressionValueGenericCustomVariable expValGenericQuestScore = new ExpressionValueGenericCustomVariable(
+				GenericTreeObjectType.QUESTION_CATEGORY, qVar);
 
 		// Simple TreeObject equals TreeObject (e.g. Q1 == A1)
 		String actual = parseDrools(new ExpressionChain(expValQ1,
@@ -103,7 +114,7 @@ public class PrattParserTest {
 						AvailableOperator.EQUALS), expValQ1A1));
 		Assert.assertEquals(actual, "null[null[null[Q1], ==, null[Q1A1]], &&, null[null[Q1], ==, null[Q1A1]]]");
 
-		// Q IN (A1, A2) AND Q IN (A1, A2) AND Q=A
+		// Q IN (A1, A2) AND Q IN (A1, A2) AND Q==A
 		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionFunction(AvailableFunction.IN), expValQ1A1,
 				new ExpressionSymbol(AvailableSymbol.COMMA), expValQ1A2, new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.AND), expValQ1,
@@ -114,6 +125,22 @@ public class PrattParserTest {
 		Assert.assertEquals(actual, "null[null[null[null[Q1], IN(, null[Q1A1], null[Q1A2]], "
 				+ "&&, null[null[Q1], IN(, null[Q1A1], null[Q1A2]]], " + "&&, null[null[Q1], ==, null[Q1A1]]]");
 
+		// Cat.score = Min(q.score, q.score)
+		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), expValQVar, new ExpressionSymbol(AvailableSymbol.COMMA),
+				expValQVar, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, "null[null[categoryTest.catVar], MIN(, null[Q1.questVar], null[Q1.questVar]]");
+
+		// Cat.score = Quest.score
+		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				expValQVar));
+		Assert.assertEquals(actual, "null[null[categoryTest.catVar], null[Q1.questVar]]");
+
+		// Generics test
+		actual = parseDrools(new ExpressionChain(expValGenericCatScore, new ExpressionOperatorMath(
+				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), expValGenericQuestScore,
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, "null[null[Categories_catVar], MIN(, null[Category_Questions_questVar]]");
 	}
 
 	/**
