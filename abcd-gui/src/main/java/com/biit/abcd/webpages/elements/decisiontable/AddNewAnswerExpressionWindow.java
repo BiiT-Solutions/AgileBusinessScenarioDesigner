@@ -25,10 +25,10 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
-		// Add the question to the expression
-		reference.setEditable(false);
-		expressionChain.addExpression(0, reference);
 		this.expressionChain = expressionChain.generateCopy();
+		// Add the question to the expression
+		this.expressionChain.addExpression(0, reference);
+		this.expressionChain.getExpressions().get(0).setEditable(false);
 
 		if (reference instanceof ExpressionValueCustomVariable) {
 			// Custom variable
@@ -96,9 +96,13 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	}
 
 	public ExpressionChain getExpressionChain() {
-		ExpressionValueTreeObjectReference reference = (ExpressionValueTreeObjectReference) expressionChain
-				.removeFirstExpression();
-		reference.setEditable(true);
+		removeFirstExpression();
 		return expressionChain;
+	}
+
+	public void removeFirstExpression() {
+		if ((expressionChain != null) && !expressionChain.getExpressions().isEmpty()) {
+			expressionChain.removeFirstExpression();
+		}
 	}
 }

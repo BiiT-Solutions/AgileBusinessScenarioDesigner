@@ -25,6 +25,7 @@ import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.CancelActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
@@ -586,6 +587,12 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 							+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 
 					newActionValueWindow.close();
+				}
+			});
+			newActionValueWindow.addCancelActionListener(new CancelActionListener() {
+				@Override
+				public void cancelAction(AcceptCancelWindow window) {
+					newActionValueWindow.removeFirstExpression();
 				}
 			});
 		} else {

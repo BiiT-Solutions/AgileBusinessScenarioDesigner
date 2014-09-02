@@ -42,24 +42,6 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 
 	public void initTabs(){
 		// First Tab
-		TabLayout operatorLayout;
-		operatorLayout = new TabOperatorLayout();
-		operatorLayout.addNewElementListener(new ElementAddedListener() {
-
-			@Override
-			public void elementAdded(Object newElement) {
-				if (getSelectedViewer() != null) {
-					getSelectedViewer().addElementToSelected((Expression) newElement);
-
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
-							+ " with 'Value: " + newElement + "'.");
-				}
-			}
-		});
-		setTab(operatorLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
-
-		// Second Tab
 		TabFormVariablesLayout formVariablesLayout = new ExpressionTabFormVariablesLayout();
 		formVariablesLayout.addNewElementListener(new ElementAddedListener() {
 
@@ -85,6 +67,24 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 			}
 		});
 		setTab(formVariablesLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
+
+		// Second Tab
+		TabLayout operatorLayout;
+		operatorLayout = new TabOperatorLayout();
+		operatorLayout.addNewElementListener(new ElementAddedListener() {
+
+			@Override
+			public void elementAdded(Object newElement) {
+				if (getSelectedViewer() != null) {
+					getSelectedViewer().addElementToSelected((Expression) newElement);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
+							+ " with 'Value: " + newElement + "'.");
+				}
+			}
+		});
+		setTab(operatorLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
 
 		// Third Tab
 		TabFormGenericTreeObjectLayout formVariablesScopeLayout = new TabFormGenericTreeObjectLayout();

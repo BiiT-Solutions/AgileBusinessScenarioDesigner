@@ -67,7 +67,7 @@ public class TabOperatorLayout extends TabLayout {
 		this.setMargin(false);
 	}
 
-	private void createMathOperators(AbstractLayout layout) {
+	private void createMathOperators(GridLayout layout) {
 		Button assignButton = createButton("=", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
@@ -131,7 +131,8 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		layout.addComponent(assignButton);
+		assignButton.setWidth("100%");
+		layout.addComponent(assignButton, 0, 0, GRID_COLUMNS-1, 0);
 		layout.addComponent(plusButton);
 		layout.addComponent(minusButton);
 		layout.addComponent(multButton);
