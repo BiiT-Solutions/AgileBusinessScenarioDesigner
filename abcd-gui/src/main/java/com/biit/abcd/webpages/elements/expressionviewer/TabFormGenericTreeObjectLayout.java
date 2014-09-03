@@ -69,13 +69,6 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if ((variableSelection.getValue() != null) && (variableTable.getValue() != null)) {
-					// final ExpressionValueGenericCustomVariable
-					// formVariableReference = new
-					// ExpressionValueGenericCustomVariable(
-					// (GenericTreeObjectVariable) variableTable.getValue(),
-					// (CustomVariable) variableSelection
-					// .getValue());
-					// addExpression(formVariableReference);
 					addExpression(new ExpressionValueGenericCustomVariable((GenericTreeObjectType) variableTable
 							.getValue(), (CustomVariable) variableSelection.getValue()));
 				}

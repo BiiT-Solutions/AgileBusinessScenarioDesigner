@@ -16,7 +16,7 @@ import com.biit.jexeval.exceptions.ExpressionException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @Test(groups = { "expressionEvaluator" })
-public class ExpressionTest {
+public class ExpressionCheck {
 
 	@Test
 	public void testInFunction() {

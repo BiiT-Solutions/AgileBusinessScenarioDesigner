@@ -407,6 +407,18 @@
         primary key (ID)
     );
 
+    create table expression_value_systemdate (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        isEditable bit not null,
+        value datetime,
+        primary key (ID)
+    );
+
     create table expression_value_timestamp (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -415,7 +427,6 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
-        systemDate bit not null,
         value datetime,
         primary key (ID)
     );
@@ -844,6 +855,12 @@
     alter table expression_value_string 
         add constraint UK_imteh9r9im4ctld1b9b5kkacw  unique (comparationId);
 
+    alter table expression_value_systemdate 
+        add constraint UK_mj1pnbvm8gv3gngq2yh15502f  unique (ID);
+
+    alter table expression_value_systemdate 
+        add constraint UK_co43pbqqg7civhr3g8p752mt8  unique (comparationId);
+
     alter table expression_value_timestamp 
         add constraint UK_kju72l70wu9w63min4j3y59jw  unique (ID);
 
@@ -944,13 +961,13 @@
         add constraint UK_gtcyh8mle277igwtb5dvhjkr1  unique (comparationId);
 
     alter table tree_forms 
+        add constraint UK_2lpmhpxyj0ahdclkdlep5fn9t  unique (name, version);
+
+    alter table tree_forms 
         add constraint UK_plkq2e2pj19uak2ncrgf1ft6v  unique (ID);
 
     alter table tree_forms 
         add constraint UK_k9mhkly9g8lqwf1m9esm50y6m  unique (comparationId);
-
-    alter table tree_forms 
-        add constraint UK_2lpmhpxyj0ahdclkdlep5fn9t  unique (name, version);
 
     alter table tree_forms_diagram 
         add constraint UK_otbxhecixo9rbriamr8v44nik  unique (diagrams_ID);

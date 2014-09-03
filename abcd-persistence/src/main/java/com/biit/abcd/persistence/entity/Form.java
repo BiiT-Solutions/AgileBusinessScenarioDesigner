@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -21,7 +22,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.liferay.portal.model.UserGroup;
 
 @Entity
-@Table(name = "tree_forms")
+@Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
 public class Form extends BaseForm {
 
 	@Column(nullable = false)

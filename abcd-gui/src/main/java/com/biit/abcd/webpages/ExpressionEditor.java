@@ -143,6 +143,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 						}
 					}
 				});
+				windowAccept.showCentered();
 			}
 		});
 

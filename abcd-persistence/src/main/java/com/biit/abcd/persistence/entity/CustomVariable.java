@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,11 +20,15 @@ public class CustomVariable extends StorableObject {
 
 	// Used mainly for unique constraint.
 	@ManyToOne
-	@JoinColumn(name="form")
+	@JoinColumn(name = "form")
 	private Form form;
 
+	// MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~190.
+	@Column(length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 	@Enumerated(EnumType.STRING)
+	// MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~190.
+	@Column(length = MAX_UNIQUE_COLUMN_LENGTH)
 	private CustomVariableScope scope;
 	@Enumerated(EnumType.STRING)
 	private CustomVariableType type;
@@ -72,11 +77,12 @@ public class CustomVariable extends StorableObject {
 
 	/**
 	 * Returns true if the custom variable compared has the same name and scope
+	 * 
 	 * @param otherVariable
 	 * @return
 	 */
-	public boolean duplicatedCustomVariable(CustomVariable otherVariable){
-		if(getName().equals(otherVariable.getName()) && getScope().equals(otherVariable.getScope())) {
+	public boolean duplicatedCustomVariable(CustomVariable otherVariable) {
+		if (getName().equals(otherVariable.getName()) && getScope().equals(otherVariable.getScope())) {
 			return true;
 		} else {
 			return false;
