@@ -43,7 +43,7 @@ public class ExpressionTest {
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 
-		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore=1+1");
+		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = 1 + 1");
 		expressionChain.getExpressionEvaluator().eval();
 	}
 
@@ -76,7 +76,7 @@ public class ExpressionTest {
 
 		expressionChain.getExpressionEvaluator().eval();
 	}
-	
+
 	@Test(expectedExceptions = ExpressionException.class)
 	public void variableWithNumberError() throws FieldTooLongException, NotValidChildException {
 		// Create the form
@@ -105,6 +105,68 @@ public class ExpressionTest {
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueString("1"));
 		expressionChain.addExpression(customQuestionVariable);
+
+		expressionChain.getExpressionEvaluator().eval();
+	}
+
+	@Test
+	public void functionIn() throws FieldTooLongException, NotValidChildException {
+		// Create the form
+		Form form = new Form("DhszwForm");
+		Category category = new Category(CATEGORY_NAME);
+		form.addChild(category);
+		Question question = new Question(QUESTION_NAME);
+		category.addChild(question);
+
+		// Create the custom variables
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY);
+		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
+				CustomVariableScope.QUESTION);
+
+		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueCustomVariable customCategoryVariable = new ExpressionValueCustomVariable(category,
+				customVarCategory);
+
+		// Category.Score=Category.Score+1Question.Score;
+		expressionChain.addExpression(customCategoryVariable);
+		expressionChain.addExpression(new ExpressionFunction(AvailableFunction.IN));
+		expressionChain.addExpression(new ExpressionValueString("1"));
+		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
+		expressionChain.addExpression(new ExpressionValueString("1"));
+		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+
+		expressionChain.getExpressionEvaluator().eval();
+	}
+
+	@Test(expectedExceptions = ExpressionException.class)
+	public void functionInBad() throws FieldTooLongException, NotValidChildException {
+		// Create the form
+		Form form = new Form("DhszwForm");
+		Category category = new Category(CATEGORY_NAME);
+		form.addChild(category);
+		Question question = new Question(QUESTION_NAME);
+		category.addChild(question);
+
+		// Create the custom variables
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY);
+		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
+				CustomVariableScope.QUESTION);
+
+		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueCustomVariable customCategoryVariable = new ExpressionValueCustomVariable(category,
+				customVarCategory);
+
+		// Category.Score=Category.Score+1Question.Score;
+		expressionChain.addExpression(customCategoryVariable);
+		expressionChain.addExpression(new ExpressionValueString("1"));
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
+		expressionChain.addExpression(new ExpressionFunction(AvailableFunction.IN));
+		expressionChain.addExpression(new ExpressionValueString("1"));
+		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
+		expressionChain.addExpression(new ExpressionValueString("1"));
+		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 
 		expressionChain.getExpressionEvaluator().eval();
 	}

@@ -122,9 +122,9 @@ public class ExpressionChain extends Expression implements INameAttribute {
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
-				result += filterVariables(expressions.get(i));
+				result += filterVariables(expressions.get(i)) + " ";
 			} else {
-				result += expressions.get(i).getExpression();
+				result += expressions.get(i).getExpression() + " ";
 			}
 		}
 		return result.trim();

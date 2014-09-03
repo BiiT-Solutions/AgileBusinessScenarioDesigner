@@ -4,13 +4,13 @@
 		<groups>
 			<run>
 				<include name="expressionEvaluator" />
-				<include name="formDao" />
-				<include name="diagramDao" />
-				<include name="formCustomVariablesDao" />
-				<include name="globalVariablesDao" />
-				<include name="tableRulesDao" />
-				<include name="orphan" />
-				<include name="genericTreeObjectVariablesDao" />
+				<exclude name="formDao" />
+				<exclude name="diagramDao" />
+				<exclude name="formCustomVariablesDao" />
+				<exclude name="globalVariablesDao" />
+				<exclude name="tableRulesDao" />
+				<exclude name="orphan" />
+				<exclude name="genericTreeObjectVariablesDao" />
 			</run>
 		</groups>
 		<classes>
