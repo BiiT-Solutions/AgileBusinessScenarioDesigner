@@ -36,8 +36,6 @@ public class TabOperatorLayout extends TabLayout {
 		GridLayout inputLayout = new GridLayout(1, 1);
 		inputLayout.setWidth("100%");
 		createInputField(inputLayout);
-		// addComponent(inputLayout);
-		// setComponentAlignment(inputLayout, Alignment.MIDDLE_CENTER);
 
 		GridLayout operatorLayout = new GridLayout(GRID_COLUMNS, 4);
 		operatorLayout.setWidth("100%");
@@ -49,17 +47,12 @@ public class TabOperatorLayout extends TabLayout {
 		matLayout.addComponent(inputLayout);
 		matLayout.addComponent(operatorLayout);
 
-		// addComponent(operatorLayout);
-		// setComponentAlignment(operatorLayout, Alignment.MIDDLE_CENTER);
 		accordion.addTab(matLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_MATH), true);
 
 		GridLayout logicalLayout = new GridLayout(GRID_COLUMNS, 4);
 		logicalLayout.setWidth("100%");
 		createLogicalOperators(logicalLayout);
 		createLogicalFunctionsOperators(logicalLayout);
-
-		// addComponent(logicalLayout);
-		// setComponentAlignment(logicalLayout, Alignment.MIDDLE_CENTER);
 
 		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
 		addComponent(accordion);

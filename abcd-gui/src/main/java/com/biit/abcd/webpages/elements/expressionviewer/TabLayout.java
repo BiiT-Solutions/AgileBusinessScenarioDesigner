@@ -28,14 +28,10 @@ public abstract class TabLayout extends VerticalLayout {
 	}
 
 	protected void addExpression(Expression expression) {
-		// formExpression.addExpression(expression);
-		// firePropertyUpdateListener(expression);
 		fireElementAddedListener(expression);
 	}
 
 	protected void updateExpression(Expression expression) {
-		// formExpression.addExpression(expression);
-		// firePropertyUpdateListener(expression);
 		fireElementUpdatedListener(expression);
 	}
 

@@ -112,10 +112,6 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 					variableSelection.addItem(customvariable);
 					variableSelection.setItemCaption(customvariable, customvariable.getName());
 				}
-				// if ((customVariables != null) && !customVariables.isEmpty())
-				// {
-				// variableSelection.setValue(customVariables.get(0));
-				// }
 			}
 		}
 	}

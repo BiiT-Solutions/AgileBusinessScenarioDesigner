@@ -69,7 +69,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		expressions.add(index, expression);
 	}
 
-	public Expression removeFirstExpression(){
+	public Expression removeFirstExpression() {
 		return expressions.remove(0);
 	}
 
@@ -87,7 +87,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	/**
 	 * Some characters are not allowed in the Expression Evaluator.
-	 *
+	 * 
 	 * @param expression
 	 * @return
 	 */
@@ -110,7 +110,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	/**
 	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
-	 *
+	 * 
 	 * @return
 	 */
 	@Override
@@ -122,7 +122,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
-				result += filterVariables(expressions.get(i)) + " ";
+				result += filterVariables(expressions.get(i));
 			} else {
 				result += expressions.get(i).getExpression();
 			}
@@ -148,6 +148,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 					// Value is not needed for evaluation.
 					String value = "1";
 					evaluator.with(varName, value);
+					definedVariables.add(varName);
 				}
 			}
 		}
