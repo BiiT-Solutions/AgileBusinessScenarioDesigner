@@ -11,3 +11,4 @@ widgetsets/
 tmp
 *.zip
 styles.css
+/abcd-core/src/test/resources/generatedRules.drl

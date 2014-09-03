@@ -16,6 +16,8 @@ import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImp
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -36,11 +38,13 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -116,11 +120,19 @@ public class TableRuleTest {
 	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
 	public void testTableRuleSpecialConditions() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException {
+			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, InvalidAnswerFormatException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createRuleTestSpecialConditionsForm();
 		formDrools.parse(vaadinForm);
 		formDrools.runDroolsRules(this.form);
+
+		ICategory testCat1 = this.form.getCategory("Sociaal netwerk");
+		com.biit.abcd.core.drools.facts.inputform.Question testQuestion1 = (com.biit.abcd.core.drools.facts.inputform.Question) testCat1
+				.getQuestion("Sociaal.Familie");
+		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+				.getCategory("Persoonsgegevens");
+		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
+		Assert.assertEquals(36.0, testCat2.getNumberVariableValue("cScore"));
 	}
 
 	/**
@@ -238,12 +250,14 @@ public class TableRuleTest {
 	}
 
 	private Form createRuleTestSpecialConditionsForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
 		Category category = new Category("Sociaal netwerk");
 		form.addChild(category);
+		Category category2 = new Category("Persoonsgegevens");
+		form.addChild(category2);
 
 		Question question1 = new Question("Sociaal.Familie");
 		Answer answer1Question1 = new Answer("Sociaal.Familie.Regelmatig");
@@ -259,6 +273,16 @@ public class TableRuleTest {
 		Answer answer1Question3 = new Answer("Sociaal.Beleving.TrekTerug");
 		question3.addChild(answer1Question3);
 		category.addChild(question3);
+
+		Question birthDate = new Question("Aanvrager.Geboortedatum");
+		birthDate.setAnswerType(AnswerType.INPUT);
+		birthDate.setAnswerFormat(AnswerFormat.DATE);
+		category2.addChild(birthDate);
+
+		Question birthDate2 = new Question("Aanvrager.Geboortedatumm");
+		birthDate2.setAnswerType(AnswerType.INPUT);
+		birthDate2.setAnswerFormat(AnswerFormat.DATE);
+		category2.addChild(birthDate2);
 
 		// Create the custom variables
 		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
@@ -283,7 +307,7 @@ public class TableRuleTest {
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_EQUALS),
 				new ExpressionValueNumber(2.)));
 		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(question1, customVarQuestion),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(5.)));
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(4.)));
 		tableRule.getRules().add(ruleRow);
 
 		ruleRow = new TableRuleRow();
@@ -291,7 +315,7 @@ public class TableRuleTest {
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.GREATER_THAN),
 				new ExpressionValueNumber(2.)));
 		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(question1, customVarQuestion),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(5.)));
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(3.)));
 		tableRule.getRules().add(ruleRow);
 
 		ruleRow = new TableRuleRow();
@@ -299,7 +323,7 @@ public class TableRuleTest {
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
 				new ExpressionValueNumber(2.)));
 		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(question1, customVarQuestion),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(5.)));
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(2.)));
 		tableRule.getRules().add(ruleRow);
 
 		ruleRow = new TableRuleRow();
@@ -307,7 +331,15 @@ public class TableRuleTest {
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueNumber(2.)));
 		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(question1, customVarQuestion),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(5.)));
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(1.)));
+		tableRule.getRules().add(ruleRow);
+
+		ruleRow = new TableRuleRow();
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(birthDate, QuestionUnit.DATE));
+		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_EQUALS),
+				new ExpressionValueTreeObjectReference(birthDate2, QuestionUnit.DATE)));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(category2, customVarCategory),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(36.)));
 		tableRule.getRules().add(ruleRow);
 
 		// Add the rows and the table to the form

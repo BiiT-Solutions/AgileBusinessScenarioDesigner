@@ -16,6 +16,8 @@ import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImp
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -43,7 +45,9 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -51,6 +55,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -61,7 +66,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class RulesTest {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
-	private final static Charset baseCharset =  StandardCharsets.UTF_8;
+	private final static Charset baseCharset = StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -79,29 +84,46 @@ public class RulesTest {
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
+	// @Test(groups = { "rules" })
+	// public void testRuleSet() throws ExpressionInvalidException,
+	// NotValidChildException, NotValidOperatorInExpression,
+	// ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
+	// IOException,
+	// CategoryDoesNotExistException, DocumentException,
+	// CategoryNameWithoutTranslation {
+	// // Load the rules
+	// FormToDroolsExporter formDrools = new FormToDroolsExporter();
+	// Form vaadinForm = this.createDhszwForm();
+	// formDrools.parse(vaadinForm);
+	//
+	// // Load the submitted form
+	// this.readXml();
+	// this.translateFormCategories();
+	// formDrools.runDroolsRules(this.form);
+	//
+	// // Check the created variables
+	// com.biit.abcd.core.drools.facts.inputform.Category testCat1 =
+	// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+	// .getCategory("Justitie");
+	// Assert.assertEquals("Geen contact met politie. Geen strafblad.",
+	// testCat1.getVariableValue("cScoreText"));
+	// com.biit.abcd.core.drools.facts.inputform.Category testCat2 =
+	// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+	// .getCategory("Huisvesting");
+	// Assert.assertEquals(
+	// "In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.",
+	// testCat2.getVariableValue("cScoreText"));
+	// }
+
 	@Test(groups = { "rules" })
-	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException,
+	public void testSpecialRules() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
+			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			InvalidAnswerFormatException {
 		// Load the rules
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		Form vaadinForm = this.createDhszwForm();
+		Form vaadinForm = this.createSpecialRules();
 		formDrools.parse(vaadinForm);
-
-		// Load the submitted form
-		this.readXml();
-		this.translateFormCategories();
-		formDrools.runDroolsRules(this.form);
-
-		// Check the created variables
-		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-				.getCategory("Justitie");
-		Assert.assertEquals("Geen contact met politie. Geen strafblad.", testCat1.getVariableValue("cScoreText"));
-		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-				.getCategory("Huisvesting");
-		Assert.assertEquals(
-				"In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.",
-				testCat2.getVariableValue("cScoreText"));
 	}
 
 	static String readFile(String path, Charset encoding) throws IOException {
@@ -272,6 +294,73 @@ public class RulesTest {
 		mainDiagram.addDiagramObject(startTable);
 		mainDiagram.addDiagramObject(tableExpression);
 		mainDiagram.addDiagramObject(expressionSubdiagram);
+		mainDiagram.addDiagramObject(subdiagramEnd);
+
+		form.addDiagram(mainDiagram);
+
+		return form;
+	}
+
+	/**
+	 * Create the form structure.
+	 *
+	 * @return
+	 * @throws NotValidChildException
+	 * @throws NotValidOperatorInExpression
+	 * @throws ChildrenNotFoundException
+	 * @throws FieldTooLongException
+	 * @throws IOException
+	 * @throws InvalidAnswerFormatException
+	 */
+	private Form createSpecialRules() throws NotValidChildException, NotValidOperatorInExpression,
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
+
+		// Create the form
+		Form form = new Form("DhszwForm");
+		Category category = new Category("Category");
+		form.addChild(category);
+
+		Question question = new Question("Q1");
+		question.setAnswerType(AnswerType.INPUT);
+		question.setAnswerFormat(AnswerFormat.DATE);
+		category.addChild(question);
+
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY);
+
+		Diagram mainDiagram = new Diagram("main");
+		DiagramSource diagramStartNode = new DiagramSource();
+		diagramStartNode.setJointjsId(IdGenerator.createId());
+		diagramStartNode.setType(DiagramObjectType.SOURCE);
+		Node nodeSource = new Node(diagramStartNode.getJointjsId());
+
+		// Creation of a subdiagram with all the rules
+		DiagramRule ruleDiagramNode = new DiagramRule();
+		ruleDiagramNode.setRule(new Rule("testRule", new ExpressionChain(new ExpressionValueTreeObjectReference(
+				question, QuestionUnit.DATE), new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
+				new ExpressionValueTimestamp(true)), new ExpressionChain(new ExpressionValueCustomVariable(category,
+				customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(25.))));
+		ruleDiagramNode.setJointjsId(IdGenerator.createId());
+		ruleDiagramNode.setType(DiagramObjectType.RULE);
+		Node nodeRuleDiagram = new Node(ruleDiagramNode.getJointjsId());
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+
+		DiagramLink startTable = new DiagramLink(nodeSource, nodeRuleDiagram);
+		startTable.setJointjsId(IdGenerator.createId());
+		startTable.setType(DiagramObjectType.LINK);
+		DiagramLink subdiagramEnd = new DiagramLink(nodeRuleDiagram, nodeSink);
+		subdiagramEnd.setJointjsId(IdGenerator.createId());
+		subdiagramEnd.setType(DiagramObjectType.LINK);
+
+		mainDiagram.addDiagramObject(diagramStartNode);
+		mainDiagram.addDiagramObject(ruleDiagramNode);
+		mainDiagram.addDiagramObject(diagramEndNode);
+		mainDiagram.addDiagramObject(startTable);
 		mainDiagram.addDiagramObject(subdiagramEnd);
 
 		form.addDiagram(mainDiagram);

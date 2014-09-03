@@ -13,31 +13,20 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 public class Category extends CommonAttributes implements ICategory {
 
 	private List<IGroup> groups;
-	private List<IQuestion> questions;
 	private ISubmittedForm parent;
+	private List<IQuestion> questions;
 
 	public Category(String tag) {
 		this.setTag(tag);
 		this.setGroups(new ArrayList<IGroup>());
 	}
 
-	@Override
-	public List<IGroup> getGroups() {
-		return this.groups;
-	}
-
-	@Override
-	public IGroup getGroup(String tag) throws GroupDoesNotExistException {
-		for (IGroup group : this.getGroups()) {
-			if (group.getTag().equals(tag)) {
-				return group;
-			}
+	public void addGroup(IGroup group) {
+		if (this.groups == null) {
+			this.setGroups(new ArrayList<IGroup>());
 		}
-		throw new GroupDoesNotExistException("Group '" + tag + "' does not exists.");
-	}
-
-	public void setGroups(List<IGroup> groups) {
-		this.groups = groups;
+		((Group)group).setParent(this);
+		this.groups.add(group);
 	}
 
 	@Override
@@ -50,16 +39,12 @@ public class Category extends CommonAttributes implements ICategory {
 		}
 	}
 
-	public void addGroup(IGroup group) {
-		if (this.groups == null) {
-			this.setGroups(new ArrayList<IGroup>());
+	public void addQuestion(IQuestion question) {
+		if (this.questions == null) {
+			this.setQuestions(new ArrayList<IQuestion>());
 		}
-		((Group)group).setParent(this);
-		this.groups.add(group);
-	}
-
-	public void setQuestions(List<IQuestion> questions) {
-		this.questions = questions;
+		((Question)question).setParent(this);
+		this.questions.add(question);
 	}
 
 	@Override
@@ -72,17 +57,27 @@ public class Category extends CommonAttributes implements ICategory {
 		}
 	}
 
-	public void addQuestion(IQuestion question) {
-		if (this.questions == null) {
-			this.setQuestions(new ArrayList<IQuestion>());
+	@Override
+	public IGroup getGroup(String tag) throws GroupDoesNotExistException {
+		for (IGroup group : this.getGroups()) {
+			if (group.getTag().equals(tag)) {
+				return group;
+			}
 		}
-		((Question)question).setParent(this);
-		this.questions.add(question);
+		throw new GroupDoesNotExistException("Group '" + tag + "' does not exists.");
 	}
 
 	@Override
-	public List<IQuestion> getQuestions() {
-		return this.questions;
+	public List<IGroup> getGroups() {
+		return this.groups;
+	}
+
+	public Number getNumberVariableValue(String varName){
+		return ((SubmittedForm)this.getParent()).getNumberVariableValue(this, varName);
+	}
+
+	public ISubmittedForm getParent(){
+		return this.parent;
 	}
 
 	@Override
@@ -95,12 +90,17 @@ public class Category extends CommonAttributes implements ICategory {
 		throw new QuestionDoesNotExistException("Question '" + questionTag + "' does not exists.");
 	}
 
-	public void setParent(ISubmittedForm form){
-		this.parent = form;
+	@Override
+	public List<IQuestion> getQuestions() {
+		return this.questions;
 	}
 
-	public ISubmittedForm getParent(){
-		return this.parent;
+	public Object getVariableValue(String varName){
+		return ((SubmittedForm)this.getParent()).getVariableValue(this, varName);
+	}
+
+	public boolean isScoreNotSet(String varName) {
+		return !this.isScoreSet(varName);
 	}
 
 	public boolean isScoreSet(String varName) {
@@ -112,16 +112,16 @@ public class Category extends CommonAttributes implements ICategory {
 		}
 	}
 
-	public boolean isScoreNotSet(String varName) {
-		return !this.isScoreSet(varName);
+	public void setGroups(List<IGroup> groups) {
+		this.groups = groups;
 	}
 
-	public Object getVariableValue(String varName){
-		return ((SubmittedForm)this.getParent()).getVariableValue(this, varName);
+	public void setParent(ISubmittedForm form){
+		this.parent = form;
 	}
 
-	public Number getNumberVariableValue(String varName){
-		return ((SubmittedForm)this.getParent()).getNumberVariableValue(this, varName);
+	public void setQuestions(List<IQuestion> questions) {
+		this.questions = questions;
 	}
 
 	public void setVariableValue(String varName, Object value){

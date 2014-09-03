@@ -50,6 +50,7 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		}
 	}
 
+	@Override
 	public Timestamp getValue() {
 		if (systemDate) {
 			return new Timestamp(System.currentTimeMillis());
@@ -81,6 +82,10 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		}
 		copy.systemDate = systemDate;
 		return copy;
+	}
+
+	public boolean isSystemDate(){
+		return systemDate;
 	}
 
 }
