@@ -57,9 +57,4 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		copy.value = new Timestamp(value.getTime());
 		return copy;
 	}
-
-	public boolean isSystemDate(){
-		return systemDate;
-	}
-
 }

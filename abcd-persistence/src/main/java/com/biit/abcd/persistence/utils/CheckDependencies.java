@@ -54,7 +54,7 @@ public class CheckDependencies {
 
 	/**
 	 * Check dependencies inside the expression chain hierarchy
-	 * 
+	 *
 	 * @param expressionChain
 	 * @throws DependencyExistException
 	 */
@@ -64,7 +64,8 @@ public class CheckDependencies {
 			List<Expression> conditions = expressionChain.getExpressions();
 			for (Expression condition : conditions) {
 				if (condition instanceof ExpressionValueTreeObjectReference) {
-					if (((ExpressionValueTreeObjectReference) condition).getReference().equals(treeObject)) {
+					TreeObject reference = ((ExpressionValueTreeObjectReference) condition).getReference();
+					if ((reference != null) && reference.equals(treeObject)) {
 						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName()
 								+ ", referenced in the form.");
 					}
@@ -77,11 +78,12 @@ public class CheckDependencies {
 
 	/**
 	 * Look for tree object dependencies inside the diagram<br>
-	 * Only three node types can create new dependencies that hasn't been checked yet:<br>
+	 * Only three node types can create new dependencies that hasn't been
+	 * checked yet:<br>
 	 * - DiagramLink<br>
 	 * - DiagramFork<br>
 	 * - DiagramChild: to check internal dependencies<br>
-	 * 
+	 *
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -112,7 +114,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for table rule dependencies inside the diagram<br>
-	 * 
+	 *
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -140,7 +142,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for rule dependencies inside the diagram<br>
-	 * 
+	 *
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -168,7 +170,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for rule dependencies inside the diagram<br>
-	 * 
+	 *
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */

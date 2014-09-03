@@ -33,7 +33,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.TreeObject;
 
@@ -1200,7 +1200,7 @@ public class GenericParser {
 		// All the expressions without functions should pass this condition and
 		// some generic functions too
 
-		System.out.println("PARSED EXPRESSION: " + parsedExpression);
+//		System.out.println("PARSED EXPRESSION: " + parsedExpression);
 
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();
@@ -1429,22 +1429,20 @@ public class GenericParser {
 				}
 				// Comparison with system date (Special date)
 				else if ((leftTreeObject instanceof Question) && (rightExpressions.size() == 1)
-						&& (rightExpressions.get(0) instanceof ExpressionValueTimestamp)) {
-					if (((ExpressionValueTimestamp) rightExpressions.get(0)).isSystemDate()) {
-						Question leftQuestion = (Question) leftTreeObject;
-						TreeObject leftQuestionParent = leftQuestion.getParent();
-						this.putTreeObjectName(leftQuestion, leftQuestion.getComparationIdNoDash().toString());
-						// Check the parent
-						if (leftQuestionParent instanceof Category) {
-							droolsConditions += this.simpleCategoryConditions((Category) leftQuestionParent);
-						} else if (leftQuestionParent instanceof Group) {
-							droolsConditions += this.simpleGroupConditions((Group) leftQuestionParent);
-						}
-						droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-								+ " : Question(getAnswer() instanceof Date, getTag() == '" + leftQuestion.getName()
-								+ "', getAnswer() " + operator.getValue() + " DateUtils.returnCurrentDate()) from $"
-								+ leftQuestionParent.getComparationIdNoDash().toString() + ".getQuestions() and\n";
+						&& (rightExpressions.get(0) instanceof ExpressionValueSystemDate)) {
+					Question leftQuestion = (Question) leftTreeObject;
+					TreeObject leftQuestionParent = leftQuestion.getParent();
+					this.putTreeObjectName(leftQuestion, leftQuestion.getComparationIdNoDash().toString());
+					// Check the parent
+					if (leftQuestionParent instanceof Category) {
+						droolsConditions += this.simpleCategoryConditions((Category) leftQuestionParent);
+					} else if (leftQuestionParent instanceof Group) {
+						droolsConditions += this.simpleGroupConditions((Group) leftQuestionParent);
 					}
+					droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
+							+ " : Question(getAnswer() instanceof Date, getTag() == '" + leftQuestion.getName()
+							+ "', getAnswer() " + operator.getValue() + " DateUtils.returnCurrentDate()) from $"
+							+ leftQuestionParent.getComparationIdNoDash().toString() + ".getQuestions() and\n";
 				}
 			}
 		} else {

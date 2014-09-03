@@ -45,7 +45,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
@@ -84,36 +84,30 @@ public class RulesTest {
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
-	// @Test(groups = { "rules" })
-	// public void testRuleSet() throws ExpressionInvalidException,
-	// NotValidChildException, NotValidOperatorInExpression,
-	// ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-	// IOException,
-	// CategoryDoesNotExistException, DocumentException,
-	// CategoryNameWithoutTranslation {
-	// // Load the rules
-	// FormToDroolsExporter formDrools = new FormToDroolsExporter();
-	// Form vaadinForm = this.createDhszwForm();
-	// formDrools.parse(vaadinForm);
-	//
-	// // Load the submitted form
-	// this.readXml();
-	// this.translateFormCategories();
-	// formDrools.runDroolsRules(this.form);
-	//
-	// // Check the created variables
-	// com.biit.abcd.core.drools.facts.inputform.Category testCat1 =
-	// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-	// .getCategory("Justitie");
-	// Assert.assertEquals("Geen contact met politie. Geen strafblad.",
-	// testCat1.getVariableValue("cScoreText"));
-	// com.biit.abcd.core.drools.facts.inputform.Category testCat2 =
-	// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-	// .getCategory("Huisvesting");
-	// Assert.assertEquals(
-	// "In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.",
-	// testCat2.getVariableValue("cScoreText"));
-	// }
+	@Test(groups = { "rules" })
+	public void testRuleSet() throws ExpressionInvalidException, NotValidChildException, NotValidOperatorInExpression,
+			ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException,
+			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
+		// Load the rules
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		Form vaadinForm = this.createDhszwForm();
+		formDrools.parse(vaadinForm);
+
+		// Load the submitted form
+		this.readXml();
+		this.translateFormCategories();
+		formDrools.runDroolsRules(this.form);
+
+		// Check the created variables
+		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+				.getCategory("Justitie");
+		Assert.assertEquals("Geen contact met politie. Geen strafblad.", testCat1.getVariableValue("cScoreText"));
+		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+				.getCategory("Huisvesting");
+		Assert.assertEquals(
+				"In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.",
+				testCat2.getVariableValue("cScoreText"));
+	}
 
 	@Test(groups = { "rules" })
 	public void testSpecialRules() throws ExpressionInvalidException, NotValidChildException,
@@ -338,7 +332,7 @@ public class RulesTest {
 		DiagramRule ruleDiagramNode = new DiagramRule();
 		ruleDiagramNode.setRule(new Rule("testRule", new ExpressionChain(new ExpressionValueTreeObjectReference(
 				question, QuestionUnit.DATE), new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
-				new ExpressionValueTimestamp(true)), new ExpressionChain(new ExpressionValueCustomVariable(category,
+				new ExpressionValueSystemDate()), new ExpressionChain(new ExpressionValueCustomVariable(category,
 				customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(25.))));
 		ruleDiagramNode.setJointjsId(IdGenerator.createId());

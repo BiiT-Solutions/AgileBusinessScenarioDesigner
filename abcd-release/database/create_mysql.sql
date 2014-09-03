@@ -470,8 +470,8 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        name varchar(255),
-        scope varchar(255),
+        name varchar(190),
+        scope varchar(190),
         type varchar(255),
         form bigint,
         primary key (ID)

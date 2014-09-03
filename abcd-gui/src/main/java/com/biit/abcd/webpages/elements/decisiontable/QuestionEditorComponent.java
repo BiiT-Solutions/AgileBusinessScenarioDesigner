@@ -5,7 +5,6 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.webpages.components.TabEditorComponent;
 import com.biit.abcd.webpages.components.ThemeIcon;
-import com.biit.abcd.webpages.elements.expressionviewer.TabGlobalConstantsLayout;
 import com.biit.form.TreeObject;
 
 public class QuestionEditorComponent extends TabEditorComponent {
@@ -31,7 +30,7 @@ public class QuestionEditorComponent extends TabEditorComponent {
 //		setTab(new TabFormGenericTreeObjectLayout(), "",
 //				ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
 		// Third tab
-		setTab(new TabGlobalConstantsLayout(), "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
+//		setTab(new TabGlobalConstantsLayout(), "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
 
 	}
 
