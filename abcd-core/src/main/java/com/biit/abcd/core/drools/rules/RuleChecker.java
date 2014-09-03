@@ -52,17 +52,17 @@ public class RuleChecker {
 		}
 		// Check the action
 		try {
-			row.getAction().getExpressionEvaluator().eval();
+			row.getActionChain().getExpressionEvaluator().eval();
 		} catch (Exception e) {
 			throw new ExpressionInvalidException("[" + rowIndex + "] :: Action expression invalid: "
-					+ row.getAction().toString());
+					+ row.getActionChain().toString());
 		}
 	}
 
 	public static void checkRuleValid(Rule rule) throws RuleInvalidException {
 		try {
-			rule.getCondition().getExpressionEvaluator().eval();
-			rule.getActions().getExpressionEvaluator().eval();
+			rule.getConditionChain().getExpressionEvaluator().eval();
+			rule.getActionChain().getExpressionEvaluator().eval();
 		} catch (Exception e) {
 			throw new RuleInvalidException("Rule " + rule.getName() + " invalid");
 		}

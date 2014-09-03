@@ -46,19 +46,23 @@ public class Rule extends StorableObject implements INameAttribute {
 		setName(name);
 	}
 
-	public ExpressionChain getCondition() {
-		return condition;
-	}
+//	public ExpressionChain getCondition() {
+//		return condition;
+//	}
 
 	public List<Expression> getConditions() {
 		return condition.getExpressions();
+	}
+
+	public ExpressionChain getConditionChain() {
+		return condition;
 	}
 
 	public void setCondition(ExpressionChain condition) {
 		this.condition = condition;
 	}
 
-	public ExpressionChain getActions() {
+	public ExpressionChain getActionChain() {
 		return actions;
 	}
 
@@ -78,8 +82,8 @@ public class Rule extends StorableObject implements INameAttribute {
 
 	public boolean isAssignedTo(TreeObject treeObject) {
 		Set<TreeObject> references = new HashSet<>();
-		references.addAll(getCondition().getReferencedTreeObjects());
-		references.addAll(getActions().getReferencedTreeObjects());
+		references.addAll(getConditionChain().getReferencedTreeObjects());
+		references.addAll(getActionChain().getReferencedTreeObjects());
 		if (!references.isEmpty()) {
 			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
 			if (commonTreeObject.equals(treeObject)) {

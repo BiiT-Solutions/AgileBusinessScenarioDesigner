@@ -12,6 +12,7 @@ import com.biit.abcd.core.drools.prattparser.ParseException;
 import com.biit.abcd.core.drools.prattparser.Parser;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -249,7 +250,7 @@ public class GenericParser {
 		return "";
 	}
 
-	public String createDroolsRule(List<Expression> conditions, List<Expression> actions, String extraConditions) {
+	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions) throws RuleNotImplementedException {
 
 		// System.out.println("CONDITIONS: " + conditions);
 		// System.out.println("ACTIONS: " + actions);
@@ -310,8 +311,9 @@ public class GenericParser {
 	 *            the expression being parsed
 	 * @param extraConditions
 	 * @return the rule
+	 * @throws RuleNotImplementedException
 	 */
-	private String genericAssignationFunctionAction(List<Expression> actions, String extraConditions) {
+	private String genericAssignationFunctionAction(ExpressionChain actions, String extraConditions) throws RuleNotImplementedException {
 		String ruleCore = "";
 		// we have to generate a set of rules defined by the generic variable
 		ruleCore += this.genericRuleSet(actions, extraConditions);
@@ -458,10 +460,11 @@ public class GenericParser {
 	 * @param expressions
 	 * @param extraConditions
 	 * @return
+	 * @throws RuleNotImplementedException
 	 */
-	private String genericRuleSet(List<Expression> expressions, String extraConditions) {
+	private String genericRuleSet(ExpressionChain expressionChain, String extraConditions) throws RuleNotImplementedException {
 		String ruleCore = "";
-		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) expressions
+		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) expressionChain.getExpressions()
 				.get(0);
 
 		List<TreeObject> treeObjects = new ArrayList<TreeObject>();
@@ -483,12 +486,12 @@ public class GenericParser {
 				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
 						genericVarToCalculate.getVariable());
 				// Remove the generic
-				expressions.remove(0);
+				expressionChain.getExpressions().remove(0);
 				// Add the specific
-				expressions.add(0, expValCat);
+				expressionChain.getExpressions().add(0, expValCat);
 
 				try {
-					ruleCore += new ExpressionParser().parse(expressions, extraConditions);
+					ruleCore += new ExpressionParser().parse(expressionChain, extraConditions);
 					// System.out.println(ruleCore);
 				} catch (ExpressionInvalidException e) {
 					e.printStackTrace();
@@ -910,8 +913,10 @@ public class GenericParser {
 	 * @param actions
 	 *            list of expressions to be parsed
 	 * @return RHS of the rule, and sometimes a modified LHS
+	 * @throws RuleNotImplementedException
 	 */
-	private String parseActions(List<Expression> actions) {
+	private String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException {
+		List<Expression> actions = expressionChain.getExpressions();
 		Parser parser = new ExpressionChainParser(actions);
 		ITreeElement result = null;
 		try {
@@ -941,7 +946,7 @@ public class GenericParser {
 
 			}
 		}
-		return "";
+		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
 	}
 
 	// /**
@@ -992,8 +997,8 @@ public class GenericParser {
 	// return ruleCore;
 	// }
 
-	private String parseConditions(List<Expression> conditions) {
-		Parser parser = new ExpressionChainParser(conditions);
+	private String parseConditions(ExpressionChain conditions) {
+		Parser parser = new ExpressionChainParser(conditions.getExpressions());
 		ITreeElement result = null;
 		try {
 			result = parser.parseExpression();
@@ -1142,30 +1147,32 @@ public class GenericParser {
 	 * @param actions
 	 *            list of expressions to be parsed
 	 * @return RHS of the rule, and sometimes a modified LHS
+	 * @throws RuleNotImplementedException
 	 */
-	private String parseExpressions(List<Expression> actions, String extraConditions) {
+	private String parseExpressions(ExpressionChain expressionChain, String extraConditions)
+			throws RuleNotImplementedException {
 		// A.k.a Expression
 		// Action type => cat.score = min(q1.score, q2.score, ...)
-		if ((actions.get(0) instanceof ExpressionValueCustomVariable)
-				&& (actions.get(1) instanceof ExpressionOperatorMath)
-				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
-				&& (actions.get(2) instanceof ExpressionFunction)) {
-			switch (((ExpressionFunction) actions.get(2)).getValue()) {
+		if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
+				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
+				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
+				&& (expressionChain.getExpressions().get(2) instanceof ExpressionFunction)) {
+			switch (((ExpressionFunction) expressionChain.getExpressions().get(2)).getValue()) {
 			case MAX:
 			case MIN:
 			case AVG:
-				return this.maxMinAvgAssignationFunctionAction(actions, extraConditions);
+				return this.maxMinAvgAssignationFunctionAction(expressionChain.getExpressions(), extraConditions);
 			case PMT:
-				return this.pmtAssignationFunctionAction(actions, extraConditions);
+				return this.pmtAssignationFunctionAction(expressionChain.getExpressions(), extraConditions);
 			}
 
-		} else if ((actions.get(0) instanceof ExpressionValueGenericCustomVariable)
-				&& (actions.get(1) instanceof ExpressionOperatorMath)
-				&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
-				&& (actions.get(2) instanceof ExpressionFunction)) {
-			return this.genericAssignationFunctionAction(actions, extraConditions);
+		} else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)
+				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
+				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
+				&& (expressionChain.getExpressions().get(2) instanceof ExpressionFunction)) {
+			return this.genericAssignationFunctionAction(expressionChain, extraConditions);
 		}
-		return "";
+		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
 	}
 
 	private String pmtAssignationFunctionAction(List<Expression> actions, String extraConditions) {
@@ -1200,7 +1207,7 @@ public class GenericParser {
 		// All the expressions without functions should pass this condition and
 		// some generic functions too
 
-//		System.out.println("PARSED EXPRESSION: " + parsedExpression);
+		// System.out.println("PARSED EXPRESSION: " + parsedExpression);
 
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();

@@ -37,7 +37,7 @@ public class TableRuleRow extends StorableObject {
 		this.action = new ExpressionChain();
 		getConditions().add(question);
 		getConditions().add(answer);
-		getAction().setExpressions(action.getExpressions());
+		getActionChain().setExpressions(action.getExpressions());
 	}
 
 	public void addCondition(Expression expression) {
@@ -52,7 +52,7 @@ public class TableRuleRow extends StorableObject {
 		return conditions.getExpressions();
 	}
 
-	public ExpressionChain getConditionsChain() {
+	public ExpressionChain getConditionChain() {
 		return conditions;
 	}
 
@@ -64,7 +64,7 @@ public class TableRuleRow extends StorableObject {
 		this.action = action;
 	}
 
-	public ExpressionChain getAction() {
+	public ExpressionChain getActionChain() {
 		return action;
 	}
 

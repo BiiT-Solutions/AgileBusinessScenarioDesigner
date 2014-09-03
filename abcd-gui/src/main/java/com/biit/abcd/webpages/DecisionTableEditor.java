@@ -630,8 +630,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	@Override
 	public void editAction(final TableRuleRow row) {
-		if (row.getAction() != null) {
-			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row.getAction());
+		if (row.getActionChain() != null) {
+			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row.getActionChain());
 
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -640,12 +640,12 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 					ExpressionChain expChain = newActionValueWindow.getExpressionChain();
 
 					if (expChain != null) {
-						row.getAction().setExpressions(expChain.getExpressions());
+						row.getActionChain().setExpressions(expChain.getExpressions());
 						decisionTable.update(getSelectedTableRule());
 
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Action '"
-								+ row.getAction().getRepresentation() + "' to row '" + row.getId()
+								+ row.getActionChain().getRepresentation() + "' to row '" + row.getId()
 								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 					}
 					newActionValueWindow.close();
@@ -656,8 +656,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	@Override
 	public void removeAction(TableRuleRow row) {
-		ExpressionChain action = row.getAction();
-		row.getAction().removeAllExpressions();
+		ExpressionChain action = row.getActionChain();
+		row.getActionChain().removeAllExpressions();
 		decisionTable.update(getSelectedTableRule());
 
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()

@@ -30,15 +30,15 @@ public class CheckDependencies {
 				for (TableRule tableRule : form.getTableRules()) {
 					for (TableRuleRow tableRuleRow : tableRule.getRules()) {
 						// Check conditions of the table rule row
-						checkTreeObjectDependeciesInExpressionChain(tableRuleRow.getConditionsChain(), treeObject);
+						checkTreeObjectDependeciesInExpressionChain(tableRuleRow.getConditionChain(), treeObject);
 						// Check actions of the table rule row
-						checkTreeObjectDependeciesInExpressionChain(tableRuleRow.getAction(), treeObject);
+						checkTreeObjectDependeciesInExpressionChain(tableRuleRow.getActionChain(), treeObject);
 					}
 				}
 				// Check the rules
 				for (Rule rule : form.getRules()) {
-					checkTreeObjectDependeciesInExpressionChain(rule.getCondition(), treeObject);
-					checkTreeObjectDependeciesInExpressionChain(rule.getActions(), treeObject);
+					checkTreeObjectDependeciesInExpressionChain(rule.getConditionChain(), treeObject);
+					checkTreeObjectDependeciesInExpressionChain(rule.getActionChain(), treeObject);
 				}
 				// Check the expressions
 				for (ExpressionChain expressions : form.getExpressionChain()) {

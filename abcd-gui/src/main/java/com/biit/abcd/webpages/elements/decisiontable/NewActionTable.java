@@ -59,8 +59,8 @@ public class NewActionTable extends Table {
 	public void updateRow(TableRuleRow row){
 		Item rowItem = getItem(row);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) rowItem.getItemProperty(Columns.ACTION).getValue());
-		if (row.getAction() != null) {
-			String representation = row.getAction().getRepresentation();
+		if (row.getActionChain() != null) {
+			String representation = row.getActionChain().getRepresentation();
 			if(representation.length()>CHARACTER_LIMIT){
 				representation = "..."+representation.substring(representation.length()-CHARACTER_LIMIT, representation.length());
 			}
@@ -112,7 +112,7 @@ public class NewActionTable extends Table {
 	/**
 	 * This action listener is called when the user press on the edit button of
 	 * the cell component
-	 * 
+	 *
 	 */
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
@@ -131,14 +131,14 @@ public class NewActionTable extends Table {
 	/**
 	 * This action listener is called when the user press on the remove button
 	 * of the cell component
-	 * 
+	 *
 	 */
 	private class CellDeleteButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -7125934888135148456L;
 		private Object row;
 
 		public CellDeleteButtonClickListener(Object itemId) {
-			this.row = itemId;
+			row = itemId;
 		}
 
 		@Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -25,7 +26,7 @@ public class DiagramParser extends GenericParser {
 	private String newRule = "";
 	private List<String> forkConditions;
 
-	public String parse(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException {
+	public String parse(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException {
 		List<DiagramObject> diagramObjects = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjects) {
 			// Start the algorithm for each diagram source defined in the main
@@ -44,9 +45,10 @@ public class DiagramParser extends GenericParser {
 	 *            the node being parsed
 	 * @throws ExpressionInvalidException
 	 * @throws RuleInvalidException
+	 * @throws RuleNotImplementedException
 	 */
 	private void parseDiagramElement(DiagramElement node, String extraConditions) throws ExpressionInvalidException,
-			RuleInvalidException {
+			RuleInvalidException, RuleNotImplementedException {
 		// Parse the corresponding node
 		switch (node.getType()) {
 		case TABLE:
@@ -110,8 +112,9 @@ public class DiagramParser extends GenericParser {
 	 * score must fulfill
 	 *
 	 * @return
+	 * @throws RuleNotImplementedException
 	 */
-	private List<String> parseFork(DiagramFork forkNode, String extraConditions) {
+	private List<String> parseFork(DiagramFork forkNode, String extraConditions) throws RuleNotImplementedException {
 		List<String> forkConditions = new ArrayList<String>();
 		// Get the element to be checked
 		ExpressionValueTreeObjectReference expVal = forkNode.getReference();
@@ -129,7 +132,7 @@ public class DiagramParser extends GenericParser {
 //				for(Expression exp : outLink.getExpressionChain().getExpressions()){
 //					System.out.println("Expression class: " + exp.getClass());
 //				}
-				String childrenCondition = this.createDroolsRule(outLink.getExpressionChain().getExpressions(), null, extraConditions);
+				String childrenCondition = this.createDroolsRule(outLink.getExpressionChain(), null, extraConditions);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
 			}

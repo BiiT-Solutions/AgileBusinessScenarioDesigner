@@ -17,6 +17,7 @@ import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -92,12 +93,13 @@ public class ZrmFormTest {
 
 	/**
 	 * This test must be disabled due to uses orbeon specific document id.
+	 * @throws RuleNotImplementedException
 	 */
 	@Test(groups = { "rulesWithOrbeon" })
 	public void completeZrmTest() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
-			InvalidAnswerFormatException {
+			InvalidAnswerFormatException, RuleNotImplementedException {
 		this.form = new SubmittedForm("WebForms", "De_Haagse_Passage_v2");
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createZrmForm();
@@ -120,7 +122,7 @@ public class ZrmFormTest {
 	public void basicZrmTest() throws ExpressionInvalidException, NotValidChildException, NotValidOperatorInExpression,
 			ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException,
 			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
-			InvalidAnswerFormatException {
+			InvalidAnswerFormatException, RuleNotImplementedException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createZrmForm();
 		formDrools.parse(vaadinForm);
@@ -143,7 +145,7 @@ public class ZrmFormTest {
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
 	 * Form used to create the drools rules
-	 * 
+	 *
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression

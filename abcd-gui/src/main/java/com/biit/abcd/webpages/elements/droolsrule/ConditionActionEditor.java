@@ -99,8 +99,8 @@ public class ConditionActionEditor extends ExpressionEditorComponent {
 		conditionViewer.removeAllComponents();
 		actionViewer.removeAllComponents();
 		if (rule != null) {
-			conditionViewer.updateExpression(rule.getCondition());
-			actionViewer.updateExpression(rule.getActions());
+			conditionViewer.updateExpression(rule.getConditionChain());
+			actionViewer.updateExpression(rule.getActionChain());
 		}else{
 			conditionViewer.updateExpression(null);
 			actionViewer.updateExpression(null);

@@ -199,6 +199,8 @@ public enum LanguageCodes {
 	ERROR_DROOLS_INVALID_RULE("error.drools.invalid"),
 	ERROR_ORBEON_IMPORTER_INVALID_FORM("error.orbeonimporter.invalid.form"),
 
+	ERROR_RULE_NOT_IMPLEMENTED("error.rule.not.implemented"),
+
 	INFO_DATA_STORED("info.data.store"),
 
 	ANSWER_TYPE_INPUT("answer.type.input"),

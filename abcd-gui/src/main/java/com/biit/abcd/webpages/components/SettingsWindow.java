@@ -10,6 +10,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
@@ -96,6 +97,10 @@ public class SettingsWindow extends PopupWindow {
 										| CategoryNameWithoutTranslation e) {
 									MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
 											e.getMessage());
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								} catch (RuleNotImplementedException e) {
+									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
+											.getExpressionChain().getRepresentation());
 									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 								}
 							}

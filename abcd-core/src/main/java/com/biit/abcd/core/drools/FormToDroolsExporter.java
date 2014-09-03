@@ -14,6 +14,7 @@ import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImp
 import com.biit.abcd.core.drools.rules.FormParser;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
@@ -44,8 +45,9 @@ public class FormToDroolsExporter {
 	 * @throws ExpressionInvalidException
 	 * @throws RuleInvalidException
 	 * @throws IOException
+	 * @throws RuleNotImplementedException
 	 */
-	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException, IOException {
+	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException {
 		if ((form != null) && !form.getChildren().isEmpty()) {
 			this.km = new KieManager();
 			FormParser formRules;
@@ -79,9 +81,10 @@ public class FormToDroolsExporter {
 	 * @throws ExpressionInvalidException
 	 * @throws RuleInvalidException
 	 * @throws IOException
+	 * @throws RuleNotImplementedException
 	 */
 	public void parse(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, IOException {
+			RuleInvalidException, IOException, RuleNotImplementedException {
 		if (!form.getChildren().isEmpty()) {
 			this.km = new KieManager();
 			FormParser formRules;
@@ -138,7 +141,7 @@ public class FormToDroolsExporter {
 
 	public ISubmittedForm testZrmSubmittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
 			throws ExpressionInvalidException, NotValidOperatorInExpression, RuleInvalidException, IOException,
-			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation {
+			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation, RuleNotImplementedException {
 		// Load the submitted form
 		this.parse(vaadinForm);
 		this.readXml(formInfo);

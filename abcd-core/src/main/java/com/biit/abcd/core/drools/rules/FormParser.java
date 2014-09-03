@@ -8,6 +8,7 @@ import java.util.List;
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -20,13 +21,13 @@ public class FormParser {
 	private List<GlobalVariable> globalVariables;
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
-	public FormParser(Form form) throws ExpressionInvalidException, RuleInvalidException {
+	public FormParser(Form form) throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException {
 		this.form = form;
 		this.initParser();
 	}
 
 	public FormParser(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException {
+			RuleInvalidException, RuleNotImplementedException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
@@ -34,7 +35,7 @@ public class FormParser {
 		this.initParser();
 	}
 
-	private void initParser() throws ExpressionInvalidException, RuleInvalidException {
+	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException {
 		if (this.form != null) {
 			this.rules = "package com.biit.drools \n";
 			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
@@ -90,7 +91,7 @@ public class FormParser {
 	/**
 	 * Creates the global constants for the drools session Also stores in memory the value to be inserted before the
 	 * facts
-	 * 
+	 *
 	 * @return The global constants in drools
 	 */
 	private String parseGlobalVariables() {

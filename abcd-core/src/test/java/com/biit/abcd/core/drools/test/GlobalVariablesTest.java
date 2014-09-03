@@ -15,6 +15,7 @@ import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
@@ -30,7 +31,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class GlobalVariablesTest {
 
 	@Test(groups = { "rules" })
-	public void testGlobVarsInDroolsEngine() throws ExpressionInvalidException, RuleInvalidException, FieldTooLongException, NotValidTypeInVariableData, NotValidChildException, IOException  {
+	public void testGlobVarsInDroolsEngine() throws ExpressionInvalidException, RuleInvalidException, FieldTooLongException, NotValidTypeInVariableData, NotValidChildException, IOException, RuleNotImplementedException  {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		formDrools.parse(this.createBasicForm(), this.createGlobalvariables());
 		// Empty form to force the engine to load the global variables values
