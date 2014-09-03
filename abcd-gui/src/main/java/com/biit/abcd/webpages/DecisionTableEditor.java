@@ -194,6 +194,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 					}
 				});
+				windowAccept.showCentered();
 			}
 		});
 

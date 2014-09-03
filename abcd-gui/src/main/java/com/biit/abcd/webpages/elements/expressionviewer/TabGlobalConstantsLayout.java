@@ -6,7 +6,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -50,7 +50,6 @@ public class TabGlobalConstantsLayout extends TabLayout {
 	}
 
 	private void addSystemDate() {
-
 		Button globalVariableButton = new Button(
 				ServerTranslate.translate(LanguageCodes.EXPRESSION_STRING_GLOBAL_VARIABLE_SYSTEM_DATE),
 				new ClickListener() {
@@ -58,7 +57,7 @@ public class TabGlobalConstantsLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						ExpressionValueTimestamp exprValue = new ExpressionValueTimestamp(true);
+						ExpressionValueSystemDate exprValue = new ExpressionValueSystemDate();
 						addExpression(exprValue);
 					}
 				});

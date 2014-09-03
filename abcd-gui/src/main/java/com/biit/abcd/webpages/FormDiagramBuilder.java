@@ -253,6 +253,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 						windowAccept.close();
 					}
 				});
+				windowAccept.showCentered();
 			}
 		});
 		diagramBuilderUpperMenu.addClearButtonClickListener(new ClickListener() {

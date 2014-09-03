@@ -140,7 +140,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)
 					|| (expressions.get(i) instanceof ExpressionValueGenericCustomVariable)
-					|| (expressions.get(i) instanceof ExpressionValueGenericVariable)) {
+					|| (expressions.get(i) instanceof ExpressionValueGenericVariable)
+					|| (expressions.get(i) instanceof ExpressionValueSystemDate)) {
 				// Dots are not allowed.
 				String varName = filterVariables(expressions.get(i));
 				// Do not repeat variable declaration.
