@@ -1,8 +1,6 @@
 package com.biit.abcd.core.drools;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,7 +45,8 @@ public class FormToDroolsExporter {
 	 * @throws IOException
 	 * @throws RuleNotImplementedException
 	 */
-	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException {
+	public void parse(Form form) throws ExpressionInvalidException, RuleInvalidException, IOException,
+			RuleNotImplementedException {
 		if ((form != null) && !form.getChildren().isEmpty()) {
 			this.km = new KieManager();
 			FormParser formRules;
@@ -55,8 +54,9 @@ public class FormToDroolsExporter {
 				// Creation of the rules
 				formRules = new FormParser(form);
 				this.droolsRules = formRules.getRules();
-//				System.out.println(formRules.getRules());
-				Files.write(Paths.get("./src/test/resources/generatedRules.drl"), formRules.getRules().getBytes());
+				// System.out.println(formRules.getRules());
+				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"),
+				// formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 
@@ -115,8 +115,10 @@ public class FormToDroolsExporter {
 	 * @param form
 	 */
 	public void runDroolsRules(ISubmittedForm form) {
-		this.km.setFacts(Arrays.asList(form));
-		this.km.execute();
+		if ((form != null) && (this.km != null)) {
+			this.km.setFacts(Arrays.asList(form));
+			this.km.execute();
+		}
 	}
 
 	public void readXml(String formInfo) throws DocumentException, IOException {
@@ -139,9 +141,10 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
 	}
 
-	public ISubmittedForm testZrmSubmittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
+	public ISubmittedForm submittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
 			throws ExpressionInvalidException, NotValidOperatorInExpression, RuleInvalidException, IOException,
-			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation, RuleNotImplementedException {
+			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			RuleNotImplementedException {
 		// Load the submitted form
 		this.parse(vaadinForm);
 		this.readXml(formInfo);

@@ -23,7 +23,7 @@ public class RuleChecker {
 		try {
 			expression.getExpressionEvaluator().eval();
 		} catch (Exception e) {
-			throw new ExpressionInvalidException("Expression " + expression.getName() + " invalid");
+			throw new ExpressionInvalidException("Expression " + expression.getExpression() + " invalid");
 		}
 	}
 

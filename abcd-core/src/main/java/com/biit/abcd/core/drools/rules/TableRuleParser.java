@@ -24,12 +24,14 @@ public class TableRuleParser extends GenericParser {
 			int i = 0;
 			// One rule for each row
 			for (TableRuleRow row : tableRule.getRules()) {
-				// RuleChecker.checkRowExpressionValid(row, i + 1);
+				ExpressionChain auxConditions = this.preParseConditions(row.getConditionChain());
+//				System.out.println("EXPRESSION: " + auxConditions.getExpression());
+//				RuleChecker.checkExpressionValid(auxConditions);
 				newRules += Utils.getStartRuleString(tableRuleName + "_row_" + i);
 				newRules += Utils.getAttributes();
 				newRules += Utils.getWhenRuleString();
-				newRules += this.createDroolsRule(this.preParseConditions(row.getConditionChain()),
-						row.getActionChain(), extraConditions);
+
+				newRules += this.createDroolsRule(auxConditions, row.getActionChain(), extraConditions);
 				newRules += Utils.getEndRuleString();
 				i++;
 			}

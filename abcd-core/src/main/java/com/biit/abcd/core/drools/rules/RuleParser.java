@@ -14,7 +14,7 @@ public class RuleParser extends GenericParser {
 		String newRule = "";
 		if (rule != null) {
 			String ruleName = rule.getName();
-			// RuleChecker.checkRuleValid(rule);
+			RuleChecker.checkRuleValid(rule);
 			newRule += Utils.getStartRuleString(ruleName);
 			newRule += Utils.getAttributes();
 			newRule += Utils.getWhenRuleString();

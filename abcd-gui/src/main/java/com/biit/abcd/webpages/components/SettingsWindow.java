@@ -82,7 +82,7 @@ public class SettingsWindow extends PopupWindow {
 								String formInfo = droolsWindow.getFormInfo();
 
 								try {
-									submittedForm = new FormToDroolsExporter().testZrmSubmittedForm(UserSessionHandler
+									submittedForm = new FormToDroolsExporter().submittedForm(UserSessionHandler
 											.getFormController().getForm(), UserSessionHandler
 											.getGlobalVariablesController().getGlobalVariables(), formInfo);
 									final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(

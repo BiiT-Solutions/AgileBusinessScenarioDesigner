@@ -162,7 +162,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private void save() {
 		try {
 			UserSessionHandler.getFormController().save();
-			UserSessionHandler.getFormController().reload();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			System.out.println(e);

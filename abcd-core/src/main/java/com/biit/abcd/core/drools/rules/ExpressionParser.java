@@ -19,17 +19,18 @@ public class ExpressionParser extends GenericParser {
 		super();
 	}
 
-	public String parse(ExpressionChain expressionChain, String extraConditions) throws ExpressionInvalidException, RuleNotImplementedException {
+	public String parse(ExpressionChain expressionChain, String extraConditions) throws ExpressionInvalidException,
+			RuleNotImplementedException {
 		String newRule = "";
 		if (expressionChain != null) {
 			if (expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				newRule += this.createDroolsRule(null, expressionChain, extraConditions);
 			} else {
 				String expressionName = expressionChain.getName();
-				if(expressionName == null){
+				if (expressionName == null) {
 					expressionName = UUID.randomUUID().toString().replaceAll("-", "");
 				}
-				// RuleChecker.checkExpressionValid(expressionChain);
+				RuleChecker.checkExpressionValid(expressionChain);
 				newRule += Utils.getStartRuleString(expressionName);
 				newRule += Utils.getAttributes();
 				newRule += Utils.getWhenRuleString();
@@ -40,21 +41,25 @@ public class ExpressionParser extends GenericParser {
 		return newRule;
 	}
 
-//	public String parse(ExpressionChain expressionChain, String extraConditions) throws ExpressionInvalidException, RuleNotImplementedException {
-//		String newRule = "";
-//		if (expressions != null) {
-//			if (expressions.get(0) instanceof ExpressionValueGenericCustomVariable) {
-//				newRule += this.createDroolsRule(null, expressionChain, extraConditions);
-//			} else {
-////				String expressionName = expressionChain.getName();
-//				// RuleChecker.checkExpressionValid(expressionChain);
-//				newRule += Utils.getStartRuleString(UUID.randomUUID().toString().replaceAll("-", ""));
-//				newRule += Utils.getAttributes();
-//				newRule += Utils.getWhenRuleString();
-//				newRule += this.createDroolsRule(null, expressionChain, extraConditions);
-//				newRule += Utils.getEndRuleString();
-//			}
-//		}
-//		return newRule;
-//	}
+	// public String parse(ExpressionChain expressionChain, String
+	// extraConditions) throws ExpressionInvalidException,
+	// RuleNotImplementedException {
+	// String newRule = "";
+	// if (expressions != null) {
+	// if (expressions.get(0) instanceof ExpressionValueGenericCustomVariable) {
+	// newRule += this.createDroolsRule(null, expressionChain, extraConditions);
+	// } else {
+	// // String expressionName = expressionChain.getName();
+	// // RuleChecker.checkExpressionValid(expressionChain);
+	// newRule +=
+	// Utils.getStartRuleString(UUID.randomUUID().toString().replaceAll("-",
+	// ""));
+	// newRule += Utils.getAttributes();
+	// newRule += Utils.getWhenRuleString();
+	// newRule += this.createDroolsRule(null, expressionChain, extraConditions);
+	// newRule += Utils.getEndRuleString();
+	// }
+	// }
+	// return newRule;
+	// }
 }

@@ -34,8 +34,8 @@ public class FormController {
 	private IFormDao formDao;
 
 	public FormController(User user, SpringContextHelper helper) {
-		setUser(user);
-		formDao = (IFormDao) helper.getBean("formDao");
+		this.setUser(user);
+		this.formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	public void setUser(User user) {
@@ -43,81 +43,72 @@ public class FormController {
 	}
 
 	public void save() throws DuplicatedVariableException {
-		checkDuplicatedVariables();
-		if (saveAllowed && (getForm() != null)) {
-			formDao.makePersistent(getForm());
+		this.checkDuplicatedVariables();
+		if (this.saveAllowed && (this.getForm() != null)) {
+			this.formDao.makePersistent(this.getForm());
 		}
 	}
 
 	public void checkDuplicatedVariables() throws DuplicatedVariableException {
-		List<CustomVariable> customVariablesList = getForm().getCustomVariables();
+		List<CustomVariable> customVariablesList = this.getForm().getCustomVariables();
 		for (int i = 0; i < (customVariablesList.size() - 1); i++) {
 			CustomVariable cv = customVariablesList.get(i);
-			for (int j = i + 1; j < (getForm().getCustomVariables().size()); j++) {
-				if (cv.duplicatedCustomVariable(getForm().getCustomVariables().get(j))) {
-					saveAllowed = false;
+			for (int j = i + 1; j < (this.getForm().getCustomVariables().size()); j++) {
+				if (cv.duplicatedCustomVariable(this.getForm().getCustomVariables().get(j))) {
+					this.saveAllowed = false;
 					throw new DuplicatedVariableException("Duplicated variable in form variables.");
 				}
 			}
 		}
-		saveAllowed = true;
+		this.saveAllowed = true;
 	}
 
 	public void remove() {
-		if (getForm() != null) {
-			formDao.makeTransient(getForm());
-		}
-	}
-
-	/**
-	 * Reloads the selected form from database.
-	 */
-	public void reload() {
-		if (getForm() != null) {
-			setForm((Form)formDao.read(getForm().getId()));
+		if (this.getForm() != null) {
+			this.formDao.makeTransient(this.getForm());
 		}
 	}
 
 	public void remove(TreeObject treeObject) throws DependencyExistException {
-		if ((getForm() != null) && (treeObject != null) && (treeObject.getParent() != null)) {
+		if ((this.getForm() != null) && (treeObject != null) && (treeObject.getParent() != null)) {
 			treeObject.remove();
 		}
 	}
 
 	public void moveUp(TreeObject treeObject) throws ChildrenNotFoundException {
-		if (getForm() != null) {
+		if (this.getForm() != null) {
 			if ((treeObject.getParent() != null) && (treeObject.getParent().getChildren().indexOf(treeObject) > 0)) {
 				treeObject.getParent().switchChildren(treeObject.getParent().getChildren().indexOf(treeObject),
-						treeObject.getParent().getChildren().indexOf(treeObject) - 1, user);
+						treeObject.getParent().getChildren().indexOf(treeObject) - 1, this.user);
 			}
 		}
 	}
 
 	public void moveDown(TreeObject object) throws ChildrenNotFoundException {
-		if (getForm() != null) {
+		if (this.getForm() != null) {
 			if ((object.getParent() != null)
 					&& (object.getParent().getChildren().indexOf(object) < (object.getParent().getChildren().size() - 1))) {
 				object.getParent().switchChildren(object.getParent().getChildren().indexOf(object),
-						object.getParent().getChildren().indexOf(object) + 1, user);
+						object.getParent().getChildren().indexOf(object) + 1, this.user);
 			}
 		}
 	}
 
 	public Form getForm() {
-		return form;
+		return this.form;
 	}
 
 	public void setForm(Form form) {
 		this.form = form;
-		clearWorkVariables();
+		this.clearWorkVariables();
 	}
 
 	public User getUser() {
-		return user;
+		return this.user;
 	}
 
 	public TreeObject getLastAccessTreeObject() {
-		return lastAccessTreeObject;
+		return this.lastAccessTreeObject;
 	}
 
 	public void setLastAccessTreeObject(TreeObject lastAccessTreeObject) {
@@ -125,7 +116,7 @@ public class FormController {
 	}
 
 	public Diagram getLastAccessDiagram() {
-		return lastAccessDiagram;
+		return this.lastAccessDiagram;
 	}
 
 	public void setLastAccessDiagram(Diagram lastAccessDiagram) {
@@ -133,7 +124,7 @@ public class FormController {
 	}
 
 	public ExpressionChain getLastAccessExpression() {
-		return lastAccessExpression;
+		return this.lastAccessExpression;
 	}
 
 	public void setLastAccessExpression(ExpressionChain lastAccessExpression) {
@@ -141,7 +132,7 @@ public class FormController {
 	}
 
 	public TableRule getLastAccessTable() {
-		return lastAccessTable;
+		return this.lastAccessTable;
 	}
 
 	public void setLastAccessTable(TableRule lastAccessTable) {
@@ -151,14 +142,14 @@ public class FormController {
 	/**
 	 * Gets rules with treeObject as the common element for all the references
 	 * in the rule.
-	 * 
+	 *
 	 * @param treeObject
 	 * @return
 	 */
 	public List<Rule> getRulesAssignedToTreeObject(TreeObject treeObject) {
 		List<Rule> assignedRules = new ArrayList<>();
 
-		List<Rule> rules = getForm().getRules();
+		List<Rule> rules = this.getForm().getRules();
 		for (Rule rule : rules) {
 			if (rule.isAssignedTo(treeObject)) {
 				assignedRules.add(rule);
@@ -166,7 +157,7 @@ public class FormController {
 		}
 		return assignedRules;
 	}
-	
+
 	/**
 	 * Gets expressionChains that reference to a particular element.
 	 * @param element
@@ -174,18 +165,18 @@ public class FormController {
 	 */
 	public List<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
 		List<ExpressionChain> expressionChains = new ArrayList<>();
-		
-		List<ExpressionChain> expressions = getForm().getExpressionChain();
+
+		List<ExpressionChain> expressions = this.getForm().getExpressionChain();
 		for(ExpressionChain expression: expressions){
 			if(expression.isAssignedTo(element)){
 				expressionChains.add(expression);
 			}
-		}		
+		}
 		return expressionChains;
 	}
 
 	public Rule getLastAccessRule() {
-		return lastAccessRule;
+		return this.lastAccessRule;
 	}
 
 	public void setLastAccessRule(Rule lastAccessRule) {
@@ -202,17 +193,17 @@ public class FormController {
 				return rule0.compareTo(rule1);
 			}
 		});
-		copiedRows = new ArrayList<TableRuleRow>();
+		this.copiedRows = new ArrayList<TableRuleRow>();
 		for (TableRuleRow rowToCopy : listOfRowsToCopy) {
-			copiedRows.add(rowToCopy.generateCopy());
+			this.copiedRows.add(rowToCopy.generateCopy());
 		}
 	}
 
 	public void pasteTableRuleRowsAsNew(TableRule selectedTableRule) {
-		if ((copiedRows == null) || copiedRows.isEmpty()) {
+		if ((this.copiedRows == null) || this.copiedRows.isEmpty()) {
 			return;
 		}
-		List<TableRuleRow> rowsToPaste = getNewInstanceOfCopiedElements();
+		List<TableRuleRow> rowsToPaste = this.getNewInstanceOfCopiedElements();
 		for (TableRuleRow rowToPaste : rowsToPaste) {
 			selectedTableRule.addRow(rowToPaste);
 		}
@@ -220,18 +211,18 @@ public class FormController {
 
 	private List<TableRuleRow> getNewInstanceOfCopiedElements() {
 		List<TableRuleRow> newCopiedRows = new ArrayList<TableRuleRow>();
-		for (TableRuleRow row : copiedRows) {
+		for (TableRuleRow row : this.copiedRows) {
 			newCopiedRows.add(row.generateCopy());
 		}
 		return newCopiedRows;
 	}
 
 	private void clearWorkVariables() {
-		lastAccessTreeObject = null;
-		lastAccessDiagram = null;
-		lastAccessExpression = null;
-		lastAccessTable = null;
-		lastAccessRule = null;
-		copiedRows = null;
+		this.lastAccessTreeObject = null;
+		this.lastAccessDiagram = null;
+		this.lastAccessExpression = null;
+		this.lastAccessTable = null;
+		this.lastAccessRule = null;
+		this.copiedRows = null;
 	}
 }

@@ -195,7 +195,7 @@ public class FunctionsTest {
 		Node nodeExpression = new Node(diagramPmtExpressionNode.getJointjsId());
 
 		DiagramRule diagramPmtRuleNode = new DiagramRule();
-		diagramPmtRuleNode.setRule(new Rule("PMT_Rule", new ExpressionChain(new ExpressionValueString("")),
+		diagramPmtRuleNode.setRule(new Rule("PMT_Rule", new ExpressionChain(new ExpressionValueString("1")),
 				new ExpressionChain(new ExpressionValueCustomVariable(categoryFin, customVarCategory),
 						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
 								AvailableFunction.PMT), new ExpressionValueNumber(10), new ExpressionSymbol(
