@@ -406,7 +406,7 @@ $open-sans-pathPrefix: "./fonts/";
 		opacity: 0.7;
 		width: 16px;
 		height: 16px;
-		background: url(appbar.sort.alphabetical.descending.svg);
+		background: url(table.header.alphabetical.descending.svg);
 		background-size: contain;
 		display: block;
 	}
@@ -415,7 +415,7 @@ $open-sans-pathPrefix: "./fonts/";
 		opacity: 0.7;
 		width: 16px;
 		height: 16px;
-		background: url(appbar.sort.alphabetical.ascending.svg);
+		background: url(table.header.alphabetical.ascending.svg);
 		background-size: contain;
 		display: block;
 	}	
@@ -519,7 +519,7 @@ $open-sans-pathPrefix: "./fonts/";
 		opacity: 0.7;
 		height: 11px;
 		margin: 2px 0px 0px 0px;
-		background: url(appbar.section.expand.svg) right top no-repeat;
+		background: url(element.expand.svg) right top no-repeat;
 		background-size: contain;
 		display: block;
 		left: -2px;
@@ -529,7 +529,7 @@ $open-sans-pathPrefix: "./fonts/";
 		opacity: 0.7;
 		height: 11px;
 		margin: 2px 0px 0px 0px;
-		background: url(appbar.section.collapse.svg) right top no-repeat;
+		background: url(element.collapse.svg) right top no-repeat;
 		background-size: contain;
 		display: block;
 		left: -2px;
@@ -751,7 +751,7 @@ $open-sans-pathPrefix: "./fonts/";
 	}
 	
 	.v-table-column-selector {
-	    background: url("appbar.interface.opendown.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
+	    background: url("table.header.opendown.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
 	    display: block;
 	    height: 16px;
 	    opacity: 0.7;
@@ -759,7 +759,7 @@ $open-sans-pathPrefix: "./fonts/";
 	}
 	
 	.v-table-column-selector:active {
-	    background: url("appbar.interface.opendown.over.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
+	    background: url("table.header.opendown.over.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
 	    display: block;
 	    height: 16px;
 	    opacity: 0.7;
