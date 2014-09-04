@@ -1,11 +1,15 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.form.TreeObject;
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button.ClickListener;
@@ -22,9 +26,11 @@ public class EditCellComponent extends CustomComponent {
 	private Label textLabel;
 	private boolean selectValue;
 	private boolean onlyEdit = false;
+	private List<CellDoubleClickedListener> doubleClickListeners;
 
 	public EditCellComponent() {
 		selectValue = false;
+		doubleClickListeners = new ArrayList<>();
 
 		addStyleName(CLASSNAME);
 
@@ -39,6 +45,18 @@ public class EditCellComponent extends CustomComponent {
 		textLabel.setSizeUndefined();
 
 		rootLayout.addComponent(textLabel);
+		rootLayout.addLayoutClickListener(new LayoutClickListener() {
+			private static final long serialVersionUID = -5210194218425133869L;
+
+			@Override
+			public void layoutClick(LayoutClickEvent event) {
+				if (event.isDoubleClick()) {
+					for (CellDoubleClickedListener listener : doubleClickListeners) {
+						listener.isDoubleClick();
+					}
+				}
+			}
+		});
 
 		setCompositionRoot(rootLayout);
 		setSizeUndefined();
@@ -59,7 +77,7 @@ public class EditCellComponent extends CustomComponent {
 
 	private void addButtons() {
 		if (editButton.getParent() == null) {
-			if(!isOnlyEdit()){
+			if (!isOnlyEdit()) {
 				rootLayout.addComponent(removeButton, 0);
 			}
 			rootLayout.addComponent(editButton, 0);
@@ -69,7 +87,7 @@ public class EditCellComponent extends CustomComponent {
 	private void removeButtons() {
 		if (editButton.getParent() != null) {
 			rootLayout.removeComponent(editButton);
-			if(!isOnlyEdit()){
+			if (!isOnlyEdit()) {
 				rootLayout.removeComponent(removeButton);
 			}
 		}
@@ -110,16 +128,25 @@ public class EditCellComponent extends CustomComponent {
 			setLabel(treeObject.toString());
 		}
 	}
-	
+
 	/**
 	 * Disables/Enables the delete button
+	 * 
 	 * @param onlyEdit
 	 */
-	public void setOnlyEdit(boolean onlyEdit){
+	public void setOnlyEdit(boolean onlyEdit) {
 		this.onlyEdit = onlyEdit;
 	}
-	
-	private boolean isOnlyEdit(){
+
+	private boolean isOnlyEdit() {
 		return onlyEdit;
+	}
+
+	public void addDoubleClickListener(CellDoubleClickedListener listener) {
+		doubleClickListeners.add(listener);
+	}
+
+	public void removeDoubleClickListener(CellDoubleClickedListener listener) {
+		doubleClickListeners.remove(listener);
 	}
 }

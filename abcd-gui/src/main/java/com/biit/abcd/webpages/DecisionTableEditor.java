@@ -302,8 +302,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information
-	 * of the currently selected table.
+	 * Updates the table where the user defines the rules with the information of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
 		decisionTable.update(getSelectedTableRule());
@@ -316,7 +315,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	/**
 	 * Gets the currently selected table.
-	 *
+	 * 
 	 * @return
 	 */
 	private TableRule getSelectedTableRule() {
@@ -408,8 +407,9 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void newEditQuestionWindow(final TableRuleRow row, final Object propertyId) {
-//		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
-//				.getExpressionValue(row, propertyId);
+		// final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference)
+		// decisionTable
+		// .getExpressionValue(row, propertyId);
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable
 				.getNextExpressionValue(row, propertyId);
 
@@ -508,7 +508,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	/**
 	 * Sets a tree object as an expression inside the table
-	 *
+	 * 
 	 * @param row
 	 * @param propertyId
 	 * @param selectedObject
@@ -520,7 +520,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	/**
 	 * Sets a custom variable as an expression inside the table
-	 *
+	 * 
 	 * @param row
 	 * @param propertyId
 	 * @param treeObject
@@ -534,7 +534,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	/**
 	 * Sets a custom variable as an expression inside the table
-	 *
+	 * 
 	 * @param row
 	 * @param propertyId
 	 * @param treeObject
@@ -547,7 +547,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	/**
 	 * Sets a custom variable as an expression inside the table
-	 *
+	 * 
 	 * @param row
 	 * @param propertyId
 	 * @param treeObject
@@ -597,7 +597,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				}
 			});
 		} else {
-			MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
+			MessageManager.showWarning(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
 					LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
 		}
 	}
@@ -631,7 +631,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	@Override
 	public void editAction(final TableRuleRow row) {
 		if (row.getActionChain() != null) {
-			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row.getActionChain());
+			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(
+					row.getActionChain());
 
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {

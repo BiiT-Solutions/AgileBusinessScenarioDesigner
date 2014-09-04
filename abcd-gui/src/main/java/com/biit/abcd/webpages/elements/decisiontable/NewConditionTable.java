@@ -71,6 +71,21 @@ public class NewConditionTable extends Table {
 				ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_HEADER_ANSWER_CONDITION), null, Align.CENTER);
 	}
 
+	private class RowDoubleClickedListener implements CellDoubleClickedListener {
+		private Object row;
+		private Object propertyId;
+
+		public RowDoubleClickedListener(Object itemId, Object propertyId) {
+			row = itemId;
+			this.propertyId = propertyId;
+		}
+
+		@Override
+		public void isDoubleClick() {
+			fireEditExpressionListeners((TableRuleRow) row, propertyId);
+		}
+	}
+
 	private class CellEditButtonClickListener implements ClickListener {
 
 		private static final long serialVersionUID = 8366131692308964272L;
@@ -177,6 +192,7 @@ public class NewConditionTable extends Table {
 				ExpressionEditCell editCellComponent = new ExpressionEditCell();
 				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId, propertyId));
 				editCellComponent.addRemoveButtonClickListener(new CellClearButtonClickListener(itemId, propertyId));
+				editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId, propertyId));
 				// Propagate element click.
 				editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId, propertyId));
 				item.getItemProperty(propertyId).setValue(editCellComponent);

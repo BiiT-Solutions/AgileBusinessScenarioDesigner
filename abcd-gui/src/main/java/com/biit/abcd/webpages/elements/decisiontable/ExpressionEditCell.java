@@ -10,6 +10,7 @@ public class ExpressionEditCell extends EditCellComponent {
 		super();
 		setLabel(" ");
 		setCellBehaviour();
+		setOnlyEdit(true);
 	}
 
 	private void setCellBehaviour() {
