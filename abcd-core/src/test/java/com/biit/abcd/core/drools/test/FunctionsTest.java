@@ -17,6 +17,8 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -49,6 +51,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -80,7 +83,8 @@ public class FunctionsTest {
 	@Test(groups = { "rules" })
 	public void testExpressions() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation, RuleNotImplementedException {
+			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			RuleNotImplementedException, InvalidAnswerFormatException {
 		// Load the rules
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createDhszwForm();
@@ -111,9 +115,10 @@ public class FunctionsTest {
 	 * @throws ChildrenNotFoundException
 	 * @throws FieldTooLongException
 	 * @throws IOException
+	 * @throws InvalidAnswerFormatException
 	 */
 	private Form createDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -126,6 +131,24 @@ public class FunctionsTest {
 				CustomVariableScope.QUESTION);
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
+		CustomVariable customVarForm = new CustomVariable(form, "fScore", CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+
+		Question father = new Question("fatherHeight");
+		father.setAnswerType(AnswerType.INPUT);
+		father.setAnswerFormat(AnswerFormat.NUMBER);
+
+		Question mother = new Question("motherHeight");
+		mother.setAnswerType(AnswerType.INPUT);
+		mother.setAnswerFormat(AnswerFormat.NUMBER);
+
+		Question weight = new Question("weight");
+		weight.setAnswerType(AnswerType.INPUT);
+		weight.setAnswerFormat(AnswerFormat.NUMBER);
+
+		Question height = new Question("height");
+		height.setAnswerType(AnswerType.INPUT);
+		height.setAnswerFormat(AnswerFormat.NUMBER);
 
 		// Create the tableRule
 		TableRule tableRule = new TableRule("BaseTable");
@@ -143,7 +166,7 @@ public class FunctionsTest {
 				category = new Category(lineSplit[0]);
 				if (lineSplit[0].equals("Financiën")) {
 					categoryFin = category;
-				}else if (lineSplit[0].equals("Justitie")) {
+				} else if (lineSplit[0].equals("Justitie")) {
 					categoryJus = category;
 				}
 				form.addChild(category);
@@ -166,6 +189,11 @@ public class FunctionsTest {
 									.parseDouble(lineSplit[3])))));
 		}
 
+		categoryFin.addChild(father);
+		categoryFin.addChild(mother);
+		categoryFin.addChild(weight);
+		categoryFin.addChild(height);
+
 		// Add the rows and the table to the form
 		form.getTableRules().add(tableRule);
 
@@ -182,7 +210,7 @@ public class FunctionsTest {
 		diagramTableRuleNode.setType(DiagramObjectType.TABLE);
 		Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
 
-		// CREATE GENERIC EXPRESSION
+		// PMT EXPRESSION
 		DiagramCalculation diagramPmtExpressionNode = new DiagramCalculation();
 		diagramPmtExpressionNode.setFormExpression(new ExpressionChain("PMT_Expression",
 				new ExpressionValueCustomVariable(categoryJus, customVarCategory), new ExpressionOperatorMath(
@@ -194,6 +222,99 @@ public class FunctionsTest {
 		diagramPmtExpressionNode.setType(DiagramObjectType.CALCULATION);
 		Node nodeExpression = new Node(diagramPmtExpressionNode.getJointjsId());
 
+		// // MATH EXPRESSION
+		// DiagramCalculation diagramOperationsExpressionNode = new
+		// DiagramCalculation();
+		// diagramOperationsExpressionNode.setFormExpression(new
+		// ExpressionChain("Math_Expression",
+		// new ExpressionValueCustomVariable(category, customVarCategory), new
+		// ExpressionOperatorMath(
+		// AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.), new
+		// ExpressionOperatorMath(
+		// AvailableOperator.PLUS), new
+		// ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+		// new ExpressionValueTreeObjectReference(mother), new
+		// ExpressionOperatorMath(
+		// AvailableOperator.MULTIPLICATION), new ExpressionValueNumber(0.6),
+		// new ExpressionSymbol(
+		// AvailableSymbol.RIGHT_BRACKET), new
+		// ExpressionOperatorMath(AvailableOperator.PLUS),
+		// new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new
+		// ExpressionValueTreeObjectReference(father),
+		// new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new
+		// ExpressionValueNumber(0.4),
+		// new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// diagramOperationsExpressionNode.setJointjsId(IdGenerator.createId());
+		// diagramOperationsExpressionNode.setType(DiagramObjectType.CALCULATION);
+		// Node nodeOperationsExpression = new
+		// Node(diagramOperationsExpressionNode.getJointjsId());
+
+		// // MATH EXPRESSION
+		// DiagramCalculation diagramOperationsExpressionNode = new
+		// DiagramCalculation();
+		// diagramOperationsExpressionNode.setFormExpression(new
+		// ExpressionChain("Math_Form_Expression",
+		// new ExpressionValueCustomVariable(form, customVarForm), new
+		// ExpressionOperatorMath(
+		// AvailableOperator.ASSIGNATION), new ExpressionValueNumber(44.5), new
+		// ExpressionOperatorMath(
+		// AvailableOperator.PLUS), new
+		// ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+		// new ExpressionValueNumber(0.376), new ExpressionOperatorMath(
+		// AvailableOperator.MULTIPLICATION), new
+		// ExpressionValueTreeObjectReference(mother), new ExpressionSymbol(
+		// AvailableSymbol.RIGHT_BRACKET), new
+		// ExpressionOperatorMath(AvailableOperator.PLUS),
+		// new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new
+		// ExpressionValueTreeObjectReference(father),
+		// new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new
+		// ExpressionValueNumber(0.411),
+		// new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// diagramOperationsExpressionNode.setJointjsId(IdGenerator.createId());
+		// diagramOperationsExpressionNode.setType(DiagramObjectType.CALCULATION);
+		// Node nodeOperationsExpression = new
+		// Node(diagramOperationsExpressionNode.getJointjsId());
+
+		// // MATH EXPRESSION
+		// DiagramCalculation diagramOperationsExpressionNode = new
+		// DiagramCalculation();
+		// diagramOperationsExpressionNode.setFormExpression(new
+		// ExpressionChain("BMI_Form_Expression",
+		// new ExpressionValueCustomVariable(form, customVarForm), new
+		// ExpressionOperatorMath(
+		// AvailableOperator.ASSIGNATION), new
+		// ExpressionValueTreeObjectReference(weight),
+		// new ExpressionOperatorMath(AvailableOperator.DIVISION), new
+		// ExpressionSymbol(
+		// AvailableSymbol.LEFT_BRACKET), new
+		// ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+		// new ExpressionValueTreeObjectReference(height), new
+		// ExpressionOperatorMath(AvailableOperator.DIVISION),
+		// new ExpressionValueNumber(100.), new
+		// ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+		// new ExpressionOperatorMath(AvailableOperator.PLUS), new
+		// ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+		// new ExpressionValueTreeObjectReference(height), new
+		// ExpressionOperatorMath(AvailableOperator.DIVISION),
+		// new ExpressionValueNumber(100.), new
+		// ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+		// new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// diagramOperationsExpressionNode.setJointjsId(IdGenerator.createId());
+		// diagramOperationsExpressionNode.setType(DiagramObjectType.CALCULATION);
+		// Node nodeOperationsExpression = new
+		// Node(diagramOperationsExpressionNode.getJointjsId());
+
+		// MATH EXPRESSION
+		DiagramCalculation diagramOperationsExpressionNode = new DiagramCalculation();
+		diagramOperationsExpressionNode.setFormExpression(new ExpressionChain("BMI_Form_Expression",
+				new ExpressionValueCustomVariable(form, customVarForm), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(weight),
+				new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionValueTreeObjectReference(height)));
+		diagramOperationsExpressionNode.setJointjsId(IdGenerator.createId());
+		diagramOperationsExpressionNode.setType(DiagramObjectType.CALCULATION);
+		Node nodeOperationsExpression = new Node(diagramOperationsExpressionNode.getJointjsId());
+
+		// PMT RULE
 		DiagramRule diagramPmtRuleNode = new DiagramRule();
 		diagramPmtRuleNode.setRule(new Rule("PMT_Rule", new ExpressionChain(new ExpressionValueString("1")),
 				new ExpressionChain(new ExpressionValueCustomVariable(categoryFin, customVarCategory),
@@ -214,9 +335,12 @@ public class FunctionsTest {
 		DiagramLink startTable = new DiagramLink(nodeSource, nodeTable);
 		startTable.setJointjsId(IdGenerator.createId());
 		startTable.setType(DiagramObjectType.LINK);
-		DiagramLink tableExpression = new DiagramLink(nodeTable, nodeExpression);
+		DiagramLink tableExpression = new DiagramLink(nodeTable, nodeOperationsExpression);
 		tableExpression.setJointjsId(IdGenerator.createId());
 		tableExpression.setType(DiagramObjectType.LINK);
+		DiagramLink operationsExpression = new DiagramLink(nodeOperationsExpression, nodeExpression);
+		operationsExpression.setJointjsId(IdGenerator.createId());
+		operationsExpression.setType(DiagramObjectType.LINK);
 		DiagramLink expressionRule = new DiagramLink(nodeExpression, nodeRule);
 		tableExpression.setJointjsId(IdGenerator.createId());
 		tableExpression.setType(DiagramObjectType.LINK);
@@ -226,11 +350,13 @@ public class FunctionsTest {
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramTableRuleNode);
+		mainDiagram.addDiagramObject(diagramOperationsExpressionNode);
 		mainDiagram.addDiagramObject(diagramPmtExpressionNode);
 		mainDiagram.addDiagramObject(diagramPmtRuleNode);
 		mainDiagram.addDiagramObject(diagramEndNode);
 		mainDiagram.addDiagramObject(startTable);
 		mainDiagram.addDiagramObject(tableExpression);
+		mainDiagram.addDiagramObject(operationsExpression);
 		mainDiagram.addDiagramObject(expressionRule);
 		mainDiagram.addDiagramObject(subdiagramEnd);
 

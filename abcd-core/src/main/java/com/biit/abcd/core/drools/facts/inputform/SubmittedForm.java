@@ -100,6 +100,10 @@ public class SubmittedForm implements ISubmittedForm {
 		this.formVariables.get(treeObject).put(varName, value);
 	}
 
+	public void setVariableValue(String varName, Object value){
+		this.setVariableValue(this, varName, value);
+	}
+
 	public boolean hasScoreSet(Object treeObject, String varName){
 		if((this.formVariables == null) || (this.formVariables.get(treeObject) == null) || (this.formVariables.get(treeObject).get(varName) == null)){
 			return false;

@@ -25,7 +25,7 @@ public class TableRuleParser extends GenericParser {
 			// One rule for each row
 			for (TableRuleRow row : tableRule.getRules()) {
 				ExpressionChain auxConditions = this.preParseConditions(row.getConditionChain());
-//				System.out.println("EXPRESSION: " + auxConditions.getExpression());
+//				System.out.println("EXPRESSION: " + auxConditions);
 //				RuleChecker.checkExpressionValid(auxConditions);
 				newRules += Utils.getStartRuleString(tableRuleName + "_row_" + i);
 				newRules += Utils.getAttributes();

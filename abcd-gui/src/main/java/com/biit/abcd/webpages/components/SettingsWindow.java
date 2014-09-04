@@ -82,9 +82,14 @@ public class SettingsWindow extends PopupWindow {
 								String formInfo = droolsWindow.getFormInfo();
 
 								try {
-									submittedForm = new FormToDroolsExporter().submittedForm(UserSessionHandler
+
+									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
+									submittedForm = droolsExporter.submittedForm(UserSessionHandler
 											.getFormController().getForm(), UserSessionHandler
 											.getGlobalVariablesController().getGlobalVariables(), formInfo);
+
+//									AbcdLogger.debug(this.getClass().getName(), droolsExporter.getGeneratedRules());
+
 									final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 											submittedForm);
 									droolsResultWindow.showCentered();

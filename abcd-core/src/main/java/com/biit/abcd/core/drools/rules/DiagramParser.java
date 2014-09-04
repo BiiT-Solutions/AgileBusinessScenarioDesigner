@@ -26,7 +26,8 @@ public class DiagramParser extends GenericParser {
 	private String newRule = "";
 	private List<String> forkConditions;
 
-	public String parse(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException {
+	public String parse(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
+			RuleNotImplementedException {
 		List<DiagramObject> diagramObjects = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjects) {
 			// Start the algorithm for each diagram source defined in the main
@@ -80,7 +81,7 @@ public class DiagramParser extends GenericParser {
 			break;
 		case FORK:
 			this.forkConditions = this.parseFork((DiagramFork) node, extraConditions);
-			// for(String forkCond: this.forkConditions) {
+			// for (String forkCond : this.forkConditions) {
 			// System.out.println("FORK CONDITION: " + forkCond);
 			// }
 			break;
@@ -124,14 +125,17 @@ public class DiagramParser extends GenericParser {
 		} else {
 			// For each outgoing link a new condition is created
 			for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
-//				List<Expression> conditions = Arrays.asList(expVal, outLink.getExpressionChain());
+				// List<Expression> conditions = Arrays.asList(expVal,
+				// outLink.getExpressionChain());
 				// Parse the conditions using the generic parser
-//				String childrenCondition = this.createDroolsRule(conditions, null, extraConditions);
-//				System.out.println(outLink.getExpressionChain());
-//				System.out.println(outLink.getExpressionChain().getExpressions().size());
-//				for(Expression exp : outLink.getExpressionChain().getExpressions()){
-//					System.out.println("Expression class: " + exp.getClass());
-//				}
+				// String childrenCondition = this.createDroolsRule(conditions,
+				// null, extraConditions);
+				// System.out.println(outLink.getExpressionChain());
+				// System.out.println(outLink.getExpressionChain().getExpressions().size());
+				// for(Expression exp :
+				// outLink.getExpressionChain().getExpressions()){
+				// System.out.println("Expression class: " + exp.getClass());
+				// }
 				String childrenCondition = this.createDroolsRule(outLink.getExpressionChain(), null, extraConditions);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
