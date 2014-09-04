@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,6 +37,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity
 @Table(name = "diagram")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Diagram extends StorableObject implements INameAttribute {
 
 	private String name;
