@@ -31,6 +31,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 		TextField appNameField = new TextField("App name: ");
 		appNameField.setImmediate(true);
 		appNameField.setWidth("100%");
+		appNameField.setInputPrompt("WebForms");
 		appNameField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -2834862614448446156L;
 
@@ -39,7 +40,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 				appName = String.valueOf(event.getProperty().getValue());
 			}
 		});
-		appNameField.setValue("WebForms");
+//		appNameField.setValue("WebForms");
 
 		TextField formNameField = new TextField("Form name: ");
 		formNameField.setImmediate(true);
@@ -47,27 +48,25 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 		formNameField.setInputPrompt("Form Name");
 		formNameField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 4853902617302026183L;
-
 			@Override
 			public void valueChange(final ValueChangeEvent event) {
 				formName = String.valueOf(event.getProperty().getValue());
 			}
 		});
-		formNameField.setValue("De_Haagse_Passage_v2");
+//		formNameField.setValue("De_Haagse_Passage_v2");
 
 		TextField documentIdField = new TextField("Form ID: ");
 		documentIdField.setImmediate(true);
 		documentIdField.setWidth("100%");
-		documentIdField.setInputPrompt("Doc ID");
+		documentIdField.setInputPrompt("Form ID");
 		documentIdField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 5884042251295904822L;
-
 			@Override
 			public void valueChange(final ValueChangeEvent event) {
 				documentId = String.valueOf(event.getProperty().getValue());
 			}
 		});
-		documentIdField.setValue("370023c797b9b9b691ed0e64a559f6adb7971df5");
+//		documentIdField.setValue("370023c797b9b9b691ed0e64a559f6adb7971df5");
 
 		layout.addComponent(appNameField);
 		layout.addComponent(formNameField);

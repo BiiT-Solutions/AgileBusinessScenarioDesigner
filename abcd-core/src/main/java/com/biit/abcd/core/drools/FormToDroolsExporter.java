@@ -55,8 +55,7 @@ public class FormToDroolsExporter {
 				formRules = new FormParser(form);
 				this.droolsRules = formRules.getRules();
 				// System.out.println(formRules.getRules());
-				// Files.write(Paths.get("./src/test/resources/generatedRules.drl"),
-				// formRules.getRules().getBytes());
+//				Files.write(Paths.get("./src/test/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 

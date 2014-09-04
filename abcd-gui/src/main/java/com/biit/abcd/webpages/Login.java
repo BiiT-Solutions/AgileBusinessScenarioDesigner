@@ -66,11 +66,13 @@ public class Login extends WebPageComponent {
 		usernameField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_EMAIL));
 		usernameField.setWidth(FIELD_SIZE);
 		usernameField.focus();
+		usernameField.setId("userNameLoginForm");
 
 		passwordField = new PasswordField(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_PASSWORD));
 		passwordField.setRequired(true);
 		passwordField.setWidth(FIELD_SIZE);
 		passwordField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_PASSWORD));
+		passwordField.setId("userPassLoginForm");
 
 		// If you press enter. Login operation.
 		passwordField.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
@@ -114,8 +116,8 @@ public class Login extends WebPageComponent {
 
 	private void checkUserAndPassword() {
 		// Try to log in the user when the button is clicked
-		String userMail = (String) usernameField.getValue();
-		String password = (String) passwordField.getValue();
+		String userMail = usernameField.getValue();
+		String password = passwordField.getValue();
 
 		User user = null;
 		try {
@@ -133,7 +135,7 @@ public class Login extends WebPageComponent {
 		}
 
 		if (user != null) {
-			WebBrowser browser = (WebBrowser) UI.getCurrent().getPage().getWebBrowser();
+			WebBrowser browser = UI.getCurrent().getPage().getWebBrowser();
 			try {
 				String message = "User '" + user.getEmailAddress() + "' logged successfully. Using '"
 						+ browser.getBrowserApplication() + "'";

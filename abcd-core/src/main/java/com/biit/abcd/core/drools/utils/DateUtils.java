@@ -26,6 +26,34 @@ public class DateUtils {
 		return now.getTime();
 	}
 
+	public static Integer returnYearDistanceFromDate(Date date) {
+		Calendar now = Calendar.getInstance();
+		Calendar compareDate = Calendar.getInstance();
+		compareDate.setTime(date);
+
+		int diff = now.get(Calendar.YEAR) - compareDate.get(Calendar.YEAR);
+		if ((now.get(Calendar.MONTH) > compareDate.get(Calendar.MONTH))
+				|| ((now.get(Calendar.MONTH) == compareDate.get(Calendar.MONTH)) && (now.get(Calendar.DATE) > compareDate
+						.get(Calendar.DATE)))) {
+			diff--;
+		}
+		return diff;
+	}
+
+	public static Integer returnMonthDistanceFromDate(Date date) {
+		Calendar now = Calendar.getInstance();
+		Calendar compareDate = Calendar.getInstance();
+		compareDate.setTime(date);
+		return ((returnYearDistanceFromDate(date) * 12) + compareDate.get(Calendar.MONTH)) - now.get(Calendar.MONTH);
+	}
+
+	public static Integer returnDaysDistanceFromDate(Date date) {
+		Calendar now = Calendar.getInstance();
+		Calendar compareDate = Calendar.getInstance();
+		compareDate.setTime(date);
+		return (int) ((now.getTimeInMillis() - compareDate.getTimeInMillis()) / (1000 * 60 * 60 * 24));
+	}
+
 	public static Date returnCurrentDate() {
 		return Calendar.getInstance().getTime();
 	}

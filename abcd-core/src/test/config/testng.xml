@@ -10,8 +10,8 @@
 			</run>
 		</groups>
 		<classes>
-			<class name="com.biit.abcd.core.drools.test.PrattParserTest" />
-			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />
+			 <class name="com.biit.abcd.core.drools.test.PrattParserTest" />
+			<!--<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />
 			<class name="com.biit.abcd.core.drools.test.TableRuleTest" />
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.RulesTest" />
@@ -19,8 +19,8 @@
 			<class name="com.biit.abcd.core.drools.test.DiagramDateTest" />
 			<class name="com.biit.abcd.core.drools.test.ZrmFormTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramOrTest" />
-			<class name="com.biit.abcd.core.drools.test.GenericsTest" />
-			<class name="com.biit.abcd.core.drools.test.FunctionsTest" />
+			<class name="com.biit.abcd.core.drools.test.GenericsTest" />-->
+			<!--<class name="com.biit.abcd.core.drools.test.FunctionsTest" />-->
 			<!-- Test dependent of the orbeon server, may not work in all machines -->
 			<!-- <class name="com.biit.abcd.core.drools.test.DHPUserFormsTest" /> -->
 		</classes>

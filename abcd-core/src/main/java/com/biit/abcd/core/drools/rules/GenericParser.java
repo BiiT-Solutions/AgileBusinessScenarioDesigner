@@ -11,6 +11,7 @@ import com.biit.abcd.core.drools.prattparser.ExpressionChainParser;
 import com.biit.abcd.core.drools.prattparser.ParseException;
 import com.biit.abcd.core.drools.prattparser.Parser;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
+import com.biit.abcd.core.drools.prattparser.visitor.TreeElementMathExpressionVisitor;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.logger.AbcdLogger;
@@ -55,19 +56,20 @@ public class GenericParser {
 	 *            variable to be added to the LHS of the rule
 	 * @return LHS of the rule modified with the new variables
 	 */
-	private String addConditionVariable(ExpressionValueCustomVariable variable) {
+	private String addConditionVariable(TreeObject treeObject) {
 		String ruleCore = "";
 
 		// Add the variable assignation to the rule
-		TreeObject treeObject = variable.getReference();
-		if (treeObject instanceof Category) {
-			ruleCore += this.simpleCategoryConditions((Category) treeObject);
+		if (treeObject != null) {
+			if (treeObject instanceof Category) {
+				ruleCore += this.simpleCategoryConditions((Category) treeObject);
 
-		} else if (treeObject instanceof Group) {
-			ruleCore += this.simpleGroupConditions((Group) treeObject);
+			} else if (treeObject instanceof Group) {
+				ruleCore += this.simpleGroupConditions((Group) treeObject);
 
-		} else if (treeObject instanceof Question) {
-			ruleCore += this.simpleQuestionConditions((Question) treeObject);
+			} else if (treeObject instanceof Question) {
+				ruleCore += this.simpleQuestionConditions((Question) treeObject);
+			}
 		}
 		return ruleCore;
 	}
@@ -143,6 +145,7 @@ public class GenericParser {
 		}
 		return droolsConditions;
 	}
+
 
 	/**
 	 * Parse actions like => Score = stringValue || Score = numberValue || Score
@@ -235,6 +238,31 @@ public class GenericParser {
 		return pmt;
 	}
 
+	private String checkCustomVariableAssignation(ExpressionValueCustomVariable variable) {
+		if (variable != null) {
+			TreeObject treeObject = variable.getReference();
+			if (this.getTreeObjectName(variable.getReference()) == null) {
+				// The variable don't exists and can't have a value assigned
+				String ruleCore = "";
+
+				// Add the variable assignation to the rule
+				if (treeObject != null) {
+					if (treeObject instanceof Category) {
+						ruleCore += this.simpleCategoryCustomVariableConditions(variable);
+
+					} else if (treeObject instanceof Group) {
+						ruleCore += this.simpleGroupCustomVariableConditions(variable);
+
+					} else if (treeObject instanceof Question) {
+						ruleCore += this.simpleQuestionCustomVariableConditions(variable);
+					}
+				}
+				return ruleCore;
+			}
+		}
+		return "";
+	}
+
 	/**
 	 * Checks the existence of a binding in drools with the the reference of the
 	 * variable passed If there is no binding, creates a new one (i.e. $var :
@@ -242,21 +270,36 @@ public class GenericParser {
 	 *
 	 * @param expValVariable
 	 */
-	private String checkVariableAssignation(ExpressionValueCustomVariable expValVariable) {
-		if (this.getTreeObjectName(expValVariable.getReference()) == null) {
-			// The variable don't exists and can't have a value assigned
-			return this.addConditionVariable(expValVariable);
+	private String checkVariableAssignation(Expression expression) {
+		if (expression instanceof ExpressionValueCustomVariable) {
+			return this.checkCustomVariableAssignation((ExpressionValueCustomVariable) expression);
+		} else if (expression instanceof ExpressionValueTreeObjectReference) {
+			return this.checkVariableAssignation((ExpressionValueTreeObjectReference) expression);
 		}
 		return "";
 	}
 
-	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions) throws RuleNotImplementedException {
+	private String checkVariableAssignation(ExpressionValueTreeObjectReference variable) {
+		return this.checkVariableAssignation(variable.getReference());
+	}
+
+	private String checkVariableAssignation(TreeObject treeObject) {
+		if (treeObject != null) {
+			if (this.getTreeObjectName(treeObject) == null) {
+				// The variable don't exists and can't have a value assigned
+				return this.addConditionVariable(treeObject);
+			}
+		}
+		return "";
+	}
+
+	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions)
+			throws RuleNotImplementedException {
 
 		// System.out.println("CONDITIONS: " + conditions);
 		// System.out.println("ACTIONS: " + actions);
 
 		this.treeObjectDroolsname.clear();
-		// TODO
 		String ruleCore = "";
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
@@ -280,8 +323,116 @@ public class GenericParser {
 		return ruleCore;
 	}
 
+	/**
+	 * Parse conditions like => Question BETWEEN(Answer1, answer2). <br>
+	 * The values inside the between must be always numbers <br>
+	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
+	 * && (getAnswer() <= answer.getValue()))
+	 *
+	 * @param conditions
+	 * @return LHS of the rule
+	 */
+	private String customVariableBetweenAnswersCondition(List<Expression> conditions) {
+		String droolsConditions = "";
+		List<Expression> operatorLeft = ((ExpressionChain) conditions.get(0)).getExpressions();
+		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)) {
+
+			ExpressionValueCustomVariable leftVariable = (ExpressionValueCustomVariable) operatorLeft.get(0);
+			if (leftVariable != null) {
+
+				List<Expression> firstExpressionValue = ((ExpressionChain) conditions.get(2)).getExpressions();
+				List<Expression> secondExpressionValue = ((ExpressionChain) conditions.get(3)).getExpressions();
+				if ((firstExpressionValue.size() == 1)
+						&& (firstExpressionValue.get(0) instanceof ExpressionValueNumber)
+						&& (secondExpressionValue.size() == 1)
+						&& (secondExpressionValue.get(0) instanceof ExpressionValueNumber)) {
+					// Get the values of the between expression
+					Double value1 = ((ExpressionValueNumber) firstExpressionValue.get(0)).getValue();
+					Double value2 = ((ExpressionValueNumber) secondExpressionValue.get(0)).getValue();
+					if ((value1 != null) && (value2 != null)) {
+
+						TreeObject leftReferenceParent = leftVariable.getReference().getParent();
+						if (leftReferenceParent != null) {
+							this.putTreeObjectName(leftVariable.getReference(), leftVariable.getComparationIdNoDash()
+									.toString());
+							// Check the parent
+							if (leftReferenceParent instanceof Form) {
+								droolsConditions += this.simpleFormCondition((Form) leftReferenceParent);
+							} else if (leftReferenceParent instanceof Category) {
+								droolsConditions += this.simpleCategoryConditions((Category) leftReferenceParent);
+							} else if (leftReferenceParent instanceof Group) {
+								droolsConditions += this.simpleGroupConditions((Group) leftReferenceParent);
+							}
+						}
+						if (leftVariable.getReference() instanceof Question) {
+							Question leftQuestion = (Question) leftVariable.getReference();
+							switch (leftQuestion.getAnswerType()) {
+							case INPUT:
+								switch (leftQuestion.getAnswerFormat()) {
+								case DATE:
+									String instanceOfDate = "getAnswer() instanceof Date";
+									String greatEqualsDate = "getAnswer() <= DateUtils.returnCurrentDateMinusYears("
+											+ value1.intValue() + ")";
+									String lessEqualsDate = "getAnswer() >= DateUtils.returnCurrentDateMinusYears("
+											+ value2.intValue() + ")";
+									droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
+											+ " : Question( " + instanceOfDate + ", " + greatEqualsDate + ", "
+											+ lessEqualsDate + ") from $"
+											+ leftReferenceParent.getComparationIdNoDash().toString()
+											+ ".getQuestions()\n";
+									droolsConditions += "and\n";
+								default:
+									break;
+								}
+								break;
+							default:
+								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
+										+ " : Question( getAnswer() >= '" + value1 + "' || <= '" + value2 + "') from $"
+										+ leftReferenceParent.getComparationIdNoDash().toString()
+										+ ".getQuestions() \n";
+								droolsConditions += "and\n";
+								break;
+							}
+						} else {
+							String varName = leftVariable.getVariable().getName();
+
+							switch (leftVariable.getVariable().getScope()) {
+							case FORM:
+								droolsConditions += "	$"
+										+ leftVariable.getReference().getComparationIdNoDash().toString()
+										+ " : SubmittedForm( isScoreSet('" + varName + "'), getNumberVariableValue('"
+										+ varName + "') >= '" + value1 + "' || <= '" + value2 + "') \n";
+								break;
+							case CATEGORY:
+								droolsConditions += "	$"
+										+ leftVariable.getReference().getComparationIdNoDash().toString()
+										+ " : Category( isScoreSet('" + varName + "'), getNumberVariableValue('"
+										+ varName + "') >= '" + value1 + "' || <= '" + value2 + "') from $"
+										+ leftReferenceParent.getComparationIdNoDash().toString()
+										+ ".getCategories() \n";
+								break;
+							case GROUP:
+								droolsConditions += "	$"
+										+ leftVariable.getReference().getComparationIdNoDash().toString()
+										+ " : Group( isScoreSet('" + varName + "'), getNumberVariableValue('" + varName
+										+ "') >= '" + value1 + "' || <= '" + value2 + "') from $"
+										+ leftReferenceParent.getComparationIdNoDash().toString() + ".getGroups() \n";
+								break;
+							default:
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		return droolsConditions;
+	}
+
 	private String equalsOperator(List<Expression> expressions) {
+
 		List<Expression> operatorLeft = ((ExpressionChain) expressions.get(0)).getExpressions();
+		Expression operator = expressions.get(1);
 		List<Expression> operatorRight = ((ExpressionChain) expressions.get(2)).getExpressions();
 
 		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
@@ -300,6 +451,30 @@ public class GenericParser {
 			return this.treeObjectScoreLogicOperatorValueNumber((ExpressionValueCustomVariable) operatorLeft.get(0),
 					(ExpressionOperatorLogic) expressions.get(1), (ExpressionValueNumber) operatorRight.get(0));
 		}
+		// Question INPUT
+		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
+				&& (operator instanceof ExpressionOperatorLogic) && (operatorRight.size() == 1)
+				&& (operatorRight.get(0) instanceof ExpressionValueNumber)) {
+			TreeObject treeObject = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
+			Double value = ((ExpressionValueNumber) operatorRight.get(0)).getValue();
+
+			if (treeObject instanceof Question) {
+				switch (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit()) {
+				case YEARS:
+					return this.questionDateYearsOperatorValueNumber(treeObject, value,
+							((ExpressionOperatorLogic) operator).getValue());
+				case MONTHS:
+					return this.questionDateMonthsOperatorValueNumber(treeObject, value,
+							((ExpressionOperatorLogic) operator).getValue());
+				case DAYS:
+					return this.questionDateDaysOperatorValueNumber(treeObject, value,
+							((ExpressionOperatorLogic) operator).getValue());
+				case DATE:
+
+					break;
+				}
+			}
+		}
 		return "";
 	}
 
@@ -313,146 +488,14 @@ public class GenericParser {
 	 * @return the rule
 	 * @throws RuleNotImplementedException
 	 */
-	private String genericAssignationFunctionAction(ExpressionChain actions, String extraConditions) throws RuleNotImplementedException {
+	private String genericAssignationFunctionAction(ExpressionChain actions, String extraConditions)
+			throws RuleNotImplementedException {
 		String ruleCore = "";
 		// we have to generate a set of rules defined by the generic variable
 		ruleCore += this.genericRuleSet(actions, extraConditions);
 		this.cleaningNeeded = false;
 		return ruleCore;
 	}
-
-	// /**
-	// * Parse conditions of type Question == answer. <br>
-	// * Create drools rule of type
-	// Question(getValue().equals(answer.getName()))
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String questionAnswerEqualsCondition(List<Expression> conditions)
-	// {
-	// String droolsConditions = "";
-	// ExpressionValueTreeObjectReference expVal =
-	// (ExpressionValueTreeObjectReference) conditions.get(0);
-	//
-	// // Check if the first object is a question
-	// TreeObject treeObject = expVal.getReference();
-	// if ((treeObject != null) && (treeObject instanceof Question)) {
-	// // Sublist from 2 , because the expression list received is Q1 ==
-	// // Answer
-	// droolsConditions += this.questionAnswerEqualsCondition((Question)
-	// treeObject,
-	// conditions.subList(2, conditions.size()));
-	// }
-	// return droolsConditions;
-	// }
-	//
-	// /**
-	// * Parse conditions of type Question (==, IN, BETWEEN) SomeAnswer. <br>
-	// * Create drools rule of type Question(getValue() (==, IN, BETWEEN)
-	// answer)
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String questionAnswerEqualsCondition(Question question,
-	// List<Expression> answerExpressions) {
-	// String droolsConditions = "";
-	// Expression answerExpression = answerExpressions.get(0);
-	//
-	// // System.out.println("ANSWER CLASSS: " + answerExpression.getClass());
-	//
-	// if (answerExpression instanceof ExpressionValueTreeObjectReference) {
-	// droolsConditions += this.questionAnswerEqualsCondition(question,
-	// (ExpressionValueTreeObjectReference) answerExpression);
-	//
-	// // TODO
-	// } else if (answerExpression instanceof ExpressionFunction) {
-	// // Check for the existence of OR between expressions
-	// if (this.expressionContainsOr(answerExpressions)) {
-	// // TODO
-	// // Separates the expressions around the OR
-	// // List<List<Expression>> separatedExpressions =
-	// // this.separateORexpressions(answerExpressions);
-	// // // Add the question for each expression so it can be
-	// // processed separately
-	// // List<String> orConditions = new ArrayList<String>();
-	// // for(int i=0; i<separatedExpressions.size(); i++){
-	// // List<Expression> auxList = new ArrayList<Expression>();
-	// // auxList.add(new
-	// // ExpressionValueTreeObjectReference(question));
-	// // auxList.addAll(separatedExpressions.get(i));
-	// // orConditions.add(this.parseConditions(auxList));
-	// // }
-	// // String orCondition =
-	// // this.createDroolsOrCondition(orConditions);
-	// // System.out.println("OR CONDITION AFTER: " + orCondition);
-	// // droolsConditions += orCondition;
-	// } else {
-	// switch (((ExpressionFunction) answerExpression).getValue()) {
-	// case IN:
-	// droolsConditions += this.answersInQuestionCondition(question,
-	// answerExpressions);
-	// break;
-	// case BETWEEN:
-	// droolsConditions += this.questionBetweenAnswersCondition(question,
-	// answerExpressions);
-	// break;
-	// default:
-	// break;
-	// }
-	// }
-	// } else if (answerExpression instanceof ExpressionOperatorLogic) {
-	// switch (((ExpressionOperatorLogic) answerExpression).getValue()) {
-	// case GREATER_EQUALS:
-	// droolsConditions += this.questionValueGreaterEqualsAnswer(question,
-	// answerExpressions);
-	// break;
-	// case GREATER_THAN:
-	// droolsConditions += this.questionValueGreaterThanAnswer(question,
-	// answerExpressions);
-	// break;
-	// case LESS_EQUALS:
-	// droolsConditions += this.questionValueLessEqualsAnswer(question,
-	// answerExpressions);
-	// break;
-	// case LESS_THAN:
-	// droolsConditions += this.questionValueLessThanAnswer(question,
-	// answerExpressions);
-	// break;
-	//
-	// default:
-	// break;
-	// }
-	// }
-	// return droolsConditions;
-	// }
-	//
-	// private String questionAnswerEqualsCondition(Question question,
-	// ExpressionValueTreeObjectReference answer) {
-	// String droolsConditions = "";
-	// TreeObject treeObject2 = answer.getReference();
-	// if ((treeObject2 != null)) {
-	// // Check the parent of the question
-	// TreeObject questionParent = question.getParent();
-	// this.putTreeObjectName(question,
-	// question.getComparationIdNoDash().toString());
-	// if (questionParent instanceof Category) {
-	// droolsConditions += this.simpleCategoryConditions((Category)
-	// questionParent);
-	// } else if (questionParent instanceof Group) {
-	// droolsConditions += this.simpleGroupConditions((Group) questionParent);
-	// }
-	// this.putTreeObjectName(question,
-	// question.getComparationIdNoDash().toString());
-	// droolsConditions += "	$" + question.getComparationIdNoDash().toString() +
-	// " : Question( getAnswer() == '"
-	// + treeObject2.getName() + "') from $" +
-	// questionParent.getComparationIdNoDash().toString()
-	// + ".getQuestions()\n";
-	// }
-	// return droolsConditions;
-	// }
 
 	/**
 	 * Creates a set of expressions and passes it back to the expression parser
@@ -462,10 +505,11 @@ public class GenericParser {
 	 * @return
 	 * @throws RuleNotImplementedException
 	 */
-	private String genericRuleSet(ExpressionChain expressionChain, String extraConditions) throws RuleNotImplementedException {
+	private String genericRuleSet(ExpressionChain expressionChain, String extraConditions)
+			throws RuleNotImplementedException {
 		String ruleCore = "";
-		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) expressionChain.getExpressions()
-				.get(0);
+		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) expressionChain
+				.getExpressions().get(0);
 
 		List<TreeObject> treeObjects = new ArrayList<TreeObject>();
 		switch (genericVarToCalculate.getType()) {
@@ -501,98 +545,72 @@ public class GenericParser {
 		return ruleCore;
 	}
 
+	private List<Expression> getExpressionChainVariables(ExpressionChain expressionChain) {
+		List<Expression> variables = new ArrayList<Expression>();
+		for (Expression expression : expressionChain.getExpressions()) {
+			// Look for possible variables that need assignation
+			if ((expression instanceof ExpressionValueCustomVariable)
+					|| (expression instanceof ExpressionValueTreeObjectReference)) {
+				variables.add(expression);
+			} else if (expression instanceof ExpressionChain) {
+				variables.addAll(this.getExpressionChainVariables((ExpressionChain) expression));
+			}
+		}
+		return variables;
+	}
+
 	private String getTreeObjectName(TreeObject treeObject) {
 		return this.treeObjectDroolsname.get(treeObject);
 	}
 
-	// /**
-	// * Parse conditions like => Question BETWEEN(Answer1, answer2). <br>
-	// * The values inside the between must be always numbers <br>
-	// * Create drools rule like => Question( (getAnswer() >= answer.getValue())
-	// * && (getAnswer() <= answer.getValue()))
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String questionBetweenAnswersCondition(List<Expression>
-	// conditions) {
-	// String droolsConditions = "";
-	// ExpressionValueTreeObjectReference expVal =
-	// (ExpressionValueTreeObjectReference) conditions.get(0);
-	// // Check if the first object is a question
-	// TreeObject treeObject = expVal.getReference();
-	// if ((treeObject != null) && (treeObject instanceof Question)) {
-	// // Sublist from 1 , because the expression list received is Q1
-	// // BETWEEN( answer1, ... )
-	// droolsConditions += this.questionBetweenAnswersCondition((Question)
-	// treeObject,
-	// conditions.subList(1, conditions.size()));
-	// }
-	// return droolsConditions;
-	// }
-	//
-	// /**
-	// * Parse conditions like => BETWEEN(Answer1, answer2). <br>
-	// * The values inside the between must be always numbers <br>
-	// * Create drools rule like => Question( (getAnswer() >= answer.getValue())
-	// * && (getAnswer() <= answer.getValue()))
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String questionBetweenAnswersCondition(Question question,
-	// List<Expression> answerExpressions) {
-	// // Get the values of the between expression
-	// Double value1 = ((ExpressionValueNumber)
-	// answerExpressions.get(1)).getValue();
-	// Double value2 = ((ExpressionValueNumber)
-	// answerExpressions.get(3)).getValue();
-	// String droolsConditions = "";
-	// if ((value1 != null) && (value2 != null)) {
-	// TreeObject questionParent = question.getParent();
-	// this.putTreeObjectName(question,
-	// question.getComparationIdNoDash().toString());
-	// // Check the parent of the question
-	// if (questionParent instanceof Category) {
-	// droolsConditions += this.simpleCategoryConditions((Category)
-	// questionParent);
-	// } else if (questionParent instanceof Group) {
-	// droolsConditions += this.simpleGroupConditions((Group) questionParent);
-	// }
-	// switch (question.getAnswerType()) {
-	// case INPUT:
-	// switch (question.getAnswerFormat()) {
-	// case DATE:
-	// String instanceOfDate = "getAnswer() instanceof Date";
-	// String greatEqualsDate =
-	// "getAnswer() <= DateUtils.returnCurrentDateMinusYears("
-	// + value1.intValue() + ")";
-	// String lessEqualsDate =
-	// "getAnswer() >= DateUtils.returnCurrentDateMinusYears(" +
-	// value2.intValue()
-	// + ")";
-	// droolsConditions += "	$" + question.getComparationIdNoDash().toString() +
-	// " : Question( "
-	// + instanceOfDate + ", " + greatEqualsDate + ", " + lessEqualsDate +
-	// ") from $"
-	// + questionParent.getComparationIdNoDash().toString() +
-	// ".getQuestions()\n";
-	// default:
-	// break;
-	// }
-	// break;
-	// default:
-	// droolsConditions += "	$" + question.getComparationIdNoDash().toString()
-	// + " : Question( getAnswer() >= '" + value1 + "' || <= '" + value2 +
-	// "') from $"
-	// + questionParent.getComparationIdNoDash().toString() +
-	// ".getQuestions()\n";
-	// break;
-	// }
-	//
-	// }
-	// return droolsConditions;
-	// }
+	private String mathAssignationAction(ExpressionChain actions, String extraConditions)
+			throws RuleNotImplementedException {
+		String ruleCore = "";
+		Parser parser = new ExpressionChainParser(actions);
+		ITreeElement result = null;
+		try {
+			result = parser.parseExpression();
+		} catch (ParseException ex) {
+			AbcdLogger.errorMessage(this.getClass().getName(), ex);
+		}
+		if (result != null) {
+			ExpressionChain mathematicalChain = result.getExpressionChain();
+
+			List<Expression> chainList = mathematicalChain.getExpressions();
+
+			if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
+				ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0))
+						.getExpressions().get(0);
+				// Check if the reference exists in the rule, if not, it creates
+				// a
+				// new reference
+				ruleCore += this.checkVariableAssignation(var);
+
+				List<Expression> variables = this.getExpressionChainVariables(mathematicalChain);
+				for (Expression expression : variables) {
+					if ((expression instanceof ExpressionValueCustomVariable)
+							|| (expression instanceof ExpressionValueTreeObjectReference)) {
+						ruleCore += this.checkVariableAssignation(expression);
+					}
+				}
+				ruleCore += Utils.getThenRuleString();
+				String mathematicalExpression = "";
+
+				TreeElementMathExpressionVisitor treePrint = new TreeElementMathExpressionVisitor();
+				result.accept(treePrint);
+				if (treePrint != null) {
+					mathematicalExpression = treePrint.getBuilder().toString();
+				}
+
+				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
+						+ var.getVariable().getName() + "', " + mathematicalExpression + ");\n";
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
+						+ var.getVariable().getName() + ", " + mathematicalExpression + ")\");\n";
+
+			}
+		}
+		return ruleCore;
+	}
 
 	/**
 	 * Expression parser. An expression is a rule without the condition part in
@@ -747,71 +765,6 @@ public class GenericParser {
 		return ruleCore;
 	}
 
-	// /**
-	// * Parse conditions like => Question IN(answer1, ...) <br>
-	// * Create drools rule like => Question(getAnswer() in (answer1, ...))
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String answersInQuestionCondition(List<Expression> conditions) {
-	// String droolsConditions = "";
-	// ExpressionValueTreeObjectReference expVal =
-	// (ExpressionValueTreeObjectReference) conditions.get(0);
-	// TreeObject treeObject = expVal.getReference();
-	// if ((treeObject != null) && (treeObject instanceof Question)) {
-	// // Sublist from 1 , because the expression list received is Q1 IN(
-	// // answer1, ... )
-	// droolsConditions += this.answersInQuestionCondition((Question)
-	// treeObject,
-	// conditions.subList(1, conditions.size()));
-	// }
-	// return droolsConditions;
-	// }
-	//
-	// /**
-	// * Parse conditions like => IN(answer1, ...) <br>
-	// * Create drools rule like => Question(getAnswer() in (answer1, ...))
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String answersInQuestionCondition(Question question,
-	// List<Expression> answerExpressions) {
-	// String droolsConditions = "";
-	// String inValues = "";
-	// // Store the values inside the IN condition in a String
-	// for (int i = 1; i < (answerExpressions.size() - 1); i += 2) {
-	// ExpressionValueTreeObjectReference ansVal =
-	// (ExpressionValueTreeObjectReference) answerExpressions.get(i);
-	// if (ansVal instanceof ExpressionValueCustomVariable) {
-	// // TODO
-	// } else {
-	// inValues += "'" + ansVal.getReference().getName() + "', ";
-	// }
-	// }
-	// // Remove the last comma
-	// inValues = inValues.substring(0, inValues.length() - 2);
-	// if (!inValues.isEmpty()) {
-	// // Check the parent of the question
-	// TreeObject questionParent = question.getParent();
-	// this.putTreeObjectName(question,
-	// question.getComparationIdNoDash().toString());
-	// if (questionParent instanceof Category) {
-	// droolsConditions += this.simpleCategoryConditions((Category)
-	// questionParent);
-	// } else if (questionParent instanceof Group) {
-	// droolsConditions += this.simpleGroupConditions((Group) questionParent);
-	// }
-	// droolsConditions += "	$" + question.getComparationIdNoDash().toString() +
-	// " : Question( getAnswer() in( "
-	// + inValues + " )) from $" +
-	// questionParent.getComparationIdNoDash().toString()
-	// + ".getQuestions()\n";
-	// }
-	// return droolsConditions;
-	// }
-
 	/**
 	 * Parse actions like => Score = Score (+|-|/|*) numberValue <br>
 	 * Create drools rule like => setVariableValue(scopeOfVariable,
@@ -870,39 +823,6 @@ public class GenericParser {
 		return ruleCore;
 	}
 
-	// /**
-	// * Parse a list of conditions like => Conditions AND Conditions AND ...
-	// <br>
-	// * Create drools rule like => $conditions1... \n $conditions2 ...
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String conditionsWithAnd(List<List<Expression>> conditions) {
-	// String ruleCore = "";
-	//
-	// for (List<Expression> condition : conditions) {
-	// ruleCore += this.parseConditions(condition);
-	// }
-	// return Utils.removeDuplicateLines(ruleCore);
-	// }
-	//
-	// /**
-	// * Parse a list of conditions like => Conditions OR Conditions OR ... <br>
-	// * Create drools rule like => $value : (conditions OR conditions OR ... )
-	// *
-	// * @param conditions
-	// * @return LHS of the rule
-	// */
-	// private String conditionsWithOr(List<List<Expression>> conditions) {
-	// String ruleCore = "";
-	//
-	// for (List<Expression> condition : conditions) {
-	// ruleCore += this.parseConditions(condition);
-	// }
-	// return Utils.removeDuplicateLines(ruleCore);
-	// }
-
 	/**
 	 * Parse the actions of the rule <br>
 	 * Accepts actions with the patterns : <br>
@@ -949,61 +869,11 @@ public class GenericParser {
 		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
 	}
 
-	// /**
-	// * Parse actions like => Score = stringValue || Score = numberValue ||
-	// Score
-	// * = Function (parameters ...)<br>
-	// * Create drools rule like => setVariableValue(scopeOfVariable,
-	// * variableName, stringVariableValue )
-	// *
-	// * @param actions
-	// * the action of the rule being parsed
-	// * @return the RHS of the rule
-	// */
-	// private String assignationAction(List<Expression> actions) {
-	// String ruleCore = "";
-	// ExpressionValueCustomVariable var = (ExpressionValueCustomVariable)
-	// actions.get(0);
-	// // Check if the reference exists in the rule, if not, it creates a new
-	// // reference
-	// ruleCore += this.checkVariableAssignation(var);
-	//
-	// ruleCore += Utils.getThenRuleString();
-	//
-	// if ((actions.get(2) instanceof ExpressionValueString) || (actions.get(2)
-	// instanceof ExpressionValueNumber)) {
-	// ExpressionValue value = (ExpressionValue) actions.get(2);
-	// ruleCore += "	$" + this.getTreeObjectName(var.getReference()) +
-	// ".setVariableValue('"
-	// + var.getVariable().getName() + "', " + value.getValue() + ");\n";
-	// ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" +
-	// var.getReference().getName() + ", "
-	// + var.getVariable().getName() + ", " + value.getValue() + ")\");\n";
-	// } else if (actions.get(2) instanceof ExpressionFunction) {
-	// switch (((ExpressionFunction) actions.get(2)).getValue()) {
-	// case PMT:
-	// String value = this.calculatePMT(actions.subList(3, 6));
-	// ruleCore += "	$" + this.getTreeObjectName(var.getReference()) +
-	// ".setVariableValue('"
-	// + var.getVariable().getName() + "', " + value + ");\n";
-	// ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" +
-	// var.getReference().getName() + ", "
-	// + var.getVariable().getName() + ", " + value + ")\");\n";
-	// break;
-	// default:
-	// break;
-	// }
-	// }
-	// return ruleCore;
-	// }
-
 	private String parseConditions(ExpressionChain conditions) {
 		Parser parser = new ExpressionChainParser(conditions.getExpressions());
 		ITreeElement result = null;
 		try {
 			result = parser.parseExpression();
-			// ITreeElementVisitor treePrint = new TreeElementDroolsVisitor();
-			// resultVisitor.accept(treePrint);
 		} catch (ParseException ex) {
 			AbcdLogger.errorMessage(this.getClass().getName(), ex);
 		}
@@ -1012,129 +882,7 @@ public class GenericParser {
 		// After this point the expression chain is the result of the parsing
 		// engine. The expression chain has AST (abstract syntax tree) form
 		// *******************************************************************************************************
-
 		return this.processParserResult(result.getExpressionChain());
-
-		// // Condition of type (something AND something AND ...) or (something
-		// OR
-		// // something OR ...)
-		// // Currently no combinations of ANDs and ORs are allowed
-		// if (conditions.size() > 6) {
-		// int startAndConditionIndex = 0;
-		// int endAndConditionIndex = 0;
-		// int startOrConditionIndex = 0;
-		// int endOrConditionIndex = 0;
-		// // Creation of substrings defined by the AND or the OR expressions
-		// // Each subCondition list is parsed individually
-		// List<List<Expression>> andSubConditions = new
-		// ArrayList<List<Expression>>();
-		// List<List<Expression>> orSubConditions = new
-		// ArrayList<List<Expression>>();
-		// for (Expression condition : conditions) {
-		// if (condition instanceof ExpressionOperatorLogic) {
-		// switch (((ExpressionOperatorLogic) condition).getValue()) {
-		// case AND:
-		// andSubConditions.add(conditions.subList(startAndConditionIndex,
-		// endAndConditionIndex));
-		// startAndConditionIndex = endAndConditionIndex + 1;
-		// break;
-		// case OR:
-		// orSubConditions.add(conditions.subList(startOrConditionIndex,
-		// endOrConditionIndex));
-		// startOrConditionIndex = endOrConditionIndex + 1;
-		// break;
-		// default:
-		// break;
-		// }
-		// }
-		// endAndConditionIndex++;
-		// endOrConditionIndex++;
-		// }
-		// // Add the last subCondition
-		// andSubConditions.add(conditions.subList(startAndConditionIndex,
-		// endAndConditionIndex));
-		// // Add the last subCondition
-		// orSubConditions.add(conditions.subList(startOrConditionIndex,
-		// endOrConditionIndex));
-		// if (startAndConditionIndex != 0) {
-		// return this.conditionsWithAnd(andSubConditions);
-		// } else if (startOrConditionIndex != 0) {
-		// System.out.println("OR PARSING");
-		// return this.conditionsWithOr(orSubConditions);
-		// }
-		// }
-		// // Condition of type (Question | Answer)
-		// if ((conditions.size() == 2) && (conditions.get(0) instanceof
-		// ExpressionValueTreeObjectReference)
-		// && (conditions.get(1) instanceof ExpressionChain)) {
-		// TreeObject questionObject = ((ExpressionValueTreeObjectReference)
-		// conditions.get(0)).getReference();
-		// if ((questionObject != null) && (questionObject instanceof Question))
-		// {
-		// List<Expression> answerExpressions = ((ExpressionChain)
-		// conditions.get(1)).getExpressions();
-		// return this.questionAnswerEqualsCondition((Question) questionObject,
-		// answerExpressions);
-		// }
-		// }
-		// // Condition of type (Question | Answer)
-		// if ((conditions.size() == 2) && (conditions.get(0) instanceof
-		// ExpressionValueTreeObjectReference)
-		// && (conditions.get(1) instanceof ExpressionValueTreeObjectReference))
-		// {
-		// TreeObject questionObject = ((ExpressionValueTreeObjectReference)
-		// conditions.get(0)).getReference();
-		// if ((questionObject != null) && (questionObject instanceof Question))
-		// {
-		// return this.questionAnswerEqualsCondition((Question) questionObject,
-		// (ExpressionValueTreeObjectReference) conditions.get(1));
-		//
-		// // List<Expression> answerExpressions =
-		// // ((ExpressionChain)conditions.get(1)).getExpressions();
-		// // return
-		// // this.questionAnswerEqualsCondition((Question)questionObject,
-		// // answerExpressions);
-		// }
-		// }
-		// // Condition of type (cat.score == value)
-		// else if ((conditions.size() == 3) && (conditions.get(0) instanceof
-		// ExpressionValueCustomVariable)
-		// && (conditions.get(1) instanceof ExpressionOperatorLogic)
-		// && (((ExpressionOperatorLogic)
-		// conditions.get(1)).getValue().equals(AvailableOperator.EQUALS))
-		// && (conditions.get(2) instanceof ExpressionValueNumber)) {
-		// return this.scoreEqualsCondition(conditions);
-		// }
-		// // Condition of type (question1 == answer11)
-		// else if ((conditions.size() == 3) && (conditions.get(0) instanceof
-		// ExpressionValueTreeObjectReference)
-		// && (conditions.get(1) instanceof ExpressionOperatorLogic)
-		// && (((ExpressionOperatorLogic)
-		// conditions.get(1)).getValue().equals(AvailableOperator.EQUALS))
-		// && (conditions.get(2) instanceof ExpressionValueTreeObjectReference))
-		// {
-		// return this.questionAnswerEqualsCondition(conditions);
-		// }
-		// // Condition of type (question1 BETWEEN (answer11, answer12))
-		// else if ((conditions.size() == 6) && (conditions.get(0) instanceof
-		// ExpressionValueTreeObjectReference)
-		// && (conditions.get(1) instanceof ExpressionFunction)
-		// && (((ExpressionFunction)
-		// conditions.get(1)).getValue().equals(AvailableFunction.BETWEEN))
-		// && (conditions.get(2) instanceof ExpressionValueNumber)
-		// && (conditions.get(4) instanceof ExpressionValueNumber)) {
-		// return this.questionBetweenAnswersCondition(conditions);
-		// }
-		// // Condition of type (question1 IN (answer11, answer12, ...))
-		// else if ((conditions.size() > 3) && (conditions.get(0) instanceof
-		// ExpressionValueTreeObjectReference)
-		// && (conditions.get(1) instanceof ExpressionFunction)
-		// && (((ExpressionFunction)
-		// conditions.get(1)).getValue().equals(AvailableFunction.IN))) {
-		//
-		// return this.answersInQuestionCondition(conditions);
-		// }
-		// return "";
 	}
 
 	/**
@@ -1155,7 +903,8 @@ public class GenericParser {
 		// Action type => cat.score = min(q1.score, q2.score, ...)
 		if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
 				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
-				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
+				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
+						.equals(AvailableOperator.ASSIGNATION))
 				&& (expressionChain.getExpressions().get(2) instanceof ExpressionFunction)) {
 			switch (((ExpressionFunction) expressionChain.getExpressions().get(2)).getValue()) {
 			case MAX:
@@ -1168,10 +917,19 @@ public class GenericParser {
 
 		} else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)
 				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
-				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
+				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
+						.equals(AvailableOperator.ASSIGNATION))
 				&& (expressionChain.getExpressions().get(2) instanceof ExpressionFunction)) {
 			return this.genericAssignationFunctionAction(expressionChain, extraConditions);
 		}
+		// Generic calculation
+		else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
+				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
+				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
+						.equals(AvailableOperator.ASSIGNATION))) {
+			return this.mathAssignationAction(expressionChain, extraConditions);
+		}
+
 		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
 	}
 
@@ -1218,7 +976,8 @@ public class GenericParser {
 				case EQUALS:
 					return this.equalsOperator(expressions);
 				case AND:
-					return this.andOperator(expressions);
+					String andRes = this.andOperator(expressions);
+					return andRes;
 				case GREATER_EQUALS:
 				case GREATER_THAN:
 				case LESS_EQUALS:
@@ -1244,7 +1003,11 @@ public class GenericParser {
 			if ((expressions.get(1) instanceof ExpressionFunction)) {
 				switch (((ExpressionFunction) expressions.get(1)).getValue()) {
 				case BETWEEN:
-					return this.questionBetweenAnswersCondition(expressions);
+					if (((ExpressionChain) expressions.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
+						return this.customVariableBetweenAnswersCondition(expressions);
+					} else if (((ExpressionChain) expressions.get(0)).getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
+						return this.questionBetweenAnswersCondition(expressions);
+					}
 				case IN:
 					return this.answersInQuestionCondition(expressions);
 				default:
@@ -1286,64 +1049,95 @@ public class GenericParser {
 	 * @return LHS of the rule
 	 */
 	private String questionBetweenAnswersCondition(List<Expression> conditions) {
+
+		// System.out.println("QUESTION BETWEEN");
+		// System.out.println("CONDITIONS: " + conditions);
+
 		String droolsConditions = "";
 		List<Expression> operatorLeft = ((ExpressionChain) conditions.get(0)).getExpressions();
 		TreeObject leftReference = null;
 		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)) {
+
 			leftReference = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
-		}
-		if (leftReference != null) {
-			List<Expression> firstExpressionValue = ((ExpressionChain) conditions.get(2)).getExpressions();
-			List<Expression> secondExpressionValue = ((ExpressionChain) conditions.get(3)).getExpressions();
-			if ((firstExpressionValue.size() == 1) && (firstExpressionValue.get(0) instanceof ExpressionValueNumber)
-					&& (secondExpressionValue.size() == 1)
-					&& (secondExpressionValue.get(0) instanceof ExpressionValueNumber)) {
-				// Get the values of the between expression
-				Double value1 = ((ExpressionValueNumber) firstExpressionValue.get(0)).getValue();
-				Double value2 = ((ExpressionValueNumber) secondExpressionValue.get(0)).getValue();
-				if ((value1 != null) && (value2 != null)) {
-					TreeObject leftReferenceParent = leftReference.getParent();
-					this.putTreeObjectName(leftReference, leftReference.getComparationIdNoDash().toString());
-					// Check the parent
-					if (leftReferenceParent instanceof Form) {
-						droolsConditions += this.simpleFormCondition((Form) leftReferenceParent);
-					} else if (leftReferenceParent instanceof Category) {
-						droolsConditions += this.simpleCategoryConditions((Category) leftReferenceParent);
-					} else if (leftReferenceParent instanceof Group) {
-						droolsConditions += this.simpleGroupConditions((Group) leftReferenceParent);
-					}
-					if (leftReference instanceof Question) {
-						Question leftQuestion = (Question) leftReference;
-						switch (leftQuestion.getAnswerType()) {
-						case INPUT:
-							switch (leftQuestion.getAnswerFormat()) {
-							case DATE:
-								String instanceOfDate = "getAnswer() instanceof Date";
-								String greatEqualsDate = "getAnswer() <= DateUtils.returnCurrentDateMinusYears("
-										+ value1.intValue() + ")";
-								String lessEqualsDate = "getAnswer() >= DateUtils.returnCurrentDateMinusYears("
-										+ value2.intValue() + ")";
-								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-										+ " : Question( " + instanceOfDate + ", " + greatEqualsDate + ", "
-										+ lessEqualsDate + ") from $"
-										+ leftReferenceParent.getComparationIdNoDash().toString() + ".getQuestions()\n";
-								droolsConditions += "and\n";
+			if (leftReference != null) {
+
+				List<Expression> firstExpressionValue = ((ExpressionChain) conditions.get(2)).getExpressions();
+				List<Expression> secondExpressionValue = ((ExpressionChain) conditions.get(3)).getExpressions();
+				if ((firstExpressionValue.size() == 1)
+						&& (firstExpressionValue.get(0) instanceof ExpressionValueNumber)
+						&& (secondExpressionValue.size() == 1)
+						&& (secondExpressionValue.get(0) instanceof ExpressionValueNumber)) {
+					// Get the values of the between expression
+					Double value1 = ((ExpressionValueNumber) firstExpressionValue.get(0)).getValue();
+					Double value2 = ((ExpressionValueNumber) secondExpressionValue.get(0)).getValue();
+					if ((value1 != null) && (value2 != null)) {
+
+						TreeObject leftReferenceParent = leftReference.getParent();
+						this.putTreeObjectName(leftReference, leftReference.getComparationIdNoDash().toString());
+						// Check the parent
+						if (leftReferenceParent instanceof Form) {
+							droolsConditions += this.simpleFormCondition((Form) leftReferenceParent);
+						} else if (leftReferenceParent instanceof Category) {
+							droolsConditions += this.simpleCategoryConditions((Category) leftReferenceParent);
+						} else if (leftReferenceParent instanceof Group) {
+							droolsConditions += this.simpleGroupConditions((Group) leftReferenceParent);
+						}
+						if (leftReference instanceof Question) {
+							Question leftQuestion = (Question) leftReference;
+							switch (leftQuestion.getAnswerType()) {
+							case INPUT:
+								switch (leftQuestion.getAnswerFormat()) {
+								case DATE:
+									String instanceOfDate = "getAnswer() instanceof Date";
+									String greatEqualsDate = "getAnswer() <= DateUtils.returnCurrentDateMinusYears("
+											+ value1.intValue() + ")";
+									String lessEqualsDate = "getAnswer() >= DateUtils.returnCurrentDateMinusYears("
+											+ value2.intValue() + ")";
+									droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
+											+ " : Question( " + instanceOfDate + ", " + greatEqualsDate + ", "
+											+ lessEqualsDate + ") from $"
+											+ leftReferenceParent.getComparationIdNoDash().toString()
+											+ ".getQuestions()\n";
+									droolsConditions += "and\n";
+								default:
+									break;
+								}
+								break;
 							default:
+								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
+										+ " : Question( getAnswer() >= '" + value1 + "' || <= '" + value2 + "') from $"
+										+ leftReferenceParent.getComparationIdNoDash().toString()
+										+ ".getQuestions() \n";
+								droolsConditions += "and\n";
 								break;
 							}
-							break;
-						default:
-							droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-									+ " : Question( getAnswer() >= '" + value1 + "' || <= '" + value2 + "') from $"
-									+ leftReferenceParent.getComparationIdNoDash().toString() + ".getQuestions() \n";
-							droolsConditions += "and\n";
-							break;
 						}
 					}
 				}
 			}
 		}
 		return droolsConditions;
+	}
+
+	private String questionDateDaysOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
+		return "	$" + question.getComparationIdNoDash().toString()
+				+ " : Question(getAnswer() instanceof Date, DateUtils.returnDaysDistanceFromDate(getAnswer()) "
+				+ operator.getValue() + " " + value.intValue() + ") from $"
+				+ question.getParent().getComparationIdNoDash().toString() + ".getQuestions()\n";
+	}
+
+	private String questionDateMonthsOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
+		return "	$" + question.getComparationIdNoDash().toString()
+				+ " : Question(getAnswer() instanceof Date, DateUtils.returnMonthDistanceFromDate(getAnswer()) "
+				+ operator.getValue() + " " + value.intValue() + ") from $"
+				+ question.getParent().getComparationIdNoDash().toString() + ".getQuestions()\n";
+	}
+
+	private String questionDateYearsOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
+		return "	$" + question.getComparationIdNoDash().toString()
+				+ " : Question(getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
+				+ operator.getValue() + " " + value.intValue() + ") from $"
+				+ question.getParent().getComparationIdNoDash().toString() + ".getQuestions()\n";
 	}
 
 	private String questionGeGtLeLtAnswer(List<Expression> conditions, AvailableOperator operator) {
@@ -1453,7 +1247,6 @@ public class GenericParser {
 				}
 			}
 		} else {
-			// System.out.println(conditions);
 			ExpressionValueCustomVariable customVariable = (ExpressionValueCustomVariable) ((ExpressionChain) conditions
 					.get(0)).getExpressions().get(0);
 			ExpressionValueNumber valueNumber = (ExpressionValueNumber) ((ExpressionChain) conditions.get(2))
@@ -1495,64 +1288,6 @@ public class GenericParser {
 				+ ".getQuestions()\n";
 	}
 
-	// private boolean expressionContainsOr(List<Expression> expChain) {
-	// for (Expression expression : expChain) {
-	// if ((expression instanceof ExpressionOperatorLogic)
-	// && ((ExpressionOperatorLogic)
-	// expression).getValue().equals(AvailableOperator.OR)) {
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-	//
-	// private List<List<Expression>> separateOrExpressions(List<Expression>
-	// expChain) {
-	// int startOrConditionIndex = 0;
-	// int endOrConditionIndex = 0;
-	// // Creation of substrings defined by the AND or the OR expressions
-	// // Each subCondition list is parsed individually
-	// List<List<Expression>> orSubConditions = new
-	// ArrayList<List<Expression>>();
-	// for (Expression expression : expChain) {
-	// if (expression instanceof ExpressionOperatorLogic) {
-	// switch (((ExpressionOperatorLogic) expression).getValue()) {
-	// case OR:
-	// orSubConditions.add(expChain.subList(startOrConditionIndex,
-	// endOrConditionIndex));
-	// startOrConditionIndex = endOrConditionIndex + 1;
-	// break;
-	// default:
-	// break;
-	// }
-	// }
-	// endOrConditionIndex++;
-	// }
-	// // Add the last subCondition
-	// orSubConditions.add(expChain.subList(startOrConditionIndex,
-	// endOrConditionIndex));
-	// return orSubConditions;
-	// }
-	//
-	// private boolean expressionContainsAnd(List<Expression> expChain) {
-	// for (Expression expression : expChain) {
-	// if ((expression instanceof ExpressionOperatorLogic)
-	// && ((ExpressionOperatorLogic)
-	// expression).getValue().equals(AvailableOperator.AND)) {
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-	//
-	// private String createDroolsOrCondition(List<String> conditions) {
-	// String conditionsWithOr = "( ";
-	// for (String condition : conditions) {
-	// conditionsWithOr += condition;
-	// }
-	// return conditionsWithOr + " )\n";
-	// }
-
 	private String simpleCategoryConditions(Category category) {
 		String conditions = "";
 		Form form = (Form) category.getParent();
@@ -1566,10 +1301,35 @@ public class GenericParser {
 		return conditions;
 	}
 
+	private String simpleCategoryCustomVariableConditions(ExpressionValueCustomVariable customVariable) {
+		Category category = (Category) customVariable.getReference();
+		String conditions = "";
+		Form form = (Form) category.getParent();
+		conditions += this.simpleFormCondition(form);
+
+		if (this.getTreeObjectName(category) == null) {
+			this.putTreeObjectName(category, category.getComparationIdNoDash().toString());
+			conditions += "	$" + category.getComparationIdNoDash().toString() + " : Category( isScoreSet('"
+					+ customVariable.getVariable().getName() + "')) from $" + form.getComparationIdNoDash().toString()
+					+ ".getCategory('" + category.getName() + "') and\n";
+		}
+		return conditions;
+	}
+
 	private String simpleFormCondition(Form form) {
 		if (this.getTreeObjectName(form) == null) {
 			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
 			return "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm() and\n";
+		}
+		return "";
+	}
+
+	private String simpleFormCustomVariableCondition(ExpressionValueCustomVariable customVariable) {
+		Form form = (Form) customVariable.getReference();
+		if (this.getTreeObjectName(form) == null) {
+			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
+			return "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('"
+					+ customVariable.getVariable().getName() + "')) and\n";
 		}
 		return "";
 	}
@@ -1587,6 +1347,21 @@ public class GenericParser {
 		return conditions;
 	}
 
+	private String simpleGroupCustomVariableConditions(ExpressionValueCustomVariable customVariable) {
+		Group group = (Group) customVariable.getReference();
+		String conditions = "";
+		Category category = (Category) group.getParent();
+		conditions += this.simpleCategoryConditions(category);
+
+		if (this.getTreeObjectName(group) == null) {
+			this.putTreeObjectName(group, group.getComparationIdNoDash().toString());
+			conditions += "	$" + group.getComparationIdNoDash().toString() + " : Group( isScoreSet('"
+					+ customVariable.getVariable().getName() + "')) from $"
+					+ category.getComparationIdNoDash().toString() + ".getGroup('" + group.getName() + "') and\n";
+		}
+		return conditions;
+	}
+
 	private String simpleQuestionConditions(Question question) {
 		String conditions = "";
 		TreeObject questionParent = question.getParent();
@@ -1598,7 +1373,7 @@ public class GenericParser {
 				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
 				conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
 						+ question.getName() + "') from $" + category.getComparationIdNoDash().toString()
-						+ ".getQuestions()\n";
+						+ ".getQuestions() and\n";
 			}
 
 		} else if (questionParent instanceof Group) {
@@ -1609,7 +1384,36 @@ public class GenericParser {
 				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
 				conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
 						+ question.getName() + "') from $" + group.getComparationIdNoDash().toString()
-						+ ".getQuestions()\n";
+						+ ".getQuestions() and\n";
+			}
+		}
+		return conditions;
+	}
+
+	private String simpleQuestionCustomVariableConditions(ExpressionValueCustomVariable customVariable) {
+		Question question = (Question) customVariable.getReference();
+		String conditions = "";
+		TreeObject questionParent = question.getParent();
+		if (questionParent instanceof Category) {
+			Category category = (Category) questionParent;
+			conditions += this.simpleCategoryConditions(category);
+
+			if (this.getTreeObjectName(question) == null) {
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+				conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
+						+ question.getName() + "', isScoreSet('" + customVariable.getVariable().getName()
+						+ "' )) from $" + category.getComparationIdNoDash().toString() + ".getQuestions() and\n";
+			}
+
+		} else if (questionParent instanceof Group) {
+			Group group = (Group) questionParent;
+			conditions += this.simpleGroupConditions(group);
+
+			if (this.getTreeObjectName(question) == null) {
+				this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
+				conditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
+						+ question.getName() + "', isScoreSet('" + customVariable.getVariable().getName() + "')) from $"
+						+ group.getComparationIdNoDash().toString() + ".getQuestions() and\n";
 			}
 		}
 		return conditions;
@@ -1634,7 +1438,7 @@ public class GenericParser {
 			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('" + varName
 					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-					+ valueNumber.getValue() + ") and\n";
+					+ valueNumber.getValue() + ") \n";
 
 		} else if (scope instanceof Category) {
 			TreeObject form = scope.getParent();
@@ -1643,7 +1447,7 @@ public class GenericParser {
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Category( isScoreSet('" + varName
 					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
 					+ valueNumber.getValue() + ") from $" + form.getComparationIdNoDash().toString() + ".getCategory('"
-					+ scope.getName() + "') and\n";
+					+ scope.getName() + "') \n";
 
 		} else if (scope instanceof Group) {
 			TreeObject category = scope.getParent();
@@ -1652,7 +1456,7 @@ public class GenericParser {
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Group( isScoreSet('" + varName
 					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
 					+ valueNumber.getValue() + " ) from $" + category.getComparationIdNoDash().toString()
-					+ ".getGroup('" + scope.getName() + "') and\n";
+					+ ".getGroup('" + scope.getName() + "') \n";
 
 		} else if (scope instanceof Question) {
 			TreeObject questionParent = scope.getParent();
@@ -1665,7 +1469,7 @@ public class GenericParser {
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Question( isScoreSet('" + varName
 					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
 					+ valueNumber.getValue() + " ) from $" + questionParent.getComparationIdNoDash().toString()
-					+ ".getQuestions() and\n";
+					+ ".getQuestions() \n";
 		}
 		return ruleCore;
 	}

@@ -9,6 +9,8 @@ import com.biit.abcd.core.drools.prattparser.Parser;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementPrintVisitor;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -28,12 +30,14 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class PrattParserTest {
 	@Test(groups = { "simpleParser" })
-	public static void testParser() throws FieldTooLongException, NotValidChildException {
+	public static void testParser() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
 		Form form = new Form("testForm");
 		Category category = new Category("categoryTest");
@@ -48,12 +52,29 @@ public class PrattParserTest {
 				CustomVariableScope.CATEGORY);
 		CustomVariable qVar = new CustomVariable(form, "questVar", CustomVariableType.NUMBER,
 				CustomVariableScope.QUESTION);
+		CustomVariable fVar = new CustomVariable(form, "formVar", CustomVariableType.NUMBER, CustomVariableScope.FORM);
+
+		Question father = new Question("fatherHeight");
+		father.setAnswerType(AnswerType.INPUT);
+		father.setAnswerFormat(AnswerFormat.NUMBER);
+		category.addChild(father);
+
+		Question mother = new Question("motherHeight");
+		mother.setAnswerType(AnswerType.INPUT);
+		mother.setAnswerFormat(AnswerFormat.NUMBER);
+		category.addChild(mother);
+
+		Question birthDate = new Question("birthdate");
+		birthDate.setAnswerType(AnswerType.INPUT);
+		birthDate.setAnswerFormat(AnswerFormat.DATE);
+		category.addChild(birthDate);
 
 		ExpressionValueTreeObjectReference expValQ1 = new ExpressionValueTreeObjectReference(question);
 		ExpressionValueTreeObjectReference expValQ1A1 = new ExpressionValueTreeObjectReference(answer1);
 		ExpressionValueTreeObjectReference expValQ1A2 = new ExpressionValueTreeObjectReference(answer2);
 		ExpressionValueCustomVariable expValCVar = new ExpressionValueCustomVariable(category, cVar);
 		ExpressionValueCustomVariable expValQVar = new ExpressionValueCustomVariable(question, qVar);
+		ExpressionValueCustomVariable expValFormScore = new ExpressionValueCustomVariable(form, fVar);
 		ExpressionValueNumber expValNumber = new ExpressionValueNumber(5.);
 		// Generics
 		ExpressionValueGenericCustomVariable expValGenericCatScore = new ExpressionValueGenericCustomVariable(
@@ -141,6 +162,39 @@ public class PrattParserTest {
 				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), expValGenericQuestScore,
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
 		Assert.assertEquals(actual, "null[null[Categories_catVar], MIN(, null[Category_Questions_questVar]]");
+
+		// Mathematical test
+		actual = parseDrools(new ExpressionChain(new ExpressionValueCustomVariable(category, cVar),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.),
+				new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueTreeObjectReference(mother), new ExpressionOperatorMath(
+						AvailableOperator.MULTIPLICATION), new ExpressionValueNumber(0.6), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorMath(AvailableOperator.PLUS),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(father),
+				new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionValueNumber(0.4),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(
+				actual,
+				"null[null[categoryTest.catVar], null[null[null[10], +, null[null[motherHeight], *, null[0.6]]], +, null[null[fatherHeight], *, null[0.4]]]]");
+
+		// Mathematical test
+		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionUnit.YEARS),
+				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+						new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND),
+				expValFormScore, new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
+						new ExpressionValueNumber(13.))));
+		Assert.assertEquals(actual,
+				"null[null[null[birthdate], ==, null[4]], &&, null[null[testForm.formVar], <, null[13]]]");
+
+		// Mathematical test
+		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionUnit.YEARS),
+				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+						new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND),
+				expValFormScore, new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN),
+						new ExpressionValueNumber(13.1), new ExpressionSymbol(AvailableSymbol.COMMA),
+						new ExpressionValueNumber(19.2), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET))));
+		Assert.assertEquals(actual,
+				"null[null[null[birthdate], ==, null[4]], &&, null[null[testForm.formVar], BETWEEN(, null[13.1], null[19.2]]]");
 	}
 
 	/**

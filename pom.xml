@@ -54,6 +54,7 @@
 		<orbeon-form-reader.version>0.2.0</orbeon-form-reader.version>
 		<apache-poi.version>3.10.1</apache-poi.version>
 		<root.directory>${project.basedir}</root.directory>
+		
 	</properties>
 
 	<dependencies>
