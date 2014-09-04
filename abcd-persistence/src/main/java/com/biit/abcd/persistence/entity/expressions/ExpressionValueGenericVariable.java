@@ -6,6 +6,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 
 @Entity
 @Table(name = "expression_value_generic_variable")
@@ -60,6 +61,14 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 	@Override
 	public Object getValue() {
 		return getType();
+	}
+
+	@Override
+	public void setValue(Object value) throws NotValidExpressionValue {
+		if (!(value instanceof GenericTreeObjectType)) {
+			throw new NotValidExpressionValue("Expected GenericTreeObjectType object in '" + value + "'");
+		}
+		setType((GenericTreeObjectType) value);
 	}
 
 }

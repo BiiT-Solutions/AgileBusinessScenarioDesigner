@@ -173,11 +173,9 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 					variableTable.addItem(value);
 					variableTable.setValue(value);
 				}
-				AbcdLogger.info(
-						this.getClass().getName(),
-						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-								+ value.getClass() + " with 'Name: " + value.getName() + " - Type: " + value.getFormat()
-								+ "'.");
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has created a " + value.getClass() + " with 'Name: " + value.getName() + " - Type: "
+						+ value.getFormat() + "'.");
 				window.close();
 			}
 		});
@@ -212,11 +210,9 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						// Update the view of the value
 						variableTable.updateItem(variable);
 					}
-					AbcdLogger.info(
-							this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has edited a "
-									+ variable.getClass() + " with 'Name: " + variable.getName() + " - Type: " + variable.getFormat()
-									+ "'.");
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has edited a " + variable.getClass()
+							+ " with 'Name: " + variable.getName() + " - Type: " + variable.getFormat() + "'.");
 					window.close();
 				}
 			});

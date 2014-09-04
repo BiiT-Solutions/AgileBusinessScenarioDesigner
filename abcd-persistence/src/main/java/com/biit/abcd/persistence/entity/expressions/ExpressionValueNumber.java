@@ -3,9 +3,11 @@ package com.biit.abcd.persistence.entity.expressions;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
+
 /**
  * Defines values as a double.
- *
+ * 
  */
 @Entity
 @Table(name = "expression_value_number")
@@ -52,6 +54,14 @@ public class ExpressionValueNumber extends ExpressionValue {
 		ExpressionValueNumber copy = new ExpressionValueNumber();
 		copy.value = value;
 		return copy;
+	}
+
+	@Override
+	public void setValue(Object value) throws NotValidExpressionValue {
+		if (!(value instanceof Double)) {
+			throw new NotValidExpressionValue("Expected Double object in '" + value + "'");
+		}
+		setValue((Double) value);
 	}
 
 }

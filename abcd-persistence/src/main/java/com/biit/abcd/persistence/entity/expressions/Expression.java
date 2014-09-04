@@ -47,4 +47,10 @@ public abstract class Expression extends StorableObject {
 	public void setEditable(boolean isEditable) {
 		this.isEditable = isEditable;
 	}
+
+	public void copy(Expression expression) {
+		setCreatedBy(expression.getCreatedBy());
+		setCreationTime(expression.getCreationTime());
+		setEditable(expression.isEditable());
+	}
 }
