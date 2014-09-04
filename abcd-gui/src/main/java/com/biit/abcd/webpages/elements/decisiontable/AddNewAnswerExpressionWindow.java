@@ -22,6 +22,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	private SelectFormAnswerTable answerTable;
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionChain expressionChain;
+	private boolean tableGenerated = false;
 
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
@@ -73,7 +74,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		} else {
 			answerTable.setValue(null);
 		}
-
+		tableGenerated = true;
 		return answerTable;
 	}
 
@@ -96,7 +97,9 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	}
 
 	public ExpressionChain getExpressionChain() {
-		removeFirstExpression();
+		if (!tableGenerated) {
+			removeFirstExpression();
+		}
 		return expressionChain;
 	}
 

@@ -566,6 +566,9 @@ public class GenericParser {
 	private String mathAssignationAction(ExpressionChain actions, String extraConditions)
 			throws RuleNotImplementedException {
 		String ruleCore = "";
+		if (extraConditions != null) {
+			ruleCore += extraConditions;
+		}
 		Parser parser = new ExpressionChainParser(actions);
 		ITreeElement result = null;
 		try {
