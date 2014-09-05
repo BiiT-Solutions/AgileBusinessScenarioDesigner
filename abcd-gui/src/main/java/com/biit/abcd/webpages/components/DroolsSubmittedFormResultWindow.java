@@ -25,6 +25,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	}
 
 	private Component generateContent(ISubmittedForm submittedForm) {
+
 		VerticalLayout layout = new VerticalLayout();
 		// Create content
 		TreeTable resultTreeTable = new TreeTable();
@@ -33,15 +34,16 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 		resultTreeTable.addContainerProperty("Name", String.class, "");
 		resultTreeTable.addContainerProperty("Score", Double.class, 0.);
-
-		for (ICategory category : submittedForm.getCategories()) {
-			final Object categoryItem = resultTreeTable.addItem(new Object[] { category.getText(),
-					((Category) category).getVariableValue("cScore") }, null);
-			for (IQuestion question : category.getQuestions()) {
-				final Object questionItem = resultTreeTable.addItem(
-						new Object[] { question.getTag(), ((Question) question).getVariableValue("qScore") }, null);
-				resultTreeTable.setParent(questionItem, categoryItem);
-				resultTreeTable.setChildrenAllowed(questionItem, false);
+		if (submittedForm != null) {
+			for (ICategory category : submittedForm.getCategories()) {
+				final Object categoryItem = resultTreeTable.addItem(new Object[] { category.getText(),
+						((Category) category).getVariableValue("cScore") }, null);
+				for (IQuestion question : category.getQuestions()) {
+					final Object questionItem = resultTreeTable.addItem(new Object[] { question.getTag(),
+							((Question) question).getVariableValue("qScore") }, null);
+					resultTreeTable.setParent(questionItem, categoryItem);
+					resultTreeTable.setChildrenAllowed(questionItem, false);
+				}
 			}
 		}
 		layout.addComponent(resultTreeTable);

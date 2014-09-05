@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.rules;
+package com.biit.abcd.core.drools.utils;
 
 import java.util.ArrayList;
 import java.util.List;
