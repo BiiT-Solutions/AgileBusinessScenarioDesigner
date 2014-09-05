@@ -1,6 +1,7 @@
 package com.biit.abcd.core.drools.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class RulesUtils {
@@ -119,5 +120,64 @@ public class RulesUtils {
 			}
 		}
 		return result.toString();
+	}
+
+	// rule "getBmiMale_row_2"
+	// when
+	//
+	// (
+	// $4db44f24d9db4d72ab0e2a884e09ff28 : SubmittedForm() and
+	// $21798d15524a4ab9a3a757e24efb4144 : Category() from
+	// $4db44f24d9db4d72ab0e2a884e09ff28.getCategory('Algemeen') and
+	// $308d01df47ff4babb2d7dba4515ec5b1 : Question(getAnswer() instanceof Date,
+	// DateUtils.returnYearDistanceFromDate(getAnswer()) == 4) from
+	// $21798d15524a4ab9a3a757e24efb4144.getQuestions()
+	// and
+	// $4db44f24d9db4d72ab0e2a884e09ff28 : SubmittedForm( isScoreSet('BMI'),
+	// getNumberVariableValue('BMI') >= '17.5' || < '19.2')
+	// )
+	// then
+	// $4db44f24d9db4d72ab0e2a884e09ff28.setVariableValue('BmiClassification',
+	// 'overweight');
+	// AbcdLogger.debug("DroolsRule",
+	// "Variable set (KidsScreen, BmiClassification, overweight)");
+	//
+	// end
+
+	public static String checkForDuplicatedVariables(String ruleCore) {
+		String cleanedResults = "";
+		boolean insideRHS = false;
+		HashSet<String> variablesAssigned = new HashSet<String>();
+		String[] lines = ruleCore.split("\n");
+		int sameVariableIndex = 0;
+		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+			String line = lines[lineIndex];
+			if (line.equals("then")) {
+				insideRHS = true;
+			}
+			String[] auxRuleArray = line.split(" : ");
+			if (auxRuleArray.length > 1) {
+				if (variablesAssigned.contains(auxRuleArray[0])) {
+					if (insideRHS) {
+						auxRuleArray[0] = auxRuleArray[0] + "0";
+					} else {
+						auxRuleArray[0] = auxRuleArray[0] + sameVariableIndex;
+						sameVariableIndex++;
+					}
+				} else {
+					variablesAssigned.add(auxRuleArray[0]);
+				}
+				for (int i = 0; i < auxRuleArray.length; i++) {
+					if (i == (auxRuleArray.length - 1)) {
+						cleanedResults += auxRuleArray[i] + "\n";
+					} else {
+						cleanedResults += auxRuleArray[i] + " : ";
+					}
+				}
+			} else {
+				cleanedResults += line + "\n";
+			}
+		}
+		return cleanedResults;
 	}
 }

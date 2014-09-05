@@ -311,7 +311,7 @@ public class GenericParser {
 	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions)
 			throws RuleNotImplementedException {
 
-		// System.out.println("CONDITIONS: " + conditions);
+//		System.out.println("CONDITIONS: " + conditions);
 		// System.out.println("ACTIONS: " + actions);
 
 		this.treeObjectDroolsname.clear();
@@ -334,6 +334,7 @@ public class GenericParser {
 		}
 		if (this.cleaningNeeded) {
 			ruleCore = RulesUtils.newRemoveDuplicateLines(ruleCore);
+			ruleCore = RulesUtils.checkForDuplicatedVariables(ruleCore);
 		}
 		return ruleCore;
 	}
@@ -501,7 +502,7 @@ public class GenericParser {
 							((ExpressionOperatorLogic) operator).getValue());
 					break;
 				case DATE:
-					//TODO
+					// TODO
 					break;
 				}
 			}
@@ -1011,8 +1012,8 @@ public class GenericParser {
 					return this.equalsOperator(expressions);
 				case AND:
 					return this.andOperator(expressions);
-				case OR:
-					return this.orOperator(expressions);
+					// case OR:
+					// return this.orOperator(expressions);
 				case GREATER_EQUALS:
 				case GREATER_THAN:
 				case LESS_EQUALS:

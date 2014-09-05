@@ -150,7 +150,7 @@ public class FormToDroolsExporter {
 //			return this.submittedForm;
 		} catch (Exception e) {
 			System.out.println("-----------------------------------------------");
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 		return this.submittedForm;
 	}

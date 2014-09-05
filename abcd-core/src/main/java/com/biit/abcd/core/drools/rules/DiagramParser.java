@@ -6,6 +6,7 @@ import java.util.List;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -18,8 +19,13 @@ import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.form.TreeObject;
 
 public class DiagramParser extends GenericParser {
 
@@ -81,9 +87,9 @@ public class DiagramParser extends GenericParser {
 			break;
 		case FORK:
 			this.forkConditions = this.parseFork((DiagramFork) node, extraConditions);
-			// for (String forkCond : this.forkConditions) {
-			// System.out.println("FORK CONDITION: " + forkCond);
-			// }
+			for (String forkCond : this.forkConditions) {
+				System.out.println("FORK CONDITION: " + forkCond);
+			}
 			break;
 		case SINK:
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
@@ -125,6 +131,7 @@ public class DiagramParser extends GenericParser {
 		} else {
 			// For each outgoing link a new condition is created
 			for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
+				String childrenCondition = "";
 				// List<Expression> conditions = Arrays.asList(expVal,
 				// outLink.getExpressionChain());
 				// Parse the conditions using the generic parser
@@ -136,7 +143,29 @@ public class DiagramParser extends GenericParser {
 				// outLink.getExpressionChain().getExpressions()){
 				// System.out.println("Expression class: " + exp.getClass());
 				// }
-				String childrenCondition = this.createDroolsRule(outLink.getExpressionChain(), null, extraConditions);
+
+				System.out.println("INSIDE FORK, PARSING: " + outLink.getExpressionChain().getRepresentation());
+
+				TreeObject treeObject = expVal.getReference();
+				if ((treeObject instanceof Question) && (((Question) treeObject).getAnswerType() != null)) {
+					Question questionObject = (Question) treeObject;
+					switch (questionObject.getAnswerType()) {
+					case RADIO:
+					case MULTI_CHECKBOX:
+						List<Expression> expressionList = outLink.getExpressionChain().getExpressions();
+						childrenCondition = this.createDroolsRule(new ExpressionChain(expressionList.get(0),
+								new ExpressionOperatorLogic(AvailableOperator.EQUALS), expressionList.get(1)), null,
+								extraConditions);
+						break;
+					default:
+						break;
+					}
+				} else {
+					childrenCondition = this.createDroolsRule(outLink.getExpressionChain(), null, extraConditions);
+				}
+
+				System.out.println("CHILDREN CONDITION: " + childrenCondition);
+
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
 			}
