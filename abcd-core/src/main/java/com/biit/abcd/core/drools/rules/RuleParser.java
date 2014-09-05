@@ -2,7 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.utils.Utils;
+import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
 public class RuleParser extends GenericParser {
@@ -16,11 +16,11 @@ public class RuleParser extends GenericParser {
 		if (rule != null) {
 			String ruleName = rule.getName();
 			RuleChecker.checkRuleValid(rule);
-			newRule += Utils.getStartRuleString(ruleName);
-			newRule += Utils.getAttributes();
-			newRule += Utils.getWhenRuleString();
+			newRule += RulesUtils.getStartRuleString(ruleName);
+			newRule += RulesUtils.getAttributes();
+			newRule += RulesUtils.getWhenRuleString();
 			newRule += this.createDroolsRule(rule.getConditionChain(), rule.getActionChain(), extraConditions);
-			newRule += Utils.getEndRuleString();
+			newRule += RulesUtils.getEndRuleString();
 		}
 		return newRule;
 	}

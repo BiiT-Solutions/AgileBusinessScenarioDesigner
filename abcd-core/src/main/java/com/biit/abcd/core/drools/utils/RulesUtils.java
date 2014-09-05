@@ -3,7 +3,7 @@ package com.biit.abcd.core.drools.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utils {
+public class RulesUtils {
 
 	public static String getStartRuleString(String name) {
 		return "rule \"" + name + "\"\n";

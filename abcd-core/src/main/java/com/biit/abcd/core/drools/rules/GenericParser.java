@@ -14,7 +14,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementMathExpressionVisitor;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.utils.Utils;
+import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -181,7 +181,7 @@ public class GenericParser {
 		// reference
 		ruleCore += this.checkVariableAssignation(var);
 
-		ruleCore += Utils.getThenRuleString();
+		ruleCore += RulesUtils.getThenRuleString();
 
 		Object auxVal = actions.get(1);
 		if ((auxVal instanceof ExpressionChain)) {
@@ -333,7 +333,7 @@ public class GenericParser {
 			}
 		}
 		if (this.cleaningNeeded) {
-			ruleCore = Utils.newRemoveDuplicateLines(ruleCore);
+			ruleCore = RulesUtils.newRemoveDuplicateLines(ruleCore);
 		}
 		return ruleCore;
 	}
@@ -627,7 +627,7 @@ public class GenericParser {
 						ruleCore += this.checkVariableAssignation(expression);
 					}
 				}
-				ruleCore += Utils.getThenRuleString();
+				ruleCore += RulesUtils.getThenRuleString();
 				String mathematicalExpression = "";
 
 				TreeElementMathExpressionVisitor treePrint = new TreeElementMathExpressionVisitor();
@@ -781,8 +781,8 @@ public class GenericParser {
 					+ ") from $var; $sol : sum($value)) \n";
 		}
 
-		ruleCore = Utils.removeDuplicateLines(ruleCore);
-		ruleCore += Utils.getThenRuleString();
+		ruleCore = RulesUtils.removeDuplicateLines(ruleCore);
+		ruleCore += RulesUtils.getThenRuleString();
 
 		// RHS
 		if (variableToCalculate != null) {
@@ -826,7 +826,7 @@ public class GenericParser {
 			ruleCore += this.checkVariableAssignation(var2);
 			ExpressionValueNumber valueNumber = (ExpressionValueNumber) actions.get(4);
 
-			ruleCore += Utils.getThenRuleString();
+			ruleCore += RulesUtils.getThenRuleString();
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('" + customVarName
 					+ "', " + "(Double)$" + this.getTreeObjectName(var2.getReference()) + ".getNumberVariableValue('"
 					+ customVarName + "') " + operator.getValue() + " " + valueNumber.getValue() + ");\n";
@@ -842,7 +842,7 @@ public class GenericParser {
 			ExpressionValueCustomVariable var2 = (ExpressionValueCustomVariable) actions.get(4);
 			ruleCore += this.checkVariableAssignation(var2);
 
-			ruleCore += Utils.getThenRuleString();
+			ruleCore += RulesUtils.getThenRuleString();
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('" + customVarName
 					+ "', " + "(Double)$" + this.getTreeObjectName(var2.getReference()) + ".getNumberVariableValue('"
 					+ customVarName + "') " + operator.getValue() + " " + valueNumber.getValue() + ");\n";
@@ -977,7 +977,7 @@ public class GenericParser {
 		// reference
 		ruleCore += this.checkVariableAssignation(var);
 
-		ruleCore += Utils.getThenRuleString();
+		ruleCore += RulesUtils.getThenRuleString();
 
 		ExpressionFunction auxFunc = (ExpressionFunction) actions.get(2);
 		switch (auxFunc.getValue()) {
