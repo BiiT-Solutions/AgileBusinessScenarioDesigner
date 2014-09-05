@@ -5,11 +5,12 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 
 /**
  * Defines a value as a already defined Global Constant.
- *
+ * 
  */
 @Entity
 @Table(name = "expression_value_global_variable")
@@ -59,5 +60,13 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 	@Override
 	public Object getValue() {
 		return getVariable();
+	}
+
+	@Override
+	public void setValue(Object value) throws NotValidExpressionValue {
+		if (!(value instanceof GlobalVariable)) {
+			throw new NotValidExpressionValue("Expected GlobalVariable object in '" + value + "'");
+		}
+		setVariable((GlobalVariable) value);
 	}
 }

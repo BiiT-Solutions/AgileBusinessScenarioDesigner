@@ -57,6 +57,7 @@ public class VariableWindow extends AcceptCancelWindow {
 
 		variableName.setWidth(FIELD_WIDTH);
 		variableFormat.setWidth(FIELD_WIDTH);
+		variableName.focus();
 
 		formLayout.addComponent(variableName);
 		formLayout.addComponent(variableFormat);

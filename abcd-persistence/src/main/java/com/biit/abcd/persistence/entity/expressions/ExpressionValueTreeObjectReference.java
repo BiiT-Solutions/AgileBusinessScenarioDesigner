@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.form.TreeObject;
 
 @Entity
@@ -88,6 +89,14 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	@Override
 	public Object getValue() {
 		return getReference();
+	}
+
+	@Override
+	public void setValue(Object value) throws NotValidExpressionValue {
+		if (!(value instanceof TreeObject)) {
+			throw new NotValidExpressionValue("Expected TreeObject object in '" + value + "'");
+		}
+		setReference((TreeObject) value);
 	}
 
 }

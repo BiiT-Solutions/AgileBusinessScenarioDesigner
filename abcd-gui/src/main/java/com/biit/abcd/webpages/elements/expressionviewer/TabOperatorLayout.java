@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import java.text.ParseException;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -11,7 +13,10 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -125,7 +130,7 @@ public class TabOperatorLayout extends TabLayout {
 		});
 
 		assignButton.setWidth("100%");
-		layout.addComponent(assignButton, 0, 0, GRID_COLUMNS-1, 0);
+		layout.addComponent(assignButton, 0, 0, GRID_COLUMNS - 1, 0);
 		layout.addComponent(plusButton);
 		layout.addComponent(minusButton);
 		layout.addComponent(multButton);
@@ -396,8 +401,7 @@ public class TabOperatorLayout extends TabLayout {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						StringInputWindow stringInputWindow = new StringInputWindow(
-								ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+						StringInputWindow stringInputWindow = new StringInputWindow();
 						stringInputWindow.setCaption(ServerTranslate
 								.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
 						stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -408,17 +412,47 @@ public class TabOperatorLayout extends TabLayout {
 									MessageManager.showError(ServerTranslate
 											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
 								} else {
-									// Is a number.
+									// It is a number.
 									try {
-										Double valueAsDouble = Double.parseDouble(value);
-										ExpressionValueNumber exprValue = new ExpressionValueNumber(valueAsDouble);
-										addExpression(exprValue);
-										// Is a string.
-									} catch (NumberFormatException nfe) {
-										ExpressionValueString exprValue = new ExpressionValueString(value);
-										addExpression(exprValue);
+										switch (((StringInputWindow) window).getFormat()) {
+										case NUMBER:
+											try {
+												Double valueAsDouble = Double.parseDouble(value);
+												ExpressionValueNumber exprValueNumber = new ExpressionValueNumber(
+														valueAsDouble);
+												addExpression(exprValueNumber);
+												window.close();
+											} catch (NumberFormatException nfe) {
+												throw new NotValidExpressionValue("Value '" + value
+														+ "' is not a number!");
+											}
+											break;
+										case DATE:
+											try {
+												ExpressionValueTimestamp exprValueDate;
+												exprValueDate = new ExpressionValueTimestamp(value);
+												addExpression(exprValueDate);
+												window.close();
+											} catch (ParseException e) {
+												throw new NotValidExpressionValue("Value '" + value
+														+ "' is not a number!");
+											}
+											break;
+										case POSTAL_CODE:
+											ExpressionValuePostalCode exprValuePostCode = new ExpressionValuePostalCode(
+													value);
+											addExpression(exprValuePostCode);
+											window.close();
+											break;
+										case TEXT:
+											ExpressionValueString exprValueString = new ExpressionValueString(value);
+											addExpression(exprValueString);
+											window.close();
+											break;
+										}
+									} catch (NotValidExpressionValue e1) {
+										MessageManager.showError(LanguageCodes.ERROR_INVALID_VALUE);
 									}
-									window.close();
 								}
 							}
 						});

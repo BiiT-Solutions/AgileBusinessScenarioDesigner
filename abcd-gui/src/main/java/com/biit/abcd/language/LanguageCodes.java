@@ -200,6 +200,9 @@ public enum LanguageCodes {
 	ERROR_ORBEON_IMPORTER_INVALID_FORM("error.orbeonimporter.invalid.form"),
 
 	ERROR_RULE_NOT_IMPLEMENTED("error.rule.not.implemented"),
+	
+	ERROR_INVALID_DATE("error.invalid.date"),
+	ERROR_INVALID_VALUE("error.invalid.value"),
 
 	INFO_DATA_STORED("info.data.store"),
 
@@ -298,6 +301,7 @@ public enum LanguageCodes {
 	EXPRESSION_PROPERTIES_FUNCTIONS("expression.properties.functions"),
 	EXPRESSION_INPUT_WINDOW_CAPTION("expression.input.window.caption"),
 	EXPRESSION_INPUT_WINDOW_TEXTFIELD("expression.input.window.textfield"),
+	EXPRESSION_INPUT_WINDOW_TYPE("expression.input.window.type"),
 	EXPRESSION_GLOBAL_CONSTANT_WINDOW_CAPTION("expression.global.constant.window.caption"),
 	EXPRESSION_GLOBAL_CONSTANT_WINDOW_LIST("expression.global.constant.window.list"),
 	EXPRESSION_FORM_VARIABLE_WINDOW_CAPTION("expression.form.variable.window.caption"),

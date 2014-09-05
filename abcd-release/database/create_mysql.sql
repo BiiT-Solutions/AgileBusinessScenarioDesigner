@@ -395,6 +395,18 @@
         primary key (ID)
     );
 
+    create table expression_value_postal_code (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        isEditable bit not null,
+        value varchar(255),
+        primary key (ID)
+    );
+
     create table expression_value_string (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -848,6 +860,12 @@
 
     alter table expression_value_number 
         add constraint UK_5pr6kfc8ssvjg8bcoxs7iaxo6  unique (comparationId);
+
+    alter table expression_value_postal_code 
+        add constraint UK_jnl1ff1sox87eqvsa3w1nugx9  unique (ID);
+
+    alter table expression_value_postal_code 
+        add constraint UK_65y7nqlko6hgjo6b3go7lwa82  unique (comparationId);
 
     alter table expression_value_string 
         add constraint UK_ssjam0lpu4ptut6q7uiyinb46  unique (ID);
