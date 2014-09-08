@@ -33,10 +33,11 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	@Override
 	public Form getForm(String name) {
 		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<BaseForm> cq = criteriaBuilder.createQuery(BaseForm.class);
-		Root<Form> root = cq.from(getType());
-		cq.where(criteriaBuilder.equal(root.get("name"), name));
-		List<BaseForm> results = getEntityManager().createQuery(cq).getResultList();
+		CriteriaQuery<BaseForm> criteriaQuery = criteriaBuilder.createQuery(BaseForm.class);
+		Root<Form> root = criteriaQuery.from(getType());
+		criteriaQuery.select(root);
+		criteriaQuery.where(criteriaBuilder.equal(root.get("name"), name));
+		List<BaseForm> results = getEntityManager().createQuery(criteriaQuery).getResultList();
 		if (!results.isEmpty()) {
 			return (Form) results.get(0);
 		}

@@ -42,7 +42,7 @@
 	<bean
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 		id="entityManagerFactory">
-		 <property name="jpaDialect">
+		<property name="jpaDialect">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
 		</property>
 		<property name="dataSource" ref="dataSource" />
@@ -52,14 +52,14 @@
 		</property>
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
 				<!-- New ID creator -->
-				<prop key="hibernate.id.new_generator_mappings">true</prop>
+				<prop key="hibernate.id.new_generator_mappings">${hibernate.id.new_generator_mappings}</prop>
 				<!-- Create table if not exists -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<!-- Unnecesary to open and close sessions -->
-				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
 				
 				<!-- C3p0 -->
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
