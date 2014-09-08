@@ -76,9 +76,7 @@ public class DiagramParser extends GenericParser {
 			DiagramCalculation expressionNode = (DiagramCalculation) node;
 			if (expressionNode.getFormExpression() != null) {
 				ExpressionParser expParser = new ExpressionParser();
-
-				System.out.println("EXPRESSION EXTRA CONDITIONS: " + extraConditions);
-
+//				System.out.println("EXPRESSION EXTRA CONDITIONS: " + extraConditions);
 				this.newRule += expParser.parse(expressionNode.getFormExpression(), extraConditions);
 			}
 			break;
