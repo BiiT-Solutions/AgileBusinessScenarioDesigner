@@ -141,6 +141,7 @@ public class DiagramDateTest {
 			}
 			Answer answer = new Answer(lineSplit[2]);
 			question1.addChild(answer);
+			question1.setAnswerType(AnswerType.INPUT);
 
 			tableRule1.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question1), new ExpressionChain(
@@ -177,6 +178,7 @@ public class DiagramDateTest {
 			}
 			Answer answer = new Answer(lineSplit[2]);
 			question2.addChild(answer);
+			question2.setAnswerType(AnswerType.INPUT);
 
 			tableRule2.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question2), new ExpressionChain(

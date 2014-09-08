@@ -140,18 +140,20 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
 	}
 
-	public ISubmittedForm submittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo) {
+	public ISubmittedForm submittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
+			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation {
 		// Load the submitted form
-		try {
-			this.parse(vaadinForm);
-			this.readXml(formInfo);
-			this.translateFormCategories();
-			this.runDroolsRules(this.submittedForm);
-//			return this.submittedForm;
-		} catch (Exception e) {
-			System.out.println("-----------------------------------------------");
-			e.printStackTrace();
-		}
+		// try {
+		this.parse(vaadinForm);
+		this.readXml(formInfo);
+		this.translateFormCategories();
+		this.runDroolsRules(this.submittedForm);
+		// return this.submittedForm;
+		// } catch (Exception e) {
+		// System.out.println("-----------------------------------------------");
+		// e.printStackTrace();
+		// }
 		return this.submittedForm;
 	}
 

@@ -21,11 +21,12 @@ public class Category extends CommonAttributes implements ICategory {
 		this.setGroups(new ArrayList<IGroup>());
 	}
 
+	@Override
 	public void addGroup(IGroup group) {
 		if (this.groups == null) {
 			this.setGroups(new ArrayList<IGroup>());
 		}
-		((Group)group).setParent(this);
+		((Group) group).setParent(this);
 		this.groups.add(group);
 	}
 
@@ -34,16 +35,17 @@ public class Category extends CommonAttributes implements ICategory {
 		if (this.groups == null) {
 			this.setGroups(new ArrayList<IGroup>());
 		}
-		for(IGroup group: groups) {
+		for (IGroup group : groups) {
 			this.addGroup(group);
 		}
 	}
 
+	@Override
 	public void addQuestion(IQuestion question) {
 		if (this.questions == null) {
 			this.setQuestions(new ArrayList<IQuestion>());
 		}
-		((Question)question).setParent(this);
+		((Question) question).setParent(this);
 		this.questions.add(question);
 	}
 
@@ -52,7 +54,7 @@ public class Category extends CommonAttributes implements ICategory {
 		if (this.questions == null) {
 			this.setQuestions(new ArrayList<IQuestion>());
 		}
-		for(IQuestion question: questions) {
+		for (IQuestion question : questions) {
 			this.addQuestion(question);
 		}
 	}
@@ -72,19 +74,21 @@ public class Category extends CommonAttributes implements ICategory {
 		return this.groups;
 	}
 
-	public Number getNumberVariableValue(String varName){
-		return ((SubmittedForm)this.getParent()).getNumberVariableValue(this, varName);
+	public Number getNumberVariableValue(String varName) {
+		return ((SubmittedForm) this.getParent()).getNumberVariableValue(this, varName);
 	}
 
-	public ISubmittedForm getParent(){
+	public ISubmittedForm getParent() {
 		return this.parent;
 	}
 
 	@Override
 	public IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException {
-		for (IQuestion question : this.getQuestions()) {
-			if (question.getTag().equals(questionTag)) {
-				return question;
+		if (this.questions != null) {
+			for (IQuestion question : this.getQuestions()) {
+				if (question.getTag().equals(questionTag)) {
+					return question;
+				}
 			}
 		}
 		throw new QuestionDoesNotExistException("Question '" + questionTag + "' does not exists.");
@@ -95,8 +99,8 @@ public class Category extends CommonAttributes implements ICategory {
 		return this.questions;
 	}
 
-	public Object getVariableValue(String varName){
-		return ((SubmittedForm)this.getParent()).getVariableValue(this, varName);
+	public Object getVariableValue(String varName) {
+		return ((SubmittedForm) this.getParent()).getVariableValue(this, varName);
 	}
 
 	public boolean isScoreNotSet(String varName) {
@@ -105,7 +109,7 @@ public class Category extends CommonAttributes implements ICategory {
 
 	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
-		if(((SubmittedForm)this.getParent()).hasScoreSet(this, varName)) {
+		if (((SubmittedForm) this.getParent()).hasScoreSet(this, varName)) {
 			return true;
 		} else {
 			return false;
@@ -116,7 +120,7 @@ public class Category extends CommonAttributes implements ICategory {
 		this.groups = groups;
 	}
 
-	public void setParent(ISubmittedForm form){
+	public void setParent(ISubmittedForm form) {
 		this.parent = form;
 	}
 
@@ -124,7 +128,7 @@ public class Category extends CommonAttributes implements ICategory {
 		this.questions = questions;
 	}
 
-	public void setVariableValue(String varName, Object value){
-		((SubmittedForm)this.getParent()).setVariableValue(this, varName, value);
+	public void setVariableValue(String varName, Object value) {
+		((SubmittedForm) this.getParent()).setVariableValue(this, varName, value);
 	}
 }

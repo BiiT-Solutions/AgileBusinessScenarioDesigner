@@ -76,6 +76,9 @@ public class DiagramParser extends GenericParser {
 			DiagramCalculation expressionNode = (DiagramCalculation) node;
 			if (expressionNode.getFormExpression() != null) {
 				ExpressionParser expParser = new ExpressionParser();
+
+				System.out.println("EXPRESSION EXTRA CONDITIONS: " + extraConditions);
+
 				this.newRule += expParser.parse(expressionNode.getFormExpression(), extraConditions);
 			}
 			break;
@@ -87,9 +90,9 @@ public class DiagramParser extends GenericParser {
 			break;
 		case FORK:
 			this.forkConditions = this.parseFork((DiagramFork) node, extraConditions);
-			for (String forkCond : this.forkConditions) {
-				System.out.println("FORK CONDITION: " + forkCond);
-			}
+//			for (String forkCond : this.forkConditions) {
+//				System.out.println("FORK CONDITION: " + forkCond);
+//			}
 			break;
 		case SINK:
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
@@ -144,7 +147,8 @@ public class DiagramParser extends GenericParser {
 				// System.out.println("Expression class: " + exp.getClass());
 				// }
 
-				System.out.println("INSIDE FORK, PARSING: " + outLink.getExpressionChain().getRepresentation());
+				// System.out.println("INSIDE FORK, PARSING: " +
+				// outLink.getExpressionChain().getRepresentation());
 
 				TreeObject treeObject = expVal.getReference();
 				if ((treeObject instanceof Question) && (((Question) treeObject).getAnswerType() != null)) {
@@ -164,8 +168,8 @@ public class DiagramParser extends GenericParser {
 					childrenCondition = this.createDroolsRule(outLink.getExpressionChain(), null, extraConditions);
 				}
 
-				System.out.println("CHILDREN CONDITION: " + childrenCondition);
-
+				// System.out.println("CHILDREN CONDITION: " +
+				// childrenCondition);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
 			}

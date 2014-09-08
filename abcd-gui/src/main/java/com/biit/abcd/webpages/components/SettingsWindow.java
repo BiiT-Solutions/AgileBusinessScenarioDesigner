@@ -1,12 +1,22 @@
 package com.biit.abcd.webpages.components;
 
+import java.io.IOException;
+
+import org.dom4j.DocumentException;
+
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -69,33 +79,33 @@ public class SettingsWindow extends PopupWindow {
 							public void acceptAction(AcceptCancelWindow window) {
 								String formInfo = droolsWindow.getFormInfo();
 
-//								try {
+								try {
 
 									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-									submittedForm = droolsExporter.submittedForm(UserSessionHandler
-											.getFormController().getForm(), UserSessionHandler
-											.getGlobalVariablesController().getGlobalVariables(), formInfo);
+									submittedForm = droolsExporter.submittedForm(UserSessionHandler.getFormController()
+											.getForm(), UserSessionHandler.getGlobalVariablesController()
+											.getGlobalVariables(), formInfo);
 
-//									AbcdLogger.debug(this.getClass().getName(), droolsExporter.getGeneratedRules());
+									// AbcdLogger.debug(this.getClass().getName(),
+									// droolsExporter.getGeneratedRules());
 
 									final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 											submittedForm);
 									droolsResultWindow.showCentered();
 									droolsWindow.close();
-//								} catch (ExpressionInvalidException | RuleInvalidException | IOException
-//										| NotValidOperatorInExpression e) {
-//									MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
-//									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-//								} catch (CategoryDoesNotExistException | DocumentException
-//										| CategoryNameWithoutTranslation e) {
-//									MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
-//											e.getMessage());
-//									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-//								} catch (RuleNotImplementedException e) {
-//									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
-//											.getExpressionChain().getRepresentation());
-//									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-//								}
+								} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
+									MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								} catch (DocumentException
+										| CategoryNameWithoutTranslation e) {
+									MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
+											e.getMessage());
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								} catch (RuleNotImplementedException e) {
+									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
+											.getExpressionChain().getRepresentation());
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								}
 							}
 						});
 						droolsWindow.showCentered();
