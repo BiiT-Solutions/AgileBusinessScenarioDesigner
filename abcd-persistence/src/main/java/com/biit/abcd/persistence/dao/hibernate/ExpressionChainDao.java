@@ -1,7 +1,5 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IExpressionChainDao;
@@ -13,10 +11,6 @@ public class ExpressionChainDao extends GenericDao<ExpressionChain> implements I
 
 	public ExpressionChainDao() {
 		super(ExpressionChain.class);
-	}
-
-	@Override
-	protected void initializeSets(List<ExpressionChain> rules) {
 	}
 
 }
