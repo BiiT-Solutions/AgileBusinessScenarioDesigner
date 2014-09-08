@@ -110,9 +110,9 @@ public class TableRuleTest {
 		com.biit.abcd.core.drools.facts.inputform.Question testQuestion4 = (com.biit.abcd.core.drools.facts.inputform.Question) testGroup4
 				.getQuestion("Beheer");
 		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
-		Assert.assertEquals(4.0, testQuestion1.getNumberVariableValue("qScore"));
-		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
-		Assert.assertEquals(4.0, testQuestion1.getNumberVariableValue("qScore"));
+		Assert.assertEquals(4.0, testQuestion2.getNumberVariableValue("qScore"));
+		Assert.assertEquals(5.0, testQuestion3.getNumberVariableValue("qScore"));
+		Assert.assertEquals(4.0, testQuestion4.getNumberVariableValue("qScore"));
 //		System.out.println(testQuestion1.getNumberVariableValue("qScore"));
 //		System.out.println(testQuestion2.getNumberVariableValue("qScore"));
 //		System.out.println(testQuestion3.getNumberVariableValue("qScore"));
