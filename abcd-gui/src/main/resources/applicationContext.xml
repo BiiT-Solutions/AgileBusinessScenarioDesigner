@@ -26,10 +26,10 @@
 	<!-- Data Source -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${jdbc.driverClassName}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
 	</bean>
 	<!-- Hibernate session factory -->
 	<bean id="sessionFactory"
@@ -39,15 +39,29 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.show_sql">false</prop>
-				<!-- Create table if not exists -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.id.new_generator_mappings">true</prop>
 				<!-- Get default data -->
-				<!--<prop key="hibernate.hbm2ddl.import_files">initial_data.sql</prop>-->
+				<!--<prop key="hibernate.hbm2ddl.import_files">initial_data.sql</prop> -->
+
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<!-- Create table if not exists -->
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.id.new_generator_mappings">${hibernate.id.new_generator_mappings}</prop>
 				<!-- Unnecesary to open and close sessions -->
-				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
+
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+				<prop key="hibernate.proxool.pool_alias">PoolDb1</prop>
+				<prop key="hibernate.jdbc.batch_versioned_data">${hibernate.jdbc.batch_versioned_data}</prop>
+				<prop key="hibernate.jdbc.use_streams_for_binary">${hibernate.jdbc.use_streams_for_binary}</prop>
+				<prop key="hibernate.c3p0.max_size">${hibernate.c3p0.max_size}</prop>
+				<prop key="hibernate.c3p0.min_size">${hibernate.c3p0.min_size}</prop>
+				<prop key="hibernate.c3p0.timeout">${hibernate.c3p0.timeout}</prop>
+				<prop key="hibernate.c3p0.max_statements">${hibernate.c3p0.max_statements}</prop>
+				<prop key="hibernate.c3p0.idle_test_period">${hibernate.c3p0.idle_test_period}</prop>
+				<prop key="hibernate.c3p0.acquire_increment">${hibernate.c3p0.acquire_increment}</prop>
 			</props>
 		</property>
 		<property name="packagesToScan">
