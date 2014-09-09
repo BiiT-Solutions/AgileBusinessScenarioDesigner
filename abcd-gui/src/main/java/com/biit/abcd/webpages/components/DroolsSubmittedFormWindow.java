@@ -32,6 +32,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 		appNameField.setImmediate(true);
 		appNameField.setWidth("100%");
 		appNameField.setInputPrompt("WebForms");
+		appNameField.setId("droolsWebFormsInput");
 		appNameField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -2834862614448446156L;
 
@@ -46,6 +47,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 		formNameField.setImmediate(true);
 		formNameField.setWidth("100%");
 		formNameField.setInputPrompt("Form Name");
+		formNameField.setId("droolsFormNameInput");
 		formNameField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 4853902617302026183L;
 			@Override
@@ -59,6 +61,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 		documentIdField.setImmediate(true);
 		documentIdField.setWidth("100%");
 		documentIdField.setInputPrompt("Form ID");
+		documentIdField.setId("droolsFormIdInput");
 		documentIdField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 5884042251295904822L;
 			@Override

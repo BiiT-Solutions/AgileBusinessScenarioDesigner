@@ -154,8 +154,9 @@ public class GenericParser {
 				if (leftReference instanceof Question) {
 					Question leftQuestion = (Question) leftReference;
 					droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-							+ " : Question( getAnswer() in( " + inValues + " )) from $"
-							+ leftReferenceParent.getComparationIdNoDash().toString() + ".getQuestions()\n";
+							+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() in( " + inValues
+							+ " )) from $" + leftReferenceParent.getComparationIdNoDash().toString()
+							+ ".getQuestions()\n";
 				}
 			}
 		}
@@ -311,7 +312,7 @@ public class GenericParser {
 	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions)
 			throws RuleNotImplementedException {
 
-//		System.out.println("CONDITIONS: " + conditions);
+		// System.out.println("CONDITIONS: " + conditions);
 		// System.out.println("ACTIONS: " + actions);
 
 		this.treeObjectDroolsname.clear();
@@ -403,7 +404,8 @@ public class GenericParser {
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-										+ " : Question( getAnswer() >= '" + value1 + "' || < '" + value2 + "') from $"
+										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= '"
+										+ value1 + "' || < '" + value2 + "') from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getQuestions() \n";
 								droolsConditions += "and\n";
@@ -917,7 +919,11 @@ public class GenericParser {
 		// After this point the expression chain is the result of the parsing
 		// engine. The expression chain has AST (abstract syntax tree) form
 		// *******************************************************************************************************
-		return this.processParserResult(result.getExpressionChain());
+		if ((result != null) && (result.getExpressionChain() != null)) {
+			return this.processParserResult(result.getExpressionChain());
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -1069,9 +1075,9 @@ public class GenericParser {
 			droolsConditions += this.simpleGroupConditions((Group) questionParent);
 		}
 		this.putTreeObjectName(question, question.getComparationIdNoDash().toString());
-		droolsConditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getAnswer() == '"
-				+ answer.getName() + "') from $" + questionParent.getComparationIdNoDash().toString()
-				+ ".getQuestions()\n";
+		droolsConditions += "	$" + question.getComparationIdNoDash().toString() + " : Question( getTag() == '"
+				+ question.getName() + "', getAnswer() == '" + answer.getName() + "') from $"
+				+ questionParent.getComparationIdNoDash().toString() + ".getQuestions()\n";
 		return droolsConditions + ")\n";
 	}
 
@@ -1141,7 +1147,8 @@ public class GenericParser {
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-										+ " : Question( getAnswer() >= '" + value1 + "' || < '" + value2 + "') from $"
+										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= '"
+										+ value1 + "' || < '" + value2 + "') from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getQuestions() \n";
 								droolsConditions += "and\n";

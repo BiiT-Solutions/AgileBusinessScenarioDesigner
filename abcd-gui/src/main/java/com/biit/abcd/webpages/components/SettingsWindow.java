@@ -88,16 +88,21 @@ public class SettingsWindow extends PopupWindow {
 
 									// AbcdLogger.debug(this.getClass().getName(),
 									// droolsExporter.getGeneratedRules());
-
 									final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 											submittedForm);
+									droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
+										@Override
+										public void acceptAction(AcceptCancelWindow window) {
+											droolsResultWindow.close();
+										}
+									});
 									droolsResultWindow.showCentered();
 									droolsWindow.close();
+
 								} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
 									MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
 									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								} catch (DocumentException
-										| CategoryNameWithoutTranslation e) {
+								} catch (DocumentException | CategoryNameWithoutTranslation e) {
 									MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
 											e.getMessage());
 									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);

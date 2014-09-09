@@ -1,5 +1,6 @@
 package com.biit.abcd.core.drools;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,7 +56,8 @@ public class FormToDroolsExporter {
 				formRules = new FormParser(form);
 				this.droolsRules = formRules.getRules();
 				// System.out.println(formRules.getRules());
-				Files.write(Paths.get("./src/test/generatedRules.drl"), formRules.getRules().getBytes());
+				Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"),
+						formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 
@@ -124,6 +126,11 @@ public class FormToDroolsExporter {
 		// [0]=App name, [1]=Form name, [2]=Doc id
 		String[] infoArray = formInfo.split("::");
 		this.submittedForm = new SubmittedForm(infoArray[0], infoArray[1]);
+
+		// Don't delete, useful when we want to retrieve the xml for debugging purposes
+//		Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "orbeon.xml"),
+//				OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]).getBytes());
+
 		this.orbeonImporter
 				.readXml(OrbeonImporter.getXml(infoArray[0], infoArray[1], infoArray[2]), this.submittedForm);
 		Assert.assertNotNull(this.submittedForm);
@@ -131,12 +138,6 @@ public class FormToDroolsExporter {
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		// Load the structure file of the form
-		// String xmlStructure =
-		// readFile(FileReader.getResource("dhszwStructure.xhtml").getAbsolutePath(),
-		// Charset.defaultCharset());
-		// OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm,
-		// xmlStructure);
 		OrbeonCategoryTranslator.getInstance().readXml(this.submittedForm);
 	}
 

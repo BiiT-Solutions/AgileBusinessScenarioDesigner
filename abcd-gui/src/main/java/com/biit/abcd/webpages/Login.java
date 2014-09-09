@@ -110,9 +110,18 @@ public class Login extends WebPageComponent {
 		layout.addComponent(usernameField);
 		layout.addComponent(passwordField);
 		layout.addComponent(loginButton);
+//		layout.addComponent(createNameVersion());
 		panel.setContent(layout);
 		return panel;
 	}
+
+//	private Component createNameVersion(){
+//		HorizontalLayout hl = new HorizontalLayout();
+//
+//		return hl;
+//	}
+
+
 
 	private void checkUserAndPassword() {
 		// Try to log in the user when the button is clicked
@@ -157,4 +166,16 @@ public class Login extends WebPageComponent {
 			ApplicationFrame.navigateTo(WebMap.getMainPage());
 		}
 	}
+//
+//	private String getVersion() {
+//		String version = null;
+//		try {
+//			Manifest manifest = new Manifest(this.getUI().getc.getResourceAsStream("/META-INF/MANIFEST.MF"));
+//			Attributes attributes = manifest.getMainAttributes();
+//			version = attributes.getValue("Implementation-Version");
+//		} catch (IOException e) {
+//			MonitoringStatusLogger.errorMessage(this.getClass().getName(), e);
+//		}
+//		return version;
+//	}
 }

@@ -16,7 +16,7 @@ import com.vaadin.ui.Component;
 public class FormTreeTable extends TreeObjectTable {
 	private static final long serialVersionUID = 6016194810449244086L;
 
-	protected enum FormTreeTableProperties {
+	public enum FormTreeTableProperties {
 		ELEMENT_NAME, RULES
 	};
 
@@ -47,7 +47,7 @@ public class FormTreeTable extends TreeObjectTable {
 		if (item != null) {
 			List<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
 			List<ExpressionChain> expressionChains = UserSessionHandler.getFormController().getFormExpressionChainsAssignedToTreeObject(element);
-			
+
 			ComponentCellRule rulesComponent = getRulesComponent(element,assignedRules,expressionChains);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
 		}

@@ -11,9 +11,9 @@
 		</groups>
 		<classes>
 			<!--<class name="com.biit.abcd.core.drools.test.PrattParserTest" />
-			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />-->
+			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />
 			<class name="com.biit.abcd.core.drools.test.TableRuleTest" />
-			<!--<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
+			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.RulesTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramDateTest" />
