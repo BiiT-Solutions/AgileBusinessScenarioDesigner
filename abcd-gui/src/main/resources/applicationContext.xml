@@ -14,7 +14,7 @@
                         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd"
 	default-autowire="byName">
 	<!-- Activates various annotations to be detected in bean classes -->
-	<tx:annotation-driven />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 	<context:annotation-config />
 	<!-- Scans the classpath for annotated components that will be auto-registered 
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 

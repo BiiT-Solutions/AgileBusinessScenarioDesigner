@@ -16,7 +16,7 @@
 	default-autowire="byName">
 
 	<!-- Activates various annotations to be detected in bean classes -->
-	<tx:annotation-driven />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 	<context:annotation-config />
 
 	<!-- Scans the classpath for annotated components that will be auto-registered 
