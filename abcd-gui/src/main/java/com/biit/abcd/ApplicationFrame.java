@@ -3,6 +3,7 @@ package com.biit.abcd;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -11,6 +12,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
 @Theme("abcd")
+@PreserveOnRefresh
 public class ApplicationFrame extends UI {
 	private static final long serialVersionUID = -704009283476930001L;
 	private Navigator navigator;

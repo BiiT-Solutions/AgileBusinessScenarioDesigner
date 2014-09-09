@@ -11,9 +11,10 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 public class Group extends CommonAttributes implements IGroup {
 
 	private List<IQuestion> questions;
-	private ICategory parent;
+	private List<IGroup> groups;
+	private IGroup parent;
 
-	public Group(String tag){
+	public Group(String tag) {
 		this.setTag(tag);
 		this.setQuestions(new ArrayList<IQuestion>());
 	}
@@ -33,8 +34,21 @@ public class Group extends CommonAttributes implements IGroup {
 		throw new QuestionDoesNotExistException("Question '" + tag + "' does not exists.");
 	}
 
+	public void setGroups(List<IGroup> groups) {
+		this.groups = groups;
+	}
+
 	public void setQuestions(List<IQuestion> questions) {
 		this.questions = questions;
+	}
+
+	@Override
+	public void addGroup(IGroup group) {
+		if (this.groups == null) {
+			this.setGroups(new ArrayList<IGroup>());
+		}
+		((Group) group).setParent(this);
+		this.groups.add(group);
 	}
 
 	@Override
@@ -45,15 +59,16 @@ public class Group extends CommonAttributes implements IGroup {
 		this.questions.addAll(questions);
 	}
 
+	@Override
 	public void addQuestion(IQuestion question) {
 		if (this.questions == null) {
 			this.setQuestions(new ArrayList<IQuestion>());
 		}
-		((Question)question).setParent(this);
+		((Question) question).setParent(this);
 		this.questions.add(question);
 	}
 
-	public ICategory getParent() {
+	public IGroup getParent() {
 		return this.parent;
 	}
 
@@ -61,9 +76,13 @@ public class Group extends CommonAttributes implements IGroup {
 		this.parent = parent;
 	}
 
+	public void setParent(IGroup parent) {
+		this.parent = parent;
+	}
+
 	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
-		if(((SubmittedForm)((Category)this.getParent()).getParent()).hasScoreSet(this, varName)) {
+		if (((SubmittedForm) ((Category) this.getParent()).getParent()).hasScoreSet(this, varName)) {
 			return true;
 		} else {
 			return false;
@@ -74,15 +93,15 @@ public class Group extends CommonAttributes implements IGroup {
 		return !this.isScoreSet(varName);
 	}
 
-	public Object getVariableValue(String varName){
-		return ((SubmittedForm)((Category)this.getParent()).getParent()).getVariableValue(this, varName);
+	public Object getVariableValue(String varName) {
+		return ((SubmittedForm) ((Category) this.getParent()).getParent()).getVariableValue(this, varName);
 	}
 
-	public Number getNumberVariableValue(String varName){
-		return ((SubmittedForm)((Category)this.getParent()).getParent()).getNumberVariableValue(this, varName);
+	public Number getNumberVariableValue(String varName) {
+		return ((SubmittedForm) ((Category) this.getParent()).getParent()).getNumberVariableValue(this, varName);
 	}
 
-	public void setVariableValue(String varName, Object value){
-		((SubmittedForm)((Category)this.getParent()).getParent()).setVariableValue(this, varName, value);
+	public void setVariableValue(String varName, Object value) {
+		((SubmittedForm) ((Category) this.getParent()).getParent()).setVariableValue(this, varName, value);
 	}
 }

@@ -175,6 +175,7 @@ public class RulesTest {
 			}
 			Answer answer = new Answer(lineSplit[2]);
 			question.addChild(answer);
+			question.setAnswerType(AnswerType.INPUT);
 
 			tableRule.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(

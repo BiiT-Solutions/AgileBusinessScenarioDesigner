@@ -17,6 +17,7 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -133,6 +134,7 @@ public class DiagramOrTest {
 			}
 			Answer answer = new Answer(lineSplit[2]);
 			question1.addChild(answer);
+			question1.setAnswerType(AnswerType.INPUT);
 
 			tableRule1.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question1), new ExpressionChain(
@@ -169,6 +171,7 @@ public class DiagramOrTest {
 			}
 			Answer answer = new Answer(lineSplit[2]);
 			question2.addChild(answer);
+			question2.setAnswerType(AnswerType.INPUT);
 
 			tableRule2.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question2), new ExpressionChain(

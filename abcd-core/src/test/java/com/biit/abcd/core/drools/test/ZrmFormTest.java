@@ -297,6 +297,7 @@ public class ZrmFormTest {
 				answer54Rul5 = answer;
 			}
 			question.addChild(answer);
+			question.setAnswerType(AnswerType.INPUT);
 
 			baseTableRule.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
