@@ -2,7 +2,9 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,45 +37,45 @@ public class Form extends BaseForm {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@Fetch(FetchMode.SUBSELECT)
-	private List<Diagram> diagrams;
+	@Fetch(FetchMode.JOIN)
+	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<TableRule> tableRules;
+	private Set<TableRule> tableRules;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@Fetch(FetchMode.JOIN)
+	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<CustomVariable> customVariables;
+	private Set<ExpressionChain> expressionChain;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@Fetch(FetchMode.SUBSELECT)
-	private List<ExpressionChain> expressionChain;
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@Fetch(FetchMode.SUBSELECT)
-	private List<Rule> rules;
+	@Fetch(FetchMode.JOIN)
+	private Set<Rule> rules;
 
 	public Form() {
 		super();
-		diagrams = new ArrayList<>();
-		tableRules = new ArrayList<>();
-		customVariables = new ArrayList<>();
-		expressionChain = new ArrayList<>();
-		rules = new ArrayList<>();
+		diagrams = new HashSet<>();
+		tableRules = new HashSet<>();
+		customVariables = new HashSet<>();
+		expressionChain = new HashSet<>();
+		rules = new HashSet<>();
 	}
 
 	public Form(String name) throws FieldTooLongException {
 		super(name);
-		diagrams = new ArrayList<>();
-		tableRules = new ArrayList<>();
-		customVariables = new ArrayList<>();
-		expressionChain = new ArrayList<>();
-		rules = new ArrayList<>();
+		diagrams = new HashSet<>();
+		tableRules = new HashSet<>();
+		customVariables = new HashSet<>();
+		expressionChain = new HashSet<>();
+		rules = new HashSet<>();
 	}
 
 	@Override
@@ -128,16 +130,16 @@ public class Form extends BaseForm {
 		diagrams.remove(diagram);
 	}
 
-	public List<Diagram> getDiagrams() {
+	public Set<Diagram> getDiagrams() {
 		return diagrams;
 	}
 
-	public void setDiagrams(List<Diagram> diagrams) {
+	public void setDiagrams(Set<Diagram> diagrams) {
 		this.diagrams.clear();
 		this.diagrams.addAll(diagrams);
 	}
 
-	public List<TableRule> getTableRules() {
+	public Set<TableRule> getTableRules() {
 		return tableRules;
 	}
 
@@ -146,7 +148,7 @@ public class Form extends BaseForm {
 		this.tableRules.addAll(tableRules);
 	}
 
-	public List<CustomVariable> getCustomVariables() {
+	public Set<CustomVariable> getCustomVariables() {
 		return customVariables;
 	}
 
@@ -196,24 +198,24 @@ public class Form extends BaseForm {
 		return null;
 	}
 
-	public void setCustomVariables(List<CustomVariable> customVariables) {
+	public void setCustomVariables(Set<CustomVariable> customVariables) {
 		this.customVariables.clear();
 		this.customVariables.addAll(customVariables);
 	}
 
-	public List<ExpressionChain> getExpressionChain() {
+	public Set<ExpressionChain> getExpressionChain() {
 		return expressionChain;
 	}
 
-	public void setExpressionChain(List<ExpressionChain> expressions) {
+	public void setExpressionChain(Set<ExpressionChain> expressions) {
 		expressionChain = expressions;
 	}
 
-	public List<Rule> getRules() {
+	public Set<Rule> getRules() {
 		return rules;
 	}
 
-	public void setRules(List<Rule> rules) {
+	public void setRules(Set<Rule> rules) {
 		this.rules = rules;
 	}
 

@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
@@ -84,8 +85,9 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 			} else {
 				// Select the first one if available.
 				if (UserSessionHandler.getFormController().getForm().getRules().size() > 0) {
-					tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getForm().getRules()
-							.get(0));
+
+					Iterator<Rule> iterator = (UserSessionHandler.getFormController().getForm().getRules().iterator());
+					tableSelectRule.setSelectedExpression(iterator.next());
 				}
 			}
 			refreshRuleEditor();

@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.dao;
 
+import java.util.Iterator;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,7 +27,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Autowired
 	private IDiagramDao diagramDao;
-	
+
 	@Autowired
 	private IFormDao formDao;
 
@@ -61,7 +63,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 		diagramDao.removeAll();
 		Assert.assertEquals(diagramDao.getRowCount(), 0);
 	}
-	
+
 	@Test
 	public void storeFormDiagram() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
@@ -75,10 +77,11 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(diagramDao.getRowCount(), 1);
-		Assert.assertEquals(retrievedForm.getDiagrams().get(0).getName(), DUMMY_DIAGRAM);
-		
+		Iterator<Diagram> iterator = retrievedForm.getDiagrams().iterator();
+		Assert.assertTrue(iterator.hasNext());
+		Assert.assertEquals(iterator.next().getName(), DUMMY_DIAGRAM);
+
 		formDao.makeTransient(form);
 	}
-
 
 }

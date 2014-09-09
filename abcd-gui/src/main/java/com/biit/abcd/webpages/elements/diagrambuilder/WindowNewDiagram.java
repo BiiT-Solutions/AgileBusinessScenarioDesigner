@@ -1,6 +1,6 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
-import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -22,7 +22,7 @@ public class WindowNewDiagram extends WindowCreateNewObject {
 	@Override
 	public void acceptAction(TextField inputTextField) {
 		if ((inputTextField.getValue() != null) && !inputTextField.getValue().isEmpty()) {
-			List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
+			Set<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
 			for (Diagram diagram : diagrams) {
 				if (diagram.getName().equals(inputTextField.getValue())) {
 					MessageManager.showError(LanguageCodes.ERROR_DIAGRAM_REPEATED_NAME);

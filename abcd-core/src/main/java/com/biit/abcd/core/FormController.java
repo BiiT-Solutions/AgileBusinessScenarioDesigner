@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.persistence.dao.IFormDao;
@@ -50,11 +52,11 @@ public class FormController {
 	}
 
 	public void checkDuplicatedVariables() throws DuplicatedVariableException {
-		List<CustomVariable> customVariablesList = this.getForm().getCustomVariables();
+		List<CustomVariable> customVariablesList = new ArrayList<>(this.getForm().getCustomVariables());
 		for (int i = 0; i < (customVariablesList.size() - 1); i++) {
 			CustomVariable cv = customVariablesList.get(i);
-			for (int j = i + 1; j < (this.getForm().getCustomVariables().size()); j++) {
-				if (cv.duplicatedCustomVariable(this.getForm().getCustomVariables().get(j))) {
+			for (int j = i + 1; j < customVariablesList.size(); j++) {
+				if (cv.duplicatedCustomVariable(customVariablesList.get(j))) {
 					this.saveAllowed = false;
 					throw new DuplicatedVariableException("Duplicated variable in form variables.");
 				}
@@ -146,10 +148,10 @@ public class FormController {
 	 * @param treeObject
 	 * @return
 	 */
-	public List<Rule> getRulesAssignedToTreeObject(TreeObject treeObject) {
-		List<Rule> assignedRules = new ArrayList<>();
+	public Set<Rule> getRulesAssignedToTreeObject(TreeObject treeObject) {
+		Set<Rule> assignedRules = new HashSet<>();
 
-		List<Rule> rules = this.getForm().getRules();
+		Set<Rule> rules = this.getForm().getRules();
 		for (Rule rule : rules) {
 			if (rule.isAssignedTo(treeObject)) {
 				assignedRules.add(rule);
@@ -163,10 +165,10 @@ public class FormController {
 	 * @param element
 	 * @return
 	 */
-	public List<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
-		List<ExpressionChain> expressionChains = new ArrayList<>();
+	public Set<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
+		Set<ExpressionChain> expressionChains = new HashSet<>();
 
-		List<ExpressionChain> expressions = this.getForm().getExpressionChain();
+		Set<ExpressionChain> expressions = this.getForm().getExpressionChain();
 		for(ExpressionChain expression: expressions){
 			if(expression.isAssignedTo(element)){
 				expressionChains.add(expression);
