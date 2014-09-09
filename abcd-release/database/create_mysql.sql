@@ -663,7 +663,8 @@
 
     create table tree_forms_form_custom_variables (
         tree_forms_ID bigint not null,
-        customVariables_ID bigint not null
+        customVariables_ID bigint not null,
+        primary key (tree_forms_ID, customVariables_ID)
     );
 
     create table tree_forms_rule (
