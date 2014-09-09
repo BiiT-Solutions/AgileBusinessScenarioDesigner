@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
 import com.biit.jexeval.ExpressionChecker;
@@ -26,6 +28,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "expression_index")
+	@BatchSize(size=500)
 	private List<Expression> expressions;
 
 	private String name;

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -49,7 +50,7 @@ public class FormParser {
 			}
 
 			// Follow the diagram to parse and launch the rules
-			List<Diagram> diagrams = this.form.getDiagrams();
+			Set<Diagram> diagrams = this.form.getDiagrams();
 			if (diagrams != null) {
 				// Look for the root diagrams
 				List<Diagram> rootDiagrams = new ArrayList<Diagram>();

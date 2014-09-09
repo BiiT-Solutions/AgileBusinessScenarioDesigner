@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -27,12 +28,12 @@ public class TableRuleParser extends GenericParser {
 				ExpressionChain auxConditions = this.preParseConditions(row.getConditionChain());
 //				System.out.println("EXPRESSION: " + auxConditions);
 //				RuleChecker.checkExpressionValid(auxConditions);
-				newRules += Utils.getStartRuleString(tableRuleName + "_row_" + i);
-				newRules += Utils.getAttributes();
-				newRules += Utils.getWhenRuleString();
+				newRules += RulesUtils.getStartRuleString(tableRuleName + "_row_" + i);
+				newRules += RulesUtils.getAttributes();
+				newRules += RulesUtils.getWhenRuleString();
 
 				newRules += this.createDroolsRule(auxConditions, row.getActionChain(), extraConditions);
-				newRules += Utils.getEndRuleString();
+				newRules += RulesUtils.getEndRuleString();
 				i++;
 			}
 		}

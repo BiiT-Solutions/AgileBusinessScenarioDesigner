@@ -1,6 +1,8 @@
 package com.biit.abcd.core.drools;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,13 +17,11 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.OrbeonImporter;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
-import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 
 public class FormToDroolsExporter {
 
@@ -55,7 +55,7 @@ public class FormToDroolsExporter {
 				formRules = new FormParser(form);
 				this.droolsRules = formRules.getRules();
 				// System.out.println(formRules.getRules());
-//				Files.write(Paths.get("./src/test/generatedRules.drl"), formRules.getRules().getBytes());
+				Files.write(Paths.get("./src/test/generatedRules.drl"), formRules.getRules().getBytes());
 				// Load the rules in memory
 				this.km.buildSessionRules(formRules.getRules());
 
@@ -141,14 +141,19 @@ public class FormToDroolsExporter {
 	}
 
 	public ISubmittedForm submittedForm(Form vaadinForm, List<GlobalVariable> globalVariables, String formInfo)
-			throws ExpressionInvalidException, NotValidOperatorInExpression, RuleInvalidException, IOException,
-			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
-			RuleNotImplementedException {
+			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation {
 		// Load the submitted form
+		// try {
 		this.parse(vaadinForm);
 		this.readXml(formInfo);
 		this.translateFormCategories();
 		this.runDroolsRules(this.submittedForm);
+		// return this.submittedForm;
+		// } catch (Exception e) {
+		// System.out.println("-----------------------------------------------");
+		// e.printStackTrace();
+		// }
 		return this.submittedForm;
 	}
 

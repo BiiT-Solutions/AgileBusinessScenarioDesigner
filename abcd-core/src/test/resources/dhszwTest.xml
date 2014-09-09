@@ -66,23 +66,23 @@
 	<category-2>
 		<subcategory-2-1 />
 		<group-Financien>
-			<Inkomen>Financien.Inkomen.RuimVoldoende</Inkomen>
+			<Inkomen>RuimVoldoende</Inkomen>
 		</group-Financien>
 		<subcategory-2-2 />
 		<group-Financien-1>
-			<Bron>Inkomsten.Bron.Werk</Bron>
+			<Bron>Werk</Bron>
 		</group-Financien-1>
 		<subcategory-2-3 />
 		<group-Financien-2>
-			<Schulden>Financien.Schulden.NietSparenGeenSchulden</Schulden>
+			<Schulden>NietSparenGeenSchulden</Schulden>
 		</group-Financien-2>
 		<subcategory-2-4 />
 		<group-Financien-3>
-			<Uitgaven>Financien.Uitgaven.OnverstandigWelVeroorloven</Uitgaven>
+			<Uitgaven>OnverstandigWelVeroorloven</Uitgaven>
 		</group-Financien-3>
 		<subcategory-2-5 />
 		<group-Financien-4>
-			<Beheer>Financien.Beheer.RedelijkInzicht</Beheer>
+			<Beheer>RedelijkInzicht</Beheer>
 			<group-Beheer>
 				<Hulp>Financien.Beheer.Hulp.ProfessioneelOnvoldoende</Hulp>
 				<Vroeger>Financien.Beheer.Vroeger.Ja</Vroeger>

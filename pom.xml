@@ -7,7 +7,7 @@
 	<groupId>com.biit.abcd</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>0.8.1</version>
+	<version>0.8.2</version>
 	<name>Agile Business sCenario Designer Tool</name>
 
 	<modules>
@@ -51,7 +51,7 @@
 		<drools.version>6.1.0.CR2</drools.version>
 		<biit-common-utils.version>0.1.0</biit-common-utils.version>
 		<form-structure.version>0.1.3</form-structure.version>
-		<orbeon-form-reader.version>0.2.0</orbeon-form-reader.version>
+		<orbeon-form-reader.version>0.3.0</orbeon-form-reader.version>
 		<apache-poi.version>3.10.1</apache-poi.version>
 		<root.directory>${project.basedir}</root.directory>
 		<c3p0.version>0.9.1.2</c3p0.version>

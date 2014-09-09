@@ -81,7 +81,7 @@ public class CustomVariable extends StorableObject {
 	 * @param otherVariable
 	 * @return
 	 */
-	public boolean duplicatedCustomVariable(CustomVariable otherVariable) {
+	public boolean hasSameNameAndScope(CustomVariable otherVariable) {
 		if (getName().equals(otherVariable.getName()) && getScope().equals(otherVariable.getScope())) {
 			return true;
 		} else {

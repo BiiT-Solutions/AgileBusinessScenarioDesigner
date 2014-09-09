@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 
@@ -31,11 +32,11 @@ public class ExpressionParser extends GenericParser {
 					expressionName = UUID.randomUUID().toString().replaceAll("-", "");
 				}
 				RuleChecker.checkExpressionValid(expressionChain);
-				newRule += Utils.getStartRuleString(expressionName);
-				newRule += Utils.getAttributes();
-				newRule += Utils.getWhenRuleString();
+				newRule += RulesUtils.getStartRuleString(expressionName);
+				newRule += RulesUtils.getAttributes();
+				newRule += RulesUtils.getWhenRuleString();
 				newRule += this.createDroolsRule(null, expressionChain, extraConditions);
-				newRule += Utils.getEndRuleString();
+				newRule += RulesUtils.getEndRuleString();
 			}
 		}
 		return newRule;

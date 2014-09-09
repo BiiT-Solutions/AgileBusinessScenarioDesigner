@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
@@ -119,8 +120,9 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		} else {
 			// Select the first one if available.
 			if (UserSessionHandler.getFormController().getForm().getTableRules().size() > 0) {
-				tableSelectionMenu.setSelectedTableRule(UserSessionHandler.getFormController().getForm()
-						.getTableRules().get(0));
+				Iterator<TableRule> iterator = (UserSessionHandler.getFormController().getForm().getTableRules()
+						.iterator());
+				tableSelectionMenu.setSelectedTableRule(iterator.next());
 			}
 		}
 		addShortcutListener(new ShortcutListener("copy", KeyCode.C, new int[] { ModifierKey.CTRL }) {
@@ -658,12 +660,11 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	@Override
 	public void removeAction(TableRuleRow row) {
 		ExpressionChain action = row.getActionChain();
-		row.getActionChain().removeAllExpressions();
-		decisionTable.update(getSelectedTableRule());
-
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "' has removed Action '" + action.getRepresentation() + "' from row '" + row.getId()
 				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+		row.getActionChain().removeAllExpressions();
+		decisionTable.update(getSelectedTableRule());
 	}
 
 	public void copy() {

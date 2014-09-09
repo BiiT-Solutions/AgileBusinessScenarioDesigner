@@ -180,6 +180,7 @@ public class FunctionsTest {
 			}
 			Answer answer = new Answer(lineSplit[2]);
 			question.addChild(answer);
+			question.setAnswerType(AnswerType.INPUT);
 
 			tableRule.getRules().add(
 					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
@@ -221,6 +222,9 @@ public class FunctionsTest {
 		diagramPmtExpressionNode.setJointjsId(IdGenerator.createId());
 		diagramPmtExpressionNode.setType(DiagramObjectType.CALCULATION);
 		Node nodeExpression = new Node(diagramPmtExpressionNode.getJointjsId());
+
+		// --------------------------------------------------------------------------------------
+		// DO NOT DELETE THIS COMMENTS !!!
 
 		// // MATH EXPRESSION
 		// DiagramCalculation diagramOperationsExpressionNode = new

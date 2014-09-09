@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -30,10 +31,11 @@ public class FormTreeTable extends TreeObjectTable {
 	public void addItem(TreeObject element, TreeObject parent) {
 		super.addItem(element, parent);
 		if (element != null) {
-			List<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
-			List<ExpressionChain> expressionChains = UserSessionHandler.getFormController().getFormExpressionChainsAssignedToTreeObject(element);
+			Set<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
+			Set<ExpressionChain> expressionChains = UserSessionHandler.getFormController()
+					.getFormExpressionChainsAssignedToTreeObject(element);
 
-			ComponentCellRule rulesComponent = getRulesComponent(element,assignedRules,expressionChains);
+			ComponentCellRule rulesComponent = getRulesComponent(element, assignedRules, expressionChains);
 			Item item = getItem(element);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
 		}
@@ -45,17 +47,19 @@ public class FormTreeTable extends TreeObjectTable {
 		super.updateItem(element);
 		Item item = getItem(element);
 		if (item != null) {
-			List<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
-			List<ExpressionChain> expressionChains = UserSessionHandler.getFormController().getFormExpressionChainsAssignedToTreeObject(element);
-			
-			ComponentCellRule rulesComponent = getRulesComponent(element,assignedRules,expressionChains);
+			Set<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
+			Set<ExpressionChain> expressionChains = UserSessionHandler.getFormController()
+					.getFormExpressionChainsAssignedToTreeObject(element);
+
+			ComponentCellRule rulesComponent = getRulesComponent(element, assignedRules, expressionChains);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
 		}
 	}
 
-	public ComponentCellRule getRulesComponent(TreeObject element,List<Rule> rules, List<ExpressionChain> expressionChains) {
+	public ComponentCellRule getRulesComponent(TreeObject element, Set<Rule> rules,
+			Set<ExpressionChain> expressionChains) {
 		ComponentCellRule component = new ComponentCellRule();
-		component.update(rules,expressionChains);
+		component.update(rules, expressionChains);
 		component.registerTouchCallBack(this, element);
 		return component;
 	}
