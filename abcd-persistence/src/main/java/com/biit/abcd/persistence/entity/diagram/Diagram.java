@@ -47,7 +47,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
-	@BatchSize(size=10)
+	@BatchSize(size=20)
 	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
