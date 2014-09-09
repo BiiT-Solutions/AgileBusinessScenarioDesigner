@@ -52,11 +52,11 @@ public class FormController {
 	}
 
 	public void checkDuplicatedVariables() throws DuplicatedVariableException {
-		List<CustomVariable> customVariablesList = new ArrayList<>(this.getForm().getCustomVariables());
+		List<CustomVariable> customVariablesList = this.getForm().getCustomVariables();
 		for (int i = 0; i < (customVariablesList.size() - 1); i++) {
 			CustomVariable cv = customVariablesList.get(i);
-			for (int j = i + 1; j < customVariablesList.size(); j++) {
-				if (cv.duplicatedCustomVariable(customVariablesList.get(j))) {
+			for (int j = i + 1; j < (this.getForm().getCustomVariables().size()); j++) {
+				if (cv.duplicatedCustomVariable(this.getForm().getCustomVariables().get(j))) {
 					this.saveAllowed = false;
 					throw new DuplicatedVariableException("Duplicated variable in form variables.");
 				}
@@ -142,9 +142,8 @@ public class FormController {
 	}
 
 	/**
-	 * Gets rules with treeObject as the common element for all the references
-	 * in the rule.
-	 *
+	 * Gets rules with treeObject as the common element for all the references in the rule.
+	 * 
 	 * @param treeObject
 	 * @return
 	 */
@@ -162,6 +161,7 @@ public class FormController {
 
 	/**
 	 * Gets expressionChains that reference to a particular element.
+	 * 
 	 * @param element
 	 * @return
 	 */
@@ -169,8 +169,8 @@ public class FormController {
 		Set<ExpressionChain> expressionChains = new HashSet<>();
 
 		Set<ExpressionChain> expressions = this.getForm().getExpressionChain();
-		for(ExpressionChain expression: expressions){
-			if(expression.isAssignedTo(element)){
+		for (ExpressionChain expression : expressions) {
+			if (expression.isAssignedTo(element)) {
 				expressionChains.add(expression);
 			}
 		}
