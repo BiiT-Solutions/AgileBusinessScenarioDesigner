@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.dao;
 
+import java.util.Iterator;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -56,9 +58,13 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getName(), "Score");
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.NUMBER);
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getScope(), CustomVariableScope.CATEGORY);
+		
+		Iterator<CustomVariable> iterator = inForm.getCustomVariables().iterator();
+		Assert.assertTrue(iterator.hasNext());		
+		CustomVariable retrievedVariable = iterator.next();
+		Assert.assertEquals(retrievedVariable.getName(), "Score");
+		Assert.assertEquals(retrievedVariable.getType(), CustomVariableType.NUMBER);
+		Assert.assertEquals(retrievedVariable.getScope(), CustomVariableScope.CATEGORY);
 		formDao.makeTransient(form);
 	}
 
@@ -77,9 +83,14 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getName(), "Name");
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.STRING);
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getScope(), CustomVariableScope.QUESTION);
+		
+		Iterator<CustomVariable> iterator = inForm.getCustomVariables().iterator();
+		Assert.assertTrue(iterator.hasNext());		
+		CustomVariable retrievedVariable = iterator.next();
+		
+		Assert.assertEquals(retrievedVariable.getName(), "Name");
+		Assert.assertEquals(retrievedVariable.getType(), CustomVariableType.STRING);
+		Assert.assertEquals(retrievedVariable.getScope(), CustomVariableScope.QUESTION);
 		formDao.makeTransient(form);
 	}
 
@@ -99,9 +110,14 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getName(), "CreationDate");
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getType(), CustomVariableType.DATE);
-		Assert.assertEquals(inForm.getCustomVariables().get(0).getScope(), CustomVariableScope.FORM);
+		
+		Iterator<CustomVariable> iterator = inForm.getCustomVariables().iterator();
+		Assert.assertTrue(iterator.hasNext());		
+		CustomVariable retrievedVariable = iterator.next();
+		
+		Assert.assertEquals(retrievedVariable.getName(), "CreationDate");
+		Assert.assertEquals(retrievedVariable.getType(), CustomVariableType.DATE);
+		Assert.assertEquals(retrievedVariable.getScope(), CustomVariableScope.FORM);
 		formDao.makeTransient(form);
 	}
 

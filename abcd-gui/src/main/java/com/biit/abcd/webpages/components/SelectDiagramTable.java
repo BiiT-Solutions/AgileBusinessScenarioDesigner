@@ -91,7 +91,7 @@ public class SelectDiagramTable extends TreeTable {
 		updateItemInGui(diagram);
 	}
 
-	public void addRows(List<Diagram> diagrams) {
+	public void addRows(Set<Diagram> diagrams) {
 		for (Diagram diagram : diagrams) {
 			addRow(diagram);
 		}

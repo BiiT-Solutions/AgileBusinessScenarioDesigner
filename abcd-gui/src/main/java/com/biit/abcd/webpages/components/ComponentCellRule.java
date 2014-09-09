@@ -1,6 +1,6 @@
 package com.biit.abcd.webpages.components;
 
-import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -15,12 +15,12 @@ import com.vaadin.ui.UI;
 public class ComponentCellRule extends ComponentCell {
 	private static final long serialVersionUID = -5962905982968281894L;
 
-	public void update(List<Rule> rules, List<ExpressionChain> expressions) {
+	public void update(Set<Rule> rules, Set<ExpressionChain> expressions) {
 		clear();
 		for (Rule rule : rules) {
 			addRule(rule);
 		}
-		for(ExpressionChain expression: expressions){
+		for (ExpressionChain expression : expressions) {
 			addExpression(expression);
 		}
 	}
@@ -32,7 +32,8 @@ public class ComponentCellRule extends ComponentCell {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				ApplicationFrame.navigateTo(WebMap.EXPRESSION_EDITOR);
-				ExpressionEditor expressionEditor = (ExpressionEditor) ((ApplicationFrame) UI.getCurrent()).getCurrentView();
+				ExpressionEditor expressionEditor = (ExpressionEditor) ((ApplicationFrame) UI.getCurrent())
+						.getCurrentView();
 				expressionEditor.selectComponent(expression);
 			}
 		});

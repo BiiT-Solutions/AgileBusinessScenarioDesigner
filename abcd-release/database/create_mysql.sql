@@ -666,27 +666,32 @@
 
     create table tree_forms_diagram (
         tree_forms_ID bigint not null,
-        diagrams_ID bigint not null
+        diagrams_ID bigint not null,
+        primary key (tree_forms_ID, diagrams_ID)
     );
 
     create table tree_forms_expressions_chain (
         tree_forms_ID bigint not null,
-        expressionChain_ID bigint not null
+        expressionChain_ID bigint not null,
+        primary key (tree_forms_ID, expressionChain_ID)
     );
 
     create table tree_forms_form_custom_variables (
         tree_forms_ID bigint not null,
-        customVariables_ID bigint not null
+        customVariables_ID bigint not null,
+        primary key (tree_forms_ID, customVariables_ID)
     );
 
     create table tree_forms_rule (
         tree_forms_ID bigint not null,
-        rules_ID bigint not null
+        rules_ID bigint not null,
+        primary key (tree_forms_ID, rules_ID)
     );
 
     create table tree_forms_rule_decision_table (
         tree_forms_ID bigint not null,
-        tableRules_ID bigint not null
+        tableRules_ID bigint not null,
+        primary key (tree_forms_ID, tableRules_ID)
     );
 
     create table tree_groups (

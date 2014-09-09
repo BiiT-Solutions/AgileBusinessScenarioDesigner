@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
@@ -80,8 +81,10 @@ public class ExpressionEditor extends FormWebPageComponent {
 			} else {
 				// Select the first one if available.
 				if (UserSessionHandler.getFormController().getForm().getExpressionChain().size() > 0) {
-					tableSelectExpression.setSelectedExpression(UserSessionHandler.getFormController().getForm()
-							.getExpressionChain().get(0));
+
+					Iterator<ExpressionChain> iterator = (UserSessionHandler.getFormController().getForm()
+							.getExpressionChain().iterator());
+					tableSelectExpression.setSelectedExpression(iterator.next());
 				}
 			}
 			refreshExpressionEditor();
@@ -129,8 +132,8 @@ public class ExpressionEditor extends FormWebPageComponent {
 					public void acceptAction(AcceptCancelWindow window) {
 						ExpressionChain expChain = getSelectedExpression();
 						try {
-							CheckDependencies.checkExpressionDependencies(UserSessionHandler.getFormController().getForm(),
-									expChain);
+							CheckDependencies.checkExpressionDependencies(UserSessionHandler.getFormController()
+									.getForm(), expChain);
 							removeSelectedExpression();
 							AbcdLogger.info(this.getClass().getName(),
 									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "

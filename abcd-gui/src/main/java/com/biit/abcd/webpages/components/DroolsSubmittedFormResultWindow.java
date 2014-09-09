@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.FormController;
@@ -57,7 +58,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		if (fc != null) {
 			Form form = fc.getForm();
 			if (form != null) {
-				List<CustomVariable> customVariables = form.getCustomVariables();
+				Set<CustomVariable> customVariables = form.getCustomVariables();
 
 				if (customVariables != null) {
 					custonVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
@@ -73,7 +74,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 							formTreeTable.addContainerProperty(customVariable.getName(), Date.class, null);
 							break;
 						}
-
 						if (custonVariablesScopeMap.get(customVariable.getScope()) == null) {
 							List<String> customVariablesNames = new ArrayList<String>();
 							customVariablesNames.add(customVariable.getName());

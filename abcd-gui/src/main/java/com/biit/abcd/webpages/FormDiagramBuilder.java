@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages;
 
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
@@ -205,7 +206,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		} else {
-			List<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
+			Set<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
 			diagramBuilderTable.removeValueChangeListener(diagramTableValueChange);
 			diagramBuilderTable.setValue(null);
 			diagramBuilderTable.removeAllItems();

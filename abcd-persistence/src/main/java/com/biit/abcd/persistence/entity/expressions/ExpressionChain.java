@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
 import com.biit.jexeval.ExpressionChecker;
@@ -35,6 +37,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	// @Orderby or @OrderColumn we use our own order manager.
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderBy(value = "sortSeq ASC")
+	@BatchSize(size=500)
 	private List<Expression> expressions;
 
 	private String name;

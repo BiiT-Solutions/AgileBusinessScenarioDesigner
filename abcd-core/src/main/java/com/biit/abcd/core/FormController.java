@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.persistence.dao.IFormDao;
@@ -29,7 +32,6 @@ public class FormController {
 	private TableRule lastAccessTable;
 	private Rule lastAccessRule;
 	private List<TableRuleRow> copiedRows;
-	private boolean saveAllowed = true;
 
 	private IFormDao formDao;
 
@@ -44,23 +46,24 @@ public class FormController {
 
 	public void save() throws DuplicatedVariableException {
 		this.checkDuplicatedVariables();
-		if (this.saveAllowed && (this.getForm() != null)) {
+		if (this.getForm() != null) {
 			this.formDao.makePersistent(this.getForm());
 		}
 	}
 
 	public void checkDuplicatedVariables() throws DuplicatedVariableException {
-		List<CustomVariable> customVariablesList = this.getForm().getCustomVariables();
-		for (int i = 0; i < (customVariablesList.size() - 1); i++) {
-			CustomVariable cv = customVariablesList.get(i);
-			for (int j = i + 1; j < (this.getForm().getCustomVariables().size()); j++) {
-				if (cv.duplicatedCustomVariable(this.getForm().getCustomVariables().get(j))) {
-					this.saveAllowed = false;
+		Set<CustomVariable> customVariablesList = this.getForm().getCustomVariables();
+		Iterator<CustomVariable> startComparator = customVariablesList.iterator();
+		while (startComparator.hasNext()) {
+			CustomVariable comparedVariable = startComparator.next();
+			Iterator<CustomVariable> comparedWithIterator = startComparator;
+			while (comparedWithIterator.hasNext()) {
+				CustomVariable comparedWithVariable = comparedWithIterator.next();
+				if (comparedVariable.hasSameNameAndScope(comparedWithVariable)) {
 					throw new DuplicatedVariableException("Duplicated variable in form variables.");
 				}
 			}
 		}
-		this.saveAllowed = true;
 	}
 
 	public void remove() {
@@ -140,16 +143,15 @@ public class FormController {
 	}
 
 	/**
-	 * Gets rules with treeObject as the common element for all the references
-	 * in the rule.
-	 *
+	 * Gets rules with treeObject as the common element for all the references in the rule.
+	 * 
 	 * @param treeObject
 	 * @return
 	 */
-	public List<Rule> getRulesAssignedToTreeObject(TreeObject treeObject) {
-		List<Rule> assignedRules = new ArrayList<>();
+	public Set<Rule> getRulesAssignedToTreeObject(TreeObject treeObject) {
+		Set<Rule> assignedRules = new HashSet<>();
 
-		List<Rule> rules = this.getForm().getRules();
+		Set<Rule> rules = this.getForm().getRules();
 		for (Rule rule : rules) {
 			if (rule.isAssignedTo(treeObject)) {
 				assignedRules.add(rule);
@@ -160,15 +162,16 @@ public class FormController {
 
 	/**
 	 * Gets expressionChains that reference to a particular element.
+	 * 
 	 * @param element
 	 * @return
 	 */
-	public List<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
-		List<ExpressionChain> expressionChains = new ArrayList<>();
+	public Set<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
+		Set<ExpressionChain> expressionChains = new HashSet<>();
 
-		List<ExpressionChain> expressions = this.getForm().getExpressionChain();
-		for(ExpressionChain expression: expressions){
-			if(expression.isAssignedTo(element)){
+		Set<ExpressionChain> expressions = this.getForm().getExpressionChain();
+		for (ExpressionChain expression : expressions) {
+			if (expression.isAssignedTo(element)) {
 				expressionChains.add(expression);
 			}
 		}
