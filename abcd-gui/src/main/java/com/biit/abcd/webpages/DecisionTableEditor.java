@@ -660,12 +660,11 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	@Override
 	public void removeAction(TableRuleRow row) {
 		ExpressionChain action = row.getActionChain();
-		row.getActionChain().removeAllExpressions();
-		decisionTable.update(getSelectedTableRule());
-
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "' has removed Action '" + action.getRepresentation() + "' from row '" + row.getId()
 				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+		row.getActionChain().removeAllExpressions();
+		decisionTable.update(getSelectedTableRule());
 	}
 
 	public void copy() {

@@ -47,8 +47,9 @@ public class Form extends BaseForm {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
+	//Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
-	private List<CustomVariable> customVariables;
+	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -57,6 +58,7 @@ public class Form extends BaseForm {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
+	//Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<Rule> rules;
 
@@ -64,7 +66,7 @@ public class Form extends BaseForm {
 		super();
 		diagrams = new HashSet<>();
 		tableRules = new HashSet<>();
-		customVariables = new ArrayList<>();
+		customVariables = new HashSet<>();
 		expressionChain = new HashSet<>();
 		rules = new HashSet<>();
 	}
@@ -73,7 +75,7 @@ public class Form extends BaseForm {
 		super(name);
 		diagrams = new HashSet<>();
 		tableRules = new HashSet<>();
-		customVariables = new ArrayList<>();
+		customVariables = new HashSet<>();
 		expressionChain = new HashSet<>();
 		rules = new HashSet<>();
 	}
@@ -148,7 +150,7 @@ public class Form extends BaseForm {
 		this.tableRules.addAll(tableRules);
 	}
 
-	public List<CustomVariable> getCustomVariables() {
+	public Set<CustomVariable> getCustomVariables() {
 		return customVariables;
 	}
 
