@@ -65,13 +65,9 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 					for (CustomVariable customVariable : customVariables) {
 						switch (customVariable.getType()) {
 						case NUMBER:
-							formTreeTable.addContainerProperty(customVariable.getName(), Double.class, 0.);
-							break;
 						case STRING:
-							formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
-							break;
 						case DATE:
-							formTreeTable.addContainerProperty(customVariable.getName(), Date.class, null);
+							formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
 							break;
 						}
 						if (custonVariablesScopeMap.get(customVariable.getScope()) == null) {
@@ -121,8 +117,10 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		List<String> formVariables = custonVariablesScopeMap.get(CustomVariableScope.FORM);
 		if (formVariables != null) {
 			for (String variable : formVariables) {
-				formTreeTable.getItem(form).getItemProperty(variable)
-						.setValue(submittedForm.getVariableValue(variable));
+				if (submittedForm.getVariableValue(variable) != null) {
+					formTreeTable.getItem(form).getItemProperty(variable)
+							.setValue(submittedForm.getVariableValue(variable).toString());
+				}
 			}
 		}
 	}
@@ -140,8 +138,10 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		List<String> categoryVariables = custonVariablesScopeMap.get(CustomVariableScope.CATEGORY);
 		if ((categoryVariables != null) && (categorySubForm != null)) {
 			for (String variable : categoryVariables) {
-				formTreeTable.getItem(category).getItemProperty(variable)
-						.setValue(categorySubForm.getVariableValue(variable));
+				if (categorySubForm.getVariableValue(variable) != null) {
+					formTreeTable.getItem(category).getItemProperty(variable)
+							.setValue(categorySubForm.getVariableValue(variable).toString());
+				}
 			}
 		}
 	}
@@ -167,8 +167,10 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 			List<String> groupVariables = custonVariablesScopeMap.get(CustomVariableScope.GROUP);
 			if ((groupVariables != null) && (groupSubForm != null)) {
 				for (String variable : groupVariables) {
-					formTreeTable.getItem(groupQuest).getItemProperty(variable)
-							.setValue(groupSubForm.getVariableValue(variable));
+					if (groupSubForm.getVariableValue(variable) != null) {
+						formTreeTable.getItem(groupQuest).getItemProperty(variable)
+								.setValue(groupSubForm.getVariableValue(variable).toString());
+					}
 				}
 			}
 		} else {
@@ -183,8 +185,10 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 			List<String> questionVariables = custonVariablesScopeMap.get(CustomVariableScope.QUESTION);
 			if ((questionVariables != null) && (questionSubForm != null)) {
 				for (String variable : questionVariables) {
-					formTreeTable.getItem(groupQuest).getItemProperty(variable)
-							.setValue(questionSubForm.getVariableValue(variable));
+					if (questionSubForm.getVariableValue(variable) != null) {
+						formTreeTable.getItem(groupQuest).getItemProperty(variable)
+								.setValue(questionSubForm.getVariableValue(variable).toString());
+					}
 					formTreeTable.getItem(groupQuest).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
 							.setValue(questionSubForm.getAnswer().toString());
 				}
@@ -213,8 +217,10 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		List<String> questionVariables = custonVariablesScopeMap.get(CustomVariableScope.QUESTION);
 		if ((questionVariables != null) && (questionSubForm != null)) {
 			for (String variable : questionVariables) {
-				formTreeTable.getItem(question).getItemProperty(variable)
-						.setValue(questionSubForm.getVariableValue(variable));
+				if (questionSubForm.getVariableValue(variable) != null) {
+					formTreeTable.getItem(question).getItemProperty(variable)
+							.setValue(questionSubForm.getVariableValue(variable).toString());
+				}
 				formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
 						.setValue(questionSubForm.getAnswer().toString());
 			}
