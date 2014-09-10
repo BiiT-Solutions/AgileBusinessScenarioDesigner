@@ -6,9 +6,12 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
+import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
@@ -22,11 +25,13 @@ public class FormManager extends FormWebPageComponent {
 	private FormsVersionsTreeTable formTable;
 	private FormManagerUpperMenu upperMenu;
 
+	private ISimpleFormViewDao simpleFormViewDao;
 	private IFormDao formDao;
 
 	public FormManager() {
 		super();
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
 		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
@@ -41,8 +46,16 @@ public class FormManager extends FormWebPageComponent {
 		rootLayout.setMargin(true);
 		getWorkingAreaLayout().addComponent(rootLayout);
 		formTable.selectLastUsedForm();
-		UserSessionHandler.getFormController().setForm(getForm());
 		updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
+
+		getBottomMenu().addFormSelectedListener(new IFormSelectedListener() {
+			@Override
+			public void formSelected() {
+				if (formTable.getValue() != null) {
+					UserSessionHandler.getFormController().setForm(formDao.read(formTable.getValue().getId()));
+				}
+			}
+		});
 	}
 
 	private FormsVersionsTreeTable createTreeTable() {
@@ -52,13 +65,6 @@ public class FormManager extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if (UserSessionHandler.getFormController() != null) {
-					if (!(getForm() instanceof RootForm)) {
-						UserSessionHandler.getFormController().setForm(getForm());
-					} else {
-						UserSessionHandler.getFormController().setForm(null);
-					}
-				}
 				updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 			}
 		});
@@ -75,13 +81,14 @@ public class FormManager extends FormWebPageComponent {
 		return Arrays.asList(DActivity.READ);
 	}
 
-	public Form getForm() {
+	public SimpleFormView getForm() {
 		return formTable.getValue();
 	}
 
 	public void addNewForm(Form form) {
-		formTable.addForm(form);
-		formTable.selectForm(form);
+		SimpleFormView simpleView = new SimpleFormView(form);
+		formTable.addForm(simpleView);
+		formTable.selectForm(simpleView);
 		formDao.makePersistent(form);
 	}
 

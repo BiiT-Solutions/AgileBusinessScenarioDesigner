@@ -74,4 +74,8 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	public AbstractOrderedLayout getWorkingAreaLayout() {
 		return workingAreaLayout;
 	}
+
+	public BottomMenu getBottomMenu() {
+		return bottomMenu;
+	}
 }

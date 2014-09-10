@@ -1,0 +1,44 @@
+package com.biit.abcd.persistence.dao;
+
+import java.util.List;
+
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
+@Test(groups = { "simpleFormViewDao" })
+public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContextTests {
+	private final static String DUMMY_FORM = "Dummy Form View";
+
+	@Autowired
+	private IFormDao formDao;
+
+	@Autowired
+	private ISimpleFormViewDao simpleFormViewDao;
+
+	@Test
+	public void getView() throws FieldTooLongException {
+		Form form = new Form();
+		form.setName(DUMMY_FORM);
+		form.setLabel(DUMMY_FORM);
+		form.setCreatedBy(1l);
+		form.setUpdatedBy(1l);
+		formDao.makePersistent(form);
+		Assert.assertEquals(formDao.getRowCount(), 1);
+
+		Assert.assertEquals(simpleFormViewDao.getRowCount(), 1);
+		List<SimpleFormView> views = simpleFormViewDao.getAll();
+		Assert.assertEquals(views.size(), 1);
+		Assert.assertEquals(views.get(0).getName(), DUMMY_FORM);
+	}
+}
