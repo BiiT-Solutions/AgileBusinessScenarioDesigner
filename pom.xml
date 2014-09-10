@@ -7,7 +7,7 @@
 	<groupId>com.biit.abcd</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>0.8.2</version>
+	<version>0.8.3</version>
 	<name>Agile Business sCenario Designer Tool</name>
 
 	<modules>

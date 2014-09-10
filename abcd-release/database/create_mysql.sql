@@ -268,6 +268,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value varchar(255),
         primary key (ID)
     );
@@ -280,6 +281,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         currentValue varchar(255),
         primary key (ID)
     );
@@ -292,6 +294,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         currentValue varchar(255),
         primary key (ID)
     );
@@ -304,6 +307,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value varchar(255),
         primary key (ID)
     );
@@ -316,6 +320,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value bit not null,
         primary key (ID)
     );
@@ -328,6 +333,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         unit varchar(255),
         reference_ID bigint,
         variable_ID bigint,
@@ -342,6 +348,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value_ID bigint,
         primary key (ID)
     );
@@ -354,6 +361,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         type varchar(255),
         variable_ID bigint,
         primary key (ID)
@@ -367,6 +375,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         type varchar(255),
         primary key (ID)
     );
@@ -379,6 +388,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         constant_ID bigint,
         primary key (ID)
     );
@@ -391,6 +401,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value double precision not null,
         primary key (ID)
     );
@@ -403,6 +414,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value varchar(255),
         primary key (ID)
     );
@@ -415,6 +427,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value varchar(255),
         primary key (ID)
     );
@@ -427,6 +440,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value datetime,
         primary key (ID)
     );
@@ -439,6 +453,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         value datetime,
         primary key (ID)
     );
@@ -451,6 +466,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         unit varchar(255),
         reference_ID bigint,
         primary key (ID)
@@ -464,15 +480,14 @@
         updateTime datetime,
         updatedBy DOUBLE,
         isEditable bit not null,
+        sortSeq bigint not null,
         name varchar(255),
         primary key (ID)
     );
 
     create table expressions_chain_expression_basic (
         expressions_chain_ID bigint not null,
-        expressions_ID bigint not null,
-        expression_index integer not null,
-        primary key (expressions_chain_ID, expression_index)
+        expressions_ID bigint not null
     );
 
     create table form_custom_variables (

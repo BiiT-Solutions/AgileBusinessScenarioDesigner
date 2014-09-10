@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite thread-count="1" verbose="1" name="WebFormsCore">
-	<test name="AbcdTest" enabled="false" preserve-order="true">
+	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
 				<exclude name="orbeon" />
@@ -10,10 +10,10 @@
 			</run>
 		</groups>
 		<classes>
-			<!--<class name="com.biit.abcd.core.drools.test.PrattParserTest" />
-			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />-->
-			<class name="com.biit.abcd.core.drools.test.TableRuleTest" />
-			<!--<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
+			<class name="com.biit.abcd.core.drools.test.PrattParserTest" />
+			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />
+			<!--<class name="com.biit.abcd.core.drools.test.TableRuleTest" />
+			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.RulesTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramDateTest" />

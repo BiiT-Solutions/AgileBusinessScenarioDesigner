@@ -86,6 +86,13 @@ public class SubmittedForm implements ISubmittedForm {
 		return this.formVariables.get(treeObject).get(varName);
 	}
 
+	public Object getVariableValue(String varName) {
+		if ((this.formVariables == null) || (this.formVariables.get(this) == null)) {
+			return null;
+		}
+		return this.formVariables.get(this).get(varName);
+	}
+
 	public boolean hasScoreSet(Object treeObject, String varName) {
 		if ((this.formVariables == null) || (this.formVariables.get(treeObject) == null)
 				|| (this.formVariables.get(treeObject).get(varName) == null)) {

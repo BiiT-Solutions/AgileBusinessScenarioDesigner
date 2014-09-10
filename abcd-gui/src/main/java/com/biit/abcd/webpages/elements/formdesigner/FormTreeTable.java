@@ -17,7 +17,7 @@ import com.vaadin.ui.Component;
 public class FormTreeTable extends TreeObjectTable {
 	private static final long serialVersionUID = 6016194810449244086L;
 
-	protected enum FormTreeTableProperties {
+	public enum FormTreeTableProperties {
 		ELEMENT_NAME, RULES
 	};
 
