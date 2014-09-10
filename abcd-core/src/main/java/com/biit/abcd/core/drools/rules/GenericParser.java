@@ -404,8 +404,8 @@ public class GenericParser {
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= '"
-										+ value1 + "' || < '" + value2 + "') from $"
+										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
+										+ value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getQuestions() \n";
 								droolsConditions += "and\n";
@@ -419,13 +419,13 @@ public class GenericParser {
 								droolsConditions += "	$"
 										+ leftVariable.getReference().getComparationIdNoDash().toString()
 										+ " : SubmittedForm( isScoreSet('" + varName + "'), getNumberVariableValue('"
-										+ varName + "') >= '" + value1 + "' || < '" + value2 + "') \n";
+										+ varName + "') >= " + value1 + " && < " + value2 + ") \n";
 								break;
 							case CATEGORY:
 								droolsConditions += "	$"
 										+ leftVariable.getReference().getComparationIdNoDash().toString()
 										+ " : Category( isScoreSet('" + varName + "'), getNumberVariableValue('"
-										+ varName + "') >= '" + value1 + "' || < '" + value2 + "') from $"
+										+ varName + "') >= " + value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getCategories() \n";
 								break;
@@ -433,7 +433,7 @@ public class GenericParser {
 								droolsConditions += "	$"
 										+ leftVariable.getReference().getComparationIdNoDash().toString()
 										+ " : Group( isScoreSet('" + varName + "'), getNumberVariableValue('" + varName
-										+ "') >= '" + value1 + "' || < '" + value2 + "') from $"
+										+ "') >= " + value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString() + ".getGroups() \n";
 								break;
 							default:
@@ -612,15 +612,13 @@ public class GenericParser {
 		}
 		if (result != null) {
 			ExpressionChain mathematicalChain = result.getExpressionChain();
-
 			List<Expression> chainList = mathematicalChain.getExpressions();
 
 			if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0))
 						.getExpressions().get(0);
 				// Check if the reference exists in the rule, if not, it creates
-				// a
-				// new reference
+				// a new reference
 				ruleCore += this.checkVariableAssignation(var);
 
 				List<Expression> variables = this.getExpressionChainVariables(mathematicalChain);
@@ -1147,8 +1145,8 @@ public class GenericParser {
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= '"
-										+ value1 + "' || < '" + value2 + "') from $"
+										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
+										+ value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getQuestions() \n";
 								droolsConditions += "and\n";

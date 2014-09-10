@@ -110,6 +110,10 @@ public class SettingsWindow extends PopupWindow {
 									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
 											.getExpressionChain().getRepresentation());
 									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								} catch (Exception e) {
+									MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR, 
+											LanguageCodes.ERROR_DROOLS_ENGINE);
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 								}
 							}
 						});

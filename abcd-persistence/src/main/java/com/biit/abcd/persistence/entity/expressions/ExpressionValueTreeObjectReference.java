@@ -18,7 +18,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	private TreeObject reference;
 
 	@Enumerated(EnumType.STRING)
-	private QuestionUnit unit;
+	private QuestionUnit unit = null;
 
 	public ExpressionValueTreeObjectReference() {
 		super();
