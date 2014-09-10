@@ -14,7 +14,7 @@
                         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd"
 	default-autowire="byName">
 	<!-- Activates various annotations to be detected in bean classes -->
-	<tx:annotation-driven />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 	<context:annotation-config />
 	<!-- Scans the classpath for annotated components that will be auto-registered 
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 
@@ -23,6 +23,7 @@
 		base-package="com.biit.abcd, com.biit.form, com.biit.persistence" />
 	<!-- Read any *.properties file -->
 	<context:property-placeholder location="classpath*:*.properties" />
+	
 	<!-- Data Source -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -31,25 +32,36 @@
 		<property name="username" value="${hibernate.connection.username}" />
 		<property name="password" value="${hibernate.connection.password}" />
 	</bean>
-	<!-- Hibernate session factory -->
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource">
-			<ref bean="dataSource" />
-		</property>
-		<property name="hibernateProperties">
-			<props>
-				<!-- Get default data -->
-				<!--<prop key="hibernate.hbm2ddl.import_files">initial_data.sql</prop> -->
+	
+	<!-- Transaction Manager -->
+	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
+		id="transactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
 
+	<bean
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		id="entityManagerFactory">
+		<property name="jpaDialect">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+		</property>
+		<property name="dataSource" ref="dataSource" />
+		
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+		<property name="jpaProperties">
+			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<!-- New ID creator -->
+				<prop key="hibernate.id.new_generator_mappings">${hibernate.id.new_generator_mappings}</prop>
 				<!-- Create table if not exists -->
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-				<prop key="hibernate.id.new_generator_mappings">${hibernate.id.new_generator_mappings}</prop>
 				<!-- Unnecesary to open and close sessions -->
 				<prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
-
+				
+				<!-- C3p0 -->
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
 				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
 				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
@@ -62,18 +74,16 @@
 				<prop key="hibernate.c3p0.max_statements">${hibernate.c3p0.max_statements}</prop>
 				<prop key="hibernate.c3p0.idle_test_period">${hibernate.c3p0.idle_test_period}</prop>
 				<prop key="hibernate.c3p0.acquire_increment">${hibernate.c3p0.acquire_increment}</prop>
+			
 			</props>
 		</property>
 		<property name="packagesToScan">
 			<list>
-				<value>com.biit.**.*</value>
+				<value>com.biit.abcd.**.*</value>
 			</list>
-		</property>
+		</property>	
 	</bean>
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+	
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />
 	<!-- Aspect -->

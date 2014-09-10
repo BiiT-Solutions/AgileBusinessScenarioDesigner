@@ -19,10 +19,6 @@ public class ExpressionChainDao extends GenericDao<ExpressionChain> implements I
 	}
 
 	@Override
-	protected void initializeSets(List<ExpressionChain> rules) {
-	}
-
-	@Override
 	public ExpressionChain makePersistent(ExpressionChain entity) {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the

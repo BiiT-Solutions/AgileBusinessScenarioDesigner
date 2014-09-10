@@ -4,6 +4,17 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>Agile Business sCenario Designer Tool</display-name>
 
+	<!-- Enable Lazy load -->
+	<filter>
+		<filter-name>OpenEntityManagerInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+	</filter>
+	<!-- Include this if you are using Hibernate -->
+	<filter-mapping>
+		<filter-name>OpenEntityManagerInViewFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<context-param>
 		<param-name>heartbeatInterval</param-name>
 		<param-value>600</param-value>
@@ -16,7 +27,7 @@
 		<param-name>productionMode</param-name>
 		<param-value>false</param-value>
 	</context-param>
-	
+
 	<!-- Using Vaadin GUI -->
 	<servlet>
 		<servlet-name>Vaadin Application Servlet</servlet-name>
@@ -54,7 +65,10 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-	
+
+
+
+
 	<!-- Uncomment following filter if you want fast deployment in jetty -->
 	<!-- <filter> <filter-name>GzipFilter</filter-name> <filter-class>org.eclipse.jetty.servlets.GzipFilter</filter-class> 
 		<init-param> <param-name>mimeTypes</param-name> <param-value>text/html,text/plain,text/xml,application/xhtml+xml,text/css,application/javascript,image/svg+xml</param-value> 
