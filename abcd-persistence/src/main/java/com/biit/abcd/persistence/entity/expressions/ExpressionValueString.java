@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,6 +14,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressio
 @Table(name = "expression_value_string")
 public class ExpressionValueString extends ExpressionValue {
 
+	@Column(columnDefinition="TEXT")
 	private String value;
 
 	protected ExpressionValueString() {
