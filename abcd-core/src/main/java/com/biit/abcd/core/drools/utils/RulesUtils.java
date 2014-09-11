@@ -31,7 +31,7 @@ public class RulesUtils {
 	 * the algorithm generates repeated rules <br>
 	 * This method the lines that are equals in the rule<br>
 	 * It should be used before sending the rules to the engine <br>
-	 *
+	 * 
 	 * @param ruleCore
 	 * @return
 	 */
@@ -91,7 +91,7 @@ public class RulesUtils {
 	 * the algorithm generates repeated rules <br>
 	 * This method the lines that are equals in the rule<br>
 	 * It should be used before sending the rules to the engine <br>
-	 *
+	 * 
 	 * @param ruleCore
 	 * @return
 	 */
@@ -121,28 +121,6 @@ public class RulesUtils {
 		}
 		return result.toString();
 	}
-
-	// rule "getBmiMale_row_2"
-	// when
-	//
-	// (
-	// $4db44f24d9db4d72ab0e2a884e09ff28 : SubmittedForm() and
-	// $21798d15524a4ab9a3a757e24efb4144 : Category() from
-	// $4db44f24d9db4d72ab0e2a884e09ff28.getCategory('Algemeen') and
-	// $308d01df47ff4babb2d7dba4515ec5b1 : Question(getAnswer() instanceof Date,
-	// DateUtils.returnYearDistanceFromDate(getAnswer()) == 4) from
-	// $21798d15524a4ab9a3a757e24efb4144.getQuestions()
-	// and
-	// $4db44f24d9db4d72ab0e2a884e09ff28 : SubmittedForm( isScoreSet('BMI'),
-	// getNumberVariableValue('BMI') >= '17.5' || < '19.2')
-	// )
-	// then
-	// $4db44f24d9db4d72ab0e2a884e09ff28.setVariableValue('BmiClassification',
-	// 'overweight');
-	// AbcdLogger.debug("DroolsRule",
-	// "Variable set (KidsScreen, BmiClassification, overweight)");
-	//
-	// end
 
 	public static String checkForDuplicatedVariables(String ruleCore) {
 		String cleanedResults = "";
@@ -175,6 +153,28 @@ public class RulesUtils {
 					}
 				}
 			} else {
+				cleanedResults += line + "\n";
+			}
+		}
+		return cleanedResults;
+	}
+
+	public static String removeExtraParenthesis(String ruleCore) {
+		String cleanedResults = "";
+		String[] lines = ruleCore.split("\n");
+		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+			String line = lines[lineIndex];
+			if (line.equals(")")) {
+				// If the previous line was also a parenthesis remove them
+				if (lineIndex > 0 && lines[lineIndex - 1].equals("(")) {
+					lines[lineIndex - 1] = null;
+					lines[lineIndex] = null;
+				}
+			}
+		}
+		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+			String line = lines[lineIndex];
+			if (line != null) {
 				cleanedResults += line + "\n";
 			}
 		}

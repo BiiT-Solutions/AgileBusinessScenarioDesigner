@@ -1,7 +1,6 @@
 package com.biit.abcd.webpages.components;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +45,9 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		formTreeTable.setSelectable(true);
 		formTreeTable.setImmediate(true);
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
-		generateContent((SubmittedForm) submittedForm);
+		if (submittedForm != null) {
+			generateContent((SubmittedForm) submittedForm);
+		}
 		setContent(formTreeTable);
 	}
 
