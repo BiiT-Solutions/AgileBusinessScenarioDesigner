@@ -71,12 +71,12 @@ public class FormToDroolsExporter {
 		}
 	}
 
-	private ISubmittedForm readXml(String orbeonAppname, String orbeonFormName, String orbeonDocumentId)
+	private ISubmittedForm readXml(String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId)
 			throws DocumentException, IOException {
-		ISubmittedForm submittedForm = new SubmittedForm(orbeonAppname, orbeonFormName);
+		ISubmittedForm submittedForm = new SubmittedForm(orbeonApplicationName, orbeonFormName);
 
 		OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
-		orbeonImporter.readXml(OrbeonImporter.getXml(orbeonAppname, orbeonFormName, orbeonDocumentId), submittedForm);
+		orbeonImporter.readXml(OrbeonImporter.getXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId), submittedForm);
 		Assert.assertNotNull(submittedForm);
 		Assert.assertFalse(submittedForm.getCategories().isEmpty());
 		return submittedForm;
@@ -87,21 +87,21 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(submittedForm);
 	}
 
-	public ISubmittedForm processForm(Form form, String orbeonAppname, String orbeonFormName, String orbeonDocumentId)
+	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
 
 		// Obtain results
-		return applyDrools(orbeonAppname, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
+		return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
 				rulesGenerator.getGlobalVariables());
 	}
 
-	public ISubmittedForm applyDrools(String orbeonAppname, String orbeonFormName, String orbeonDocumentId,
+	public ISubmittedForm applyDrools(String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId,
 			String droolsRules, List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,
 			CategoryNameWithoutTranslation {
-		ISubmittedForm submittedForm = readXml(orbeonAppname, orbeonFormName, orbeonDocumentId);
+		ISubmittedForm submittedForm = readXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId);
 		translateFormCategories(submittedForm);
 		// Launch kie
 		KieManager km = new KieManager();
