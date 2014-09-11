@@ -18,6 +18,7 @@ public class SubmittedForm implements ISubmittedForm {
 	private String applicationName;
 	private List<ICategory> categories;
 	private String formName;
+	//TreeObject -> VarName --> Value
 	private HashMap<Object, HashMap<String, Object>> formVariables;
 
 	public SubmittedForm(String applicationName, String formName) {
@@ -132,6 +133,10 @@ public class SubmittedForm implements ISubmittedForm {
 	@Override
 	public String toString() {
 		return this.getFormName();
+	}
+
+	public HashMap<Object, HashMap<String, Object>> getFormVariables() {
+		return formVariables;
 	}
 
 }
