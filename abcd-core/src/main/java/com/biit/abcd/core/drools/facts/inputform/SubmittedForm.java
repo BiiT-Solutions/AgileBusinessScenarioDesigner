@@ -11,7 +11,7 @@ import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 /**
  * Basic implementation of an Orbeon Form that includes categories and
  * questions.
- *
+ * 
  */
 public class SubmittedForm implements ISubmittedForm {
 
@@ -76,7 +76,7 @@ public class SubmittedForm implements ISubmittedForm {
 		return (Number) this.formVariables.get(treeObject).get(varName);
 	}
 
-	public Number getNumberVariableValue(String varName){
+	public Number getNumberVariableValue(String varName) {
 		return this.getNumberVariableValue(this, varName);
 	}
 
@@ -88,10 +88,7 @@ public class SubmittedForm implements ISubmittedForm {
 	}
 
 	public Object getVariableValue(String varName) {
-		if ((this.formVariables == null) || (this.formVariables.get(this) == null)) {
-			return null;
-		}
-		return this.formVariables.get(this).get(varName);
+		return getVariableValue(this, varName);
 	}
 
 	public boolean hasScoreSet(Object treeObject, String varName) {
@@ -105,7 +102,7 @@ public class SubmittedForm implements ISubmittedForm {
 
 	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
-		if (this.hasScoreSet(this, varName)) {
+		if (hasScoreSet(this, varName)) {
 			return true;
 		} else {
 			return false;
@@ -117,17 +114,17 @@ public class SubmittedForm implements ISubmittedForm {
 	}
 
 	public void setVariableValue(Object treeObject, String varName, Object value) {
-		if (this.formVariables == null) {
-			this.formVariables = new HashMap<Object, HashMap<String, Object>>();
+		if (formVariables == null) {
+			formVariables = new HashMap<Object, HashMap<String, Object>>();
 		}
-		if (this.formVariables.get(treeObject) == null) {
-			this.formVariables.put(treeObject, new HashMap<String, Object>());
+		if (formVariables.get(treeObject) == null) {
+			formVariables.put(treeObject, new HashMap<String, Object>());
 		}
-		this.formVariables.get(treeObject).put(varName, value);
+		formVariables.get(treeObject).put(varName, value);
 	}
 
 	public void setVariableValue(String varName, Object value) {
-		this.setVariableValue(this, varName, value);
+		setVariableValue(this, varName, value);
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	// @Orderby or @OrderColumn we use our own order manager.
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderBy(value = "sortSeq ASC")
-	@BatchSize(size=500)
+	@BatchSize(size = 500)
 	private List<Expression> expressions;
 
 	private String name;
@@ -99,7 +99,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	/**
 	 * Some characters are not allowed in the Expression Evaluator.
-	 *
+	 * 
 	 * @param expression
 	 * @return
 	 */
@@ -123,7 +123,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	/**
 	 * Returns the expression in string format that can be evaluated by a
 	 * Expression Evaluator.
-	 *
+	 * 
 	 * @return
 	 */
 	@Override
@@ -237,7 +237,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			for (int i = 0; i < getExpressions().size(); i++) {
 				Expression expression = getExpressions().get(i);
 				expression.setSortSeq(i);
-				if ((expression != null) && (expression instanceof ExpressionChain)) {
+				if (expression instanceof ExpressionChain) {
 					((ExpressionChain) expression).updateChildrenSortSeqs();
 				}
 			}

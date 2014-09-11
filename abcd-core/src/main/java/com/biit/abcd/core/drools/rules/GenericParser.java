@@ -44,6 +44,7 @@ public class GenericParser {
 
 	private boolean cleaningNeeded = true;
 	private HashMap<TreeObject, String> treeObjectDroolsname;
+	private boolean droolsFormDefined = false;
 
 	public GenericParser() {
 		this.treeObjectDroolsname = new HashMap<TreeObject, String>();
@@ -52,7 +53,7 @@ public class GenericParser {
 	/**
 	 * Adds condition rows to the rule that manages the assignation of a
 	 * variable in the action<br>
-	 *
+	 * 
 	 * @param variable
 	 *            variable to be added to the LHS of the rule
 	 * @return LHS of the rule modified with the new variables
@@ -108,7 +109,7 @@ public class GenericParser {
 	/**
 	 * Parse conditions like => Question IN(answer1, ...) <br>
 	 * Create drools rule like => Question(getAnswer() in (answer1, ...))
-	 *
+	 * 
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
@@ -168,7 +169,7 @@ public class GenericParser {
 	 * = Function (parameters ...)<br>
 	 * Create drools rule like => setVariableValue(scopeOfVariable,
 	 * variableName, stringVariableValue )
-	 *
+	 * 
 	 * @param actions
 	 *            the action of the rule being parsed
 	 * @return the RHS of the rule
@@ -223,7 +224,7 @@ public class GenericParser {
 	 * For more information:
 	 * http://poi.apache.org/apidocs/org/apache/poi/ss/formula
 	 * /functions/FinanceLib.html
-	 *
+	 * 
 	 * @param actions
 	 * @return
 	 */
@@ -283,7 +284,7 @@ public class GenericParser {
 	 * Checks the existence of a binding in drools with the the reference of the
 	 * variable passed If there is no binding, creates a new one (i.e. $var :
 	 * Question() ...)
-	 *
+	 * 
 	 * @param expValVariable
 	 */
 	private String checkVariableAssignation(Expression expression) {
@@ -314,9 +315,11 @@ public class GenericParser {
 
 		// System.out.println("CONDITIONS: " + conditions);
 		// System.out.println("ACTIONS: " + actions);
-
+		
 		this.treeObjectDroolsname.clear();
 		String ruleCore = "";
+		ruleCore += "	$droolsForm: DroolsForm() and\n";
+		
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
 		}
@@ -336,6 +339,8 @@ public class GenericParser {
 		if (this.cleaningNeeded) {
 			ruleCore = RulesUtils.newRemoveDuplicateLines(ruleCore);
 			ruleCore = RulesUtils.checkForDuplicatedVariables(ruleCore);
+			ruleCore = RulesUtils.removeExtraParenthesis(ruleCore);
+			
 		}
 		return ruleCore;
 	}
@@ -345,7 +350,7 @@ public class GenericParser {
 	 * The values inside the between must be always numbers <br>
 	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
 	 * && (getAnswer() <= answer.getValue()))
-	 *
+	 * 
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
@@ -387,6 +392,19 @@ public class GenericParser {
 							case INPUT:
 								switch (leftQuestion.getAnswerFormat()) {
 								case DATE:
+									if (leftVariable.getUnit() != null) {
+										switch (leftVariable.getUnit()) {
+										case YEARS:
+											break;
+										case MONTHS:
+											break;
+										case DAYS:
+											break;
+										case DATE:
+											break;
+										}
+									}
+
 									String instanceOfDate = "getAnswer() instanceof Date";
 									String greatEqualsDate = "getAnswer() <= DateUtils.returnCurrentDateMinusYears("
 											+ value1.intValue() + ")";
@@ -404,8 +422,8 @@ public class GenericParser {
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= '"
-										+ value1 + "' || < '" + value2 + "') from $"
+										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
+										+ value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getQuestions() \n";
 								droolsConditions += "and\n";
@@ -416,16 +434,19 @@ public class GenericParser {
 
 							switch (leftVariable.getVariable().getScope()) {
 							case FORM:
-								droolsConditions += "	$"
-										+ leftVariable.getReference().getComparationIdNoDash().toString()
-										+ " : SubmittedForm( isScoreSet('" + varName + "'), getNumberVariableValue('"
-										+ varName + "') >= '" + value1 + "' || < '" + value2 + "') \n";
+								this.putTreeObjectName(leftVariable.getReference(), leftVariable.getReference()
+										.getComparationIdNoDash().toString());
+									droolsConditions += "	$"
+											+ leftVariable.getReference().getComparationIdNoDash().toString()
+											+ " : SubmittedForm( isScoreSet('" + varName
+											+ "'), getNumberVariableValue('" + varName + "') >= " + value1 + " && < "
+											+ value2 + ") from $droolsForm.getSubmittedForm() \n";
 								break;
 							case CATEGORY:
 								droolsConditions += "	$"
 										+ leftVariable.getReference().getComparationIdNoDash().toString()
 										+ " : Category( isScoreSet('" + varName + "'), getNumberVariableValue('"
-										+ varName + "') >= '" + value1 + "' || < '" + value2 + "') from $"
+										+ varName + "') >= " + value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getCategories() \n";
 								break;
@@ -433,7 +454,7 @@ public class GenericParser {
 								droolsConditions += "	$"
 										+ leftVariable.getReference().getComparationIdNoDash().toString()
 										+ " : Group( isScoreSet('" + varName + "'), getNumberVariableValue('" + varName
-										+ "') >= '" + value1 + "' || < '" + value2 + "') from $"
+										+ "') >= " + value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString() + ".getGroups() \n";
 								break;
 							default:
@@ -515,7 +536,7 @@ public class GenericParser {
 	/**
 	 * Generic expression parser.<br>
 	 * Works like the expression parser but allows generic variables <br>
-	 *
+	 * 
 	 * @param actions
 	 *            the expression being parsed
 	 * @param extraConditions
@@ -533,7 +554,7 @@ public class GenericParser {
 
 	/**
 	 * Creates a set of expressions and passes it back to the expression parser
-	 *
+	 * 
 	 * @param expressions
 	 * @param extraConditions
 	 * @return
@@ -612,15 +633,13 @@ public class GenericParser {
 		}
 		if (result != null) {
 			ExpressionChain mathematicalChain = result.getExpressionChain();
-
 			List<Expression> chainList = mathematicalChain.getExpressions();
 
 			if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0))
 						.getExpressions().get(0);
 				// Check if the reference exists in the rule, if not, it creates
-				// a
-				// new reference
+				// a new reference
 				ruleCore += this.checkVariableAssignation(var);
 
 				List<Expression> variables = this.getExpressionChainVariables(mathematicalChain);
@@ -657,7 +676,7 @@ public class GenericParser {
 	 * &nbsp&nbsp&nbsp $var : List() from collect( some conditions )<br>
 	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var);
 	 * $sol : min($value) )
-	 *
+	 * 
 	 * @param actions
 	 *            the expression being parsed
 	 * @param extraConditions
@@ -808,7 +827,7 @@ public class GenericParser {
 	 * variableName, getVariablevalue(variableName)+numberValue ) <br>
 	 * The variables to the right and to the left of the assignation can be
 	 * different (i.e. a = b+1) <br>
-	 *
+	 * 
 	 * @param actions
 	 *            the action of the rule being parsed
 	 * @return the RHS of the rule
@@ -866,7 +885,7 @@ public class GenericParser {
 	 * &nbsp&nbsp&nbsp Var = value | string <br>
 	 * &nbsp&nbsp&nbsp Var = Var mathOperator value <br>
 	 * &nbsp&nbsp&nbsp Var = value mathOperator Var
-	 *
+	 * 
 	 * @param actions
 	 *            list of expressions to be parsed
 	 * @return RHS of the rule, and sometimes a modified LHS
@@ -932,7 +951,7 @@ public class GenericParser {
 	 * &nbsp&nbsp&nbsp Var = value | string <br>
 	 * &nbsp&nbsp&nbsp Var = Var mathOperator value <br>
 	 * &nbsp&nbsp&nbsp Var = value mathOperator Var
-	 *
+	 * 
 	 * @param actions
 	 *            list of expressions to be parsed
 	 * @return RHS of the rule, and sometimes a modified LHS
@@ -1006,7 +1025,7 @@ public class GenericParser {
 		// All the expressions without functions should pass this condition and
 		// some generic functions too
 
-		// System.out.println("PARSED EXPRESSION: " + parsedExpression);
+		System.out.println("PARSED EXPRESSION: " + parsedExpression);
 
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();
@@ -1086,7 +1105,7 @@ public class GenericParser {
 	 * The values inside the between must be always numbers <br>
 	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
 	 * && (getAnswer() <= answer.getValue()))
-	 *
+	 * 
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
@@ -1147,8 +1166,8 @@ public class GenericParser {
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getComparationIdNoDash().toString()
-										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= '"
-										+ value1 + "' || < '" + value2 + "') from $"
+										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
+										+ value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getComparationIdNoDash().toString()
 										+ ".getQuestions() \n";
 								droolsConditions += "and\n";
@@ -1212,22 +1231,32 @@ public class GenericParser {
 							Question leftQuestion = (Question) leftTreeObject;
 							if (leftQuestion.getAnswerType().equals(AnswerType.INPUT)
 									&& leftQuestion.getAnswerFormat().equals(AnswerFormat.DATE)) {
-								switch (operator) {
-								case GREATER_EQUALS:
-									return this.questionValueDateGreaterEqualsAnswer(leftTreeObjectParent,
-											leftQuestion, value);
-								case GREATER_THAN:
-									return this.questionValueDateGreaterThanAnswer(leftTreeObjectParent, leftQuestion,
-											value);
-								case LESS_EQUALS:
-									return this.questionValueDateLessEqualsAnswer(leftTreeObjectParent, leftQuestion,
-											value);
-								case LESS_THAN:
-									return this.questionValueDateLessThanAnswer(leftTreeObjectParent, leftQuestion,
-											value);
-								default:
-									break;
-								}
+								droolsConditions += this.questionDateOperatorValue(leftTreeObjectParent, leftQuestion,
+										operator, value);
+
+								// switch (operator) {
+								// case GREATER_EQUALS:
+								// return
+								// this.questionValueDateGreaterEqualsAnswer(leftTreeObjectParent,
+								// leftQuestion, value);
+								// case GREATER_THAN:
+								// return
+								// this.questionValueDateGreaterThanAnswer(leftTreeObjectParent,
+								// leftQuestion,
+								// value);
+								// case LESS_EQUALS:
+								// return
+								// this.questionValueDateLessEqualsAnswer(leftTreeObjectParent,
+								// leftQuestion,
+								// value);
+								// case LESS_THAN:
+								// return
+								// this.questionValueDateLessThanAnswer(leftTreeObjectParent,
+								// leftQuestion,
+								// value);
+								// default:
+								// break;
+								// }
 							}
 						}
 					}
@@ -1300,36 +1329,63 @@ public class GenericParser {
 		return droolsConditions;
 	}
 
-	private String questionValueDateGreaterEqualsAnswer(TreeObject leftReferenceParent, TreeObject leftQuestion,
-			Double value) {
-		return "	$" + leftQuestion.getComparationIdNoDash().toString()
-				+ " : Question(getAnswer() instanceof Date, getAnswer() <= DateUtils.returnCurrentDateMinusYears("
-				+ value.intValue() + ")) from $" + leftReferenceParent.getComparationIdNoDash().toString()
-				+ ".getQuestions()\n";
+	private String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
+			AvailableOperator operator, Double value) {
+		String rule = "";
+
+		// Check if the reference exists in the rule, if not, it creates
+		// a new reference
+		rule += this.checkVariableAssignation(leftQuestion);
+
+		rule += "	$" + leftQuestion.getComparationIdNoDash().toString()
+				+ " : Question(getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
+				+ operator.getValue() + value.intValue() + ") from $"
+				+ leftReferenceParent.getComparationIdNoDash().toString() + ".getQuestions()\n";
+		return rule;
 	}
 
-	private String questionValueDateGreaterThanAnswer(TreeObject leftReferenceParent, TreeObject leftQuestion,
-			Double value) {
-		return "	$" + leftQuestion.getComparationIdNoDash().toString()
-				+ " : Question(getAnswer() instanceof Date, getAnswer() < DateUtils.returnCurrentDateMinusYears("
-				+ value.intValue() + ")) from $" + leftReferenceParent.getComparationIdNoDash().toString()
-				+ ".getQuestions()\n";
-	}
-
-	private String questionValueDateLessEqualsAnswer(TreeObject leftReferenceParent, TreeObject leftQuestion,
-			Double value) {
-		return "	$" + leftQuestion.getComparationIdNoDash().toString()
-				+ " : Question(getAnswer() instanceof Date, getAnswer() >= DateUtils.returnCurrentDateMinusYears("
-				+ value.intValue() + ")) from $" + leftReferenceParent.getComparationIdNoDash().toString()
-				+ ".getQuestions()\n";
-	}
-
-	private String questionValueDateLessThanAnswer(TreeObject leftReferenceParent, TreeObject leftQuestion, Double value) {
-		return "	$" + leftQuestion.getComparationIdNoDash().toString()
-				+ " : Question(getAnswer() instanceof Date, getAnswer() > DateUtils.returnCurrentDateMinusYears("
-				+ value.intValue() + ")) from $" + leftReferenceParent.getComparationIdNoDash().toString()
-				+ ".getQuestions()\n";
-	}
+	// private String questionValueDateGreaterEqualsAnswer(TreeObject
+	// leftReferenceParent, TreeObject leftQuestion,
+	// Double value) {
+	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
+	// +
+	// " : Question(getAnswer() instanceof Date, getAnswer() <= DateUtils.returnCurrentDateMinusYears("
+	// + value.intValue() + ")) from $" +
+	// leftReferenceParent.getComparationIdNoDash().toString()
+	// + ".getQuestions()\n";
+	// }
+	//
+	// private String questionValueDateGreaterThanAnswer(TreeObject
+	// leftReferenceParent, TreeObject leftQuestion,
+	// Double value) {
+	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
+	// +
+	// " : Question(getAnswer() instanceof Date, getAnswer() < DateUtils.returnCurrentDateMinusYears("
+	// + value.intValue() + ")) from $" +
+	// leftReferenceParent.getComparationIdNoDash().toString()
+	// + ".getQuestions()\n";
+	// }
+	//
+	// private String questionValueDateLessEqualsAnswer(TreeObject
+	// leftReferenceParent, TreeObject leftQuestion,
+	// Double value) {
+	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
+	// +
+	// " : Question(getAnswer() instanceof Date, getAnswer() >= DateUtils.returnCurrentDateMinusYears("
+	// + value.intValue() + ")) from $" +
+	// leftReferenceParent.getComparationIdNoDash().toString()
+	// + ".getQuestions()\n";
+	// }
+	//
+	// private String questionValueDateLessThanAnswer(TreeObject
+	// leftReferenceParent, TreeObject leftQuestion, Double value) {
+	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
+	// +
+	// " : Question(getAnswer() instanceof Date, getAnswer() > DateUtils.returnCurrentDateMinusYears("
+	// + value.intValue() + ")) from $" +
+	// leftReferenceParent.getComparationIdNoDash().toString()
+	// + ".getQuestions()\n";
+	// }
 
 	private String simpleCategoryConditions(Category category) {
 		String conditions = "";
@@ -1360,22 +1416,27 @@ public class GenericParser {
 	}
 
 	private String simpleFormCondition(Form form) {
+		String droolsRule = "";
 		if (this.getTreeObjectName(form) == null) {
 			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
-			return "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm() and\n";
+			
+				droolsRule += "	$" + form.getComparationIdNoDash().toString()
+						+ " : SubmittedForm() from $droolsForm.getSubmittedForm() and\n";
 		}
-		return "";
+		return droolsRule;
 	}
 
-	private String simpleFormCustomVariableCondition(ExpressionValueCustomVariable customVariable) {
-		Form form = (Form) customVariable.getReference();
-		if (this.getTreeObjectName(form) == null) {
-			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
-			return "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('"
-					+ customVariable.getVariable().getName() + "')) and\n";
-		}
-		return "";
-	}
+//	private String simpleFormCustomVariableCondition(ExpressionValueCustomVariable customVariable) {
+//		String droolsRule = "";
+//		Form form = (Form) customVariable.getReference();
+//		if (this.getTreeObjectName(form) == null) {
+//			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
+//			droolsRule += "	$droolsForm : DroolsForm() and\n";
+//			droolsRule += "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('"
+//					+ customVariable.getVariable().getName() + "')) from $droolsForm.getSubmittedForm() and\n";
+//		}
+//		return "";
+//	}
 
 	private String simpleGroupConditions(Group group) {
 		String conditions = "";
@@ -1466,7 +1527,7 @@ public class GenericParser {
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
 	 * Create drools rule like => Category(isScoreSet('cScore'),
 	 * getVariablevalue('cScore') == value )
-	 *
+	 * 
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
@@ -1479,9 +1540,9 @@ public class GenericParser {
 
 		if (scope instanceof Form) {
 			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
-			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-					+ valueNumber.getValue() + ") \n";
+				ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('" + varName
+						+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + ") from $droolsForm.getSubmittedForm() \n";
 
 		} else if (scope instanceof Category) {
 			TreeObject form = scope.getParent();
@@ -1490,7 +1551,7 @@ public class GenericParser {
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Category( isScoreSet('" + varName
 					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
 					+ valueNumber.getValue() + ") from $" + form.getComparationIdNoDash().toString() + ".getCategory('"
-					+ scope.getName() + "') \n";
+					+ scope.getName() + "') and\n";
 
 		} else if (scope instanceof Group) {
 			TreeObject category = scope.getParent();
@@ -1499,7 +1560,7 @@ public class GenericParser {
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Group( isScoreSet('" + varName
 					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
 					+ valueNumber.getValue() + " ) from $" + category.getComparationIdNoDash().toString()
-					+ ".getGroup('" + scope.getName() + "') \n";
+					+ ".getGroup('" + scope.getName() + "') and\n";
 
 		} else if (scope instanceof Question) {
 			TreeObject questionParent = scope.getParent();
@@ -1512,8 +1573,12 @@ public class GenericParser {
 			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : Question( isScoreSet('" + varName
 					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
 					+ valueNumber.getValue() + " ) from $" + questionParent.getComparationIdNoDash().toString()
-					+ ".getQuestions() \n";
+					+ ".getQuestions() and\n";
 		}
 		return ruleCore;
+	}
+	
+	public void setDroolsFormDefined(boolean droolsFormDefined){
+		this.droolsFormDefined = droolsFormDefined;
 	}
 }

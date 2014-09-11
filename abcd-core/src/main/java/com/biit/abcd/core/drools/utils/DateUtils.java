@@ -26,18 +26,33 @@ public class DateUtils {
 		return now.getTime();
 	}
 
+	public static Integer returnYearDistanceFromDate(Object object) {
+		if (object instanceof Date) {
+			return returnYearDistanceFromDate((Date) object);
+		}
+		return null;
+	}
+
 	public static Integer returnYearDistanceFromDate(Date date) {
 		Calendar now = Calendar.getInstance();
 		Calendar compareDate = Calendar.getInstance();
 		compareDate.setTime(date);
 
 		int diff = now.get(Calendar.YEAR) - compareDate.get(Calendar.YEAR);
-		if ((now.get(Calendar.MONTH) > compareDate.get(Calendar.MONTH))
-				|| ((now.get(Calendar.MONTH) == compareDate.get(Calendar.MONTH)) && (now.get(Calendar.DATE) > compareDate
-						.get(Calendar.DATE)))) {
-			diff--;
-		}
+		// if ((now.get(Calendar.MONTH) > compareDate.get(Calendar.MONTH))
+		// || ((now.get(Calendar.MONTH) == compareDate.get(Calendar.MONTH)) &&
+		// (now.get(Calendar.DATE) > compareDate
+		// .get(Calendar.DATE)))) {
+		// diff--;
+		// }
 		return diff;
+	}
+
+	public static Integer returnMonthDistanceFromDate(Object object) {
+		if (object instanceof Date) {
+			return returnMonthDistanceFromDate((Date) object);
+		}
+		return null;
 	}
 
 	public static Integer returnMonthDistanceFromDate(Date date) {
@@ -47,10 +62,19 @@ public class DateUtils {
 		return ((returnYearDistanceFromDate(date) * 12) + compareDate.get(Calendar.MONTH)) - now.get(Calendar.MONTH);
 	}
 
+	public static Integer returnDaysDistanceFromDate(Object object) {
+		if (object instanceof Date) {
+			return returnDaysDistanceFromDate((Date) object);
+		}
+		return null;
+	}
+
 	public static Integer returnDaysDistanceFromDate(Date date) {
 		Calendar now = Calendar.getInstance();
 		Calendar compareDate = Calendar.getInstance();
 		compareDate.setTime(date);
+		Integer days = (int) ((now.getTimeInMillis() - compareDate.getTimeInMillis()) / (1000 * 60 * 60 * 24));
+		System.out.println("DAYS CALCULATED: " + days);
 		return (int) ((now.getTimeInMillis() - compareDate.getTimeInMillis()) / (1000 * 60 * 60 * 24));
 	}
 

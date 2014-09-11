@@ -61,8 +61,8 @@ public class KieManager {
 	 * @param facts
 	 */
 	public void startKie(List<DroolsGlobalVariable> globalVars, List<ISubmittedForm> facts) {
-		KieRepository kr = this.ks.getRepository();
-		KieContainer kContainer = this.ks.newKieContainer(kr.getDefaultReleaseId());
+		KieRepository kr = ks.getRepository();
+		KieContainer kContainer = ks.newKieContainer(kr.getDefaultReleaseId());
 		KieSession kSession = kContainer.newKieSession();
 		this.setGlobalVariables(kSession, globalVars);
 		this.insertFacts(kSession, facts);
@@ -70,6 +70,8 @@ public class KieManager {
 	}
 
 	private void createRules(KieFileSystem kfs, String rules) {
+		// Needs a virtual path to store the file and retrieve it
+		// Can't load the string directly
 		kfs.write("src/main/resources/kiemodulemodel/form.drl", rules);
 	}
 

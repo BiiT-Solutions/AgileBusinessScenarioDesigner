@@ -8,6 +8,7 @@ import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
+import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -86,15 +87,17 @@ public class SettingsWindow extends PopupWindow {
 
 									// AbcdLogger.debug(this.getClass().getName(),
 									// droolsExporter.getGeneratedRules());
-									final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-											submittedForm);
-									droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
-										@Override
-										public void acceptAction(AcceptCancelWindow window) {
-											droolsResultWindow.close();
-										}
-									});
-									droolsResultWindow.showCentered();
+									if (submittedForm instanceof DroolsForm) {
+										final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
+												((DroolsForm) submittedForm).getSubmittedForm());
+										droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
+											@Override
+											public void acceptAction(AcceptCancelWindow window) {
+												droolsResultWindow.close();
+											}
+										});
+										droolsResultWindow.showCentered();
+									}
 									droolsWindow.close();
 
 								} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
@@ -107,6 +110,10 @@ public class SettingsWindow extends PopupWindow {
 								} catch (RuleNotImplementedException e) {
 									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
 											.getExpressionChain().getRepresentation());
+									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								} catch (Exception e) {
+									MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
+											LanguageCodes.ERROR_DROOLS_ENGINE);
 									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 								}
 							}

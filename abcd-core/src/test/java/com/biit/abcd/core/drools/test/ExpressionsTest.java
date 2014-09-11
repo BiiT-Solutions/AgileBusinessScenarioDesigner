@@ -10,13 +10,12 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -26,29 +25,21 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
-import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
-import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
-import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
-import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
-import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
-import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -56,190 +47,246 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-
 public class ExpressionsTest {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
-	private final static Charset baseCharset =  StandardCharsets.UTF_8;
+	private final static Charset baseCharset = StandardCharsets.UTF_8;
+	private final static String BMI_TEXT_VARIABLE_NAME = "BmiClassification";
+	private final static String BMI_VARIABLE_NAME = "BMI";
+	private final static String AGE = "age";
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
 	public void readXml() throws DocumentException, IOException {
 		this.form = new SubmittedForm(APP, FORM);
-		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", baseCharset);
+		String xmlFile = readFile("./src/test/resources/kidScreen.xml", baseCharset);
 		this.orbeonImporter.readXml(xmlFile, this.form);
 		Assert.assertNotNull(this.form);
 		Assert.assertFalse(this.form.getCategories().isEmpty());
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", baseCharset);
+		String xmlStructure = readFile("./src/test/resources/kidScreen.xhtml", baseCharset);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
 	@Test(groups = { "rules" })
 	public void testExpressions() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation, RuleNotImplementedException {
+			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			RuleNotImplementedException, InvalidAnswerFormatException {
 //		// Load the rules
 //		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-//		Form vaadinForm = this.createDhszwForm();
-//		formDrools.generateDroolRules(vaadinForm);
+//		// Form vaadinForm = this.createDhszwForm();
+//		formDrools.parse(createKidsFormSimpleExpression());
 //		// Load the submitted form
-//		this.readXml();
-//		this.translateFormCategories();
-//		formDrools.runDroolsRules(this.form);
-//
-//		// Check the results of the drools execution
-//		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-//				.getCategory("Alcohol-, drugs-, game- of gokverslaving");
-//		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-//				.getCategory("Huisvesting");
-//		Assert.assertEquals(1.0, testCat1.getNumberVariableValue("cScore"));
-//		Assert.assertEquals(3.0, testCat2.getNumberVariableValue("cScore"));
+//		readXml();
+//		translateFormCategories();
+//		formDrools.runDroolsRules(form);
+//		
+//		SubmittedForm subForm = (SubmittedForm) form;
+//		System.out.println(subForm.getVariableValue(AGE));
+		
+//		Assert.assertEquals("overweight", subForm.getVariableValue(BMI_VARIABLE_NAME));
+
+		// // Check the results of the drools execution
+		// com.biit.abcd.core.drools.facts.inputform.Category testCat1 =
+		// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+		// .getCategory("Alcohol-, drugs-, game- of gokverslaving");
+		// com.biit.abcd.core.drools.facts.inputform.Category testCat2 =
+		// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+		// .getCategory("Huisvesting");
+		// Assert.assertEquals(1.0, testCat1.getNumberVariableValue("cScore"));
+		// Assert.assertEquals(3.0, testCat2.getNumberVariableValue("cScore"));
 	}
 
-	/**
-	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
-	 * Form used to create the drools rules
-	 *
-	 * @return
-	 * @throws NotValidChildException
-	 * @throws NotValidOperatorInExpression
-	 * @throws ChildrenNotFoundException
-	 * @throws FieldTooLongException
-	 * @throws IOException
-	 */
-	private Form createDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException {
+	private Form createKidsFormSimpleExpression() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException {
+		Form form = new Form("KidsScreen");
 
-		// Create the form
-		Form form = new Form("DhszwForm");
+		Category algemeen = new Category("Algemeen");
+		form.addChild(algemeen);
 
-		// Create the custom variables
-		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
-				CustomVariableScope.QUESTION);
-		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY);
+		Question birthdate = new Question("birthdate");
+		birthdate.setAnswerType(AnswerType.INPUT);
+		birthdate.setAnswerFormat(AnswerFormat.DATE);
+		algemeen.addChild(birthdate);
 
-		// Create the tableRule
-		TableRule tableRule = new TableRule("BaseTable");
+		// Create custom variables
+		CustomVariable age = new CustomVariable(form, AGE, CustomVariableType.NUMBER, CustomVariableScope.FORM);
 
-		String lastCategory = "";
-		Category category = null;
-		String lastQuestion = "";
-		Question question = null;
-		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"),
-				StandardCharsets.UTF_8)) {
-			// [0] = category, [1] = question, [2] = answer, [3] = value
-			String[] lineSplit = line.split("\t");
-			if (!lastCategory.equals(lineSplit[0])) {
-				// Create a category
-				category = new Category(lineSplit[0]);
-				form.addChild(category);
-				lastCategory = lineSplit[0];
-			}
-			if (!lastQuestion.equals(lineSplit[1])) {
-				// Create a question
-				question = new Question(lineSplit[1]);
-				category.addChild(question);
-				lastQuestion = lineSplit[1];
-			}
-			Answer answer = new Answer(lineSplit[2]);
-			question.addChild(answer);
-			question.setAnswerType(AnswerType.INPUT);
+		ExpressionChain expressionAssignTest = new ExpressionChain("AgeYearAssig", new ExpressionValueCustomVariable(form, age),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(
+						birthdate, QuestionUnit.YEARS));
 
-			tableRule.getRules().add(
-					new TableRuleRow(new ExpressionValueTreeObjectReference(question), new ExpressionChain(
-							new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
-							new ExpressionValueCustomVariable(question, customVarQuestion), new ExpressionOperatorMath(
-									AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
-									.parseDouble(lineSplit[3])))));
-		}
+		form.getExpressionChain().add(expressionAssignTest);
 
-		// Add the rows and the table to the form
-		form.getTableRules().add(tableRule);
-
-		// Creation of the accumulate expressions
-		int accumExp = 1;
-		for (String line : Files.readAllLines(Paths.get("./src/test/resources/tables/accumulations"),
-				StandardCharsets.UTF_8)) {
-			// [0] = category, [1] = function, [2] = questions
-			String[] lineSplit = line.split("\t");
-
-			ExpressionChain testExpressionChain = new ExpressionChain(lineSplit[0] + "Score_" + accumExp);
-			testExpressionChain.addExpression(new ExpressionValueCustomVariable(this.getCategoryFromForm(form,
-					lineSplit[0]), customVarCategory));
-			testExpressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-			if (lineSplit[1].equals("min")) {
-				testExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.MIN));
-			}
-			// Each position is a question
-			String[] questionSplit = lineSplit[2].split("::");
-			int i = 0;
-			for (String questionString : questionSplit) {
-				testExpressionChain.addExpression(new ExpressionValueCustomVariable(this.getQuestionFromCategory(
-						this.getCategoryFromForm(form, lineSplit[0]), questionString), customVarQuestion));
-				if (i < (questionSplit.length - 1)) {
-					// So the last expression of the rule before the bracket is
-					// not a comma
-					testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
-				}
-				i++;
-			}
-			testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-			form.getExpressionChain().add(testExpressionChain);
-			accumExp++;
-		}
-
-		Diagram mainDiagram = new Diagram("main");
-
-		DiagramSource diagramStartNode = new DiagramSource();
-		diagramStartNode.setJointjsId(IdGenerator.createId());
-		diagramStartNode.setType(DiagramObjectType.SOURCE);
-		Node nodeSource = new Node(diagramStartNode.getJointjsId());
-
-		DiagramTable diagramTableRuleNode = new DiagramTable();
-		diagramTableRuleNode.setTable(tableRule);
-		diagramTableRuleNode.setJointjsId(IdGenerator.createId());
-		diagramTableRuleNode.setType(DiagramObjectType.TABLE);
-		Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
-
-		// Creation of a subdiagram with all the expressions
-		DiagramChild subExpressionDiagramNode = new DiagramChild();
-		subExpressionDiagramNode.setChildDiagram(this.createExpressionsSubdiagram(form));
-		subExpressionDiagramNode.setJointjsId(IdGenerator.createId());
-		subExpressionDiagramNode.setType(DiagramObjectType.DIAGRAM_CHILD);
-		Node nodeSubExpressionDiagram = new Node(subExpressionDiagramNode.getJointjsId());
-
-		DiagramSink diagramEndNode = new DiagramSink();
-		diagramEndNode.setJointjsId(IdGenerator.createId());
-		diagramEndNode.setType(DiagramObjectType.SINK);
-		Node nodeSink = new Node(diagramEndNode.getJointjsId());
-
-		DiagramLink startTable = new DiagramLink(nodeSource, nodeTable);
-		startTable.setJointjsId(IdGenerator.createId());
-		startTable.setType(DiagramObjectType.LINK);
-		DiagramLink tableExpression = new DiagramLink(nodeTable, nodeSubExpressionDiagram);
-		tableExpression.setJointjsId(IdGenerator.createId());
-		tableExpression.setType(DiagramObjectType.LINK);
-		DiagramLink subdiagramEnd = new DiagramLink(nodeSubExpressionDiagram, nodeSink);
-		subdiagramEnd.setJointjsId(IdGenerator.createId());
-		subdiagramEnd.setType(DiagramObjectType.LINK);
-
-		mainDiagram.addDiagramObject(diagramStartNode);
-		mainDiagram.addDiagramObject(diagramTableRuleNode);
-		mainDiagram.addDiagramObject(subExpressionDiagramNode);
-		mainDiagram.addDiagramObject(diagramEndNode);
-		mainDiagram.addDiagramObject(startTable);
-		mainDiagram.addDiagramObject(tableExpression);
-		mainDiagram.addDiagramObject(subdiagramEnd);
-
-		form.addDiagram(mainDiagram);
+		// Creation of a simple diagram to load the table rule
+		form.addDiagram(createExpressionsSubdiagram(form));
 
 		return form;
 	}
+
+	// /**
+	// * Create the form structure. Creates to simple assignation rules in the
+	// table rule and one expression with max func
+	// * Form used to create the drools rules
+	// *
+	// * @return
+	// * @throws NotValidChildException
+	// * @throws NotValidOperatorInExpression
+	// * @throws ChildrenNotFoundException
+	// * @throws FieldTooLongException
+	// * @throws IOException
+	// */
+	// private Form createDhszwForm() throws NotValidChildException,
+	// NotValidOperatorInExpression,
+	// ChildrenNotFoundException, FieldTooLongException, IOException {
+	//
+	// // Create the form
+	// Form form = new Form("DhszwForm");
+	//
+	// // Create the custom variables
+	// CustomVariable customVarQuestion = new CustomVariable(form, "qScore",
+	// CustomVariableType.NUMBER,
+	// CustomVariableScope.QUESTION);
+	// CustomVariable customVarCategory = new CustomVariable(form, "cScore",
+	// CustomVariableType.NUMBER,
+	// CustomVariableScope.CATEGORY);
+	//
+	// // Create the tableRule
+	// TableRule tableRule = new TableRule("BaseTable");
+	//
+	// String lastCategory = "";
+	// Category category = null;
+	// String lastQuestion = "";
+	// Question question = null;
+	// for (String line :
+	// Files.readAllLines(Paths.get("./src/test/resources/tables/baseTable"),
+	// StandardCharsets.UTF_8)) {
+	// // [0] = category, [1] = question, [2] = answer, [3] = value
+	// String[] lineSplit = line.split("\t");
+	// if (!lastCategory.equals(lineSplit[0])) {
+	// // Create a category
+	// category = new Category(lineSplit[0]);
+	// form.addChild(category);
+	// lastCategory = lineSplit[0];
+	// }
+	// if (!lastQuestion.equals(lineSplit[1])) {
+	// // Create a question
+	// question = new Question(lineSplit[1]);
+	// category.addChild(question);
+	// lastQuestion = lineSplit[1];
+	// }
+	// Answer answer = new Answer(lineSplit[2]);
+	// question.addChild(answer);
+	// question.setAnswerType(AnswerType.INPUT);
+	//
+	// tableRule.getRules().add(
+	// new TableRuleRow(new ExpressionValueTreeObjectReference(question), new
+	// ExpressionChain(
+	// new ExpressionValueTreeObjectReference(answer)), new ExpressionChain(
+	// new ExpressionValueCustomVariable(question, customVarQuestion), new
+	// ExpressionOperatorMath(
+	// AvailableOperator.ASSIGNATION), new ExpressionValueNumber(Double
+	// .parseDouble(lineSplit[3])))));
+	// }
+	//
+	// // Add the rows and the table to the form
+	// form.getTableRules().add(tableRule);
+	//
+	// // Creation of the accumulate expressions
+	// int accumExp = 1;
+	// for (String line :
+	// Files.readAllLines(Paths.get("./src/test/resources/tables/accumulations"),
+	// StandardCharsets.UTF_8)) {
+	// // [0] = category, [1] = function, [2] = questions
+	// String[] lineSplit = line.split("\t");
+	//
+	// ExpressionChain testExpressionChain = new ExpressionChain(lineSplit[0] +
+	// "Score_" + accumExp);
+	// testExpressionChain.addExpression(new
+	// ExpressionValueCustomVariable(this.getCategoryFromForm(form,
+	// lineSplit[0]), customVarCategory));
+	// testExpressionChain.addExpression(new
+	// ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+	// if (lineSplit[1].equals("min")) {
+	// testExpressionChain.addExpression(new
+	// ExpressionFunction(AvailableFunction.MIN));
+	// }
+	// // Each position is a question
+	// String[] questionSplit = lineSplit[2].split("::");
+	// int i = 0;
+	// for (String questionString : questionSplit) {
+	// testExpressionChain.addExpression(new
+	// ExpressionValueCustomVariable(this.getQuestionFromCategory(
+	// this.getCategoryFromForm(form, lineSplit[0]), questionString),
+	// customVarQuestion));
+	// if (i < (questionSplit.length - 1)) {
+	// // So the last expression of the rule before the bracket is
+	// // not a comma
+	// testExpressionChain.addExpression(new
+	// ExpressionSymbol(AvailableSymbol.COMMA));
+	// }
+	// i++;
+	// }
+	// testExpressionChain.addExpression(new
+	// ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+	// form.getExpressionChain().add(testExpressionChain);
+	// accumExp++;
+	// }
+	//
+	// Diagram mainDiagram = new Diagram("main");
+	//
+	// DiagramSource diagramStartNode = new DiagramSource();
+	// diagramStartNode.setJointjsId(IdGenerator.createId());
+	// diagramStartNode.setType(DiagramObjectType.SOURCE);
+	// Node nodeSource = new Node(diagramStartNode.getJointjsId());
+	//
+	// DiagramTable diagramTableRuleNode = new DiagramTable();
+	// diagramTableRuleNode.setTable(tableRule);
+	// diagramTableRuleNode.setJointjsId(IdGenerator.createId());
+	// diagramTableRuleNode.setType(DiagramObjectType.TABLE);
+	// Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
+	//
+	// // Creation of a subdiagram with all the expressions
+	// DiagramChild subExpressionDiagramNode = new DiagramChild();
+	// subExpressionDiagramNode.setChildDiagram(this.createExpressionsSubdiagram(form));
+	// subExpressionDiagramNode.setJointjsId(IdGenerator.createId());
+	// subExpressionDiagramNode.setType(DiagramObjectType.DIAGRAM_CHILD);
+	// Node nodeSubExpressionDiagram = new
+	// Node(subExpressionDiagramNode.getJointjsId());
+	//
+	// DiagramSink diagramEndNode = new DiagramSink();
+	// diagramEndNode.setJointjsId(IdGenerator.createId());
+	// diagramEndNode.setType(DiagramObjectType.SINK);
+	// Node nodeSink = new Node(diagramEndNode.getJointjsId());
+	//
+	// DiagramLink startTable = new DiagramLink(nodeSource, nodeTable);
+	// startTable.setJointjsId(IdGenerator.createId());
+	// startTable.setType(DiagramObjectType.LINK);
+	// DiagramLink tableExpression = new DiagramLink(nodeTable,
+	// nodeSubExpressionDiagram);
+	// tableExpression.setJointjsId(IdGenerator.createId());
+	// tableExpression.setType(DiagramObjectType.LINK);
+	// DiagramLink subdiagramEnd = new DiagramLink(nodeSubExpressionDiagram,
+	// nodeSink);
+	// subdiagramEnd.setJointjsId(IdGenerator.createId());
+	// subdiagramEnd.setType(DiagramObjectType.LINK);
+	//
+	// mainDiagram.addDiagramObject(diagramStartNode);
+	// mainDiagram.addDiagramObject(diagramTableRuleNode);
+	// mainDiagram.addDiagramObject(subExpressionDiagramNode);
+	// mainDiagram.addDiagramObject(diagramEndNode);
+	// mainDiagram.addDiagramObject(startTable);
+	// mainDiagram.addDiagramObject(tableExpression);
+	// mainDiagram.addDiagramObject(subdiagramEnd);
+	//
+	// form.addDiagram(mainDiagram);
+	//
+	// return form;
+	// }
 
 	private Diagram createExpressionsSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("expressionDiagram");
@@ -282,21 +329,22 @@ public class ExpressionsTest {
 		return new String(encoded, encoding);
 	}
 
-	private Category getCategoryFromForm(Form form, String catName) {
-		for (TreeObject child : form.getAll(Category.class)) {
-			if ((child instanceof Category) && child.getName().equals(catName)) {
-				return (Category) child;
-			}
-		}
-		return null;
-	}
-
-	private Question getQuestionFromCategory(Category category, String questionName) {
-		for (TreeObject question : category.getAll(Question.class)) {
-			if (question.getName().equals(questionName)) {
-				return (Question) question;
-			}
-		}
-		return null;
-	}
+	// private Category getCategoryFromForm(Form form, String catName) {
+	// for (TreeObject child : form.getAll(Category.class)) {
+	// if ((child instanceof Category) && child.getName().equals(catName)) {
+	// return (Category) child;
+	// }
+	// }
+	// return null;
+	// }
+	//
+	// private Question getQuestionFromCategory(Category category, String
+	// questionName) {
+	// for (TreeObject question : category.getAll(Question.class)) {
+	// if (question.getName().equals(questionName)) {
+	// return (Question) question;
+	// }
+	// }
+	// return null;
+	// }
 }

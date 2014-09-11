@@ -105,9 +105,11 @@ public class DiagramParser extends GenericParser {
 		int linkNumber = 0;
 		for (DiagramLink outLink : node.getOutgoingLinks()) {
 			if (node.getType().equals(DiagramObjectType.FORK)) {
+//				extraConditions +=  this.forkConditions.get(linkNumber);
 				this.parseDiagramElement(outLink.getTargetElement(), this.forkConditions.get(linkNumber));
 			} else {
-				this.parseDiagramElement(outLink.getTargetElement(), null);
+//				System.out.println("EXTRA CONDITIONS: " + extraConditions);
+				this.parseDiagramElement(outLink.getTargetElement(), extraConditions);
 			}
 			linkNumber++;
 		}
@@ -160,14 +162,14 @@ public class DiagramParser extends GenericParser {
 								extraConditions);
 						break;
 					default:
+						//TODO
 						break;
 					}
 				} else {
 					childrenCondition = this.createDroolsRule(outLink.getExpressionChain(), null, extraConditions);
 				}
 
-				// System.out.println("CHILDREN CONDITION: " +
-				// childrenCondition);
+				System.out.println("CHILDREN CONDITION: " + childrenCondition);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
 			}

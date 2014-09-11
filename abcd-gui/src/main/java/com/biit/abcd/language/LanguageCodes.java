@@ -185,6 +185,7 @@ public enum LanguageCodes {
 	ERROR_SELECT_ANSWER("error.select.answer"),
 	ERROR_SELECT_DIAGRAM("error.select.diagram"),
 	ERROR_SELECT_VARIABLE("error.select.variable"),
+	ERROR_DROOLS_ENGINE("error.drools.engine"),
 
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),

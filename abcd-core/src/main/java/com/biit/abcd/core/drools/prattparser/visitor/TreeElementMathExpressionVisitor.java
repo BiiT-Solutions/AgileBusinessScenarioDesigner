@@ -57,14 +57,36 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 	public void visit(NameExpression name) {
 		if ((name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference)
 				|| (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueCustomVariable)) {
-			TreeObject treeObject = ((ExpressionValueTreeObjectReference) name.getExpressionChain().getExpressions()
-					.get(0)).getReference();
+
+			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain()
+					.getExpressions().get(0);
+			TreeObject treeObject = expVal.getReference();
 
 			String id = treeObject.getComparationIdNoDash();
 			if ((treeObject instanceof Question) && ((Question) treeObject).getAnswerType().equals(AnswerType.INPUT)) {
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case NUMBER:
 					this.builder.append("(Double)$" + id + ".getAnswer()");
+					break;
+				case DATE:
+					if(expVal.getUnit() != null){
+						switch (expVal.getUnit()) {
+						case YEARS:
+							this.builder.append("DateUtils.returnYearDistanceFromDate( $" + id + ".getAnswer())");
+							break;
+						case MONTHS:
+							this.builder.append("DateUtils.returnMonthDistanceFromDate( $" + id + ".getAnswer())");
+							this.builder.append("$" + id + ".getAnswer()");
+							break;
+						case DAYS:
+							this.builder.append("DateUtils.returnDaysDistanceFromDate( $" + id + ".getAnswer())");
+							this.builder.append("$" + id + ".getAnswer()");
+							break;
+						case DATE:
+							this.builder.append("$" + id + ".getAnswer()");
+							break;
+						}
+					}
 					break;
 				default:
 					this.builder.append("$" + id + ".getAnswer()");

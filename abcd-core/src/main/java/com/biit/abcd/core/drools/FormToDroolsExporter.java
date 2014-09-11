@@ -10,6 +10,7 @@ import java.util.List;
 import org.dom4j.DocumentException;
 import org.junit.Assert;
 
+import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
@@ -27,9 +28,12 @@ import com.biit.orbeon.form.ISubmittedForm;
 public class FormToDroolsExporter {
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
-	 * This method creates the global constants defined in the globalVariables array
+	 * Parses the vaadin form and loads the rules generated in the drools
+	 * engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly
+	 * defined. <br>
+	 * This method creates the global constants defined in the globalVariables
+	 * array
 	 * 
 	 * @param form
 	 *            form to be parsed
@@ -42,7 +46,7 @@ public class FormToDroolsExporter {
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException {
-		if (!form.getChildren().isEmpty()) {
+		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
 				// Creation of the rules
@@ -59,8 +63,10 @@ public class FormToDroolsExporter {
 	}
 
 	/**
-	 * Loads the (Submitted) form as facts of the knowledge base of the drools engine. <br>
-	 * It also starts the engine execution by firing all the rules inside the engine.
+	 * Loads the (Submitted) form as facts of the knowledge base of the drools
+	 * engine. <br>
+	 * It also starts the engine execution by firing all the rules inside the
+	 * engine.
 	 * 
 	 * @param form
 	 */
@@ -76,7 +82,8 @@ public class FormToDroolsExporter {
 		ISubmittedForm submittedForm = new SubmittedForm(orbeonApplicationName, orbeonFormName);
 
 		OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
-		orbeonImporter.readXml(OrbeonImporter.getXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId), submittedForm);
+		orbeonImporter.readXml(OrbeonImporter.getXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId),
+				submittedForm);
 		Assert.assertNotNull(submittedForm);
 		Assert.assertFalse(submittedForm.getCategories().isEmpty());
 		return submittedForm;
@@ -87,15 +94,17 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(submittedForm);
 	}
 
-	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId)
-			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation {
+	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName,
+			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
+			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
-
 		// Obtain results
-		return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
-				rulesGenerator.getGlobalVariables());
+		if (rulesGenerator != null) {
+			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
+					rulesGenerator.getGlobalVariables());
+		} else
+			return null;
 	}
 
 	public ISubmittedForm applyDrools(String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId,
@@ -105,11 +114,15 @@ public class FormToDroolsExporter {
 		translateFormCategories(submittedForm);
 		// Launch kie
 		KieManager km = new KieManager();
-		runDroolsRules(submittedForm, km);
 		// Load the rules in memory
 		km.buildSessionRules(droolsRules);
+		// km.buildSessionRules(new
+		// String(Files.readAllBytes(Paths.get(System.getProperty("java.io.tmpdir")
+		// + File.separator + "generatedRules.drl"))));
 		// Creation of the global constants
 		km.setGlobalVariables(globalVariables);
-		return submittedForm;
+		ISubmittedForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
+		runDroolsRules(droolsForm, km);
+		return droolsForm;
 	}
 }
