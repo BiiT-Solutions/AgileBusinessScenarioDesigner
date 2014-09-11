@@ -16,6 +16,7 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.NotValidFormException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -45,7 +46,7 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	private IVariableDataDao variableDataDao;
 
 	@Test
-	public void storeBasicVariables() throws NotValidFormException {
+	public void storeBasicVariables() throws NotValidFormException, FieldTooLongException {
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_NAME);
 
@@ -61,7 +62,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	}
 
 	@Test
-	public void storeBasicVariablesWithTextData() throws NotValidFormException, NotValidTypeInVariableData {
+	public void storeBasicVariablesWithTextData() throws NotValidFormException, NotValidTypeInVariableData,
+			FieldTooLongException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
@@ -90,7 +92,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	}
 
 	@Test
-	public void storeBasicVariablesWithNumberData() throws NotValidFormException, NotValidTypeInVariableData {
+	public void storeBasicVariablesWithNumberData() throws NotValidFormException, NotValidTypeInVariableData,
+			FieldTooLongException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.NUMBER);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
@@ -119,14 +122,15 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	}
 
 	@Test
-	public void storeBasicVariablesWithDateData() throws NotValidFormException, NotValidTypeInVariableData {
+	public void storeBasicVariablesWithDateData() throws NotValidFormException, NotValidTypeInVariableData,
+			FieldTooLongException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.DATE);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
 
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_5, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
 		globalVariable.addVariableData(VARIABLE_DATA_VALUE_6, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
-		
+
 		globalVariablesDao.makePersistent(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 1);
 		Assert.assertEquals(variableDataDao.getRowCount(), 2);
@@ -148,7 +152,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	}
 
 	@Test
-	public void storeBasicVariablesWithPostalCodeData() throws NotValidFormException, NotValidTypeInVariableData {
+	public void storeBasicVariablesWithPostalCodeData() throws NotValidFormException, NotValidTypeInVariableData,
+			FieldTooLongException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.POSTAL_CODE);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);

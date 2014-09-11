@@ -96,6 +96,7 @@
 	</bean>
 	<!-- DAOS -->
 	<bean name="formDao" class="com.biit.abcd.persistence.dao.hibernate.FormDao" />
+	<bean name="simpleFormViewDao" class="com.biit.abcd.persistence.dao.hibernate.SimpleFormViewDao" />
 	<bean name="diagramDao" class="com.biit.abcd.persistence.dao.hibernate.DiagramDao" />
 	<!-- Liferay Services -->
 	<bean id="userService" class="com.biit.liferay.access.UserService" />

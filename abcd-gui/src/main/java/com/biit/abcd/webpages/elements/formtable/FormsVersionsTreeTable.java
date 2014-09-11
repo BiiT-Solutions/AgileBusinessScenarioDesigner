@@ -14,10 +14,9 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.persistence.dao.IFormDao;
-import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
+import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
-import com.biit.abcd.security.AbcdAuthorizationService;
-import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
@@ -27,8 +26,9 @@ import com.vaadin.ui.TreeTable;
 
 public class FormsVersionsTreeTable extends TreeTable {
 	private static final long serialVersionUID = -7776688515497328826L;
+	private ISimpleFormViewDao simpleFormViewDao;
 	private IFormDao formDao;
-	private HashMap<String, List<Form>> formMap;
+	private HashMap<String, List<SimpleFormView>> formMap;
 
 	enum FormsVersionsTreeTableProperties {
 		FORM_NAME, VERSION, ACCESS, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
@@ -37,6 +37,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	public FormsVersionsTreeTable() {
 		// Add Vaadin conext to Spring, and get beans for DAOs.
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
 		formDao = (IFormDao) helper.getBean("formDao");
 
 		initContainerProperties();
@@ -114,7 +115,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * @param forms
 	 */
 	@SuppressWarnings("unchecked")
-	private void addRow(Form form) {
+	private void addRow(SimpleFormView form) {
 		if (form != null) {
 			Item item = addItem(form);
 			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_NAME).setValue(form.getName());
@@ -156,7 +157,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		}
 	}
 
-	public void addForm(Form form) {
+	public void addForm(SimpleFormView form) {
 		RootForm parent = getFormRoot(form);
 		if (parent == null) {
 			parent = new RootForm(form.getName());
@@ -179,7 +180,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * @param form
 	 * @return
 	 */
-	private RootForm getFormRoot(Form form) {
+	private RootForm getFormRoot(SimpleFormView form) {
 		for (Object item : getItemIds()) {
 			if (item instanceof RootForm) {
 				if (((RootForm) item).getName().equals(form.getName())) {
@@ -192,8 +193,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 	private void initializeFormTable() {
 		formMap = initializeFormData();
-		for (List<Form> forms : formMap.values()) {
-			for (Form form : forms) {
+		for (List<SimpleFormView> forms : formMap.values()) {
+			for (SimpleFormView form : forms) {
 				addForm(form);
 			}
 		}
@@ -210,15 +211,15 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * @return
 	 * @throws NotConnectedToDatabaseException
 	 */
-	private HashMap<String, List<Form>> initializeFormData() {
-		HashMap<String, List<Form>> formData = new HashMap<>();
-		List<Form> forms = new ArrayList<>();
+	private HashMap<String, List<SimpleFormView>> initializeFormData() {
+		HashMap<String, List<SimpleFormView>> formData = new HashMap<>();
+		List<SimpleFormView> forms = new ArrayList<>();
 
-		forms = formDao.getAll();
-		for (Form form : forms) {
+		forms = simpleFormViewDao.getAll();
+		for (SimpleFormView form : forms) {
 			if (!formData.containsKey(form.getName())) {
 				// First form with this name
-				List<Form> listFormsForName = new ArrayList<Form>();
+				List<SimpleFormView> listFormsForName = new ArrayList<>();
 				listFormsForName.add(form);
 				formData.put(form.getName(), listFormsForName);
 			} else {
@@ -226,7 +227,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			}
 		}
 
-		for (List<Form> formList : formData.values()) {
+		for (List<SimpleFormView> formList : formData.values()) {
 			Collections.sort(formList, new FormVersionComparator());
 		}
 
@@ -238,9 +239,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * created for each different form name.
 	 * 
 	 */
-	private class FormVersionComparator implements Comparator<Form> {
+	private class FormVersionComparator implements Comparator<SimpleFormView> {
 		@Override
-		public int compare(Form arg0, Form arg1) {
+		public int compare(SimpleFormView arg0, SimpleFormView arg1) {
 			return arg0.getVersion().compareTo(arg1.getVersion());
 		}
 	}
@@ -252,7 +253,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		try {
 			if (UserSessionHandler.getFormController().getForm() != null) {
 				// Update form with new object if the form has change.
-				selectForm(UserSessionHandler.getFormController().getForm());
+				selectForm(new SimpleFormView(UserSessionHandler.getFormController().getForm()));
 			} else {
 				// Select default one.
 				selectFirstRow();
@@ -266,14 +267,14 @@ public class FormsVersionsTreeTable extends TreeTable {
 	/**
 	 * This function selects a form from the table.
 	 */
-	public void selectForm(Form form) {
+	public void selectForm(SimpleFormView form) {
 		if (form != null && !containsId(form)) {
 			// uncollapseForm(form);
 			setCollapsed(form, false);
 		}
 		for (Object itemId : getItemIds()) {
-			if (itemId instanceof Form) {
-				Form tableForm = (Form) itemId;
+			if (itemId instanceof SimpleFormView) {
+				SimpleFormView tableForm = (SimpleFormView) itemId;
 				if (tableForm.getId() != null && tableForm.getId().equals(form.getId())) {
 					setValue(tableForm);
 				}
@@ -289,9 +290,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	@Override
-	public Form getValue() {
-		if (super.getValue() instanceof Form) {
-			return (Form) super.getValue();
+	public SimpleFormView getValue() {
+		if (super.getValue() instanceof SimpleFormView) {
+			return (SimpleFormView) super.getValue();
 		}
 		return null;
 	}
@@ -302,12 +303,12 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * @param form
 	 * @return
 	 */
-	private String getFormPermissionsTag(Form form) {
+	private String getFormPermissionsTag(SimpleFormView form) {
 		String permissions = "";
-		if (!AbcdAuthorizationService.getInstance().canEditForm(form, UserSessionHandler.getUser(),
-				DActivity.FORM_EDITING)) {
-			permissions = "read only";
-		}
+//		if (!AbcdAuthorizationService.getInstance().canEditForm(form, UserSessionHandler.getUser(),
+//				DActivity.FORM_EDITING)) {
+//			permissions = "read only";
+//		}
 		return permissions;
 	}
 

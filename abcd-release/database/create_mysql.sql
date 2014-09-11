@@ -569,13 +569,8 @@
         updateTime datetime,
         updatedBy DOUBLE,
         format integer,
-        name varchar(255),
+        name varchar(190),
         primary key (ID)
-    );
-
-    create table parent_of_children (
-        TreeObject_ID bigint not null,
-        children_ID bigint not null
     );
 
     create table rule (
@@ -962,8 +957,8 @@
     alter table global_variables 
         add constraint UK_kr7p6k3u1po5mbamq95rvh6gj  unique (comparationId);
 
-    alter table parent_of_children 
-        add constraint UK_3awgy2uyqhop13ni86af4ufgv  unique (children_ID);
+    alter table global_variables 
+        add constraint UK_ba2w3ms6v9agn6ac5ois703u2  unique (name);
 
     alter table rule 
         add constraint UK_8rqluiaunf9galin639sd894c  unique (ID);

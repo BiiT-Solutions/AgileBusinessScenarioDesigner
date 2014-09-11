@@ -84,8 +84,8 @@ public class DiagramDateTest {
 			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, InvalidAnswerFormatException, RuleNotImplementedException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createDiagramTestForm();
-		formDrools.parse(vaadinForm);
-		formDrools.runDroolsRules(this.form);
+//		formDrools.generateDroolRules(vaadinForm);
+//		formDrools.runDroolsRules(this.form);
 
 		// Check the results of the drools execution
 		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form

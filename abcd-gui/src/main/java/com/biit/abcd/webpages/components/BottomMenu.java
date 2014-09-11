@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
@@ -8,19 +11,20 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class BottomMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 6149788828670200504L;
-	private IconButton treeDesignerButton, formVariables, diagramBuilderButton,
-			expressionsEditorButton, ruleEditorButton, decissionTableButton;
+	private IconButton treeDesignerButton, formVariables, diagramBuilderButton, expressionsEditorButton,
+			ruleEditorButton, decissionTableButton;
+
+	private List<IFormSelectedListener> formSelectedListeners;
 
 	protected BottomMenu() {
 		super();
+		formSelectedListeners = new ArrayList<>();
 		defineButtomMenu();
 	}
 
 	private void defineButtomMenu() {
 		setWidth("100%");
 		setHeight("80px");
-
-		
 
 		// Add Tree Designer button.
 		treeDesignerButton = new IconButton(LanguageCodes.BOTTOM_MENU_TREE_DESIGNER, ThemeIcon.TREE_DESIGNER_PAGE,
@@ -29,6 +33,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						launchListeners();
 						changeView(WebMap.TREE_DESIGNER);
 					}
 				});
@@ -42,6 +47,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						launchListeners();
 						changeView(WebMap.FORM_VARIABLES);
 					}
 				});
@@ -56,6 +62,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						launchListeners();
 						changeView(WebMap.DIAGRAM_BUILDER);
 					}
 				});
@@ -70,6 +77,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						launchListeners();
 						changeView(WebMap.EXPRESSION_EDITOR);
 					}
 				});
@@ -83,6 +91,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						launchListeners();
 						changeView(WebMap.DROOLS_RULE_EDITOR);
 					}
 				});
@@ -95,6 +104,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						launchListeners();
 						changeView(WebMap.DECISSION_TABLE_EDITOR);
 					}
 				});
@@ -127,5 +137,19 @@ public class BottomMenu extends HorizontalButtonGroup {
 		if (decissionTableButton != null) {
 			decissionTableButton.setEnabled(enableFormButtons);
 		}
+	}
+
+	private void launchListeners() {
+		for (IFormSelectedListener listener : formSelectedListeners) {
+			listener.formSelected();
+		}
+	}
+
+	public void addFormSelectedListener(IFormSelectedListener listener) {
+		formSelectedListeners.add(listener);
+	}
+
+	public void removeFormSelectedListener(IFormSelectedListener listener) {
+		formSelectedListeners.remove(listener);
 	}
 }

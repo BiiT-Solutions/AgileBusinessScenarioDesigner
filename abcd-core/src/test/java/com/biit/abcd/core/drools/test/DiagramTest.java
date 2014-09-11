@@ -79,8 +79,8 @@ public class DiagramTest {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, RuleNotImplementedException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createDiagramTestForm();
-		formDrools.parse(vaadinForm);
-		formDrools.runDroolsRules(this.form);
+//		formDrools.generateDroolRules(vaadinForm);
+//		formDrools.runDroolsRules(this.form);
 	}
 
 	/**

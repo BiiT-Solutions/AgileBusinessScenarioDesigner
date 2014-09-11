@@ -19,7 +19,7 @@ public class KieManager {
 	private List<ISubmittedForm> facts;
 	private KieServices ks;
 
-	public KieManager(){
+	public KieManager() {
 		this.globalVariables = new ArrayList<DroolsGlobalVariable>();
 		this.facts = new ArrayList<ISubmittedForm>();
 	}
@@ -29,7 +29,9 @@ public class KieManager {
 	}
 
 	public void setGlobalVariables(List<DroolsGlobalVariable> globalVariables) {
-		this.globalVariables = globalVariables;
+		if (globalVariables != null) {
+			this.globalVariables = globalVariables;
+		}
 	}
 
 	public List<ISubmittedForm> getFacts() {
@@ -40,24 +42,25 @@ public class KieManager {
 		this.facts = list;
 	}
 
-	public void buildSessionRules(String rules){
+	public void buildSessionRules(String rules) {
 		this.ks = KieServices.Factory.get();
 		KieFileSystem kfs = this.ks.newKieFileSystem();
 		this.createRules(kfs, rules);
 		this.build(this.ks, kfs);
 	}
 
-	public void execute(){
+	public void execute() {
 		this.startKie(this.globalVariables, this.facts);
 	}
 
 	/**
 	 * Method in charge of initializing the kie session, set the rules, variables and facts and fire the rules
+	 * 
 	 * @param rules
 	 * @param globalVars
 	 * @param facts
 	 */
-	public void startKie(List<DroolsGlobalVariable> globalVars, List<ISubmittedForm> facts){
+	public void startKie(List<DroolsGlobalVariable> globalVars, List<ISubmittedForm> facts) {
 		KieRepository kr = this.ks.getRepository();
 		KieContainer kContainer = this.ks.newKieContainer(kr.getDefaultReleaseId());
 		KieSession kSession = kContainer.newKieSession();
@@ -66,11 +69,11 @@ public class KieManager {
 		kSession.fireAllRules();
 	}
 
-	private void createRules(KieFileSystem kfs, String rules){
+	private void createRules(KieFileSystem kfs, String rules) {
 		kfs.write("src/main/resources/kiemodulemodel/form.drl", rules);
 	}
 
-	private void build(KieServices ks, KieFileSystem kfs){
+	private void build(KieServices ks, KieFileSystem kfs) {
 		// Build and deploy the new information
 		KieBuilder kb = ks.newKieBuilder(kfs);
 		kb.buildAll(); // kieModule is automatically deployed to KieRepository if successfully built.
@@ -80,15 +83,15 @@ public class KieManager {
 	}
 
 	// Insert global variables in the drools session
-	private void setGlobalVariables(KieSession kSession, List<DroolsGlobalVariable> globalVars){
-		for(DroolsGlobalVariable dgb : globalVars) {
+	private void setGlobalVariables(KieSession kSession, List<DroolsGlobalVariable> globalVars) {
+		for (DroolsGlobalVariable dgb : globalVars) {
 			kSession.setGlobal(dgb.getName(), dgb.getValue());
 		}
 	}
 
 	// Insert any number of facts in the drools session
-	private void insertFacts(KieSession kSession, List<ISubmittedForm> facts){
-		for(ISubmittedForm fact : facts){
+	private void insertFacts(KieSession kSession, List<ISubmittedForm> facts) {
+		for (ISubmittedForm fact : facts) {
 			kSession.insert(fact);
 		}
 	};

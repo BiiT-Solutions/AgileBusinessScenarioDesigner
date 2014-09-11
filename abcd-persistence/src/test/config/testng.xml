@@ -5,6 +5,7 @@
 			<run>
 				<include name="expressionEvaluator" />
 				<include name="formDao" />
+				<include name="simpleFormViewDao" />
 				<include name="diagramDao" />
 				<include name="formCustomVariablesDao" />
 				<include name="globalVariablesDao" />
@@ -15,6 +16,7 @@
 		</groups>
 		<classes>
 			<class name="com.biit.abcd.persistence.dao.FormTest" />
+			<class name="com.biit.abcd.persistence.dao.SimpleFormViewTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
 			<class name="com.biit.abcd.persistence.dao.FormCustomVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.GlobalVariablesTest" />

@@ -9,6 +9,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
+import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.TextField;
@@ -36,7 +37,7 @@ public class WindowNewForm extends WindowCreateNewObject {
 				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
 						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 				try {
-					form.setName(inputTextField.getValue().substring(0, 185));
+					form.setName(inputTextField.getValue().substring(0, StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
 				} catch (FieldTooLongException e1) {
 					// Impossible.
 				}
@@ -44,10 +45,8 @@ public class WindowNewForm extends WindowCreateNewObject {
 			form.setCreatedBy(UserSessionHandler.getUser());
 			form.setUpdatedBy(UserSessionHandler.getUser());
 			((FormManager) getParentWindow()).addNewForm(form);
-			AbcdLogger.info(
-					this.getClass().getName(),
-					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-							+ form.getClass() + " with 'Name: " + form.getName() + "'.");
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has created a " + form.getClass() + " with 'Name: " + form.getName() + "'.");
 			close();
 		} else {
 			MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);

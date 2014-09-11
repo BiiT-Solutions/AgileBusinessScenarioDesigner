@@ -100,22 +100,22 @@ public class ZrmFormTest {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			InvalidAnswerFormatException, RuleNotImplementedException {
-		this.form = new SubmittedForm("WebForms", "De_Haagse_Passage_v2");
-		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		Form vaadinForm = this.createZrmForm();
-		formDrools.parse(vaadinForm);
-		// Load the submitted form
-		this.orbeonImporter.readFormAnswers(this.form, FORM_ID);
-		// Translate Categories names.
-		OrbeonCategoryTranslator.getInstance().readXml(this.form);
-		// formDrools.go(this.loadForm());
-
-		formDrools.runDroolsRules(this.form);
-
-		for (ICategory category : this.form.getCategories()) {
-			AbcdLogger.debug(this.getClass().getName(), "Category name: " + category.getText() + " || Category score: "
-					+ ((com.biit.abcd.core.drools.facts.inputform.Category) category).getVariableValue("cScore"));
-		}
+//		this.form = new SubmittedForm("WebForms", "De_Haagse_Passage_v2");
+//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+//		Form vaadinForm = this.createZrmForm();
+//		formDrools.generateDroolRules(vaadinForm);
+//		// Load the submitted form
+//		this.orbeonImporter.readFormAnswers(this.form, FORM_ID);
+//		// Translate Categories names.
+//		OrbeonCategoryTranslator.getInstance().readXml(this.form);
+//		// formDrools.go(this.loadForm());
+//
+//		formDrools.runDroolsRules(this.form);
+//
+//		for (ICategory category : this.form.getCategories()) {
+//			AbcdLogger.debug(this.getClass().getName(), "Category name: " + category.getText() + " || Category score: "
+//					+ ((com.biit.abcd.core.drools.facts.inputform.Category) category).getVariableValue("cScore"));
+//		}
 	}
 
 	@Test(groups = { "rules" })
@@ -123,18 +123,18 @@ public class ZrmFormTest {
 			ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException,
 			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			InvalidAnswerFormatException, RuleNotImplementedException {
-		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		Form vaadinForm = this.createZrmForm();
-		formDrools.parse(vaadinForm);
-		// Load the submitted form
-		this.readXml();
-		this.translateFormCategories();
-		formDrools.runDroolsRules(this.form);
-
-		for (ICategory category : this.form.getCategories()) {
-			AbcdLogger.debug(this.getClass().getName(), "Category name: " + category.getText() + " || Category score: "
-					+ ((com.biit.abcd.core.drools.facts.inputform.Category) category).getVariableValue("cScore"));
-		}
+//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+//		Form vaadinForm = this.createZrmForm();
+//		formDrools.generateDroolRules(vaadinForm);
+//		// Load the submitted form
+//		this.readXml();
+//		this.translateFormCategories();
+//		formDrools.runDroolsRules(this.form);
+//
+//		for (ICategory category : this.form.getCategories()) {
+//			AbcdLogger.debug(this.getClass().getName(), "Category name: " + category.getText() + " || Category score: "
+//					+ ((com.biit.abcd.core.drools.facts.inputform.Category) category).getVariableValue("cScore"));
+//		}
 	}
 
 	static String readFile(String path, Charset encoding) throws IOException {

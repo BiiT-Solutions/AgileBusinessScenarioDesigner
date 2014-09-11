@@ -6,7 +6,7 @@
 	<packaging>war</packaging>
 	<name>Agile Business sCenario Designer Tool (GUI)</name>
 	<parent>
-		<groupId>com.biit.abcd</groupId>
+		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
 		<version>0.8.3</version>
 	</parent>

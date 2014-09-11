@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
@@ -14,11 +15,13 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @Entity
 @Table(name = "global_variables")
 public class GlobalVariable extends StorableObject {
 
+	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 	private AnswerFormat format;
 
@@ -39,7 +42,11 @@ public class GlobalVariable extends StorableObject {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) throws FieldTooLongException {
+		if (name.length() > MAX_UNIQUE_COLUMN_LENGTH) {
+			throw new FieldTooLongException("Name is limited to " + MAX_UNIQUE_COLUMN_LENGTH
+					+ " characters due to database restrictions. ");
+		}
 		this.name = name;
 	}
 
@@ -56,12 +63,16 @@ public class GlobalVariable extends StorableObject {
 	}
 
 	public void updateValues(GlobalVariable newVariable) {
-		setName(newVariable.getName());
+		try {
+			setName(newVariable.getName());
+		} catch (FieldTooLongException e) {
+			// Impossible.
+		}
 	}
 
 	/**
 	 * Creates a new variable data and adds it to the global variable
-	 *
+	 * 
 	 * @param value
 	 *            : the value of the variable data
 	 * @param validFrom

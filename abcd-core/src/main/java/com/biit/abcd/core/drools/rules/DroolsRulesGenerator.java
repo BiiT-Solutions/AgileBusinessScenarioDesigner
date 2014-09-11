@@ -15,24 +15,18 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 
-public class FormParser {
+public class DroolsRulesGenerator {
 
 	private Form form;
 	private String rules;
 	private List<GlobalVariable> globalVariables;
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
-	public FormParser(Form form) throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException {
-		this.form = form;
-		this.initParser();
-	}
-
-	public FormParser(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
+	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
 			RuleInvalidException, RuleNotImplementedException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
-
 		this.initParser();
 	}
 
@@ -65,34 +59,13 @@ public class FormParser {
 					this.rules += diagParser.parse(diagram);
 				}
 			}
-
-			// // First parse the table rule
-			// if(this.form.getTableRules() != null){
-			// // For each table rule, transform the code to drools rules
-			// for(TableRule tableRule: this.form.getTableRules()){
-			// this.rules += TableRuleParser.parse(tableRule);
-			// }
-			// }
-			// // Second parse the standalone expressions
-			// if(!this.form.getExpressionChain().isEmpty()){
-			// for(ExpressionChain expression: this.form.getExpressionChain()){
-			// this.rules += ExpressionParser.parse(expression);
-			// }
-			// }
-			// // Third parse the rules defined in the rule editor
-			// if(!this.form.getRules().isEmpty()){
-			// RuleParser ruleParser = new RuleParser();
-			// for(Rule rule: this.form.getRules()){
-			// this.rules += ruleParser.parse(rule);
-			// }
-			// }
 		}
 	}
 
 	/**
 	 * Creates the global constants for the drools session Also stores in memory the value to be inserted before the
 	 * facts
-	 *
+	 * 
 	 * @return The global constants in drools
 	 */
 	private String parseGlobalVariables() {
@@ -115,8 +88,6 @@ public class FormParser {
 							globalConstants += this.globalVariableString(globalVariable);
 							this.droolsGlobalVariables.add(new DroolsGlobalVariable(globalVariable.getName(),
 									variableData.getValue()));
-
-							// this.globalVariableValues.put(globalVariable, variableData.getValue());
 							break;
 						}
 					}
