@@ -10,9 +10,9 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 
 	private static final long serialVersionUID = -2904744459099883988L;
 
-	private String appName;
-	private String formName;
-	private String documentId;
+	private String orbeonAppName;
+	private String orbeonFormName;
+	private String orbeonDocumentId;
 
 	public DroolsSubmittedFormWindow() {
 		super();
@@ -38,7 +38,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 
 			@Override
 			public void valueChange(final ValueChangeEvent event) {
-				appName = String.valueOf(event.getProperty().getValue());
+				orbeonAppName = String.valueOf(event.getProperty().getValue());
 			}
 		});
 //		appNameField.setValue("WebForms");
@@ -52,7 +52,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 			private static final long serialVersionUID = 4853902617302026183L;
 			@Override
 			public void valueChange(final ValueChangeEvent event) {
-				formName = String.valueOf(event.getProperty().getValue());
+				orbeonFormName = String.valueOf(event.getProperty().getValue());
 			}
 		});
 //		formNameField.setValue("De_Haagse_Passage_v2");
@@ -66,7 +66,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 			private static final long serialVersionUID = 5884042251295904822L;
 			@Override
 			public void valueChange(final ValueChangeEvent event) {
-				documentId = String.valueOf(event.getProperty().getValue());
+				orbeonDocumentId = String.valueOf(event.getProperty().getValue());
 			}
 		});
 //		documentIdField.setValue("370023c797b9b9b691ed0e64a559f6adb7971df5");
@@ -79,8 +79,18 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 		return layout;
 	}
 
-	public String getFormInfo(){
-		return appName + "::" + formName + "::" + documentId;
+	public String getOrbeonAppName() {
+		return orbeonAppName;
 	}
+
+	public String getOrbeonFormName() {
+		return orbeonFormName;
+	}
+
+	public String getOrbeonDocumentId() {
+		return orbeonDocumentId;
+	}
+
+	
 
 }

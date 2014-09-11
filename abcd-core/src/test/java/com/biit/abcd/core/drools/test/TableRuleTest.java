@@ -88,10 +88,10 @@ public class TableRuleTest {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, RuleNotImplementedException,
 			GroupDoesNotExistException {
-		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		Form vaadinForm = this.createRuleTestForm();
-		formDrools.parse(vaadinForm);
-		formDrools.runDroolsRules(this.form);
+//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+//		Form vaadinForm = this.createRuleTestForm();
+//		formDrools.generateDroolRules(vaadinForm);
+//		formDrools.runDroolsRules(this.form);
 
 
 //		ICategory testCat1 = this.form.getCategory("Financiën");

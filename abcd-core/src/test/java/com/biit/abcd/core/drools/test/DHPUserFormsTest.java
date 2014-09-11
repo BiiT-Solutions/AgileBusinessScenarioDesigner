@@ -90,7 +90,7 @@ public class DHPUserFormsTest {
 	}
 
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml",  StandardCharsets.UTF_8);
+		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", StandardCharsets.UTF_8);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
@@ -103,10 +103,7 @@ public class DHPUserFormsTest {
 		Form vaadinForm = this.createZrmForm();
 		// Load the submitted form
 		for (String docId : DocumentIds) {
-			formDrools.parse(vaadinForm);
-			this.readXml(docId);
-			this.translateFormCategories();
-			formDrools.runDroolsRules(this.form);
+			formDrools.applyDrools(APP, FORM, docId, formDrools.generateDroolRules(vaadinForm, null).getRules(), null);
 		}
 	}
 
@@ -118,7 +115,7 @@ public class DHPUserFormsTest {
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
 	 * Form used to create the drools rules
-	 *
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression

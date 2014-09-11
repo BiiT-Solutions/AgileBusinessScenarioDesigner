@@ -77,14 +77,12 @@ public class SettingsWindow extends PopupWindow {
 
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								String formInfo = droolsWindow.getFormInfo();
-
 								try {
 
 									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-									submittedForm = droolsExporter.submittedForm(UserSessionHandler.getFormController()
-											.getForm(), UserSessionHandler.getGlobalVariablesController()
-											.getGlobalVariables(), formInfo);
+									submittedForm = droolsExporter.processForm(UserSessionHandler.getFormController()
+											.getForm(), droolsWindow.getOrbeonAppName(), droolsWindow
+											.getOrbeonFormName(), droolsWindow.getOrbeonDocumentId());
 
 									// AbcdLogger.debug(this.getClass().getName(),
 									// droolsExporter.getGeneratedRules());

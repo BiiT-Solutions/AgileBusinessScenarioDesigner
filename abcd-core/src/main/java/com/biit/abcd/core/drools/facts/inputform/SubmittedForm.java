@@ -129,20 +129,9 @@ public class SubmittedForm implements ISubmittedForm {
 		this.setVariableValue(this, varName, value);
 	}
 
-	// public boolean isScoreSet() {
-	// if (this.getVariableValue(this, this.getFormName()) != null) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
-
 	@Override
 	public String toString() {
 		return this.getFormName();
 	}
 
-	// public boolean isScoreNotSet() {
-	// return !this.isScoreSet();
-	// }
 }

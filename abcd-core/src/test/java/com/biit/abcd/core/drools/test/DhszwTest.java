@@ -96,8 +96,12 @@ public class DhszwTest {
 			IOException, CategoryDoesNotExistException, RuleNotImplementedException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createCompleteDhszwForm();
-		formDrools.parse(vaadinForm);
-		formDrools.runDroolsRules(this.form);
+//		formDrools.generateDroolRules(vaadinForm);
+//		formDrools.runDroolsRules(this.form);
+//		
+//			formDrools.applyDrools(APP, FORM, docId, formDrools.generateDroolRules(vaadinForm, null).getRules(), null);
+		
+		
 		Assert.assertEquals("Geen contact met politie. Geen strafblad.",
 				((SubmittedForm) this.form).getVariableValue(this.form.getCategory("Justitie"), "cScoreText"));
 	}
@@ -351,38 +355,38 @@ public class DhszwTest {
 		return subDiagram;
 	}
 
-	private List<GlobalVariable> createGlobalvariables() throws NotValidTypeInVariableData {
-		List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
-		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
-		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
-		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
-		Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
-
-		// Should get the second value
-		GlobalVariable globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);
-		globalVariableNumber.setName("IVA");
-		globalVariableNumber.addVariableData(19.0, validFrom, validToPast);
-		globalVariableNumber.addVariableData(21.0, validToPast, null);
-		// Should not represent this constant
-		GlobalVariable globalVariableText = new GlobalVariable(AnswerFormat.TEXT);
-		globalVariableText.setName("TestText");
-		globalVariableText.addVariableData("Hello", validFromFuture, validToFuture);
-		// Should get the value
-		GlobalVariable globalVariablePostalCode = new GlobalVariable(AnswerFormat.POSTAL_CODE);
-		globalVariablePostalCode.setName("TestPC");
-		globalVariablePostalCode.addVariableData("Postal", validFrom, validToFuture);
-		// Should enter a valid date as constant
-		GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
-		globalVariableDate.setName("TestDate");
-		globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
-
-		globalVarList.add(globalVariableNumber);
-		globalVarList.add(globalVariableText);
-		globalVarList.add(globalVariablePostalCode);
-		globalVarList.add(globalVariableDate);
-
-		return globalVarList;
-	}
+//	private List<GlobalVariable> createGlobalvariables() throws NotValidTypeInVariableData {
+//		List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
+//		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
+//		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
+//		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
+//		Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
+//
+//		// Should get the second value
+//		GlobalVariable globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);
+//		globalVariableNumber.setName("IVA");
+//		globalVariableNumber.addVariableData(19.0, validFrom, validToPast);
+//		globalVariableNumber.addVariableData(21.0, validToPast, null);
+//		// Should not represent this constant
+//		GlobalVariable globalVariableText = new GlobalVariable(AnswerFormat.TEXT);
+//		globalVariableText.setName("TestText");
+//		globalVariableText.addVariableData("Hello", validFromFuture, validToFuture);
+//		// Should get the value
+//		GlobalVariable globalVariablePostalCode = new GlobalVariable(AnswerFormat.POSTAL_CODE);
+//		globalVariablePostalCode.setName("TestPC");
+//		globalVariablePostalCode.addVariableData("Postal", validFrom, validToFuture);
+//		// Should enter a valid date as constant
+//		GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
+//		globalVariableDate.setName("TestDate");
+//		globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
+//
+//		globalVarList.add(globalVariableNumber);
+//		globalVarList.add(globalVariableText);
+//		globalVarList.add(globalVariablePostalCode);
+//		globalVarList.add(globalVariableDate);
+//
+//		return globalVarList;
+//	}
 
 	private Category getCategoryFromForm(Form form, String catName) {
 		for (TreeObject child : form.getAll(Category.class)) {

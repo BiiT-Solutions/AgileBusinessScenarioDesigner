@@ -569,7 +569,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         format integer,
-        name varchar(255),
+        name varchar(190),
         primary key (ID)
     );
 
@@ -956,6 +956,9 @@
 
     alter table global_variables 
         add constraint UK_kr7p6k3u1po5mbamq95rvh6gj  unique (comparationId);
+
+    alter table global_variables 
+        add constraint UK_ba2w3ms6v9agn6ac5ois703u2  unique (name);
 
     alter table rule 
         add constraint UK_8rqluiaunf9galin639sd894c  unique (ID);

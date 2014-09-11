@@ -200,10 +200,13 @@ public enum LanguageCodes {
 	ERROR_ORBEON_IMPORTER_INVALID_FORM("error.orbeonimporter.invalid.form"),
 
 	ERROR_RULE_NOT_IMPLEMENTED("error.rule.not.implemented"),
+	ERROR_TITLE("error.title"),
 	
 	ERROR_INVALID_DATE("error.invalid.date"),
 	ERROR_INVALID_VALUE("error.invalid.value"),
-
+	
+	ERROR_NAME_TOO_LONG("error.name.too.long"),
+	
 	INFO_DATA_STORED("info.data.store"),
 
 	ANSWER_TYPE_INPUT("answer.type.input"),

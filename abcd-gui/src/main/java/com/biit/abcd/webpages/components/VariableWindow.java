@@ -6,6 +6,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -73,20 +74,25 @@ public class VariableWindow extends AcceptCancelWindow {
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_NAME_WRONG);
 			return null;
 		}
-		
+
 		GlobalVariable globalVariable = new GlobalVariable((AnswerFormat) variableFormat.getValue());
-		globalVariable.setName(variableName.getValue());
+		try {
+			globalVariable.setName(variableName.getValue());
+		} catch (FieldTooLongException e) {
+			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.ERROR_NAME_TOO_LONG);
+			return null;
+		}
 		return globalVariable;
 	}
-	
-	public void setValue(GlobalVariable value){
-		if (value != null ) {
+
+	public void setValue(GlobalVariable value) {
+		if (value != null) {
 			variableName.setValue(value.getName());
 			variableFormat.setValue(value.getFormat());
 		}
 	}
-	
-	public void disableTypeEdition(){
+
+	public void disableTypeEdition() {
 		variableFormat.setEnabled(false);
 	}
 }
