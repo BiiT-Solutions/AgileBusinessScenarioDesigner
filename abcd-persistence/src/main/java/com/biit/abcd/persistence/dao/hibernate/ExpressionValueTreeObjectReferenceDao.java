@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IExpressionValueTreeObjectReferenceDao;
@@ -12,6 +14,11 @@ public class ExpressionValueTreeObjectReferenceDao extends GenericDao<Expression
 
 	public ExpressionValueTreeObjectReferenceDao() {
 		super(ExpressionValueTreeObjectReference.class);
+	}
+
+	@Override
+	protected void initializeSets(List<ExpressionValueTreeObjectReference> elements) {
+
 	}
 
 }

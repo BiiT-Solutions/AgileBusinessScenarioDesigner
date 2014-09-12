@@ -2,10 +2,10 @@ package com.biit.abcd.persistence.dao.hibernate;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IDiagramDao;
@@ -20,18 +20,34 @@ public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 	public DiagramDao() {
 		super(Diagram.class);
 	}
+	
+	@Override
+	protected void initializeSets(List<Diagram> elements) {
+		for (Diagram diagram : elements) {
+			// Initializes the sets for lazy-loading (within the same session)
+			Hibernate.initialize(diagram.getDiagramObjectForInitializeSet());
+		}
+	}
 
 	@Override
 	public Diagram read(Form form) {
-		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<Diagram> cq = criteriaBuilder.createQuery(getType());
-		Root<Diagram> root = cq.from(getType());
-		cq.where(criteriaBuilder.equal(root.get("form"), form));
-		List<Diagram> results = getEntityManager().createQuery(cq).getResultList();
-		if (!results.isEmpty()) {
-			return (Diagram) results.get(0);
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			Criteria criteria = session.createCriteria(Diagram.class);
+			criteria.add(Restrictions.eq("form", form));
+			@SuppressWarnings("unchecked")
+			List<Diagram> results = criteria.list();
+			initializeSets(results);
+			session.getTransaction().commit();
+			if (results.size() > 0) {
+				return results.get(0);
+			}
+			return null;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
 		}
-		return null;
 	}
 
 }

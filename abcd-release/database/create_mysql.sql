@@ -415,7 +415,7 @@
         updatedBy DOUBLE,
         isEditable bit not null,
         sortSeq bigint not null,
-        value varchar(255),
+        value TEXT,
         primary key (ID)
     );
 
@@ -428,7 +428,7 @@
         updatedBy DOUBLE,
         isEditable bit not null,
         sortSeq bigint not null,
-        value varchar(255),
+        value TEXT,
         primary key (ID)
     );
 

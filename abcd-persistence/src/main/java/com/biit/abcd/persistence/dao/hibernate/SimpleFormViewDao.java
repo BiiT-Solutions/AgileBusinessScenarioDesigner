@@ -5,13 +5,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-
+import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,44 +22,49 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 
 	private Class<SimpleFormView> type;
 
-	@PersistenceContext
-	private EntityManager entityManager = null;
-
 	@Autowired
-	private EntityManagerFactory entityManagerFactory;
+	private SessionFactory sessionFactory = null;
 
 	public SimpleFormViewDao() {
 		this.type = SimpleFormView.class;
 
 	}
 
-	protected EntityManager getEntityManager() {
-		return entityManager;
-	}
-
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
 	public Class<SimpleFormView> getType() {
 		return type;
 	}
 
+	protected SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
 	@Override
 	public int getRowCount() {
-		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-		criteriaQuery.select(criteriaBuilder.count(criteriaQuery.from(Form.class)));
-		return entityManager.createQuery(criteriaQuery).getSingleResult().intValue();
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			Criteria criteria = session.createCriteria(Form.class);
+			criteria.setProjection(Projections.rowCount());
+			int rows = ((Long) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+			return rows;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SimpleFormView> getAll() {
-		Query query = getEntityManager()
-				.createNativeQuery(
-						"SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo FROM tree_forms tf");
-		List<Object[]> rows = query.getResultList();
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		SQLQuery query = session
+				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo FROM tree_forms tf");
+
+		List<Object[]> rows = query.list();
+
+		session.getTransaction().commit();
 
 		List<SimpleFormView> formViews = new ArrayList<>();
 		for (Object[] row : rows) {

@@ -31,7 +31,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 	@Autowired
 	private IFormDao formDao;
-
+	
 	@Test
 	public void basicExpressionConverter() throws FieldTooLongException, NotValidChildException {
 		// Create the form
@@ -195,6 +195,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
+		
+		form.getCustomVariables().add(customVarCategory);
 
 		ExpressionChain expressionChain = new ExpressionChain();
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(category, customVarCategory);
@@ -204,6 +206,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionUnit.YEARS));
 		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = birthdate");
 		expressionChain.getExpressionEvaluator().eval();
+		
+		
 
 		// Check the order
 		form.getExpressionChain().add(expressionChain);
