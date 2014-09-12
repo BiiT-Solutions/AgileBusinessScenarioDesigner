@@ -24,7 +24,7 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 	private static final long serialVersionUID = -9123887739972604746L;
-	private HashMap<CustomVariableScope, List<String>> custonVariablesScopeMap;
+	private HashMap<CustomVariableScope, List<String>> customVariablesScopeMap;
 	private DroolsTreeObjectTable formTreeTable;
 
 	protected enum TreeObjectTableProperties {
@@ -62,7 +62,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				Set<CustomVariable> customVariables = form.getCustomVariables();
 
 				if (customVariables != null) {
-					custonVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
+					customVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
 					for (CustomVariable customVariable : customVariables) {
 						switch (customVariable.getType()) {
 						case NUMBER:
@@ -71,14 +71,14 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 							formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
 							break;
 						}
-						if (custonVariablesScopeMap.get(customVariable.getScope()) == null) {
+						if (customVariablesScopeMap.get(customVariable.getScope()) == null) {
 							List<String> customVariablesNames = new ArrayList<String>();
 							customVariablesNames.add(customVariable.getName());
-							custonVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
+							customVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
 						} else {
-							List<String> customVariablesNames = custonVariablesScopeMap.get(customVariable.getScope());
+							List<String> customVariablesNames = customVariablesScopeMap.get(customVariable.getScope());
 							customVariablesNames.add(customVariable.getName());
-							custonVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
+							customVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
 						}
 					}
 				}
@@ -115,7 +115,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 	@SuppressWarnings("unchecked")
 	private void createFormVariables(Form form, SubmittedForm submittedForm) {
-		List<String> formVariables = custonVariablesScopeMap.get(CustomVariableScope.FORM);
+		List<String> formVariables = customVariablesScopeMap.get(CustomVariableScope.FORM);
 		if (formVariables != null) {
 			for (String variable : formVariables) {
 				if (submittedForm.getVariableValue(variable) != null) {
@@ -136,7 +136,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
-		List<String> categoryVariables = custonVariablesScopeMap.get(CustomVariableScope.CATEGORY);
+		List<String> categoryVariables = customVariablesScopeMap.get(CustomVariableScope.CATEGORY);
 		if ((categoryVariables != null) && (categorySubForm != null)) {
 			for (String variable : categoryVariables) {
 				if (categorySubForm.getVariableValue(variable) != null) {
@@ -165,7 +165,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 			} catch (GroupDoesNotExistException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
-			List<String> groupVariables = custonVariablesScopeMap.get(CustomVariableScope.GROUP);
+			List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
 			if ((groupVariables != null) && (groupSubForm != null)) {
 				for (String variable : groupVariables) {
 					if (groupSubForm.getVariableValue(variable) != null) {
@@ -183,7 +183,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 			} catch (QuestionDoesNotExistException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
-			List<String> questionVariables = custonVariablesScopeMap.get(CustomVariableScope.QUESTION);
+			List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
 			if ((questionVariables != null) && (questionSubForm != null)) {
 				for (String variable : questionVariables) {
 					if (questionSubForm.getVariableValue(variable) != null) {
@@ -215,7 +215,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
-		List<String> questionVariables = custonVariablesScopeMap.get(CustomVariableScope.QUESTION);
+		List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
 		if ((questionVariables != null) && (questionSubForm != null)) {
 			for (String variable : questionVariables) {
 				if (questionSubForm.getVariableValue(variable) != null) {

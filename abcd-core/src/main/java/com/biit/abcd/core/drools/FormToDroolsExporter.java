@@ -28,12 +28,9 @@ import com.biit.orbeon.form.ISubmittedForm;
 public class FormToDroolsExporter {
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools
-	 * engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly
-	 * defined. <br>
-	 * This method creates the global constants defined in the globalVariables
-	 * array
+	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
+	 * This method creates the global constants defined in the globalVariables array
 	 * 
 	 * @param form
 	 *            form to be parsed
@@ -63,10 +60,8 @@ public class FormToDroolsExporter {
 	}
 
 	/**
-	 * Loads the (Submitted) form as facts of the knowledge base of the drools
-	 * engine. <br>
-	 * It also starts the engine execution by firing all the rules inside the
-	 * engine.
+	 * Loads the (Submitted) form as facts of the knowledge base of the drools engine. <br>
+	 * It also starts the engine execution by firing all the rules inside the engine.
 	 * 
 	 * @param form
 	 */
@@ -112,17 +107,17 @@ public class FormToDroolsExporter {
 			CategoryNameWithoutTranslation {
 		ISubmittedForm submittedForm = readXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId);
 		translateFormCategories(submittedForm);
-		// Launch kie
-		KieManager km = new KieManager();
-		// Load the rules in memory
-		km.buildSessionRules(droolsRules);
-		// km.buildSessionRules(new
-		// String(Files.readAllBytes(Paths.get(System.getProperty("java.io.tmpdir")
-		// + File.separator + "generatedRules.drl"))));
-		// Creation of the global constants
-		km.setGlobalVariables(globalVariables);
 		ISubmittedForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
-		runDroolsRules(droolsForm, km);
+		if (droolsRules != null && droolsRules.length() > 0) {
+			// Launch kie
+			KieManager km = new KieManager();
+			// Load the rules in memory
+			km.buildSessionRules(droolsRules);
+			// Creation of the global constants
+			km.setGlobalVariables(globalVariables);
+
+			runDroolsRules(droolsForm, km);
+		}
 		return droolsForm;
 	}
 
