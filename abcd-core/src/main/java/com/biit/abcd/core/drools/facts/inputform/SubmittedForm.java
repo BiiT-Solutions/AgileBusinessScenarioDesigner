@@ -138,7 +138,7 @@ public class SubmittedForm implements ISubmittedForm {
 	}
 
 	@Override
-	public ISubmittedForm getForm() {
+	public ISubmittedForm getSubmittedForm() {
 		return this;
 	}
 
