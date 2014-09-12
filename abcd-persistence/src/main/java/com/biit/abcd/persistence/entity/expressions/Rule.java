@@ -16,7 +16,7 @@ import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines a drools rule.
- *
+ * 
  */
 @Entity
 @Table(name = "rule")
@@ -46,9 +46,9 @@ public class Rule extends StorableObject implements INameAttribute {
 		setName(name);
 	}
 
-//	public ExpressionChain getCondition() {
-//		return condition;
-//	}
+	// public ExpressionChain getCondition() {
+	// return condition;
+	// }
 
 	public List<Expression> getConditions() {
 		return condition.getExpressions();

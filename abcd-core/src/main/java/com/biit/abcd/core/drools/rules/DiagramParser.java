@@ -169,7 +169,7 @@ public class DiagramParser extends GenericParser {
 					childrenCondition = this.createDroolsRule(outLink.getExpressionChain(), null, extraConditions);
 				}
 
-				System.out.println("CHILDREN CONDITION: " + childrenCondition);
+//				System.out.println("CHILDREN CONDITION: " + childrenCondition);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(childrenCondition);
 			}
