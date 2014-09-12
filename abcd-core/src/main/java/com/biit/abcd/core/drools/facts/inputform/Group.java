@@ -25,13 +25,21 @@ public class Group extends CommonAttributes implements IGroup {
 	}
 
 	@Override
-	public IQuestion getQuestion(String tag) throws QuestionDoesNotExistException {
+	public IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException {
 		for (IQuestion question : this.getQuestions()) {
-			if (question.getTag().equals(tag)) {
+			if (question.getTag().equals(questionTag)) {
 				return question;
 			}
 		}
-		throw new QuestionDoesNotExistException("Question '" + tag + "' does not exists.");
+		// Check in inner groups.
+		for (IGroup group : groups) {
+			try {
+				return group.getQuestion(questionTag);
+			} catch (QuestionDoesNotExistException qne) {
+				// Not found in group. Continue.
+			}
+		}
+		throw new QuestionDoesNotExistException("Question '" + questionTag + "' does not exists.");
 	}
 
 	public void setGroups(List<IGroup> groups) {

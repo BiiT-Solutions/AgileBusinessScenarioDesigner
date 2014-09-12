@@ -91,6 +91,13 @@ public class Category extends CommonAttributes implements ICategory {
 				}
 			}
 		}
+		for (IGroup group : groups) {
+			try {
+				return group.getQuestion(questionTag);
+			} catch (QuestionDoesNotExistException qne) {
+				// Not found in group. Continue.
+			}
+		}
 		throw new QuestionDoesNotExistException("Question '" + questionTag + "' does not exists.");
 	}
 

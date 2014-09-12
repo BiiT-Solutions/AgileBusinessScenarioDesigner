@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
+import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 /**
- * Basic implementation of an Orbeon Form that includes categories and
- * questions.
+ * Basic implementation of an Orbeon Form that includes categories and questions.
  * 
  */
 public class SubmittedForm implements ISubmittedForm {
@@ -18,7 +19,7 @@ public class SubmittedForm implements ISubmittedForm {
 	private String applicationName;
 	private List<ICategory> categories;
 	private String formName;
-	//TreeObject -> VarName --> Value
+	// TreeObject -> VarName --> Value
 	private HashMap<Object, HashMap<String, Object>> formVariables;
 
 	public SubmittedForm(String applicationName, String formName) {
@@ -134,6 +135,17 @@ public class SubmittedForm implements ISubmittedForm {
 
 	public HashMap<Object, HashMap<String, Object>> getFormVariables() {
 		return formVariables;
+	}
+
+	@Override
+	public ISubmittedForm getForm() {
+		return this;
+	}
+
+	@Override
+	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
+			CategoryDoesNotExistException {
+		return getCategory(categoryName).getQuestion(questionName);
 	}
 
 }

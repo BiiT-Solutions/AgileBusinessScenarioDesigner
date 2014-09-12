@@ -89,7 +89,7 @@ public class SettingsWindow extends PopupWindow {
 									// droolsExporter.getGeneratedRules());
 									if (submittedForm instanceof DroolsForm) {
 										final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-												((DroolsForm) submittedForm).getSubmittedForm());
+												((DroolsForm) submittedForm).getForm());
 										droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
 											@Override
 											public void acceptAction(AcceptCancelWindow window) {
