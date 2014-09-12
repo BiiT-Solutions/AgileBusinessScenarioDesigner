@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -38,28 +39,33 @@ public class Form extends BaseForm {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.JOIN)
+	@OrderBy(value = "name ASC")
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy(value = "name ASC")
 	private Set<TableRule> tableRules;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	//Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy(value = "name ASC")
 	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy(value = "name ASC")
 	private Set<ExpressionChain> expressionChain;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	//Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy(value = "name ASC")
 	private Set<Rule> rules;
 
 	public Form() {
