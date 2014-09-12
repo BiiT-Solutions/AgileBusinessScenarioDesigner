@@ -29,6 +29,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
+// @TransactionConfiguration(defaultRollback = true)
 @Test(groups = { "orphan" })
 public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form with Orphan";
@@ -83,7 +84,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void removeDiagram() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
-		form.setName(FULL_FORM);
+		form.setName(FULL_FORM + "1");
 
 		Category category1 = new Category();
 		category1.setName("Category1");
@@ -153,7 +154,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException {
 		Form form = new Form();
-		form.setName(FULL_FORM);
+		form.setName(FULL_FORM + "2");
 
 		Category category1 = new Category();
 		category1.setName("Category1");

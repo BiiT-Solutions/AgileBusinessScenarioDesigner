@@ -15,60 +15,48 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
  */
 public class DroolsForm implements ISubmittedForm {
 
-	private ISubmittedForm form;
+	private SubmittedForm submittedform;
 
 	public DroolsForm(SubmittedForm submittedForm) {
-		this.form = submittedForm;
+		this.submittedform = submittedForm;
 	}
 
-	@Override
 	public List<ICategory> getCategories() {
-		return form.getCategories();
+		return submittedform.getCategories();
 	}
 
-	@Override
 	public void addCategory(ICategory category) {
-		form.addCategory(category);
+		submittedform.addCategory(category);
 
 	}
 
-	public ISubmittedForm getForm() {
-		return form;
+	public SubmittedForm getSubmittedForm() {
+		return submittedform;
 	}
 
-	@Override
 	public ICategory getCategory(String categoryName) throws CategoryDoesNotExistException {
-		return form.getCategory(categoryName);
+		return submittedform.getCategory(categoryName);
 	}
 
-	@Override
 	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
 			CategoryDoesNotExistException {
-		return form.getCategory(categoryName).getQuestion(questionName);
+		return submittedform.getCategory(categoryName).getQuestion(questionName);
 	}
 
-	@Override
 	public String getFormName() {
-		return form.getFormName();
+		return submittedform.getFormName();
 	}
 
-	@Override
 	public String getApplicationName() {
-		return form.getApplicationName();
+		return submittedform.getApplicationName();
 	}
 
-	@Override
 	public String getId() {
-		return form.getId();
+		return submittedform.getId();
 	}
 
-	public void setForm(SubmittedForm submittedForm) {
-		this.form = submittedForm;
-	}
-
-	@Override
-	public ISubmittedForm getSubmittedForm() {
-		return form;
+	public void setSubmittedForm(SubmittedForm submittedForm) {
+		this.submittedform = submittedForm;
 	}
 
 }

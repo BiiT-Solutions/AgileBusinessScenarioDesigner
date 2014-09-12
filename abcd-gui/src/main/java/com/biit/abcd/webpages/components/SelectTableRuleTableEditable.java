@@ -34,6 +34,7 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 		setValue(tableRule);
 	}
 	
+	@Override
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
 		if (editCellComponent != null) {

@@ -10,8 +10,13 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
+import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -162,6 +167,17 @@ public class TestFormCreator {
 		drinks.addChild(drinksC);
 		drinks.addChild(drinksD);
 		voeding.addChild(drinks);
+	}
+
+	public ISubmittedForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException,
+			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation {
+		// Generate the drools rules.
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), null);
+		readStaticSubmittedForm();
+		translateFormCategories();
+		// Test the rules with the submitted form and returns a DroolsForm
+		return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(), null);
 	}
 
 	public Form getForm() {

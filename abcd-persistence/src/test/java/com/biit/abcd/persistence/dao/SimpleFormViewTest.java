@@ -40,5 +40,6 @@ public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContext
 		List<SimpleFormView> views = simpleFormViewDao.getAll();
 		Assert.assertEquals(views.size(), 1);
 		Assert.assertEquals(views.get(0).getName(), DUMMY_FORM);
+		formDao.makeTransient(form);
 	}
 }

@@ -20,6 +20,10 @@ public class RuleDao extends GenericDao<Rule> implements IRuleDao {
 	}
 
 	@Override
+	protected void initializeSets(List<Rule> rules) {
+	}
+
+	@Override
 	public Rule makePersistent(Rule entity) {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the

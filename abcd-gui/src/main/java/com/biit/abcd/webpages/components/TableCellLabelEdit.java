@@ -60,8 +60,8 @@ public class TableCellLabelEdit extends Table {
 		this.setColumnExpandRatio(MenuProperties.TABLE_NAME, 1);
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 
-		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
-		setSortAscending(false);
+		setSortContainerPropertyId(MenuProperties.TABLE_NAME);
+		setSortAscending(true);
 		sort();
 	}
 

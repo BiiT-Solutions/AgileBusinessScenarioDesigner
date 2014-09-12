@@ -196,6 +196,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
 
+		form.getCustomVariables().add(customVarCategory);
+
 		ExpressionChain expressionChain = new ExpressionChain();
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(category, customVarCategory);
 

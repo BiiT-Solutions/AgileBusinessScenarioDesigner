@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
@@ -33,6 +34,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@BatchSize(size=500)
+	@OrderBy(value = "creationTime ASC")
 	private List<TableRuleRow> rules;
 
 	public TableRule() {

@@ -28,7 +28,6 @@ public class SubmittedForm implements ISubmittedForm {
 		this.setCategories(new ArrayList<ICategory>());
 	}
 
-	@Override
 	public void addCategory(ICategory category) {
 		if (this.categories == null) {
 			this.setCategories(new ArrayList<ICategory>());
@@ -37,17 +36,14 @@ public class SubmittedForm implements ISubmittedForm {
 		this.categories.add(category);
 	}
 
-	@Override
 	public String getApplicationName() {
 		return this.applicationName;
 	}
 
-	@Override
 	public List<ICategory> getCategories() {
 		return this.categories;
 	}
 
-	@Override
 	public ICategory getCategory(String categoryText) throws CategoryDoesNotExistException {
 		for (ICategory category : this.getCategories()) {
 			if (category.getText().equals(categoryText)) {
@@ -57,12 +53,10 @@ public class SubmittedForm implements ISubmittedForm {
 		throw new CategoryDoesNotExistException("Category '" + categoryText + "' does not exists.");
 	}
 
-	@Override
 	public String getFormName() {
 		return this.formName;
 	}
 
-	@Override
 	public String getId() {
 		if ((this.getApplicationName() != null) && (this.getFormName() != null)) {
 			return this.getApplicationName() + "/" + this.getFormName();
@@ -128,7 +122,6 @@ public class SubmittedForm implements ISubmittedForm {
 		setVariableValue(this, varName, value);
 	}
 
-	@Override
 	public String toString() {
 		return this.getFormName();
 	}
@@ -137,19 +130,13 @@ public class SubmittedForm implements ISubmittedForm {
 		return formVariables;
 	}
 
-	public ISubmittedForm getForm() {
+	public ISubmittedForm getSubmittedForm() {
 		return this;
 	}
 
-	@Override
 	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
 			CategoryDoesNotExistException {
 		return getCategory(categoryName).getQuestion(questionName);
-	}
-
-	@Override
-	public ISubmittedForm getSubmittedForm() {
-		return this;
 	}
 
 }

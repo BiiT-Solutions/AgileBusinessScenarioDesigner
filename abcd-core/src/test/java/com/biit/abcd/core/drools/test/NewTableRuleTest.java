@@ -3,13 +3,16 @@ package com.biit.abcd.core.drools.test;
 import java.io.IOException;
 
 import org.dom4j.DocumentException;
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.FormToDroolsExporter;
-import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.facts.inputform.Question;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
+import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
@@ -20,12 +23,13 @@ import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
-import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -41,31 +45,32 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
  */
 public class NewTableRuleTest extends TestFormCreator {
 
+	private final static String QUESTION_EQUALS_ANSWER = "works";
+
 	public NewTableRuleTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 		super();
 	}
 
-	private final static String QUESTION_ANSWER_EQUALS = "questionAnswerEquals";
-
 	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
-	public void testTableRuleLoadAndExecution() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, RuleNotImplementedException,
-			GroupDoesNotExistException, InvalidAnswerFormatException, DocumentException, CategoryNameWithoutTranslation {
+	public void testSimpleTableRule() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
+			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException {
 
 		// Create the table and form diagram
 		createKidsFormSimpleTable();
-		// Generate the drools rules.
-		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), null);
-		readStaticSubmittedForm();
-		translateFormCategories();
-		// Test the rules with the submitted form and returns a DroolsForm
-		ISubmittedForm droolsForm = formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(), null);
+		// Create the rules and launch the engine
+		ISubmittedForm droolsForm = createAndRunDroolsRules();
+
+		Assert.assertEquals(QUESTION_EQUALS_ANSWER, ((Question) droolsForm.getCategory("Lifestyle").getGroup("voeding")
+				.getQuestion("breakfast")).getVariableValue("qVar"));
 	}
 
 	private void createKidsFormSimpleTable() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException {
+
+		CustomVariable questionVariable = new CustomVariable(getForm(), "qVar", CustomVariableType.STRING,
+				CustomVariableScope.QUESTION);
 
 		// Create the tableRule
 		// Only with one conditions colum
@@ -76,9 +81,9 @@ public class NewTableRuleTest extends TestFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "b"))));
-//		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), formQuestionAnswer),
-//				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-//						"QuestionEqualsAnswerWorking")));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString(QUESTION_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
 
 		// Add the table rule
