@@ -137,7 +137,6 @@ public class SubmittedForm implements ISubmittedForm {
 		return formVariables;
 	}
 
-	@Override
 	public ISubmittedForm getForm() {
 		return this;
 	}
@@ -146,6 +145,11 @@ public class SubmittedForm implements ISubmittedForm {
 	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
 			CategoryDoesNotExistException {
 		return getCategory(categoryName).getQuestion(questionName);
+	}
+
+	@Override
+	public ISubmittedForm getSubmittedForm() {
+		return this;
 	}
 
 }

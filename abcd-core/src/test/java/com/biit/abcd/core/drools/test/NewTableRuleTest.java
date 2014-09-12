@@ -20,9 +20,6 @@ import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -55,7 +52,7 @@ public class NewTableRuleTest extends TestFormCreator {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, RuleNotImplementedException,
 			GroupDoesNotExistException, InvalidAnswerFormatException, DocumentException, CategoryNameWithoutTranslation {
-		
+
 		// Create the table and form diagram
 		createKidsFormSimpleTable();
 		// Generate the drools rules.
@@ -74,17 +71,16 @@ public class NewTableRuleTest extends TestFormCreator {
 		// Only with one conditions colum
 		TableRule tableRule = new TableRule("TestTable");
 
-			// Question == Answer
+		// Question == Answer
 		TableRuleRow ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				new ExpressionValueTreeObjectReference(breakfastB)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, formQuestionAnswer),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-						"QuestionEqualsAnswerWorking")));
+				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "b"))));
+//		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), formQuestionAnswer),
+//				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
+//						"QuestionEqualsAnswerWorking")));
 		tableRule.getRules().add(ruleRow);
 
-		
 		// Add the table rule
 		getForm().getTableRules().add(tableRule);
 		// Creation of a simple diagram to load the table rule

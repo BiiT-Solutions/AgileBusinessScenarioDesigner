@@ -32,7 +32,6 @@ public class DroolsForm implements ISubmittedForm {
 
 	}
 
-	@Override
 	public ISubmittedForm getForm() {
 		return form;
 	}
@@ -65,6 +64,11 @@ public class DroolsForm implements ISubmittedForm {
 
 	public void setForm(SubmittedForm submittedForm) {
 		this.form = submittedForm;
+	}
+
+	@Override
+	public ISubmittedForm getSubmittedForm() {
+		return form;
 	}
 
 }

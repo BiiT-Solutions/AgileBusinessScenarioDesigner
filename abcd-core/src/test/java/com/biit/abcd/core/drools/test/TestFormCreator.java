@@ -28,22 +28,22 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class TestFormCreator {
-	
+
 	private ISubmittedForm submittedForm;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
 	private Form form = null;
-	
+
 	static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 	}
 
 	public TestFormCreator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
-		
+
 		orbeonImporter = new OrbeonSubmittedAnswerImporter();
-		
+
 		form = new Form("KidsScreen");
 
 		Category algemeen = new Category("Algemeen");
@@ -53,7 +53,7 @@ public class TestFormCreator {
 		birthdate.setAnswerType(AnswerType.INPUT);
 		birthdate.setAnswerFormat(AnswerFormat.DATE);
 		algemeen.addChild(birthdate);
-		
+
 		Question gender = new Question("gender");
 		Answer male = new Answer("M");
 		Answer female = new Answer("F");
@@ -66,22 +66,22 @@ public class TestFormCreator {
 		height.setAnswerType(AnswerType.INPUT);
 		height.setAnswerFormat(AnswerFormat.NUMBER);
 		algemeen.addChild(height);
-		
+
 		Question heightFather = new Question("heightFather");
 		heightFather.setAnswerType(AnswerType.INPUT);
 		heightFather.setAnswerFormat(AnswerFormat.NUMBER);
 		algemeen.addChild(heightFather);
-		
+
 		Question heightMother = new Question("heightMother");
 		heightMother.setAnswerType(AnswerType.INPUT);
 		heightMother.setAnswerFormat(AnswerFormat.NUMBER);
 		algemeen.addChild(heightMother);
-		
+
 		Question weight = new Question("weight");
 		weight.setAnswerType(AnswerType.INPUT);
 		weight.setAnswerFormat(AnswerFormat.NUMBER);
 		algemeen.addChild(weight);
-		
+
 		Category gezondheid = new Category("Gezondheid");
 		form.addChild(gezondheid);
 
@@ -112,7 +112,7 @@ public class TestFormCreator {
 		breakfast.addChild(breakfastD);
 		breakfast.addChild(breakfastE);
 		voeding.addChild(breakfast);
-		
+
 		Question fruit = new Question("fruit");
 		Answer fruitA = new Answer("a");
 		Answer fruitB = new Answer("b");
@@ -145,12 +145,12 @@ public class TestFormCreator {
 		vegetables.addChild(vegetablesD);
 		vegetables.addChild(vegetablesE);
 		voeding.addChild(vegetables);
-		
+
 		Question vegetablesAmount = new Question("vegetablesAmount");
 		vegetablesAmount.setAnswerType(AnswerType.INPUT);
 		vegetablesAmount.setAnswerFormat(AnswerFormat.NUMBER);
 		voeding.addChild(vegetablesAmount);
-		
+
 		Question drinks = new Question("drinks");
 		Answer drinksA = new Answer("a");
 		Answer drinksB = new Answer("b");
@@ -164,12 +164,11 @@ public class TestFormCreator {
 		voeding.addChild(drinks);
 	}
 
-	
-	public Form getForm(){
+	public Form getForm() {
 		return form;
 	}
-	
-	public ISubmittedForm getSubmittedForm(){
+
+	public ISubmittedForm getSubmittedForm() {
 		return submittedForm;
 	}
 
@@ -181,52 +180,37 @@ public class TestFormCreator {
 		Assert.assertNotNull(submittedForm);
 		Assert.assertFalse(submittedForm.getCategories().isEmpty());
 	}
-	
+
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readStaticSubmittedForm" })
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
 		String xmlStructure = readFile("./src/test/resources/kidScreen.xhtml", StandardCharsets.UTF_8);
 		OrbeonCategoryTranslator.getInstance().readXml(submittedForm, xmlStructure);
 	}
-	
+
 	/**
 	 * Returns the tree object with the name specified. <br>
-	 * In our test scenario the names are unique 
+	 * In our test scenario the names are unique
+	 * 
 	 * @param name
 	 * @return
 	 */
-	public TreeObject getTreeObject(String name){
+	public TreeObject getTreeObject(String name) {
 		// Look for the name in the categories
-		for(TreeObject category : getForm().getChildren()){
-			if(category.getName().equals(name)){
+		for (TreeObject category : getForm().getChildren()) {
+			if (category.getName().equals(name)) {
 				return category;
 			}
 			// Look for the name in the category children
-			if(category instanceof Category){
-				for(TreeObject categoryChild : ((Category)category).getChildren()){
-					if(categoryChild.getName().equals(name)){
+			if (category instanceof Category) {
+				for (TreeObject categoryChild : ((Category) category).getChildren()) {
+					if (categoryChild.getName().equals(name)) {
 						return categoryChild;
 					}
 					// Look for the name in the group children
-					if(categoryChild instanceof Group){
-						for(TreeObject groupChild : ((Group)categoryChild).getChildren()){
-							if(groupChild.getName().equals(name)){
+					if (categoryChild instanceof Group) {
+						for (TreeObject groupChild : ((Group) categoryChild).getChildren()) {
+							if (groupChild.getName().equals(name)) {
 								return groupChild;
-							}
-							// Look for the name in the question children
-							if(groupChild instanceof Question){
-								for(TreeObject questionChild : ((Question)groupChild).getChildren()){
-									if(questionChild.getName().equals(name)){
-										return questionChild;
-									}
-								}
-							}
-						}
-					}
-					// Look for the name in the question children
-					if(categoryChild instanceof Question){
-						for(TreeObject questionChild : ((Question)categoryChild).getChildren()){
-							if(questionChild.getName().equals(name)){
-								return questionChild;
 							}
 						}
 					}
@@ -235,8 +219,17 @@ public class TestFormCreator {
 		}
 		return null;
 	}
-	
-	public TreeObject getAnswer(String QuestionName, String answerName) {
 
+	public TreeObject getAnswer(String QuestionName, String answerName) {
+		TreeObject question = getTreeObject(QuestionName);
+		// Look for the name in the question children
+		if (question instanceof Question) {
+			for (TreeObject questionChild : ((Question) question).getChildren()) {
+				if (questionChild.getName().equals(answerName)) {
+					return questionChild;
+				}
+			}
+		}
+		return null;
 	}
 }
