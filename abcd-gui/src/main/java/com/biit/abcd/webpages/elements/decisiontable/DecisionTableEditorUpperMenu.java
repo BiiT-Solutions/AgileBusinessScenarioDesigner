@@ -19,7 +19,7 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 
-		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.SAVE,
+		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.FORM_SAVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
 		newTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE, ThemeIcon.TABLE_ADD,
 				LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP);

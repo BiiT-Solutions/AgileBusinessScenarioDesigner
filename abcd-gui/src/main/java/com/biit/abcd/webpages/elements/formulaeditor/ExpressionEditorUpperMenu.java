@@ -17,7 +17,7 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
-		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.SAVE,
+		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.FORM_SAVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
 		newExpression = new IconButton(LanguageCodes.MENU_EXPRESSIONS_ADD, ThemeIcon.EXPRESSION_ADD,
 				LanguageCodes.MENU_EXPRESSIONS_ADD);

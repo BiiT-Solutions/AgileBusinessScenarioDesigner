@@ -20,7 +20,6 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.form.BaseForm;
 import com.biit.form.persistence.dao.hibernate.TreeObjectDao;
 
 @Repository
@@ -64,13 +63,6 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 						tableRuleRow.getActionChain().updateChildrenSortSeqs();
 					}
 				}
-			}
-		}
-		if (rulesList != null && !rulesList.isEmpty()) {
-			for (Rule rule : rulesList) {
-				System.out.println("RULE ID: " + rule.getId() + " -- UUID: " + rule.getComparationId());
-				System.out.println("RULE CONDITION ID: " + rule.getConditionChain().getId()
-						+ " -- CONDITION CHAIN UUID: " + rule.getConditionChain().getComparationId());
 			}
 		}
 		return super.makePersistent(entity);

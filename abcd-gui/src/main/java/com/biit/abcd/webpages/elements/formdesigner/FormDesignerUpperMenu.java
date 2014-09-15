@@ -25,7 +25,7 @@ public class FormDesignerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Save
-		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcon.SAVE, LanguageCodes.MENU_SAVE);
+		saveButton = new IconButton(LanguageCodes.MENU_SAVE, ThemeIcon.FORM_SAVE, LanguageCodes.MENU_SAVE);
 		addIconButton(saveButton);
 
 		// Add new Category

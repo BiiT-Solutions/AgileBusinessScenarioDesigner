@@ -30,6 +30,8 @@ public enum LanguageCodes {
 	MENU_SAVE("menu.save"),
 	MENU_MOVE_UP("menu.moveup"),
 	MENU_MOVE_DOWN("menu.movedown"),
+	
+	BUTTON_DOWNLOAD("button.download"),
 
 	COLLAPSABLE_PANEL_COLLAPSE_TOOLTIP("collapsable.panel.collapse.tooltip"),
 	COLLAPSABLE_PANEL_EXPAND_TOOLTIP("collapsable.panel.expand.tooltip"),
@@ -65,6 +67,7 @@ public enum LanguageCodes {
 	WARNING_DIAGRAM_DELETION("warning.diagram.deletion"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
+	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
 
 	FORM_TABLE_COLUMN_NAME("formTable.column.name"),
 	FORM_TABLE_COLUMN_VERSION("formTable.column.version"),
