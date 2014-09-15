@@ -1,6 +1,10 @@
 package com.biit.abcd.webpages;
 
 import java.io.IOException;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+
+import javax.servlet.ServletContext;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
@@ -20,12 +24,15 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.UserError;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -45,9 +52,20 @@ public class Login extends WebPageComponent {
 		setCompositionRoot(rootLayout);
 		setSizeFull();
 
+		VerticalLayout loginVersion = new VerticalLayout();
+		loginVersion.setSizeUndefined();
+		loginVersion.setSpacing(true);
+
 		Panel loginPanel = buildLoginForm();
-		rootLayout.addComponent(loginPanel);
-		rootLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
+		Component nameVersion = createNameVersion();
+
+		loginVersion.addComponent(loginPanel);
+		loginVersion.addComponent(nameVersion);
+		loginVersion.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
+		loginVersion.setComponentAlignment(nameVersion, Alignment.MIDDLE_CENTER);
+
+		rootLayout.addComponent(loginVersion);
+		rootLayout.setComponentAlignment(loginVersion, Alignment.MIDDLE_CENTER);
 	}
 
 	@Override
@@ -93,14 +111,15 @@ public class Login extends WebPageComponent {
 		});
 
 		// Add the login button
-		Button loginButton = new Button(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_SIGN_IN), new ClickListener() {
-			private static final long serialVersionUID = 1239035599265918788L;
+		Button loginButton = new Button(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_SIGN_IN),
+				new ClickListener() {
+					private static final long serialVersionUID = 1239035599265918788L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				checkUserAndPassword();
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						checkUserAndPassword();
+					}
+				});
 		loginButton.setWidth(FIELD_SIZE);
 
 		// Alignment and sizes.
@@ -110,18 +129,15 @@ public class Login extends WebPageComponent {
 		layout.addComponent(usernameField);
 		layout.addComponent(passwordField);
 		layout.addComponent(loginButton);
-//		layout.addComponent(createNameVersion());
 		panel.setContent(layout);
 		return panel;
 	}
 
-//	private Component createNameVersion(){
-//		HorizontalLayout hl = new HorizontalLayout();
-//
-//		return hl;
-//	}
-
-
+	private Component createNameVersion() {
+		Label label = new Label("Agile Business sCenario Designer - v" + getVersion());
+		label.setWidth(null);
+		return label;
+	}
 
 	private void checkUserAndPassword() {
 		// Try to log in the user when the button is clicked
@@ -166,16 +182,18 @@ public class Login extends WebPageComponent {
 			ApplicationFrame.navigateTo(WebMap.getMainPage());
 		}
 	}
-//
-//	private String getVersion() {
-//		String version = null;
-//		try {
-//			Manifest manifest = new Manifest(this.getUI().getc.getResourceAsStream("/META-INF/MANIFEST.MF"));
-//			Attributes attributes = manifest.getMainAttributes();
-//			version = attributes.getValue("Implementation-Version");
-//		} catch (IOException e) {
-//			MonitoringStatusLogger.errorMessage(this.getClass().getName(), e);
-//		}
-//		return version;
-//	}
+
+	private String getVersion() {
+		ServletContext context = VaadinServlet.getCurrent().getServletContext();
+		Manifest manifest;
+		String version = null;
+		try {
+			manifest = new Manifest(context.getResourceAsStream("/META-INF/MANIFEST.MF"));
+			Attributes attributes = manifest.getMainAttributes();
+			version = attributes.getValue("Implementation-Version");
+		} catch (IOException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+		return version;
+	}
 }

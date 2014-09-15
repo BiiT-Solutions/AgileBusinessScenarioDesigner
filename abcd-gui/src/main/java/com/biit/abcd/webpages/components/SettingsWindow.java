@@ -9,6 +9,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -111,6 +112,10 @@ public class SettingsWindow extends PopupWindow {
 									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
 											.getExpressionChain().getRepresentation());
 									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+								} catch (ActionNotImplementedException e) {
+									MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+											LanguageCodes.WARNING_RULE_INCOMPLETE);
+									AbcdLogger.warning(SettingsWindow.class.getName(), e.toString());
 								} catch (Exception e) {
 									MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
 											LanguageCodes.ERROR_DROOLS_ENGINE);

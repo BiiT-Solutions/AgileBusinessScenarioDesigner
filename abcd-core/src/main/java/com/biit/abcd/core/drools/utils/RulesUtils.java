@@ -180,4 +180,25 @@ public class RulesUtils {
 		}
 		return cleanedResults;
 	}
+	
+	public static String addThenIfNeeded(String ruleCore) {
+		String cleanedResults = "";
+		boolean thenClause = false;
+		String[] lines = ruleCore.split("\n");
+		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+			String line = lines[lineIndex];
+			if (line.equals("then")) {
+				thenClause = true;
+			}
+		}
+		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+			if((lineIndex == (lines.length-1)) && (!thenClause)){
+				System.out.println("ENTRA EN IF");
+				
+				cleanedResults += getThenRuleString();
+			}
+			cleanedResults += lines[lineIndex] + "\n";
+		}
+		return cleanedResults;
+	}
 }

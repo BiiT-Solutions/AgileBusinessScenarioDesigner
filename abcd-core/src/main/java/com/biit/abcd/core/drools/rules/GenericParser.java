@@ -315,18 +315,18 @@ public class GenericParser {
 
 		// System.out.println("CONDITIONS: " + conditions);
 		// System.out.println("ACTIONS: " + actions);
-		
+
 		this.treeObjectDroolsname.clear();
 		String ruleCore = "";
 		ruleCore += "	$droolsForm: DroolsForm() and\n";
-		
+
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
 		}
-		if (conditions != null) {
+		if ((conditions != null) && (conditions.getExpressions() != null) && (!conditions.getExpressions().isEmpty())) {
 			ruleCore += this.parseConditions(conditions);
 		}
-		if (actions != null) {
+		if ((actions != null) && (actions.getExpressions() != null) && (!actions.getExpressions().isEmpty())) {
 			// Expression rule
 			if (conditions == null) {
 				ruleCore += this.parseExpressions(actions, extraConditions);
@@ -340,7 +340,6 @@ public class GenericParser {
 			ruleCore = RulesUtils.newRemoveDuplicateLines(ruleCore);
 			ruleCore = RulesUtils.checkForDuplicatedVariables(ruleCore);
 			ruleCore = RulesUtils.removeExtraParenthesis(ruleCore);
-			
 		}
 		return ruleCore;
 	}
@@ -436,11 +435,11 @@ public class GenericParser {
 							case FORM:
 								this.putTreeObjectName(leftVariable.getReference(), leftVariable.getReference()
 										.getComparationIdNoDash().toString());
-									droolsConditions += "	$"
-											+ leftVariable.getReference().getComparationIdNoDash().toString()
-											+ " : SubmittedForm( isScoreSet('" + varName
-											+ "'), getNumberVariableValue('" + varName + "') >= " + value1 + " && < "
-											+ value2 + ") from $droolsForm.getSubmittedForm() \n";
+								droolsConditions += "	$"
+										+ leftVariable.getReference().getComparationIdNoDash().toString()
+										+ " : SubmittedForm( isScoreSet('" + varName + "'), getNumberVariableValue('"
+										+ varName + "') >= " + value1 + " && < " + value2
+										+ ") from $droolsForm.getSubmittedForm() \n";
 								break;
 							case CATEGORY:
 								droolsConditions += "	$"
@@ -1025,7 +1024,7 @@ public class GenericParser {
 		// All the expressions without functions should pass this condition and
 		// some generic functions too
 
-//		System.out.println("PARSED EXPRESSION: " + parsedExpression);
+		// System.out.println("PARSED EXPRESSION: " + parsedExpression);
 
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();
@@ -1419,24 +1418,28 @@ public class GenericParser {
 		String droolsRule = "";
 		if (this.getTreeObjectName(form) == null) {
 			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
-			
-				droolsRule += "	$" + form.getComparationIdNoDash().toString()
-						+ " : SubmittedForm() from $droolsForm.getSubmittedForm() and\n";
+
+			droolsRule += "	$" + form.getComparationIdNoDash().toString()
+					+ " : SubmittedForm() from $droolsForm.getSubmittedForm() and\n";
 		}
 		return droolsRule;
 	}
 
-//	private String simpleFormCustomVariableCondition(ExpressionValueCustomVariable customVariable) {
-//		String droolsRule = "";
-//		Form form = (Form) customVariable.getReference();
-//		if (this.getTreeObjectName(form) == null) {
-//			this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
-//			droolsRule += "	$droolsForm : DroolsForm() and\n";
-//			droolsRule += "	$" + form.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('"
-//					+ customVariable.getVariable().getName() + "')) from $droolsForm.getSubmittedForm() and\n";
-//		}
-//		return "";
-//	}
+	// private String
+	// simpleFormCustomVariableCondition(ExpressionValueCustomVariable
+	// customVariable) {
+	// String droolsRule = "";
+	// Form form = (Form) customVariable.getReference();
+	// if (this.getTreeObjectName(form) == null) {
+	// this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
+	// droolsRule += "	$droolsForm : DroolsForm() and\n";
+	// droolsRule += "	$" + form.getComparationIdNoDash().toString() +
+	// " : SubmittedForm( isScoreSet('"
+	// + customVariable.getVariable().getName() +
+	// "')) from $droolsForm.getSubmittedForm() and\n";
+	// }
+	// return "";
+	// }
 
 	private String simpleGroupConditions(Group group) {
 		String conditions = "";
@@ -1540,9 +1543,9 @@ public class GenericParser {
 
 		if (scope instanceof Form) {
 			this.putTreeObjectName(scope, scope.getComparationIdNoDash().toString());
-				ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('" + varName
-						+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + ") from $droolsForm.getSubmittedForm() \n";
+			ruleCore += "	$" + scope.getComparationIdNoDash().toString() + " : SubmittedForm( isScoreSet('" + varName
+					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+					+ valueNumber.getValue() + ") from $droolsForm.getSubmittedForm() \n";
 
 		} else if (scope instanceof Category) {
 			TreeObject form = scope.getParent();
@@ -1577,8 +1580,8 @@ public class GenericParser {
 		}
 		return ruleCore;
 	}
-	
-	public void setDroolsFormDefined(boolean droolsFormDefined){
+
+	public void setDroolsFormDefined(boolean droolsFormDefined) {
 		this.droolsFormDefined = droolsFormDefined;
 	}
 }

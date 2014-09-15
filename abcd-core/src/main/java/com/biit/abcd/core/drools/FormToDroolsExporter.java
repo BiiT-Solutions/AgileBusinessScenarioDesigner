@@ -14,6 +14,7 @@ import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -40,9 +41,10 @@ public class FormToDroolsExporter {
 	 * @throws RuleInvalidException
 	 * @throws IOException
 	 * @throws RuleNotImplementedException
+	 * @throws ActionNotImplementedException 
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
-			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException {
+			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -91,7 +93,7 @@ public class FormToDroolsExporter {
 
 	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName,
 			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation {
+			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
 		// Obtain results

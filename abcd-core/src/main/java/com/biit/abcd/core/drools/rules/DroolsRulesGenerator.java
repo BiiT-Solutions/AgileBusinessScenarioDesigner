@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -23,14 +24,14 @@ public class DroolsRulesGenerator {
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
 	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, RuleNotImplementedException {
+			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
 		this.initParser();
 	}
 
-	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException {
+	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
 		if (this.form != null) {
 			this.rules = "package com.biit.drools \n";
 			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";

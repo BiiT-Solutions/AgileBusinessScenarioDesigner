@@ -14,6 +14,7 @@ import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -170,7 +171,7 @@ public class TestFormCreator {
 	}
 
 	public ISubmittedForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation {
+			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
 		// Generate the drools rules.
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), null);
