@@ -23,6 +23,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 
 	@Override
 	protected void initializeSets(List<Form> forms) {
+		super.initializeSets(forms);
 		for (Form form : forms) {
 			// Initializes the sets for lazy-loading (within the same session)+
 			Hibernate.initialize(form.getChildren());
