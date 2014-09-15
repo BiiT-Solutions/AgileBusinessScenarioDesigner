@@ -387,7 +387,11 @@ public enum LanguageCodes {
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_CAPTION("condition.table.editor.button.copy.rows.caption"),
 	CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_TOOLTIP("condition.table.editor.button.copy.rows.tooltip"),
 	CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_CAPTION("condition.table.editor.button.paste.rows.caption"),
-	CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_TOOLTIP("condition.table.editor.button.paste.rows.tooltip");
+	CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_TOOLTIP("condition.table.editor.button.paste.rows.tooltip"),
+	
+	SAVE_AS_FILE_CREATING("save.as.file.creating"),
+	SAVE_AS_FILE_CREATED("save.as.file.created"),
+	SAVE_AS_FILE_FAILED("save.as.file.failed");
 
 
 

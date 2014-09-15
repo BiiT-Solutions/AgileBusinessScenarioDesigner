@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -118,7 +119,7 @@ public class SaveAsButton extends IconButton {
 			layout.setSpacing(true);
 			layout.setMargin(true);
 
-			labelTextField = new Label("Creating the resource...");
+			labelTextField = new Label(ServerTranslate.translate(LanguageCodes.SAVE_AS_FILE_CREATING));
 			layout.addComponent(labelTextField);
 			this.setContent(layout);
 		}
@@ -138,7 +139,7 @@ public class SaveAsButton extends IconButton {
 			StreamResource streamResource = getResource();
 
 			if (streamResource != null) {
-				labelTextField.setValue("The file has been generated successfully. Press the button to download.");
+				labelTextField.setValue(ServerTranslate.translate(LanguageCodes.SAVE_AS_FILE_CREATED));
 				center();
 
 				Button downloadButton = new IconButton(LanguageCodes.BUTTON_DOWNLOAD, ThemeIcon.DOWNLOAD,
@@ -154,8 +155,6 @@ public class SaveAsButton extends IconButton {
 								} catch (Exception e) {
 									AbcdLogger.errorMessage(this.getClass().getName(), e);
 								}
-								// data = null;
-								// close();
 							}
 						});
 
@@ -170,7 +169,7 @@ public class SaveAsButton extends IconButton {
 		}
 
 		public void showError() {
-			labelTextField.setValue("Failed to obtain the desired data. Try again.");
+			labelTextField.setValue(ServerTranslate.translate(LanguageCodes.SAVE_AS_FILE_FAILED));
 			center();
 		}
 
