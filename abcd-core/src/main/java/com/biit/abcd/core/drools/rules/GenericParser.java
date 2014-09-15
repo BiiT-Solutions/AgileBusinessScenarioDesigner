@@ -1025,7 +1025,7 @@ public class GenericParser {
 		// All the expressions without functions should pass this condition and
 		// some generic functions too
 
-		System.out.println("PARSED EXPRESSION: " + parsedExpression);
+//		System.out.println("PARSED EXPRESSION: " + parsedExpression);
 
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();

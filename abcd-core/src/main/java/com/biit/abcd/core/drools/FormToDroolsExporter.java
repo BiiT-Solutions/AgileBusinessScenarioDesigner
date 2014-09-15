@@ -120,4 +120,32 @@ public class FormToDroolsExporter {
 		}
 		return droolsForm;
 	}
+
+	/**
+	 * Method used for testing purposes.<br>
+	 * 
+	 * @param submittedForm without scores
+	 * @param droolsRules
+	 * @param globalVariables
+	 * @return submittedForm with the scores calculated by drools
+	 * @throws DocumentException
+	 * @throws IOException
+	 * @throws CategoryNameWithoutTranslation
+	 */
+	public ISubmittedForm applyDrools(ISubmittedForm submittedForm, String droolsRules,
+			List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,
+			CategoryNameWithoutTranslation {
+		// Launch kie
+		KieManager km = new KieManager();
+		// Load the rules in memory
+		km.buildSessionRules(droolsRules);
+		// km.buildSessionRules(new
+		// String(Files.readAllBytes(Paths.get(System.getProperty("java.io.tmpdir")
+		// + File.separator + "generatedRules.drl"))));
+		// Creation of the global constants
+		km.setGlobalVariables(globalVariables);
+		ISubmittedForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
+		runDroolsRules(droolsForm, km);
+		return droolsForm;
+	}
 }

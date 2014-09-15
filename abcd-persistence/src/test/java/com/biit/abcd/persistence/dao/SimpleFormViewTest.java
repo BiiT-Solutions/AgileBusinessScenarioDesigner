@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -41,5 +40,6 @@ public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContext
 		List<SimpleFormView> views = simpleFormViewDao.getAll();
 		Assert.assertEquals(views.size(), 1);
 		Assert.assertEquals(views.get(0).getName(), DUMMY_FORM);
+		formDao.makeTransient(form);
 	}
 }

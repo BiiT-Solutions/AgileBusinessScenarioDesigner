@@ -178,7 +178,10 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	}
 
 	private void removeSelectedRule() {
-		UserSessionHandler.getFormController().getForm().getRules().remove(tableSelectRule.getSelectedRule());
+		boolean test = UserSessionHandler.getFormController().getForm().getRules()
+				.remove(tableSelectRule.getSelectedRule());
+		System.out.println("**********" + test + "  " + tableSelectRule.getSelectedRule().getClass().getName() + " "
+				+ tableSelectRule.getSelectedRule().getId());
 		tableSelectRule.removeSelectedRow();
 		refreshRuleEditor();
 	}
