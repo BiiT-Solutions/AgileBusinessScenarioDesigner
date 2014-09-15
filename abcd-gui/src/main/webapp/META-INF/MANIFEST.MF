@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Version: 0.8.4
+Implementation-Version: 1.0.000
 Built-By: Alfonso
 Build-Jdk: 1.7.0_21
 Created-By: Apache Maven 3.0.5
