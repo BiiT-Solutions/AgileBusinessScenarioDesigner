@@ -62,7 +62,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 					.getExpressions().get(0);
 			TreeObject treeObject = expVal.getReference();
 
-			String id = treeObject.getComparationIdNoDash();
+			String id = treeObject.getUniqueNameReadable();
 			if ((treeObject instanceof Question) && ((Question) treeObject).getAnswerType().equals(AnswerType.INPUT)) {
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case NUMBER:

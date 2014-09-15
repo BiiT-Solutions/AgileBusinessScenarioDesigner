@@ -154,13 +154,13 @@ public class AcceptCancelWindow extends Window {
 		cancelListeners.remove(listener);
 	}
 
-	private void fireAcceptActionListeners() {
+	protected void fireAcceptActionListeners() {
 		for (AcceptActionListener listener : acceptListeners) {
 			listener.acceptAction(this);
 		}
 	}
 
-	private void fireCancelActionListeners() {
+	protected void fireCancelActionListeners() {
 		for (CancelActionListener listener : cancelListeners) {
 			listener.cancelAction(this);
 		}

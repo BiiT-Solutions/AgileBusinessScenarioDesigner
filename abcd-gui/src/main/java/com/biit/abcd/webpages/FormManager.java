@@ -6,7 +6,6 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
-import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.security.DActivity;
@@ -25,19 +24,26 @@ public class FormManager extends FormWebPageComponent {
 	private FormsVersionsTreeTable formTable;
 	private FormManagerUpperMenu upperMenu;
 
-	private ISimpleFormViewDao simpleFormViewDao;
 	private IFormDao formDao;
 
 	public FormManager() {
 		super();
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
 		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	@Override
 	protected void initContent() {
 		this.upperMenu = createUpperMenu();
+		upperMenu.addFormSelectedListener(new IFormSelectedListener() {
+
+			@Override
+			public void formSelected() {
+				if (formTable.getValue() != null) {
+					UserSessionHandler.getFormController().setForm(formDao.read(formTable.getValue().getId()));
+				}
+			}
+		});
 		setUpperMenu(upperMenu);
 
 		formTable = createTreeTable();
@@ -69,6 +75,12 @@ public class FormManager extends FormWebPageComponent {
 			}
 		});
 		return treeTable;
+	}
+	
+	@Override
+	public void updateButtons(boolean enableFormButtons) {
+		super.updateButtons(enableFormButtons);
+		upperMenu.updateButtons(enableFormButtons);
 	}
 
 	private FormManagerUpperMenu createUpperMenu() {

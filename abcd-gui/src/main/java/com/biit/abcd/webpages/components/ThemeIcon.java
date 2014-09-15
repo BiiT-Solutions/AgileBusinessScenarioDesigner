@@ -15,8 +15,10 @@ public enum ThemeIcon {
 	EDIT("element.edit.svg"),
 
 	LINK("appbar.link.svg"),
+	
+	DOWNLOAD("file.download.svg"),
 
-	SAVE("form.save.svg"),
+	FORM_SAVE("form.save.svg"),
 
 	CONFIGURE("appbar.settings.svg"),
 
@@ -49,6 +51,8 @@ public enum ThemeIcon {
 	FORM_MANAGER_PAGE("page.form.manager.svg"),
 
 	FORM_MANAGER_ADD_FORM("form.create.svg"),
+	
+	FORM_MANAGER_EXPORT_RULES("form.export.rules.svg"),
 
 	TREE_DESIGNER_PAGE("page.form.edit.svg"),
 

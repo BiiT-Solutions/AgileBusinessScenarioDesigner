@@ -16,7 +16,7 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
-		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.SAVE,
+		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.FORM_SAVE,
 				LanguageCodes.FORM_DIAGRAM_BUILDER_UPPER_BUTTON_SAVE_TOOLTIP);
 		newRule = new IconButton(LanguageCodes.MENU_RULE_ADD_CAPTION, ThemeIcon.RULE_ADD,
 				LanguageCodes.MENU_RULE_ADD_TOOLTIP);

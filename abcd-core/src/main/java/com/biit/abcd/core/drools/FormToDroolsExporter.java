@@ -61,6 +61,21 @@ public class FormToDroolsExporter {
 		return null;
 	}
 
+	public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
+			RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException {
+		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
+			DroolsRulesGenerator formRules;
+			try {
+				// Creation of the rules
+				formRules = new DroolsRulesGenerator(form, globalVariables);
+				return formRules.getRules();
+			} catch (ExpressionInvalidException e) {
+				throw e;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Loads the (Submitted) form as facts of the knowledge base of the drools engine. <br>
 	 * It also starts the engine execution by firing all the rules inside the engine.
@@ -126,7 +141,8 @@ public class FormToDroolsExporter {
 	/**
 	 * Method used for testing purposes.<br>
 	 * 
-	 * @param submittedForm without scores
+	 * @param submittedForm
+	 *            without scores
 	 * @param droolsRules
 	 * @param globalVariables
 	 * @return submittedForm with the scores calculated by drools
