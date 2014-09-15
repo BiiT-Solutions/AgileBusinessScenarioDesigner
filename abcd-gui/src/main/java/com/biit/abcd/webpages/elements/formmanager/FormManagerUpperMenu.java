@@ -89,4 +89,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void removeFormSelectedListener(IFormSelectedListener listener) {
 		formSelectedListeners.remove(listener);
 	}
+
+	public void updateButtons(boolean enableFormButtons) {
+		if (exportToDrools != null) {
+			exportToDrools.setEnabled(enableFormButtons);
+		}
+	}
 }

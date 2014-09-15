@@ -76,6 +76,12 @@ public class FormManager extends FormWebPageComponent {
 		});
 		return treeTable;
 	}
+	
+	@Override
+	public void updateButtons(boolean enableFormButtons) {
+		super.updateButtons(enableFormButtons);
+		upperMenu.updateButtons(enableFormButtons);
+	}
 
 	private FormManagerUpperMenu createUpperMenu() {
 		FormManagerUpperMenu upperMenu = new FormManagerUpperMenu(this);
