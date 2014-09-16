@@ -163,7 +163,7 @@ public class FormToDroolsExporter {
 	 * @throws IOException
 	 * @throws CategoryNameWithoutTranslation
 	 */
-	public ISubmittedForm applyDrools(ISubmittedForm submittedForm, String droolsRules,
+	public DroolsForm applyDrools(ISubmittedForm submittedForm, String droolsRules,
 			List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,
 			CategoryNameWithoutTranslation {
 		// Launch kie
@@ -175,7 +175,7 @@ public class FormToDroolsExporter {
 		// + File.separator + "generatedRules.drl"))));
 		// Creation of the global constants
 		km.setGlobalVariables(globalVariables);
-		ISubmittedForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
+		DroolsForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
 		runDroolsRules(droolsForm, km);
 		return droolsForm;
 	}

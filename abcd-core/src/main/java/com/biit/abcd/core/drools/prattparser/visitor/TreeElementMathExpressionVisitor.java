@@ -76,11 +76,9 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 							break;
 						case MONTHS:
 							this.builder.append("DateUtils.returnMonthDistanceFromDate( $" + id + ".getAnswer())");
-							this.builder.append("$" + id + ".getAnswer()");
 							break;
 						case DAYS:
 							this.builder.append("DateUtils.returnDaysDistanceFromDate( $" + id + ".getAnswer())");
-							this.builder.append("$" + id + ".getAnswer()");
 							break;
 						case DATE:
 							this.builder.append("$" + id + ".getAnswer()");

@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.FormToDroolsExporter;
+import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
@@ -175,7 +176,7 @@ public class TestFormCreator {
 		voeding.addChild(drinks);
 	}
 
-	public ISubmittedForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException,
+	public DroolsForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
 		// Generate the drools rules.
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
