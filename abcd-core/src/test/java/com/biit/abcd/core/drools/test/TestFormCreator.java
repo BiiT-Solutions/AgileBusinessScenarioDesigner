@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.junit.Assert;
@@ -25,6 +26,7 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -40,15 +42,18 @@ public class TestFormCreator {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
 	private Form form = null;
+	private List<GlobalVariable> globalVariables = null;
 
 	static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 	}
 
-	public TestFormCreator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
-
+	public TestFormCreator(){
 		orbeonImporter = new OrbeonSubmittedAnswerImporter();
+	}
+	
+	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
 		form = new Form("KidsScreen");
 
@@ -174,11 +179,11 @@ public class TestFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
 		// Generate the drools rules.
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), null);
+		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), globalVariables);
 		readStaticSubmittedForm();
 		translateFormCategories();
 		// Test the rules with the submitted form and returns a DroolsForm
-		return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(), null);
+		return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(), rulesGenerator.getGlobalVariables());
 	}
 
 	public Form getForm() {
@@ -248,5 +253,13 @@ public class TestFormCreator {
 			}
 		}
 		return null;
+	}
+	
+	public List<GlobalVariable> getGlobalVariables(){
+		return globalVariables;
+	}
+	
+	public void setGlobalVariables(List<GlobalVariable> globalVariables){
+		this.globalVariables = globalVariables;
 	}
 }

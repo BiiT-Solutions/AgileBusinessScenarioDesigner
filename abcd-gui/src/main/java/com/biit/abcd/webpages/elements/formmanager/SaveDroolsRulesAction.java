@@ -29,8 +29,8 @@ public class SaveDroolsRulesAction implements SaveAction {
 	public byte[] getInformationData() {
 		try {
 			FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-			//TODO Global Variables not included. 
-			String rules = droolsExporter.getDroolRules(UserSessionHandler.getFormController().getForm(), null);
+			String rules = droolsExporter.getDroolRules(UserSessionHandler.getFormController().getForm(),
+					UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
 			return rules.getBytes();
 		} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
 			MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());

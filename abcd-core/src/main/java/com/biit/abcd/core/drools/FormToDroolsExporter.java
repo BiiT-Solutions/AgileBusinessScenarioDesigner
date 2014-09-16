@@ -106,18 +106,18 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(submittedForm);
 	}
 
-	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName,
-			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
-		// Generate all drools rules.
-		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
-		// Obtain results
-		if (rulesGenerator != null) {
-			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
-					rulesGenerator.getGlobalVariables());
-		} else
-			return null;
-	}
+//	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName,
+//			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
+//			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+//		// Generate all drools rules.
+//		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
+//		// Obtain results
+//		if (rulesGenerator != null) {
+//			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
+//					rulesGenerator.getGlobalVariables());
+//		} else
+//			return null;
+//	}
 	
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName, String orbeonFormName,
 			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
