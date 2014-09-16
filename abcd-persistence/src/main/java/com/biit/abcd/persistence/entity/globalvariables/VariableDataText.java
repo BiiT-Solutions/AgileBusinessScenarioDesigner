@@ -10,6 +10,12 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 public class VariableDataText extends VariableData {
 
 	private String value;
+	// Attribute used for json deserialization due to parent abstract class
+	private String isA = null;
+
+	public VariableDataText() {
+		isA = "VariableDataText";
+	}
 
 	@Override
 	public String getValue() {

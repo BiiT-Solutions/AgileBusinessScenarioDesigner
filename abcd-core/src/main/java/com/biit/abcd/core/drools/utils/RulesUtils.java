@@ -3,11 +3,13 @@ package com.biit.abcd.core.drools.utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 public class RulesUtils {
 
 	public static String getStartRuleString(String name) {
-		return "rule \"" + name + "\"\n";
+		return "rule \"" + name + "_"+ getUniqueId() + "\"\n";
+//		return "rule \"" +getUniqueId() + "\"\n";
 	}
 
 	public static String getWhenRuleString() {
@@ -26,6 +28,10 @@ public class RulesUtils {
 		return "\nend\n";
 	}
 
+	private static String getUniqueId(){
+		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
+	
 	/**
 	 * Due to the independent parsing of the conditions of the rule, sometimes
 	 * the algorithm generates repeated rules <br>

@@ -252,12 +252,12 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 							// Add item.
 							variableDataTable.addItem(variableData);
 							((GlobalVariable) variableTable.getValue()).getData().add(variableData);
+							AbcdLogger.info(this.getClass().getName(),
+									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+											+ variableData.getClass() + " with 'Value: " + variableData.getValue()
+											+ " - Valid from: " + variableData.getValidFrom() + " - Valid to: "
+											+ variableData.getValidTo() + "'.");
 						}
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-										+ variableData.getClass() + " with 'Value: " + variableData.getValue()
-										+ " - Valid from: " + variableData.getValidFrom() + " - Valid to: "
-										+ variableData.getValidTo() + "'.");
 						window.close();
 					}
 				});
@@ -293,12 +293,12 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 							} catch (NotValidTypeInVariableData e) {
 								MessageManager.showError(e.getMessage());
 							}
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' has edited a "
+									+ selectedValue.getClass() + " with 'Value: " + selectedValue.getValue()
+									+ " - Valid from: " + selectedValue.getValidFrom() + " - Valid to: "
+									+ selectedValue.getValidTo() + "'.");
 						}
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has edited a "
-										+ selectedValue.getClass() + " with 'Value: " + selectedValue.getValue()
-										+ " - Valid from: " + selectedValue.getValidFrom() + " - Valid to: "
-										+ selectedValue.getValidTo() + "'.");
 						window.close();
 					}
 				});

@@ -44,7 +44,6 @@ public class GenericParser {
 
 	private boolean cleaningNeeded = true;
 	private HashMap<TreeObject, String> treeObjectDroolsname;
-	private boolean droolsFormDefined = false;
 
 	public GenericParser() {
 		this.treeObjectDroolsname = new HashMap<TreeObject, String>();
@@ -82,29 +81,29 @@ public class GenericParser {
 		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
 		ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
 
-		result += "(\n";
+		// result += "(\n";
 		result += this.processParserResult(leftChain);
-		result += "and\n";
+		// result += "and\n";
 		result += this.processParserResult(rightChain);
-		result += ")\n";
+		// result += ")\n";
 
 		return result;
 	}
 
-	private String orOperator(List<Expression> expressions) {
-		String result = "";
-
-		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
-		ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
-
-		result += "(\n";
-		result += this.processParserResult(leftChain);
-		result += "or\n";
-		result += this.processParserResult(rightChain);
-		result += ")\n";
-
-		return result;
-	}
+	// private String orOperator(List<Expression> expressions) {
+	// String result = "";
+	//
+	// ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
+	// ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
+	//
+	// result += "(\n";
+	// result += this.processParserResult(leftChain);
+	// result += "or\n";
+	// result += this.processParserResult(rightChain);
+	// result += ")\n";
+	//
+	// return result;
+	// }
 
 	/**
 	 * Parse conditions like => Question IN(answer1, ...) <br>
@@ -155,7 +154,7 @@ public class GenericParser {
 				if (leftReference instanceof Question) {
 					Question leftQuestion = (Question) leftReference;
 					droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-							+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() in( " + inValues
+							+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer() in( " + inValues
 							+ " )) from $" + leftReferenceParent.getUniqueNameReadable().toString()
 							+ ".getQuestions()\n";
 				}
@@ -190,10 +189,13 @@ public class GenericParser {
 			auxVal = ((ExpressionChain) auxVal).getExpressions().get(0);
 			ExpressionValue value = (ExpressionValue) auxVal;
 			if (auxVal instanceof ExpressionValueString) {
+
+				String variableValue = value.getValue().toString().replace("\"", "\\\"").replace("\'", "\\\'");
+
 				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
-						+ var.getVariable().getName() + "', '" + value.getValue() + "');\n";
+						+ var.getVariable().getName() + "', '" + variableValue + "');\n";
 				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set (" + var.getReference().getName() + ", "
-						+ var.getVariable().getName() + ", " + value.getValue() + ")\");\n";
+						+ var.getVariable().getName() + ", " + variableValue + ")\");\n";
 
 			} else if (auxVal instanceof ExpressionValueNumber) {
 				ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('"
@@ -318,7 +320,8 @@ public class GenericParser {
 
 		this.treeObjectDroolsname.clear();
 		String ruleCore = "";
-		ruleCore += "	$droolsForm: DroolsForm() and\n";
+		// ruleCore += "	$droolsForm: DroolsForm() and\n";
+		ruleCore += "	$droolsForm: DroolsForm() \n";
 
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
@@ -414,18 +417,17 @@ public class GenericParser {
 											+ lessEqualsDate + ") from $"
 											+ leftReferenceParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
-									droolsConditions += "and\n";
+									// droolsConditions += "and\n";
 								default:
 									break;
 								}
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
+										+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
 										+ value1 + " && < " + value2 + ") from $"
-										+ leftReferenceParent.getUniqueNameReadable().toString()
-										+ ".getQuestions() \n";
-								droolsConditions += "and\n";
+										+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
+								// droolsConditions += "and\n";
 								break;
 							}
 						} else {
@@ -435,24 +437,26 @@ public class GenericParser {
 							case FORM:
 								this.putTreeObjectName(leftVariable.getReference(), leftVariable.getReference()
 										.getUniqueNameReadable().toString());
-									droolsConditions += "	$"
-											+ leftVariable.getReference().getUniqueNameReadable().toString()
-											+ " : SubmittedForm( isScoreSet('" + varName
-											+ "'), getNumberVariableValue('" + varName + "') >= " + value1 + " && < "
-											+ value2 + ") from $droolsForm.getSubmittedForm() \n";
+								droolsConditions += "	$"
+										+ leftVariable.getReference().getUniqueNameReadable().toString()
+										+ " : SubmittedForm(isScoreSet('" + varName + "'), getNumberVariableValue('"
+										+ varName + "') >= " + value1 + " && < " + value2
+										+ ") from $droolsForm.getSubmittedForm() \n";
 								break;
 							case CATEGORY:
 								droolsConditions += "	$"
 										+ leftVariable.getReference().getUniqueNameReadable().toString()
-										+ " : Category( isScoreSet('" + varName + "'), getNumberVariableValue('"
-										+ varName + "') >= " + value1 + " && < " + value2 + ") from $"
+										+ " : Category( getTag() == '" + leftVariable.getReference().getName()
+										+ "', isScoreSet('" + varName + "'), getNumberVariableValue('" + varName
+										+ "') >= " + value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getUniqueNameReadable().toString()
 										+ ".getCategories() \n";
 								break;
 							case GROUP:
 								droolsConditions += "	$"
 										+ leftVariable.getReference().getUniqueNameReadable().toString()
-										+ " : Group( isScoreSet('" + varName + "'), getNumberVariableValue('" + varName
+										+ " : Group( getTag() == '" + leftVariable.getReference().getName()
+										+ "', isScoreSet('" + varName + "'), getNumberVariableValue('" + varName
 										+ "') >= " + value1 + " && < " + value2 + ") from $"
 										+ leftReferenceParent.getUniqueNameReadable().toString() + ".getGroups() \n";
 								break;
@@ -467,7 +471,7 @@ public class GenericParser {
 		return droolsConditions;
 	}
 
-	private String equalsOperator(List<Expression> expressions) {
+	private String equalsNotEqualsOperator(List<Expression> expressions, AvailableOperator availableOperator) {
 		String droolsConditions = "";
 
 		List<Expression> operatorLeft = ((ExpressionChain) expressions.get(0)).getExpressions();
@@ -480,16 +484,24 @@ public class GenericParser {
 			TreeObject treeObject2 = ((ExpressionValueTreeObjectReference) operatorRight.get(0)).getReference();
 			// Question == Answer
 			if ((treeObject1 instanceof Question) && (treeObject2 instanceof Answer)) {
-				droolsConditions += this.questionAnswerEqualsCondition((Question) treeObject1, (Answer) treeObject2);
+				droolsConditions += this.questionAnswerEqualsCondition((Question) treeObject1, (Answer) treeObject2,
+						availableOperator);
 			}
 		}
-		// TreeObject.score == ValueNumber
+		// TreeObject.score == Value
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
 				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueNumber)) {
 
 			droolsConditions += this.treeObjectScoreLogicOperatorValueNumber(
 					(ExpressionValueCustomVariable) operatorLeft.get(0), (ExpressionOperatorLogic) expressions.get(1),
 					(ExpressionValueNumber) operatorRight.get(0));
+		}
+		// TreeObject.score == String
+		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
+				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueString)) {
+			droolsConditions += this.treeObjectScoreEqualsValueString(
+					(ExpressionValueCustomVariable) operatorLeft.get(0), (ExpressionOperatorLogic) expressions.get(1),
+					(ExpressionValueString) operatorRight.get(0));
 		}
 		// Question INPUT
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
@@ -809,10 +821,6 @@ public class GenericParser {
 		if (variableToCalculate != null) {
 			ruleCore += "	$" + this.getTreeObjectName(variableToCalculate.getReference()) + ".setVariableValue('"
 					+ variableToCalculate.getVariable().getName() + "', $sol);\n";
-			// ruleCore += "	System.out.println(\"Variable set (" +
-			// variableToCalculate.getReference().getName() + ", "
-			// + variableToCalculate.getVariable().getName() +
-			// ", \" + $sol +\")\");\n";
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 					+ variableToCalculate.getReference().getName() + ", " + variableToCalculate.getVariable().getName()
 					+ ", \" + $sol +\")\");\n";
@@ -851,10 +859,6 @@ public class GenericParser {
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('" + customVarName
 					+ "', " + "(Double)$" + this.getTreeObjectName(var2.getReference()) + ".getNumberVariableValue('"
 					+ customVarName + "') " + operator.getValue() + " " + valueNumber.getValue() + ");\n";
-			// ruleCore += "	System.out.println( \"Variable updated (" +
-			// var.getReference().getName() + ", "
-			// + customVarName + ", " + operator.getValue() +
-			// valueNumber.getValue() + ")\");\n";
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable updated (" + var.getReference().getName() + ", "
 					+ customVarName + ", " + operator.getValue() + valueNumber.getValue() + ")\");\n";
 
@@ -867,10 +871,6 @@ public class GenericParser {
 			ruleCore += "	$" + this.getTreeObjectName(var.getReference()) + ".setVariableValue('" + customVarName
 					+ "', " + "(Double)$" + this.getTreeObjectName(var2.getReference()) + ".getNumberVariableValue('"
 					+ customVarName + "') " + operator.getValue() + " " + valueNumber.getValue() + ");\n";
-			// ruleCore += "	System.out.println( \"Variable updated (" +
-			// var.getReference().getName() + ", "
-			// + customVarName + ", " + operator.getValue() +
-			// valueNumber.getValue() + ")\");\n";
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable updated (" + var.getReference().getName() + ", "
 					+ customVarName + ", " + operator.getValue() + valueNumber.getValue() + ")\");\n";
 
@@ -1033,7 +1033,9 @@ public class GenericParser {
 			if (expressions.get(1) instanceof ExpressionOperatorLogic) {
 				switch (((ExpressionOperatorLogic) expressions.get(1)).getValue()) {
 				case EQUALS:
-					return this.equalsOperator(expressions);
+				case NOT_EQUALS:
+					return this.equalsNotEqualsOperator(expressions,
+							((ExpressionOperatorLogic) expressions.get(1)).getValue());
 				case AND:
 					return this.andOperator(expressions);
 					// case OR:
@@ -1082,8 +1084,9 @@ public class GenericParser {
 		this.treeObjectDroolsname.put(treeObject, value);
 	}
 
-	private String questionAnswerEqualsCondition(Question question, Answer answer) {
-		String droolsConditions = "(\n";
+	private String questionAnswerEqualsCondition(Question question, Answer answer, AvailableOperator availableOperator) {
+		// String droolsConditions = "(\n";
+		String droolsConditions = "";
 		// Check the parent of the question
 		TreeObject questionParent = question.getParent();
 		this.putTreeObjectName(question, question.getUniqueNameReadable().toString());
@@ -1093,10 +1096,12 @@ public class GenericParser {
 			droolsConditions += this.simpleGroupConditions((Group) questionParent);
 		}
 		this.putTreeObjectName(question, question.getUniqueNameReadable().toString());
-		droolsConditions += "	$" + question.getUniqueNameReadable().toString() + " : Question( getTag() == '"
-				+ question.getName() + "', getAnswer() == '" + answer.getName() + "') from $"
-				+ questionParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
-		return droolsConditions + ")\n";
+		droolsConditions += "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag() == '"
+				+ question.getName() + "', getAnswer()" + availableOperator.getValue().toString() + "'"
+				+ answer.getName() + "') from $" + questionParent.getUniqueNameReadable().toString()
+				+ ".getQuestions()\n";
+		// return droolsConditions + ")\n";
+		return droolsConditions;
 	}
 
 	/**
@@ -1158,18 +1163,17 @@ public class GenericParser {
 											+ lessEqualsDate + ") from $"
 											+ leftReferenceParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
-									droolsConditions += "and\n";
+									// droolsConditions += "and\n";
 								default:
 									break;
 								}
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-										+ " : Question( getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
+										+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
 										+ value1 + " && < " + value2 + ") from $"
-										+ leftReferenceParent.getUniqueNameReadable().toString()
-										+ ".getQuestions() \n";
-								droolsConditions += "and\n";
+										+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
+								// droolsConditions += "and\n";
 								break;
 							}
 						}
@@ -1181,22 +1185,22 @@ public class GenericParser {
 	}
 
 	private String questionDateDaysOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
-		return "	$" + question.getUniqueNameReadable().toString()
-				+ " : Question(getAnswer() instanceof Date, DateUtils.returnDaysDistanceFromDate(getAnswer()) "
+		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
+				+ "', getAnswer() instanceof Date, DateUtils.returnDaysDistanceFromDate(getAnswer()) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
 				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
 	}
 
 	private String questionDateMonthsOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
-		return "	$" + question.getUniqueNameReadable().toString()
-				+ " : Question(getAnswer() instanceof Date, DateUtils.returnMonthDistanceFromDate(getAnswer()) "
+		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
+				+ "', getAnswer() instanceof Date, DateUtils.returnMonthDistanceFromDate(getAnswer()) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
 				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
 	}
 
 	private String questionDateYearsOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
-		return "	$" + question.getUniqueNameReadable().toString()
-				+ " : Question(getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
+		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
+				+ "', getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
 				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
 	}
@@ -1205,9 +1209,9 @@ public class GenericParser {
 		String droolsConditions = "";
 		List<Expression> left = ((ExpressionChain) conditions.get(0)).getExpressions();
 		TreeObject leftTreeObject = null;
+
 		if ((left.size() == 1) && !(left.get(0) instanceof ExpressionValueCustomVariable)) {
 			leftTreeObject = ((ExpressionValueTreeObjectReference) left.get(0)).getReference();
-
 			if (leftTreeObject != null) {
 				List<Expression> rightExpressions = ((ExpressionChain) conditions.get(2)).getExpressions();
 
@@ -1228,34 +1232,28 @@ public class GenericParser {
 						}
 						if (leftTreeObject instanceof Question) {
 							Question leftQuestion = (Question) leftTreeObject;
-							if (leftQuestion.getAnswerType().equals(AnswerType.INPUT)
-									&& leftQuestion.getAnswerFormat().equals(AnswerFormat.DATE)) {
-								droolsConditions += this.questionDateOperatorValue(leftTreeObjectParent, leftQuestion,
-										operator, value);
-
-								// switch (operator) {
-								// case GREATER_EQUALS:
-								// return
-								// this.questionValueDateGreaterEqualsAnswer(leftTreeObjectParent,
-								// leftQuestion, value);
-								// case GREATER_THAN:
-								// return
-								// this.questionValueDateGreaterThanAnswer(leftTreeObjectParent,
-								// leftQuestion,
-								// value);
-								// case LESS_EQUALS:
-								// return
-								// this.questionValueDateLessEqualsAnswer(leftTreeObjectParent,
-								// leftQuestion,
-								// value);
-								// case LESS_THAN:
-								// return
-								// this.questionValueDateLessThanAnswer(leftTreeObjectParent,
-								// leftQuestion,
-								// value);
-								// default:
-								// break;
-								// }
+							if (leftQuestion.getAnswerType().equals(AnswerType.INPUT)) {
+								switch (leftQuestion.getAnswerFormat()) {
+								case DATE:
+									droolsConditions += this.questionDateOperatorValue(leftTreeObjectParent,
+											leftQuestion, operator, value);
+									break;
+								case NUMBER:
+									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
+											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer() "
+											+ operator.getValue() + " " + value.intValue() + ") from $"
+											+ leftTreeObjectParent.getUniqueNameReadable().toString()
+											+ ".getQuestions()\n";
+									break;
+								case TEXT:
+								case POSTAL_CODE:
+									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
+											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer() "
+											+ operator.getValue() + " " + value.intValue() + ") from $"
+											+ leftTreeObjectParent.getUniqueNameReadable().toString()
+											+ ".getQuestions()\n";
+									break;
+								}
 							}
 						}
 					}
@@ -1290,12 +1288,12 @@ public class GenericParser {
 							droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
 									+ " : Question(getAnswer() instanceof Date, getTag() == '" + leftQuestion.getName()
 									+ "') from $" + leftQuestionParent.getUniqueNameReadable().toString()
-									+ ".getQuestions() and\n";
+									+ ".getQuestions() \n";
 							droolsConditions += "	$" + rightQuestion.getUniqueNameReadable().toString()
 									+ " : Question(getAnswer() instanceof Date, getTag() == '"
 									+ rightQuestion.getName() + "', getAnswer() " + operator.getValue() + " $"
 									+ leftQuestion.getUniqueNameReadable().toString() + ".getAnswer()) from $"
-									+ rightQuestionParent.getUniqueNameReadable().toString() + ".getQuestions() and\n";
+									+ rightQuestionParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
 						}
 					}
 				}
@@ -1314,7 +1312,7 @@ public class GenericParser {
 					droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
 							+ " : Question(getAnswer() instanceof Date, getTag() == '" + leftQuestion.getName()
 							+ "', getAnswer() " + operator.getValue() + " DateUtils.returnCurrentDate()) from $"
-							+ leftQuestionParent.getUniqueNameReadable().toString() + ".getQuestions() and\n";
+							+ leftQuestionParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
 				}
 			}
 		} else {
@@ -1336,55 +1334,13 @@ public class GenericParser {
 		// a new reference
 		rule += this.checkVariableAssignation(leftQuestion);
 
-		rule += "	$" + leftQuestion.getUniqueNameReadable().toString()
-				+ " : Question(getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
+		rule += "	$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
+				+ leftQuestion.getName()
+				+ "', getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
 				+ operator.getValue() + value.intValue() + ") from $"
 				+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
 		return rule;
 	}
-
-	// private String questionValueDateGreaterEqualsAnswer(TreeObject
-	// leftReferenceParent, TreeObject leftQuestion,
-	// Double value) {
-	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
-	// +
-	// " : Question(getAnswer() instanceof Date, getAnswer() <= DateUtils.returnCurrentDateMinusYears("
-	// + value.intValue() + ")) from $" +
-	// leftReferenceParent.getComparationIdNoDash().toString()
-	// + ".getQuestions()\n";
-	// }
-	//
-	// private String questionValueDateGreaterThanAnswer(TreeObject
-	// leftReferenceParent, TreeObject leftQuestion,
-	// Double value) {
-	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
-	// +
-	// " : Question(getAnswer() instanceof Date, getAnswer() < DateUtils.returnCurrentDateMinusYears("
-	// + value.intValue() + ")) from $" +
-	// leftReferenceParent.getComparationIdNoDash().toString()
-	// + ".getQuestions()\n";
-	// }
-	//
-	// private String questionValueDateLessEqualsAnswer(TreeObject
-	// leftReferenceParent, TreeObject leftQuestion,
-	// Double value) {
-	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
-	// +
-	// " : Question(getAnswer() instanceof Date, getAnswer() >= DateUtils.returnCurrentDateMinusYears("
-	// + value.intValue() + ")) from $" +
-	// leftReferenceParent.getComparationIdNoDash().toString()
-	// + ".getQuestions()\n";
-	// }
-	//
-	// private String questionValueDateLessThanAnswer(TreeObject
-	// leftReferenceParent, TreeObject leftQuestion, Double value) {
-	// return "	$" + leftQuestion.getComparationIdNoDash().toString()
-	// +
-	// " : Question(getAnswer() instanceof Date, getAnswer() > DateUtils.returnCurrentDateMinusYears("
-	// + value.intValue() + ")) from $" +
-	// leftReferenceParent.getComparationIdNoDash().toString()
-	// + ".getQuestions()\n";
-	// }
 
 	private String simpleCategoryConditions(Category category) {
 		String conditions = "";
@@ -1394,7 +1350,7 @@ public class GenericParser {
 		if (this.getTreeObjectName(category) == null) {
 			this.putTreeObjectName(category, category.getUniqueNameReadable().toString());
 			conditions += "	$" + category.getUniqueNameReadable().toString() + " : Category() from $"
-					+ form.getUniqueNameReadable().toString() + ".getCategory('" + category.getName() + "') and\n";
+					+ form.getUniqueNameReadable().toString() + ".getCategory('" + category.getName() + "') \n";
 		}
 		return conditions;
 	}
@@ -1409,7 +1365,7 @@ public class GenericParser {
 			this.putTreeObjectName(category, category.getUniqueNameReadable().toString());
 			conditions += "	$" + category.getUniqueNameReadable().toString() + " : Category( isScoreSet('"
 					+ customVariable.getVariable().getName() + "')) from $" + form.getUniqueNameReadable().toString()
-					+ ".getCategory('" + category.getName() + "') and\n";
+					+ ".getCategory('" + category.getName() + "') \n";
 		}
 		return conditions;
 	}
@@ -1418,28 +1374,11 @@ public class GenericParser {
 		String droolsRule = "";
 		if (this.getTreeObjectName(form) == null) {
 			this.putTreeObjectName(form, form.getUniqueNameReadable().toString());
-			
-				droolsRule += "	$" + form.getUniqueNameReadable().toString()
-						+ " : SubmittedForm() from $droolsForm.getSubmittedForm() and\n";
+			droolsRule += "	$" + form.getUniqueNameReadable().toString()
+					+ " : SubmittedForm() from $droolsForm.getSubmittedForm() \n";
 		}
 		return droolsRule;
 	}
-
-	// private String
-	// simpleFormCustomVariableCondition(ExpressionValueCustomVariable
-	// customVariable) {
-	// String droolsRule = "";
-	// Form form = (Form) customVariable.getReference();
-	// if (this.getTreeObjectName(form) == null) {
-	// this.putTreeObjectName(form, form.getComparationIdNoDash().toString());
-	// droolsRule += "	$droolsForm : DroolsForm() and\n";
-	// droolsRule += "	$" + form.getComparationIdNoDash().toString() +
-	// " : SubmittedForm( isScoreSet('"
-	// + customVariable.getVariable().getName() +
-	// "')) from $droolsForm.getSubmittedForm() and\n";
-	// }
-	// return "";
-	// }
 
 	private String simpleGroupConditions(Group group) {
 		String conditions = "";
@@ -1449,7 +1388,7 @@ public class GenericParser {
 		if (this.getTreeObjectName(group) == null) {
 			this.putTreeObjectName(group, group.getUniqueNameReadable().toString());
 			conditions += "	$" + group.getUniqueNameReadable().toString() + " : Group() from $"
-					+ category.getUniqueNameReadable().toString() + ".getGroup('" + group.getName() + "') and\n";
+					+ category.getUniqueNameReadable().toString() + ".getGroup('" + group.getName() + "') \n";
 		}
 		return conditions;
 	}
@@ -1464,7 +1403,7 @@ public class GenericParser {
 			this.putTreeObjectName(group, group.getUniqueNameReadable().toString());
 			conditions += "	$" + group.getUniqueNameReadable().toString() + " : Group( isScoreSet('"
 					+ customVariable.getVariable().getName() + "')) from $"
-					+ category.getUniqueNameReadable().toString() + ".getGroup('" + group.getName() + "') and\n";
+					+ category.getUniqueNameReadable().toString() + ".getGroup('" + group.getName() + "') \n";
 		}
 		return conditions;
 	}
@@ -1478,9 +1417,9 @@ public class GenericParser {
 
 			if (this.getTreeObjectName(question) == null) {
 				this.putTreeObjectName(question, question.getUniqueNameReadable().toString());
-				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question( getTag() == '"
+				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag() == '"
 						+ question.getName() + "') from $" + category.getUniqueNameReadable().toString()
-						+ ".getQuestions() and\n";
+						+ ".getQuestions() \n";
 			}
 
 		} else if (questionParent instanceof Group) {
@@ -1489,9 +1428,9 @@ public class GenericParser {
 
 			if (this.getTreeObjectName(question) == null) {
 				this.putTreeObjectName(question, question.getUniqueNameReadable().toString());
-				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question( getTag() == '"
+				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag() == '"
 						+ question.getName() + "') from $" + group.getUniqueNameReadable().toString()
-						+ ".getQuestions() and\n";
+						+ ".getQuestions() \n";
 			}
 		}
 		return conditions;
@@ -1507,9 +1446,9 @@ public class GenericParser {
 
 			if (this.getTreeObjectName(question) == null) {
 				this.putTreeObjectName(question, question.getUniqueNameReadable().toString());
-				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question( getTag() == '"
+				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag() == '"
 						+ question.getName() + "', isScoreSet('" + customVariable.getVariable().getName()
-						+ "' )) from $" + category.getUniqueNameReadable().toString() + ".getQuestions() and\n";
+						+ "' )) from $" + category.getUniqueNameReadable().toString() + ".getQuestions() \n";
 			}
 
 		} else if (questionParent instanceof Group) {
@@ -1518,9 +1457,9 @@ public class GenericParser {
 
 			if (this.getTreeObjectName(question) == null) {
 				this.putTreeObjectName(question, question.getUniqueNameReadable().toString());
-				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question( getTag() == '"
+				conditions += "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag() == '"
 						+ question.getName() + "', isScoreSet('" + customVariable.getVariable().getName()
-						+ "')) from $" + group.getUniqueNameReadable().toString() + ".getQuestions() and\n";
+						+ "')) from $" + group.getUniqueNameReadable().toString() + ".getQuestions() \n";
 			}
 		}
 		return conditions;
@@ -1541,29 +1480,129 @@ public class GenericParser {
 		TreeObject scope = var.getReference();
 		String varName = var.getVariable().getName();
 
-		if (scope instanceof Form) {
-			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm( isScoreSet('" + varName
+		switch (var.getVariable().getType()) {
+		case NUMBER:
+			if (scope instanceof Form) {
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('" + varName
 						+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
 						+ valueNumber.getValue() + ") from $droolsForm.getSubmittedForm() \n";
+
+			} else if (scope instanceof Category) {
+				TreeObject form = scope.getParent();
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += this.simpleFormCondition((Form) form);
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Category( isScoreSet('" + varName
+						+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + ") from $" + form.getUniqueNameReadable().toString()
+						+ ".getCategory('" + scope.getName() + "') \n";
+
+			} else if (scope instanceof Group) {
+				TreeObject category = scope.getParent();
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += this.simpleCategoryConditions((Category) category);
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Group( isScoreSet('" + varName
+						+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + " ) from $" + category.getUniqueNameReadable().toString()
+						+ ".getGroup('" + scope.getName() + "') \n";
+
+			} else if (scope instanceof Question) {
+				TreeObject questionParent = scope.getParent();
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				if (questionParent instanceof Category) {
+					ruleCore += this.simpleCategoryConditions((Category) questionParent);
+				} else if (questionParent instanceof Group) {
+					ruleCore += this.simpleGroupConditions((Group) questionParent);
+				}
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Question( isScoreSet('" + varName
+						+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + " ) from $" + questionParent.getUniqueNameReadable().toString()
+						+ ".getQuestions() \n";
+			}
+			break;
+		case DATE:
+		case STRING:
+			if (scope instanceof Form) {
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + ") from $droolsForm.getSubmittedForm() \n";
+
+			} else if (scope instanceof Category) {
+				TreeObject form = scope.getParent();
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += this.simpleFormCondition((Form) form);
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Category( isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + ") from $" + form.getUniqueNameReadable().toString()
+						+ ".getCategory('" + scope.getName() + "') \n";
+
+			} else if (scope instanceof Group) {
+				TreeObject category = scope.getParent();
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += this.simpleCategoryConditions((Category) category);
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Group( isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + " ) from $" + category.getUniqueNameReadable().toString()
+						+ ".getGroup('" + scope.getName() + "') \n";
+
+			} else if (scope instanceof Question) {
+				TreeObject questionParent = scope.getParent();
+				this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				if (questionParent instanceof Category) {
+					ruleCore += this.simpleCategoryConditions((Category) questionParent);
+				} else if (questionParent instanceof Group) {
+					ruleCore += this.simpleGroupConditions((Group) questionParent);
+				}
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Question( isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ valueNumber.getValue() + " ) from $" + questionParent.getUniqueNameReadable().toString()
+						+ ".getQuestions() \n";
+			}
+		}
+		return ruleCore;
+	}
+
+	/**
+	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
+	 * Create drools rule like => Category(isScoreSet('cScore'),
+	 * getVariablevalue('cScore') == value )
+	 * 
+	 * @param expressionOperatorLogic
+	 * 
+	 * @param conditions
+	 * @return LHS of the rule
+	 */
+	private String treeObjectScoreEqualsValueString(ExpressionValueCustomVariable var,
+			ExpressionOperatorLogic expressionOperatorLogic, ExpressionValueString valueNumber) {
+		String ruleCore = "";
+
+		TreeObject scope = var.getReference();
+		String varName = var.getVariable().getName();
+
+		if (scope instanceof Form) {
+			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('" + varName
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "') from $droolsForm.getSubmittedForm() \n";
 
 		} else if (scope instanceof Category) {
 			TreeObject form = scope.getParent();
 			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
 			ruleCore += this.simpleFormCondition((Form) form);
 			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Category( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-					+ valueNumber.getValue() + ") from $" + form.getUniqueNameReadable().toString() + ".getCategory('"
-					+ scope.getName() + "') and\n";
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "') from $" + form.getUniqueNameReadable().toString() + ".getCategory('"
+					+ scope.getName() + "') \n";
 
 		} else if (scope instanceof Group) {
 			TreeObject category = scope.getParent();
 			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
 			ruleCore += this.simpleCategoryConditions((Category) category);
 			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Group( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-					+ valueNumber.getValue() + " ) from $" + category.getUniqueNameReadable().toString()
-					+ ".getGroup('" + scope.getName() + "') and\n";
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "' ) from $" + category.getUniqueNameReadable().toString()
+					+ ".getGroup('" + scope.getName() + "') \n";
 
 		} else if (scope instanceof Question) {
 			TreeObject questionParent = scope.getParent();
@@ -1574,14 +1613,10 @@ public class GenericParser {
 				ruleCore += this.simpleGroupConditions((Group) questionParent);
 			}
 			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Question( isScoreSet('" + varName
-					+ "'), getNumberVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-					+ valueNumber.getValue() + " ) from $" + questionParent.getUniqueNameReadable().toString()
-					+ ".getQuestions() and\n";
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "' ) from $" + questionParent.getUniqueNameReadable().toString()
+					+ ".getQuestions() \n";
 		}
 		return ruleCore;
-	}
-
-	public void setDroolsFormDefined(boolean droolsFormDefined) {
-		this.droolsFormDefined = droolsFormDefined;
 	}
 }

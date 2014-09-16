@@ -7,11 +7,13 @@
 				<include name="rules" />
 				<exclude name="rulesWithOrbeon" />
 				<include name="simpleParser" />
+				<include name="gson" />
 			</run>
 		</groups>
 		<classes>
 			<class name="com.biit.abcd.core.drools.test.PrattParserTest" />
 			<class name="com.biit.abcd.core.drools.test.NewTableRuleTest" />
+			<class name="com.biit.abcd.core.drools.test.JsonConverterTest" />
 			<!-- <class name="com.biit.abcd.core.drools.test.GlobalVariablesTest"/>
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.RulesTest" />

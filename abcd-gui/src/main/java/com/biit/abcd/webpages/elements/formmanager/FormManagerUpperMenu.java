@@ -83,8 +83,17 @@ public class FormManagerUpperMenu extends UpperMenu {
 								FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
 								ISubmittedForm submittedForm;
 								try {
+									// submittedForm =
+									// droolsExporter.processForm(UserSessionHandler.getFormController()
+									// .getForm(),
+									// droolsWindow.getOrbeonAppName(),
+									// droolsWindow
+									// .getOrbeonFormName(),
+									// droolsWindow.getOrbeonDocumentId());
+
 									submittedForm = droolsExporter.processForm(UserSessionHandler.getFormController()
-											.getForm(), droolsWindow.getOrbeonAppName(), droolsWindow
+											.getForm(), UserSessionHandler.getGlobalVariablesController()
+											.getGlobalVariables(), droolsWindow.getOrbeonAppName(), droolsWindow
 											.getOrbeonFormName(), droolsWindow.getOrbeonDocumentId());
 									if (submittedForm instanceof DroolsForm) {
 										final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(

@@ -13,6 +13,12 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 public class VariableDataDate extends VariableData {
 
 	private Timestamp value;
+	// Attribute used for json deserialization due to parent abstract class
+	private String isA = null;
+
+	public VariableDataDate() {
+		isA = "VariableDataDate";
+	}
 
 	@Override
 	public Timestamp getValue() {
@@ -36,5 +42,4 @@ public class VariableDataDate extends VariableData {
 			return false;
 		}
 	}
-
 }

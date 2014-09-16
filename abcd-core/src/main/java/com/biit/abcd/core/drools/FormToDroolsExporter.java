@@ -118,6 +118,19 @@ public class FormToDroolsExporter {
 		} else
 			return null;
 	}
+	
+	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName, String orbeonFormName,
+			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
+			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+		// Generate all drools rules.
+		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
+		// Obtain results
+		if (rulesGenerator != null) {
+			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
+					rulesGenerator.getGlobalVariables());
+		} else
+			return null;
+	}
 
 	public ISubmittedForm applyDrools(String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId,
 			String droolsRules, List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,

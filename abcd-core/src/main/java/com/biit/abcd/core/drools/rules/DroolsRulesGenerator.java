@@ -1,5 +1,9 @@
 package com.biit.abcd.core.drools.rules;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
+import com.biit.abcd.core.drools.globalvariablesjson.JSonConverter;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -31,7 +36,8 @@ public class DroolsRulesGenerator {
 		this.initParser();
 	}
 
-	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
+	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
+			ActionNotImplementedException {
 		if (this.form != null) {
 			this.rules = "package com.biit.drools \n\n";
 			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
@@ -64,8 +70,10 @@ public class DroolsRulesGenerator {
 	}
 
 	/**
-	 * Creates the global constants for the drools session Also stores in memory the value to be inserted before the
-	 * facts
+	 * Creates the global constants for the drools session.<br>
+	 * Stores in memory the values to be inserted before the facts and generates
+	 * the global variables export file
+	 * 
 	 * 
 	 * @return The global constants in drools
 	 */
@@ -74,6 +82,7 @@ public class DroolsRulesGenerator {
 		// In the GUI are called global variables, but regarding the forms are
 		// constants
 		if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
+			exportGlobalVariables(this.globalVariables);
 			for (GlobalVariable globalVariable : this.globalVariables) {
 				// First check if the data inside the variable has a valid date
 				List<VariableData> varDataList = globalVariable.getData();
@@ -83,12 +92,13 @@ public class DroolsRulesGenerator {
 						Timestamp currentTime = new Timestamp(new Date().getTime());
 						Timestamp initTime = variableData.getValidFrom();
 						Timestamp endTime = variableData.getValidTo();
-						// Sometimes endtime can be null, meaning that the variable data has no ending time
+						// Sometimes endtime can be null, meaning that the
+						// variable data has no ending time
 						if ((currentTime.after(initTime) && (endTime == null))
 								|| (currentTime.after(initTime) && currentTime.before(endTime))) {
 							globalConstants += this.globalVariableString(globalVariable);
 							this.droolsGlobalVariables.add(new DroolsGlobalVariable(globalVariable.getName(),
-									variableData.getValue()));
+									globalVariable.getFormat(), variableData.getValue()));
 							break;
 						}
 					}
@@ -96,6 +106,18 @@ public class DroolsRulesGenerator {
 			}
 		}
 		return globalConstants;
+	}
+
+	public void exportGlobalVariables(List<GlobalVariable> globalVariablesList) {
+		// Create the global variables export file
+		String globalVariablesJson = JSonConverter.convertGlobalVariableListToJson(globalVariablesList);
+		// System.out.println(globalVariablesJson);
+		try {
+			Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "globalVariables.json"),
+					globalVariablesJson.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String globalVariableString(GlobalVariable globalVariable) {

@@ -513,6 +513,7 @@
         updatedBy DOUBLE,
         validFrom datetime,
         validTo datetime,
+        isA varchar(255),
         value datetime,
         primary key (ID)
     );
@@ -526,6 +527,7 @@
         updatedBy DOUBLE,
         validFrom datetime,
         validTo datetime,
+        isA varchar(255),
         value double precision,
         primary key (ID)
     );
@@ -539,6 +541,7 @@
         updatedBy DOUBLE,
         validFrom datetime,
         validTo datetime,
+        isA varchar(255),
         postalCode varchar(255),
         primary key (ID)
     );
@@ -557,6 +560,7 @@
         updatedBy DOUBLE,
         validFrom datetime,
         validTo datetime,
+        isA varchar(255),
         value varchar(255),
         primary key (ID)
     );

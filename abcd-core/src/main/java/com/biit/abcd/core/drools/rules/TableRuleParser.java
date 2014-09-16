@@ -38,7 +38,7 @@ public class TableRuleParser extends GenericParser {
 				}
 				i++;
 			}
-//			checkActionComplete(tableRule);
+			// checkActionComplete(tableRule);
 		}
 		return newRules;
 	}
@@ -78,19 +78,21 @@ public class TableRuleParser extends GenericParser {
 				preParsedConditions.getExpressions().add(answerExpression);
 			}
 		}
-		// System.out.println("PRE PARSED CONDITIONS: " + preParsedConditions);
+//		System.out.println("PRE PARSED CONDITIONS: " + preParsedConditions);
 		return preParsedConditions;
 	}
-	
-	private void checkActionComplete(TableRule tableRule) throws ActionNotImplementedException{
-		int i = 0;
-		// One rule for each row
-		for (TableRuleRow row : tableRule.getRules()) {
-			if (row.getActionChain().getExpressions().isEmpty()) {
-				throw new ActionNotImplementedException("Action not implemented in row " + (i + 1)
-						+ " of tablerule", row.getConditionChain());
-			}
-			i++;
-		}
-	}
+
+	// private void checkActionComplete(TableRule tableRule) throws
+	// ActionNotImplementedException{
+	// int i = 0;
+	// // One rule for each row
+	// for (TableRuleRow row : tableRule.getRules()) {
+	// if (row.getActionChain().getExpressions().isEmpty()) {
+	// throw new ActionNotImplementedException("Action not implemented in row "
+	// + (i + 1)
+	// + " of tablerule", row.getConditionChain());
+	// }
+	// i++;
+	// }
+	// }
 }
