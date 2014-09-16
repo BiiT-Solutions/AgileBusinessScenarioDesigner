@@ -29,9 +29,12 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
@@ -50,6 +53,7 @@ public class NewExpressionsTest extends TestFormCreator {
 	private final static String MONTHS = "months";
 	private final static String DAYS = "days";
 	private final static String DATE = "date";
+	private final static String BMI = "bmi";
 
 	@Test(groups = { "rules" })
 	public void testExpressions() throws ExpressionInvalidException, NotValidChildException,
@@ -82,6 +86,12 @@ public class NewExpressionsTest extends TestFormCreator {
 		// Check date
 		Assert.assertEquals(((Question) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")
 				.getQuestion("fruit")).getVariableValue(DATE), birthdate);
+		
+		// Check bmi
+		Double height = ((Double)((Question) droolsForm.getSubmittedForm().getCategory("Algemeen").getQuestion("height")).getAnswer());
+		Double weight = ((Double)((Question) droolsForm.getSubmittedForm().getCategory("Algemeen").getQuestion("weight")).getAnswer());
+		Double bmi = weight/((height/100)*(height/100));
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
 	}
 
 	private void createKidsFormSimpleExpressions() throws FieldTooLongException, NotValidChildException,
@@ -90,6 +100,8 @@ public class NewExpressionsTest extends TestFormCreator {
 		// Create custom variables
 		// Assign to form
 		CustomVariable yearsCustomVariable = new CustomVariable(getForm(), YEARS, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		CustomVariable bmiCustomVariable = new CustomVariable(getForm(), BMI, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 		// Assign to category
 		CustomVariable monthsCustomVariable = new CustomVariable(getForm(), MONTHS, CustomVariableType.NUMBER,
@@ -124,6 +136,21 @@ public class NewExpressionsTest extends TestFormCreator {
 		expression = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(getTreeObject("fruit"),
 				dateCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionUnit.DATE));
+		getForm().getExpressionChain().add(expression);
+
+		// Mathematical expression
+		expression = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(getForm(),
+				bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorMath(
+						AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
+						getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
+				new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionSymbol(
+						AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject("height")),
+				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChain().add(expression);
 
 		// Creation of a simple diagram to load the table rule
