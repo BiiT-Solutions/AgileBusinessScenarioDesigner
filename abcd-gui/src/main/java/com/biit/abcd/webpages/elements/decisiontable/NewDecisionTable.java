@@ -105,7 +105,7 @@ public class NewDecisionTable extends CustomComponent {
 
 	/**
 	 * Add all the necessary columns
-	 *
+	 * 
 	 * @param selectedTableRule
 	 */
 	public void updateColumns(TableRule selectedTableRule) {
@@ -119,7 +119,7 @@ public class NewDecisionTable extends CustomComponent {
 
 	/**
 	 * Add the necessary rows and fills them
-	 *
+	 * 
 	 * @param selectedTableRule
 	 */
 	public void updateRows(TableRule selectedTableRule) {

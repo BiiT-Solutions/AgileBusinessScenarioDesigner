@@ -38,13 +38,14 @@ public class NewActionTable extends Table {
 
 		setImmediate(true);
 		setSizeFull();
+
 		addContainerProperty(Columns.ACTION, Component.class, null,
-				ServerTranslate
-				.translate(LanguageCodes.ACTION_TABLE_HEADER_ACTION),
-				null, Align.CENTER);
+				ServerTranslate.translate(LanguageCodes.ACTION_TABLE_HEADER_ACTION), null, Align.CENTER);
+
 		cellRowSelector = new CellRowSelector();
 		addItemClickListener(cellRowSelector);
 		setCellStyleGenerator(cellRowSelector);
+
 		setSelectable(false);
 	}
 
@@ -56,13 +57,14 @@ public class NewActionTable extends Table {
 		}
 	}
 
-	public void updateRow(TableRuleRow row){
+	public void updateRow(TableRuleRow row) {
 		Item rowItem = getItem(row);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) rowItem.getItemProperty(Columns.ACTION).getValue());
 		if (row.getActionChain() != null) {
 			String representation = row.getActionChain().getRepresentation();
-			if(representation.length()>CHARACTER_LIMIT){
-				representation = "..."+representation.substring(representation.length()-CHARACTER_LIMIT, representation.length());
+			if (representation.length() > CHARACTER_LIMIT) {
+				representation = "..."
+						+ representation.substring(representation.length() - CHARACTER_LIMIT, representation.length());
 			}
 			actionValue.setLabel(representation);
 		} else {
@@ -70,49 +72,10 @@ public class NewActionTable extends Table {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void setDefaultNewItemPropertyValues(final Object itemId,
-			final Item item) {
-		final Table thisTable = this;
-		if (item.getItemProperty(Columns.ACTION).getValue() == null) {
-			EditCellComponent editCellComponent = new ActionValueEditCell();
-			// Propagate element click.
-			editCellComponent.addLayoutClickListener(new LayoutClickListener() {
-				private static final long serialVersionUID = -8606373054437936380L;
-
-				@Override
-				public void layoutClick(LayoutClickEvent event) {
-					MouseEventDetails mouseEvent = new MouseEventDetails();
-					mouseEvent.setAltKey(event.isAltKey());
-					mouseEvent.setButton(event.getButton());
-					mouseEvent.setClientX(event.getClientX());
-					mouseEvent.setClientY(event.getClientY());
-					mouseEvent.setCtrlKey(event.isCtrlKey());
-					mouseEvent.setMetaKey(event.isMetaKey());
-					mouseEvent.setRelativeX(event.getRelativeX());
-					mouseEvent.setRelativeY(event.getRelativeY());
-					mouseEvent.setShiftKey(event.isShiftKey());
-					if (event.isDoubleClick()) {
-						// Double click
-						mouseEvent.setType(0x00002);
-					} else {
-						mouseEvent.setType(0x00001);
-					}
-					cellRowSelector.itemClick(new ItemClickEvent(thisTable,
-							item, itemId, Columns.ACTION, mouseEvent));
-				}
-			});
-			item.getItemProperty(Columns.ACTION).setValue(editCellComponent);
-			editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId));
-			editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener(itemId));
-			item.getItemProperty(Columns.ACTION).setValue(editCellComponent);
-		}
-	}
-
 	/**
 	 * This action listener is called when the user press on the edit button of
 	 * the cell component
-	 *
+	 * 
 	 */
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
@@ -131,7 +94,7 @@ public class NewActionTable extends Table {
 	/**
 	 * This action listener is called when the user press on the remove button
 	 * of the cell component
-	 *
+	 * 
 	 */
 	private class CellDeleteButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -7125934888135148456L;
@@ -144,6 +107,32 @@ public class NewActionTable extends Table {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			fireClearActionListeners((TableRuleRow) row);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
+		if (item.getItemProperty(Columns.ACTION).getValue() == null) {
+			EditCellComponent editCellComponent = new ActionValueEditCell();
+			editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId));
+			editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener(itemId));
+			editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId));
+			// Propagate element click.
+			editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId));
+			item.getItemProperty(Columns.ACTION).setValue(editCellComponent);
+		}
+	}
+
+	private class RowDoubleClickedListener implements CellDoubleClickedListener {
+		private Object row;
+
+		public RowDoubleClickedListener(Object itemId) {
+			row = itemId;
+		}
+
+		@Override
+		public void isDoubleClick() {
+			fireEditActionListeners((TableRuleRow) row);
 		}
 	}
 
@@ -178,11 +167,11 @@ public class NewActionTable extends Table {
 	// Action table listeners
 	// **********************
 
-	public void addEditActionListener(EditActionListener listener){
+	public void addEditActionListener(EditActionListener listener) {
 		editActionListeners.add(listener);
 	}
 
-	public void removeEditActionListener(EditActionListener listener){
+	public void removeEditActionListener(EditActionListener listener) {
 		editActionListeners.remove(listener);
 	}
 
@@ -191,17 +180,52 @@ public class NewActionTable extends Table {
 			listener.editAction(row);
 		}
 	}
-	public void addClearActionListener(ClearActionListener listener){
+
+	public void addClearActionListener(ClearActionListener listener) {
 		clearActionListeners.add(listener);
 	}
 
-	public void removeClearActionListener(ClearActionListener listener){
+	public void removeClearActionListener(ClearActionListener listener) {
 		clearActionListeners.remove(listener);
 	}
 
 	private void fireClearActionListeners(TableRuleRow row) {
 		for (ClearActionListener listener : clearActionListeners) {
 			listener.removeAction(row);
+		}
+	}
+
+	private class LayoutClickPropagator implements LayoutClickListener {
+		private static final long serialVersionUID = 7317098890526331989L;
+		private Table conditionTable;
+		private Item item;
+		private Object itemId;
+
+		public LayoutClickPropagator(Table conditiontable, Item item, Object itemId) {
+			conditionTable = conditiontable;
+			this.item = item;
+			this.itemId = itemId;
+		}
+
+		@Override
+		public void layoutClick(LayoutClickEvent event) {
+			MouseEventDetails mouseEvent = new MouseEventDetails();
+			mouseEvent.setAltKey(event.isAltKey());
+			mouseEvent.setButton(event.getButton());
+			mouseEvent.setClientX(event.getClientX());
+			mouseEvent.setClientY(event.getClientY());
+			mouseEvent.setCtrlKey(event.isCtrlKey());
+			mouseEvent.setMetaKey(event.isMetaKey());
+			mouseEvent.setRelativeX(event.getRelativeX());
+			mouseEvent.setRelativeY(event.getRelativeY());
+			mouseEvent.setShiftKey(event.isShiftKey());
+			if (event.isDoubleClick()) {
+				// Double click
+				mouseEvent.setType(0x00002);
+			} else {
+				mouseEvent.setType(0x00001);
+			}
+			cellRowSelector.itemClick(new ItemClickEvent(conditionTable, item, itemId, Columns.ACTION, mouseEvent));
 		}
 	}
 }

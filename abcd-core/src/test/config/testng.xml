@@ -15,8 +15,8 @@
 			<class name="com.biit.abcd.core.drools.test.NewTableRuleTest" />
 			<class name="com.biit.abcd.core.drools.test.JsonConverterTest" />
 			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest"/>
-			<class name="com.biit.abcd.core.drools.test.NewExpressionsTest" />
-			<!--<class name="com.biit.abcd.core.drools.test.RulesTest" />
+			<class name="com.biit.abcd.core.drools.test.NewExpressionsTest"/>
+			<!-- <class name="com.biit.abcd.core.drools.test.RulesTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramTest" />
 			<class name="com.biit.abcd.core.drools.test.DiagramDateTest"/>
 			<class name="com.biit.abcd.core.drools.test.ZrmFormTest" /> 

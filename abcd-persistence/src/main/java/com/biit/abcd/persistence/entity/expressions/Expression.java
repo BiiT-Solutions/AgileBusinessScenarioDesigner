@@ -18,7 +18,7 @@ import com.biit.persistence.entity.StorableObject;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Expression extends StorableObject {
 
-	private boolean isEditable = true;
+	private transient boolean isEditable = true;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
 	// we cannot use the list of children with

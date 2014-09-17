@@ -11,14 +11,8 @@ public class ActionValueEditCell extends EditCellComponent {
 
 	public ActionValueEditCell() {
 		super();
-		addRemoveButtonClickListener(new ClickListener() {
-			private static final long serialVersionUID = 6253961924451407630L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				setLabel(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
-			}
-		});
+		setOnlyEdit(true);
+		setCellBehaviour();
 	}
 
 	public void setLabel(ExpressionChain action) {
@@ -30,4 +24,14 @@ public class ActionValueEditCell extends EditCellComponent {
 		}
 	}
 
+	private void setCellBehaviour() {
+		addRemoveButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 6253961924451407630L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				setLabel(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE));
+			}
+		});
+	}
 }
