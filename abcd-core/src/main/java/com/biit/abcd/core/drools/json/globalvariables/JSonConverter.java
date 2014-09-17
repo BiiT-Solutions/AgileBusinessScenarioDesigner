@@ -16,7 +16,7 @@ public class JSonConverter {
 
 	public static String convertGlobalVariableListToJson(List<GlobalVariable> globalVariables) {
 		// create the gson object
-		Gson gson = new Gson();
+		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(globalVariables);
 	}
 

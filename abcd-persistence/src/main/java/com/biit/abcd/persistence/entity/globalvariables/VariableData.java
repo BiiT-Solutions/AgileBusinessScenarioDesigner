@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.persistence.entity.StorableObject;
@@ -24,6 +25,10 @@ public abstract class VariableData extends StorableObject {
 	public abstract void setValue(Object value) throws NotValidTypeInVariableData;
 
 	public abstract boolean checkType(Object value);
+
+	// Attribute used for json deserialization due to parent abstract class
+	@Transient
+	private final String type = this.getClass().getName();
 
 	public Timestamp getValidFrom() {
 		return validFrom;
@@ -54,6 +59,10 @@ public abstract class VariableData extends StorableObject {
 	@Override
 	public String toString() {
 		return getValue().toString();
+	}
+
+	public String getType() {
+		return type;
 	}
 
 }
