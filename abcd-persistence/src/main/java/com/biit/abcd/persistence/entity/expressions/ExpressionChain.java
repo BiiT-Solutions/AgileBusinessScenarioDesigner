@@ -150,11 +150,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			// (except equals).
 			if ((i > 0
 					&& (expressions.get(i) instanceof ExpressionValueString)
-					&& (!(expressions.get(i - 1) instanceof ExpressionFunction))
-					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorMath) || (((ExpressionOperator) expressions
-							.get(i - 1)).getValue().equals(AvailableOperator.ASSIGNATION))) 
+					&& (!(expressions.get(i - 1) instanceof ExpressionFunction) || ((ExpressionFunction) expressions.get(i - 1)).getValue().equals(AvailableFunction.IN))
+					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorMath) || ((ExpressionOperator) expressions
+							.get(i - 1)).getValue().equals(AvailableOperator.ASSIGNATION)) 
 					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorLogic) || (((ExpressionOperator) expressions.get(i - 1))
-					.getValue().equals(AvailableOperator.EQUALS))))
+					.getValue().equals(AvailableOperator.EQUALS)) || (((ExpressionOperator) expressions.get(i - 1))
+							.getValue().equals(AvailableOperator.NOT_EQUALS))))
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)
