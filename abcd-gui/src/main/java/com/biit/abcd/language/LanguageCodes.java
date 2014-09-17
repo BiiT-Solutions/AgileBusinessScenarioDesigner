@@ -65,6 +65,7 @@ public enum LanguageCodes {
 	WARNING_RULE_DELETION("warning.rule.deletion"),
 	WARNING_EXPRESSION_DELETION("warning.expression.deletion"),
 	WARNING_DIAGRAM_DELETION("warning.diagram.deletion"),
+	WARNING_RULE_INCOMPLETE("warning.rule.incomplete"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),

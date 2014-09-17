@@ -1,24 +1,10 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
-
-import org.dom4j.DocumentException;
-
 import com.biit.abcd.ApplicationFrame;
-import com.biit.abcd.MessageManager;
-import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.drools.FormToDroolsExporter;
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
-import com.biit.orbeon.form.ISubmittedForm;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -29,7 +15,6 @@ public class SettingsWindow extends PopupWindow {
 
 	private static final long serialVersionUID = 4258182015635300330L;
 	private static final String width = "300px";
-	private ISubmittedForm submittedForm;
 
 	public SettingsWindow() {
 		setClosable(true);
@@ -67,61 +52,6 @@ public class SettingsWindow extends PopupWindow {
 						close();
 					}
 				});
-		Button droolsEngineButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_DROOLS_ENGINE),
-				new ClickListener() {
-					private static final long serialVersionUID = 5662848461729745562L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						final DroolsSubmittedFormWindow droolsWindow = new DroolsSubmittedFormWindow();
-						droolsWindow.addAcceptActionListener(new AcceptActionListener() {
-
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								try {
-
-									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-									submittedForm = droolsExporter.processForm(UserSessionHandler.getFormController()
-											.getForm(), droolsWindow.getOrbeonAppName(), droolsWindow
-											.getOrbeonFormName(), droolsWindow.getOrbeonDocumentId());
-
-									// AbcdLogger.debug(this.getClass().getName(),
-									// droolsExporter.getGeneratedRules());
-									if (submittedForm instanceof DroolsForm) {
-										final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-												((DroolsForm) submittedForm).getSubmittedForm());
-										droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
-											@Override
-											public void acceptAction(AcceptCancelWindow window) {
-												droolsResultWindow.close();
-											}
-										});
-										droolsResultWindow.showCentered();
-									}
-									droolsWindow.close();
-
-								} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
-									MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								} catch (DocumentException | CategoryNameWithoutTranslation e) {
-									MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
-											e.getMessage());
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								} catch (RuleNotImplementedException e) {
-									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
-											.getExpressionChain().getRepresentation());
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								} catch (Exception e) {
-									MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
-											LanguageCodes.ERROR_DROOLS_ENGINE);
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								}
-							}
-						});
-						droolsWindow.showCentered();
-						close();
-					}
-				});
 		Button logoutButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_LOG_OUT),
 				new ClickListener() {
 					private static final long serialVersionUID = -1121572145945309858L;
@@ -151,12 +81,10 @@ public class SettingsWindow extends PopupWindow {
 		});
 
 		globalConstantsButton.setWidth("100%");
-		droolsEngineButton.setWidth("100%");
 		logoutButton.setWidth("100%");
 		closeButton.setWidth("100%");
 
 		rootLayout.addComponent(globalConstantsButton);
-		rootLayout.addComponent(droolsEngineButton);
 		rootLayout.addComponent(logoutButton);
 		rootLayout.addComponent(closeButton);
 

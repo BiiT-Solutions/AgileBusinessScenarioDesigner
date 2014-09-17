@@ -14,6 +14,7 @@ import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -40,9 +41,10 @@ public class FormToDroolsExporter {
 	 * @throws RuleInvalidException
 	 * @throws IOException
 	 * @throws RuleNotImplementedException
+	 * @throws ActionNotImplementedException 
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
-			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException {
+			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -60,7 +62,7 @@ public class FormToDroolsExporter {
 	}
 
 	public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, IOException, RuleNotImplementedException {
+			RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -104,11 +106,24 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(submittedForm);
 	}
 
-	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName,
+//	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName,
+//			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
+//			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+//		// Generate all drools rules.
+//		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
+//		// Obtain results
+//		if (rulesGenerator != null) {
+//			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
+//					rulesGenerator.getGlobalVariables());
+//		} else
+//			return null;
+//	}
+	
+	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName, String orbeonFormName,
 			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation {
+			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
 		// Generate all drools rules.
-		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
+		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
 		if (rulesGenerator != null) {
 			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
@@ -148,7 +163,7 @@ public class FormToDroolsExporter {
 	 * @throws IOException
 	 * @throws CategoryNameWithoutTranslation
 	 */
-	public ISubmittedForm applyDrools(ISubmittedForm submittedForm, String droolsRules,
+	public DroolsForm applyDrools(ISubmittedForm submittedForm, String droolsRules,
 			List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,
 			CategoryNameWithoutTranslation {
 		// Launch kie
@@ -160,7 +175,7 @@ public class FormToDroolsExporter {
 		// + File.separator + "generatedRules.drl"))));
 		// Creation of the global constants
 		km.setGlobalVariables(globalVariables);
-		ISubmittedForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
+		DroolsForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
 		runDroolsRules(droolsForm, km);
 		return droolsForm;
 	}

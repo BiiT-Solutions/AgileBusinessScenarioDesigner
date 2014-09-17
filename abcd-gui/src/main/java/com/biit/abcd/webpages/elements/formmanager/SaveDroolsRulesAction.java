@@ -37,7 +37,8 @@ public class SaveDroolsRulesAction implements SaveAction {
 			List<String> filesToZip = new ArrayList<>();
 			List<String> namesOfFiles = new ArrayList<>();
 			FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-			String rules = droolsExporter.getDroolRules(UserSessionHandler.getFormController().getForm(), null);
+			String rules = droolsExporter.getDroolRules(UserSessionHandler.getFormController().getForm(),
+					UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
 			filesToZip.add(rules);
 			namesOfFiles.add("droolRules.drl");
 			String variables =

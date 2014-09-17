@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>0.8.3</version>
+		<version>0.8.5</version>
 	</parent>
 	<!-- JBOSS repository -->
 	<repositories>
@@ -100,6 +100,12 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>${apache-poi.version}</version>
+		</dependency>
+		<!-- GSON -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

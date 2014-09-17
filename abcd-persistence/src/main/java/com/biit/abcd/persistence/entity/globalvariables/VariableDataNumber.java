@@ -7,9 +7,15 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 
 @Entity
 @Table(name = "global_variable_data_number")
-public class VariableDataNumber extends VariableData{
+public class VariableDataNumber extends VariableData {
 
 	private Double value;
+	// Attribute used for json deserialization due to parent abstract class
+	private String isA = null;
+
+	public VariableDataNumber() {
+		isA = "VariableDataNumber";
+	}
 
 	@Override
 	public Double getValue() {
@@ -17,27 +23,25 @@ public class VariableDataNumber extends VariableData{
 	}
 
 	@Override
-	public void setValue(Object value) throws NotValidTypeInVariableData{
-		if(!checkType(value)){
-			throw new NotValidTypeInVariableData("The type '" + value.getClass()
-					+ "' is not allowed in this variable.");
+	public void setValue(Object value) throws NotValidTypeInVariableData {
+		if (!checkType(value)) {
+			throw new NotValidTypeInVariableData("The type '" + value.getClass() + "' is not allowed in this variable.");
 		}
 	}
 
 	@Override
-	public boolean checkType(Object value){
+	public boolean checkType(Object value) {
 		Double aux = null;
-		if(value instanceof String){
-			try{
-				aux = Double.parseDouble((String)value);
-			}
-			catch(Exception e){
+		if (value instanceof String) {
+			try {
+				aux = Double.parseDouble((String) value);
+			} catch (Exception e) {
 			}
 		} else {
-			aux = (Double)value;
+			aux = (Double) value;
 		}
 
-		if(aux instanceof Double){
+		if (aux instanceof Double) {
 			this.value = aux;
 			return true;
 		} else {
@@ -49,8 +53,9 @@ public class VariableDataNumber extends VariableData{
 	 * Removes trailing zeros.
 	 */
 	@Override
-	public String toString(){
-		return getValue().toString().indexOf(".") < 0 ? getValue().toString() : getValue().toString().replaceAll("0*$", "").replaceAll("\\.$", "");
+	public String toString() {
+		return getValue().toString().indexOf(".") < 0 ? getValue().toString() : getValue().toString()
+				.replaceAll("0*$", "").replaceAll("\\.$", "");
 	}
 
 }

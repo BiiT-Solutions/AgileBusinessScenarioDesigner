@@ -3,6 +3,7 @@ package com.biit.abcd.core.drools.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -33,7 +34,7 @@ public class DiagramParser extends GenericParser {
 	private List<String> forkConditions;
 
 	public String parse(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
-			RuleNotImplementedException {
+			RuleNotImplementedException, ActionNotImplementedException {
 		List<DiagramObject> diagramObjects = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjects) {
 			// Start the algorithm for each diagram source defined in the main
@@ -53,9 +54,10 @@ public class DiagramParser extends GenericParser {
 	 * @throws ExpressionInvalidException
 	 * @throws RuleInvalidException
 	 * @throws RuleNotImplementedException
+	 * @throws ActionNotImplementedException 
 	 */
 	private void parseDiagramElement(DiagramElement node, String extraConditions) throws ExpressionInvalidException,
-			RuleInvalidException, RuleNotImplementedException {
+			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
 		// Parse the corresponding node
 		switch (node.getType()) {
 		case TABLE:

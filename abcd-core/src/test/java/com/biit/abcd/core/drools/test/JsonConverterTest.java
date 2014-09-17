@@ -1,50 +1,38 @@
 package com.biit.abcd.core.drools.test;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.dom4j.DocumentException;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.FormToDroolsExporter;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.globalvariablesjson.JSonConverter;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
-import com.biit.form.exceptions.InvalidAnswerFormatException;
-import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-/**
- * Tests the correct creation of the global variables <br>
- * It also test the introduction of the variables in the drools engine
- */
-public class GlobalVariablesTest extends TestFormCreator {
+public class JsonConverterTest {
 
-	@Test(groups = { "rules" })
-	public void testGlobVarsInDroolsEngine() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, ActionNotImplementedException, DocumentException, CategoryNameWithoutTranslation {
+	private List<GlobalVariable> globalVarList = null;
 
-		// Create the form and the variables
-		initForm();
-		createGlobalvariables();
-		// Generate the rules
-		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		formDrools.generateDroolRules(getForm(), getGlobalVariables());
-		// Create the rules and launch the engine
-		createAndRunDroolsRules();
+	// Simple table question answer
+	@Test(groups = { "gson" })
+	public void testJsonConverter() throws NotValidTypeInVariableData, FieldTooLongException {
+		createGlobalVariables();
+		String globalVariablesJson = JSonConverter.convertGlobalVariableListToJson(globalVarList);
+		List<GlobalVariable> jsonGlobalVariablesList = JSonConverter
+				.convertJsonToGlobalVariableList(globalVariablesJson);
+
+		Assert.assertEquals(jsonGlobalVariablesList.size(), 4);
+		Assert.assertEquals(jsonGlobalVariablesList.get(2).getName(), "TestPC");
+		Assert.assertEquals(jsonGlobalVariablesList.get(0).getData().get(1).getValue(), 21.0);
 	}
 
-	private void createGlobalvariables() throws NotValidTypeInVariableData, FieldTooLongException {
-		List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
+	private void createGlobalVariables() throws NotValidTypeInVariableData, FieldTooLongException {
+		globalVarList = new ArrayList<GlobalVariable>();
 		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
 		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
 		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
@@ -72,7 +60,5 @@ public class GlobalVariablesTest extends TestFormCreator {
 		globalVarList.add(globalVariableText);
 		globalVarList.add(globalVariablePostalCode);
 		globalVarList.add(globalVariableDate);
-
-		setGlobalVariables(globalVarList);
 	}
 }

@@ -74,7 +74,6 @@ public class DateUtils {
 		Calendar compareDate = Calendar.getInstance();
 		compareDate.setTime(date);
 		Integer days = (int) ((now.getTimeInMillis() - compareDate.getTimeInMillis()) / (1000 * 60 * 60 * 24));
-		System.out.println("DAYS CALCULATED: " + days);
 		return (int) ((now.getTimeInMillis() - compareDate.getTimeInMillis()) / (1000 * 60 * 60 * 24));
 	}
 

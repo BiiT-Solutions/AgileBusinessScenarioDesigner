@@ -1,5 +1,9 @@
 package com.biit.abcd.core.drools.rules;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
+import com.biit.abcd.core.drools.globalvariablesjson.JSonConverter;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
@@ -23,14 +29,15 @@ public class DroolsRulesGenerator {
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
 	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, RuleNotImplementedException {
+			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
 		this.initParser();
 	}
 
-	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException {
+	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
+			ActionNotImplementedException {
 		if (this.form != null) {
 			this.rules = "package com.biit.drools \n\n";
 			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
@@ -41,6 +48,7 @@ public class DroolsRulesGenerator {
 			// Creation of the global variables
 			if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
 				this.rules += this.parseGlobalVariables();
+				this.rules += "\n";
 			}
 
 			// Follow the diagram to parse and launch the rules
@@ -63,8 +71,10 @@ public class DroolsRulesGenerator {
 	}
 
 	/**
-	 * Creates the global constants for the drools session Also stores in memory the value to be inserted before the
-	 * facts
+	 * Creates the global constants for the drools session.<br>
+	 * Stores in memory the values to be inserted before the facts and generates
+	 * the global variables export file
+	 * 
 	 * 
 	 * @return The global constants in drools
 	 */
@@ -73,6 +83,9 @@ public class DroolsRulesGenerator {
 		// In the GUI are called global variables, but regarding the forms are
 		// constants
 		if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
+			// Create the Json file with the exported information
+			exportGlobalVariables(this.globalVariables);
+
 			for (GlobalVariable globalVariable : this.globalVariables) {
 				// First check if the data inside the variable has a valid date
 				List<VariableData> varDataList = globalVariable.getData();
@@ -82,12 +95,13 @@ public class DroolsRulesGenerator {
 						Timestamp currentTime = new Timestamp(new Date().getTime());
 						Timestamp initTime = variableData.getValidFrom();
 						Timestamp endTime = variableData.getValidTo();
-						// Sometimes endtime can be null, meaning that the variable data has no ending time
+						// Sometimes endtime can be null, meaning that the
+						// variable data has no ending time
 						if ((currentTime.after(initTime) && (endTime == null))
 								|| (currentTime.after(initTime) && currentTime.before(endTime))) {
 							globalConstants += this.globalVariableString(globalVariable);
 							this.droolsGlobalVariables.add(new DroolsGlobalVariable(globalVariable.getName(),
-									variableData.getValue()));
+									globalVariable.getFormat(), variableData.getValue()));
 							break;
 						}
 					}
@@ -95,6 +109,56 @@ public class DroolsRulesGenerator {
 			}
 		}
 		return globalConstants;
+	}
+
+	/**
+	 * Sets the global variable array that is going to be used in the drools
+	 * engine<br>
+	 * It does not create the drools rules
+	 * 
+	 * @param globalVariables
+	 */
+	public void setGlobalVariables(List<GlobalVariable> globalVariables) {
+		// In the GUI are called global variables, but regarding the forms are
+		// constants
+		if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
+			for (GlobalVariable globalVariable : this.globalVariables) {
+				// First check if the data inside the variable has a valid date
+				List<VariableData> varDataList = globalVariable.getData();
+				if ((varDataList != null) && !varDataList.isEmpty()) {
+					for (VariableData variableData : varDataList) {
+						Timestamp currentTime = new Timestamp(new Date().getTime());
+						Timestamp initTime = variableData.getValidFrom();
+						Timestamp endTime = variableData.getValidTo();
+						// Sometimes endtime can be null, meaning that the
+						// variable data has no ending time
+						if ((currentTime.after(initTime) && (endTime == null))
+								|| (currentTime.after(initTime) && currentTime.before(endTime))) {
+							this.droolsGlobalVariables.add(new DroolsGlobalVariable(globalVariable.getName(),
+									globalVariable.getFormat(), variableData.getValue()));
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Export the global variables of the abcd to a json file
+	 * 
+	 * @param globalVariablesList
+	 */
+	public void exportGlobalVariables(List<GlobalVariable> globalVariablesList) {
+		// Create the global variables export file
+		String globalVariablesJson = JSonConverter.convertGlobalVariableListToJson(globalVariablesList);
+		// System.out.println(globalVariablesJson);
+		try {
+			Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "globalVariables.json"),
+					globalVariablesJson.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String globalVariableString(GlobalVariable globalVariable) {
@@ -107,9 +171,8 @@ public class DroolsRulesGenerator {
 			return "global java.lang.String " + globalVariable.getName() + "\n";
 		case NUMBER:
 			return "global java.lang.Number " + globalVariable.getName() + "\n";
-		default:
-			return "";
 		}
+		return "";
 	}
 
 	public List<DroolsGlobalVariable> getGlobalVariables() {
