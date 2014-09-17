@@ -191,7 +191,7 @@ public class SaveAsButton extends IconButton {
 				};
 
 				// Allow user to download it.
-				resource = new StreamResource(streamSource, "export." + saveAction.getExtension());
+				resource = new StreamResource(streamSource, saveAction.getFileName());
 
 				resource.setMIMEType(saveAction.getMimeType());
 				resource.setCacheTime(-1);

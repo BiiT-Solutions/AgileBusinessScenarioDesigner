@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.globalvariablesjson;
+package com.biit.abcd.core.drools.json.globalvariables;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -20,17 +20,17 @@ public class VariableDataDeserializer implements JsonDeserializer<VariableData> 
 	private static Map<String, Class> map = new TreeMap<String, Class>();
 
 	static {
-		map.put("VariableDataNumber", VariableDataNumber.class);
-		map.put("VariableDataDate", VariableDataDate.class);
-		map.put("VariableDataText", VariableDataText.class);
-		map.put("VariableDataPostalCode", VariableDataPostalCode.class);
+		map.put(VariableDataNumber.class.getName(), VariableDataNumber.class);
+		map.put(VariableDataDate.class.getName(), VariableDataDate.class);
+		map.put(VariableDataText.class.getName(), VariableDataText.class);
+		map.put(VariableDataPostalCode.class.getName(), VariableDataPostalCode.class);
 	}
 
 	@Override
 	public VariableData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
 
-		String type = json.getAsJsonObject().get("isA").getAsString();
+		String type = json.getAsJsonObject().get("type").getAsString();
 		Class c = map.get(type);
 		if (c == null)
 			throw new RuntimeException("Unknow class: " + type);

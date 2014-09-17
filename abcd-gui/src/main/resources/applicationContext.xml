@@ -55,6 +55,8 @@
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<!-- Unnecesary to open and close sessions -->
 				<prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
+				<!-- When deleting an object, set ID to null -->
+				<prop key="hibernate.use_identifier_rollback">${hibernate.use_identifier_rollback}</prop>
 				
 				<!-- C3p0 -->
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>

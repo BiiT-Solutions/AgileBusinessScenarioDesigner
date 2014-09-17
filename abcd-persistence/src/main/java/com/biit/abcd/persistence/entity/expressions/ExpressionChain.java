@@ -20,8 +20,7 @@ import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more
- * complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more complex expression.
  */
 @Entity
 @Table(name = "expressions_chain")
@@ -121,8 +120,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a
-	 * Expression Evaluator.
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
 	 * 
 	 * @return
 	 */
@@ -148,7 +146,16 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		List<String> definedVariables = new ArrayList<>();
 		// Define variables.
 		for (int i = 0; i < expressions.size(); i++) {
-			if ((expressions.get(i) instanceof ExpressionValueString)
+			// Strings not allowed in functions, mathematical operators (except assignation) and logical operations
+			// (except equals).
+			if ((i > 0
+					&& (expressions.get(i) instanceof ExpressionValueString)
+					&& (!(expressions.get(i - 1) instanceof ExpressionFunction) || ((ExpressionFunction) expressions.get(i - 1)).getValue().equals(AvailableFunction.IN))
+					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorMath) || ((ExpressionOperator) expressions
+							.get(i - 1)).getValue().equals(AvailableOperator.ASSIGNATION)) 
+					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorLogic) || (((ExpressionOperator) expressions.get(i - 1))
+					.getValue().equals(AvailableOperator.EQUALS)) || (((ExpressionOperator) expressions.get(i - 1))
+							.getValue().equals(AvailableOperator.NOT_EQUALS))))
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)

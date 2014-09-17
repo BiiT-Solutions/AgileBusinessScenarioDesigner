@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.globalvariablesjson;
+package com.biit.abcd.core.drools.json.globalvariables;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ public class JSonConverter {
 
 	public static String convertGlobalVariableListToJson(List<GlobalVariable> globalVariables) {
 		// create the gson object
-		Gson gson = new Gson();
+		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(globalVariables);
 	}
 

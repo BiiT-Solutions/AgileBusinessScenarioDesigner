@@ -22,8 +22,8 @@
 			<class name="com.biit.abcd.persistence.dao.GlobalVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.TableRuleTest" />
 			<class name="com.biit.abcd.persistence.entity.expressions.ExpressionTest" />
-			<class name="com.biit.jexeval.ExpressionCheck" />
 			<class name="com.biit.abcd.persistence.dao.OrphanRemoveTest" />
+			<class name="com.biit.jexeval.ExpressionCheck" />
 		</classes>
 	</test>
 </suite>

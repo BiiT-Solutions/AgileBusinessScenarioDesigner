@@ -10,11 +10,8 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 public class VariableDataNumber extends VariableData {
 
 	private Double value;
-	// Attribute used for json deserialization due to parent abstract class
-	private String isA = null;
 
 	public VariableDataNumber() {
-		isA = "VariableDataNumber";
 	}
 
 	@Override
@@ -57,5 +54,4 @@ public class VariableDataNumber extends VariableData {
 		return getValue().toString().indexOf(".") < 0 ? getValue().toString() : getValue().toString()
 				.replaceAll("0*$", "").replaceAll("\\.$", "");
 	}
-
 }
