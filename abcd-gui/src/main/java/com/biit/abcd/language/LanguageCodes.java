@@ -392,7 +392,9 @@ public enum LanguageCodes {
 	
 	SAVE_AS_FILE_CREATING("save.as.file.creating"),
 	SAVE_AS_FILE_CREATED("save.as.file.created"),
-	SAVE_AS_FILE_FAILED("save.as.file.failed");
+	SAVE_AS_FILE_FAILED("save.as.file.failed"),
+	
+	ZIP_FILE_NOT_GENERATED("zip.file.error");
 
 
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
-import com.biit.abcd.core.drools.globalvariablesjson.JSonConverter;
+import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -72,8 +72,7 @@ public class DroolsRulesGenerator {
 
 	/**
 	 * Creates the global constants for the drools session.<br>
-	 * Stores in memory the values to be inserted before the facts and generates
-	 * the global variables export file
+	 * Stores in memory the values to be inserted before the facts and generates the global variables export file
 	 * 
 	 * 
 	 * @return The global constants in drools
@@ -112,8 +111,7 @@ public class DroolsRulesGenerator {
 	}
 
 	/**
-	 * Sets the global variable array that is going to be used in the drools
-	 * engine<br>
+	 * Sets the global variable array that is going to be used in the drools engine<br>
 	 * It does not create the drools rules
 	 * 
 	 * @param globalVariables
@@ -149,10 +147,9 @@ public class DroolsRulesGenerator {
 	 * 
 	 * @param globalVariablesList
 	 */
-	public void exportGlobalVariables(List<GlobalVariable> globalVariablesList) {
+	public static void exportGlobalVariables(List<GlobalVariable> globalVariablesList) {
 		// Create the global variables export file
 		String globalVariablesJson = JSonConverter.convertGlobalVariableListToJson(globalVariablesList);
-		// System.out.println(globalVariablesJson);
 		try {
 			Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "globalVariables.json"),
 					globalVariablesJson.getBytes());

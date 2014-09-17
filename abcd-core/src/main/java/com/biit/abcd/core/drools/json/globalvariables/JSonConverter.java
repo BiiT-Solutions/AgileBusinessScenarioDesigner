@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.globalvariablesjson;
+package com.biit.abcd.core.drools.json.globalvariables;
 
 import java.util.Arrays;
 import java.util.List;

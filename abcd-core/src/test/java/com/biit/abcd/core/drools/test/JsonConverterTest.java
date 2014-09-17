@@ -8,7 +8,7 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.globalvariablesjson.JSonConverter;
+import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
