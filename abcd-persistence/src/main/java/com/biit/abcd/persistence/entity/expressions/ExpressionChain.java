@@ -146,7 +146,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		List<String> definedVariables = new ArrayList<>();
 		// Define variables.
 		for (int i = 0; i < expressions.size(); i++) {
-			// Strings not allowed in functions, methematical operators (except assignation) and logical operations
+			// Strings not allowed in functions, mathematical operators (except assignation) and logical operations
 			// (except equals).
 			if ((i > 0
 					&& (expressions.get(i) instanceof ExpressionValueString)
