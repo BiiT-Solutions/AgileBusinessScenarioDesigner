@@ -15,15 +15,15 @@
 			</run>
 		</groups>
 		<classes>
-			<!--  <class name="com.biit.abcd.persistence.dao.FormTest" />
+			<class name="com.biit.abcd.persistence.dao.FormTest" />
 			<class name="com.biit.abcd.persistence.dao.SimpleFormViewTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
 			<class name="com.biit.abcd.persistence.dao.FormCustomVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.GlobalVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.TableRuleTest" />
 			<class name="com.biit.abcd.persistence.entity.expressions.ExpressionTest" />
+			<class name="com.biit.abcd.persistence.dao.OrphanRemoveTest" />
 			<class name="com.biit.jexeval.ExpressionCheck" />
-			<class name="com.biit.abcd.persistence.dao.OrphanRemoveTest" />-->
 		</classes>
 	</test>
 </suite>

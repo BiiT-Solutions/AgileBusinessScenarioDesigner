@@ -36,6 +36,12 @@ public class ExpressionCheck {
 		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
 	}
 
+	@Test
+	public void testBetweenWithVariablesFunction() {
+		ExpressionChecker e = new ExpressionChecker("x between(x, x+2)");
+		Assert.assertEquals("1", e.with("x", "1").eval().toPlainString());
+	}
+
 	@Test(expectedExceptions = ExpressionException.class)
 	public void testIncorrectBetweenFunction() {
 		ExpressionChecker e = new ExpressionChecker("x + between(0, 10)");
@@ -70,6 +76,12 @@ public class ExpressionCheck {
 		expressions.addExpression(dateVariable);
 		// No exception launch.
 		expressions.getExpressionEvaluator().eval();
+	}
+
+	@Test(expectedExceptions = ExpressionException.class)
+	public void testBetweenNotNumber() throws FieldTooLongException {
+		ExpressionChecker e = new ExpressionChecker("x between(x1, 1)");
+		e.with("x", "1").eval();
 	}
 
 }
