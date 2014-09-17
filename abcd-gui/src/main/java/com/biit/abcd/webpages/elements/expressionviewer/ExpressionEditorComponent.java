@@ -12,8 +12,7 @@ import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Component for editing an expression. Is composed by a viewer and a properties
- * menu in tabs.
+ * Component for editing an expression. Is composed by a viewer and a properties menu in tabs.
  */
 public abstract class ExpressionEditorComponent extends TabEditorComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
@@ -40,7 +39,7 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 		addKeyController();
 	}
 
-	public void initTabs(){
+	public void initTabs() {
 		// First Tab
 		TabFormVariablesLayout formVariablesLayout = new ExpressionTabFormVariablesLayout();
 		formVariablesLayout.addNewElementListener(new ElementAddedListener() {
@@ -122,8 +121,8 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 	}
 
 	/**
-	 * A Expression editor can have more than one viewer. When user click into a
-	 * viewer, this one gains the focus and is selected.
+	 * A Expression editor can have more than one viewer. When user click into a viewer, this one gains the focus and is
+	 * selected.
 	 */
 	public abstract ExpressionViewer getSelectedViewer();
 
@@ -137,10 +136,11 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 			@Override
 			public void handleAction(Object sender, Object target) {
 				Expression expression = getSelectedViewer().getSelectedExpression();
-				getSelectedViewer().removeSelectedExpression();
-
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has deleted the Expression " + expression.getRepresentation() + "'.");
+				if (getSelectedViewer().removeSelectedExpression()) {
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has deleted the Expression "
+							+ expression.getRepresentation() + "'.");
+				}
 			}
 		});
 

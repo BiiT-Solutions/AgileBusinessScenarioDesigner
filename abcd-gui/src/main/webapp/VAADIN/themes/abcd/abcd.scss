@@ -730,6 +730,12 @@ $open-sans-pathPrefix: "./fonts/";
 		background-color: White;
 	}
 	
+	.v-csslayout.v-expression-element.v-csslayout-v-expression-element.expression-disabled {
+		background-color: gray;
+		background-image: linear-gradient(45deg, #ccc 0%, #ccc 25%, #bbb 25%, #bbb 50%, #ccc 50%, #ccc 75%, #bbb 75%);
+		background-size: 20px 20px;
+	}
+	
 	.v-menu-separator.v-csslayout-v-menu-separator {
 		padding: 0px;
 		background-image: linear-gradient(to right, #f2f2f2 0%, #efefef 33%, #e0e0e0 80%);

@@ -320,9 +320,10 @@ public class ExpressionViewer extends CssLayout {
 				HorizontalLayout lineLayout = (HorizontalLayout) rootLayout.getComponent(i);
 				for (int j = 0; j < lineLayout.getComponentCount(); j++) {
 					if (lineLayout.getComponent(j) instanceof ExpressionElement) {
-						if (isFocused()
-								&& expressionOfElement.get(lineLayout.getComponent(j)).equals(selectedExpression)
-								&& selectedExpression.isEditable()) {
+						if (!expressionOfElement.get(lineLayout.getComponent(j)).isEditable()) {
+							lineLayout.getComponent(j).addStyleName("expression-disabled");
+						} else if (isFocused()
+								&& expressionOfElement.get(lineLayout.getComponent(j)).equals(selectedExpression)) {
 							lineLayout.getComponent(j).addStyleName("expression-selected");
 						} else {
 							lineLayout.getComponent(j).removeStyleName("expression-selected");
@@ -369,13 +370,15 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
-	public void removeSelectedExpression() {
+	public boolean removeSelectedExpression() {
 		if (isFocused() && (getSelectedExpression() != null) && getSelectedExpression().isEditable()) {
 			int index = expressions.getExpressions().indexOf(getSelectedExpression());
 			expressions.getExpressions().remove(getSelectedExpression());
 			updateExpression();
 			selectExpressionByIndex(index);
+			return true;
 		}
+		return false;
 	}
 
 	/**
