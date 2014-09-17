@@ -19,11 +19,18 @@ import com.vaadin.ui.VerticalLayout;
 
 public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 7699690992550597244L;
-	private SelectFormAnswerTable answerTable;
+	private SelectFormAnswerTable answerTable = null;
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionChain expressionChain;
-	private boolean tableGenerated = false;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param reference
+	 *            Question or element to apply the expression.
+	 * @param expressionChain
+	 *            Expression applied
+	 */
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
 		this.expressionChain = expressionChain.generateCopy();
@@ -60,22 +67,26 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				expressionChain.removeAllExpressions();
-				if (answerTable.getValue() != null) {
-					expressionChain.addExpression(new ExpressionValueTreeObjectReference(answerTable.getValue()));
-				}
+				setSelectedTableElement();
 			}
 		});
 		answerTable.setSizeFull();
 		if (!expressionChain.getExpressions().isEmpty()
-				&& (expressionChain.getExpressions().get(0) instanceof ExpressionValueTreeObjectReference)) {
-			answerTable.setValue(((ExpressionValueTreeObjectReference) expressionChain.getExpressions().get(0))
-					.getReference());
+				&& (expressionChain.getExpressions().get(expressionChain.getExpressions().size() - 1) instanceof ExpressionValueTreeObjectReference)) {
+			answerTable.setValue(((ExpressionValueTreeObjectReference) expressionChain.getExpressions().get(
+					expressionChain.getExpressions().size() - 1)).getReference());
 		} else {
 			answerTable.setValue(null);
 		}
-		tableGenerated = true;
+		setSelectedTableElement();
 		return answerTable;
+	}
+
+	private void setSelectedTableElement() {
+		expressionChain.removeAllExpressions();
+		if (answerTable.getValue() != null) {
+			expressionChain.addExpression(new ExpressionValueTreeObjectReference(answerTable.getValue()));
+		}
 	}
 
 	public Component generateExpression() {
@@ -97,7 +108,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	}
 
 	public ExpressionChain getExpressionChain() {
-		if (!tableGenerated) {
+		if (answerTable == null) {
 			removeFirstExpression();
 		}
 		return expressionChain;
