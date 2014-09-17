@@ -304,7 +304,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information of the currently selected table.
+	 * Updates the table where the user defines the rules with the information
+	 * of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
 		decisionTable.update(getSelectedTableRule());

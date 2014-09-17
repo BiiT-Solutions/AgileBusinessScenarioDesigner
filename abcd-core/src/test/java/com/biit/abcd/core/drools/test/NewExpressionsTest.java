@@ -75,11 +75,11 @@ public class NewExpressionsTest extends TestFormCreator {
 
 		// Check years
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(YEARS),
-				DateUtils.returnYearDistanceFromDate(birthdate));
+				DateUtils.returnYearsDistanceFromDate(birthdate));
 		// Check months
 		Assert.assertEquals(
 				((Category) droolsForm.getSubmittedForm().getCategory("Algemeen")).getVariableValue(MONTHS),
-				DateUtils.returnMonthDistanceFromDate(birthdate));
+				DateUtils.returnMonthsDistanceFromDate(birthdate));
 		// Check days
 		Assert.assertEquals(((Group) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
 				.getVariableValue(DAYS), DateUtils.returnDaysDistanceFromDate(birthdate));

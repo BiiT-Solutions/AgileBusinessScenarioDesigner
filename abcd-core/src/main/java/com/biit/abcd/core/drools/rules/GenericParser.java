@@ -154,9 +154,9 @@ public class GenericParser {
 				if (leftReference instanceof Question) {
 					Question leftQuestion = (Question) leftReference;
 					droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-							+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer() in( " + inValues
-							+ " )) from $" + leftReferenceParent.getUniqueNameReadable().toString()
-							+ ".getQuestions()\n";
+							+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer('"
+							+ getTreeObjectAnswerType(leftQuestion) + "') in( " + inValues + " )) from $"
+							+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
 				}
 			}
 		}
@@ -357,6 +357,7 @@ public class GenericParser {
 	 * @return LHS of the rule
 	 */
 	private String customVariableBetweenAnswersCondition(List<Expression> conditions) {
+
 		String droolsConditions = "";
 		List<Expression> operatorLeft = ((ExpressionChain) conditions.get(0)).getExpressions();
 		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)) {
@@ -391,43 +392,66 @@ public class GenericParser {
 						if (leftVariable.getReference() instanceof Question) {
 							Question leftQuestion = (Question) leftVariable.getReference();
 							switch (leftQuestion.getAnswerType()) {
+							case RADIO:
+							case MULTI_CHECKBOX:
+								// The flow don't get here.
+								// It does not
+								break;
 							case INPUT:
 								switch (leftQuestion.getAnswerFormat()) {
+								case NUMBER:
+									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
+											+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer('"
+											+ getTreeObjectAnswerType(leftQuestion) + "') >= " + value1 + " && < "
+											+ value2 + ") from $"
+											+ leftReferenceParent.getUniqueNameReadable().toString()
+											+ ".getQuestions() \n";
+									break;
+								case POSTAL_CODE:
+								case TEXT:
+									// The system should not get here because it
+									// is forbidden by the jexeval
+									break;
 								case DATE:
+									String betweenDate = "";
 									if (leftVariable.getUnit() != null) {
 										switch (leftVariable.getUnit()) {
 										case YEARS:
+											betweenDate = "DateUtils.returnYearsDistanceFromDate(getAnswer('"
+													+ AnswerFormat.DATE.toString() + "')) >= " + value1.intValue()
+													+ " && < " + value2.intValue();
 											break;
 										case MONTHS:
+											betweenDate = "DateUtils.returnMonthsDistanceFromDate(getAnswer('"
+													+ AnswerFormat.DATE.toString() + "')) >= " + value1.intValue()
+													+ " && < " + value2.intValue();
 											break;
 										case DAYS:
+											betweenDate = "DateUtils.returnDaysDistanceFromDate(getAnswer('"
+													+ AnswerFormat.DATE.toString() + "')) >= " + value1.intValue()
+													+ " && < " + value2.intValue();
 											break;
 										case DATE:
+											// TODO
+											// betweenDate = "getAnswer("
+											// + AnswerFormat.DATE.toString()
+											// +
+											// ") instanceof Date, DateUtils.returnDaysDistanceFromDate(getAnswer("
+											// + AnswerFormat.DATE.toString() +
+											// ")) >= " + value1.intValue()
+											// + " && < " + value2.intValue();
 											break;
 										}
+									} else {
+										AbcdLogger.warning(this.getClass().getName(),
+												"Question with format DATE don't have a selected unit");
+										droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
+												+ " : Question( " + betweenDate + ") from $"
+												+ leftReferenceParent.getUniqueNameReadable().toString()
+												+ ".getQuestions()\n";
+										// droolsConditions += "and\n";
 									}
-
-									String instanceOfDate = "getAnswer() instanceof Date";
-									String greatEqualsDate = "getAnswer() <= DateUtils.returnCurrentDateMinusYears("
-											+ value1.intValue() + ")";
-									String lessEqualsDate = "getAnswer() > DateUtils.returnCurrentDateMinusYears("
-											+ value2.intValue() + ")";
-									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-											+ " : Question( " + instanceOfDate + ", " + greatEqualsDate + ", "
-											+ lessEqualsDate + ") from $"
-											+ leftReferenceParent.getUniqueNameReadable().toString()
-											+ ".getQuestions()\n";
-									// droolsConditions += "and\n";
-								default:
-									break;
 								}
-								break;
-							default:
-								droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-										+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
-										+ value1 + " && < " + value2 + ") from $"
-										+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
-								// droolsConditions += "and\n";
 								break;
 							}
 						} else {
@@ -1097,9 +1121,9 @@ public class GenericParser {
 		}
 		this.putTreeObjectName(question, question.getUniqueNameReadable().toString());
 		droolsConditions += "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag() == '"
-				+ question.getName() + "', getAnswer()" + availableOperator.getValue().toString() + "'"
-				+ answer.getName() + "') from $" + questionParent.getUniqueNameReadable().toString()
-				+ ".getQuestions()\n";
+				+ question.getName() + "', getAnswer('" + getTreeObjectAnswerType(question) + "')"
+				+ availableOperator.getValue().toString() + "'" + answer.getName() + "') from $"
+				+ questionParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
 		// return droolsConditions + ")\n";
 		return droolsConditions;
 	}
@@ -1153,11 +1177,12 @@ public class GenericParser {
 							case INPUT:
 								switch (leftQuestion.getAnswerFormat()) {
 								case DATE:
-									String instanceOfDate = "getAnswer() instanceof Date";
-									String greatEqualsDate = "getAnswer() <= DateUtils.returnCurrentDateMinusYears("
-											+ value1.intValue() + ")";
-									String lessEqualsDate = "getAnswer() > DateUtils.returnCurrentDateMinusYears("
-											+ value2.intValue() + ")";
+									String instanceOfDate = "getAnswer('" + getTreeObjectAnswerType(leftQuestion)
+											+ "') instanceof Date";
+									String greatEqualsDate = "getAnswer('" + getTreeObjectAnswerType(leftQuestion)
+											+ "') <= DateUtils.returnCurrentDateMinusYears(" + value1.intValue() + ")";
+									String lessEqualsDate = "getAnswer('" + getTreeObjectAnswerType(leftQuestion)
+											+ "') > DateUtils.returnCurrentDateMinusYears(" + value2.intValue() + ")";
 									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
 											+ " : Question( " + instanceOfDate + ", " + greatEqualsDate + ", "
 											+ lessEqualsDate + ") from $"
@@ -1170,9 +1195,10 @@ public class GenericParser {
 								break;
 							default:
 								droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-										+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer() >= "
-										+ value1 + " && < " + value2 + ") from $"
-										+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
+										+ " : Question(getTag() == '" + leftQuestion.getName() + "', getAnswer('"
+										+ getTreeObjectAnswerType(leftQuestion) + "') >= " + value1 + " && < " + value2
+										+ ") from $" + leftReferenceParent.getUniqueNameReadable().toString()
+										+ ".getQuestions() \n";
 								// droolsConditions += "and\n";
 								break;
 							}
@@ -1186,23 +1212,26 @@ public class GenericParser {
 
 	private String questionDateDaysOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
 		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
-				+ "', getAnswer() instanceof Date, DateUtils.returnDaysDistanceFromDate(getAnswer()) "
-				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
+				+ "', getAnswer('" + getTreeObjectAnswerType(question)
+				+ "') instanceof Date, DateUtils.returnDaysDistanceFromDate(getAnswer('"
+				+ getTreeObjectAnswerType(question) + "')) " + operator.getValue() + " " + value.intValue()
+				+ ") from $" + question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
 	}
 
 	private String questionDateMonthsOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
 		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
-				+ "', getAnswer() instanceof Date, DateUtils.returnMonthDistanceFromDate(getAnswer()) "
-				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
+				+ "', getAnswer('" + getTreeObjectAnswerType(question)
+				+ "') instanceof Date, DateUtils.returnMonthsDistanceFromDate(getAnswer('"
+				+ getTreeObjectAnswerType(question) + "')) " + operator.getValue() + " " + value.intValue()
+				+ ") from $" + question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
 	}
 
 	private String questionDateYearsOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
 		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
-				+ "', getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
-				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
+				+ "', getAnswer('" + getTreeObjectAnswerType(question)
+				+ "') instanceof Date, DateUtils.returnYearsDistanceFromDate(getAnswer('"
+				+ getTreeObjectAnswerType(question) + "')) " + operator.getValue() + " " + value.intValue()
+				+ ") from $" + question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
 	}
 
 	private String questionGeGtLeLtAnswer(List<Expression> conditions, AvailableOperator operator) {
@@ -1240,16 +1269,18 @@ public class GenericParser {
 									break;
 								case NUMBER:
 									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer() "
-											+ operator.getValue() + " " + value.intValue() + ") from $"
+											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer('"
+											+ getTreeObjectAnswerType(leftQuestion) + "') " + operator.getValue() + " "
+											+ value.intValue() + ") from $"
 											+ leftTreeObjectParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
 									break;
 								case TEXT:
 								case POSTAL_CODE:
 									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer() "
-											+ operator.getValue() + " " + value.intValue() + ") from $"
+											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer('"
+											+ getTreeObjectAnswerType(leftQuestion) + "') " + operator.getValue() + " "
+											+ value.intValue() + ") from $"
 											+ leftTreeObjectParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
 									break;
@@ -1286,13 +1317,15 @@ public class GenericParser {
 								droolsConditions += this.simpleGroupConditions((Group) rightQuestionParent);
 							}
 							droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-									+ " : Question(getAnswer() instanceof Date, getTag() == '" + leftQuestion.getName()
-									+ "') from $" + leftQuestionParent.getUniqueNameReadable().toString()
-									+ ".getQuestions() \n";
+									+ " : Question(getAnswer('" + getTreeObjectAnswerType(leftQuestion)
+									+ "') instanceof Date, getTag() == '" + leftQuestion.getName() + "') from $"
+									+ leftQuestionParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
 							droolsConditions += "	$" + rightQuestion.getUniqueNameReadable().toString()
-									+ " : Question(getAnswer() instanceof Date, getTag() == '"
-									+ rightQuestion.getName() + "', getAnswer() " + operator.getValue() + " $"
-									+ leftQuestion.getUniqueNameReadable().toString() + ".getAnswer()) from $"
+									+ " : Question(getAnswer('" + getTreeObjectAnswerType(rightQuestion)
+									+ "') instanceof Date, getTag() == '" + rightQuestion.getName() + "', getAnswer('"
+									+ getTreeObjectAnswerType(rightQuestion) + "') " + operator.getValue() + " $"
+									+ leftQuestion.getUniqueNameReadable().toString() + ".getAnswer('"
+									+ getTreeObjectAnswerType(rightQuestion) + "')) from $"
 									+ rightQuestionParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
 						}
 					}
@@ -1310,8 +1343,10 @@ public class GenericParser {
 						droolsConditions += this.simpleGroupConditions((Group) leftQuestionParent);
 					}
 					droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
-							+ " : Question(getAnswer() instanceof Date, getTag() == '" + leftQuestion.getName()
-							+ "', getAnswer() " + operator.getValue() + " DateUtils.returnCurrentDate()) from $"
+							+ " : Question(getAnswer('" + getTreeObjectAnswerType(leftQuestion)
+							+ "') instanceof Date, getTag() == '" + leftQuestion.getName() + "', getAnswer('"
+							+ getTreeObjectAnswerType(leftQuestion) + "') " + operator.getValue()
+							+ " DateUtils.returnCurrentDate()) from $"
 							+ leftQuestionParent.getUniqueNameReadable().toString() + ".getQuestions() \n";
 				}
 			}
@@ -1335,9 +1370,9 @@ public class GenericParser {
 		rule += this.checkVariableAssignation(leftQuestion);
 
 		rule += "	$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
-				+ leftQuestion.getName()
-				+ "', getAnswer() instanceof Date, DateUtils.returnYearDistanceFromDate(getAnswer()) "
-				+ operator.getValue() + value.intValue() + ") from $"
+				+ leftQuestion.getName() + "', getAnswer('" + getTreeObjectAnswerType(leftQuestion)
+				+ "') instanceof Date, DateUtils.returnYearsDistanceFromDate(getAnswer('"
+				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + value.intValue() + ") from $"
 				+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
 		return rule;
 	}
@@ -1618,5 +1653,25 @@ public class GenericParser {
 					+ ".getQuestions() \n";
 		}
 		return ruleCore;
+	}
+
+	/**
+	 * Returns the type of answer for the question in the parameter
+	 * 
+	 * @return
+	 */
+	public String getTreeObjectAnswerType(TreeObject treeObject) {
+		if (treeObject instanceof Question) {
+			Question question = (Question) treeObject;
+			switch (question.getAnswerType()) {
+			case RADIO:
+			case MULTI_CHECKBOX:
+				return AnswerFormat.TEXT.toString();
+			case INPUT:
+				return question.getAnswerFormat().toString();
+			}
+			return "";
+		}
+		return "";
 	}
 }

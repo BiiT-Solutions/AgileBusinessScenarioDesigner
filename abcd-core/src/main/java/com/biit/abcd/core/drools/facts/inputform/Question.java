@@ -1,8 +1,11 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.util.Calendar;
+import java.util.Date;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
@@ -30,9 +33,61 @@ public class Question extends CommonAttributes implements IQuestion {
 			parsedValue = Double.parseDouble(this.answer);
 		} catch (Exception e) {
 			try {
-				parsedValue = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this.answer);
+				parsedValue = new SimpleDateFormat("yyyy-MM-dd").parse(this.answer);
 			} catch (Exception e1) {
 				parsedValue = this.answer;
+			}
+		}
+		return parsedValue;
+	}
+
+	public Object getAnswer(String answerFormat) {
+		if(answerFormat == null){
+			return "";
+		}
+		if(answerFormat.isEmpty()){
+			return getAnswer();
+		}
+		
+		Object parsedValue = null;
+		switch (answerFormat) {
+		case "NUMBER":
+			if (answer != null && !answer.isEmpty()) {
+				try {
+					return Double.parseDouble(this.answer);
+				} catch (Exception e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+					return 0.0;
+				}
+			} else {
+				return 0.0;
+			}
+
+		case "POSTAL_CODE":
+		case "TEXT":
+			return answer;
+
+		case "DATE":
+			if (answer != null && !answer.isEmpty()) {
+				try {
+					return new SimpleDateFormat("yyyy-MM-dd").parse(answer);
+					
+				} catch (ParseException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+					// Default, create tomorrow's date
+					Calendar cal = Calendar.getInstance();  
+					cal.setTime( new Date());  
+					cal.add(Calendar.DAY_OF_YEAR, 1);  
+					Date tomorrow = cal.getTime();
+					return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
+				}
+			} else {
+				// Default, create tomorrow's date
+				Calendar cal = Calendar.getInstance();  
+				cal.setTime( new Date());  
+				cal.add(Calendar.DAY_OF_YEAR, 1);  
+				Date tomorrow = cal.getTime();
+				return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
 			}
 		}
 		return parsedValue;

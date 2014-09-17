@@ -1,5 +1,9 @@
 package com.biit.abcd.core.drools.prattparser.visitor;
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+
 import com.biit.abcd.core.drools.prattparser.expressions.AssignExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.CallExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.ConditionalExpression;
@@ -7,11 +11,16 @@ import com.biit.abcd.core.drools.prattparser.expressions.NameExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.OperatorExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.form.TreeObject;
 
 public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
@@ -55,42 +64,50 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 
 	@Override
 	public void visit(NameExpression name) {
-		if ((name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference)
-				|| (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueCustomVariable)) {
+		if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
 
 			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain()
 					.getExpressions().get(0);
 			TreeObject treeObject = expVal.getReference();
-
 			String id = treeObject.getUniqueNameReadable();
+			// If it is a question of input type
 			if ((treeObject instanceof Question) && ((Question) treeObject).getAnswerType().equals(AnswerType.INPUT)) {
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case NUMBER:
-					this.builder.append("(Double)$" + id + ".getAnswer()");
+					this.builder.append("(Double)$" + id + ".getAnswer('" + AnswerFormat.NUMBER.toString() + "')");
 					break;
 				case DATE:
-					if(expVal.getUnit() != null){
+					if (expVal.getUnit() != null) {
 						switch (expVal.getUnit()) {
 						case YEARS:
-							this.builder.append("DateUtils.returnYearDistanceFromDate( $" + id + ".getAnswer())");
+							this.builder.append("DateUtils.returnYearsDistanceFromDate( $" + id + ".getAnswer('"
+									+ AnswerFormat.DATE.toString() + "'))");
 							break;
 						case MONTHS:
-							this.builder.append("DateUtils.returnMonthDistanceFromDate( $" + id + ".getAnswer())");
+							this.builder.append("DateUtils.returnMonthsDistanceFromDate( $" + id + ".getAnswer('"
+									+ AnswerFormat.DATE.toString() + "'))");
 							break;
 						case DAYS:
-							this.builder.append("DateUtils.returnDaysDistanceFromDate( $" + id + ".getAnswer())");
+							this.builder.append("DateUtils.returnDaysDistanceFromDate( $" + id + ".getAnswer('"
+									+ AnswerFormat.DATE.toString() + "'))");
 							break;
 						case DATE:
-							this.builder.append("$" + id + ".getAnswer()");
+							this.builder.append("$" + id + ".getAnswer('" + AnswerFormat.DATE.toString() + "')");
 							break;
 						}
 					}
 					break;
-				default:
-					this.builder.append("$" + id + ".getAnswer()");
+				case TEXT:
+					this.builder.append("$" + id + ".getAnswer('" + AnswerFormat.TEXT.toString() + "')");
+					break;
+				case POSTAL_CODE:
+					this.builder.append("$" + id + ".getAnswer('" + AnswerFormat.POSTAL_CODE.toString() + "')");
 					break;
 				}
-			} else {
+			}
+			// If it is not a question input type
+			else {
+				// If it is a custom variable
 				if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
 					CustomVariable variable = ((ExpressionValueCustomVariable) name.getExpressionChain()
 							.getExpressions().get(0)).getVariable();
@@ -105,9 +122,32 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 						this.builder.append("(String)$" + id + ".getVariableValue('" + variable.getName() + "')");
 						break;
 					}
-				} else {
-					this.builder.append("$" + id + ".getAnswer()");
 				}
+				// For every other possible value, we assume text value
+				else {
+					this.builder.append("$" + id + ".getAnswer('" + AnswerFormat.TEXT.toString() + "')");
+				}
+			}
+		}
+		// In case is a ExpressionValueNumber
+		else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueNumber) {
+			this.builder.append(Double.parseDouble(name.getName()));
+		}// In case is a global constant
+		else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueGlobalConstant) {
+			GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) name.getExpressionChain()
+					.getExpressions().get(0)).getVariable();
+
+			switch (globalExpression.getFormat()) {
+			case NUMBER:
+				this.builder.append("(Double)" + name.getName());
+				break;
+			case TEXT:
+			case POSTAL_CODE:
+				this.builder.append(name.getName());
+				break;
+			case DATE:
+				this.builder.append("(Date)" + name.getName());
+				break;
 			}
 		} else {
 			this.builder.append(name.getName());
@@ -139,5 +179,34 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 
 	public StringBuilder getBuilder() {
 		return this.builder;
+	}
+
+	/**
+	 * Creates the global constants for the drools session.<br>
+	 * Stores in memory the values to be inserted before the facts and generates
+	 * the global variables export file
+	 * 
+	 * 
+	 * @return The global constants in drools
+	 */
+	private Object getGlobalVariableActiveValue(GlobalVariable globalVariable) {
+		// First check if the data inside the variable has a valid date
+		List<VariableData> varDataList = globalVariable.getData();
+		if ((varDataList != null) && !varDataList.isEmpty()) {
+			for (VariableData variableData : varDataList) {
+
+				Timestamp currentTime = new Timestamp(new Date().getTime());
+				Timestamp initTime = variableData.getValidFrom();
+				Timestamp endTime = variableData.getValidTo();
+				// Sometimes endtime can be null, meaning that the
+				// variable data has no ending time
+				if ((currentTime.after(initTime) && (endTime == null))
+						|| (currentTime.after(initTime) && currentTime.before(endTime))) {
+					return variableData.getValue();
+
+				}
+			}
+		}
+		return "";
 	}
 }

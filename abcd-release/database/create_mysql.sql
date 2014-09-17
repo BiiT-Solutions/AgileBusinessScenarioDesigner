@@ -267,7 +267,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value varchar(255),
         primary key (ID)
@@ -280,7 +279,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         currentValue varchar(255),
         primary key (ID)
@@ -293,7 +291,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         currentValue varchar(255),
         primary key (ID)
@@ -306,7 +303,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value varchar(255),
         primary key (ID)
@@ -319,7 +315,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value bit not null,
         primary key (ID)
@@ -332,7 +327,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         unit varchar(255),
         reference_ID bigint,
@@ -347,7 +341,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value_ID bigint,
         primary key (ID)
@@ -360,7 +353,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         type varchar(255),
         variable_ID bigint,
@@ -374,7 +366,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         type varchar(255),
         primary key (ID)
@@ -387,7 +378,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         constant_ID bigint,
         primary key (ID)
@@ -400,7 +390,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value double precision not null,
         primary key (ID)
@@ -413,7 +402,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value TEXT,
         primary key (ID)
@@ -426,7 +414,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value TEXT,
         primary key (ID)
@@ -439,7 +426,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value datetime,
         primary key (ID)
@@ -452,7 +438,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         value datetime,
         primary key (ID)
@@ -465,7 +450,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         unit varchar(255),
         reference_ID bigint,
@@ -479,7 +463,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        isEditable bit not null,
         sortSeq bigint not null,
         name varchar(255),
         primary key (ID)
