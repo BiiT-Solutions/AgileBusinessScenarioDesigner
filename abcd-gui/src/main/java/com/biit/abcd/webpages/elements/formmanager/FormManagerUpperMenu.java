@@ -79,53 +79,62 @@ public class FormManagerUpperMenu extends UpperMenu {
 								launchListeners();
 								// After this SaveAsButton standard behavior is
 								// launched automatically.
-								// Show results in window
-								FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-								ISubmittedForm submittedForm;
-								try {
-									// submittedForm =
-									// droolsExporter.processForm(UserSessionHandler.getFormController()
-									// .getForm(),
-									// droolsWindow.getOrbeonAppName(),
-									// droolsWindow
-									// .getOrbeonFormName(),
-									// droolsWindow.getOrbeonDocumentId());
+								// Show results in window if defined.
+								if (droolsWindow.getOrbeonAppName() != null
+										&& droolsWindow.getOrbeonAppName().length() > 0
+										&& droolsWindow.getOrbeonFormName() != null
+										&& droolsWindow.getOrbeonFormName().length() > 0
+										&& droolsWindow.getOrbeonDocumentId() != null
+										&& droolsWindow.getOrbeonDocumentId().length() > 0) {
+									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
+									ISubmittedForm submittedForm;
+									try {
+										// submittedForm =
+										// droolsExporter.processForm(UserSessionHandler.getFormController()
+										// .getForm(),
+										// droolsWindow.getOrbeonAppName(),
+										// droolsWindow
+										// .getOrbeonFormName(),
+										// droolsWindow.getOrbeonDocumentId());
 
-									submittedForm = droolsExporter.processForm(UserSessionHandler.getFormController()
-											.getForm(), UserSessionHandler.getGlobalVariablesController()
-											.getGlobalVariables(), droolsWindow.getOrbeonAppName(), droolsWindow
-											.getOrbeonFormName(), droolsWindow.getOrbeonDocumentId());
-									if (submittedForm instanceof DroolsForm) {
-										final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-												((DroolsForm) submittedForm).getSubmittedForm());
-										droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
-											@Override
-											public void acceptAction(AcceptCancelWindow window) {
-												droolsResultWindow.close();
-											}
-										});
-										droolsResultWindow.showCentered();
+										submittedForm = droolsExporter.processForm(UserSessionHandler
+												.getFormController().getForm(), UserSessionHandler
+												.getGlobalVariablesController().getGlobalVariables(), droolsWindow
+												.getOrbeonAppName(), droolsWindow.getOrbeonFormName(), droolsWindow
+												.getOrbeonDocumentId());
+										if (submittedForm instanceof DroolsForm) {
+											final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
+													((DroolsForm) submittedForm).getSubmittedForm());
+											droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
+												@Override
+												public void acceptAction(AcceptCancelWindow window) {
+													droolsResultWindow.close();
+												}
+											});
+											droolsResultWindow.showCentered();
+										}
+										droolsWindow.close();
+									} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
+										MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE,
+												e.getMessage());
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+									} catch (DocumentException | CategoryNameWithoutTranslation e) {
+										MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
+												e.getMessage());
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+									} catch (RuleNotImplementedException e) {
+										MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
+												.getExpressionChain().getRepresentation());
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+									} catch (ActionNotImplementedException e) {
+										MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+												LanguageCodes.WARNING_RULE_INCOMPLETE);
+										AbcdLogger.warning(SettingsWindow.class.getName(), e.toString());
+									} catch (Exception e) {
+										MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
+												LanguageCodes.ERROR_DROOLS_ENGINE);
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 									}
-									droolsWindow.close();
-								} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
-									MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								} catch (DocumentException | CategoryNameWithoutTranslation e) {
-									MessageManager.showError(LanguageCodes.ERROR_ORBEON_IMPORTER_INVALID_FORM,
-											e.getMessage());
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								} catch (RuleNotImplementedException e) {
-									MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
-											.getExpressionChain().getRepresentation());
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-								} catch (ActionNotImplementedException e) {
-									MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-											LanguageCodes.WARNING_RULE_INCOMPLETE);
-									AbcdLogger.warning(SettingsWindow.class.getName(), e.toString());
-								} catch (Exception e) {
-									MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
-											LanguageCodes.ERROR_DROOLS_ENGINE);
-									AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 								}
 							}
 						});

@@ -69,4 +69,9 @@ public class SaveDroolsRulesAction implements SaveAction {
 		return true;
 	}
 
+	@Override
+	public String getFileName() {
+		return "rules." + getExtension();
+	}
+
 }

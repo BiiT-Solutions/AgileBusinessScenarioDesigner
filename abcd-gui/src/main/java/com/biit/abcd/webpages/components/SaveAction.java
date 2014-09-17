@@ -10,22 +10,27 @@ public interface SaveAction {
 	 * 
 	 * @return
 	 */
-	public abstract boolean isValid();
+	boolean isValid();
 
-	public abstract byte[] getInformationData();
+	byte[] getInformationData();
 
 	/**
 	 * Extension of the file to generate. Also must be the type of file in graphviz.
 	 * 
 	 * @return
 	 */
-	public abstract String getExtension();
+	String getExtension();
 
 	/**
 	 * Mimetype of the generated file ("application/pdf", "image/png", ...)
 	 * 
 	 * @return
 	 */
-	public abstract String getMimeType();
+	String getMimeType();
+
+	/**
+	 * Gets the file name.
+	 */
+	String getFileName();
 
 }
