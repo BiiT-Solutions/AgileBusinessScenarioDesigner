@@ -39,9 +39,8 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 	}
 
 	/**
-	 * Returns the selected list of element. All elements must be of the same
-	 * class.
-	 *
+	 * Returns the selected list of element. All elements must be of the same class.
+	 * 
 	 * @return
 	 */
 	public List<TreeObject> getSelectedFormElements() {
@@ -116,8 +115,17 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 		}
 	}
 
+	public void setValue(TreeObject element) {
+		formQuestionTable.setValue(element);
+		TreeObject elementToExpand = element;
+		while (elementToExpand.getParent() != null) {
+			formQuestionTable.setCollapsed(elementToExpand.getParent(), false);
+			elementToExpand = elementToExpand.getParent();
+		}
+	}
+
 	public void setValue(ExpressionValueCustomVariable expression) {
-		formQuestionTable.setValue(expression.getReference());
+		setValue(expression.getReference());
 		variableSelection.setValue(expression.getVariable());
 	}
 

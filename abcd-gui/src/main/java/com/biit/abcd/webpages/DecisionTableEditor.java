@@ -409,18 +409,27 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void newEditQuestionWindow(final TableRuleRow row, final Object propertyId) {
-		// final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference)
-		// decisionTable
-		// .getExpressionValue(row, propertyId);
-		final ExpressionChain answerExpression = (ExpressionChain) decisionTable
-				.getNextExpressionValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getNextCellValue(row, propertyId);
 
 		final AddNewQuestionEditorWindow newQuestionConditionWindow = new AddNewQuestionEditorWindow(UserSessionHandler
 				.getFormController().getForm(), false);
 
-		// if (questionExpression.getReference() != null) {
-		// newQuestionConditionWindow.setTreeObjectSelected(questionExpression.getReference());
-		// }
+		if (decisionTable.getCellValue(row, propertyId) instanceof ExpressionValueCustomVariable) {
+			final ExpressionValueCustomVariable variableExpression = (ExpressionValueCustomVariable) decisionTable
+					.getCellValue(row, propertyId);
+
+			if (variableExpression != null) {
+				newQuestionConditionWindow.select(variableExpression);
+			}
+		} else if (decisionTable.getCellValue(row, propertyId) instanceof ExpressionValueTreeObjectReference) {
+			final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+					.getCellValue(row, propertyId);
+
+			if (questionExpression.getReference() != null) {
+				newQuestionConditionWindow.select(questionExpression.getReference());
+			}
+		}
+
 		newQuestionConditionWindow.addAcceptActionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
@@ -569,8 +578,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	private void newEditAnswerWindow(TableRuleRow row, Object propertyId) {
 		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
-				.getPreviousExpressionValue(row, propertyId);
-		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getExpressionValue(row, propertyId);
+				.getPreviousCellValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
 			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
@@ -606,7 +615,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	private void removeQuestion(TableRuleRow row, Object propertyId) {
 		ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
-				.getExpressionValue(row, propertyId);
+				.getCellValue(row, propertyId);
 		TreeObject auxTo = questionExpression.getReference();
 		questionExpression.setReference(null);
 		// Removes and updates the table.
@@ -619,8 +628,8 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	private void removeAnswer(TableRuleRow row, Object propertyId) {
 		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
-				.getPreviousExpressionValue(row, propertyId);
-		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getExpressionValue(row, propertyId);
+				.getPreviousCellValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
 		answerExpression.removeAllExpressions();
 		decisionTable.update(getSelectedTableRule());
 

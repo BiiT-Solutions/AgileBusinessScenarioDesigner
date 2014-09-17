@@ -11,27 +11,33 @@ public class QuestionEditorComponent extends TabEditorComponent {
 
 	private static final long serialVersionUID = -3303171393725653154L;
 	private QuestionTabFormVariablesLayout questionFormTab;
-//	private GenericElementTabFormVariablesLayout genericFormTab;
 
-	public QuestionEditorComponent(TreeObject treeObject) {
+	// private GenericElementTabFormVariablesLayout genericFormTab;
+
+	public QuestionEditorComponent(ExpressionValueCustomVariable expression) {
 		super();
 		initTabs();
 		getRootLayout().addComponent(getTabSheet());
 		getRootLayout().setExpandRatio(getTabSheet(), 1.f);
 		setCompositionRoot(getRootLayout());
+		setSelected(expression.getReference());
+	}
+
+	public void setSelected(TreeObject expression) {
+		if (questionFormTab != null) {
+			questionFormTab.setValue(expression);
+		}
+	}
+	
+	public void setSelected(ExpressionValueCustomVariable customVariable) {
+		if (questionFormTab != null) {
+			questionFormTab.setValue(customVariable);
+		}
 	}
 
 	public void initTabs() {
-		// First Tab
 		questionFormTab = new QuestionTabFormVariablesLayout();
 		setTab(questionFormTab, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
-		// Second Tab
-//		genericFormTab = new GenericElementTabFormVariablesLayout();
-//		setTab(new TabFormGenericTreeObjectLayout(), "",
-//				ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
-		// Third tab
-//		setTab(new TabGlobalConstantsLayout(), "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
-
 	}
 
 	public Object getSelectedObject() {

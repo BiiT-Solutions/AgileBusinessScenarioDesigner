@@ -133,22 +133,22 @@ public class NewDecisionTable extends CustomComponent {
 	}
 
 	// ********************
-	// Expression functions
+	// Cell functions
 	// ********************
 
-	public Expression getPreviousExpressionValue(TableRuleRow row, Object propertyId) {
+	public Expression getPreviousCellValue(TableRuleRow row, Object propertyId) {
 		return conditionTable.getPreviousExpressionValue(row, propertyId);
 	}
 
-	public Expression getNextExpressionValue(TableRuleRow row, Object propertyId) {
+	public Expression getNextCellValue(TableRuleRow row, Object propertyId) {
 		return conditionTable.getNextExpressionValue(row, propertyId);
 	}
 
-	public Expression getExpressionValue(TableRuleRow row, Object propertyId) {
+	public Expression getCellValue(TableRuleRow row, Object propertyId) {
 		return conditionTable.getExpressionValue(row, propertyId);
 	}
 
-	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression) {
+	public void setCellValue(TableRuleRow row, Object propertyId, Expression expression) {
 		conditionTable.setExpressionValue(row, propertyId, expression);
 	}
 
