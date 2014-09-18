@@ -42,13 +42,13 @@ public class Question extends CommonAttributes implements IQuestion {
 	}
 
 	public Object getAnswer(String answerFormat) {
-		if(answerFormat == null){
+		if (answerFormat == null) {
 			return "";
 		}
-		if(answerFormat.isEmpty()){
+		if (answerFormat.isEmpty()) {
 			return getAnswer();
 		}
-		
+
 		Object parsedValue = null;
 		switch (answerFormat) {
 		case "NUMBER":
@@ -71,21 +71,21 @@ public class Question extends CommonAttributes implements IQuestion {
 			if (answer != null && !answer.isEmpty()) {
 				try {
 					return new SimpleDateFormat("yyyy-MM-dd").parse(answer);
-					
+
 				} catch (ParseException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 					// Default, create tomorrow's date
-					Calendar cal = Calendar.getInstance();  
-					cal.setTime( new Date());  
-					cal.add(Calendar.DAY_OF_YEAR, 1);  
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(new Date());
+					cal.add(Calendar.DAY_OF_YEAR, 1);
 					Date tomorrow = cal.getTime();
 					return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
 				}
 			} else {
 				// Default, create tomorrow's date
-				Calendar cal = Calendar.getInstance();  
-				cal.setTime( new Date());  
-				cal.add(Calendar.DAY_OF_YEAR, 1);  
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(new Date());
+				cal.add(Calendar.DAY_OF_YEAR, 1);
 				Date tomorrow = cal.getTime();
 				return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
 			}
@@ -117,57 +117,65 @@ public class Question extends CommonAttributes implements IQuestion {
 		}
 	}
 
+//	public boolean isScoreSet(String varName) {
+//		// Retrieve the form which will have the variables
+//		if (this.getParent() instanceof ICategory) {
+//			if (((SubmittedForm) ((Category) this.getParent()).getParent()).hasScoreSet(this, varName)) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		} else {
+//			if (((SubmittedForm) ((Category) ((Group) this.getParent()).getParent()).getParent()).hasScoreSet(this,
+//					varName)) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//	}
+	
 	public boolean isScoreSet(String varName) {
-		// Retrieve the form which will have the variables
+		return isScoreSet(this, varName);
+	}
+
+	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
-			if (((SubmittedForm) ((Category) this.getParent()).getParent()).hasScoreSet(this, varName)) {
-				return true;
-			} else {
-				return false;
-			}
+			return ((Category) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		} else {
-			if (((SubmittedForm) ((Category) ((Group) this.getParent()).getParent()).getParent()).hasScoreSet(this,
-					varName)) {
-				return true;
-			} else {
-				return false;
-			}
+			return ((Group) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		}
 	}
 
 	public boolean isScoreNotSet(String varName) {
-		return !this.isScoreSet(varName);
+		return !isScoreSet(varName);
 	}
 
-	public boolean isScoreNotSet() {
-		return !this.isScoreSet("");
-	}
+//	public boolean isScoreNotSet() {
+//		return !isScoreSet("");
+//	}
 
 	public Object getVariableValue(String varName) {
-		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedForm) ((Category) this.getParent()).getParent()).getVariableValue(this, varName);
-		} else {
-			return ((SubmittedForm) ((Category) ((Group) this.getParent()).getParent()).getParent()).getVariableValue(
-					this, varName);
-		}
+		return getVariableValue(this, varName);
 	}
 
-	public Number getNumberVariableValue(String varName) {
+	public Object getVariableValue(Object submmitedFormObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedForm) ((Category) this.getParent()).getParent()).getNumberVariableValue(this, varName);
+			return ((Category) this.getParent()).getVariableValue(this, varName);
 		} else {
-			return ((SubmittedForm) ((Category) ((Group) this.getParent()).getParent()).getParent())
-					.getNumberVariableValue(this, varName);
+			return ((Group) this.getParent()).getVariableValue(this, varName);
 		}
 	}
 
 	public void setVariableValue(String varName, Object value) {
-		if (this.getParent() instanceof ICategory) {
-			((SubmittedForm) ((Category) this.getParent()).getParent()).setVariableValue(this, varName, value);
-		} else {
-			((SubmittedForm) ((Category) ((Group) this.getParent()).getParent()).getParent()).setVariableValue(this,
-					varName, value);
-		}
+		setVariableValue(this, varName, value);
+	}
 
+	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
+		if (this.getParent() instanceof ICategory) {
+			((Category) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+		} else {
+			((Group) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+		}
 	}
 }

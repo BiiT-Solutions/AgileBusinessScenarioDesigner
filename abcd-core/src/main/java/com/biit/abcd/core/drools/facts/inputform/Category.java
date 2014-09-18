@@ -74,9 +74,10 @@ public class Category extends CommonAttributes implements ICategory {
 		return this.groups;
 	}
 
-	public Number getNumberVariableValue(String varName) {
-		return ((SubmittedForm) this.getParent()).getNumberVariableValue(this, varName);
-	}
+	// public Number getNumberVariableValue(String varName) {
+	// return ((SubmittedForm) this.getParent()).getNumberVariableValue(this,
+	// varName);
+	// }
 
 	public ISubmittedForm getParent() {
 		return this.parent;
@@ -106,21 +107,18 @@ public class Category extends CommonAttributes implements ICategory {
 		return this.questions;
 	}
 
-	public Object getVariableValue(String varName) {
-		return ((SubmittedForm) this.getParent()).getVariableValue(this, varName);
-	}
-
 	public boolean isScoreNotSet(String varName) {
 		return !this.isScoreSet(varName);
 	}
 
 	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
-		if (((SubmittedForm) this.getParent()).hasScoreSet(this, varName)) {
-			return true;
-		} else {
-			return false;
-		}
+		return isScoreSet(this, varName);
+	}
+	
+	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
+		// Retrieve the form which will have the variables
+		return ((SubmittedForm) getParent()).isScoreSet(submittedFormTreeObject, varName);
 	}
 
 	public void setGroups(List<IGroup> groups) {
@@ -135,7 +133,19 @@ public class Category extends CommonAttributes implements ICategory {
 		this.questions = questions;
 	}
 
+	public Object getVariableValue(String varName) {
+		return getVariableValue(this, varName);
+	}
+
+	public Object getVariableValue(Object submmitedFormObject, String varName) {
+		return ((SubmittedForm) this.getParent()).getVariableValue(submmitedFormObject, varName);
+	}
+
 	public void setVariableValue(String varName, Object value) {
-		((SubmittedForm) this.getParent()).setVariableValue(this, varName, value);
+		setVariableValue(this, varName, value);
+	}
+
+	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
+		((SubmittedForm) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 	}
 }

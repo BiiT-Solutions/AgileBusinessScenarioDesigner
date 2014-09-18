@@ -6,6 +6,7 @@ import java.util.List;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
+import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 public class Group extends CommonAttributes implements IGroup {
@@ -32,18 +33,35 @@ public class Group extends CommonAttributes implements IGroup {
 			}
 		}
 		// Check in inner groups.
-		for (IGroup group : groups) {
-			try {
-				return group.getQuestion(questionTag);
-			} catch (QuestionDoesNotExistException qne) {
-				// Not found in group. Continue.
+		if (groups != null) {
+			for (IGroup group : groups) {
+				try {
+					return group.getQuestion(questionTag);
+				} catch (QuestionDoesNotExistException qne) {
+					// Not found in group. Continue.
+				}
 			}
 		}
 		throw new QuestionDoesNotExistException("Question '" + questionTag + "' does not exists.");
 	}
 
+	public IGroup getGroup(String tag) throws GroupDoesNotExistException {
+		if (getGroups() != null) {
+			for (IGroup group : this.getGroups()) {
+				if (group.getTag().equals(tag)) {
+					return group;
+				}
+			}
+		}
+		throw new GroupDoesNotExistException("Group '" + tag + "' does not exists.");
+	}
+
 	public void setGroups(List<IGroup> groups) {
 		this.groups = groups;
+	}
+
+	public List<IGroup> getGroups() {
+		return this.groups;
 	}
 
 	public void setQuestions(List<IQuestion> questions) {
@@ -89,27 +107,47 @@ public class Group extends CommonAttributes implements IGroup {
 	}
 
 	public boolean isScoreSet(String varName) {
-		// Retrieve the form which will have the variables
-		if (((SubmittedForm) ((Category) this.getParent()).getParent()).hasScoreSet(this, varName)) {
-			return true;
+		return isScoreSet(this, varName);
+	}
+
+	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
+		if (this.getParent() instanceof ICategory) {
+			return ((Category) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		} else {
-			return false;
+			return ((Group) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		}
 	}
 
 	public boolean isScoreNotSet(String varName) {
-		return !this.isScoreSet(varName);
+		return !isScoreSet(varName);
 	}
+
+	// public Number getNumberVariableValue(String varName) {
+	// return ((SubmittedForm) ((Category)
+	// this.getParent()).getParent()).getNumberVariableValue(this, varName);
+	// }
 
 	public Object getVariableValue(String varName) {
-		return ((SubmittedForm) ((Category) this.getParent()).getParent()).getVariableValue(this, varName);
+		return getVariableValue(this, varName);
 	}
 
-	public Number getNumberVariableValue(String varName) {
-		return ((SubmittedForm) ((Category) this.getParent()).getParent()).getNumberVariableValue(this, varName);
+	public Object getVariableValue(Object submmitedFormObject, String varName) {
+		if (this.getParent() instanceof ICategory) {
+			return ((Category) this.getParent()).getVariableValue(submmitedFormObject, varName);
+		} else {
+			return ((Group) this.getParent()).getVariableValue(submmitedFormObject, varName);
+		}
 	}
 
 	public void setVariableValue(String varName, Object value) {
-		((SubmittedForm) ((Category) this.getParent()).getParent()).setVariableValue(this, varName, value);
+		setVariableValue(this, varName, value);
+	}
+
+	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
+		if (this.getParent() instanceof ICategory) {
+			((Category) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+		} else {
+			((Group) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+		}
 	}
 }

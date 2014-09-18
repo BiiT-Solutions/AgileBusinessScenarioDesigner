@@ -206,9 +206,21 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		try {
 			categorySubForm = (Category) submittedForm.getCategory(category.getName());
 			if (categorySubForm != null) {
-				groupSubForm = (Group) categorySubForm.getGroup(group.getName());
-				if (groupSubForm != null) {
-					questionSubForm = (Question) groupSubForm.getQuestion(question.getName());
+				// The parent of the question is a category
+				// System.out.println("CATEGORY: " + category.getName());
+				// System.out.println("GROUP : " + group.getName());
+				// System.out.println("QUESTION : " + question.getName());
+				// System.out.println("QUESTION PARENT: " +
+				// question.getParent().getName());
+
+				if (question.getParent() instanceof com.biit.abcd.persistence.entity.Category) {
+					questionSubForm = (Question) categorySubForm.getQuestion(question.getName());
+				} else {
+					// The parent of the question is a group
+					groupSubForm = (Group) categorySubForm.getGroup(group.getName());
+					if (groupSubForm != null) {
+						questionSubForm = (Question) groupSubForm.getQuestion(question.getName());
+					}
 				}
 			}
 		} catch (CategoryDoesNotExistException | GroupDoesNotExistException | QuestionDoesNotExistException e) {
@@ -226,6 +238,5 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 						.setValue(questionSubForm.getAnswer().toString());
 			}
 		}
-
 	}
 }
