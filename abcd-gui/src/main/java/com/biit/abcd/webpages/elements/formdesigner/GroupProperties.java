@@ -24,7 +24,7 @@ public class GroupProperties extends GenericFormElementProperties<Group> {
 	}
 
 	@Override
-	public void setElementAbstract(Group element) {
+	public void setElementForProperties(Group element) {
 		instance = element;
 		groupTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getName());

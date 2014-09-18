@@ -203,7 +203,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 		expressionChain.addExpression(customVariable);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionUnit.YEARS));
+		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
 		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = birthdate");
 		expressionChain.getExpressionEvaluator().eval();
 

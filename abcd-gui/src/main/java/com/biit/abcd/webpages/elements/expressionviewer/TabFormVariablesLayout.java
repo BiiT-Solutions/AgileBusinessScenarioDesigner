@@ -117,11 +117,6 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 
 	public void setValue(TreeObject element) {
 		formQuestionTable.setValue(element);
-		TreeObject elementToExpand = element;
-		while (elementToExpand.getParent() != null) {
-			formQuestionTable.setCollapsed(elementToExpand.getParent(), false);
-			elementToExpand = elementToExpand.getParent();
-		}
 	}
 
 	public void setValue(ExpressionValueCustomVariable expression) {

@@ -33,8 +33,8 @@ public class TreeObjectTable extends TreeTable {
 	private static final long serialVersionUID = -6949123334668973540L;;
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't
-	 * be defined, then raises a {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
+	 * {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -53,8 +53,7 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -75,8 +74,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
+	 * members.
 	 * 
 	 * @param element
 	 */
@@ -97,8 +96,7 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels. The
-	 * level is specified by a class.
+	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
 	 * 
 	 * @param collapseFrom
 	 */
@@ -232,6 +230,22 @@ public class TreeObjectTable extends TreeTable {
 			ComponentCellTreeObject cell = (ComponentCellTreeObject) item.getItemProperty(
 					TreeObjectTableProperties.ELEMENT_NAME).getValue();
 			cell.update(element);
+		}
+	}
+
+	/**
+	 * Set values and selects it by default.
+	 * 
+	 * @param element
+	 */
+	public void setValue(TreeObject element) {
+		super.setValue(element);
+		if (element != null) {
+			TreeObject elementToExpand = element;
+			while (elementToExpand.getParent() != null) {
+				setCollapsed(elementToExpand.getParent(), false);
+				elementToExpand = elementToExpand.getParent();
+			}
 		}
 	}
 

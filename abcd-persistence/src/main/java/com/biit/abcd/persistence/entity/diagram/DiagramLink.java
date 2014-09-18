@@ -298,6 +298,10 @@ public class DiagramLink extends DiagramObject {
 		this.expressionChain = expressionChain;
 	}
 
+	/**
+	 * Replace any existing expressions with this expression.
+	 * @param expression
+	 */
 	public void resetExpressions(Expression expression){
 		getExpressionChain().setExpressions(Arrays.asList(expression));
 	}

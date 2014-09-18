@@ -19,7 +19,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.CheckDependencies;
@@ -304,8 +304,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information
-	 * of the currently selected table.
+	 * Updates the table where the user defines the rules with the information of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
 		decisionTable.update(getSelectedTableRule());
@@ -572,7 +571,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void setQuestionDateExpression(TableRuleRow row, Integer propertyId, Question selectedQuestion,
-			QuestionUnit unit) {
+			QuestionDateUnit unit) {
 		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedQuestion, unit));
 		decisionTable.update(getSelectedTableRule());
 	}
@@ -583,14 +582,19 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
+			//Generate a expression with the question not editable.
+			ExpressionChain answerExpressionWithQuestion = answerExpression.generateCopy();
+			answerExpressionWithQuestion.addExpression(0, questionExpression);
+			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
+			
 			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
-					questionExpression, answerExpression);
+					questionExpression, answerExpressionWithQuestion);
+			
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					ExpressionChain expChain = newActionValueWindow.getExpressionChain();
-					answerExpression.setExpressions(expChain.getExpressions());
+					answerExpression.setExpressions(newActionValueWindow.getExpressionChain().getExpressions());
 					decisionTable.update(getSelectedTableRule());
 
 					AbcdLogger.info(this.getClass().getName(), "User '"
@@ -605,7 +609,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			newActionValueWindow.addCancelActionListener(new CancelActionListener() {
 				@Override
 				public void cancelAction(AcceptCancelWindow window) {
-					newActionValueWindow.removeFirstExpression();
+					//newActionValueWindow.getExpressionWithoutFirstElement();
 				}
 			});
 		} else {

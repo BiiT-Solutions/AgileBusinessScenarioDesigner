@@ -34,10 +34,6 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
 		this.expressionChain = expressionChain.generateCopy();
-		// Add the question to the expression
-		this.expressionChain.addExpression(0, reference);
-		this.expressionChain.getExpressions().get(0).setEditable(false);
-
 		if (reference instanceof ExpressionValueCustomVariable) {
 			// Custom variable
 			setContent(generateExpression());
@@ -46,7 +42,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 			if (treeObject != null) {
 				if ((treeObject instanceof Question) && (((Question) treeObject).getAnswerType() != AnswerType.INPUT)) {
 					Question question = (Question) treeObject;
-					setContent(generateTable(question));
+					setContent(generateTreeObjectTable(question));
 				} else {
 					setContent(generateExpression());
 				}
@@ -56,7 +52,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_CONDITION_CAPTION));
 	}
 
-	public Component generateTable(Question question) {
+	public Component generateTreeObjectTable(Question question) {
 		setWidth("50%");
 		setHeight("75%");
 		answerTable = new SelectFormAnswerTable();
@@ -109,14 +105,16 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 
 	public ExpressionChain getExpressionChain() {
 		if (answerTable == null) {
-			removeFirstExpression();
+			return getExpressionWithoutFirstElement();
 		}
 		return expressionChain;
 	}
 
-	public void removeFirstExpression() {
+	public ExpressionChain getExpressionWithoutFirstElement() {
+		ExpressionChain expressionChain = this.expressionChain.generateCopy();
 		if ((expressionChain != null) && !expressionChain.getExpressions().isEmpty()) {
 			expressionChain.removeFirstExpression();
 		}
+		return expressionChain;
 	}
 }

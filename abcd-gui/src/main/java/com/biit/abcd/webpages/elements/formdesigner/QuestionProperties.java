@@ -32,7 +32,7 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 	}
 
 	@Override
-	public void setElementAbstract(Question element) {
+	public void setElementForProperties(Question element) {
 		instance = element;
 		questionTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		questionTechnicalLabel.setValue(instance.getName());

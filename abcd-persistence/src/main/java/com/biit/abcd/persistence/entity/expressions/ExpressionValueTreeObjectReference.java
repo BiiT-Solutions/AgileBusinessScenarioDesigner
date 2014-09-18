@@ -18,7 +18,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	private TreeObject reference;
 
 	@Enumerated(EnumType.STRING)
-	private QuestionUnit unit = null;
+	private QuestionDateUnit unit = null;
 
 	public ExpressionValueTreeObjectReference() {
 		super();
@@ -29,23 +29,10 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		this.reference = reference;
 	}
 
-	public ExpressionValueTreeObjectReference(TreeObject reference, boolean editable) {
-		super();
-		this.reference = reference;
-		setEditable(editable);
-	}
-
-	public ExpressionValueTreeObjectReference(TreeObject reference, QuestionUnit unit) {
+	public ExpressionValueTreeObjectReference(TreeObject reference, QuestionDateUnit unit) {
 		super();
 		this.reference = reference;
 		this.unit = unit;
-	}
-
-	public ExpressionValueTreeObjectReference(TreeObject reference, QuestionUnit unit, boolean editable) {
-		super();
-		this.reference = reference;
-		this.unit = unit;
-		setEditable(editable);
 	}
 
 	public TreeObject getReference() {
@@ -56,11 +43,11 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		this.reference = reference;
 	}
 
-	public synchronized QuestionUnit getUnit() {
+	public synchronized QuestionDateUnit getUnit() {
 		return unit;
 	}
 
-	public synchronized void setUnit(QuestionUnit unit) {
+	public synchronized void setUnit(QuestionDateUnit unit) {
 		this.unit = unit;
 	}
 

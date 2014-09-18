@@ -26,7 +26,7 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 	}
 
 	@Override
-	public void setElementAbstract(Form element) {
+	public void setElementForProperties(Form element) {
 		instance = element;
 		formName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
 		formName.setValue(instance.getName());

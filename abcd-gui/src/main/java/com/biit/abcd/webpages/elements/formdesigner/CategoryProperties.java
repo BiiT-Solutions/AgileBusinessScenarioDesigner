@@ -22,7 +22,7 @@ public class CategoryProperties extends GenericFormElementProperties<Category> {
 	}
 
 	@Override
-	public void setElementAbstract(Category element) {
+	public void setElementForProperties(Category element) {
 		instance = element;
 		categoryLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		categoryLabel.setValue(instance.getName());

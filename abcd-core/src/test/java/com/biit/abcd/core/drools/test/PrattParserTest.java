@@ -30,7 +30,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -178,7 +178,7 @@ public class PrattParserTest {
 				"null[null[categoryTest.catVar], null[null[null[10], +, null[null[motherHeight], *, null[0.6]]], +, null[null[fatherHeight], *, null[0.4]]]]");
 
 		// Mathematical test
-		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionUnit.YEARS),
+		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionDateUnit.YEARS),
 				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 						new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND),
 				expValFormScore, new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
@@ -187,7 +187,7 @@ public class PrattParserTest {
 				"null[null[null[birthdate], ==, null[4]], &&, null[null[testForm.formVar], <, null[13]]]");
 
 		// Mathematical test
-		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionUnit.YEARS),
+		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionDateUnit.YEARS),
 				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 						new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND),
 				expValFormScore, new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN),

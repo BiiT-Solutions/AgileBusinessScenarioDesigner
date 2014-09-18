@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -29,15 +29,15 @@ public class WindowSelectDateUnit extends AcceptCancelWindow {
 		setHeight(height);
 	}
 
-	public QuestionUnit getValue() {
-		return (QuestionUnit) unitSelector.getValue();
+	public QuestionDateUnit getValue() {
+		return (QuestionDateUnit) unitSelector.getValue();
 	}
 
 	private Component generateContent(String inputFieldCaption) {
 		unitSelector = new ComboBox(inputFieldCaption);
 		unitSelector.setNullSelectionAllowed(false);
 
-		for (QuestionUnit unit : QuestionUnit.values()) {
+		for (QuestionDateUnit unit : QuestionDateUnit.values()) {
 			unitSelector.addItem(unit);
 			String caption = "";
 			switch (unit) {
@@ -68,7 +68,7 @@ public class WindowSelectDateUnit extends AcceptCancelWindow {
 		return rootLayout;
 	}
 
-	public void setValue(QuestionUnit value) {
+	public void setValue(QuestionDateUnit value) {
 		unitSelector.setValue(value);
 	}
 }

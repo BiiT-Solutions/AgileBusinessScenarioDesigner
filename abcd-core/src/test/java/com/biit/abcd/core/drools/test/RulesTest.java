@@ -48,7 +48,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -333,7 +333,7 @@ public class RulesTest {
 		// Creation of a subdiagram with all the rules
 		DiagramRule ruleDiagramNode = new DiagramRule();
 		ruleDiagramNode.setRule(new Rule("testRule", new ExpressionChain(new ExpressionValueTreeObjectReference(
-				question, QuestionUnit.DATE), new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
+				question, QuestionDateUnit.DATE), new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
 				new ExpressionValueSystemDate()), new ExpressionChain(new ExpressionValueCustomVariable(category,
 				customVarCategory), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(25.))));

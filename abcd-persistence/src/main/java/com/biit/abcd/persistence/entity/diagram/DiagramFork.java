@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 
 @Entity
@@ -42,5 +43,19 @@ public class DiagramFork extends DiagramElement {
 			this.reference.clear();
 		}
 		this.reference.add(reference);
+	}
+
+	/**
+	 * When the Diagram Fork changes, all outgoing links must be updated. I.e. links first expression element must be
+	 * updated.
+	 */
+	public void updateOutgoingLinks() {
+		for (DiagramLink outLink : getOutgoingLinks()) {
+			if (getReference() != null) {
+				Expression expression = getReference().generateCopy();
+				expression.setEditable(false);
+				outLink.resetExpressions(expression);
+			}
+		}
 	}
 }

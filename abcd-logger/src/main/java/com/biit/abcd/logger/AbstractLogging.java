@@ -102,4 +102,8 @@ public abstract class AbstractLogging {
 
 		return clsName;
 	}
+	
+	protected void log(String message){
+		logger.debug(message);
+	}
 }

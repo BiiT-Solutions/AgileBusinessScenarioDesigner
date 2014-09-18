@@ -4,13 +4,10 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.AnswerType;
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -21,69 +18,63 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<DiagramLink> {
+public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLink> {
 	private static final long serialVersionUID = 6308407654774598230L;
-	private DiagramLink instance;
-	private FormLayout linkForm;
-	private FieldWithSearchButton fieldWithSearchButton;
+	private DiagramLink diagramLink;
 
-	public JsonDiagramPropertiesLink() {
+	public DiagramPropertiesLink() {
 		super(DiagramLink.class);
 	}
 
 	@Override
-	public void setElementAbstract(DiagramLink element) {
-		instance = element;
+	public void setElementForProperties(DiagramLink diagramLink) {
+		this.diagramLink = diagramLink;
 
-		linkForm = new FormLayout();
-		linkForm.setWidth(null);
+		FormLayout formLayout = new FormLayout();
+		formLayout.setWidth(null);
 
-		if (instance.getSourceElement() instanceof DiagramFork) {
-			DiagramFork fork = (DiagramFork) element.getSourceElement();
+		// Comes from a fork.
+		if (diagramLink.getSourceElement() instanceof DiagramFork) {
+			DiagramFork fork = (DiagramFork) diagramLink.getSourceElement();
+			addTab(formLayout, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
 			if (fork.getReference() != null) {
-				setSelectAnswerExpression(fork);
+				FieldWithSearchButton fieldWithSearchButton = createFieldWithSearchButton(fork);
+				formLayout.addComponent(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' added expression " + instance.getExpressionChain().getRepresentation()
-						+ " to Link with ID:" + instance.getId() + "'.");
+						+ "' added expression " + diagramLink.getExpressionChain().getRepresentation()
+						+ " to Link with ID:" + diagramLink.getId() + "'.");
 			}
-			addTab(linkForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
 		}
 	}
 
-	private void setSelectAnswerExpression(final DiagramFork fork) {
-		fieldWithSearchButton = new FieldWithSearchButton(
+	private FieldWithSearchButton createFieldWithSearchButton(final DiagramFork fork) {
+		final FieldWithSearchButton fieldWithSearchButton = new FieldWithSearchButton(
 				ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION));
 		fieldWithSearchButton.setNullCaption(ServerTranslate
 				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
-		updateText();
+		updateText(fieldWithSearchButton);
 		fieldWithSearchButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -1215227801957570166L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				// Generate a expression with the question not editable.
+				final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) diagramLink
+						.getExpressionChain().getExpressions().get(0);
+				ExpressionChain answerExpressionWithQuestion = diagramLink.getExpressionChain().generateCopy();
+
 				final AddNewAnswerExpressionWindow addNewAnswerExpressionWindow = new AddNewAnswerExpressionWindow(fork
-						.getReference(), instance.getExpressionChain());
+						.getReference(), answerExpressionWithQuestion);
 				addNewAnswerExpressionWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						ExpressionChain expressionChain = addNewAnswerExpressionWindow.getExpressionChain();
-						// Add the question element if it's not an input
-						// question
-						{
-							Expression auxExp = instance.getExpressionChain().getExpressions().get(0);
-							if ((auxExp instanceof ExpressionValueTreeObjectReference)
-									&& !(auxExp instanceof ExpressionValueCustomVariable)
-									&& (((ExpressionValueTreeObjectReference) auxExp).getReference() instanceof Question)
-									&& !((Question) ((ExpressionValueTreeObjectReference) auxExp).getReference())
-											.getAnswerType().equals(AnswerType.INPUT)) {
-								expressionChain.getExpressions().add(0,
-										instance.getExpressionChain().getExpressions().get(0));
-							}
-						}
-						instance.getExpressionChain().setExpressions(expressionChain.getExpressions());
-						updateText();
+						diagramLink.getExpressionChain().setExpressions(
+								addNewAnswerExpressionWindow.getExpressionChain().getExpressions());
+						diagramLink.getExpressionChain().addExpression(0, questionExpression);
+						diagramLink.getExpressionChain().getExpressions().get(0).setEditable(false);
+						updateText(fieldWithSearchButton);
 						addNewAnswerExpressionWindow.close();
 					}
 				});
@@ -95,24 +86,25 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Expression auxExp = instance.getExpressionChain().getExpressions().get(0);
-				instance.getExpressionChain().removeAllExpressions();
-				instance.addExpressionToExpressionChain(auxExp);
-				updateText();
+				// Remove all but not the fork element.
+				Expression auxExp = diagramLink.getExpressionChain().getExpressions().get(0);
+				diagramLink.resetExpressions(auxExp);
+				updateText(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' removed expression from Link with ID:" + instance.getId() + "'.");
+						+ "' removed expression from Link with ID:" + diagramLink.getId() + "'.");
 			}
 		});
-		linkForm.addComponent(fieldWithSearchButton);
+		return fieldWithSearchButton;
 	}
 
-	public void updateText() {
-		if ((instance.getExpressionChain() != null) && !instance.getExpressionChain().getExpressions().isEmpty()) {
-			fieldWithSearchButton.setValue(instance.getExpressionChain(), instance.getTextWithoutFirstExpression());
+	public void updateText(FieldWithSearchButton fieldWithSearchButton) {
+		if ((diagramLink.getExpressionChain() != null) && !diagramLink.getExpressionChain().getExpressions().isEmpty()) {
+			fieldWithSearchButton.setValue(diagramLink.getExpressionChain(),
+					diagramLink.getTextWithoutFirstExpression());
 		} else {
 			fieldWithSearchButton.setValue(null);
 		}
-		firePropertyUpdateListener(instance);
+		firePropertyUpdateListener(diagramLink);
 	}
 
 	@Override
@@ -122,6 +114,6 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
-		firePropertyUpdateListener(instance);
+		firePropertyUpdateListener(diagramLink);
 	}
 }

@@ -15,17 +15,17 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class JsonDiagramPropertiesSink extends PropertiesForClassComponent<DiagramSink> {
+public class DiagramPropertiesSink extends PropertiesForClassComponent<DiagramSink> {
 	private static final long serialVersionUID = -5894964889869328279L;
 	private DiagramSink instance;
 	private FieldWithSearchButton fieldWithSearchButton;
 
-	public JsonDiagramPropertiesSink() {
+	public DiagramPropertiesSink() {
 		super(DiagramSink.class);
 	}
 
 	@Override
-	public void setElementAbstract(DiagramSink element) {
+	public void setElementForProperties(DiagramSink element) {
 		instance = element;
 
 		fieldWithSearchButton = new FieldWithSearchButton(
