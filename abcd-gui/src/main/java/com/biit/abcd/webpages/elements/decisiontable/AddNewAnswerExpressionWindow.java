@@ -34,9 +34,9 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
 		this.expressionChain = expressionChain.generateCopy();
-		// Add the question to the expression
-		this.expressionChain.addExpression(0, reference);
-		this.expressionChain.getExpressions().get(0).setEditable(false);
+//		// Add the question to the expression
+//		this.expressionChain.addExpression(0, reference);
+//		this.expressionChain.getExpressions().get(0).setEditable(false);
 
 		if (reference instanceof ExpressionValueCustomVariable) {
 			// Custom variable

@@ -304,8 +304,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information
-	 * of the currently selected table.
+	 * Updates the table where the user defines the rules with the information of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
 		decisionTable.update(getSelectedTableRule());
@@ -583,8 +582,15 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
+			ExpressionChain answerExpressionWithQuestion = answerExpression.generateCopy();
+			answerExpressionWithQuestion.addExpression(0, questionExpression);
+			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
+			
 			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
-					questionExpression, answerExpression);
+					questionExpression, answerExpressionWithQuestion);
+			// Add the question to the expression
+			// answerExpression.addExpression(0, questionExpression);
+			// answerExpression.getExpressions().get(0).setEditable(false);
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
@@ -605,7 +611,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			newActionValueWindow.addCancelActionListener(new CancelActionListener() {
 				@Override
 				public void cancelAction(AcceptCancelWindow window) {
-					newActionValueWindow.getExpressionWithoutFirstElement();
+					//newActionValueWindow.getExpressionWithoutFirstElement();
 				}
 			});
 		} else {
