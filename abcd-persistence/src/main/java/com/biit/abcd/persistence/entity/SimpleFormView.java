@@ -124,4 +124,9 @@ public class SimpleFormView {
 		this.availableTo = availableTo;
 	}
 
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }
