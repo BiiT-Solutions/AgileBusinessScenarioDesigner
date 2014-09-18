@@ -88,11 +88,11 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 	@SuppressWarnings("unchecked")
 	public void setElement(Object element) {
 		if (type.isInstance(element)) {
-			setElementAbstract((T) element);
+			setElementForProperties((T) element);
 		}
 	}
 
-	protected abstract void setElementAbstract(T element);
+	protected abstract void setElementForProperties(T element);
 
 	protected abstract void updateElement();
 

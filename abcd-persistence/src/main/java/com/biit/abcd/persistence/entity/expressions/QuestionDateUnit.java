@@ -1,6 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-public enum QuestionUnit {
+public enum QuestionDateUnit {
 	DAYS("D"),
 
 	MONTHS("M"),
@@ -11,7 +11,7 @@ public enum QuestionUnit {
 
 	String abbreviature;
 
-	QuestionUnit(String abbreviature) {
+	QuestionDateUnit(String abbreviature) {
 		this.abbreviature = abbreviature;
 	}
 

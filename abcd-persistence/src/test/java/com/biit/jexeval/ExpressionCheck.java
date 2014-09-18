@@ -10,7 +10,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.form.TreeObject;
 import com.biit.jexeval.exceptions.ExpressionException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -56,7 +56,7 @@ public class ExpressionCheck {
 		ExpressionChain expressions = new ExpressionChain();
 		ExpressionValueTreeObjectReference dateTreeVariable = new ExpressionValueTreeObjectReference();
 		dateTreeVariable.setReference(question);
-		dateTreeVariable.setUnit(QuestionUnit.YEARS);
+		dateTreeVariable.setUnit(QuestionDateUnit.YEARS);
 		expressions.addExpression(dateTreeVariable);
 		// No exception launch.
 		expressions.getExpressionEvaluator().eval();
@@ -72,7 +72,7 @@ public class ExpressionCheck {
 
 		ExpressionChain expressions = new ExpressionChain();
 		ExpressionValueCustomVariable dateVariable = new ExpressionValueCustomVariable(question, variable);
-		dateVariable.setUnit(QuestionUnit.MONTHS);
+		dateVariable.setUnit(QuestionDateUnit.MONTHS);
 		expressions.addExpression(dateVariable);
 		// No exception launch.
 		expressions.getExpressionEvaluator().eval();

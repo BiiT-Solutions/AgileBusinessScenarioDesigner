@@ -22,7 +22,7 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 	}
 
 	@Override
-	public void setElementAbstract(Answer element) {
+	public void setElementForProperties(Answer element) {
 		instance = element;
 		answerTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		answerTechnicalLabel.setValue(instance.getName());

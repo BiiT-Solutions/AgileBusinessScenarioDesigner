@@ -46,7 +46,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 			if (treeObject != null) {
 				if ((treeObject instanceof Question) && (((Question) treeObject).getAnswerType() != AnswerType.INPUT)) {
 					Question question = (Question) treeObject;
-					setContent(generateTable(question));
+					setContent(generateTreeObjectTable(question));
 				} else {
 					setContent(generateExpression());
 				}
@@ -56,7 +56,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		setCaption(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_EDIT_CONDITION_CAPTION));
 	}
 
-	public Component generateTable(Question question) {
+	public Component generateTreeObjectTable(Question question) {
 		setWidth("50%");
 		setHeight("75%");
 		answerTable = new SelectFormAnswerTable();
@@ -109,14 +109,16 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 
 	public ExpressionChain getExpressionChain() {
 		if (answerTable == null) {
-			removeFirstExpression();
+			return getExpressionWithoutFirstElement();
 		}
 		return expressionChain;
 	}
 
-	public void removeFirstExpression() {
+	public ExpressionChain getExpressionWithoutFirstElement() {
+		ExpressionChain expressionChain = this.expressionChain.generateCopy();
 		if ((expressionChain != null) && !expressionChain.getExpressions().isEmpty()) {
 			expressionChain.removeFirstExpression();
 		}
+		return expressionChain;
 	}
 }

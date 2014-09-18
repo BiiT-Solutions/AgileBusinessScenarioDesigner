@@ -13,10 +13,9 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
-import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
@@ -32,59 +31,52 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.VerticalLayout;
 
-public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<DiagramFork> {
+public class DiagramPropertiesFork extends PropertiesForClassComponent<DiagramFork> {
 	private static final long serialVersionUID = -5767909479835775870L;
-	private DiagramFork instance;
+	private DiagramFork diagramFork;
 	private TreeObjectTableSingleSelect treeObjectTable;
 	private ListSelect variableSelection;
 	private Button addQuestionButton, addVariableButton;
 
-	public JsonDiagramPropertiesFork() {
+	public DiagramPropertiesFork() {
 		super(DiagramFork.class);
 	}
 
-	private void setNewReference(TreeObject treeObjectRefence) {
-		instance.setReference(new ExpressionValueTreeObjectReference(treeObjectRefence));
-		for (DiagramLink outLink : instance.getOutgoingLinks()) {
-			outLink.resetExpressions(new ExpressionValueTreeObjectReference(treeObjectRefence, false));
-		}
-		firePropertyUpdateListener(instance);
+	private void setNewReference(TreeObject treeObjectReference) {
+		diagramFork.setReference(new ExpressionValueTreeObjectReference(treeObjectReference));
+		diagramFork.updateOutgoingLinks();
+		firePropertyUpdateListener(diagramFork);
 	}
 
-	private void setNewDateReference(TreeObject reference, QuestionUnit dateUnit) {
-		instance.setReference(new ExpressionValueTreeObjectReference(reference, dateUnit));
-		for (DiagramLink outLink : instance.getOutgoingLinks()) {
-			outLink.resetExpressions(new ExpressionValueTreeObjectReference(reference, dateUnit, false));
-		}
-		firePropertyUpdateListener(instance);
+	private void setNewDateReference(TreeObject reference, QuestionDateUnit dateUnit) {
+		diagramFork.setReference(new ExpressionValueTreeObjectReference(reference, dateUnit));
+		diagramFork.updateOutgoingLinks();
+		firePropertyUpdateListener(diagramFork);
 	}
 
 	private void setNewReferenceCustomVariable(TreeObject treeObjectRefence, CustomVariable variable) {
-		instance.setReference(new ExpressionValueCustomVariable(treeObjectRefence, variable));
-		for (DiagramLink outLink : instance.getOutgoingLinks()) {
-			outLink.resetExpressions(new ExpressionValueCustomVariable(treeObjectRefence, variable, false));
-		}
-		firePropertyUpdateListener(instance);
+		diagramFork.setReference(new ExpressionValueCustomVariable(treeObjectRefence, variable));
+		diagramFork.updateOutgoingLinks();
+		firePropertyUpdateListener(diagramFork);
 	}
 
-	private void setNewDateReferenceCustomVariable(TreeObject reference, CustomVariable variable, QuestionUnit dateUnit) {
-		instance.setReference(new ExpressionValueCustomVariable(reference, variable, dateUnit));
-		for (DiagramLink outLink : instance.getOutgoingLinks()) {
-			outLink.resetExpressions(new ExpressionValueCustomVariable(reference, variable, dateUnit, false));
-		}
-		firePropertyUpdateListener(instance);
+	private void setNewDateReferenceCustomVariable(TreeObject reference, CustomVariable variable,
+			QuestionDateUnit dateUnit) {
+		diagramFork.setReference(new ExpressionValueCustomVariable(reference, variable, dateUnit));
+		diagramFork.updateOutgoingLinks();
+		firePropertyUpdateListener(diagramFork);
 	}
 
 	@Override
-	public void setElementAbstract(DiagramFork element) {
-		instance = element;
+	public void setElementForProperties(DiagramFork element) {
+		diagramFork = element;
 
 		VerticalLayout layout = new VerticalLayout();
 		layout.setWidth("100%");
 		layout.setSpacing(true);
 		layout.setMargin(true);
 
-		initializeFormQuestionTable();
+		treeObjectTable = createFormQuestionTable();
 		addQuestionButton = new Button(
 				ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT));
 		addQuestionButton.addClickListener(new ClickListener() {
@@ -103,29 +95,29 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 						windowDate.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								QuestionUnit unit = windowDate.getValue();
+								QuestionDateUnit unit = windowDate.getValue();
 								setNewDateReference(reference, unit);
-								AbcdLogger.info(this.getClass().getName(),
-										"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-												+ instance.getReference().getRepresentation() + " in Fork with ID:"
-												+ instance.getId() + "'.");
+								AbcdLogger.info(this.getClass().getName(), "User '"
+										+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getId() + "'.");
 								window.close();
 							}
 						});
 						windowDate.showCentered();
 					} else {
 						setNewReference(reference);
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-								+ instance.getReference().getRepresentation() + " in Fork with ID:" + instance.getId()
-								+ "'.");
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getId() + "'.");
 					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
 				}
 			}
 		});
-		initializeVariableSelection();
+		variableSelection = createVariableSelection();
 		addVariableButton = new Button(
 				ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_BUTTON_ADD_VARIABLE));
 		addVariableButton.addClickListener(new ClickListener() {
@@ -145,28 +137,35 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 						windowDate.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								QuestionUnit unit = windowDate.getValue();
+								QuestionDateUnit unit = windowDate.getValue();
 								setNewDateReferenceCustomVariable(reference, variable, unit);
-								AbcdLogger.info(this.getClass().getName(),
-										"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-												+ instance.getReference().getRepresentation() + " in Fork with ID:"
-												+ instance.getId() + "'.");
+								AbcdLogger.info(this.getClass().getName(), "User '"
+										+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getId() + "'.");
 								window.close();
 							}
 						});
 						windowDate.showCentered();
 					} else {
 						setNewReferenceCustomVariable(reference, variable);
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-								+ instance.getReference().getRepresentation() + " in Fork with ID:" + instance.getId()
-								+ "'.");
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
+										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getId() + "'.");
 					}
 				} else {
 					MessageManager.showError(LanguageCodes.ERROR_SELECT_VARIABLE);
 				}
 			}
 		});
+
+		if (diagramFork != null && diagramFork.getReference() != null) {
+			treeObjectTable.setValue(diagramFork.getReference().getReference());
+			if (diagramFork.getReference() instanceof ExpressionValueCustomVariable) {
+				variableSelection.setValue(((ExpressionValueCustomVariable)diagramFork.getReference()).getVariable());
+			}
+		}
 
 		layout.addComponent(treeObjectTable);
 		layout.setExpandRatio(treeObjectTable, 0.5f);
@@ -180,7 +179,7 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 		addTab(layout, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_FORK_NODE_CAPTION), true, 0);
 	}
 
-	private void initializeFormQuestionTable() {
+	private TreeObjectTableSingleSelect createFormQuestionTable() {
 		treeObjectTable = new TreeObjectTableSingleSelect();
 		treeObjectTable.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
 		treeObjectTable.setSizeFull();
@@ -199,15 +198,17 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 		});
 		treeObjectTable.collapseFrom(Category.class);
 		treeObjectTable.setPageLength(10);
+		return treeObjectTable;
 	}
 
-	private void initializeVariableSelection() {
-		variableSelection = new ListSelect();
+	private ListSelect createVariableSelection() {
+		ListSelect variableSelection = new ListSelect();
 		variableSelection
 				.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
 		variableSelection.setSizeFull();
 		variableSelection.setNullSelectionAllowed(false);
 		variableSelection.setImmediate(true);
+		return variableSelection;
 	}
 
 	private void setFormVariableSelectionValues() {
@@ -235,6 +236,6 @@ public class JsonDiagramPropertiesFork extends PropertiesForClassComponent<Diagr
 
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
-		firePropertyUpdateListener(instance);
+		firePropertyUpdateListener(diagramFork);
 	}
 }

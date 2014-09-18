@@ -36,7 +36,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.ChildrenNotFoundException;
@@ -116,26 +116,26 @@ public class NewExpressionsTest extends TestFormCreator {
 		// Assign a date(years) to a custom variable
 		ExpressionChain expression = new ExpressionChain("YearsAssignation", new ExpressionValueCustomVariable(
 				getForm(), yearsCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionUnit.YEARS));
+				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.YEARS));
 		getForm().getExpressionChain().add(expression);
 
 		// Assign a date(months) to a custom variable
 		expression = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(
 				getTreeObject("Algemeen"), monthsCustomVariable), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(getTreeObject("birthdate"),
-				QuestionUnit.MONTHS));
+				QuestionDateUnit.MONTHS));
 		getForm().getExpressionChain().add(expression);
 
 		// Assign a date(days) to a custom variable
 		expression = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(getTreeObject("voeding"),
 				daysCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionUnit.DAYS));
+				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.DAYS));
 		getForm().getExpressionChain().add(expression);
 
 		// Assign a date(date) to a custom variable
 		expression = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(getTreeObject("fruit"),
 				dateCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionUnit.DATE));
+				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.DATE));
 		getForm().getExpressionChain().add(expression);
 
 		// Mathematical expression

@@ -35,7 +35,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.ChildrenNotFoundException;
@@ -118,7 +118,7 @@ public class ExpressionsTest {
 
 		ExpressionChain expressionAssignTest = new ExpressionChain("AgeYearAssig", new ExpressionValueCustomVariable(form, age),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(
-						birthdate, QuestionUnit.YEARS));
+						birthdate, QuestionDateUnit.YEARS));
 
 		form.getExpressionChain().add(expressionAssignTest);
 

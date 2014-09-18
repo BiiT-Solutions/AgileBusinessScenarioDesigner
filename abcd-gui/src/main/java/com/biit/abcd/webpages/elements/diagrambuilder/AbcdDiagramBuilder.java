@@ -30,14 +30,16 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	private Diagram diagram;
 	private HashMap<String, DiagramObject> diagramElements;
-	private List<DiagramObjectPickedListener> listeners;
+	private List<DiagramObjectPickedListener> pickListeners;
 	private List<JumpToListener> jumpToListeners;
+	private List<DiagramObjectAddedListener> objectAddedListeners;
 
 	public AbcdDiagramBuilder() {
 		super();
 		diagramElements = new HashMap<>();
-		listeners = new ArrayList<AbcdDiagramBuilder.DiagramObjectPickedListener>();
+		pickListeners = new ArrayList<AbcdDiagramBuilder.DiagramObjectPickedListener>();
 		jumpToListeners = new ArrayList<JumpToListener>();
+		objectAddedListeners = new ArrayList<>();
 
 		addElementActionListener(new ElementActionListener() {
 
@@ -53,7 +55,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 			@Override
 			public void addElement(String jsonString) {
-				addObjectToDiagram(jsonString);
+				DiagramObject elementAdded = addObjectToDiagram(jsonString);
+				fireDiagramObjectAddedListener(elementAdded);				
 			}
 		});
 		addElementPickedListener(new ElementPickedListener() {
@@ -141,9 +144,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	}
 
 	/**
-	 * Gets Element of diagram from a json String. If it doesn't exist on the
-	 * diagram, we add it first.
-	 *
+	 * Gets Element of diagram from a json String. If it doesn't exist on the diagram, we add it first.
+	 * 
 	 * @param jsonString
 	 * @return
 	 */
@@ -160,10 +162,10 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 	/**
 	 * Add a new Diagram object to the diagram if it doesn't exist.
-	 *
+	 * 
 	 * @param element
 	 */
-	private void addObjectToDiagram(DiagramObject element) {
+	private DiagramObject addObjectToDiagram(DiagramObject element) {
 		if (!diagramElements.containsKey(element.getJointjsId())) {
 			diagram.addDiagramObject(element);
 			element.setCreatedBy(UserSessionHandler.getUser());
@@ -172,21 +174,25 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			diagram.setUpdatedBy(UserSessionHandler.getUser());
 			diagram.setUpdateTime();
 			diagramElements.put(element.getJointjsId(), element);
+			return element;
+		} else {
+			return diagramElements.get(element.getJointjsId());
 		}
 	}
 
 	/**
 	 * Add a new Diagram object to the diagram if it doesn't exist.
-	 *
+	 * 
 	 * @param element
 	 */
-	private void addObjectToDiagram(String jsonString) {
+	private DiagramObject addObjectToDiagram(String jsonString) {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
-		addObjectToDiagram(element);
+		DiagramObject elementOfDiagram = addObjectToDiagram(element);
 		updateLinkVisualization(element);
 
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "' Diagram element: " + element.getClass() + " added'.");
+		return elementOfDiagram;
 	}
 
 	private void removeObjectOfDiagram(String jsonString) {
@@ -296,15 +302,15 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	}
 
 	public void addDiagramObjectPickedListener(DiagramObjectPickedListener listener) {
-		listeners.add(listener);
+		pickListeners.add(listener);
 	}
 
 	public void removeDiagramObjectPickedListener(DiagramObjectPickedListener listener) {
-		listeners.remove(listener);
+		pickListeners.remove(listener);
 	}
 
-	public void fireDiagramObjectPickedListeners(DiagramObject pickedObject) {
-		for (DiagramObjectPickedListener listener : listeners) {
+	private void fireDiagramObjectPickedListeners(DiagramObject pickedObject) {
+		for (DiagramObjectPickedListener listener : pickListeners) {
 			listener.diagramObjectPicked(pickedObject);
 		}
 	}
@@ -325,9 +331,23 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		jumpToListeners.remove(jumpToListener);
 	}
 
-	public void fireJumpToListener(Object object) {
+	private void fireJumpToListener(Object object) {
 		for (JumpToListener listener : jumpToListeners) {
 			listener.jumpTo(object);
+		}
+	}
+	
+	public void addDiagramObjectAddedListener(DiagramObjectAddedListener listener) {
+		objectAddedListeners.add(listener);
+	}
+
+	public void removeDiagramObjectAddedListener(DiagramObjectAddedListener listener) {
+		objectAddedListeners.remove(listener);
+	}
+
+	private void fireDiagramObjectAddedListener(DiagramObject elementAdded) {
+		for (DiagramObjectAddedListener listener : objectAddedListeners) {
+			listener.elementAdded(elementAdded);
 		}
 	}
 }

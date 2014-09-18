@@ -21,69 +21,67 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<DiagramLink> {
+public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLink> {
 	private static final long serialVersionUID = 6308407654774598230L;
-	private DiagramLink instance;
-	private FormLayout linkForm;
-	private FieldWithSearchButton fieldWithSearchButton;
+	private DiagramLink diagramLink;
 
-	public JsonDiagramPropertiesLink() {
+	public DiagramPropertiesLink() {
 		super(DiagramLink.class);
 	}
 
 	@Override
-	public void setElementAbstract(DiagramLink element) {
-		instance = element;
+	public void setElementForProperties(DiagramLink diagramLink) {
+		this.diagramLink = diagramLink;
 
-		linkForm = new FormLayout();
-		linkForm.setWidth(null);
+		FormLayout formLayout = new FormLayout();
+		formLayout.setWidth(null);
 
-		if (instance.getSourceElement() instanceof DiagramFork) {
-			DiagramFork fork = (DiagramFork) element.getSourceElement();
-			if (fork.getReference() != null) {
-				setSelectAnswerExpression(fork);
+		// Comes from a fork.
+		if (diagramLink.getSourceElement() instanceof DiagramFork) {
+			DiagramFork fork = (DiagramFork) diagramLink.getSourceElement();
+			addTab(formLayout, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
+			if (fork.getReference() != null) {			
+				FieldWithSearchButton fieldWithSearchButton = createFieldWithSearchButton(fork);
+				formLayout.addComponent(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' added expression " + instance.getExpressionChain().getRepresentation()
-						+ " to Link with ID:" + instance.getId() + "'.");
+						+ "' added expression " + diagramLink.getExpressionChain().getRepresentation()
+						+ " to Link with ID:" + diagramLink.getId() + "'.");
 			}
-			addTab(linkForm, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
 		}
 	}
 
-	private void setSelectAnswerExpression(final DiagramFork fork) {
-		fieldWithSearchButton = new FieldWithSearchButton(
+	private FieldWithSearchButton createFieldWithSearchButton(final DiagramFork fork) {
+		final FieldWithSearchButton fieldWithSearchButton = new FieldWithSearchButton(
 				ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_CAPTION));
 		fieldWithSearchButton.setNullCaption(ServerTranslate
 				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
-		updateText();
+		updateText(fieldWithSearchButton);
 		fieldWithSearchButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -1215227801957570166L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final AddNewAnswerExpressionWindow addNewAnswerExpressionWindow = new AddNewAnswerExpressionWindow(fork
-						.getReference(), instance.getExpressionChain());
+						.getReference(), diagramLink.getExpressionChain());
 				addNewAnswerExpressionWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
 						ExpressionChain expressionChain = addNewAnswerExpressionWindow.getExpressionChain();
-						// Add the question element if it's not an input
-						// question
-						{
-							Expression auxExp = instance.getExpressionChain().getExpressions().get(0);
-							if ((auxExp instanceof ExpressionValueTreeObjectReference)
-									&& !(auxExp instanceof ExpressionValueCustomVariable)
-									&& (((ExpressionValueTreeObjectReference) auxExp).getReference() instanceof Question)
-									&& !((Question) ((ExpressionValueTreeObjectReference) auxExp).getReference())
-											.getAnswerType().equals(AnswerType.INPUT)) {
-								expressionChain.getExpressions().add(0,
-										instance.getExpressionChain().getExpressions().get(0));
-							}
+						// Add the question element if it's not an input question
+						// '=' is omitted. Only used "Question Answer"
+						Expression answerOfExpression = diagramLink.getExpressionChain().getExpressions().get(0);
+						if ((answerOfExpression instanceof ExpressionValueTreeObjectReference)
+								&& !(answerOfExpression instanceof ExpressionValueCustomVariable)
+								&& (((ExpressionValueTreeObjectReference) answerOfExpression).getReference() instanceof Question)
+								&& !((Question) ((ExpressionValueTreeObjectReference) answerOfExpression)
+										.getReference()).getAnswerType().equals(AnswerType.INPUT)) {
+							expressionChain.getExpressions().add(0,
+									diagramLink.getExpressionChain().getExpressions().get(0));
 						}
-						instance.getExpressionChain().setExpressions(expressionChain.getExpressions());
-						updateText();
+						diagramLink.getExpressionChain().setExpressions(expressionChain.getExpressions());
+						updateText(fieldWithSearchButton);
 						addNewAnswerExpressionWindow.close();
 					}
 				});
@@ -95,24 +93,25 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Expression auxExp = instance.getExpressionChain().getExpressions().get(0);
-				instance.getExpressionChain().removeAllExpressions();
-				instance.addExpressionToExpressionChain(auxExp);
-				updateText();
+				Expression auxExp = diagramLink.getExpressionChain().getExpressions().get(0);
+				diagramLink.getExpressionChain().removeAllExpressions();
+				diagramLink.addExpressionToExpressionChain(auxExp);
+				updateText(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' removed expression from Link with ID:" + instance.getId() + "'.");
+						+ "' removed expression from Link with ID:" + diagramLink.getId() + "'.");
 			}
 		});
-		linkForm.addComponent(fieldWithSearchButton);
+		return fieldWithSearchButton;
 	}
 
-	public void updateText() {
-		if ((instance.getExpressionChain() != null) && !instance.getExpressionChain().getExpressions().isEmpty()) {
-			fieldWithSearchButton.setValue(instance.getExpressionChain(), instance.getTextWithoutFirstExpression());
+	public void updateText(FieldWithSearchButton fieldWithSearchButton) {
+		if ((diagramLink.getExpressionChain() != null) && !diagramLink.getExpressionChain().getExpressions().isEmpty()) {
+			fieldWithSearchButton.setValue(diagramLink.getExpressionChain(),
+					diagramLink.getTextWithoutFirstExpression());
 		} else {
 			fieldWithSearchButton.setValue(null);
 		}
-		firePropertyUpdateListener(instance);
+		firePropertyUpdateListener(diagramLink);
 	}
 
 	@Override
@@ -122,6 +121,6 @@ public class JsonDiagramPropertiesLink extends PropertiesForClassComponent<Diagr
 
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
-		firePropertyUpdateListener(instance);
+		firePropertyUpdateListener(diagramLink);
 	}
 }

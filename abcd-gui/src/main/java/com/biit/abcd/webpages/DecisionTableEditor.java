@@ -19,7 +19,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionUnit;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.CheckDependencies;
@@ -572,7 +572,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void setQuestionDateExpression(TableRuleRow row, Integer propertyId, Question selectedQuestion,
-			QuestionUnit unit) {
+			QuestionDateUnit unit) {
 		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedQuestion, unit));
 		decisionTable.update(getSelectedTableRule());
 	}
@@ -605,7 +605,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			newActionValueWindow.addCancelActionListener(new CancelActionListener() {
 				@Override
 				public void cancelAction(AcceptCancelWindow window) {
-					newActionValueWindow.removeFirstExpression();
+					newActionValueWindow.getExpressionWithoutFirstElement();
 				}
 			});
 		} else {

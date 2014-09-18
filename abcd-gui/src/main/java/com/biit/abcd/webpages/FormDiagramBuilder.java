@@ -27,8 +27,9 @@ import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.components.SelectDiagramTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
+import com.biit.abcd.webpages.elements.diagrambuilder.DiagramObjectAddedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
-import com.biit.abcd.webpages.elements.diagrambuilder.JsonPropertiesComponent;
+import com.biit.abcd.webpages.elements.diagrambuilder.DriagramPropertiesComponent;
 import com.biit.abcd.webpages.elements.diagrambuilder.JumpToListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.WindowNewDiagram;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -44,7 +45,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private SelectDiagramTable diagramBuilderTable;
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
-	private JsonPropertiesComponent propertiesContainer;
+	private DriagramPropertiesComponent propertiesContainer;
 	private DiagramTableValueChange diagramTableValueChange;
 
 	public FormDiagramBuilder() {
@@ -68,7 +69,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
 		rootDiagramBuilder.setSpacing(true);
 
-		propertiesContainer = new JsonPropertiesComponent();
+		propertiesContainer = new DriagramPropertiesComponent();
 		propertiesContainer.setSizeFull();
 
 		diagramBuilderTable = new SelectDiagramTable();
@@ -139,7 +140,21 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					selectComponent((Diagram) element);
 				}
 			}
+		});
 
+		diagramBuilder.addDiagramObjectAddedListener(new DiagramObjectAddedListener() {
+
+			@Override
+			public void elementAdded(DiagramObject diagramObject) {
+				// A link must obtain the diagram source for the expressions.
+				if (diagramObject instanceof DiagramLink) {
+					DiagramLink diagramLink = (DiagramLink) diagramObject;
+					if (diagramLink.getSourceElement() instanceof DiagramFork) {
+						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
+						((DiagramFork) diagramLink.getSourceElement()).updateOutgoingLinks();
+					}
+				}
+			}
 		});
 		// Diagram builder starts as disabled until a diagram is selected.
 		diagramBuilder.setEnabled(false);
@@ -158,14 +173,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					return;
 				}
 				if (element instanceof DiagramFork) {
-					DiagramFork currentFork = (DiagramFork) element;
-					List<DiagramLink> links = currentFork.getOutgoingLinks();
-					// TODO add a checking to know if it is valid and change
-					// color or something
-					for (DiagramLink link : links) {
-						diagramBuilder.updateChangesToDiagram(link);
-					}
-					diagramBuilder.updateChangesToDiagram(currentFork);
+					updateForkChanges((DiagramFork) element);
 					return;
 				}
 				if (element instanceof DiagramChild) {
@@ -193,6 +201,16 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		initializeDiagramsTableAndSelectFirst();
 		initUpperMenu();
+	}
+
+	private void updateForkChanges(DiagramFork fork) {
+		List<DiagramLink> links = fork.getOutgoingLinks();
+		// TODO add a checking to know if it is valid and change
+		// color or something
+		for (DiagramLink link : links) {
+			diagramBuilder.updateChangesToDiagram(link);
+		}
+		diagramBuilder.updateChangesToDiagram(fork);
 	}
 
 	protected void selectComponent(Diagram element) {

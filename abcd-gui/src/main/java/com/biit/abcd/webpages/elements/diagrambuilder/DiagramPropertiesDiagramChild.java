@@ -16,18 +16,18 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class JsonDiagramPropertiesDiagramChild extends PropertiesForClassComponent<DiagramChild> {
+public class DiagramPropertiesDiagramChild extends PropertiesForClassComponent<DiagramChild> {
 	private static final long serialVersionUID = -1462969396162576789L;
 	private DiagramChild instance;
 	private FormLayout childForm;
 	private FieldWithSearchButton fieldWithSearchButton;
 
-	public JsonDiagramPropertiesDiagramChild() {
+	public DiagramPropertiesDiagramChild() {
 		super(DiagramChild.class);
 	}
 
 	@Override
-	public void setElementAbstract(DiagramChild element) {
+	public void setElementForProperties(DiagramChild element) {
 		instance = element;
 
 		childForm = new FormLayout();
