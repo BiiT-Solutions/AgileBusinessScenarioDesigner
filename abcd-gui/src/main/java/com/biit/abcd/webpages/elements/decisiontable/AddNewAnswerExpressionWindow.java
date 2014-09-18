@@ -19,7 +19,6 @@ import com.vaadin.ui.VerticalLayout;
 
 public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 7699690992550597244L;
-	private SelectFormAnswerTable answerTable = null;
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionChain expressionChain;
 
@@ -55,15 +54,16 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	public Component generateTreeObjectTable(Question question) {
 		setWidth("50%");
 		setHeight("75%");
-		answerTable = new SelectFormAnswerTable();
+		final SelectFormAnswerTable answerTable = new SelectFormAnswerTable();
 		answerTable.setRootElement(question);
+		answerTable.setNullSelectionAllowed(true);
 		answerTable.setSelectable(true);
 		answerTable.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -4771701909112677308L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				setSelectedTableElement();
+				setSelectedTableElement(answerTable);
 			}
 		});
 		answerTable.setSizeFull();
@@ -74,11 +74,11 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 		} else {
 			answerTable.setValue(null);
 		}
-		setSelectedTableElement();
+		setSelectedTableElement(answerTable);
 		return answerTable;
 	}
 
-	private void setSelectedTableElement() {
+	private void setSelectedTableElement(SelectFormAnswerTable answerTable) {
 		expressionChain.removeAllExpressions();
 		if (answerTable.getValue() != null) {
 			expressionChain.addExpression(new ExpressionValueTreeObjectReference(answerTable.getValue()));

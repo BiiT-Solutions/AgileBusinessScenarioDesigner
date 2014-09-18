@@ -11,7 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.util.StopWatch;
 
 /**
- * Logs all file managed by Spring. In this project only are DAOs. 
+ * Logs all file managed by Spring. In this project only are DAOs.
  * 
  */
 @Aspect
@@ -55,7 +55,11 @@ public class BasicLogging extends AbstractLogging {
 	 */
 	@AfterReturning(pointcut = "selectAll()", returning = "retVal")
 	public void afterReturningAdvice(Object retVal) {
-		log("Returning:" + retVal.toString());
+//		if (retVal != null) {
+//			log("Returning:" + retVal.toString());
+//		} else {
+//			log("Returning:" + retVal);
+//		}
 	}
 
 	/**
@@ -63,7 +67,7 @@ public class BasicLogging extends AbstractLogging {
 	 */
 	@AfterThrowing(pointcut = "selectAll()", throwing = "ex")
 	public void AfterThrowingAdvice(IllegalArgumentException ex) {
-		log("There has been an exception: " + ex.getMessage());
+//		log("There has been an exception: " + ex.getMessage());
 	}
 
 }
