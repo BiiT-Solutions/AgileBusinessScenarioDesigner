@@ -582,15 +582,14 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
+			//Generate a expression with the question not editable.
 			ExpressionChain answerExpressionWithQuestion = answerExpression.generateCopy();
 			answerExpressionWithQuestion.addExpression(0, questionExpression);
 			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
 			
 			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
 					questionExpression, answerExpressionWithQuestion);
-			// Add the question to the expression
-			// answerExpression.addExpression(0, questionExpression);
-			// answerExpression.getExpressions().get(0).setEditable(false);
+			
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override

@@ -7,6 +7,8 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
@@ -35,7 +37,7 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 		if (diagramLink.getSourceElement() instanceof DiagramFork) {
 			DiagramFork fork = (DiagramFork) diagramLink.getSourceElement();
 			addTab(formLayout, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
-			if (fork.getReference() != null) {			
+			if (fork.getReference() != null) {
 				FieldWithSearchButton fieldWithSearchButton = createFieldWithSearchButton(fork);
 				formLayout.addComponent(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
@@ -57,13 +59,21 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				// Generate a expression with the question not editable.
+				final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) diagramLink
+						.getExpressionChain().getExpressions().get(0);
+				ExpressionChain answerExpressionWithQuestion = diagramLink.getExpressionChain().generateCopy();
+
 				final AddNewAnswerExpressionWindow addNewAnswerExpressionWindow = new AddNewAnswerExpressionWindow(fork
-						.getReference(), diagramLink.getExpressionChain());
+						.getReference(), answerExpressionWithQuestion);
 				addNewAnswerExpressionWindow.addAcceptActionListener(new AcceptActionListener() {
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						diagramLink.getExpressionChain().setExpressions(addNewAnswerExpressionWindow.getExpressionChain().getExpressions());
+						diagramLink.getExpressionChain().setExpressions(
+								addNewAnswerExpressionWindow.getExpressionChain().getExpressions());
+						diagramLink.getExpressionChain().addExpression(0, questionExpression);
+						diagramLink.getExpressionChain().getExpressions().get(0).setEditable(false);
 						updateText(fieldWithSearchButton);
 						addNewAnswerExpressionWindow.close();
 					}
@@ -76,7 +86,7 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				//Remove all but not the fork element. 
+				// Remove all but not the fork element.
 				Expression auxExp = diagramLink.getExpressionChain().getExpressions().get(0);
 				diagramLink.resetExpressions(auxExp);
 				updateText(fieldWithSearchButton);
