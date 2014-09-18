@@ -4,14 +4,9 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.AnswerType;
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
@@ -68,19 +63,7 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						ExpressionChain expressionChain = addNewAnswerExpressionWindow.getExpressionChain();
-						// Add the question element if it's not an input question
-						// '=' is omitted. Only used "Question Answer"
-						Expression answerOfExpression = diagramLink.getExpressionChain().getExpressions().get(0);
-						if ((answerOfExpression instanceof ExpressionValueTreeObjectReference)
-								&& !(answerOfExpression instanceof ExpressionValueCustomVariable)
-								&& (((ExpressionValueTreeObjectReference) answerOfExpression).getReference() instanceof Question)
-								&& !((Question) ((ExpressionValueTreeObjectReference) answerOfExpression)
-										.getReference()).getAnswerType().equals(AnswerType.INPUT)) {
-							expressionChain.getExpressions().add(0,
-									diagramLink.getExpressionChain().getExpressions().get(0));
-						}
-						diagramLink.getExpressionChain().setExpressions(expressionChain.getExpressions());
+						diagramLink.getExpressionChain().setExpressions(addNewAnswerExpressionWindow.getExpressionChain().getExpressions());
 						updateText(fieldWithSearchButton);
 						addNewAnswerExpressionWindow.close();
 					}
@@ -93,9 +76,9 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				//Remove all but not the fork element. 
 				Expression auxExp = diagramLink.getExpressionChain().getExpressions().get(0);
-				diagramLink.getExpressionChain().removeAllExpressions();
-				diagramLink.addExpressionToExpressionChain(auxExp);
+				diagramLink.resetExpressions(auxExp);
 				updateText(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' removed expression from Link with ID:" + diagramLink.getId() + "'.");

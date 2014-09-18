@@ -108,9 +108,9 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 	}
 
 	public ExpressionChain getExpressionChain() {
-		if (answerTable == null) {
-			return getExpressionWithoutFirstElement();
-		}
+//		if (answerTable == null) {
+//			return getExpressionWithoutFirstElement();
+//		}
 		return expressionChain;
 	}
 

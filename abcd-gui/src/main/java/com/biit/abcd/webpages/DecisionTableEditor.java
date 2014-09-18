@@ -595,8 +595,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					ExpressionChain expChain = newActionValueWindow.getExpressionChain();
-					answerExpression.setExpressions(expChain.getExpressions());
+					answerExpression.setExpressions(newActionValueWindow.getExpressionChain().getExpressions());
 					decisionTable.update(getSelectedTableRule());
 
 					AbcdLogger.info(this.getClass().getName(), "User '"
