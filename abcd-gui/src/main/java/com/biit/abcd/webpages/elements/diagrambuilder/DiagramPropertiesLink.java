@@ -9,8 +9,10 @@ import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.webpages.components.AcceptCancelClearWindow.ClearElementsActionListener;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
@@ -76,6 +78,15 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 						diagramLink.getExpressionChain().getExpressions().get(0).setEditable(false);
 						updateText(fieldWithSearchButton);
 						addNewAnswerExpressionWindow.close();
+					}
+				});
+				addNewAnswerExpressionWindow.addClearActionListener(new ClearElementsActionListener() {
+
+					@Override
+					public void clearAction(AcceptCancelClearWindow window) {
+						addNewAnswerExpressionWindow.clearSelection();
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' removed expression from Link with ID:" + diagramLink.getId() + "'.");
 					}
 				});
 				addNewAnswerExpressionWindow.showCentered();

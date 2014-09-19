@@ -127,6 +127,6 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 		if (expressionEditorComponent != null) {
 			((SimpleExpressionEditorComponent) expressionEditorComponent).clear();
 		}
-		expressionChain = null;
+		expressionChain = new ExpressionChain();
 	}
 }
