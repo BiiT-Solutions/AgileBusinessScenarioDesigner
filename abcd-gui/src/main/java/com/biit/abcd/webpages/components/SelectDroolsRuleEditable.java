@@ -16,7 +16,8 @@ public class SelectDroolsRuleEditable extends TableCellLabelEdit {
 	private static final long serialVersionUID = 3348987098295904893L;
 
 	public SelectDroolsRuleEditable() {
-		super(LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME, LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE);
+		super(LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME,
+				LanguageCodes.DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE);
 	}
 
 	public void update(Form form) {
@@ -33,7 +34,7 @@ public class SelectDroolsRuleEditable extends TableCellLabelEdit {
 	public void setSelectedExpression(Rule rule) {
 		setValue(rule);
 	}
-	
+
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
 		if (editCellComponent != null) {
@@ -41,7 +42,7 @@ public class SelectDroolsRuleEditable extends TableCellLabelEdit {
 		}
 		return null;
 	}
-	
+
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private Rule rule;
@@ -53,8 +54,7 @@ public class SelectDroolsRuleEditable extends TableCellLabelEdit {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
+					ServerTranslate.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
 
 			newTableCellEditWindow.setValue(rule.getName());
 			newTableCellEditWindow.showCentered();
@@ -62,7 +62,8 @@ public class SelectDroolsRuleEditable extends TableCellLabelEdit {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					for (Rule existingDroolsRule : UserSessionHandler.getFormController().getForm().getRules()) {
-						if (existingDroolsRule.getName().equals(newTableCellEditWindow.getValue())) {
+						if (existingDroolsRule != rule
+								&& existingDroolsRule.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_DROOLS_RULE_NAME);
 							return;
 						}

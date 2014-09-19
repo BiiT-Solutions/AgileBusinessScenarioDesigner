@@ -33,7 +33,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 	public void setSelectedExpression(ExpressionChain expression) {
 		setValue(expression);
 	}
-	
+
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
 		if (editCellComponent != null) {
@@ -41,7 +41,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 		}
 		return null;
 	}
-	
+
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private ExpressionChain formExpression;
@@ -53,16 +53,17 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
+					ServerTranslate.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
 
 			newTableCellEditWindow.setValue(formExpression.getName());
 			newTableCellEditWindow.showCentered();
 			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					for (ExpressionChain existingTableRule : UserSessionHandler.getFormController().getForm().getExpressionChain()) {
-						if (existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
+					for (ExpressionChain existingTableRule : UserSessionHandler.getFormController().getForm()
+							.getExpressionChain()) {
+						if (existingTableRule != formExpression
+								&& existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 							return;
 						}
