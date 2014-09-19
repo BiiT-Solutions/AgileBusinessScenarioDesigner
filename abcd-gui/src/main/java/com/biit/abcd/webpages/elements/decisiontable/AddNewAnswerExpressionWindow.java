@@ -7,7 +7,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
@@ -17,7 +17,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
-public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
+public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 	private static final long serialVersionUID = 7699690992550597244L;
 	private SelectFormAnswerTable answerTable = null;
 	private ExpressionEditorComponent expressionEditorComponent;
@@ -67,6 +67,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 				setSelectedTableElement();
 			}
 		});
+
 		answerTable.setSizeFull();
 		if (!expressionChain.getExpressions().isEmpty()
 				&& (expressionChain.getExpressions().get(expressionChain.getExpressions().size() - 1) instanceof ExpressionValueTreeObjectReference)) {
@@ -117,5 +118,15 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelWindow {
 			expressionChain.removeFirstExpression();
 		}
 		return expressionChain;
+	}
+
+	public void clearSelection() {
+		if (answerTable != null) {
+			answerTable.setValue(null);
+		}
+		if (expressionEditorComponent != null) {
+			((SimpleExpressionEditorComponent) expressionEditorComponent).clear();
+		}
+		expressionChain = null;
 	}
 }
