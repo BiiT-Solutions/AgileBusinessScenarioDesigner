@@ -57,6 +57,16 @@
 				<prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
 				<!-- When deleting an object, set ID to null -->
 				<prop key="hibernate.use_identifier_rollback">${hibernate.use_identifier_rollback}</prop>
+				<prop key="hibernate.order_inserts">${hibernate.order_inserts}</prop>
+				<prop key="hibernate.order_updates">${hibernate.order_updates}</prop>
+				
+				<!-- Second Level Cache-->
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">hibernate-ehcache.xml</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop> 
 				
 				<!-- C3p0 -->
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
