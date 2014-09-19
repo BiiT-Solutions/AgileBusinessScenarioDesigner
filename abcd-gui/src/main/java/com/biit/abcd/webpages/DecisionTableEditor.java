@@ -640,7 +640,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 			});
 		} else {
-			MessageManager.showWarning(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
+			MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
 					LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
 		}
 	}
@@ -690,14 +690,27 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 					if (expChain != null) {
 						row.getActionChain().setExpressions(expChain.getExpressions());
-						decisionTable.update(getSelectedTableRule());
-
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Action '"
 								+ row.getActionChain().getRepresentation() + "' to row '" + row.getId()
 								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+					} else {
+						removeAction(row);
 					}
+					decisionTable.update(getSelectedTableRule());
 					newActionValueWindow.close();
+				}
+			});
+
+			newActionValueWindow.addClearActionListener(new ClearElementsActionListener() {
+
+				@Override
+				public void clearAction(AcceptCancelClearWindow window) {
+					newActionValueWindow.clearSelection();
+					AbcdLogger.info(this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed Action of row '"
+									+ row.getId() + "' in Table rule '"
+									+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 				}
 			});
 		}
