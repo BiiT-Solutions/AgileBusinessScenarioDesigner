@@ -1,6 +1,8 @@
 package com.biit.abcd.persistence.entity.rules;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -32,7 +34,7 @@ public class TableRuleRow extends StorableObject {
 	}
 
 	// Simple (Question : Answer => Action) builder
-	public TableRuleRow(Expression question, Expression answer, ExpressionChain action){
+	public TableRuleRow(Expression question, Expression answer, ExpressionChain action) {
 		conditions = new ExpressionChain();
 		this.action = new ExpressionChain();
 		getConditions().add(question);
@@ -89,8 +91,18 @@ public class TableRuleRow extends StorableObject {
 		addCondition(new ExpressionChain());
 	}
 
-	public void setExpression(int position, Expression expression){
-		//TODO exception if bad expression?
+	public void setExpression(int position, Expression expression) {
+		// TODO exception if bad expression?
 		getConditions().set(position, expression);
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(conditions);
+		innerStorableObjects.addAll(conditions.getAllInnerStorableObjects());
+		innerStorableObjects.add(action);
+		innerStorableObjects.addAll(action.getAllInnerStorableObjects());
+		return innerStorableObjects;
 	}
 }

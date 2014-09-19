@@ -92,4 +92,14 @@ public class Rule extends StorableObject implements INameAttribute {
 		}
 		return false;
 	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(condition);
+		innerStorableObjects.addAll(condition.getAllInnerStorableObjects());
+		innerStorableObjects.add(actions);
+		innerStorableObjects.addAll(actions.getAllInnerStorableObjects());
+		return innerStorableObjects;
+	}
 }

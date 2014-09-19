@@ -2,6 +2,7 @@ package com.biit.abcd.persistence.dao.hibernate;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,12 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.persistence.dao.hibernate.TreeObjectDao;
+import com.biit.persistence.entity.StorableObject;
 
 @Repository
 public class FormDao extends TreeObjectDao<Form> implements IFormDao {
@@ -72,7 +75,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	protected void initializeSets(List<Form> forms) {
 		super.initializeSets(forms);
 		for (Form form : forms) {
-			// Initializes the sets for lazy-loading (within the same session)+
+			// Initializes the sets for lazy-loading (within the same session)
 			Hibernate.initialize(form.getChildren());
 			Hibernate.initialize(form.getDiagrams());
 			Hibernate.initialize(form.getTableRules());
@@ -80,6 +83,36 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 			Hibernate.initialize(form.getExpressionChain());
 			Hibernate.initialize(form.getRules());
 		}
+	}
+
+	/**
+	 * Get all elements that has a null value in the ID parameter before persisting.
+	 * 
+	 * @param form
+	 * @return
+	 */
+	@Override
+	public Set<StorableObject> getElementsWithNullIds(Form form) {
+		Set<StorableObject> elementsWithNullIds = new HashSet<>();
+		elementsWithNullIds.addAll(super.getElementsWithNullIds(form));
+
+		Set<StorableObject> diagrams = new HashSet<>();
+		for (Diagram diagram : form.getDiagrams()) {
+			diagrams.add(diagram);
+			// Add also diagram objects.
+			for (StorableObject child : diagram.getDiagramObjects()) {
+				diagrams.add(child);
+			}
+		}
+		elementsWithNullIds.addAll(getElementsWithNullIds(diagrams));
+
+		Set<StorableObject> tableRules = new HashSet<>();
+		for (TableRule tableRule : form.getTableRules()) {
+			tableRules.add(tableRule);
+		}
+		elementsWithNullIds.addAll(getElementsWithNullIds(tableRules));
+
+		return elementsWithNullIds;
 	}
 
 	@Override

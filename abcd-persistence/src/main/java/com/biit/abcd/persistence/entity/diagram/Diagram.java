@@ -2,7 +2,9 @@ package com.biit.abcd.persistence.entity.diagram;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,7 +13,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
@@ -48,7 +49,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
-	@BatchSize(size=20)
+	@BatchSize(size = 20)
 	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
@@ -99,7 +100,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	/**
 	 * Function to get the list of diagram object elements. Do not add elements to this list, use the appropriate
 	 * functions.
-	 *
+	 * 
 	 * @return
 	 */
 	public List<DiagramObject> getDiagramObjects() {
@@ -108,7 +109,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	/**
 	 * Only for using with hibernate.
-	 *
+	 * 
 	 * @return
 	 */
 	public List<DiagramObject> getDiagramObjectForInitializeSet() {
@@ -168,7 +169,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	/**
 	 * Retrieves all links of a specific Diagram Element.
-	 *
+	 * 
 	 * @param source
 	 * @return
 	 */
@@ -196,6 +197,16 @@ public class Diagram extends StorableObject implements INameAttribute {
 			}
 		}
 		return childDiagrams;
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		for (DiagramObject child : getDiagramObjects()) {
+			innerStorableObjects.add(child);
+			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+		}
+		return innerStorableObjects;
 	}
 
 }

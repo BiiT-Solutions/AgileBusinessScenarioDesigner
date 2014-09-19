@@ -1,7 +1,9 @@
 package com.biit.abcd.persistence.entity.diagram;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.persistence.entity.StorableObject;
 
 @Entity
 @Table(name = "diagram_fork")
@@ -57,5 +60,18 @@ public class DiagramFork extends DiagramElement {
 				outLink.resetExpressions(expression);
 			}
 		}
+	}
+
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		for (ExpressionValueTreeObjectReference child : reference) {
+			innerStorableObjects.add(child);
+			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+		}
+		return innerStorableObjects;
 	}
 }

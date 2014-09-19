@@ -1,7 +1,9 @@
 package com.biit.abcd.persistence.entity.diagram;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -31,6 +33,7 @@ import com.biit.abcd.gson.utils.DiagramSourceDeserializer;
 import com.biit.abcd.gson.utils.DiagramSourceSerializer;
 import com.biit.abcd.gson.utils.DiagramTableDeserializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
+import com.biit.persistence.entity.StorableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -138,7 +141,7 @@ public abstract class DiagramElement extends DiagramObject {
 
 	@Override
 	public void update(DiagramObject object, User user) {
-		super.update(object,user);
+		super.update(object, user);
 		if (object instanceof DiagramElement) {
 			DiagramElement element = (DiagramElement) object;
 
@@ -179,14 +182,29 @@ public abstract class DiagramElement extends DiagramObject {
 	}
 
 	@Override
-	public void setUpdatedBy(User user){
+	public void setUpdatedBy(User user) {
 		super.setUpdatedBy(user);
 		biitText.setUpdatedBy(user);
 	}
 
 	@Override
-	public void setUpdateTime(Timestamp dateUpdated){
+	public void setUpdateTime(Timestamp dateUpdated) {
 		super.setUpdateTime(dateUpdated);
 		biitText.setUpdateTime(dateUpdated);
+	}
+
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(size);
+		innerStorableObjects.addAll(size.getAllInnerStorableObjects());
+		innerStorableObjects.add(position);
+		innerStorableObjects.addAll(position.getAllInnerStorableObjects());
+		innerStorableObjects.add(biitText);
+		innerStorableObjects.addAll(biitText.getAllInnerStorableObjects());
+		return innerStorableObjects;
 	}
 }

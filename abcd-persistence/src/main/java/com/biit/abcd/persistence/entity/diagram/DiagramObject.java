@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -140,5 +143,15 @@ public abstract class DiagramObject extends StorableObject {
 		Gson gson = gsonBuilder.create();
 		String json = gson.toJson(this);
 		return json;
+	}
+
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		// Parent element is ignored.
+		return innerStorableObjects;
 	}
 }

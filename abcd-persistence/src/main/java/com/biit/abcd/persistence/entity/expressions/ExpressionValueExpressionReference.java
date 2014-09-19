@@ -1,11 +1,15 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines a value as another existing expression.
@@ -66,6 +70,14 @@ public class ExpressionValueExpressionReference extends ExpressionValue {
 			throw new NotValidExpressionValue("Expected Expression object in '" + value + "'");
 		}
 		setValue((Expression) value);
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(value);
+		innerStorableObjects.addAll(value.getAllInnerStorableObjects());
+		return innerStorableObjects;
 	}
 
 }

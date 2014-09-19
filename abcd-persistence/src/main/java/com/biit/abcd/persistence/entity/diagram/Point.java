@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -34,5 +37,14 @@ public class Point extends StorableObject {
 	@Override
 	public String toString() {
 		return "(x:" + x + ", y:" + y + ")";
+	}
+	
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 }

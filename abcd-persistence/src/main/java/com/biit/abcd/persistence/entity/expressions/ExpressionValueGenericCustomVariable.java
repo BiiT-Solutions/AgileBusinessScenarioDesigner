@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -7,6 +10,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines a value as a already defined form custom variable.
@@ -69,6 +73,14 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 		copy.variable = variable;
 		copy.setEditable(isEditable());
 		return copy;
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(variable);
+		innerStorableObjects.addAll(variable.getAllInnerStorableObjects());
+		return innerStorableObjects;
 	}
 
 }

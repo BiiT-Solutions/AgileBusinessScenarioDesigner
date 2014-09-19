@@ -1,9 +1,13 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines values as a double.
@@ -62,6 +66,12 @@ public class ExpressionValueNumber extends ExpressionValue {
 			throw new NotValidExpressionValue("Expected Double object in '" + value + "'");
 		}
 		setValue((Double) value);
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 
 }
