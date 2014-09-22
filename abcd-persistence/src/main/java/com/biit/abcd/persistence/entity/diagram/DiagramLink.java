@@ -2,7 +2,9 @@ package com.biit.abcd.persistence.entity.diagram;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import com.biit.abcd.gson.utils.DiagramLinkDeserializer;
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.persistence.entity.StorableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -328,5 +331,17 @@ public class DiagramLink extends DiagramObject {
 			return result.trim();
 		}
 		return "";
+	}
+	
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(source);
+		innerStorableObjects.addAll(source.getAllInnerStorableObjects());
+		innerStorableObjects.add(target);
+		innerStorableObjects.addAll(target.getAllInnerStorableObjects());
+		innerStorableObjects.add(expressionChain);
+		innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
+		return innerStorableObjects;
 	}
 }

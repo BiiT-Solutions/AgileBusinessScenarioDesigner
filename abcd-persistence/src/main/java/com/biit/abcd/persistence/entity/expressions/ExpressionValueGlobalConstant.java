@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -7,6 +10,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines a value as a already defined Global Constant.
@@ -68,5 +72,13 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 			throw new NotValidExpressionValue("Expected GlobalVariable object in '" + value + "'");
 		}
 		setVariable((GlobalVariable) value);
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(constant);
+		innerStorableObjects.addAll(constant.getAllInnerStorableObjects());
+		return innerStorableObjects;
 	}
 }

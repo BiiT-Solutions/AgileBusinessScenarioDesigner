@@ -127,4 +127,13 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 	public void setVariableSelection(ListSelect variableSelection) {
 		this.variableSelection = variableSelection;
 	}
+
+	public void clearSelection() {
+		if (formQuestionTable != null) {
+			formQuestionTable.setValue(null);
+		}
+		if (variableSelection != null) {
+			variableSelection.setValue(null);
+		}
+	}
 }

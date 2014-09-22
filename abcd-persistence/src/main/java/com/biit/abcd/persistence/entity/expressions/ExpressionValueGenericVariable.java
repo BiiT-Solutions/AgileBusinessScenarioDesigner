@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -7,6 +10,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
+import com.biit.persistence.entity.StorableObject;
 
 @Entity
 @Table(name = "expression_value_generic_variable")
@@ -69,6 +73,12 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 			throw new NotValidExpressionValue("Expected GenericTreeObjectType object in '" + value + "'");
 		}
 		setType((GenericTreeObjectType) value);
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 
 }

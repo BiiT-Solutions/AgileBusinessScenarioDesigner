@@ -52,4 +52,8 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 		}
 		updateSelectionStyles();
 	}
+
+	public void clear() {
+		expressionViewer.clearExpression();
+	}
 }

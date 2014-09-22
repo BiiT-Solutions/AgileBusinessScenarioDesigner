@@ -2,7 +2,9 @@ package com.biit.abcd.persistence.entity.globalvariables;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -100,5 +102,15 @@ public class GlobalVariable extends StorableObject {
 		default:
 			return new VariableDataText();
 		}
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		for (VariableData child : data) {
+			innerStorableObjects.add(child);
+			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+		}
+		return innerStorableObjects;
 	}
 }

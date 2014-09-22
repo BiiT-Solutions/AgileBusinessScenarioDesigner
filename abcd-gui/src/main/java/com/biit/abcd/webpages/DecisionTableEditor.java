@@ -24,6 +24,8 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
+import com.biit.abcd.webpages.components.AcceptCancelClearWindow.ClearElementsActionListener;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.CancelActionListener;
@@ -437,7 +439,6 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				// questionExpression.getReference();
 				final Object selectedElement = ((AddNewQuestionEditorWindow) window).getSelectedCondition();
 				if (selectedElement != null) {
-					newQuestionConditionWindow.close();
 					if (selectedElement instanceof Question) {
 						final Question selectedQuestion = (Question) selectedElement;
 						if (selectedQuestion.getAnswerFormat() == AnswerFormat.DATE) {
@@ -510,8 +511,17 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 								customVariable.getVariable());
 					}
 				} else {
-					MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
+					// MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
+					removeQuestion(row, propertyId);
 				}
+				newQuestionConditionWindow.close();
+			}
+		});
+		newQuestionConditionWindow.addClearActionListener(new ClearElementsActionListener() {
+
+			@Override
+			public void clearAction(AcceptCancelClearWindow window) {
+				newQuestionConditionWindow.clearSelection();
 			}
 		});
 		newQuestionConditionWindow.showCentered();
@@ -576,26 +586,30 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		decisionTable.update(getSelectedTableRule());
 	}
 
-	private void newEditAnswerWindow(TableRuleRow row, Object propertyId) {
+	private void newEditAnswerWindow(final TableRuleRow row, final Object propertyId) {
 		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
 				.getPreviousCellValue(row, propertyId);
 		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
-			//Generate a expression with the question not editable.
+			// Generate a expression with the question not editable.
 			ExpressionChain answerExpressionWithQuestion = answerExpression.generateCopy();
 			answerExpressionWithQuestion.addExpression(0, questionExpression);
 			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
-			
+
 			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
 					questionExpression, answerExpressionWithQuestion);
-			
+
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					answerExpression.setExpressions(newActionValueWindow.getExpressionChain().getExpressions());
-					decisionTable.update(getSelectedTableRule());
+					if (newActionValueWindow.getExpressionChain() != null) {
+						answerExpression.setExpressions(newActionValueWindow.getExpressionChain().getExpressions());
+						decisionTable.update(getSelectedTableRule());
+					} else {
+						removeAnswer(row, (Integer) propertyId);
+					}
 
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has added Answer '"
@@ -609,11 +623,24 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			newActionValueWindow.addCancelActionListener(new CancelActionListener() {
 				@Override
 				public void cancelAction(AcceptCancelWindow window) {
-					//newActionValueWindow.getExpressionWithoutFirstElement();
+					// newActionValueWindow.getExpressionWithoutFirstElement();
 				}
 			});
+			newActionValueWindow.addClearActionListener(new ClearElementsActionListener() {
+
+				@Override
+				public void clearAction(AcceptCancelClearWindow window) {
+					newActionValueWindow.clearSelection();
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed Answer '"
+							+ answerExpression.getName() + "' regarding Question '"
+							+ questionExpression.getReference().getName() + "' in Table rule '"
+							+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				}
+
+			});
 		} else {
-			MessageManager.showWarning(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
+			MessageManager.showError(LanguageCodes.WARNING_NO_QUESTION_SELECTED_CAPTION,
 					LanguageCodes.WARNING_NO_QUESTION_SELECTED_BODY);
 		}
 	}
@@ -622,13 +649,16 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
 				.getCellValue(row, propertyId);
 		TreeObject auxTo = questionExpression.getReference();
-		questionExpression.setReference(null);
-		// Removes and updates the table.
+		// Remove data
+		setTreeObjectExpression(row, (Integer) propertyId, null);
+		// Removes and updates the answer table.
 		removeAnswer(row, (Integer) propertyId + 1);
 
-		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-				+ "' has removed Question '" + auxTo.getName() + "' from Table rule '"
-				+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+		if (auxTo != null) {
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has removed Question '" + auxTo.getName() + "' from Table rule '"
+					+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+		}
 	}
 
 	private void removeAnswer(TableRuleRow row, Object propertyId) {
@@ -638,10 +668,12 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		answerExpression.removeAllExpressions();
 		decisionTable.update(getSelectedTableRule());
 
-		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-				+ "' has removed Answer '" + answerExpression.getName() + "' regarding Question '"
-				+ questionExpression.getReference().getName() + "' in Table rule '"
-				+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+		if (questionExpression.getReference() != null) {
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has removed Answer '" + answerExpression.getName() + "' regarding Question '"
+					+ questionExpression.getReference().getName() + "' in Table rule '"
+					+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+		}
 	}
 
 	@Override
@@ -658,14 +690,27 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 					if (expChain != null) {
 						row.getActionChain().setExpressions(expChain.getExpressions());
-						decisionTable.update(getSelectedTableRule());
-
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Action '"
 								+ row.getActionChain().getRepresentation() + "' to row '" + row.getId()
 								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+					} else {
+						removeAction(row);
 					}
+					decisionTable.update(getSelectedTableRule());
 					newActionValueWindow.close();
+				}
+			});
+
+			newActionValueWindow.addClearActionListener(new ClearElementsActionListener() {
+
+				@Override
+				public void clearAction(AcceptCancelClearWindow window) {
+					newActionValueWindow.clearSelection();
+					AbcdLogger.info(this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed Action of row '"
+									+ row.getId() + "' in Table rule '"
+									+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 				}
 			});
 		}

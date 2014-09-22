@@ -28,7 +28,7 @@ public class QuestionEditorComponent extends TabEditorComponent {
 			questionFormTab.setValue(expression);
 		}
 	}
-	
+
 	public void setSelected(ExpressionValueCustomVariable customVariable) {
 		if (questionFormTab != null) {
 			questionFormTab.setValue(customVariable);
@@ -67,6 +67,10 @@ public class QuestionEditorComponent extends TabEditorComponent {
 			return treeObjectsList.get(0);
 		}
 		return null;
+	}
+
+	public void clearSelection() {
+		questionFormTab.clearSelection();
 	}
 
 }

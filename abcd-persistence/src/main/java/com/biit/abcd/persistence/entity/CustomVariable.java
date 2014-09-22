@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -88,4 +91,14 @@ public class CustomVariable extends StorableObject {
 			return false;
 		}
 	}
+
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
+	}
+
 }

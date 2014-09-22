@@ -2,13 +2,16 @@ package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines any mathematical operator.
@@ -44,6 +47,12 @@ public class ExpressionOperatorMath extends ExpressionOperator {
 	@Override
 	public List<AvailableOperator> getAcceptedValues() {
 		return ALLOWED_OPERATORS;
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 
 }

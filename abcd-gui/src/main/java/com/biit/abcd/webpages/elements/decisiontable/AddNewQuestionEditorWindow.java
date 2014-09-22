@@ -4,12 +4,12 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.form.TreeObject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
-public class AddNewQuestionEditorWindow extends AcceptCancelWindow {
+public class AddNewQuestionEditorWindow extends AcceptCancelClearWindow {
 
 	private static final long serialVersionUID = -4090805671578721633L;
 	private QuestionEditorComponent questionEditorComponent;
@@ -68,5 +68,11 @@ public class AddNewQuestionEditorWindow extends AcceptCancelWindow {
 
 	public Object getSelectedFormElement() {
 		return questionEditorComponent.getSelectedFormElement();
+	}
+
+	public void clearSelection() {
+		if (questionEditorComponent != null) {
+			questionEditorComponent.clearSelection();
+		}
 	}
 }

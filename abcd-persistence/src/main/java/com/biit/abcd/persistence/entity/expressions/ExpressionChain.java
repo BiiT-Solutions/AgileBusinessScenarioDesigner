@@ -18,6 +18,7 @@ import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
 import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * A concatenation of expressions: values, operators, ... that defines a more complex expression.
@@ -150,12 +151,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			// (except equals).
 			if ((i > 0
 					&& (expressions.get(i) instanceof ExpressionValueString)
-					&& (!(expressions.get(i - 1) instanceof ExpressionFunction) || ((ExpressionFunction) expressions.get(i - 1)).getValue().equals(AvailableFunction.IN))
+					&& (!(expressions.get(i - 1) instanceof ExpressionFunction) || ((ExpressionFunction) expressions
+							.get(i - 1)).getValue().equals(AvailableFunction.IN))
 					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorMath) || ((ExpressionOperator) expressions
-							.get(i - 1)).getValue().equals(AvailableOperator.ASSIGNATION)) 
-					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorLogic) || (((ExpressionOperator) expressions.get(i - 1))
-					.getValue().equals(AvailableOperator.EQUALS)) || (((ExpressionOperator) expressions.get(i - 1))
-							.getValue().equals(AvailableOperator.NOT_EQUALS))))
+							.get(i - 1)).getValue().equals(AvailableOperator.ASSIGNATION)) && (!(expressions.get(i - 1) instanceof ExpressionOperatorLogic)
+					|| (((ExpressionOperator) expressions.get(i - 1)).getValue().equals(AvailableOperator.EQUALS)) || (((ExpressionOperator) expressions
+						.get(i - 1)).getValue().equals(AvailableOperator.NOT_EQUALS))))
 					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
 					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
 					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)
@@ -254,5 +255,15 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	@Override
 	public String toString() {
 		return getName() + expressions;
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		for (Expression expression : getExpressions()) {
+			innerStorableObjects.add(expression);
+			innerStorableObjects.addAll(expression.getAllInnerStorableObjects());
+		}
+		return innerStorableObjects;
 	}
 }

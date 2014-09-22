@@ -1,9 +1,13 @@
 package com.biit.abcd.persistence.entity.globalvariables;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.persistence.entity.StorableObject;
 
 @Entity
 @Table(name = "global_variable_data_number")
@@ -53,5 +57,11 @@ public class VariableDataNumber extends VariableData {
 	public String toString() {
 		return getValue().toString().indexOf(".") < 0 ? getValue().toString() : getValue().toString()
 				.replaceAll("0*$", "").replaceAll("\\.$", "");
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 }

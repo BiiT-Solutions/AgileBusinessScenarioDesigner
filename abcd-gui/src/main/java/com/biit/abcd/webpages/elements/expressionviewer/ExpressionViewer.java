@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
@@ -379,6 +380,20 @@ public class ExpressionViewer extends CssLayout {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Clear all editable expressions.
+	 */
+	public void clearExpression() {
+		Iterator<Expression> expressionIterator = new ArrayList<>(expressions.getExpressions()).iterator();
+		while (expressionIterator.hasNext()) {
+			Expression expression = expressionIterator.next();
+			if (expression.isEditable()) {
+				expressions.getExpressions().remove(expression);
+			}
+		}
+		updateExpression();
 	}
 
 	/**

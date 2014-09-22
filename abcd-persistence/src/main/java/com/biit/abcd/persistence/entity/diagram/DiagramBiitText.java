@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -28,7 +31,7 @@ public class DiagramBiitText extends StorableObject {
 	private String strokeWidth;
 
 	public DiagramBiitText() {
-		//text = "";
+		// text = "";
 		fill = "#000000";
 		fontSize = "16";
 		stroke = "#000000";
@@ -79,5 +82,14 @@ public class DiagramBiitText extends StorableObject {
 	public String toString() {
 		return "{text: " + text + ", fill: " + fill + ", font-size:" + fontSize + ", stroke:" + stroke
 				+ ", stroke-width:" + strokeWidth;
+	}
+
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 }

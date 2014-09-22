@@ -23,6 +23,7 @@ public class AcceptCancelWindow extends Window {
 	protected IconButton acceptButton;
 	protected IconButton cancelButton;
 	private Component contentComponent;
+	protected HorizontalLayout buttonLayout;
 
 	public interface AcceptActionListener {
 		public void acceptAction(AcceptCancelWindow window);
@@ -88,7 +89,7 @@ public class AcceptCancelWindow extends Window {
 		rootLayout.setMargin(true);
 		rootLayout.setSizeFull();
 
-		HorizontalLayout buttonLayout = new HorizontalLayout();
+		buttonLayout = new HorizontalLayout();
 		buttonLayout.setWidth(null);
 		buttonLayout.setSpacing(true);
 

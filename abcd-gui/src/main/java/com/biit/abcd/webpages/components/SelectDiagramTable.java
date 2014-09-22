@@ -10,7 +10,6 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.Cell;
@@ -148,8 +147,9 @@ public class SelectDiagramTable extends TreeTable {
 			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					for (Rule existingDroolsRule : UserSessionHandler.getFormController().getForm().getRules()) {
-						if (existingDroolsRule.getName().equals(newTableCellEditWindow.getValue())) {
+					for (Diagram existingDiagram : UserSessionHandler.getFormController().getForm().getDiagrams()) {
+						if (existingDiagram != diagram
+								&& existingDiagram.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_DROOLS_RULE_NAME);
 							return;
 						}

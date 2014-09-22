@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -55,5 +58,14 @@ public class Node extends StorableObject {
 			selector = object.selector;
 			port = object.port;
 		}
+	}
+	
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 }

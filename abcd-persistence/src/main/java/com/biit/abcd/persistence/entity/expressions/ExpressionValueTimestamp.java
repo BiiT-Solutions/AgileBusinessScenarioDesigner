@@ -4,12 +4,15 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.utils.DateManager;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * Defines a value as a timestamp.
@@ -75,5 +78,11 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 			throw new NotValidExpressionValue("Expected Timestamp object in '" + value + "'");
 		}
 		setValue((Timestamp) value);
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 }

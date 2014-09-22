@@ -18,14 +18,14 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 	public SelectTableRuleTableEditable() {
 		super(LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_NAME, LanguageCodes.FORM_VARIABLE_TABLE_COLUMN_UPDATE);
 	}
-	
+
 	public void update(Form form) {
 		this.removeAllItems();
 		for (TableRule tableRule : form.getTableRules()) {
 			addRow(tableRule);
 		}
 	}
-	
+
 	public TableRule getSelectedTableRule() {
 		return (TableRule) getValue();
 	}
@@ -33,7 +33,7 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 	public void setSelectedTableRule(TableRule tableRule) {
 		setValue(tableRule);
 	}
-	
+
 	@Override
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
@@ -42,7 +42,7 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 		}
 		return null;
 	}
-	
+
 	private class CellEditButtonClickListener implements ClickListener {
 		private static final long serialVersionUID = -4186477224806988479L;
 		private TableRule tableRule;
@@ -54,8 +54,7 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			final TableCellLabelEditWindow newTableCellEditWindow = new TableCellLabelEditWindow(
-					ServerTranslate
-					.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
+					ServerTranslate.translate(LanguageCodes.WINDOW_EDIT_TABLE_CELL_LABEL));
 
 			newTableCellEditWindow.setValue(tableRule.getName());
 			newTableCellEditWindow.showCentered();
@@ -63,7 +62,8 @@ public class SelectTableRuleTableEditable extends TableCellLabelEdit {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					for (TableRule existingTableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
-						if (existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
+						if (existingTableRule != tableRule
+								&& existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_TABLE_RULE_NAME);
 							return;
 						}

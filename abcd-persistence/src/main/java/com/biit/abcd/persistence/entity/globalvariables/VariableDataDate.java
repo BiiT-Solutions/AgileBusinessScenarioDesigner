@@ -2,11 +2,14 @@ package com.biit.abcd.persistence.entity.globalvariables;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.persistence.entity.StorableObject;
 
 @Entity
 @Table(name = "global_variable_data_date")
@@ -38,6 +41,12 @@ public class VariableDataDate extends VariableData {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 
 }

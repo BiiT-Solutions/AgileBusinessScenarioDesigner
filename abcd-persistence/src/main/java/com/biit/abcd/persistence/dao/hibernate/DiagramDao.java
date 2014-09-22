@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -12,6 +13,7 @@ import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.persistence.dao.hibernate.GenericDao;
+import com.biit.persistence.entity.StorableObject;
 
 @Repository
 public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
@@ -48,6 +50,12 @@ public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 			session.getTransaction().rollback();
 			throw e;
 		}
+	}
+
+	@Override
+	public Set<StorableObject> getElementsWithNullIds(Diagram entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.biit.abcd.persistence.entity.rules;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -33,7 +35,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 	// simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@BatchSize(size=500)
+	@BatchSize(size = 500)
 	@OrderBy(value = "creationTime ASC")
 	private List<TableRuleRow> rules;
 
@@ -76,9 +78,8 @@ public class TableRule extends StorableObject implements INameAttribute {
 	}
 
 	/**
-	 * When you add a new row, the table or the row is resized to allow the
-	 * operation
-	 *
+	 * When you add a new row, the table or the row is resized to allow the operation
+	 * 
 	 * @param row
 	 * @return
 	 */
@@ -119,5 +120,15 @@ public class TableRule extends StorableObject implements INameAttribute {
 		} else {
 			return 0;
 		}
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		for (TableRuleRow rule : rules) {
+			innerStorableObjects.add(rule);
+			innerStorableObjects.addAll(rule.getAllInnerStorableObjects());
+		}
+		return innerStorableObjects;
 	}
 }

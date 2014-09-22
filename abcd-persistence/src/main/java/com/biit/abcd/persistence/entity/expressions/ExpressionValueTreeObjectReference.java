@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,6 +12,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.form.TreeObject;
+import com.biit.persistence.entity.StorableObject;
 
 @Entity
 @Table(name = "expression_value_tree_object_reference")
@@ -84,6 +88,14 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 			throw new NotValidExpressionValue("Expected TreeObject object in '" + value + "'");
 		}
 		setReference((TreeObject) value);
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.add(reference);
+		innerStorableObjects.addAll(reference.getAllInnerStorableObjects());
+		return innerStorableObjects;
 	}
 
 }

@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -8,6 +11,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
+import com.biit.persistence.entity.StorableObject;
 
 /**
  * User for defining functions as MAX, MIN, AVERAGE, ABS, ...
@@ -20,9 +24,10 @@ public class ExpressionFunction extends Expression implements IExpressionType<Av
 	@Enumerated(EnumType.STRING)
 	private AvailableFunction value;
 
-	public ExpressionFunction(){}
+	public ExpressionFunction() {
+	}
 
-	public ExpressionFunction(AvailableFunction function){
+	public ExpressionFunction(AvailableFunction function) {
 		value = function;
 	}
 
@@ -55,5 +60,11 @@ public class ExpressionFunction extends Expression implements IExpressionType<Av
 		ExpressionFunction copy = new ExpressionFunction();
 		copy.value = value;
 		return copy;
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
 	}
 }
