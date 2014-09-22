@@ -94,6 +94,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 												.getGlobalVariablesController().getGlobalVariables(), droolsWindow
 												.getOrbeonAppName(), droolsWindow.getOrbeonFormName(), droolsWindow
 												.getOrbeonDocumentId());
+
 										if (submittedForm instanceof DroolsForm) {
 											final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 													((DroolsForm) submittedForm).getSubmittedForm());

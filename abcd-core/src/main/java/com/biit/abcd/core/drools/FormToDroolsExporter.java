@@ -52,7 +52,7 @@ public class FormToDroolsExporter {
 				formRules = new DroolsRulesGenerator(form, globalVariables);
 				AbcdLogger.debug(this.getClass().getName(), formRules.getRules());
 				Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"),
-						formRules.getRules().getBytes());
+						formRules.getRules().getBytes("UTF-8"));
 				return formRules;
 			} catch (ExpressionInvalidException e) {
 				throw e;

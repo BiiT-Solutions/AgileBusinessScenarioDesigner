@@ -94,8 +94,8 @@ public class SubmittedForm implements ISubmittedForm {
 	}
 	
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
-		if ((this.formVariables == null) || (this.formVariables.get(submittedFormTreeObject) == null)
-				|| (this.formVariables.get(submittedFormTreeObject).get(varName) == null)) {
+		if ((formVariables == null) || (formVariables.get(submittedFormTreeObject) == null)
+				|| (formVariables.get(submittedFormTreeObject).get(varName) == null)) {
 			return false;
 		} else {
 			return true;

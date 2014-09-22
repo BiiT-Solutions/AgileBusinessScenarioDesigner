@@ -8,8 +8,8 @@ import java.util.UUID;
 public class RulesUtils {
 
 	public static String getStartRuleString(String name) {
-		return "rule \"" + name + "_"+ getUniqueId() + "\"\n";
-//		return "rule \"" +getUniqueId() + "\"\n";
+		return "rule \"" + name + "_" + getUniqueId() + "\"\n";
+		// return "rule \"" +getUniqueId() + "\"\n";
 	}
 
 	public static String getWhenRuleString() {
@@ -28,10 +28,10 @@ public class RulesUtils {
 		return "\nend\n";
 	}
 
-	private static String getUniqueId(){
+	private static String getUniqueId() {
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
-	
+
 	/**
 	 * Due to the independent parsing of the conditions of the rule, sometimes
 	 * the algorithm generates repeated rules <br>
@@ -186,7 +186,7 @@ public class RulesUtils {
 		}
 		return cleanedResults;
 	}
-	
+
 	public static String addThenIfNeeded(String ruleCore) {
 		String cleanedResults = "";
 		boolean thenClause = false;
@@ -198,12 +198,21 @@ public class RulesUtils {
 			}
 		}
 		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-			if((lineIndex == (lines.length-1)) && (!thenClause)){
+			if ((lineIndex == (lines.length - 1)) && (!thenClause)) {
 				System.out.println("ENTRA EN IF");
-				
+
 				cleanedResults += getThenRuleString();
 			}
 			cleanedResults += lines[lineIndex] + "\n";
+		}
+		return cleanedResults;
+	}
+
+	public static String removeLastNLines(String ruleCore, int n) {
+		String cleanedResults = "";
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < (lines.length - n); i++) {
+			cleanedResults += lines[i] + "\n";
 		}
 		return cleanedResults;
 	}
