@@ -61,12 +61,11 @@
 				<prop key="hibernate.order_updates">${hibernate.order_updates}</prop>
 				
 				<!-- Second Level Cache-->
-				<prop key="hibernate.cache.use_second_level_cache">true</prop>
-				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
-				<prop key="hibernate.cache.provider_configuration_file_resource_path">hibernate-ehcache.xml</prop>
-				<prop key="hibernate.cache.use_query_cache">true</prop>
-				<prop key="hibernate.generate_statistics">true</prop>
-				<prop key="hibernate.cache.use_structured_entries">true</prop> 
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
 				
 				<!-- C3p0 -->
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
