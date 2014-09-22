@@ -90,21 +90,6 @@ public class GenericParser {
 		return result;
 	}
 
-	private String orOperator(List<Expression> expressions) {
-		String result = "";
-
-		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
-		ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
-
-		// result += "(\n";
-		result += this.processParserResult(leftChain);
-		result += " or\n";
-		result += this.processParserResult(rightChain);
-		// result += ")\n";
-
-		return result;
-	}
-
 	/**
 	 * Parse conditions like => Question IN(answer1, ...) <br>
 	 * Create drools rule like => Question(getAnswer() in (answer1, ...))
@@ -315,8 +300,8 @@ public class GenericParser {
 	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions)
 			throws RuleNotImplementedException {
 
-//		System.out.println("CONDITIONS: " + conditions);
-//		System.out.println("ACTIONS: " + actions);
+		// System.out.println("CONDITIONS: " + conditions);
+		// System.out.println("ACTIONS: " + actions);
 
 		this.treeObjectDroolsname.clear();
 		String ruleCore = "";
@@ -607,6 +592,179 @@ public class GenericParser {
 		return ruleCore;
 	}
 
+	private String genericFunctionParameters(String ruleCore, List<Expression> actions) {
+		// LHS
+		// We will have some expression of type Category.score = (Min | Max |
+		// Avg) of some values
+		ExpressionValueCustomVariable variableToCalculate = (ExpressionValueCustomVariable) actions.get(0);
+		// The rule is different if the variable to assign is a Form, a Category
+		// a Group or a Question
+		TreeObject leftTreeObject = variableToCalculate.getReference();
+		int varIndex = 1;
+		String scopeClass = "";
+		TreeObject parent = null;
+		CustomVariable customVariable = null;
+		for (int i = 3; i < actions.size(); i++) {
+			Expression expression = actions.get(i);
+			if (expression instanceof ExpressionValueCustomVariable) {
+				ExpressionValueCustomVariable aux = (ExpressionValueCustomVariable) expression;
+				TreeObject to = aux.getReference();
+				customVariable = aux.getVariable();
+				if (to instanceof Question) {
+					scopeClass = "Question";
+					parent = to.getParent();
+				} else if (to instanceof Group) {
+					scopeClass = "Group";
+					parent = to.getParent();
+				} else if (to instanceof Category) {
+					scopeClass = "Category";
+					parent = to.getParent();
+				}
+				if (varIndex == 1) {
+					ruleCore += "	$var : List( size>0 ) from collect( " + scopeClass + "(isScoreSet('"
+							+ customVariable.getName() + "'), getTag() == '" + to.getName() + "' || ";
+				} else {
+					ruleCore += "== '" + to.getName() + "' || ";
+				}
+				varIndex++;
+			}
+			// Generic variable inside the function
+			else if (expression instanceof ExpressionValueGenericCustomVariable) {
+				ExpressionValueGenericCustomVariable expValGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
+				List<TreeObject> treeObjects = null;
+				customVariable = expValGenericCustomVariable.getVariable();
+				switch (expValGenericCustomVariable.getType()) {
+				case CATEGORY:
+					if (leftTreeObject instanceof Form) {
+						scopeClass = "Category";
+						treeObjects = leftTreeObject.getAll(Category.class);
+					}
+					break;
+				case GROUP:
+					// If it has more than one parameter in the function like =>
+					// Cat = Fuc( group , quest )
+					if (actions.size() > 5) {
+						return maxMinAvgAssignationFunctionActionWithSeveralGenerics(ruleCore, actions);
+					} else if (leftTreeObject instanceof Category) {
+						scopeClass = "Group";
+						// treeObjects = leftTreeObject.getAll(Group.class);
+						// We only want the questions for the category
+						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+							treeObjects = new ArrayList<TreeObject>();
+							for (TreeObject child : leftTreeObject.getChildren()) {
+								if (child instanceof Group) {
+									treeObjects.add(child);
+								}
+							}
+						}
+
+						// // To guarantee the nested groups variable
+						// assignation
+						// if (treeObjects != null && !treeObjects.isEmpty()) {
+						// for (TreeObject auxTreeobject : treeObjects) {
+						// ruleCore += checkVariableAssignation(auxTreeobject);
+						// }
+						// }
+
+					}
+					break;
+				case QUESTION_CATEGORY:
+					// If it has more than one parameter in the function like =>
+					// Cat = Fuc( group , quest )
+					if (actions.size() > 5) {
+						return maxMinAvgAssignationFunctionActionWithSeveralGenerics(ruleCore, actions);
+					} else if (leftTreeObject instanceof Category) {
+						scopeClass = "Question";
+						// We only want the questions for the category
+						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+							treeObjects = new ArrayList<TreeObject>();
+							for (TreeObject child : leftTreeObject.getChildren()) {
+								if (child instanceof Question) {
+									treeObjects.add(child);
+								}
+							}
+						}
+					}
+					break;
+				case QUESTION_GROUP:
+					if (leftTreeObject instanceof Group) {
+						scopeClass = "Question";
+						// We only want the questions for the group
+						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+							treeObjects = new ArrayList<TreeObject>();
+							for (TreeObject child : leftTreeObject.getChildren()) {
+								if (child instanceof Question) {
+									treeObjects.add(child);
+								}
+							}
+						}
+					}
+					break;
+				}
+				int genericVarIndex = 1;
+				if (treeObjects != null) {
+					for (TreeObject to : treeObjects) {
+						if (genericVarIndex == 1) {
+							ruleCore += "	$var : List( size>0 ) from collect( " + scopeClass + "(isScoreSet('"
+									+ customVariable.getName() + "'), getTag() == '" + to.getName() + "' || ";
+						} else {
+							ruleCore += "== '" + to.getName() + "' || ";
+						}
+						genericVarIndex++;
+						parent = to.getParent();
+					}
+				}
+			}
+		}
+		// Finish the line of the condition
+		if (parent != null) {
+			ruleCore = ruleCore.substring(0, ruleCore.length() - 3);
+			if (scopeClass.equals("Question")) {
+				ruleCore += ") from $" + parent.getUniqueNameReadable().toString() + ".getQuestions()) \n";
+			} else if (scopeClass.equals("Group")) {
+				ruleCore += ") from $" + parent.getUniqueNameReadable().toString() + ".getGroups()) \n";
+			} else if (scopeClass.equals("Category")) {
+				ruleCore += ") from $" + parent.getUniqueNameReadable().toString() + ".getCategories())\n";
+			}
+
+			String getVarValue = "getVariableValue('" + customVariable.getName() + "')";
+			ExpressionFunction function = (ExpressionFunction) actions.get(2);
+			if (function.getValue().equals(AvailableFunction.MAX)) {
+				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
+						+ ") from $var; $sol : max($value)) \n";
+			} else if (function.getValue().equals(AvailableFunction.MIN)) {
+				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
+						+ ") from $var; $sol : min($value)) \n";
+			} else if (function.getValue().equals(AvailableFunction.AVG)) {
+				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
+						+ ") from $var; $sol : average($value)) \n";
+			} else if (function.getValue().equals(AvailableFunction.SUM)) {
+				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
+						+ ") from $var; $sol : sum($value)) \n";
+			}
+
+			ruleCore = RulesUtils.removeDuplicateLines(ruleCore);
+			ruleCore += RulesUtils.getThenRuleString();
+
+			// RHS
+			if (variableToCalculate != null) {
+				ruleCore += "	$" + this.getTreeObjectName(variableToCalculate.getReference()) + ".setVariableValue('"
+						+ variableToCalculate.getVariable().getName() + "', $sol);\n";
+
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST (" + variableToCalculate.getReference().getName()
+						+ ", " + variableToCalculate.getVariable().getName() + ", \" + $var +\")\");\n";
+
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+						+ variableToCalculate.getReference().getName() + ", "
+						+ variableToCalculate.getVariable().getName() + ", \" + $sol +\")\");\n";
+			}
+		} else {
+			// So the rule don't fail
+			ruleCore += RulesUtils.getThenRuleString();
+		}
+		return ruleCore;
+	}
+
 	/**
 	 * Creates a set of expressions and passes it back to the expression parser
 	 * 
@@ -668,6 +826,26 @@ public class GenericParser {
 			}
 		}
 		return variables;
+	}
+
+	/**
+	 * Returns the type of answer for the question in the parameter
+	 * 
+	 * @return
+	 */
+	public String getTreeObjectAnswerType(TreeObject treeObject) {
+		if (treeObject instanceof Question) {
+			Question question = (Question) treeObject;
+			switch (question.getAnswerType()) {
+			case RADIO:
+			case MULTI_CHECKBOX:
+				return AnswerFormat.TEXT.toString();
+			case INPUT:
+				return question.getAnswerFormat().toString();
+			}
+			return "";
+		}
+		return "";
 	}
 
 	private String getTreeObjectName(TreeObject treeObject) {
@@ -740,7 +918,7 @@ public class GenericParser {
 	 */
 	private String maxMinAvgAssignationFunctionAction(List<Expression> actions, String extraConditions) {
 
-//		System.out.println("ACTIONS LIST: " + actions);
+		// System.out.println("ACTIONS LIST: " + actions);
 
 		String ruleCore = "";
 		if (extraConditions != null) {
@@ -766,169 +944,6 @@ public class GenericParser {
 			ruleCore += this.simpleQuestionConditions((Question) leftTreeObject);
 		}
 		ruleCore += genericFunctionParameters(ruleCore, actions);
-		return ruleCore;
-	}
-
-	private String genericFunctionParameters(String ruleCore, List<Expression> actions) {
-		// LHS
-		// We will have some expression of type Category.score = (Min | Max |
-		// Avg) of some values
-		ExpressionValueCustomVariable variableToCalculate = (ExpressionValueCustomVariable) actions.get(0);
-		// The rule is different if the variable to assign is a Form, a Category
-		// a Group or a Question
-		TreeObject leftTreeObject = variableToCalculate.getReference();
-		int varIndex = 1;
-		String scopeClass = "";
-		TreeObject parent = null;
-		CustomVariable customVariable = null;
-		for (int i = 3; i < actions.size(); i++) {
-			Expression expression = actions.get(i);
-			if (expression instanceof ExpressionValueCustomVariable) {
-				ExpressionValueCustomVariable aux = (ExpressionValueCustomVariable) expression;
-				TreeObject to = aux.getReference();
-				customVariable = aux.getVariable();
-				if (to instanceof Question) {
-					scopeClass = "Question";
-					parent = to.getParent();
-				} else if (to instanceof Group) {
-					scopeClass = "Group";
-					parent = to.getParent();
-				} else if (to instanceof Category) {
-					scopeClass = "Category";
-					parent = to.getParent();
-				}
-				if (varIndex == 1) {
-					ruleCore += "	$var : List() from collect( " + scopeClass + "(isScoreSet('"
-							+ customVariable.getName() + "'), getTag() == '" + to.getName() + "' || ";
-				} else {
-					ruleCore += "== '" + to.getName() + "' || ";
-				}
-				varIndex++;
-			}
-			// Generic variable inside the function
-			else if (expression instanceof ExpressionValueGenericCustomVariable) {
-				ExpressionValueGenericCustomVariable expValGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
-				List<TreeObject> treeObjects = null;
-				customVariable = expValGenericCustomVariable.getVariable();
-				switch (expValGenericCustomVariable.getType()) {
-				case CATEGORY:
-					if (leftTreeObject instanceof Form) {
-						scopeClass = "Category";
-						treeObjects = leftTreeObject.getAll(Category.class);
-					}
-					break;
-				case GROUP:
-					// If it has more than one parameter in the function like =>
-					// Cat = Fuc( group , quest )
-					if (actions.size() > 5) {
-						return maxMinAvgAssignationFunctionActionWithSeveralGenerics(ruleCore, actions);
-					} else if (leftTreeObject instanceof Category) {
-						scopeClass = "Group";
-						treeObjects = leftTreeObject.getAll(Group.class);
-
-						// To guarantee the nested groups variable assignation
-						if (treeObjects != null && !treeObjects.isEmpty()) {
-							for (TreeObject auxTreeobject : treeObjects) {
-								ruleCore += checkVariableAssignation(auxTreeobject);
-							}
-						}
-
-					}
-					break;
-				case QUESTION_CATEGORY:
-					// If it has more than one parameter in the function like =>
-					// Cat = Fuc( group , quest )
-					if (actions.size() > 5) {
-						return maxMinAvgAssignationFunctionActionWithSeveralGenerics(ruleCore, actions);
-					} else if (leftTreeObject instanceof Category) {
-						scopeClass = "Question";
-						// We only want the questions for the category
-						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-							treeObjects = new ArrayList<TreeObject>();
-							for (TreeObject child : leftTreeObject.getChildren()) {
-								if (child instanceof Question) {
-									treeObjects.add(child);
-								}
-							}
-						}
-					}
-					break;
-				case QUESTION_GROUP:
-					if (leftTreeObject instanceof Group) {
-						scopeClass = "Question";
-						// We only want the questions for the group
-						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-							treeObjects = new ArrayList<TreeObject>();
-							for (TreeObject child : leftTreeObject.getChildren()) {
-								if (child instanceof Question) {
-									treeObjects.add(child);
-								}
-							}
-						}
-					}
-					break;
-				}
-				int genericVarIndex = 1;
-				if (treeObjects != null) {
-					for (TreeObject to : treeObjects) {
-						if (genericVarIndex == 1) {
-							ruleCore += "	$var : List() from collect( " + scopeClass + "(isScoreSet('"
-									+ customVariable.getName() + "'), getTag() == '" + to.getName() + "' || ";
-						} else {
-							ruleCore += "== '" + to.getName() + "' || ";
-						}
-						genericVarIndex++;
-						parent = to.getParent();
-					}
-				}
-			}
-		}
-		// Finish the line of the condition
-		if (parent != null) {
-			ruleCore = ruleCore.substring(0, ruleCore.length() - 3);
-			if (scopeClass.equals("Question")) {
-				ruleCore += ") from $" + parent.getUniqueNameReadable().toString() + ".getQuestions()) \n";
-			} else if (scopeClass.equals("Group")) {
-				ruleCore += ") from $" + parent.getUniqueNameReadable().toString() + ".getGroups()) \n";
-			} else if (scopeClass.equals("Category")) {
-				ruleCore += ") from $" + parent.getUniqueNameReadable().toString() + ".getCategories())\n";
-			}
-
-			String getVarValue = "getVariableValue('" + customVariable.getName() + "')";
-			ExpressionFunction function = (ExpressionFunction) actions.get(2);
-			if (function.getValue().equals(AvailableFunction.MAX)) {
-				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
-						+ ") from $var; $sol : max($value)) \n";
-			} else if (function.getValue().equals(AvailableFunction.MIN)) {
-				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
-						+ ") from $var; $sol : min($value)) \n";
-			} else if (function.getValue().equals(AvailableFunction.AVG)) {
-				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
-						+ ") from $var; $sol : average($value)) \n";
-			} else if (function.getValue().equals(AvailableFunction.SUM)) {
-				ruleCore += "	accumulate( " + scopeClass + "($value : " + getVarValue
-						+ ") from $var; $sol : sum($value)) \n";
-			}
-
-			ruleCore = RulesUtils.removeDuplicateLines(ruleCore);
-			ruleCore += RulesUtils.getThenRuleString();
-
-			// RHS
-			if (variableToCalculate != null) {
-				ruleCore += "	$" + this.getTreeObjectName(variableToCalculate.getReference()) + ".setVariableValue('"
-						+ variableToCalculate.getVariable().getName() + "', $sol);\n";
-
-				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST (" + variableToCalculate.getReference().getName()
-						+ ", " + variableToCalculate.getVariable().getName() + ", \" + $var +\")\");\n";
-
-				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-						+ variableToCalculate.getReference().getName() + ", "
-						+ variableToCalculate.getVariable().getName() + ", \" + $sol +\")\");\n";
-			}
-		} else {
-			// So the rule don't fail
-			ruleCore += RulesUtils.getThenRuleString();
-		}
 		return ruleCore;
 	}
 
@@ -964,22 +979,43 @@ public class GenericParser {
 			customVariable = genericExpressionVariable.getVariable();
 			switch (genericExpressionVariable.getType()) {
 			case CATEGORY:
-			case QUESTION_GROUP:
 				break;
 			case GROUP:
 				if (leftTreeObject instanceof Category) {
 					scopeClass = "Group";
-					treeObjects = leftTreeObject.getAll(Group.class);
-					// To guarantee the nested groups variable assignation
-					if (treeObjects != null && !treeObjects.isEmpty()) {
-						for (TreeObject auxTreeobject : treeObjects) {
-							ruleCore += checkVariableAssignation(auxTreeobject);
+					if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+						treeObjects = new ArrayList<TreeObject>();
+						for (TreeObject child : leftTreeObject.getChildren()) {
+							if (child instanceof Group) {
+								treeObjects.add(child);
+							}
 						}
 					}
+					// treeObjects = leftTreeObject.getAll(Group.class);
+					// // To guarantee the nested groups variable assignation
+					// if (treeObjects != null && !treeObjects.isEmpty()) {
+					// for (TreeObject auxTreeobject : treeObjects) {
+					// ruleCore += checkVariableAssignation(auxTreeobject);
+					// }
+					// }
 				}
 				break;
 			case QUESTION_CATEGORY:
 				if (leftTreeObject instanceof Category) {
+					scopeClass = "Question";
+					// We only want the questions for the category
+					if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+						treeObjects = new ArrayList<TreeObject>();
+						for (TreeObject child : leftTreeObject.getChildren()) {
+							if (child instanceof Question) {
+								treeObjects.add(child);
+							}
+						}
+					}
+				}
+				break;
+			case QUESTION_GROUP:
+				if (leftTreeObject instanceof Group) {
 					scopeClass = "Question";
 					// We only want the questions for the category
 					if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
@@ -1026,7 +1062,7 @@ public class GenericParser {
 					actionsToModify.remove(5);
 					actionsToModify.remove(4);
 				}
-//				System.out.println("NOT TREE OBJECTS FOUND");
+				// System.out.println("NOT TREE OBJECTS FOUND");
 				return genericFunctionParameters(ruleCore, actionsToModify);
 			}
 
@@ -1156,6 +1192,21 @@ public class GenericParser {
 
 		}
 		return ruleCore;
+	}
+
+	private String orOperator(List<Expression> expressions) {
+		String result = "";
+
+		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
+		ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
+
+		// result += "(\n";
+		result += this.processParserResult(leftChain);
+		result += " or\n";
+		result += this.processParserResult(rightChain);
+		// result += ")\n";
+
+		return result;
 	}
 
 	/**
@@ -1554,6 +1605,21 @@ public class GenericParser {
 				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
 	}
 
+	private String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
+			AvailableOperator operator, Double value) {
+		String rule = "";
+
+		// Check if the reference exists in the rule, if not, it creates
+		// a new reference
+		rule += this.checkVariableAssignation(leftQuestion);
+
+		rule += "	$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
+				+ leftQuestion.getName() + "', DateUtils.returnYearsDistanceFromDate(getAnswer('"
+				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + value.intValue() + ") from $"
+				+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
+		return rule;
+	}
+
 	private String questionDateYearsOperatorValueNumber(TreeObject question, Double value, AvailableOperator operator) {
 		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
 				+ "', DateUtils.returnYearsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
@@ -1686,21 +1752,6 @@ public class GenericParser {
 					(ExpressionOperatorLogic) conditions.get(1), valueNumber);
 		}
 		return droolsConditions;
-	}
-
-	private String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
-			AvailableOperator operator, Double value) {
-		String rule = "";
-
-		// Check if the reference exists in the rule, if not, it creates
-		// a new reference
-		rule += this.checkVariableAssignation(leftQuestion);
-
-		rule += "	$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
-				+ leftQuestion.getName() + "', DateUtils.returnYearsDistanceFromDate(getAnswer('"
-				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + value.intValue() + ") from $"
-				+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
-		return rule;
 	}
 
 	private String simpleCategoryConditions(Category category) {
@@ -1852,6 +1903,67 @@ public class GenericParser {
 	 * Create drools rule like => Category(isScoreSet('cScore'),
 	 * getVariablevalue('cScore') == value )
 	 * 
+	 * @param expressionOperatorLogic
+	 * 
+	 * @param conditions
+	 * @return LHS of the rule
+	 */
+	private String treeObjectScoreEqualsValueString(ExpressionValueCustomVariable var,
+			ExpressionOperatorLogic expressionOperatorLogic, ExpressionValueString valueNumber) {
+		String ruleCore = "";
+
+		TreeObject scope = var.getReference();
+		String varName = var.getVariable().getName();
+
+		if (scope instanceof Form) {
+			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('" + varName
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "') from $droolsForm.getSubmittedForm() \n";
+
+		} else if (scope instanceof Category) {
+			TreeObject form = scope.getParent();
+			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+			ruleCore += this.simpleFormCondition((Form) form);
+			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Category( isScoreSet('" + varName
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "') from $" + form.getUniqueNameReadable().toString() + ".getCategory('"
+					+ scope.getName() + "') \n";
+
+		} else if (scope instanceof Group) {
+			TreeObject groupParent = scope.getParent();
+			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+			if (groupParent instanceof Category) {
+				ruleCore += this.simpleCategoryConditions((Category) groupParent);
+			} else if (groupParent instanceof Group) {
+				ruleCore += this.simpleGroupConditions((Group) groupParent);
+			}
+			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Group( isScoreSet('" + varName
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "' ) from $" + groupParent.getUniqueNameReadable().toString()
+					+ ".getGroup('" + scope.getName() + "') \n";
+
+		} else if (scope instanceof Question) {
+			TreeObject questionParent = scope.getParent();
+			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+			if (questionParent instanceof Category) {
+				ruleCore += this.simpleCategoryConditions((Category) questionParent);
+			} else if (questionParent instanceof Group) {
+				ruleCore += this.simpleGroupConditions((Group) questionParent);
+			}
+			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Question( isScoreSet('" + varName
+					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
+					+ valueNumber.getValue() + "' ) from $" + questionParent.getUniqueNameReadable().toString()
+					+ ".getQuestions() \n";
+		}
+		return ruleCore;
+	}
+
+	/**
+	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
+	 * Create drools rule like => Category(isScoreSet('cScore'),
+	 * getVariablevalue('cScore') == value )
+	 * 
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
@@ -1969,86 +2081,5 @@ public class GenericParser {
 			}
 		}
 		return ruleCore;
-	}
-
-	/**
-	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'),
-	 * getVariablevalue('cScore') == value )
-	 * 
-	 * @param expressionOperatorLogic
-	 * 
-	 * @param conditions
-	 * @return LHS of the rule
-	 */
-	private String treeObjectScoreEqualsValueString(ExpressionValueCustomVariable var,
-			ExpressionOperatorLogic expressionOperatorLogic, ExpressionValueString valueNumber) {
-		String ruleCore = "";
-
-		TreeObject scope = var.getReference();
-		String varName = var.getVariable().getName();
-
-		if (scope instanceof Form) {
-			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('" + varName
-					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
-					+ valueNumber.getValue() + "') from $droolsForm.getSubmittedForm() \n";
-
-		} else if (scope instanceof Category) {
-			TreeObject form = scope.getParent();
-			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-			ruleCore += this.simpleFormCondition((Form) form);
-			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Category( isScoreSet('" + varName
-					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
-					+ valueNumber.getValue() + "') from $" + form.getUniqueNameReadable().toString() + ".getCategory('"
-					+ scope.getName() + "') \n";
-
-		} else if (scope instanceof Group) {
-			TreeObject groupParent = scope.getParent();
-			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-			if (groupParent instanceof Category) {
-				ruleCore += this.simpleCategoryConditions((Category) groupParent);
-			} else if (groupParent instanceof Group) {
-				ruleCore += this.simpleGroupConditions((Group) groupParent);
-			}
-			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Group( isScoreSet('" + varName
-					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
-					+ valueNumber.getValue() + "' ) from $" + groupParent.getUniqueNameReadable().toString()
-					+ ".getGroup('" + scope.getName() + "') \n";
-
-		} else if (scope instanceof Question) {
-			TreeObject questionParent = scope.getParent();
-			this.putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-			if (questionParent instanceof Category) {
-				ruleCore += this.simpleCategoryConditions((Category) questionParent);
-			} else if (questionParent instanceof Group) {
-				ruleCore += this.simpleGroupConditions((Group) questionParent);
-			}
-			ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Question( isScoreSet('" + varName
-					+ "'), getVariableValue('" + varName + "') " + expressionOperatorLogic.getValue().toString() + " '"
-					+ valueNumber.getValue() + "' ) from $" + questionParent.getUniqueNameReadable().toString()
-					+ ".getQuestions() \n";
-		}
-		return ruleCore;
-	}
-
-	/**
-	 * Returns the type of answer for the question in the parameter
-	 * 
-	 * @return
-	 */
-	public String getTreeObjectAnswerType(TreeObject treeObject) {
-		if (treeObject instanceof Question) {
-			Question question = (Question) treeObject;
-			switch (question.getAnswerType()) {
-			case RADIO:
-			case MULTI_CHECKBOX:
-				return AnswerFormat.TEXT.toString();
-			case INPUT:
-				return question.getAnswerFormat().toString();
-			}
-			return "";
-		}
-		return "";
 	}
 }

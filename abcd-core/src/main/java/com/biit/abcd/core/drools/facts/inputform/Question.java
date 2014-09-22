@@ -43,7 +43,7 @@ public class Question extends CommonAttributes implements IQuestion {
 
 	public Object getAnswer(String answerFormat) {
 		if (answerFormat == null) {
-			return "";
+			return null;
 		}
 		if (answerFormat.isEmpty()) {
 			return getAnswer();
@@ -82,12 +82,13 @@ public class Question extends CommonAttributes implements IQuestion {
 					return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
 				}
 			} else {
-				// Default, create tomorrow's date
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(new Date());
-				cal.add(Calendar.DAY_OF_YEAR, 1);
-				Date tomorrow = cal.getTime();
-				return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
+				return null;
+//				// Default, create tomorrow's date
+//				Calendar cal = Calendar.getInstance();
+//				cal.setTime(new Date());
+//				cal.add(Calendar.DAY_OF_YEAR, 1);
+//				Date tomorrow = cal.getTime();
+//				return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
 			}
 		}
 		return parsedValue;
