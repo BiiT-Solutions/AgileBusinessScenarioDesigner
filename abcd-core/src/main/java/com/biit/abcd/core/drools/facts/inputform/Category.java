@@ -74,11 +74,6 @@ public class Category extends CommonAttributes implements ICategory {
 		return this.groups;
 	}
 
-	// public Number getNumberVariableValue(String varName) {
-	// return ((SubmittedForm) this.getParent()).getNumberVariableValue(this,
-	// varName);
-	// }
-
 	public ISubmittedForm getParent() {
 		return this.parent;
 	}

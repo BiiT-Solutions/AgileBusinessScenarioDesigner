@@ -29,6 +29,9 @@
               <vegetables>d</vegetables>
               <vegetablesAmount>3</vegetablesAmount>
               <drinks>c</drinks>
+              <group-voeding2>
+                <drinks>c</drinks>
+              </group-voeding2>             
             </group-voeding>
             <subcategory-3-2/>
             <group-mentaal>

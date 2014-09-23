@@ -48,7 +48,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
  * Tests the correct creation of the global variables <br>
  * It also test the introduction of the variables in the drools engine
  */
-public class GlobalVariablesTest extends TestFormCreator {
+public class GlobalVariablesTest extends KidsFormCreator {
 	private final static String GLOBAL_VALUE = "globalValue";
 	private GlobalVariable globalVariableNumber = null;
 

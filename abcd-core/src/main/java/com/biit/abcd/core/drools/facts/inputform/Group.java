@@ -122,11 +122,6 @@ public class Group extends CommonAttributes implements IGroup {
 		return !isScoreSet(varName);
 	}
 
-	// public Number getNumberVariableValue(String varName) {
-	// return ((SubmittedForm) ((Category)
-	// this.getParent()).getParent()).getNumberVariableValue(this, varName);
-	// }
-
 	public Object getVariableValue(String varName) {
 		return getVariableValue(this, varName);
 	}

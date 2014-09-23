@@ -44,7 +44,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
  * Checks the correct creation and execution of table rules <br>
  * Also checks the correct loading in memory of the submitted form from orbeon
  */
-public class NewTableRuleTest extends TestFormCreator {
+public class NewTableRuleTest extends KidsFormCreator {
 
 	private final static String QUESTION_EQUALS_ANSWER = "works";
 	private final static String QUESTION_NOT_EQUALS_ANSWER = "works";

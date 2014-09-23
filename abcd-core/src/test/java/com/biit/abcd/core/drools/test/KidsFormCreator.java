@@ -36,7 +36,7 @@ import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-public class TestFormCreator {
+public class KidsFormCreator {
 
 	private ISubmittedForm submittedForm;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -50,7 +50,7 @@ public class TestFormCreator {
 		return new String(encoded, encoding);
 	}
 
-	public TestFormCreator() {
+	public KidsFormCreator() {
 	}
 
 	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
@@ -173,6 +173,22 @@ public class TestFormCreator {
 		drinks.addChild(drinksC);
 		drinks.addChild(drinksD);
 		voeding.addChild(drinks);
+		
+		// Extra for testing generics
+		Group voeding2 = new Group("voeding2");
+		voeding.addChild(voeding2);
+		
+		Question drinks1 = new Question("drinks1");
+		Answer drinksA1 = new Answer("a");
+		Answer drinksB1 = new Answer("b");
+		Answer drinksC1 = new Answer("c");
+		Answer drinksD1 = new Answer("d");
+		drinks1.setAnswerType(AnswerType.RADIO);
+		drinks1.addChild(drinksA1);
+		drinks1.addChild(drinksB1);
+		drinks1.addChild(drinksC1);
+		drinks1.addChild(drinksD1);
+		voeding2.addChild(drinks1);
 	}
 
 	public DroolsForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException, IOException,

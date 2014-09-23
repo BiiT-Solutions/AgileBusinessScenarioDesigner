@@ -65,18 +65,6 @@ public class SubmittedForm implements ISubmittedForm {
 		return null;
 	}
 
-	// public Number getNumberVariableValue(Object treeObject, String varName) {
-	// if ((this.formVariables == null) || (this.formVariables.get(treeObject)
-	// == null)) {
-	// return null;
-	// }
-	// return (Number) this.formVariables.get(treeObject).get(varName);
-	// }
-
-	// public Number getNumberVariableValue(String varName) {
-	// return this.getNumberVariableValue(this, varName);
-	// }
-
 	public Object getVariableValue(Object treeObject, String varName) {
 		if ((this.formVariables == null) || (this.formVariables.get(treeObject) == null)) {
 			return null;

@@ -48,7 +48,7 @@ import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-public class NewExpressionsTest extends TestFormCreator {
+public class NewExpressionsTest extends KidsFormCreator {
 	private final static String YEARS = "years";
 	private final static String MONTHS = "months";
 	private final static String DAYS = "days";

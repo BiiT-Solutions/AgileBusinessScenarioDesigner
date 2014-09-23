@@ -82,13 +82,12 @@ public class Question extends CommonAttributes implements IQuestion {
 					return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
 				}
 			} else {
-				return null;
-//				// Default, create tomorrow's date
-//				Calendar cal = Calendar.getInstance();
-//				cal.setTime(new Date());
-//				cal.add(Calendar.DAY_OF_YEAR, 1);
-//				Date tomorrow = cal.getTime();
-//				return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
+				// Default, create tomorrow's date
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(new Date());
+				cal.add(Calendar.DAY_OF_YEAR, 1);
+				Date tomorrow = cal.getTime();
+				return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
 			}
 		}
 		return parsedValue;
@@ -118,24 +117,6 @@ public class Question extends CommonAttributes implements IQuestion {
 		}
 	}
 
-//	public boolean isScoreSet(String varName) {
-//		// Retrieve the form which will have the variables
-//		if (this.getParent() instanceof ICategory) {
-//			if (((SubmittedForm) ((Category) this.getParent()).getParent()).hasScoreSet(this, varName)) {
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		} else {
-//			if (((SubmittedForm) ((Category) ((Group) this.getParent()).getParent()).getParent()).hasScoreSet(this,
-//					varName)) {
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		}
-//	}
-	
 	public boolean isScoreSet(String varName) {
 		return isScoreSet(this, varName);
 	}
@@ -151,10 +132,6 @@ public class Question extends CommonAttributes implements IQuestion {
 	public boolean isScoreNotSet(String varName) {
 		return !isScoreSet(varName);
 	}
-
-//	public boolean isScoreNotSet() {
-//		return !isScoreSet("");
-//	}
 
 	public Object getVariableValue(String varName) {
 		return getVariableValue(this, varName);

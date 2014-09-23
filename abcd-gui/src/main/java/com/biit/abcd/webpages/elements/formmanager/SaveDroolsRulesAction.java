@@ -38,7 +38,7 @@ public class SaveDroolsRulesAction implements SaveAction {
 			String rules = droolsExporter.getDroolRules(UserSessionHandler.getFormController().getForm(),
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
 			filesToZip.add(rules);
-			namesOfFiles.add("droolRules.drl");
+			namesOfFiles.add("droolsRules.drl");
 			String variables = JSonConverter.convertGlobalVariableListToJson(UserSessionHandler
 					.getGlobalVariablesController().getGlobalVariables());
 			filesToZip.add(variables);

@@ -25,7 +25,7 @@ public class ExpressionParser extends GenericParser {
 		String newRule = "";
 		if (expressionChain != null) {
 			if (expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
-				newRule += this.createDroolsRule(null, expressionChain, extraConditions);
+				newRule += createDroolsRule(null, expressionChain, extraConditions);
 			} else {
 				String expressionName = expressionChain.getName();
 				if (expressionName == null) {
@@ -35,32 +35,10 @@ public class ExpressionParser extends GenericParser {
 				newRule += RulesUtils.getStartRuleString(expressionName);
 				newRule += RulesUtils.getAttributes();
 				newRule += RulesUtils.getWhenRuleString();
-				newRule += this.createDroolsRule(null, expressionChain, extraConditions);
+				newRule += createDroolsRule(null, expressionChain, extraConditions);
 				newRule += RulesUtils.getEndRuleString();
 			}
 		}
 		return newRule;
 	}
-
-	// public String parse(ExpressionChain expressionChain, String
-	// extraConditions) throws ExpressionInvalidException,
-	// RuleNotImplementedException {
-	// String newRule = "";
-	// if (expressions != null) {
-	// if (expressions.get(0) instanceof ExpressionValueGenericCustomVariable) {
-	// newRule += this.createDroolsRule(null, expressionChain, extraConditions);
-	// } else {
-	// // String expressionName = expressionChain.getName();
-	// // RuleChecker.checkExpressionValid(expressionChain);
-	// newRule +=
-	// Utils.getStartRuleString(UUID.randomUUID().toString().replaceAll("-",
-	// ""));
-	// newRule += Utils.getAttributes();
-	// newRule += Utils.getWhenRuleString();
-	// newRule += this.createDroolsRule(null, expressionChain, extraConditions);
-	// newRule += Utils.getEndRuleString();
-	// }
-	// }
-	// return newRule;
-	// }
 }

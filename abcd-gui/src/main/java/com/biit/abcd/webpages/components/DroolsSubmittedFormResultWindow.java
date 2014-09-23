@@ -31,11 +31,12 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		ORIGINAL_VALUE
 	}
 
-	public DroolsSubmittedFormResultWindow(ISubmittedForm submittedForm) {
+	public DroolsSubmittedFormResultWindow(ISubmittedForm submittedForm) throws CategoryDoesNotExistException,
+			GroupDoesNotExistException {
 		super();
 		setCaption("Submitted form scores");
-		setWidth("50%");
-		setHeight("50%");
+		setWidth("60%");
+		setHeight("60%");
 		setClosable(false);
 		setModal(true);
 		setResizable(false);
@@ -48,6 +49,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		if (submittedForm != null) {
 			generateContent((SubmittedForm) submittedForm);
 		}
+
 		setContent(formTreeTable);
 	}
 
@@ -64,13 +66,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				if (customVariables != null) {
 					customVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
 					for (CustomVariable customVariable : customVariables) {
-						switch (customVariable.getType()) {
-						case NUMBER:
-						case STRING:
-						case DATE:
-							formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
-							break;
-						}
+						formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
 						if (customVariablesScopeMap.get(customVariable.getScope()) == null) {
 							List<String> customVariablesNames = new ArrayList<String>();
 							customVariablesNames.add(customVariable.getName());
@@ -82,6 +78,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 						}
 					}
 				}
+
 				// Put form variables
 				if ((form != null) && (submittedForm != null)) {
 					createFormVariables(form, submittedForm);
@@ -89,20 +86,37 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 					List<TreeObject> categories = form.getChildren();
 					if (categories != null) {
 						for (TreeObject category : categories) {
-							createCategoryVariables(category, submittedForm);
-							// Put group/question variables
-							List<TreeObject> groupsQuests = category.getChildren();
-							if (groupsQuests != null) {
-								for (TreeObject groupQuest : groupsQuests) {
-									createGroupQuestionVariable(category, groupQuest, submittedForm);
-									// Put question variables
-									if (groupQuest instanceof com.biit.abcd.persistence.entity.Group) {
-										List<TreeObject> questions = groupQuest.getChildren();
-										if (questions != null) {
-											for (TreeObject question : questions) {
-												createQuestionVariable(category, groupQuest, question, submittedForm);
+
+							// Get the subform category
+							Category categorySubForm = getSubmittedFormCategory(category, submittedForm);
+							createCategoryVariables(category, categorySubForm);
+							// Put category children variables
+							List<TreeObject> categoryChildren = category.getChildren();
+							if (categoryChildren != null) {
+								for (TreeObject categoryChild : categoryChildren) {
+									if (categoryChild instanceof com.biit.abcd.persistence.entity.Group) {
+										// Get the subform group
+										Group groupSubForm = getSubmittedFormGroup(categoryChild, categorySubForm);
+										createGroupVariables(categoryChild, groupSubForm);
+										List<TreeObject> groupChildren = categoryChild.getChildren();
+										if (groupChildren != null) {
+											for (TreeObject groupChild : groupChildren) {
+												if (groupChild instanceof com.biit.abcd.persistence.entity.Group) {
+													createNestedGroupVariables(groupChild,
+															getSubmittedFormGroup(groupChild, groupSubForm));
+
+												} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
+
+													System.out.println("PARSING QUESTION: " + groupChild.getName());
+
+													createQuestionVariables(groupChild,
+															getSubmittedFormGroupQuestion(groupChild, groupSubForm));
+												}
 											}
 										}
+									} else if (categoryChild instanceof com.biit.abcd.persistence.entity.Question) {
+										createQuestionVariables(categoryChild,
+												getSubmittedFormCategoryQuestion(categoryChild, categorySubForm));
 									}
 								}
 							}
@@ -127,116 +141,139 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createCategoryVariables(TreeObject category, SubmittedForm submittedForm) {
-		Category categorySubForm = null;
-
-		try {
-			categorySubForm = (Category) submittedForm.getCategory(category.getName());
-		} catch (CategoryDoesNotExistException e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
-		}
-
+	private void createCategoryVariables(TreeObject category, Category categorySubForm) {
 		List<String> categoryVariables = customVariablesScopeMap.get(CustomVariableScope.CATEGORY);
 		if ((categoryVariables != null) && (categorySubForm != null)) {
 			for (String variable : categoryVariables) {
 				if (categorySubForm.getVariableValue(variable) != null) {
 					formTreeTable.getItem(category).getItemProperty(variable)
 							.setValue(categorySubForm.getVariableValue(variable).toString());
+				} else {
+					formTreeTable.getItem(category).getItemProperty(variable).setValue("-");
 				}
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createGroupQuestionVariable(TreeObject category, TreeObject groupQuest, SubmittedForm submittedForm) {
+	private void createGroupVariables(TreeObject group, Group groupSubForm) {
+		List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
+
+		if ((groupVariables != null) && (groupSubForm != null)) {
+			for (String variable : groupVariables) {
+				if (groupSubForm.getVariableValue(variable) != null) {
+					formTreeTable.getItem(group).getItemProperty(variable)
+							.setValue(groupSubForm.getVariableValue(variable).toString());
+				} else {
+					formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createQuestionVariables(TreeObject question, Question questionSubForm) {
+		List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
+
+		if ((questionVariables != null) && (questionSubForm != null)) {
+			for (String variable : questionVariables) {
+				if (questionSubForm.getVariableValue(variable) != null) {
+					formTreeTable.getItem(question).getItemProperty(variable)
+							.setValue(questionSubForm.getVariableValue(variable).toString());
+				} else {
+					formTreeTable.getItem(question).getItemProperty(variable).setValue("-");
+				}
+				formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+						.setValue(questionSubForm.getAnswer().toString());
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createNestedGroupVariables(TreeObject group, Group groupSubForm) {
+		List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
+
+		if ((groupVariables != null) && (groupSubForm != null)) {
+			for (String variable : groupVariables) {
+				if (groupSubForm.getVariableValue(variable) != null) {
+					formTreeTable.getItem(group).getItemProperty(variable)
+							.setValue(groupSubForm.getVariableValue(variable).toString());
+				} else {
+					formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
+				}
+			}
+		}
+
+		// Manage the nested values
+		List<TreeObject> groupChildren = group.getChildren();
+		if (groupChildren != null) {
+			for (TreeObject groupChild : groupChildren) {
+				if (groupChild instanceof com.biit.abcd.persistence.entity.Group) {
+					createNestedGroupVariables(groupChild, getSubmittedFormGroup(groupChild, groupSubForm));
+
+				} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
+					createQuestionVariables(groupChild, getSubmittedFormGroupQuestion(groupChild, groupSubForm));
+				}
+			}
+		}
+
+	}
+
+	private Category getSubmittedFormCategory(TreeObject category, SubmittedForm submittedForm) {
 		Category categorySubForm = null;
 		try {
 			categorySubForm = (Category) submittedForm.getCategory(category.getName());
 		} catch (CategoryDoesNotExistException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
-
-		if (groupQuest instanceof com.biit.abcd.persistence.entity.Group) {
-			Group groupSubForm = null;
-			try {
-				if (categorySubForm != null) {
-					groupSubForm = (Group) categorySubForm.getGroup(groupQuest.getName());
-				}
-			} catch (GroupDoesNotExistException e) {
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
-			}
-			List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
-			if ((groupVariables != null) && (groupSubForm != null)) {
-				for (String variable : groupVariables) {
-					if (groupSubForm.getVariableValue(variable) != null) {
-						formTreeTable.getItem(groupQuest).getItemProperty(variable)
-								.setValue(groupSubForm.getVariableValue(variable).toString());
-					}
-				}
-			}
-		} else {
-			com.biit.abcd.core.drools.facts.inputform.Question questionSubForm = null;
-			try {
-				if (categorySubForm != null) {
-					questionSubForm = (Question) categorySubForm.getQuestion(groupQuest.getName());
-				}
-			} catch (QuestionDoesNotExistException e) {
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
-			}
-			List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
-			if ((questionVariables != null) && (questionSubForm != null)) {
-				for (String variable : questionVariables) {
-					if (questionSubForm.getVariableValue(variable) != null) {
-						formTreeTable.getItem(groupQuest).getItemProperty(variable)
-								.setValue(questionSubForm.getVariableValue(variable).toString());
-					}
-					formTreeTable.getItem(groupQuest).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-							.setValue(questionSubForm.getAnswer().toString());
-				}
-			}
-		}
+		return categorySubForm;
 	}
 
-	@SuppressWarnings("unchecked")
-	private void createQuestionVariable(TreeObject category, TreeObject group, TreeObject question,
-			SubmittedForm submittedForm) {
-		Category categorySubForm = null;
+	private Group getSubmittedFormGroup(TreeObject group, Category categorySubForm) {
 		Group groupSubForm = null;
-		Question questionSubForm = null;
 		try {
-			categorySubForm = (Category) submittedForm.getCategory(category.getName());
 			if (categorySubForm != null) {
-				// The parent of the question is a category
-				// System.out.println("CATEGORY: " + category.getName());
-				// System.out.println("GROUP : " + group.getName());
-				// System.out.println("QUESTION : " + question.getName());
-				// System.out.println("QUESTION PARENT: " +
-				// question.getParent().getName());
-
-				if (question.getParent() instanceof com.biit.abcd.persistence.entity.Category) {
-					questionSubForm = (Question) categorySubForm.getQuestion(question.getName());
-				} else {
-					// The parent of the question is a group
-					groupSubForm = (Group) categorySubForm.getGroup(group.getName());
-					if (groupSubForm != null) {
-						questionSubForm = (Question) groupSubForm.getQuestion(question.getName());
-					}
-				}
+				groupSubForm = (Group) categorySubForm.getGroup(group.getName());
 			}
-		} catch (CategoryDoesNotExistException | GroupDoesNotExistException | QuestionDoesNotExistException e) {
+		} catch (GroupDoesNotExistException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
+		return groupSubForm;
+	}
 
-		List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
-		if ((questionVariables != null) && (questionSubForm != null)) {
-			for (String variable : questionVariables) {
-				if (questionSubForm.getVariableValue(variable) != null) {
-					formTreeTable.getItem(question).getItemProperty(variable)
-							.setValue(questionSubForm.getVariableValue(variable).toString());
-				}
-				formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-						.setValue(questionSubForm.getAnswer().toString());
+	private Group getSubmittedFormGroup(TreeObject group, Group groupSubForm) {
+		Group nestedGroupSubForm = null;
+		try {
+			if (groupSubForm != null) {
+				nestedGroupSubForm = (Group) groupSubForm.getGroup(group.getName());
 			}
+		} catch (GroupDoesNotExistException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
+		return nestedGroupSubForm;
+	}
+
+	private Question getSubmittedFormCategoryQuestion(TreeObject question, Category categorySubForm) {
+		Question questionSubForm = null;
+		try {
+			if (categorySubForm != null) {
+				questionSubForm = (Question) categorySubForm.getQuestion(question.getName());
+			}
+		} catch (QuestionDoesNotExistException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+		return questionSubForm;
+	}
+
+	private Question getSubmittedFormGroupQuestion(TreeObject question, Group groupSubForm) {
+		Question questionSubForm = null;
+		try {
+			if (groupSubForm != null) {
+				questionSubForm = (Question) groupSubForm.getQuestion(question.getName());
+			}
+		} catch (QuestionDoesNotExistException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+		return questionSubForm;
 	}
 }

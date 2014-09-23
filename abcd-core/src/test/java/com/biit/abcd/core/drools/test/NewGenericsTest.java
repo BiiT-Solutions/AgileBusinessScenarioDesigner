@@ -42,7 +42,7 @@ import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-public class NewGenericsTest extends TestFormCreator {
+public class NewGenericsTest extends KidsFormCreator {
 
 	private final static String FORM_SCORE = "formScore";
 	private final static String CATEGORY_SCORE = "catScore";
@@ -114,7 +114,8 @@ public class NewGenericsTest extends TestFormCreator {
 				categoryCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChain().add(expression);
 
-		// Generic expression with several generics (Generic category = generic
+		// Generic expression with several generics (Generic category =
+		// generic
 		// category groups, generic category questions)
 		expression = new ExpressionChain("genericCategoryGroupsQuestions", new ExpressionValueGenericCustomVariable(
 				GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(
@@ -125,15 +126,27 @@ public class NewGenericsTest extends TestFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChain().add(expression);
 
-		// Generic expression with several generics (Generic category = generic
+		// Generic expression with several generics (Generic category =
+		// generic
 		// category groups, generic category questions)
-		expression = new ExpressionChain("genericCategoryQuestionsGroups", new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(
+		expression = new ExpressionChain("genericCategoryQuestionsGroups",
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
+						groupCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChain().add(expression);
+
+		// Generic expression with several generics (Generic group = generic
+		// groups, generic group questions)
+		expression = new ExpressionChain("genericGroupQuestionsGroups", new ExpressionValueGenericCustomVariable(
+				GenericTreeObjectType.GROUP, categoryCustomVariable), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
-						questionCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChain().add(expression);
 
 		// Creation of a simple diagram to load the table rule

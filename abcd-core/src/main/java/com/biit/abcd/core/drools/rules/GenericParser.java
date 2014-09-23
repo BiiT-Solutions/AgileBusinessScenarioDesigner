@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -252,13 +253,13 @@ public class GenericParser {
 				// Add the variable assignation to the rule
 				if (treeObject != null) {
 					if (treeObject instanceof Category) {
-						ruleCore += this.simpleCategoryCustomVariableConditions(variable);
+						ruleCore += simpleCategoryCustomVariableConditions(variable);
 
 					} else if (treeObject instanceof Group) {
-						ruleCore += this.simpleGroupCustomVariableConditions(variable);
+						ruleCore += simpleGroupCustomVariableConditions(variable);
 
 					} else if (treeObject instanceof Question) {
-						ruleCore += this.simpleQuestionCustomVariableConditions(variable);
+						ruleCore += simpleQuestionCustomVariableConditions(variable);
 					}
 				}
 				return ruleCore;
@@ -291,7 +292,7 @@ public class GenericParser {
 		if (treeObject != null) {
 			if (this.getTreeObjectName(treeObject) == null) {
 				// The variable don't exists and can't have a value assigned
-				return this.addConditionVariable(treeObject);
+				return addConditionVariable(treeObject);
 			}
 		}
 		return "";
@@ -299,16 +300,12 @@ public class GenericParser {
 
 	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions)
 			throws RuleNotImplementedException {
-
 		// System.out.println("CONDITIONS: " + conditions);
 		// System.out.println("ACTIONS: " + actions);
-
 		this.treeObjectDroolsname.clear();
 		String ruleCore = "";
-		// ruleCore += "	$droolsForm: DroolsForm() and\n";
-
-		// Condition to avoid putting the drools form in the recursive generic
-		// expressions
+		// Condition to avoid putting the drools form variable in the recursive
+		// generic expressions
 		// It is introduced in everything else
 		if (actions == null) {
 			ruleCore += "	$droolsForm: DroolsForm() \n";
@@ -318,22 +315,28 @@ public class GenericParser {
 			}
 		}
 
+		// Extra conditions of the fork
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
 		}
+		// Parse the conditions of the rule
 		if ((conditions != null) && (conditions.getExpressions() != null) && (!conditions.getExpressions().isEmpty())) {
-			ruleCore += this.parseConditions(conditions);
+			ruleCore += parseConditions(conditions);
 		}
+		// Parse the expressions of the rule
+		// If the rule has no conditions then is a expression
+		// If the rule has conditions is a normal rule
 		if ((actions != null) && (actions.getExpressions() != null) && (!actions.getExpressions().isEmpty())) {
 			// Expression rule
 			if (conditions == null) {
-				ruleCore += this.parseExpressions(actions, extraConditions);
+				ruleCore += parseExpressions(actions, extraConditions);
 			}
 			// Normal rule
 			else {
-				ruleCore += this.parseActions(actions);
+				ruleCore += parseActions(actions);
 			}
 		}
+		// Functions that clean the resulting string that contains the rule
 		if (this.cleaningNeeded) {
 			ruleCore = RulesUtils.newRemoveDuplicateLines(ruleCore);
 			ruleCore = RulesUtils.checkForDuplicatedVariables(ruleCore);
@@ -588,11 +591,15 @@ public class GenericParser {
 		String ruleCore = "";
 		// we have to generate a set of rules defined by the generic variable
 		ruleCore += this.genericRuleSet(actions, extraConditions);
-		this.cleaningNeeded = false;
+		// Flag used to know if we have to create again the generic part of the
+		// rules, like the droolsForm variable
+		cleaningNeeded = false;
 		return ruleCore;
 	}
 
 	private String genericFunctionParameters(String ruleCore, List<Expression> actions) {
+//		System.out.println("ACTIONS: " + actions);
+
 		// LHS
 		// We will have some expression of type Category.score = (Min | Max |
 		// Avg) of some values
@@ -648,7 +655,7 @@ public class GenericParser {
 					} else if (leftTreeObject instanceof Category) {
 						scopeClass = "Group";
 						// treeObjects = leftTreeObject.getAll(Group.class);
-						// We only want the questions for the category
+						// We only want the questions for the group
 						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
 							treeObjects = new ArrayList<TreeObject>();
 							for (TreeObject child : leftTreeObject.getChildren()) {
@@ -657,15 +664,6 @@ public class GenericParser {
 								}
 							}
 						}
-
-						// // To guarantee the nested groups variable
-						// assignation
-						// if (treeObjects != null && !treeObjects.isEmpty()) {
-						// for (TreeObject auxTreeobject : treeObjects) {
-						// ruleCore += checkVariableAssignation(auxTreeobject);
-						// }
-						// }
-
 					}
 					break;
 				case QUESTION_CATEGORY:
@@ -687,7 +685,9 @@ public class GenericParser {
 					}
 					break;
 				case QUESTION_GROUP:
-					if (leftTreeObject instanceof Group) {
+					if (actions.size() > 5) {
+						return maxMinAvgAssignationFunctionActionWithSeveralGenerics(ruleCore, actions);
+					} else if (leftTreeObject instanceof Group) {
 						scopeClass = "Question";
 						// We only want the questions for the group
 						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
@@ -766,7 +766,8 @@ public class GenericParser {
 	}
 
 	/**
-	 * Creates a set of expressions and passes it back to the expression parser
+	 * Transforms the generic left part of the rule in a set of rules and passes
+	 * them to the expression parser
 	 * 
 	 * @param expressions
 	 * @param extraConditions
@@ -782,29 +783,38 @@ public class GenericParser {
 		List<TreeObject> treeObjects = new ArrayList<TreeObject>();
 		switch (genericVarToCalculate.getType()) {
 		case CATEGORY:
+			// Gets all the categories for the form
 			treeObjects.addAll(genericVarToCalculate.getVariable().getForm().getChildren());
 			break;
 		case GROUP:
+			// Gets all the groups for all the categories
 			for (TreeObject category : genericVarToCalculate.getVariable().getForm().getChildren()) {
-				treeObjects.addAll(category.getAll(Group.class));
+				List<TreeObject> orderedElements = category.getAll(Group.class);
+				Collections.reverse(orderedElements);
+				treeObjects.addAll(orderedElements);
 			}
 			break;
 		case QUESTION_GROUP:
 		case QUESTION_CATEGORY:
+			// Not used because you can't assign a function with generic
+			// parameters to a question
 			break;
 		}
-		// For each category, we generate the expression to create a new rule
+		// For each category/group, we generate a new expression
 		if (treeObjects != null && !treeObjects.isEmpty()) {
-			for (TreeObject category : treeObjects) {
-				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
+			for (TreeObject specificTreeObject : treeObjects) {
+				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(specificTreeObject,
 						genericVarToCalculate.getVariable());
+				
+				ExpressionChain auxExpression = expressionChain.generateCopy(); //getExpressions().remove(0);
 				// Remove the generic
-				expressionChain.getExpressions().remove(0);
+				auxExpression.getExpressions().remove(0);
 				// Add the specific
-				expressionChain.getExpressions().add(0, expValCat);
+				auxExpression.getExpressions().add(0, expValCat);
 
 				try {
-					ruleCore += new ExpressionParser().parse(expressionChain, extraConditions);
+					// Parse the new rule again
+					ruleCore += new ExpressionParser().parse(auxExpression, extraConditions);
 					// System.out.println(ruleCore);
 				} catch (ExpressionInvalidException e) {
 					e.printStackTrace();
@@ -833,7 +843,7 @@ public class GenericParser {
 	 * 
 	 * @return
 	 */
-	public String getTreeObjectAnswerType(TreeObject treeObject) {
+	private String getTreeObjectAnswerType(TreeObject treeObject) {
 		if (treeObject instanceof Question) {
 			Question question = (Question) treeObject;
 			switch (question.getAnswerType()) {
@@ -919,13 +929,13 @@ public class GenericParser {
 	private String maxMinAvgAssignationFunctionAction(List<Expression> actions, String extraConditions) {
 
 		// System.out.println("ACTIONS LIST: " + actions);
-
 		String ruleCore = "";
+		// Add the conditions of the fork
 		if (extraConditions != null) {
 			ruleCore += extraConditions;
 		}
 		// LHS
-		// We will have some expression of type Category.score = (Min | Max |
+		// We will have some expression of type TreeObject.score = (Min | Max |
 		// Avg) of some values
 		ExpressionValueCustomVariable variableToCalculate = (ExpressionValueCustomVariable) actions.get(0);
 		// The rule is different if the variable to assign is a Form, a Category
@@ -954,9 +964,11 @@ public class GenericParser {
 	 * @param rule
 	 * @return
 	 */
-	private String maxMinAvgAssignationFunctionActionWithSeveralGenerics(String rule, List<Expression> actions) {
+	private String maxMinAvgAssignationFunctionActionWithSeveralGenerics(String priorRulePart, List<Expression> actions) {
+		// Used only in the inside of this method, we don't want to modify the
+		// previous part of the rule
+		String ruleCore = "";
 
-		String ruleCore = rule;
 		// LHS
 		// We will have some expression of type Category.score = (Min | Max |
 		// Avg) of some values
@@ -981,7 +993,9 @@ public class GenericParser {
 			case CATEGORY:
 				break;
 			case GROUP:
-				if (leftTreeObject instanceof Category) {
+				// The left variable for a group can be a category or another
+				// group
+				if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
 					scopeClass = "Group";
 					if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
 						treeObjects = new ArrayList<TreeObject>();
@@ -991,13 +1005,6 @@ public class GenericParser {
 							}
 						}
 					}
-					// treeObjects = leftTreeObject.getAll(Group.class);
-					// // To guarantee the nested groups variable assignation
-					// if (treeObjects != null && !treeObjects.isEmpty()) {
-					// for (TreeObject auxTreeobject : treeObjects) {
-					// ruleCore += checkVariableAssignation(auxTreeobject);
-					// }
-					// }
 				}
 				break;
 			case QUESTION_CATEGORY:
@@ -1062,10 +1069,8 @@ public class GenericParser {
 					actionsToModify.remove(5);
 					actionsToModify.remove(4);
 				}
-				// System.out.println("NOT TREE OBJECTS FOUND");
 				return genericFunctionParameters(ruleCore, actionsToModify);
 			}
-
 			if (parent != null) {
 				// Finish the line of the condition
 				ruleCore = ruleCore.substring(0, ruleCore.length() - 3);
@@ -1098,6 +1103,9 @@ public class GenericParser {
 							+ ")) \n";
 					break;
 				}
+			} else {
+				// Empty the rule to avoid conflicts
+				ruleCore = "";
 			}
 			genericIndex++;
 		}
@@ -1123,6 +1131,21 @@ public class GenericParser {
 
 				ruleCore += "	$" + this.getTreeObjectName(variableToCalculate.getReference()) + ".setVariableValue('"
 						+ variableToCalculate.getVariable().getName() + "', sol);\n";
+				
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST ( sol1: $sol1 )\");\n";
+				
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST (" + variableToCalculate.getReference().getName()
+						+ ", " + variableToCalculate.getVariable().getName() + ", \" + $sol2 +\")\");\n";
+				
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST (" + variableToCalculate.getReference().getName()
+						+ ", " + variableToCalculate.getVariable().getName() + ", \" + $var1 +\")\");\n";
+				
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST (" + variableToCalculate.getReference().getName()
+						+ ", " + variableToCalculate.getVariable().getName() + ", \" + $var2 +\")\");\n";
+				
+				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST (" + variableToCalculate.getReference().getName()
+						+ ", " + variableToCalculate.getVariable().getName() + ", \" + sol +\")\");\n";
+				
 				ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 						+ variableToCalculate.getReference().getName() + ", "
 						+ variableToCalculate.getVariable().getName() + ", \" + sol +\")\");\n";
@@ -1131,7 +1154,7 @@ public class GenericParser {
 			// So the rule don't fail
 			ruleCore += RulesUtils.getThenRuleString();
 		}
-		return ruleCore;
+		return priorRulePart.concat(ruleCore);
 	}
 
 	/**
@@ -1276,21 +1299,18 @@ public class GenericParser {
 	}
 
 	/**
-	 * Parse the actions of the rule <br>
-	 * Accepts actions with the patterns : <br>
-	 * &nbsp&nbsp&nbsp Var = value | string <br>
-	 * &nbsp&nbsp&nbsp Var = Var mathOperator value <br>
-	 * &nbsp&nbsp&nbsp Var = value mathOperator Var
+	 * Parse the actions of the rule or complete expressions<br>
 	 * 
-	 * @param actions
+	 * @param expressionChain
 	 *            list of expressions to be parsed
+	 * @param extraConditions
+	 *            conditions belonging to a fork
 	 * @return RHS of the rule, and sometimes a modified LHS
 	 * @throws RuleNotImplementedException
 	 */
 	private String parseExpressions(ExpressionChain expressionChain, String extraConditions)
 			throws RuleNotImplementedException {
-		// A.k.a Expression
-		// Action type => cat.score = min(q1.score, q2.score, ...)
+		// Functions
 		if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
 				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
@@ -1300,26 +1320,28 @@ public class GenericParser {
 			case MAX:
 			case MIN:
 			case AVG:
+				// Functions created with the accumulate function of drools
 				return this.maxMinAvgAssignationFunctionAction(expressionChain.getExpressions(), extraConditions);
 			case PMT:
 				return this.pmtAssignationFunctionAction(expressionChain.getExpressions(), extraConditions);
 			}
 
-		} else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)
+		}
+		// Generic calculation
+		else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)
 				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
 						.equals(AvailableOperator.ASSIGNATION))
 				&& (expressionChain.getExpressions().get(2) instanceof ExpressionFunction)) {
 			return this.genericAssignationFunctionAction(expressionChain, extraConditions);
 		}
-		// Generic calculation
+		// Mathematical calculation
 		else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
 				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
 						.equals(AvailableOperator.ASSIGNATION))) {
 			return this.mathAssignationAction(expressionChain, extraConditions);
 		}
-
 		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
 	}
 
@@ -1382,14 +1404,14 @@ public class GenericParser {
 				}
 			} else if (expressions.get(1) instanceof ExpressionFunction) {
 				switch (((ExpressionFunction) expressions.get(1)).getValue()) {
-				case MIN:
+//				case MIN:
 					// return this.genericMinFunction(expressions);
-					break;
+//					break;
 				// In case the IN element has only one value
 				case IN:
 					return this.answersInQuestionCondition(expressions);
-				default:
-					break;
+//				default:
+//					break;
 				}
 			}
 		}
@@ -1448,7 +1470,6 @@ public class GenericParser {
 	 * @return LHS of the rule
 	 */
 	private String questionBetweenAnswersCondition(List<Expression> conditions) {
-
 		// System.out.println("QUESTION BETWEEN");
 		// System.out.println("CONDITIONS: " + conditions);
 
