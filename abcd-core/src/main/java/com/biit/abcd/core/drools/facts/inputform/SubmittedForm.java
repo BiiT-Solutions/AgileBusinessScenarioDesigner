@@ -11,7 +11,8 @@ import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 /**
- * Basic implementation of an Orbeon Form that includes categories and questions.
+ * Basic implementation of an Orbeon Form that includes categories and
+ * questions.
  * 
  */
 public class SubmittedForm implements ISubmittedForm {
@@ -64,16 +65,17 @@ public class SubmittedForm implements ISubmittedForm {
 		return null;
 	}
 
-	public Number getNumberVariableValue(Object treeObject, String varName) {
-		if ((this.formVariables == null) || (this.formVariables.get(treeObject) == null)) {
-			return null;
-		}
-		return (Number) this.formVariables.get(treeObject).get(varName);
-	}
+	// public Number getNumberVariableValue(Object treeObject, String varName) {
+	// if ((this.formVariables == null) || (this.formVariables.get(treeObject)
+	// == null)) {
+	// return null;
+	// }
+	// return (Number) this.formVariables.get(treeObject).get(varName);
+	// }
 
-	public Number getNumberVariableValue(String varName) {
-		return this.getNumberVariableValue(this, varName);
-	}
+	// public Number getNumberVariableValue(String varName) {
+	// return this.getNumberVariableValue(this, varName);
+	// }
 
 	public Object getVariableValue(Object treeObject, String varName) {
 		if ((this.formVariables == null) || (this.formVariables.get(treeObject) == null)) {
@@ -86,21 +88,17 @@ public class SubmittedForm implements ISubmittedForm {
 		return getVariableValue(this, varName);
 	}
 
-	public boolean hasScoreSet(Object treeObject, String varName) {
-		if ((this.formVariables == null) || (this.formVariables.get(treeObject) == null)
-				|| (this.formVariables.get(treeObject).get(varName) == null)) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
-		if (hasScoreSet(this, varName)) {
-			return true;
-		} else {
+		return isScoreSet(this, varName);
+	}
+	
+	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
+		if ((formVariables == null) || (formVariables.get(submittedFormTreeObject) == null)
+				|| (formVariables.get(submittedFormTreeObject).get(varName) == null)) {
 			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -108,14 +106,14 @@ public class SubmittedForm implements ISubmittedForm {
 		this.categories = categories;
 	}
 
-	public void setVariableValue(Object treeObject, String varName, Object value) {
+	public void setVariableValue(Object submittedFormTreeObject, String varName, Object value) {
 		if (formVariables == null) {
 			formVariables = new HashMap<Object, HashMap<String, Object>>();
 		}
-		if (formVariables.get(treeObject) == null) {
-			formVariables.put(treeObject, new HashMap<String, Object>());
+		if (formVariables.get(submittedFormTreeObject) == null) {
+			formVariables.put(submittedFormTreeObject, new HashMap<String, Object>());
 		}
-		formVariables.get(treeObject).put(varName, value);
+		formVariables.get(submittedFormTreeObject).put(varName, value);
 	}
 
 	public void setVariableValue(String varName, Object value) {

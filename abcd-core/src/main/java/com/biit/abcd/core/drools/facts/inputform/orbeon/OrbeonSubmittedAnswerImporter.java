@@ -26,22 +26,22 @@ public class OrbeonSubmittedAnswerImporter extends OrbeonImporter {
 	}
 
 	@Override
+	public IGroup createGroup(ICategory category, String tag) {
+		return new Group(tag);
+	}
+	
+	@Override
+	public IGroup createGroup(IGroup group, String tag) {
+		return new Group(tag);
+	}
+
+	@Override
 	public IQuestion createQuestion(ICategory category, String tag) {
 		return new Question(tag);
 	}
 
 	@Override
-	public IGroup createGroup(ICategory category, String tag) {
-		return new Group(tag);
-	}
-
-	@Override
 	public IQuestion createQuestion(IGroup group, String tag) {
 		return new Question(tag);
-	}
-
-	@Override
-	public IGroup createGroup(IGroup group, String tag) {
-		return new Group(tag);
 	}
 }

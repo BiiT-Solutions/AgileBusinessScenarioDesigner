@@ -31,6 +31,9 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 		formName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
 		formName.setValue(instance.getName());
 		formName.setEnabled(false);
+		// formName.addValidator(new RegexpValidator("[a-zA-Z0-9]",
+		// "ERROR !!!"));
+
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
 		formVersion.setEnabled(false);

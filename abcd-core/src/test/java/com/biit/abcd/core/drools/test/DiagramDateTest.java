@@ -92,7 +92,7 @@ public class DiagramDateTest {
 				.getCategory("Financiën");
 		com.biit.abcd.core.drools.facts.inputform.Question testQuestion1 = (com.biit.abcd.core.drools.facts.inputform.Question) testCat1
 				.getQuestion("Financien.Inkomen");
-		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
+//		Assert.assertEquals(5.0, testQuestion1.getNumberVariableValue("qScore"));
 	}
 
 	/**

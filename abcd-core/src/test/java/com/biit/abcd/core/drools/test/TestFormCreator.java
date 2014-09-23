@@ -50,10 +50,9 @@ public class TestFormCreator {
 		return new String(encoded, encoding);
 	}
 
-	public TestFormCreator(){
-		orbeonImporter = new OrbeonSubmittedAnswerImporter();
+	public TestFormCreator() {
 	}
-	
+
 	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
 		form = new Form("KidsScreen");
@@ -176,15 +175,17 @@ public class TestFormCreator {
 		voeding.addChild(drinks);
 	}
 
-	public DroolsForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+	public DroolsForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException, IOException,
+			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			ActionNotImplementedException {
 		// Generate the drools rules.
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), globalVariables);
 		readStaticSubmittedForm();
 		translateFormCategories();
 		// Test the rules with the submitted form and returns a DroolsForm
-		return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(), rulesGenerator.getGlobalVariables());
+		return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(),
+				rulesGenerator.getGlobalVariables());
 	}
 
 	public Form getForm() {
@@ -255,12 +256,12 @@ public class TestFormCreator {
 		}
 		return null;
 	}
-	
-	public List<GlobalVariable> getGlobalVariables(){
+
+	public List<GlobalVariable> getGlobalVariables() {
 		return globalVariables;
 	}
-	
-	public void setGlobalVariables(List<GlobalVariable> globalVariables){
+
+	public void setGlobalVariables(List<GlobalVariable> globalVariables) {
 		this.globalVariables = globalVariables;
 	}
 }

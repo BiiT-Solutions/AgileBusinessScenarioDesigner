@@ -158,6 +158,7 @@ public class DiagramParser extends GenericParser {
 					switch (questionObject.getAnswerType()) {
 					case RADIO:
 					case MULTI_CHECKBOX:
+//						System.out.println(outLink.getExpressionChain().toString());
 						List<Expression> expressionList = outLink.getExpressionChain().getExpressions();
 						childrenCondition = this.createDroolsRule(new ExpressionChain(expressionList.get(0),
 								new ExpressionOperatorLogic(AvailableOperator.EQUALS), expressionList.get(1)), null,
