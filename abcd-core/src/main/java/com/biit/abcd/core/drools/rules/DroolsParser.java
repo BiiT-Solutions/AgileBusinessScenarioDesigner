@@ -38,20 +38,20 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
 
-public class GenericParser {
+public class DroolsParser {
 
 	private boolean cleaningNeeded = true;
 	private HashMap<TreeObject, String> treeObjectDroolsname;
 
-	public GenericParser() {
-		this.treeObjectDroolsname = new HashMap<TreeObject, String>();
+	public DroolsParser() {
+		treeObjectDroolsname = new HashMap<TreeObject, String>();
 	}
 
 	/**
-	 * Adds condition rows to the rule that manages the assignation of a
-	 * variable in the action<br>
+	 * Adds condition rows to the rule that manages the assignation of a variable in the action<br>
 	 * 
 	 * @param variable
 	 *            variable to be added to the LHS of the rule
@@ -149,10 +149,8 @@ public class GenericParser {
 	}
 
 	/**
-	 * Parse actions like => Score = stringValue || Score = numberValue || Score
-	 * = Function (parameters ...)<br>
-	 * Create drools rule like => setVariableValue(scopeOfVariable,
-	 * variableName, stringVariableValue )
+	 * Parse actions like => Score = stringValue || Score = numberValue || Score = Function (parameters ...)<br>
+	 * Create drools rule like => setVariableValue(scopeOfVariable, variableName, stringVariableValue )
 	 * 
 	 * @param actions
 	 *            the action of the rule being parsed
@@ -205,12 +203,9 @@ public class GenericParser {
 	}
 
 	/**
-	 * Receives a list with the three parameters needed to calculate the PMT
-	 * function, (Rate, Months, Present value)<br>
+	 * Receives a list with the three parameters needed to calculate the PMT function, (Rate, Months, Present value)<br>
 	 * We make use of the Apache POI lib<br>
-	 * For more information:
-	 * http://poi.apache.org/apidocs/org/apache/poi/ss/formula
-	 * /functions/FinanceLib.html
+	 * For more information: http://poi.apache.org/apidocs/org/apache/poi/ss/formula /functions/FinanceLib.html
 	 * 
 	 * @param actions
 	 * @return
@@ -268,9 +263,8 @@ public class GenericParser {
 	}
 
 	/**
-	 * Checks the existence of a binding in drools with the the reference of the
-	 * variable passed If there is no binding, creates a new one (i.e. $var :
-	 * Question() ...)
+	 * Checks the existence of a binding in drools with the the reference of the variable passed If there is no binding,
+	 * creates a new one (i.e. $var : Question() ...)
 	 * 
 	 * @param expValVariable
 	 */
@@ -297,56 +291,85 @@ public class GenericParser {
 		return "";
 	}
 
-	public String createDroolsRule(ExpressionChain conditions, ExpressionChain actions, String extraConditions)
-			throws RuleNotImplementedException {
+	/**
+	 * Main method. Create Drools Rules from rules and diagram
+	 * 
+	 * @param conditions
+	 *            conditions of a rule.
+	 * @param actions
+	 *            actions of a rule.
+	 * @param forkConditions
+	 *            conditions defined as a fork in a digram.
+	 * @return
+	 * @throws RuleNotImplementedException
+	 */
+	public String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException {
+		String parsedText = "";
+		for (Rule rule : rules) {
+			parsedText += createDroolsRule(rule.generateCopy());
+		}
+		return parsedText;
+	}
 
-		// System.out.println("CONDITIONS: " + conditions);
-		// System.out.println("ACTIONS: " + actions);
+	/**
+	 * Main method. Create Drools Rules from rules and diagram
+	 * 
+	 * @param conditions
+	 *            conditions of a rule.
+	 * @param actions
+	 *            actions of a rule.
+	 * @param forkConditions
+	 *            conditions defined as a fork in a digram.
+	 * @return
+	 * @throws RuleNotImplementedException
+	 */
+	private String createDroolsRule(Rule rule) throws RuleNotImplementedException {
 
-		this.treeObjectDroolsname.clear();
-		String ruleCore = "";
-		// ruleCore += "	$droolsForm: DroolsForm() and\n";
+		if (rule == null) {
+			return "";
+		}
+
+		treeObjectDroolsname = new HashMap<TreeObject, String>();
+		String result = "";
 
 		// Condition to avoid putting the drools form in the recursive generic
-		// expressions
-		// It is introduced in everything else
-		if (actions == null) {
-			ruleCore += "	$droolsForm: DroolsForm() \n";
-		} else {
-			if (!(actions.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)) {
-				ruleCore += "	$droolsForm: DroolsForm() \n";
-			}
+		// expressions. It is introduced in everything else
+		if (rule.getActionChain() == null
+				|| !(rule.getActionChain().getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)) {
+			result += "\t$droolsForm: DroolsForm()\n";
 		}
 
-		if (extraConditions != null) {
-			ruleCore += extraConditions;
+		// Obtain conditions if exists.
+		if ((rule.getConditionChain() != null) && (rule.getConditionChain().getExpressions() != null)
+				&& (!rule.getConditionChain().getExpressions().isEmpty())) {
+			result += parseConditions(rule.getConditionChain());
 		}
-		if ((conditions != null) && (conditions.getExpressions() != null) && (!conditions.getExpressions().isEmpty())) {
-			ruleCore += this.parseConditions(conditions);
-		}
-		if ((actions != null) && (actions.getExpressions() != null) && (!actions.getExpressions().isEmpty())) {
-			// Expression rule
-			if (conditions == null) {
-				ruleCore += this.parseExpressions(actions, extraConditions);
-			}
-			// Normal rule
-			else {
-				ruleCore += this.parseActions(actions);
-			}
+		if ((rule.getActionChain() != null) && (rule.getActionChain().getExpressions() != null)
+				&& (!rule.getActionChain().getExpressions().isEmpty())) {
+//			// No conditions: expression rule
+//			if ((rule.getConditionChain() == null) || (rule.getConditionChain().getExpressions() == null)
+//					|| rule.getConditionChain().getExpressions().isEmpty()) {
+//				result += parseExpressions(rule.getActionChain());
+//			}
+//			// Normal rule with actions and conditions. Conditions are obtained before, obtain actions.
+//			else {
+//				result += parseActions(rule.getActionChain());
+//			}
+			
+			result += parseActions(rule.getActionChain());
 		}
 		if (this.cleaningNeeded) {
-			ruleCore = RulesUtils.newRemoveDuplicateLines(ruleCore);
-			ruleCore = RulesUtils.checkForDuplicatedVariables(ruleCore);
-			ruleCore = RulesUtils.removeExtraParenthesis(ruleCore);
+			result = RulesUtils.newRemoveDuplicateLines(result);
+			result = RulesUtils.checkForDuplicatedVariables(result);
+			result = RulesUtils.removeExtraParenthesis(result);
 		}
-		return ruleCore;
+		return result;
 	}
 
 	/**
 	 * Parse conditions like => Question BETWEEN(Answer1, answer2). <br>
 	 * The values inside the between must be always numbers <br>
-	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
-	 * && (getAnswer() <= answer.getValue()))
+	 * Create drools rule like => Question( (getAnswer() >= answer.getValue()) && (getAnswer() <= answer.getValue()))
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
@@ -579,15 +602,15 @@ public class GenericParser {
 	 * 
 	 * @param actions
 	 *            the expression being parsed
-	 * @param extraConditions
+	 * @param forkConditions
 	 * @return the rule
 	 * @throws RuleNotImplementedException
 	 */
-	private String genericAssignationFunctionAction(ExpressionChain actions, String extraConditions)
+	private String genericAssignationFunctionAction(ExpressionChain actions, String forkConditions)
 			throws RuleNotImplementedException {
 		String ruleCore = "";
 		// we have to generate a set of rules defined by the generic variable
-		ruleCore += this.genericRuleSet(actions, extraConditions);
+		ruleCore += this.genericRuleSet(actions, forkConditions);
 		this.cleaningNeeded = false;
 		return ruleCore;
 	}
@@ -769,11 +792,11 @@ public class GenericParser {
 	 * Creates a set of expressions and passes it back to the expression parser
 	 * 
 	 * @param expressions
-	 * @param extraConditions
+	 * @param forkConditions
 	 * @return
 	 * @throws RuleNotImplementedException
 	 */
-	private String genericRuleSet(ExpressionChain expressionChain, String extraConditions)
+	private String genericRuleSet(ExpressionChain expressionChain, String forkConditions)
 			throws RuleNotImplementedException {
 		String ruleCore = "";
 		ExpressionValueGenericCustomVariable genericVarToCalculate = (ExpressionValueGenericCustomVariable) expressionChain
@@ -804,7 +827,7 @@ public class GenericParser {
 				expressionChain.getExpressions().add(0, expValCat);
 
 				try {
-					ruleCore += new ExpressionParser().parse(expressionChain, extraConditions);
+					ruleCore += ExpressionParser.parse(expressionChain, forkConditions);
 					// System.out.println(ruleCore);
 				} catch (ExpressionInvalidException e) {
 					e.printStackTrace();
@@ -852,11 +875,11 @@ public class GenericParser {
 		return this.treeObjectDroolsname.get(treeObject);
 	}
 
-	private String mathAssignationAction(ExpressionChain actions, String extraConditions)
+	private String mathAssignationAction(ExpressionChain actions, String forkConditions)
 			throws RuleNotImplementedException {
 		String ruleCore = "";
-		if (extraConditions != null) {
-			ruleCore += extraConditions;
+		if (forkConditions != null) {
+			ruleCore += forkConditions;
 		}
 		Parser parser = new ExpressionChainParser(actions);
 		ITreeElement result = null;
@@ -903,26 +926,25 @@ public class GenericParser {
 	}
 
 	/**
-	 * Expression parser. An expression is a rule without the condition part in
-	 * the definition, but not in the drools engine.<br>
+	 * Expression parser. An expression is a rule without the condition part in the definition, but not in the drools
+	 * engine.<br>
 	 * Parse actions like => Cat.score = min(q1.score, q2.score, ...) <br>
 	 * Create drools rule like => <br>
 	 * &nbsp&nbsp&nbsp $var : List() from collect( some conditions )<br>
-	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var);
-	 * $sol : min($value) )
+	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var); $sol : min($value) )
 	 * 
 	 * @param actions
 	 *            the expression being parsed
-	 * @param extraConditions
+	 * @param forkConditions
 	 * @return the rule
 	 */
-	private String maxMinAvgAssignationFunctionAction(List<Expression> actions, String extraConditions) {
+	private String maxMinAvgAssignationFunctionAction(List<Expression> actions, String forkConditions) {
 
 		// System.out.println("ACTIONS LIST: " + actions);
 
 		String ruleCore = "";
-		if (extraConditions != null) {
-			ruleCore += extraConditions;
+		if (forkConditions != null) {
+			ruleCore += forkConditions;
 		}
 		// LHS
 		// We will have some expression of type Category.score = (Min | Max |
@@ -1136,10 +1158,9 @@ public class GenericParser {
 
 	/**
 	 * Parse actions like => Score = Score (+|-|/|*) numberValue <br>
-	 * Create drools rule like => setVariableValue(scopeOfVariable,
-	 * variableName, getVariablevalue(variableName)+numberValue ) <br>
-	 * The variables to the right and to the left of the assignation can be
-	 * different (i.e. a = b+1) <br>
+	 * Create drools rule like => setVariableValue(scopeOfVariable, variableName,
+	 * getVariablevalue(variableName)+numberValue ) <br>
+	 * The variables to the right and to the left of the assignation can be different (i.e. a = b+1) <br>
 	 * 
 	 * @param actions
 	 *            the action of the rule being parsed
@@ -1202,7 +1223,7 @@ public class GenericParser {
 
 		// result += "(\n";
 		result += this.processParserResult(leftChain);
-		result += " or\n";
+		result += "or\n";
 		result += this.processParserResult(rightChain);
 		// result += ")\n";
 
@@ -1232,7 +1253,7 @@ public class GenericParser {
 		}
 
 		if (actions.size() > 2) {
-			// Action type => (cat.scoreText = "someText") || (cat.score =
+			// Action type assignation => (cat.scoreText = "someText") || (cat.score =
 			// someValue)
 			if ((actions.get(0) instanceof ExpressionValueCustomVariable)
 					&& (actions.get(1) instanceof ExpressionOperatorMath)
@@ -1241,7 +1262,7 @@ public class GenericParser {
 							|| (actions.get(2) instanceof ExpressionValueNumber) || (actions.get(2) instanceof ExpressionFunction))) {
 				return this.assignationAction(result.getExpressionChain());
 			}
-			// Action type => cat.scoreText = cat.scoreText + 1
+			// Action type update => cat.scoreText = cat.scoreText + 1
 			else if ((actions.get(0) instanceof ExpressionValueCustomVariable)
 					&& (actions.get(1) instanceof ExpressionOperatorMath)
 					&& (((ExpressionOperatorMath) actions.get(1)).getValue().equals(AvailableOperator.ASSIGNATION))
@@ -1269,7 +1290,7 @@ public class GenericParser {
 		// engine. The expression chain has AST (abstract syntax tree) form
 		// *******************************************************************************************************
 		if ((result != null) && (result.getExpressionChain() != null)) {
-			return this.processParserResult(result.getExpressionChain());
+			return processParserResult(result.getExpressionChain());
 		} else {
 			return "";
 		}
@@ -1287,8 +1308,7 @@ public class GenericParser {
 	 * @return RHS of the rule, and sometimes a modified LHS
 	 * @throws RuleNotImplementedException
 	 */
-	private String parseExpressions(ExpressionChain expressionChain, String extraConditions)
-			throws RuleNotImplementedException {
+	private String parseExpressions(ExpressionChain expressionChain) throws RuleNotImplementedException {
 		// A.k.a Expression
 		// Action type => cat.score = min(q1.score, q2.score, ...)
 		if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
@@ -1300,33 +1320,35 @@ public class GenericParser {
 			case MAX:
 			case MIN:
 			case AVG:
-				return this.maxMinAvgAssignationFunctionAction(expressionChain.getExpressions(), extraConditions);
+				return this.maxMinAvgAssignationFunctionAction(expressionChain.getExpressions(), forkConditions);
 			case PMT:
-				return this.pmtAssignationFunctionAction(expressionChain.getExpressions(), extraConditions);
+				return this.pmtAssignationFunctionAction(expressionChain.getExpressions(), forkConditions);
 			}
 
+			// Generic calculation
 		} else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)
 				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
 						.equals(AvailableOperator.ASSIGNATION))
 				&& (expressionChain.getExpressions().get(2) instanceof ExpressionFunction)) {
-			return this.genericAssignationFunctionAction(expressionChain, extraConditions);
+			return this.genericAssignationFunctionAction(expressionChain, forkConditions);
 		}
-		// Generic calculation
+
+		// Mathematical expression
 		else if ((expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
 				&& (expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
 				&& (((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
 						.equals(AvailableOperator.ASSIGNATION))) {
-			return this.mathAssignationAction(expressionChain, extraConditions);
+			return this.mathAssignationAction(expressionChain, forkConditions);
 		}
 
 		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
 	}
 
-	private String pmtAssignationFunctionAction(List<Expression> actions, String extraConditions) {
+	private String pmtAssignationFunctionAction(List<Expression> actions, String forkConditions) {
 		String ruleCore = "";
-		if (extraConditions != null) {
-			ruleCore += extraConditions;
+		if (forkConditions != null) {
+			ruleCore += forkConditions;
 		}
 		ExpressionValueCustomVariable var = (ExpressionValueCustomVariable) actions.get(0);
 		// Check if the reference exists in the rule, if not, it creates a new
@@ -1354,9 +1376,6 @@ public class GenericParser {
 	private String processParserResult(ExpressionChain parsedExpression) {
 		// All the expressions without functions should pass this condition and
 		// some generic functions too
-
-		// System.out.println("PARSED EXPRESSION: " + parsedExpression);
-
 		if ((parsedExpression != null) && (parsedExpression.getExpressions().size() == 3)) {
 			List<Expression> expressions = parsedExpression.getExpressions();
 
@@ -1365,17 +1384,17 @@ public class GenericParser {
 				switch (((ExpressionOperatorLogic) expressions.get(1)).getValue()) {
 				case EQUALS:
 				case NOT_EQUALS:
-					return this.equalsNotEqualsOperator(expressions,
+					return equalsNotEqualsOperator(expressions,
 							((ExpressionOperatorLogic) expressions.get(1)).getValue());
 				case AND:
-					return this.andOperator(expressions);
+					return andOperator(expressions);
 				case OR:
-					return this.orOperator(expressions);
+					return orOperator(expressions);
 				case GREATER_EQUALS:
 				case GREATER_THAN:
 				case LESS_EQUALS:
 				case LESS_THAN:
-					return this.questionGeGtLeLtAnswer(expressions,
+					return questionGeGtLeLtAnswer(expressions,
 							((ExpressionOperatorLogic) expressions.get(1)).getValue());
 				default:
 					break;
@@ -1441,8 +1460,7 @@ public class GenericParser {
 	/**
 	 * Parse conditions like => Question BETWEEN(Answer1, answer2). <br>
 	 * The values inside the between must be always numbers <br>
-	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
-	 * && (getAnswer() <= answer.getValue()))
+	 * Create drools rule like => Question( (getAnswer() >= answer.getValue()) && (getAnswer() <= answer.getValue()))
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
@@ -1900,8 +1918,7 @@ public class GenericParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'),
-	 * getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param expressionOperatorLogic
 	 * 
@@ -1961,8 +1978,7 @@ public class GenericParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'),
-	 * getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
