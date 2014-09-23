@@ -57,6 +57,7 @@
 		<c3p0.version>0.9.1.2</c3p0.version>
 		<gson.version>2.3</gson.version>
 		<h2.version>1.4.181</h2.version>
+		<ehcache.version>2.6.9</ehcache.version>
 	</properties>
 
 	<dependencies>
