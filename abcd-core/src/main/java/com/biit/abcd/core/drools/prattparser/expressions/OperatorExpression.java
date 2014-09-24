@@ -13,15 +13,15 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 public class OperatorExpression implements ITreeElement {
 
 	private final ITreeElement leftElement;
-	private final ExpressionTokenType operator;
 	private final ITreeElement rightElement;
-	private final Expression expression;
+	private final ExpressionTokenType operatorTokenType;
+	private final Expression operatorExpression;
 
 	public OperatorExpression(ITreeElement left, ExpressionToken operator, ITreeElement right) {
 		this.leftElement = left;
-		this.expression = operator.getExpression();
-		this.operator = operator.getType();
 		this.rightElement = right;
+		this.operatorExpression = operator.getExpression();
+		this.operatorTokenType = operator.getType();
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class OperatorExpression implements ITreeElement {
 	}
 
 	public ExpressionTokenType getOperator() {
-		return this.operator;
+		return this.operatorTokenType;
 	}
 
 	public ITreeElement getRightElement() {
@@ -42,13 +42,13 @@ public class OperatorExpression implements ITreeElement {
 	}
 
 	public Expression getExpression() {
-		return this.expression;
+		return this.operatorExpression;
 	}
 
 	@Override
 	public ExpressionChain getExpressionChain() {
 		ExpressionChain expChain = new ExpressionChain(this.leftElement.getExpressionChain());
-		expChain.addExpressions(this.expression);
+		expChain.addExpressions(this.operatorExpression);
 		expChain.addExpressions(this.rightElement.getExpressionChain());
 		return expChain;
 	}

@@ -30,17 +30,20 @@ public class Rule extends StorableObject implements INameAttribute {
 	private ExpressionChain actions;
 
 	public Rule() {
+		super();
 		setCondition(new ExpressionChain());
 		setActions(new ExpressionChain());
 	}
 
 	public Rule(String name) {
+		super();
 		setCondition(new ExpressionChain());
 		setActions(new ExpressionChain());
 		setName(name);
 	}
 
 	public Rule(String name, ExpressionChain conditions, ExpressionChain actions) {
+		super();
 		setCondition(conditions);
 		setActions(actions);
 		setName(name);
@@ -49,6 +52,20 @@ public class Rule extends StorableObject implements INameAttribute {
 	// public ExpressionChain getCondition() {
 	// return condition;
 	// }
+
+	/**
+	 * Add more conditions to the existing one (with 'AND' operator)
+	 */
+	public void addConditions(ExpressionChain extraConditions) {
+		if (extraConditions != null) {
+			if (condition.getExpressions().isEmpty()) {
+				condition.getExpressions().addAll(extraConditions.getExpressions());
+			} else {
+				condition.getExpressions().add(new ExpressionOperatorLogic(AvailableOperator.AND));
+				condition.getExpressions().addAll(extraConditions.getExpressions());
+			}
+		}
+	}
 
 	public List<Expression> getConditions() {
 		return condition.getExpressions();
@@ -101,5 +118,16 @@ public class Rule extends StorableObject implements INameAttribute {
 		innerStorableObjects.add(actions);
 		innerStorableObjects.addAll(actions.getAllInnerStorableObjects());
 		return innerStorableObjects;
+	}
+
+	public Rule generateCopy() {
+		Rule copy = new Rule();
+		if (name != null) {
+			copy.name = new String(name);
+		}
+		copy.setCondition(this.condition.generateCopy());
+		copy.setActions(this.actions.generateCopy());
+
+		return copy;
 	}
 }

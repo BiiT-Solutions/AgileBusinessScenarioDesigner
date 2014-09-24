@@ -1,8 +1,8 @@
 package com.biit.abcd.core.drools.prattparser.parselets;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
-import com.biit.abcd.core.drools.prattparser.ParseException;
-import com.biit.abcd.core.drools.prattparser.Parser;
+import com.biit.abcd.core.drools.prattparser.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.Precedence;
 import com.biit.abcd.core.drools.prattparser.expressions.AssignExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.NameExpression;
@@ -16,11 +16,11 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
  */
 public class AssignParselet implements InfixParselet {
 
-	public ITreeElement parse(Parser parser, ITreeElement left, ExpressionToken token) {
+	public ITreeElement parse(PrattParser parser, ITreeElement left, ExpressionToken token) {
 		ITreeElement right = parser.parseExpression(Precedence.ASSIGNMENT - 1);
 
 		if (!(left instanceof NameExpression)) {
-			throw new ParseException("The left-hand side of an assignment must be a name.");
+			throw new PrattParserException("The left-hand side of an assignment must be a name.");
 		}
 
 		return new AssignExpression(((NameExpression) left), right);

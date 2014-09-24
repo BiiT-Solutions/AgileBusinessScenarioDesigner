@@ -1,44 +1,229 @@
 package com.biit.abcd.core.drools.rules;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.persistence.entity.Category;
+import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Group;
+import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.form.TreeObject;
 
-/**
- * Known restrictions: - The questions'/groups'/categories' score to set and
- * calculate can only be separated by one level (You can't calculate the minimum
- * score of the questions belonging to a group and set it to a category)
- *
- */
-public class ExpressionParser extends GenericParser {
+public class ExpressionParser {
 
-	public ExpressionParser() {
+	private ExpressionParser() {
 		super();
 	}
 
-	public String parse(ExpressionChain expressionChain, String extraConditions) throws ExpressionInvalidException,
-			RuleNotImplementedException {
-		String newRule = "";
+	public static List<DroolsRule> parse(ExpressionChain expressionChain, ExpressionChain extraConditions)
+			throws ExpressionInvalidException, RuleNotImplementedException {
 		if (expressionChain != null) {
+			// If the expression is composed by a generic variable, we have to
+			// generate the set of rules that represents the generic
 			if (expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
-				newRule += createDroolsRule(null, expressionChain, extraConditions);
+				return createExpressionRuleSet(expressionChain, extraConditions);
 			} else {
-				String expressionName = expressionChain.getName();
-				if (expressionName == null) {
-					expressionName = UUID.randomUUID().toString().replaceAll("-", "");
-				}
-				RuleChecker.checkExpressionValid(expressionChain);
-				newRule += RulesUtils.getStartRuleString(expressionName);
-				newRule += RulesUtils.getAttributes();
-				newRule += RulesUtils.getWhenRuleString();
-				newRule += createDroolsRule(null, expressionChain, extraConditions);
-				newRule += RulesUtils.getEndRuleString();
+				return Arrays.asList(createExpressionRule(expressionChain, extraConditions));
 			}
 		}
-		return newRule;
+		return null;
+	}
+
+	/**
+	 * Transforms an expression into a rule
+	 * 
+	 * @param expressionChain
+	 * @param extraConditions
+	 * @return
+	 */
+	private static DroolsRule createExpressionRule(ExpressionChain expressionChain, ExpressionChain extraConditions) {
+		DroolsRule droolsRule = new DroolsRule();
+		droolsRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
+		if (extraConditions != null) {
+			droolsRule.addConditions(extraConditions.generateCopy());
+		}
+		// IF the expression chain contains generic variables, we have to unwrap
+		// them
+		if (checkForGenericVariables(expressionChain)) {
+			ExpressionChain expressionChainUnwrapped = unwrapGenericVariables(expressionChain);
+			if (expressionChainUnwrapped != null) {
+				droolsRule.setActions(expressionChainUnwrapped);
+			} else {
+				// We don't want to create a rule if there is no actions
+				return null;
+			}
+		} else {
+			droolsRule.setActions(expressionChain.generateCopy());
+		}
+		return droolsRule;
+	}
+
+	private static List<DroolsRule> createExpressionRuleSet(ExpressionChain expressionChain,
+			ExpressionChain extraConditions) {
+		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
+
+		ExpressionValueGenericCustomVariable expressionValueGenericVariable = (ExpressionValueGenericCustomVariable) expressionChain
+				.getExpressions().get(0);
+		List<TreeObject> treeObjects = new ArrayList<TreeObject>();
+		switch (expressionValueGenericVariable.getType()) {
+		case CATEGORY:
+			treeObjects.addAll(expressionValueGenericVariable.getVariable().getForm().getChildren());
+			break;
+		case GROUP:
+			for (TreeObject category : expressionValueGenericVariable.getVariable().getForm().getChildren()) {
+				treeObjects.addAll(category.getAll(Group.class));
+			}
+			break;
+		case QUESTION_GROUP:
+		case QUESTION_CATEGORY:
+			// We only support Categories and groups on the left part of the
+			// generic assignation
+			break;
+		}
+		// For each category, we generate the expression to create a new rule
+		if (treeObjects != null && !treeObjects.isEmpty()) {
+			for (TreeObject category : treeObjects) {
+				ExpressionChain expressionChainCopy = expressionChain.generateCopy();
+				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
+						expressionValueGenericVariable.getVariable());
+				// Remove the generic
+				expressionChainCopy.getExpressions().remove(0);
+				// Add the specific
+				expressionChainCopy.getExpressions().add(0, expValCat);
+				// Add to the rule set
+				droolsRules.add(createExpressionRule(expressionChainCopy, extraConditions));
+			}
+		} else {
+			// We don't want to create a rule if there is no children
+			return null;
+		}
+		return droolsRules;
+	}
+
+	/**
+	 * Checks if there are generic variables at the right side of the
+	 * assignation expression
+	 * 
+	 * @return
+	 */
+	private static boolean checkForGenericVariables(ExpressionChain expressionChain) {
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionValueGenericCustomVariable) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * We have to substitute the generic for the list of tree objects that
+	 * represent
+	 * 
+	 * @param expressionChain
+	 * @return
+	 */
+	private static ExpressionChain unwrapGenericVariables(ExpressionChain expressionChain) {
+		// // To avoid modifying the original expression
+		// ExpressionChain expressionChainCopy = expressionChain.generateCopy();
+		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChain
+				.getExpressions().get(0);
+		// The rule is different if the variable to assign is a Form, a Category
+		// a Group or a Question
+		TreeObject leftTreeObject = expressionValueLeftTreeObject.getReference();
+		ExpressionChain generatedExpressionChain = new ExpressionChain();
+		for (int originalExpressionIndex = 0; originalExpressionIndex < expressionChain.getExpressions().size(); originalExpressionIndex++) {
+			Expression expression = expressionChain.getExpressions().get(originalExpressionIndex);
+			if (expression instanceof ExpressionValueGenericCustomVariable) {
+				// The generic variable being analyzed
+				ExpressionValueGenericCustomVariable expressionValueGenericVariable = (ExpressionValueGenericCustomVariable) expression;
+				List<TreeObject> treeObjects = null;
+				CustomVariable customVariableOfGeneric = expressionValueGenericVariable.getVariable();
+				switch (expressionValueGenericVariable.getType()) {
+				case CATEGORY:
+					if (leftTreeObject instanceof Form) {
+						treeObjects = leftTreeObject.getAll(Category.class);
+					}
+					break;
+				case GROUP:
+					if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
+						// We only want the questions for the category
+						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+							treeObjects = new ArrayList<TreeObject>();
+							for (TreeObject child : leftTreeObject.getChildren()) {
+								if (child instanceof Group) {
+									treeObjects.add(child);
+								}
+							}
+						}
+					}
+					break;
+				case QUESTION_CATEGORY:
+					if (leftTreeObject instanceof Category) {
+						// We only want the questions for the category
+						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+							treeObjects = new ArrayList<TreeObject>();
+							for (TreeObject child : leftTreeObject.getChildren()) {
+								if (child instanceof Question) {
+									treeObjects.add(child);
+								}
+							}
+						}
+					}
+					break;
+				case QUESTION_GROUP:
+					if (leftTreeObject instanceof Group) {
+						// We only want the questions for the group
+						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+							treeObjects = new ArrayList<TreeObject>();
+							for (TreeObject child : leftTreeObject.getChildren()) {
+								if (child instanceof Question) {
+									treeObjects.add(child);
+								}
+							}
+						}
+					}
+					break;
+				}
+				// We have to create a CustomVariable for each treeObject found
+				// and add it to the expression
+				if ((treeObjects != null) && (!treeObjects.isEmpty())) {
+					// int treeObjectIndex = 0;
+					for (TreeObject treeObject : treeObjects) {
+						generatedExpressionChain.addExpression(new ExpressionValueCustomVariable(treeObject,
+								customVariableOfGeneric));
+						// if (treeObjectIndex < treeObjects.size() - 1) {
+						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
+						// }
+						// treeObjectIndex++;
+					}
+				}
+			} else {
+				// if it is not a generic value, we copy the same value
+				if (!((expression instanceof ExpressionSymbol) && (((ExpressionSymbol) expression).getValue()
+						.equals(AvailableSymbol.COMMA)))) {
+					generatedExpressionChain.addExpression(expression);
+				}
+			}
+		}
+		// Remove the last comma if there is one
+		// Condition to avoid errors in the parser
+		if (((generatedExpressionChain.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2) instanceof ExpressionSymbol) && (((ExpressionSymbol) generatedExpressionChain
+				.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2)).getValue()
+				.equals(AvailableSymbol.COMMA)))) {
+			generatedExpressionChain.getExpressions().remove(generatedExpressionChain.getExpressions().size() - 2);
+		}
+
+		return generatedExpressionChain;
 	}
 }

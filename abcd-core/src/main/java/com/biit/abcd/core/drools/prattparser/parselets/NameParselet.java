@@ -1,7 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.parselets;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
-import com.biit.abcd.core.drools.prattparser.Parser;
+import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.expressions.NameExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 /**
@@ -9,7 +9,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
  */
 public class NameParselet implements PrefixParselet {
 	@Override
-	public ITreeElement parse(Parser parser, ExpressionToken token) {
+	public ITreeElement parse(PrattParser parser, ExpressionToken token) {
 		return new NameExpression(token);
 	}
 }

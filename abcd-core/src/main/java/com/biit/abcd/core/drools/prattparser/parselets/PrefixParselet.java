@@ -1,7 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.parselets;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
-import com.biit.abcd.core.drools.prattparser.Parser;
+import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 
 
@@ -17,5 +17,5 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
  *
  */
 public interface PrefixParselet {
-	ITreeElement parse(Parser parser, ExpressionToken token);
+	ITreeElement parse(PrattParser parser, ExpressionToken token);
 }

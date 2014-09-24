@@ -1,7 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.parselets;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
-import com.biit.abcd.core.drools.prattparser.Parser;
+import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 /**
@@ -16,7 +16,7 @@ public class PostfixOperatorParselet implements InfixParselet {
 	}
 
 	@Override
-	public ITreeElement parse(Parser parser, ITreeElement left, ExpressionToken token) {
+	public ITreeElement parse(PrattParser parser, ITreeElement left, ExpressionToken token) {
 		return new PostfixExpression(left, token);
 	}
 

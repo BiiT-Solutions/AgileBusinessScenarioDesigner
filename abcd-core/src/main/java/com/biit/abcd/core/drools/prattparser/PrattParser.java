@@ -17,7 +17,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
 
-public class Parser {
+public class PrattParser {
 
 	private final Iterator<ExpressionToken> mTokens;
 	private final List<ExpressionToken> mRead = new ArrayList<ExpressionToken>();
@@ -25,7 +25,7 @@ public class Parser {
 	private final Map<ExpressionTokenType, InfixParselet> mInfixParselets = new HashMap<ExpressionTokenType, InfixParselet>();
 	private final HashMap<String, ExpressionTokenType> mPunctuators = new HashMap<String, ExpressionTokenType>();
 
-	public Parser(List<Expression> tokens) {
+	public PrattParser(List<Expression> tokens) {
 		this.mTokens = this.preParsing(tokens);
 	}
 
@@ -115,7 +115,7 @@ public class Parser {
 		// System.out.println("TOKEN CONSUMED 2: " + prefix);
 
 		if (prefix == null) {
-			throw new ParseException("Could not parse \"" + token.toString() + "\".");
+			throw new PrattParserException("Could not parse \"" + token.toString() + "\".");
 		}
 
 		ITreeElement left = prefix.parse(this, token);

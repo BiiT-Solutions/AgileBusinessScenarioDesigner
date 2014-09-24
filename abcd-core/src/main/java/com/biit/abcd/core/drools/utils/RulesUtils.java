@@ -5,11 +5,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+
 public class RulesUtils {
 
-	public static String getStartRuleString(String name) {
-		return "rule \"" + name + "_" + getUniqueId() + "\"\n";
-		// return "rule \"" +getUniqueId() + "\"\n";
+	public static String getRuleName(String name, ExpressionChain extraConditions) {
+		if (extraConditions == null) {
+			return "rule \"" + name + "_" + getUniqueId() + "\"\n";
+		} else {
+			return "rule \"" + name + "_" + extraConditions.getExpression().replaceAll("[^a-zA-Z0-9_]", "_") + "_"
+					+ getUniqueId() + "\"\n";
+		}
 	}
 
 	public static String getWhenRuleString() {
@@ -25,7 +31,7 @@ public class RulesUtils {
 	}
 
 	public static String getEndRuleString() {
-		return "\nend\n";
+		return "end\n\n";
 	}
 
 	private static String getUniqueId() {
@@ -33,8 +39,7 @@ public class RulesUtils {
 	}
 
 	/**
-	 * Due to the independent parsing of the conditions of the rule, sometimes
-	 * the algorithm generates repeated rules <br>
+	 * Due to the independent parsing of the conditions of the rule, sometimes the algorithm generates repeated rules <br>
 	 * This method the lines that are equals in the rule<br>
 	 * It should be used before sending the rules to the engine <br>
 	 * 
@@ -93,8 +98,7 @@ public class RulesUtils {
 	}
 
 	/**
-	 * Due to the independent parsing of the conditions of the rule, sometimes
-	 * the algorithm generates repeated rules <br>
+	 * Due to the independent parsing of the conditions of the rule, sometimes the algorithm generates repeated rules <br>
 	 * This method the lines that are equals in the rule<br>
 	 * It should be used before sending the rules to the engine <br>
 	 * 

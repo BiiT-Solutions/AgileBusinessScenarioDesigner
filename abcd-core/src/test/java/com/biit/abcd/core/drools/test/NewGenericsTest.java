@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
@@ -83,74 +84,110 @@ public class NewGenericsTest extends KidsFormCreator {
 				CustomVariableType.NUMBER, CustomVariableScope.QUESTION);
 
 		// Generic expression (Generic category = generic category questions)
-		ExpressionChain expression = new ExpressionChain("genericCategoryQuestions",
+		ExpressionChain expression1 = new ExpressionChain("genericCategoryQuestions",
 				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
 						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression);
+		getForm().getExpressionChain().add(expression1);
 
 		// Generic expression (Generic group = generic group questions)
-		expression = new ExpressionChain("genericGroupQuestions", new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression);
+		ExpressionChain expression2 = new ExpressionChain("genericGroupQuestions",
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChain().add(expression2);
 
 		// Generic expression (Generic category = generic category groups)
-		expression = new ExpressionChain("genericCategoryGroups", new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression);
+		ExpressionChain expression3 = new ExpressionChain("genericCategoryGroups",
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChain().add(expression3);
 
 		// Generic expression (Form = generic categories)
-		expression = new ExpressionChain("formGenericCategories", new ExpressionValueCustomVariable(getForm(),
-				formCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
-				AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY,
-				categoryCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression);
-
-		// Generic expression with several generics (Generic category =
-		// generic
-		// category groups, generic category questions)
-		expression = new ExpressionChain("genericCategoryGroupsQuestions", new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
+		ExpressionChain expression4 = new ExpressionChain("formGenericCategories", new ExpressionValueCustomVariable(
+				getForm(), formCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression);
+		getForm().getExpressionChain().add(expression4);
 
 		// Generic expression with several generics (Generic category =
-		// generic
-		// category groups, generic category questions)
-		expression = new ExpressionChain("genericCategoryQuestionsGroups",
+		// generic category groups, generic category questions)
+		ExpressionChain expression5 = new ExpressionChain("genericCategoryGroupsQuestions",
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
+						questionCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChain().add(expression5);
+
+		// Generic expression with several generics (Generic category =
+		// generic category groups, generic category questions)
+		ExpressionChain expression6 = new ExpressionChain("genericCategoryQuestionsGroups",
 				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
 						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
 						groupCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression);
+		getForm().getExpressionChain().add(expression6);
 
 		// Generic expression with several generics (Generic group = generic
 		// groups, generic group questions)
-		expression = new ExpressionChain("genericGroupQuestionsGroups", new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.GROUP, categoryCustomVariable), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression);
+		ExpressionChain expression7 = new ExpressionChain("genericGroupQuestionsGroups",
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, categoryCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChain().add(expression7);
 
 		// Creation of a simple diagram to load the table rule
-		getForm().addDiagram(createExpressionsSubdiagram());
+		getForm().addDiagram(createSimpleTableDiagram());
+	}
+
+	private Diagram createSimpleTableDiagram() {
+		Diagram mainDiagram = new Diagram("main");
+
+		DiagramSource diagramStartNode = new DiagramSource();
+		diagramStartNode.setJointjsId(IdGenerator.createId());
+		diagramStartNode.setType(DiagramObjectType.SOURCE);
+		Node nodeSource = new Node(diagramStartNode.getJointjsId());
+
+		DiagramChild subDiagramExpressionNode = new DiagramChild();
+		subDiagramExpressionNode.setChildDiagram(createExpressionsSubdiagram());
+		subDiagramExpressionNode.setJointjsId(IdGenerator.createId());
+		subDiagramExpressionNode.setType(DiagramObjectType.DIAGRAM_CHILD);
+		Node nodeTable = new Node(subDiagramExpressionNode.getJointjsId());
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+
+		DiagramLink startExpression = new DiagramLink(nodeSource, nodeTable);
+		startExpression.setJointjsId(IdGenerator.createId());
+		startExpression.setType(DiagramObjectType.LINK);
+		DiagramLink expressionEnd = new DiagramLink(nodeTable, nodeSink);
+		expressionEnd.setJointjsId(IdGenerator.createId());
+		expressionEnd.setType(DiagramObjectType.LINK);
+
+		mainDiagram.addDiagramObject(diagramStartNode);
+		mainDiagram.addDiagramObject(subDiagramExpressionNode);
+		mainDiagram.addDiagramObject(diagramEndNode);
+		mainDiagram.addDiagramObject(startExpression);
+		mainDiagram.addDiagramObject(expressionEnd);
+
+		return mainDiagram;
 	}
 
 	private Diagram createExpressionsSubdiagram() {

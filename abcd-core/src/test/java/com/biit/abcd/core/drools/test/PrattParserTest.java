@@ -3,9 +3,9 @@ package com.biit.abcd.core.drools.test;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.prattparser.ExpressionChainParser;
-import com.biit.abcd.core.drools.prattparser.ParseException;
-import com.biit.abcd.core.drools.prattparser.Parser;
+import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
+import com.biit.abcd.core.drools.prattparser.PrattParser;
+import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementPrintVisitor;
 import com.biit.abcd.persistence.entity.Answer;
@@ -201,14 +201,14 @@ public class PrattParserTest {
 	 * Parses the given chunk of code and returns pretty-printed result.
 	 */
 	public static String parse(ExpressionChain source) {
-		Parser parser = new ExpressionChainParser(source);
+		PrattParser parser = new ExpressionChainPrattParser(source);
 		TreeElementPrintVisitor treePrint = null;
 		try {
 			ITreeElement resultVisitor = parser.parseExpression();
 			treePrint = new TreeElementPrintVisitor();
 			resultVisitor.accept(treePrint);
 
-		} catch (ParseException ex) {
+		} catch (PrattParserException ex) {
 			System.out.println(" Error: " + ex.getMessage());
 		}
 		if (treePrint != null) {
@@ -223,10 +223,10 @@ public class PrattParserTest {
 	 * pretty-printed result.
 	 */
 	public static String parseDrools(ExpressionChain source) {
-		Parser parser = new ExpressionChainParser(source);
+		PrattParser parser = new ExpressionChainPrattParser(source);
 		try {
 			return parser.parseExpression().getExpressionChain().toString();
-		} catch (ParseException ex) {
+		} catch (PrattParserException ex) {
 			System.out.println("Error: " + ex.getMessage());
 		}
 		return "";

@@ -12,11 +12,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 public class NameExpression implements ITreeElement {
 
 	private final String name;
-	private final Expression variable;
+	private final Expression expression;
 
 	public NameExpression(ExpressionToken variable) {
 		this.name = variable.toString();
-		this.variable = variable.getExpression();
+		this.expression = variable.getExpression();
 	}
 
 	public String getName() {
@@ -30,6 +30,6 @@ public class NameExpression implements ITreeElement {
 
 	@Override
 	public ExpressionChain getExpressionChain() {
-		return new ExpressionChain(this.variable);
+		return new ExpressionChain(this.expression);
 	}
 }

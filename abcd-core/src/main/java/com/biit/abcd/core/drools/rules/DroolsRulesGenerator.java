@@ -64,7 +64,7 @@ public class DroolsRulesGenerator {
 				DiagramParser diagParser = new DiagramParser();
 				// Parse the root diagrams
 				for (Diagram diagram : rootDiagrams) {
-					this.rules += diagParser.parse(diagram);
+					this.rules += diagParser.getDroolsRulesAsText(diagram);
 				}
 			}
 		}

@@ -17,14 +17,14 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
  * Extends the generic Parser class with support for parsing the actual Bantam
  * grammar.
  */
-public class ExpressionChainParser extends Parser {
+public class ExpressionChainPrattParser extends PrattParser {
 
-	public ExpressionChainParser(ExpressionChain expressionChain) {
+	public ExpressionChainPrattParser(ExpressionChain expressionChain) {
 		super(standardizeExpressions(expressionChain.getExpressions()));
 		this.registerParselets();
 	}
 
-	public ExpressionChainParser(List<Expression> expressions) {
+	public ExpressionChainPrattParser(List<Expression> expressions) {
 		super(standardizeExpressions(expressions));
 		this.registerParselets();
 	}
@@ -41,6 +41,9 @@ public class ExpressionChainParser extends Parser {
 		this.register(ExpressionTokenType.BETWEEN, new CallParselet());
 		this.register(ExpressionTokenType.IN, new CallParselet());
 		this.register(ExpressionTokenType.MIN, new CallParselet());
+		this.register(ExpressionTokenType.MAX, new CallParselet());
+		this.register(ExpressionTokenType.AVG, new CallParselet());
+		this.register(ExpressionTokenType.SUM, new CallParselet());
 		this.register(ExpressionTokenType.PMT, new CallParselet());
 
 		// Register the simple operator parselets.
