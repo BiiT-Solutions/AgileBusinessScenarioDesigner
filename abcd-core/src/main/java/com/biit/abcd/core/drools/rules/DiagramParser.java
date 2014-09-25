@@ -20,9 +20,13 @@ import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
@@ -134,13 +138,15 @@ public class DiagramParser {
 		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
 			ExpressionChain expressionOfLinkCopy = outLink.getExpressionChain().generateCopy();
 
+			System.out.println("EXPRESSION LINK OF THE FORK: " + expressionOfLinkCopy);
+
 			// Add the previous conditions in case there are nested forks
 			if ((previousConditions != null) && (previousConditions.getExpressions() != null)
 					&& !(previousConditions.getExpressions().isEmpty())) {
 				expressionOfLinkCopy.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 				expressionOfLinkCopy.addExpressions(previousConditions.getExpressions());
 			}
-			
+
 			TreeObject treeObject = treeObjectOfForkNode.getReference();
 			if ((treeObject instanceof Question)) {
 				Question questionObject = (Question) treeObject;
@@ -158,14 +164,35 @@ public class DiagramParser {
 					// flows.
 					break;
 				case INPUT:
-					// In case of input we only have to copy the link, which
-					// we have done at the beginning of the loop.
+					// In case of input we only have to add a copy of the link,
+					// which
+					// we do at the bottom of the loop.
 					break;
 				}
 			}
 			// Add the condition of the fork path to the array of conditions
 			forkConditions.add(expressionOfLinkCopy);
 		}
+
+		for (ExpressionChain forkExpressionChain : forkConditions) {
+			// Only one condition implies empty link "others"
+			// We have to negate the other conditions of the fork
+			if (forkExpressionChain.getExpressions().size() == 1) {
+				ExpressionChain resultOfNegation = new ExpressionChain();
+				for (ExpressionChain forkExpressionChainToNegate : forkConditions) {
+					if (!forkExpressionChainToNegate.equals(forkExpressionChain)) {
+						resultOfNegation.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+						resultOfNegation.addExpression(forkExpressionChainToNegate);
+						resultOfNegation.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+						resultOfNegation.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+					}
+				}
+				// Remove the last AND
+				resultOfNegation.getExpressions().remove(resultOfNegation.getExpressions().size() - 1);
+				System.out.println("RESULT OF NEGATION: " + resultOfNegation);
+			}
+		}
+
 		return forkConditions;
 	}
 

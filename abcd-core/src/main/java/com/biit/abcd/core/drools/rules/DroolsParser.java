@@ -249,6 +249,12 @@ public class DroolsParser {
 		String parsedText = "";
 
 		for (Rule rule : rules) {
+			
+			System.out.println("RULE CONDITIONS: " + rule.getConditionChain().getExpression());
+			System.out.println("RULE CONDITIONS: " + rule.getConditionChain());
+			System.out.println("RULE ACTIONS: " + rule.getActionChain().getExpression());
+			System.out.println("RULE ACTIONS: " + rule.getActionChain());
+			
 			if (rule != null) {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
@@ -714,11 +720,6 @@ public class DroolsParser {
 				if (variableToCalculate != null) {
 					ruleCore += "	$" + getTreeObjectName(variableToCalculate.getReference())
 							+ ".setVariableValue('" + variableToCalculate.getVariable().getName() + "', $sol);\n";
-
-					ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"TEST ("
-							+ variableToCalculate.getReference().getName() + ", "
-							+ variableToCalculate.getVariable().getName() + ", \" + $var +\")\");\n";
-
 					ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 							+ variableToCalculate.getReference().getName() + ", "
 							+ variableToCalculate.getVariable().getName() + ", \" + $sol +\")\");\n";
