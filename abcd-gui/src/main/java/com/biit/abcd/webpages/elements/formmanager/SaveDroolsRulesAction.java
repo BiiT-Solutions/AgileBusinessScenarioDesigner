@@ -38,11 +38,12 @@ public class SaveDroolsRulesAction implements SaveAction {
 			String rules = droolsExporter.getDroolRules(UserSessionHandler.getFormController().getForm(),
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
 			filesToZip.add(rules);
-			namesOfFiles.add("droolsRules.drl");
+			Integer formVersion = UserSessionHandler.getFormController().getForm().getVersion();
+			namesOfFiles.add("droolsRules_v" + formVersion + ".drl");
 			String variables = JSonConverter.convertGlobalVariableListToJson(UserSessionHandler
 					.getGlobalVariablesController().getGlobalVariables());
 			filesToZip.add(variables);
-			namesOfFiles.add("globalVariables.json");
+			namesOfFiles.add("globalVariables_v" + formVersion + ".json");
 
 			try {
 				return ZipUtils.createZipFile(filesToZip, namesOfFiles);

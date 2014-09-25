@@ -59,6 +59,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 		this.infixLeft(ExpressionTokenType.MINUS, Precedence.SUM);
 		this.infixLeft(ExpressionTokenType.MULTIPLICATION, Precedence.PRODUCT);
 		this.infixLeft(ExpressionTokenType.DIVISION, Precedence.PRODUCT);
+		this.infixLeft(ExpressionTokenType.MODULE, Precedence.PRODUCT);
 		this.infixLeft(ExpressionTokenType.AND, Precedence.LOGIC_AND);
 		this.infixLeft(ExpressionTokenType.OR, Precedence.LOGIC_OR);
 		this.infixLeft(ExpressionTokenType.EQUALS, Precedence.COMP_EQ_NEQ);

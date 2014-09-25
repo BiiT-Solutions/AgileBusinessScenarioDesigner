@@ -18,7 +18,8 @@ public class Precedence {
   public static final int SUM         = 7;
   public static final int PRODUCT     = 8;
   public static final int EXPONENT    = 9;
-  public static final int PREFIX      = 10;
-  public static final int POSTFIX     = 11;
-  public static final int CALL        = 12;
+  public static final int SQRT_ABS    = 10;
+  public static final int PREFIX      = 11;
+  public static final int POSTFIX     = 12;
+  public static final int CALL        = 13;
 }

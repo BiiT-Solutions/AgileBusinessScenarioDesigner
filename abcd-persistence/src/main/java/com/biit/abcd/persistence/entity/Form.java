@@ -50,7 +50,7 @@ public class Form extends BaseForm {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	//Cannot be JOIN
+	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy(value = "name ASC")
 	private Set<CustomVariable> customVariables;
@@ -63,7 +63,7 @@ public class Form extends BaseForm {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	//Cannot be JOIN
+	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy(value = "name ASC")
 	private Set<Rule> rules;
@@ -198,7 +198,7 @@ public class Form extends BaseForm {
 	 * @return the custom variable or null if not found
 	 */
 	public CustomVariable getCustomVariable(String name, String scope) {
-		for (CustomVariable customVariable : this.getCustomVariables()) {
+		for (CustomVariable customVariable : getCustomVariables()) {
 			if (customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
 				return customVariable;
 			}
@@ -228,7 +228,8 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root
+	 * diagram.
 	 * 
 	 * @param diagram
 	 */

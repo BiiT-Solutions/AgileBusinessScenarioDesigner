@@ -23,7 +23,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
@@ -33,7 +32,7 @@ public class DiagramParser {
 	public String getDroolsRulesAsText(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
 			RuleNotImplementedException, ActionNotImplementedException {
 		List<Rule> newRules = parse(diagram, null);
-		String rulesAsString = new DroolsParser().createDroolsRule(newRules);
+		String rulesAsString = DroolsParser.createDroolsRule(newRules);
 		return rulesAsString;
 	}
 
@@ -61,7 +60,7 @@ public class DiagramParser {
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
 	 */
-	private List<Rule> parseDiagramElement(DiagramElement node, ExpressionChain extraConditions, List<Rule> newRules )
+	private List<Rule> parseDiagramElement(DiagramElement node, ExpressionChain extraConditions, List<Rule> newRules)
 			throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
 			ActionNotImplementedException {
 		List<ExpressionChain> forkConditions = new ArrayList<>();
@@ -128,41 +127,44 @@ public class DiagramParser {
 	private List<ExpressionChain> completeForkExpressions(DiagramFork forkNode, ExpressionChain previousConditions)
 			throws RuleNotImplementedException, RuleInvalidException {
 		List<ExpressionChain> forkConditions = new ArrayList<>();
+
 		// Get the element to be checked
 		ExpressionValueTreeObjectReference treeObjectOfForkNode = forkNode.getReference();
-		// The variable is checked against a score
-		if (treeObjectOfForkNode instanceof ExpressionValueCustomVariable) {
-			// TODO
-		} else {
-			// For each outgoing link a new condition is created
-			for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
-				ExpressionChain expressionOfLink = outLink.getExpressionChain().generateCopy();
-				TreeObject treeObject = treeObjectOfForkNode.getReference();
-				if ((treeObject instanceof Question)) {
-					Question questionObject = (Question) treeObject;
-					switch (questionObject.getAnswerType()) {
-					case RADIO:
-						// We have 'sex male' as expression in diagram links. We
-						// need to add an equals to create a
-						// complete expression 'sex=male'.
-						expressionOfLink.getExpressions().add(1, new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+		// For each outgoing link a new condition is created
+		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
+			ExpressionChain expressionOfLinkCopy = outLink.getExpressionChain().generateCopy();
 
-						break;
-					case MULTI_CHECKBOX:
-						// Fork with multicheckbox can cause problems. User can
-						// select answers from both different
-						// flows.
-						break;
-					case INPUT:
-						// TODO
-						break;
-					}
-				} else {
-					throw new RuleInvalidException("Only questions and custom variables are allowed in forks.");
-				}
-				// Add the condition of the fork path to the array of conditions
-				forkConditions.add(expressionOfLink);
+			// Add the previous conditions in case there are nested forks
+			if ((previousConditions != null) && (previousConditions.getExpressions() != null)
+					&& !(previousConditions.getExpressions().isEmpty())) {
+				expressionOfLinkCopy.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+				expressionOfLinkCopy.addExpressions(previousConditions.getExpressions());
 			}
+			
+			TreeObject treeObject = treeObjectOfForkNode.getReference();
+			if ((treeObject instanceof Question)) {
+				Question questionObject = (Question) treeObject;
+				switch (questionObject.getAnswerType()) {
+				case RADIO:
+					// We have 'sex male' as expression in diagram links. We
+					// need to add an equals to create a
+					// complete expression 'sex=male'.
+					expressionOfLinkCopy.getExpressions().add(1, new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+
+					break;
+				case MULTI_CHECKBOX:
+					// Fork with multicheckbox can cause problems. User can
+					// select answers from both different
+					// flows.
+					break;
+				case INPUT:
+					// In case of input we only have to copy the link, which
+					// we have done at the beginning of the loop.
+					break;
+				}
+			}
+			// Add the condition of the fork path to the array of conditions
+			forkConditions.add(expressionOfLinkCopy);
 		}
 		return forkConditions;
 	}

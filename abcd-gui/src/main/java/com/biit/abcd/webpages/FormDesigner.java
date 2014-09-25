@@ -116,6 +116,8 @@ public class FormDesigner extends FormWebPageComponent {
 		} else {
 			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
 		}
+		// Collapse the table at question level
+		formTreeTable.collapseFrom(Question.class);
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {

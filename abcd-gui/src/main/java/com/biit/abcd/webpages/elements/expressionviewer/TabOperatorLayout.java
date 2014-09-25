@@ -120,7 +120,7 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		Button potButton = createButton("x\u207F", new ClickListener() {
+		Button powButton = createButton("x\u207F", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -136,7 +136,7 @@ public class TabOperatorLayout extends TabLayout {
 		layout.addComponent(multButton);
 		layout.addComponent(divButton);
 		layout.addComponent(moduleButton);
-		layout.addComponent(potButton);
+		layout.addComponent(powButton);
 	}
 
 	private void createMathFunctionsOperators(AbstractLayout layout) {
@@ -223,8 +223,11 @@ public class TabOperatorLayout extends TabLayout {
 
 		layout.addComponent(maxButton);
 		layout.addComponent(minimumButton);
+		absoluteButton.setEnabled(false);
 		layout.addComponent(absoluteButton);
+		sqrtButton.setEnabled(false);
 		layout.addComponent(sqrtButton);
+		roundButton.setEnabled(false);
 		layout.addComponent(roundButton);
 		layout.addComponent(averageButton);
 		layout.addComponent(pmtButton);
@@ -274,6 +277,7 @@ public class TabOperatorLayout extends TabLayout {
 		layout.addComponent(notButton);
 		layout.addComponent(inButton);
 		layout.addComponent(betweenButton);
+		ifButton.setEnabled(false);
 		layout.addComponent(ifButton);
 	}
 

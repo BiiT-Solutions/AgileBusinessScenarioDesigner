@@ -3,7 +3,6 @@ package com.biit.abcd.webpages.components;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.FormController;
@@ -49,24 +48,28 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		if (submittedForm != null) {
 			generateContent((SubmittedForm) submittedForm);
 		}
-
 		setContent(formTreeTable);
 	}
 
 	private void generateContent(SubmittedForm submittedForm) {
 
 		formTreeTable.addContainerProperty(TreeObjectTableProperties.ORIGINAL_VALUE, String.class, "");
-
+		formTreeTable.setColumnWidth(TreeObjectTableProperties.ORIGINAL_VALUE, 150);
 		FormController fc = UserSessionHandler.getFormController();
 		if (fc != null) {
 			Form form = fc.getForm();
 			if (form != null) {
-				Set<CustomVariable> customVariables = form.getCustomVariables();
+				List<CustomVariable> sortedCustomVariables = new ArrayList<CustomVariable>();
+				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Question.class));
+				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Group.class));
+				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Category.class));
+				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Form.class));
 
-				if (customVariables != null) {
+				if ((sortedCustomVariables != null) && (!sortedCustomVariables.isEmpty())) {
 					customVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
-					for (CustomVariable customVariable : customVariables) {
+					for (CustomVariable customVariable : sortedCustomVariables) {
 						formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
+						formTreeTable.setColumnWidth(customVariable.getName(), 150);
 						if (customVariablesScopeMap.get(customVariable.getScope()) == null) {
 							List<String> customVariablesNames = new ArrayList<String>();
 							customVariablesNames.add(customVariable.getName());
@@ -106,9 +109,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 															getSubmittedFormGroup(groupChild, groupSubForm));
 
 												} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
-
-													System.out.println("PARSING QUESTION: " + groupChild.getName());
-
 													createQuestionVariables(groupChild,
 															getSubmittedFormGroupQuestion(groupChild, groupSubForm));
 												}

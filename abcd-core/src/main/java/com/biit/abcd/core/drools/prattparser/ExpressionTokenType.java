@@ -35,6 +35,8 @@ public enum ExpressionTokenType {
 			return "/";
 		case POW:
 			return "^";
+		case MODULE:
+			return "%";
 		case NOT:
 			return "NOT(";
 		case AND:
