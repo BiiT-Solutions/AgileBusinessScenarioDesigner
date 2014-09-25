@@ -9,7 +9,7 @@ import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class Group extends CommonAttributes implements IGroup {
+public class Group extends SubmittedFormObject implements IGroup, IDroolsForm {
 
 	private List<IQuestion> questions;
 	private List<IGroup> groups;

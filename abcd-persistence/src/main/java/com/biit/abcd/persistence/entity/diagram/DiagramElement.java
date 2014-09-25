@@ -175,6 +175,10 @@ public abstract class DiagramElement extends DiagramObject {
 		return getParent().getOutgoingLinks(this);
 	}
 
+	public List<DiagramLink> getIncomingLinks() {
+		return getParent().getIncomingLinks(this);
+	}
+
 	@Override
 	public void setCreatedBy(User user) {
 		super.setCreatedBy(user);

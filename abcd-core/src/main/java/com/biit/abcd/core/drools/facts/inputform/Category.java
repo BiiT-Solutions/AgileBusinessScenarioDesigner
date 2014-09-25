@@ -10,7 +10,7 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class Category extends CommonAttributes implements ICategory {
+public class Category extends SubmittedFormObject implements ICategory, IDroolsForm {
 
 	private List<IGroup> groups;
 	private ISubmittedForm parent;
@@ -110,7 +110,7 @@ public class Category extends CommonAttributes implements ICategory {
 		// Retrieve the form which will have the variables
 		return isScoreSet(this, varName);
 	}
-	
+
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		// Retrieve the form which will have the variables
 		return ((SubmittedForm) getParent()).isScoreSet(submittedFormTreeObject, varName);

@@ -33,6 +33,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	private List<DiagramObjectPickedListener> pickListeners;
 	private List<JumpToListener> jumpToListeners;
 	private List<DiagramObjectAddedListener> objectAddedListeners;
+	private List<DiagramObjectUpdatedListener> objectUpdatedListeners;
 
 	public AbcdDiagramBuilder() {
 		super();
@@ -40,13 +41,9 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		pickListeners = new ArrayList<AbcdDiagramBuilder.DiagramObjectPickedListener>();
 		jumpToListeners = new ArrayList<JumpToListener>();
 		objectAddedListeners = new ArrayList<>();
+		objectUpdatedListeners = new ArrayList<>();
 
 		addElementActionListener(new ElementActionListener() {
-
-			@Override
-			public void updateElement(String jsonString) {
-				updateObjectOfDiagram(jsonString);
-			}
 
 			@Override
 			public void removeElement(String jsonString) {
@@ -56,9 +53,16 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			@Override
 			public void addElement(String jsonString) {
 				DiagramObject elementAdded = addObjectToDiagram(jsonString);
-				fireDiagramObjectAddedListener(elementAdded);				
+				fireDiagramObjectAddedListener(elementAdded);
+			}
+
+			@Override
+			public void updateElement(String jsonString) {
+				DiagramObject elementUpdated = updateObjectOfDiagram(jsonString);
+				fireDiagramObjectUpdatedListener(elementUpdated);
 			}
 		});
+
 		addElementPickedListener(new ElementPickedListener() {
 
 			@Override
@@ -144,7 +148,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	}
 
 	/**
-	 * Gets Element of diagram from a json String. If it doesn't exist on the diagram, we add it first.
+	 * Gets Element of diagram from a json String. If it doesn't exist on the
+	 * diagram, we add it first.
 	 * 
 	 * @param jsonString
 	 * @return
@@ -209,14 +214,16 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		}
 	}
 
-	private void updateObjectOfDiagram(String jsonString) {
+	private DiagramObject updateObjectOfDiagram(String jsonString) {
 		DiagramObject element = DiagramObject.fromJson(jsonString);
 		if (diagramElements.containsKey(element.getJointjsId())) {
 			DiagramObject originalElement = diagramElements.get(element.getJointjsId());
 			originalElement.update(element, UserSessionHandler.getUser());
 			diagram.setUpdatedBy(UserSessionHandler.getUser());
 			diagram.setUpdateTime();
+			element = originalElement;
 		}
+		return element;
 	}
 
 	private void updateLinkVisualization(DiagramObject object) {
@@ -336,7 +343,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			listener.jumpTo(object);
 		}
 	}
-	
+
 	public void addDiagramObjectAddedListener(DiagramObjectAddedListener listener) {
 		objectAddedListeners.add(listener);
 	}
@@ -348,6 +355,20 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	private void fireDiagramObjectAddedListener(DiagramObject elementAdded) {
 		for (DiagramObjectAddedListener listener : objectAddedListeners) {
 			listener.elementAdded(elementAdded);
+		}
+	}
+
+	public void addDiagramObjectUpdatedListener(DiagramObjectUpdatedListener listener) {
+		objectUpdatedListeners.add(listener);
+	}
+
+	public void removeDiagramObjectUpdatedListener(DiagramObjectUpdatedListener listener) {
+		objectUpdatedListeners.remove(listener);
+	}
+
+	private void fireDiagramObjectUpdatedListener(DiagramObject elementUpdated) {
+		for (DiagramObjectUpdatedListener listener : objectUpdatedListeners) {
+			listener.elementUpdated(elementUpdated);
 		}
 	}
 }

@@ -28,8 +28,9 @@ import com.biit.abcd.webpages.components.SelectDiagramTable;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramObjectAddedListener;
-import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
+import com.biit.abcd.webpages.elements.diagrambuilder.DiagramObjectUpdatedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.DriagramPropertiesComponent;
+import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JumpToListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.WindowNewDiagram;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -152,6 +153,29 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					if (diagramLink.getSourceElement() instanceof DiagramFork) {
 						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
 						((DiagramFork) diagramLink.getSourceElement()).updateOutgoingLinks();
+					}
+				}
+			}
+		});
+
+		diagramBuilder.addDiagramObjectUpdatedListener(new DiagramObjectUpdatedListener() {
+			@Override
+			public void elementUpdated(DiagramObject diagramObject) {
+				// A link must obtain the diagram source for the expressions.
+				if (diagramObject instanceof DiagramLink) {
+					DiagramLink diagramLink = (DiagramLink) diagramObject;
+					if (diagramLink.getParent() != null) {
+						if (diagramLink.getTargetElement().getIncomingLinks().size() > 1) {
+							diagramBuilder.undo();
+							AbcdLogger.warning(this.getClass().getName(),
+									"The selected node can't have two incoming links");
+						} else if (!(diagramLink.getSourceElement() instanceof DiagramFork)) {
+							if (diagramLink.getSourceElement().getOutgoingLinks().size() > 1) {
+								diagramBuilder.undo();
+								AbcdLogger.warning(this.getClass().getName(),
+										"The selected node can't have two outgoing links");
+							}
+						}
 					}
 				}
 			}

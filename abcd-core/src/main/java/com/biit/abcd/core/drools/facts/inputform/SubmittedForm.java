@@ -15,7 +15,7 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
  * questions.
  * 
  */
-public class SubmittedForm implements ISubmittedForm {
+public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 
 	private String applicationName;
 	private List<ICategory> categories;
@@ -124,5 +124,4 @@ public class SubmittedForm implements ISubmittedForm {
 			CategoryDoesNotExistException {
 		return getCategory(categoryName).getQuestion(questionName);
 	}
-
 }

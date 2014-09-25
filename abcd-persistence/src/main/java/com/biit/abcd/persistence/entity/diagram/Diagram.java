@@ -98,8 +98,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 	}
 
 	/**
-	 * Function to get the list of diagram object elements. Do not add elements to this list, use the appropriate
-	 * functions.
+	 * Function to get the list of diagram object elements. Do not add elements
+	 * to this list, use the appropriate functions.
 	 * 
 	 * @return
 	 */
@@ -168,7 +168,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	}
 
 	/**
-	 * Retrieves all links of a specific Diagram Element.
+	 * Retrieves all outgoing links of a specific Diagram Element.
 	 * 
 	 * @param source
 	 * @return
@@ -179,6 +179,25 @@ public class Diagram extends StorableObject implements INameAttribute {
 			if (element instanceof DiagramLink) {
 				DiagramLink link = (DiagramLink) element;
 				if (link.getSource().getJointjsId().equals(source.getJointjsId())) {
+					links.add(link);
+				}
+			}
+		}
+		return links;
+	}
+
+	/**
+	 * Retrieves all incoming links of a specific Diagram Element.
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public List<DiagramLink> getIncomingLinks(DiagramElement source) {
+		List<DiagramLink> links = new ArrayList<>();
+		for (DiagramObject element : diagramElements) {
+			if (element instanceof DiagramLink) {
+				DiagramLink link = (DiagramLink) element;
+				if (link.getTarget().getJointjsId().equals(source.getJointjsId())) {
 					links.add(link);
 				}
 			}

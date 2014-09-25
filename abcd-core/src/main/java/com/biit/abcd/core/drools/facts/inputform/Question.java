@@ -10,7 +10,7 @@ import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 
-public class Question extends CommonAttributes implements IQuestion {
+public class Question extends SubmittedFormObject implements IQuestion, IDroolsForm {
 
 	private String answer;
 	private String name;

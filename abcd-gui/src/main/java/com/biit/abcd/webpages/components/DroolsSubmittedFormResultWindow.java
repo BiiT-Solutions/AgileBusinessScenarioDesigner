@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.components;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,8 @@ import com.biit.abcd.core.drools.facts.inputform.Group;
 import com.biit.abcd.core.drools.facts.inputform.Question;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.Form;
@@ -183,8 +186,27 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				} else {
 					formTreeTable.getItem(question).getItemProperty(variable).setValue("-");
 				}
-				formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-						.setValue(questionSubForm.getAnswer().toString());
+
+				if (question instanceof com.biit.abcd.persistence.entity.Question) {
+					com.biit.abcd.persistence.entity.Question questionTreeObject = (com.biit.abcd.persistence.entity.Question) question;
+					if (questionTreeObject.getAnswerType().equals(AnswerType.INPUT)
+							&& questionTreeObject.getAnswerFormat().equals(AnswerFormat.DATE)) {
+						try {
+							SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+							String formattedDate = dateFormat.format(questionSubForm.getAnswer());
+							formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+									.setValue(formattedDate);
+						} catch (IllegalArgumentException e) {
+							AbcdLogger.errorMessage(this.getClass().getName(), e);
+						}
+					} else {
+						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+								.setValue(questionSubForm.getAnswer().toString());
+					}
+				} else {
+					formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+							.setValue(questionSubForm.getAnswer().toString());
+				}
 			}
 		}
 	}

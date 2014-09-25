@@ -32,7 +32,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class TabOperatorLayout extends TabLayout {
 	private static final long serialVersionUID = -6980953550185164306L;
-	private static final int GRID_COLUMNS = 3;
+	private static final int GRID_COLUMNS = 4;
 
 	public TabOperatorLayout() {
 		AccordionMultiple accordion = new AccordionMultiple();
@@ -111,23 +111,23 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		Button moduleButton = createButton("%", new ClickListener() {
-			private static final long serialVersionUID = -8611397253545833133L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				addMathematicalExpression(AvailableOperator.MODULE);
-			}
-		});
-
-		Button powButton = createButton("x\u207F", new ClickListener() {
-			private static final long serialVersionUID = -8611397253545833133L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				addMathematicalExpression(AvailableOperator.POW);
-			}
-		});
+		// Button moduleButton = createButton("%", new ClickListener() {
+		// private static final long serialVersionUID = -8611397253545833133L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// addMathematicalExpression(AvailableOperator.MODULE);
+		// }
+		// });
+		//
+		// Button powButton = createButton("x\u207F", new ClickListener() {
+		// private static final long serialVersionUID = -8611397253545833133L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// addMathematicalExpression(AvailableOperator.POW);
+		// }
+		// });
 
 		assignButton.setWidth("100%");
 		layout.addComponent(assignButton, 0, 0, GRID_COLUMNS - 1, 0);
@@ -135,8 +135,8 @@ public class TabOperatorLayout extends TabLayout {
 		layout.addComponent(minusButton);
 		layout.addComponent(multButton);
 		layout.addComponent(divButton);
-		layout.addComponent(moduleButton);
-		layout.addComponent(powButton);
+		// layout.addComponent(moduleButton);
+		// layout.addComponent(powButton);
 	}
 
 	private void createMathFunctionsOperators(AbstractLayout layout) {
@@ -161,35 +161,38 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
-		Button absoluteButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ABS),
-				new ClickListener() {
-					private static final long serialVersionUID = -3339234972234970277L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						addFunctionExpression(AvailableFunction.ABS);
-					}
-				});
-
-		Button sqrtButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_SQRT),
-				new ClickListener() {
-					private static final long serialVersionUID = -3339234972234970277L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						addFunctionExpression(AvailableFunction.SQRT);
-					}
-				});
-
-		Button roundButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ROUND),
-				new ClickListener() {
-					private static final long serialVersionUID = -3339234972234970277L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						addFunctionExpression(AvailableFunction.ROUND);
-					}
-				});
+		// Button absoluteButton =
+		// createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ABS),
+		// new ClickListener() {
+		// private static final long serialVersionUID = -3339234972234970277L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// addFunctionExpression(AvailableFunction.ABS);
+		// }
+		// });
+		//
+		// Button sqrtButton =
+		// createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_SQRT),
+		// new ClickListener() {
+		// private static final long serialVersionUID = -3339234972234970277L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// addFunctionExpression(AvailableFunction.SQRT);
+		// }
+		// });
+		//
+		// Button roundButton =
+		// createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ROUND),
+		// new ClickListener() {
+		// private static final long serialVersionUID = -3339234972234970277L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// addFunctionExpression(AvailableFunction.ROUND);
+		// }
+		// });
 
 		Button averageButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AVG),
 				new ClickListener() {
@@ -223,15 +226,12 @@ public class TabOperatorLayout extends TabLayout {
 
 		layout.addComponent(maxButton);
 		layout.addComponent(minimumButton);
-		absoluteButton.setEnabled(false);
-		layout.addComponent(absoluteButton);
-		sqrtButton.setEnabled(false);
-		layout.addComponent(sqrtButton);
-		roundButton.setEnabled(false);
-		layout.addComponent(roundButton);
+		// layout.addComponent(absoluteButton);
+		// layout.addComponent(sqrtButton);
+		// layout.addComponent(roundButton);
 		layout.addComponent(averageButton);
-		layout.addComponent(pmtButton);
 		layout.addComponent(sumButton);
+		layout.addComponent(pmtButton);
 	}
 
 	private void createLogicalFunctionsOperators(AbstractLayout layout) {
@@ -388,14 +388,14 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		layout.addComponent(andButton);
-		layout.addComponent(orButton);
 		layout.addComponent(greaterThanButton);
 		layout.addComponent(greaterEqualsButton);
 		layout.addComponent(lessThanButton);
 		layout.addComponent(lessEqualsButton);
 		layout.addComponent(equalsButton);
 		layout.addComponent(distinctButton);
+		layout.addComponent(andButton);
+		layout.addComponent(orButton);
 	}
 
 	private void createInputField(AbstractLayout layout) {
