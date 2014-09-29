@@ -60,6 +60,8 @@ public enum LanguageCodes {
 	WARNING_ELEMENT_NOT_FOUND_DESCRIPTION("warning.element.not.found.description"),
 	WARNING_NAME_TOO_LONG("warning.element.name.too.long"),
 	WARNING_NAME_TOO_LONG_DESCRIPTION("warning.element.name.too.long.description"),
+	WARNING_NAME_INVALID_CHARACTERS("warning.element.name.invalid"),
+	WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION("warning.element.name.invalid.description"),
 	WARNING_LOST_UNSAVED_DATA("warning.unsaved.data.will.be.lost"),
 	WARNING_TABLE_RULE_DELETION("warning.table.rule.deletion"),
 	WARNING_RULE_DELETION("warning.rule.deletion"),

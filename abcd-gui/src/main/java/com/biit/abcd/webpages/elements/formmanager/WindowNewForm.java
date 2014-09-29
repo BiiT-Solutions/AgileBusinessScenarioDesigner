@@ -32,12 +32,12 @@ public class WindowNewForm extends WindowCreateNewObject {
 		if (formDao.getForm(inputTextField.getValue()) == null) {
 			form = new Form();
 			try {
-				form.setName(inputTextField.getValue());
+				form.setLabel(inputTextField.getValue());
 			} catch (FieldTooLongException e) {
 				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
 						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 				try {
-					form.setName(inputTextField.getValue().substring(0, StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
+					form.setLabel(inputTextField.getValue().substring(0, StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
 				} catch (FieldTooLongException e1) {
 					// Impossible.
 				}

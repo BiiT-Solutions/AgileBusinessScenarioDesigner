@@ -12,6 +12,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.jexeval.exceptions.ExpressionException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -49,7 +50,7 @@ public class ExpressionCheck {
 	}
 
 	@Test
-	public void testDateTreeObject() throws FieldTooLongException {
+	public void testDateTreeObject() throws FieldTooLongException, CharacterNotAllowedException {
 		TreeObject question = new Question();
 		question.setName("Question1");
 
@@ -63,7 +64,7 @@ public class ExpressionCheck {
 	}
 
 	@Test
-	public void testDateVariables() throws FieldTooLongException {
+	public void testDateVariables() throws FieldTooLongException, CharacterNotAllowedException {
 		TreeObject question = new Question();
 		question.setName("Question1");
 

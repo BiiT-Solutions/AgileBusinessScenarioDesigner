@@ -21,6 +21,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.exceptions.NotValidFormException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -43,9 +44,9 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	private IFormDao formDao;
 
 	@Test
-	public void storeDummyTableRule() throws NotValidFormException, FieldTooLongException {
+	public void storeDummyTableRule() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(DUMMY_FORM);
+		form.setLabel(DUMMY_FORM);
 
 		TableRule tableRule = new TableRule();
 
@@ -66,16 +67,17 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	}
 
 	@Test
-	public void storeTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException {
+	public void storeTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException,
+			CharacterNotAllowedException {
 		// Define form.
 		Form form = new Form();
-		form.setName(DUMMY_FORM + "_v2");
+		form.setLabel(DUMMY_FORM + "_v2");
 
 		Category category = new Category();
 		form.addChild(category);
 
 		Question question = new Question();
-		question.setName("Select one answer:");
+		question.setName("Question1");
 		question.setAnswerType(AnswerType.RADIO);
 		category.addChild(question);
 
@@ -95,9 +97,10 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	}
 
 	@Test
-	public void storeFormTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException {
+	public void storeFormTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException,
+			CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(TABLE_RULE_FORM);
+		form.setLabel(TABLE_RULE_FORM);
 
 		Category category1 = new Category();
 		category1.setName("Category1");

@@ -56,6 +56,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -99,7 +100,8 @@ public class DHPUserFormsTest {
 	public void completeZrmTest() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
-			InvalidAnswerFormatException, RuleNotImplementedException, ActionNotImplementedException {
+			InvalidAnswerFormatException, RuleNotImplementedException, ActionNotImplementedException,
+			CharacterNotAllowedException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createZrmForm();
 		// Load the submitted form
@@ -124,9 +126,11 @@ public class DHPUserFormsTest {
 	 * @throws FieldTooLongException
 	 * @throws IOException
 	 * @throws InvalidAnswerFormatException
+	 * @throws CharacterNotAllowedException
 	 */
 	private Form createZrmForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException,
+			CharacterNotAllowedException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");

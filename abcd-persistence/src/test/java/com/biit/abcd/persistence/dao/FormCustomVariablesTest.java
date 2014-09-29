@@ -14,6 +14,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidFormException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -30,9 +31,9 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	private IFormDao formDao;
 
 	@Test
-	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException {
+	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException {
 		Form basicForm = new Form();
-		basicForm.setName(DUMMY_FORM);
+		basicForm.setLabel(DUMMY_FORM);
 
 		CustomVariable formCustomVariables = new CustomVariable();
 		basicForm.getCustomVariables().add(formCustomVariables);
@@ -44,9 +45,9 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test
-	public void storeIntegerVariables() throws FieldTooLongException {
+	public void storeIntegerVariables() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(DUMMY_FORM + "_v2");
+		form.setLabel(DUMMY_FORM + "_v2");
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "Score", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
@@ -58,9 +59,9 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
-		
+
 		Iterator<CustomVariable> iterator = inForm.getCustomVariables().iterator();
-		Assert.assertTrue(iterator.hasNext());		
+		Assert.assertTrue(iterator.hasNext());
 		CustomVariable retrievedVariable = iterator.next();
 		Assert.assertEquals(retrievedVariable.getName(), "Score");
 		Assert.assertEquals(retrievedVariable.getType(), CustomVariableType.NUMBER);
@@ -69,9 +70,9 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test
-	public void storeStringVariables() throws FieldTooLongException {
+	public void storeStringVariables() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(DUMMY_FORM + "_v3");
+		form.setLabel(DUMMY_FORM + "_v3");
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "Name", CustomVariableType.STRING,
 				CustomVariableScope.QUESTION);
@@ -83,11 +84,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
-		
+
 		Iterator<CustomVariable> iterator = inForm.getCustomVariables().iterator();
-		Assert.assertTrue(iterator.hasNext());		
+		Assert.assertTrue(iterator.hasNext());
 		CustomVariable retrievedVariable = iterator.next();
-		
+
 		Assert.assertEquals(retrievedVariable.getName(), "Name");
 		Assert.assertEquals(retrievedVariable.getType(), CustomVariableType.STRING);
 		Assert.assertEquals(retrievedVariable.getScope(), CustomVariableScope.QUESTION);
@@ -95,9 +96,9 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test
-	public void storeDateVariables() throws FieldTooLongException {
+	public void storeDateVariables() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(DUMMY_FORM + "_v4");
+		form.setLabel(DUMMY_FORM + "_v4");
 		formDao.makePersistent(form);
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "CreationDate", CustomVariableType.DATE,
@@ -110,11 +111,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
-		
+
 		Iterator<CustomVariable> iterator = inForm.getCustomVariables().iterator();
-		Assert.assertTrue(iterator.hasNext());		
+		Assert.assertTrue(iterator.hasNext());
 		CustomVariable retrievedVariable = iterator.next();
-		
+
 		Assert.assertEquals(retrievedVariable.getName(), "CreationDate");
 		Assert.assertEquals(retrievedVariable.getType(), CustomVariableType.DATE);
 		Assert.assertEquals(retrievedVariable.getScope(), CustomVariableScope.FORM);

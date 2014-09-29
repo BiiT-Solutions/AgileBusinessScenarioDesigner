@@ -31,6 +31,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -59,7 +60,7 @@ public class NewNestedGroupsTest extends KidsFormCreator {
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
-			ActionNotImplementedException {
+			ActionNotImplementedException, CharacterNotAllowedException {
 
 		// Restart the form to avoid test cross references
 		initForm();

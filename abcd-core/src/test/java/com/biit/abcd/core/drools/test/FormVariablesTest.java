@@ -80,7 +80,7 @@ public class FormVariablesTest {
 	private void createFormRelations() throws NotValidChildException, FieldTooLongException,
 			InvalidAnswerFormatException {
 
-//		form.setName("KidsScreen");
+//		form.setLabel("KidsScreen");
 //		algemeen.setName("Algemeen");
 //		birthdate.setName("birthdate");
 //		gender.setName("gender");

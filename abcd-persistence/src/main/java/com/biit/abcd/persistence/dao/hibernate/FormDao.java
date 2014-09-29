@@ -11,9 +11,13 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
@@ -133,12 +137,32 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	}
 
 	@Override
-	public Form getForm(String name) {
+	@Cacheable(value = "forms", key = "#id")
+	public Form read(Long id) {
+		AbcdLogger.info(FormDao.class.getName(), "1111111111111111111111111111111111111111111");
+		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
+		Form form = super.read(id);
+		AbcdLogger.info(FormDao.class.getName(), "2222222222222222222222222222222222222222222");
+		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
+		return form;
+	}
+
+	@Override
+	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label"),
+			@CacheEvict(value = "forms", key = "#form.id"),
+			@CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
+	public void makeTransient(Form form) {
+		super.makeTransient(form);
+	}
+
+	@Override
+	@Cacheable(value = "forms", key = "#label")
+	public Form getForm(String label) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
 			Criteria criteria = session.createCriteria(Form.class);
-			criteria.add(Restrictions.eq("name", name));
+			criteria.add(Restrictions.eq("label", label));
 			@SuppressWarnings("unchecked")
 			List<Form> results = criteria.list();
 			initializeSets(results);
@@ -171,6 +195,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	}
 
 	@Override
+	@Cacheable(value = "forms")
 	public List<Form> getAll() {
 		List<Form> result = super.getAll();
 		// For solving Hibernate bug

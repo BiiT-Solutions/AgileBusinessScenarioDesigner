@@ -11,7 +11,8 @@
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd 
                         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd 
                         http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-2.0.xsd
-                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd"
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+			http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
 	default-autowire="byName">
 	<!-- Activates various annotations to be detected in bean classes -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
@@ -62,10 +63,12 @@
 				
 				<!-- Second Level Cache-->
 				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
-				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
 				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>				
 				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
 				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}</prop>
 				
 				<!-- C3p0 -->
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
@@ -85,6 +88,8 @@
 		<property name="packagesToScan">
 			<list>
 				<value>com.biit.abcd.**.*</value>
+				<value>com.biit.persistence.**.*</value>
+				<value>com.biit.forms.**.*</value>
 			</list>
 		</property>
 	</bean>

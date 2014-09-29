@@ -29,6 +29,7 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
@@ -53,7 +54,7 @@ public class KidsFormCreator {
 	public KidsFormCreator() {
 	}
 
-	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
+	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException {
 
 		form = new Form("KidsScreen");
 

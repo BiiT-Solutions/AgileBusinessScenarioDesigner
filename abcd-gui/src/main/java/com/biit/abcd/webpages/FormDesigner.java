@@ -25,6 +25,7 @@ import com.biit.abcd.webpages.elements.formdesigner.FormDesignerPropertiesCompon
 import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -241,7 +242,7 @@ public class FormDesigner extends FormWebPageComponent {
 				}
 				try {
 					newCategory.setName(newCategory.getDefaultName(getForm(), getForm().getChildren().size()));
-				} catch (FieldTooLongException e) {
+				} catch (FieldTooLongException | CharacterNotAllowedException e) {
 					// Default name is never so long.
 				}
 				addCategoryToUI(newCategory);
@@ -288,7 +289,7 @@ public class FormDesigner extends FormWebPageComponent {
 					if (container != null) {
 						try {
 							newGroup.setName(newGroup.getDefaultName(container, 1));
-						} catch (FieldTooLongException e) {
+						} catch (FieldTooLongException | CharacterNotAllowedException e) {
 							// Default name is never so long.
 						}
 						addElementToUI(newGroup, container);
@@ -328,7 +329,7 @@ public class FormDesigner extends FormWebPageComponent {
 					if (parent != null) {
 						try {
 							newQuestion.setName(newQuestion.getDefaultName(parent, 1));
-						} catch (FieldTooLongException e) {
+						} catch (FieldTooLongException | CharacterNotAllowedException e) {
 							// Default name is never so long.
 						}
 						addElementToUI(newQuestion, parent);
@@ -365,7 +366,7 @@ public class FormDesigner extends FormWebPageComponent {
 					if (parent != null) {
 						try {
 							newAnswer.setName(newAnswer.getDefaultName(parent, 1));
-						} catch (FieldTooLongException e) {
+						} catch (FieldTooLongException | CharacterNotAllowedException e) {
 							// Default name is never so long.
 						}
 						// First add to UI and then add parent.

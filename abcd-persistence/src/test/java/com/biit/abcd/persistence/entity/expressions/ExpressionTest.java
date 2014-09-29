@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.jexeval.exceptions.ExpressionException;
@@ -33,7 +34,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	private IFormDao formDao;
 
 	@Test
-	public void basicExpressionConverter() throws FieldTooLongException, NotValidChildException {
+	public void basicExpressionConverter() throws FieldTooLongException, NotValidChildException,
+			CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		Category category = new Category(CATEGORY_NAME);
@@ -57,7 +59,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	}
 
 	@Test(expectedExceptions = ExpressionException.class)
-	public void basicInvalidExpressionConverter() throws FieldTooLongException, NotValidChildException {
+	public void basicInvalidExpressionConverter() throws FieldTooLongException, NotValidChildException,
+			CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		Category category = new Category(CATEGORY_NAME);
@@ -87,7 +90,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	}
 
 	@Test(expectedExceptions = ExpressionException.class)
-	public void variableWithNumberError() throws FieldTooLongException, NotValidChildException {
+	public void variableWithNumberError() throws FieldTooLongException, NotValidChildException,
+			CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		Category category = new Category(CATEGORY_NAME);
@@ -119,7 +123,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	}
 
 	@Test
-	public void functionIn() throws FieldTooLongException, NotValidChildException {
+	public void functionIn() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		Category category = new Category(CATEGORY_NAME);
@@ -149,7 +153,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	}
 
 	@Test(expectedExceptions = ExpressionException.class)
-	public void functionInBad() throws FieldTooLongException, NotValidChildException {
+	public void functionInBad() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		Category category = new Category(CATEGORY_NAME);
@@ -182,7 +186,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 	@Test
 	public void checkExpressionStorageAndOrder() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException {
+			InvalidAnswerFormatException, CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		Category category = new Category(CATEGORY_NAME);
