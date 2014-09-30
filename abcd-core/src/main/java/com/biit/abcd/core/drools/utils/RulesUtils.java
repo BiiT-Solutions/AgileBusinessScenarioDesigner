@@ -37,7 +37,8 @@ public class RulesUtils {
 	}
 
 	/**
-	 * Due to the independent parsing of the conditions of the rule, sometimes the algorithm generates repeated rules <br>
+	 * Due to the independent parsing of the conditions of the rule, sometimes
+	 * the algorithm generates repeated rules <br>
 	 * This method the lines that are equals in the rule<br>
 	 * It should be used before sending the rules to the engine <br>
 	 * 
@@ -158,5 +159,56 @@ public class RulesUtils {
 			cleanedResults += lines[i] + "\n";
 		}
 		return cleanedResults;
+	}
+
+	public static Integer getNumberOfLines(String ruleCore) {
+		String[] lines = ruleCore.split("\n");
+		return lines.length;
+	}
+
+	public static String replaceLine(String ruleCore, String lineToSet, int lineNumber) {
+		String cleanedResults = "";
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == lineNumber) {
+				cleanedResults += lineToSet + "\n";
+			} else {
+				cleanedResults += lines[i] + "\n";
+			}
+		}
+		return cleanedResults;
+	}
+
+	public static String replaceLastLine(String ruleCore, String lineToSet) {
+		String cleanedResults = "";
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == (lines.length - 1)) {
+				cleanedResults += lineToSet + "\n";
+			} else {
+				cleanedResults += lines[i] + "\n";
+			}
+		}
+		return cleanedResults;
+	}
+
+	public static String getLine(String ruleCore, int lineNumber) {
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == lineNumber) {
+				return lines[i];
+			}
+		}
+		return "";
+	}
+
+	public static String getLastLine(String ruleCore) {
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == (lines.length - 1)) {
+				return lines[i];
+			}
+		}
+		return "";
 	}
 }

@@ -134,6 +134,7 @@ public class ExpressionParser {
 	 * @return
 	 */
 	private static ExpressionChain unwrapGenericVariables(ExpressionChain expressionChain) {
+
 		// // To avoid modifying the original expression
 		// ExpressionChain expressionChainCopy = expressionChain.generateCopy();
 		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChain
@@ -157,7 +158,6 @@ public class ExpressionParser {
 					break;
 				case GROUP:
 					if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
-						// We only want the questions for the category
 						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
 							treeObjects = new ArrayList<TreeObject>();
 							for (TreeObject child : leftTreeObject.getChildren()) {
@@ -195,17 +195,14 @@ public class ExpressionParser {
 					}
 					break;
 				}
+
 				// We have to create a CustomVariable for each treeObject found
 				// and add it to the expression
 				if ((treeObjects != null) && (!treeObjects.isEmpty())) {
-					// int treeObjectIndex = 0;
 					for (TreeObject treeObject : treeObjects) {
 						generatedExpressionChain.addExpression(new ExpressionValueCustomVariable(treeObject,
 								customVariableOfGeneric));
-						// if (treeObjectIndex < treeObjects.size() - 1) {
 						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
-						// }
-						// treeObjectIndex++;
 					}
 				}
 			} else {
@@ -216,6 +213,7 @@ public class ExpressionParser {
 				}
 			}
 		}
+
 		// Remove the last comma if there is one
 		// Condition to avoid errors in the parser
 		if (((generatedExpressionChain.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2) instanceof ExpressionSymbol) && (((ExpressionSymbol) generatedExpressionChain

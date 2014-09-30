@@ -82,9 +82,17 @@ public class PrattParserTest {
 		ExpressionValueGenericCustomVariable expValGenericQuestScore = new ExpressionValueGenericCustomVariable(
 				GenericTreeObjectType.QUESTION_CATEGORY, qVar);
 
+		// Simple Negation TreeObject (e.g. NOT(Q1 == A1) )
+		ExpressionChain negatedExpression = new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionChain(expValQ1,
+						new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQ1A1), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		String actual = parseDrools(negatedExpression);
+		Assert.assertEquals(actual, "null[NOT(, null[null[Q1], ==, null[Q1A1]]]");
+
 		// Simple TreeObject equals TreeObject (e.g. Q1 == A1)
-		String actual = parseDrools(new ExpressionChain(expValQ1,
-				new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQ1A1));
+		actual = parseDrools(new ExpressionChain(expValQ1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				expValQ1A1));
 		Assert.assertEquals(actual, "null[null[Q1], ==, null[Q1A1]]");
 
 		// Simple TreeObject.Score equals ValueNumber (e.g. Cat1.score == 10)
@@ -178,23 +186,45 @@ public class PrattParserTest {
 				"null[null[categoryTest.catVar], null[null[null[10], +, null[null[motherHeight], *, null[0.6]]], +, null[null[fatherHeight], *, null[0.4]]]]");
 
 		// Mathematical test
-		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionDateUnit.YEARS),
-				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND),
-				expValFormScore, new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
+		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate,
+				QuestionDateUnit.YEARS), new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND), expValFormScore,
+				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
 						new ExpressionValueNumber(13.))));
 		Assert.assertEquals(actual,
 				"null[null[null[birthdate], ==, null[4]], &&, null[null[testForm.formVar], <, null[13]]]");
 
 		// Mathematical test
-		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate, QuestionDateUnit.YEARS),
-				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-						new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND),
-				expValFormScore, new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN),
-						new ExpressionValueNumber(13.1), new ExpressionSymbol(AvailableSymbol.COMMA),
-						new ExpressionValueNumber(19.2), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET))));
+		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate,
+				QuestionDateUnit.YEARS), new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND), expValFormScore,
+				new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(13.1),
+						new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(19.2),
+						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET))));
 		Assert.assertEquals(actual,
 				"null[null[null[birthdate], ==, null[4]], &&, null[null[testForm.formVar], BETWEEN(, null[13.1], null[19.2]]]");
+
+		// Negation of a Function
+		actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT), new ExpressionSymbol(
+				AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(father), new ExpressionFunction(
+				AvailableFunction.BETWEEN), new ExpressionValueNumber(13.1),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(19.2), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+
+		Assert.assertEquals(actual, "null[NOT(, null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]]]");
+
+		actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT), new ExpressionSymbol(
+				AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(father), new ExpressionFunction(
+				AvailableFunction.BETWEEN), new ExpressionValueNumber(13.1),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(19.2), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.OR),
+				new ExpressionValueTreeObjectReference(father), new ExpressionFunction(AvailableFunction.BETWEEN),
+				new ExpressionValueNumber(13.1), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueNumber(19.2), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(
+				actual,
+				"null[NOT(, null[null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]], ||, null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]]]]");
 	}
 
 	/**
