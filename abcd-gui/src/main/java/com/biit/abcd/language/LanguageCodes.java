@@ -30,6 +30,7 @@ public enum LanguageCodes {
 	MENU_SAVE("menu.save"),
 	MENU_MOVE_UP("menu.moveup"),
 	MENU_MOVE_DOWN("menu.movedown"),
+	MENU_MOVE_TO("menu.move"),
 	
 	BUTTON_DOWNLOAD("button.download"),
 
@@ -68,6 +69,8 @@ public enum LanguageCodes {
 	WARNING_EXPRESSION_DELETION("warning.expression.deletion"),
 	WARNING_DIAGRAM_DELETION("warning.diagram.deletion"),
 	WARNING_RULE_INCOMPLETE("warning.rule.incomplete"),
+	WARNING_MOVEMENT_NOT_VALID("warning.movement.not.valid"), 
+	WARNING_MOVEMENT_DESCRIPTION_NOT_VALID("warning.movement.description.not.valid"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
@@ -396,7 +399,9 @@ public enum LanguageCodes {
 	SAVE_AS_FILE_CREATED("save.as.file.created"),
 	SAVE_AS_FILE_FAILED("save.as.file.failed"),
 	
-	ZIP_FILE_NOT_GENERATED("zip.file.error");
+	ZIP_FILE_NOT_GENERATED("zip.file.error"),
+	
+	SELECT_TREE_OBJECT("select.tree.object");
 
 
 

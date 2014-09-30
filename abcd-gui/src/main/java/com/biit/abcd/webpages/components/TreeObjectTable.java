@@ -30,6 +30,11 @@ public class TreeObjectTable extends TreeTable {
 		ELEMENT_NAME
 	}
 
+	public TreeObjectTable() {
+		initContainerProperties();
+		setImmediate(true);
+	}
+
 	private static final long serialVersionUID = -6949123334668973540L;;
 
 	/**
@@ -45,11 +50,6 @@ public class TreeObjectTable extends TreeTable {
 			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
 		}
 		return name;
-	}
-
-	public TreeObjectTable() {
-		initContainerProperties();
-		setImmediate(true);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class TreeObjectTable extends TreeTable {
 		return false;
 	}
 
-	private void loadTreeObject(TreeObject element, TreeObject parent) {
+	public void loadTreeObject(TreeObject element, TreeObject parent) {
 		addItem(element, parent);
 
 		List<TreeObject> children = element.getChildren();

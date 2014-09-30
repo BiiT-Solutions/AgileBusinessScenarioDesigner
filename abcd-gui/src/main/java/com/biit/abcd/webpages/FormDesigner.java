@@ -19,8 +19,11 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
+import com.biit.abcd.webpages.components.SelectTreeObjectWindow;
 import com.biit.abcd.webpages.elements.formdesigner.FormDesignerPropertiesComponent;
 import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
@@ -209,7 +212,52 @@ public class FormDesigner extends FormWebPageComponent {
 			}
 		});
 
+		upperMenu.addMoveButtonListener(new ClickListener() {
+			private static final long serialVersionUID = 808060310562321887L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				openMoveWindow();
+			}
+		});
+
 		return upperMenu;
+	}
+
+	/**
+	 * Opens move element window.
+	 */
+	protected void openMoveWindow() {
+		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(UserSessionHandler.getFormController()
+				.getForm(), false);
+		moveWindow.showCentered();
+		moveWindow.addAcceptActionListener(new AcceptActionListener() {
+
+			@Override
+			public void acceptAction(AcceptCancelWindow window) {
+				if (formTreeTable.getTreeObjectSelected() != null && moveWindow.getSelectedTreeObject() != null) {
+					try {
+						TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
+						TreeObject whereToMove = moveWindow.getSelectedTreeObject();
+						TreeObject.move(whatToMove, whereToMove);
+						window.close();
+						clearAndUpdateFormTable();
+						formTreeTable.setValue(whatToMove);
+						formTreeTable.collapseFrom(Question.class);
+					} catch (ChildrenNotFoundException | NotValidChildException e) {
+						MessageManager.showWarning(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
+								LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
+					}
+				}
+			}
+		});
+	}
+
+	private void clearAndUpdateFormTable() {
+		// Clear and update form
+		TreeObject currentSelection = formTreeTable.getTreeObjectSelected();
+		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
+		formTreeTable.select(currentSelection);
 	}
 
 	private Form getForm() {
@@ -512,7 +560,6 @@ public class FormDesigner extends FormWebPageComponent {
 				try {
 					selected.remove();
 					removeElementFromUI(selected);
-
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + selected.getClass()
 							+ " from the Form, with 'Name: " + selected.getName() + "'.");

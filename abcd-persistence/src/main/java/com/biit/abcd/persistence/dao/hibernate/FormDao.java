@@ -139,10 +139,8 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	@Override
 	@Cacheable(value = "forms", key = "#id")
 	public Form read(Long id) {
-		AbcdLogger.info(FormDao.class.getName(), "1111111111111111111111111111111111111111111");
 		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		Form form = super.read(id);
-		AbcdLogger.info(FormDao.class.getName(), "2222222222222222222222222222222222222222222");
 		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		return form;
 	}
