@@ -1,0 +1,57 @@
+package com.biit.abcd.webpages.components;
+
+import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.form.TreeObject;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.VerticalLayout;
+
+public class SelectTreeObjectWindow extends AcceptCancelWindow {
+
+	private static final long serialVersionUID = -4090805671578721633L;
+	private TreeObjectTable treeObjectTable;
+
+	public SelectTreeObjectWindow(Form form, boolean multiselect) {
+		super();
+		setWidth("50%");
+		setHeight("75%");
+		setResizable(false);
+		cancelButton.setCaption(ServerTranslate.translate(LanguageCodes.CLOSE_BUTTON_CAPTION));
+		cancelButton.setDescription(ServerTranslate.translate(LanguageCodes.CLOSE_BUTTON_TOOLTIP));
+		setCaption(ServerTranslate.translate(LanguageCodes.SELECT_TREE_OBJECT));
+		setModal(true);
+		setContent(generateContent());
+	}
+
+	private Component generateContent() {
+		VerticalLayout layout = new VerticalLayout();
+		// Create content
+		treeObjectTable = new TreeObjectTable();
+		treeObjectTable.setSelectable(true);
+		treeObjectTable.setSizeFull();
+		treeObjectTable.setRootElement(UserSessionHandler.getFormController().getForm());
+
+		layout.addComponent(treeObjectTable);
+		layout.setSizeFull();
+		layout.setMargin(true);
+		return layout;
+	}
+
+	public void select(TreeObject selected) {
+		if (treeObjectTable != null) {
+			treeObjectTable.setValue(selected);
+		}
+	}
+
+	public TreeObject getSelectedTreeObject() {
+		return (TreeObject) treeObjectTable.getValue();
+	}
+
+	public void clearSelection() {
+		if (treeObjectTable != null) {
+			treeObjectTable.setValue(null);
+		}
+	}
+}

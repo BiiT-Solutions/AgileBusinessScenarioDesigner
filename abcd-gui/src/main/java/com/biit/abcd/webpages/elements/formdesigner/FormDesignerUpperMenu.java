@@ -12,11 +12,12 @@ import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.form.TreeObject;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 
 public class FormDesignerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -4712688788270327039L;
 	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton, moveUpButton,
-			moveDownButton, removeButton;
+			moveDownButton, removeButton, moveButton;
 
 	public FormDesignerUpperMenu() {
 		super();
@@ -56,6 +57,11 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		moveDownButton = new IconButton(LanguageCodes.MENU_MOVE_DOWN, ThemeIcon.MOVE_DOWN,
 				LanguageCodes.MENU_MOVE_DOWN);
 		addIconButton(moveDownButton);
+		
+		//Move to
+		moveButton = new IconButton(LanguageCodes.MENU_MOVE_TO, ThemeIcon.MOVE_TO,
+				LanguageCodes.MENU_MOVE_TO);
+		addIconButton(moveButton);
 
 		// Remove
 		removeButton = new IconButton(LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE, ThemeIcon.DELETE,
@@ -129,6 +135,10 @@ public class FormDesignerUpperMenu extends UpperMenu {
 
 	public void addRemoveButtonButtonClickListener(Button.ClickListener listener) {
 		removeButton.addClickListener(listener);
+	}
+	
+	public void addMoveButtonListener(ClickListener listener) {
+		moveButton.addClickListener(listener);
 	}
 
 }

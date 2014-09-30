@@ -7,14 +7,14 @@ import com.biit.form.TreeObject;
 
 /**
  * TreeObjectTable component
- *
+ * 
  * This is a customized component to represent a TreeObject in a tree table.
- *
+ * 
  */
 public class DroolsTreeObjectTable extends TreeObjectTable {
 	private static final long serialVersionUID = 2056310678127658383L;
 
-	private void loadTreeObject(TreeObject element, TreeObject parent) {
+	public void loadTreeObject(TreeObject element, TreeObject parent) {
 		if (!(element instanceof Answer)) {
 			addItem(element, parent);
 		}

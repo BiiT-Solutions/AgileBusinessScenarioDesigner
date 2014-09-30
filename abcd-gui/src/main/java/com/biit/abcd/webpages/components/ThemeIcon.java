@@ -105,6 +105,8 @@ public enum ThemeIcon {
 	MOVE_UP("element.move.up.svg"),
 
 	MOVE_DOWN("element.move.down.svg"),
+	
+	MOVE_TO("element.move.svg"),
 
 	TABLE("appbar.table.svg"),
 
