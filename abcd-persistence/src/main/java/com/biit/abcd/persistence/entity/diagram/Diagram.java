@@ -49,7 +49,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
-	@BatchSize(size = 20)
+	@BatchSize(size = 10)
 	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
@@ -98,8 +98,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 	}
 
 	/**
-	 * Function to get the list of diagram object elements. Do not add elements
-	 * to this list, use the appropriate functions.
+	 * Function to get the list of diagram object elements. Do not add elements to this list, use the appropriate
+	 * functions.
 	 * 
 	 * @return
 	 */

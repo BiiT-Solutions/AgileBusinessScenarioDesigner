@@ -41,6 +41,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
@@ -76,7 +77,7 @@ public class DiagramTest {
 
 	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
 	public void testTableRuleLoadAndExecution() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, RuleNotImplementedException {
+			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException, CategoryDoesNotExistException, QuestionDoesNotExistException, RuleNotImplementedException, CharacterNotAllowedException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createDiagramTestForm();
 //		formDrools.generateDroolRules(vaadinForm);
@@ -94,9 +95,10 @@ public class DiagramTest {
 	 * @throws ChildrenNotFoundException
 	 * @throws FieldTooLongException
 	 * @throws IOException
+	 * @throws CharacterNotAllowedException 
 	 */
 	private Form createDiagramTestForm() throws NotValidChildException, NotValidOperatorInExpression,
-	ChildrenNotFoundException, FieldTooLongException, IOException {
+	ChildrenNotFoundException, FieldTooLongException, IOException, CharacterNotAllowedException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");

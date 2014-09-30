@@ -38,6 +38,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -76,19 +77,19 @@ public class ExpressionsTest {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			RuleNotImplementedException, InvalidAnswerFormatException {
-//		// Load the rules
-//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-//		// Form vaadinForm = this.createDhszwForm();
-//		formDrools.parse(createKidsFormSimpleExpression());
-//		// Load the submitted form
-//		readXml();
-//		translateFormCategories();
-//		formDrools.runDroolsRules(form);
-//		
-//		SubmittedForm subForm = (SubmittedForm) form;
-//		System.out.println(subForm.getVariableValue(AGE));
-		
-//		Assert.assertEquals("overweight", subForm.getVariableValue(BMI_VARIABLE_NAME));
+		// // Load the rules
+		// FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		// // Form vaadinForm = this.createDhszwForm();
+		// formDrools.parse(createKidsFormSimpleExpression());
+		// // Load the submitted form
+		// readXml();
+		// translateFormCategories();
+		// formDrools.runDroolsRules(form);
+		//
+		// SubmittedForm subForm = (SubmittedForm) form;
+		// System.out.println(subForm.getVariableValue(AGE));
+
+		// Assert.assertEquals("overweight", subForm.getVariableValue(BMI_VARIABLE_NAME));
 
 		// // Check the results of the drools execution
 		// com.biit.abcd.core.drools.facts.inputform.Category testCat1 =
@@ -102,7 +103,7 @@ public class ExpressionsTest {
 	}
 
 	private Form createKidsFormSimpleExpression() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException {
+			InvalidAnswerFormatException, CharacterNotAllowedException {
 		Form form = new Form("KidsScreen");
 
 		Category algemeen = new Category("Algemeen");
@@ -116,9 +117,9 @@ public class ExpressionsTest {
 		// Create custom variables
 		CustomVariable age = new CustomVariable(form, AGE, CustomVariableType.NUMBER, CustomVariableScope.FORM);
 
-		ExpressionChain expressionAssignTest = new ExpressionChain("AgeYearAssig", new ExpressionValueCustomVariable(form, age),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(
-						birthdate, QuestionDateUnit.YEARS));
+		ExpressionChain expressionAssignTest = new ExpressionChain("AgeYearAssig", new ExpressionValueCustomVariable(
+				form, age), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
 
 		form.getExpressionChain().add(expressionAssignTest);
 

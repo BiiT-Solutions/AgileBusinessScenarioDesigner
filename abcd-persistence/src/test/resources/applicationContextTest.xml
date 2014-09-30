@@ -12,7 +12,8 @@
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd 
                         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd 
                         http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-2.0.xsd
-                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd"
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+			http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
 	default-autowire="byName">
 
 	<!-- Activates various annotations to be detected in bean classes -->
@@ -53,18 +54,43 @@
 				<prop key="hibernate.id.new_generator_mappings">${hibernate.id.new_generator_mappings}</prop>
 				<!-- Create table if not exists -->
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-				<!-- When deleting an object, set ID to null -->
-				<prop key="hibernate.use_identifier_rollback">${hibernate.use_identifier_rollback}</prop>
-				<!-- Get default data -->
-				<!--<prop key="hibernate.hbm2ddl.import_files">initial_data.sql</prop> -->
 				<!-- Unnecesary to open and close sessions -->
 				<prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
+				<!-- When deleting an object, set ID to null -->
+				<prop key="hibernate.use_identifier_rollback">${hibernate.use_identifier_rollback}</prop>
+				<prop key="hibernate.order_inserts">${hibernate.order_inserts}</prop>
+				<prop key="hibernate.order_updates">${hibernate.order_updates}</prop>
+				
+				<!-- Second Level Cache-->
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>				
+				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}</prop>
+				
+				<!-- C3p0 -->
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+				<prop key="hibernate.proxool.pool_alias">PoolDb1</prop>
+				<prop key="hibernate.jdbc.batch_versioned_data">${hibernate.jdbc.batch_versioned_data}</prop>
+				<prop key="hibernate.jdbc.use_streams_for_binary">${hibernate.jdbc.use_streams_for_binary}</prop>
+				<prop key="hibernate.c3p0.max_size">${hibernate.c3p0.max_size}</prop>
+				<prop key="hibernate.c3p0.min_size">${hibernate.c3p0.min_size}</prop>
+				<prop key="hibernate.c3p0.timeout">${hibernate.c3p0.timeout}</prop>
+				<prop key="hibernate.c3p0.max_statements">${hibernate.c3p0.max_statements}</prop>
+				<prop key="hibernate.c3p0.idle_test_period">${hibernate.c3p0.idle_test_period}</prop>
+				<prop key="hibernate.c3p0.acquire_increment">${hibernate.c3p0.acquire_increment}</prop>
 			</props>
 		</property>
 
 		<property name="packagesToScan">
 			<list>
-				<value>com.biit.**.*</value>
+				<value>com.biit.abcd.**.*</value>
+				<value>com.biit.persistence.**.*</value>
+				<value>com.biit.forms.**.*</value>
 			</list>
 		</property>
 	</bean>

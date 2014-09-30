@@ -3,6 +3,7 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
+				<include name="ehCache" />
 				<include name="expressionEvaluator" />
 				<include name="formDao" />
 				<include name="simpleFormViewDao" />
@@ -24,6 +25,7 @@
 			<class name="com.biit.abcd.persistence.entity.expressions.ExpressionTest" />
 			<class name="com.biit.abcd.persistence.dao.OrphanRemoveTest" />
 			<class name="com.biit.jexeval.ExpressionCheck" />
+			<class name="com.biit.abcd.persistence.EhCacheTest" />
 		</classes>
 	</test>
 </suite>

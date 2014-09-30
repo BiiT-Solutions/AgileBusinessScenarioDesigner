@@ -34,6 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -55,7 +56,7 @@ public class NewGenericsTest extends KidsFormCreator {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			RuleNotImplementedException, InvalidAnswerFormatException, ActionNotImplementedException, ParseException,
-			GroupDoesNotExistException, QuestionDoesNotExistException {
+			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException {
 
 		// Restart the form to avoid test cross references
 		initForm();

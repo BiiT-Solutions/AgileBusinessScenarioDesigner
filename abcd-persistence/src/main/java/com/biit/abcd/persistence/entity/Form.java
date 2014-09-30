@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
@@ -25,11 +28,15 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.form.BaseForm;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.liferay.portal.model.UserGroup;
 
 @Entity
-@Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
+@Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version" }) })
+@AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH))
+@Cache(region = "forms", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Form extends BaseForm {
 
 	@Column(nullable = false)
@@ -40,12 +47,14 @@ public class Form extends BaseForm {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.JOIN)
 	@OrderBy(value = "name ASC")
+	@Cache(region = "diagrams", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy(value = "name ASC")
+	@Cache(region = "tableRules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<TableRule> tableRules;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,12 +62,14 @@ public class Form extends BaseForm {
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy(value = "name ASC")
+	@Cache(region = "customVariables", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy(value = "name ASC")
+	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<ExpressionChain> expressionChain;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -66,6 +77,7 @@ public class Form extends BaseForm {
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy(value = "name ASC")
+	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
 	public Form() {
@@ -77,7 +89,7 @@ public class Form extends BaseForm {
 		rules = new HashSet<>();
 	}
 
-	public Form(String name) throws FieldTooLongException {
+	public Form(String name) throws FieldTooLongException, CharacterNotAllowedException {
 		super(name);
 		diagrams = new HashSet<>();
 		tableRules = new HashSet<>();
@@ -228,8 +240,7 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root
-	 * diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
 	 * 
 	 * @param diagram
 	 */

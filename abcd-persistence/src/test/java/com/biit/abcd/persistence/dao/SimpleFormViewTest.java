@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,9 +28,8 @@ public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContext
 	private ISimpleFormViewDao simpleFormViewDao;
 
 	@Test
-	public void getView() throws FieldTooLongException {
+	public void getView() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(DUMMY_FORM);
 		form.setLabel(DUMMY_FORM);
 		form.setCreatedBy(1l);
 		form.setUpdatedBy(1l);
@@ -39,7 +39,7 @@ public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContext
 		Assert.assertEquals(simpleFormViewDao.getRowCount(), 1);
 		List<SimpleFormView> views = simpleFormViewDao.getAll();
 		Assert.assertEquals(views.size(), 1);
-		Assert.assertEquals(views.get(0).getName(), DUMMY_FORM);
+		Assert.assertEquals(views.get(0).getLabel(), DUMMY_FORM);
 		formDao.makeTransient(form);
 	}
 }

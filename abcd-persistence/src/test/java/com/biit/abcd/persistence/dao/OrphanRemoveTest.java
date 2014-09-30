@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -65,9 +66,9 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	}
 
 	@Test
-	public void removeRuleOfForm() throws FieldTooLongException {
+	public void removeRuleOfForm() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(DUMMY_FORM);
+		form.setLabel(DUMMY_FORM);
 		// Rule already has two chains inside.
 		Rule rule = new Rule();
 		form.getRules().add(rule);
@@ -82,9 +83,9 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	}
 
 	@Test
-	public void removeDiagram() throws NotValidChildException, FieldTooLongException {
+	public void removeDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(FULL_FORM + "1");
+		form.setLabel(FULL_FORM + "1");
 
 		Category category1 = new Category();
 		category1.setName("Category1");
@@ -152,9 +153,10 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	}
 
 	@Test
-	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException {
+	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException,
+			CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(FULL_FORM + "2");
+		form.setLabel(FULL_FORM + "2");
 
 		Category category1 = new Category();
 		category1.setName("Category1");

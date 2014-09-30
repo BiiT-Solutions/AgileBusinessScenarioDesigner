@@ -35,7 +35,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 	// simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@BatchSize(size = 500)
+	@BatchSize(size = 20)
 	@OrderBy(value = "creationTime ASC")
 	private List<TableRuleRow> rules;
 

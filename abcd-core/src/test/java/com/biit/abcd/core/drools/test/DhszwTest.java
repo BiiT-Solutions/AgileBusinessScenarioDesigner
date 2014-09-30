@@ -5,10 +5,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.junit.Assert;
@@ -21,7 +17,6 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -53,12 +48,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
-import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
@@ -70,7 +64,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class DhszwTest {
 	private final static String APP = "Application1";
 	private final static String FORM = "Form1";
-	private final static Charset baseCharset =  StandardCharsets.UTF_8;
+	private final static Charset baseCharset = StandardCharsets.UTF_8;
 
 	private ISubmittedForm form;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
@@ -78,7 +72,7 @@ public class DhszwTest {
 	@Test(groups = { "orbeon" })
 	public void readXml() throws DocumentException, IOException {
 		this.form = new SubmittedForm(APP, FORM);
-		String xmlFile = readFile("./src/test/resources/dhszwTest.xml",  baseCharset);
+		String xmlFile = readFile("./src/test/resources/dhszwTest.xml", baseCharset);
 		this.orbeonImporter.readXml(xmlFile, this.form);
 		Assert.assertNotNull(this.form);
 		Assert.assertFalse(this.form.getCategories().isEmpty());
@@ -86,22 +80,21 @@ public class DhszwTest {
 
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readXml" })
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml",  baseCharset);
+		String xmlStructure = readFile("./src/test/resources/dhszwTest.xhtml", baseCharset);
 		OrbeonCategoryTranslator.getInstance().readXml(this.form, xmlStructure);
 	}
 
 	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
 	public void updateQuestionsScore() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, RuleNotImplementedException {
+			IOException, CategoryDoesNotExistException, RuleNotImplementedException, CharacterNotAllowedException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		Form vaadinForm = this.createCompleteDhszwForm();
-//		formDrools.generateDroolRules(vaadinForm);
-//		formDrools.runDroolsRules(this.form);
-//		
-//			formDrools.applyDrools(APP, FORM, docId, formDrools.generateDroolRules(vaadinForm, null).getRules(), null);
-		
-		
+		// formDrools.generateDroolRules(vaadinForm);
+		// formDrools.runDroolsRules(this.form);
+		//
+		// formDrools.applyDrools(APP, FORM, docId, formDrools.generateDroolRules(vaadinForm, null).getRules(), null);
+
 		Assert.assertEquals("Geen contact met politie. Geen strafblad.",
 				((SubmittedForm) this.form).getVariableValue(this.form.getCategory("Justitie"), "cScoreText"));
 	}
@@ -114,16 +107,17 @@ public class DhszwTest {
 	/**
 	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
 	 * Form used to create the drools rules
-	 *
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
 	 * @throws ChildrenNotFoundException
 	 * @throws FieldTooLongException
 	 * @throws IOException
+	 * @throws CharacterNotAllowedException
 	 */
 	private Form createCompleteDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, CharacterNotAllowedException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -355,38 +349,38 @@ public class DhszwTest {
 		return subDiagram;
 	}
 
-//	private List<GlobalVariable> createGlobalvariables() throws NotValidTypeInVariableData {
-//		List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
-//		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
-//		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
-//		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
-//		Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
-//
-//		// Should get the second value
-//		GlobalVariable globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);
-//		globalVariableNumber.setName("IVA");
-//		globalVariableNumber.addVariableData(19.0, validFrom, validToPast);
-//		globalVariableNumber.addVariableData(21.0, validToPast, null);
-//		// Should not represent this constant
-//		GlobalVariable globalVariableText = new GlobalVariable(AnswerFormat.TEXT);
-//		globalVariableText.setName("TestText");
-//		globalVariableText.addVariableData("Hello", validFromFuture, validToFuture);
-//		// Should get the value
-//		GlobalVariable globalVariablePostalCode = new GlobalVariable(AnswerFormat.POSTAL_CODE);
-//		globalVariablePostalCode.setName("TestPC");
-//		globalVariablePostalCode.addVariableData("Postal", validFrom, validToFuture);
-//		// Should enter a valid date as constant
-//		GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
-//		globalVariableDate.setName("TestDate");
-//		globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
-//
-//		globalVarList.add(globalVariableNumber);
-//		globalVarList.add(globalVariableText);
-//		globalVarList.add(globalVariablePostalCode);
-//		globalVarList.add(globalVariableDate);
-//
-//		return globalVarList;
-//	}
+	// private List<GlobalVariable> createGlobalvariables() throws NotValidTypeInVariableData {
+	// List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
+	// Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
+	// Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
+	// Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
+	// Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
+	//
+	// // Should get the second value
+	// GlobalVariable globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);
+	// globalVariableNumber.setName("IVA");
+	// globalVariableNumber.addVariableData(19.0, validFrom, validToPast);
+	// globalVariableNumber.addVariableData(21.0, validToPast, null);
+	// // Should not represent this constant
+	// GlobalVariable globalVariableText = new GlobalVariable(AnswerFormat.TEXT);
+	// globalVariableText.setName("TestText");
+	// globalVariableText.addVariableData("Hello", validFromFuture, validToFuture);
+	// // Should get the value
+	// GlobalVariable globalVariablePostalCode = new GlobalVariable(AnswerFormat.POSTAL_CODE);
+	// globalVariablePostalCode.setName("TestPC");
+	// globalVariablePostalCode.addVariableData("Postal", validFrom, validToFuture);
+	// // Should enter a valid date as constant
+	// GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
+	// globalVariableDate.setName("TestDate");
+	// globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
+	//
+	// globalVarList.add(globalVariableNumber);
+	// globalVarList.add(globalVariableText);
+	// globalVarList.add(globalVariablePostalCode);
+	// globalVarList.add(globalVariableDate);
+	//
+	// return globalVarList;
+	// }
 
 	private Category getCategoryFromForm(Form form, String catName) {
 		for (TreeObject child : form.getAll(Category.class)) {

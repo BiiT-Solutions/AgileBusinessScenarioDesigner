@@ -6,6 +6,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.BaseCategory;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -17,7 +18,7 @@ public class Category extends BaseCategory {
 		super();
 	}
 
-	public Category(String name) throws FieldTooLongException {
+	public Category(String name) throws FieldTooLongException, CharacterNotAllowedException {
 		super(name);
 	}
 

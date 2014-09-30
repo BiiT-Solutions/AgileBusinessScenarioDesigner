@@ -604,7 +604,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(255),
+        label longtext,
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -618,7 +618,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(255),
+        label longtext,
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -632,7 +632,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(255),
+        label longtext,
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -679,7 +679,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(255),
+        label longtext,
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -694,7 +694,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(255),
+        label longtext,
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
@@ -977,7 +977,7 @@
         add constraint UK_gtcyh8mle277igwtb5dvhjkr1  unique (comparationId);
 
     alter table tree_forms 
-        add constraint UK_2lpmhpxyj0ahdclkdlep5fn9t  unique (name, version);
+        add constraint UK_iwgivd7sy9sfbjyj0hlyccrxt  unique (label, version);
 
     alter table tree_forms 
         add constraint UK_plkq2e2pj19uak2ncrgf1ft6v  unique (ID);

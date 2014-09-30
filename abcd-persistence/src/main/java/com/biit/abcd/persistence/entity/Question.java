@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.BaseQuestion;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
@@ -24,7 +25,7 @@ public class Question extends BaseQuestion {
 	public Question() {
 	}
 
-	public Question(String name) throws FieldTooLongException {
+	public Question(String name) throws FieldTooLongException, CharacterNotAllowedException {
 		super(name);
 	}
 

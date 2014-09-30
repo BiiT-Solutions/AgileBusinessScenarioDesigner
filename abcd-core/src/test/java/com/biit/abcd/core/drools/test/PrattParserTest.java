@@ -31,13 +31,14 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class PrattParserTest {
 	@Test(groups = { "simpleParser" })
-	public static void testParser() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
+	public static void testParser() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException {
 
 		Form form = new Form("testForm");
 		Category category = new Category("categoryTest");

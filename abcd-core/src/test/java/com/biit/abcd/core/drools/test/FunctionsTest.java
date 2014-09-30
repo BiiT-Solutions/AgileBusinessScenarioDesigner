@@ -50,6 +50,7 @@ import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -85,30 +86,31 @@ public class FunctionsTest {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			RuleNotImplementedException, InvalidAnswerFormatException {
-//		// Load the rules
-//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-//		Form vaadinForm = this.createDhszwForm();
-//		formDrools.generateDroolRules(vaadinForm);
-//		// Load the submitted form
-//		this.readXml();
-//		this.translateFormCategories();
-//		formDrools.runDroolsRules(this.form);
-//
-//		// Check the results of the drools execution
-//		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-//				.getCategory("Financiën");
-//		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-//				.getCategory("Justitie");
-//
-//		Assert.assertEquals(185.26, testCat1.getNumberVariableValue("cScore"));
-//		Assert.assertEquals(3226.72, testCat2.getNumberVariableValue("cScore"));
+		// // Load the rules
+		// FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		// Form vaadinForm = this.createDhszwForm();
+		// formDrools.generateDroolRules(vaadinForm);
+		// // Load the submitted form
+		// this.readXml();
+		// this.translateFormCategories();
+		// formDrools.runDroolsRules(this.form);
+		//
+		// // Check the results of the drools execution
+		// com.biit.abcd.core.drools.facts.inputform.Category testCat1 =
+		// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+		// .getCategory("Financiën");
+		// com.biit.abcd.core.drools.facts.inputform.Category testCat2 =
+		// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+		// .getCategory("Justitie");
+		//
+		// Assert.assertEquals(185.26, testCat1.getNumberVariableValue("cScore"));
+		// Assert.assertEquals(3226.72, testCat2.getNumberVariableValue("cScore"));
 	}
 
 	/**
-	 * Create the form structure. Creates to simple assignation rules in the
-	 * table rule and one expression with max func Form used to create the
-	 * drools rules
-	 *
+	 * Create the form structure. Creates to simple assignation rules in the table rule and one expression with max func
+	 * Form used to create the drools rules
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
@@ -116,9 +118,11 @@ public class FunctionsTest {
 	 * @throws FieldTooLongException
 	 * @throws IOException
 	 * @throws InvalidAnswerFormatException
+	 * @throws CharacterNotAllowedException
 	 */
 	private Form createDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException,
+			CharacterNotAllowedException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");

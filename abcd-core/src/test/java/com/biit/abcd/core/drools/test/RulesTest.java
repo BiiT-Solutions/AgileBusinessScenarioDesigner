@@ -10,7 +10,6 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.orbeon.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -55,6 +54,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -88,26 +88,29 @@ public class RulesTest {
 	@Test(groups = { "rules" })
 	public void testRuleSet() throws ExpressionInvalidException, NotValidChildException, NotValidOperatorInExpression,
 			ChildrenNotFoundException, RuleInvalidException, FieldTooLongException, IOException,
-			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation, RuleNotImplementedException {
-//		// Load the rules
-//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-//		Form vaadinForm = this.createDhszwForm();
-//		formDrools.generateDroolRules(vaadinForm);
-//
-//		// Load the submitted form
-//		this.readXml();
-//		this.translateFormCategories();
-//		formDrools.runDroolsRules(this.form);
-//
-//		// Check the created variables
-//		com.biit.abcd.core.drools.facts.inputform.Category testCat1 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-//				.getCategory("Justitie");
-//		Assert.assertEquals("Geen contact met politie. Geen strafblad.", testCat1.getVariableValue("cScoreText"));
-//		com.biit.abcd.core.drools.facts.inputform.Category testCat2 = (com.biit.abcd.core.drools.facts.inputform.Category) this.form
-//				.getCategory("Huisvesting");
-//		Assert.assertEquals(
-//				"In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.",
-//				testCat2.getVariableValue("cScoreText"));
+			CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
+			RuleNotImplementedException {
+		// // Load the rules
+		// FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		// Form vaadinForm = this.createDhszwForm();
+		// formDrools.generateDroolRules(vaadinForm);
+		//
+		// // Load the submitted form
+		// this.readXml();
+		// this.translateFormCategories();
+		// formDrools.runDroolsRules(this.form);
+		//
+		// // Check the created variables
+		// com.biit.abcd.core.drools.facts.inputform.Category testCat1 =
+		// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+		// .getCategory("Justitie");
+		// Assert.assertEquals("Geen contact met politie. Geen strafblad.", testCat1.getVariableValue("cScoreText"));
+		// com.biit.abcd.core.drools.facts.inputform.Category testCat2 =
+		// (com.biit.abcd.core.drools.facts.inputform.Category) this.form
+		// .getCategory("Huisvesting");
+		// Assert.assertEquals(
+		// "In veilige, stabiele huisvesting, maar slechts marginaal toereikend en/of in onderhuur of niet autonome huisvesting.",
+		// testCat2.getVariableValue("cScoreText"));
 	}
 
 	@Test(groups = { "rules" })
@@ -115,10 +118,10 @@ public class RulesTest {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			InvalidAnswerFormatException, RuleNotImplementedException {
-//		// Load the rules
-//		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-//		Form vaadinForm = this.createSpecialRules();
-//		formDrools.generateDroolRules(vaadinForm);
+		// // Load the rules
+		// FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		// Form vaadinForm = this.createSpecialRules();
+		// formDrools.generateDroolRules(vaadinForm);
 	}
 
 	static String readFile(String path, Charset encoding) throws IOException {
@@ -128,16 +131,17 @@ public class RulesTest {
 
 	/**
 	 * Create the form structure.
-	 *
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
 	 * @throws ChildrenNotFoundException
 	 * @throws FieldTooLongException
 	 * @throws IOException
+	 * @throws CharacterNotAllowedException
 	 */
 	private Form createDhszwForm() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, CharacterNotAllowedException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -299,7 +303,7 @@ public class RulesTest {
 
 	/**
 	 * Create the form structure.
-	 *
+	 * 
 	 * @return
 	 * @throws NotValidChildException
 	 * @throws NotValidOperatorInExpression
@@ -307,9 +311,11 @@ public class RulesTest {
 	 * @throws FieldTooLongException
 	 * @throws IOException
 	 * @throws InvalidAnswerFormatException
+	 * @throws CharacterNotAllowedException
 	 */
 	private Form createSpecialRules() throws NotValidChildException, NotValidOperatorInExpression,
-			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException {
+			ChildrenNotFoundException, FieldTooLongException, IOException, InvalidAnswerFormatException,
+			CharacterNotAllowedException {
 
 		// Create the form
 		Form form = new Form("DhszwForm");

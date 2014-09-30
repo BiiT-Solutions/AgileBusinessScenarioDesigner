@@ -14,6 +14,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -65,9 +66,9 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test
-	public void storeFormDiagram() throws NotValidChildException, FieldTooLongException {
+	public void storeFormDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
-		form.setName(DIAGRAM_FORM);
+		form.setLabel(DIAGRAM_FORM);
 
 		Diagram diagram = new Diagram(DUMMY_DIAGRAM);
 		form.getDiagrams().add(diagram);
