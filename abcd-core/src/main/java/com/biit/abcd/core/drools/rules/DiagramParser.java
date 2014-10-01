@@ -173,10 +173,13 @@ public class DiagramParser {
 						break;
 					}
 				}
+//				System.out.println("EXPRESSION ADDED TO FORK CONDITIONS: " + expressionOfLinkCopy);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(expressionOfLinkCopy);
 			}
 		}
+
+//		System.out.println("FORK CONDITIONS: " + forkConditions);
 
 		int forkConditionToRemove = 0;
 		for (ExpressionChain forkExpressionChain : forkConditions) {

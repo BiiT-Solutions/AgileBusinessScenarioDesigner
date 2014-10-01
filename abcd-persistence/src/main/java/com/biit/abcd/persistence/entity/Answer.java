@@ -18,7 +18,8 @@ public class Answer extends BaseAnswer {
 	}
 
 	public Answer(String name) throws FieldTooLongException, CharacterNotAllowedException {
-		super(name);
+		super();
+		setName(name);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -82,7 +83,11 @@ public class ExpressionParser {
 			break;
 		case GROUP:
 			for (TreeObject category : expressionValueGenericVariable.getVariable().getForm().getChildren()) {
-				treeObjects.addAll(category.getAll(Group.class));
+				List<TreeObject> groups = category.getAll(Group.class);
+				// We need to reverse the groups to correctly generate the rules
+				// for nested groups
+				Collections.reverse(groups);
+				treeObjects.addAll(groups);
 			}
 			break;
 		case QUESTION_GROUP:

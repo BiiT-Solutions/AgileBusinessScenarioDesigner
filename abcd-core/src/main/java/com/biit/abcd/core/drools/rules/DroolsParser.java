@@ -1211,7 +1211,7 @@ public class DroolsParser {
 	}
 
 	private static String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
-			AvailableOperator operator, Double value) {
+			AvailableOperator operator, Object value) {
 		String rule = "";
 
 		// Check if the reference exists in the rule, if not, it creates
@@ -1220,7 +1220,7 @@ public class DroolsParser {
 
 		rule += "	$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
 				+ leftQuestion.getName() + "', DateUtils.returnYearsDistanceFromDate(getAnswer('"
-				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + value.intValue() + ") from $"
+				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + value + ") from $"
 				+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
 		return rule;
 	}
@@ -1244,9 +1244,9 @@ public class DroolsParser {
 				List<Expression> rightExpressions = ((ExpressionChain) conditions.get(2)).getExpressions();
 
 				// Comparison with a number
-				if ((rightExpressions.size() == 1) && (rightExpressions.get(0) instanceof ExpressionValueNumber)) {
+				if ((rightExpressions.size() == 1) && (rightExpressions.get(0) instanceof ExpressionValue)) {
 					// Get the values of the between expression
-					Double value = ((ExpressionValueNumber) rightExpressions.get(0)).getValue();
+					Object value = ((ExpressionValue) rightExpressions.get(0)).getValue();
 					if (value != null) {
 						TreeObject leftTreeObjectParent = leftTreeObject.getParent();
 						putTreeObjectName(leftTreeObject, leftTreeObject.getUniqueNameReadable().toString());
@@ -1270,7 +1270,7 @@ public class DroolsParser {
 									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
 											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer('"
 											+ getTreeObjectAnswerType(leftQuestion) + "') " + operator.getValue() + " "
-											+ value.intValue() + ") from $"
+											+ value + ") from $"
 											+ leftTreeObjectParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
 									break;
@@ -1279,7 +1279,7 @@ public class DroolsParser {
 									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
 											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer('"
 											+ getTreeObjectAnswerType(leftQuestion) + "') " + operator.getValue() + " "
-											+ value.intValue() + ") from $"
+											+ value + ") from $"
 											+ leftTreeObjectParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
 									break;

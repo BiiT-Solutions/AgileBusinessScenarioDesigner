@@ -34,6 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -47,7 +48,7 @@ public class ForkOthersTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testFork() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException, CharacterNotAllowedException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -59,20 +60,20 @@ public class ForkOthersTest extends KidsFormCreator {
 		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
 	}
 
-	@Test(groups = { "rules" })
-	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
-
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create the table and form diagram
-		createFormNestedForks();
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check Fork assignation
-		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
-	}
+//	@Test(groups = { "rules" })
+//	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+//			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+//			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException, CharacterNotAllowedException {
+//
+//		// Restart the form to avoid test cross references
+//		initForm();
+//		// Create the table and form diagram
+//		createFormNestedForks();
+//		// Create the rules and launch the engine
+//		DroolsForm droolsForm = createAndRunDroolsRules();
+//		// Check Fork assignation
+//		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+//	}
 
 	// @Test(groups = { "rules" })
 	// public void testForkWithMultipleConditions() throws
