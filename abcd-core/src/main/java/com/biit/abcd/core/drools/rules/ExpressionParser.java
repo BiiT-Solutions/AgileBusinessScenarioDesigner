@@ -13,9 +13,11 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
@@ -34,6 +36,10 @@ public class ExpressionParser {
 			// generate the set of rules that represents the generic
 			if (expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				return createExpressionRuleSet(expressionChain, extraConditions);
+			} else if ((expressionChain.getExpressions().get(0) instanceof ExpressionFunction)
+					&& ((ExpressionFunction) expressionChain.getExpressions().get(0)).getValue().equals(
+							AvailableFunction.IF)) {
+				return createIfRuleSet(expressionChain, extraConditions);
 			} else {
 				return Arrays.asList(createExpressionRule(expressionChain, extraConditions));
 			}
@@ -68,6 +74,54 @@ public class ExpressionParser {
 			droolsRule.setActions(expressionChain.generateCopy());
 		}
 		return droolsRule;
+	}
+
+	private static List<DroolsRule> createIfRuleSet(ExpressionChain expressionChain, ExpressionChain extraConditions) {
+		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
+		ExpressionChain ifCondition = new ExpressionChain();
+		ExpressionChain ifActionThen = new ExpressionChain();
+		ExpressionChain ifActionElse = new ExpressionChain();
+		
+		int ifIndex = 0;
+		ExpressionChain expressionCopy = expressionChain.generateCopy();
+		// Remove the IF from the expression
+		expressionCopy.removeFirstExpression();
+		// and the last parenthesis
+		expressionCopy.removeLastExpression();
+		for (Expression expression : expressionCopy.getExpressions()) {
+			if ((expression instanceof ExpressionSymbol)
+					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.COMMA)) {
+				ifIndex++;
+			} else {
+				if (ifIndex == 0) {
+					ifCondition.addExpression(expression);
+				} else if (ifIndex == 1) {
+					ifActionThen.addExpression(expression);
+				} else if (ifIndex == 2) {
+					ifActionElse.addExpression(expression);
+				}
+			}
+		}
+		// Creation of the rules that represent the if
+		DroolsRule ifThenRule = new DroolsRule();
+		ifThenRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
+		ifThenRule.setCondition(ifCondition);
+		ifThenRule.setActions(ifActionThen);
+		droolsRules.add(ifThenRule);
+		
+		DroolsRule ifElseRule = new DroolsRule();
+		ifElseRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
+		ExpressionChain negatedCondition = new ExpressionChain();
+		// For the ELSE part we negate the Condition part
+		negatedCondition.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		negatedCondition.addExpressions(ifCondition.getExpressions());
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		ifElseRule.setCondition(negatedCondition);
+		ifElseRule.setActions(ifActionElse);
+		droolsRules.add(ifElseRule);
+
+		return droolsRules;
 	}
 
 	private static List<DroolsRule> createExpressionRuleSet(ExpressionChain expressionChain,

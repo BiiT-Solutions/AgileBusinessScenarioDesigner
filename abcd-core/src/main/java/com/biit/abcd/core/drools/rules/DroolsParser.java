@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.apache.poi.ss.formula.functions.FinanceLib;
 
@@ -21,7 +20,6 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
@@ -41,7 +39,7 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
 
 public class DroolsParser {
-	
+
 	private static boolean orOperatorUsed = false;
 
 	private static HashMap<TreeObject, String> treeObjectDroolsname = new HashMap<TreeObject, String>();
@@ -108,7 +106,8 @@ public class DroolsParser {
 						ExpressionValueTreeObjectReference inExpValTreeObj = (ExpressionValueTreeObjectReference) inParameter
 								.get(0);
 						if (inExpValTreeObj instanceof ExpressionValueCustomVariable) {
-							// TODO
+							inValues += "'" + getDroolsVariableValueFromExpressionValueTreeObject(inExpValTreeObj)
+									+ "', ";
 						} else {
 							inValues += "'" + inExpValTreeObj.getReference().getName() + "', ";
 						}
@@ -342,7 +341,7 @@ public class DroolsParser {
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
 		result = RulesUtils.removeExtraParenthesis(result);
-		if(orOperatorUsed)
+		if (orOperatorUsed)
 			result = RulesUtils.fixOrCondition(result);
 
 		return result;
@@ -413,6 +412,7 @@ public class DroolsParser {
 					break;
 				case DATE:
 					// TODO
+					// Date can not be compared with a value
 					break;
 				}
 			}
@@ -714,146 +714,6 @@ public class DroolsParser {
 		return "";
 	}
 
-	/**
-	 * Used when parsing the generic custom variables inside the assignation
-	 * method<br>
-	 * Checks the scopes of the variables and assign one entry in a HashMap for
-	 * every type of scope
-	 * 
-	 * @param actions
-	 *            the expressionChain with the actions to check
-	 * @return
-	 */
-	private static HashMap<CustomVariableScope, List<ExpressionValueCustomVariable>> getElementTypesMapInsideFunction(
-			ExpressionChain actions) {
-		HashMap<CustomVariableScope, List<ExpressionValueCustomVariable>> customVariableScopeMap = new HashMap<CustomVariableScope, List<ExpressionValueCustomVariable>>();
-		for (int actionIndex = 2; actionIndex < actions.getExpressions().size(); actionIndex++) {
-			Expression expressionAction = actions.getExpressions().get(actionIndex);
-			if (expressionAction instanceof ExpressionChain) {
-				Expression expressionActionInsideExpressionChain = ((ExpressionChain) expressionAction)
-						.getExpressions().get(0);
-				if (expressionActionInsideExpressionChain instanceof ExpressionValueCustomVariable) {
-					ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) expressionActionInsideExpressionChain;
-					CustomVariable customVariable = expressionValueCustomVariable.getVariable();
-					if (customVariableScopeMap.get(customVariable.getScope()) == null) {
-						customVariableScopeMap.put(customVariable.getScope(),
-								new ArrayList<ExpressionValueCustomVariable>());
-						customVariableScopeMap.get(customVariable.getScope()).add(expressionValueCustomVariable);
-					} else {
-						customVariableScopeMap.get(customVariable.getScope()).add(expressionValueCustomVariable);
-					}
-				}
-			}
-		}
-		return customVariableScopeMap;
-	}
-
-	private static String assignationFunctionMinMaxAvgSumActionWithMultipleElementTypes(ExpressionChain actions,
-			HashMap<CustomVariableScope, List<ExpressionValueCustomVariable>> customVariableScopeMap) {
-		String ruleCore = "";
-		ExpressionValueCustomVariable leftExpressionValueCustomvariable = (ExpressionValueCustomVariable) ((ExpressionChain) actions
-				.getExpressions().get(0)).getExpressions().get(0);
-		ExpressionFunction expressionFunction = (ExpressionFunction) actions.getExpressions().get(1);
-
-		int variableIndex = 1;
-		for (Entry<CustomVariableScope, List<ExpressionValueCustomVariable>> customVariableScopeEntry : customVariableScopeMap
-				.entrySet()) {
-			List<ExpressionValueCustomVariable> customVariableList = customVariableScopeEntry.getValue();
-			// Create the $var and accumulate drools functions
-			CustomVariableScope customVariableScope = null;
-			CustomVariable customVariable = null;
-			TreeObject customVariableTreeObjectParent = null;
-			int customVariableListIndex = 0;
-			for (ExpressionValueCustomVariable customVariableExpression : customVariableList) {
-				TreeObject customVariableTreeObject = customVariableExpression.getReference();
-				customVariable = customVariableExpression.getVariable();
-				customVariableScope = customVariable.getScope();
-				customVariableTreeObjectParent = customVariableTreeObject.getParent();
-				if (customVariableListIndex == 0) {
-					ruleCore += "	$var" + variableIndex + " : List() from collect( " + customVariableScope.getName()
-							+ "(isScoreSet('" + customVariable.getName() + "'), getTag() == '"
-							+ customVariableTreeObject.getName() + "' || ";
-				} else {
-					ruleCore += "== '" + customVariableTreeObject.getName() + "' || ";
-				}
-				customVariableListIndex++;
-			}
-
-			// Finish the line of the condition
-			if (customVariableTreeObjectParent != null) {
-				// Finish the line of the condition
-				ruleCore = ruleCore.substring(0, ruleCore.length() - 3);
-				switch (customVariableScope) {
-				case QUESTION:
-					ruleCore += ") from $" + customVariableTreeObjectParent.getUniqueNameReadable().toString()
-							+ ".getQuestions()) \n";
-					break;
-				case GROUP:
-					ruleCore += ") from $" + customVariableTreeObjectParent.getUniqueNameReadable().toString()
-							+ ".getGroups()) \n";
-					break;
-				case CATEGORY:
-					ruleCore += ") from $" + customVariableTreeObjectParent.getUniqueNameReadable().toString()
-							+ ".getCategories()) \n";
-					break;
-				case FORM:
-					// The code flow should not get here
-					break;
-				}
-				switch (expressionFunction.getValue()) {
-				case MAX:
-					ruleCore += "	accumulate( " + customVariableScope.getName() + "($value" + variableIndex + " : "
-							+ "getVariableValue('" + customVariable.getName() + "')" + ") from $var" + variableIndex
-							+ "; $sol" + variableIndex + " : max($value" + variableIndex + ")) \n";
-					break;
-				case MIN:
-					ruleCore += "	accumulate( " + customVariableScope.getName() + "($value" + variableIndex + " : "
-							+ "getVariableValue('" + customVariable.getName() + "')" + ") from $var" + variableIndex
-							+ "; $sol" + variableIndex + " : min($value" + variableIndex + ")) \n";
-					break;
-				case AVG:
-					ruleCore += "	accumulate( " + customVariableScope.getName() + "($value" + variableIndex + " : "
-							+ "getVariableValue('" + customVariable.getName() + "')" + ") from $var" + variableIndex
-							+ "; $sol" + variableIndex + " : average($value" + variableIndex + ")) \n";
-					break;
-				case SUM:
-					ruleCore += "	accumulate( " + customVariableScope.getName() + "($value" + variableIndex + " : "
-							+ "getVariableValue('" + customVariable.getName() + "')" + ") from $var" + variableIndex
-							+ "; $sol" + variableIndex + " : sum($value" + variableIndex + ")) \n";
-					break;
-				}
-			}
-			variableIndex++;
-		}
-
-		ruleCore = RulesUtils.removeDuplicateLines(ruleCore);
-		ruleCore += RulesUtils.getThenRuleString();
-		// RHS
-		if (leftExpressionValueCustomvariable != null) {
-			switch (expressionFunction.getValue()) {
-			case MAX:
-				ruleCore += "	Double sol = ((Double)$sol1 > (Double)$sol2) ? (Double)$sol1 : (Double)$sol2;\n";
-				break;
-			case MIN:
-				ruleCore += "	Double sol = ((Double)$sol1 > (Double)$sol2) ? (Double)$sol2 : (Double)$sol1;\n";
-				break;
-			case AVG:
-				ruleCore += "	Double sol = ((Double)$sol1 + (Double)$sol2)/2.0;\n";
-				break;
-			case SUM:
-				ruleCore += "	Double sol = (Double)$sol1 + (Double)$sol2;\n";
-				break;
-			}
-
-			ruleCore += "	$" + getTreeObjectName(leftExpressionValueCustomvariable.getReference())
-					+ ".setVariableValue('" + leftExpressionValueCustomvariable.getVariable().getName() + "', sol);\n";
-			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-					+ leftExpressionValueCustomvariable.getReference().getName() + ", "
-					+ leftExpressionValueCustomvariable.getVariable().getName() + ", \" + sol +\")\");\n";
-		}
-		return ruleCore;
-	}
-
 	private static String orOperator(List<Expression> expressions) {
 		String result = "";
 
@@ -862,12 +722,12 @@ public class DroolsParser {
 
 		String leftPart = processResultConditionsFromPrattParser(leftChain);
 		String rigthPart = processResultConditionsFromPrattParser(rightChain);
-		
+
 		String leftPartLastLine = RulesUtils.getLastLine(leftPart);
 		String rightPartLastLine = RulesUtils.getLastLine(rigthPart);
 		String leftPartWithoutLastLine = RulesUtils.removeLastNLines(leftPart, 1);
 		String rightPartWithoutLastLine = RulesUtils.removeLastNLines(rigthPart, 1);
-		
+
 		result += leftPartWithoutLastLine;
 		result += rightPartWithoutLastLine;
 		result += "\t(\n";
@@ -877,7 +737,6 @@ public class DroolsParser {
 		result += "\n\t)\n";
 
 		orOperatorUsed = true;
-		
 		return result;
 	}
 
@@ -911,27 +770,27 @@ public class DroolsParser {
 	 * @throws RuleNotImplementedException
 	 */
 	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException {
-		List<Expression> actions = expressionChain.getExpressions();
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
-		ExpressionChain expressionChainAnalyzed = prattParserResult.getExpressionChain();
+		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 
-		if ((expressionChainAnalyzed.getExpressions().get(0) instanceof ExpressionChain)
-				&& (((ExpressionChain) expressionChainAnalyzed.getExpressions().get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable)) {
+			if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
+				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
+						.get(0) instanceof ExpressionValueCustomVariable)) {
 
-			if (expressionChainAnalyzed.getExpressions().get(1) instanceof ExpressionFunction) {
-				switch (((ExpressionFunction) expressionChainAnalyzed.getExpressions().get(1)).getValue()) {
+			if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
+				switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
 				case MAX:
 				case MIN:
 				case AVG:
 				case SUM:
-					return assignationFunctionMinMaxAvgSumAction(expressionChainAnalyzed);
+					return assignationFunctionMinMaxAvgSumAction(prattParserResultExpressionChain);
 				case PMT:
 					return assignationFunctionPmtAction(expressionChain.getExpressions());
 				}
 			}
 			// Mathematical expression
 			else {
-				return mathAssignationAction(expressionChainAnalyzed, prattParserResult);
+				return mathAssignationAction(prattParserResultExpressionChain, prattParserResult);
 			}
 		}
 		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
@@ -1213,7 +1072,7 @@ public class DroolsParser {
 
 	private static String questionDateDaysOperatorValueNumber(TreeObject question, Double value,
 			AvailableOperator operator) {
-		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
+		return "\t$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
 				+ "', DateUtils.returnDaysDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
 				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
@@ -1221,7 +1080,7 @@ public class DroolsParser {
 
 	private static String questionDateMonthsOperatorValueNumber(TreeObject question, Double value,
 			AvailableOperator operator) {
-		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
+		return "\t$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
 				+ "', DateUtils.returnMonthsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
 				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";
@@ -1229,13 +1088,12 @@ public class DroolsParser {
 
 	private static String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
 			AvailableOperator operator, Object value) {
+		// TODO
 		String rule = "";
-
 		// Check if the reference exists in the rule, if not, it creates
 		// a new reference
 		rule += checkVariableAssignation(leftQuestion);
-
-		rule += "	$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
+		rule += "\t$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
 				+ leftQuestion.getName() + "', DateUtils.returnYearsDistanceFromDate(getAnswer('"
 				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + value + ") from $"
 				+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
@@ -1244,7 +1102,7 @@ public class DroolsParser {
 
 	private static String questionDateYearsOperatorValueNumber(TreeObject question, Double value,
 			AvailableOperator operator) {
-		return "	$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
+		return "\t$" + question.getUniqueNameReadable().toString() + " : Question(getTag()== '" + question.getName()
 				+ "', DateUtils.returnYearsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
 				+ question.getParent().getUniqueNameReadable().toString() + ".getQuestions()\n";

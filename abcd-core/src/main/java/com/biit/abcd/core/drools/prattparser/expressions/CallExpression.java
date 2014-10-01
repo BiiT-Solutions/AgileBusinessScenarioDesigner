@@ -28,7 +28,7 @@ public class CallExpression implements ITreeElement {
 	}
 
 	public ITreeElement getFunction() {
-		return this.leftElement;
+		return leftElement;
 	}
 
 	public List<ITreeElement> getArgs() {
@@ -37,8 +37,13 @@ public class CallExpression implements ITreeElement {
 
 	@Override
 	public ExpressionChain getExpressionChain() {
-		ExpressionChain expChain = new ExpressionChain(this.leftElement.getExpressionChain(), this.function.getExpression());
-		for(ITreeElement treeElem : this.args){
+		ExpressionChain expChain = null;
+		if (leftElement == null) {
+			expChain = new ExpressionChain(function.getExpression());
+		} else {
+			expChain = new ExpressionChain(leftElement.getExpressionChain(), function.getExpression());
+		}
+		for (ITreeElement treeElem : args) {
 			expChain.addExpressions(treeElem.getExpressionChain());
 		}
 		return expChain;

@@ -38,7 +38,8 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class PrattParserTest {
 	@Test(groups = { "simpleParser" })
-	public static void testParser() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException {
+	public static void testParser() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException {
 
 		Form form = new Form("form");
 		Category category = new Category("categoryTest");
@@ -85,9 +86,8 @@ public class PrattParserTest {
 
 		// Simple Negation TreeObject (e.g. NOT(QU1 == A1) )
 		String actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
-				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), expValQU1,
-						new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQU1A1, new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET)));
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), expValQU1, new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), expValQU1A1, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
 		Assert.assertEquals(actual, "null[NOT(, null[null[QU1], ==, null[QU1A1]]]");
 
 		// Simple TreeObject equals TreeObject (e.g. QU1 == A1)
@@ -101,11 +101,13 @@ public class PrattParserTest {
 		Assert.assertEquals(actual, "null[null[categoryTest.catVar], ==, null[5]]");
 
 		// Simple AND condition
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.AND), expValQU1));
+		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.AND),
+				expValQU1));
 		Assert.assertEquals(actual, "null[null[QU1], &&, null[QU1]]");
 
 		// Simple OR condition
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.OR), expValQU1));
+		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.OR),
+				expValQU1));
 		Assert.assertEquals(actual, "null[null[QU1], ||, null[QU1]]");
 
 		// AND|OR conditions combination
@@ -113,7 +115,8 @@ public class PrattParserTest {
 				expValQU1A1, new ExpressionOperatorLogic(AvailableOperator.OR), expValQU1, new ExpressionOperatorLogic(
 						AvailableOperator.EQUALS), expValQU1A1, new ExpressionOperatorLogic(AvailableOperator.AND),
 				expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQU1A1));
-		Assert.assertEquals(actual,
+		Assert.assertEquals(
+				actual,
 				"null[null[null[QU1], ==, null[QU1A1]], ||, null[null[null[QU1], ==, null[QU1A1]], &&, null[null[QU1], ==, null[QU1A1]]]]");
 
 		// Simple TreeObject Between Function (e.g. QU1 between(0, 18))
@@ -139,8 +142,8 @@ public class PrattParserTest {
 
 		// AND function (e.g. Q==A AND Q==A)
 		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				expValQU1A1, new ExpressionOperatorLogic(AvailableOperator.AND), expValQU1, new ExpressionOperatorLogic(
-						AvailableOperator.EQUALS), expValQU1A1));
+				expValQU1A1, new ExpressionOperatorLogic(AvailableOperator.AND), expValQU1,
+				new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQU1A1));
 		Assert.assertEquals(actual, "null[null[null[QU1], ==, null[QU1A1]], &&, null[null[QU1], ==, null[QU1A1]]]");
 
 		// Q IN (A1, A2) AND Q IN (A1, A2) AND Q==A
@@ -225,6 +228,19 @@ public class PrattParserTest {
 		Assert.assertEquals(
 				actual,
 				"null[NOT(, null[null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]], ||, null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]]]]");
+
+//		actual = parseDrools(new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
+//				new ExpressionValueTreeObjectReference(father),
+//				new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(25.),
+//				new ExpressionSymbol(AvailableSymbol.COMMA), expValFormScore, new ExpressionOperatorMath(
+//						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1), new ExpressionSymbol(
+//						AvailableSymbol.COMMA), expValFormScore, new ExpressionOperatorMath(
+//						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(1.7), new ExpressionSymbol(
+//						AvailableSymbol.RIGHT_BRACKET)));
+//		
+//		Assert.assertEquals(
+//				actual,
+//				"null[IF(, null[null[fatherHeight], <, null[25]], null[null[form.formVar], null[7.1]], null[null[form.formVar], null[1.7]]]");
 	}
 
 	/**
