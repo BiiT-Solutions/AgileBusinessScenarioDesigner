@@ -143,8 +143,6 @@ public class RulesUtils {
 		}
 		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			if ((lineIndex == (lines.length - 1)) && (!thenClause)) {
-				System.out.println("ENTRA EN IF");
-
 				cleanedResults += getThenRuleString();
 			}
 			cleanedResults += lines[lineIndex] + "\n";
@@ -210,5 +208,38 @@ public class RulesUtils {
 			}
 		}
 		return "";
+	}
+
+	public static String fixOrCondition(String ruleCore) {
+		String cleanedResults = "";
+		int finishCondition = -1;
+		HashSet<Integer> skipLines = new HashSet<Integer>();
+
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (lines[i].equals("\tor")) {
+				skipLines.add(i - 2);
+				skipLines.add(i - 1);
+				skipLines.add(i);
+				skipLines.add(i + 1);
+			} else if (lines[i].equals("then")) {
+				skipLines.add(i-1);
+				finishCondition = i;
+				break;
+			}
+		}
+		for (int i = 0; i < lines.length; i++) {
+			if(finishCondition == i){
+				break;
+			}
+			if(!skipLines.contains(i)){
+				lines[i] = lines[i] + " and";
+			}
+		}
+		for (int i = 0; i < lines.length; i++) {
+			cleanedResults += lines[i]+"\n";
+		}
+		
+		return cleanedResults;
 	}
 }

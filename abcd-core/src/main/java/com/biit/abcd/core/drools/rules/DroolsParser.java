@@ -41,6 +41,8 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
 
 public class DroolsParser {
+	
+	private static boolean orOperatorUsed = false;
 
 	private static HashMap<TreeObject, String> treeObjectDroolsname = new HashMap<TreeObject, String>();
 
@@ -288,8 +290,8 @@ public class DroolsParser {
 	 */
 	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException {
 		String parsedText = "";
-
 		for (Rule rule : rules) {
+			orOperatorUsed = false;
 			if (rule != null) {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
@@ -340,6 +342,8 @@ public class DroolsParser {
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
 		result = RulesUtils.removeExtraParenthesis(result);
+		if(orOperatorUsed)
+			result = RulesUtils.fixOrCondition(result);
 
 		return result;
 	}
@@ -428,32 +432,33 @@ public class DroolsParser {
 			}
 		}
 
-//		List<Expression> categories = new ArrayList<Expression>();
-//		List<Expression> groups = new ArrayList<Expression>();
-//		List<Expression> questions = new ArrayList<Expression>();
-//		List<Expression> sortedVariables = new ArrayList<Expression>();
-//		for (Expression variable : variables) {
-//			ExpressionValueTreeObjectReference expressionValue = (ExpressionValueTreeObjectReference) variable;
-//			TreeObject treeObject = expressionValue.getReference();
-//			if (treeObject instanceof Form) {
-//				sortedVariables.add(variable);
-//			} else if (treeObject instanceof Category) {
-//				categories.add(variable);
-//			} else if (treeObject instanceof Group) {
-//				groups.add(variable);
-//			} else if (treeObject instanceof Question) {
-//				questions.add(variable);
-//			}
-//		}
-//		if (!categories.isEmpty()) {
-//			sortedVariables.addAll(categories);
-//		}
-//		if (!groups.isEmpty()) {
-//			sortedVariables.addAll(groups);
-//		}
-//		if (!questions.isEmpty()) {
-//			sortedVariables.addAll(questions);
-//		}
+		// List<Expression> categories = new ArrayList<Expression>();
+		// List<Expression> groups = new ArrayList<Expression>();
+		// List<Expression> questions = new ArrayList<Expression>();
+		// List<Expression> sortedVariables = new ArrayList<Expression>();
+		// for (Expression variable : variables) {
+		// ExpressionValueTreeObjectReference expressionValue =
+		// (ExpressionValueTreeObjectReference) variable;
+		// TreeObject treeObject = expressionValue.getReference();
+		// if (treeObject instanceof Form) {
+		// sortedVariables.add(variable);
+		// } else if (treeObject instanceof Category) {
+		// categories.add(variable);
+		// } else if (treeObject instanceof Group) {
+		// groups.add(variable);
+		// } else if (treeObject instanceof Question) {
+		// questions.add(variable);
+		// }
+		// }
+		// if (!categories.isEmpty()) {
+		// sortedVariables.addAll(categories);
+		// }
+		// if (!groups.isEmpty()) {
+		// sortedVariables.addAll(groups);
+		// }
+		// if (!questions.isEmpty()) {
+		// sortedVariables.addAll(questions);
+		// }
 		return variables;
 	}
 
@@ -570,7 +575,6 @@ public class DroolsParser {
 							+ ")\");\n";
 				}
 
-
 			} else if (variables.size() > 1) {
 				if (function.getValue().equals(AvailableFunction.MAX)) {
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
@@ -580,7 +584,8 @@ public class DroolsParser {
 					ruleCore += "\t}\n";
 					ruleCore += "\tif(maxValue != -1){\n";
 					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName() + "', maxValue);\n";
+							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
+							+ "', maxValue);\n";
 					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 							+ leftExpressionCustomVariable.getReference().getName() + ", "
 							+ leftExpressionCustomVariable.getVariable().getName() + ", maxValue)\");\t}\n";
@@ -604,7 +609,7 @@ public class DroolsParser {
 					ruleCore += "\t\tavgValue+=variable\n";
 					ruleCore += "\t}\n";
 					ruleCore += "\tavgValue = avgValue/(double)variablesList.size()\n";
-					
+
 					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
 							+ "', avgValue);\n";
@@ -617,7 +622,7 @@ public class DroolsParser {
 					ruleCore += "\tfor(double variable: variablesList){\n";
 					ruleCore += "\t\tsumValue+=variable\n";
 					ruleCore += "\t}\n";
-					
+
 					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
 							+ "', sumValue);\n";
@@ -855,12 +860,24 @@ public class DroolsParser {
 		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
 		ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
 
-		// result += "(\n";
-		result += processResultConditionsFromPrattParser(leftChain);
-		result += "or\n";
-		result += processResultConditionsFromPrattParser(rightChain);
-		// result += ")\n";
+		String leftPart = processResultConditionsFromPrattParser(leftChain);
+		String rigthPart = processResultConditionsFromPrattParser(rightChain);
+		
+		String leftPartLastLine = RulesUtils.getLastLine(leftPart);
+		String rightPartLastLine = RulesUtils.getLastLine(rigthPart);
+		String leftPartWithoutLastLine = RulesUtils.removeLastNLines(leftPart, 1);
+		String rightPartWithoutLastLine = RulesUtils.removeLastNLines(rigthPart, 1);
+		
+		result += leftPartWithoutLastLine;
+		result += rightPartWithoutLastLine;
+		result += "\t(\n";
+		result += leftPartLastLine;
+		result += "\n\tor\n";
+		result += rightPartLastLine;
+		result += "\n\t)\n";
 
+		orOperatorUsed = true;
+		
 		return result;
 	}
 
