@@ -108,6 +108,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	static {
 		for (DActivity activity : WEBFORMS_MANAGE_FORMS_ACTIVITIES) {
+			formAdministratorPermissions.add(activity);
 			formManagerPermissions.add(activity);
 		}
 		for (DActivity activity : WEBFORMS_READ_ONLY) {
