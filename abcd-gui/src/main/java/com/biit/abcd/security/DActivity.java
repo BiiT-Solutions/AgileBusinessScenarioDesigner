@@ -47,7 +47,9 @@ public enum DActivity implements IActivity {
 
 	XML_VALIDATOR_AGAINST_FORM("XmlValidatorAgainstForm"),
 
-	FORM_ANALYSIS("FormAnalysis");
+	FORM_ANALYSIS("FormAnalysis"),
+
+	ADMIN_FORMS("AdminForms");
 
 	private String tag;
 

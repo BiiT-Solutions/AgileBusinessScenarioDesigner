@@ -1,4 +1,4 @@
-package com.biit.abcd.authentication;
+package com.biit.abcd.security;
 
 public enum AbcdRoles {
 
@@ -9,7 +9,7 @@ public enum AbcdRoles {
 
 	FORM_EDIT("abcd_manage-forms"),
 
-	FORM_ADMIN("abcd-forms_administration");
+	FORM_ADMIN("abcd_administration");
 
 	private String stringTag;
 

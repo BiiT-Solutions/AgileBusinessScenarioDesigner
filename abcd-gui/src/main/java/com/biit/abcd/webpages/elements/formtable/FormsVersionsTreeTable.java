@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.UiAccesser;
-import com.biit.abcd.authentication.AbcdAuthorizationService;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
@@ -19,6 +18,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
@@ -155,6 +155,56 @@ public class FormsVersionsTreeTable extends TreeTable {
 			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE).setValue(
 					(DateManager.convertDateToString(form.getUpdateTime())));
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void refreshRow(SimpleFormView form) {
+		if (form != null) {
+			Item item = getItem(form);
+			if (item != null) {
+				item.getItemProperty(FormsVersionsTreeTableProperties.FORM_NAME).setValue(form.getName());
+				item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
+				item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
+				item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM).setValue(
+						(DateManager.convertDateToString(form.getAvailableFrom())));
+				if (form.getAvailableTo() != null) {
+					item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue(
+							(DateManager.convertDateToString(form.getAvailableTo())));
+				} else {
+					item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue("");
+				}
+				User userAccessingForm = UiAccesser.getUserUsingForm(form.getId());
+				if (userAccessingForm != null) {
+					item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue(
+							userAccessingForm.getEmailAddress());
+				} else {
+					item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue("");
+				}
+				try {
+					item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue(
+							LiferayServiceAccess.getInstance().getUserById(form.getCreatedBy()).getEmailAddress());
+				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException e) {
+					item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue("");
+				}
+				item.getItemProperty(FormsVersionsTreeTableProperties.CREATION_DATE).setValue(
+						(DateManager.convertDateToString(form.getCreationTime())));
+				try {
+					item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue(
+							LiferayServiceAccess.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress());
+				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException e) {
+					item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue("");
+				}
+				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE).setValue(
+						(DateManager.convertDateToString(form.getUpdateTime())));
+			}
+		}
+	}
+
+	public void refreshSelectedRow() {
+		SimpleFormView selectedForm = getValue();
+		if (selectedForm != null && !(selectedForm instanceof RootForm)) {
+			refreshRow(selectedForm);
 		}
 	}
 
@@ -319,7 +369,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		// permissions = "read only";
 		// }
 		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form.getId(), UserSessionHandler.getUser())) {
-			permissions = "read only";
+			permissions = "locked";
 		}
 		return permissions;
 	}

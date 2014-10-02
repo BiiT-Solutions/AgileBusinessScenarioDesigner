@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.biit.abcd.UiAccesser;
-import com.biit.abcd.authentication.AbcdAuthorizationService;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
@@ -76,6 +76,7 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
+				formTable.refreshSelectedRow();
 			}
 		});
 		return treeTable;
