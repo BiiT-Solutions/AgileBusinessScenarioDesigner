@@ -44,26 +44,26 @@ public class DiagramPropertiesFork extends PropertiesForClassComponent<DiagramFo
 
 	private void setNewReference(TreeObject treeObjectReference) {
 		diagramFork.setReference(new ExpressionValueTreeObjectReference(treeObjectReference));
-		diagramFork.updateOutgoingLinks();
+		diagramFork.resetOutgoingLinks();
 		firePropertyUpdateListener(diagramFork);
 	}
 
 	private void setNewDateReference(TreeObject reference, QuestionDateUnit dateUnit) {
 		diagramFork.setReference(new ExpressionValueTreeObjectReference(reference, dateUnit));
-		diagramFork.updateOutgoingLinks();
+		diagramFork.resetOutgoingLinks();
 		firePropertyUpdateListener(diagramFork);
 	}
 
 	private void setNewReferenceCustomVariable(TreeObject treeObjectRefence, CustomVariable variable) {
 		diagramFork.setReference(new ExpressionValueCustomVariable(treeObjectRefence, variable));
-		diagramFork.updateOutgoingLinks();
+		diagramFork.resetOutgoingLinks();
 		firePropertyUpdateListener(diagramFork);
 	}
 
 	private void setNewDateReferenceCustomVariable(TreeObject reference, CustomVariable variable,
 			QuestionDateUnit dateUnit) {
 		diagramFork.setReference(new ExpressionValueCustomVariable(reference, variable, dateUnit));
-		diagramFork.updateOutgoingLinks();
+		diagramFork.resetOutgoingLinks();
 		firePropertyUpdateListener(diagramFork);
 	}
 

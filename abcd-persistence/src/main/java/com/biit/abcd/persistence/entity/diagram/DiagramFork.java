@@ -52,7 +52,7 @@ public class DiagramFork extends DiagramElement {
 	 * When the Diagram Fork changes, all outgoing links must be updated. I.e. links first expression element must be
 	 * updated.
 	 */
-	public void updateOutgoingLinks() {
+	public void resetOutgoingLinks() {
 		for (DiagramLink outLink : getOutgoingLinks()) {
 			if (getReference() != null) {
 				Expression expression = getReference().generateCopy();

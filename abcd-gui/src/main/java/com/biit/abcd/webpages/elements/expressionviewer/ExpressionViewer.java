@@ -153,7 +153,7 @@ public class ExpressionViewer extends CssLayout {
 
 										}
 									});
-									// For Input fields .
+									// For Input fields.
 								} else if (expression instanceof ExpressionValueString
 										|| expression instanceof ExpressionValueNumber
 										|| expression instanceof ExpressionValuePostalCode

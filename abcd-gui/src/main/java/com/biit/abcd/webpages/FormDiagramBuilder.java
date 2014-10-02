@@ -13,6 +13,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
@@ -152,7 +153,10 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					DiagramLink diagramLink = (DiagramLink) diagramObject;
 					if (diagramLink.getSourceElement() instanceof DiagramFork) {
 						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
-						((DiagramFork) diagramLink.getSourceElement()).updateOutgoingLinks();
+						//((DiagramFork) diagramLink.getSourceElement()).resetOutgoingLinks();
+						Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference().generateCopy();
+						expression.setEditable(false);
+						diagramLink.resetExpressions(expression);
 					}
 				}
 			}

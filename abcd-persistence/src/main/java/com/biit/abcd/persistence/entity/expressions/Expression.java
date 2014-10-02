@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.biit.persistence.entity.StorableObject;
 
@@ -18,6 +19,7 @@ import com.biit.persistence.entity.StorableObject;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Expression extends StorableObject {
 
+	@Transient
 	private transient boolean isEditable = true;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
