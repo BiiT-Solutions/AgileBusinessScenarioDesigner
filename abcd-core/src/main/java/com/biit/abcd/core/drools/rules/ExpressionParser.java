@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -12,9 +13,11 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
@@ -33,6 +36,10 @@ public class ExpressionParser {
 			// generate the set of rules that represents the generic
 			if (expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				return createExpressionRuleSet(expressionChain, extraConditions);
+			} else if ((expressionChain.getExpressions().get(0) instanceof ExpressionFunction)
+					&& ((ExpressionFunction) expressionChain.getExpressions().get(0)).getValue().equals(
+							AvailableFunction.IF)) {
+				return createIfRuleSet(expressionChain, extraConditions);
 			} else {
 				return Arrays.asList(createExpressionRule(expressionChain, extraConditions));
 			}
@@ -69,6 +76,54 @@ public class ExpressionParser {
 		return droolsRule;
 	}
 
+	private static List<DroolsRule> createIfRuleSet(ExpressionChain expressionChain, ExpressionChain extraConditions) {
+		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
+		ExpressionChain ifCondition = new ExpressionChain();
+		ExpressionChain ifActionThen = new ExpressionChain();
+		ExpressionChain ifActionElse = new ExpressionChain();
+		
+		int ifIndex = 0;
+		ExpressionChain expressionCopy = expressionChain.generateCopy();
+		// Remove the IF from the expression
+		expressionCopy.removeFirstExpression();
+		// and the last parenthesis
+		expressionCopy.removeLastExpression();
+		for (Expression expression : expressionCopy.getExpressions()) {
+			if ((expression instanceof ExpressionSymbol)
+					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.COMMA)) {
+				ifIndex++;
+			} else {
+				if (ifIndex == 0) {
+					ifCondition.addExpression(expression);
+				} else if (ifIndex == 1) {
+					ifActionThen.addExpression(expression);
+				} else if (ifIndex == 2) {
+					ifActionElse.addExpression(expression);
+				}
+			}
+		}
+		// Creation of the rules that represent the if
+		DroolsRule ifThenRule = new DroolsRule();
+		ifThenRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
+		ifThenRule.setCondition(ifCondition);
+		ifThenRule.setActions(ifActionThen);
+		droolsRules.add(ifThenRule);
+		
+		DroolsRule ifElseRule = new DroolsRule();
+		ifElseRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
+		ExpressionChain negatedCondition = new ExpressionChain();
+		// For the ELSE part we negate the Condition part
+		negatedCondition.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		negatedCondition.addExpressions(ifCondition.getExpressions());
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		ifElseRule.setCondition(negatedCondition);
+		ifElseRule.setActions(ifActionElse);
+		droolsRules.add(ifElseRule);
+
+		return droolsRules;
+	}
+
 	private static List<DroolsRule> createExpressionRuleSet(ExpressionChain expressionChain,
 			ExpressionChain extraConditions) {
 		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
@@ -82,7 +137,11 @@ public class ExpressionParser {
 			break;
 		case GROUP:
 			for (TreeObject category : expressionValueGenericVariable.getVariable().getForm().getChildren()) {
-				treeObjects.addAll(category.getAll(Group.class));
+				List<TreeObject> groups = category.getAll(Group.class);
+				// We need to reverse the groups to correctly generate the rules
+				// for nested groups
+				Collections.reverse(groups);
+				treeObjects.addAll(groups);
 			}
 			break;
 		case QUESTION_GROUP:
@@ -134,6 +193,7 @@ public class ExpressionParser {
 	 * @return
 	 */
 	private static ExpressionChain unwrapGenericVariables(ExpressionChain expressionChain) {
+
 		// // To avoid modifying the original expression
 		// ExpressionChain expressionChainCopy = expressionChain.generateCopy();
 		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChain
@@ -157,7 +217,6 @@ public class ExpressionParser {
 					break;
 				case GROUP:
 					if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
-						// We only want the questions for the category
 						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
 							treeObjects = new ArrayList<TreeObject>();
 							for (TreeObject child : leftTreeObject.getChildren()) {
@@ -195,17 +254,14 @@ public class ExpressionParser {
 					}
 					break;
 				}
+
 				// We have to create a CustomVariable for each treeObject found
 				// and add it to the expression
 				if ((treeObjects != null) && (!treeObjects.isEmpty())) {
-					// int treeObjectIndex = 0;
 					for (TreeObject treeObject : treeObjects) {
 						generatedExpressionChain.addExpression(new ExpressionValueCustomVariable(treeObject,
 								customVariableOfGeneric));
-						// if (treeObjectIndex < treeObjects.size() - 1) {
 						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
-						// }
-						// treeObjectIndex++;
 					}
 				}
 			} else {
@@ -216,6 +272,7 @@ public class ExpressionParser {
 				}
 			}
 		}
+
 		// Remove the last comma if there is one
 		// Condition to avoid errors in the parser
 		if (((generatedExpressionChain.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2) instanceof ExpressionSymbol) && (((ExpressionSymbol) generatedExpressionChain

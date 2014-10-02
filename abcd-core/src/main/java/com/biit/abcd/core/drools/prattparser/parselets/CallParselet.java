@@ -18,7 +18,12 @@ public class CallParselet implements InfixParselet {
 	@Override
 	public ITreeElement parse(PrattParser parser, ITreeElement left, ExpressionToken token) {
 
-//		System.out.println("CALL PARSELET: " + token);
+//		// When the IF function is used a dummy variable is introduces and have
+//		// to be removed before returning the parsed expression
+//		if ((token.getExpression() instanceof ExpressionFunction)
+//				&& ((ExpressionFunction) token.getExpression()).getValue().equals(AvailableFunction.IF)) {
+//			left = null;
+//		}
 
 		// Parse the comma-separated arguments until we hit, ")".
 		List<ITreeElement> args = new ArrayList<ITreeElement>();
@@ -26,7 +31,8 @@ public class CallParselet implements InfixParselet {
 		// There may be no arguments at all.
 		if (!parser.match(ExpressionTokenType.RIGHT_BRACKET)) {
 			do {
-				args.add(parser.parseExpression());
+				ITreeElement te = parser.parseExpression();
+				args.add(te);
 			} while (parser.match(ExpressionTokenType.COMMA));
 			parser.consume(ExpressionTokenType.RIGHT_BRACKET);
 		}

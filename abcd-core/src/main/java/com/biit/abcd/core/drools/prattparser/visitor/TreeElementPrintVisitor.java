@@ -7,6 +7,9 @@ import com.biit.abcd.core.drools.prattparser.expressions.NameExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.OperatorExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
+import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.form.TreeObject;
 
 
 public class TreeElementPrintVisitor implements ITreeElementVisitor{
@@ -50,6 +53,18 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 
 	@Override
 	public void visit(NameExpression name) {
+		System.out.println("NAME:" + name.getName());
+		
+		// The answers have a label not a technical name
+		if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
+			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain()
+					.getExpressions().get(0);
+			TreeObject treeObject = expVal.getReference();
+			if (treeObject instanceof Answer) {
+				this.builder.append(((Answer)treeObject).getLabel());
+			}
+		}
+		// For everything else, get the technical name
 		this.builder.append(name.getName());
 	}
 

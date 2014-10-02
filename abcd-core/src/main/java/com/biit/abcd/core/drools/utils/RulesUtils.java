@@ -37,7 +37,8 @@ public class RulesUtils {
 	}
 
 	/**
-	 * Due to the independent parsing of the conditions of the rule, sometimes the algorithm generates repeated rules <br>
+	 * Due to the independent parsing of the conditions of the rule, sometimes
+	 * the algorithm generates repeated rules <br>
 	 * This method the lines that are equals in the rule<br>
 	 * It should be used before sending the rules to the engine <br>
 	 * 
@@ -142,8 +143,6 @@ public class RulesUtils {
 		}
 		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			if ((lineIndex == (lines.length - 1)) && (!thenClause)) {
-				System.out.println("ENTRA EN IF");
-
 				cleanedResults += getThenRuleString();
 			}
 			cleanedResults += lines[lineIndex] + "\n";
@@ -157,6 +156,90 @@ public class RulesUtils {
 		for (int i = 0; i < (lines.length - n); i++) {
 			cleanedResults += lines[i] + "\n";
 		}
+		return cleanedResults;
+	}
+
+	public static Integer getNumberOfLines(String ruleCore) {
+		String[] lines = ruleCore.split("\n");
+		return lines.length;
+	}
+
+	public static String replaceLine(String ruleCore, String lineToSet, int lineNumber) {
+		String cleanedResults = "";
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == lineNumber) {
+				cleanedResults += lineToSet + "\n";
+			} else {
+				cleanedResults += lines[i] + "\n";
+			}
+		}
+		return cleanedResults;
+	}
+
+	public static String replaceLastLine(String ruleCore, String lineToSet) {
+		String cleanedResults = "";
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == (lines.length - 1)) {
+				cleanedResults += lineToSet + "\n";
+			} else {
+				cleanedResults += lines[i] + "\n";
+			}
+		}
+		return cleanedResults;
+	}
+
+	public static String getLine(String ruleCore, int lineNumber) {
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == lineNumber) {
+				return lines[i];
+			}
+		}
+		return "";
+	}
+
+	public static String getLastLine(String ruleCore) {
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (i == (lines.length - 1)) {
+				return lines[i];
+			}
+		}
+		return "";
+	}
+
+	public static String fixOrCondition(String ruleCore) {
+		String cleanedResults = "";
+		int finishCondition = -1;
+		HashSet<Integer> skipLines = new HashSet<Integer>();
+
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (lines[i].equals("\tor")) {
+				skipLines.add(i - 2);
+				skipLines.add(i - 1);
+				skipLines.add(i);
+				skipLines.add(i + 1);
+			} else if (lines[i].equals("then")) {
+				skipLines.add(i-1);
+				finishCondition = i;
+				break;
+			}
+		}
+		for (int i = 0; i < lines.length; i++) {
+			if(finishCondition == i){
+				break;
+			}
+			if(!skipLines.contains(i)){
+				lines[i] = lines[i] + " and";
+			}
+		}
+		for (int i = 0; i < lines.length; i++) {
+			cleanedResults += lines[i]+"\n";
+		}
+		
 		return cleanedResults;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import com.biit.abcd.core.drools.prattparser.parselets.InfixParselet;
 import com.biit.abcd.core.drools.prattparser.parselets.PrefixParselet;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -33,7 +34,7 @@ public class PrattParser {
 	 * Simplifies the posterior calculus<br>
 	 * Transforms the list of expressions in a list of expression tokens, with
 	 * the type more accessible
-	 *
+	 * 
 	 * @param tokens
 	 * @return
 	 */
@@ -57,8 +58,6 @@ public class PrattParser {
 
 		for (int expIndex = 0; expIndex < tokens.size(); expIndex++) {
 			Expression expression = tokens.get(expIndex);
-//			System.out.println("EXPRESSION : " + expression);
-//			System.out.println("EXPRESSION CLASS : " + expression.getClass());
 			if ((expression instanceof ExpressionOperatorMath)
 					&& ((ExpressionOperatorMath) expression).getValue().equals(AvailableOperator.ASSIGNATION)
 					&& ((expIndex + 1) <= tokens.size())) {
@@ -68,6 +67,16 @@ public class PrattParser {
 					// an infix operator
 					continue;
 				}
+			}
+			// To correctly parse the IF function we have to introduce a dummy
+			// variable that we will remove before returning the parsed
+			// expression
+			// This is because the if function don't need to be assigned to
+			// any variable
+			else if ((expression instanceof ExpressionFunction)
+					&& ((ExpressionFunction) expression).getValue().equals(AvailableFunction.IF)) {
+				expTokenList.add(new ExpressionToken(ExpressionTokenType.NAME, new ExpressionValueString(
+						"DummyVariable")));
 			}
 			// If it is an operator
 			if (expression instanceof IExpressionType<?>) {

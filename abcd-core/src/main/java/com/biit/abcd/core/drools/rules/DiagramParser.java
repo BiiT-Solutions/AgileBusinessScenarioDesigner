@@ -23,6 +23,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
@@ -108,7 +109,7 @@ public class DiagramParser {
 		}
 		int linkNumber = 0;
 		for (DiagramLink outLink : node.getOutgoingLinks()) {
-			if (node.getType().equals(DiagramObjectType.FORK)) {
+			if (node.getType().equals(DiagramObjectType.FORK) && (forkConditions.size() > linkNumber)) {
 				parseDiagramElement(outLink.getTargetElement(), forkConditions.get(linkNumber), newRules);
 			} else {
 				parseDiagramElement(outLink.getTargetElement(), extraConditions, newRules);
@@ -133,67 +134,136 @@ public class DiagramParser {
 		List<ExpressionChain> forkConditions = new ArrayList<>();
 
 		// Get the element to be checked
-		ExpressionValueTreeObjectReference treeObjectOfForkNode = forkNode.getReference();
+		ExpressionValueTreeObjectReference forkNodeExpression = forkNode.getReference();
 		// For each outgoing link a new condition is created
 		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
 			ExpressionChain expressionOfLinkCopy = outLink.getExpressionChain().generateCopy();
 
-			System.out.println("EXPRESSION LINK OF THE FORK: " + expressionOfLinkCopy);
+//			System.out.println("EXPRESSION LINK OF THE FORK: " + expressionOfLinkCopy);
 
-			// Add the previous conditions in case there are nested forks
-			if ((previousConditions != null) && (previousConditions.getExpressions() != null)
-					&& !(previousConditions.getExpressions().isEmpty())) {
-				expressionOfLinkCopy.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
-				expressionOfLinkCopy.addExpressions(previousConditions.getExpressions());
-			}
+			if (forkNodeExpression != null) {
+				TreeObject treeObject = forkNodeExpression.getReference();
+				if ((treeObject instanceof Question)) {
+					Question questionObject = (Question) treeObject;
+					switch (questionObject.getAnswerType()) {
+					case RADIO:
+						// We have 'sex male' as expression in diagram links. We
+						// need to add an equals to create a
+						// complete expression 'sex == male'.
+						if ((expressionOfLinkCopy.getExpressions().size() > 1)
+								&& !(expressionOfLinkCopy.getExpressions().get(1) instanceof ExpressionOperatorLogic)) {
+							expressionOfLinkCopy.getExpressions().add(1,
+									new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+						} else {
+							expressionOfLinkCopy.getExpressions().clear();
+						}
 
-			TreeObject treeObject = treeObjectOfForkNode.getReference();
-			if ((treeObject instanceof Question)) {
-				Question questionObject = (Question) treeObject;
-				switch (questionObject.getAnswerType()) {
-				case RADIO:
-					// We have 'sex male' as expression in diagram links. We
-					// need to add an equals to create a
-					// complete expression 'sex=male'.
-					expressionOfLinkCopy.getExpressions().add(1, new ExpressionOperatorLogic(AvailableOperator.EQUALS));
-
-					break;
-				case MULTI_CHECKBOX:
-					// Fork with multicheckbox can cause problems. User can
-					// select answers from both different
-					// flows.
-					break;
-				case INPUT:
-					// In case of input we only have to add a copy of the link,
-					// which
-					// we do at the bottom of the loop.
-					break;
+						break;
+					case MULTI_CHECKBOX:
+						// Fork with multicheckbox can cause problems. User can
+						// select answers from both different
+						// flows.
+						break;
+					case INPUT:
+						// In case of input we only have to add a copy of the
+						// link, which we do at the bottom of the loop.
+						if (expressionOfLinkCopy.getExpressions().size() <= 1) {
+							expressionOfLinkCopy.getExpressions().clear();
+						}
+						break;
+					}
 				}
+//				System.out.println("EXPRESSION ADDED TO FORK CONDITIONS: " + expressionOfLinkCopy);
+				// Add the condition of the fork path to the array of conditions
+				forkConditions.add(expressionOfLinkCopy);
 			}
-			// Add the condition of the fork path to the array of conditions
-			forkConditions.add(expressionOfLinkCopy);
 		}
 
+//		System.out.println("FORK CONDITIONS: " + forkConditions);
+
+		int forkConditionToRemove = 0;
 		for (ExpressionChain forkExpressionChain : forkConditions) {
 			// Only one condition implies empty link "others"
 			// We have to negate the other conditions of the fork
-			if (forkExpressionChain.getExpressions().size() == 1) {
+			if (forkExpressionChain.getExpressions().isEmpty()) {
 				ExpressionChain resultOfNegation = new ExpressionChain();
 				for (ExpressionChain forkExpressionChainToNegate : forkConditions) {
 					if (!forkExpressionChainToNegate.equals(forkExpressionChain)) {
+
+						// List<ExpressionChain> expressionChainList =
+						// divideOrConditions(forkExpressionChainToNegate
+						// .generateCopy());
+						// System.out.println("OR DIVISION: " +
+						// expressionChainList);
+						//
+						// for (ExpressionChain expressionChain :
+						// expressionChainList) {
+						// if (expressionChain != null
+						// && !(expressionChain.getExpressions().get(0)
+						// instanceof ExpressionOperatorLogic)) {
 						resultOfNegation.addExpression(new ExpressionFunction(AvailableFunction.NOT));
-						resultOfNegation.addExpression(forkExpressionChainToNegate);
+						resultOfNegation.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+						resultOfNegation.addExpression(forkExpressionChainToNegate.generateCopy());
 						resultOfNegation.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 						resultOfNegation.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 					}
+					// }
+					// }
 				}
 				// Remove the last AND
 				resultOfNegation.getExpressions().remove(resultOfNegation.getExpressions().size() - 1);
-				System.out.println("RESULT OF NEGATION: " + resultOfNegation);
+//				System.out.println("RESULT OF NEGATION: " + resultOfNegation);
+				forkConditions.set(forkConditionToRemove, resultOfNegation);
+			}
+			forkConditionToRemove++;
+		}
+
+		// // Add the previous conditions in case there are nested forks
+		// if ((previousConditions != null) &&
+		// (previousConditions.getExpressions() != null)
+		// && !(previousConditions.getExpressions().isEmpty())) {
+		// expressionOfLinkCopy.addExpression(new
+		// ExpressionOperatorLogic(AvailableOperator.AND));
+		// expressionOfLinkCopy.addExpressions(previousConditions.getExpressions());
+		// }
+
+//		System.out.println("FORK CONDITIONS AFTER NEGATION, BEFORE PREVIOUS CONDITIONS: " + forkConditions);
+
+		if ((previousConditions != null) && (previousConditions.getExpressions() != null)
+				&& !(previousConditions.getExpressions().isEmpty())) {
+			for (ExpressionChain forkExpressionChain : forkConditions) {
+
+//				System.out.println("FORK EXPRESSION CHAIN BEFORE: " + forkExpressionChain);
+//				System.out.println("PREVIOUS EXPRESSIONS: " + previousConditions);
+
+				forkExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+				forkExpressionChain.addExpressions(previousConditions.getExpressions());
+
+//				System.out.println("FORK EXPRESSION CHAIN AFTER: " + forkExpressionChain);
 			}
 		}
 
+//		System.out.println("FORK CONDITIONS AFTER NEGATION, AFTER PREVIOUS CONDITIONS: " + forkConditions);
+
 		return forkConditions;
+	}
+
+	private static List<ExpressionChain> divideOrConditions(ExpressionChain expressionChain) {
+		List<ExpressionChain> expressionChainList = new ArrayList<ExpressionChain>();
+
+		ExpressionChain newExpressionChain = new ExpressionChain();
+		for (Expression expression : expressionChain.getExpressions()) {
+			if ((expression instanceof ExpressionOperatorLogic)
+					&& ((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.OR)) {
+				expressionChainList.add(newExpressionChain);
+				expressionChainList.add(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.OR)));
+				newExpressionChain = new ExpressionChain();
+			} else {
+				newExpressionChain.addExpression(expression);
+			}
+		}
+		expressionChainList.add(newExpressionChain);
+		return expressionChainList;
 	}
 
 }

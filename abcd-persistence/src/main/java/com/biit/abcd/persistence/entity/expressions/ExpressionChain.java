@@ -21,7 +21,8 @@ import com.biit.jexeval.ExpressionEvaluator;
 import com.biit.persistence.entity.StorableObject;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more
+ * complex expression.
  */
 @Entity
 @Table(name = "expressions_chain")
@@ -85,6 +86,10 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		return expressions.remove(0);
 	}
 
+	public Expression removeLastExpression() {
+		return expressions.remove(expressions.size() - 1);
+	}
+
 	public void addExpressions(Expression... expressions) {
 		for (Expression expression : expressions) {
 			addExpression(expression);
@@ -121,7 +126,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * Returns the expression in string format that can be evaluated by a
+	 * Expression Evaluator.
 	 * 
 	 * @return
 	 */
@@ -147,7 +153,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		List<String> definedVariables = new ArrayList<>();
 		// Define variables.
 		for (int i = 0; i < expressions.size(); i++) {
-			// Strings not allowed in functions, mathematical operators (except assignation) and logical operations
+			// Strings not allowed in functions, mathematical operators (except
+			// assignation) and logical operations
 			// (except equals).
 			if ((i > 0
 					&& (expressions.get(i) instanceof ExpressionValueString)

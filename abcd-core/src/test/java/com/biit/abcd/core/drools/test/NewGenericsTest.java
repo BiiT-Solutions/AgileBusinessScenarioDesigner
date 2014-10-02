@@ -131,7 +131,7 @@ public class NewGenericsTest extends KidsFormCreator {
 		getForm().getExpressionChain().add(expression5);
 
 		// Generic expression with several generics (Generic category =
-		// generic category groups, generic category questions)
+		// generic category questions, generic category groups)
 		ExpressionChain expression6 = new ExpressionChain("genericCategoryQuestionsGroups",
 				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),

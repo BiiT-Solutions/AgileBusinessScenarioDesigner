@@ -146,8 +146,6 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 			}
 		} else {
 			this.builder.append("'" + name.getName().replace("\"", "\\\"").replace("\'", "\\\'") + "'");
-			
-			
 		}
 	}
 

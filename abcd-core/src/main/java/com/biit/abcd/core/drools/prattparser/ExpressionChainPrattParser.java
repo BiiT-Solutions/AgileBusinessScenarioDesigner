@@ -45,6 +45,9 @@ public class ExpressionChainPrattParser extends PrattParser {
 		this.register(ExpressionTokenType.AVG, new CallParselet());
 		this.register(ExpressionTokenType.SUM, new CallParselet());
 		this.register(ExpressionTokenType.PMT, new CallParselet());
+//		// Although it uses the CallParselet, we defined some special conditions
+//		// for the IF
+//		this.register(ExpressionTokenType.IF, new CallParselet());
 
 		// Register the simple operator parselets.
 		this.prefix(ExpressionTokenType.PLUS, Precedence.PREFIX);
@@ -107,16 +110,16 @@ public class ExpressionChainPrattParser extends PrattParser {
 	 * Transforms the list of expression received (that can have expression
 	 * chains inside) in a flat expression list, leaving all the expressions at
 	 * the same level for the parser
-	 *
+	 * 
 	 * @param expressions
 	 * @return
 	 */
 	private static List<Expression> standardizeExpressions(List<Expression> expressions) {
 		List<Expression> result = new ArrayList<Expression>();
 		for (Expression expression : expressions) {
-			if(expression instanceof ExpressionChain){
-				result.addAll(standardizeExpressions(((ExpressionChain)expression).getExpressions()));
-			}else{
+			if (expression instanceof ExpressionChain) {
+				result.addAll(standardizeExpressions(((ExpressionChain) expression).getExpressions()));
+			} else {
 				result.add(expression);
 			}
 		}
