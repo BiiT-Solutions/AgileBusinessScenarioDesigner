@@ -24,6 +24,17 @@ public class ApplicationFrame extends UI {
 		defineWebPages();
 	}
 
+	@Override
+	public void detach() {
+		if (UserSessionHandler.getUser() != null) {
+			// Log user ui expired.
+			AbcdLogger.info(this.getClass().getName(), UserSessionHandler.getUser().getEmailAddress()
+					+ " Ui has expired.");
+			UiAccesser.releaseForm(UserSessionHandler.getUser());
+		}
+		super.detach();
+	}
+
 	private void setChangeViewEvents() {
 		navigator.addViewChangeListener(new ViewChangeListener() {
 			private static final long serialVersionUID = -668206181478591694L;

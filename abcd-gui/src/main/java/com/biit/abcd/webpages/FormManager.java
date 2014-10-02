@@ -3,6 +3,8 @@ package com.biit.abcd.webpages;
 import java.util.Arrays;
 import java.util.List;
 
+import com.biit.abcd.UiAccesser;
+import com.biit.abcd.authentication.AbcdAuthorizationService;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
@@ -58,7 +60,9 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-					UserSessionHandler.getFormController().setForm(formDao.read(formTable.getValue().getId()));
+					Form form = formDao.read(formTable.getValue().getId());
+					UserSessionHandler.getFormController().setForm(form);
+					UiAccesser.lockForm(form, UserSessionHandler.getUser());
 				}
 			}
 		});
@@ -76,10 +80,12 @@ public class FormManager extends FormWebPageComponent {
 		});
 		return treeTable;
 	}
-	
+
 	@Override
 	public void updateButtons(boolean enableFormButtons) {
-		super.updateButtons(enableFormButtons);
+		super.updateButtons(enableFormButtons
+				&& !AbcdAuthorizationService.getInstance().isFormReadOnly(formTable.getValue().getId(),
+						UserSessionHandler.getUser()));
 		upperMenu.updateButtons(enableFormButtons);
 	}
 

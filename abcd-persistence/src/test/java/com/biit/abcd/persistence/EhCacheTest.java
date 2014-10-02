@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence;
 
+import org.hibernate.stat.EntityStatistics;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -25,13 +26,13 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void testSecondLevelCache() throws FieldTooLongException {
-		
+
 		formDao.getSessionFactory().getStatistics().clear();
 
 		Form form = new Form();
 		form.setLabel(DUMMY_FORM);
 		formDao.makePersistent(form);
-		
+
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount(), 0);
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
@@ -40,9 +41,10 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		form = formDao.getForm(DUMMY_FORM);
 		Assert.assertNotNull(form);
 
-		System.out.println("*--------------------------------------*");
-		System.out.println(formDao.getSessionFactory().getStatistics());
-		System.out.println("*--------------------------------------*");
+
+		EntityStatistics entityStats = formDao.getSessionFactory().getStatistics().getEntityStatistics(Form.class.getName());
+		Assert.assertEquals(entityStats.getLoadCount(), 1);
+		Assert.assertEquals(entityStats.getFetchCount(), 0);
 
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
 		Assert.assertTrue(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount() > 0);

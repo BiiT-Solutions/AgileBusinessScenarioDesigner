@@ -260,4 +260,9 @@ public class Form extends BaseForm {
 		// TODO
 		return null;
 	}
+
+	public Long getOrganizationId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

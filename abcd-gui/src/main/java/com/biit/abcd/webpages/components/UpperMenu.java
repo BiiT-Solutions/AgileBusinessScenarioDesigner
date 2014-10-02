@@ -1,6 +1,8 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.UiAccesser;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -42,22 +44,23 @@ public class UpperMenu extends HorizontalButtonGroup {
 		// Add FormManager button.
 		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcon.FORM_MANAGER_PAGE,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
-			private static final long serialVersionUID = 4002268252434768032L;
+					private static final long serialVersionUID = 4002268252434768032L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				final AlertMessageWindow windowAccept = new AlertMessageWindow(
-						LanguageCodes.WARNING_LOST_UNSAVED_DATA);
-				windowAccept.addAcceptActionListener(new AcceptActionListener() {
 					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-						windowAccept.close();
+					public void buttonClick(ClickEvent event) {
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+								UiAccesser.releaseForm(UserSessionHandler.getUser());
+								windowAccept.close();
+							}
+						});
+						windowAccept.showCentered();
 					}
 				});
-				windowAccept.showCentered();
-			}
-		});
 		formManagerButton.setEnabled(true);
 		formManagerButton.setHeight("100%");
 		formManagerButton.setWidth(BUTTON_WIDTH);
@@ -69,14 +72,14 @@ public class UpperMenu extends HorizontalButtonGroup {
 
 		settingsButton = new IconButton(LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, ThemeIcon.SETTINGS,
 				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, IconSize.BIG, new ClickListener() {
-			private static final long serialVersionUID = 3450355943436017152L;
+					private static final long serialVersionUID = 3450355943436017152L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				SettingsWindow settings = new SettingsWindow();
-				settings.showRelativeToComponent(settingsButton);
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						SettingsWindow settings = new SettingsWindow();
+						settings.showRelativeToComponent(settingsButton);
+					}
+				});
 		settingsButton.setHeight("100%");
 		settingsButton.setWidth(BUTTON_WIDTH);
 
