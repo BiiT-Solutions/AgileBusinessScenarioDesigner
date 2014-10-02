@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
@@ -20,6 +21,7 @@ import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
+import com.liferay.portal.model.User;
 import com.vaadin.data.Item;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.TreeTable;
@@ -60,14 +62,14 @@ public class FormsVersionsTreeTable extends TreeTable {
 		addContainerProperty(FormsVersionsTreeTableProperties.ACCESS, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_ACCESS), null, Align.CENTER);
 
+		addContainerProperty(FormsVersionsTreeTableProperties.USED_BY, String.class, "",
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_USEDBY), null, Align.CENTER);
+
 		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLEFROM), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLETO), null, Align.CENTER);
-
-		addContainerProperty(FormsVersionsTreeTableProperties.USED_BY, String.class, "",
-				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_USEDBY), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.CREATED_BY, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_CREATEDBY), null, Align.CENTER);
@@ -129,7 +131,13 @@ public class FormsVersionsTreeTable extends TreeTable {
 			} else {
 				item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue("");
 			}
-			item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue("");
+			User userAccessingForm = UiAccesser.getUserUsingForm(form.getId());
+			if (userAccessingForm != null) {
+				item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue(
+						userAccessingForm.getEmailAddress());
+			} else {
+				item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue("");
+			}
 			try {
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue(
 						LiferayServiceAccess.getInstance().getUserById(form.getCreatedBy()).getEmailAddress());
@@ -305,10 +313,10 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 */
 	private String getFormPermissionsTag(SimpleFormView form) {
 		String permissions = "";
-//		if (!AbcdAuthorizationService.getInstance().canEditForm(form, UserSessionHandler.getUser(),
-//				DActivity.FORM_EDITING)) {
-//			permissions = "read only";
-//		}
+		// if (!AbcdAuthorizationService.getInstance().canEditForm(form, UserSessionHandler.getUser(),
+		// DActivity.FORM_EDITING)) {
+		// permissions = "read only";
+		// }
 		return permissions;
 	}
 
