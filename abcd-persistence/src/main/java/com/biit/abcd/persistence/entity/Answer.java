@@ -30,4 +30,9 @@ public class Answer extends BaseAnswer {
 	public void checkDependencies() throws DependencyExistException {
 		CheckDependencies.checkTreeObjectDependencies(this);
 	}
+
+	@Override
+	public String getSimpleAsciiName() {
+		return getName().replaceAll("[^a-zA-Z0-9.]", "");
+	}
 }
