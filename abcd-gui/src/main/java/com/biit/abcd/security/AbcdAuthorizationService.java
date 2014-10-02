@@ -400,9 +400,8 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	}
 
 	public boolean isFormReadOnly(Long formId, User user) {
-		boolean formIsInUse = UiAccesser.getUserUsingForm(formId) != null;
-		return (!formIsInUse && !isAuthorizedToForm(formId, user))
-				|| (formIsInUse && UiAccesser.getUserUsingForm(formId) != user);
+		User userUsingForm = UiAccesser.getUserUsingForm(formId);
+		boolean formIsInUse = (userUsingForm != null);
+		return !isAuthorizedToForm(formId, user) || (formIsInUse && UiAccesser.getUserUsingForm(formId) != user);
 	}
-
 }
