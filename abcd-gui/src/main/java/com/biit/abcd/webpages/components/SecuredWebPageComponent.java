@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
@@ -50,6 +51,13 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 								ApplicationFrame.navigateTo(WebMap.getLoginPage());
 							}
 						}
+					}
+					// Avoid access if already a user is using the form.
+					if (UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) != null
+							&& UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) != UserSessionHandler
+									.getUser()) {
+						UserSessionHandler.getFormController().setForm(null);
+						ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 					}
 					securedEnter(event);
 				}
