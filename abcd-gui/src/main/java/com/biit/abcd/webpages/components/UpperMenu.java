@@ -53,8 +53,8 @@ public class UpperMenu extends HorizontalButtonGroup {
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 								UiAccesser.releaseForm(UserSessionHandler.getUser());
+								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);								
 								windowAccept.close();
 							}
 						});

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.UiAccesser;
+import com.biit.abcd.authentication.AbcdAuthorizationService;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
@@ -317,6 +318,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 		// DActivity.FORM_EDITING)) {
 		// permissions = "read only";
 		// }
+		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form.getId(), UserSessionHandler.getUser())) {
+			permissions = "read only";
+		}
 		return permissions;
 	}
 
