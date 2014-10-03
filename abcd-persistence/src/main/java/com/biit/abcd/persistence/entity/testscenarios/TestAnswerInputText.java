@@ -1,0 +1,48 @@
+package com.biit.abcd.persistence.entity.testscenarios;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
+import com.biit.persistence.entity.StorableObject;
+
+/**
+ * Defines radio button values.
+ * 
+ */
+@Entity
+@Table(name = "test_answer_input_text")
+public class TestAnswerInputText extends TestAnswer {
+
+	private String inputValue = null;
+
+	public TestAnswerInputText() {
+		super();
+	}
+
+	@Override
+	public String getValue() {
+		return inputValue;
+	}
+
+	@Override
+	public void setValue(Object value) throws NotValidAnswerValue {
+		if (!(value instanceof String)) {
+			throw new NotValidAnswerValue("Expected String object in '" + value + "'");
+		}
+		setValue((String) value);
+	}
+
+	public void setValue(String value) {
+		this.inputValue = value;
+	}
+
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		return innerStorableObjects;
+	}
+}

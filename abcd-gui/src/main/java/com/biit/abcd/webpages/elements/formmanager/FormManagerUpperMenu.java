@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.dom4j.DocumentException;
 
+import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
@@ -19,6 +20,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.FormManager;
+import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.DroolsSubmittedFormResultWindow;
@@ -37,7 +39,7 @@ import com.vaadin.ui.UI;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
-	private IconButton newFormButton, exportToDrools;
+	private IconButton newFormButton, exportToDrools, createTestScenario, launchTestScenario;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
 
@@ -62,7 +64,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 										LanguageCodes.WINDOW_NEWFORM_NAME_TEXTFIELD));
 					}
 				});
-		// Add new Form
+		// Create rules and launch drools engine
 		exportToDrools = new IconButton(LanguageCodes.FORM_MANAGER_EXPORT_RULES, ThemeIcon.FORM_MANAGER_EXPORT_RULES,
 				LanguageCodes.FORM_MANAGER_EXPORT_RULES, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 267803697670003444L;
@@ -134,8 +136,34 @@ public class FormManagerUpperMenu extends UpperMenu {
 						droolsWindow.showCentered();
 					}
 				});
+
+		// Create new test scenario
+		createTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS,
+				ThemeIcon.FORM_MANAGER_ADD_FORM, LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM,
+				new ClickListener() {
+					private static final long serialVersionUID = -1628560253598118060L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						ApplicationFrame.navigateTo(WebMap.TEST_SCENARIOS);
+					}
+				});
+
+		// Launch test scenario
+		launchTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS,
+				ThemeIcon.FORM_MANAGER_EXPORT_RULES, LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM,
+				new ClickListener() {
+					private static final long serialVersionUID = 2538065448920025133L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+					}
+				});
+		
 		addIconButton(newFormButton);
 		addIconButton(exportToDrools);
+		addIconButton(createTestScenario);
+		addIconButton(launchTestScenario);
 	}
 
 	public void setEnabledButtons() {

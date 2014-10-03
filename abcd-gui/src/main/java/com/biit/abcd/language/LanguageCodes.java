@@ -71,9 +71,12 @@ public enum LanguageCodes {
 	WARNING_RULE_INCOMPLETE("warning.rule.incomplete"),
 	WARNING_MOVEMENT_NOT_VALID("warning.movement.not.valid"), 
 	WARNING_MOVEMENT_DESCRIPTION_NOT_VALID("warning.movement.description.not.valid"),
+	WARNING_TEST_SCENARIO_DELETION("warning.test.scenario.deletion"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
+	FORM_MANAGER_CREATE_TEST_SCENARIOS("formManager.create.test.scenarios"),
+	FORM_MANAGER_LAUNCH_TEST_SCENARIOS("formManager.launch.test.scenarios"),
 
 	FORM_TABLE_COLUMN_NAME("formTable.column.name"),
 	FORM_TABLE_COLUMN_VERSION("formTable.column.version"),
@@ -195,6 +198,7 @@ public enum LanguageCodes {
 	ERROR_SELECT_DIAGRAM("error.select.diagram"),
 	ERROR_SELECT_VARIABLE("error.select.variable"),
 	ERROR_DROOLS_ENGINE("error.drools.engine"),
+	ERROR_REPEATED_TEST_SCENARIO_NAME("error.testscenario.repeatedName"),
 
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
@@ -375,14 +379,13 @@ public enum LanguageCodes {
 	JSON_DIAGRAM_PROPERTIES_TABLE_NODE_CAPTION("json.diagram.properties.table.node.caption"),
 	JSON_DIAGRAM_PROPERTIES_RULE_NODE_CAPTION("json.diagram.properties.rule.node.caption"),
 
-
 	DROOLS_RULES_EDITOR_TABLE_NAME("drools.rules.editor.table.name"),
 	DROOLS_RULES_EDITOR_TABLE_COLUMN_NAME("drools.rules.editor.tablecolumn.name"),
 	DROOLS_RULES_EDITOR_TABLE_COLUMN_UPDATE("drools.rules.editor.tablecolumn.update"),
 	DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD("drools.rules.editor.name.textField"),
 	DROOLS_RULES_EDITOR_CONDITION_LAYOUT_CAPTION("drools.rules.condition.layout.caption"),
 	DROOLS_RULES_EDITOR_ACTION_LAYOUT_CAPTION("drools.rules.action.layout.caption"),
-
+	
 	WINDOW_EDIT_TABLE_CELL_LABEL("window.edit.table.cell.label"),
 
 	DECISION_TABLE_COPY_ROW_NOT_PERFORMED_CAPTION("decision.table.copy.row.not.performed.caption"),
@@ -401,8 +404,19 @@ public enum LanguageCodes {
 	
 	ZIP_FILE_NOT_GENERATED("zip.file.error"),
 	
-	SELECT_TREE_OBJECT("select.tree.object");
-
+	SELECT_TREE_OBJECT("select.tree.object"),
+	
+	TEST_SCENARIOS_TABLE_COLUMN_NAME("test.scenarios.table.column.name"),
+	TEST_SCENARIOS_TABLE_COLUMN_UPDATE("test.scenarios.table.column.update"),
+	TEST_SCENARIOS_WARNING_NAME_TOO_LONG("test.scenarios.warning.name.too.long"),
+	TEST_SCENARIOS_EDITOR_BUTTON_SAVE_CAPTION("test.scenarios.editor.button.save.caption"),
+	TEST_SCENARIOS_EDITOR_BUTTON_SAVE_TOOLTIP("test.scenarios.editor.button.save.tooltip"),
+	TEST_SCENARIOS_EDITOR_BUTTON_ADD_CAPTION("test.scenarios.editor.button.add.caption"),
+	TEST_SCENARIOS_EDITOR_BUTTON_ADD_TOOLTIP("test.scenarios.editor.button.add.tooltip"),
+	TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_CAPTION("test.scenarios.editor.button.remove.caption"),
+	TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_TOOLTIP("test.scenarios.editor.button.remove.tooltip"),
+	TEST_SCENARIOS_EDITOR_NEW_WINDOW_CAPTION("test.scenarios.editor.new.window.caption"),
+	TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION("test.scenarios.editor.new.window.field.caption");
 
 
 	private String value;

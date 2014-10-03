@@ -18,6 +18,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
@@ -32,6 +33,7 @@ public class FormController {
 	private TableRule lastAccessTable;
 	private Rule lastAccessRule;
 	private List<TableRuleRow> copiedRows;
+	private TestScenario lastAccessTestScenario;
 
 	private IFormDao formDao;
 
@@ -141,6 +143,22 @@ public class FormController {
 	public void setLastAccessTable(TableRule lastAccessTable) {
 		this.lastAccessTable = lastAccessTable;
 	}
+	
+	public Rule getLastAccessRule() {
+		return this.lastAccessRule;
+	}
+
+	public void setLastAccessRule(Rule lastAccessRule) {
+		this.lastAccessRule = lastAccessRule;
+	}
+	
+	public TestScenario getLastAccessTestScenario() {
+		return lastAccessTestScenario;
+	}
+
+	public void setLastAccessTestScenario(TestScenario lastAccessTestScenario) {
+		this.lastAccessTestScenario = lastAccessTestScenario;
+	}
 
 	/**
 	 * Gets rules with treeObject as the common element for all the references in the rule.
@@ -176,14 +194,6 @@ public class FormController {
 			}
 		}
 		return expressionChains;
-	}
-
-	public Rule getLastAccessRule() {
-		return this.lastAccessRule;
-	}
-
-	public void setLastAccessRule(Rule lastAccessRule) {
-		this.lastAccessRule = lastAccessRule;
 	}
 
 	public void copyTableRuleRows(final TableRule origin, Collection<TableRuleRow> rowsToCopy) {

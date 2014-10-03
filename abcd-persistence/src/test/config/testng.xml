@@ -13,6 +13,7 @@
 				<include name="tableRulesDao" />
 				<include name="orphan" />
 				<include name="genericTreeObjectVariablesDao" />
+				<include name="testScenarioDao" />
 			</run>
 		</groups>
 		<classes>
@@ -26,6 +27,7 @@
 			<class name="com.biit.abcd.persistence.dao.OrphanRemoveTest" />
 			<class name="com.biit.jexeval.ExpressionCheck" />
 			<class name="com.biit.abcd.persistence.EhCacheTest" />
+			<class name="com.biit.abcd.persistence.dao.TestScenarioTest" />
 		</classes>
 	</test>
 </suite>

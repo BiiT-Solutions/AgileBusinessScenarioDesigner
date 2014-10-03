@@ -53,8 +53,9 @@ public class RulesUtils {
 			if ((auxSplit[i] != null)) {
 				String compareTo = auxSplit[i];
 				for (int j = i + 1; j < auxSplit.length; j++) {
-					if ((auxSplit[j] != null) && !auxSplit[i].equals("and") && !auxSplit[i].equals("(")
-							&& !auxSplit[i].equals(")")) {
+					if ((auxSplit[j] != null) && !auxSplit[i].equals("\tand") && !auxSplit[i].equals("\t(")
+							&& !auxSplit[i].equals("\t)") && !auxSplit[i].equals("\tor")
+							&& !auxSplit[i].equals("\tnot(")) {
 						if (auxSplit[j].equals(compareTo)) {
 							auxSplit[j] = null;
 						}
@@ -85,7 +86,7 @@ public class RulesUtils {
 			}
 			String[] auxRuleArray = line.split(" : ");
 			if (auxRuleArray.length > 1) {
-				if (variablesAssigned.contains(auxRuleArray[0])) {
+				if (variablesAssigned.contains(auxRuleArray[0].replace("(\t", ""))) {
 					if (insideRHS) {
 						auxRuleArray[0] = auxRuleArray[0] + "0";
 					} else {
@@ -93,7 +94,7 @@ public class RulesUtils {
 						sameVariableIndex++;
 					}
 				} else {
-					variablesAssigned.add(auxRuleArray[0]);
+					variablesAssigned.add(auxRuleArray[0].replace("(\t", ""));
 				}
 				for (int i = 0; i < auxRuleArray.length; i++) {
 					if (i == (auxRuleArray.length - 1)) {
@@ -218,28 +219,37 @@ public class RulesUtils {
 		String[] lines = ruleCore.split("\n");
 		for (int i = 0; i < lines.length; i++) {
 			if (lines[i].equals("\tor")) {
-				skipLines.add(i - 2);
+				// skipLines.add(i - 2);
 				skipLines.add(i - 1);
 				skipLines.add(i);
 				skipLines.add(i + 1);
+			} else if (lines[i].equals("\tnot(")) {
+				skipLines.add(i);
 			} else if (lines[i].equals("then")) {
-				skipLines.add(i-1);
+				skipLines.add(i - 1);
 				finishCondition = i;
 				break;
 			}
 		}
 		for (int i = 0; i < lines.length; i++) {
-			if(finishCondition == i){
+			// In the action part, stop the algorithm
+			if (finishCondition == i) {
 				break;
 			}
-			if(!skipLines.contains(i)){
+			// If the line don't belong to an or, add an and
+			if (!skipLines.contains(i)) {
 				lines[i] = lines[i] + " and";
+			}
+			// If the previous line belongs to an OR but it has more lines after
+			// it, add an and
+			if (skipLines.contains(i - 1) && !skipLines.contains(i)) {
+				lines[i - 1] = lines[i - 1] + " and";
 			}
 		}
 		for (int i = 0; i < lines.length; i++) {
-			cleanedResults += lines[i]+"\n";
+			cleanedResults += lines[i] + "\n";
 		}
-		
+
 		return cleanedResults;
 	}
 }

@@ -139,7 +139,8 @@ public class DiagramParser {
 		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
 			ExpressionChain expressionOfLinkCopy = outLink.getExpressionChain().generateCopy();
 
-//			System.out.println("EXPRESSION LINK OF THE FORK: " + expressionOfLinkCopy);
+			// System.out.println("EXPRESSION LINK OF THE FORK: " +
+			// expressionOfLinkCopy);
 
 			if (forkNodeExpression != null) {
 				TreeObject treeObject = forkNodeExpression.getReference();
@@ -173,13 +174,14 @@ public class DiagramParser {
 						break;
 					}
 				}
-//				System.out.println("EXPRESSION ADDED TO FORK CONDITIONS: " + expressionOfLinkCopy);
+				// System.out.println("EXPRESSION ADDED TO FORK CONDITIONS: " +
+				// expressionOfLinkCopy);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(expressionOfLinkCopy);
 			}
 		}
 
-//		System.out.println("FORK CONDITIONS: " + forkConditions);
+		// System.out.println("FORK CONDITIONS: " + forkConditions);
 
 		int forkConditionToRemove = 0;
 		for (ExpressionChain forkExpressionChain : forkConditions) {
@@ -190,65 +192,68 @@ public class DiagramParser {
 				for (ExpressionChain forkExpressionChainToNegate : forkConditions) {
 					if (!forkExpressionChainToNegate.equals(forkExpressionChain)) {
 
-						// List<ExpressionChain> expressionChainList =
-						// divideOrConditions(forkExpressionChainToNegate
-						// .generateCopy());
-						// System.out.println("OR DIVISION: " +
-						// expressionChainList);
-						//
-						// for (ExpressionChain expressionChain :
-						// expressionChainList) {
-						// if (expressionChain != null
-						// && !(expressionChain.getExpressions().get(0)
-						// instanceof ExpressionOperatorLogic)) {
-						resultOfNegation.addExpression(new ExpressionFunction(AvailableFunction.NOT));
-						resultOfNegation.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-						resultOfNegation.addExpression(forkExpressionChainToNegate.generateCopy());
-						resultOfNegation.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-						resultOfNegation.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+						if (chekForAndsOrOrs(forkExpressionChainToNegate)) {
+//							System.out.println("CHAIN NEGATED: " + negateAndOrConditions(forkExpressionChainToNegate));
+							resultOfNegation.addExpressions(negateAndOrConditions(forkExpressionChainToNegate).getExpressions());
+							resultOfNegation.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+						} else {
+							resultOfNegation.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+							resultOfNegation.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+							resultOfNegation.addExpression(forkExpressionChainToNegate.generateCopy());
+							resultOfNegation.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+							resultOfNegation.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+						}
 					}
-					// }
-					// }
 				}
 				// Remove the last AND
-				resultOfNegation.getExpressions().remove(resultOfNegation.getExpressions().size() - 1);
-//				System.out.println("RESULT OF NEGATION: " + resultOfNegation);
+				if (resultOfNegation.getExpressions().size() > 1) {
+					resultOfNegation.getExpressions().remove(resultOfNegation.getExpressions().size() - 1);
+				}
+				System.out.println("RESULT OF NEGATION: " + resultOfNegation);
 				forkConditions.set(forkConditionToRemove, resultOfNegation);
 			}
 			forkConditionToRemove++;
 		}
 
-		// // Add the previous conditions in case there are nested forks
-		// if ((previousConditions != null) &&
-		// (previousConditions.getExpressions() != null)
-		// && !(previousConditions.getExpressions().isEmpty())) {
-		// expressionOfLinkCopy.addExpression(new
-		// ExpressionOperatorLogic(AvailableOperator.AND));
-		// expressionOfLinkCopy.addExpressions(previousConditions.getExpressions());
-		// }
-
-//		System.out.println("FORK CONDITIONS AFTER NEGATION, BEFORE PREVIOUS CONDITIONS: " + forkConditions);
+		// System.out.println("FORK CONDITIONS AFTER NEGATION, BEFORE PREVIOUS CONDITIONS: "
+		// + forkConditions);
 
 		if ((previousConditions != null) && (previousConditions.getExpressions() != null)
 				&& !(previousConditions.getExpressions().isEmpty())) {
 			for (ExpressionChain forkExpressionChain : forkConditions) {
 
-//				System.out.println("FORK EXPRESSION CHAIN BEFORE: " + forkExpressionChain);
-//				System.out.println("PREVIOUS EXPRESSIONS: " + previousConditions);
+				// System.out.println("FORK EXPRESSION CHAIN BEFORE: " +
+				// forkExpressionChain);
+				// System.out.println("PREVIOUS EXPRESSIONS: " +
+				// previousConditions);
 
 				forkExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 				forkExpressionChain.addExpressions(previousConditions.getExpressions());
 
-//				System.out.println("FORK EXPRESSION CHAIN AFTER: " + forkExpressionChain);
+				// System.out.println("FORK EXPRESSION CHAIN AFTER: " +
+				// forkExpressionChain);
 			}
 		}
 
-//		System.out.println("FORK CONDITIONS AFTER NEGATION, AFTER PREVIOUS CONDITIONS: " + forkConditions);
+		// System.out.println("FORK CONDITIONS AFTER NEGATION, AFTER PREVIOUS CONDITIONS: "
+		// + forkConditions);
 
 		return forkConditions;
 	}
 
-	private static List<ExpressionChain> divideOrConditions(ExpressionChain expressionChain) {
+	private static boolean chekForAndsOrOrs(ExpressionChain expressionChain) {
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionOperatorLogic) {
+				if (((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.AND)
+						|| ((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.OR)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static List<ExpressionChain> divideConditions(ExpressionChain expressionChain) {
 		List<ExpressionChain> expressionChainList = new ArrayList<ExpressionChain>();
 
 		ExpressionChain newExpressionChain = new ExpressionChain();
@@ -264,6 +269,31 @@ public class DiagramParser {
 		}
 		expressionChainList.add(newExpressionChain);
 		return expressionChainList;
+	}
+
+	private static ExpressionChain negateAndOrConditions(ExpressionChain expressionChain) {
+		ExpressionChain negatedExpressionChain = new ExpressionChain();
+		negatedExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+		negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		for (Expression expression : expressionChain.getExpressions()) {
+			if ((expression instanceof ExpressionOperatorLogic)
+					&& ((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.OR)) {
+				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+				negatedExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+				negatedExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+			} else if ((expression instanceof ExpressionOperatorLogic)
+					&& ((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.AND)) {
+				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+				negatedExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.OR));
+				negatedExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+			} else {
+				negatedExpressionChain.addExpression(expression);
+			}
+		}
+		negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		return negatedExpressionChain;
 	}
 
 }

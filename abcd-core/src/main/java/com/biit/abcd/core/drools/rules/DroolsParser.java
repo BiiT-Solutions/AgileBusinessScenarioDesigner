@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.poi.ss.formula.functions.FinanceLib;
 
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
@@ -48,7 +47,8 @@ public class DroolsParser {
 	private static HashMap<TreeObject, String> treeObjectDroolsname = new HashMap<TreeObject, String>();
 
 	/**
-	 * Adds condition rows to the rule that manages the assignation of a variable in the action<br>
+	 * Adds condition rows to the rule that manages the assignation of a
+	 * variable in the action<br>
 	 * 
 	 * @param variable
 	 *            variable to be added to the LHS of the rule
@@ -62,7 +62,7 @@ public class DroolsParser {
 			if (treeObject instanceof Form) {
 				ruleCore += simpleFormCondition((Form) treeObject);
 
-			}else if (treeObject instanceof Category) {
+			} else if (treeObject instanceof Category) {
 				ruleCore += simpleCategoryConditions((Category) treeObject);
 
 			} else if (treeObject instanceof Group) {
@@ -147,9 +147,12 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Receives a list with the three parameters needed to calculate the PMT function, (Rate, Months, Present value)<br>
+	 * Receives a list with the three parameters needed to calculate the PMT
+	 * function, (Rate, Months, Present value)<br>
 	 * We make use of the Apache POI lib<br>
-	 * For more information: http://poi.apache.org/apidocs/org/apache/poi/ss/formula /functions/FinanceLib.html
+	 * For more information:
+	 * http://poi.apache.org/apidocs/org/apache/poi/ss/formula
+	 * /functions/FinanceLib.html
 	 * 
 	 * @param actions
 	 * @return
@@ -232,8 +235,9 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Checks the existence of a binding in drools with the the reference of the variable passed If there is no binding,
-	 * creates a new one (i.e. $var : Question() ...)
+	 * Checks the existence of a binding in drools with the the reference of the
+	 * variable passed If there is no binding, creates a new one (i.e. $var :
+	 * Question() ...)
 	 * 
 	 * @param expValVariable
 	 */
@@ -247,8 +251,9 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Checks the existence of a binding in drools with the the reference of the variable passed If there is no binding,
-	 * creates a new one (i.e. $var : Question() ...)
+	 * Checks the existence of a binding in drools with the the reference of the
+	 * variable passed If there is no binding, creates a new one (i.e. $var :
+	 * Question() ...)
 	 * 
 	 * @param expValVariable
 	 */
@@ -320,6 +325,10 @@ public class DroolsParser {
 		if (rule == null) {
 			return null;
 		}
+		
+//		System.out.println("RULE CONDITIONS: " + rule.getConditionChain());
+//		System.out.println("RULE ACTIONS: " + rule.getActionChain());		
+		
 		String result = "";
 		treeObjectDroolsname = new HashMap<TreeObject, String>();
 		result += "\t$droolsForm: DroolsForm()\n";
@@ -340,7 +349,7 @@ public class DroolsParser {
 		}
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
-		result = RulesUtils.removeExtraParenthesis(result);
+//		result = RulesUtils.removeExtraParenthesis(result);
 		if (orOperatorUsed)
 			result = RulesUtils.fixOrCondition(result);
 
@@ -499,12 +508,13 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Expression parser. An expression is a rule without the condition part in the definition, but not in the drools
-	 * engine.<br>
+	 * Expression parser. An expression is a rule without the condition part in
+	 * the definition, but not in the drools engine.<br>
 	 * Parse actions like => Cat.score = min(q1.score, q2.score, ...) <br>
 	 * Create drools rule like => <br>
 	 * &nbsp&nbsp&nbsp $var : List() from collect( some conditions )<br>
-	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var); $sol : min($value) )
+	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var);
+	 * $sol : min($value) )
 	 * 
 	 * @param actions
 	 *            the expression being parsed
@@ -606,20 +616,21 @@ public class DroolsParser {
 					break;
 				case PMT:
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble rate = variablesList.get(0);\n";
-					ruleCore += "\tdouble term = variablesList.get(1);\n";
-					ruleCore += "\tdouble amount = variablesList.get(2);\n";
+					ruleCore += "\tif(variablesList.size() == 3){\n";
+					ruleCore += "\t\tdouble rate = variablesList.get(0);\n";
+					ruleCore += "\t\tdouble term = variablesList.get(1);\n";
+					ruleCore += "\t\tdouble amount = variablesList.get(2);\n";
 
-					ruleCore += "\tdouble v = 1 + rate;\n";
-					ruleCore += "\tdouble t = -term;\n";
-					ruleCore += "\tdouble pmtValue = (amount*rate)/(1-Math.pow(v,t));\n";
+					ruleCore += "\t\tdouble v = 1 + rate;\n";
+					ruleCore += "\t\tdouble t = -term;\n";
+					ruleCore += "\t\tdouble pmtValue = (amount*rate)/(1-Math.pow(v,t));\n";
 
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
 							+ "', pmtValue);\n";
-					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", pmtValue)\");\n";
+							+ leftExpressionCustomVariable.getVariable().getName() + ", pmtValue)\"); }\n";
 					break;
 				}
 			}
@@ -636,12 +647,12 @@ public class DroolsParser {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
 				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isScoreSet('"
 						+ expressionValueCustomVariable.getVariable().getName() + "')){";
-				ruleCore += "\tvariablesList.add("
+				ruleCore += "\tvariablesList.add((double)"
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable) + ");}\n";
 
 			} else if (variable instanceof ExpressionValueTreeObjectReference) {
 				ExpressionValueTreeObjectReference expressionValueTreeObject = (ExpressionValueTreeObjectReference) variable;
-				ruleCore += "\tvariablesList.add("
+				ruleCore += "\tvariablesList.add((double)"
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
 
 			} else if (variable instanceof ExpressionValueGlobalConstant) {
@@ -653,12 +664,12 @@ public class DroolsParser {
 				case TEXT:
 				case POSTAL_CODE:
 				case DATE:
-					//TODO
+					// TODO
 					break;
 				}
 			} else if (variable instanceof ExpressionValue) {
-				if(variable instanceof ExpressionValueNumber){
-					ruleCore += "\tvariablesList.add(" + ((ExpressionValueNumber) variable).getValue() + ");\n";
+				if (variable instanceof ExpressionValueNumber) {
+					ruleCore += "\tvariablesList.add((double)" + ((ExpressionValueNumber) variable).getValue() + ");\n";
 				}
 			}
 		}
@@ -725,6 +736,8 @@ public class DroolsParser {
 	}
 
 	private static String orOperator(List<Expression> expressions) {
+//		System.out.println("OR EXPRESSIONS: " + expressions);
+		
 		String result = "";
 
 		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
@@ -740,11 +753,11 @@ public class DroolsParser {
 
 		result += leftPartWithoutLastLine;
 		result += rightPartWithoutLastLine;
-		result += "\t(\n";
+		result += "\t(";
 		result += leftPartLastLine;
 		result += "\n\tor\n";
 		result += rightPartLastLine;
-		result += "\n\t)\n";
+		result += "\t)\n";
 
 		orOperatorUsed = true;
 		return result;
@@ -796,7 +809,8 @@ public class DroolsParser {
 				case PMT:
 					return assignationFunctionAction(prattParserResultExpressionChain);
 					// case PMT:
-					// return assignationFunctionPmtAction(expressionChain.getExpressions());
+					// return
+					// assignationFunctionPmtAction(expressionChain.getExpressions());
 				}
 			}
 			// Mathematical expression
@@ -895,7 +909,7 @@ public class DroolsParser {
 		if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionChain) {
 			String auxRule = processResultConditionsFromPrattParser((ExpressionChain) prattParserResultExpressionChain
 					.getExpressions().get(1));
-			String newLastLine = "\tnot ( " + RulesUtils.getLastLine(auxRule) + " )";
+			String newLastLine = "\tnot(\n" + RulesUtils.getLastLine(auxRule) + "\t)";
 			ruleCore = RulesUtils.replaceLastLine(auxRule, newLastLine);
 		}
 		return ruleCore;
@@ -929,7 +943,8 @@ public class DroolsParser {
 	/**
 	 * Parse conditions like => Question BETWEEN(Answer1, answer2). <br>
 	 * The values inside the between must be always numbers <br>
-	 * Create drools rule like => Question( (getAnswer() >= answer.getValue()) && (getAnswer() <= answer.getValue()))
+	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
+	 * && (getAnswer() <= answer.getValue()))
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
@@ -1133,14 +1148,13 @@ public class DroolsParser {
 					ExpressionValue value = (ExpressionValue) rightExpressions.get(0);
 					String droolsValue = "";
 					if (value instanceof ExpressionValueTreeObjectReference) {
-						droolsConditions += checkVariableAssignation((ExpressionValueTreeObjectReference)value);
+						droolsConditions += checkVariableAssignation((ExpressionValueTreeObjectReference) value);
 						droolsValue = getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference) value);
 
 					} else {
 						droolsValue = ((ExpressionValue) value).getValue().toString();
 					}
-					
-					
+
 					if (value != null) {
 						TreeObject leftTreeObjectParent = leftTreeObject.getParent();
 						putTreeObjectName(leftTreeObject, leftTreeObject.getUniqueNameReadable().toString());
@@ -1470,7 +1484,8 @@ public class DroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isScoreSet('cScore'),
+	 * getVariablevalue('cScore') == value )
 	 * 
 	 * @param expressionOperatorLogic
 	 * 
@@ -1530,7 +1545,8 @@ public class DroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isScoreSet('cScore'),
+	 * getVariablevalue('cScore') == value )
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule

@@ -3,6 +3,7 @@ package com.biit.abcd.authentication;
 import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.core.TestScenariosController;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
@@ -12,11 +13,13 @@ public class UserSessionHandler {
 	private User user = null;
 	private FormController formController;
 	private static GlobalVariablesController globalVariablesController;
+	private static TestScenariosController testScenariosController;
 
 	// Store the user object of the currently inlogged user
 
 	/**
-	 * Initializes the {@link UserSessionHandler} for the given {@link Application}
+	 * Initializes the {@link UserSessionHandler} for the given
+	 * {@link Application}
 	 * 
 	 * @param ui
 	 */
@@ -51,7 +54,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Set the User object for the currently inlogged user for this application instance
+	 * Set the User object for the currently inlogged user for this application
+	 * instance
 	 * 
 	 * @param user
 	 */
@@ -67,7 +71,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Get the User object of the currently inlogged user for this application instance.
+	 * Get the User object of the currently inlogged user for this application
+	 * instance.
 	 * 
 	 * @return The currently inlogged user
 	 */
@@ -77,7 +82,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Get the FormController object of the currently inlogged user for this application instance.
+	 * Get the FormController object of the currently inlogged user for this
+	 * application instance.
 	 * 
 	 * @return The currently inlogged user
 	 */
@@ -87,7 +93,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Set the User object for the currently inlogged user for this application instance
+	 * Set the User object for the currently inlogged user for this application
+	 * instance
 	 * 
 	 * @param user
 	 */
@@ -110,4 +117,11 @@ public class UserSessionHandler {
 		return globalVariablesController;
 	}
 
+	public static TestScenariosController getTestScenariosController() {
+		if (testScenariosController == null) {
+			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+			testScenariosController = new TestScenariosController(helper);
+		}
+		return testScenariosController;
+	}
 }
