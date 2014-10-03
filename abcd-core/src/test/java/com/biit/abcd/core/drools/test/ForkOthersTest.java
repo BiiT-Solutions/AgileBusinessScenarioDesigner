@@ -16,6 +16,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
@@ -44,11 +45,14 @@ public class ForkOthersTest extends KidsFormCreator {
 
 	private final static String END2 = "end2";
 	private final static String END3 = "end3";
+	private final static String FORM_CUSTOM_VAR = "formCustomVar";
+	private final static String CATEGORY_CUSTOM_VAR = "categoryCustomVar";
 
 	@Test(groups = { "rules" })
 	public void testFork() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException, CharacterNotAllowedException {
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			CharacterNotAllowedException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -60,40 +64,37 @@ public class ForkOthersTest extends KidsFormCreator {
 		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
 	}
 
-//	@Test(groups = { "rules" })
-//	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-//			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-//			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException, CharacterNotAllowedException {
-//
-//		// Restart the form to avoid test cross references
-//		initForm();
-//		// Create the table and form diagram
-//		createFormNestedForks();
-//		// Create the rules and launch the engine
-//		DroolsForm droolsForm = createAndRunDroolsRules();
-//		// Check Fork assignation
-//		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
-//	}
+	@Test(groups = { "rules" })
+	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			CharacterNotAllowedException {
 
-	// @Test(groups = { "rules" })
-	// public void testForkWithMultipleConditions() throws
-	// FieldTooLongException, NotValidChildException,
-	// InvalidAnswerFormatException, ExpressionInvalidException,
-	// RuleInvalidException, IOException,
-	// RuleNotImplementedException, DocumentException,
-	// CategoryNameWithoutTranslation,
-	// ActionNotImplementedException {
-	//
-	// // Restart the form to avoid test cross references
-	// initForm();
-	// // Create the table and form diagram
-	// createFormMultipleConditionsFork();
-	// // Create the rules and launch the engine
-	// DroolsForm droolsForm = createAndRunDroolsRules();
-	// // Check Fork assignation
-	// // Assert.assertEquals(((SubmittedForm)
-	// // droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
-	// }
+		// Restart the form to avoid test cross references
+		initForm();
+		// Create the table and form diagram
+		createFormNestedForks();
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check Fork assignation
+		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+	}
+
+	@Test(groups = { "rules" })
+	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
+			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			ActionNotImplementedException, CharacterNotAllowedException {
+
+		// Restart the form to avoid test cross references
+		initForm();
+		// Create the table and form diagram
+		createFormMultipleConditionsFork();
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check Fork assignation
+		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 4.75);
+	}
 
 	private void createFormSimpleFork() {
 		getForm().addDiagram(createForkWithThreeOutputsDiagram());
@@ -186,13 +187,33 @@ public class ForkOthersTest extends KidsFormCreator {
 	private Diagram createMultipleConditionsFork() {
 		CustomVariable end2CustomVariable = new CustomVariable(getForm(), END2, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
-
+		CustomVariable formCustomVariableInCondition = new CustomVariable(getForm(), FORM_CUSTOM_VAR,
+				CustomVariableType.NUMBER, CustomVariableScope.FORM);
+		CustomVariable categoryCustomVariableInCondition = new CustomVariable(getForm(), CATEGORY_CUSTOM_VAR,
+				CustomVariableType.NUMBER, CustomVariableScope.CATEGORY);
+		
 		Diagram mainDiagram = new Diagram("main");
 
 		DiagramSource diagramStartNode = new DiagramSource();
 		diagramStartNode.setJointjsId(IdGenerator.createId());
 		diagramStartNode.setType(DiagramObjectType.SOURCE);
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
+
+		DiagramCalculation diagramExpression = new DiagramCalculation();
+		diagramExpression.setFormExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
+				getForm(), formCustomVariableInCondition), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(6.5)));
+		diagramExpression.setJointjsId(IdGenerator.createId());
+		diagramExpression.setType(DiagramObjectType.CALCULATION);
+		Node nodeExpression = new Node(diagramExpression.getJointjsId());
+		
+		DiagramCalculation diagramExpression2 = new DiagramCalculation();
+		diagramExpression2.setFormExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
+				getTreeObject("Lifestyle"), categoryCustomVariableInCondition), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(2.5)));
+		diagramExpression2.setJointjsId(IdGenerator.createId());
+		diagramExpression2.setType(DiagramObjectType.CALCULATION);
+		Node nodeExpression2 = new Node(diagramExpression2.getJointjsId());
 
 		DiagramFork diagramFork = new DiagramFork();
 		diagramFork.setJointjsId(IdGenerator.createId());
@@ -224,9 +245,17 @@ public class ForkOthersTest extends KidsFormCreator {
 				new ExpressionValueNumber(4.75)));
 		Node fourthNodeSink = new Node(thirdEndNode.getJointjsId());
 
-		DiagramLink startFork = new DiagramLink(nodeSource, nodeFork);
-		startFork.setJointjsId(IdGenerator.createId());
-		startFork.setType(DiagramObjectType.LINK);
+		DiagramLink startExpression = new DiagramLink(nodeSource, nodeExpression);
+		startExpression.setJointjsId(IdGenerator.createId());
+		startExpression.setType(DiagramObjectType.LINK);
+		
+		DiagramLink expressionExpression2 = new DiagramLink(nodeExpression, nodeExpression2);
+		expressionExpression2.setJointjsId(IdGenerator.createId());
+		expressionExpression2.setType(DiagramObjectType.LINK);
+
+		DiagramLink expression2Fork = new DiagramLink(nodeExpression2, nodeFork);
+		expression2Fork.setJointjsId(IdGenerator.createId());
+		expression2Fork.setType(DiagramObjectType.LINK);
 
 		DiagramLink forkFirstEnd = new DiagramLink(nodeFork, secondNodeSink);
 		forkFirstEnd.setJointjsId(IdGenerator.createId());
@@ -245,21 +274,27 @@ public class ForkOthersTest extends KidsFormCreator {
 		forkSecondEnd.setJointjsId(IdGenerator.createId());
 		forkSecondEnd.setType(DiagramObjectType.LINK);
 		forkSecondEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount"))));
+				getTreeObject("vegetablesAmount")), new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS),
+				new ExpressionValueCustomVariable(getForm(), formCustomVariableInCondition)));
 
 		DiagramLink forkThirdEnd = new DiagramLink(nodeFork, fourthNodeSink);
 		forkThirdEnd.setJointjsId(IdGenerator.createId());
 		forkThirdEnd.setType(DiagramObjectType.LINK);
-		forkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount")), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
-				new ExpressionValueNumber(3.5)));
+		forkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueCustomVariable(
+				getTreeObject("Lifestyle"), categoryCustomVariableInCondition), new ExpressionOperatorLogic(
+				AvailableOperator.LESS_THAN), new ExpressionValueCustomVariable(getForm(),
+				formCustomVariableInCondition)));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
+		mainDiagram.addDiagramObject(diagramExpression);
+		mainDiagram.addDiagramObject(diagramExpression2);
 		mainDiagram.addDiagramObject(diagramFork);
 		mainDiagram.addDiagramObject(firstEndNode);
 		mainDiagram.addDiagramObject(secondEndNode);
 		mainDiagram.addDiagramObject(thirdEndNode);
-		mainDiagram.addDiagramObject(startFork);
+		mainDiagram.addDiagramObject(startExpression);
+		mainDiagram.addDiagramObject(expressionExpression2);
+		mainDiagram.addDiagramObject(expression2Fork);
 		mainDiagram.addDiagramObject(forkFirstEnd);
 		mainDiagram.addDiagramObject(forkSecondEnd);
 		mainDiagram.addDiagramObject(forkThirdEnd);

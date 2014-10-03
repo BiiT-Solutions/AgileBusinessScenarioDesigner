@@ -1,9 +1,12 @@
 package com.biit.abcd.core.drools.test;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.testng.Assert;
@@ -18,6 +21,7 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.utils.DateUtils;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -38,10 +42,13 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
@@ -60,16 +67,20 @@ public class NewExpressionsTest extends KidsFormCreator {
 	private final static String DATE = "date";
 	private final static String BMI = "bmi";
 	private final static String IF_RESULT = "ifResult";
+	private final static String PMT = "pmt";
+	private GlobalVariable globalVariableNumber = null;
 
 	@Test(groups = { "rules" })
 	public void testExpressions() throws ExpressionInvalidException, NotValidChildException,
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			RuleNotImplementedException, InvalidAnswerFormatException, ActionNotImplementedException, ParseException,
-			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException {
+			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException,
+			NotValidTypeInVariableData {
 
 		// Restart the form to avoid test cross references
 		initForm();
+		createGlobalvariables();
 		// Create the table and form diagram
 		createKidsFormSimpleExpressions();
 		// Create the rules and launch the engine
@@ -102,6 +113,8 @@ public class NewExpressionsTest extends KidsFormCreator {
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
 
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT), 7.1);
+		
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
 	}
 
 	private void createKidsFormSimpleExpressions() throws FieldTooLongException, NotValidChildException,
@@ -114,6 +127,8 @@ public class NewExpressionsTest extends KidsFormCreator {
 		CustomVariable bmiCustomVariable = new CustomVariable(getForm(), BMI, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 		CustomVariable ifResultCustomVariable = new CustomVariable(getForm(), IF_RESULT, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), PMT, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 		// Assign to category
 		CustomVariable monthsCustomVariable = new CustomVariable(getForm(), MONTHS, CustomVariableType.NUMBER,
@@ -177,7 +192,49 @@ public class NewExpressionsTest extends KidsFormCreator {
 				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChain().add(expression6);
 
+		// PMT expression
+		ExpressionChain expression7 = new ExpressionChain("pmtExpression", new ExpressionValueCustomVariable(
+				getForm(), pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalConstant(globalVariableNumber),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
+						getTreeObject("heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueNumber(1000), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChain().add(expression7);
+
 		getForm().addDiagram(createSimpleDiagram());
+	}
+
+	private void createGlobalvariables() throws NotValidTypeInVariableData, FieldTooLongException {
+		List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
+		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
+		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
+		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
+		Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
+
+		// Should get the second value
+		globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);
+		globalVariableNumber.setName("Percentage");
+		globalVariableNumber.addVariableData(19.0, validFrom, validToPast);
+		globalVariableNumber.addVariableData(21.0, validToPast, null);
+		// Should not represent this constant
+		GlobalVariable globalVariableText = new GlobalVariable(AnswerFormat.TEXT);
+		globalVariableText.setName("TestText");
+		globalVariableText.addVariableData("Hello", validFromFuture, validToFuture);
+		// Should get the value
+		GlobalVariable globalVariablePostalCode = new GlobalVariable(AnswerFormat.POSTAL_CODE);
+		globalVariablePostalCode.setName("TestPC");
+		globalVariablePostalCode.addVariableData("Postal", validFrom, validToFuture);
+		// Should enter a valid date as constant
+		GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
+		globalVariableDate.setName("TestDate");
+		globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
+
+		globalVarList.add(globalVariableNumber);
+		globalVarList.add(globalVariableText);
+		globalVarList.add(globalVariablePostalCode);
+		globalVarList.add(globalVariableDate);
+
+		setGlobalVariables(globalVarList);
 	}
 
 	private Diagram createSimpleDiagram() {

@@ -610,9 +610,9 @@ public class DroolsParser {
 					ruleCore += "\tdouble term = variablesList.get(1);\n";
 					ruleCore += "\tdouble amount = variablesList.get(2);\n";
 
-					ruleCore += "\tdouble v = (1+(rate/12));\n";
-					ruleCore += "\tdouble t = (-(term/12)*12);\n";
-					ruleCore += "\tdouble pmtValue = (amount*(rate/12))/(1-Math.pow(v,t));\n";
+					ruleCore += "\tdouble v = 1 + rate;\n";
+					ruleCore += "\tdouble t = -term;\n";
+					ruleCore += "\tdouble pmtValue = (amount*rate)/(1-Math.pow(v,t));\n";
 
 					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
@@ -1097,7 +1097,7 @@ public class DroolsParser {
 	}
 
 	private static String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
-			AvailableOperator operator, Object value) {
+			AvailableOperator operator, String droolsValue) {
 		// TODO
 		String rule = "";
 		// Check if the reference exists in the rule, if not, it creates
@@ -1105,7 +1105,7 @@ public class DroolsParser {
 		rule += checkVariableAssignation(leftQuestion);
 		rule += "\t$" + leftQuestion.getUniqueNameReadable().toString() + " : Question(getTag() == '"
 				+ leftQuestion.getName() + "', DateUtils.returnYearsDistanceFromDate(getAnswer('"
-				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + value + ") from $"
+				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + droolsValue + ") from $"
 				+ leftReferenceParent.getUniqueNameReadable().toString() + ".getQuestions()\n";
 		return rule;
 	}
@@ -1128,10 +1128,19 @@ public class DroolsParser {
 			if (leftTreeObject != null) {
 				List<Expression> rightExpressions = ((ExpressionChain) conditions.get(2)).getExpressions();
 
-				// Comparison with a number
+				// Comparison with a value
 				if ((rightExpressions.size() == 1) && (rightExpressions.get(0) instanceof ExpressionValue)) {
-					// Get the values of the between expression
-					Object value = ((ExpressionValue) rightExpressions.get(0)).getValue();
+					ExpressionValue value = (ExpressionValue) rightExpressions.get(0);
+					String droolsValue = "";
+					if (value instanceof ExpressionValueTreeObjectReference) {
+						droolsConditions += checkVariableAssignation((ExpressionValueTreeObjectReference)value);
+						droolsValue = getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference) value);
+
+					} else {
+						droolsValue = ((ExpressionValue) value).getValue().toString();
+					}
+					
+					
 					if (value != null) {
 						TreeObject leftTreeObjectParent = leftTreeObject.getParent();
 						putTreeObjectName(leftTreeObject, leftTreeObject.getUniqueNameReadable().toString());
@@ -1149,13 +1158,13 @@ public class DroolsParser {
 								switch (leftQuestion.getAnswerFormat()) {
 								case DATE:
 									droolsConditions += questionDateOperatorValue(leftTreeObjectParent, leftQuestion,
-											operator, value);
+											operator, droolsValue);
 									break;
 								case NUMBER:
 									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
 											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer('"
 											+ getTreeObjectAnswerType(leftQuestion) + "') " + operator.getValue() + " "
-											+ value + ") from $"
+											+ droolsValue + ") from $"
 											+ leftTreeObjectParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
 									break;
@@ -1164,7 +1173,7 @@ public class DroolsParser {
 									droolsConditions += "	$" + leftQuestion.getUniqueNameReadable().toString()
 											+ " : Question(getTag()== '" + leftQuestion.getName() + "', getAnswer('"
 											+ getTreeObjectAnswerType(leftQuestion) + "') " + operator.getValue() + " "
-											+ value + ") from $"
+											+ droolsValue + ") from $"
 											+ leftTreeObjectParent.getUniqueNameReadable().toString()
 											+ ".getQuestions()\n";
 									break;
@@ -1186,7 +1195,9 @@ public class DroolsParser {
 							TreeObject leftQuestionParent = leftQuestion.getParent();
 							putTreeObjectName(leftQuestion, leftQuestion.getUniqueNameReadable().toString());
 							// Check the parent
-							if (leftQuestionParent instanceof Category) {
+							if (leftQuestionParent instanceof Form) {
+								droolsConditions += simpleFormCondition((Form) leftQuestionParent);
+							} else if (leftQuestionParent instanceof Category) {
 								droolsConditions += simpleCategoryConditions((Category) leftQuestionParent);
 							} else if (leftQuestionParent instanceof Group) {
 								droolsConditions += simpleGroupConditions((Group) leftQuestionParent);
@@ -1237,9 +1248,7 @@ public class DroolsParser {
 		} else {
 			ExpressionValueCustomVariable customVariable = (ExpressionValueCustomVariable) ((ExpressionChain) conditions
 					.get(0)).getExpressions().get(0);
-
 			Expression valueExpression = ((ExpressionChain) conditions.get(2)).getExpressions().get(0);
-
 			droolsConditions += treeObjectScoreLogicOperatorValueExpression(customVariable,
 					(ExpressionOperatorLogic) conditions.get(1), valueExpression);
 		}
