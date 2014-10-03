@@ -47,7 +47,7 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm {
 
 	public IGroup getGroup(String tag) throws GroupDoesNotExistException {
 		if (getGroups() != null) {
-			for (IGroup group : this.getGroups()) {
+			for (IGroup group : getGroups()) {
 				if (group.getTag().equals(tag)) {
 					return group;
 				}

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.poi.ss.formula.functions.FinanceLib;
 
+import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
@@ -31,11 +32,13 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.TreeObject;
 
 public class DroolsParser {
@@ -45,8 +48,7 @@ public class DroolsParser {
 	private static HashMap<TreeObject, String> treeObjectDroolsname = new HashMap<TreeObject, String>();
 
 	/**
-	 * Adds condition rows to the rule that manages the assignation of a
-	 * variable in the action<br>
+	 * Adds condition rows to the rule that manages the assignation of a variable in the action<br>
 	 * 
 	 * @param variable
 	 *            variable to be added to the LHS of the rule
@@ -57,7 +59,10 @@ public class DroolsParser {
 
 		// Add the variable assignation to the rule
 		if (treeObject != null) {
-			if (treeObject instanceof Category) {
+			if (treeObject instanceof Form) {
+				ruleCore += simpleFormCondition((Form) treeObject);
+
+			}else if (treeObject instanceof Category) {
 				ruleCore += simpleCategoryConditions((Category) treeObject);
 
 			} else if (treeObject instanceof Group) {
@@ -142,12 +147,9 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Receives a list with the three parameters needed to calculate the PMT
-	 * function, (Rate, Months, Present value)<br>
+	 * Receives a list with the three parameters needed to calculate the PMT function, (Rate, Months, Present value)<br>
 	 * We make use of the Apache POI lib<br>
-	 * For more information:
-	 * http://poi.apache.org/apidocs/org/apache/poi/ss/formula
-	 * /functions/FinanceLib.html
+	 * For more information: http://poi.apache.org/apidocs/org/apache/poi/ss/formula /functions/FinanceLib.html
 	 * 
 	 * @param actions
 	 * @return
@@ -230,9 +232,8 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Checks the existence of a binding in drools with the the reference of the
-	 * variable passed If there is no binding, creates a new one (i.e. $var :
-	 * Question() ...)
+	 * Checks the existence of a binding in drools with the the reference of the variable passed If there is no binding,
+	 * creates a new one (i.e. $var : Question() ...)
 	 * 
 	 * @param expValVariable
 	 */
@@ -246,9 +247,8 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Checks the existence of a binding in drools with the the reference of the
-	 * variable passed If there is no binding, creates a new one (i.e. $var :
-	 * Question() ...)
+	 * Checks the existence of a binding in drools with the the reference of the variable passed If there is no binding,
+	 * creates a new one (i.e. $var : Question() ...)
 	 * 
 	 * @param expValVariable
 	 */
@@ -368,7 +368,7 @@ public class DroolsParser {
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
 				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueNumber)) {
 
-			droolsConditions += treeObjectScoreLogicOperatorValueNumber(
+			droolsConditions += treeObjectScoreLogicOperatorValueExpression(
 					(ExpressionValueCustomVariable) operatorLeft.get(0), (ExpressionOperatorLogic) expressions.get(1),
 					(ExpressionValueNumber) operatorRight.get(0));
 		}
@@ -424,41 +424,12 @@ public class DroolsParser {
 		List<Expression> variables = new ArrayList<Expression>();
 		for (Expression expression : expressionChain.getExpressions()) {
 			// Look for possible variables that need assignation
-			if ((expression instanceof ExpressionValueCustomVariable)
-					|| (expression instanceof ExpressionValueTreeObjectReference)) {
+			if (expression instanceof ExpressionValue) {
 				variables.add(expression);
 			} else if (expression instanceof ExpressionChain) {
 				variables.addAll(getExpressionChainVariables((ExpressionChain) expression));
 			}
 		}
-
-		// List<Expression> categories = new ArrayList<Expression>();
-		// List<Expression> groups = new ArrayList<Expression>();
-		// List<Expression> questions = new ArrayList<Expression>();
-		// List<Expression> sortedVariables = new ArrayList<Expression>();
-		// for (Expression variable : variables) {
-		// ExpressionValueTreeObjectReference expressionValue =
-		// (ExpressionValueTreeObjectReference) variable;
-		// TreeObject treeObject = expressionValue.getReference();
-		// if (treeObject instanceof Form) {
-		// sortedVariables.add(variable);
-		// } else if (treeObject instanceof Category) {
-		// categories.add(variable);
-		// } else if (treeObject instanceof Group) {
-		// groups.add(variable);
-		// } else if (treeObject instanceof Question) {
-		// questions.add(variable);
-		// }
-		// }
-		// if (!categories.isEmpty()) {
-		// sortedVariables.addAll(categories);
-		// }
-		// if (!groups.isEmpty()) {
-		// sortedVariables.addAll(groups);
-		// }
-		// if (!questions.isEmpty()) {
-		// sortedVariables.addAll(questions);
-		// }
 		return variables;
 	}
 
@@ -528,20 +499,19 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Expression parser. An expression is a rule without the condition part in
-	 * the definition, but not in the drools engine.<br>
+	 * Expression parser. An expression is a rule without the condition part in the definition, but not in the drools
+	 * engine.<br>
 	 * Parse actions like => Cat.score = min(q1.score, q2.score, ...) <br>
 	 * Create drools rule like => <br>
 	 * &nbsp&nbsp&nbsp $var : List() from collect( some conditions )<br>
-	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var);
-	 * $sol : min($value) )
+	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var); $sol : min($value) )
 	 * 
 	 * @param actions
 	 *            the expression being parsed
 	 * @param forkConditions
 	 * @return the rule
 	 */
-	private static String assignationFunctionMinMaxAvgSumAction(ExpressionChain actions) {
+	private static String assignationFunctionAction(ExpressionChain actions) {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
 		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
@@ -576,7 +546,8 @@ public class DroolsParser {
 				}
 
 			} else if (variables.size() > 1) {
-				if (function.getValue().equals(AvailableFunction.MAX)) {
+				switch (function.getValue()) {
+				case MAX:
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 					ruleCore += "\tdouble maxValue = -1;\n";
 					ruleCore += "\tfor(double variable: variablesList){\n";
@@ -589,7 +560,8 @@ public class DroolsParser {
 					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 							+ leftExpressionCustomVariable.getReference().getName() + ", "
 							+ leftExpressionCustomVariable.getVariable().getName() + ", maxValue)\");\t}\n";
-				} else if (function.getValue().equals(AvailableFunction.MIN)) {
+					break;
+				case MIN:
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 					ruleCore += "\tdouble minValue = 1000000;\n";
 					ruleCore += "\tfor(double variable: variablesList){\n";
@@ -602,7 +574,8 @@ public class DroolsParser {
 					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 							+ leftExpressionCustomVariable.getReference().getName() + ", "
 							+ leftExpressionCustomVariable.getVariable().getName() + ", minValue)\");\t}\n";
-				} else if (function.getValue().equals(AvailableFunction.AVG)) {
+					break;
+				case AVG:
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 					ruleCore += "\tdouble avgValue = 0;\n";
 					ruleCore += "\tfor(double variable: variablesList){\n";
@@ -610,25 +583,44 @@ public class DroolsParser {
 					ruleCore += "\t}\n";
 					ruleCore += "\tavgValue = avgValue/(double)variablesList.size()\n";
 
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
 							+ "', avgValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", avgValue)\");\t}\n";
-				} else if (function.getValue().equals(AvailableFunction.SUM)) {
+							+ leftExpressionCustomVariable.getVariable().getName() + ", avgValue)\");\n";
+					break;
+				case SUM:
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 					ruleCore += "\tdouble sumValue = 0;\n";
 					ruleCore += "\tfor(double variable: variablesList){\n";
 					ruleCore += "\t\tsumValue+=variable\n";
 					ruleCore += "\t}\n";
 
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
 							+ "', sumValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", sumValue)\");\t}\n";
+							+ leftExpressionCustomVariable.getVariable().getName() + ", sumValue)\");\n";
+					break;
+				case PMT:
+					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
+					ruleCore += "\tdouble rate = variablesList.get(0);\n";
+					ruleCore += "\tdouble term = variablesList.get(1);\n";
+					ruleCore += "\tdouble amount = variablesList.get(2);\n";
+
+					ruleCore += "\tdouble v = (1+(rate/12));\n";
+					ruleCore += "\tdouble t = (-(term/12)*12);\n";
+					ruleCore += "\tdouble pmtValue = (amount*(rate/12))/(1-Math.pow(v,t));\n";
+
+					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
+							+ "', pmtValue);\n";
+					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+							+ leftExpressionCustomVariable.getReference().getName() + ", "
+							+ leftExpressionCustomVariable.getVariable().getName() + ", pmtValue)\");\n";
+					break;
 				}
 			}
 		}
@@ -651,6 +643,23 @@ public class DroolsParser {
 				ExpressionValueTreeObjectReference expressionValueTreeObject = (ExpressionValueTreeObjectReference) variable;
 				ruleCore += "\tvariablesList.add("
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+
+			} else if (variable instanceof ExpressionValueGlobalConstant) {
+				GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) variable).getVariable();
+				switch (globalExpression.getFormat()) {
+				case NUMBER:
+					ruleCore += "\tvariablesList.add((Double)" + globalExpression.getName() + ");\n";
+					break;
+				case TEXT:
+				case POSTAL_CODE:
+				case DATE:
+					//TODO
+					break;
+				}
+			} else if (variable instanceof ExpressionValue) {
+				if(variable instanceof ExpressionValueNumber){
+					ruleCore += "\tvariablesList.add(" + ((ExpressionValueNumber) variable).getValue() + ");\n";
+				}
 			}
 		}
 		return ruleCore;
@@ -669,6 +678,7 @@ public class DroolsParser {
 	private static String getDroolsVariableValueFromExpressionValueTreeObject(
 			ExpressionValueTreeObjectReference expressionValue) {
 		TreeObject treeObject = expressionValue.getReference();
+
 		String id = treeObject.getUniqueNameReadable();
 
 		if (expressionValue instanceof ExpressionValueCustomVariable) {
@@ -773,7 +783,7 @@ public class DroolsParser {
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 
-			if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
+		if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
 				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
 						.get(0) instanceof ExpressionValueCustomVariable)) {
 
@@ -783,9 +793,10 @@ public class DroolsParser {
 				case MIN:
 				case AVG:
 				case SUM:
-					return assignationFunctionMinMaxAvgSumAction(prattParserResultExpressionChain);
 				case PMT:
-					return assignationFunctionPmtAction(expressionChain.getExpressions());
+					return assignationFunctionAction(prattParserResultExpressionChain);
+					// case PMT:
+					// return assignationFunctionPmtAction(expressionChain.getExpressions());
 				}
 			}
 			// Mathematical expression
@@ -918,8 +929,7 @@ public class DroolsParser {
 	/**
 	 * Parse conditions like => Question BETWEEN(Answer1, answer2). <br>
 	 * The values inside the between must be always numbers <br>
-	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
-	 * && (getAnswer() <= answer.getValue()))
+	 * Create drools rule like => Question( (getAnswer() >= answer.getValue()) && (getAnswer() <= answer.getValue()))
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
@@ -1227,10 +1237,11 @@ public class DroolsParser {
 		} else {
 			ExpressionValueCustomVariable customVariable = (ExpressionValueCustomVariable) ((ExpressionChain) conditions
 					.get(0)).getExpressions().get(0);
-			ExpressionValueNumber valueNumber = (ExpressionValueNumber) ((ExpressionChain) conditions.get(2))
-					.getExpressions().get(0);
-			droolsConditions += treeObjectScoreLogicOperatorValueNumber(customVariable,
-					(ExpressionOperatorLogic) conditions.get(1), valueNumber);
+
+			Expression valueExpression = ((ExpressionChain) conditions.get(2)).getExpressions().get(0);
+
+			droolsConditions += treeObjectScoreLogicOperatorValueExpression(customVariable,
+					(ExpressionOperatorLogic) conditions.get(1), valueExpression);
 		}
 		return droolsConditions;
 	}
@@ -1450,8 +1461,7 @@ public class DroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'),
-	 * getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param expressionOperatorLogic
 	 * 
@@ -1511,15 +1521,23 @@ public class DroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'),
-	 * getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
 	 */
-	private static String treeObjectScoreLogicOperatorValueNumber(ExpressionValueCustomVariable var,
-			ExpressionOperatorLogic operator, ExpressionValueNumber valueNumber) {
+	private static String treeObjectScoreLogicOperatorValueExpression(ExpressionValueCustomVariable var,
+			ExpressionOperatorLogic operator, Expression value) {
 		String ruleCore = "";
+
+		String droolsValue = "";
+		if (value instanceof ExpressionValueTreeObjectReference) {
+			ruleCore += checkVariableAssignation(value);
+			droolsValue = getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference) value);
+
+		} else {
+			droolsValue = ((ExpressionValue) value).getValue().toString();
+		}
 
 		TreeObject scope = var.getReference();
 		String varName = var.getVariable().getName();
@@ -1528,71 +1546,9 @@ public class DroolsParser {
 		case NUMBER:
 			if (scope instanceof Form) {
 				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('"
-						+ varName
-						// + "'), getNumberVariableValue('" + varName + "') " +
-						// operator.getValue().toString() + " "
-						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + ") from $droolsForm.getSubmittedForm() \n";
-
-			} else if (scope instanceof Category) {
-				TreeObject form = scope.getParent();
-				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-				ruleCore += simpleFormCondition((Form) form);
-				ruleCore += "	$"
-						+ scope.getUniqueNameReadable().toString()
-						+ " : Category( isScoreSet('"
-						+ varName
-						// + "'), getNumberVariableValue('" + varName + "') " +
-						// operator.getValue().toString() + " "
-						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + ") from $" + form.getUniqueNameReadable().toString()
-						+ ".getCategory('" + scope.getName() + "') \n";
-
-			} else if (scope instanceof Group) {
-				TreeObject groupParent = scope.getParent();
-				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-				if (groupParent instanceof Category) {
-					ruleCore += simpleCategoryConditions((Category) groupParent);
-				} else if (groupParent instanceof Group) {
-					ruleCore += simpleGroupConditions((Group) groupParent);
-				}
-				ruleCore += "	$"
-						+ scope.getUniqueNameReadable().toString()
-						+ " : Group( isScoreSet('"
-						+ varName
-						// + "'), getNumberVariableValue('" + varName + "') " +
-						// operator.getValue().toString() + " "
-						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + " ) from $" + groupParent.getUniqueNameReadable().toString()
-						+ ".getGroup('" + scope.getName() + "') \n";
-
-			} else if (scope instanceof Question) {
-				TreeObject questionParent = scope.getParent();
-				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
-				if (questionParent instanceof Category) {
-					ruleCore += simpleCategoryConditions((Category) questionParent);
-				} else if (questionParent instanceof Group) {
-					ruleCore += simpleGroupConditions((Group) questionParent);
-				}
-				ruleCore += "	$"
-						+ scope.getUniqueNameReadable().toString()
-						+ " : Question( isScoreSet('"
-						+ varName
-						// + "'), getNumberVariableValue('" + varName + "') " +
-						// operator.getValue().toString() + " "
-						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + " ) from $" + questionParent.getUniqueNameReadable().toString()
-						+ ".getQuestions() \n";
-			}
-			break;
-		case DATE:
-		case STRING:
-			if (scope instanceof Form) {
-				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
 				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('" + varName
 						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + ") from $droolsForm.getSubmittedForm() \n";
+						+ droolsValue + ") from $droolsForm.getSubmittedForm() \n";
 
 			} else if (scope instanceof Category) {
 				TreeObject form = scope.getParent();
@@ -1600,8 +1556,8 @@ public class DroolsParser {
 				ruleCore += simpleFormCondition((Form) form);
 				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Category( isScoreSet('" + varName
 						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + ") from $" + form.getUniqueNameReadable().toString()
-						+ ".getCategory('" + scope.getName() + "') \n";
+						+ droolsValue + ") from $" + form.getUniqueNameReadable().toString() + ".getCategory('"
+						+ scope.getName() + "') \n";
 
 			} else if (scope instanceof Group) {
 				TreeObject groupParent = scope.getParent();
@@ -1613,8 +1569,8 @@ public class DroolsParser {
 				}
 				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Group( isScoreSet('" + varName
 						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + " ) from $" + groupParent.getUniqueNameReadable().toString()
-						+ ".getGroup('" + scope.getName() + "') \n";
+						+ droolsValue + " ) from $" + groupParent.getUniqueNameReadable().toString() + ".getGroup('"
+						+ scope.getName() + "') \n";
 
 			} else if (scope instanceof Question) {
 				TreeObject questionParent = scope.getParent();
@@ -1626,7 +1582,51 @@ public class DroolsParser {
 				}
 				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Question( isScoreSet('" + varName
 						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
-						+ valueNumber.getValue() + " ) from $" + questionParent.getUniqueNameReadable().toString()
+						+ droolsValue + " ) from $" + questionParent.getUniqueNameReadable().toString()
+						+ ".getQuestions() \n";
+			}
+			break;
+		case DATE:
+		case STRING:
+			if (scope instanceof Form) {
+				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : SubmittedForm(isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ droolsValue + ") from $droolsForm.getSubmittedForm() \n";
+
+			} else if (scope instanceof Category) {
+				TreeObject form = scope.getParent();
+				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				ruleCore += simpleFormCondition((Form) form);
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Category( isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ droolsValue + ") from $" + form.getUniqueNameReadable().toString() + ".getCategory('"
+						+ scope.getName() + "') \n";
+
+			} else if (scope instanceof Group) {
+				TreeObject groupParent = scope.getParent();
+				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				if (groupParent instanceof Category) {
+					ruleCore += simpleCategoryConditions((Category) groupParent);
+				} else if (groupParent instanceof Group) {
+					ruleCore += simpleGroupConditions((Group) groupParent);
+				}
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Group( isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ droolsValue + " ) from $" + groupParent.getUniqueNameReadable().toString() + ".getGroup('"
+						+ scope.getName() + "') \n";
+
+			} else if (scope instanceof Question) {
+				TreeObject questionParent = scope.getParent();
+				putTreeObjectName(scope, scope.getUniqueNameReadable().toString());
+				if (questionParent instanceof Category) {
+					ruleCore += simpleCategoryConditions((Category) questionParent);
+				} else if (questionParent instanceof Group) {
+					ruleCore += simpleGroupConditions((Group) questionParent);
+				}
+				ruleCore += "	$" + scope.getUniqueNameReadable().toString() + " : Question( isScoreSet('" + varName
+						+ "'), getVariableValue('" + varName + "') " + operator.getValue().toString() + " "
+						+ droolsValue + " ) from $" + questionParent.getUniqueNameReadable().toString()
 						+ ".getQuestions() \n";
 			}
 		}
