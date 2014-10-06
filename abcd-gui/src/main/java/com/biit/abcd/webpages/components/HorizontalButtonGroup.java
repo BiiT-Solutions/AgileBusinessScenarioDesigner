@@ -1,7 +1,10 @@
 package com.biit.abcd.webpages.components;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -13,14 +16,16 @@ public class HorizontalButtonGroup extends CustomComponent {
 	protected HorizontalLayout rootLayout;
 	private String size;
 	private boolean contractIcons;
+	private Set<Button> buttons;
 
 	public HorizontalButtonGroup() {
 		super();
+		buttons = new HashSet<>();
 		initHorizontalButtonGroup();
 		setIconSizeWithAttachListener();
 	}
-	
-	protected void initHorizontalButtonGroup(){
+
+	protected void initHorizontalButtonGroup() {
 		setStyleName(CLASSNAME);
 
 		rootLayout = new HorizontalLayout();
@@ -31,8 +36,8 @@ public class HorizontalButtonGroup extends CustomComponent {
 
 		contractIcons = false;
 	}
-	
-	protected void setIconSizeWithAttachListener(){
+
+	protected void setIconSizeWithAttachListener() {
 		addAttachListener(new AttachListener() {
 			private static final long serialVersionUID = -2513076537414804598L;
 
@@ -44,6 +49,7 @@ public class HorizontalButtonGroup extends CustomComponent {
 	}
 
 	public void addIconButton(IconButton button) {
+		buttons.add(button);
 		rootLayout.addComponent(button);
 		button.setSizeFull();
 	}
@@ -53,7 +59,7 @@ public class HorizontalButtonGroup extends CustomComponent {
 		this.size = null;
 		rootLayout.setWidth(null);
 	}
-	
+
 	public void setContractIcons(boolean contractIcons, String size) {
 		this.contractIcons = contractIcons;
 		this.size = size;
@@ -62,7 +68,7 @@ public class HorizontalButtonGroup extends CustomComponent {
 
 	private void setIconSize() {
 		Iterator<Component> itr = rootLayout.iterator();
-		if(contractIcons){
+		if (contractIcons) {
 			rootLayout.setWidth(null);
 		}
 
@@ -75,8 +81,12 @@ public class HorizontalButtonGroup extends CustomComponent {
 				component.setWidth("100%");
 			}
 		}
-		
+
 		markAsDirtyRecursive();
+	}
+
+	public Set<Button> getButtons() {
+		return buttons;
 	}
 
 }

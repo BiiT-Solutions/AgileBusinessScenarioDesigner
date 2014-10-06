@@ -12,7 +12,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 
-public class UpperMenu extends HorizontalButtonGroup {
+public abstract class UpperMenu extends SecuredMenu {
 	private static final long serialVersionUID = 3501103183357307175L;
 	public static final String BUTTON_WIDTH = "100px";
 	public static final String SEPARATOR_WIDTH = "10px";
@@ -54,7 +54,7 @@ public class UpperMenu extends HorizontalButtonGroup {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								UiAccesser.releaseForm(UserSessionHandler.getUser());
-								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);								
+								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 								windowAccept.close();
 							}
 						});

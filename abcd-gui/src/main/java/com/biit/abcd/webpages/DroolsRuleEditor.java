@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +32,7 @@ import com.vaadin.ui.UI;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -1017932957756165996L;
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private ExpressionEditorComponent ruleExpressionEditorComponent;
 	private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
 	private SelectDroolsRuleEditable tableSelectRule;
@@ -92,6 +95,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 			}
 			refreshRuleEditor();
 		} else {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
@@ -174,7 +178,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return null;
+		return activityPermissions;
 	}
 
 	private void removeSelectedRule() {

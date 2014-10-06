@@ -1,16 +1,17 @@
 package com.biit.abcd.webpages.components;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.WebMap;
+import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.liferay.portal.model.User;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
@@ -40,30 +41,25 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 			if (user == null) {
 				ApplicationFrame.navigateTo(WebMap.getLoginPage());
 			} else {
-				if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(user, DActivity.READ)) {
-					MessageManager.showWarning(LanguageCodes.ERROR_USER_NOACCESS, LanguageCodes.ERROR_USER_PERMISSION);
-					ApplicationFrame.navigateTo(WebMap.getLoginPage());
-					// For security avoid access if an user type the url of this page.
-				} else {
+				try {
 					if (accessAuthorizationsRequired() != null && !accessAuthorizationsRequired().isEmpty()) {
 						for (DActivity activity : accessAuthorizationsRequired()) {
-							if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(user, activity)) {
+							if (!AbcdAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(user,
+									activity)) {
+								AbcdLogger.debug(this.getClass().getName(), "Activity '" + activity
+										+ "' not authorized for user '" + user.getEmailAddress()
+										+ "'. Returned to login screen.");
 								ApplicationFrame.navigateTo(WebMap.getLoginPage());
 							}
 						}
 					}
-					// Avoid access if already a user is using the form.
-					if (UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) != null
-							&& UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) != UserSessionHandler
-									.getUser()) {
-						UserSessionHandler.getFormController().setForm(null);
-						ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-					}
 					securedEnter(event);
+				} catch (AuthenticationRequired | IOException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+					MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE);
 				}
 			}
 		} catch (NullPointerException npe) {
-			npe.printStackTrace();
 			AbcdLogger.errorMessage(this.getClass().getName(), npe);
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.getLoginPage());

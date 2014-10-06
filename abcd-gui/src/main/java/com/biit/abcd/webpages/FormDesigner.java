@@ -1,6 +1,8 @@
 package com.biit.abcd.webpages;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +43,7 @@ import com.vaadin.ui.HorizontalLayout;
 
 public class FormDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private FormTreeTable formTreeTable;
 	private FormDesignerPropertiesComponent propertiesComponent;
 	private FormDesignerUpperMenu upperMenu;
@@ -55,6 +58,7 @@ public class FormDesigner extends FormWebPageComponent {
 	protected void initContent() {
 		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
@@ -130,7 +134,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return null;
+		return activityPermissions;
 	}
 
 	private void updateUpperMenu(TreeObject selectedObject) {

@@ -6,8 +6,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Pages that has a form definition and can access to other pages that also have
- * a form.
+ * Pages that has a form definition and can access to other pages that also have a form.
  */
 public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	private static final long serialVersionUID = 5215781045989004097L;
@@ -47,7 +46,6 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 		mainPanel.setSizeFull();
 
 		setButtonMenu();
-		setUpperMenu(new UpperMenu());
 	}
 
 	public void setUpperMenu(UpperMenu upperMenu) {
@@ -66,8 +64,7 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	}
 
 	/**
-	 * The Working Area Layout is the layout where the page includes its own
-	 * components.
+	 * The Working Area Layout is the layout where the page includes its own components.
 	 * 
 	 * @return
 	 */

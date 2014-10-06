@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +45,7 @@ import com.vaadin.ui.UI;
 
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private SelectDiagramTable diagramBuilderTable;
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
@@ -58,6 +60,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	protected void initContent() {
 		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
@@ -153,8 +156,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					DiagramLink diagramLink = (DiagramLink) diagramObject;
 					if (diagramLink.getSourceElement() instanceof DiagramFork) {
 						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
-						//((DiagramFork) diagramLink.getSourceElement()).resetOutgoingLinks();
-						Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference().generateCopy();
+						// ((DiagramFork) diagramLink.getSourceElement()).resetOutgoingLinks();
+						Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
+								.generateCopy();
 						expression.setEditable(false);
 						diagramLink.resetExpressions(expression);
 					}
@@ -249,6 +253,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	private void initializeDiagramsTable() {
 		if (UserSessionHandler.getFormController().getForm() == null) {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		} else {
@@ -395,7 +400,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return null;
+		return activityPermissions;
 	}
 
 	private void save() {

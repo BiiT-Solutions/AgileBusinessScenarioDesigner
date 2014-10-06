@@ -10,9 +10,7 @@ import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
-import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
@@ -23,191 +21,81 @@ import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
-import com.vaadin.server.VaadinServlet;
 
 public class AbcdAuthorizationService extends AuthorizationService {
-
-	private IFormDao formDao;
 
 	/**
 	 * Can create and edit forms.
 	 */
-	private static final DActivity[] WEBFORMS_MANAGE_FORMS_ACTIVITIES = {
-
-	DActivity.READ,
+	private static final DActivity[] MANAGE_FORMS_ACTIVITIES = {
 
 	DActivity.FORM_EDITING,
-
-	DActivity.FORM_FLOW_EDITING,
-
-	DActivity.FORM_STATUS_UPGRADE,
 
 	DActivity.FORM_CREATE,
 
 	DActivity.FORM_CHANGE_GROUP,
 
-	DActivity.FORM_VERSION,
-
-	DActivity.FORM_DESCRIPTION,
-
-	DActivity.ELEMENTS_ADD_AND_REMOVE,
-
-	DActivity.ELEMENTS_ORDER,
-
-	DActivity.ELEMENTS_EDIT,
-
-	DActivity.USER_EDIT_OWN_DATA,
-
-	DActivity.XFORMS_EXPORT,
-
-	DActivity.XFORMS_PUBLISH,
-
-	DActivity.XML_VALIDATOR_AGAINST_FORM,
-
-	DActivity.FORM_ANALYSIS
+	DActivity.FORM_VERSION
 
 	};
 
 	/**
 	 * Can only read forms.
 	 */
-	private static final DActivity[] WEBFORMS_READ_ONLY = {
+	private static final DActivity[] READ_ONLY = {
 
 	DActivity.READ,
 
-	DActivity.USER_EDIT_OWN_DATA,
-
-	DActivity.XML_VALIDATOR_AGAINST_FORM,
-
-	DActivity.FORM_ANALYSIS
+	DActivity.USER_EDIT_OWN_DATA
 
 	};
 
 	/**
 	 * Can do administration task for forms. Has by default all Webforms manager permissions.
 	 */
-	private static final DActivity[] WEBFORMS_ADMINISTRATOR_EXTRA_PERMISSIONS = {
+	private static final DActivity[] ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
-	DActivity.ADMIN_FORMS,
+	DActivity.ADMIN_FORMS
 
-	DActivity.FORM_STATUS_DOWNGRADE,
+	};
 
-	DActivity.ACCESS_TO_ANY_GROUP,
+	private static final DActivity[] MANAGE_GLOBAL_CONSTANTS = {
 
-	DActivity.FORM_DELETE_GROUP,
-
-	DActivity.XML_VALIDATOR_AGAINST_FORM
+	DActivity.GLOBAL_VARIABLE_EDITOR
 
 	};
 
 	private static List<IActivity> formManagerPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> readOnlyPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> formAdministratorPermissions = new ArrayList<IActivity>();
+	private static List<IActivity> globalConstantsAdministratorPermissions = new ArrayList<IActivity>();
 
 	private static AbcdAuthorizationService instance = new AbcdAuthorizationService();
 
 	static {
-		for (DActivity activity : WEBFORMS_MANAGE_FORMS_ACTIVITIES) {
+		for (DActivity activity : ADMINISTRATOR_EXTRA_PERMISSIONS) {
+			formAdministratorPermissions.add(activity);
+		}
+		for (DActivity activity : MANAGE_FORMS_ACTIVITIES) {
 			formAdministratorPermissions.add(activity);
 			formManagerPermissions.add(activity);
 		}
-		for (DActivity activity : WEBFORMS_READ_ONLY) {
+		for (DActivity activity : READ_ONLY) {
 			readOnlyPermissions.add(activity);
-		}
-		for (DActivity activity : WEBFORMS_ADMINISTRATOR_EXTRA_PERMISSIONS) {
 			formAdministratorPermissions.add(activity);
+			formManagerPermissions.add(activity);
+		}
+		for (DActivity activity : MANAGE_GLOBAL_CONSTANTS) {
+			globalConstantsAdministratorPermissions.add(activity);
 		}
 	}
 
-	private AuthorizationByFormPool authorizationFormPool;
-
 	public AbcdAuthorizationService() {
 		super();
-		authorizationFormPool = new AuthorizationByFormPool();
-
-		// Add Vaadin conext to Spring, and get beans for DAOs.
-		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	public static AbcdAuthorizationService getInstance() {
 		return instance;
-	}
-
-	/**
-	 * User is allowed to do an activity.
-	 * 
-	 * @param user
-	 * @param activity
-	 * @return
-	 */
-	@Override
-	public boolean isAuthorizedActivity(User user, IActivity activity) {
-		try {
-			return super.isAuthorizedActivity(user, activity);
-		} catch (IOException | AuthenticationRequired e) {
-			MessageManager.showError(e.getMessage());
-			return false;
-		}
-	}
-
-	/**
-	 * User can do an activity on a form if the user has the permissions and pertains to the same group that the form.
-	 * 
-	 * @param form
-	 * @param user
-	 * @param activity
-	 * @return
-	 */
-	public boolean isAuthorizedActivity(Form form, User user, DActivity activity) {
-		if (user == null) {
-			return false;
-		}
-		// Is it in the pool?
-		Boolean authorized = authorizationFormPool.isAuthorizedActivity(form, user, activity);
-		if (authorized != null) {
-			return authorized;
-		}
-
-		// Calculate authorization.
-		authorized = isInFormGroup(form, user) && isAuthorizedActivity(user, activity);
-		authorizationFormPool.addUser(form, user, activity, authorized);
-		return authorized;
-	}
-
-	/**
-	 * User can do an activity on a form if the user has the permissions, is not already in use and pertains to the same
-	 * group that the form.
-	 * 
-	 * @param form
-	 * @param user
-	 * @param activity
-	 * @return
-	 */
-	public boolean isAuthorizedActivityAndNotInUse(Form form, User user, DActivity activity) {
-		return isAuthorizedActivity(form, user, activity) && isNotUsedByOtherUser(form);
-	}
-
-	/**
-	 * Remove all cached permissions for a specific form. This actions must be done when permissions are changed by some
-	 * actions and must be updated immediately (i.e. when a form changes to final design status).
-	 * 
-	 * @param form
-	 */
-	public void resetFormCachedPermissions(Form form) {
-		authorizationFormPool.removeForm(form);
-	}
-
-	/**
-	 * A form is editable if user has permissions, the form is not already in use and the form is editable.
-	 * 
-	 * @param form
-	 * @param user
-	 * @param activity
-	 * @return
-	 */
-	public boolean canEditForm(Form form, User user, DActivity activity) {
-		return isAuthorizedActivityAndNotInUse(form, user, activity) && isFormEditable(form);
 	}
 
 	@Override
@@ -229,54 +117,11 @@ public class AbcdAuthorizationService extends AuthorizationService {
 			break;
 		case NULL:
 			break;
+		case GLOBAL_CONSTANTS:
+			activities.addAll(globalConstantsAdministratorPermissions);
+			break;
 		}
 		return activities;
-	}
-
-	/**
-	 * Can write to a form if the user pertains to the form group and no other user is editing the form. If the form has
-	 * no group defined, any user can access to it.
-	 * 
-	 * @param form
-	 * @param user
-	 * @return
-	 */
-	private boolean isInFormGroup(Form form, User user) {
-		if (form == null || form.getUserGroup() == null) {
-			return true;
-		}
-		// Some administrators can access to any form.
-		if (isAuthorizedActivity(user, DActivity.ACCESS_TO_ANY_GROUP)) {
-			return true;
-		}
-		try {
-			if (!AuthenticationService.getInstance().isInGroup(form.getUserGroup(), user)) {
-				return false;
-			}
-			return true;
-		} catch (IOException | AuthenticationRequired e) {
-			MessageManager.showError(e.getMessage());
-		} catch (NotConnectedToWebServiceException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	/**
-	 * A form is editable if it is the last version.
-	 * 
-	 * @param form
-	 * @return
-	 */
-	private boolean isFormEditable(Form form) {
-		if (form == null) {
-			return false;
-		}
-		// Not stored, then this user has created the form.
-		if (form.getId() == null) {
-			return true;
-		}
-		return form.getVersion().equals(formDao.getLastVersion(form));
 	}
 
 	public UserGroup getDefaultGroup(User user) {
@@ -290,14 +135,6 @@ public class AbcdAuthorizationService extends AuthorizationService {
 			MessageManager.showError(e.getMessage());
 		}
 		return null;
-	}
-
-	public boolean isNotUsedByOtherUser(Form form) {
-		// if (form != null && form.getCurrentUser() != null
-		// && form.getCurrentUser().getUserId() != UserSessionHandler.getUser().getUserId()) {
-		// return false;
-		// }
-		return true;
 	}
 
 	public boolean isEditable(Form form) {
@@ -329,7 +166,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return false;
 	}
 
-	public boolean isAuthorizedActivity(User user, Form form, IActivity activity) {
+	private boolean isAuthorizedActivity(User user, Form form, IActivity activity) {
 		if (form == null || form.getOrganizationId() == null) {
 			return false;
 		}
@@ -346,7 +183,24 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		}
 	}
 
-	public Organization getOrganization(User user, Long organizationId) {
+	private boolean isAuthorizedActivity(User user, Long organizationId, IActivity activity) {
+		if (organizationId == null) {
+			return false;
+		}
+		Organization organization = getOrganization(user, organizationId);
+		if (organization == null) {
+			return false;
+		}
+		try {
+			return isAuthorizedActivity(user, organization, activity);
+		} catch (IOException | AuthenticationRequired e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			// For security
+			return false;
+		}
+	}
+
+	private Organization getOrganization(User user, Long organizationId) {
 		try {
 			List<Organization> organizations = getUserOrganizations(user);
 			for (Organization organization : organizations) {
@@ -378,30 +232,25 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return organizations;
 	}
 
-	public boolean isAuthorizedToForm(Form form, User user) {
-		// TODO
-		return true;
+	private boolean isAuthorizedToForm(Form form, User user) {
+		return isAuthorizedActivity(user, form, DActivity.FORM_EDITING);
 	}
 
-	public boolean isAuthorizedToForm(Long formId, User user) {
-		// TODO
-		return true;
-	}
-
-	public boolean isFormEditable(Form form, User user) {
-		// TODO
-		return true;
+	public boolean isAuthorizedToForm(Long formOrganizationId, User user) {
+		return isAuthorizedActivity(user, formOrganizationId, DActivity.FORM_EDITING);
 	}
 
 	public boolean isFormReadOnly(Form form, User user) {
-		boolean formIsInUse = UiAccesser.getUserUsingForm(form) != null;
-		return (!formIsInUse && !isAuthorizedToForm(form, user))
-				|| (formIsInUse && UiAccesser.getUserUsingForm(form) != user);
+		return !isAuthorizedToForm(form, user) || isFormAlreadyInUse(form.getId(), user);
 	}
 
-	public boolean isFormReadOnly(Long formId, User user) {
-		User userUsingForm = UiAccesser.getUserUsingForm(formId);
-		boolean formIsInUse = (userUsingForm != null);
-		return !isAuthorizedToForm(formId, user) || (formIsInUse && UiAccesser.getUserUsingForm(formId) != user);
+	public boolean isFormReadOnly(Long formId, Long formOrganizationId, User user) {
+		return !isAuthorizedToForm(formOrganizationId, user) || isFormAlreadyInUse(formId, user);
 	}
+
+	public boolean isFormAlreadyInUse(Long formId, User user) {
+		User userUsingForm = UiAccesser.getUserUsingForm(formId);
+		return (userUsingForm != null) && userUsingForm != user;
+	}
+
 }

@@ -26,10 +26,16 @@ public class TestScenarioEditorUpperMenu extends UpperMenu {
 		addIconButton(saveButton);
 		addIconButton(newTestScenario);
 		addIconButton(removeTestScenario);
+
+		for (Button button : getDisabledButtons()) {
+			button.setEnabled(false);
+		}
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
-		saveButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(saveButton)) {
+			saveButton.addClickListener(listener);
+		}
 	}
 
 	public void removeSaveButtonClickListener(Button.ClickListener listener) {
@@ -37,7 +43,9 @@ public class TestScenarioEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addNewTestScenarioButtonClickListener(Button.ClickListener listener) {
-		newTestScenario.addClickListener(listener);
+		if (!getDisabledButtons().contains(newTestScenario)) {
+			newTestScenario.addClickListener(listener);
+		}
 	}
 
 	public void removeNewTestScenarioButtonClickListener(Button.ClickListener listener) {
@@ -45,7 +53,9 @@ public class TestScenarioEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addRemoveTestScenarioButtonClickListener(Button.ClickListener listener) {
-		removeTestScenario.addClickListener(listener);
+		if (!getDisabledButtons().contains(removeTestScenario)) {
+			removeTestScenario.addClickListener(listener);
+		}
 	}
 
 	public void removeRemoveTestScenarioButtonClickListener(Button.ClickListener listener) {

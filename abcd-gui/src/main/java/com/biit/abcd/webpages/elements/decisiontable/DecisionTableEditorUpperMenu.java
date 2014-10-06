@@ -7,10 +7,9 @@ import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
 
 public class DecisionTableEditorUpperMenu extends UpperMenu {
-
 	private static final long serialVersionUID = 1878327027307547248L;
 	private IconButton saveButton, newTable, removeTable, newConditionButton, deleteConditionButton, newRuleButton,
-	deleteRuleButton, copyRowsButton, pasteRowsButton;
+			deleteRuleButton, copyRowsButton, pasteRowsButton;
 
 	public DecisionTableEditorUpperMenu() {
 		super();
@@ -18,7 +17,6 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	}
 
 	private void defineMenu() {
-
 		saveButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.FORM_SAVE,
 				LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_SAVE_TOOLTIP);
 		newTable = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_ADD_TABLE, ThemeIcon.TABLE_ADD,
@@ -47,10 +45,16 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		addIconButton(deleteRuleButton);
 		addIconButton(copyRowsButton);
 		addIconButton(pasteRowsButton);
+
+		for (Button button : getDisabledButtons()) {
+			button.setEnabled(false);
+		}
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
-		saveButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(saveButton)) {
+			saveButton.addClickListener(listener);
+		}
 	}
 
 	public void removeSaveButtonClickListener(Button.ClickListener listener) {
@@ -58,7 +62,9 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addNewConditionButtonClickListener(Button.ClickListener listener) {
-		newConditionButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(newConditionButton)) {
+			newConditionButton.addClickListener(listener);
+		}
 	}
 
 	public void removeNewConditionClickListener(Button.ClickListener listener) {
@@ -66,7 +72,9 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addRemoveConditionButtonClickListener(Button.ClickListener listener) {
-		deleteConditionButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(deleteConditionButton)) {
+			deleteConditionButton.addClickListener(listener);
+		}
 	}
 
 	public void removeDeleteConditionClickListener(Button.ClickListener listener) {
@@ -74,7 +82,9 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addNewRuleButtonClickListener(Button.ClickListener listener) {
-		newRuleButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(newRuleButton)) {
+			newRuleButton.addClickListener(listener);
+		}
 	}
 
 	public void removeAddRuleClickListener(Button.ClickListener listener) {
@@ -82,7 +92,9 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addRemoveRuleButtonClickListener(Button.ClickListener listener) {
-		deleteRuleButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(deleteRuleButton)) {
+			deleteRuleButton.addClickListener(listener);
+		}
 	}
 
 	public void removeRemoveRuleClickListener(Button.ClickListener listener) {
@@ -90,7 +102,9 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addNewTableClickListener(Button.ClickListener listener) {
-		newTable.addClickListener(listener);
+		if (!getDisabledButtons().contains(newTable)) {
+			newTable.addClickListener(listener);
+		}
 	}
 
 	public void removeNewTableClickListener(Button.ClickListener listener) {
@@ -98,26 +112,34 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addRemoveTableClickListener(Button.ClickListener listener) {
-		removeTable.addClickListener(listener);
+		if (!getDisabledButtons().contains(removeTable)) {
+			removeTable.addClickListener(listener);
+		}
 	}
 
 	public void removeRemoveTableClickListener(Button.ClickListener listener) {
 		removeTable.removeClickListener(listener);
 	}
 
-	public void addCopyRowsClickListener(Button.ClickListener listener){
-		copyRowsButton.addClickListener(listener);
+	public void addCopyRowsClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(copyRowsButton)) {
+			copyRowsButton.addClickListener(listener);
+		}
 	}
 
-	public void removeCopyRowsClickListener(Button.ClickListener listener){
+	public void removeCopyRowsClickListener(Button.ClickListener listener) {
 		copyRowsButton.removeClickListener(listener);
 	}
 
-	public void addPasteRowsClickListener(Button.ClickListener listener){
-		pasteRowsButton.addClickListener(listener);
+	public void addPasteRowsClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(pasteRowsButton)) {
+			pasteRowsButton.addClickListener(listener);
+		}
 	}
 
-	public void removePasteyRowsClickListener(Button.ClickListener listener){
-		pasteRowsButton.removeClickListener(listener);
+	public void removePasteyRowsClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(pasteRowsButton)) {
+			pasteRowsButton.removeClickListener(listener);
+		}
 	}
 }

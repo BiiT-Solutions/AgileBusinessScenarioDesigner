@@ -14,11 +14,11 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
-import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
@@ -30,7 +30,6 @@ import com.vaadin.ui.TreeTable;
 public class FormsVersionsTreeTable extends TreeTable {
 	private static final long serialVersionUID = -7776688515497328826L;
 	private ISimpleFormViewDao simpleFormViewDao;
-	private IFormDao formDao;
 	private HashMap<String, List<SimpleFormView>> formMap;
 
 	enum FormsVersionsTreeTableProperties {
@@ -41,7 +40,6 @@ public class FormsVersionsTreeTable extends TreeTable {
 		// Add Vaadin conext to Spring, and get beans for DAOs.
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
-		formDao = (IFormDao) helper.getBean("formDao");
 
 		initContainerProperties();
 		initializeFormTable();
@@ -363,15 +361,15 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * @return
 	 */
 	private String getFormPermissionsTag(SimpleFormView form) {
-		String permissions = "";
-		// if (!AbcdAuthorizationService.getInstance().canEditForm(form, UserSessionHandler.getUser(),
-		// DActivity.FORM_EDITING)) {
-		// permissions = "read only";
-		// }
-		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form.getId(), UserSessionHandler.getUser())) {
-			permissions = "locked";
+		if (!AbcdAuthorizationService.getInstance().isAuthorizedToForm(form.getOrganizationId(),
+				UserSessionHandler.getUser())) {
+			return "read only";
 		}
-		return permissions;
+		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form.getId(), form.getOrganizationId(),
+				UserSessionHandler.getUser())) {
+			return "in use";
+		}
+		return "";
 	}
 
 	@Override

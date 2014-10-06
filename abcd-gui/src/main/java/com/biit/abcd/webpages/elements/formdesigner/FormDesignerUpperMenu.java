@@ -54,13 +54,11 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		addIconButton(moveUpButton);
 
 		// Move down.
-		moveDownButton = new IconButton(LanguageCodes.MENU_MOVE_DOWN, ThemeIcon.MOVE_DOWN,
-				LanguageCodes.MENU_MOVE_DOWN);
+		moveDownButton = new IconButton(LanguageCodes.MENU_MOVE_DOWN, ThemeIcon.MOVE_DOWN, LanguageCodes.MENU_MOVE_DOWN);
 		addIconButton(moveDownButton);
-		
-		//Move to
-		moveButton = new IconButton(LanguageCodes.MENU_MOVE_TO, ThemeIcon.MOVE_TO,
-				LanguageCodes.MENU_MOVE_TO);
+
+		// Move to
+		moveButton = new IconButton(LanguageCodes.MENU_MOVE_TO, ThemeIcon.MOVE_TO, LanguageCodes.MENU_MOVE_TO);
 		addIconButton(moveButton);
 
 		// Remove
@@ -103,42 +101,64 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 		}
+
+		// Disable buttons that user has no permissions to use.
+		for (Button button : getDisabledButtons()) {
+			button.setEnabled(false);
+		}
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
-		saveButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(saveButton)) {
+			saveButton.addClickListener(listener);
+		}
 	}
 
 	public void addNewCategoryButtonButtonClickListener(Button.ClickListener listener) {
-		newCategoryButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(newCategoryButton)) {
+			newCategoryButton.addClickListener(listener);
+		}
 	}
 
 	public void addNewQuestionButtonClickListener(Button.ClickListener listener) {
-		newQuestionButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(newQuestionButton)) {
+			newQuestionButton.addClickListener(listener);
+		}
 	}
 
 	public void addNewGroupButtonClickListener(Button.ClickListener listener) {
-		newGroupButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(newGroupButton)) {
+			newGroupButton.addClickListener(listener);
+		}
 	}
 
 	public void addNewAnswerButtonClickListener(Button.ClickListener listener) {
-		newAnswerButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(newAnswerButton)) {
+			newAnswerButton.addClickListener(listener);
+		}
 	}
 
 	public void addMoveUpButtonClickListener(Button.ClickListener listener) {
-		moveUpButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(moveUpButton)) {
+			moveUpButton.addClickListener(listener);
+		}
 	}
 
 	public void addMoveDownButtonClickListener(Button.ClickListener listener) {
-		moveDownButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(moveDownButton)) {
+			moveDownButton.addClickListener(listener);
+		}
 	}
 
 	public void addRemoveButtonButtonClickListener(Button.ClickListener listener) {
-		removeButton.addClickListener(listener);
-	}
-	
-	public void addMoveButtonListener(ClickListener listener) {
-		moveButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(removeButton)) {
+			removeButton.addClickListener(listener);
+		}
 	}
 
+	public void addMoveButtonListener(ClickListener listener) {
+		if (!getDisabledButtons().contains(moveButton)) {
+			moveButton.addClickListener(listener);
+		}
+	}
 }

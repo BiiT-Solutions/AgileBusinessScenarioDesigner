@@ -17,6 +17,7 @@ public class SimpleFormView {
 	private String comparationId;
 	private Timestamp availableFrom;
 	private Timestamp availableTo;
+	private long organizationId;
 
 	public SimpleFormView() {
 
@@ -34,6 +35,7 @@ public class SimpleFormView {
 		setComparationId(form.getComparationId());
 		setAvailableFrom(form.getAvailableFrom());
 		setAvailableTo(form.getAvailableTo());
+		setOrganizationId(form.getOrganizationId());
 	}
 
 	public String getName() {
@@ -127,6 +129,14 @@ public class SimpleFormView {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(long organizationId) {
+		this.organizationId = organizationId;
 	}
 
 }

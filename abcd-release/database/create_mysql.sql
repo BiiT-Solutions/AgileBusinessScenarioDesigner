@@ -727,6 +727,7 @@
         version integer,
         availableFrom datetime not null,
         availableTo datetime,
+        organizationId DOUBLE not null,
         primary key (ID)
     );
 

@@ -17,7 +17,7 @@ public class UiAccesser {
 
 	private static HashMap<User, Form> formsInUse = new HashMap<User, Form>();
 
-	public static synchronized boolean isUserUserUsingForm(User user, Form form) {
+	public static synchronized boolean isUserUsingForm(User user, Form form) {
 		return formsInUse.get(form) != null && formsInUse.get(form).equals(user);
 	}
 

@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -58,7 +60,7 @@ import com.vaadin.ui.UI;
 public class DecisionTableEditor extends FormWebPageComponent implements EditExpressionListener,
 		ClearExpressionListener, EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
-
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private NewDecisionTable decisionTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableRuleTableEditable tableSelectionMenu;
@@ -71,6 +73,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	protected void initContent() {
 		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
@@ -314,7 +317,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return null;
+		return activityPermissions;
 	}
 
 	/**

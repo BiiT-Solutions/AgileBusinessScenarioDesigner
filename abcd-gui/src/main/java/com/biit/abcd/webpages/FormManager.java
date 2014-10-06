@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
-import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
@@ -23,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private FormsVersionsTreeTable formTable;
 	private FormManagerUpperMenu upperMenu;
 
@@ -60,14 +61,14 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-					if (UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) == null
-							|| UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) == UserSessionHandler
-									.getUser()) {
+//					if (UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) == null
+//							|| UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) == UserSessionHandler
+//									.getUser()) {
 						Form form = formDao.read(formTable.getValue().getId());
 						UserSessionHandler.getFormController().setForm(form);
 						UiAccesser.lockForm(form, UserSessionHandler.getUser());
 					}
-				}
+//				}
 			}
 		});
 	}
@@ -88,9 +89,7 @@ public class FormManager extends FormWebPageComponent {
 
 	@Override
 	public void updateButtons(boolean enableFormButtons) {
-		super.updateButtons(enableFormButtons
-				&& !AbcdAuthorizationService.getInstance().isFormReadOnly(formTable.getValue().getId(),
-						UserSessionHandler.getUser()));
+		super.updateButtons(enableFormButtons);
 		upperMenu.updateButtons(enableFormButtons);
 	}
 
@@ -101,7 +100,7 @@ public class FormManager extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return Arrays.asList(DActivity.READ);
+		return activityPermissions;
 	}
 
 	public SimpleFormView getForm() {

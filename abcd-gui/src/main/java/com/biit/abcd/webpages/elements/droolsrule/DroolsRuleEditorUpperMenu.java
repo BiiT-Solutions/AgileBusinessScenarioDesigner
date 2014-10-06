@@ -26,10 +26,16 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 		addIconButton(saveButton);
 		addIconButton(newRule);
 		addIconButton(removeRule);
+
+		for (Button button : getDisabledButtons()) {
+			button.setEnabled(false);
+		}
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
-		saveButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(saveButton)) {
+			saveButton.addClickListener(listener);
+		}
 	}
 
 	public void removeSaveButtonClickListener(Button.ClickListener listener) {
@@ -37,7 +43,9 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addNewRuleButtonClickListener(Button.ClickListener listener) {
-		newRule.addClickListener(listener);
+		if (!getDisabledButtons().contains(newRule)) {
+			newRule.addClickListener(listener);
+		}
 	}
 
 	public void removeNewRuleButtonClickListener(Button.ClickListener listener) {
@@ -45,7 +53,9 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addRemoveRuleButtonClickListener(Button.ClickListener listener) {
-		removeRule.addClickListener(listener);
+		if (!getDisabledButtons().contains(removeRule)) {
+			removeRule.addClickListener(listener);
+		}
 	}
 
 	public void removeRemoveRuleButtonClickListener(Button.ClickListener listener) {

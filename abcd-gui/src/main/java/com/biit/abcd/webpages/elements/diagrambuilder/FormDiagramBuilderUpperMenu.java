@@ -1,9 +1,6 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.security.AbcdAuthorizationService;
-import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
@@ -52,43 +49,60 @@ public class FormDiagramBuilderUpperMenu extends UpperMenu {
 		addIconButton(toBackButton);
 		addIconButton(toSvgButton);
 		addIconButton(toPngButton);
-	}
 
-	public void setEnabledButtons() {
-		clearButton.setEnabled(AbcdAuthorizationService.getInstance().isAuthorizedActivity(
-				UserSessionHandler.getUser(), DActivity.FORM_CREATE));
+		for (Button button : getDisabledButtons()) {
+			if (!button.equals(toSvgButton) && !button.equals(toPngButton)) {
+				button.setEnabled(false);
+			}
+		}
 	}
 
 	public void addNewDiagramButtonClickListener(Button.ClickListener listener) {
-		newDiagramButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(newDiagramButton)) {
+			newDiagramButton.addClickListener(listener);
+		}
 	}
 
 	public void addDeleteNewDiagramButtonClickListener(Button.ClickListener listener) {
-		deleteDiagramButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(deleteDiagramButton)) {
+			deleteDiagramButton.addClickListener(listener);
+		}
 	}
 
 	public void addClearButtonClickListener(Button.ClickListener listener) {
-		clearButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(clearButton)) {
+			clearButton.addClickListener(listener);
+		}
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
-		saveButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(saveButton)) {
+			saveButton.addClickListener(listener);
+		}
 	}
 
 	public void addUndoButtonClickListener(Button.ClickListener listener) {
-		undoButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(undoButton)) {
+			undoButton.addClickListener(listener);
+		}
 	}
 
 	public void addRedoButtonClickListener(Button.ClickListener listener) {
-		redoButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(redoButton)) {
+			redoButton.addClickListener(listener);
+		}
 	}
 
 	public void addToFrontButtonClickListener(Button.ClickListener listener) {
-		toFrontButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(toFrontButton)) {
+			toFrontButton.addClickListener(listener);
+		}
 	}
 
 	public void addToBackButtonClickListener(Button.ClickListener listener) {
-		toBackButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(toBackButton)) {
+			toBackButton.addClickListener(listener);
+		}
 	}
 
 	public void addToSvgButtonClickListener(Button.ClickListener listener) {

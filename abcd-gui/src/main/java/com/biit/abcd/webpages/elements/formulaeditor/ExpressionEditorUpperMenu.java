@@ -27,10 +27,16 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 		addIconButton(saveButton);
 		addIconButton(newExpression);
 		addIconButton(removeExpression);
+
+		for (Button button : getDisabledButtons()) {
+			button.setEnabled(false);
+		}
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
-		saveButton.addClickListener(listener);
+		if (!getDisabledButtons().contains(saveButton)) {
+			saveButton.addClickListener(listener);
+		}
 	}
 
 	public void removeSaveButtonClickListener(Button.ClickListener listener) {
@@ -38,7 +44,9 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addNewExpressionButtonClickListener(Button.ClickListener listener) {
-		newExpression.addClickListener(listener);
+		if (!getDisabledButtons().contains(newExpression)) {
+			newExpression.addClickListener(listener);
+		}
 	}
 
 	public void removeNewExpressionButtonClickListener(Button.ClickListener listener) {
@@ -46,7 +54,9 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 	}
 
 	public void addRemoveExpressionButtonClickListener(Button.ClickListener listener) {
-		removeExpression.addClickListener(listener);
+		if (!getDisabledButtons().contains(removeExpression)) {
+			removeExpression.addClickListener(listener);
+		}
 	}
 
 	public void removeRemoveExpressionButtonClickListener(Button.ClickListener listener) {

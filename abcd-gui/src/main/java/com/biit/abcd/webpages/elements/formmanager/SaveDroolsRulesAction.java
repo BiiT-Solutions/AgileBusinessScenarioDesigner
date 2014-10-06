@@ -59,8 +59,6 @@ public class SaveDroolsRulesAction implements SaveAction {
 					.getRepresentation());
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 		} catch (Exception e) {
-			// MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
-			// LanguageCodes.ERROR_DROOLS_ENGINE);
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 		}

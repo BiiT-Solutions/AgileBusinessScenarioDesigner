@@ -80,6 +80,9 @@ public class Form extends BaseForm {
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
+	@Column(nullable = false, columnDefinition = "DOUBLE")
+	private Long organizationId;
+
 	public Form() {
 		super();
 		diagrams = new HashSet<>();
@@ -262,7 +265,6 @@ public class Form extends BaseForm {
 	}
 
 	public Long getOrganizationId() {
-		// TODO Auto-generated method stub
-		return null;
+		return organizationId;
 	}
 }

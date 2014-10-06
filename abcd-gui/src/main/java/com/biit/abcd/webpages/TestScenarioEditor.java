@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import com.vaadin.ui.UI;
 
 public class TestScenarioEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -6743796589244668454L;
-
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private Panel dummyPanel;
 	private SelectTestScenarioTableEditable tableSelectExpression;
 	private TestScenarioEditorUpperMenu testScenarioUpperMenu;
@@ -87,6 +89,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			}
 			refreshTestScenario();
 		} else {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
@@ -160,7 +163,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return null;
+		return activityPermissions;
 	}
 
 	private void removeSelectedTestScenario() {
