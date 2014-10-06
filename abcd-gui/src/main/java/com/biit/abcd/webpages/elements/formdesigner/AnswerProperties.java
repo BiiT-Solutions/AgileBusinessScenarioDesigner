@@ -9,6 +9,7 @@ import com.biit.abcd.persistence.entity.Answer;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
@@ -17,6 +18,7 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 
 	private Answer instance;
 	private TextField answerTechnicalLabel;
+	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "[^<& ]+";
 
 	public AnswerProperties() {
 		super(Answer.class);
@@ -27,6 +29,8 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 		instance = element;
 		answerTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		answerTechnicalLabel.setValue(instance.getName());
+		answerTechnicalLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
+				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
 
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);

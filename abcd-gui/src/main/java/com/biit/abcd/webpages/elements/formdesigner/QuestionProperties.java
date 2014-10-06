@@ -16,6 +16,7 @@ import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -27,6 +28,7 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 	private TextField questionTechnicalLabel;
 	private ComboBox answerType;
 	private ComboBox answerFormat;
+	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "([A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff_])([0-9A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff\\_\\xb7]){2,}";
 
 	public QuestionProperties() {
 		super(Question.class);
@@ -37,6 +39,8 @@ public class QuestionProperties extends GenericFormElementProperties<Question> {
 		instance = element;
 		questionTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		questionTechnicalLabel.setValue(instance.getName());
+		questionTechnicalLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
+				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
 
 		initializeSelectionLists();
 		if (instance.getAnswerType() != null) {

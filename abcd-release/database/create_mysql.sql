@@ -760,6 +760,12 @@
         primary key (tree_forms_ID, tableRules_ID)
     );
 
+    create table tree_forms_test_scenario (
+        tree_forms_ID bigint not null,
+        testScenarios_ID bigint not null,
+        primary key (tree_forms_ID, testScenarios_ID)
+    );
+
     create table tree_groups (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -1136,6 +1142,9 @@
     alter table tree_forms_rule_decision_table 
         add constraint UK_b274bmp72bu1n40rl4k5kvhas  unique (tableRules_ID);
 
+    alter table tree_forms_test_scenario 
+        add constraint UK_c0jjkkgcgpgx4o9h315avv5ev  unique (testScenarios_ID);
+
     alter table tree_groups 
         add constraint UK_sfdvxxi1k3p9pqsjl5nhmgdp  unique (ID);
 
@@ -1485,5 +1494,15 @@
 
     alter table tree_forms_rule_decision_table 
         add constraint FK_mb6o16g0xsjlo3nx5xoc0i0g9 
+        foreign key (tree_forms_ID) 
+        references tree_forms (ID);
+
+    alter table tree_forms_test_scenario 
+        add constraint FK_c0jjkkgcgpgx4o9h315avv5ev 
+        foreign key (testScenarios_ID) 
+        references test_scenario (ID);
+
+    alter table tree_forms_test_scenario 
+        add constraint FK_fqeidj7da9e5kofvo7xc6970x 
         foreign key (tree_forms_ID) 
         references tree_forms (ID);

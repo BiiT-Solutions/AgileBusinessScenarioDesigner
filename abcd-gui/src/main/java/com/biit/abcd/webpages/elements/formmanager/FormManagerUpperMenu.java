@@ -162,8 +162,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 		
 		addIconButton(newFormButton);
 		addIconButton(exportToDrools);
-		addIconButton(createTestScenario);
-		addIconButton(launchTestScenario);
+//		addIconButton(createTestScenario);
+//		addIconButton(launchTestScenario);
 	}
 
 	public void setEnabledButtons() {

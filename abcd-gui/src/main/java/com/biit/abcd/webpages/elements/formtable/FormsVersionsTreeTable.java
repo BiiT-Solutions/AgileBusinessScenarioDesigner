@@ -142,7 +142,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			try {
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue(
 						LiferayServiceAccess.getInstance().getUserById(form.getCreatedBy()).getEmailAddress());
-			} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException e) {
+			} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue("");
 			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.CREATION_DATE).setValue(
@@ -150,7 +150,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			try {
 				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue(
 						LiferayServiceAccess.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress());
-			} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException e) {
+			} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
 				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue("");
 			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE).setValue(
@@ -184,7 +184,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 				try {
 					item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue(
 							LiferayServiceAccess.getInstance().getUserById(form.getCreatedBy()).getEmailAddress());
-				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException e) {
+				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
 					item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue("");
 				}
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATION_DATE).setValue(
@@ -192,7 +192,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 				try {
 					item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue(
 							LiferayServiceAccess.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress());
-				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException e) {
+				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
 					item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue("");
 				}
 				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE).setValue(

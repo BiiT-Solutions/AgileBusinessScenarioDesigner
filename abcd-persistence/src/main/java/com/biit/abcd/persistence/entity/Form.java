@@ -26,6 +26,7 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.BaseForm;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -80,6 +81,14 @@ public class Form extends BaseForm {
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	// Cannot be JOIN
+	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy(value = "name ASC")
+	@Cache(region = "testScenarios", usage = CacheConcurrencyStrategy.READ_WRITE)
+	private Set<TestScenario> testScenarios;
+
 	public Form() {
 		super();
 		diagrams = new HashSet<>();
@@ -87,6 +96,7 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChain = new HashSet<>();
 		rules = new HashSet<>();
+		testScenarios = new HashSet<>();
 	}
 
 	public Form(String name) throws FieldTooLongException, CharacterNotAllowedException {
@@ -96,6 +106,7 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChain = new HashSet<>();
 		rules = new HashSet<>();
+		testScenarios = new HashSet<>();
 	}
 
 	@Override
@@ -115,6 +126,9 @@ public class Form extends BaseForm {
 		}
 		for (Rule rule : getRules()) {
 			rule.resetIds();
+		}
+		for (TestScenario testScenario : getTestScenarios()) {
+			testScenario.resetIds();
 		}
 	}
 
@@ -240,7 +254,8 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root
+	 * diagram.
 	 * 
 	 * @param diagram
 	 */
@@ -264,5 +279,22 @@ public class Form extends BaseForm {
 	public Long getOrganizationId() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Set<TestScenario> getTestScenarios() {
+		return testScenarios;
+	}
+
+	public void setTestScenarios(Set<TestScenario> testScenarios) {
+		this.tableRules.clear();
+		this.testScenarios.addAll(testScenarios);
+	}
+
+	public void addTestScenario(TestScenario testScenario) {
+		testScenarios.add(testScenario);
+	}
+
+	public void removeTestScenario(TestScenario testScenario) {
+		testScenarios.remove(testScenario);
 	}
 }

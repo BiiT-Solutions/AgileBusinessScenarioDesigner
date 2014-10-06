@@ -86,6 +86,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 			Hibernate.initialize(form.getCustomVariables());
 			Hibernate.initialize(form.getExpressionChain());
 			Hibernate.initialize(form.getRules());
+			Hibernate.initialize(form.getTestScenarios());
 		}
 	}
 

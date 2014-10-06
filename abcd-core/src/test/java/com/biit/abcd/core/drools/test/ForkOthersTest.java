@@ -48,37 +48,37 @@ public class ForkOthersTest extends KidsFormCreator {
 	private final static String FORM_CUSTOM_VAR = "formCustomVar";
 	private final static String CATEGORY_CUSTOM_VAR = "categoryCustomVar";
 
-//	@Test(groups = { "rules" })
-//	public void testFork() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-//			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-//			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-//			CharacterNotAllowedException {
-//
-//		// Restart the form to avoid test cross references
-//		initForm();
-//		// Create the table and form diagram
-//		createFormSimpleFork();
-//		// Create the rules and launch the engine
-//		DroolsForm droolsForm = createAndRunDroolsRules();
-//		// Check Fork assignation
-//		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
-//	}
-//
-//	@Test(groups = { "rules" })
-//	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-//			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-//			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-//			CharacterNotAllowedException {
-//
-//		// Restart the form to avoid test cross references
-//		initForm();
-//		// Create the table and form diagram
-//		createFormNestedForks();
-//		// Create the rules and launch the engine
-//		DroolsForm droolsForm = createAndRunDroolsRules();
-//		// Check Fork assignation
-//		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
-//	}
+	@Test(groups = { "rules" })
+	public void testFork() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			CharacterNotAllowedException {
+
+		// Restart the form to avoid test cross references
+		initForm();
+		// Create the table and form diagram
+		createFormSimpleFork();
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check Fork assignation
+		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+	}
+
+	@Test(groups = { "rules" })
+	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			CharacterNotAllowedException {
+
+		// Restart the form to avoid test cross references
+		initForm();
+		// Create the table and form diagram
+		createFormNestedForks();
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check Fork assignation
+		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+	}
 
 	@Test(groups = { "rules" })
 	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,

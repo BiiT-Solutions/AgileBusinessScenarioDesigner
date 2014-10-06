@@ -50,6 +50,25 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		testScenarioDao.makeTransient(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 0);
 	}
+	
+	@Test
+	public void storeRemoveTestScenariosFromForm() throws NotValidFormException, FieldTooLongException {
+		Form form = new Form();
+		form.setLabel("Form");
+		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
+		form.addTestScenario(testScenario);
+
+		formDao.makePersistent(form);
+		Assert.assertEquals(formDao.getRowCount(), 1);
+
+		List<Form> persistedList = formDao.getAll();
+		Assert.assertEquals(persistedList.size(), 1);
+		Assert.assertEquals(persistedList.get(0).getTestScenarios().size(), 1);
+		Assert.assertEquals(persistedList.get(0).getTestScenarios().iterator().next().getName(), TEST_SCENARIO_NAME);
+
+		formDao.makeTransient(form);
+		Assert.assertEquals(formDao.getRowCount(), 0);
+	}
 
 	@Test
 	public void storeRemoveTestScenariosMapData() throws NotValidFormException, FieldTooLongException,

@@ -1,11 +1,15 @@
 package com.biit.abcd.webpages.components;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.AbstractComponentContainer;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Component;
@@ -147,7 +151,20 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 		@Override
 		public void valueChange(ValueChangeEvent event) {
 			if (field.isAttached() && field.isEnabled()) {
-				updateElement();
+				if ((field.getValidators() != null) && (!field.getValidators().isEmpty())) {
+					Collection<Validator> validators = field.getValidators();
+					for (Validator validator : validators) {
+						try {
+							validator.validate(field.getValue());
+							updateElement();
+						} catch (InvalidValueException e) {
+							AbcdLogger.warning(this.getClass().getName(), e.toString());
+						}
+					}
+				} else {
+					updateElement();
+
+				}
 			}
 		}
 	};
