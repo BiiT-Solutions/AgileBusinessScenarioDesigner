@@ -7,7 +7,6 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.elements.decisiontable.EditCellComponent;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
@@ -19,6 +20,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.listeners.DoubleClickListener;
 import com.biit.jointjs.diagram.builder.server.listeners.ElementActionListener;
@@ -148,8 +150,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	}
 
 	/**
-	 * Gets Element of diagram from a json String. If it doesn't exist on the
-	 * diagram, we add it first.
+	 * Gets Element of diagram from a json String. If it doesn't exist on the diagram, we add it first.
 	 * 
 	 * @param jsonString
 	 * @return
@@ -241,7 +242,10 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		this.diagram = diagram;
 		if (diagram != null) {
 			// Initialize the map of diagramElements.
-			setEnabled(true);
+			if (!AbcdAuthorizationService.getInstance().isFormReadOnly(
+					UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
+				setEnabled(true);
+			}
 			diagramElements = createMapOfDiagramObjects(diagram);
 			fromJson(diagram.toJson());
 		} else {

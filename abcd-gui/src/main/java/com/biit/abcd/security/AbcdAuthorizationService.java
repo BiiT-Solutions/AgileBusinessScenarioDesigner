@@ -241,10 +241,16 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	}
 
 	public boolean isFormReadOnly(Form form, User user) {
+		if (form == null || user == null) {
+			return true;
+		}
 		return !isAuthorizedToForm(form, user) || isFormAlreadyInUse(form.getId(), user);
 	}
 
 	public boolean isFormReadOnly(Long formId, Long formOrganizationId, User user) {
+		if (formId == null || formOrganizationId == null || user == null) {
+			return true;
+		}
 		return !isAuthorizedToForm(formOrganizationId, user) || isFormAlreadyInUse(formId, user);
 	}
 

@@ -1,5 +1,9 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -9,13 +13,13 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
-import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.components.SelectExpressionWindow;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class DiagramPropertiesSink extends PropertiesForClassComponent<DiagramSink> {
+public class DiagramPropertiesSink extends SecuredDiagramElementProperties<DiagramSink> {
 	private static final long serialVersionUID = -5894964889869328279L;
 	private DiagramSink instance;
 	private FieldWithSearchButton fieldWithSearchButton;
@@ -92,6 +96,11 @@ public class DiagramPropertiesSink extends PropertiesForClassComponent<DiagramSi
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(instance);
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(fieldWithSearchButton));
 	}
 
 }

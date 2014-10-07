@@ -1,5 +1,9 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -9,13 +13,13 @@ import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
-import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.components.SelectRuleWindow;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class DiagramPropertiesRule extends PropertiesForClassComponent<DiagramRule> {
+public class DiagramPropertiesRule extends SecuredDiagramElementProperties<DiagramRule> {
 	private static final long serialVersionUID = -5724748150445403970L;
 	private DiagramRule instance;
 	private FieldWithSearchButton fieldWithSearchButton;
@@ -90,6 +94,11 @@ public class DiagramPropertiesRule extends PropertiesForClassComponent<DiagramRu
 	protected void firePropertyUpdateOnExitListener() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(fieldWithSearchButton));
 	}
 
 }

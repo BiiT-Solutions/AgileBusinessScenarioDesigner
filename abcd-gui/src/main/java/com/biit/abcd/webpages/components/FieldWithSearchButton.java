@@ -93,19 +93,18 @@ public class FieldWithSearchButton extends CustomComponent {
 	public void removeClickListener(ClickListener listener) {
 		searchButton.removeClickListener(listener);
 	}
-	
-	public void addRemoveClickListener(ClickListener listener){
+
+	public void addRemoveClickListener(ClickListener listener) {
 		removeButton.addClickListener(listener);
 	}
-	
-	public void removeRemoveClickListener(ClickListener listener){
+
+	public void removeRemoveClickListener(ClickListener listener) {
 		removeButton.removeClickListener(listener);
 	}
 
 	/**
-	 * This class implements the delete content listener. It deletes the content
-	 * of the field and sets the value to null when the user presses the delete
-	 * button.
+	 * This class implements the delete content listener. It deletes the content of the field and sets the value to null
+	 * when the user presses the delete button.
 	 * 
 	 */
 	private class DeleteContentListener implements ClickListener {
@@ -124,5 +123,13 @@ public class FieldWithSearchButton extends CustomComponent {
 
 	public void setVisibleDeleteButton(boolean visible) {
 		removeButton.setVisible(visible);
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		textField.setEnabled(enabled);
+		searchButton.setEnabled(enabled);
+		removeButton.setEnabled(enabled);
 	}
 }

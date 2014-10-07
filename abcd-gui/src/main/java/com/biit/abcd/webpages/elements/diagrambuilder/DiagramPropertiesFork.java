@@ -1,6 +1,9 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -18,12 +21,12 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.components.TreeObjectTableSingleSelect;
 import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.biit.form.TreeObject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -31,7 +34,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.VerticalLayout;
 
-public class DiagramPropertiesFork extends PropertiesForClassComponent<DiagramFork> {
+public class DiagramPropertiesFork extends SecuredDiagramElementProperties<DiagramFork> {
 	private static final long serialVersionUID = -5767909479835775870L;
 	private DiagramFork diagramFork;
 	private TreeObjectTableSingleSelect treeObjectTable;
@@ -163,7 +166,7 @@ public class DiagramPropertiesFork extends PropertiesForClassComponent<DiagramFo
 		if (diagramFork != null && diagramFork.getReference() != null) {
 			treeObjectTable.setValue(diagramFork.getReference().getReference());
 			if (diagramFork.getReference() instanceof ExpressionValueCustomVariable) {
-				variableSelection.setValue(((ExpressionValueCustomVariable)diagramFork.getReference()).getVariable());
+				variableSelection.setValue(((ExpressionValueCustomVariable) diagramFork.getReference()).getVariable());
 			}
 		}
 
@@ -237,5 +240,11 @@ public class DiagramPropertiesFork extends PropertiesForClassComponent<DiagramFo
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(diagramFork);
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(variableSelection, addQuestionButton, addVariableButton,
+				treeObjectTable));
 	}
 }

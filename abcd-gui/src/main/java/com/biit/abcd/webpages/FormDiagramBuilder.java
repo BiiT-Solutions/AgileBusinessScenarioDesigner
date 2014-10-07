@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -32,7 +33,7 @@ import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder;
 import com.biit.abcd.webpages.elements.diagrambuilder.AbcdDiagramBuilder.DiagramObjectPickedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramObjectAddedListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.DiagramObjectUpdatedListener;
-import com.biit.abcd.webpages.elements.diagrambuilder.DriagramPropertiesComponent;
+import com.biit.abcd.webpages.elements.diagrambuilder.DiagramPropertiesComponent;
 import com.biit.abcd.webpages.elements.diagrambuilder.FormDiagramBuilderUpperMenu;
 import com.biit.abcd.webpages.elements.diagrambuilder.JumpToListener;
 import com.biit.abcd.webpages.elements.diagrambuilder.WindowNewDiagram;
@@ -49,7 +50,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	private SelectDiagramTable diagramBuilderTable;
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
-	private DriagramPropertiesComponent propertiesContainer;
+	private DiagramPropertiesComponent propertiesContainer;
 	private DiagramTableValueChange diagramTableValueChange;
 
 	public FormDiagramBuilder() {
@@ -74,7 +75,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		HorizontalLayout rootDiagramBuilder = new HorizontalLayout();
 		rootDiagramBuilder.setSpacing(true);
 
-		propertiesContainer = new DriagramPropertiesComponent();
+		propertiesContainer = new DiagramPropertiesComponent();
 		propertiesContainer.setSizeFull();
 
 		diagramBuilderTable = new SelectDiagramTable();
@@ -85,6 +86,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 		diagramBuilder = new AbcdDiagramBuilder();
 		diagramBuilder.setSizeFull();
+
 		diagramBuilder.addDiagramObjectPickedListener(new DiagramObjectPickedListener() {
 
 			@Override
