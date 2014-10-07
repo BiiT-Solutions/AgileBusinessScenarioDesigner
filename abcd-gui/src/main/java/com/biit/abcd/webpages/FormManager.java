@@ -108,6 +108,7 @@ public class FormManager extends FormWebPageComponent {
 		formTable.addForm(simpleView);
 		formTable.selectForm(simpleView);
 		formDao.makePersistent(form);
+		simpleView.setId(form.getId());
 	}
 
 }

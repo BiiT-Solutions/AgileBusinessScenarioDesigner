@@ -22,6 +22,7 @@ public class FormDesignerUpperMenu extends UpperMenu {
 	public FormDesignerUpperMenu() {
 		super();
 		defineMenu();
+		disableNotAllowedButtons();
 	}
 
 	private void defineMenu() {
@@ -103,9 +104,7 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		}
 
 		// Disable buttons that user has no permissions to use.
-		for (Button button : getDisabledButtons()) {
-			button.setEnabled(false);
-		}
+		disableNotAllowedButtons();
 	}
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
@@ -159,6 +158,13 @@ public class FormDesignerUpperMenu extends UpperMenu {
 	public void addMoveButtonListener(ClickListener listener) {
 		if (!getDisabledButtons().contains(moveButton)) {
 			moveButton.addClickListener(listener);
+		}
+	}
+
+	private void disableNotAllowedButtons() {
+		// Disable buttons that user has no permissions to use.
+		for (Button button : getDisabledButtons()) {
+			button.setEnabled(false);
 		}
 	}
 }
