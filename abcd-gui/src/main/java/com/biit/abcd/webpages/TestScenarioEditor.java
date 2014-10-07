@@ -17,21 +17,22 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener
 import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.components.testscenario.SelectTestScenarioTableEditable;
-import com.biit.abcd.webpages.components.testscenario.TestScenarioEditorUpperMenu;
-import com.biit.abcd.webpages.components.testscenario.WindowNewTestScenario;
+import com.biit.abcd.webpages.elements.testscenario.SelectTestScenarioTableEditable;
+import com.biit.abcd.webpages.elements.testscenario.TestScenarioEditorUpperMenu;
+import com.biit.abcd.webpages.elements.testscenario.TestScenarioForm;
+import com.biit.abcd.webpages.elements.testscenario.WindowNewTestScenario;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
 public class TestScenarioEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -6743796589244668454L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
-	private Panel dummyPanel;
 	private SelectTestScenarioTableEditable tableSelectExpression;
+	private TestScenarioForm testScenarioForm;
+	private SelectTestScenarioTableEditable tableSelectTestScenario;
 	private TestScenarioEditorUpperMenu testScenarioUpperMenu;
 
 	public TestScenarioEditor() {
@@ -47,47 +48,49 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		collapsibleLayout.setSizeFull();
 
 		// Create menu
-		tableSelectExpression = new SelectTestScenarioTableEditable();
-		tableSelectExpression.addValueChangeListener(new ValueChangeListener() {
+		tableSelectTestScenario = new SelectTestScenarioTableEditable();
+		tableSelectTestScenario.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 4251583661250518900L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				UserSessionHandler.getTestScenariosController().setLastAccessTestScenario(getSelectedTestScenario());
+				UserSessionHandler.getFormController().setLastAccessTestScenario(getSelectedTestScenario());
 				refreshTestScenario();
 			}
 
 		});
-		collapsibleLayout.createMenu(tableSelectExpression);
+		collapsibleLayout.createMenu(tableSelectTestScenario);
 
-		// Create content
-		dummyPanel = new Panel();
-		dummyPanel.setSizeFull();
-		collapsibleLayout.setContent(dummyPanel);
-
+		// Create empty form
+		testScenarioForm = new TestScenarioForm();
+		collapsibleLayout.setContent(testScenarioForm);
 		getWorkingAreaLayout().addComponent(collapsibleLayout);
 
 		initUpperMenu();
 
-		if (UserSessionHandler.getTestScenariosController().getTestScenarios() != null) {
+		if (UserSessionHandler.getFormController().getForm() != null) {
 			// Add tables
-			tableSelectExpression.updateTable(UserSessionHandler.getTestScenariosController().getTestScenarios());
+			tableSelectTestScenario.update(UserSessionHandler.getFormController().getForm());
 
 			sortTableMenu();
 
 			if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
-				tableSelectExpression.setSelectedTestScenario(UserSessionHandler.getTestScenariosController()
+				tableSelectTestScenario.setSelectedTestScenario(UserSessionHandler.getFormController()
 						.getLastAccessTestScenario());
 			} else {
 				// Select the first one if available.
-				if (UserSessionHandler.getTestScenariosController().getTestScenarios().size() > 0) {
+				if (UserSessionHandler.getFormController().getForm().getTestScenarios().size() > 0) {
 
-					Iterator<TestScenario> iterator = (UserSessionHandler.getTestScenariosController()
+					Iterator<TestScenario> iterator = (UserSessionHandler.getFormController().getForm()
 							.getTestScenarios().iterator());
-					tableSelectExpression.setSelectedTestScenario(iterator.next());
+					tableSelectTestScenario.setSelectedTestScenario(iterator.next());
 				}
 			}
+			// Create form panel content
+			testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
+
 			refreshTestScenario();
+
 		} else {
 			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
@@ -147,12 +150,14 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	}
 
 	private TestScenario getSelectedTestScenario() {
-		return tableSelectExpression.getSelectedTestScenario();
+		return tableSelectTestScenario.getSelectedTestScenario();
 	}
 
 	private void save() {
 		try {
-			UserSessionHandler.getTestScenariosController().update(tableSelectExpression.getTestScenarios());
+			
+			
+			UserSessionHandler.getFormController().save();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -167,24 +172,30 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	}
 
 	private void removeSelectedTestScenario() {
-		tableSelectExpression.removeSelectedRow();
+		UserSessionHandler.getFormController().getForm().getTestScenarios()
+				.remove(tableSelectTestScenario.getSelectedTestScenario());
+		tableSelectTestScenario.removeSelectedRow();
 		refreshTestScenario();
 	}
 
 	public void addTestScenarioToMenu(TestScenario testScenario) {
-		tableSelectExpression.addRow(testScenario);
-		tableSelectExpression.setSelectedTestScenario(testScenario);
+		tableSelectTestScenario.addRow(testScenario);
+		tableSelectTestScenario.setSelectedTestScenario(testScenario);
+		refreshTestScenario();
 	}
 
 	public void sortTableMenu() {
-		tableSelectExpression.sort();
+		tableSelectTestScenario.sort();
 	}
 
 	public void selectComponent(TestScenario testScenario) {
-		tableSelectExpression.setSelectedTestScenario(testScenario);
+		tableSelectTestScenario.setSelectedTestScenario(testScenario);
 	}
 
 	private void refreshTestScenario() {
+		testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
 	}
+	
+	
 
 }

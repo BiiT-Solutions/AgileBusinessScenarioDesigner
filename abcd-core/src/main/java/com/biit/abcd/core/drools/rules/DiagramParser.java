@@ -193,8 +193,10 @@ public class DiagramParser {
 					if (!forkExpressionChainToNegate.equals(forkExpressionChain)) {
 
 						if (chekForAndsOrOrs(forkExpressionChainToNegate)) {
-//							System.out.println("CHAIN NEGATED: " + negateAndOrConditions(forkExpressionChainToNegate));
-							resultOfNegation.addExpressions(negateAndOrConditions(forkExpressionChainToNegate).getExpressions());
+							// System.out.println("CHAIN NEGATED: " +
+							// negateAndOrConditions(forkExpressionChainToNegate));
+							resultOfNegation.addExpressions(negateAndOrConditions(forkExpressionChainToNegate)
+									.getExpressions());
 							resultOfNegation.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 						} else {
 							resultOfNegation.addExpression(new ExpressionFunction(AvailableFunction.NOT));
@@ -209,7 +211,8 @@ public class DiagramParser {
 				if (resultOfNegation.getExpressions().size() > 1) {
 					resultOfNegation.getExpressions().remove(resultOfNegation.getExpressions().size() - 1);
 				}
-				System.out.println("RESULT OF NEGATION: " + resultOfNegation);
+				// System.out.println("RESULT OF NEGATION: " +
+				// resultOfNegation);
 				forkConditions.set(forkConditionToRemove, resultOfNegation);
 			}
 			forkConditionToRemove++;

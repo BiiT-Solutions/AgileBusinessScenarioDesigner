@@ -28,6 +28,11 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 		this.applicationName = applicationName;
 		this.setCategories(new ArrayList<ICategory>());
 	}
+	
+	public SubmittedForm(String formName) {
+		this.formName = formName;
+		this.setCategories(new ArrayList<ICategory>());
+	}
 
 	public void addCategory(ICategory category) {
 		if (this.categories == null) {

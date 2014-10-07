@@ -422,7 +422,11 @@ public enum LanguageCodes {
 	TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_CAPTION("test.scenarios.editor.button.remove.caption"),
 	TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_TOOLTIP("test.scenarios.editor.button.remove.tooltip"),
 	TEST_SCENARIOS_EDITOR_NEW_WINDOW_CAPTION("test.scenarios.editor.new.window.caption"),
-	TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION("test.scenarios.editor.new.window.field.caption");
+	TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION("test.scenarios.editor.new.window.field.caption"),
+	
+	TECHNICAL_NAME_ERROR("technical.name.error"),
+	
+	INPUT_DATA_FORMAT_INCORRECT_ERROR("input.data.format.incorrect.error");
 
 
 	private String value;

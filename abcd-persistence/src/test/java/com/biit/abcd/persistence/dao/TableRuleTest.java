@@ -46,6 +46,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	@Test
 	public void storeDummyTableRule() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
 
 		TableRule tableRule = new TableRule();
@@ -71,6 +72,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 			CharacterNotAllowedException {
 		// Define form.
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v2");
 
 		Category category = new Category();
@@ -100,6 +102,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	public void storeFormTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException,
 			CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(TABLE_RULE_FORM);
 
 		Category category1 = new Category();

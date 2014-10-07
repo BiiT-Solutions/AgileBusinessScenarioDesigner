@@ -30,6 +30,7 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		formDao.getSessionFactory().getStatistics().clear();
 
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
 		formDao.makePersistent(form);
 

@@ -14,6 +14,7 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.AbstractComponent;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
@@ -22,6 +23,7 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 
 	private Category instance;
 	private TextField categoryLabel;
+	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "([A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff_])([0-9A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff\\_\\xb7]){2,}";
 
 	public CategoryProperties() {
 		super(Category.class);
@@ -32,6 +34,8 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 		instance = element;
 		categoryLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		categoryLabel.setValue(instance.getName());
+		categoryLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
+				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
 
 		FormLayout categoryFormLayout = new FormLayout();
 		categoryFormLayout.setWidth(null);

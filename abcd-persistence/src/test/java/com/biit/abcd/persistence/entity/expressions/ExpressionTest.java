@@ -38,6 +38,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 			CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
 		Category category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 
@@ -63,6 +64,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 			CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
 		Category category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 		Question question = new Question(QUESTION_NAME);
@@ -94,6 +96,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 			CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
 		Category category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 		Question question = new Question(QUESTION_NAME);
@@ -126,6 +129,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	public void functionIn() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
 		Category category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 		Question question = new Question(QUESTION_NAME);
@@ -156,6 +160,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	public void functionInBad() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
 		Category category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 		Question question = new Question(QUESTION_NAME);
@@ -189,6 +194,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 			InvalidAnswerFormatException, CharacterNotAllowedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
 		Category category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 

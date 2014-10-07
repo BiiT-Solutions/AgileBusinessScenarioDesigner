@@ -68,6 +68,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test
 	public void storeFormDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DIAGRAM_FORM);
 
 		Diagram diagram = new Diagram(DUMMY_DIAGRAM);

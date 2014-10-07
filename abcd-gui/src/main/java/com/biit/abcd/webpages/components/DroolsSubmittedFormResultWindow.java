@@ -238,7 +238,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				}
 			}
 		}
-
 	}
 
 	private Category getSubmittedFormCategory(TreeObject category, SubmittedForm submittedForm) {

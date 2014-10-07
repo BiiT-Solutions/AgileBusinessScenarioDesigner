@@ -14,6 +14,7 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.AbstractComponent;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -24,7 +25,8 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 	private Group instance;
 	private TextField groupTechnicalLabel;
 	private CheckBox groupIsRepeatable;
-
+	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "([A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff_])([0-9A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff\\_\\xb7]){2,}";
+	
 	public GroupProperties() {
 		super(Group.class);
 	}
@@ -34,6 +36,9 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 		instance = element;
 		groupTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		groupTechnicalLabel.setValue(instance.getName());
+		groupTechnicalLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
+				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
+		
 		groupIsRepeatable = new CheckBox(ServerTranslate.translate(LanguageCodes.GROUP_PROPERTIES_REPEAT));
 		groupIsRepeatable.setValue(instance.isRepeatable());
 

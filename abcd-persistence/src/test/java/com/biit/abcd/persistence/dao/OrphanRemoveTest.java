@@ -68,6 +68,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void removeRuleOfForm() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
 		// Rule already has two chains inside.
 		Rule rule = new Rule();
@@ -85,6 +86,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void removeDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM + "1");
 
 		Category category1 = new Category();
@@ -156,6 +158,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException,
 			CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM + "2");
 
 		Category category1 = new Category();

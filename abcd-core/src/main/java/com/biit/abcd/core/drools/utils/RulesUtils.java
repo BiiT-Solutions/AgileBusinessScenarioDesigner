@@ -219,7 +219,6 @@ public class RulesUtils {
 		String[] lines = ruleCore.split("\n");
 		for (int i = 0; i < lines.length; i++) {
 			if (lines[i].equals("\tor")) {
-				// skipLines.add(i - 2);
 				skipLines.add(i - 1);
 				skipLines.add(i);
 				skipLines.add(i + 1);
@@ -236,14 +235,14 @@ public class RulesUtils {
 			if (finishCondition == i) {
 				break;
 			}
-			// If the line don't belong to an or, add an and
-			if (!skipLines.contains(i)) {
-				lines[i] = lines[i] + " and";
-			}
 			// If the previous line belongs to an OR but it has more lines after
 			// it, add an and
-			if (skipLines.contains(i - 1) && !skipLines.contains(i)) {
+			if (skipLines.contains(i - 1) && !skipLines.contains(i) && !lines[i-1].equals("\tnot(")) {
 				lines[i - 1] = lines[i - 1] + " and";
+				lines[i] = lines[i] + " and";
+			}// If the line don't belong to an or, add an and
+			else if (!skipLines.contains(i)) {
+				lines[i] = lines[i] + " and";
 			}
 		}
 		for (int i = 0; i < lines.length; i++) {

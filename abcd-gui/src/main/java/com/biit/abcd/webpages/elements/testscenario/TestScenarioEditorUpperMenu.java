@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components.testscenario;
+package com.biit.abcd.webpages.elements.testscenario;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
