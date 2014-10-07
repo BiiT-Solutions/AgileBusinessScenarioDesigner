@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity.testscenarios;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,10 +32,20 @@ public class TestAnswerInputDate extends TestAnswer {
 
 	@Override
 	public void setValue(Object value) throws NotValidAnswerValue {
-		if (!(value instanceof Timestamp)) {
-			throw new NotValidAnswerValue("Expected Timestamp object in '" + value + "'");
+		if (value != null) {
+			if (!(value instanceof Timestamp)) {
+				if (value instanceof Date) {
+					setValue(new Timestamp(((Date) value).getTime()));
+				} else {
+					throw new NotValidAnswerValue("Expected Timestamp object in '" + value + "'");
+				}
+			} else {
+				setValue((Timestamp) value);
+			}
+		}else{
+			dateValue = null;
 		}
-		setValue((Timestamp) value);
+			
 	}
 
 	public void setValue(Timestamp value) {

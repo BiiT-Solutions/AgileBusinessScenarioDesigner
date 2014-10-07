@@ -30,10 +30,14 @@ public class TestAnswerInputPostalCode extends TestAnswer {
 
 	@Override
 	public void setValue(Object value) throws NotValidAnswerValue {
-		if (!(value instanceof String)) {
-			throw new NotValidAnswerValue("Expected String object in '" + value + "'");
+		if (value != null) {
+			if (!(value instanceof String)) {
+				throw new NotValidAnswerValue("Expected String object in '" + value + "'");
+			}
+			setValue((String) value);
+		}else{
+			inputValue = null;
 		}
-		setValue((String) value);
 	}
 
 	public void setValue(String value) {

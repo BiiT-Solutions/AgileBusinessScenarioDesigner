@@ -21,7 +21,7 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 
 	@Override
 	public void acceptAction(TextField inputTextField) {
-		for (TestScenario existingScenarios : UserSessionHandler.getTestScenariosController().getTestScenarios()) {
+		for (TestScenario existingScenarios : UserSessionHandler.getFormController().getForm().getTestScenarios()) {
 			if (existingScenarios.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_TEST_SCENARIO_NAME);
 				return;
@@ -33,7 +33,7 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 			testScenario.setCreatedBy(UserSessionHandler.getUser());
 			testScenario.setUpdatedBy(UserSessionHandler.getUser());
 			testScenario.setUpdateTime();
-			UserSessionHandler.getTestScenariosController().getTestScenarios().add(testScenario);
+			UserSessionHandler.getFormController().getForm().getTestScenarios().add(testScenario);
 			((TestScenarioEditor) getParentWindow()).addTestScenarioToMenu(testScenario);
 			((TestScenarioEditor) getParentWindow()).sortTableMenu();
 

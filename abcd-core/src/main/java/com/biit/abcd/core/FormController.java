@@ -236,6 +236,7 @@ public class FormController {
 		this.lastAccessExpression = null;
 		this.lastAccessTable = null;
 		this.lastAccessRule = null;
+		this.lastAccessTestScenario = null;
 		this.copiedRows = null;
 	}
 }

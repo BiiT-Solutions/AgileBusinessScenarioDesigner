@@ -145,6 +145,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						// Accept button update the form from the
+						// simpleViewForm.
+						launchListeners();
 						ApplicationFrame.navigateTo(WebMap.TEST_SCENARIOS);
 					}
 				});
@@ -162,7 +165,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		
 		addIconButton(newFormButton);
 		addIconButton(exportToDrools);
-//		addIconButton(createTestScenario);
+		addIconButton(createTestScenario);
 //		addIconButton(launchTestScenario);
 	}
 

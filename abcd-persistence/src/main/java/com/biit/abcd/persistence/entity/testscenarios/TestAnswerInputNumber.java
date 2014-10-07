@@ -35,10 +35,14 @@ public class TestAnswerInputNumber extends TestAnswer {
 
 	@Override
 	public void setValue(Object value) throws NotValidAnswerValue {
-		if (!(value instanceof Double)) {
-			throw new NotValidAnswerValue("Expected Double object in '" + value + "'");
+		if (value != null) {
+			if (!(value instanceof Double)) {
+				throw new NotValidAnswerValue("Expected Double object in '" + value + "'");
+			}
+			setValue((Double) value);
+		}else{
+			inputValue = null;
 		}
-		setValue((Double) value);
 	}
 
 	public void setValue(Double value) {

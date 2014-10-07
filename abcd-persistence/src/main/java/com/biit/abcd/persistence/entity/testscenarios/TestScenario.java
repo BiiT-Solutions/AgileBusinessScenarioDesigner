@@ -69,6 +69,10 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	public TestAnswer getTestAnswer(Question question) {
 		return questionTestAnswerRelationship.get(question);
 	}
+	
+	public boolean containsQuestion(Question question){
+		return questionTestAnswerRelationship.containsKey(question);
+	}
 
 	public void setData(HashMap<Question, TestAnswer> questionTestAnswerRelation) {
 		this.questionTestAnswerRelationship = questionTestAnswerRelation;
