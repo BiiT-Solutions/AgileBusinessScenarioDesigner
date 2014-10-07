@@ -1,5 +1,9 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -9,10 +13,11 @@ import com.biit.abcd.persistence.entity.Answer;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class AnswerProperties extends GenericFormElementProperties<Answer> {
+public class AnswerProperties extends SecuredFormElementProperties<Answer> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Answer instance;
@@ -83,5 +88,10 @@ public class AnswerProperties extends GenericFormElementProperties<Answer> {
 	@Override
 	protected TreeObject getTreeObjectInstance() {
 		return instance;
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(answerTechnicalLabel));
 	}
 }

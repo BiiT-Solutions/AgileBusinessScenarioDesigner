@@ -9,7 +9,6 @@ import java.util.Set;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
@@ -41,14 +40,6 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 		} else {
 			try {
 				// Form is not in use.
-//				System.out.println("----> "
-//						+ AbcdAuthorizationService.getInstance().isFormAlreadyInUse(
-//								UserSessionHandler.getFormController().getForm().getId(), user) + " / "
-//						+ UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm().getId()));
-//				if (UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm().getId()) != null) {
-//					System.out.println(UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm().getId())
-//							.getScreenName());
-//				}
 				if (!AbcdAuthorizationService.getInstance().isFormAlreadyInUse(
 						UserSessionHandler.getFormController().getForm().getId(), user)) {
 					// user has permissions to edit this form.
@@ -68,8 +59,8 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 		disabledButtons = new HashSet<>();
 		// Disable all Buttons
 		if (!editionEnabled) {
-//			MessageManager
-//					.showWarning(LanguageCodes.WARNING_FORM_IN_USE, LanguageCodes.WARNING_FORM_IN_USE_DESCRIPTION);
+			 MessageManager
+			 .showWarning(LanguageCodes.WARNING_FORM_IN_USE, LanguageCodes.WARNING_FORM_IN_USE_DESCRIPTION);
 			for (Button button : getButtons()) {
 				disabledButtons.add(button);
 			}

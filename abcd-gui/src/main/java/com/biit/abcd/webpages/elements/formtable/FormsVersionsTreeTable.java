@@ -18,7 +18,6 @@ import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.AbcdAuthorizationService;
-import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;

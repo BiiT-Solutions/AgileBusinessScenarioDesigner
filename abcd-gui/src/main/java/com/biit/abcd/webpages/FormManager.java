@@ -61,14 +61,10 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-//					if (UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) == null
-//							|| UiAccesser.getUserUsingForm(UserSessionHandler.getFormController().getForm()) == UserSessionHandler
-//									.getUser()) {
-						Form form = formDao.read(formTable.getValue().getId());
-						UserSessionHandler.getFormController().setForm(form);
-						UiAccesser.lockForm(form, UserSessionHandler.getUser());
-					}
-//				}
+					Form form = formDao.read(formTable.getValue().getId());
+					UserSessionHandler.getFormController().setForm(form);
+					UiAccesser.lockForm(form, UserSessionHandler.getUser());
+				}
 			}
 		});
 	}

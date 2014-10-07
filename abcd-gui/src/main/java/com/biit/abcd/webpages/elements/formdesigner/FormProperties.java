@@ -1,6 +1,9 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -8,11 +11,12 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.TreeObject;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class FormProperties extends GenericFormElementProperties<Form> {
+public class FormProperties extends SecuredFormElementProperties<Form> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Form instance;
@@ -52,7 +56,6 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 		formForm.addComponent(availableTo);
 
 		addTab(formForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION), true, 0);
-
 	}
 
 	@Override
@@ -77,6 +80,11 @@ public class FormProperties extends GenericFormElementProperties<Form> {
 	@Override
 	protected TreeObject getTreeObjectInstance() {
 		return instance;
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(availableFrom, availableTo));
 	}
 
 }
