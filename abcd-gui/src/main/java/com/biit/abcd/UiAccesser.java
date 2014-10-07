@@ -15,15 +15,16 @@ public class UiAccesser {
 		void receiveBroadcast(String message);
 	}
 
-	private static HashMap<User, Form> formsInUse = new HashMap<User, Form>();
+	//User --> Id Form
+	private static HashMap<User, Long> formsInUse = new HashMap<User, Long>();
 
 	public static synchronized boolean isUserUsingForm(User user, Form form) {
-		return formsInUse.get(form) != null && formsInUse.get(form).equals(user);
+		return formsInUse.get(user) != null && formsInUse.get(user).equals(form.getId());
 	}
 
 	public static synchronized User getUserUsingForm(Form form) {
 		for (User user : formsInUse.keySet()) {
-			if (formsInUse.get(user).equals(form)) {
+			if (formsInUse.get(user).equals(form.getId())) {
 				return user;
 			}
 		}
@@ -32,7 +33,7 @@ public class UiAccesser {
 
 	public static synchronized User getUserUsingForm(Long formId) {
 		for (User user : formsInUse.keySet()) {
-			if (formsInUse.get(user) != null && formsInUse.get(user).getId().equals(formId)) {
+			if (formsInUse.get(user) != null && formsInUse.get(user).equals(formId)) {
 				return user;
 			}
 		}
@@ -44,10 +45,10 @@ public class UiAccesser {
 			return;
 		}
 
-		if (!formsInUse.containsKey(form)) {
+		if (!formsInUse.containsValue(form.getId())) {
 			AbcdLogger.info(UiAccesser.class.getName(), "User '" + user.getEmailAddress() + "' has locked '" + form
 					+ "'");
-			formsInUse.put(user, form);
+			formsInUse.put(user, form.getId());
 		}
 	}
 
