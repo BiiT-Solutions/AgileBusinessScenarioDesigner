@@ -32,7 +32,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private HashMap<String, List<SimpleFormView>> formMap;
 
 	enum FormsVersionsTreeTableProperties {
-		FORM_NAME, VERSION, ACCESS, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
+		FORM_LABEL, VERSION, ACCESS, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
 	};
 
 	public FormsVersionsTreeTable() {
@@ -51,7 +51,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setNullSelectionAllowed(true);
 		setSizeFull();
 
-		addContainerProperty(FormsVersionsTreeTableProperties.FORM_NAME, String.class, "",
+		addContainerProperty(FormsVersionsTreeTableProperties.FORM_LABEL, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.VERSION, String.class, "",
@@ -82,7 +82,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_MODIFICATIONDATE), null, Align.CENTER);
 
 		setColumnCollapsingAllowed(true);
-		setColumnCollapsible(FormsVersionsTreeTableProperties.FORM_NAME, false);
+		setColumnCollapsible(FormsVersionsTreeTableProperties.FORM_LABEL, false);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.VERSION, false);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.ACCESS, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.AVAILABLE_FROM, true);
@@ -95,7 +95,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setColumnCollapsed(FormsVersionsTreeTableProperties.CREATED_BY, true);
 		setColumnCollapsed(FormsVersionsTreeTableProperties.CREATION_DATE, true);
 
-		setColumnExpandRatio(FormsVersionsTreeTableProperties.FORM_NAME, 3);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.FORM_LABEL, 3);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.VERSION, 0.5f);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.ACCESS, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.AVAILABLE_FROM, 1);
@@ -118,7 +118,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private void addRow(SimpleFormView form) {
 		if (form != null) {
 			Item item = addItem(form);
-			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_NAME).setValue(form.getName());
+			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 			item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
 			item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
 			item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM).setValue(
@@ -160,7 +160,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		if (form != null) {
 			Item item = getItem(form);
 			if (item != null) {
-				item.getItemProperty(FormsVersionsTreeTableProperties.FORM_NAME).setValue(form.getName());
+				item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 				item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
 				item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
 				item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM).setValue(
@@ -209,14 +209,14 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private void addRow(RootForm form) {
 		if (form != null) {
 			Item item = addItem(form);
-			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_NAME).setValue(form.getName());
+			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 		}
 	}
 
 	public void addForm(SimpleFormView form) {
 		RootForm parent = getFormRoot(form);
 		if (parent == null) {
-			parent = new RootForm(form.getName());
+			parent = new RootForm(form.getLabel());
 			addRow(parent);
 		}
 		if (form != null) {
@@ -239,7 +239,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private RootForm getFormRoot(SimpleFormView form) {
 		for (Object item : getItemIds()) {
 			if (item instanceof RootForm) {
-				if (((RootForm) item).getName().equals(form.getName())) {
+				if (((RootForm) item).getLabel().equals(form.getLabel())) {
 					return (RootForm) item;
 				}
 			}
@@ -255,7 +255,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			}
 		}
 
-		setSortContainerPropertyId(FormsVersionsTreeTableProperties.FORM_NAME);
+		setSortContainerPropertyId(FormsVersionsTreeTableProperties.FORM_LABEL);
 		setSortAscending(true);
 		sort();
 	}
@@ -273,13 +273,13 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 		forms = simpleFormViewDao.getAll();
 		for (SimpleFormView form : forms) {
-			if (!formData.containsKey(form.getName())) {
+			if (!formData.containsKey(form.getLabel())) {
 				// First form with this name
-				List<SimpleFormView> listFormsForName = new ArrayList<>();
-				listFormsForName.add(form);
-				formData.put(form.getName(), listFormsForName);
+				List<SimpleFormView> listFormsForLabel = new ArrayList<>();
+				listFormsForLabel.add(form);
+				formData.put(form.getLabel(), listFormsForLabel);
 			} else {
-				formData.get(form.getName()).add(form);
+				formData.get(form.getLabel()).add(form);
 			}
 		}
 
@@ -364,8 +364,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 				UserSessionHandler.getUser())) {
 			return "read only";
 		}
-		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form.getId(), form.getOrganizationId(),
-				UserSessionHandler.getUser())) {
+		if (AbcdAuthorizationService.getInstance().isFormAlreadyInUse(form.getId(), UserSessionHandler.getUser())) {
 			return "in use";
 		}
 		return "";
@@ -373,7 +372,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 	@Override
 	public Collection<?> getSortableContainerPropertyIds() {
-		return new ArrayList<>(Arrays.asList(FormsVersionsTreeTableProperties.FORM_NAME));
+		return new ArrayList<>(Arrays.asList(FormsVersionsTreeTableProperties.FORM_LABEL));
 	}
 
 }

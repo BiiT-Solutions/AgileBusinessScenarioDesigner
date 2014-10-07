@@ -9,6 +9,7 @@ import org.dom4j.DocumentException;
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -17,6 +18,8 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.FormManager;
@@ -34,18 +37,24 @@ import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.UI;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
 	private IconButton newFormButton, exportToDrools, createTestScenario, launchTestScenario;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
+	private Form form;
+	private IFormDao formDao;
 
 	public FormManagerUpperMenu(FormManager parent) {
 		super();
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 		this.parent = parent;
 		formSelectedListeners = new ArrayList<>();
 		defineMenu();
@@ -60,9 +69,45 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						UI.getCurrent().addWindow(
-								new WindowNewForm(parent, LanguageCodes.BOTTOM_MENU_FORM_MANAGER,
-										LanguageCodes.WINDOW_NEWFORM_NAME_TEXTFIELD));
+						final WindowNewForm newFormWindow = new WindowNewForm(
+								LanguageCodes.WINDOW_NEWFORM_WINDOW_TITLE, LanguageCodes.WINDOW_NEWFORM_NAME_TEXTFIELD,
+								LanguageCodes.WINDOW_NEWFORM_NAME_COMBOBOX, new DActivity[] { DActivity.FORM_EDITING });
+						newFormWindow.showCentered();
+						newFormWindow.addAcceptActionListener(new AcceptActionListener() {
+
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty()) {
+									return;
+								}
+								if (!formDao.exists(newFormWindow.getValue())) {
+									form = new Form();
+									try {
+										form.setLabel(newFormWindow.getValue());
+									} catch (FieldTooLongException e) {
+										MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+												LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+										try {
+											form.setLabel(newFormWindow.getValue().substring(0,
+													StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
+										} catch (FieldTooLongException e1) {
+											// Impossible.
+										}
+									}
+									form.setCreatedBy(UserSessionHandler.getUser());
+									form.setUpdatedBy(UserSessionHandler.getUser());
+									form.setOrganizationId(newFormWindow.getOrganization().getOrganizationId());
+									((FormManager) parent).addNewForm(form);
+									AbcdLogger.info(this.getClass().getName(), "User '"
+											+ UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+											+ form.getClass() + " with 'Name: " + form.getName() + "'.");
+									newFormWindow.close();
+								} else {
+									MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);
+								}
+							}
+						});
+
 					}
 				});
 		// Create rules and launch drools engine
@@ -169,7 +214,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	public void setEnabledButtons() {
 		try {
-			newFormButton.setEnabled(AbcdAuthorizationService.getInstance().isAuthorizedActivity(
+			newFormButton.setEnabled(AbcdAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
 					UserSessionHandler.getUser(), DActivity.FORM_CREATE));
 		} catch (IOException | AuthenticationRequired e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);

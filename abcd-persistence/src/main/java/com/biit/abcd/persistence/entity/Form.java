@@ -267,4 +267,8 @@ public class Form extends BaseForm {
 	public Long getOrganizationId() {
 		return organizationId;
 	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
+	}
 }

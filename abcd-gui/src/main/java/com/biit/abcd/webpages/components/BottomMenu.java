@@ -12,7 +12,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class BottomMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = 6149788828670200504L;
 	private IconButton treeDesignerButton, formVariables, diagramBuilderButton, expressionsEditorButton,
-			ruleEditorButton, decissionTableButton;
+			ruleEditorButton, decisionTableButton;
 
 	private List<IFormSelectedListener> formSelectedListeners;
 
@@ -98,7 +98,7 @@ public class BottomMenu extends HorizontalButtonGroup {
 		ruleEditorButton.setEnabled(false);
 		addIconButton(ruleEditorButton);
 
-		decissionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcon.TABLE,
+		decisionTableButton = new IconButton(LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, ThemeIcon.TABLE,
 				LanguageCodes.BOTTOM_MENU_DROOLS_TABLE_EDITOR, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = -2494460723270342409L;
 
@@ -108,8 +108,8 @@ public class BottomMenu extends HorizontalButtonGroup {
 						changeView(WebMap.DECISSION_TABLE_EDITOR);
 					}
 				});
-		decissionTableButton.setEnabled(false);
-		addIconButton(decissionTableButton);
+		decisionTableButton.setEnabled(false);
+		addIconButton(decisionTableButton);
 	}
 
 	private void changeView(WebMap newView) {
@@ -134,8 +134,8 @@ public class BottomMenu extends HorizontalButtonGroup {
 		if (ruleEditorButton != null) {
 			ruleEditorButton.setEnabled(enableFormButtons);
 		}
-		if (decissionTableButton != null) {
-			decissionTableButton.setEnabled(enableFormButtons);
+		if (decisionTableButton != null) {
+			decisionTableButton.setEnabled(enableFormButtons);
 		}
 	}
 

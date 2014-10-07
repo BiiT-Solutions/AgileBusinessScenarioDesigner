@@ -4,8 +4,8 @@ import com.biit.abcd.persistence.entity.SimpleFormView;
 
 public class RootForm extends SimpleFormView {
 
-	public RootForm(String name) {
-		setName(name);
+	public RootForm(String label) {
+		setLabel(label);
 	}
 
 	@Override
