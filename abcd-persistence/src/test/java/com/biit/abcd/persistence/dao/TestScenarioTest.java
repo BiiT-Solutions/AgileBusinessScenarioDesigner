@@ -54,6 +54,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void storeRemoveTestScenariosFromForm() throws NotValidFormException, FieldTooLongException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel("Form");
 		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
 		form.addTestScenario(testScenario);
@@ -74,6 +75,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	public void storeRemoveTestScenariosMapDataFromForm() throws NotValidFormException, FieldTooLongException,
 			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel("Form");
 
 		Category category = new Category();
@@ -117,6 +119,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	public void storeRemoveTestScenariosMapData() throws NotValidFormException, FieldTooLongException,
 			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel("Form");
 
 		Category category = new Category();

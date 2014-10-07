@@ -30,6 +30,7 @@ public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContext
 	@Test
 	public void getView() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
 		form.setCreatedBy(1l);
 		form.setUpdatedBy(1l);

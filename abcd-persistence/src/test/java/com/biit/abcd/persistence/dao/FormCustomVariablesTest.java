@@ -32,21 +32,23 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test
 	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException {
-		Form basicForm = new Form();
-		basicForm.setLabel(DUMMY_FORM);
+		Form form = new Form();
+		form.setOrganizationId(0l);
+		form.setLabel(DUMMY_FORM);
 
 		CustomVariable formCustomVariables = new CustomVariable();
-		basicForm.getCustomVariables().add(formCustomVariables);
-		formDao.makePersistent(basicForm);
+		form.getCustomVariables().add(formCustomVariables);
+		formDao.makePersistent(form);
 
 		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 1);
-		formDao.makeTransient(basicForm);
+		formDao.makeTransient(form);
 		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 0);
 	}
 
 	@Test
 	public void storeIntegerVariables() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v2");
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "Score", CustomVariableType.NUMBER,
@@ -72,6 +74,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	@Test
 	public void storeStringVariables() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v3");
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "Name", CustomVariableType.STRING,
@@ -98,6 +101,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	@Test
 	public void storeDateVariables() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v4");
 		formDao.makePersistent(form);
 

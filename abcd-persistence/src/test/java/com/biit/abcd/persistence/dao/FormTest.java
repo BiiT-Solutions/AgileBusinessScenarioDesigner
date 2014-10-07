@@ -46,6 +46,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test
 	public void storeDummyForm() throws FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
 		formDao.makePersistent(form);
 		Assert.assertEquals(formDao.getRowCount(), 1);
@@ -57,6 +58,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test
 	public void storeFormWithCategory() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM);
 		Category category = new Category();
 		category.setName(CATEGORY_LABEL);
@@ -71,6 +73,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test
 	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel(OTHER_FORM);
 		Category category = new Category();
 		category.setName(CATEGORY_LABEL);
@@ -86,6 +89,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test
 	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException, CharacterNotAllowedException {
 		Form form = new Form();
+		form.setOrganizationId(0l);
 		form.setLabel("MoveUp");
 
 		Category category = new Category();
