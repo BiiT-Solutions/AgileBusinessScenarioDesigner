@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.webpages.elements.decisiontable.Cell;
@@ -54,8 +55,7 @@ public class RuleConditionTable extends Table {
 					condition.setValue("= " + question.getChild(0));
 					row1.getItemProperty("Condition").setValue(condition);
 				} catch (com.vaadin.data.Property.ReadOnlyException | ChildrenNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
 		}

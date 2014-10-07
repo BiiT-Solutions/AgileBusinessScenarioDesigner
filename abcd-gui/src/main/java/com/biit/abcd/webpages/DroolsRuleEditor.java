@@ -19,8 +19,9 @@ import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectDroolsRuleEditable;
-import com.biit.abcd.webpages.elements.droolsrule.ConditionActionEditor;
+import com.biit.abcd.webpages.elements.droolsrule.ConditionActionEditorComponent;
 import com.biit.abcd.webpages.elements.droolsrule.DroolsRuleEditorUpperMenu;
+import com.biit.abcd.webpages.elements.droolsrule.SecuredConditionActionEditorComponent;
 import com.biit.abcd.webpages.elements.droolsrule.WindowNewRule;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.form.exceptions.DependencyExistException;
@@ -66,7 +67,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 		collapsibleLayout.createMenu(tableSelectRule);
 
 		// Create content
-		ruleExpressionEditorComponent = new ConditionActionEditor();
+		ruleExpressionEditorComponent = new SecuredConditionActionEditorComponent();
 		ruleExpressionEditorComponent.setSizeFull();
 		collapsibleLayout.setContent(ruleExpressionEditorComponent);
 
@@ -162,7 +163,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	}
 
 	private void refreshRuleEditor() {
-		((ConditionActionEditor) ruleExpressionEditorComponent).refreshRuleEditor(getSelectedRule());
+		((ConditionActionEditorComponent) ruleExpressionEditorComponent).refreshRuleEditor(getSelectedRule());
 		ruleExpressionEditorComponent.updateSelectionStyles();
 	}
 
@@ -182,10 +183,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	}
 
 	private void removeSelectedRule() {
-		boolean test = UserSessionHandler.getFormController().getForm().getRules()
-				.remove(tableSelectRule.getSelectedRule());
-		System.out.println("**********" + test + "  " + tableSelectRule.getSelectedRule().getClass().getName() + " "
-				+ tableSelectRule.getSelectedRule().getId());
+		UserSessionHandler.getFormController().getForm().getRules().remove(tableSelectRule.getSelectedRule());
 		tableSelectRule.removeSelectedRow();
 		refreshRuleEditor();
 	}

@@ -10,14 +10,21 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class ConditionActionEditor extends ExpressionEditorComponent {
+public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 	private static final long serialVersionUID = -7858734121952085269L;
 	private ExpressionViewer conditionViewer;
 	private ExpressionViewer actionViewer;
 	private ExpressionViewer selectedViewer;
 
-	public ConditionActionEditor() {
+	public ConditionActionEditorComponent() {
 		super();
+	}
+
+	protected ExpressionViewer createExpressionViewer() {
+		ExpressionViewer expressionViewer = new ExpressionViewer();
+		expressionViewer.setSizeFull();
+		expressionViewer.setFocused(true);
+		return expressionViewer;
 	}
 
 	@Override
@@ -27,9 +34,7 @@ public class ConditionActionEditor extends ExpressionEditorComponent {
 		viewLayout.setMargin(false);
 		viewLayout.setSpacing(false);
 
-		conditionViewer = new ExpressionViewer();
-		conditionViewer.setSizeFull();
-		conditionViewer.setFocused(true);
+		conditionViewer = createExpressionViewer();
 		conditionViewer.addLayoutClickedListener(new LayoutClickedListener() {
 
 			@Override
@@ -45,9 +50,7 @@ public class ConditionActionEditor extends ExpressionEditorComponent {
 		viewLayout.setComponentAlignment(conditionLabel, Alignment.BOTTOM_LEFT);
 		viewLayout.addComponent(conditionViewer);
 
-		actionViewer = new ExpressionViewer();
-		actionViewer.setSizeFull();
-		actionViewer.setFocused(true);
+		actionViewer = createExpressionViewer();
 		actionViewer.addLayoutClickedListener(new LayoutClickedListener() {
 
 			@Override
@@ -101,10 +104,18 @@ public class ConditionActionEditor extends ExpressionEditorComponent {
 		if (rule != null) {
 			conditionViewer.updateExpression(rule.getConditionChain());
 			actionViewer.updateExpression(rule.getActionChain());
-		}else{
+		} else {
 			conditionViewer.updateExpression(null);
 			actionViewer.updateExpression(null);
 		}
+	}
+
+	public ExpressionViewer getConditionViewer() {
+		return conditionViewer;
+	}
+
+	public ExpressionViewer getActionViewer() {
+		return actionViewer;
 	}
 
 }
