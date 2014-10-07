@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.facts.inputform.orbeon;
+package com.biit.abcd.core.drools.facts.inputform.inporter;
 
 import com.biit.abcd.core.drools.facts.inputform.Category;
 import com.biit.abcd.core.drools.facts.inputform.Group;
