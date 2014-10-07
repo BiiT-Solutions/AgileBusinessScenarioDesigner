@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.facts.inputform.inporter;
+package com.biit.abcd.core.drools.facts.inputform.importer;
 
 import com.biit.abcd.core.drools.facts.inputform.Category;
 import com.biit.abcd.core.drools.facts.inputform.Group;
