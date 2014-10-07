@@ -1,5 +1,9 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -9,13 +13,13 @@ import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
-import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.components.SelectExpressionWindow;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class DiagramPropertiesCalculation extends PropertiesForClassComponent<DiagramCalculation> {
+public class DiagramPropertiesCalculation extends SecuredDiagramElementProperties<DiagramCalculation> {
 	private static final long serialVersionUID = 5356130114169313201L;
 	private DiagramCalculation instance;
 	private FieldWithSearchButton fieldWithSearchButton;
@@ -53,8 +57,8 @@ public class DiagramPropertiesCalculation extends PropertiesForClassComponent<Di
 							firePropertyUpdateListener(instance);
 							AbcdLogger.info(this.getClass().getName(), "User '"
 									+ UserSessionHandler.getUser().getEmailAddress() + "' added Expression "
-									+ instance.getFormExpression().getName()
-									+ " to Calculation node with ID:" + instance.getId() + "'.");
+									+ instance.getFormExpression().getName() + " to Calculation node with ID:"
+									+ instance.getId() + "'.");
 							window.close();
 						} else {
 							MessageManager.showError(LanguageCodes.ERROR_SELECT_EXPRESSION);
@@ -92,6 +96,11 @@ public class DiagramPropertiesCalculation extends PropertiesForClassComponent<Di
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(instance);
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(fieldWithSearchButton));
 	}
 
 }

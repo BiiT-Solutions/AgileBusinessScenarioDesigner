@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +34,7 @@ import com.vaadin.ui.Window.CloseListener;
 
 public class GlobalVariablesCreator extends FormWebPageComponent {
 	private static final long serialVersionUID = 6042328256995069412L;
-
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private HorizontalLayout rootLayout;
 	private GlobalVariablesTable variableTable;
 	private VariableDataTable variableDataTable;
@@ -329,8 +331,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		// TODO Auto-generated method stub
-		return null;
+		return activityPermissions;
 	}
 
 	private void save() {

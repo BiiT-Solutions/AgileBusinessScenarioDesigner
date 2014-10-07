@@ -17,10 +17,10 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		super(type);
 	}
 
+	@Override
 	public void setElement(Object element) {
 		super.setElement(element);
 		initCommonProperties(element);
-
 	}
 
 	protected void initCommonProperties(Object element) {

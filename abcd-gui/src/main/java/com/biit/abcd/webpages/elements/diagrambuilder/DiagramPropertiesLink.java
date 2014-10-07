@@ -1,5 +1,9 @@
 package com.biit.abcd.webpages.elements.diagrambuilder;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -9,20 +13,21 @@ import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow.ClearElementsActionListener;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
-import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLink> {
+public class DiagramPropertiesLink extends SecuredDiagramElementProperties<DiagramLink> {
 	private static final long serialVersionUID = 6308407654774598230L;
 	private DiagramLink diagramLink;
+	private FieldWithSearchButton fieldWithSearchButton;
 
 	public DiagramPropertiesLink() {
 		super(DiagramLink.class);
@@ -40,7 +45,7 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 			DiagramFork fork = (DiagramFork) diagramLink.getSourceElement();
 			addTab(formLayout, ServerTranslate.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_CAPTION), true, 0);
 			if (fork.getReference() != null) {
-				FieldWithSearchButton fieldWithSearchButton = createFieldWithSearchButton(fork);
+				fieldWithSearchButton = createFieldWithSearchButton(fork);
 				formLayout.addComponent(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' added expression " + diagramLink.getExpressionChain().getRepresentation()
@@ -85,7 +90,8 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 					@Override
 					public void clearAction(AcceptCancelClearWindow window) {
 						addNewAnswerExpressionWindow.clearSelection();
-						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress()
 								+ "' removed expression from Link with ID:" + diagramLink.getId() + "'.");
 					}
 				});
@@ -126,5 +132,10 @@ public class DiagramPropertiesLink extends PropertiesForClassComponent<DiagramLi
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(diagramLink);
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(fieldWithSearchButton));
 	}
 }

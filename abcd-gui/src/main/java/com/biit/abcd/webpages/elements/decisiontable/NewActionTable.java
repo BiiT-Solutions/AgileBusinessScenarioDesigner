@@ -8,6 +8,7 @@ import java.util.Set;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.webpages.components.EditCellComponent;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;

@@ -1,5 +1,9 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -9,11 +13,12 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class CategoryProperties extends GenericFormElementProperties<Category> {
+public class CategoryProperties extends SecuredFormElementProperties<Category> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Category instance;
@@ -32,12 +37,12 @@ public class CategoryProperties extends GenericFormElementProperties<Category> {
 		categoryLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
 				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
 
-		FormLayout categoryForm = new FormLayout();
-		categoryForm.setWidth(null);
-		categoryForm.addComponent(categoryLabel);
+		FormLayout categoryFormLayout = new FormLayout();
+		categoryFormLayout.setWidth(null);
+		categoryFormLayout.addComponent(categoryLabel);
 
-		addTab(categoryForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION),
-				true, 0);
+		addTab(categoryFormLayout,
+				ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
 	}
 
 	@Override
@@ -88,6 +93,11 @@ public class CategoryProperties extends GenericFormElementProperties<Category> {
 	@Override
 	protected TreeObject getTreeObjectInstance() {
 		return instance;
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(categoryLabel));
 	}
 
 }

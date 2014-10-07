@@ -31,6 +31,7 @@ import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.SettingsWindow;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
+import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.vaadin.ui.Button.ClickEvent;
@@ -162,7 +163,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 					public void buttonClick(ClickEvent event) {
 					}
 				});
-		
+
 		addIconButton(newFormButton);
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
@@ -170,8 +171,12 @@ public class FormManagerUpperMenu extends UpperMenu {
 	}
 
 	public void setEnabledButtons() {
-		newFormButton.setEnabled(AbcdAuthorizationService.getInstance().isAuthorizedActivity(
-				UserSessionHandler.getUser(), DActivity.FORM_CREATE));
+		try {
+			newFormButton.setEnabled(AbcdAuthorizationService.getInstance().isAuthorizedActivity(
+					UserSessionHandler.getUser(), DActivity.FORM_CREATE));
+		} catch (IOException | AuthenticationRequired e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	private void launchListeners() {

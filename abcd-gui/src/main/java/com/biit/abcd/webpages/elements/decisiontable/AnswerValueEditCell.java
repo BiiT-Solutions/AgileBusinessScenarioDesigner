@@ -1,9 +1,10 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import com.biit.abcd.webpages.components.SecuredEditCellComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-public class AnswerValueEditCell extends EditCellComponent {
+public class AnswerValueEditCell extends SecuredEditCellComponent {
 	private static final long serialVersionUID = 5684048033655720281L;
 
 	public AnswerValueEditCell() {

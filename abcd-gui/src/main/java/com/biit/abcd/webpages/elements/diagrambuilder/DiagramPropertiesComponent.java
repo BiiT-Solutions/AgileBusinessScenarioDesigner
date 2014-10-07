@@ -2,10 +2,10 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.webpages.components.PropertiesComponent;
 
-public class DriagramPropertiesComponent extends PropertiesComponent {
+public class DiagramPropertiesComponent extends PropertiesComponent {
 	private static final long serialVersionUID = 7006610652322714314L;
 
-	public DriagramPropertiesComponent() {
+	public DiagramPropertiesComponent() {
 		super();
 		registerPropertiesComponent(new DiagramPropertiesSource());
 		registerPropertiesComponent(new DiagramPropertiesSink());

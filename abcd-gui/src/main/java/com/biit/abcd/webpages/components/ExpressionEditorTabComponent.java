@@ -11,16 +11,16 @@ import com.vaadin.ui.TabSheet.Tab;
  * Component for editing an expression. Is composed by a viewer and a properties
  * menu in tabs.
  */
-public abstract class TabEditorComponent extends CustomComponent {
+public abstract class ExpressionEditorTabComponent extends CustomComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
 	private HorizontalLayout rootLayout;
 	private TabSheet tabMenu;
 
-	public TabEditorComponent() {
+	public ExpressionEditorTabComponent() {
 		initComponents(false);
 	}
 
-	public TabEditorComponent(boolean questionEditor) {
+	public ExpressionEditorTabComponent(boolean questionEditor) {
 		initComponents(questionEditor);
 	}
 

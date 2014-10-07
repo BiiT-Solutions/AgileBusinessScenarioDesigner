@@ -1,5 +1,8 @@
 package com.biit.abcd.security;
 
+/**
+ * This roles must be inserted in Liferay.
+ */
 public enum AbcdRoles {
 
 	/* empty role */
@@ -9,7 +12,9 @@ public enum AbcdRoles {
 
 	FORM_EDIT("abcd_manage-forms"),
 
-	FORM_ADMIN("abcd_administration");
+	FORM_ADMIN("abcd_administration"),
+
+	GLOBAL_CONSTANTS("abcd_manage-global-constants");
 
 	private String stringTag;
 

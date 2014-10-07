@@ -81,6 +81,9 @@ public class Form extends BaseForm {
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
+	@Column(nullable = false, columnDefinition = "DOUBLE")
+	private Long organizationId;
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// Cannot be JOIN
@@ -277,8 +280,7 @@ public class Form extends BaseForm {
 	}
 
 	public Long getOrganizationId() {
-		// TODO Auto-generated method stub
-		return null;
+		return organizationId;
 	}
 
 	public Set<TestScenario> getTestScenarios() {

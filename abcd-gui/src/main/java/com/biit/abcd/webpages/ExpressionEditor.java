@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.components.SelectExpressionTableEditable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expressionviewer.SecuredSimpleExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.WindowNewExpression;
 import com.biit.abcd.webpages.elements.formulaeditor.ExpressionEditorUpperMenu;
@@ -30,6 +33,7 @@ import com.vaadin.ui.UI;
 
 public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTableEditable tableSelectExpression;
@@ -61,7 +65,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 		collapsibleLayout.createMenu(tableSelectExpression);
 
 		// Create content
-		expressionEditorComponent = new SimpleExpressionEditorComponent();
+		expressionEditorComponent = new SecuredSimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 		collapsibleLayout.setContent(expressionEditorComponent);
 
@@ -89,6 +93,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 			}
 			refreshExpressionEditor();
 		} else {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
@@ -175,7 +180,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		return null;
+		return activityPermissions;
 	}
 
 	private void removeSelectedExpression() {

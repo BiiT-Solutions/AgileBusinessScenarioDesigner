@@ -6,6 +6,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.vaadin.data.Item;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -15,6 +16,7 @@ import com.vaadin.ui.TextField;
 
 public class VariableTable extends Table {
 	private static final long serialVersionUID = 3067131269771569684L;
+	private boolean protectedElements = false;
 
 	enum FormVariablesProperties {
 		VARIABLE_NAME, TYPE, SCOPE;
@@ -22,6 +24,8 @@ public class VariableTable extends Table {
 
 	public VariableTable() {
 		initContainerProperties();
+		protectedElements = AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+				UserSessionHandler.getUser());
 	}
 
 	private void initContainerProperties() {
@@ -51,14 +55,17 @@ public class VariableTable extends Table {
 		Item item = addItem(customVariable);
 		TextField nameTextField = createTextField(customVariable);
 		nameTextField.setValue(customVariable.getName());
+		nameTextField.setEnabled(!protectedElements);
 		item.getItemProperty(FormVariablesProperties.VARIABLE_NAME).setValue(nameTextField);
 
 		ComboBox typeComboBox = createTypeComboBox(customVariable);
 		typeComboBox.setValue(customVariable.getType());
+		typeComboBox.setEnabled(!protectedElements);
 		item.getItemProperty(FormVariablesProperties.TYPE).setValue(typeComboBox);
 
 		ComboBox scopeComboBox = createScopeComboBox(customVariable);
 		scopeComboBox.setValue(customVariable.getScope());
+		scopeComboBox.setEnabled(!protectedElements);
 		item.getItemProperty(FormVariablesProperties.SCOPE).setValue(scopeComboBox);
 	}
 
@@ -146,32 +153,6 @@ public class VariableTable extends Table {
 		});
 		return scopeComboBox;
 	}
-
-	//	public List<CustomVariable> getCustomVariables() {
-	//		List<CustomVariable> customVariables = new ArrayList<>();
-	//		for (Object itemId : getItemIds()) {
-	//			CustomVariable customVariable = (CustomVariable) itemId;
-	//			String newName = ((TextField) getItem(itemId).getItemProperty(
-	//					FormVariablesProperties.VARIABLE_NAME).getValue()).getValue();
-	//			if (!newName.equals(customVariable.getName())) {
-	//				updateInfo(customVariable);
-	//				customVariable.setName(newName);
-	//			}
-	//			CustomVariableType newType = (CustomVariableType) ((ComboBox) getItem(itemId).getItemProperty(
-	//					FormVariablesProperties.TYPE).getValue()).getValue();
-	//			if (!newType.equals(customVariable.getType())) {
-	//				updateInfo(customVariable);
-	//				customVariable.setType(newType);
-	//			}
-	//			CustomVariableScope newScope = (CustomVariableScope) ((ComboBox) getItem(itemId).getItemProperty(
-	//					FormVariablesProperties.SCOPE).getValue()).getValue();
-	//			if (!newScope.equals(customVariable.getScope())) {
-	//				customVariable.setScope(newScope);
-	//			}
-	//			customVariables.add(customVariable);
-	//		}
-	//		return customVariables;
-	//	}
 
 	private void updateInfo(CustomVariable customVariable) {
 		customVariable.setUpdatedBy(UserSessionHandler.getUser().getUserId());

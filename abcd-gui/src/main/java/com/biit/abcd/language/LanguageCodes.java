@@ -72,6 +72,8 @@ public enum LanguageCodes {
 	WARNING_MOVEMENT_NOT_VALID("warning.movement.not.valid"), 
 	WARNING_MOVEMENT_DESCRIPTION_NOT_VALID("warning.movement.description.not.valid"),
 	WARNING_TEST_SCENARIO_DELETION("warning.test.scenario.deletion"),
+	WARNING_FORM_IN_USE("warning.form.used"),
+	WARNING_FORM_IN_USE_DESCRIPTION("warning.form.used.description"),
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),

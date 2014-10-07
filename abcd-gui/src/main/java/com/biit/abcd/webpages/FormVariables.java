@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -22,6 +24,7 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class FormVariables extends FormWebPageComponent {
 	private static final long serialVersionUID = 8796076485600899730L;
+	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private FormVariablesUpperMenu upperMenu;
 	private VariableTable variableTable;
 
@@ -42,6 +45,7 @@ public class FormVariables extends FormWebPageComponent {
 		getWorkingAreaLayout().addComponent(variableTable);
 
 		if (UserSessionHandler.getFormController().getForm() == null) {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		} else {
@@ -129,8 +133,6 @@ public class FormVariables extends FormWebPageComponent {
 
 	@Override
 	public List<DActivity> accessAuthorizationsRequired() {
-		// TODO Auto-generated method stub
-		return null;
+		return activityPermissions;
 	}
-
 }
