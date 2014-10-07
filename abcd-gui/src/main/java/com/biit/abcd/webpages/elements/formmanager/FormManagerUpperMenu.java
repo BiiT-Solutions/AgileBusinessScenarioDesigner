@@ -167,7 +167,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		addIconButton(newFormButton);
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
-//		addIconButton(launchTestScenario);
+		addIconButton(launchTestScenario);
 	}
 
 	public void setEnabledButtons() {
@@ -197,5 +197,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 		if (exportToDrools != null) {
 			exportToDrools.setEnabled(enableFormButtons);
 		}
+		if (createTestScenario != null) {
+			createTestScenario.setEnabled(enableFormButtons);
+		}
+		
 	}
 }
