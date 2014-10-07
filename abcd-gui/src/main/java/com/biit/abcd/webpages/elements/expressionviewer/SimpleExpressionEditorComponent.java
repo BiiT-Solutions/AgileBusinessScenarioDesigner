@@ -11,6 +11,13 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 		super();
 	}
 
+	protected ExpressionViewer createExpressionViewer() {
+		ExpressionViewer expressionViewer = new ExpressionViewer();
+		expressionViewer.setSizeFull();
+		expressionViewer.setFocused(true);
+		return expressionViewer;
+	}
+
 	@Override
 	public VerticalLayout createViewersLayout() {
 		VerticalLayout viewLayout = new VerticalLayout();
@@ -18,7 +25,7 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 		viewLayout.setMargin(false);
 		viewLayout.setSpacing(false);
 
-		expressionViewer = new ExpressionViewer();
+		expressionViewer = createExpressionViewer();
 		expressionViewer.setSizeFull();
 		expressionViewer.setFocused(true);
 
@@ -28,10 +35,10 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 
 	@Override
 	public void updateSelectionStyles() {
-		if (expressionViewer.getExpressions() == null) {
-			expressionViewer.addStyleName("expression-unselected");
+		if (getSelectedViewer().getExpressions() == null) {
+			getSelectedViewer().addStyleName("expression-unselected");
 		} else {
-			expressionViewer.removeStyleName("expression-unselected");
+			getSelectedViewer().removeStyleName("expression-unselected");
 		}
 	}
 
@@ -41,8 +48,8 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 	}
 
 	public void refreshExpressionEditor(ExpressionChain selectedExpression) {
-		if (expressionViewer != null) {
-			expressionViewer.removeAllComponents();
+		if (getSelectedViewer() != null) {
+			getSelectedViewer().removeAllComponents();
 			if (selectedExpression != null) {
 				// Add table rows.
 				getSelectedViewer().updateExpression(selectedExpression);
@@ -54,6 +61,6 @@ public class SimpleExpressionEditorComponent extends ExpressionEditorComponent {
 	}
 
 	public void clear() {
-		expressionViewer.clearExpression();
+		getSelectedViewer().clearExpression();
 	}
 }

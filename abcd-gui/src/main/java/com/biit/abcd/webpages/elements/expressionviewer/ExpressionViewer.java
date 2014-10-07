@@ -47,7 +47,7 @@ public class ExpressionViewer extends CssLayout {
 	private Expression selectedExpression = null;
 	private VerticalLayout rootLayout;
 	// Used for storing the relationship.
-	private HashMap<ExpressionElement, Expression> expressionOfElement;
+	protected HashMap<ExpressionElement, Expression> expressionOfElement;
 	private Label evaluatorOutput;
 	// If this editor has the focus.
 	private boolean focused;
@@ -118,6 +118,10 @@ public class ExpressionViewer extends CssLayout {
 		}
 	}
 
+	protected boolean isExpressionEditable(Expression expression) {
+		return expression.isEditable();
+	}
+
 	public void addExpression(HorizontalLayout lineLayout, final Expression expression) {
 		final ExpressionElement expressionElement = new ExpressionElement(expression.getRepresentation(),
 				new LayoutClickListener() {
@@ -130,7 +134,7 @@ public class ExpressionViewer extends CssLayout {
 
 						if (event.isDoubleClick()) {
 							// For Operators.
-							if (expression.isEditable()) {
+							if (isExpressionEditable(expression)) {
 								if (expression instanceof ExpressionOperator) {
 
 									ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
@@ -315,7 +319,7 @@ public class ExpressionViewer extends CssLayout {
 	/**
 	 * The selected expression is white.
 	 */
-	private void updateExpressionSelectionStyles() {
+	protected void updateExpressionSelectionStyles() {
 		for (int i = 0; i < rootLayout.getComponentCount(); i++) {
 			if (rootLayout.getComponent(i) instanceof HorizontalLayout) {
 				HorizontalLayout lineLayout = (HorizontalLayout) rootLayout.getComponent(i);
@@ -489,6 +493,10 @@ public class ExpressionViewer extends CssLayout {
 
 	public void removeLayoutClickedListener(LayoutClickedListener listener) {
 		clickedListeners.remove(listener);
+	}
+
+	public VerticalLayout getRootLayout() {
+		return rootLayout;
 	}
 
 }

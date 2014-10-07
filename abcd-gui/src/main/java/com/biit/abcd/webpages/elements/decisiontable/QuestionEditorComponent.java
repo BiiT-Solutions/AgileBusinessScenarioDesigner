@@ -3,11 +3,11 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.webpages.components.TabEditorComponent;
+import com.biit.abcd.webpages.components.ExpressionEditorTabComponent;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.form.TreeObject;
 
-public class QuestionEditorComponent extends TabEditorComponent {
+public class QuestionEditorComponent extends ExpressionEditorTabComponent {
 
 	private static final long serialVersionUID = -3303171393725653154L;
 	private QuestionTabFormVariablesLayout questionFormTab;

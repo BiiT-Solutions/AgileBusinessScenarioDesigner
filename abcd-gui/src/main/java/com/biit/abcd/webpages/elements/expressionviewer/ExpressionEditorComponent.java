@@ -5,7 +5,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
-import com.biit.abcd.webpages.components.TabEditorComponent;
+import com.biit.abcd.webpages.components.ExpressionEditorTabComponent;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
@@ -14,7 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * Component for editing an expression. Is composed by a viewer and a properties menu in tabs.
  */
-public abstract class ExpressionEditorComponent extends TabEditorComponent {
+public abstract class ExpressionEditorComponent extends ExpressionEditorTabComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
 
 	public abstract VerticalLayout createViewersLayout();
@@ -46,13 +46,7 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 
 			@Override
 			public void elementAdded(Object newElement) {
-				if (getSelectedViewer() != null) {
-					getSelectedViewer().addElementToSelected((Expression) newElement);
-
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
-							+ " with 'Value: " + newElement + "'.");
-				}
+				addElementToView(newElement);
 			}
 		});
 		// Adding units to dates need to refresh the GUI.
@@ -74,13 +68,7 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 
 			@Override
 			public void elementAdded(Object newElement) {
-				if (getSelectedViewer() != null) {
-					getSelectedViewer().addElementToSelected((Expression) newElement);
-
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
-							+ " with 'Value: " + newElement + "'.");
-				}
+				addElementToView(newElement);
 			}
 		});
 		setTab(operatorLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
@@ -90,13 +78,7 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 		formVariablesScopeLayout.addNewElementListener(new ElementAddedListener() {
 			@Override
 			public void elementAdded(Object newElement) {
-				if (getSelectedViewer() != null) {
-					getSelectedViewer().addElementToSelected((Expression) newElement);
-
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
-							+ " with 'Value: " + newElement + "'.");
-				}
+				addElementToView(newElement);
 			}
 		});
 		setTab(formVariablesScopeLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
@@ -107,17 +89,20 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 
 			@Override
 			public void elementAdded(Object newElement) {
-				if (getSelectedViewer() != null) {
-					getSelectedViewer().addElementToSelected((Expression) newElement);
-
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has added a " + newElement.getClass()
-							+ " with 'Value: " + newElement + "'.");
-				}
+				addElementToView(newElement);
 			}
 
 		});
 		setTab(globalConstantLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
+	}
+
+	protected void addElementToView(Object newElement) {
+		if (getSelectedViewer() != null) {
+			getSelectedViewer().addElementToSelected((Expression) newElement);
+
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has added a " + newElement.getClass() + " with 'Value: " + newElement + "'.");
+		}
 	}
 
 	/**
@@ -129,7 +114,7 @@ public abstract class ExpressionEditorComponent extends TabEditorComponent {
 	/**
 	 * Add all keyboard defined actions.
 	 */
-	private void addKeyController() {
+	protected void addKeyController() {
 		addShortcutListener(new ShortcutListener("DELETE_SHORTCUT", KeyCode.DELETE, null) {
 			private static final long serialVersionUID = -71562151456777493L;
 
