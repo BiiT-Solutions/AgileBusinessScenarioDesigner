@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
-import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;

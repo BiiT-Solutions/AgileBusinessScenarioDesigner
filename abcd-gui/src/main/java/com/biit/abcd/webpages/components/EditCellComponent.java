@@ -49,15 +49,19 @@ public class EditCellComponent extends CustomComponent {
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
 				if (event.isDoubleClick()) {
-					for (CellDoubleClickedListener listener : doubleClickListeners) {
-						listener.isDoubleClick();
-					}
+					doubleClickElement();
 				}
 			}
 		});
 
 		setCompositionRoot(rootLayout);
 		setSizeUndefined();
+	}
+
+	protected void doubleClickElement() {
+		for (CellDoubleClickedListener listener : doubleClickListeners) {
+			listener.isDoubleClick();
+		}
 	}
 
 	public void select(boolean value) {

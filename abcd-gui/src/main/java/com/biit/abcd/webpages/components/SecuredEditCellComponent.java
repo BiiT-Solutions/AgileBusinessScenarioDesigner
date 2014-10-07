@@ -32,4 +32,12 @@ public class SecuredEditCellComponent extends EditCellComponent {
 			}
 		}
 	}
+
+	@Override
+	protected void doubleClickElement() {
+		if (!AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+				UserSessionHandler.getUser())) {
+			super.doubleClickElement();
+		}
+	}
 }
