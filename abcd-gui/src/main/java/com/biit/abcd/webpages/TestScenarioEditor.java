@@ -17,10 +17,10 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener
 import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
-import com.biit.abcd.webpages.components.testscenario.SelectTestScenarioTableEditable;
-import com.biit.abcd.webpages.components.testscenario.TestScenarioEditorUpperMenu;
-import com.biit.abcd.webpages.components.testscenario.TestScenarioForm;
-import com.biit.abcd.webpages.components.testscenario.WindowNewTestScenario;
+import com.biit.abcd.webpages.elements.testscenario.SelectTestScenarioTableEditable;
+import com.biit.abcd.webpages.elements.testscenario.TestScenarioEditorUpperMenu;
+import com.biit.abcd.webpages.elements.testscenario.TestScenarioForm;
+import com.biit.abcd.webpages.elements.testscenario.WindowNewTestScenario;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;

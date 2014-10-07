@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components.testscenario;
+package com.biit.abcd.webpages.elements.testscenario;
 
 import java.sql.Timestamp;
 import java.util.Collection;

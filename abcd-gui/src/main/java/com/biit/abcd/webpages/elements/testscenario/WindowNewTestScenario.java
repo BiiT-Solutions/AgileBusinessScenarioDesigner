@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components.testscenario;
+package com.biit.abcd.webpages.elements.testscenario;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;

@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components.testscenario;
+package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.ArrayList;
 import java.util.List;
