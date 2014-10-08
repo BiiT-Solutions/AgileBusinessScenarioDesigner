@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -12,8 +13,6 @@ import com.biit.abcd.persistence.dao.ISimpleTestScenarioViewDao;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.SimpleTestScenarioView;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.ComboBox;
@@ -25,6 +24,7 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	private ISimpleFormViewDao simpleFormViewDao;
 	private ISimpleTestScenarioViewDao simpleTestScenarioViewDao;
 	private List<SimpleFormView> formData;
+	private List<SimpleTestScenarioView> testScenarioData;
 	private ComboBox formVersion;
 	private ComboBox testScenario;
 
@@ -58,29 +58,27 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 		testScenario = new ComboBox(ServerTranslate.translate(LanguageCodes.LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL));
 		testScenario.setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		testScenario.setNullSelectionAllowed(false);
-
-		formVersion.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = 1110173383679291471L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				if (event != null) {
-					SimpleFormView simpleFormView = (SimpleFormView) event.getProperty().getValue();
-					List<SimpleTestScenarioView> testScenarioViews = simpleTestScenarioViewDao
-							.getSimpleTestScenarioByFormId(simpleFormView.getId());
-					for (SimpleTestScenarioView testScenarioView : testScenarioViews) {
-						testScenario.addItem(testScenarioView);
-						testScenario.setItemCaption(testScenarioView, testScenarioView.getName());
-					}
-				}
-			}
-		});
+		initializeTestScenarioData();
+		for (SimpleTestScenarioView testScenarioView : testScenarioData) {
+			testScenario.addItem(testScenarioView);
+			testScenario.setItemCaption(testScenarioView, testScenarioView.getName());
+		}
 
 		formVersion.setWidth(100.0f, Unit.PERCENTAGE);
 		testScenario.setWidth(100.0f, Unit.PERCENTAGE);
 		layout.addComponent(formVersion);
 		layout.addComponent(testScenario);
 		return layout;
+	}
+
+	/**
+	 * Loads all the test scenarios related with all the form versions
+	 */
+	private void initializeTestScenarioData() {
+		testScenarioData = new ArrayList<SimpleTestScenarioView>();
+		for (SimpleFormView formView : formData) {
+			testScenarioData.addAll(simpleTestScenarioViewDao.getSimpleTestScenarioByFormId(formView.getId()));
+		}
 	}
 
 	/**

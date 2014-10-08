@@ -76,7 +76,6 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 					}
 				});
 				rootLayout.addComponent(newInstance);
-
 				rootLayout.markAsDirty();
 			} catch (InstantiationException | IllegalAccessException e) {
 				MessageManager.showError(ServerTranslate.translate(LanguageCodes.ERROR_UNEXPECTED_ERROR) + " "
