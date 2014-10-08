@@ -9,7 +9,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
@@ -19,17 +19,17 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 
-public class DiagramPropertiesCalculation extends SecuredDiagramElementProperties<DiagramCalculation> {
+public class DiagramPropertiesCalculation extends SecuredDiagramElementProperties<DiagramExpression> {
 	private static final long serialVersionUID = 5356130114169313201L;
-	private DiagramCalculation instance;
+	private DiagramExpression instance;
 	private FieldWithSearchButton fieldWithSearchButton;
 
 	public DiagramPropertiesCalculation() {
-		super(DiagramCalculation.class);
+		super(DiagramExpression.class);
 	}
 
 	@Override
-	public void setElementForProperties(DiagramCalculation element) {
+	public void setElementForProperties(DiagramExpression element) {
 		instance = element;
 
 		fieldWithSearchButton = new FieldWithSearchButton(

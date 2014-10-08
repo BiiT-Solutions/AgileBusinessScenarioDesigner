@@ -19,29 +19,23 @@ import com.biit.form.TreeObject;
 import com.biit.jexeval.ExpressionChecker;
 import com.biit.jexeval.ExpressionEvaluator;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more
- * complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more complex expression.
  */
 @Entity
 @Table(name = "expressions_chain")
 public class ExpressionChain extends Expression implements INameAttribute {
 
-	// @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,
-	// orphanRemoval = true)
-	// @OrderColumn(name = "expression_index")
-	// private List<Expression> expressions;
+	private String name;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
-	// we cannot use the list of children with
-	// @Orderby or @OrderColumn we use our own order manager.
+	// we cannot use the list of children with @Orderby or @OrderColumn we use our own order manager.
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
 	private List<Expression> expressions;
-
-	private String name;
 
 	public ExpressionChain() {
 		expressions = new ArrayList<>();
@@ -71,6 +65,16 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		setName(name);
 		for (Expression expression : expressions) {
 			addExpression(expression);
+		}
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (expressions != null) {
+			for (Expression expression : getExpressions()) {
+				expression.resetIds();
+			}
 		}
 	}
 
@@ -126,8 +130,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a
-	 * Expression Evaluator.
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
 	 * 
 	 * @return
 	 */
@@ -272,5 +275,19 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			innerStorableObjects.addAll(expression.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionChain) {
+			super.copyData(object);
+			ExpressionChain expressionChain = (ExpressionChain) object;
+			name = expressionChain.getName();
+			for (Expression expression : expressionChain.getExpressions()) {
+				getExpressions().add(expression.generateCopy());
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionChain.");
+		}
 	}
 }

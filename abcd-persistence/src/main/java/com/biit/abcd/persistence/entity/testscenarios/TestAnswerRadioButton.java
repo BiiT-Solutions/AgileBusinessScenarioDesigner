@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines radio button values.
@@ -35,7 +36,7 @@ public class TestAnswerRadioButton extends TestAnswer {
 				throw new NotValidAnswerValue("Expected String object in '" + value + "'");
 			}
 			setValue((String) value);
-		}else{
+		} else {
 			radioButtonValue = null;
 		}
 	}
@@ -48,5 +49,17 @@ public class TestAnswerRadioButton extends TestAnswer {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof TestAnswerRadioButton) {
+			super.copyBasicInfo(object);
+			TestAnswerRadioButton testAnswerRadioButton = (TestAnswerRadioButton) object;
+			radioButtonValue = testAnswerRadioButton.getValue();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of TestAnswerRadioButton.");
+		}
 	}
 }

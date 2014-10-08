@@ -26,7 +26,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
@@ -144,27 +144,27 @@ public class NewExpressionsTest extends KidsFormCreator {
 		ExpressionChain expression1 = new ExpressionChain("YearsAssignation", new ExpressionValueCustomVariable(
 				getForm(), yearsCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.YEARS));
-		getForm().getExpressionChain().add(expression1);
+		getForm().getExpressionChains().add(expression1);
 
 		// Assign a date(months) to a custom variable
 		ExpressionChain expression2 = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(
 				getTreeObject("Algemeen"), monthsCustomVariable), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(getTreeObject("birthdate"),
 				QuestionDateUnit.MONTHS));
-		getForm().getExpressionChain().add(expression2);
+		getForm().getExpressionChains().add(expression2);
 
 		// Assign a date(days) to a custom variable
 		ExpressionChain expression3 = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(
 				getTreeObject("voeding"), daysCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(
 						getTreeObject("birthdate"), QuestionDateUnit.DAYS));
-		getForm().getExpressionChain().add(expression3);
+		getForm().getExpressionChains().add(expression3);
 
 		// Assign a date(date) to a custom variable
 		ExpressionChain expression4 = new ExpressionChain("DateAssignation", new ExpressionValueCustomVariable(
 				getTreeObject("fruit"), dateCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.DATE));
-		getForm().getExpressionChain().add(expression4);
+		getForm().getExpressionChains().add(expression4);
 
 		// Mathematical expression
 		ExpressionChain expression5 = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(
@@ -179,7 +179,7 @@ public class NewExpressionsTest extends KidsFormCreator {
 				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression5);
+		getForm().getExpressionChains().add(expression5);
 
 		// If expression
 		ExpressionChain expression6 = new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
@@ -190,7 +190,7 @@ public class NewExpressionsTest extends KidsFormCreator {
 				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
 						ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression6);
+		getForm().getExpressionChains().add(expression6);
 
 		// PMT expression
 		ExpressionChain expression7 = new ExpressionChain("pmtExpression", new ExpressionValueCustomVariable(
@@ -199,7 +199,7 @@ public class NewExpressionsTest extends KidsFormCreator {
 				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
 						getTreeObject("heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueNumber(1000), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression7);
+		getForm().getExpressionChains().add(expression7);
 
 		getForm().addDiagram(createSimpleDiagram());
 	}
@@ -274,14 +274,14 @@ public class NewExpressionsTest extends KidsFormCreator {
 
 	private Diagram createExpressionsSubdiagram() {
 		Diagram subDiagram = new Diagram("expressionDiagram");
-		for (ExpressionChain expressionChain : getForm().getExpressionChain()) {
+		for (ExpressionChain expressionChain : getForm().getExpressionChains()) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
 			diagramSource.setType(DiagramObjectType.SOURCE);
 			Node nodeSource = new Node(diagramSource.getJointjsId());
 
-			DiagramCalculation diagramExpression = new DiagramCalculation();
+			DiagramExpression diagramExpression = new DiagramExpression();
 			diagramExpression.setFormExpression(expressionChain);
 			diagramExpression.setJointjsId(IdGenerator.createId());
 			diagramExpression.setType(DiagramObjectType.CALCULATION);

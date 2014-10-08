@@ -137,10 +137,10 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				if (selectedVariable != null) {
 					// Check if the value is the last of the list, if not, it
 					// can't be deleted
-					if (isLastValueOfVariableList(((GlobalVariable) variableTable.getValue()).getData(),
+					if (isLastValueOfVariableList(((GlobalVariable) variableTable.getValue()).getVariableData(),
 							selectedVariable)) {
 						variableDataTable.removeItem(selectedVariable);
-						((GlobalVariable) variableTable.getValue()).getData().remove(selectedVariable);
+						((GlobalVariable) variableTable.getValue()).getVariableData().remove(selectedVariable);
 					} else {
 						MessageManager.showWarning(LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID_TITLE,
 								LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID);
@@ -236,7 +236,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 				// If the global variable has values, we manage the
 				// "value from"/"value to" properties
-				List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
+				List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getVariableData();
 				if (auxVariableList.size() > 0) {
 					// Set the "value from" value related to the previous one
 					VariableData auxVariableData = auxVariableList.get(auxVariableList.size() - 1);
@@ -253,7 +253,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						if (variableData != null) {
 							// Add item.
 							variableDataTable.addItem(variableData);
-							((GlobalVariable) variableTable.getValue()).getData().add(variableData);
+							((GlobalVariable) variableTable.getValue()).getVariableData().add(variableData);
 							AbcdLogger.info(this.getClass().getName(),
 									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
 											+ variableData.getClass() + " with 'Value: " + variableData.getValue()
@@ -319,7 +319,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	}
 
 	private boolean isLastValidToInfinite(GlobalVariable variable) {
-		List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getData();
+		List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getVariableData();
 		if (auxVariableList.size() > 0) {
 			VariableData auxVariableData = auxVariableList.get(auxVariableList.size() - 1);
 			if (auxVariableData.getValidTo() == null) {

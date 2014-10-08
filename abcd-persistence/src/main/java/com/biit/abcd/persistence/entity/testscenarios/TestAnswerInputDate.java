@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines radio button values.
@@ -42,10 +43,10 @@ public class TestAnswerInputDate extends TestAnswer {
 			} else {
 				setValue((Timestamp) value);
 			}
-		}else{
+		} else {
 			dateValue = null;
 		}
-			
+
 	}
 
 	public void setValue(Timestamp value) {
@@ -56,5 +57,17 @@ public class TestAnswerInputDate extends TestAnswer {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof TestAnswerInputDate) {
+			super.copyBasicInfo(object);
+			TestAnswerInputDate testAnswerInputDate = (TestAnswerInputDate) object;
+			dateValue = testAnswerInputDate.getValue();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of TestAnswerInputDate.");
+		}
 	}
 }

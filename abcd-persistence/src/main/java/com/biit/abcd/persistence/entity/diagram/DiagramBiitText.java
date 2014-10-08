@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -91,5 +92,20 @@ public class DiagramBiitText extends StorableObject {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof DiagramBiitText) {
+			super.copyBasicInfo(object);
+			DiagramBiitText diagramBiitText = (DiagramBiitText) object;
+			text = diagramBiitText.getText();
+			fill = diagramBiitText.getFill();
+			fontSize = diagramBiitText.getFontSize();
+			stroke = diagramBiitText.getStroke();
+			strokeWidth = diagramBiitText.getStrokeWidth();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramBiitText.");
+		}
 	}
 }

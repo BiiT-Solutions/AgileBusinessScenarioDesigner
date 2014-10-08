@@ -39,11 +39,11 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
 
 		// fetch the form entity from database first time
-		form = formDao.getForm(DUMMY_FORM);
+		form = formDao.getForm(DUMMY_FORM, 0l);
 		Assert.assertNotNull(form);
 
-
-		EntityStatistics entityStats = formDao.getSessionFactory().getStatistics().getEntityStatistics(Form.class.getName());
+		EntityStatistics entityStats = formDao.getSessionFactory().getStatistics()
+				.getEntityStatistics(Form.class.getName());
 		Assert.assertEquals(entityStats.getLoadCount(), 1);
 		Assert.assertEquals(entityStats.getFetchCount(), 0);
 
@@ -52,7 +52,7 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
 
 		// Here entity is already in second level cache (session has been closed) so no database query will be hit
-		form = formDao.getForm(DUMMY_FORM);
+		form = formDao.getForm(DUMMY_FORM, 0l);
 		Assert.assertNotNull(form);
 
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);

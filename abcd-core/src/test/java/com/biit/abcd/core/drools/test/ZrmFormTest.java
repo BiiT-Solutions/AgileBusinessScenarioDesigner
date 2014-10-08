@@ -27,7 +27,7 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
@@ -399,7 +399,7 @@ public class ZrmFormTest {
 				i++;
 			}
 			testExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-			form.getExpressionChain().add(testExpressionChain);
+			form.getExpressionChains().add(testExpressionChain);
 			accumExp++;
 		}
 
@@ -590,14 +590,14 @@ public class ZrmFormTest {
 
 	private Diagram createExpressionsSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("expressionDiagram");
-		for (ExpressionChain expressionChain : form.getExpressionChain()) {
+		for (ExpressionChain expressionChain : form.getExpressionChains()) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
 			diagramSource.setType(DiagramObjectType.SOURCE);
 			Node nodeSource = new Node(diagramSource.getJointjsId());
 
-			DiagramCalculation diagramExpression = new DiagramCalculation();
+			DiagramExpression diagramExpression = new DiagramExpression();
 			diagramExpression.setFormExpression(expressionChain);
 			diagramExpression.setJointjsId(IdGenerator.createId());
 			diagramExpression.setType(DiagramObjectType.CALCULATION);

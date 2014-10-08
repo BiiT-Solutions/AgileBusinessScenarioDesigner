@@ -20,7 +20,7 @@ public class GlobalVariablesDao extends GenericDao<GlobalVariable> implements IG
 	protected void initializeSets(List<GlobalVariable> elements) {
 		for (GlobalVariable globalVariable : elements) {
 			// Initializes the sets for lazy-loading (within the same session)
-			Hibernate.initialize(globalVariable.getData());
+			Hibernate.initialize(globalVariable.getVariableData());
 		}
 	}
 }

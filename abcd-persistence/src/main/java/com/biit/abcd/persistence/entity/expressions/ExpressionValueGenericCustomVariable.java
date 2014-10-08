@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines a value as a already defined form custom variable.
@@ -38,6 +39,14 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 		setType(type);
 		this.variable = variable;
 		setEditable(editable);
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (variable != null) {
+			variable.resetIds();
+		}
 	}
 
 	@Override
@@ -81,6 +90,18 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 		innerStorableObjects.add(variable);
 		innerStorableObjects.addAll(variable.getAllInnerStorableObjects());
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionValueGenericCustomVariable) {
+			super.copyData(object);
+			ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) object;
+			this.setVariable(expressionValueGenericCustomVariable.getVariable());
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionValueGenericCustomVariable.");
+		}
 	}
 
 }

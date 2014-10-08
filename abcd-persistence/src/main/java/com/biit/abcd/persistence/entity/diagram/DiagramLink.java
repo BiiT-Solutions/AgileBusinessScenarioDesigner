@@ -18,6 +18,7 @@ import com.biit.abcd.gson.utils.DiagramLinkSerializer;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -60,6 +61,18 @@ public class DiagramLink extends DiagramObject {
 		expressionChain = new ExpressionChain();
 		setSource(source);
 		setTarget(target);
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		expressionChain.resetIds();
+		if (source != null) {
+			source.resetIds();
+		}
+		if (target != null) {
+			target.resetIds();
+		}
 	}
 
 	public Node getSource() {
@@ -196,8 +209,8 @@ public class DiagramLink extends DiagramObject {
 	private boolean isAnswerEmpty() {
 		if ((expressionChain == null) || expressionChain.getExpressions().isEmpty()) {
 			return true;
-		}else if(hasSourceFork()) {
-			if(expressionChain.getExpressions().size()<=1){
+		} else if (hasSourceFork()) {
+			if (expressionChain.getExpressions().size() <= 1) {
 				return true;
 			}
 		}
@@ -216,7 +229,7 @@ public class DiagramLink extends DiagramObject {
 			} else {
 				if (expressionChain != null) {
 					return getTextWithoutFirstExpression();
-//					return expressionChain.getExpression();
+					// return expressionChain.getExpression();
 				} else {
 					return "";
 				}
@@ -234,22 +247,34 @@ public class DiagramLink extends DiagramObject {
 	@Override
 	public void setCreatedBy(User user) {
 		super.setCreatedBy(user);
-		source.setCreatedBy(user);
-		target.setCreatedBy(user);
+		if (source != null) {
+			source.setCreatedBy(user);
+		}
+		if (target != null) {
+			target.setCreatedBy(user);
+		}
 	}
 
 	@Override
 	public void setUpdatedBy(User user) {
 		super.setUpdatedBy(user);
-		source.setUpdatedBy(user);
-		target.setUpdatedBy(user);
+		if (source != null) {
+			source.setUpdatedBy(user);
+		}
+		if (target != null) {
+			target.setUpdatedBy(user);
+		}
 	}
 
 	@Override
 	public void setUpdateTime(Timestamp dateUpdated) {
 		super.setUpdateTime(dateUpdated);
-		source.setUpdateTime(dateUpdated);
-		target.setUpdateTime(dateUpdated);
+		if (source != null) {
+			source.setUpdateTime(dateUpdated);
+		}
+		if (target != null) {
+			target.setUpdateTime(dateUpdated);
+		}
 	}
 
 	@Override
@@ -291,10 +316,9 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	/**
-	 * Avoid this method. Expression chain is a OneToOne relationship and
-	 * currently Hibernate doesn't handle correctly the Orphan removal. Use
-	 * setExpressions of ExpressionChain.
-	 *
+	 * Avoid this method. Expression chain is a OneToOne relationship and currently Hibernate doesn't handle correctly
+	 * the Orphan removal. Use setExpressions of ExpressionChain.
+	 * 
 	 * @param expressionChain
 	 */
 	public void setExpressionChain(ExpressionChain expressionChain) {
@@ -303,19 +327,20 @@ public class DiagramLink extends DiagramObject {
 
 	/**
 	 * Replace any existing expressions with this expression.
+	 * 
 	 * @param expression
 	 */
-	public void resetExpressions(Expression expression){
+	public void resetExpressions(Expression expression) {
 		getExpressionChain().setExpressions(Arrays.asList(expression));
 	}
 
-	public void addExpressionToExpressionChain(Expression expression){
+	public void addExpressionToExpressionChain(Expression expression) {
 		getExpressionChain().addExpression(expression);
 	}
 
-	public String getTextWithoutFirstExpression(){
+	public String getTextWithoutFirstExpression() {
 		List<Expression> auxExps = expressionChain.getExpressions();
-		if(auxExps.size()>0){
+		if (auxExps.size() > 0) {
 			List<Expression> expressions = auxExps.subList(1, auxExps.size());
 			if (expressions.isEmpty()) {
 				if (isOthers()) {
@@ -332,16 +357,50 @@ public class DiagramLink extends DiagramObject {
 		}
 		return "";
 	}
-	
+
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.add(source);
-		innerStorableObjects.addAll(source.getAllInnerStorableObjects());
-		innerStorableObjects.add(target);
-		innerStorableObjects.addAll(target.getAllInnerStorableObjects());
-		innerStorableObjects.add(expressionChain);
-		innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
+		if (source != null) {
+			innerStorableObjects.add(source);
+			innerStorableObjects.addAll(source.getAllInnerStorableObjects());
+		}
+		if (target != null) {
+			innerStorableObjects.add(target);
+			innerStorableObjects.addAll(target.getAllInnerStorableObjects());
+		}
+		if (expressionChain != null) {
+			innerStorableObjects.add(expressionChain);
+			innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
+		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof DiagramLink) {
+			super.copyData(object);
+			DiagramLink diagramLink = (DiagramLink) object;
+
+			ExpressionChain expressionChain = new ExpressionChain();
+			expressionChain.copyData(diagramLink.getExpressionChain());
+			setExpressionChain(expressionChain);
+
+			Node source = new Node();
+			source.copyData(diagramLink.getSource());
+			setSource(source);
+
+			Node target = new Node();
+			target.copyData(diagramLink.getTarget());
+			setTarget(target);
+
+			text = diagramLink.getText();
+			manhattan = diagramLink.isManhattan();
+			smooth = diagramLink.isSmooth();
+			vertices = diagramLink.getVertices();
+			attrs = diagramLink.getAttrs();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramLink.");
+		}
 	}
 }

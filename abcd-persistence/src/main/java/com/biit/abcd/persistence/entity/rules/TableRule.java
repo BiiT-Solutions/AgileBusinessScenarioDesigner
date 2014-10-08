@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Specific rules created for managing decision tables.
@@ -47,14 +48,24 @@ public class TableRule extends StorableObject implements INameAttribute {
 		rules = new ArrayList<>();
 		setName(name);
 	}
+	
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (rules != null) {
+			for (TableRuleRow tableRuleRow : rules) {
+				tableRuleRow.resetIds();
+			}
+		}
+	}
 
 	public List<TableRuleRow> getRules() {
 		return rules;
 	}
 
 	public void setRules(List<TableRuleRow> rules) {
-		this.rules.clear();
-		this.rules.addAll(rules);
+		rules.clear();
+		rules.addAll(rules);
 	}
 
 	@Override
@@ -130,5 +141,23 @@ public class TableRule extends StorableObject implements INameAttribute {
 			innerStorableObjects.addAll(rule.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof TableRule) {
+			super.copyBasicInfo(object);
+			TableRule tableRule = (TableRule) object;
+			this.setName(tableRule.getName());
+
+			rules.clear();
+			for (TableRuleRow row : tableRule.getRules()) {
+				TableRuleRow newRow = new TableRuleRow();
+				newRow.copyData(row);
+				addRow(newRow);
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRuleRow.");
+		}
 	}
 }

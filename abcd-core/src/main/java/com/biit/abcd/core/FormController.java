@@ -187,7 +187,7 @@ public class FormController {
 	public Set<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
 		Set<ExpressionChain> expressionChains = new HashSet<>();
 
-		Set<ExpressionChain> expressions = this.getForm().getExpressionChain();
+		Set<ExpressionChain> expressions = this.getForm().getExpressionChains();
 		for (ExpressionChain expression : expressions) {
 			if (expression.isAssignedTo(element)) {
 				expressionChains.add(expression);

@@ -28,7 +28,7 @@ public class JsonConverterTest {
 
 		Assert.assertEquals(jsonGlobalVariablesList.size(), 4);
 		Assert.assertEquals(jsonGlobalVariablesList.get(2).getName(), "TestPC");
-		Assert.assertEquals(jsonGlobalVariablesList.get(0).getData().get(1).getValue(), 21.0);
+		Assert.assertEquals(jsonGlobalVariablesList.get(0).getVariableData().get(1).getValue(), 21.0);
 	}
 
 	private void createGlobalVariables() throws NotValidTypeInVariableData, FieldTooLongException {

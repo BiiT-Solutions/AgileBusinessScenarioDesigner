@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * User for defining functions as MAX, MIN, AVERAGE, ABS, ...
@@ -67,4 +68,17 @@ public class ExpressionFunction extends Expression implements IExpressionType<Av
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
 	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionFunction) {
+			super.copyData(object);
+			ExpressionFunction expressionFunction = (ExpressionFunction) object;
+			value = expressionFunction.getValue();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionFunction.");
+		}
+	}
+
 }

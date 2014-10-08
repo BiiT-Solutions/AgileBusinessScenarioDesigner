@@ -16,7 +16,7 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
@@ -91,7 +91,7 @@ public class NewGenericsTest extends KidsFormCreator {
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
 						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression1);
+		getForm().getExpressionChains().add(expression1);
 
 		// Generic expression (Generic group = generic group questions)
 		ExpressionChain expression2 = new ExpressionChain("genericGroupQuestions",
@@ -100,7 +100,7 @@ public class NewGenericsTest extends KidsFormCreator {
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
 						GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression2);
+		getForm().getExpressionChains().add(expression2);
 
 		// Generic expression (Generic category = generic category groups)
 		ExpressionChain expression3 = new ExpressionChain("genericCategoryGroups",
@@ -109,7 +109,7 @@ public class NewGenericsTest extends KidsFormCreator {
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
 						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression3);
+		getForm().getExpressionChains().add(expression3);
 
 		// Generic expression (Form = generic categories)
 		ExpressionChain expression4 = new ExpressionChain("formGenericCategories", new ExpressionValueCustomVariable(
@@ -117,7 +117,7 @@ public class NewGenericsTest extends KidsFormCreator {
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
 						GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression4);
+		getForm().getExpressionChains().add(expression4);
 
 		// Generic expression with several generics (Generic category =
 		// generic category groups, generic category questions)
@@ -128,7 +128,7 @@ public class NewGenericsTest extends KidsFormCreator {
 						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
 						questionCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression5);
+		getForm().getExpressionChains().add(expression5);
 
 		// Generic expression with several generics (Generic category =
 		// generic category questions, generic category groups)
@@ -139,7 +139,7 @@ public class NewGenericsTest extends KidsFormCreator {
 						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
 						AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
 						groupCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression6);
+		getForm().getExpressionChains().add(expression6);
 
 		// Generic expression with several generics (Generic group = generic
 		// groups, generic group questions)
@@ -150,7 +150,7 @@ public class NewGenericsTest extends KidsFormCreator {
 						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChain().add(expression7);
+		getForm().getExpressionChains().add(expression7);
 
 		// Creation of a simple diagram to load the table rule
 		getForm().addDiagram(createSimpleTableDiagram());
@@ -193,14 +193,14 @@ public class NewGenericsTest extends KidsFormCreator {
 
 	private Diagram createExpressionsSubdiagram() {
 		Diagram subDiagram = new Diagram("expressionDiagram");
-		for (ExpressionChain expressionChain : getForm().getExpressionChain()) {
+		for (ExpressionChain expressionChain : getForm().getExpressionChains()) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
 			diagramSource.setType(DiagramObjectType.SOURCE);
 			Node nodeSource = new Node(diagramSource.getJointjsId());
 
-			DiagramCalculation diagramExpression = new DiagramCalculation();
+			DiagramExpression diagramExpression = new DiagramExpression();
 			diagramExpression.setFormExpression(expressionChain);
 			diagramExpression.setJointjsId(IdGenerator.createId());
 			diagramExpression.setType(DiagramObjectType.CALCULATION);

@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines a drools rule.
@@ -47,6 +48,17 @@ public class Rule extends StorableObject implements INameAttribute {
 		setCondition(conditions);
 		setActions(actions);
 		setName(name);
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (condition != null) {
+			condition.resetIds();
+		}
+		if (actions != null) {
+			actions.resetIds();
+		}
 	}
 
 	// public ExpressionChain getCondition() {
@@ -129,5 +141,22 @@ public class Rule extends StorableObject implements INameAttribute {
 		copy.setActions(this.actions.generateCopy());
 
 		return copy;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof Rule) {
+			super.copyBasicInfo(object);
+			Rule rule = (Rule) object;
+			this.setName(rule.getName());
+			ExpressionChain condition = new ExpressionChain();
+			condition.copyData(rule.getConditionChain());
+			this.setCondition(condition);
+			ExpressionChain action = new ExpressionChain();
+			action.copyData(rule.getActionChain());
+			this.setActions(action);
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Rule.");
+		}
 	}
 }

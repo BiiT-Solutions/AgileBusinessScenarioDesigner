@@ -78,7 +78,8 @@ public enum LanguageCodes {
 	WARNING_FORM_READ_ONLY_DESCRIPTION("warning.form.read.only.description"),
 
 
-	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
+	FORM_MANAGER_NEW_FORM("formManager.form.new"),
+	FORM_MANAGER_NEW_FORM_VERSION("formManager.form.new.version"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
 	FORM_MANAGER_CREATE_TEST_SCENARIOS("formManager.create.test.scenarios"),
 	FORM_MANAGER_LAUNCH_TEST_SCENARIOS("formManager.launch.test.scenarios"),
@@ -226,6 +227,9 @@ public enum LanguageCodes {
 	ERROR_INVALID_VALUE("error.invalid.value"),
 	
 	ERROR_NAME_TOO_LONG("error.name.too.long"),
+	
+	ERROR_NEW_VERSION("error.new.version"),
+	ERROR_NEW_VERSION_DESCRIPTION("error.new.version.description"),
 	
 	INFO_DATA_STORED("info.data.store"),
 

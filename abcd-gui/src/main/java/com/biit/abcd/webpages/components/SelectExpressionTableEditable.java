@@ -20,7 +20,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 
 	public void update(Form form) {
 		this.removeAllItems();
-		for (ExpressionChain expression : form.getExpressionChain()) {
+		for (ExpressionChain expression : form.getExpressionChains()) {
 			addRow(expression);
 		}
 	}
@@ -60,7 +60,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					for (ExpressionChain existingTableRule : UserSessionHandler.getFormController().getForm()
-							.getExpressionChain()) {
+							.getExpressionChains()) {
 						if (existingTableRule != formExpression
 								&& existingTableRule.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);

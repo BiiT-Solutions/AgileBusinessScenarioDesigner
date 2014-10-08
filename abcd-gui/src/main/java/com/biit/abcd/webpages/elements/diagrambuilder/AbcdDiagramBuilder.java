@@ -10,7 +10,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
@@ -97,8 +97,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 				DiagramObject object = getObjectOfDiagram(jsonString);
 				switch (object.getType()) {
 				case CALCULATION:
-					if (((DiagramCalculation) object).getFormExpression() != null) {
-						fireJumpToListener(((DiagramCalculation) object).getFormExpression());
+					if (((DiagramExpression) object).getFormExpression() != null) {
+						fireJumpToListener(((DiagramExpression) object).getFormExpression());
 					} else {
 						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
 								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);

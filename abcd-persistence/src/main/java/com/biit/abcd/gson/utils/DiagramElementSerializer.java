@@ -2,7 +2,7 @@ package com.biit.abcd.gson.utils;
 
 import java.lang.reflect.Type;
 
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
@@ -25,7 +25,7 @@ public class DiagramElementSerializer implements JsonSerializer<DiagramElement> 
 
 		switch (diagramObjectType) {
 		case CALCULATION:
-			return context.serialize(diagramElement, DiagramCalculation.class);
+			return context.serialize(diagramElement, DiagramExpression.class);
 		case FORK:
 			return context.serialize(diagramElement, DiagramFork.class);
 		case DIAGRAM_CHILD:

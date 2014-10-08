@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
@@ -41,7 +41,7 @@ public class CheckDependencies {
 					checkTreeObjectDependeciesInExpressionChain(rule.getActionChain(), treeObject);
 				}
 				// Check the expressions
-				for (ExpressionChain expressions : form.getExpressionChain()) {
+				for (ExpressionChain expressions : form.getExpressionChains()) {
 					checkTreeObjectDependeciesInExpressionChain(expressions, treeObject);
 				}
 				// Check the diagrams
@@ -178,8 +178,8 @@ public class CheckDependencies {
 			throws DependencyExistException {
 		List<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjectsList) {
-			if (diagramObject instanceof DiagramCalculation) {
-				if (((DiagramCalculation) diagramObject).getFormExpression().equals(expressionChain)) {
+			if (diagramObject instanceof DiagramExpression) {
+				if (((DiagramExpression) diagramObject).getFormExpression().equals(expressionChain)) {
 					throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName()
 							+ ", with name: " + expressionChain.getName() + " referenced in the form.");
 				}

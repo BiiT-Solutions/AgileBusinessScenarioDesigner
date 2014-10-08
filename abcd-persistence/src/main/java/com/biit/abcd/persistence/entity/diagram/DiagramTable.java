@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.diagram;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -10,12 +11,13 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "diagram_table")
 public class DiagramTable extends DiagramElement {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private TableRule table;
 
 	public DiagramTable() {
@@ -34,10 +36,33 @@ public class DiagramTable extends DiagramElement {
 	}
 
 	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (table != null) {
+			table.resetIds();
+		}
+	}
+
+	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.add(table);
-		innerStorableObjects.addAll(table.getAllInnerStorableObjects());
+		if (table != null) {
+			innerStorableObjects.add(table);
+			innerStorableObjects.addAll(table.getAllInnerStorableObjects());
+		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof DiagramTable) {
+			super.copyData(object);
+			DiagramTable diagramTable = (DiagramTable) object;
+			TableRule tableRule = new TableRule();
+			tableRule.copyData(diagramTable.getTable());
+			this.setTable(tableRule);
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramTable.");
+		}
 	}
 }

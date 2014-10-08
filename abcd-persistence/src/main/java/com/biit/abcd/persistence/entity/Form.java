@@ -2,8 +2,11 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -23,16 +26,25 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.BaseForm;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
-import com.liferay.portal.model.UserGroup;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version" }) })
@@ -71,7 +83,7 @@ public class Form extends BaseForm {
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy(value = "name ASC")
 	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
-	private Set<ExpressionChain> expressionChain;
+	private Set<ExpressionChain> expressionChains;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -80,9 +92,6 @@ public class Form extends BaseForm {
 	@OrderBy(value = "name ASC")
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
-
-	@Column(nullable = false, columnDefinition = "DOUBLE")
-	private Long organizationId;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -97,7 +106,7 @@ public class Form extends BaseForm {
 		diagrams = new HashSet<>();
 		tableRules = new HashSet<>();
 		customVariables = new HashSet<>();
-		expressionChain = new HashSet<>();
+		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
 		testScenarios = new HashSet<>();
 	}
@@ -107,7 +116,7 @@ public class Form extends BaseForm {
 		diagrams = new HashSet<>();
 		tableRules = new HashSet<>();
 		customVariables = new HashSet<>();
-		expressionChain = new HashSet<>();
+		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
 		testScenarios = new HashSet<>();
 	}
@@ -124,7 +133,7 @@ public class Form extends BaseForm {
 		for (CustomVariable customVariable : this.getCustomVariables()) {
 			customVariable.resetIds();
 		}
-		for (ExpressionChain expression : getExpressionChain()) {
+		for (ExpressionChain expression : getExpressionChains()) {
 			expression.resetIds();
 		}
 		for (Rule rule : getRules()) {
@@ -132,6 +141,267 @@ public class Form extends BaseForm {
 		}
 		for (TestScenario testScenario : getTestScenarios()) {
 			testScenario.resetIds();
+		}
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		super.copyData(object);
+		Form form = (Form) object;
+		// Copy basic info
+		setAvailableFrom(form.getAvailableFrom());
+		setAvailableTo(form.getAvailableTo());
+
+		// ComparatorId -> New StorableObject.
+		Map<String, TreeObject> formElements = new HashMap<>();
+		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
+		for (TreeObject children : formElementsChildren) {
+			formElements.put(children.getComparationId(), children);
+		}
+
+		// Copy CustomVariables
+		getCustomVariables().clear();
+		for (CustomVariable variable : form.getCustomVariables()) {
+			CustomVariable copiedVariable = new CustomVariable();
+			copiedVariable.copyData(variable);
+			copiedVariable.setForm(this);
+			getCustomVariables().add(copiedVariable);
+		}
+		// ComparatorId -> New CustomVariable.
+		Map<String, CustomVariable> formVariables = new HashMap<>();
+		Set<CustomVariable> formVariablesChildren = getCustomVariables();
+		for (CustomVariable children : formVariablesChildren) {
+			formVariables.put(children.getComparationId(), children);
+		}
+
+		// Copy ExpressionChains (must be AFTER CustomVariables)
+		getExpressionChains().clear();
+		for (ExpressionChain expressionChain : form.getExpressionChains()) {
+			ExpressionChain copiedExpressionChain = new ExpressionChain();
+			copiedExpressionChain.copyData(expressionChain);
+			// Update references to current form references.
+			updateVariablesReferences(copiedExpressionChain.getAllInnerStorableObjects(), formVariables);
+			updateTreeObjectReferences(copiedExpressionChain.getAllInnerStorableObjects(), formElements);
+			getExpressionChains().add(copiedExpressionChain);
+		}
+		// ComparatorId -> New ExpressionChain.
+		Map<String, ExpressionChain> formExpressionChains = new HashMap<>();
+		Set<ExpressionChain> formExpressionChainsChildren = getExpressionChains();
+		for (ExpressionChain children : formExpressionChainsChildren) {
+			formExpressionChains.put(children.getComparationId(), children);
+		}
+
+		// Copy TableRules
+		getTableRules().clear();
+		for (TableRule tableRule : form.getTableRules()) {
+			TableRule copiedTableRule = new TableRule();
+			copiedTableRule.copyData(tableRule);
+			// Update references to current form references.
+			updateVariablesReferences(copiedTableRule.getAllInnerStorableObjects(), formVariables);
+			updateTreeObjectReferences(copiedTableRule.getAllInnerStorableObjects(), formElements);
+			getTableRules().add(copiedTableRule);
+		}
+		// ComparatorId -> New TableRule.
+		Map<String, TableRule> formTableRules = new HashMap<>();
+		Set<TableRule> formTableRulesChildren = getTableRules();
+		for (TableRule children : formTableRulesChildren) {
+			formTableRules.put(children.getComparationId(), children);
+		}
+
+		// Copy Rules
+		getRules().clear();
+		for (Rule rule : form.getRules()) {
+			Rule copiedRule = new Rule();
+			copiedRule.copyData(rule);
+			// Update references to current form references.
+			updateVariablesReferences(copiedRule.getAllInnerStorableObjects(), formVariables);
+			updateTreeObjectReferences(copiedRule.getAllInnerStorableObjects(), formElements);
+			getRules().add(copiedRule);
+		}
+		// ComparatorId -> New Rule.
+		Map<String, Rule> formRules = new HashMap<>();
+		Set<Rule> formRulesChildren = getRules();
+		for (Rule children : formRulesChildren) {
+			formRules.put(children.getComparationId(), children);
+		}
+
+		// Copy TestScenarios
+		for (TestScenario testScenario : getTestScenarios()) {
+			TestScenario copiedTestScenario = new TestScenario();
+			copiedTestScenario.copyData(testScenario);
+			updateTreeObjectReferences((Set<StorableObject>) new HashSet<StorableObject>(Arrays.asList(testScenario)),
+					formElements);
+		}
+
+		// Copy Diagrams
+		getDiagrams().clear();
+		for (Diagram diagram : form.getDiagrams()) {
+			Diagram copiedDiagram = new Diagram();
+			copiedDiagram.copyData(diagram);
+			// DiagramObject parent is updated when copied.
+
+			// Update references
+			Set<StorableObject> diagramObjects = copiedDiagram.getAllInnerStorableObjects();
+			updateVariablesReferences(diagramObjects, formVariables);
+			updateTreeObjectReferences(diagramObjects, formElements);
+			updateDiagramTableRuleReferences(diagramObjects, formTableRules);
+			updateDiagramRuleReferences(diagramObjects, formRules);
+			updateDiagramExpressionReferences(diagramObjects, formExpressionChains);
+			getDiagrams().add(copiedDiagram);
+		}
+		// ComparatorId -> New TableRule.
+		Map<String, Diagram> formDiagrams = new HashMap<>();
+		Set<Diagram> formDiagramsChildren = getDiagrams();
+		for (Diagram children : formDiagramsChildren) {
+			formDiagrams.put(children.getComparationId(), children);
+		}
+
+		// Update diagram relationship after all diagrams has been created.
+		for (Diagram diagram : form.getDiagrams()) {
+			updateDiagramDiagramReferences(diagram.getAllInnerStorableObjects(), formDiagrams);
+		}
+	}
+
+	/**
+	 * Replace all references to existing objects in the hashmaps.
+	 * 
+	 * @param storableObjects
+	 * @param formTableRules
+	 */
+	private void updateDiagramDiagramReferences(Set<StorableObject> storableObjects, Map<String, Diagram> formDiagrams) {
+		for (StorableObject child : storableObjects) {
+			if (child instanceof DiagramChild) {
+				DiagramChild diagramChild = (DiagramChild) child;
+				if (formDiagrams.get(diagramChild.getChildDiagram().getComparationId()) != null) {
+					diagramChild.setChildDiagram(formDiagrams.get(diagramChild.getChildDiagram().getComparationId()));
+				} else {
+					formDiagrams.put(diagramChild.getChildDiagram().getComparationId(), diagramChild.getChildDiagram());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Replace all references to existing objects in the hashmaps.
+	 * 
+	 * @param storableObjects
+	 * @param formTableRules
+	 */
+	private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects,
+			Map<String, ExpressionChain> formExpressionChains) {
+		for (StorableObject child : storableObjects) {
+			if (child instanceof DiagramExpression) {
+				DiagramExpression diagramExpression = (DiagramExpression) child;
+				if (formExpressionChains.get(diagramExpression.getFormExpression().getComparationId()) != null) {
+					diagramExpression.setFormExpression(formExpressionChains.get(diagramExpression.getFormExpression()
+							.getComparationId()));
+				} else {
+					formExpressionChains.put(diagramExpression.getFormExpression().getComparationId(),
+							diagramExpression.getFormExpression());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Replace all references to existing objects in the hashmaps.
+	 * 
+	 * @param storableObjects
+	 * @param formTableRules
+	 */
+	private void updateDiagramRuleReferences(Set<StorableObject> storableObjects, Map<String, Rule> formRules) {
+		for (StorableObject child : storableObjects) {
+			if (child instanceof DiagramRule) {
+				DiagramRule diagramRule = (DiagramRule) child;
+				if (formRules.get(diagramRule.getRule().getComparationId()) != null) {
+					diagramRule.setRule(formRules.get(diagramRule.getRule().getComparationId()));
+				} else {
+					formRules.put(diagramRule.getRule().getComparationId(), diagramRule.getRule());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Replace all references to existing objects in the hashmaps.
+	 * 
+	 * @param storableObjects
+	 * @param formTableRules
+	 */
+	private void updateDiagramTableRuleReferences(Set<StorableObject> storableObjects,
+			Map<String, TableRule> formTableRules) {
+		for (StorableObject child : storableObjects) {
+			if (child instanceof DiagramTable) {
+				DiagramTable diagramTable = (DiagramTable) child;
+				if (formTableRules.get(diagramTable.getTable().getComparationId()) != null) {
+					diagramTable.setTable(formTableRules.get(diagramTable.getTable().getComparationId()));
+				} else {
+					formTableRules.put(diagramTable.getTable().getComparationId(), diagramTable.getTable());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Replace all references to existing objects in the hashmaps.
+	 * 
+	 * @param storableObjects
+	 * @param formElements
+	 * @param formVariables
+	 */
+	private void updateTreeObjectReferences(Set<StorableObject> storableObjects, Map<String, TreeObject> formElements) {
+		for (StorableObject child : storableObjects) {
+			if (child instanceof ExpressionValueTreeObjectReference) {
+				ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) child;
+				if (formElements.get(expressionValueTreeObjectReference.getReference().getComparationId()) != null) {
+					expressionValueTreeObjectReference.setReference(formElements.get(expressionValueTreeObjectReference
+							.getReference().getComparationId()));
+				} else {
+					formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
+							expressionValueTreeObjectReference.getReference());
+				}
+			} else if (child instanceof TestScenario) {
+				TestScenario testScenario = ((TestScenario) child);
+				Map<TreeObject, TestAnswer> questionTestAnswerRelationship = new HashMap<>();
+				for (TreeObject question : testScenario.getData().keySet()) {
+					questionTestAnswerRelationship.put(formElements.get(question.getComparationId()), testScenario
+							.getData().get(question));
+				}
+				testScenario.setData(questionTestAnswerRelationship);
+			}
+		}
+	}
+
+	/**
+	 * Replace all references to existing objects in the hashmaps.
+	 * 
+	 * @param storableObjects
+	 * @param formElements
+	 * @param formVariables
+	 */
+	private void updateVariablesReferences(Set<StorableObject> storableObjects,
+			Map<String, CustomVariable> formVariables) {
+		for (StorableObject child : storableObjects) {
+			if (child instanceof ExpressionValueCustomVariable) {
+				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) child;
+				if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
+					expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
+							.getVariable().getComparationId()));
+				} else {
+					formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
+							expressionValueCustomVariable.getVariable());
+				}
+			}
+			if (child instanceof ExpressionValueGenericCustomVariable) {
+				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) child;
+				if (formVariables.get(expressionValueGenericCustomVariable.getVariable().getComparationId()) != null) {
+					expressionValueGenericCustomVariable.setVariable(formVariables
+							.get(expressionValueGenericCustomVariable.getVariable().getComparationId()));
+				} else {
+					formVariables.put(expressionValueGenericCustomVariable.getVariable().getComparationId(),
+							expressionValueGenericCustomVariable.getVariable());
+				}
+			}
 		}
 	}
 
@@ -240,12 +510,12 @@ public class Form extends BaseForm {
 		this.customVariables.addAll(customVariables);
 	}
 
-	public Set<ExpressionChain> getExpressionChain() {
-		return expressionChain;
+	public Set<ExpressionChain> getExpressionChains() {
+		return expressionChains;
 	}
 
-	public void setExpressionChain(Set<ExpressionChain> expressions) {
-		expressionChain = expressions;
+	public void setExpressionChains(Set<ExpressionChain> expressions) {
+		expressionChains = expressions;
 	}
 
 	public Set<Rule> getRules() {
@@ -257,8 +527,7 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root
-	 * diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
 	 * 
 	 * @param diagram
 	 */
@@ -272,19 +541,6 @@ public class Form extends BaseForm {
 			}
 		}
 		return null;
-	}
-
-	public UserGroup getUserGroup() {
-		// TODO
-		return null;
-	}
-
-	public Long getOrganizationId() {
-		return organizationId;
-	}
-	
-	public void setOrganizationId(Long organizationId) {
-		this.organizationId = organizationId;
 	}
 
 	public Set<TestScenario> getTestScenarios() {
@@ -303,4 +559,17 @@ public class Form extends BaseForm {
 	public void removeTestScenario(TestScenario testScenario) {
 		testScenarios.remove(testScenario);
 	}
+
+	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
+		Form newVersion = new Form();
+		newVersion.copyData(this);
+		newVersion.setVersion(getVersion() + 1);
+		newVersion.resetIds();
+		newVersion.setCreatedBy(user);
+		newVersion.setUpdatedBy(user);
+		newVersion.setCreationTime();
+		newVersion.setUpdateTime();
+		return newVersion;
+	}
+
 }

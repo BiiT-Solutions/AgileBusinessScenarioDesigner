@@ -20,6 +20,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.FormManager;
@@ -45,7 +46,7 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
-	private IconButton newFormButton, exportToDrools, createTestScenario, launchTestScenario;
+	private IconButton newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
@@ -63,7 +64,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		// Add new Form
-		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_EDIT_FORM, ThemeIcon.FORM_MANAGER_ADD_FORM,
+		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_NEW_FORM, ThemeIcon.FORM_MANAGER_ADD_FORM,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 6053447189295644721L;
 
@@ -80,7 +81,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty()) {
 									return;
 								}
-								if (!formDao.exists(newFormWindow.getValue())) {
+								if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization()
+										.getOrganizationId())) {
 									form = new Form();
 									try {
 										form.setLabel(newFormWindow.getValue());
@@ -109,6 +111,17 @@ public class FormManagerUpperMenu extends UpperMenu {
 						});
 
 					}
+				});
+		newVersion = new IconButton(LanguageCodes.FORM_MANAGER_NEW_FORM_VERSION,
+				ThemeIcon.FORM_MANAGER_FORM_NEW_VERSION, LanguageCodes.FORM_MANAGER_NEW_FORM_VERSION, IconSize.MEDIUM,
+				new ClickListener() {
+					private static final long serialVersionUID = 8916936867106777144L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						((FormManager) parent).newFormVersion();
+					}
+
 				});
 		// Create rules and launch drools engine
 		exportToDrools = new IconButton(LanguageCodes.FORM_MANAGER_EXPORT_RULES, ThemeIcon.FORM_MANAGER_EXPORT_RULES,
@@ -210,6 +223,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 				});
 
 		addIconButton(newFormButton);
+		addIconButton(newVersion);
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
 		addIconButton(launchTestScenario);
@@ -245,6 +259,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 		if (createTestScenario != null) {
 			createTestScenario.setEnabled(enableFormButtons);
 		}
-		
+	}
+
+	public void updateNewVersionButton(SimpleFormView selected) {
+		newVersion.setEnabled(selected.isLastVersion());
 	}
 }

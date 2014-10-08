@@ -14,11 +14,18 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
-@Table(name = "diagram_sink")
-public class DiagramSink extends DiagramElement {
+@Table(name = "diagram_calculation")
+public class DiagramExpression extends DiagramElement {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private ExpressionChain formExpression;
+
+	public DiagramExpression() {
+		super();
+		DiagramBiitText biitText = new DiagramBiitText();
+		biitText.setText("Calculation");
+		setBiitText(biitText);
+	}
 
 	public ExpressionChain getFormExpression() {
 		return formExpression;
@@ -26,13 +33,6 @@ public class DiagramSink extends DiagramElement {
 
 	public void setFormExpression(ExpressionChain formExpression) {
 		this.formExpression = formExpression;
-	}
-
-	public DiagramSink() {
-		super();
-		DiagramBiitText biitText = new DiagramBiitText();
-		biitText.setText("End");
-		setBiitText(biitText);
 	}
 
 	@Override
@@ -43,6 +43,9 @@ public class DiagramSink extends DiagramElement {
 		}
 	}
 
+	/**
+	 * Has no inner elements. Returns an empty set.
+	 */
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
@@ -55,18 +58,16 @@ public class DiagramSink extends DiagramElement {
 
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof DiagramSink) {
+		if (object instanceof DiagramExpression) {
 			super.copyData(object);
-			DiagramSink diagramSink = (DiagramSink) object;
+			DiagramExpression diagramCalculation = (DiagramExpression) object;
 
-			if (diagramSink.getFormExpression() != null) {
-				ExpressionChain formExpression = new ExpressionChain();
-				formExpression.copyData(diagramSink.getFormExpression());
-				setFormExpression(formExpression);
-			}
+			ExpressionChain formExpression = new ExpressionChain();
+			formExpression.copyData(diagramCalculation.getFormExpression());
+			setFormExpression(formExpression);
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramSink.");
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of DiagramCalculation.");
 		}
 	}
-
 }

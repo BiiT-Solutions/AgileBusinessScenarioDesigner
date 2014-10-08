@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "diagram_fork")
@@ -22,7 +23,7 @@ public class DiagramFork extends DiagramElement {
 	// Due to bug (https://hibernate.atlassian.net/browse/HHH-5559) orphanRemoval is not working correctly in @OneToOne.
 	// We change a @OneToMany list with only one element.
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private List<ExpressionValueTreeObjectReference> reference;
+	private List<ExpressionValueTreeObjectReference> references;
 
 	public DiagramFork() {
 		super();
@@ -31,21 +32,31 @@ public class DiagramFork extends DiagramElement {
 		setBiitText(biitText);
 	}
 
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (references != null) {
+			for (ExpressionValueTreeObjectReference expressionValueTreeObjectReference : references) {
+				expressionValueTreeObjectReference.resetIds();
+			}
+		}
+	}
+
 	public ExpressionValueTreeObjectReference getReference() {
-		if ((reference == null) || reference.isEmpty()) {
+		if ((references == null) || references.isEmpty()) {
 			return null;
 		}
-		return reference.get(0);
+		return references.get(0);
 	}
 
 	public void setReference(ExpressionValueTreeObjectReference reference) {
-		if (this.reference == null) {
-			this.reference = new ArrayList<>();
+		if (this.references == null) {
+			this.references = new ArrayList<>();
 		}
-		if (!this.reference.isEmpty()) {
-			this.reference.clear();
+		if (!this.references.isEmpty()) {
+			this.references.clear();
 		}
-		this.reference.add(reference);
+		this.references.add(reference);
 	}
 
 	/**
@@ -68,10 +79,27 @@ public class DiagramFork extends DiagramElement {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		for (ExpressionValueTreeObjectReference child : reference) {
+		for (ExpressionValueTreeObjectReference child : references) {
 			innerStorableObjects.add(child);
 			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof DiagramFork) {
+			super.copyBasicInfo(object);
+			DiagramFork diagramFork = (DiagramFork) object;
+
+			references.clear();
+			for (ExpressionValueTreeObjectReference child : diagramFork.references) {
+				ExpressionValueTreeObjectReference newReference = new ExpressionValueTreeObjectReference();
+				newReference.copyData(child);
+				references.add(newReference);
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramFork.");
+		}
 	}
 }
