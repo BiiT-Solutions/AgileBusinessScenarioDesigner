@@ -13,6 +13,7 @@ import org.junit.Assert;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
+import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -21,6 +22,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.OrbeonImporter;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -29,9 +31,12 @@ import com.biit.orbeon.form.ISubmittedForm;
 public class FormToDroolsExporter {
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly defined. <br>
-	 * This method creates the global constants defined in the globalVariables array
+	 * Parses the vaadin form and loads the rules generated in the drools
+	 * engine. <br>
+	 * If this method doesn't fails it means that the drools rules are correctly
+	 * defined. <br>
+	 * This method creates the global constants defined in the globalVariables
+	 * array
 	 * 
 	 * @param form
 	 *            form to be parsed
@@ -41,10 +46,11 @@ public class FormToDroolsExporter {
 	 * @throws RuleInvalidException
 	 * @throws IOException
 	 * @throws RuleNotImplementedException
-	 * @throws ActionNotImplementedException 
+	 * @throws ActionNotImplementedException
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
-			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException {
+			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ActionNotImplementedException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -77,8 +83,10 @@ public class FormToDroolsExporter {
 	}
 
 	/**
-	 * Loads the (Submitted) form as facts of the knowledge base of the drools engine. <br>
-	 * It also starts the engine execution by firing all the rules inside the engine.
+	 * Loads the (Submitted) form as facts of the knowledge base of the drools
+	 * engine. <br>
+	 * It also starts the engine execution by firing all the rules inside the
+	 * engine.
 	 * 
 	 * @param form
 	 */
@@ -106,28 +114,61 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(submittedForm);
 	}
 
-//	public ISubmittedForm processForm(Form form, String orbeonApplicationName, String orbeonFormName,
-//			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
-//			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
-//		// Generate all drools rules.
-//		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
-//		// Obtain results
-//		if (rulesGenerator != null) {
-//			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
-//					rulesGenerator.getGlobalVariables());
-//		} else
-//			return null;
-//	}
-	
-	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName, String orbeonFormName,
-			String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+	// public ISubmittedForm processForm(Form form, String
+	// orbeonApplicationName, String orbeonFormName,
+	// String orbeonDocumentId) throws ExpressionInvalidException,
+	// RuleInvalidException, IOException,
+	// RuleNotImplementedException, DocumentException,
+	// CategoryNameWithoutTranslation, ActionNotImplementedException {
+	// // Generate all drools rules.
+	// DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
+	// // Obtain results
+	// if (rulesGenerator != null) {
+	// return applyDrools(orbeonApplicationName, orbeonFormName,
+	// orbeonDocumentId, rulesGenerator.getRules(),
+	// rulesGenerator.getGlobalVariables());
+	// } else
+	// return null;
+	// }
+
+	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName,
+			String orbeonFormName, String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException,
+			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			ActionNotImplementedException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
 		if (rulesGenerator != null) {
 			return applyDrools(orbeonApplicationName, orbeonFormName, orbeonDocumentId, rulesGenerator.getRules(),
 					rulesGenerator.getGlobalVariables());
+		} else
+			return null;
+	}
+
+	/**
+	 * Process the test scenario. Orbeon not needed.
+	 * 
+	 * @param form
+	 * @param globalVariables
+	 * @return
+	 * @throws ExpressionInvalidException
+	 * @throws RuleInvalidException
+	 * @throws IOException
+	 * @throws RuleNotImplementedException
+	 * @throws DocumentException
+	 * @throws CategoryNameWithoutTranslation
+	 * @throws ActionNotImplementedException
+	 */
+	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, TestScenario testScenario)
+			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+		// Generate all drools rules.
+		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
+		// Generate the submitted form based on the test scenario
+		ISubmittedForm iSubmittedForm = TestScenarioAnswerImporter.createSubmittedForm(form, testScenario);
+		// Obtain results
+		if ((rulesGenerator != null) && (iSubmittedForm != null)) {
+			return applyDrools(iSubmittedForm, rulesGenerator.getRules(), rulesGenerator.getGlobalVariables());
 		} else
 			return null;
 	}
@@ -152,7 +193,7 @@ public class FormToDroolsExporter {
 	}
 
 	/**
-	 * Method used for testing purposes.<br>
+	 * Method used for the test scenarios
 	 * 
 	 * @param submittedForm
 	 *            without scores

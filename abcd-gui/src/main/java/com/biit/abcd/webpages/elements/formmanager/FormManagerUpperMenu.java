@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.formmanager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.dom4j.DocumentException;
 
@@ -17,6 +18,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.FormManager;
@@ -31,6 +33,7 @@ import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.SettingsWindow;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
+import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -161,6 +164,67 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						final WindowLaunchTestScenario launchTestScenarioWindow = new WindowLaunchTestScenario(parent
+								.getForm().getName());
+						launchTestScenarioWindow.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								Long formId = launchTestScenarioWindow.getSelectedFormId();
+								Long testScenarioId = launchTestScenarioWindow.getSelectedTestScenarioId();
+								if ((formId != null) && (testScenarioId != null)) {
+									parent.setFormById(formId);
+									Set<TestScenario> testScenarios = UserSessionHandler.getFormController().getForm()
+											.getTestScenarios();
+
+									TestScenario testScenarioSelected = null;
+									for (TestScenario testScenario : testScenarios) {
+										if (testScenario.getId().equals(testScenarioId)) {
+											testScenarioSelected = testScenario;
+											break;
+										}
+									}
+
+									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
+									ISubmittedForm submittedForm;
+									try {
+										submittedForm = droolsExporter.processForm(UserSessionHandler
+												.getFormController().getForm(), UserSessionHandler
+												.getGlobalVariablesController().getGlobalVariables(),
+												testScenarioSelected);
+
+										if (submittedForm instanceof DroolsForm) {
+											final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
+													((DroolsForm) submittedForm).getSubmittedForm());
+											droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
+												@Override
+												public void acceptAction(AcceptCancelWindow window) {
+													droolsResultWindow.close();
+												}
+											});
+											droolsResultWindow.showCentered();
+										}
+										launchTestScenarioWindow.close();
+									} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
+										MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE,
+												e.getMessage());
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+									} catch (RuleNotImplementedException e) {
+										MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
+												.getExpressionChain().getRepresentation());
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+									} catch (ActionNotImplementedException e) {
+										MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+												LanguageCodes.WARNING_RULE_INCOMPLETE);
+										AbcdLogger.warning(SettingsWindow.class.getName(), e.toString());
+									} catch (Exception e) {
+										MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
+												LanguageCodes.ERROR_DROOLS_ENGINE);
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+									}
+								}
+							}
+						});
+						launchTestScenarioWindow.showCentered();
 					}
 				});
 
@@ -200,6 +264,6 @@ public class FormManagerUpperMenu extends UpperMenu {
 		if (createTestScenario != null) {
 			createTestScenario.setEnabled(enableFormButtons);
 		}
-		
+
 	}
 }

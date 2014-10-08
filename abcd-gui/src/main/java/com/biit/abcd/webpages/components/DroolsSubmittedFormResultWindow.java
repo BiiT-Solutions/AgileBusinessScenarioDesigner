@@ -200,12 +200,22 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 							AbcdLogger.errorMessage(this.getClass().getName(), e);
 						}
 					} else {
-						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-								.setValue(questionSubForm.getAnswer().toString());
+						if (questionSubForm.getAnswer() != null) {
+							formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+									.setValue(questionSubForm.getAnswer().toString());
+						} else {
+							formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+									.setValue("-");
+						}
 					}
 				} else {
-					formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-							.setValue(questionSubForm.getAnswer().toString());
+					if (questionSubForm.getAnswer() != null) {
+						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+								.setValue(questionSubForm.getAnswer().toString());
+					} else {
+						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+								.setValue("-");
+					}
 				}
 			}
 		}

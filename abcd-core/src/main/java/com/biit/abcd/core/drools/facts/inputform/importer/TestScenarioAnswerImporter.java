@@ -33,6 +33,7 @@ public class TestScenarioAnswerImporter {
 				for (TreeObject category : categories) {
 					// Add the category to the submittedForm
 					ICategory iCategory = new Category(category.getName());
+					iCategory.setText(category.getName());
 					submittedForm.addCategory(iCategory);
 					// Put category children variables
 					List<TreeObject> categoryChildren = category.getChildren();

@@ -17,14 +17,18 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 	private List<IQuestion> questions;
 
 	public Category(String tag) {
-		this.setTag(tag);
-		this.setGroups(new ArrayList<IGroup>());
+		setTag(tag);
+		setGroups(new ArrayList<IGroup>());
+	}
+	
+	public void setText(String text){
+		super.setText(text);
 	}
 
 	@Override
 	public void addGroup(IGroup group) {
 		if (this.groups == null) {
-			this.setGroups(new ArrayList<IGroup>());
+			setGroups(new ArrayList<IGroup>());
 		}
 		((Group) group).setParent(this);
 		this.groups.add(group);
@@ -33,17 +37,17 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 	@Override
 	public void addGroups(List<IGroup> groups) {
 		if (this.groups == null) {
-			this.setGroups(new ArrayList<IGroup>());
+			setGroups(new ArrayList<IGroup>());
 		}
 		for (IGroup group : groups) {
-			this.addGroup(group);
+			addGroup(group);
 		}
 	}
 
 	@Override
 	public void addQuestion(IQuestion question) {
 		if (this.questions == null) {
-			this.setQuestions(new ArrayList<IQuestion>());
+			setQuestions(new ArrayList<IQuestion>());
 		}
 		((Question) question).setParent(this);
 		this.questions.add(question);
@@ -52,16 +56,16 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 	@Override
 	public void addQuestions(List<IQuestion> questions) {
 		if (this.questions == null) {
-			this.setQuestions(new ArrayList<IQuestion>());
+			setQuestions(new ArrayList<IQuestion>());
 		}
 		for (IQuestion question : questions) {
-			this.addQuestion(question);
+			addQuestion(question);
 		}
 	}
 
 	@Override
 	public IGroup getGroup(String tag) throws GroupDoesNotExistException {
-		for (IGroup group : this.getGroups()) {
+		for (IGroup group : getGroups()) {
 			if (group.getTag().equals(tag)) {
 				return group;
 			}
@@ -81,7 +85,7 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 	@Override
 	public IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException {
 		if (this.questions != null) {
-			for (IQuestion question : this.getQuestions()) {
+			for (IQuestion question : getQuestions()) {
 				if (question.getTag().equals(questionTag)) {
 					return question;
 				}
@@ -103,7 +107,7 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 	}
 
 	public boolean isScoreNotSet(String varName) {
-		return !this.isScoreSet(varName);
+		return !isScoreSet(varName);
 	}
 
 	public boolean isScoreSet(String varName) {

@@ -36,7 +36,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	};
 
 	public FormsVersionsTreeTable() {
-		// Add Vaadin conext to Spring, and get beans for DAOs.
+		// Add Vaadin context to Spring, and get beans for DAOs.
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
 
