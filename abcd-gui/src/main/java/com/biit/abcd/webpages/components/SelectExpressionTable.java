@@ -62,7 +62,7 @@ public class SelectExpressionTable extends Table {
 
 	public void update(Form form) {
 		this.removeAllItems();
-		for (ExpressionChain expression : form.getExpressionChain()) {
+		for (ExpressionChain expression : form.getExpressionChains()) {
 			addRow(expression);
 		}
 	}

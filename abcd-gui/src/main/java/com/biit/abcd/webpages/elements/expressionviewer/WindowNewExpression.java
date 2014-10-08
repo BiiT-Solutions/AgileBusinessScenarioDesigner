@@ -20,7 +20,7 @@ public class WindowNewExpression extends WindowCreateNewObject {
 	@Override
 	public void acceptAction(TextField inputTextField) {
 		for (ExpressionChain existingExpressions : UserSessionHandler.getFormController().getForm()
-				.getExpressionChain()) {
+				.getExpressionChains()) {
 			if (existingExpressions.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);
 				return;
@@ -31,7 +31,7 @@ public class WindowNewExpression extends WindowCreateNewObject {
 		expression.setCreatedBy(UserSessionHandler.getUser());
 		expression.setUpdatedBy(UserSessionHandler.getUser());
 		expression.setUpdateTime();
-		UserSessionHandler.getFormController().getForm().getExpressionChain().add(expression);
+		UserSessionHandler.getFormController().getForm().getExpressionChains().add(expression);
 		((ExpressionEditor) getParentWindow()).addExpressionToMenu(expression);
 		((ExpressionEditor) getParentWindow()).sortTableMenu();
 

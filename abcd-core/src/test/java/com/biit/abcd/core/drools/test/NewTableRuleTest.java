@@ -107,7 +107,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "a"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+		ruleRow.setActionChain(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
 				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
@@ -115,7 +115,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "b"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+		ruleRow.setActionChain(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
 				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueString(QUESTION_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
@@ -123,7 +123,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "c"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+		ruleRow.setActionChain(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
 				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
@@ -131,7 +131,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "d"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+		ruleRow.setActionChain(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
 				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
@@ -139,7 +139,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "e"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+		ruleRow.setActionChain(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
 				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
@@ -169,7 +169,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		// Null columns
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference());
 		ruleRow.addCondition(new ExpressionChain());
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+		ruleRow.setActionChain(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
 				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
@@ -181,7 +181,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("fruit")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "d"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
+		ruleRow.setActionChain(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject("breakfast"),
 				questionVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueString(QUESTION_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
@@ -191,7 +191,7 @@ public class NewTableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueTreeObjectReference(getAnswer("breakfast", "a"))));
 		// Null action
-		ruleRow.setAction(new ExpressionChain());
+		ruleRow.setActionChain(new ExpressionChain());
 		tableRule.getRules().add(ruleRow);
 
 		// Add the table rule

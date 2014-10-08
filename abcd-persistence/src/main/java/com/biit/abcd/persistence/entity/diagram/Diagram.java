@@ -34,6 +34,7 @@ import com.biit.abcd.gson.utils.DiagramSourceSerializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
@@ -61,6 +62,14 @@ public class Diagram extends StorableObject implements INameAttribute {
 		diagramElements = new ArrayList<>();
 	}
 
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		for (DiagramObject diagramObject : diagramElements) {
+			diagramObject.resetIds();
+		}
+	}
+
 	public static Diagram fromJson(String jsonString) {
 		if (jsonString != null) {
 			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
@@ -83,7 +92,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 		gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementSerializer());
-		gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramExpression.class, new DiagramCalculationSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleSerializer());
@@ -226,6 +235,29 @@ public class Diagram extends StorableObject implements INameAttribute {
 			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof Diagram) {
+			super.copyBasicInfo(object);
+			Diagram diagram = (Diagram) object;
+			name = diagram.getName();
+
+			diagramElements.clear();
+			for (DiagramObject child : diagram.getDiagramObjects()) {
+				try {
+					DiagramObject diagramElement = child.getClass().newInstance();
+					diagramElement.copyData(child);
+					addDiagramObject(diagramElement);
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new NotValidStorableObjectException("Object '" + object + "' has a problem copying '" + child
+							+ "'.");
+				}
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Diagram.");
+		}
 	}
 
 }

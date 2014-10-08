@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -59,7 +60,7 @@ public class Node extends StorableObject {
 			port = object.port;
 		}
 	}
-	
+
 	/**
 	 * Has no inner elements. Returns an empty set.
 	 */
@@ -67,5 +68,18 @@ public class Node extends StorableObject {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof Node) {
+			super.copyBasicInfo(object);
+			Node node = (Node) object;
+			jointjsId = node.getJointjsId();
+			selector = node.getSelector();
+			port = node.getPort();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Node.");
+		}
 	}
 }

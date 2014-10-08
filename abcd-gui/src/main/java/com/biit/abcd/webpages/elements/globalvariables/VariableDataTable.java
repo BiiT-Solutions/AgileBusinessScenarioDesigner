@@ -29,7 +29,7 @@ public class VariableDataTable extends Table {
 
 	public void setVariable(GlobalVariable variable) {
 		if (variable != null) {
-			for (VariableData data : variable.getData()) {
+			for (VariableData data : variable.getVariableData()) {
 				addItem(data);
 			}
 		} else {

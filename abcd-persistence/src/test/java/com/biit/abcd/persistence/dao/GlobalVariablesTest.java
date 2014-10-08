@@ -78,13 +78,13 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		List<GlobalVariable> persistedList = globalVariablesDao.getAll();
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		Assert.assertEquals(persistedList.get(0).getData().size(), 2);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValue(), VARIABLE_DATA_VALUE_1);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_2);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().size(), 2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValue(), VARIABLE_DATA_VALUE_1);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValue(), VARIABLE_DATA_VALUE_2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
 
 		globalVariablesDao.makeTransient(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
@@ -108,13 +108,13 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		List<GlobalVariable> persistedList = globalVariablesDao.getAll();
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		Assert.assertEquals(persistedList.get(0).getData().size(), 2);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValue(), VARIABLE_DATA_VALUE_3);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_4);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().size(), 2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValue(), VARIABLE_DATA_VALUE_3);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValue(), VARIABLE_DATA_VALUE_4);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
 
 		globalVariablesDao.makeTransient(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
@@ -138,13 +138,13 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		List<GlobalVariable> persistedList = globalVariablesDao.getAll();
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		Assert.assertEquals(persistedList.get(0).getData().size(), 2);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValue(), VARIABLE_DATA_VALUE_5);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_6);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().size(), 2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValue(), VARIABLE_DATA_VALUE_5);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValue(), VARIABLE_DATA_VALUE_6);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
 
 		globalVariablesDao.makeTransient(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
@@ -168,13 +168,13 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 		List<GlobalVariable> persistedList = globalVariablesDao.getAll();
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
-		Assert.assertEquals(persistedList.get(0).getData().size(), 2);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValue(), VARIABLE_DATA_VALUE_7);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
-		Assert.assertEquals(persistedList.get(0).getData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValue(), VARIABLE_DATA_VALUE_8);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
-		Assert.assertEquals(persistedList.get(0).getData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().size(), 2);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValue(), VARIABLE_DATA_VALUE_7);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidFrom(), VARIABLE_DATA_VALID_FROM);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(0).getValidTo(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValue(), VARIABLE_DATA_VALUE_8);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidFrom(), VARIABLE_DATA_VALID_TO);
+		Assert.assertEquals(persistedList.get(0).getVariableData().get(1).getValidTo(), VARIABLE_DATA_VALID_TO_2);
 
 		globalVariablesDao.makeTransient(globalVariable);
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);

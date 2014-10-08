@@ -220,6 +220,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			addRow(parent);
 		}
 		if (form != null) {
+			parent.addChildForm(form);
 			addRow(form);
 			setChildrenAllowed(parent, true);
 			setParent(form, parent);
@@ -287,6 +288,17 @@ public class FormsVersionsTreeTable extends TreeTable {
 			Collections.sort(formList, new FormVersionComparator());
 		}
 
+		// Set witch is the last version.
+		for (List<SimpleFormView> formList : formData.values()) {
+			for (int i = 0; i < formList.size(); i++) {
+				if (i < formList.size() - 1) {
+					formList.get(i).setLastVersion(false);
+				} else {
+					formList.get(i).setLastVersion(true);
+				}
+			}
+		}
+
 		return formData;
 	}
 
@@ -298,7 +310,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private class FormVersionComparator implements Comparator<SimpleFormView> {
 		@Override
 		public int compare(SimpleFormView arg0, SimpleFormView arg1) {
-			return arg0.getVersion().compareTo(arg1.getVersion());
+			return arg1.getVersion().compareTo(arg0.getVersion());
 		}
 	}
 
@@ -373,6 +385,14 @@ public class FormsVersionsTreeTable extends TreeTable {
 	@Override
 	public Collection<?> getSortableContainerPropertyIds() {
 		return new ArrayList<>(Arrays.asList(FormsVersionsTreeTableProperties.FORM_LABEL));
+	}
+
+	public RootForm getSelectedRootForm() {
+		if (getValue() instanceof RootForm) {
+			return (RootForm) getValue();
+		} else {
+			return (RootForm) getParent(getValue());
+		}
 	}
 
 }

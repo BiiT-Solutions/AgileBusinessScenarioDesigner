@@ -18,6 +18,7 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "global_variables")
@@ -29,15 +30,25 @@ public class GlobalVariable extends StorableObject {
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "global_variable_data_set")
-	private List<VariableData> data;
+	private List<VariableData> variableData;
 
 	public GlobalVariable() {
-		data = new ArrayList<VariableData>();
+		variableData = new ArrayList<VariableData>();
 	}
 
 	public GlobalVariable(AnswerFormat format) {
-		data = new ArrayList<VariableData>();
+		variableData = new ArrayList<VariableData>();
 		setFormat(format);
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (variableData != null) {
+			for (VariableData data : variableData) {
+				data.resetIds();
+			}
+		}
 	}
 
 	public String getName() {
@@ -52,8 +63,8 @@ public class GlobalVariable extends StorableObject {
 		this.name = name;
 	}
 
-	public List<VariableData> getData() {
-		return data;
+	public List<VariableData> getVariableData() {
+		return variableData;
 	}
 
 	public AnswerFormat getFormat() {
@@ -88,7 +99,7 @@ public class GlobalVariable extends StorableObject {
 		variableData.setValue(value);
 		variableData.setValidFrom(validFrom);
 		variableData.setValidTo(validTo);
-		getData().add(variableData);
+		getVariableData().add(variableData);
 	}
 
 	private VariableData getNewInstanceVariableData() {
@@ -107,10 +118,35 @@ public class GlobalVariable extends StorableObject {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		for (VariableData child : data) {
+		for (VariableData child : variableData) {
 			innerStorableObjects.add(child);
 			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof GlobalVariable) {
+			super.copyBasicInfo(object);
+			GlobalVariable globalVariable = (GlobalVariable) object;
+			name = globalVariable.getName();
+			format = globalVariable.getFormat();
+
+			variableData.clear();
+			for (VariableData child : getVariableData()) {
+				VariableData data;
+				try {
+					data = child.getClass().newInstance();
+					data.copyData(child);
+					variableData.add(data);
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new NotValidStorableObjectException("Object '" + object
+							+ "' is not a valid instance of GlobalVariable.");
+				}
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of GlobalVariable.");
+		}
 	}
 }

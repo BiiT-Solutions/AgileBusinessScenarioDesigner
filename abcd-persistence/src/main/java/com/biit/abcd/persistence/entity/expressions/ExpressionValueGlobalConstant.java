@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines a value as a already defined Global Constant.
@@ -80,5 +81,22 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 		innerStorableObjects.add(constant);
 		innerStorableObjects.addAll(constant.getAllInnerStorableObjects());
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionValueGlobalConstant) {
+			super.copyData(object);
+			ExpressionValueGlobalConstant expressionValueGlobalConstant = (ExpressionValueGlobalConstant) object;
+			try {
+				this.setValue(expressionValueGlobalConstant.getValue());
+			} catch (NotValidExpressionValue e) {
+				throw new NotValidStorableObjectException("Object '" + object
+						+ "' is not a valid instance of ExpressionValueGlobalConstant.");
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionValueGlobalConstant.");
+		}
 	}
 }

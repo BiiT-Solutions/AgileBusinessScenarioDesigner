@@ -11,15 +11,17 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
+import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Generic class for creating operators logical and mathematical.
- *
+ * 
  */
 @Entity
 @Table(name = "expression_operator")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator>{
+public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator> {
 
 	@Enumerated(EnumType.STRING)
 	private AvailableOperator currentValue;
@@ -46,7 +48,7 @@ public abstract class ExpressionOperator extends Expression implements IExpressi
 
 	/**
 	 * Set a value.
-	 *
+	 * 
 	 * @param exprOpvalue
 	 * @throws NotValidOperatorInExpression
 	 *             If this exception is launched, check ALLOWED_OPERATORS of the class.
@@ -76,5 +78,16 @@ public abstract class ExpressionOperator extends Expression implements IExpressi
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionOperator) {
+			super.copyData(object);
+			currentValue = ((ExpressionOperator) object).getValue();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionOperator.");
+		}
 	}
 }

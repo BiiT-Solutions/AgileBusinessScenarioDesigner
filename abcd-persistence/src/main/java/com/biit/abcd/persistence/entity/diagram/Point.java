@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.annotations.Expose;
 
 @Entity
@@ -38,7 +39,7 @@ public class Point extends StorableObject {
 	public String toString() {
 		return "(x:" + x + ", y:" + y + ")";
 	}
-	
+
 	/**
 	 * Has no inner elements. Returns an empty set.
 	 */
@@ -46,5 +47,17 @@ public class Point extends StorableObject {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof Point) {
+			super.copyBasicInfo(object);
+			Point point = (Point) object;
+			x = point.getX();
+			y = point.getY();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Point.");
+		}
 	}
 }

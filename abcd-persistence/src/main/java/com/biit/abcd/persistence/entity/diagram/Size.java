@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.annotations.Expose;
 
 @Entity
@@ -46,5 +47,17 @@ public class Size extends StorableObject {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof Size) {
+			super.copyBasicInfo(object);
+			Size size = (Size) object;
+			width = size.getWidth();
+			height = size.getHeight();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Size.");
+		}
 	}
 }

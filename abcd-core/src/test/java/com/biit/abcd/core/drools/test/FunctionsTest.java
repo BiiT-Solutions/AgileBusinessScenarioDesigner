@@ -26,7 +26,7 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
@@ -216,7 +216,7 @@ public class FunctionsTest {
 		Node nodeTable = new Node(diagramTableRuleNode.getJointjsId());
 
 		// PMT EXPRESSION
-		DiagramCalculation diagramPmtExpressionNode = new DiagramCalculation();
+		DiagramExpression diagramPmtExpressionNode = new DiagramExpression();
 		diagramPmtExpressionNode.setFormExpression(new ExpressionChain("PMT_Expression",
 				new ExpressionValueCustomVariable(categoryJus, customVarCategory), new ExpressionOperatorMath(
 						AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.PMT),
@@ -313,7 +313,7 @@ public class FunctionsTest {
 		// Node(diagramOperationsExpressionNode.getJointjsId());
 
 		// MATH EXPRESSION
-		DiagramCalculation diagramOperationsExpressionNode = new DiagramCalculation();
+		DiagramExpression diagramOperationsExpressionNode = new DiagramExpression();
 		diagramOperationsExpressionNode.setFormExpression(new ExpressionChain("BMI_Form_Expression",
 				new ExpressionValueCustomVariable(form, customVarForm), new ExpressionOperatorMath(
 						AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(weight),

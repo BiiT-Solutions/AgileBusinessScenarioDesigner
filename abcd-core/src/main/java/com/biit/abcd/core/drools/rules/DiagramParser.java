@@ -9,7 +9,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
@@ -84,7 +84,7 @@ public class DiagramParser {
 			}
 			break;
 		case CALCULATION:
-			DiagramCalculation expressionNode = (DiagramCalculation) node;
+			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getFormExpression() != null) {
 				newRules.addAll(ExpressionParser.parse(expressionNode.getFormExpression(), extraConditions));
 			}

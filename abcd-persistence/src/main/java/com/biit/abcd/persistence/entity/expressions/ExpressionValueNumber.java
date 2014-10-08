@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines values as a double.
@@ -72,6 +73,23 @@ public class ExpressionValueNumber extends ExpressionValue {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionValueNumber) {
+			super.copyData(object);
+			ExpressionValueNumber expressionValueNumber = (ExpressionValueNumber) object;
+			try {
+				this.setValue(expressionValueNumber.getValue());
+			} catch (NotValidExpressionValue e) {
+				throw new NotValidStorableObjectException("Object '" + object
+						+ "' is not a valid instance of ExpressionValueNumber.");
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionValueNumber.");
+		}
 	}
 
 }

@@ -30,7 +30,7 @@ public class SelectExpressionWindow extends AcceptCancelWindow {
 		selectExpressionTable = new SelectExpressionTable();
 		selectExpressionTable.setSizeFull();
 		
-		for (ExpressionChain expression : UserSessionHandler.getFormController().getForm().getExpressionChain()){
+		for (ExpressionChain expression : UserSessionHandler.getFormController().getForm().getExpressionChains()){
 			selectExpressionTable.addRow(expression);
 		}
 		

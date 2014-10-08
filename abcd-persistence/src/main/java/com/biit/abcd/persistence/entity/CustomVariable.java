@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Sets all user defined custom variables that will be used in drools conditions and action.
@@ -101,4 +102,19 @@ public class CustomVariable extends StorableObject {
 		return innerStorableObjects;
 	}
 
+	/**
+	 * Parent form is not copied!
+	 */
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof CustomVariable) {
+			super.copyBasicInfo(object);
+			CustomVariable variable = (CustomVariable) object;
+			name = variable.getName();
+			scope = variable.getScope();
+			type = variable.getType();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of CustomVariable.");
+		}
+	}
 }

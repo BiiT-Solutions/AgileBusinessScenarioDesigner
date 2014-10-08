@@ -94,7 +94,7 @@
 
     create table diagram_fork_expression_value_tree_object_reference (
         diagram_fork_ID bigint not null,
-        reference_ID bigint not null
+        references_ID bigint not null
     );
 
     create table diagram_links (
@@ -339,18 +339,6 @@
         primary key (ID)
     );
 
-    create table expression_value_expression_reference (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        sortSeq bigint not null,
-        value_ID bigint,
-        primary key (ID)
-    );
-
     create table expression_value_generic_custom_variable (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -533,7 +521,7 @@
 
     create table global_variable_data_set (
         global_variables_ID bigint not null,
-        data_ID bigint not null
+        variableData_ID bigint not null
     );
 
     create table global_variable_data_text (
@@ -724,10 +712,10 @@
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
+        organizationId DOUBLE not null,
         version integer,
         availableFrom datetime not null,
         availableTo datetime,
-        organizationId DOUBLE not null,
         primary key (ID)
     );
 
@@ -739,8 +727,8 @@
 
     create table tree_forms_expressions_chain (
         tree_forms_ID bigint not null,
-        expressionChain_ID bigint not null,
-        primary key (tree_forms_ID, expressionChain_ID)
+        expressionChains_ID bigint not null,
+        primary key (tree_forms_ID, expressionChains_ID)
     );
 
     create table tree_forms_form_custom_variables (
@@ -829,7 +817,7 @@
         add constraint UK_efh14aqc52m2bt7suefmq12qn  unique (comparationId);
 
     alter table diagram_fork_expression_value_tree_object_reference 
-        add constraint UK_qjdox15ikgx1yrjmmwmi60s5o  unique (reference_ID);
+        add constraint UK_41wpgkw0p4oj65dmnb34e4lqj  unique (references_ID);
 
     alter table diagram_links 
         add constraint UK_h604hokhqdqbq8jnjxeupxokf  unique (ID);
@@ -924,12 +912,6 @@
     alter table expression_value_custom_variable 
         add constraint UK_6be9j8k8bp0uudvgtk61e4tu4  unique (comparationId);
 
-    alter table expression_value_expression_reference 
-        add constraint UK_egetkbs1hrvgqajn7qplpf4yn  unique (ID);
-
-    alter table expression_value_expression_reference 
-        add constraint UK_irf75tqpf7ywr50qxdg3fqwge  unique (comparationId);
-
     alter table expression_value_generic_custom_variable 
         add constraint UK_1ilcykdnhd0ixr9iaomtrog3h  unique (ID);
 
@@ -1021,7 +1003,7 @@
         add constraint UK_1g8ysiehft4rrd3aiheq1cktx  unique (comparationId);
 
     alter table global_variable_data_set 
-        add constraint UK_pttoh2ouj3te5iqnhvym6l2g1  unique (data_ID);
+        add constraint UK_2o1wa9axcmlhv1c8knoh3b7bw  unique (variableData_ID);
 
     alter table global_variable_data_text 
         add constraint UK_t91aqfdhy6wnrrg749k2een9u  unique (ID);
@@ -1132,7 +1114,7 @@
         add constraint UK_otbxhecixo9rbriamr8v44nik  unique (diagrams_ID);
 
     alter table tree_forms_expressions_chain 
-        add constraint UK_o92uqjo7rspntjcyeohxrlktl  unique (expressionChain_ID);
+        add constraint UK_melu1cfpayuydi8fv6gxnoufq  unique (expressionChains_ID);
 
     alter table tree_forms_form_custom_variables 
         add constraint UK_8javwlxk4w7hc1g5g52yecvtt  unique (customVariables_ID);
@@ -1439,11 +1421,6 @@
         references rule_decision_table (ID);
 
     alter table test_scenario_test_answer_basic 
-        add constraint FK_jy3bdbqvowh4tjeta3t231nbl 
-        foreign key (questionTestAnswerRelationship_KEY) 
-        references tree_questions (ID);
-
-    alter table test_scenario_test_answer_basic 
         add constraint FK_a1lgwvamyrw44r3i3kfbvn0ti 
         foreign key (test_scenario_ID) 
         references test_scenario (ID);
@@ -1459,8 +1436,8 @@
         references tree_forms (ID);
 
     alter table tree_forms_expressions_chain 
-        add constraint FK_o92uqjo7rspntjcyeohxrlktl 
-        foreign key (expressionChain_ID) 
+        add constraint FK_melu1cfpayuydi8fv6gxnoufq 
+        foreign key (expressionChains_ID) 
         references expressions_chain (ID);
 
     alter table tree_forms_expressions_chain 

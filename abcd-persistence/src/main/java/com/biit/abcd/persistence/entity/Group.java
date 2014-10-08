@@ -5,10 +5,11 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.BaseRepeatableGroup;
-import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "tree_groups")
@@ -23,7 +24,8 @@ public class Group extends BaseRepeatableGroup {
 	}
 
 	@Override
-	protected void copyData(TreeObject object) {
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		super.copyData(object);
 	}
 
 	@Override

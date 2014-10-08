@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.exception.ConstraintViolationException;
+
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
@@ -16,6 +21,9 @@ import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.NotValidTreeObjectException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
@@ -78,6 +86,7 @@ public class FormManager extends FormWebPageComponent {
 			public void valueChange(ValueChangeEvent event) {
 				updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 				formTable.refreshSelectedRow();
+				upperMenu.updateNewVersionButton(formTable.getValue());
 			}
 		});
 		return treeTable;
@@ -113,5 +122,51 @@ public class FormManager extends FormWebPageComponent {
 	
 	public void setFormById(Long formId){
 		UserSessionHandler.getFormController().setForm(formDao.read(formId));
+	}
+	public void newFormVersion() {
+		Form newForm;
+		try {
+			RootForm rootForm = formTable.getSelectedRootForm();
+			SimpleFormView currentForm = rootForm.getLastFormVersion();
+
+			newForm = createNewFormVersion(currentForm);
+			addNewForm(newForm);
+		} catch (NotValidTreeObjectException e) {
+			MessageManager.showError(LanguageCodes.ERROR_NAME_TOO_LONG);
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+		} catch (CharacterNotAllowedException e) {
+			// Impossible
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		} catch (NotValidStorableObjectException e) {
+			MessageManager.showError(LanguageCodes.ERROR_NEW_VERSION, LanguageCodes.ERROR_NEW_VERSION_DESCRIPTION);
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+		}
+	}
+
+	public Form createNewFormVersion(SimpleFormView form) throws NotValidStorableObjectException,
+			CharacterNotAllowedException {
+		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
+				+ " createNewFormVersion " + form + " START");
+
+		Form newFormVersion;
+		try {
+			Form realForm = formDao.getForm(form.getLabel(), form.getVersion(), form.getOrganizationId());
+			newFormVersion = realForm.createNewVersion(UserSessionHandler.getUser());
+		} catch (CharacterNotAllowedException | NotValidStorableObjectException ex) {
+			AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
+					+ " createForm " + ex.getMessage());
+			throw ex;
+		}
+
+		try {
+			formDao.makePersistent(newFormVersion);
+		} catch (ConstraintViolationException cve) {
+			AbcdLogger.errorMessage(this.getClass().getName(), cve);
+			throw cve;
+		}
+
+		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
+				+ " createNewFormVersion " + form + " END");
+		return newFormVersion;
 	}
 }

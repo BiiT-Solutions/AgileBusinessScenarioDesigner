@@ -2,7 +2,7 @@ package com.biit.abcd.gson.utils;
 
 import java.lang.reflect.Type;
 
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
@@ -32,7 +32,7 @@ public class DiagramObjectDeserializer implements JsonDeserializer<DiagramObject
 		case LINK:
 			return context.deserialize(json, DiagramLink.class);
 		case CALCULATION:
-			return context.deserialize(json, DiagramCalculation.class);
+			return context.deserialize(json, DiagramExpression.class);
 		case FORK:
 			return context.deserialize(json, DiagramFork.class);
 		case DIAGRAM_CHILD:

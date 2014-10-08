@@ -14,6 +14,7 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Specific rules created for managing decision tables.
@@ -42,6 +43,17 @@ public class TableRuleRow extends StorableObject {
 		getActionChain().setExpressions(action.getExpressions());
 	}
 
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (conditions != null) {
+			conditions.resetIds();
+		}
+		if (action != null) {
+			action.resetIds();
+		}
+	}
+
 	public void addCondition(Expression expression) {
 		conditions.addExpression(expression);
 	}
@@ -58,11 +70,15 @@ public class TableRuleRow extends StorableObject {
 		return conditions;
 	}
 
+	public void setConditionsChain(ExpressionChain conditions) {
+		this.conditions = conditions;
+	}
+
 	public void removeConditions() {
 		conditions.removeAllExpressions();
 	}
 
-	public void setAction(ExpressionChain action) {
+	public void setActionChain(ExpressionChain action) {
 		this.action = action;
 	}
 
@@ -104,5 +120,21 @@ public class TableRuleRow extends StorableObject {
 		innerStorableObjects.add(action);
 		innerStorableObjects.addAll(action.getAllInnerStorableObjects());
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof TableRuleRow) {
+			super.copyBasicInfo(object);
+			TableRuleRow tableRuleRow = (TableRuleRow) object;
+			ExpressionChain condition = new ExpressionChain();
+			condition.copyData(tableRuleRow.getConditionChain());
+			this.setConditionsChain(condition);
+			ExpressionChain action = new ExpressionChain();
+			action.copyData(tableRuleRow.getActionChain());
+			this.setActionChain(action);
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRuleRow.");
+		}
 	}
 }

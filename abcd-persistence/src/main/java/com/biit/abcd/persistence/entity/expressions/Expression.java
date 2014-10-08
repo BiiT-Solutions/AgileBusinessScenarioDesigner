@@ -8,10 +8,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * Basic class for defining an expression. Any other expression must inherit
- * from this class.
+ * Basic class for defining an expression. Any other expression must inherit from this class.
  * 
  */
 @Entity
@@ -20,7 +20,7 @@ import com.biit.persistence.entity.StorableObject;
 public abstract class Expression extends StorableObject {
 
 	@Transient
-	private transient boolean isEditable = true;
+	private transient boolean editable = true;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
 	// we cannot use the list of children with
@@ -38,9 +38,8 @@ public abstract class Expression extends StorableObject {
 	public abstract Expression generateCopy();
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a
-	 * Expression Evaluator. Not allowed characters are ',', '.', ':',
-	 * operators, ... that must filtered of the expression if necessary.
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator. Not allowed characters
+	 * are ',', '.', ':', operators, ... that must filtered of the expression if necessary.
 	 * 
 	 * @return
 	 */
@@ -58,11 +57,11 @@ public abstract class Expression extends StorableObject {
 	}
 
 	public boolean isEditable() {
-		return isEditable;
+		return editable;
 	}
 
 	public void setEditable(boolean isEditable) {
-		this.isEditable = isEditable;
+		this.editable = isEditable;
 	}
 
 	public void setSortSeq(long sortSeq) {
@@ -73,4 +72,16 @@ public abstract class Expression extends StorableObject {
 	public String toString() {
 		return getExpression();
 	}
+
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof Expression) {
+			super.copyBasicInfo(object);
+			Expression expression = (Expression) object;
+			editable = expression.isEditable();
+			sortSeq = expression.getSortSeq();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Expression.");
+		}
+	}
+
 }

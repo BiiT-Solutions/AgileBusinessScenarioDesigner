@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "expression_value_tree_object_reference")
@@ -37,6 +38,14 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		super();
 		this.reference = reference;
 		this.unit = unit;
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
+//		if (reference != null) {
+//			reference.resetIds();
+//		}
 	}
 
 	public TreeObject getReference() {
@@ -96,6 +105,24 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		innerStorableObjects.add(reference);
 		innerStorableObjects.addAll(reference.getAllInnerStorableObjects());
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionValueTreeObjectReference) {
+			super.copyData(object);
+			ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) object;
+			try {
+				this.setUnit(expressionValueTreeObjectReference.getUnit());
+				this.setValue(expressionValueTreeObjectReference.getValue());
+			} catch (NotValidExpressionValue e) {
+				throw new NotValidStorableObjectException("Object '" + object
+						+ "' is not a valid instance of ExpressionValueTreeObjectReference.");
+			}
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionValueTreeObjectReference.");
+		}
 	}
 
 }

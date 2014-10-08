@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines a value as a timestamp.
@@ -84,5 +85,17 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionValueTimestamp) {
+			super.copyData(object);
+			ExpressionValueTimestamp expressionValueTimestamp = (ExpressionValueTimestamp) object;
+			this.setValue(expressionValueTimestamp.getValue());
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionValueTimestamp.");
+		}
 	}
 }

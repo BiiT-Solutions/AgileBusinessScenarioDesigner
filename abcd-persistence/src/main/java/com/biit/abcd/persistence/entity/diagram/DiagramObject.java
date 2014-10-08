@@ -35,6 +35,7 @@ import com.biit.abcd.gson.utils.DiagramSourceSerializer;
 import com.biit.abcd.gson.utils.DiagramTableDeserializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -110,7 +111,7 @@ public abstract class DiagramObject extends StorableObject {
 			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 			gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementDeserializer());
-			gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationDeserializer());
+			gsonBuilder.registerTypeAdapter(DiagramExpression.class, new DiagramCalculationDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleDeserializer());
@@ -130,7 +131,7 @@ public abstract class DiagramObject extends StorableObject {
 	public String toJson() {
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectSerializer());
-		gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramExpression.class, new DiagramCalculationSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleSerializer());
@@ -153,5 +154,19 @@ public abstract class DiagramObject extends StorableObject {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		// Parent element is ignored.
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof DiagramObject) {
+			super.copyBasicInfo(object);
+			DiagramObject diagramObject = (DiagramObject) object;
+			type = diagramObject.getType();
+			jointjsId = diagramObject.getJointjsId();
+			embeds = diagramObject.getEmbeds();
+			z = diagramObject.getZ();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramObject.");
+		}
 	}
 }

@@ -16,7 +16,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
@@ -199,7 +199,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		diagramStartNode.setType(DiagramObjectType.SOURCE);
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
-		DiagramCalculation diagramExpression = new DiagramCalculation();
+		DiagramExpression diagramExpression = new DiagramExpression();
 		diagramExpression.setFormExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
 				getForm(), formCustomVariableInCondition), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(6.5)));
@@ -207,7 +207,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		diagramExpression.setType(DiagramObjectType.CALCULATION);
 		Node nodeExpression = new Node(diagramExpression.getJointjsId());
 
-		DiagramCalculation diagramExpression2 = new DiagramCalculation();
+		DiagramExpression diagramExpression2 = new DiagramExpression();
 		diagramExpression2.setFormExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
 				getTreeObject("Lifestyle"), categoryCustomVariableInCondition), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueNumber(2.5)));

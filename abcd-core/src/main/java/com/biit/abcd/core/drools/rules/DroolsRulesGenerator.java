@@ -89,7 +89,7 @@ public class DroolsRulesGenerator {
 
 			for (GlobalVariable globalVariable : this.globalVariables) {
 				// First check if the data inside the variable has a valid date
-				List<VariableData> varDataList = globalVariable.getData();
+				List<VariableData> varDataList = globalVariable.getVariableData();
 				if ((varDataList != null) && !varDataList.isEmpty()) {
 					for (VariableData variableData : varDataList) {
 
@@ -124,7 +124,7 @@ public class DroolsRulesGenerator {
 		if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
 			for (GlobalVariable globalVariable : this.globalVariables) {
 				// First check if the data inside the variable has a valid date
-				List<VariableData> varDataList = globalVariable.getData();
+				List<VariableData> varDataList = globalVariable.getVariableData();
 				if ((varDataList != null) && !varDataList.isEmpty()) {
 					for (VariableData variableData : varDataList) {
 						Timestamp currentTime = new Timestamp(new Date().getTime());

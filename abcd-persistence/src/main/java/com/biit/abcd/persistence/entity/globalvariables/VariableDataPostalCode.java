@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "global_variable_data_postalcode")
@@ -45,6 +46,17 @@ public class VariableDataPostalCode extends VariableData {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+	
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof VariableDataPostalCode) {
+			super.copyData(object);
+			VariableDataPostalCode variableDataPostalCode = (VariableDataPostalCode) object;
+			postalCode = variableDataPostalCode.getValue();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of VariableDataPostalCode.");
+		}
 	}
 
 }

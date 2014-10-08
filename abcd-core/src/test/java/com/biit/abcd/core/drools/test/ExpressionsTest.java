@@ -24,7 +24,7 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramCalculation;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
@@ -121,7 +121,7 @@ public class ExpressionsTest {
 				form, age), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
 
-		form.getExpressionChain().add(expressionAssignTest);
+		form.getExpressionChains().add(expressionAssignTest);
 
 		// Creation of a simple diagram to load the table rule
 		form.addDiagram(createExpressionsSubdiagram(form));
@@ -291,14 +291,14 @@ public class ExpressionsTest {
 
 	private Diagram createExpressionsSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("expressionDiagram");
-		for (ExpressionChain expressionChain : form.getExpressionChain()) {
+		for (ExpressionChain expressionChain : form.getExpressionChains()) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
 			diagramSource.setType(DiagramObjectType.SOURCE);
 			Node nodeSource = new Node(diagramSource.getJointjsId());
 
-			DiagramCalculation diagramExpression = new DiagramCalculation();
+			DiagramExpression diagramExpression = new DiagramExpression();
 			diagramExpression.setFormExpression(expressionChain);
 			diagramExpression.setJointjsId(IdGenerator.createId());
 			diagramExpression.setType(DiagramObjectType.CALCULATION);

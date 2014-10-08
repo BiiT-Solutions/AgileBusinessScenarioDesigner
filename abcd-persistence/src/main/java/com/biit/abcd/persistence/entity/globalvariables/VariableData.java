@@ -10,6 +10,7 @@ import javax.persistence.Transient;
 
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "global_variable_data")
@@ -20,15 +21,15 @@ public abstract class VariableData extends StorableObject {
 
 	private Timestamp validTo;
 
+	// Attribute used for json deserialization due to parent abstract class
+	@Transient
+	private final String type = this.getClass().getName();
+
 	public abstract Object getValue();
 
 	public abstract void setValue(Object value) throws NotValidTypeInVariableData;
 
 	public abstract boolean checkType(Object value);
-
-	// Attribute used for json deserialization due to parent abstract class
-	@Transient
-	private final String type = this.getClass().getName();
 
 	public Timestamp getValidFrom() {
 		return validFrom;
@@ -63,6 +64,18 @@ public abstract class VariableData extends StorableObject {
 
 	public String getType() {
 		return type;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof VariableData) {
+			super.copyBasicInfo(object);
+			VariableData variableData = (VariableData) object;
+			validFrom = variableData.getValidFrom();
+			validTo = variableData.getValidTo();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of VariableData.");
+		}
 	}
 
 }

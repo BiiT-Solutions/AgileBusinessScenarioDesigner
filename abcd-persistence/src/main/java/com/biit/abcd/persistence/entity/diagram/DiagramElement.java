@@ -34,6 +34,7 @@ import com.biit.abcd.gson.utils.DiagramSourceSerializer;
 import com.biit.abcd.gson.utils.DiagramTableDeserializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -64,6 +65,17 @@ public abstract class DiagramElement extends DiagramObject {
 
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (size != null) {
+			size.resetIds();
+		}
+		if (position != null) {
+			position.resetIds();
+		}
 	}
 
 	public Point getPosition() {
@@ -103,7 +115,7 @@ public abstract class DiagramElement extends DiagramObject {
 			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 			gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramElement.class, new DiagramElementDeserializer());
-			gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationDeserializer());
+			gsonBuilder.registerTypeAdapter(DiagramExpression.class, new DiagramCalculationDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildDeserializer());
 			gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleDeserializer());
@@ -124,7 +136,7 @@ public abstract class DiagramElement extends DiagramObject {
 	public String toJson() {
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		gsonBuilder.registerTypeAdapter(DiagramObject.class, new DiagramObjectSerializer());
-		gsonBuilder.registerTypeAdapter(DiagramCalculation.class, new DiagramCalculationSerializer());
+		gsonBuilder.registerTypeAdapter(DiagramExpression.class, new DiagramCalculationSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramFork.class, new DiagramForkSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramChild.class, new DiagramChildSerializer());
 		gsonBuilder.registerTypeAdapter(DiagramRule.class, new DiagramRuleSerializer());
@@ -203,12 +215,40 @@ public abstract class DiagramElement extends DiagramObject {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.add(size);
-		innerStorableObjects.addAll(size.getAllInnerStorableObjects());
-		innerStorableObjects.add(position);
-		innerStorableObjects.addAll(position.getAllInnerStorableObjects());
-		innerStorableObjects.add(biitText);
-		innerStorableObjects.addAll(biitText.getAllInnerStorableObjects());
+		if (size != null) {
+			innerStorableObjects.add(size);
+			innerStorableObjects.addAll(size.getAllInnerStorableObjects());
+		}
+		if (position != null) {
+			innerStorableObjects.add(position);
+			innerStorableObjects.addAll(position.getAllInnerStorableObjects());
+		}
+		if (biitText != null) {
+			innerStorableObjects.add(biitText);
+			innerStorableObjects.addAll(biitText.getAllInnerStorableObjects());
+		}
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof DiagramElement) {
+			super.copyData(object);
+
+			DiagramElement diagramSource = (DiagramElement) object;
+			tooltip = diagramSource.getTooltip();
+			angle = diagramSource.getAngle();
+			biitText = diagramSource.getBiitText();
+
+			Size size = new Size();
+			size.copyData(diagramSource.getSize());
+			setSize(size);
+
+			Point point = new Point();
+			point.copyData(diagramSource.getPosition());
+			setPosition(point);
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramElement.");
+		}
 	}
 }

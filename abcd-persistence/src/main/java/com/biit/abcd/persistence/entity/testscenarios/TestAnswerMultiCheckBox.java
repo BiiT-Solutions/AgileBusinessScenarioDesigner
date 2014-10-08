@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
  * Defines radio button values.
@@ -19,7 +20,7 @@ import com.biit.persistence.entity.StorableObject;
 @Table(name = "test_answer_multi_checkbox")
 public class TestAnswerMultiCheckBox extends TestAnswer {
 
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> multiCheckBoxValue;
 
 	public TestAnswerMultiCheckBox() {
@@ -40,7 +41,7 @@ public class TestAnswerMultiCheckBox extends TestAnswer {
 				throw new NotValidAnswerValue("Expected Set<String> object in '" + value + "'");
 			}
 			setValue((Set<String>) value);
-		}else{
+		} else {
 			multiCheckBoxValue = null;
 		}
 	}
@@ -53,5 +54,17 @@ public class TestAnswerMultiCheckBox extends TestAnswer {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof TestAnswerMultiCheckBox) {
+			super.copyBasicInfo(object);
+			TestAnswerMultiCheckBox testAnswerMultiCheckBox = (TestAnswerMultiCheckBox) object;
+			multiCheckBoxValue = testAnswerMultiCheckBox.getValue();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of TestAnswerMultiCheckBox.");
+		}
 	}
 }

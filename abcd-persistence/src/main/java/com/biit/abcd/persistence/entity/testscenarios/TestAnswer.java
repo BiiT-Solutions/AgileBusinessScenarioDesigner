@@ -9,8 +9,7 @@ import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerV
 import com.biit.persistence.entity.StorableObject;
 
 /**
- * Basic class for defining a test answer. Any other test answer must inherit
- * from this class.
+ * Basic class for defining a test answer. Any other test answer must inherit from this class.
  * 
  */
 @Entity
@@ -21,4 +20,5 @@ public abstract class TestAnswer extends StorableObject {
 	public abstract Object getValue();
 
 	public abstract void setValue(Object value) throws NotValidAnswerValue;
+
 }

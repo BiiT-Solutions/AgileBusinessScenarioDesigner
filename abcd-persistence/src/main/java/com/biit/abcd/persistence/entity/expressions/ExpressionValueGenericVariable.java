@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "expression_value_generic_variable")
@@ -79,6 +80,18 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		if (object instanceof ExpressionValueGenericVariable) {
+			super.copyData(object);
+			ExpressionValueGenericVariable expressionValueGenericVariable = (ExpressionValueGenericVariable) object;
+			type = expressionValueGenericVariable.getType();
+		} else {
+			throw new NotValidStorableObjectException("Object '" + object
+					+ "' is not an instance of ExpressionValueGenericVariable.");
+		}
 	}
 
 }
