@@ -9,5 +9,7 @@ public interface ISimpleFormViewDao {
 	int getRowCount();
 
 	List<SimpleFormView> getAll();
+	
+	List<SimpleFormView> getSimpleFormViewByName(String name);
 
 }

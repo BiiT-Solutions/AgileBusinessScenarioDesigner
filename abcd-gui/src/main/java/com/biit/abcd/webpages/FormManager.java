@@ -119,7 +119,10 @@ public class FormManager extends FormWebPageComponent {
 		formDao.makePersistent(form);
 		simpleView.setId(form.getId());
 	}
-
+	
+	public void setFormById(Long formId){
+		UserSessionHandler.getFormController().setForm(formDao.read(formId));
+	}
 	public void newFormVersion() {
 		Form newForm;
 		try {

@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.webpages.elements.formmanager.SaveDroolsRulesAction;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -20,7 +21,7 @@ public class DroolsSubmittedFormWindow extends AcceptCancelWindow {
 
 	public DroolsSubmittedFormWindow() {
 		super();
-		setCaption("Submitted form information");
+		setCaption(ServerTranslate.translate(LanguageCodes.SUBMITTED_FORM_INFORMATION_CAPTION));
 		setWidth("40%");
 		setHeight("40%");
 		setClosable(false);

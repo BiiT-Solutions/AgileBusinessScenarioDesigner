@@ -14,6 +14,7 @@
 				<include name="orphan" />
 				<include name="genericTreeObjectVariablesDao" />
 				<include name="testScenarioDao" />
+				<include name="simpleTestScenarioViewDao" />
 			</run>
 		</groups>
 		<classes>
@@ -28,6 +29,7 @@
 			<class name="com.biit.jexeval.ExpressionCheck" />
 			<class name="com.biit.abcd.persistence.EhCacheTest" />
 			<class name="com.biit.abcd.persistence.dao.TestScenarioTest" />
+			<class name="com.biit.abcd.persistence.dao.SimpleTestScenarioViewTest" />
 		</classes>
 	</test>
 </suite>

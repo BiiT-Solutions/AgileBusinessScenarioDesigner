@@ -430,7 +430,13 @@ public enum LanguageCodes {
 	
 	TECHNICAL_NAME_ERROR("technical.name.error"),
 	
-	INPUT_DATA_FORMAT_INCORRECT_ERROR("input.data.format.incorrect.error");
+	INPUT_DATA_FORMAT_INCORRECT_ERROR("input.data.format.incorrect.error"),
+	
+	SUBMITTED_FORM_INFORMATION_CAPTION("submitted.form.information.caption"),
+	
+	LAUNCH_TEST_WINDOW_CAPTION("launch.test.window.caption"),
+	LAUNCH_TEST_WINDOW_FORM_LABEL("launch.test.window.form.label"),
+	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label");
 
 
 	private String value;
