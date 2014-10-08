@@ -92,7 +92,7 @@ public class TestScenarioAnswerImporter {
 
 	private static void setQuestionAnswer(Question question, IQuestion iQuestion, TestScenario testScenario) {
 		TestAnswer testAnswer = testScenario.getTestAnswer((Question) question);
-		if (testAnswer != null) {
+		if ((testAnswer != null) && (testAnswer.getValue() != null)) {
 			// We have to separate the set
 			// of values to copy the
 			// behavior of the orbeon
@@ -106,7 +106,6 @@ public class TestScenarioAnswerImporter {
 				// Remove the last space
 				valueSet = valueSet.substring(0, valueSet.length() - 2);
 				iQuestion.setAnswer(valueSet);
-
 			}
 			// Transform the timestamp to a date
 			else if (testAnswer instanceof TestAnswerInputDate) {
@@ -116,7 +115,8 @@ public class TestScenarioAnswerImporter {
 			} else {
 				iQuestion.setAnswer(testAnswer.getValue().toString());
 			}
+		} else {
+			iQuestion.setAnswer("");
 		}
 	}
-
 }
