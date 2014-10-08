@@ -1,56 +1,110 @@
 package com.biit.abcd.webpages.elements.formmanager;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.dao.IFormDao;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.webpages.FormManager;
-import com.biit.abcd.webpages.components.WindowCreateNewObject;
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.FieldTooLongException;
-import com.vaadin.server.VaadinServlet;
+import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.DActivity;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.biit.liferay.security.IActivity;
+import com.liferay.portal.model.Organization;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 
-public class WindowNewForm extends WindowCreateNewObject {
+public class WindowNewForm extends AcceptCancelWindow {
 	private static final long serialVersionUID = 2963807969133587359L;
-	private Form form;
+	private static final String width = "640px";
+	private static final String height = "180px";
 
-	private IFormDao formDao;
+	private TextField textField;
+	private ComboBox organizationField;
+	private IActivity[] exclusivePermissionFilter;
 
-	public WindowNewForm(FormManager parentWindow, LanguageCodes windowCaption, LanguageCodes inputFieldCaption) {
-		super(parentWindow, windowCaption, inputFieldCaption);
-
-		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-		formDao = (IFormDao) helper.getBean("formDao");
+	public WindowNewForm(LanguageCodes windowsCaption, LanguageCodes inputFieldCaption, LanguageCodes groupCaption,
+			DActivity[] exclusivePermissionFilter) {
+		super();
+		this.exclusivePermissionFilter = exclusivePermissionFilter;
+		setContent(generateContent(inputFieldCaption, groupCaption));
+		setCaption(ServerTranslate.translate(windowsCaption));
+		setResizable(false);
+		setDraggable(false);
+		setClosable(false);
+		setModal(true);
+		setWidth(width);
+		setHeight(height);
 	}
 
-	@Override
-	public void acceptAction(TextField inputTextField) {
-		if (formDao.getForm(inputTextField.getValue()) == null) {
-			form = new Form();
-			try {
-				form.setLabel(inputTextField.getValue());
-			} catch (FieldTooLongException e) {
-				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
-				try {
-					form.setLabel(inputTextField.getValue().substring(0, StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
-				} catch (FieldTooLongException e1) {
-					// Impossible.
+	public void setDefaultValue(String nullValue) {
+		textField.setValue(nullValue);
+	}
+
+	public String getValue() {
+		return textField.getValue();
+	}
+
+	public Organization getOrganization() {
+		return (Organization) organizationField.getValue();
+	}
+
+	private Component generateContent(LanguageCodes inputFieldCaption, LanguageCodes groupCaption) {
+		textField = new TextField(ServerTranslate.translate(inputFieldCaption));
+		textField.focus();
+		textField.setWidth("100%");
+
+		organizationField = new ComboBox(ServerTranslate.translate(groupCaption));
+		organizationField.setNullSelectionAllowed(false);
+		organizationField.setWidth("100%");
+		try {
+			List<Organization> organizations = AbcdAuthorizationService.getInstance().getUserOrganizations(
+					UserSessionHandler.getUser());
+			Iterator<Organization> itr = organizations.iterator();
+			while (itr.hasNext()) {
+				Organization organization = itr.next();
+				for (IActivity activity : exclusivePermissionFilter) {
+					// If the user doesn't comply to all activities in the filter in the group, then exit
+					if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+							organization, activity)) {
+						itr.remove();
+						break;
+					}
 				}
 			}
-			form.setCreatedBy(UserSessionHandler.getUser());
-			form.setUpdatedBy(UserSessionHandler.getUser());
-			((FormManager) getParentWindow()).addNewForm(form);
-			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-					+ "' has created a " + form.getClass() + " with 'Name: " + form.getName() + "'.");
-			close();
-		} else {
-			MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);
+			for (Organization organization : organizations) {
+				organizationField.addItem(organization);
+				organizationField.setItemCaption(organization, organization.getName());
+			}
+			if (!organizations.isEmpty()) {
+				organizationField.setValue(organizations.get(0));
+			}
+		} catch (IOException | AuthenticationRequired e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 		}
+
+		HorizontalLayout rootLayout = new HorizontalLayout();
+		rootLayout.setSpacing(true);
+		rootLayout.setSizeFull();
+
+		rootLayout.addComponent(textField);
+		rootLayout.addComponent(organizationField);
+		rootLayout.setComponentAlignment(textField, Alignment.MIDDLE_CENTER);
+		rootLayout.setComponentAlignment(organizationField, Alignment.MIDDLE_CENTER);
+		rootLayout.setExpandRatio(textField, 0.6f);
+		rootLayout.setExpandRatio(organizationField, 0.4f);
+		return rootLayout;
 	}
 
+	public void setValue(String value) {
+		textField.setValue(value);
+	}
 }

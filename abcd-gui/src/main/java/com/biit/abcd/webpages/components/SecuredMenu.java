@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -15,7 +14,6 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.liferay.portal.model.User;
 import com.vaadin.ui.Button;
 
@@ -29,42 +27,46 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 			Arrays.asList(DActivity.FORM_EDITING));
 	private Set<Button> disabledButtons = null;
 
-	private void checkButtonPermission() {
+	private Set<Button> calculateDisabledButtons() {
 		User user = UserSessionHandler.getUser();
 		// Check permissions.
 		boolean editionEnabled = false;
+		boolean inUse = true;
 		if (user == null || UserSessionHandler.getFormController() == null
 				|| UserSessionHandler.getFormController().getForm() == null) {
 			AbcdLogger.info(this.getClass().getName(), "User redirected to login screen.");
 			ApplicationFrame.navigateTo(WebMap.getLoginPage());
 		} else {
-			try {
-				// Form is not in use.
-				if (!AbcdAuthorizationService.getInstance().isFormAlreadyInUse(
-						UserSessionHandler.getFormController().getForm().getId(), user)) {
-					// user has permissions to edit this form.
-					for (DActivity activity : accessAuthorizationsRequired()) {
-						if (AbcdAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(user, activity)) {
-							editionEnabled = true;
-							break;
-						}
+			// Form is not in use.
+			if (!AbcdAuthorizationService.getInstance().isFormAlreadyInUse(
+					UserSessionHandler.getFormController().getForm().getId(), user)) {
+				inUse = false;
+				// user has permissions to edit this form.
+				for (DActivity activity : accessAuthorizationsRequired()) {
+					if (AbcdAuthorizationService.getInstance().isAuthorizedActivity(user,
+							UserSessionHandler.getFormController().getForm(), activity)) {
+						editionEnabled = true;
+						break;
 					}
 				}
-			} catch (AuthenticationRequired | IOException e) {
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
-				MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE);
 			}
 		}
 
-		disabledButtons = new HashSet<>();
+		Set<Button> disabledButtons = new HashSet<>();
 		// Disable all Buttons
 		if (!editionEnabled) {
-			 MessageManager
-			 .showWarning(LanguageCodes.WARNING_FORM_IN_USE, LanguageCodes.WARNING_FORM_IN_USE_DESCRIPTION);
+			if (inUse) {
+				MessageManager.showWarning(LanguageCodes.WARNING_FORM_IN_USE,
+						LanguageCodes.WARNING_FORM_IN_USE_DESCRIPTION);
+			} else {
+				MessageManager.showWarning(LanguageCodes.WARNING_FORM_READ_ONLY,
+						LanguageCodes.WARNING_FORM_READ_ONLY_DESCRIPTION);
+			}
 			for (Button button : getButtons()) {
 				disabledButtons.add(button);
 			}
 		}
+		return disabledButtons;
 	}
 
 	/**
@@ -74,7 +76,7 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 	 */
 	public Set<Button> getDisabledButtons() {
 		if (disabledButtons == null) {
-			checkButtonPermission();
+			disabledButtons = calculateDisabledButtons();
 		}
 		return disabledButtons;
 	}

@@ -74,6 +74,9 @@ public enum LanguageCodes {
 	WARNING_TEST_SCENARIO_DELETION("warning.test.scenario.deletion"),
 	WARNING_FORM_IN_USE("warning.form.used"),
 	WARNING_FORM_IN_USE_DESCRIPTION("warning.form.used.description"),
+	WARNING_FORM_READ_ONLY("warning.form.read.only"),
+	WARNING_FORM_READ_ONLY_DESCRIPTION("warning.form.read.only.description"),
+
 
 	FORM_MANAGER_EDIT_FORM("formManager.form.edit"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
@@ -117,6 +120,7 @@ public enum LanguageCodes {
 
 	WINDOW_NEWFORM_WINDOW_TITLE("windowNewForm.name.textField"),
 	WINDOW_NEWFORM_NAME_TEXTFIELD("windowNewForm.name.textField"),
+	WINDOW_NEWFORM_NAME_COMBOBOX("windowNewForm.group.combobox"),
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),

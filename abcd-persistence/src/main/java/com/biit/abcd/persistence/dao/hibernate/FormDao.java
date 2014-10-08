@@ -161,6 +161,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 		session.beginTransaction();
 		try {
 			Criteria criteria = session.createCriteria(Form.class);
+			criteria.setProjection(Projections.max("version"));
 			criteria.add(Restrictions.eq("label", label));
 			@SuppressWarnings("unchecked")
 			List<Form> results = criteria.list();
@@ -259,6 +260,23 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 		@Override
 		public int compare(Expression o1, Expression o2) {
 			return (o1.getSortSeq() < o2.getSortSeq() ? -1 : (o1 == o2 ? 0 : 1));
+		}
+	}
+
+	@Override
+	public boolean exists(String label) {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			Criteria criteria = session.createCriteria(getType());
+			criteria.setProjection(Projections.rowCount());
+			criteria.add(Restrictions.eq("label", label));
+			int rows = ((Long) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+			return rows > 0;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
 		}
 	}
 }
