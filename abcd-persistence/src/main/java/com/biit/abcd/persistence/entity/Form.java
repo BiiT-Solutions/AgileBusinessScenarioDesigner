@@ -29,6 +29,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -168,7 +169,6 @@ public class Form extends BaseForm {
 		Map<String, TreeObject> formElements = new HashMap<>();
 		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
 		formElementsChildren.add(this);
-		AbcdLogger.warning(this.getClass().getName(), formElementsChildren.toString());
 		for (TreeObject children : formElementsChildren) {
 			formElements.put(children.getComparationId(), children);
 		}
@@ -456,6 +456,18 @@ public class Form extends BaseForm {
 	}
 
 	public void removeDiagram(Diagram diagram) {
+		// Remove relationship between diagrams.
+		for (Diagram diagramParent : getDiagrams()) {
+			for (DiagramObject diagramObject : diagramParent.getDiagramObjects()) {
+				if (diagramObject instanceof DiagramChild) {
+					DiagramChild diagramChild = (DiagramChild) diagramObject;
+					if (diagramChild.getChildDiagram().equals(diagram)) {
+						diagramChild.setChildDiagram(null);
+					}
+				}
+			}
+		}
+		// Remove diagram.
 		diagrams.remove(diagram);
 	}
 
