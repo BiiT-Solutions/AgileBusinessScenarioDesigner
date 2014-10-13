@@ -201,7 +201,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 		// Create new test scenario
 		createTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS,
-				ThemeIcon.FORM_MANAGER_ADD_FORM, LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM,
+				ThemeIcon.FORM_TEST_CREATE, LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM,
 				new ClickListener() {
 					private static final long serialVersionUID = -1628560253598118060L;
 
@@ -216,7 +216,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 		// Launch test scenario
 		launchTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS,
-				ThemeIcon.FORM_MANAGER_EXPORT_RULES, LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM,
+				ThemeIcon.FORM_TEST_LAUNCH, LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM,
 				new ClickListener() {
 					private static final long serialVersionUID = 2538065448920025133L;
 
