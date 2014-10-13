@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.drools.facts.inputform.Category;
 import com.biit.abcd.core.drools.facts.inputform.Group;
 import com.biit.abcd.core.drools.facts.inputform.Question;
@@ -28,6 +27,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = -9123887739972604746L;
 	private HashMap<CustomVariableScope, List<String>> customVariablesScopeMap;
 	private DroolsTreeObjectTable formTreeTable;
+	private Form form;
 
 	protected enum TreeObjectTableProperties {
 		ORIGINAL_VALUE
@@ -47,7 +47,38 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		formTreeTable.setSizeFull();
 		formTreeTable.setSelectable(true);
 		formTreeTable.setImmediate(true);
-		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
+		form = UserSessionHandler.getFormController().getForm();
+		formTreeTable.setRootElement(form);
+		if (submittedForm != null) {
+			generateContent((SubmittedForm) submittedForm);
+		}
+		setContent(formTreeTable);
+	}
+
+	/**
+	 * Used for the test scenarios of categories
+	 * 
+	 * @param submittedForm
+	 * @param form
+	 * @throws CategoryDoesNotExistException
+	 * @throws GroupDoesNotExistException
+	 */
+	public DroolsSubmittedFormResultWindow(ISubmittedForm submittedForm, Form form)
+			throws CategoryDoesNotExistException, GroupDoesNotExistException {
+		super();
+		setCaption("Submitted form scores");
+		setWidth("60%");
+		setHeight("60%");
+		setClosable(false);
+		setModal(true);
+		setResizable(false);
+
+		formTreeTable = new DroolsTreeObjectTable();
+		formTreeTable.setSizeFull();
+		formTreeTable.setSelectable(true);
+		formTreeTable.setImmediate(true);
+		this.form = form;
+		formTreeTable.setRootElement(this.form);
 		if (submittedForm != null) {
 			generateContent((SubmittedForm) submittedForm);
 		}
@@ -55,72 +86,68 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	}
 
 	private void generateContent(SubmittedForm submittedForm) {
-
 		formTreeTable.addContainerProperty(TreeObjectTableProperties.ORIGINAL_VALUE, String.class, "");
 		formTreeTable.setColumnWidth(TreeObjectTableProperties.ORIGINAL_VALUE, 150);
-		FormController fc = UserSessionHandler.getFormController();
-		if (fc != null) {
-			Form form = fc.getForm();
-			if (form != null) {
-				List<CustomVariable> sortedCustomVariables = new ArrayList<CustomVariable>();
-				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Question.class));
-				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Group.class));
-				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Category.class));
-				sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Form.class));
+		
+		if (form != null) {
+			List<CustomVariable> sortedCustomVariables = new ArrayList<CustomVariable>();
+			sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Question.class));
+			sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Group.class));
+			sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Category.class));
+			sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Form.class));
 
-				if ((sortedCustomVariables != null) && (!sortedCustomVariables.isEmpty())) {
-					customVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
-					for (CustomVariable customVariable : sortedCustomVariables) {
-						formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
-						formTreeTable.setColumnWidth(customVariable.getName(), 150);
-						if (customVariablesScopeMap.get(customVariable.getScope()) == null) {
-							List<String> customVariablesNames = new ArrayList<String>();
-							customVariablesNames.add(customVariable.getName());
-							customVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
-						} else {
-							List<String> customVariablesNames = customVariablesScopeMap.get(customVariable.getScope());
-							customVariablesNames.add(customVariable.getName());
-							customVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
-						}
+			if ((sortedCustomVariables != null) && (!sortedCustomVariables.isEmpty())) {
+				customVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
+				for (CustomVariable customVariable : sortedCustomVariables) {
+					formTreeTable.addContainerProperty(customVariable.getName(), String.class, null);
+					formTreeTable.setColumnWidth(customVariable.getName(), 150);
+					if (customVariablesScopeMap.get(customVariable.getScope()) == null) {
+						List<String> customVariablesNames = new ArrayList<String>();
+						customVariablesNames.add(customVariable.getName());
+						customVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
+					} else {
+						List<String> customVariablesNames = customVariablesScopeMap.get(customVariable.getScope());
+						customVariablesNames.add(customVariable.getName());
+						customVariablesScopeMap.put(customVariable.getScope(), customVariablesNames);
 					}
 				}
+			}
 
-				// Put form variables
-				if ((form != null) && (submittedForm != null)) {
-					createFormVariables(form, submittedForm);
-					// Put category variables
-					List<TreeObject> categories = form.getChildren();
-					if (categories != null) {
-						for (TreeObject category : categories) {
+			// Put form variables
+			if ((form != null) && (submittedForm != null)) {
+				createFormVariables(form, submittedForm);
+				// Put category variables
+				List<TreeObject> categories = form.getChildren();
+				if (categories != null) {
+					for (TreeObject category : categories) {
 
-							// Get the subform category
-							Category categorySubForm = getSubmittedFormCategory(category, submittedForm);
-							createCategoryVariables(category, categorySubForm);
-							// Put category children variables
-							List<TreeObject> categoryChildren = category.getChildren();
-							if (categoryChildren != null) {
-								for (TreeObject categoryChild : categoryChildren) {
-									if (categoryChild instanceof com.biit.abcd.persistence.entity.Group) {
-										// Get the subform group
-										Group groupSubForm = getSubmittedFormGroup(categoryChild, categorySubForm);
-										createGroupVariables(categoryChild, groupSubForm);
-										List<TreeObject> groupChildren = categoryChild.getChildren();
-										if (groupChildren != null) {
-											for (TreeObject groupChild : groupChildren) {
-												if (groupChild instanceof com.biit.abcd.persistence.entity.Group) {
-													createNestedGroupVariables(groupChild,
-															getSubmittedFormGroup(groupChild, groupSubForm));
+						// Get the subform category
+						Category categorySubForm = getSubmittedFormCategory(category, submittedForm);
+						createCategoryVariables(category, categorySubForm);
+						// Put category children variables
+						List<TreeObject> categoryChildren = category.getChildren();
+						if (categoryChildren != null) {
+							for (TreeObject categoryChild : categoryChildren) {
+								if (categoryChild instanceof com.biit.abcd.persistence.entity.Group) {
+									// Get the subform group
+									Group groupSubForm = getSubmittedFormGroup(categoryChild, categorySubForm);
+									createGroupVariables(categoryChild, groupSubForm);
+									List<TreeObject> groupChildren = categoryChild.getChildren();
+									if (groupChildren != null) {
+										for (TreeObject groupChild : groupChildren) {
+											if (groupChild instanceof com.biit.abcd.persistence.entity.Group) {
+												createNestedGroupVariables(groupChild,
+														getSubmittedFormGroup(groupChild, groupSubForm));
 
-												} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
-													createQuestionVariables(groupChild,
-															getSubmittedFormGroupQuestion(groupChild, groupSubForm));
-												}
+											} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
+												createQuestionVariables(groupChild,
+														getSubmittedFormGroupQuestion(groupChild, groupSubForm));
 											}
 										}
-									} else if (categoryChild instanceof com.biit.abcd.persistence.entity.Question) {
-										createQuestionVariables(categoryChild,
-												getSubmittedFormCategoryQuestion(categoryChild, categorySubForm));
 									}
+								} else if (categoryChild instanceof com.biit.abcd.persistence.entity.Question) {
+									createQuestionVariables(categoryChild,
+											getSubmittedFormCategoryQuestion(categoryChild, categorySubForm));
 								}
 							}
 						}

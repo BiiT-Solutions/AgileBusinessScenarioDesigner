@@ -8,14 +8,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.Category;
+import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputDate;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputNumber;
@@ -25,7 +37,9 @@ import com.biit.abcd.persistence.entity.testscenarios.TestAnswerMultiCheckBox;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerRadioButton;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
+import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.NotValidChildException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
@@ -35,6 +49,7 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.ListSelect;
@@ -42,10 +57,12 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Runo;
 
 @SuppressWarnings("rawtypes")
 public class TestScenarioForm extends Panel {
 	private static final long serialVersionUID = -3526986076061463631L;
+	private Form form;
 	private TestScenario testScenario;
 	private Map<Field, Question> fieldQuestionMap = null;
 	private static final String NUMBER_FIELD_VALIDATOR_REGEX = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -54,66 +71,34 @@ public class TestScenarioForm extends Panel {
 	public TestScenarioForm() {
 		super();
 		setSizeFull();
+		setStyleName(Runo.PANEL_LIGHT);
 	}
 
 	public void setContent(Form form, TestScenario testScenario) {
 		createContent(form, testScenario);
 	}
 
+	/**
+	 * Creates the content for the complete test scenario definition
+	 * 
+	 * @param form
+	 * @param testScenario
+	 */
 	private void createContent(Form form, TestScenario testScenario) {
 		if ((form != null) && (testScenario != null)) {
-
+			this.form = form;
 			this.testScenario = testScenario;
 			fieldQuestionMap = new HashMap<Field, Question>();
 			backgroundAccordion = new Accordion();
 			setCaption(form.getName());
 			backgroundAccordion.setSizeFull();
-			
+			backgroundAccordion.setStyleName(Runo.ACCORDION_LIGHT);
 			// Get the categories
 			List<TreeObject> categories = form.getChildren();
 			if (categories != null) {
 				for (TreeObject category : categories) {
-					// Create the category panels
-					Panel categoryPanel = new Panel();
-					VerticalLayout categoryBackground = new VerticalLayout();
-					// Put category children variables
-					List<TreeObject> categoryChildren = category.getChildren();
-					if (categoryChildren != null) {
-						FormLayout categoryFormLayout = new FormLayout();
-
-						for (TreeObject categoryChild : categoryChildren) {
-							if (categoryChild instanceof Group) {
-								// Create the group panels
-								Panel groupPanel = new Panel(categoryChild.getName());
-								VerticalLayout groupBackground = new VerticalLayout();
-								List<TreeObject> groupChildren = categoryChild.getChildren();
-								if (groupChildren != null) {
-									FormLayout groupFormLayout = new FormLayout();
-
-									for (TreeObject groupChild : groupChildren) {
-										if (groupChild instanceof Group) {
-											createNestedGroupVariables((Group) groupChild, categoryBackground);
-
-										} else if (groupChild instanceof Question) {
-											groupFormLayout.addComponent(getFormLayoutField((Question) groupChild));
-										}
-									}
-									// Add the form to the category background
-									groupBackground.addComponent(groupFormLayout);
-									groupBackground.setMargin(true);
-									groupPanel.setContent(groupBackground);
-									categoryBackground.addComponent(groupPanel);
-								}
-							} else if (categoryChild instanceof Question) {
-								categoryFormLayout.addComponent(getFormLayoutField((Question) categoryChild));
-							}
-						}
-						// Add the form to the category background
-						categoryBackground.addComponent(categoryFormLayout);
-						categoryBackground.setMargin(true);
-						categoryPanel.setContent(categoryBackground);
-						backgroundAccordion.addTab(categoryPanel, category.getName());
-					}
+					backgroundAccordion.addTab(createCategoryContent((Category) category),
+							category.getName());
 				}
 			}
 			setContent(backgroundAccordion);
@@ -122,6 +107,73 @@ public class TestScenarioForm extends Panel {
 			setCaption("");
 			setContent(null);
 		}
+	}
+
+	/**
+	 * Used in test scenario of categories
+	 * 
+	 * @param testScenario
+	 * @param category
+	 * @throws NotValidChildException
+	 */
+	public void createCategoryContent(TestScenario testScenario, Category category) throws NotValidChildException {
+		Set<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(category);
+		Set<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm().getCustomVariables();
+		form = new Form();
+		// We have to generate a copy to avoid structure issues
+		// TODO Generate a category copy
+		form.addChild(category);
+		form.setCustomVariables(customVariables);
+		form.addDiagram(createRulesDiagram(assignedRules));
+
+		this.testScenario = testScenario;
+		fieldQuestionMap = new HashMap<Field, Question>();
+		setContent(createCategoryContent(category));
+		addStyleName(Runo.PANEL_LIGHT);
+		setHeight(100.0f, Unit.PERCENTAGE);
+	}
+
+	private Component createCategoryContent(Category category) {
+		// Create the category panels
+		VerticalLayout categoryBackground = new VerticalLayout();
+		// Put category children variables
+		List<TreeObject> categoryChildren = category.getChildren();
+		if (categoryChildren != null) {
+			FormLayout categoryFormLayout = new FormLayout();
+
+			for (TreeObject categoryChild : categoryChildren) {
+				if (categoryChild instanceof Group) {
+					// Create the group panels
+					Panel groupPanel = new Panel(categoryChild.getName());
+					VerticalLayout groupBackground = new VerticalLayout();
+					List<TreeObject> groupChildren = categoryChild.getChildren();
+					if (groupChildren != null) {
+						FormLayout groupFormLayout = new FormLayout();
+
+						for (TreeObject groupChild : groupChildren) {
+							if (groupChild instanceof Group) {
+								createNestedGroupVariables((Group) groupChild, categoryBackground);
+
+							} else if (groupChild instanceof Question) {
+								groupFormLayout.addComponent(getFormLayoutField((Question) groupChild));
+							}
+						}
+						// Add the form to the category background
+						groupBackground.addComponent(groupFormLayout);
+						groupBackground.setMargin(true);
+						groupPanel.setContent(groupBackground);
+						categoryBackground.addComponent(groupPanel);
+					}
+				} else if (categoryChild instanceof Question) {
+					categoryFormLayout.addComponent(getFormLayoutField((Question) categoryChild));
+				}
+			}
+			// Add the form to the category background
+			categoryBackground.addComponent(categoryFormLayout);
+			categoryBackground.setMargin(true);
+//			categoryPanel.setContent(categoryBackground);
+		}
+		return categoryBackground;
 	}
 
 	private void createNestedGroupVariables(TreeObject group, VerticalLayout parentLayout) {
@@ -335,5 +387,84 @@ public class TestScenarioForm extends Panel {
 		} else {
 			return false;
 		}
+	}
+
+	public TestScenario getTestScenario() {
+		return testScenario;
+	}
+
+	public Form getForm() {
+		return form;
+	}
+
+	private Diagram createRulesDiagram(Set<Rule> rules) {
+		Diagram mainDiagram = new Diagram("main");
+
+		DiagramSource diagramStartNode = new DiagramSource();
+		diagramStartNode.setJointjsId(IdGenerator.createId());
+		diagramStartNode.setType(DiagramObjectType.SOURCE);
+		Node nodeSource = new Node(diagramStartNode.getJointjsId());
+
+		DiagramChild subDiagramExpressionNode = new DiagramChild();
+		subDiagramExpressionNode.setChildDiagram(createRulesSubdiagram(rules));
+		subDiagramExpressionNode.setJointjsId(IdGenerator.createId());
+		subDiagramExpressionNode.setType(DiagramObjectType.DIAGRAM_CHILD);
+		Node nodeTable = new Node(subDiagramExpressionNode.getJointjsId());
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+
+		DiagramLink startExpression = new DiagramLink(nodeSource, nodeTable);
+		startExpression.setJointjsId(IdGenerator.createId());
+		startExpression.setType(DiagramObjectType.LINK);
+		DiagramLink expressionEnd = new DiagramLink(nodeTable, nodeSink);
+		expressionEnd.setJointjsId(IdGenerator.createId());
+		expressionEnd.setType(DiagramObjectType.LINK);
+
+		mainDiagram.addDiagramObject(diagramStartNode);
+		mainDiagram.addDiagramObject(subDiagramExpressionNode);
+		mainDiagram.addDiagramObject(diagramEndNode);
+		mainDiagram.addDiagramObject(startExpression);
+		mainDiagram.addDiagramObject(expressionEnd);
+
+		return mainDiagram;
+	}
+
+	private Diagram createRulesSubdiagram(Set<Rule> rules) {
+		Diagram subDiagram = new Diagram("rulesDiagram");
+		for (Rule rule : rules) {
+
+			DiagramSource diagramSource = new DiagramSource();
+			diagramSource.setJointjsId(IdGenerator.createId());
+			diagramSource.setType(DiagramObjectType.SOURCE);
+			Node nodeSource = new Node(diagramSource.getJointjsId());
+
+			DiagramRule diagramRule = new DiagramRule();
+			diagramRule.setRule(rule);
+			diagramRule.setJointjsId(IdGenerator.createId());
+			diagramRule.setType(DiagramObjectType.RULE);
+			Node nodeRule = new Node(diagramRule.getJointjsId());
+
+			DiagramSink diagramSink = new DiagramSink();
+			diagramSink.setJointjsId(IdGenerator.createId());
+			diagramSink.setType(DiagramObjectType.SINK);
+			Node nodeSink = new Node(diagramSink.getJointjsId());
+
+			DiagramLink diagramLinkSourceRule = new DiagramLink(nodeSource, nodeRule);
+			diagramLinkSourceRule.setJointjsId(IdGenerator.createId());
+			diagramLinkSourceRule.setType(DiagramObjectType.LINK);
+			DiagramLink diagramLinkRuleSink = new DiagramLink(nodeRule, nodeSink);
+			diagramLinkRuleSink.setJointjsId(IdGenerator.createId());
+			diagramLinkRuleSink.setType(DiagramObjectType.LINK);
+
+			subDiagram.addDiagramObject(diagramSource);
+			subDiagram.addDiagramObject(diagramRule);
+			subDiagram.addDiagramObject(diagramSink);
+			subDiagram.addDiagramObject(diagramLinkSourceRule);
+			subDiagram.addDiagramObject(diagramLinkRuleSink);
+		}
+		return subDiagram;
 	}
 }

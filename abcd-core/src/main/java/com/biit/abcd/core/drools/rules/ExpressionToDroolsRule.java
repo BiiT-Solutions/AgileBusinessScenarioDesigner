@@ -23,9 +23,9 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.form.TreeObject;
 
-public class ExpressionParser {
+public class ExpressionToDroolsRule {
 
-	private ExpressionParser() {
+	private ExpressionToDroolsRule() {
 		super();
 	}
 
