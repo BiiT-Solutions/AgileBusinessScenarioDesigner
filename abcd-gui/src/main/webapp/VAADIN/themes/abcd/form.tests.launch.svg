@@ -15,10 +15,10 @@
    xml:space="preserve"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="form.launch.tests.svg"><metadata
+   sodipodi:docname="form.tests.launch.svg"><metadata
    id="metadata10"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
    id="defs8" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -35,7 +35,7 @@
    inkscape:zoom="6.2105263"
    inkscape:cx="30.671521"
    inkscape:cy="39.270081"
-   inkscape:window-x="-8"
+   inkscape:window-x="1912"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
    inkscape:current-layer="svg2"
@@ -50,5 +50,5 @@
 <path
    style="fill:#000000;fill-opacity:1;stroke-width:1.33363998;stroke-linejoin:round"
    inkscape:connector-curvature="0"
-   d="m 43.618643,32.652543 20,0 0,4 -3,0 0,7 12,22.999999 -3,6 -32,0 -3,-6 12,-22.999999 0,-7 -3,0 0,-4 z m 0,35.999999 9,-17.999999 6.8461,0 -2.8461,-5 0,-9 -6,0 0,9 -11.1539,22.999999 4.1539,0 z"
-   id="path4-1" /></svg>
+   d="m 38.376823,31.507885 22.11076,0 0,4.422151 -3.316614,0 0,7.738767 13.266455,25.427372 -3.316613,6.633228 -35.377215,0 -3.316613,-6.633228 13.266455,-25.427372 0,-7.738767 -3.316615,0 0,-4.422151 z m 0,39.799365 9.949843,-19.899682 7.568623,0 -3.146472,-5.527689 0,-9.949843 -6.633227,0 0,9.949843 -12.33106,25.427371 4.592293,0 z"
+   id="path4-1-1" /></svg>
