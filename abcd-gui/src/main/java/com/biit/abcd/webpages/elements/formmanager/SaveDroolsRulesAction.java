@@ -8,10 +8,12 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.utils.ZipUtils;
 import com.biit.abcd.webpages.components.SaveAction;
@@ -58,6 +60,11 @@ public class SaveDroolsRulesAction implements SaveAction {
 			MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e.getExpressionChain()
 					.getRepresentation());
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+		} catch (NotCompatibleTypeException e) {
+			MessageManager.showError(
+					LanguageCodes.ERROR_INCOMPATIBLE_TYPES,
+					ServerTranslate.translate(LanguageCodes.ERROR_INCOMPATIBLE_TYPES_MORE_INFO, new Object[] { e
+							.getExpressionValue().getValue().toString() }));
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);

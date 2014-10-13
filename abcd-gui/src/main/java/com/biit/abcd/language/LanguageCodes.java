@@ -231,6 +231,9 @@ public enum LanguageCodes {
 	ERROR_NEW_VERSION("error.new.version"),
 	ERROR_NEW_VERSION_DESCRIPTION("error.new.version.description"),
 	
+	ERROR_INCOMPATIBLE_TYPES("error.incompatible.types"),
+	ERROR_INCOMPATIBLE_TYPES_MORE_INFO("error.incompatible.types.more.info"),
+	
 	INFO_DATA_STORED("info.data.store"),
 
 	ANSWER_TYPE_INPUT("answer.type.input"),

@@ -95,7 +95,8 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 					break;
 				case TEXT:
 				case POSTAL_CODE:
-					throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation");
+					throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation",
+							expVal);
 					// case TEXT:
 					// this.builder.append("$" + id + ".getAnswer('" +
 					// AnswerFormat.TEXT.toString() + "')");
@@ -121,7 +122,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 						break;
 					case STRING:
 						throw new NotCompatibleTypeException("Using the text variable: " + variable.getName()
-								+ " inside a mathematical operation");
+								+ " inside a mathematical operation", expVal);
 						// this.builder.append("(String)$" + id +
 						// ".getVariableValue('" + variable.getName() + "')");
 						// break;
@@ -130,7 +131,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 				// For every other possible value, we assume text value
 				else {
 					throw new NotCompatibleTypeException("Using the text variable: " + treeObject.getName()
-							+ " inside a mathematical operation");
+							+ " inside a mathematical operation", expVal);
 					// this.builder.append("$" + id + ".getAnswer('" +
 					// AnswerFormat.TEXT.toString() + "')");
 				}
@@ -151,7 +152,8 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 			case TEXT:
 			case POSTAL_CODE:
 				throw new NotCompatibleTypeException("Using the text constant: " + name.getName()
-						+ " inside a mathematical operation");
+						+ " inside a mathematical operation", (ExpressionValueGlobalConstant) name.getExpressionChain()
+						.getExpressions().get(0));
 				// this.builder.append(name.getName());
 				// break;
 			case DATE:
