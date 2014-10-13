@@ -74,19 +74,19 @@ public class DiagramParser {
 		case TABLE:
 			DiagramTable tableNode = (DiagramTable) node;
 			if (tableNode.getTable() != null) {
-				newRules.addAll(TableRuleParser.parse(tableNode.getTable(), extraConditions));
+				newRules.addAll(TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions));
 			}
 			break;
 		case RULE:
 			DiagramRule ruleNode = (DiagramRule) node;
 			if (ruleNode.getRule() != null) {
-				newRules.add(RuleParser.parse(ruleNode.getRule(), extraConditions));
+				newRules.add(RuleToDroolsRule.parse(ruleNode.getRule(), extraConditions));
 			}
 			break;
 		case CALCULATION:
 			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getFormExpression() != null) {
-				newRules.addAll(ExpressionParser.parse(expressionNode.getFormExpression(), extraConditions));
+				newRules.addAll(ExpressionToDroolsRule.parse(expressionNode.getFormExpression(), extraConditions));
 			}
 			break;
 		case DIAGRAM_CHILD:
@@ -101,7 +101,7 @@ public class DiagramParser {
 		case SINK:
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
 			if (sinkExpressionNode.getFormExpression() != null) {
-				newRules.addAll(ExpressionParser.parse(sinkExpressionNode.getFormExpression(), extraConditions));
+				newRules.addAll(ExpressionToDroolsRule.parse(sinkExpressionNode.getFormExpression(), extraConditions));
 			}
 			break;
 		default:
@@ -120,10 +120,8 @@ public class DiagramParser {
 	}
 
 	/**
-	 * A fork adds some extra condition or conditions to the rules that happen
-	 * after <br>
-	 * A fork and its outgoing links define a condition that a question or a
-	 * score must fulfill
+	 * A fork adds some extra condition or conditions to the rules that happen after <br>
+	 * A fork and its outgoing links define a condition that a question or a score must fulfill
 	 * 
 	 * @return
 	 * @throws RuleNotImplementedException
