@@ -19,9 +19,9 @@ public class TestScenarioEditorUpperMenu extends UpperMenu {
 		saveButton = new IconButton(LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_SAVE_CAPTION, ThemeIcon.FORM_SAVE,
 				LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_SAVE_TOOLTIP);
 		newTestScenario = new IconButton(LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_ADD_CAPTION,
-				ThemeIcon.EXPRESSION_ADD, LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_ADD_TOOLTIP);
+				ThemeIcon.TEST_ADD, LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_ADD_TOOLTIP);
 		removeTestScenario = new IconButton(LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_CAPTION,
-				ThemeIcon.EXPRESSION_REMOVE, LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_TOOLTIP);
+				ThemeIcon.TEST_REMOVE, LanguageCodes.TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_TOOLTIP);
 
 		addIconButton(saveButton);
 		addIconButton(newTestScenario);

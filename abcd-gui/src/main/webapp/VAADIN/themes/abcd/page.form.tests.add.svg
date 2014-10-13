@@ -15,10 +15,10 @@
    xml:space="preserve"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="page.form.tests.svg"><metadata
+   sodipodi:docname="page.form.tests.add.svg"><metadata
    id="metadata10"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
    id="defs8" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -40,21 +40,13 @@
    inkscape:window-maximized="1"
    inkscape:current-layer="svg2" />
 	
-<g
-   id="g2989"
-   transform="matrix(1.1055379,0,0,1.1055379,-0.76184545,0.00329803)"><path
-     sodipodi:nodetypes="cccccccccccccccccc"
-     inkscape:connector-curvature="0"
-     transform="scale(0.99999214,0.99999214)"
-     id="path4"
-     d="m 7.21875,-0.03125 0,63.71875 14.84375,0 2.25,-4.90625 -12.21875,0 0,-53.90625 24.5,0 0,19.59375 19.59375,0 0,19.5625 4.90625,8.0625 0,-33.75 -18.375,-18.375 z m 34.28125,6.125 13.46875,13.5 -13.46875,0 z"
-     style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round" /><path
-     id="path4-1"
-     d="m 34.285566,28.633674 19.999843,0 0,3.999968 -2.999976,0 0,6.999946 11.999905,22.999819 -2.999976,5.999953 -31.999749,0 -2.999976,-5.999953 11.999906,-22.999819 0,-6.999946 -2.999977,0 0,-3.999968 z m 0,35.999717 8.99993,-17.999858 6.846046,0 -2.846078,-4.999961 0,-8.99993 -5.999953,0 0,8.99993 -11.153812,22.999819 4.153867,0 z"
-     inkscape:connector-curvature="0"
-     style="fill:#000000;fill-opacity:1;stroke-width:1.33363998;stroke-linejoin:round" /></g><g
+<path
+   style="fill:#000000;fill-opacity:1;stroke-width:1.33363998;stroke-linejoin:round"
+   inkscape:connector-curvature="0"
+   d="m 25.83727,4.6045037 34.349484,0 0,6.8698953 -5.152423,0 0,12.022321 20.609688,39.501903 -5.152422,10.304846 -54.959171,0 -5.152421,-10.304846 20.609688,-39.501903 0,-12.022321 -5.152423,0 0,-6.8698953 z m 0,61.8290673 15.457269,-30.914533 11.757998,0 -4.888103,-8.587371 0,-15.457268 -10.304844,0 0,15.457268 -19.156534,39.501904 7.134214,0 z"
+   id="path4-1" /><g
    id="g3884"
-   transform="matrix(2.4226523,0,0,2.4226523,-157.67732,-42.74827)"><path
+   transform="matrix(2.4709793,0,0,2.5320221,-162.92817,-45.594146)"><path
      sodipodi:nodetypes="cccccccccccccccccccccccccc"
      style="fill:#ffffff;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
      inkscape:connector-curvature="0"
