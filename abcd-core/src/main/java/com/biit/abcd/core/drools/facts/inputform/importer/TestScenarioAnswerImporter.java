@@ -48,7 +48,7 @@ public class TestScenarioAnswerImporter {
 
 									for (TreeObject groupChild : groupChildren) {
 										if (groupChild instanceof Group) {
-											createNestedGroupVariables((Group) groupChild, iGroup);
+											createNestedGroupVariables((Group) groupChild, iGroup, testScenario);
 
 										} else if (groupChild instanceof Question) {
 											IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.Question(
@@ -72,7 +72,7 @@ public class TestScenarioAnswerImporter {
 		return submittedForm;
 	}
 
-	private static void createNestedGroupVariables(TreeObject group, IGroup parentGroup) {
+	private static void createNestedGroupVariables(TreeObject group, IGroup parentGroup, TestScenario testScenario) {
 		IGroup iGroup = new com.biit.abcd.core.drools.facts.inputform.Group(group.getName());
 		parentGroup.addGroup(iGroup);
 		List<TreeObject> groupChildren = group.getChildren();
@@ -80,10 +80,11 @@ public class TestScenarioAnswerImporter {
 
 			for (TreeObject groupChild : groupChildren) {
 				if (groupChild instanceof Group) {
-					createNestedGroupVariables((Group) groupChild, iGroup);
+					createNestedGroupVariables((Group) groupChild, iGroup, testScenario);
 
 				} else if (groupChild instanceof Question) {
 					IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.Question(groupChild.getName());
+					setQuestionAnswer((Question) groupChild, iQuestion, testScenario);
 					iGroup.addQuestion(iQuestion);
 				}
 			}
