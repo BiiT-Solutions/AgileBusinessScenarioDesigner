@@ -224,7 +224,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 		// Create new test scenario
 		createTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS,
-				ThemeIcon.FORM_TEST_CREATE, LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM,
+				ThemeIcon.FORM_TEST_PAGE, LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM,
 				new ClickListener() {
 					private static final long serialVersionUID = -1628560253598118060L;
 

@@ -262,4 +262,9 @@ public class Diagram extends StorableObject implements INameAttribute {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }

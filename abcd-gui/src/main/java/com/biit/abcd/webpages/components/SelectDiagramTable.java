@@ -98,9 +98,9 @@ public class SelectDiagramTable extends TreeTable {
 			if (!childDiagrams.isEmpty()) {
 				setChildrenAllowed(diagram, true);
 				setCollapsed(diagram, false);
-			}
-			for (Diagram childDiagram : childDiagrams) {
-				setParent(childDiagram, diagram);
+				for (Diagram childDiagram : childDiagrams) {
+					setParent(childDiagram, diagram);
+				}
 			}
 		}
 		sort();

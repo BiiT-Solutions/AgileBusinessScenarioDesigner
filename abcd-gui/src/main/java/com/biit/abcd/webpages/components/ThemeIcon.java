@@ -176,9 +176,14 @@ public enum ThemeIcon {
 
 	FORM_VARIABLE_REMOVE("appbar.notification.remove.svg"),
 	
-	FORM_TEST_CREATE("page.form.tests.add.svg"),
+	FORM_TEST_PAGE("page.form.tests.svg"),
 	
-	FORM_TEST_LAUNCH("form.tests.launch.svg");
+	FORM_TEST_LAUNCH("form.tests.launch.svg"),
+	
+	TEST_ADD("page.form.tests.add.svg"),
+	
+	TEST_REMOVE("page.form.tests.remove.svg");
+	
 
 	private String value;
 
