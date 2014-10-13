@@ -263,7 +263,7 @@ public class Form extends BaseForm {
 			updateDiagramExpressionReferences(diagramObjects, formExpressionChains);
 			getDiagrams().add(copiedDiagram);
 		}
-		// ComparatorId -> New TableRule.
+		// ComparatorId -> New Diagram.
 		Map<String, Diagram> formDiagrams = new HashMap<>();
 		Set<Diagram> formDiagramsChildren = getDiagrams();
 		for (Diagram children : formDiagramsChildren) {
@@ -271,7 +271,7 @@ public class Form extends BaseForm {
 		}
 
 		// Update diagram relationship after all diagrams has been created.
-		for (Diagram diagram : form.getDiagrams()) {
+		for (Diagram diagram : getDiagrams()) {
 			updateDiagramDiagramReferences(diagram.getAllInnerStorableObjects(), formDiagrams);
 		}
 	}
@@ -285,6 +285,7 @@ public class Form extends BaseForm {
 	private void updateDiagramDiagramReferences(Set<StorableObject> storableObjects, Map<String, Diagram> formDiagrams) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramChild) {
+				System.out.println(child);
 				DiagramChild diagramChild = (DiagramChild) child;
 				if (formDiagrams.get(diagramChild.getChildDiagram().getComparationId()) != null) {
 					diagramChild.setChildDiagram(formDiagrams.get(diagramChild.getChildDiagram().getComparationId()));
