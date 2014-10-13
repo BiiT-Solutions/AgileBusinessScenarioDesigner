@@ -6,9 +6,9 @@ import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
-public class RuleParser {
+public class RuleToDroolsRule {
 
-	private RuleParser() {
+	private RuleToDroolsRule() {
 	}
 
 	public static Rule parse(Rule rule, ExpressionChain extraConditions) throws RuleInvalidException,

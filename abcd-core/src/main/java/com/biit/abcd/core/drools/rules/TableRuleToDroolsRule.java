@@ -12,13 +12,12 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
-public class TableRuleParser {
+public class TableRuleToDroolsRule {
 
-	private TableRuleParser() {
+	private TableRuleToDroolsRule() {
 	}
 
 	/**
@@ -31,16 +30,16 @@ public class TableRuleParser {
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
 	 */
-	public static List<Rule> parse(TableRule tableRule, ExpressionChain extraConditions)
+	public static List<DroolsRule> parse(TableRule tableRule, ExpressionChain extraConditions)
 			throws ExpressionInvalidException, RuleNotImplementedException, ActionNotImplementedException {
-		List<Rule> newRules = new ArrayList<>();
+		List<DroolsRule> newRules = new ArrayList<>();
 		if (tableRule != null) {
 			String tableRuleName = tableRule.getName();
 			int i = 0;
 			for (TableRuleRow row : tableRule.getRules()) {
 				if (row.getActionChain() != null && row.getActionChain().getExpressions() != null
 						&& !row.getActionChain().getExpressions().isEmpty()) {
-					Rule newRule = new Rule();
+					DroolsRule newRule = new DroolsRule();
 					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditionChain());
 					newRule.setName(RulesUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
 					newRule.setCondition(rowConditionExpression);
