@@ -235,14 +235,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 									.setValue("-");
 						}
 					}
-				} else {
-					if (questionSubForm.getAnswer() != null) {
-						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-								.setValue(questionSubForm.getAnswer().toString());
-					} else {
-						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-								.setValue("-");
-					}
 				}
 			}
 		}

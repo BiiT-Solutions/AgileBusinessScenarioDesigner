@@ -7,6 +7,7 @@ import com.biit.abcd.core.drools.prattparser.expressions.NameExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.OperatorExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.TreeObject;
@@ -21,14 +22,14 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 	}
 
 	@Override
-	public void visit(AssignExpression assign) {
+	public void visit(AssignExpression assign) throws NotCompatibleTypeException {
 		this.builder.append("(").append(assign.getName()).append(" = ");
 		assign.getRightElement().accept(this);
 		this.builder.append(")");
 	}
 
 	@Override
-	public void visit(CallExpression call) {
+	public void visit(CallExpression call) throws NotCompatibleTypeException {
 		call.getFunction().accept(this);
 		this.builder.append("(");
 		for (int i = 0; i < call.getArgs().size(); i++) {
@@ -41,7 +42,7 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 	}
 
 	@Override
-	public void visit(ConditionalExpression condition) {
+	public void visit(ConditionalExpression condition) throws NotCompatibleTypeException {
 		this.builder.append("(");
 		condition.getCondition().accept(this);
 		this.builder.append(" ? ");
@@ -69,7 +70,7 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 	}
 
 	@Override
-	public void visit(OperatorExpression operator) {
+	public void visit(OperatorExpression operator) throws NotCompatibleTypeException {
 		this.builder.append("(");
 		operator.getLeftElement().accept(this);
 		this.builder.append(" ").append(operator.getOperator().punctuator()).append(" ");
@@ -78,14 +79,14 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 	}
 
 	@Override
-	public void visit(PostfixExpression postfix) {
+	public void visit(PostfixExpression postfix) throws NotCompatibleTypeException {
 		this.builder.append("(");
 		postfix.getLeftElement().accept(this);
 		this.builder.append(postfix.getOperator().punctuator()).append(")");
 	}
 
 	@Override
-	public void visit(PrefixExpression prefix) {
+	public void visit(PrefixExpression prefix) throws NotCompatibleTypeException {
 		this.builder.append("(").append(prefix.getOperator().punctuator());
 		prefix.getRightElement().accept(this);
 		this.builder.append(")");

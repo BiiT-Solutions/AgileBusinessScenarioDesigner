@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -57,7 +58,7 @@ public class GlobalVariablesTest extends KidsFormCreator {
 	public void testGlobVarsInDroolsEngine() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, ActionNotImplementedException, DocumentException,
-			CategoryNameWithoutTranslation, CharacterNotAllowedException {
+			CategoryNameWithoutTranslation, CharacterNotAllowedException, NotCompatibleTypeException {
 
 		// Create the form and the variables
 		initForm();

@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.prattparser.expressions;
 
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 
@@ -20,7 +21,7 @@ public class AssignExpression implements ITreeElement {
 	}
 
 	@Override
-	public void accept(ITreeElementVisitor visitor) {
+	public void accept(ITreeElementVisitor visitor) throws NotCompatibleTypeException {
 		visitor.visit(this);
 	}
 

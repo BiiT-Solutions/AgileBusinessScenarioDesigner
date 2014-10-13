@@ -6,10 +6,12 @@ import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
+/**
+ * Transforms a Rule to a Drools rule. Internally is the same. This class is used for
+ * standardization purposes.
+ * 
+ */
 public class RuleToDroolsRule {
-
-	private RuleToDroolsRule() {
-	}
 
 	public static Rule parse(Rule rule, ExpressionChain extraConditions) throws RuleInvalidException,
 			RuleNotImplementedException {

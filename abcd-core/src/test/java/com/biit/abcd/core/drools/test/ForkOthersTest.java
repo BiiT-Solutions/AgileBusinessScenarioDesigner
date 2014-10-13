@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -52,7 +53,7 @@ public class ForkOthersTest extends KidsFormCreator {
 	public void testFork() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, NotCompatibleTypeException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -68,7 +69,7 @@ public class ForkOthersTest extends KidsFormCreator {
 	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, NotCompatibleTypeException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -84,7 +85,7 @@ public class ForkOthersTest extends KidsFormCreator {
 	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, CharacterNotAllowedException {
+			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException {
 
 		// Restart the form to avoid test cross references
 		initForm();

@@ -110,7 +110,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function adds a row to the table only if the list of forms is not empty.
+	 * This function adds a row to the table only if the list of forms is not
+	 * empty.
 	 * 
 	 * @param forms
 	 */
@@ -240,8 +241,10 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private RootForm getFormRoot(SimpleFormView form) {
 		for (Object item : getItemIds()) {
 			if (item instanceof RootForm) {
-				if (((RootForm) item).getLabel().equals(form.getLabel())) {
-					return (RootForm) item;
+				if ((form != null) && (((RootForm) item).getLabel() != null)) {
+					if (((RootForm) item).getLabel().equals(form.getLabel())) {
+						return (RootForm) item;
+					}
 				}
 			}
 		}
@@ -262,8 +265,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function loads from database all form elements and groups them by name. At the end it orders each form list
-	 * by version number.
+	 * This function loads from database all form elements and groups them by
+	 * name. At the end it orders each form list by version number.
 	 * 
 	 * @return
 	 * @throws NotConnectedToDatabaseException
@@ -303,8 +306,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This is a form comparator that sorts by version number. It is used to sort the lists of forms that we have
-	 * created for each different form name.
+	 * This is a form comparator that sorts by version number. It is used to
+	 * sort the lists of forms that we have created for each different form
+	 * name.
 	 * 
 	 */
 	private class FormVersionComparator implements Comparator<SimpleFormView> {
@@ -366,7 +370,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function returns an string with read only if the form can't be edited by the user
+	 * This function returns an string with read only if the form can't be
+	 * edited by the user
 	 * 
 	 * @param form
 	 * @return

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.Category;
@@ -23,28 +24,37 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.form.TreeObject;
 
+/**
+ * Transforms an Expression into a Drools rule. It also unwraps the generic
+ * variables that can be used in the expressions and creates a set of rules if
+ * necessary.
+ * 
+ */
 public class ExpressionToDroolsRule {
 
-	private ExpressionToDroolsRule() {
-		super();
-	}
-
 	public static List<DroolsRule> parse(ExpressionChain expressionChain, ExpressionChain extraConditions)
-			throws ExpressionInvalidException, RuleNotImplementedException {
+			throws ExpressionInvalidException, RuleNotImplementedException, RuleInvalidException {
+		List<DroolsRule> droolsRules = null;
+
 		if (expressionChain != null) {
 			// If the expression is composed by a generic variable, we have to
 			// generate the set of rules that represents the generic
 			if (expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
-				return createExpressionRuleSet(expressionChain, extraConditions);
+				droolsRules = createExpressionRuleSet(expressionChain, extraConditions);
+
 			} else if ((expressionChain.getExpressions().get(0) instanceof ExpressionFunction)
 					&& ((ExpressionFunction) expressionChain.getExpressions().get(0)).getValue().equals(
 							AvailableFunction.IF)) {
-				return createIfRuleSet(expressionChain, extraConditions);
+				droolsRules = createIfRuleSet(expressionChain, extraConditions);
+
 			} else {
-				return Arrays.asList(createExpressionRule(expressionChain, extraConditions));
+				droolsRules = Arrays.asList(createExpressionRule(expressionChain, extraConditions));
 			}
 		}
-		return null;
+//		for (DroolsRule droolsRule : droolsRules) {
+//			RuleChecker.checkRuleValid(droolsRule);
+//		}
+		return droolsRules;
 	}
 
 	/**
@@ -60,7 +70,7 @@ public class ExpressionToDroolsRule {
 		if (extraConditions != null) {
 			droolsRule.addConditions(extraConditions.generateCopy());
 		}
-		// IF the expression chain contains generic variables, we have to unwrap
+		// If the expression chain contains generic variables, we have to unwrap
 		// them
 		if (checkForGenericVariables(expressionChain)) {
 			ExpressionChain expressionChainUnwrapped = unwrapGenericVariables(expressionChain);
@@ -81,7 +91,7 @@ public class ExpressionToDroolsRule {
 		ExpressionChain ifCondition = new ExpressionChain();
 		ExpressionChain ifActionThen = new ExpressionChain();
 		ExpressionChain ifActionElse = new ExpressionChain();
-		
+
 		int ifIndex = 0;
 		ExpressionChain expressionCopy = expressionChain.generateCopy();
 		// Remove the IF from the expression
@@ -108,7 +118,7 @@ public class ExpressionToDroolsRule {
 		ifThenRule.setCondition(ifCondition);
 		ifThenRule.setActions(ifActionThen);
 		droolsRules.add(ifThenRule);
-		
+
 		DroolsRule ifElseRule = new DroolsRule();
 		ifElseRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
 		ExpressionChain negatedCondition = new ExpressionChain();

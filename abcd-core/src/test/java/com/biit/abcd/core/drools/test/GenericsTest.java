@@ -7,6 +7,7 @@ import org.dom4j.DocumentException;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -16,8 +17,8 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
@@ -44,7 +45,7 @@ import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-public class NewGenericsTest extends KidsFormCreator {
+public class GenericsTest extends KidsFormCreator {
 
 	private final static String FORM_SCORE = "formScore";
 	private final static String CATEGORY_SCORE = "catScore";
@@ -56,7 +57,7 @@ public class NewGenericsTest extends KidsFormCreator {
 			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			RuleNotImplementedException, InvalidAnswerFormatException, ActionNotImplementedException, ParseException,
-			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException {
+			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException, NotCompatibleTypeException {
 
 		// Restart the form to avoid test cross references
 		initForm();

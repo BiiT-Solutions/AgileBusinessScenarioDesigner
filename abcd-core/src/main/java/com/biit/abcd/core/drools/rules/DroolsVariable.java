@@ -1,14 +1,13 @@
 package com.biit.abcd.core.drools.rules;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
+import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.TreeObject;
 
@@ -17,36 +16,54 @@ public class DroolsVariable {
 	private String droolsId;
 	private String droolsCode;
 	private DroolsVariableScope scope;
-	private List<DroolsVariable> previousConditions;
 	private ExpressionValueTreeObjectReference value;
 	private TreeObject treeObject;
+	private CustomVariable customVariable;
 
 	public DroolsVariable() {
-		previousConditions = new ArrayList<DroolsVariable>();
 	}
 
 	public DroolsVariable(TreeObject treeObject) {
-		previousConditions = new ArrayList<DroolsVariable>();
-		this.treeObject = treeObject;
-		createPreviousConditions(treeObject);
+		setTreeObject(treeObject);
+		setDroolsId(treeObject.getUniqueNameReadable());
+		setScope(treeObject);
 	}
 
 	public DroolsVariable(ExpressionValueTreeObjectReference value) {
-		this.value = value;
-		treeObject = value.getReference();
-		createPreviousConditions(treeObject);
+		setValue(value);
+		setTreeObject(value.getReference());
+		setDroolsId(value.getReference().getUniqueNameReadable());
+		setScope(value.getReference());
 	}
 
-	public List<DroolsVariable> getPreviousConditions() {
-		return previousConditions;
+	public DroolsVariable(ExpressionValueCustomVariable value) {
+		setValue(value);
+		setTreeObject(value.getReference());
+		setDroolsId(value.getReference().getUniqueNameReadable());
+		setCustomVariable(value.getVariable());
+		setScope(value.getReference());
 	}
 
-	public void setPreviousConditions(List<DroolsVariable> previousConditions) {
-		this.previousConditions = previousConditions;
+	public String getName() {
+		if (customVariable != null) {
+			return customVariable.getName();
+		} else
+			return treeObject.getName();
 	}
 
-	public void addPreviousCondition(DroolsVariable previousCondition) {
-		getPreviousConditions().add(previousCondition);
+	private void setScope(TreeObject treeObject) {
+		if (treeObject instanceof Form) {
+			setScope(DroolsVariableScope.FORM);
+
+		} else if (treeObject instanceof Category) {
+			setScope(DroolsVariableScope.CATEGORY);
+
+		} else if (treeObject instanceof Group) {
+			setScope(DroolsVariableScope.GROUP);
+
+		} else if (treeObject instanceof Question) {
+			setScope(DroolsVariableScope.QUESTION);
+		}
 	}
 
 	public DroolsVariableScope getScope() {
@@ -88,24 +105,13 @@ public class DroolsVariable {
 	public void setTreeObject(TreeObject treeObject) {
 		this.treeObject = treeObject;
 	}
+	
+	public CustomVariable getCustomVariable() {
+		return customVariable;
+	}
 
-	private void createPreviousConditions(TreeObject treeObject) {
-		if (treeObject instanceof Form) {
-			setScope(DroolsVariableScope.FORM);
-			previousConditions.add(new DroolsVariable(treeObject));
-
-		} else if (treeObject instanceof Category) {
-			setScope(DroolsVariableScope.CATEGORY);
-			previousConditions.add(new DroolsVariable(treeObject.getParent()));
-
-		} else if (treeObject instanceof Group) {
-			setScope(DroolsVariableScope.GROUP);
-			previousConditions.add(new DroolsVariable(treeObject.getParent()));
-
-		} else if (treeObject instanceof Question) {
-			setScope(DroolsVariableScope.QUESTION);
-			previousConditions.add(new DroolsVariable(treeObject.getParent()));
-		}
+	public void setCustomVariable(CustomVariable customVariable) {
+		this.customVariable = customVariable;
 	}
 
 	private void transformToDroolsCode(TreeObject treeObject) {

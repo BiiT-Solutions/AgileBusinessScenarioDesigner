@@ -11,6 +11,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -183,6 +184,9 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								} catch (GroupDoesNotExistException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (NotCompatibleTypeException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
