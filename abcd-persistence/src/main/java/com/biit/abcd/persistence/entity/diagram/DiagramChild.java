@@ -26,6 +26,14 @@ public class DiagramChild extends DiagramElement {
 		setBiitText(biitText);
 	}
 
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		if (childDiagram != null) {
+			childDiagram.resetIds();
+		}
+	}
+
 	public Diagram getChildDiagram() {
 		return childDiagram;
 	}

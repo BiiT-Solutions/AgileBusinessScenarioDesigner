@@ -54,10 +54,12 @@ public class Diagram extends StorableObject implements INameAttribute {
 	private List<DiagramObject> diagramElements;
 
 	public Diagram() {
+		super();
 		diagramElements = new ArrayList<>();
 	}
 
 	public Diagram(String name) {
+		super();
 		this.name = name;
 		diagramElements = new ArrayList<>();
 	}

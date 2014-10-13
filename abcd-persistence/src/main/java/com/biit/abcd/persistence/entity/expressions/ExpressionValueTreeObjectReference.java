@@ -43,9 +43,9 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	@Override
 	public void resetIds() {
 		super.resetIds();
-//		if (reference != null) {
-//			reference.resetIds();
-//		}
+		// if (reference != null) {
+		// reference.resetIds();
+		// }
 	}
 
 	public TreeObject getReference() {
@@ -102,8 +102,10 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.add(reference);
-		innerStorableObjects.addAll(reference.getAllInnerStorableObjects());
+		if (reference != null) {
+			innerStorableObjects.add(reference);
+			innerStorableObjects.addAll(reference.getAllInnerStorableObjects());
+		}
 		return innerStorableObjects;
 	}
 

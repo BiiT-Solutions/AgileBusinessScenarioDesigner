@@ -326,6 +326,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 	}
 
 	public void updateNewVersionButton(SimpleFormView selected) {
-		newVersion.setEnabled(selected.isLastVersion());
+		if (selected != null) {
+			int lastVersion = formDao.getLastVersion(selected.getLabel(), selected.getOrganizationId());
+			newVersion.setEnabled(selected.getVersion() == lastVersion);
+		}
 	}
 }

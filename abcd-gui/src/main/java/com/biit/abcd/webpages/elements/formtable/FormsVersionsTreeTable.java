@@ -3,8 +3,6 @@ package com.biit.abcd.webpages.elements.formtable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.AbcdAuthorizationService;
@@ -248,8 +247,13 @@ public class FormsVersionsTreeTable extends TreeTable {
 		return null;
 	}
 
+	public void refreshFormTable() {
+		initializeFormTable();
+	}
+
 	private void initializeFormTable() {
 		formMap = initializeFormData();
+		removeAllItems();
 		for (List<SimpleFormView> forms : formMap.values()) {
 			for (SimpleFormView form : forms) {
 				addForm(form);
@@ -284,34 +288,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			}
 		}
 
-		for (List<SimpleFormView> formList : formData.values()) {
-			Collections.sort(formList, new FormVersionComparator());
-		}
-
-		// Set witch is the last version.
-		for (List<SimpleFormView> formList : formData.values()) {
-			for (int i = 0; i < formList.size(); i++) {
-				if (i < formList.size() - 1) {
-					formList.get(i).setLastVersion(false);
-				} else {
-					formList.get(i).setLastVersion(true);
-				}
-			}
-		}
-
 		return formData;
-	}
-
-	/**
-	 * This is a form comparator that sorts by version number. It is used to sort the lists of forms that we have
-	 * created for each different form name.
-	 * 
-	 */
-	private class FormVersionComparator implements Comparator<SimpleFormView> {
-		@Override
-		public int compare(SimpleFormView arg0, SimpleFormView arg1) {
-			return arg1.getVersion().compareTo(arg0.getVersion());
-		}
 	}
 
 	/**
@@ -345,6 +322,19 @@ public class FormsVersionsTreeTable extends TreeTable {
 				SimpleFormView tableForm = (SimpleFormView) itemId;
 				if (tableForm.getId() != null && tableForm.getId().equals(form.getId())) {
 					setValue(tableForm);
+				}
+			}
+		}
+	}
+
+	public void selectForm(Form form) {
+		if (form != null) {
+			for (Object itemId : getItemIds()) {
+				if (itemId instanceof SimpleFormView) {
+					SimpleFormView tableForm = (SimpleFormView) itemId;
+					if (tableForm.getId() != null && tableForm.getId().equals(form.getId())) {
+						setValue(tableForm);
+					}
 				}
 			}
 		}

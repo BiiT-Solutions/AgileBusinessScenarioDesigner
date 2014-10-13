@@ -18,7 +18,6 @@ public class SimpleFormView {
 	private Timestamp availableFrom;
 	private Timestamp availableTo;
 	private long organizationId;
-	private boolean isLastVersion = false;
 
 	public SimpleFormView() {
 
@@ -138,14 +137,6 @@ public class SimpleFormView {
 
 	public void setOrganizationId(long organizationId) {
 		this.organizationId = organizationId;
-	}
-
-	public boolean isLastVersion() {
-		return isLastVersion;
-	}
-
-	public void setLastVersion(boolean isLastVersion) {
-		this.isLastVersion = isLastVersion;
 	}
 
 }

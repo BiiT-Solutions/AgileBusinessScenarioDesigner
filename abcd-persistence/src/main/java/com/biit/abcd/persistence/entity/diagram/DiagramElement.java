@@ -180,7 +180,7 @@ public abstract class DiagramElement extends DiagramObject {
 
 	@Override
 	public String toString() {
-		return "Element: " + getJointjsId() + " " + getType().getJsonType();
+		return "Element: " + getJointjsId();
 	}
 
 	public List<DiagramLink> getOutgoingLinks() {

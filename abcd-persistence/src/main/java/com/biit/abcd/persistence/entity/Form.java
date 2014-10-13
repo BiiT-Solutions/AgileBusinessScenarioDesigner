@@ -25,6 +25,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
@@ -144,6 +145,17 @@ public class Form extends BaseForm {
 		}
 	}
 
+	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
+		Form newVersion = (Form) generateCopy(false, true);
+		newVersion.setVersion(getVersion() + 1);
+		newVersion.resetIds();
+		newVersion.setCreatedBy(user);
+		newVersion.setUpdatedBy(user);
+		newVersion.setCreationTime();
+		newVersion.setUpdateTime();
+		return newVersion;
+	}
+
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		super.copyData(object);
@@ -155,9 +167,14 @@ public class Form extends BaseForm {
 		// ComparatorId -> New StorableObject.
 		Map<String, TreeObject> formElements = new HashMap<>();
 		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
+		formElementsChildren.add(this);
+		System.out.println("-----------------------------------------------------------");
+		System.out.println("~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~");
+		AbcdLogger.warning(this.getClass().getName(), formElementsChildren.toString());
 		for (TreeObject children : formElementsChildren) {
 			formElements.put(children.getComparationId(), children);
 		}
+		System.out.println("000000000000000000000000000000000000000000");
 
 		// Copy CustomVariables
 		getCustomVariables().clear();
@@ -173,6 +190,7 @@ public class Form extends BaseForm {
 		for (CustomVariable children : formVariablesChildren) {
 			formVariables.put(children.getComparationId(), children);
 		}
+		System.out.println("111111111111111111111111111111111111111111111111");
 
 		// Copy ExpressionChains (must be AFTER CustomVariables)
 		getExpressionChains().clear();
@@ -190,6 +208,7 @@ public class Form extends BaseForm {
 		for (ExpressionChain children : formExpressionChainsChildren) {
 			formExpressionChains.put(children.getComparationId(), children);
 		}
+		System.out.println("2222222222222222222222222222222222222222222222");
 
 		// Copy TableRules
 		getTableRules().clear();
@@ -207,6 +226,7 @@ public class Form extends BaseForm {
 		for (TableRule children : formTableRulesChildren) {
 			formTableRules.put(children.getComparationId(), children);
 		}
+		System.out.println("33333333333333333333333333333333333333333333333");
 
 		// Copy Rules
 		getRules().clear();
@@ -224,6 +244,7 @@ public class Form extends BaseForm {
 		for (Rule children : formRulesChildren) {
 			formRules.put(children.getComparationId(), children);
 		}
+		System.out.println("44444444444444444444444444444444444444444444444444");
 
 		// Copy TestScenarios
 		for (TestScenario testScenario : getTestScenarios()) {
@@ -232,6 +253,8 @@ public class Form extends BaseForm {
 			updateTreeObjectReferences((Set<StorableObject>) new HashSet<StorableObject>(Arrays.asList(testScenario)),
 					formElements);
 		}
+		
+		System.out.println("555555555555555555555555555555555555555555555555555");
 
 		// Copy Diagrams
 		getDiagrams().clear();
@@ -275,6 +298,8 @@ public class Form extends BaseForm {
 				if (formDiagrams.get(diagramChild.getChildDiagram().getComparationId()) != null) {
 					diagramChild.setChildDiagram(formDiagrams.get(diagramChild.getChildDiagram().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getChildDiagram()
+							+ "'.");
 					formDiagrams.put(diagramChild.getChildDiagram().getComparationId(), diagramChild.getChildDiagram());
 				}
 			}
@@ -296,6 +321,8 @@ public class Form extends BaseForm {
 					diagramExpression.setFormExpression(formExpressionChains.get(diagramExpression.getFormExpression()
 							.getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(),
+							"Adding expression '" + diagramExpression.getFormExpression() + "'.");
 					formExpressionChains.put(diagramExpression.getFormExpression().getComparationId(),
 							diagramExpression.getFormExpression());
 				}
@@ -316,6 +343,7 @@ public class Form extends BaseForm {
 				if (formRules.get(diagramRule.getRule().getComparationId()) != null) {
 					diagramRule.setRule(formRules.get(diagramRule.getRule().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding rule '" + diagramRule.getRule() + "'.");
 					formRules.put(diagramRule.getRule().getComparationId(), diagramRule.getRule());
 				}
 			}
@@ -336,6 +364,7 @@ public class Form extends BaseForm {
 				if (formTableRules.get(diagramTable.getTable().getComparationId()) != null) {
 					diagramTable.setTable(formTableRules.get(diagramTable.getTable().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding table '" + diagramTable.getTable() + "'.");
 					formTableRules.put(diagramTable.getTable().getComparationId(), diagramTable.getTable());
 				}
 			}
@@ -357,6 +386,8 @@ public class Form extends BaseForm {
 					expressionValueTreeObjectReference.setReference(formElements.get(expressionValueTreeObjectReference
 							.getReference().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding reference '"
+							+ expressionValueTreeObjectReference.getReference() + "'.");
 					formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
 							expressionValueTreeObjectReference.getReference());
 				}
@@ -558,18 +589,6 @@ public class Form extends BaseForm {
 
 	public void removeTestScenario(TestScenario testScenario) {
 		testScenarios.remove(testScenario);
-	}
-
-	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
-		Form newVersion = new Form();
-		newVersion.copyData(this);
-		newVersion.setVersion(getVersion() + 1);
-		newVersion.resetIds();
-		newVersion.setCreatedBy(user);
-		newVersion.setUpdatedBy(user);
-		newVersion.setCreationTime();
-		newVersion.setUpdateTime();
-		return newVersion;
 	}
 
 }

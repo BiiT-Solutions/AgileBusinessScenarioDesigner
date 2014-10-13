@@ -3,7 +3,6 @@ package com.biit.abcd.persistence.entity.diagram;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -17,7 +16,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "diagram_table")
 public class DiagramTable extends DiagramElement {
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private TableRule table;
 
 	public DiagramTable() {

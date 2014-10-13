@@ -90,11 +90,13 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void diagramObjectPicked(DiagramObject object) {
-				propertiesContainer.focus();
-				propertiesContainer.updatePropertiesComponent(object);
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' Element " + object + " picked in Diagram: '" + diagramBuilder.getDiagram().getName()
-						+ "'.");
+				if (object != null) {
+					propertiesContainer.focus();
+					propertiesContainer.updatePropertiesComponent(object);
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' Element " + object
+							+ " picked in Diagram: '" + diagramBuilder.getDiagram().getName() + "'.");
+				}
 			}
 		});
 		diagramBuilder.addJumpToListener(new JumpToListener() {
