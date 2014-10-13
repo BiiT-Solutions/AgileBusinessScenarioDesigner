@@ -121,10 +121,8 @@ public class DiagramParser {
 	}
 
 	/**
-	 * A fork adds some extra condition or conditions to the rules that happen
-	 * after <br>
-	 * A fork and its outgoing links define a condition that a question or a
-	 * score must fulfill
+	 * A fork adds some extra condition or conditions to the rules that happen after <br>
+	 * A fork and its outgoing links define a condition that a question or a score must fulfill
 	 * 
 	 * @return
 	 * @throws RuleNotImplementedException

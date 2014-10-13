@@ -79,9 +79,11 @@ public class DiagramFork extends DiagramElement {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		for (ExpressionValueTreeObjectReference child : references) {
-			innerStorableObjects.add(child);
-			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+		if (references != null) {
+			for (ExpressionValueTreeObjectReference child : references) {
+				innerStorableObjects.add(child);
+				innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+			}
 		}
 		return innerStorableObjects;
 	}
@@ -89,14 +91,15 @@ public class DiagramFork extends DiagramElement {
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		if (object instanceof DiagramFork) {
-			super.copyBasicInfo(object);
+			super.copyData(object);
 			DiagramFork diagramFork = (DiagramFork) object;
-
-			references.clear();
-			for (ExpressionValueTreeObjectReference child : diagramFork.references) {
-				ExpressionValueTreeObjectReference newReference = new ExpressionValueTreeObjectReference();
-				newReference.copyData(child);
-				references.add(newReference);
+			if (references != null) {
+				references.clear();
+				for (ExpressionValueTreeObjectReference child : diagramFork.references) {
+					ExpressionValueTreeObjectReference newReference = new ExpressionValueTreeObjectReference();
+					newReference.copyData(child);
+					references.add(newReference);
+				}
 			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramFork.");

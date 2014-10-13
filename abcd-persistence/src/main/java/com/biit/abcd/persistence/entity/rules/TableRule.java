@@ -41,10 +41,12 @@ public class TableRule extends StorableObject implements INameAttribute {
 	private List<TableRuleRow> rules;
 
 	public TableRule() {
+		super();
 		rules = new ArrayList<>();
 	}
 
 	public TableRule(String name) {
+		super();
 		rules = new ArrayList<>();
 		setName(name);
 	}

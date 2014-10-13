@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hibernate.exception.ConstraintViolationException;
-
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -119,18 +117,21 @@ public class FormManager extends FormWebPageComponent {
 		formDao.makePersistent(form);
 		simpleView.setId(form.getId());
 	}
-	
-	public void setFormById(Long formId){
+
+	public void setFormById(Long formId) {
 		UserSessionHandler.getFormController().setForm(formDao.read(formId));
 	}
+
 	public void newFormVersion() {
 		Form newForm;
 		try {
 			RootForm rootForm = formTable.getSelectedRootForm();
 			SimpleFormView currentForm = rootForm.getLastFormVersion();
-
 			newForm = createNewFormVersion(currentForm);
-			addNewForm(newForm);
+
+			formDao.makePersistent(newForm);
+			formTable.refreshFormTable();
+			formTable.selectForm(newForm);
 		} catch (NotValidTreeObjectException e) {
 			MessageManager.showError(LanguageCodes.ERROR_NAME_TOO_LONG);
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
@@ -156,13 +157,6 @@ public class FormManager extends FormWebPageComponent {
 			AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
 					+ " createForm " + ex.getMessage());
 			throw ex;
-		}
-
-		try {
-			formDao.makePersistent(newFormVersion);
-		} catch (ConstraintViolationException cve) {
-			AbcdLogger.errorMessage(this.getClass().getName(), cve);
-			throw cve;
 		}
 
 		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()

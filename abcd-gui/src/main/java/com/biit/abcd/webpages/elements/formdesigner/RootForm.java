@@ -25,14 +25,15 @@ public class RootForm extends SimpleFormView {
 	}
 
 	public SimpleFormView getLastFormVersion() {
-		int numVersion = 0;
-		SimpleFormView lastVersion = null;
+		int lastVersionChecked = 0;
+		SimpleFormView lastVersionForm = null;
 		for (SimpleFormView form : getChildForms()) {
-			if (form.getVersion() > numVersion) {
-				lastVersion = form;
+			if (form.getVersion() > lastVersionChecked) {
+				lastVersionForm = form;
+				lastVersionChecked = form.getVersion();
 			}
 		}
-		return lastVersion;
+		return lastVersionForm;
 	}
 
 	public List<SimpleFormView> getChildForms() {
@@ -41,5 +42,19 @@ public class RootForm extends SimpleFormView {
 
 	public void addChildForm(SimpleFormView form) {
 		childForms.add(form);
+	}
+
+	/**
+	 * Adds a child in the specified index.
+	 * 
+	 * @param form
+	 * @param index
+	 */
+	public void addChildForm(SimpleFormView form, int index) {
+		if (index >= 0 && index < childForms.size()) {
+			childForms.add(index, form);
+		} else {
+			addChildForm(form);
+		}
 	}
 }

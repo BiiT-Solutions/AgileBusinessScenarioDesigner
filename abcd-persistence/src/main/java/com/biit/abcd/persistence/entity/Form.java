@@ -25,6 +25,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
@@ -144,6 +145,17 @@ public class Form extends BaseForm {
 		}
 	}
 
+	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
+		Form newVersion = (Form) generateCopy(false, true);
+		newVersion.setVersion(getVersion() + 1);
+		newVersion.resetIds();
+		newVersion.setCreatedBy(user);
+		newVersion.setUpdatedBy(user);
+		newVersion.setCreationTime();
+		newVersion.setUpdateTime();
+		return newVersion;
+	}
+
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		super.copyData(object);
@@ -155,6 +167,8 @@ public class Form extends BaseForm {
 		// ComparatorId -> New StorableObject.
 		Map<String, TreeObject> formElements = new HashMap<>();
 		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
+		formElementsChildren.add(this);
+		AbcdLogger.warning(this.getClass().getName(), formElementsChildren.toString());
 		for (TreeObject children : formElementsChildren) {
 			formElements.put(children.getComparationId(), children);
 		}
@@ -275,6 +289,8 @@ public class Form extends BaseForm {
 				if (formDiagrams.get(diagramChild.getChildDiagram().getComparationId()) != null) {
 					diagramChild.setChildDiagram(formDiagrams.get(diagramChild.getChildDiagram().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getChildDiagram()
+							+ "'.");
 					formDiagrams.put(diagramChild.getChildDiagram().getComparationId(), diagramChild.getChildDiagram());
 				}
 			}
@@ -296,6 +312,8 @@ public class Form extends BaseForm {
 					diagramExpression.setFormExpression(formExpressionChains.get(diagramExpression.getFormExpression()
 							.getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(),
+							"Adding expression '" + diagramExpression.getFormExpression() + "'.");
 					formExpressionChains.put(diagramExpression.getFormExpression().getComparationId(),
 							diagramExpression.getFormExpression());
 				}
@@ -316,6 +334,7 @@ public class Form extends BaseForm {
 				if (formRules.get(diagramRule.getRule().getComparationId()) != null) {
 					diagramRule.setRule(formRules.get(diagramRule.getRule().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding rule '" + diagramRule.getRule() + "'.");
 					formRules.put(diagramRule.getRule().getComparationId(), diagramRule.getRule());
 				}
 			}
@@ -336,6 +355,7 @@ public class Form extends BaseForm {
 				if (formTableRules.get(diagramTable.getTable().getComparationId()) != null) {
 					diagramTable.setTable(formTableRules.get(diagramTable.getTable().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding table '" + diagramTable.getTable() + "'.");
 					formTableRules.put(diagramTable.getTable().getComparationId(), diagramTable.getTable());
 				}
 			}
@@ -357,6 +377,8 @@ public class Form extends BaseForm {
 					expressionValueTreeObjectReference.setReference(formElements.get(expressionValueTreeObjectReference
 							.getReference().getComparationId()));
 				} else {
+					AbcdLogger.warning(this.getClass().getName(), "Adding reference '"
+							+ expressionValueTreeObjectReference.getReference() + "'.");
 					formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
 							expressionValueTreeObjectReference.getReference());
 				}
@@ -558,18 +580,6 @@ public class Form extends BaseForm {
 
 	public void removeTestScenario(TestScenario testScenario) {
 		testScenarios.remove(testScenario);
-	}
-
-	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
-		Form newVersion = new Form();
-		newVersion.copyData(this);
-		newVersion.setVersion(getVersion() + 1);
-		newVersion.resetIds();
-		newVersion.setCreatedBy(user);
-		newVersion.setUpdatedBy(user);
-		newVersion.setCreationTime();
-		newVersion.setUpdateTime();
-		return newVersion;
 	}
 
 }
