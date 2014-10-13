@@ -168,13 +168,10 @@ public class Form extends BaseForm {
 		Map<String, TreeObject> formElements = new HashMap<>();
 		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
 		formElementsChildren.add(this);
-		System.out.println("-----------------------------------------------------------");
-		System.out.println("~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~4~~");
 		AbcdLogger.warning(this.getClass().getName(), formElementsChildren.toString());
 		for (TreeObject children : formElementsChildren) {
 			formElements.put(children.getComparationId(), children);
 		}
-		System.out.println("000000000000000000000000000000000000000000");
 
 		// Copy CustomVariables
 		getCustomVariables().clear();
@@ -190,7 +187,6 @@ public class Form extends BaseForm {
 		for (CustomVariable children : formVariablesChildren) {
 			formVariables.put(children.getComparationId(), children);
 		}
-		System.out.println("111111111111111111111111111111111111111111111111");
 
 		// Copy ExpressionChains (must be AFTER CustomVariables)
 		getExpressionChains().clear();
@@ -208,7 +204,6 @@ public class Form extends BaseForm {
 		for (ExpressionChain children : formExpressionChainsChildren) {
 			formExpressionChains.put(children.getComparationId(), children);
 		}
-		System.out.println("2222222222222222222222222222222222222222222222");
 
 		// Copy TableRules
 		getTableRules().clear();
@@ -226,7 +221,6 @@ public class Form extends BaseForm {
 		for (TableRule children : formTableRulesChildren) {
 			formTableRules.put(children.getComparationId(), children);
 		}
-		System.out.println("33333333333333333333333333333333333333333333333");
 
 		// Copy Rules
 		getRules().clear();
@@ -244,7 +238,6 @@ public class Form extends BaseForm {
 		for (Rule children : formRulesChildren) {
 			formRules.put(children.getComparationId(), children);
 		}
-		System.out.println("44444444444444444444444444444444444444444444444444");
 
 		// Copy TestScenarios
 		for (TestScenario testScenario : getTestScenarios()) {
@@ -253,8 +246,6 @@ public class Form extends BaseForm {
 			updateTreeObjectReferences((Set<StorableObject>) new HashSet<StorableObject>(Arrays.asList(testScenario)),
 					formElements);
 		}
-		
-		System.out.println("555555555555555555555555555555555555555555555555555");
 
 		// Copy Diagrams
 		getDiagrams().clear();
