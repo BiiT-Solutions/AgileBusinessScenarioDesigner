@@ -246,6 +246,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						// Search the form by name
 						final WindowLaunchTestScenario launchTestScenarioWindow = new WindowLaunchTestScenario(parent
 								.getForm().getName());
 						launchTestScenarioWindow.addAcceptActionListener(new AcceptActionListener() {

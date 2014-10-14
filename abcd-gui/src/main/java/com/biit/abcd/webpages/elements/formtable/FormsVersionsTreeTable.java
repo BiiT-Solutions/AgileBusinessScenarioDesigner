@@ -217,6 +217,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 		RootForm parent = getFormRoot(form);
 		if (parent == null) {
 			parent = new RootForm(form.getLabel());
+			// Needed to look form the children forms in the launch test window
+			parent.setName(form.getName());
 			addRow(parent);
 		}
 		if (form != null) {

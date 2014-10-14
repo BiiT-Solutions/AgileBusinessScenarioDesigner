@@ -97,8 +97,8 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
-				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId FROM tree_forms tf where tf.name='"
-						+ name + "'");
+				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId FROM tree_forms tf WHERE tf.name='"
+						+ name + "' ORDER BY tf.version DESC");
 
 		List<Object[]> rows = query.list();
 

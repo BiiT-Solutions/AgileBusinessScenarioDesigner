@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.SimpleFormView;
 public class RootForm extends SimpleFormView {
 
 	private List<SimpleFormView> childForms;
+	private String rootName;
 
 	public RootForm(String label) {
 		setLabel(label);
@@ -56,5 +57,13 @@ public class RootForm extends SimpleFormView {
 		} else {
 			addChildForm(form);
 		}
+	}
+
+	public String getRootName() {
+		return rootName;
+	}
+
+	public void setRootName(String rootName) {
+		this.rootName = rootName;
 	}
 }

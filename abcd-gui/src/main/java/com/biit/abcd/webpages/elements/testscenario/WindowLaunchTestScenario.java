@@ -1,8 +1,6 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.biit.abcd.core.SpringContextHelper;
@@ -89,20 +87,9 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	 * @throws NotConnectedToDatabaseException
 	 */
 	private void initializeFormData(String formName) {
+		System.out.println("FORMNAME: " + formName);
 		formData = simpleFormViewDao.getSimpleFormViewByName(formName);
-		Collections.sort(formData, new FormVersionComparator());
-	}
-
-	/**
-	 * This is a form comparator that sorts by version number. It is used to
-	 * sort the lists of forms
-	 * 
-	 */
-	private class FormVersionComparator implements Comparator<SimpleFormView> {
-		@Override
-		public int compare(SimpleFormView arg0, SimpleFormView arg1) {
-			return arg0.getVersion().compareTo(arg1.getVersion());
-		}
+		System.out.println("FORM DATA: " + formData.size());
 	}
 
 	public Long getSelectedFormId() {
