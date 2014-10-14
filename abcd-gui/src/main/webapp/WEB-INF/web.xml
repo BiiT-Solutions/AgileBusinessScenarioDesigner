@@ -5,14 +5,13 @@
 	<display-name>Agile Business sCenario Designer Tool</display-name>
 
 	<context-param>
-		<param-name>heartbeatInterval</param-name>
-		<param-value>600</param-value>
-	</context-param>
-
-	<context-param>
 		<description>
 			Agile Business sCenario Designer Tool
 		</description>
+
+		<param-name>heartbeatInterval</param-name>
+		<param-value>120</param-value>
+		
 		<param-name>productionMode</param-name>
 		<param-value>true</param-value>
 	</context-param>

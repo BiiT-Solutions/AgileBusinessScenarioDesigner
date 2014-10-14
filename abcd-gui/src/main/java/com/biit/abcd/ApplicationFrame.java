@@ -26,13 +26,18 @@ public class ApplicationFrame extends UI {
 
 	@Override
 	public void detach() {
+		releaseResources();
+		super.detach();
+	}
+
+	private void releaseResources() {
 		if (UserSessionHandler.getUser() != null) {
 			// Log user ui expired.
 			AbcdLogger.info(this.getClass().getName(), UserSessionHandler.getUser().getEmailAddress()
-					+ " Ui has expired.");
+					+ " UI has expired.");
 			UiAccesser.releaseForm(UserSessionHandler.getUser());
+			UserSessionHandler.setUser(null);
 		}
-		super.detach();
 	}
 
 	private void setChangeViewEvents() {
