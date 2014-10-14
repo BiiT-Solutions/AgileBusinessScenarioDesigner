@@ -2,6 +2,8 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
+import com.biit.abcd.webpages.components.IconSize;
+import com.biit.abcd.webpages.components.SaveAsButton;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
@@ -9,7 +11,7 @@ import com.vaadin.ui.Button;
 public class DecisionTableEditorUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 1878327027307547248L;
 	private IconButton saveButton, newTable, removeTable, newConditionButton, deleteConditionButton, newRuleButton,
-			deleteRuleButton, copyRowsButton, pasteRowsButton;
+			deleteRuleButton, copyRowsButton, pasteRowsButton, exportToCsvButton;
 
 	public DecisionTableEditorUpperMenu() {
 		super();
@@ -35,6 +37,10 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 				ThemeIcon.COPY_ROW, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_COPY_ROWS_TOOLTIP);
 		pasteRowsButton = new IconButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_CAPTION,
 				ThemeIcon.PASTE_ROW, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_TOOLTIP);
+		// Create the table rule csv file
+		exportToCsvButton = new SaveAsButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_CAPTION,
+				ThemeIcon.FORM_MANAGER_EXPORT_RULES, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_TOOLTIP,
+				IconSize.MEDIUM, new SaveTableToCsvAction());
 
 		addIconButton(saveButton);
 		addIconButton(newTable);
@@ -45,6 +51,7 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		addIconButton(deleteRuleButton);
 		addIconButton(copyRowsButton);
 		addIconButton(pasteRowsButton);
+		addIconButton(exportToCsvButton);
 
 		for (Button button : getDisabledButtons()) {
 			button.setEnabled(false);
@@ -140,6 +147,18 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 	public void removePasteyRowsClickListener(Button.ClickListener listener) {
 		if (!getDisabledButtons().contains(pasteRowsButton)) {
 			pasteRowsButton.removeClickListener(listener);
+		}
+	}
+
+	public void addExportToCsvClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(exportToCsvButton)) {
+			exportToCsvButton.addClickListener(listener);
+		}
+	}
+
+	public void removeExportToCsvClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(exportToCsvButton)) {
+			exportToCsvButton.removeClickListener(listener);
 		}
 	}
 }

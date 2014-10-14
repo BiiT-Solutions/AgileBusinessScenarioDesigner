@@ -292,6 +292,14 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 						+ "' has pasted rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 			}
 		});
+		
+//		decisionTableEditorUpperMenu.addExportToCsvClickListener(new ClickListener() {
+//			@Override
+//			public void buttonClick(ClickEvent event) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
