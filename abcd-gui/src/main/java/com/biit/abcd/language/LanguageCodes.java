@@ -271,6 +271,8 @@ public enum LanguageCodes {
 	CONDITION_TABLE_EDIT_CONDITION_CAPTION("condition.window.edit.caption"),
 	CONDITION_TABLE_EDIT_ACTION_CAPTION("action.window.edit.caption"),
 	CONDITION_TABLE_NULL_VALUE("condition.table.null.value"),
+	CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_CAPTION("condition.table.editor.button.export.to.csv.caption"),
+	CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_TOOLTIP("condition.table.editor.button.export.to.csv.tooltip"),
 
 	WINDOW_NEW_TABLE_NAME_TEXTFIELD("windowNewTable.name.textField"),
 	WINDOW_NEW_EXPRESSION_TEXTFIELD("windowNewExpression.name.textField"),
