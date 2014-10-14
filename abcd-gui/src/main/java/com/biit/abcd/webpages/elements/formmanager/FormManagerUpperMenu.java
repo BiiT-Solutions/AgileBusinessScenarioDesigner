@@ -3,7 +3,6 @@ package com.biit.abcd.webpages.elements.formmanager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
@@ -224,9 +223,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 		// });
 
 		// Create new test scenario
-		createTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS,
-				ThemeIcon.FORM_TEST_PAGE, LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM,
-				new ClickListener() {
+		createTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, ThemeIcon.FORM_TEST_PAGE,
+				LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = -1628560253598118060L;
 
 					@Override
@@ -246,9 +244,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						// Search the form by name
-						final WindowLaunchTestScenario launchTestScenarioWindow = new WindowLaunchTestScenario(parent
-								.getForm().getName());
+						final WindowLaunchTestScenario launchTestScenarioWindow = new WindowLaunchTestScenario(
+								parent.getForm());
 						launchTestScenarioWindow.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -256,16 +253,22 @@ public class FormManagerUpperMenu extends UpperMenu {
 								Long testScenarioId = launchTestScenarioWindow.getSelectedTestScenarioId();
 								if ((formId != null) && (testScenarioId != null)) {
 									parent.setFormById(formId);
-									Set<TestScenario> testScenarios = UserSessionHandler.getFormController().getForm()
-											.getTestScenarios();
-
-									TestScenario testScenarioSelected = null;
-									for (TestScenario testScenario : testScenarios) {
-										if (testScenario.getId().equals(testScenarioId)) {
-											testScenarioSelected = testScenario;
-											break;
-										}
-									}
+//									Set<TestScenario> testScenarios = UserSessionHandler.getFormController().getForm()
+//											.getTestScenarios();
+									
+									TestScenario testScenarioDB = UserSessionHandler.getTestScenariosController()
+											.getTestScenarioById(testScenarioId);
+//									if(testScenarioDB != null){
+//										System.out.println(testScenarioDB.getName());
+//									}
+//
+//									TestScenario testScenarioSelected = null;
+//									for (TestScenario testScenario : testScenarios) {
+//										if (testScenario.getId().equals(testScenarioId)) {
+//											testScenarioSelected = testScenario;
+//											break;
+//										}
+//									}
 
 									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
 									ISubmittedForm submittedForm;
@@ -273,7 +276,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 										submittedForm = droolsExporter.processForm(UserSessionHandler
 												.getFormController().getForm(), UserSessionHandler
 												.getGlobalVariablesController().getGlobalVariables(),
-												testScenarioSelected);
+												testScenarioDB);
 
 										if (submittedForm instanceof DroolsForm) {
 											final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
@@ -359,7 +362,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		if (selected != null && !(selected instanceof RootForm)) {
 			int lastVersion = formDao.getLastVersion(selected.getLabel(), selected.getOrganizationId());
 			newVersion.setEnabled(selected.getVersion() == lastVersion);
-		}else{
+		} else {
 			newVersion.setEnabled(false);
 		}
 	}

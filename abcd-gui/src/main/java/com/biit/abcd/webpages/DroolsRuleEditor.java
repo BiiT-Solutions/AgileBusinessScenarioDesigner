@@ -173,7 +173,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-			AbcdLogger.errorMessage(DecisionTableEditor.class.getName(), e);
+			AbcdLogger.errorMessage(RuleTableEditor.class.getName(), e);
 		}
 	}
 

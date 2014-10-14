@@ -12,7 +12,7 @@ public enum WebMap {
 	
 	DIAGRAM_BUILDER(FormDiagramBuilder.class),
 	
-	DECISSION_TABLE_EDITOR(DecisionTableEditor.class), 
+	DECISSION_TABLE_EDITOR(RuleTableEditor.class), 
 	
 	EXPRESSION_EDITOR(ExpressionEditor.class),
 	

@@ -88,7 +88,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	private void generateContent(SubmittedForm submittedForm) {
 		formTreeTable.addContainerProperty(TreeObjectTableProperties.ORIGINAL_VALUE, String.class, "");
 		formTreeTable.setColumnWidth(TreeObjectTableProperties.ORIGINAL_VALUE, 150);
-		
+
 		if (form != null) {
 			List<CustomVariable> sortedCustomVariables = new ArrayList<CustomVariable>();
 			sortedCustomVariables.addAll(form.getCustomVariables(com.biit.abcd.persistence.entity.Question.class));
@@ -219,10 +219,18 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 					if (questionTreeObject.getAnswerType().equals(AnswerType.INPUT)
 							&& questionTreeObject.getAnswerFormat().equals(AnswerFormat.DATE)) {
 						try {
-							SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-							String formattedDate = dateFormat.format(questionSubForm.getAnswer());
-							formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-									.setValue(formattedDate);
+							if (questionSubForm.getAnswer() != null) {
+								SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+								System.out.println("QUESTION DATE: " + questionSubForm.getAnswer());
+
+								String formattedDate = dateFormat.format(questionSubForm.getAnswer());
+								formTreeTable.getItem(question)
+										.getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+										.setValue(formattedDate);
+							} else {
+								formTreeTable.getItem(question)
+										.getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE).setValue("-");
+							}
 						} catch (IllegalArgumentException e) {
 							AbcdLogger.errorMessage(this.getClass().getName(), e);
 						}

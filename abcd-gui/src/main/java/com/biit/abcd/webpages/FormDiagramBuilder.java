@@ -116,7 +116,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				}
 				if (element instanceof TableRule) {
 					ApplicationFrame.navigateTo(WebMap.DECISSION_TABLE_EDITOR);
-					DecisionTableEditor decisionTable = (DecisionTableEditor) ((ApplicationFrame) UI.getCurrent())
+					RuleTableEditor decisionTable = (RuleTableEditor) ((ApplicationFrame) UI.getCurrent())
 							.getCurrentView();
 					decisionTable.selectComponent((TableRule) element);
 					AbcdLogger.info(this.getClass().getName(), "User '"

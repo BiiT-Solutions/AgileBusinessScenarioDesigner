@@ -57,7 +57,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
-public class DecisionTableEditor extends FormWebPageComponent implements EditExpressionListener,
+public class RuleTableEditor extends FormWebPageComponent implements EditExpressionListener,
 		ClearExpressionListener, EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
@@ -65,7 +65,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableRuleTableEditable tableSelectionMenu;
 
-	public DecisionTableEditor() {
+	public RuleTableEditor() {
 		super();
 	}
 
@@ -150,7 +150,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void initUpperMenu() {
-		final DecisionTableEditor thisPage = this;
+		final RuleTableEditor thisPage = this;
 		decisionTableEditorUpperMenu = new DecisionTableEditorUpperMenu();
 
 		decisionTableEditorUpperMenu.addSaveButtonClickListener(new ClickListener() {
@@ -304,7 +304,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-			AbcdLogger.errorMessage(DecisionTableEditor.class.getName(), e);
+			AbcdLogger.errorMessage(RuleTableEditor.class.getName(), e);
 		}
 	}
 

@@ -5,14 +5,14 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.abcd.webpages.DecisionTableEditor;
+import com.biit.abcd.webpages.RuleTableEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
 import com.vaadin.ui.TextField;
 
 public class WindoNewTable extends WindowCreateNewObject {
 	private static final long serialVersionUID = -466962195753116776L;
 
-	public WindoNewTable(DecisionTableEditor parentWindow, LanguageCodes windowCaption, LanguageCodes inputFieldCaption) {
+	public WindoNewTable(RuleTableEditor parentWindow, LanguageCodes windowCaption, LanguageCodes inputFieldCaption) {
 		super(parentWindow, windowCaption, inputFieldCaption);
 	}
 
@@ -30,8 +30,8 @@ public class WindoNewTable extends WindowCreateNewObject {
 		tableRule.setUpdatedBy(UserSessionHandler.getUser());
 		tableRule.setUpdateTime();
 		UserSessionHandler.getFormController().getForm().getTableRules().add(tableRule);
-		((DecisionTableEditor) getParentWindow()).addTablefromWindow(tableRule);
-		((DecisionTableEditor) getParentWindow()).sortTableMenu();
+		((RuleTableEditor) getParentWindow()).addTablefromWindow(tableRule);
+		((RuleTableEditor) getParentWindow()).sortTableMenu();
 
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "' has created a " + tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");

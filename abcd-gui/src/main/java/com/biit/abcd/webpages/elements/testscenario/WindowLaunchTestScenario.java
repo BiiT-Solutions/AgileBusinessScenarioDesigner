@@ -26,7 +26,7 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	private ComboBox formVersion;
 	private ComboBox testScenario;
 
-	public WindowLaunchTestScenario(String formName) {
+	public WindowLaunchTestScenario(SimpleFormView formView) {
 		// Add Vaadin context to Spring, and get beans for DAOs.
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
@@ -38,19 +38,19 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 		setClosable(false);
 		setModal(true);
 		setResizable(false);
-		setContent(generateContent(formName));
+		setContent(generateContent(formView));
 	}
 
-	private Component generateContent(String formName) {
+	private Component generateContent(SimpleFormView formView) {
 		FormLayout layout = new FormLayout();
 
 		formVersion = new ComboBox(ServerTranslate.translate(LanguageCodes.LAUNCH_TEST_WINDOW_FORM_LABEL));
 		formVersion.setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		formVersion.setNullSelectionAllowed(false);
-		initializeFormData(formName);
-		for (SimpleFormView formView : formData) {
-			formVersion.addItem(formView);
-			formVersion.setItemCaption(formView, "v" + formView.getVersion().toString());
+		initializeFormData(formView);
+		for (SimpleFormView form : formData) {
+			formVersion.addItem(form);
+			formVersion.setItemCaption(form, "v" + form.getVersion().toString());
 		}
 
 		testScenario = new ComboBox(ServerTranslate.translate(LanguageCodes.LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL));
@@ -86,10 +86,8 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	 * @return
 	 * @throws NotConnectedToDatabaseException
 	 */
-	private void initializeFormData(String formName) {
-		System.out.println("FORMNAME: " + formName);
-		formData = simpleFormViewDao.getSimpleFormViewByName(formName);
-		System.out.println("FORM DATA: " + formData.size());
+	private void initializeFormData(SimpleFormView formView) {
+		formData = simpleFormViewDao.getSimpleFormViewByName(formView.getName());
 	}
 
 	public Long getSelectedFormId() {
