@@ -38,6 +38,7 @@ import com.biit.abcd.webpages.components.SaveAsButton;
 import com.biit.abcd.webpages.components.SettingsWindow;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
+import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -354,7 +355,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	}
 
 	public void updateNewVersionButton(SimpleFormView selected) {
-		if (selected != null) {
+		if (selected != null && !(selected instanceof RootForm)) {
 			int lastVersion = formDao.getLastVersion(selected.getLabel(), selected.getOrganizationId());
 			newVersion.setEnabled(selected.getVersion() == lastVersion);
 		}
