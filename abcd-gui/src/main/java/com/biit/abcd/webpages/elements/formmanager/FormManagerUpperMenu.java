@@ -358,6 +358,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 		if (selected != null && !(selected instanceof RootForm)) {
 			int lastVersion = formDao.getLastVersion(selected.getLabel(), selected.getOrganizationId());
 			newVersion.setEnabled(selected.getVersion() == lastVersion);
+		}else{
+			newVersion.setEnabled(false);
 		}
 	}
 }
