@@ -14,7 +14,7 @@ public class RuleChecker {
 	/**
 	 * Checks if the expression is valid using the jexeval, if not valid,
 	 * returns without parsing any rules and sends an exception
-	 *
+	 * 
 	 * @param row
 	 * @param rowIndex
 	 * @throws ExpressionInvalidException
@@ -23,39 +23,35 @@ public class RuleChecker {
 		try {
 			expression.getExpressionEvaluator().eval();
 		} catch (Exception e) {
-			throw new ExpressionInvalidException("Expression " + expression.getExpression() + " invalid");
+			throw new ExpressionInvalidException("Expression invalid", expression);
 		}
 	}
 
 	/**
-	 * Check if the expression is valid using the jexeval, if not valid,
-	 * returns without parsing any rules and sends an exception
-	 *
+	 * Check if the expression is valid using the jexeval, if not valid, returns
+	 * without parsing any rules and sends an exception
+	 * 
 	 * @param row
 	 * @param rowIndex
 	 * @throws ExpressionInvalidException
 	 */
 	public static void checkRowExpressionValid(TableRuleRow row, int rowIndex) throws ExpressionInvalidException {
 		List<Expression> conditionList = row.getConditions();
-		int columnIndex = 1;
 		for (Expression condition : conditionList) {
 			// Check the conditions that are ExpressionChains, i.e. the answers
 			if (condition instanceof ExpressionChain) {
 				try {
 					((ExpressionChain) condition).getExpressionEvaluator().eval();
 				} catch (Exception e) {
-					throw new ExpressionInvalidException("[" + rowIndex + ":" + columnIndex + "] :: ["
-							+ condition.getRepresentation() + "] :: Answer expression invalid");
+					throw new ExpressionInvalidException("Expression invalid", (ExpressionChain) condition);
 				}
 			}
-			columnIndex++;
 		}
 		// Check the action
 		try {
 			row.getActionChain().getExpressionEvaluator().eval();
 		} catch (Exception e) {
-			throw new ExpressionInvalidException("[" + rowIndex + "] :: Action expression invalid: "
-					+ row.getActionChain().toString());
+			throw new ExpressionInvalidException("Expression invalid", (ExpressionChain) row.getActionChain());
 		}
 	}
 
