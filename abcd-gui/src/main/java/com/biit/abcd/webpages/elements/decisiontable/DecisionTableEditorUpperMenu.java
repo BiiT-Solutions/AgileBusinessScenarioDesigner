@@ -39,7 +39,7 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 				ThemeIcon.PASTE_ROW, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_PASTE_ROWS_TOOLTIP);
 		// Create the table rule csv file
 		exportToCsvButton = new SaveAsButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_CAPTION,
-				ThemeIcon.FORM_MANAGER_EXPORT_RULES, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_TOOLTIP,
+				ThemeIcon.EXPORT_CSV_FILE, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_TOOLTIP,
 				IconSize.MEDIUM, new SaveTableToCsvAction());
 
 		addIconButton(saveButton);

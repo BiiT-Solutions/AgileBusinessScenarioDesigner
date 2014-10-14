@@ -1,9 +1,12 @@
 package com.biit.abcd.authentication;
 
+import java.util.HashMap;
+
 import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.TestScenariosController;
+import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
@@ -14,12 +17,13 @@ public class UserSessionHandler {
 	private FormController formController;
 	private static GlobalVariablesController globalVariablesController;
 	private static TestScenariosController testScenariosController;
+	// User Id --> UI
+	private static HashMap<Long, UI> usersSession = new HashMap<>();
 
 	// Store the user object of the currently inlogged user
 
 	/**
-	 * Initializes the {@link UserSessionHandler} for the given
-	 * {@link Application}
+	 * Initializes the {@link UserSessionHandler} for the given {@link Application}
 	 * 
 	 * @param ui
 	 */
@@ -28,6 +32,14 @@ public class UserSessionHandler {
 			throw new IllegalArgumentException("Application may not be null");
 		}
 		new UserSessionHandler(ui);
+	}
+
+	public static void checkOnlyOneSession(User user, UI ui) {
+		if (usersSession.get(user.getUserId()) != null) {
+			usersSession.get(user.getUserId()).close();
+			usersSession.get(user.getUserId()).getNavigator().navigateTo(WebMap.LOGIN_PAGE.toString());
+		}
+		usersSession.put(user.getUserId(), ui);
 	}
 
 	/**
@@ -54,8 +66,7 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Set the User object for the currently inlogged user for this application
-	 * instance
+	 * Set the User object for the currently inlogged user for this application instance
 	 * 
 	 * @param user
 	 */
@@ -71,8 +82,7 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Get the User object of the currently inlogged user for this application
-	 * instance.
+	 * Get the User object of the currently inlogged user for this application instance.
 	 * 
 	 * @return The currently inlogged user
 	 */
@@ -82,8 +92,7 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Get the FormController object of the currently inlogged user for this
-	 * application instance.
+	 * Get the FormController object of the currently inlogged user for this application instance.
 	 * 
 	 * @return The currently inlogged user
 	 */
@@ -93,8 +102,7 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Set the User object for the currently inlogged user for this application
-	 * instance
+	 * Set the User object for the currently inlogged user for this application instance
 	 * 
 	 * @param user
 	 */

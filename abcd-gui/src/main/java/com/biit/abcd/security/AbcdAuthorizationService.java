@@ -256,7 +256,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	public boolean isFormAlreadyInUse(Long formId, User user) {
 		User userUsingForm = UiAccesser.getUserUsingForm(formId);
-		return (userUsingForm != null) && userUsingForm != user;
+		return (userUsingForm != null) && userUsingForm.getUserId() != user.getUserId();
 	}
 
 }

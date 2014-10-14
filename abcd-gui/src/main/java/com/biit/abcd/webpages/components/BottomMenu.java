@@ -114,8 +114,6 @@ public class BottomMenu extends HorizontalButtonGroup {
 
 	private void changeView(WebMap newView) {
 		ApplicationFrame.navigateTo(newView);
-		// WebPageComponent nextPage = (WebPageComponent) ((ApplicationFrame)
-		// UI.getCurrent()).getCurrentView();
 	}
 
 	public void updateButtons(boolean enableFormButtons) {

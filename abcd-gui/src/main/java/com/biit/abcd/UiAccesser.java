@@ -15,7 +15,7 @@ public class UiAccesser {
 		void receiveBroadcast(String message);
 	}
 
-	//User --> Id Form
+	// User --> Id Form
 	private static HashMap<User, Long> formsInUse = new HashMap<User, Long>();
 
 	public static synchronized boolean isUserUsingForm(User user, Form form) {
