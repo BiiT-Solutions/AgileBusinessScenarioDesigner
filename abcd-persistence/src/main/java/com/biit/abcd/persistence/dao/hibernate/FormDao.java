@@ -138,7 +138,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 			throw e;
 		}
 	}
-
+	
 	@Override
 	public int getLastVersion(String formLabel, Long organizationId) {
 		Session session = getSessionFactory().getCurrentSession();

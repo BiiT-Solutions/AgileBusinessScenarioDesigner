@@ -125,11 +125,11 @@ public class UserSessionHandler {
 		return globalVariablesController;
 	}
 
-	// public static TestScenariosController getTestScenariosController() {
-	// if (testScenariosController == null) {
-	// SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-	// testScenariosController = new TestScenariosController(helper);
-	// }
-	// return testScenariosController;
-	// }
+	public static TestScenariosController getTestScenariosController() {
+		if (testScenariosController == null) {
+			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+			testScenariosController = new TestScenariosController(helper);
+		}
+		return testScenariosController;
+	}
 }

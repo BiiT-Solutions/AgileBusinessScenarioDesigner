@@ -8,6 +8,7 @@ import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementPrintVisitor;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -245,8 +246,9 @@ public class PrattParserTest {
 
 	/**
 	 * Parses the given chunk of code and returns pretty-printed result.
+	 * @throws NotCompatibleTypeException 
 	 */
-	public static String parse(ExpressionChain source) {
+	public static String parse(ExpressionChain source) throws NotCompatibleTypeException {
 		PrattParser parser = new ExpressionChainPrattParser(source);
 		TreeElementPrintVisitor treePrint = null;
 		try {

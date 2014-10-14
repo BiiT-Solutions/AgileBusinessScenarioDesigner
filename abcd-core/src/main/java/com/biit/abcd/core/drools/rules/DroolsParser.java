@@ -12,6 +12,7 @@ import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementMathExpressionVisitor;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.logger.AbcdLogger;
@@ -291,8 +292,9 @@ public class DroolsParser {
 	 *            conditions defined as a fork in a digram.
 	 * @return
 	 * @throws RuleNotImplementedException
+	 * @throws NotCompatibleTypeException 
 	 */
-	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException {
+	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException, NotCompatibleTypeException {
 		String parsedText = "";
 		for (Rule rule : rules) {
 			orOperatorUsed = false;
@@ -320,8 +322,9 @@ public class DroolsParser {
 	 *            conditions defined as a fork in a digram.
 	 * @return
 	 * @throws RuleNotImplementedException
+	 * @throws NotCompatibleTypeException 
 	 */
-	private static String createDroolsRule(Rule rule) throws RuleNotImplementedException {
+	private static String createDroolsRule(Rule rule) throws RuleNotImplementedException, NotCompatibleTypeException {
 		if (rule == null) {
 			return null;
 		}
@@ -467,7 +470,7 @@ public class DroolsParser {
 	}
 
 	private static String mathAssignationAction(ExpressionChain actions, ITreeElement prattParserResult)
-			throws RuleNotImplementedException {
+			throws RuleNotImplementedException, NotCompatibleTypeException {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
 
@@ -791,8 +794,9 @@ public class DroolsParser {
 	 *            list of expressions to be parsed
 	 * @return RHS of the rule, and sometimes a modified LHS
 	 * @throws RuleNotImplementedException
+	 * @throws NotCompatibleTypeException 
 	 */
-	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException {
+	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException, NotCompatibleTypeException {
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 

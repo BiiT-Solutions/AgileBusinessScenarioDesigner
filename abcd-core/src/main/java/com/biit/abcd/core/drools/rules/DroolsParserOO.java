@@ -13,6 +13,7 @@ import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementMathExpressionVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementVariableCreatorVisitor;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.logger.AbcdLogger;
@@ -292,8 +293,10 @@ public class DroolsParserOO {
 	 *            conditions defined as a fork in a digram.
 	 * @return
 	 * @throws RuleNotImplementedException
+	 * @throws NotCompatibleTypeException
 	 */
-	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException {
+	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException,
+			NotCompatibleTypeException {
 		String parsedText = "";
 		for (Rule rule : rules) {
 			orOperatorUsed = false;
@@ -321,15 +324,16 @@ public class DroolsParserOO {
 	 *            conditions defined as a fork in a digram.
 	 * @return
 	 * @throws RuleNotImplementedException
+	 * @throws NotCompatibleTypeException
 	 */
-	private static String createDroolsRule(Rule rule) throws RuleNotImplementedException {
+	private static String createDroolsRule(Rule rule) throws RuleNotImplementedException, NotCompatibleTypeException {
 		if (rule == null) {
 			return null;
 		}
-		
-//		System.out.println("RULE CONDITIONS: " + rule.getConditionChain());
-//		System.out.println("RULE ACTIONS: " + rule.getActionChain());		
-		
+
+		System.out.println("OO RULE CONDITIONS: " + rule.getConditionChain());
+		System.out.println("OO RULE ACTIONS: " + rule.getActionChain());
+
 		String result = "";
 		treeObjectDroolsname = new HashMap<TreeObject, String>();
 		result += "\t$droolsForm: DroolsForm()\n";
@@ -337,11 +341,21 @@ public class DroolsParserOO {
 		// Obtain conditions if exists.
 		if ((rule.getConditionChain() != null) && (rule.getConditionChain().getExpressions() != null)
 				&& (!rule.getConditionChain().getExpressions().isEmpty())) {
+
+			ITreeElement prattResult = calculatePrattParserResult(rule.getConditionChain());
+			System.out.println("CONDITION PRATT RESULT: " + prattResult.getExpressionChain());
+			createDroolsVariables(prattResult);
+
 			result += parseConditions(rule.getConditionChain());
 		}
 		if ((rule.getActionChain() != null) && (rule.getActionChain().getExpressions() != null)
 				&& (!rule.getActionChain().getExpressions().isEmpty())) {
-			String actionString = parseActions(rule.getActionChain());
+
+			ITreeElement prattResult = calculatePrattParserResult(rule.getActionChain());
+			System.out.println("ACTION PRATT RESULT: " + prattResult.getExpressionChain());
+			createDroolsVariables(prattResult);
+
+			String actionString = analyzePrattParserResult(prattResult);
 			if (actionString != null) {
 				result += actionString;
 			} else {
@@ -350,7 +364,7 @@ public class DroolsParserOO {
 		}
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
-//		result = RulesUtils.removeExtraParenthesis(result);
+		// result = RulesUtils.removeExtraParenthesis(result);
 		if (orOperatorUsed)
 			result = RulesUtils.fixOrCondition(result);
 
@@ -468,7 +482,7 @@ public class DroolsParserOO {
 	}
 
 	private static String mathAssignationAction(ExpressionChain actions, ITreeElement prattParserResult)
-			throws RuleNotImplementedException {
+			throws RuleNotImplementedException, NotCompatibleTypeException {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
 
@@ -737,8 +751,8 @@ public class DroolsParserOO {
 	}
 
 	private static String orOperator(List<Expression> expressions) {
-//		System.out.println("OR EXPRESSIONS: " + expressions);
-		
+		// System.out.println("OR EXPRESSIONS: " + expressions);
+
 		String result = "";
 
 		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
@@ -782,44 +796,37 @@ public class DroolsParserOO {
 	}
 
 	/**
-	 * Parse the actions of the rule <br>
-	 * Accepts actions with the patterns : <br>
-	 * &nbsp&nbsp&nbsp Var = value | string <br>
-	 * &nbsp&nbsp&nbsp Var = Var mathOperator value <br>
-	 * &nbsp&nbsp&nbsp Var = value mathOperator Var
+	 * Parse the rule actions
 	 * 
-	 * @param actions
-	 *            list of expressions to be parsed
-	 * @return RHS of the rule, and sometimes a modified LHS
+	 * @param prattParserResult
+	 * @return
 	 * @throws RuleNotImplementedException
+	 * @throws NotCompatibleTypeException
 	 */
-	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException {
-		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
-		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
+	private static String analyzePrattParserResult(ITreeElement prattParserResult) throws RuleNotImplementedException,
+			NotCompatibleTypeException {
+		// Retrieve the expression hierarchy created by the Pratt parser
+		ExpressionChain prattParserExpressionChain = prattParserResult.getExpressionChain();
 
-		if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
-				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
-						.get(0) instanceof ExpressionValueCustomVariable)) {
+		if ((prattParserExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
+				&& (((ExpressionChain) prattParserExpressionChain.getExpressions().get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable)) {
 
-			if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
-				switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
+			if (prattParserExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
+				switch (((ExpressionFunction) prattParserExpressionChain.getExpressions().get(1)).getValue()) {
 				case MAX:
 				case MIN:
 				case AVG:
 				case SUM:
 				case PMT:
-					return assignationFunctionAction(prattParserResultExpressionChain);
-					// case PMT:
-					// return
-					// assignationFunctionPmtAction(expressionChain.getExpressions());
+					return assignationFunctionAction(prattParserExpressionChain);
 				}
 			}
 			// Mathematical expression
 			else {
-				return mathAssignationAction(prattParserResultExpressionChain, prattParserResult);
+				return mathAssignationAction(prattParserExpressionChain, prattParserResult);
 			}
 		}
-		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
+		throw new RuleNotImplementedException("Rule not implemented.", prattParserExpressionChain);
 	}
 
 	private static String parseConditions(ExpressionChain conditions) {
@@ -830,7 +837,6 @@ public class DroolsParserOO {
 		// engine. The expression chain has AST (abstract syntax tree) form
 		// *******************************************************************************************************
 		if ((result != null) && (result.getExpressionChain() != null)) {
-			createDroolsVariables(result);
 			return processResultConditionsFromPrattParser(result.getExpressionChain());
 		} else {
 			return "";
@@ -864,28 +870,33 @@ public class DroolsParserOO {
 
 	/**
 	 * Creates the drools variables used in the parsed rule
+	 * 
 	 * @param expressionChain
+	 * @throws NotCompatibleTypeException
 	 */
-	private static void createDroolsVariables(ITreeElement prattParserResult){
+	private static void createDroolsVariables(ITreeElement prattParserResult) throws NotCompatibleTypeException {
 		List<DroolsVariable> ruleVariables = new ArrayList<DroolsVariable>();
-		System.out.println("CREATE DROOLS VARIABLES: " + prattParserResult);
 		TreeElementVariableCreatorVisitor variableCreator = new TreeElementVariableCreatorVisitor();
+
+		System.out.println("CREATING VARIABLES: " + prattParserResult.getExpressionChain());
+
 		prattParserResult.accept(variableCreator);
 		if (variableCreator != null) {
 			ruleVariables = variableCreator.getVariables();
 		}
-//		for(DroolsVariable variable : ruleVariables){
-//			System.out.println(variable.getId());
-//		}
-		
+
+		for (DroolsVariable variable : ruleVariables) {
+			System.out.println("VARIABLE: " + variable.getName());
+		}
+
 	}
-	
+
 	private static String processResultConditionsFromPrattParser(ExpressionChain prattParserResultExpressionChain) {
 
 		if ((prattParserResultExpressionChain != null) && (prattParserResultExpressionChain.getExpressions() != null)
 				&& (!prattParserResultExpressionChain.getExpressions().isEmpty())) {
 			List<Expression> expressions = prattParserResultExpressionChain.getExpressions();
-		
+
 			// Operators
 			if ((expressions.size() > 1) && (expressions.get(1) instanceof ExpressionOperatorLogic)) {
 				switch (((ExpressionOperatorLogic) expressions.get(1)).getValue()) {

@@ -12,6 +12,7 @@ import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
 import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -29,7 +30,7 @@ public class DroolsRulesGenerator {
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
 	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
+			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
@@ -37,7 +38,7 @@ public class DroolsRulesGenerator {
 	}
 
 	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
-			ActionNotImplementedException {
+			ActionNotImplementedException, NotCompatibleTypeException {
 		if (this.form != null) {
 			this.rules = "package com.biit.drools \n\n";
 			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";

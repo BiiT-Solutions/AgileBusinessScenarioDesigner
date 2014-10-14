@@ -15,10 +15,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
+/**
+ * Transforms a Table rule to a list of drools rules.
+ * 
+ */
 public class TableRuleToDroolsRule {
-
-	private TableRuleToDroolsRule() {
-	}
 
 	/**
 	 * Convert a table rule in a list of rules. One rule for each row.
@@ -50,6 +51,9 @@ public class TableRuleToDroolsRule {
 				i++;
 			}
 		}
+		// for (DroolsRule droolsRule : newRules) {
+		// RuleChecker.checkRuleValid(droolsRule);
+		// }
 		return newRules;
 	}
 

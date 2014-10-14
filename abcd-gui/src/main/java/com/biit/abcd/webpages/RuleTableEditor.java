@@ -44,7 +44,7 @@ import com.biit.abcd.webpages.elements.decisiontable.ClearExpressionListener;
 import com.biit.abcd.webpages.elements.decisiontable.DecisionTableEditorUpperMenu;
 import com.biit.abcd.webpages.elements.decisiontable.EditActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.EditExpressionListener;
-import com.biit.abcd.webpages.elements.decisiontable.NewDecisionTable;
+import com.biit.abcd.webpages.elements.decisiontable.RuleTable;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.DependencyExistException;
@@ -57,15 +57,15 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
-public class DecisionTableEditor extends FormWebPageComponent implements EditExpressionListener,
+public class RuleTableEditor extends FormWebPageComponent implements EditExpressionListener,
 		ClearExpressionListener, EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
-	private NewDecisionTable decisionTable;
+	private RuleTable ruleTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableRuleTableEditable tableSelectionMenu;
 
-	public DecisionTableEditor() {
+	public RuleTableEditor() {
 		super();
 	}
 
@@ -99,15 +99,15 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 		rootLayout.createMenu(tableSelectionMenu);
 
 		// Create content
-		decisionTable = new NewDecisionTable();
-		decisionTable.setSizeFull();
+		ruleTable = new RuleTable();
+		ruleTable.setSizeFull();
 		// Add cell function listeners
-		decisionTable.addEditExpressionListener(this);
-		decisionTable.addClearExpressionListener(this);
-		decisionTable.addEditActionListener(this);
-		decisionTable.addClearActionListener(this);
+		ruleTable.addEditExpressionListener(this);
+		ruleTable.addClearExpressionListener(this);
+		ruleTable.addEditActionListener(this);
+		ruleTable.addClearActionListener(this);
 
-		rootLayout.setContent(decisionTable);
+		rootLayout.setContent(ruleTable);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 
@@ -150,7 +150,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void initUpperMenu() {
-		final DecisionTableEditor thisPage = this;
+		final RuleTableEditor thisPage = this;
 		decisionTableEditorUpperMenu = new DecisionTableEditorUpperMenu();
 
 		decisionTableEditorUpperMenu.addSaveButtonClickListener(new ClickListener() {
@@ -304,7 +304,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-			AbcdLogger.errorMessage(DecisionTableEditor.class.getName(), e);
+			AbcdLogger.errorMessage(RuleTableEditor.class.getName(), e);
 		}
 	}
 
@@ -312,7 +312,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	 * Updates the table where the user defines the rules with the information of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 
 	@Override
@@ -351,7 +351,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	private void removeSelectedTable() {
 		UserSessionHandler.getFormController().getForm().getTableRules()
 				.remove(tableSelectionMenu.getSelectedTableRule());
-		decisionTable.removeAll();
+		ruleTable.removeAll();
 		tableSelectionMenu.removeSelectedRow();
 	}
 
@@ -360,39 +360,39 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void addNewCondition(TableRule tableRule) {
-		if ((decisionTable.getColumns().size() == 0) && (tableRule.getRules().isEmpty())) {
+		if ((ruleTable.getColumns().size() == 0) && (tableRule.getRules().isEmpty())) {
 			addNewRow(tableRule);
 		}
 		addNewColumnPair(tableRule);
-		decisionTable.update(tableRule);
+		ruleTable.update(tableRule);
 	}
 
 	private void addNewColumnPair(TableRule tableRule) {
 		tableRule.addEmptyExpressionPair();
-		decisionTable.update(tableRule);
+		ruleTable.update(tableRule);
 	}
 
 	private void removeCondition(TableRule tableRule) {
-		decisionTable.removeSelectedColumns(tableRule);
-		decisionTable.update(tableRule);
+		ruleTable.removeSelectedColumns(tableRule);
+		ruleTable.update(tableRule);
 	}
 
 	private void addNewRow(TableRule tableRule) {
 		TableRuleRow row = tableRule.addRow();
-		decisionTable.addRow(row);
+		ruleTable.addRow(row);
 	}
 
 	private void removeRow(TableRule tableRule) {
-		int conditions = decisionTable.getColumns().size() / 2;
+		int conditions = ruleTable.getColumns().size() / 2;
 
-		decisionTable.removeSelectedRows(tableRule);
-		if (decisionTable.getTableSize(tableRule) == 0) {
+		ruleTable.removeSelectedRows(tableRule);
+		if (ruleTable.getTableSize(tableRule) == 0) {
 			addNewRow(tableRule);
 			for (int i = 0; i < conditions; i++) {
 				addNewColumnPair(tableRule);
 			}
 		}
-		decisionTable.update(tableRule);
+		ruleTable.update(tableRule);
 	}
 
 	@Override
@@ -414,20 +414,20 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void newEditQuestionWindow(final TableRuleRow row, final Object propertyId) {
-		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getNextCellValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) ruleTable.getNextCellValue(row, propertyId);
 
 		final AddNewQuestionEditorWindow newQuestionConditionWindow = new AddNewQuestionEditorWindow(UserSessionHandler
 				.getFormController().getForm(), false);
 
-		if (decisionTable.getCellValue(row, propertyId) instanceof ExpressionValueCustomVariable) {
-			final ExpressionValueCustomVariable variableExpression = (ExpressionValueCustomVariable) decisionTable
+		if (ruleTable.getCellValue(row, propertyId) instanceof ExpressionValueCustomVariable) {
+			final ExpressionValueCustomVariable variableExpression = (ExpressionValueCustomVariable) ruleTable
 					.getCellValue(row, propertyId);
 
 			if (variableExpression != null) {
 				newQuestionConditionWindow.select(variableExpression);
 			}
-		} else if (decisionTable.getCellValue(row, propertyId) instanceof ExpressionValueTreeObjectReference) {
-			final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+		} else if (ruleTable.getCellValue(row, propertyId) instanceof ExpressionValueTreeObjectReference) {
+			final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) ruleTable
 					.getCellValue(row, propertyId);
 
 			if (questionExpression.getReference() != null) {
@@ -539,7 +539,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	 */
 	private void setTreeObjectExpression(TableRuleRow row, Integer propertyId, TreeObject selectedObject) {
 		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedObject));
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 
 	/**
@@ -553,7 +553,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	private void setCustomVariableExpression(TableRuleRow row, Integer propertyId, TreeObject treeObject,
 			CustomVariable customVariable) {
 		row.setExpression(propertyId, new ExpressionValueCustomVariable(treeObject, customVariable));
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 
 	/**
@@ -566,7 +566,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	 */
 	private void setGenericTreeObjectExpression(TableRuleRow row, Integer propertyId, GenericTreeObjectType genericType) {
 		row.setExpression(propertyId, new ExpressionValueGenericVariable(genericType));
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 
 	/**
@@ -580,19 +580,19 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	private void setGenericCustomVariableExpression(TableRuleRow row, Integer propertyId,
 			GenericTreeObjectType genericType, CustomVariable customVariable) {
 		row.setExpression(propertyId, new ExpressionValueGenericCustomVariable(genericType, customVariable));
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 
 	private void setQuestionDateExpression(TableRuleRow row, Integer propertyId, Question selectedQuestion,
 			QuestionDateUnit unit) {
 		row.setExpression(propertyId, new ExpressionValueTreeObjectReference(selectedQuestion, unit));
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 
 	private void newEditAnswerWindow(final TableRuleRow row, final Object propertyId) {
-		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) ruleTable
 				.getPreviousCellValue(row, propertyId);
-		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) ruleTable.getCellValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
 			// Generate a expression with the question not editable.
@@ -609,7 +609,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				public void acceptAction(AcceptCancelWindow window) {
 					if (newActionValueWindow.getExpressionChain() != null) {
 						answerExpression.setExpressions(newActionValueWindow.getExpressionChain().getExpressions());
-						decisionTable.update(getSelectedTableRule());
+						ruleTable.update(getSelectedTableRule());
 					} else {
 						removeAnswer(row, (Integer) propertyId);
 					}
@@ -649,7 +649,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void removeQuestion(TableRuleRow row, Object propertyId) {
-		ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+		ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) ruleTable
 				.getCellValue(row, propertyId);
 		TreeObject auxTo = questionExpression.getReference();
 		// Remove data
@@ -665,11 +665,11 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 	}
 
 	private void removeAnswer(TableRuleRow row, Object propertyId) {
-		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) decisionTable
+		final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) ruleTable
 				.getPreviousCellValue(row, propertyId);
-		final ExpressionChain answerExpression = (ExpressionChain) decisionTable.getCellValue(row, propertyId);
+		final ExpressionChain answerExpression = (ExpressionChain) ruleTable.getCellValue(row, propertyId);
 		answerExpression.removeAllExpressions();
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 
 		if (questionExpression.getReference() != null) {
 			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
@@ -700,7 +700,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 					} else {
 						removeAction(row);
 					}
-					decisionTable.update(getSelectedTableRule());
+					ruleTable.update(getSelectedTableRule());
 					newActionValueWindow.close();
 				}
 			});
@@ -726,7 +726,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 				+ "' has removed Action '" + action.getRepresentation() + "' from row '" + row.getId()
 				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 		row.getActionChain().removeAllExpressions();
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 
 	public void copy() {
@@ -735,7 +735,7 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 					LanguageCodes.DECISION_TABLE_COPY_TABLE_NOT_SELECTED);
 			return;
 		}
-		Collection<TableRuleRow> rows = decisionTable.getSelectedRules();
+		Collection<TableRuleRow> rows = ruleTable.getSelectedRules();
 		if (rows.isEmpty()) {
 			MessageManager.showWarning(LanguageCodes.DECISION_TABLE_COPY_ROW_NOT_PERFORMED_CAPTION,
 					LanguageCodes.DECISION_TABLE_COPY_NO_SELECTED_ELEMENTS);
@@ -751,6 +751,6 @@ public class DecisionTableEditor extends FormWebPageComponent implements EditExp
 			return;
 		}
 		UserSessionHandler.getFormController().pasteTableRuleRowsAsNew(getSelectedTableRule());
-		decisionTable.update(getSelectedTableRule());
+		ruleTable.update(getSelectedTableRule());
 	}
 }

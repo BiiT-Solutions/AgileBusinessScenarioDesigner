@@ -10,14 +10,14 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 
-public class NewDecisionTable extends CustomComponent {
+public class RuleTable extends CustomComponent {
 
 	private static final long serialVersionUID = -1214662437608420332L;
 	private HorizontalLayout rootLayout;
 	private NewConditionTable conditionTable;
 	private NewActionTable actionTable;
 
-	public NewDecisionTable() {
+	public RuleTable() {
 		super();
 
 		rootLayout = new HorizontalLayout();

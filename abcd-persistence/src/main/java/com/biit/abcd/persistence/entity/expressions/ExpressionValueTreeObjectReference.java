@@ -116,8 +116,11 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 			ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) object;
 			try {
 				this.setUnit(expressionValueTreeObjectReference.getUnit());
-				this.setValue(expressionValueTreeObjectReference.getValue());
-			} catch (NotValidExpressionValue e) {
+				TreeObject reference = (TreeObject) expressionValueTreeObjectReference.getValue().getClass()
+						.newInstance();
+				reference.copyData((StorableObject) expressionValueTreeObjectReference.getValue());
+				this.setValue(reference);
+			} catch (NotValidExpressionValue | InstantiationException | IllegalAccessException e) {
 				throw new NotValidStorableObjectException("Object '" + object
 						+ "' is not a valid instance of ExpressionValueTreeObjectReference.");
 			}

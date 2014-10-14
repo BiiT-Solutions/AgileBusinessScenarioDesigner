@@ -3,15 +3,16 @@ package com.biit.abcd.core.drools.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
@@ -35,7 +36,7 @@ import com.biit.form.TreeObject;
 public class DiagramParser {
 
 	public String getDroolsRulesAsText(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
-			RuleNotImplementedException, ActionNotImplementedException {
+			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
 		List<Rule> newRules = parse(diagram, null);
 		String rulesAsString = DroolsParser.createDroolsRule(newRules);
 		return rulesAsString;

@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.facts.inputform.Question;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
@@ -45,12 +46,12 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
  * Checks the correct creation and execution of table rules <br>
  * Also checks the correct loading in memory of the submitted form from orbeon
  */
-public class NewNestedGroupsTest extends KidsFormCreator {
+public class NestedGroupsTest extends KidsFormCreator {
 
 	private final static String QUESTION_EQUALS_ANSWER = "works";
 	private final static String QUESTION_NOT_EQUALS_ANSWER = "works";
 
-	public NewNestedGroupsTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
+	public NestedGroupsTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 		super();
 	}
 
@@ -60,7 +61,7 @@ public class NewNestedGroupsTest extends KidsFormCreator {
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
-			ActionNotImplementedException, CharacterNotAllowedException {
+			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException {
 
 		// Restart the form to avoid test cross references
 		initForm();

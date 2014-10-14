@@ -14,6 +14,7 @@ import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioAnswerImporter;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -47,10 +48,11 @@ public class FormToDroolsExporter {
 	 * @throws IOException
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
+	 * @throws NotCompatibleTypeException 
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			ActionNotImplementedException {
+			ActionNotImplementedException, NotCompatibleTypeException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -68,7 +70,7 @@ public class FormToDroolsExporter {
 	}
 
 	public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException {
+			RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -134,7 +136,7 @@ public class FormToDroolsExporter {
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName,
 			String orbeonFormName, String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException {
+			ActionNotImplementedException, NotCompatibleTypeException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
@@ -158,10 +160,11 @@ public class FormToDroolsExporter {
 	 * @throws DocumentException
 	 * @throws CategoryNameWithoutTranslation
 	 * @throws ActionNotImplementedException
+	 * @throws NotCompatibleTypeException 
 	 */
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, TestScenario testScenario)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException {
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException, NotCompatibleTypeException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Generate the submitted form based on the test scenario
