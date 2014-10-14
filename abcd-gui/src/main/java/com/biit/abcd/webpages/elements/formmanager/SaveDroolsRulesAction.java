@@ -53,12 +53,17 @@ public class SaveDroolsRulesAction implements SaveAction {
 				MessageManager.showError(LanguageCodes.ZIP_FILE_NOT_GENERATED);
 				AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 			}
-		} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
+		} catch (RuleInvalidException | IOException e) {
 			MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 		} catch (RuleNotImplementedException e) {
 			MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e.getExpressionChain()
 					.getRepresentation());
+			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+		} catch (ExpressionInvalidException e) {
+			MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, ServerTranslate.translate(
+					LanguageCodes.ERROR_DROOLS_INVALID_TYPES_IN_FUNCTION, new Object[] { e.getExpressionChain()
+							.getRepresentation() }));
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 		} catch (NotCompatibleTypeException e) {
 			MessageManager.showError(
