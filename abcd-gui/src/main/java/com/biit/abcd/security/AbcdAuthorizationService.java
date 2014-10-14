@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
@@ -244,19 +245,25 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		if (form == null || user == null) {
 			return true;
 		}
-		return !isAuthorizedToForm(form, user) || isFormAlreadyInUse(form.getId(), user);
+		return !isAuthorizedToForm(form, user) || isFormAlreadyInUse(form.getId(), user)
+				|| isNotLastVersion(form.getId());
 	}
 
 	public boolean isFormReadOnly(Long formId, Long formOrganizationId, User user) {
 		if (formId == null || formOrganizationId == null || user == null) {
 			return true;
 		}
-		return !isAuthorizedToForm(formOrganizationId, user) || isFormAlreadyInUse(formId, user);
+		return !isAuthorizedToForm(formOrganizationId, user) || isFormAlreadyInUse(formId, user)
+				|| isNotLastVersion(formId);
 	}
 
 	public boolean isFormAlreadyInUse(Long formId, User user) {
 		User userUsingForm = UiAccesser.getUserUsingForm(formId);
 		return (userUsingForm != null) && userUsingForm.getUserId() != user.getUserId();
+	}
+
+	private boolean isNotLastVersion(Long formId) {
+		return !UserSessionHandler.getFormController().getForm().isLastVersion();
 	}
 
 }

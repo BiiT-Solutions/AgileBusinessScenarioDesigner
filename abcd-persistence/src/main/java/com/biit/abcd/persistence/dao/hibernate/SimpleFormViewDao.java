@@ -60,7 +60,10 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
-				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId FROM tree_forms tf ORDER BY tf.version DESC");
+				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion "
+						+ "FROM tree_forms tf "
+						+ "INNER JOIN (SELECT MAX(version) AS maxversion, name FROM tree_forms GROUP BY name) AS max  ON max.name = tf.name "
+						+ "ORDER BY name, tf.version DESC");
 
 		List<Object[]> rows = query.list();
 
@@ -85,6 +88,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setAvailableFrom((Timestamp) row[9]);
 			formView.setAvailableTo((Timestamp) row[10]);
 			formView.setOrganizationId(((Double) row[11]).longValue());
+			formView.setLastVersion((Integer) row[12] == (Integer) row[3]);
 			formViews.add(formView);
 		}
 
@@ -97,8 +101,10 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
-				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId FROM tree_forms tf WHERE tf.name='"
-						+ name + "' ORDER BY tf.version DESC");
+				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion "
+						+ "FROM tree_forms tf "
+						+ "INNER JOIN (SELECT MAX(version) AS maxversion, name FROM tree_forms GROUP BY name) AS max  ON max.name = tf.name "
+						+ "WHERE tf.name='" + name + "' ORDER BY tf.version DESC");
 
 		List<Object[]> rows = query.list();
 
