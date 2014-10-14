@@ -109,8 +109,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function adds a row to the table only if the list of forms is not
-	 * empty.
+	 * This function adds a row to the table only if the list of forms is not empty.
 	 * 
 	 * @param forms
 	 */
@@ -271,8 +270,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function loads from database all form elements and groups them by
-	 * name. At the end it orders each form list by version number.
+	 * This function loads from database all form elements and groups them by name. At the end it orders each form list
+	 * by version number.
 	 * 
 	 * @return
 	 * @throws NotConnectedToDatabaseException
@@ -361,15 +360,13 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function returns an string with read only if the form can't be
-	 * edited by the user
+	 * This function returns an string with read only if the form can't be edited by the user
 	 * 
 	 * @param form
 	 * @return
 	 */
 	private String getFormPermissionsTag(SimpleFormView form) {
-		if (!AbcdAuthorizationService.getInstance().isAuthorizedToForm(form.getOrganizationId(),
-				UserSessionHandler.getUser())) {
+		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form, UserSessionHandler.getUser())) {
 			return "read only";
 		}
 		if (AbcdAuthorizationService.getInstance().isFormAlreadyInUse(form.getId(), UserSessionHandler.getUser())) {

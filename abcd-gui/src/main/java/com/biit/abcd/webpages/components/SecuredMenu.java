@@ -42,12 +42,9 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 					UserSessionHandler.getFormController().getForm().getId(), user)) {
 				inUse = false;
 				// user has permissions to edit this form.
-				for (DActivity activity : accessAuthorizationsRequired()) {
-					if (AbcdAuthorizationService.getInstance().isAuthorizedActivity(user,
-							UserSessionHandler.getFormController().getForm(), activity)) {
-						editionEnabled = true;
-						break;
-					}
+				if (!AbcdAuthorizationService.getInstance().isFormReadOnly(
+						UserSessionHandler.getFormController().getForm(), user)) {
+					editionEnabled = true;
 				}
 			}
 		}
