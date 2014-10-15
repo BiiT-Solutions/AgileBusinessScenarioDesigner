@@ -148,28 +148,33 @@ public class DroolsParser {
 	}
 
 	private static String checkCustomVariableAssignation(ExpressionValueCustomVariable variable) {
+		String ruleCore = "";
 		if (variable != null) {
 			TreeObject treeObject = variable.getReference();
-			if (getTreeObjectName(variable.getReference()) == null) {
-				// The variable don't exists and can't have a value assigned
-				String ruleCore = "";
+			// if (getTreeObjectName(variable.getReference()) == null) {
+			// // The variable don't exists and can't have a value assigned
+			//
+			// }else{
+			// Add the variable assignation to the rule
+			if (treeObject != null) {
+				if (treeObject instanceof Form) {
+					// TODO
+					ruleCore += simpleFormCustomVariableConditions(variable);
 
-				// Add the variable assignation to the rule
-				if (treeObject != null) {
-					if (treeObject instanceof Category) {
-						ruleCore += simpleCategoryCustomVariableConditions(variable);
+				} else if (treeObject instanceof Category) {
+					ruleCore += simpleCategoryCustomVariableConditions(variable);
 
-					} else if (treeObject instanceof Group) {
-						ruleCore += simpleGroupCustomVariableConditions(variable);
+				} else if (treeObject instanceof Group) {
+					ruleCore += simpleGroupCustomVariableConditions(variable);
 
-					} else if (treeObject instanceof Question) {
-						ruleCore += simpleQuestionCustomVariableConditions(variable);
-					}
+				} else if (treeObject instanceof Question) {
+					ruleCore += simpleQuestionCustomVariableConditions(variable);
 				}
-				return ruleCore;
 			}
+			// return ruleCore;
+			// }
 		}
-		return "";
+		return ruleCore;
 	}
 
 	private static String checkCustomVariableAssignationWithoutScore(ExpressionValueCustomVariable variable) {
@@ -446,7 +451,6 @@ public class DroolsParser {
 			// Check if the reference exists in the rule, if not, it creates
 			// a new reference
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
-
 			ExpressionChain expressionChainToSearch = (ExpressionChain) actions.generateCopy();
 			expressionChainToSearch.removeFirstExpression();
 			List<Expression> variables = getExpressionChainVariables(expressionChainToSearch);
@@ -464,7 +468,7 @@ public class DroolsParser {
 			if (treePrint != null) {
 				mathematicalExpression = treePrint.getBuilder().toString();
 			}
-			
+
 			ruleCore += "	$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', " + mathematicalExpression + ");\n";
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
@@ -993,9 +997,7 @@ public class DroolsParser {
 		TreeObject leftReference = null;
 
 		if (operatorLeft.size() == 1) {
-			if (operatorLeft.get(0) instanceof ExpressionValueCustomVariable) {
-
-			} else if (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference) {
+			if (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference) {
 				ExpressionValueTreeObjectReference leftExpressionValueTreeObject = (ExpressionValueTreeObjectReference) operatorLeft
 						.get(0);
 				leftReference = leftExpressionValueTreeObject.getReference();
@@ -1135,8 +1137,8 @@ public class DroolsParser {
 						case NUMBER:
 							droolsConditions += "	$" + leftVariable.getReference().getUniqueNameReadable().toString()
 									+ " : SubmittedForm(isScoreSet('" + varName + "'), getVariableValue('" + varName
-									+ "') >= '" + value1 + "' && < '" + value2
-									+ "') from $droolsForm.getSubmittedForm() \n";
+									+ "') >= " + value1 + " && < " + value2
+									+ ") from $droolsForm.getSubmittedForm() \n";
 							break;
 						case POSTAL_CODE:
 						case TEXT:
@@ -1407,11 +1409,11 @@ public class DroolsParser {
 		conditions += simpleFormCondition(form);
 
 		if (getTreeObjectName(category) == null) {
-			putTreeObjectName(category, category.getUniqueNameReadable().toString());
-			conditions += "	$" + category.getUniqueNameReadable().toString() + " : Category( isScoreSet('"
-					+ customVariable.getVariable().getName() + "')) from $" + form.getUniqueNameReadable().toString()
-					+ ".getCategory('" + category.getName() + "') \n";
+			putTreeObjectName(category, category.getUniqueNameReadable());
 		}
+		conditions += "	$" + category.getUniqueNameReadable() + " : Category( isScoreSet('"
+				+ customVariable.getVariable().getName() + "')) from $" + form.getUniqueNameReadable()
+				+ ".getCategory('" + category.getName() + "') \n";
 		return conditions;
 	}
 
@@ -1423,9 +1425,9 @@ public class DroolsParser {
 		conditions += simpleFormCondition(form);
 
 		if (getTreeObjectName(category) == null) {
-			putTreeObjectName(category, category.getUniqueNameReadable().toString());
-			conditions += "	$" + category.getUniqueNameReadable().toString() + " : Category() from $"
-					+ form.getUniqueNameReadable().toString() + ".getCategory('" + category.getName() + "') \n";
+			putTreeObjectName(category, category.getUniqueNameReadable());
+			conditions += "	$" + category.getUniqueNameReadable() + " : Category() from $"
+					+ form.getUniqueNameReadable() + ".getCategory('" + category.getName() + "') \n";
 		}
 		return conditions;
 	}
@@ -1438,6 +1440,17 @@ public class DroolsParser {
 					+ " : SubmittedForm() from $droolsForm.getSubmittedForm() \n";
 		}
 		return droolsRule;
+	}
+
+	private static String simpleFormCustomVariableConditions(ExpressionValueCustomVariable customVariable) {
+		Form form = (Form) customVariable.getReference();
+		String conditions = "";
+		if (getTreeObjectName(form) == null) {
+			putTreeObjectName(form, form.getUniqueNameReadable());
+		}
+		conditions += "	$" + form.getUniqueNameReadable() + " : SubmittedForm( isScoreSet('"
+				+ customVariable.getVariable().getName() + "')) from $droolsForm.getSubmittedForm() \n";
+		return conditions;
 	}
 
 	private static String simpleGroupConditions(Group group) {
