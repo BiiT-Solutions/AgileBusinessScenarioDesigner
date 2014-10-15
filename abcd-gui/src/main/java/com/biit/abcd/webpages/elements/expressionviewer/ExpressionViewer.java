@@ -168,12 +168,17 @@ public class ExpressionViewer extends CssLayout {
 											.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
 									stringInputWindow.setValue(((ExpressionValue) expression).getValue().toString());
 
-									if (expression instanceof ExpressionValueString) {
+									System.out.println("EXPRESSION CLASS: " + expression.getClass());
+
+									if (expression instanceof ExpressionValuePostalCode) {
+										stringInputWindow.setFormat(AnswerFormat.POSTAL_CODE);
+
+									} else if (expression instanceof ExpressionValueString) {
 										stringInputWindow.setFormat(AnswerFormat.TEXT);
+
 									} else if (expression instanceof ExpressionValueNumber) {
 										stringInputWindow.setFormat(AnswerFormat.NUMBER);
-									} else if (expression instanceof ExpressionValuePostalCode) {
-										stringInputWindow.setFormat(AnswerFormat.POSTAL_CODE);
+
 									} else if (expression instanceof ExpressionValueTimestamp) {
 										stringInputWindow.setFormat(AnswerFormat.DATE);
 									}
@@ -305,7 +310,6 @@ public class ExpressionViewer extends CssLayout {
 				});
 
 		expressionOfElement.put(expressionElement, expression);
-
 		lineLayout.addComponent(expressionElement);
 		lineLayout.setExpandRatio(expressionElement, 0);
 		setSelectedExpression(expression);
@@ -401,8 +405,8 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	/**
-	 * Adds a new element in the position of the selected element. Depending of the element, can be inserted after or
-	 * before.
+	 * Adds a new element in the position of the selected element. Depending of
+	 * the element, can be inserted after or before.
 	 * 
 	 * @param newElement
 	 */

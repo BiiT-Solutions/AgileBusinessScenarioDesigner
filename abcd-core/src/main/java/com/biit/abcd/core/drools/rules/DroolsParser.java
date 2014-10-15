@@ -447,7 +447,7 @@ public class DroolsParser {
 			// a new reference
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
 
-			ExpressionChain expressionChainToSearch = actions.generateCopy();
+			ExpressionChain expressionChainToSearch = (ExpressionChain) actions.generateCopy();
 			expressionChainToSearch.removeFirstExpression();
 			List<Expression> variables = getExpressionChainVariables(expressionChainToSearch);
 			for (Expression expression : variables) {
@@ -464,7 +464,7 @@ public class DroolsParser {
 			if (treePrint != null) {
 				mathematicalExpression = treePrint.getBuilder().toString();
 			}
-
+			
 			ruleCore += "	$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', " + mathematicalExpression + ");\n";
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
@@ -499,7 +499,7 @@ public class DroolsParser {
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
 
 			// Get all the customVariables and treeObjects
-			ExpressionChain expressionChainToSearch = actions.generateCopy();
+			ExpressionChain expressionChainToSearch = (ExpressionChain) actions.generateCopy();
 			expressionChainToSearch.removeFirstExpression();
 			List<Expression> variables = getExpressionChainVariables(expressionChainToSearch);
 			for (Expression expression : variables) {

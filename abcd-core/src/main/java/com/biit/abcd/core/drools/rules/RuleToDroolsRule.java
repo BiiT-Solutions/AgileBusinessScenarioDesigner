@@ -21,7 +21,7 @@ public class RuleToDroolsRule {
 			RuleChecker.checkRuleValid(droolsRule);
 			droolsRule.setName(RulesUtils.getRuleName(droolsRule.getName(), extraConditions));
 			if (extraConditions != null) {
-				droolsRule.addConditions(extraConditions.generateCopy());
+				droolsRule.addConditions((ExpressionChain) extraConditions.generateCopy());
 			}
 		}
 		return droolsRule;

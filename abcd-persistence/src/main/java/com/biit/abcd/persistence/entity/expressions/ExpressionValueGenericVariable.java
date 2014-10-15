@@ -56,14 +56,6 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueGenericVariable copy = new ExpressionValueGenericVariable();
-		copy.type = type;
-		copy.setEditable(isEditable());
-		return copy;
-	}
-
-	@Override
 	public Object getValue() {
 		return getType();
 	}

@@ -604,7 +604,7 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 
 		if (questionExpression.getReference() != null) {
 			// Generate a expression with the question not editable.
-			ExpressionChain answerExpressionWithQuestion = answerExpression.generateCopy();
+			ExpressionChain answerExpressionWithQuestion = (ExpressionChain) answerExpression.generateCopy();
 			answerExpressionWithQuestion.addExpression(0, questionExpression);
 			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
 

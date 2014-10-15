@@ -58,13 +58,6 @@ public class ExpressionValueBoolean extends ExpressionValue {
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueBoolean copy = new ExpressionValueBoolean();
-		copy.value = value;
-		return copy;
-	}
-
-	@Override
 	public void setValue(Object value) throws NotValidExpressionValue {
 		if (!(value instanceof Boolean)) {
 			throw new NotValidExpressionValue("Expected Boolean object in '" + value + "'");

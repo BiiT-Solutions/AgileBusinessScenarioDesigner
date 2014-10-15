@@ -22,7 +22,8 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more
+ * complex expression.
  */
 @Entity
 @Table(name = "expressions_chain")
@@ -31,7 +32,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	private String name;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
-	// we cannot use the list of children with @Orderby or @OrderColumn we use our own order manager.
+	// we cannot use the list of children with @Orderby or @OrderColumn we use
+	// our own order manager.
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
@@ -116,21 +118,9 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		return expression.getExpression().replaceAll("[^a-zA-Z0-9_]", "_");
 	}
 
-	@Override
-	public ExpressionChain generateCopy() {
-		ExpressionChain copy = new ExpressionChain();
-		if (name != null) {
-			copy.name = new String(name);
-		}
-		for (Expression expression : expressions) {
-			Expression copyExpression = expression.generateCopy();
-			copy.expressions.add(copyExpression);
-		}
-		return copy;
-	}
-
 	/**
-	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * Returns the expression in string format that can be evaluated by a
+	 * Expression Evaluator.
 	 * 
 	 * @return
 	 */
@@ -282,7 +272,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		if (object instanceof ExpressionChain) {
 			super.copyData(object);
 			ExpressionChain expressionChain = (ExpressionChain) object;
-			name = expressionChain.getName();
+			setName(expressionChain.getName());
 			for (Expression expression : expressionChain.getExpressions()) {
 				getExpressions().add(expression.generateCopy());
 			}

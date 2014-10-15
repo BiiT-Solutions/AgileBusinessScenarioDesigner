@@ -34,7 +34,7 @@ public class AddNewActionExpressionWindow extends AcceptCancelClearWindow {
 		expressionEditorComponent = new SimpleExpressionEditorComponent();
 		expressionEditorComponent.setSizeFull();
 
-		expressionChain = action.generateCopy();
+		expressionChain = (ExpressionChain) action.generateCopy();
 
 		((SimpleExpressionEditorComponent) expressionEditorComponent).refreshExpressionEditor(expressionChain);
 

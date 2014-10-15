@@ -7,11 +7,13 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * Basic class for defining an expression. Any other expression must inherit from this class.
+ * Basic class for defining an expression. Any other expression must inherit
+ * from this class.
  * 
  */
 @Entity
@@ -35,11 +37,21 @@ public abstract class Expression extends StorableObject {
 		setSortSeq(expression.getSortSeq());
 	}
 
-	public abstract Expression generateCopy();
+	public final Expression generateCopy() {
+		Expression copy = null;
+		try {
+			copy = this.getClass().newInstance();
+			copy.copyData(this);
+		} catch (InstantiationException | IllegalAccessException | NotValidStorableObjectException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+		return copy;
+	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a Expression Evaluator. Not allowed characters
-	 * are ',', '.', ':', operators, ... that must filtered of the expression if necessary.
+	 * Returns the expression in string format that can be evaluated by a
+	 * Expression Evaluator. Not allowed characters are ',', '.', ':',
+	 * operators, ... that must filtered of the expression if necessary.
 	 * 
 	 * @return
 	 */
@@ -77,8 +89,8 @@ public abstract class Expression extends StorableObject {
 		if (object instanceof Expression) {
 			super.copyBasicInfo(object);
 			Expression expression = (Expression) object;
-			editable = expression.isEditable();
-			sortSeq = expression.getSortSeq();
+			setEditable(expression.isEditable());
+			setSortSeq(expression.getSortSeq());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Expression.");
 		}

@@ -69,18 +69,6 @@ public abstract class ExpressionOperator extends Expression implements IExpressi
 	}
 
 	@Override
-	public Expression generateCopy() {
-		try {
-			ExpressionOperator copy = this.getClass().newInstance();
-			copy.currentValue = currentValue;
-			return copy;
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		if (object instanceof ExpressionOperator) {
 			super.copyData(object);

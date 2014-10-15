@@ -83,15 +83,6 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueCustomVariable copy = new ExpressionValueCustomVariable();
-		copy.setReference(getReference());
-		copy.variable = variable;
-		copy.setEditable(isEditable());
-		return copy;
-	}
-
-	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		innerStorableObjects.add(variable);
@@ -106,6 +97,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 			ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) object;
 			try {
 				this.setValue(expressionValueCustomVariable.getValue());
+				this.setVariable(expressionValueCustomVariable.getVariable());
 			} catch (NotValidExpressionValue e) {
 				throw new NotValidStorableObjectException("Object '" + object
 						+ "' is not a valid instance of ExpressionValueCustomVariable.");

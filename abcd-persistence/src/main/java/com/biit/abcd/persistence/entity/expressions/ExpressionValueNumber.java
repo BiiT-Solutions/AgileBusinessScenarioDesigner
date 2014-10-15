@@ -55,18 +55,11 @@ public class ExpressionValueNumber extends ExpressionValue {
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueNumber copy = new ExpressionValueNumber();
-		copy.value = value;
-		return copy;
-	}
-
-	@Override
 	public void setValue(Object value) throws NotValidExpressionValue {
 		if (!(value instanceof Double)) {
 			throw new NotValidExpressionValue("Expected Double object in '" + value + "'");
 		}
-		setValue((Double) value);
+		setValue(((Double) value).doubleValue());
 	}
 
 	@Override

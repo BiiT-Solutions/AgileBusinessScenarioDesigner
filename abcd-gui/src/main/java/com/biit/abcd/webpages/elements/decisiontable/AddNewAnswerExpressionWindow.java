@@ -33,7 +33,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 	 */
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
-		this.expressionChain = expressionChain.generateCopy();
+		this.expressionChain = (ExpressionChain) expressionChain.generateCopy();
 		if (reference instanceof ExpressionValueCustomVariable) {
 			// Custom variable
 			setContent(generateExpression());
@@ -113,7 +113,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 	}
 
 	public ExpressionChain getExpressionWithoutFirstElement() {
-		ExpressionChain expressionChain = this.expressionChain.generateCopy();
+		ExpressionChain expressionChain = (ExpressionChain) this.expressionChain.generateCopy();
 		if ((expressionChain != null) && !expressionChain.getExpressions().isEmpty()) {
 			expressionChain.removeFirstExpression();
 		}

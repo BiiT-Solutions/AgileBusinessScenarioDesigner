@@ -136,7 +136,7 @@ public class DiagramParser {
 		ExpressionValueTreeObjectReference forkNodeExpression = forkNode.getReference();
 		// For each outgoing link a new condition is created
 		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
-			ExpressionChain expressionOfLinkCopy = outLink.getExpressionChain().generateCopy();
+			ExpressionChain expressionOfLinkCopy = (ExpressionChain) outLink.getExpressionChain().generateCopy();
 
 			// System.out.println("EXPRESSION LINK OF THE FORK: " +
 			// expressionOfLinkCopy);

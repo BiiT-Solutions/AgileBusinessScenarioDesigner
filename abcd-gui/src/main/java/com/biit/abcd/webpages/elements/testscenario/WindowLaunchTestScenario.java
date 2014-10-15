@@ -33,10 +33,8 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 		simpleTestScenarioViewDao = (ISimpleTestScenarioViewDao) helper.getBean("simpleTestScenarioViewDao");
 
 		setCaption(ServerTranslate.translate(LanguageCodes.LAUNCH_TEST_WINDOW_CAPTION));
-		setWidth("20%");
-		setHeight("20%");
-		setClosable(false);
-		setModal(true);
+		setWidth("400px");
+		setHeight("200px");
 		setResizable(false);
 		setContent(generateContent(formView));
 	}

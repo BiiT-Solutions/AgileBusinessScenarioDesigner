@@ -32,10 +32,4 @@ public class ExpressionValueSystemDate extends ExpressionValueTimestamp {
 	public String getExpression() {
 		return "SystemDate";
 	}
-
-	@Override
-	public Expression generateCopy() {
-		ExpressionValueTimestamp copy = new ExpressionValueSystemDate();
-		return copy;
-	}
 }

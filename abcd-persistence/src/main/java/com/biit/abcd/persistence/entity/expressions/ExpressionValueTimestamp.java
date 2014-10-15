@@ -67,13 +67,6 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueTimestamp copy = new ExpressionValueTimestamp();
-		copy.value = new Timestamp(value.getTime());
-		return copy;
-	}
-
-	@Override
 	public void setValue(Object value) throws NotValidExpressionValue {
 		if (!(value instanceof Timestamp)) {
 			throw new NotValidExpressionValue("Expected Timestamp object in '" + value + "'");

@@ -50,13 +50,6 @@ public class ExpressionValueString extends ExpressionValue {
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueString copy = new ExpressionValueString();
-		copy.value = new String(value);
-		return copy;
-	}
-
-	@Override
 	public void setValue(Object value) throws NotValidExpressionValue {
 		if (!(value instanceof String)) {
 			throw new NotValidExpressionValue("Expected String object in '" + value + "'");

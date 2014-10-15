@@ -56,13 +56,6 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueGlobalConstant copy = new ExpressionValueGlobalConstant();
-		copy.constant = constant;
-		return copy;
-	}
-
-	@Override
 	public Object getValue() {
 		return getVariable();
 	}

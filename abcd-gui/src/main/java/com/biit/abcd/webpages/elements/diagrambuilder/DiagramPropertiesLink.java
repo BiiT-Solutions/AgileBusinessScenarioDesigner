@@ -69,7 +69,8 @@ public class DiagramPropertiesLink extends SecuredDiagramElementProperties<Diagr
 				// Generate a expression with the question not editable.
 				final ExpressionValueTreeObjectReference questionExpression = (ExpressionValueTreeObjectReference) diagramLink
 						.getExpressionChain().getExpressions().get(0);
-				ExpressionChain answerExpressionWithQuestion = diagramLink.getExpressionChain().generateCopy();
+				ExpressionChain answerExpressionWithQuestion = (ExpressionChain) diagramLink.getExpressionChain()
+						.generateCopy();
 
 				final AddNewAnswerExpressionWindow addNewAnswerExpressionWindow = new AddNewAnswerExpressionWindow(fork
 						.getReference(), answerExpressionWithQuestion);

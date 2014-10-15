@@ -68,7 +68,7 @@ public class ExpressionToDroolsRule {
 		DroolsRule droolsRule = new DroolsRule();
 		droolsRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
 		if (extraConditions != null) {
-			droolsRule.addConditions(extraConditions.generateCopy());
+			droolsRule.addConditions((ExpressionChain) extraConditions.generateCopy());
 		}
 		// If the expression chain contains generic variables, we have to unwrap
 		// them
@@ -81,7 +81,7 @@ public class ExpressionToDroolsRule {
 				return null;
 			}
 		} else {
-			droolsRule.setActions(expressionChain.generateCopy());
+			droolsRule.setActions((ExpressionChain) expressionChain.generateCopy());
 		}
 		return droolsRule;
 	}
@@ -93,7 +93,7 @@ public class ExpressionToDroolsRule {
 		ExpressionChain ifActionElse = new ExpressionChain();
 
 		int ifIndex = 0;
-		ExpressionChain expressionCopy = expressionChain.generateCopy();
+		ExpressionChain expressionCopy = (ExpressionChain) expressionChain.generateCopy();
 		// Remove the IF from the expression
 		expressionCopy.removeFirstExpression();
 		// and the last parenthesis
@@ -163,7 +163,7 @@ public class ExpressionToDroolsRule {
 		// For each category, we generate the expression to create a new rule
 		if (treeObjects != null && !treeObjects.isEmpty()) {
 			for (TreeObject category : treeObjects) {
-				ExpressionChain expressionChainCopy = expressionChain.generateCopy();
+				ExpressionChain expressionChainCopy = (ExpressionChain) expressionChain.generateCopy();
 				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
 						expressionValueGenericVariable.getVariable());
 				// Remove the generic

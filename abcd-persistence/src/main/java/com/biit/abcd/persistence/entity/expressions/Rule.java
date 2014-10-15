@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
@@ -133,13 +134,13 @@ public class Rule extends StorableObject implements INameAttribute {
 	}
 
 	public Rule generateCopy() {
-		Rule copy = new Rule();
-		if (name != null) {
-			copy.name = new String(name);
+		Rule copy = null;
+		try {
+			copy = this.getClass().newInstance();
+			copy.copyData(this);
+		} catch (InstantiationException | IllegalAccessException | NotValidStorableObjectException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
-		copy.setCondition(this.condition.generateCopy());
-		copy.setActions(this.actions.generateCopy());
-
 		return copy;
 	}
 

@@ -57,13 +57,6 @@ public class ExpressionSymbol extends Expression implements IExpressionType<Avai
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionSymbol copy = new ExpressionSymbol();
-		copy.value = value;
-		return copy;
-	}
-
-	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;

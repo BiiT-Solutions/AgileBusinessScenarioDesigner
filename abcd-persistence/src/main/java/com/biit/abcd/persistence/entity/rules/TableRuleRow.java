@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
@@ -96,9 +97,13 @@ public class TableRuleRow extends StorableObject {
 	}
 
 	public TableRuleRow generateCopy() {
-		TableRuleRow copy = new TableRuleRow();
-		copy.conditions = conditions.generateCopy();
-		copy.action = action.generateCopy();
+		TableRuleRow copy = null;
+		try {
+			copy = this.getClass().newInstance();
+			copy.copyData(this);
+		} catch (InstantiationException | IllegalAccessException | NotValidStorableObjectException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 		return copy;
 	}
 

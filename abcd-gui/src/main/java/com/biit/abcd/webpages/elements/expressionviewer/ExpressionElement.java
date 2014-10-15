@@ -23,4 +23,8 @@ public class ExpressionElement extends CssLayout {
 		this.addLayoutClickListener(clickListener);
 	}
 
+	public String toString() {
+		return elementName.getCaption();
+	}
+
 }

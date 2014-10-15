@@ -57,13 +57,6 @@ public class ExpressionFunction extends Expression implements IExpressionType<Av
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionFunction copy = new ExpressionFunction();
-		copy.value = value;
-		return copy;
-	}
-
-	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;

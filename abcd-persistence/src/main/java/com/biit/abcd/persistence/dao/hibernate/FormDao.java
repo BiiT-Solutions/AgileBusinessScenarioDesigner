@@ -22,6 +22,8 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
@@ -73,6 +75,22 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 				}
 			}
 		}
+
+		Set<Diagram> diagrams = entity.getDiagrams();
+		if (diagrams != null && !diagrams.isEmpty()) {
+			for (Diagram diagram : diagrams) {
+				List<DiagramObject> nodes = diagram.getDiagramObjects();
+				if (nodes != null && !nodes.isEmpty()) {
+					for (DiagramObject node : nodes) {
+						if (node instanceof DiagramLink) {
+							DiagramLink nodeLink = (DiagramLink) node;
+							nodeLink.getExpressionChain().updateChildrenSortSeqs();
+						}
+					}
+				}
+			}
+		}
+
 		return super.makePersistent(entity);
 	}
 
@@ -92,7 +110,8 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	}
 
 	/**
-	 * Get all elements that has a null value in the ID parameter before persisting.
+	 * Get all elements that has a null value in the ID parameter before
+	 * persisting.
 	 * 
 	 * @param form
 	 * @return
@@ -138,7 +157,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 			throw e;
 		}
 	}
-	
+
 	@Override
 	public int getLastVersion(String formLabel, Long organizationId) {
 		Session session = getSessionFactory().getCurrentSession();
@@ -261,6 +280,21 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 						for (TableRuleRow tableRuleRow : tableRuleRows) {
 							sortChildren(tableRuleRow.getConditionChain());
 							sortChildren(tableRuleRow.getActionChain());
+						}
+					}
+				}
+			}
+			// Sort the expressions inside the diagram links
+			Set<Diagram> diagrams = form.getDiagrams();
+			if (diagrams != null && !diagrams.isEmpty()) {
+				for (Diagram diagram : diagrams) {
+					List<DiagramObject> nodes = diagram.getDiagramObjects();
+					if (nodes != null && !nodes.isEmpty()) {
+						for (DiagramObject node : nodes) {
+							if (node instanceof DiagramLink) {
+								DiagramLink nodeLink = (DiagramLink) node;
+								sortChildren(nodeLink.getExpressionChain());
+							}
 						}
 					}
 				}

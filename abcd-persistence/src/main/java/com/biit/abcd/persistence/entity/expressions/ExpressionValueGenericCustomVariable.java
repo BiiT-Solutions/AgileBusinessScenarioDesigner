@@ -76,15 +76,6 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 	}
 
 	@Override
-	public Expression generateCopy() {
-		ExpressionValueGenericCustomVariable copy = new ExpressionValueGenericCustomVariable();
-		copy.setType(getType());
-		copy.variable = variable;
-		copy.setEditable(isEditable());
-		return copy;
-	}
-
-	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		innerStorableObjects.add(variable);
