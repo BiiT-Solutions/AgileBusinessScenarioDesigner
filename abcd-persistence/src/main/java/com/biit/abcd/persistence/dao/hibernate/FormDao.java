@@ -7,13 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -23,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -31,11 +26,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.form.persistence.dao.hibernate.TreeObjectDao;
+import com.biit.form.persistence.dao.hibernate.BaseFormDao;
 import com.biit.persistence.entity.StorableObject;
 
 @Repository
-public class FormDao extends TreeObjectDao<Form> implements IFormDao {
+public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	public FormDao() {
 		super(Form.class);
@@ -118,8 +113,8 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	}
 
 	/**
-	 * Get all elements that has a null value in the ID parameter before
-	 * persisting.
+	 * Get all elements that has a null value in the ID parameter before persisting. Hibernate Rollback does not set to
+	 * null the id of the elements that finally hasn't been persisted.
 	 * 
 	 * @param form
 	 * @return
@@ -127,61 +122,10 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	@Override
 	public Set<StorableObject> getElementsWithNullIds(Form form) {
 		Set<StorableObject> elementsWithNullIds = new HashSet<>();
-		elementsWithNullIds.addAll(super.getElementsWithNullIds(form));
 
-		Set<StorableObject> diagrams = new HashSet<>();
-		for (Diagram diagram : form.getDiagrams()) {
-			diagrams.add(diagram);
-			// Add also diagram objects.
-			for (StorableObject child : diagram.getDiagramObjects()) {
-				diagrams.add(child);
-			}
-		}
-		elementsWithNullIds.addAll(getElementsWithNullIds(diagrams));
-
-		Set<StorableObject> tableRules = new HashSet<>();
-		for (TableRule tableRule : form.getTableRules()) {
-			tableRules.add(tableRule);
-		}
-		elementsWithNullIds.addAll(getElementsWithNullIds(tableRules));
-
+		Set<StorableObject> formElements = form.getAllInnerStorableObjects();
+		elementsWithNullIds.addAll(getElementsWithNullIds(formElements));
 		return elementsWithNullIds;
-	}
-
-	@Override
-	public int getLastVersion(Form form) {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		try {
-			Criteria criteria = session.createCriteria(Form.class);
-			criteria.setProjection(Projections.max("version"));
-			criteria.add(Restrictions.eq("label", form.getLabel()));
-			criteria.add(Restrictions.eq("organizationId", form.getOrganizationId()));
-			Integer maxVersion = (Integer) criteria.uniqueResult();
-			session.getTransaction().commit();
-			return maxVersion;
-		} catch (RuntimeException e) {
-			session.getTransaction().rollback();
-			throw e;
-		}
-	}
-
-	@Override
-	public int getLastVersion(String formLabel, Long organizationId) {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		try {
-			Criteria criteria = session.createCriteria(Form.class);
-			criteria.setProjection(Projections.max("version"));
-			criteria.add(Restrictions.eq("label", formLabel));
-			criteria.add(Restrictions.eq("organizationId", organizationId));
-			Integer maxVersion = (Integer) criteria.uniqueResult();
-			session.getTransaction().commit();
-			return maxVersion;
-		} catch (RuntimeException e) {
-			session.getTransaction().rollback();
-			throw e;
-		}
 	}
 
 	@Override
@@ -204,50 +148,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 	@Override
 	@Cacheable(value = "forms", key = "#label")
 	public Form getForm(String label, Long organizationId) {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		try {
-			Criteria criteria = session.createCriteria(Form.class);
-			criteria.add(Restrictions.eq("label", label));
-			criteria.add(Restrictions.eq("organizationId", organizationId));
-			// get form with max version.
-			criteria.addOrder(Order.desc("version"));
-			criteria.setMaxResults(1);
-			@SuppressWarnings("unchecked")
-			List<Form> results = criteria.list();
-			initializeSets(results);
-			session.getTransaction().commit();
-			if (!results.isEmpty()) {
-				return (Form) results.get(0);
-			}
-		} catch (RuntimeException e) {
-			session.getTransaction().rollback();
-			throw e;
-		}
-		return null;
-	}
-
-	@Override
-	public Form getForm(String label, Integer version, Long organizationId) {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		try {
-			Criteria criteria = session.createCriteria(Form.class);
-			criteria.add(Restrictions.eq("version", version));
-			criteria.add(Restrictions.eq("label", label));
-			criteria.add(Restrictions.eq("organizationId", organizationId));
-			@SuppressWarnings("unchecked")
-			List<Form> results = criteria.list();
-			initializeSets(results);
-			session.getTransaction().commit();
-			if (!results.isEmpty()) {
-				return (Form) results.get(0);
-			}
-		} catch (RuntimeException e) {
-			session.getTransaction().rollback();
-			throw e;
-		}
-		return null;
+		return super.getForm(label, organizationId);
 	}
 
 	@Override
@@ -262,6 +163,7 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 		return result;
 	}
 
+	@Override
 	protected void sortChildren(List<Form> forms) {
 		for (Form form : forms) {
 			// Sort the expressions
@@ -331,24 +233,6 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 		@Override
 		public int compare(Expression o1, Expression o2) {
 			return (o1.getSortSeq() < o2.getSortSeq() ? -1 : (o1 == o2 ? 0 : 1));
-		}
-	}
-
-	@Override
-	public boolean exists(String label, Long organizationId) {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		try {
-			Criteria criteria = session.createCriteria(getType());
-			criteria.setProjection(Projections.rowCount());
-			criteria.add(Restrictions.eq("label", label));
-			criteria.add(Restrictions.eq("organizationId", organizationId));
-			int rows = ((Long) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-			return rows > 0;
-		} catch (RuntimeException e) {
-			session.getTransaction().rollback();
-			throw e;
 		}
 	}
 

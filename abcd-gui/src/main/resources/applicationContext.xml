@@ -105,9 +105,15 @@
 		<property name="fallbackToSystemLocale" value="false"></property>
 	</bean>
 	<!-- DAOS -->
-	<bean name="formDao" class="com.biit.abcd.persistence.dao.hibernate.FormDao" />
-	<bean name="simpleFormViewDao" class="com.biit.abcd.persistence.dao.hibernate.SimpleFormViewDao" />
-	<bean name="diagramDao" class="com.biit.abcd.persistence.dao.hibernate.DiagramDao" />
+	<bean name="formDao" class="com.biit.abcd.persistence.dao.hibernate.FormDao" >
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean name="simpleFormViewDao" class="com.biit.abcd.persistence.dao.hibernate.SimpleFormViewDao" >
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean name="diagramDao" class="com.biit.abcd.persistence.dao.hibernate.DiagramDao" >
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 	<!-- Liferay Services -->
 	<bean id="userService" class="com.biit.liferay.access.UserService" />
 </beans>

@@ -15,7 +15,7 @@
 				<include name="genericTreeObjectVariablesDao" />
 				<include name="testScenarioDao" />
 				<include name="simpleTestScenarioViewDao" />
-				<exclude name="newVersion" />
+				<include name="newVersion" />
 			</run>
 		</groups>
 		<classes>
