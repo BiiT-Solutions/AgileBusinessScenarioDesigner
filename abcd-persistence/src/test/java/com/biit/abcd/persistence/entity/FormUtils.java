@@ -1,0 +1,179 @@
+package com.biit.abcd.persistence.entity;
+
+import java.util.HashMap;
+import java.util.Random;
+
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
+import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
+import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
+
+public class FormUtils {
+	private static HashMap<String, CustomVariable> variableMap = new HashMap<>();
+	private static HashMap<String, TreeObject> elementsMap = new HashMap<>();
+	private static Random random = new Random();
+
+	public static Form createCompleteForm() throws FieldTooLongException, NotValidChildException,
+			CharacterNotAllowedException, InvalidAnswerFormatException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+		form.setLabel("CreatedForm");
+
+		addFormStructure(form);
+		addFormCustomVariables(form);
+		addFormExpressions(form);
+
+		return form;
+	}
+
+	public static void addFormStructure(Form form) throws NotValidChildException, FieldTooLongException,
+			CharacterNotAllowedException, InvalidAnswerFormatException {
+		elementsMap = new HashMap<>();
+		Category category = new Category();
+		category.setName("Category1");
+		form.addChild(category);
+		elementsMap.put("Category1", category);
+
+		Category category2 = new Category();
+		category2.setName("Category2");
+		form.addChild(category2);
+		elementsMap.put("Category2", category2);
+
+		Category category3 = new Category();
+		category3.setName("Category3");
+		form.addChild(category3);
+		elementsMap.put("Category3", category3);
+
+		Group group1 = new Group();
+		group1.setName("Group1");
+		category2.addChild(group1);
+		elementsMap.put("Group1", group1);
+
+		Group group2 = new Group();
+		group2.setName("Group2");
+		category2.addChild(group2);
+		elementsMap.put("Group2", group2);
+
+		Group group3 = new Group();
+		group3.setName("Group3");
+		category2.addChild(group3);
+		elementsMap.put("Group3", group3);
+
+		// Input field text.
+		Question question1 = new Question();
+		question1.setName("InsertText");
+		question1.setAnswerType(AnswerType.INPUT);
+		question1.setAnswerFormat(AnswerFormat.TEXT);
+		group2.addChild(question1);
+		elementsMap.put("InsertText", question1);
+
+		// Radio Button
+		Question question2 = new Question();
+		question2.setName("ChooseOne");
+		question2.setAnswerType(AnswerType.RADIO);
+		group2.addChild(question2);
+		elementsMap.put("ChooseOne", question2);
+
+		Answer answer1 = new Answer();
+		answer1.setName("Answer1");
+		question2.addChild(answer1);
+
+		Answer answer2 = new Answer();
+		answer2.setName("Answer2");
+		question2.addChild(answer2);
+
+		Answer answer3 = new Answer();
+		answer3.setName("Answer3");
+		question2.addChild(answer3);
+
+		// Date
+		Question question3 = new Question();
+		question3.setName("InsertDate");
+		question1.setAnswerType(AnswerType.INPUT);
+		question1.setAnswerFormat(AnswerFormat.DATE);
+		group2.addChild(question3);
+		elementsMap.put("InsertDate", question3);
+
+		// Radio Button
+		Question question4 = new Question();
+		question4.setName("ChooseMore");
+		question4.setAnswerType(AnswerType.MULTI_CHECKBOX);
+		group2.addChild(question4);
+		elementsMap.put("ChooseMore", question4);
+
+		Answer answer4 = new Answer();
+		answer4.setName("Answer4");
+		question4.addChild(answer4);
+
+		Answer answer5 = new Answer();
+		answer5.setName("Answer5");
+		question4.addChild(answer5);
+
+		Answer answer6 = new Answer();
+		answer6.setName("Answer6");
+		question4.addChild(answer6);
+	}
+
+	private static void addFormCustomVariables(Form form) {
+		variableMap = new HashMap<>();
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY);
+		form.getCustomVariables().add(customVarCategory);
+		variableMap.put("cScore", customVarCategory);
+
+		CustomVariable customVarQuestion = new CustomVariable(form, "bonus", CustomVariableType.NUMBER,
+				CustomVariableScope.QUESTION);
+		form.getCustomVariables().add(customVarQuestion);
+	}
+
+	private static void addFormExpressions(Form form) {
+		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
+				variableMap.get("cScore"));
+		// Category.Score=1+1;
+		expressionChain.addExpression(customVariable);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		expressionChain.addExpression(new ExpressionValueNumber(1d));
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
+		expressionChain.addExpression(new ExpressionValueNumber(1d));
+		form.getExpressionChains().add(expressionChain);
+
+		// Category2.bonus=InsertDate(Y)
+		ExpressionChain expressionChain2 = new ExpressionChain();
+		ExpressionValueCustomVariable customVariable2 = new ExpressionValueCustomVariable(elementsMap.get("Category2"),
+				variableMap.get("bonus"));
+		expressionChain2.addExpression(customVariable2);
+		expressionChain2.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		expressionChain2.addExpression(new ExpressionValueTreeObjectReference(elementsMap.get("InsertDate"),
+				QuestionDateUnit.YEARS));
+		form.getExpressionChains().add(expressionChain2);
+	}
+
+	private static void addFormTableRules(Form form) {
+		TableRule tableRule = new TableRule();
+
+		TableRuleRow tableRuleRow = new TableRuleRow();
+
+		ExpressionChain expressionChain = new ExpressionChain();
+
+		tableRuleRow.getConditions().add(expressionChain);
+
+		tableRule.getRules().add(tableRuleRow);
+
+		form.getTableRules().add(tableRule);
+	}
+
+	private static String randomName(String prefix) {
+		return prefix + Long.toString(random.nextLong(), 36);
+	}
+}
