@@ -34,8 +34,14 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 		return type;
 	}
 
-	protected SessionFactory getSessionFactory() {
+	@Override
+	public SessionFactory getSessionFactory() {
 		return sessionFactory;
+	}
+
+	@Override
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
@@ -134,4 +140,5 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 
 		return formViews;
 	}
+
 }
