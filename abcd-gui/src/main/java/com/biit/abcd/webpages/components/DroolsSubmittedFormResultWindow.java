@@ -112,7 +112,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 					}
 				}
 			}
-
 			// Put form variables
 			if ((form != null) && (submittedForm != null)) {
 				createFormVariables(form, submittedForm);
@@ -120,7 +119,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				List<TreeObject> categories = form.getChildren();
 				if (categories != null) {
 					for (TreeObject category : categories) {
-
 						// Get the subform category
 						Category categorySubForm = getSubmittedFormCategory(category, submittedForm);
 						createCategoryVariables(category, categorySubForm);
@@ -204,44 +202,43 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	@SuppressWarnings("unchecked")
 	private void createQuestionVariables(TreeObject question, Question questionSubForm) {
 		List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
-
-		if ((questionVariables != null) && (questionSubForm != null)) {
-			for (String variable : questionVariables) {
-				if (questionSubForm.getVariableValue(variable) != null) {
-					formTreeTable.getItem(question).getItemProperty(variable)
-							.setValue(questionSubForm.getVariableValue(variable).toString());
-				} else {
-					formTreeTable.getItem(question).getItemProperty(variable).setValue("-");
-				}
-
-				if (question instanceof com.biit.abcd.persistence.entity.Question) {
-					com.biit.abcd.persistence.entity.Question questionTreeObject = (com.biit.abcd.persistence.entity.Question) question;
-					if (questionTreeObject.getAnswerType().equals(AnswerType.INPUT)
-							&& questionTreeObject.getAnswerFormat().equals(AnswerFormat.DATE)) {
-						try {
-							if (questionSubForm.getAnswer() != null) {
-								SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-								System.out.println("QUESTION DATE: " + questionSubForm.getAnswer());
-
-								String formattedDate = dateFormat.format(questionSubForm.getAnswer());
-								formTreeTable.getItem(question)
-										.getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-										.setValue(formattedDate);
-							} else {
-								formTreeTable.getItem(question)
-										.getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE).setValue("-");
-							}
-						} catch (IllegalArgumentException e) {
-							AbcdLogger.errorMessage(this.getClass().getName(), e);
-						}
-					} else {
+		if ((questionSubForm != null) && (question != null)) {
+			// Set the original value of the question
+			if (question instanceof com.biit.abcd.persistence.entity.Question) {
+				com.biit.abcd.persistence.entity.Question questionTreeObject = (com.biit.abcd.persistence.entity.Question) question;
+				if (questionTreeObject.getAnswerType().equals(AnswerType.INPUT)
+						&& questionTreeObject.getAnswerFormat().equals(AnswerFormat.DATE)) {
+					try {
 						if (questionSubForm.getAnswer() != null) {
+							SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+							String formattedDate = dateFormat.format(questionSubForm.getAnswer());
 							formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
-									.setValue(questionSubForm.getAnswer().toString());
+									.setValue(formattedDate);
 						} else {
 							formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
 									.setValue("-");
 						}
+					} catch (IllegalArgumentException e) {
+						AbcdLogger.errorMessage(this.getClass().getName(), e);
+					}
+				} else {
+					if (questionSubForm.getAnswer() != null) {
+						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+								.setValue(questionSubForm.getAnswer().toString());
+					} else {
+						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
+								.setValue("-");
+					}
+				}
+			}
+			// Set the variable value of the question
+			if ((questionVariables != null)) {
+				for (String variable : questionVariables) {
+					if (questionSubForm.getVariableValue(variable) != null) {
+						formTreeTable.getItem(question).getItemProperty(variable)
+								.setValue(questionSubForm.getVariableValue(variable).toString());
+					} else {
+						formTreeTable.getItem(question).getItemProperty(variable).setValue("-");
 					}
 				}
 			}
