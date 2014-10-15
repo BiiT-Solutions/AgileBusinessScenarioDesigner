@@ -49,7 +49,7 @@ public class SelectDroolsRule extends Table {
 		Item item = addItem(rule);
 		item.getItemProperty(MenuProperties.RULE_NAME).setValue(rule.getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
-				DateManager.convertDateToString(rule.getUpdateTime()));
+				DateManager.convertDateToStringWithHours(rule.getUpdateTime()));
 	}
 
 	public void removeSelectedRow() {

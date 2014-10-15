@@ -360,8 +360,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	public void updateNewVersionButton(SimpleFormView selected) {
 		if (selected != null && !(selected instanceof RootForm)) {
-			int lastVersion = formDao.getLastVersion(selected.getLabel(), selected.getOrganizationId());
-			newVersion.setEnabled(selected.getVersion() == lastVersion);
+			newVersion.setEnabled(selected.isLastVersion());
 		} else {
 			newVersion.setEnabled(false);
 		}

@@ -92,7 +92,7 @@ public class TableCellLabelEdit extends Table {
 				}
 			});
 			item.getItemProperty(MenuProperties.TABLE_NAME).setValue(editCellComponent);
-			item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(((StorableObject)itemId).getUpdateTime()));
+			item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToStringWithHours(((StorableObject)itemId).getUpdateTime()));
 			return editCellComponent;
 		}
 		return null;
@@ -108,7 +108,7 @@ public class TableCellLabelEdit extends Table {
 		Item row = getItem(object);
 		SelectTableEditCell tableCell = ((SelectTableEditCell) row
 				.getItemProperty(MenuProperties.TABLE_NAME).getValue());
-		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(object.getUpdateTime()));
+		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToStringWithHours(object.getUpdateTime()));
 		tableCell.setLabel(object);
 	}
 	

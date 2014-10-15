@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.formdesigner;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,6 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	private TextField formName;
 	private TextField formVersion;
 	private DateField availableFrom;
-	private DateField availableTo;
 
 	public FormProperties() {
 		super(Form.class);
@@ -35,8 +35,6 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 		formName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
 		formName.setValue(instance.getName());
 		formName.setEnabled(false);
-		// formName.addValidator(new RegexpValidator("[a-zA-Z0-9]",
-		// "ERROR !!!"));
 
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
@@ -45,15 +43,11 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 		availableFrom = new DateField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_FROM));
 		availableFrom.setValue(instance.getAvailableFrom());
 
-		availableTo = new DateField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_TO));
-		availableTo.setValue(instance.getAvailableTo());
-
 		FormLayout formForm = new FormLayout();
 		formForm.setWidth(null);
 		formForm.addComponent(formName);
 		formForm.addComponent(formVersion);
 		formForm.addComponent(availableFrom);
-		formForm.addComponent(availableTo);
 
 		addTab(formForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_FORM_FORM_CAPTION), true, 0);
 	}
@@ -61,18 +55,20 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	@Override
 	protected void updateConcreteFormElement() {
 		if (availableFrom.getValue() != null) {
-			instance.setAvailableFrom(new Timestamp(availableFrom.getValue().getTime()));
+			
+			Calendar cal = Calendar.getInstance(); // locale-specific
+			cal.setTime(availableFrom.getValue());
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			long time = cal.getTimeInMillis();			
+			
+			instance.setAvailableFrom(new Timestamp(time));
 			AbcdLogger.info(
 					this.getClass().getName(),
 					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
 							+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom() + "'.");
-		}
-		if (availableTo.getValue() != null) {
-			instance.setAvailableTo(new Timestamp(availableTo.getValue().getTime()));
-			AbcdLogger.info(
-					this.getClass().getName(),
-					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
-							+ instance.getName() + "' property 'Valid To' to '" + instance.getAvailableTo() + "'.");
 		}
 		firePropertyUpdateListener(getTreeObjectInstance());
 	}
@@ -84,7 +80,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 	@Override
 	protected Set<AbstractComponent> getProtectedElements() {
-		return new HashSet<AbstractComponent>(Arrays.asList(availableFrom, availableTo));
+		return new HashSet<AbstractComponent>(Arrays.asList(availableFrom));
 	}
 
 }

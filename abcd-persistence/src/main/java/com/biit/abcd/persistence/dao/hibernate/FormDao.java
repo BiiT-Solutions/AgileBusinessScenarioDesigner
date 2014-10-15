@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -91,6 +93,12 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 			}
 		}
 
+		// Update previous versions validTo.
+		if (entity.getVersion() > 0) {
+			// 84600000 milliseconds in a day
+			Timestamp validTo = new Timestamp(entity.getAvailableFrom().getTime() - 84600000);
+			updateValidTo(entity.getLabel(), entity.getVersion() - 1, entity.getOrganizationId(), validTo);
+		}
 		return super.makePersistent(entity);
 	}
 
@@ -338,6 +346,52 @@ public class FormDao extends TreeObjectDao<Form> implements IFormDao {
 			int rows = ((Long) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 			return rows > 0;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
+	}
+
+	/**
+	 * Updates the validTo field of a form defined by its label and version.
+	 * 
+	 * @param label
+	 * @param version
+	 * @param validTo
+	 * @return
+	 */
+	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo) {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			String hql = "update Form set availableTo = :availableTo where label = :label and version = :version and organizationId = :organizationId";
+			Query query = session.createQuery(hql);
+			query.setString("label", label);
+			query.setLong("version", version);
+			query.setLong("organizationId", organizationId);
+			query.setTimestamp("availableTo", validTo);
+			int rowCount = query.executeUpdate();
+			session.getTransaction().commit();
+			return rowCount;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
+	}
+
+	public int updateValidFrom(String label, int version, Long organizationId, Timestamp validFrom) {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			String hql = "update Form set availableFrom = :availableFrom where label = :label and version = :version and organizationId = :organizationId";
+			Query query = session.createQuery(hql);
+			query.setString("label", label);
+			query.setLong("version", version);
+			query.setLong("organizationId", organizationId);
+			query.setTimestamp("availableFrom", validFrom);
+			int rowCount = query.executeUpdate();
+			session.getTransaction().commit();
+			return rowCount;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
 			throw e;

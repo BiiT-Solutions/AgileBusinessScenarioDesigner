@@ -50,7 +50,7 @@ public class SelectExpressionTable extends Table {
 		Item item = addItem(expression);
 		item.getItemProperty(MenuProperties.EXPRESSION_NAME).setValue(expression.getName());
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
-				DateManager.convertDateToString(expression.getUpdateTime()));
+				DateManager.convertDateToStringWithHours(expression.getUpdateTime()));
 	}
 
 	public void removeSelectedRow() {

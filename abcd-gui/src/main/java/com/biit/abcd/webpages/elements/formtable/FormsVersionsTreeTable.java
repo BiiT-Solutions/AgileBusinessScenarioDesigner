@@ -109,15 +109,27 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function adds a row to the table only if the list of forms is not
-	 * empty.
+	 * This function adds a row to the table only if the list of forms is not empty.
 	 * 
 	 * @param forms
 	 */
-	@SuppressWarnings("unchecked")
 	private void addRow(SimpleFormView form) {
 		if (form != null) {
 			Item item = addItem(form);
+			setRow(form, item);
+		}
+	}
+
+	private void refreshRow(SimpleFormView form) {
+		if (form != null) {
+			Item item = getItem(form);
+			setRow(form, item);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void setRow(SimpleFormView form, Item item) {
+		if (item != null) {
 			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 			item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
 			item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
@@ -143,7 +155,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue("");
 			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.CREATION_DATE).setValue(
-					(DateManager.convertDateToString(form.getCreationTime())));
+					(DateManager.convertDateToStringWithHours(form.getCreationTime())));
 			try {
 				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue(
 						LiferayServiceAccess.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress());
@@ -151,50 +163,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue("");
 			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE).setValue(
-					(DateManager.convertDateToString(form.getUpdateTime())));
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void refreshRow(SimpleFormView form) {
-		if (form != null) {
-			Item item = getItem(form);
-			if (item != null) {
-				item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
-				item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
-				item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
-				item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM).setValue(
-						(DateManager.convertDateToString(form.getAvailableFrom())));
-				if (form.getAvailableTo() != null) {
-					item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue(
-							(DateManager.convertDateToString(form.getAvailableTo())));
-				} else {
-					item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue("");
-				}
-				User userAccessingForm = UiAccesser.getUserUsingForm(form.getId());
-				if (userAccessingForm != null) {
-					item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue(
-							userAccessingForm.getEmailAddress());
-				} else {
-					item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue("");
-				}
-				try {
-					item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue(
-							LiferayServiceAccess.getInstance().getUserById(form.getCreatedBy()).getEmailAddress());
-				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
-					item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue("");
-				}
-				item.getItemProperty(FormsVersionsTreeTableProperties.CREATION_DATE).setValue(
-						(DateManager.convertDateToString(form.getCreationTime())));
-				try {
-					item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue(
-							LiferayServiceAccess.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress());
-				} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
-					item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue("");
-				}
-				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE).setValue(
-						(DateManager.convertDateToString(form.getUpdateTime())));
-			}
+					(DateManager.convertDateToStringWithHours(form.getUpdateTime())));
 		}
 	}
 
@@ -271,8 +240,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function loads from database all form elements and groups them by
-	 * name. At the end it orders each form list by version number.
+	 * This function loads from database all form elements and groups them by name. At the end it orders each form list
+	 * by version number.
 	 * 
 	 * @return
 	 * @throws NotConnectedToDatabaseException
@@ -361,15 +330,13 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function returns an string with read only if the form can't be
-	 * edited by the user
+	 * This function returns an string with read only if the form can't be edited by the user
 	 * 
 	 * @param form
 	 * @return
 	 */
 	private String getFormPermissionsTag(SimpleFormView form) {
-		if (!AbcdAuthorizationService.getInstance().isAuthorizedToForm(form.getOrganizationId(),
-				UserSessionHandler.getUser())) {
+		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form, UserSessionHandler.getUser())) {
 			return "read only";
 		}
 		if (AbcdAuthorizationService.getInstance().isFormAlreadyInUse(form.getId(), UserSessionHandler.getUser())) {

@@ -49,7 +49,9 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-					UserSessionHandler.getFormController().setForm(formDao.read(formTable.getValue().getId()));
+					Form selectedForm = formDao.read(formTable.getValue().getId());
+					selectedForm.setLastVersion(formTable.getValue().isLastVersion());
+					UserSessionHandler.getFormController().setForm(selectedForm);
 				}
 			}
 		});
@@ -68,6 +70,7 @@ public class FormManager extends FormWebPageComponent {
 			public void formSelected() {
 				if (formTable.getValue() != null) {
 					Form form = formDao.read(formTable.getValue().getId());
+					form.setLastVersion(formTable.getValue().isLastVersion());
 					UserSessionHandler.getFormController().setForm(form);
 					UiAccesser.lockForm(form, UserSessionHandler.getUser());
 				}
@@ -127,8 +130,9 @@ public class FormManager extends FormWebPageComponent {
 		try {
 			RootForm rootForm = formTable.getSelectedRootForm();
 			SimpleFormView currentForm = rootForm.getLastFormVersion();
+			currentForm.setLastVersion(false);
 			newForm = createNewFormVersion(currentForm);
-
+			newForm.setLastVersion(true);
 			formDao.makePersistent(newForm);
 			formTable.refreshFormTable();
 			formTable.selectForm(newForm);

@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
@@ -102,6 +103,9 @@ public class Form extends BaseForm {
 	@OrderBy(value = "name ASC")
 	@Cache(region = "testScenarios", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<TestScenario> testScenarios;
+
+	@Transient
+	private transient boolean isLastVersion = true;
 
 	public Form() {
 		super();
@@ -593,6 +597,14 @@ public class Form extends BaseForm {
 
 	public void removeTestScenario(TestScenario testScenario) {
 		testScenarios.remove(testScenario);
+	}
+
+	public boolean isLastVersion() {
+		return isLastVersion;
+	}
+
+	public void setLastVersion(boolean isLastVersion) {
+		this.isLastVersion = isLastVersion;
 	}
 
 }

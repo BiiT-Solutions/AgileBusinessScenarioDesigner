@@ -48,7 +48,7 @@ public class SelectTableRuleTable extends Table {
 	public void addRow(TableRule tableRule) {
 		Item item = addItem(tableRule);
 		item.getItemProperty(MenuProperties.TABLE_NAME).setValue(tableRule.getName());
-		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToString(tableRule.getUpdateTime()));
+		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToStringWithHours(tableRule.getUpdateTime()));
 	}
 
 	public void removeSelectedRow() {
