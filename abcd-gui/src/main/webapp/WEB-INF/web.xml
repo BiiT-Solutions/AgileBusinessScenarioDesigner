@@ -5,13 +5,13 @@
 	<display-name>Agile Business sCenario Designer Tool</display-name>
 
 	<context-param>
-		<description>
-			Agile Business sCenario Designer Tool
-		</description>
-
+		<description>Agile Business sCenario Designer Tool</description>
 		<param-name>heartbeatInterval</param-name>
 		<param-value>120</param-value>
-		
+	</context-param>
+
+	<context-param>
+		<description>Vaadin production mode</description>
 		<param-name>productionMode</param-name>
 		<param-value>true</param-value>
 	</context-param>

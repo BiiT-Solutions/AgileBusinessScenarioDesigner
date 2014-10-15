@@ -607,4 +607,41 @@ public class Form extends BaseForm {
 		this.isLastVersion = isLastVersion;
 	}
 
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.addAll(super.getAllInnerStorableObjects());
+
+		for (Diagram diagram : getDiagrams()) {
+			innerStorableObjects.add(diagram);
+			innerStorableObjects.addAll(diagram.getAllInnerStorableObjects());
+		}
+
+		for (TableRule tableRule : getTableRules()) {
+			innerStorableObjects.add(tableRule);
+			innerStorableObjects.addAll(tableRule.getAllInnerStorableObjects());
+		}
+
+		for (CustomVariable customVariable : getCustomVariables()) {
+			innerStorableObjects.add(customVariable);
+			innerStorableObjects.addAll(customVariable.getAllInnerStorableObjects());
+		}
+
+		for (ExpressionChain expressionChain : getExpressionChains()) {
+			innerStorableObjects.add(expressionChain);
+			innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
+		}
+
+		for (Rule rule : getRules()) {
+			innerStorableObjects.add(rule);
+			innerStorableObjects.addAll(rule.getAllInnerStorableObjects());
+		}
+
+		for (TestScenario testScenario : getTestScenarios()) {
+			innerStorableObjects.add(testScenario);
+			innerStorableObjects.addAll(testScenario.getAllInnerStorableObjects());
+		}
+
+		return innerStorableObjects;
+	}
 }
