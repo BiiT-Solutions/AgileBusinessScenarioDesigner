@@ -70,7 +70,7 @@ public class SelectDiagramTable extends TreeTable {
 		editCellComponent.setOnlyEdit(true);
 		item.getItemProperty(MenuProperties.DIAGRAM_NAME).setValue(editCellComponent);
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
-				DateManager.convertDateToString((diagram.getUpdateTime())));
+				DateManager.convertDateToStringWithHours((diagram.getUpdateTime())));
 		editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(diagram));
 		editCellComponent.addLayoutClickListener(new LayoutClickListener() {
 			private static final long serialVersionUID = -4750839674064167369L;
@@ -124,7 +124,7 @@ public class SelectDiagramTable extends TreeTable {
 		SelectTableEditCell tableCell = ((SelectTableEditCell) row.getItemProperty(MenuProperties.DIAGRAM_NAME)
 				.getValue());
 		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
-				DateManager.convertDateToString(diagram.getUpdateTime()));
+				DateManager.convertDateToStringWithHours(diagram.getUpdateTime()));
 		tableCell.setLabel(diagram);
 	}
 

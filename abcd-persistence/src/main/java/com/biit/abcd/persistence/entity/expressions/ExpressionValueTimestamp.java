@@ -42,7 +42,7 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 	@Override
 	public String getRepresentation() {
 		if (value != null) {
-			return DateManager.convertDateToString(value);
+			return DateManager.convertDateToStringWithHours(value);
 		} else {
 			return "";
 		}
@@ -60,7 +60,7 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 	@Override
 	public String getExpression() {
 		if (value != null) {
-			return DateManager.convertDateToString(value);
+			return DateManager.convertDateToStringWithHours(value);
 		} else {
 			return "";
 		}
