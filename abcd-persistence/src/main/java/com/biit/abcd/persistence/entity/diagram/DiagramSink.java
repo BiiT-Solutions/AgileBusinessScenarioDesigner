@@ -1,32 +1,14 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "diagram_sink")
-public class DiagramSink extends DiagramElement {
-
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private ExpressionChain formExpression;
-
-	public ExpressionChain getFormExpression() {
-		return formExpression;
-	}
-
-	public void setFormExpression(ExpressionChain formExpression) {
-		this.formExpression = formExpression;
-	}
+public class DiagramSink extends DiagramExpression {
 
 	public DiagramSink() {
 		super();
@@ -36,34 +18,9 @@ public class DiagramSink extends DiagramElement {
 	}
 
 	@Override
-	public void resetIds() {
-		super.resetIds();
-		if (formExpression != null) {
-			formExpression.resetIds();
-		}
-	}
-
-	@Override
-	public Set<StorableObject> getAllInnerStorableObjects() {
-		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		if (formExpression != null) {
-			innerStorableObjects.add(formExpression);
-			innerStorableObjects.addAll(formExpression.getAllInnerStorableObjects());
-		}
-		return innerStorableObjects;
-	}
-
-	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		if (object instanceof DiagramSink) {
 			super.copyData(object);
-			DiagramSink diagramSink = (DiagramSink) object;
-
-			if (diagramSink.getFormExpression() != null) {
-				ExpressionChain formExpression = new ExpressionChain();
-				formExpression.copyData(diagramSink.getFormExpression());
-				setFormExpression(formExpression);
-			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramSink.");
 		}

@@ -62,9 +62,11 @@ public class DiagramExpression extends DiagramElement {
 			super.copyData(object);
 			DiagramExpression diagramCalculation = (DiagramExpression) object;
 
-			ExpressionChain formExpression = new ExpressionChain();
-			formExpression.copyData(diagramCalculation.getFormExpression());
-			setFormExpression(formExpression);
+			if (diagramCalculation.getFormExpression() != null) {
+				ExpressionChain formExpression = new ExpressionChain();
+				formExpression.copyData(diagramCalculation.getFormExpression());
+				setFormExpression(formExpression);
+			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of DiagramCalculation.");

@@ -313,14 +313,16 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramExpression) {
 				DiagramExpression diagramExpression = (DiagramExpression) child;
-				if (formExpressionChains.get(diagramExpression.getFormExpression().getComparationId()) != null) {
-					diagramExpression.setFormExpression(formExpressionChains.get(diagramExpression.getFormExpression()
-							.getComparationId()));
-				} else {
-					AbcdLogger.warning(this.getClass().getName(),
-							"Adding expression '" + diagramExpression.getFormExpression() + "'.");
-					formExpressionChains.put(diagramExpression.getFormExpression().getComparationId(),
-							diagramExpression.getFormExpression());
+				if (diagramExpression.getFormExpression() != null) {
+					if (formExpressionChains.get(diagramExpression.getFormExpression().getComparationId()) != null) {
+						diagramExpression.setFormExpression(formExpressionChains.get(diagramExpression
+								.getFormExpression().getComparationId()));
+					} else {
+						AbcdLogger.warning(this.getClass().getName(),
+								"Adding expression '" + diagramExpression.getFormExpression() + "'.");
+						formExpressionChains.put(diagramExpression.getFormExpression().getComparationId(),
+								diagramExpression.getFormExpression());
+					}
 				}
 			}
 		}
@@ -418,8 +420,7 @@ public class Form extends BaseForm {
 					formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
 							expressionValueCustomVariable.getVariable());
 				}
-			}
-			if (child instanceof ExpressionValueGenericCustomVariable) {
+			} else if (child instanceof ExpressionValueGenericCustomVariable) {
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) child;
 				if (formVariables.get(expressionValueGenericCustomVariable.getVariable().getComparationId()) != null) {
 					expressionValueGenericCustomVariable.setVariable(formVariables
