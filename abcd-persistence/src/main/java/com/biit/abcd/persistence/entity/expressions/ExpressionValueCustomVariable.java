@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -95,13 +94,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 		if (object instanceof ExpressionValueCustomVariable) {
 			super.copyData(object);
 			ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) object;
-			try {
-				this.setValue(expressionValueCustomVariable.getValue());
-				this.setVariable(expressionValueCustomVariable.getVariable());
-			} catch (NotValidExpressionValue e) {
-				throw new NotValidStorableObjectException("Object '" + object
-						+ "' is not a valid instance of ExpressionValueCustomVariable.");
-			}
+			this.setVariable(expressionValueCustomVariable.getVariable());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of ExpressionValueCustomVariable.");
