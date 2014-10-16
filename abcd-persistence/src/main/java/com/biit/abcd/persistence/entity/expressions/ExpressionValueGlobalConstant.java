@@ -71,8 +71,10 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.add(constant);
-		innerStorableObjects.addAll(constant.getAllInnerStorableObjects());
+		if (constant != null) {
+			innerStorableObjects.add(constant);
+			innerStorableObjects.addAll(constant.getAllInnerStorableObjects());
+		}
 		return innerStorableObjects;
 	}
 

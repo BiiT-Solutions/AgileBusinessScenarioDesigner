@@ -35,6 +35,8 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class FormUtils {
 	private static HashMap<String, CustomVariable> variableMap = new HashMap<>();
+	private static HashMap<String, TableRule> tableMap = new HashMap<>();
+	private static HashMap<String, ExpressionChain> expressionsMap = new HashMap<>();
 	private static HashMap<String, TreeObject> elementsMap = new HashMap<>();
 	private static Random random = new Random();
 
@@ -162,6 +164,7 @@ public class FormUtils {
 
 	private static void addFormExpressions(Form form) {
 		ExpressionChain expressionChain = new ExpressionChain();
+		expressionChain.setName("Expression1");
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
 				variableMap.get("cScore"));
 		// Category.Score=1+1;
@@ -171,9 +174,11 @@ public class FormUtils {
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		form.getExpressionChains().add(expressionChain);
+		expressionsMap.put("Expression1", expressionChain);
 
 		// Category2.bonus=InsertDate(Y)
 		ExpressionChain expressionChain2 = new ExpressionChain();
+		expressionChain2.setName("Expression2");
 		ExpressionValueCustomVariable customVariable2 = new ExpressionValueCustomVariable(elementsMap.get("Category2"),
 				variableMap.get("bonus"));
 		expressionChain2.addExpression(customVariable2);
@@ -181,10 +186,12 @@ public class FormUtils {
 		expressionChain2.addExpression(new ExpressionValueTreeObjectReference(elementsMap.get("InsertDate"),
 				QuestionDateUnit.YEARS));
 		form.getExpressionChains().add(expressionChain2);
+		expressionsMap.put("Expression2", expressionChain2);
 	}
 
 	private static void addFormTableRules(Form form) {
 		TableRule tableRule = new TableRule();
+		tableRule.setName("Table1");
 
 		TableRuleRow tableRuleRow1 = new TableRuleRow();
 		// Question1=Answer1 -> Category1.score=Category1.score+1;
@@ -236,6 +243,7 @@ public class FormUtils {
 		}
 
 		form.getTableRules().add(tableRule);
+		tableMap.put("Table1", tableRule);
 	}
 
 	private static String randomName(String prefix) {

@@ -78,8 +78,10 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.add(variable);
-		innerStorableObjects.addAll(variable.getAllInnerStorableObjects());
+		if (variable != null) {
+			innerStorableObjects.add(variable);
+			innerStorableObjects.addAll(variable.getAllInnerStorableObjects());
+		}
 		return innerStorableObjects;
 	}
 

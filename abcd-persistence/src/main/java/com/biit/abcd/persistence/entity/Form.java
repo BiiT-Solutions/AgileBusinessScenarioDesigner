@@ -413,12 +413,14 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) child;
-				if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
-					expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
-							.getVariable().getComparationId()));
-				} else {
-					formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
-							expressionValueCustomVariable.getVariable());
+				if (expressionValueCustomVariable.getVariable() != null) {
+					if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
+						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
+								.getVariable().getComparationId()));
+					} else {
+						formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
+								expressionValueCustomVariable.getVariable());
+					}
 				}
 			} else if (child instanceof ExpressionValueGenericCustomVariable) {
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) child;
