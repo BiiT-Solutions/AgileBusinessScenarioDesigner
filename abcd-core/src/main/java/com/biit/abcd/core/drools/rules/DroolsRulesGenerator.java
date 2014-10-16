@@ -15,8 +15,13 @@ import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -30,7 +35,9 @@ public class DroolsRulesGenerator {
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
 	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
+			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
@@ -38,7 +45,9 @@ public class DroolsRulesGenerator {
 	}
 
 	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
-			ActionNotImplementedException, NotCompatibleTypeException {
+			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
 		if (this.form != null) {
 			this.rules = "package com.biit.drools \n\n";
 			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
@@ -75,7 +84,8 @@ public class DroolsRulesGenerator {
 
 	/**
 	 * Creates the global constants for the drools session.<br>
-	 * Stores in memory the values to be inserted before the facts and generates the global variables export file
+	 * Stores in memory the values to be inserted before the facts and generates
+	 * the global variables export file
 	 * 
 	 * 
 	 * @return The global constants in drools
@@ -114,7 +124,8 @@ public class DroolsRulesGenerator {
 	}
 
 	/**
-	 * Sets the global variable array that is going to be used in the drools engine<br>
+	 * Sets the global variable array that is going to be used in the drools
+	 * engine<br>
 	 * It does not create the drools rules
 	 * 
 	 * @param globalVariables

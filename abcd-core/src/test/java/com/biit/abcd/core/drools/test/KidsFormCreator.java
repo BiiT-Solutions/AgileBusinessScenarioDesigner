@@ -19,8 +19,13 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -55,7 +60,8 @@ public class KidsFormCreator {
 	public KidsFormCreator() {
 	}
 
-	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException {
+	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException {
 
 		form = new Form("KidsScreen");
 
@@ -175,11 +181,11 @@ public class KidsFormCreator {
 		drinks.addChild(drinksC);
 		drinks.addChild(drinksD);
 		voeding.addChild(drinks);
-		
+
 		// Extra for testing generics
 		Group voeding2 = new Group("voeding2");
 		voeding.addChild(voeding2);
-		
+
 		Question drinks1 = new Question("drinks1");
 		Answer drinksA1 = new Answer("a");
 		Answer drinksB1 = new Answer("b");
@@ -195,7 +201,9 @@ public class KidsFormCreator {
 
 	public DroolsForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException {
+			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
 		// Generate the drools rules.
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), globalVariables);

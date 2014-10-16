@@ -10,8 +10,13 @@ import com.biit.abcd.core.drools.facts.inputform.Question;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -61,7 +66,9 @@ public class TableRuleTest extends KidsFormCreator {
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
-			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException {
+			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -74,24 +81,30 @@ public class TableRuleTest extends KidsFormCreator {
 				.getQuestion("breakfast")).getVariableValue("qVar"));
 	}
 
-//	// Multiple table question answer
-//	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
-//	public void testMultipleTableRule() throws FieldTooLongException, NotValidChildException,
-//			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
-//			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-//			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
-//			ActionNotImplementedException, CharacterNotAllowedException {
-//
-//		// Restart the form to avoid test cross references
-//		initForm();
-//		// Create the table and form diagram
-//		createKidsFormMultipleConditionsTable();
-//		// Create the rules and launch the engine
-//		ISubmittedForm droolsForm = createAndRunDroolsRules();
-//
-//		Assert.assertEquals(QUESTION_EQUALS_ANSWER, ((Question) droolsForm.getCategory("Lifestyle").getGroup("voeding")
-//				.getQuestion("breakfast")).getVariableValue("qVar"));
-//	}
+	// // Multiple table question answer
+	// @Test(groups = { "rules" }, dependsOnMethods = {
+	// "translateFormCategories" })
+	// public void testMultipleTableRule() throws FieldTooLongException,
+	// NotValidChildException,
+	// InvalidAnswerFormatException, ExpressionInvalidException,
+	// RuleInvalidException, IOException,
+	// RuleNotImplementedException, DocumentException,
+	// CategoryNameWithoutTranslation,
+	// QuestionDoesNotExistException, GroupDoesNotExistException,
+	// CategoryDoesNotExistException,
+	// ActionNotImplementedException, CharacterNotAllowedException {
+	//
+	// // Restart the form to avoid test cross references
+	// initForm();
+	// // Create the table and form diagram
+	// createKidsFormMultipleConditionsTable();
+	// // Create the rules and launch the engine
+	// ISubmittedForm droolsForm = createAndRunDroolsRules();
+	//
+	// Assert.assertEquals(QUESTION_EQUALS_ANSWER, ((Question)
+	// droolsForm.getCategory("Lifestyle").getGroup("voeding")
+	// .getQuestion("breakfast")).getVariableValue("qVar"));
+	// }
 
 	private void createKidsFormSimpleConditionsTable() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException {

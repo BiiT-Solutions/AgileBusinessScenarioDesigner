@@ -46,6 +46,14 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 		return this.applicationName;
 	}
 
+	/**
+	 * Needed for generalization purposes
+	 * @return
+	 */
+	public List<ICategory> getCategorys() {
+		return this.categories;
+	}
+	
 	public List<ICategory> getCategories() {
 		return this.categories;
 	}
