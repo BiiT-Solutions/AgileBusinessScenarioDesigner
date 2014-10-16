@@ -8,9 +8,11 @@
 				<exclude name="rulesWithOrbeon" />
 				<include name="simpleParser" />
 				<include name="gson" />
+				<include name="newVersion" />
 			</run>
 		</groups>
 		<classes>
+			<class name="com.biit.abcd.core.NewVersionTest" />
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.PrattParserTest" />
 			<class name="com.biit.abcd.core.drools.test.JsonConverterTest" />

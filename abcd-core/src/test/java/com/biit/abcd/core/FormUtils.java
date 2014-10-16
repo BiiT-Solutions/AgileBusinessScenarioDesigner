@@ -1,8 +1,23 @@
-package com.biit.abcd.persistence.entity;
+package com.biit.abcd.core;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
+import junit.framework.Assert;
+
+import com.biit.abcd.core.utils.TableRuleUtils;
+import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.Category;
+import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
+import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Group;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
@@ -27,11 +42,12 @@ public class FormUtils {
 			CharacterNotAllowedException, InvalidAnswerFormatException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
-		form.setLabel("CreatedForm");
+		form.setLabel(randomName("Form"));
 
 		addFormStructure(form);
 		addFormCustomVariables(form);
 		addFormExpressions(form);
+		addFormTableRules(form);
 
 		return form;
 	}
@@ -87,14 +103,22 @@ public class FormUtils {
 		Answer answer1 = new Answer();
 		answer1.setName("Answer1");
 		question2.addChild(answer1);
+		elementsMap.put("Answer1", answer1);
 
 		Answer answer2 = new Answer();
 		answer2.setName("Answer2");
 		question2.addChild(answer2);
+		elementsMap.put("Answer2", answer2);
 
 		Answer answer3 = new Answer();
 		answer3.setName("Answer3");
 		question2.addChild(answer3);
+		elementsMap.put("Answer3", answer3);
+
+		Answer answer4 = new Answer();
+		answer4.setName("Answer4");
+		question2.addChild(answer4);
+		elementsMap.put("Answer4", answer4);
 
 		// Date
 		Question question3 = new Question();
@@ -111,10 +135,6 @@ public class FormUtils {
 		group2.addChild(question4);
 		elementsMap.put("ChooseMore", question4);
 
-		Answer answer4 = new Answer();
-		answer4.setName("Answer4");
-		question4.addChild(answer4);
-
 		Answer answer5 = new Answer();
 		answer5.setName("Answer5");
 		question4.addChild(answer5);
@@ -122,6 +142,10 @@ public class FormUtils {
 		Answer answer6 = new Answer();
 		answer6.setName("Answer6");
 		question4.addChild(answer6);
+
+		Answer answer7 = new Answer();
+		answer7.setName("Answer7");
+		question4.addChild(answer7);
 	}
 
 	private static void addFormCustomVariables(Form form) {
@@ -162,13 +186,54 @@ public class FormUtils {
 	private static void addFormTableRules(Form form) {
 		TableRule tableRule = new TableRule();
 
-		TableRuleRow tableRuleRow = new TableRuleRow();
-
+		TableRuleRow tableRuleRow1 = new TableRuleRow();
+		// Question1=Answer1 -> Category1.score=Category1.score+1;
 		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(
+				elementsMap.get("ChooseOne"));
+		expressionChain.addExpression(questionReference);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
+				elementsMap.get("Answer1"));
+		expressionChain.addExpression(answerReference);
+		tableRuleRow1.getConditions().add(expressionChain);
 
-		tableRuleRow.getConditions().add(expressionChain);
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
+				variableMap.get("cScore"));
+		// Category1.score=Category1.score+1;
+		expressionChain = new ExpressionChain();
+		expressionChain.addExpression(customVariable);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap
+				.get("cScore")));
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
+		expressionChain.addExpression(new ExpressionValueNumber(1d));
+		tableRuleRow1.getActionChain().addExpression(expressionChain);
+		tableRule.getRules().add(tableRuleRow1);
 
-		tableRule.getRules().add(tableRuleRow);
+		// Copy row (total 2 rows).
+		Collection<TableRuleRow> rowsToCopy = tableRule.getRules();
+		List<TableRuleRow> copiedRows = TableRuleUtils.copyTableRuleRows(tableRule, rowsToCopy);
+		TableRuleUtils.pasteTableRuleRows(tableRule, copiedRows);
+		Assert.assertEquals(2, tableRule.getRules().size());
+
+		// Copy rows (total 4 rows).
+		rowsToCopy = tableRule.getRules();
+		copiedRows = TableRuleUtils.copyTableRuleRows(tableRule, rowsToCopy);
+		TableRuleUtils.pasteTableRuleRows(tableRule, copiedRows);
+		Assert.assertEquals(4, tableRule.getRules().size());
+
+		// Modify rules.
+		int i = 1;
+		for (TableRuleRow tableRuleRow : tableRule.getRules()) {
+			// Question1=AnswerX
+			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().get(0))
+					.getExpressions().get(2)).setReference(elementsMap.get("Answer" + i));
+			// Category1.score=Category1.score+X;
+			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getActionChain().getExpressions().get(0))
+					.getExpressions().get(4)).setValue(i);
+			i++;
+		}
 
 		form.getTableRules().add(tableRule);
 	}

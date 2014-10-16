@@ -1,15 +1,13 @@
 package com.biit.abcd.core;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
+import com.biit.abcd.core.utils.TableRuleUtils;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
@@ -143,7 +141,7 @@ public class FormController {
 	public void setLastAccessTable(TableRule lastAccessTable) {
 		this.lastAccessTable = lastAccessTable;
 	}
-	
+
 	public Rule getLastAccessRule() {
 		return this.lastAccessRule;
 	}
@@ -151,7 +149,7 @@ public class FormController {
 	public void setLastAccessRule(Rule lastAccessRule) {
 		this.lastAccessRule = lastAccessRule;
 	}
-	
+
 	public TestScenario getLastAccessTestScenario() {
 		return lastAccessTestScenario;
 	}
@@ -197,37 +195,11 @@ public class FormController {
 	}
 
 	public void copyTableRuleRows(final TableRule origin, Collection<TableRuleRow> rowsToCopy) {
-		List<TableRuleRow> listOfRowsToCopy = new ArrayList<TableRuleRow>(rowsToCopy);
-		Collections.sort(listOfRowsToCopy, new Comparator<TableRuleRow>() {
-			@Override
-			public int compare(TableRuleRow arg0, TableRuleRow arg1) {
-				Integer rule0 = origin.getRules().indexOf(arg0);
-				Integer rule1 = origin.getRules().indexOf(arg1);
-				return rule0.compareTo(rule1);
-			}
-		});
-		this.copiedRows = new ArrayList<TableRuleRow>();
-		for (TableRuleRow rowToCopy : listOfRowsToCopy) {
-			this.copiedRows.add(rowToCopy.generateCopy());
-		}
+		copiedRows = TableRuleUtils.copyTableRuleRows(origin, rowsToCopy);
 	}
 
 	public void pasteTableRuleRowsAsNew(TableRule selectedTableRule) {
-		if ((this.copiedRows == null) || this.copiedRows.isEmpty()) {
-			return;
-		}
-		List<TableRuleRow> rowsToPaste = this.getNewInstanceOfCopiedElements();
-		for (TableRuleRow rowToPaste : rowsToPaste) {
-			selectedTableRule.addRow(rowToPaste);
-		}
-	}
-
-	private List<TableRuleRow> getNewInstanceOfCopiedElements() {
-		List<TableRuleRow> newCopiedRows = new ArrayList<TableRuleRow>();
-		for (TableRuleRow row : this.copiedRows) {
-			newCopiedRows.add(row.generateCopy());
-		}
-		return newCopiedRows;
+		TableRuleUtils.pasteTableRuleRows(selectedTableRule, copiedRows);
 	}
 
 	private void clearWorkVariables() {

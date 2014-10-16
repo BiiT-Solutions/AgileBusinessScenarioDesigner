@@ -40,14 +40,6 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		this.unit = unit;
 	}
 
-	@Override
-	public void resetIds() {
-		super.resetIds();
-		// if (reference != null) {
-		// reference.resetIds();
-		// }
-	}
-
 	public TreeObject getReference() {
 		return reference;
 	}
@@ -107,7 +99,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 			ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) object;
 			try {
 				this.setUnit(expressionValueTreeObjectReference.getUnit());
-				this.setValue(expressionValueTreeObjectReference.getValue());				
+				this.setValue(expressionValueTreeObjectReference.getValue());
 			} catch (NotValidExpressionValue e) {
 				throw new NotValidStorableObjectException("Object '" + object
 						+ "' is not a valid instance of ExpressionValueTreeObjectReference.");
