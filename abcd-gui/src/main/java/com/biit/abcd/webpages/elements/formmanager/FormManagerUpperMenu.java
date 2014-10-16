@@ -28,6 +28,7 @@ import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.DroolsSubmittedFormResultWindow;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.components.IconButton;
@@ -122,7 +123,16 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						((FormManager) parent).newFormVersion();
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_NEW_VERSION);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								((FormManager) parent).newFormVersion();
+								windowAccept.close();
+							}
+						});
+						windowAccept.showCentered();
 					}
 
 				});
@@ -253,30 +263,30 @@ public class FormManagerUpperMenu extends UpperMenu {
 								Long testScenarioId = launchTestScenarioWindow.getSelectedTestScenarioId();
 								if ((formId != null) && (testScenarioId != null)) {
 									parent.setFormById(formId);
-//									Set<TestScenario> testScenarios = UserSessionHandler.getFormController().getForm()
-//											.getTestScenarios();
-									
+									// Set<TestScenario> testScenarios =
+									// UserSessionHandler.getFormController().getForm()
+									// .getTestScenarios();
+
 									TestScenario testScenarioDB = UserSessionHandler.getTestScenariosController()
 											.getTestScenarioById(testScenarioId);
-//									if(testScenarioDB != null){
-//										System.out.println(testScenarioDB.getName());
-//									}
-//
-//									TestScenario testScenarioSelected = null;
-//									for (TestScenario testScenario : testScenarios) {
-//										if (testScenario.getId().equals(testScenarioId)) {
-//											testScenarioSelected = testScenario;
-//											break;
-//										}
-//									}
+									// if(testScenarioDB != null){
+									// System.out.println(testScenarioDB.getName());
+									// }
+									//
+									// TestScenario testScenarioSelected = null;
+									// for (TestScenario testScenario : testScenarios) {
+									// if (testScenario.getId().equals(testScenarioId)) {
+									// testScenarioSelected = testScenario;
+									// break;
+									// }
+									// }
 
 									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
 									ISubmittedForm submittedForm;
 									try {
 										submittedForm = droolsExporter.processForm(UserSessionHandler
 												.getFormController().getForm(), UserSessionHandler
-												.getGlobalVariablesController().getGlobalVariables(),
-												testScenarioDB);
+												.getGlobalVariablesController().getGlobalVariables(), testScenarioDB);
 
 										if (submittedForm instanceof DroolsForm) {
 											final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
