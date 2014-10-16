@@ -249,7 +249,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
-			String hql = "update Form set availableTo = :availableTo where label = :label and version = :version and organizationId = :organizationId";
+			String hql = "update Form set availableTo = CASE WHEN :availableTo > availableFrom THEN :availableTo ELSE availableFrom END where label = :label and version = :version and organizationId = :organizationId";
 			Query query = session.createQuery(hql);
 			query.setString("label", label);
 			query.setLong("version", version);
