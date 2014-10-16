@@ -65,6 +65,9 @@ public class DiagramPropertiesSink extends SecuredDiagramElementProperties<Diagr
 						}
 					}
 				});
+				if (instance != null && instance.getFormExpression() != null) {
+					formExpressionWindow.setSelectedExpression(instance.getFormExpression());
+				}
 				formExpressionWindow.showCentered();
 			}
 		});
