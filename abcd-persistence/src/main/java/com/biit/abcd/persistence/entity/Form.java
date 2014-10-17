@@ -244,11 +244,13 @@ public class Form extends BaseForm {
 		}
 
 		// Copy TestScenarios
-		for (TestScenario testScenario : getTestScenarios()) {
+		getTestScenarios().clear();
+		for (TestScenario testScenario : form.getTestScenarios()) {
 			TestScenario copiedTestScenario = new TestScenario();
 			copiedTestScenario.copyData(testScenario);
 			updateTreeObjectReferences((Set<StorableObject>) new HashSet<StorableObject>(Arrays.asList(testScenario)),
 					formElements);
+			getTestScenarios().add(copiedTestScenario);
 		}
 
 		// Copy Diagrams
@@ -289,7 +291,6 @@ public class Form extends BaseForm {
 	private void updateDiagramDiagramReferences(Set<StorableObject> storableObjects, Map<String, Diagram> formDiagrams) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramChild) {
-				System.out.println(child);
 				DiagramChild diagramChild = (DiagramChild) child;
 				if (formDiagrams.get(diagramChild.getChildDiagram().getComparationId()) != null) {
 					diagramChild.setChildDiagram(formDiagrams.get(diagramChild.getChildDiagram().getComparationId()));

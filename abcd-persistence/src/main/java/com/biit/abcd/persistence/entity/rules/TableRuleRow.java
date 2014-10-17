@@ -32,13 +32,17 @@ public class TableRuleRow extends StorableObject {
 
 	public TableRuleRow() {
 		conditions = new ExpressionChain();
+		conditions.setName("TableRuleRowCondition");
 		action = new ExpressionChain();
+		action.setName("TableRuleRowAction");
 	}
 
 	// Simple (Question : Answer => Action) builder
 	public TableRuleRow(Expression question, Expression answer, ExpressionChain action) {
 		conditions = new ExpressionChain();
+		conditions.setName("TableRuleRowCondition");
 		this.action = new ExpressionChain();
+		this.action.setName("TableRuleRowAction");
 		getConditions().add(question);
 		getConditions().add(answer);
 		getActionChain().setExpressions(action.getExpressions());
@@ -89,7 +93,7 @@ public class TableRuleRow extends StorableObject {
 
 	@Override
 	public String toString() {
-		return conditions.toString();
+		return conditions.toString() + " -> " + action.toString();
 	}
 
 	public int getConditionNumber() {
@@ -132,12 +136,14 @@ public class TableRuleRow extends StorableObject {
 		if (object instanceof TableRuleRow) {
 			super.copyBasicInfo(object);
 			TableRuleRow tableRuleRow = (TableRuleRow) object;
+
 			ExpressionChain condition = new ExpressionChain();
 			condition.copyData(tableRuleRow.getConditionChain());
-			this.setConditionsChain(condition);
+			setConditionsChain(condition);
+
 			ExpressionChain action = new ExpressionChain();
 			action.copyData(tableRuleRow.getActionChain());
-			this.setActionChain(action);
+			setActionChain(action);
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRuleRow.");
 		}

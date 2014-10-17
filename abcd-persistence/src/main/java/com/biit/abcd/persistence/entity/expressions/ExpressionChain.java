@@ -274,10 +274,22 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			ExpressionChain expressionChain = (ExpressionChain) object;
 			setName(expressionChain.getName());
 			for (Expression expression : expressionChain.getExpressions()) {
-				getExpressions().add(expression.generateCopy());
+				try {
+					Expression expressionCopied = expression.getClass().newInstance();
+					expressionCopied.copyData(expression);
+					getExpressions().add(expressionCopied);
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new NotValidStorableObjectException("Object '" + object
+							+ "' is not an instance of ExpressionChain.");
+				}
 			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionChain.");
 		}
+	}
+
+	@Override
+	public Object getValue() {
+		return getExpressions();
 	}
 }

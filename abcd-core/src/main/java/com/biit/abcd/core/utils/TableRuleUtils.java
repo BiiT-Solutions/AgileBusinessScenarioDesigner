@@ -24,7 +24,9 @@ public class TableRuleUtils {
 		});
 		copiedRows = new ArrayList<TableRuleRow>();
 		for (TableRuleRow rowToCopy : listOfRowsToCopy) {
-			copiedRows.add(rowToCopy.generateCopy());
+			TableRuleRow copiedRow = rowToCopy.generateCopy();
+			copiedRow.resetIds();
+			copiedRows.add(copiedRow);
 		}
 		return copiedRows;
 	}

@@ -160,6 +160,7 @@ public class FormUtils {
 		CustomVariable customVarQuestion = new CustomVariable(form, "bonus", CustomVariableType.NUMBER,
 				CustomVariableScope.QUESTION);
 		form.getCustomVariables().add(customVarQuestion);
+		variableMap.put("bonus", customVarQuestion);
 	}
 
 	private static void addFormExpressions(Form form) {
