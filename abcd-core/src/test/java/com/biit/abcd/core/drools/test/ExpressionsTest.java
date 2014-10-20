@@ -12,7 +12,10 @@ import org.dom4j.DocumentException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.core.drools.facts.inputform.Category;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.Group;
+import com.biit.abcd.core.drools.facts.inputform.Question;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -36,10 +39,17 @@ import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
@@ -91,28 +101,28 @@ public class ExpressionsTest extends KidsFormCreator {
 		// Check years
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(YEARS),
 				DateUtils.returnYearsDistanceFromDate(birthdate));
-//		// Check months
-//		Assert.assertEquals(
-//				((Category) droolsForm.getSubmittedForm().getCategory("Algemeen")).getVariableValue(MONTHS),
-//				DateUtils.returnMonthsDistanceFromDate(birthdate));
-//		// Check days
-//		Assert.assertEquals(((Group) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
-//				.getVariableValue(DAYS), DateUtils.returnDaysDistanceFromDate(birthdate));
-//		// Check date
-//		Assert.assertEquals(((Question) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")
-//				.getQuestion("fruit")).getVariableValue(DATE), birthdate);
-//
-//		// Check bmi
-//		Double height = ((Double) ((Question) droolsForm.getSubmittedForm().getCategory("Algemeen")
-//				.getQuestion("height")).getAnswer());
-//		Double weight = ((Double) ((Question) droolsForm.getSubmittedForm().getCategory("Algemeen")
-//				.getQuestion("weight")).getAnswer());
-//		Double bmi = weight / ((height / 100) * (height / 100));
-//		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
-//
-//		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT), 7.1);
-//
-//		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
+		// Check months
+		Assert.assertEquals(
+				((Category) droolsForm.getSubmittedForm().getCategory("Algemeen")).getVariableValue(MONTHS),
+				DateUtils.returnMonthsDistanceFromDate(birthdate));
+		// Check days
+		Assert.assertEquals(((Group) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
+				.getVariableValue(DAYS), DateUtils.returnDaysDistanceFromDate(birthdate));
+		// Check date
+		Assert.assertEquals(((Question) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")
+				.getQuestion("fruit")).getVariableValue(DATE), birthdate);
+
+		// Check bmi
+		Double height = ((Double) ((Question) droolsForm.getSubmittedForm().getCategory("Algemeen")
+				.getQuestion("height")).getAnswer());
+		Double weight = ((Double) ((Question) droolsForm.getSubmittedForm().getCategory("Algemeen")
+				.getQuestion("weight")).getAnswer());
+		Double bmi = weight / ((height / 100) * (height / 100));
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
+
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT), 7.1);
+
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
 	}
 
 	private void createKidsFormSimpleExpressions() throws FieldTooLongException, NotValidChildException,
@@ -144,60 +154,60 @@ public class ExpressionsTest extends KidsFormCreator {
 				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.YEARS));
 		getForm().getExpressionChains().add(expression1);
 
-//		// Assign a date(months) to a custom variable
-//		ExpressionChain expression2 = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(
-//				getTreeObject("Algemeen"), monthsCustomVariable), new ExpressionOperatorMath(
-//				AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(getTreeObject("birthdate"),
-//				QuestionDateUnit.MONTHS));
-//		getForm().getExpressionChains().add(expression2);
-//
-//		// Assign a date(days) to a custom variable
-//		ExpressionChain expression3 = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(
-//				getTreeObject("voeding"), daysCustomVariable),
-//				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(
-//						getTreeObject("birthdate"), QuestionDateUnit.DAYS));
-//		getForm().getExpressionChains().add(expression3);
-//
-//		// Assign a date(date) to a custom variable
-//		ExpressionChain expression4 = new ExpressionChain("DateAssignation", new ExpressionValueCustomVariable(
-//				getTreeObject("fruit"), dateCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-//				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.DATE));
-//		getForm().getExpressionChains().add(expression4);
-//
-//		// Mathematical expression
-//		ExpressionChain expression5 = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(
-//				getForm(), bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-//				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorMath(
-//						AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-//				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
-//						getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
-//				new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-//				new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionSymbol(
-//						AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject("height")),
-//				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
-//				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-//				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-//		getForm().getExpressionChains().add(expression5);
-//
-//		// If expression
-//		ExpressionChain expression6 = new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
-//				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorLogic(
-//						AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(
-//						AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(), ifResultCustomVariable),
-//				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1),
-//				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
-//						ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-//				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-//		getForm().getExpressionChains().add(expression6);
-//
-//		// PMT expression
-//		ExpressionChain expression7 = new ExpressionChain("pmtExpression", new ExpressionValueCustomVariable(getForm(),
-//				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-//				new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalConstant(globalVariableNumber),
-//				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
-//						getTreeObject("heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA),
-//				new ExpressionValueNumber(1000), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-//		getForm().getExpressionChains().add(expression7);
+		// Assign a date(months) to a custom variable
+		ExpressionChain expression2 = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(
+				getTreeObject("Algemeen"), monthsCustomVariable), new ExpressionOperatorMath(
+				AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(getTreeObject("birthdate"),
+				QuestionDateUnit.MONTHS));
+		getForm().getExpressionChains().add(expression2);
+
+		// Assign a date(days) to a custom variable
+		ExpressionChain expression3 = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(
+				getTreeObject("voeding"), daysCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(
+						getTreeObject("birthdate"), QuestionDateUnit.DAYS));
+		getForm().getExpressionChains().add(expression3);
+
+		// Assign a date(date) to a custom variable
+		ExpressionChain expression4 = new ExpressionChain("DateAssignation", new ExpressionValueCustomVariable(
+				getTreeObject("fruit"), dateCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.DATE));
+		getForm().getExpressionChains().add(expression4);
+
+		// Mathematical expression
+		ExpressionChain expression5 = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(
+				getForm(), bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorMath(
+						AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
+						getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
+				new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionSymbol(
+						AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject("height")),
+				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression5);
+
+		// If expression
+		ExpressionChain expression6 = new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
+				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorLogic(
+						AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(), ifResultCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
+						ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression6);
+
+		// PMT expression
+		ExpressionChain expression7 = new ExpressionChain("pmtExpression", new ExpressionValueCustomVariable(getForm(),
+				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalConstant(globalVariableNumber),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
+						getTreeObject("heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueNumber(1000), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression7);
 
 		getForm().addDiagram(createSimpleDiagram());
 	}

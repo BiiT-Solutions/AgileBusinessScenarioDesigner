@@ -253,30 +253,33 @@ public class FormManagerUpperMenu extends UpperMenu {
 								Long testScenarioId = launchTestScenarioWindow.getSelectedTestScenarioId();
 								if ((formId != null) && (testScenarioId != null)) {
 									parent.setFormById(formId);
-//									Set<TestScenario> testScenarios = UserSessionHandler.getFormController().getForm()
-//											.getTestScenarios();
-									
+									// Set<TestScenario> testScenarios =
+									// UserSessionHandler.getFormController().getForm()
+									// .getTestScenarios();
+
 									TestScenario testScenarioDB = UserSessionHandler.getTestScenariosController()
 											.getTestScenarioById(testScenarioId);
-//									if(testScenarioDB != null){
-//										System.out.println(testScenarioDB.getName());
-//									}
-//
-//									TestScenario testScenarioSelected = null;
-//									for (TestScenario testScenario : testScenarios) {
-//										if (testScenario.getId().equals(testScenarioId)) {
-//											testScenarioSelected = testScenario;
-//											break;
-//										}
-//									}
+									// if(testScenarioDB != null){
+									// System.out.println(testScenarioDB.getName());
+									// }
+									//
+									// TestScenario testScenarioSelected = null;
+									// for (TestScenario testScenario :
+									// testScenarios) {
+									// if
+									// (testScenario.getId().equals(testScenarioId))
+									// {
+									// testScenarioSelected = testScenario;
+									// break;
+									// }
+									// }
 
 									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
 									ISubmittedForm submittedForm;
 									try {
 										submittedForm = droolsExporter.processForm(UserSessionHandler
 												.getFormController().getForm(), UserSessionHandler
-												.getGlobalVariablesController().getGlobalVariables(),
-												testScenarioDB);
+												.getGlobalVariablesController().getGlobalVariables(), testScenarioDB);
 
 										if (submittedForm instanceof DroolsForm) {
 											final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(

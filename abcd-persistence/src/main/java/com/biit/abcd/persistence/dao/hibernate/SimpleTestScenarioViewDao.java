@@ -83,35 +83,4 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 		}
 		return testScenarioViews;
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SimpleTestScenarioView> getSimpleTestScenarioByFormId(Long formId) {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		SQLQuery query = session
-				.createSQLQuery("SELECT ts.ID, ts.comparationId, ts.creationTime, ts.createdBy, ts.updateTime, ts.updatedBy, ts.name FROM tree_forms_test_scenario tfts, test_scenario ts WHERE ts.ID=tfts.testScenarios_ID and tfts.tree_forms_ID="
-						+ formId + ";");
-
-		List<Object[]> rows = query.list();
-		session.getTransaction().commit();
-
-		List<SimpleTestScenarioView> testScenarioViews = new ArrayList<>();
-		for (Object[] row : rows) {
-			SimpleTestScenarioView testScenarioView = new SimpleTestScenarioView();
-			testScenarioView.setId(((BigInteger) row[0]).longValue());
-			testScenarioView.setComparationId((String) row[1]);
-			testScenarioView.setCreationTime((Timestamp) row[2]);
-			if (row[3] != null) {
-				testScenarioView.setCreatedBy(((Double) row[3]).longValue());
-			}
-			testScenarioView.setUpdateTime((Timestamp) row[4]);
-			if (row[4] != null) {
-				testScenarioView.setUpdatedBy(((Double) row[5]).longValue());
-			}
-			testScenarioView.setName((String) row[6]);
-			testScenarioViews.add(testScenarioView);
-		}
-		return testScenarioViews;
-	}
 }

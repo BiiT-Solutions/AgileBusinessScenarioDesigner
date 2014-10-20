@@ -2,7 +2,6 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,8 +38,6 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.BaseForm;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -96,13 +93,13 @@ public class Form extends BaseForm {
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	// Cannot be JOIN
-	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy(value = "name ASC")
-	@Cache(region = "testScenarios", usage = CacheConcurrencyStrategy.READ_WRITE)
-	private Set<TestScenario> testScenarios;
+//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	// Cannot be JOIN
+//	@Fetch(FetchMode.SUBSELECT)
+//	@OrderBy(value = "name ASC")
+//	@Cache(region = "testScenarios", usage = CacheConcurrencyStrategy.READ_WRITE)
+//	private Set<TestScenario> testScenarios;
 
 	@Transient
 	private transient boolean isLastVersion = true;
@@ -114,7 +111,7 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
-		testScenarios = new HashSet<>();
+//		testScenarios = new HashSet<>();
 	}
 
 	public Form(String name) throws FieldTooLongException, CharacterNotAllowedException {
@@ -124,7 +121,7 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
-		testScenarios = new HashSet<>();
+//		testScenarios = new HashSet<>();
 	}
 
 	@Override
@@ -145,9 +142,9 @@ public class Form extends BaseForm {
 		for (Rule rule : getRules()) {
 			rule.resetIds();
 		}
-		for (TestScenario testScenario : getTestScenarios()) {
-			testScenario.resetIds();
-		}
+//		for (TestScenario testScenario : getTestScenarios()) {
+//			testScenario.resetIds();
+//		}
 	}
 
 	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
@@ -243,13 +240,14 @@ public class Form extends BaseForm {
 			formRules.put(children.getComparationId(), children);
 		}
 
-		// Copy TestScenarios
-		for (TestScenario testScenario : getTestScenarios()) {
-			TestScenario copiedTestScenario = new TestScenario();
-			copiedTestScenario.copyData(testScenario);
-			updateTreeObjectReferences((Set<StorableObject>) new HashSet<StorableObject>(Arrays.asList(testScenario)),
-					formElements);
-		}
+		// // Copy TestScenarios
+		// for (TestScenario testScenario : getTestScenarios()) {
+		// TestScenario copiedTestScenario = new TestScenario();
+		// copiedTestScenario.copyData(testScenario);
+		// updateTreeObjectReferences((Set<StorableObject>) new
+		// HashSet<StorableObject>(Arrays.asList(testScenario)),
+		// formElements);
+		// }
 
 		// Copy Diagrams
 		getDiagrams().clear();
@@ -389,15 +387,18 @@ public class Form extends BaseForm {
 					formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
 							expressionValueTreeObjectReference.getReference());
 				}
-			} else if (child instanceof TestScenario) {
-				TestScenario testScenario = ((TestScenario) child);
-				Map<TreeObject, TestAnswer> questionTestAnswerRelationship = new HashMap<>();
-				for (TreeObject question : testScenario.getData().keySet()) {
-					questionTestAnswerRelationship.put(formElements.get(question.getComparationId()), testScenario
-							.getData().get(question));
-				}
-				testScenario.setData(questionTestAnswerRelationship);
-			}
+			} 
+			// else if (child instanceof TestScenario) {
+			// TestScenario testScenario = ((TestScenario) child);
+			// Map<TreeObject, TestAnswerList> questionTestAnswerRelationship =
+			// new HashMap<>();
+			// for (TreeObject question : testScenario.getData().keySet()) {
+			// questionTestAnswerRelationship.put(formElements.get(question.getComparationId()),
+			// testScenario
+			// .getData().get(question));
+			// }
+			// testScenario.setData(questionTestAnswerRelationship);
+			// }
 		}
 	}
 
@@ -583,22 +584,22 @@ public class Form extends BaseForm {
 		return null;
 	}
 
-	public Set<TestScenario> getTestScenarios() {
-		return testScenarios;
-	}
-
-	public void setTestScenarios(Set<TestScenario> testScenarios) {
-		this.tableRules.clear();
-		this.testScenarios.addAll(testScenarios);
-	}
-
-	public void addTestScenario(TestScenario testScenario) {
-		testScenarios.add(testScenario);
-	}
-
-	public void removeTestScenario(TestScenario testScenario) {
-		testScenarios.remove(testScenario);
-	}
+//	public Set<TestScenario> getTestScenarios() {
+//		return testScenarios;
+//	}
+//
+//	public void setTestScenarios(Set<TestScenario> testScenarios) {
+//		this.tableRules.clear();
+//		this.testScenarios.addAll(testScenarios);
+//	}
+//
+//	public void addTestScenario(TestScenario testScenario) {
+//		testScenarios.add(testScenario);
+//	}
+//
+//	public void removeTestScenario(TestScenario testScenario) {
+//		testScenarios.remove(testScenario);
+//	}
 
 	public boolean isLastVersion() {
 		return isLastVersion;
@@ -638,10 +639,10 @@ public class Form extends BaseForm {
 			innerStorableObjects.addAll(rule.getAllInnerStorableObjects());
 		}
 
-		for (TestScenario testScenario : getTestScenarios()) {
-			innerStorableObjects.add(testScenario);
-			innerStorableObjects.addAll(testScenario.getAllInnerStorableObjects());
-		}
+//		for (TestScenario testScenario : getTestScenarios()) {
+//			innerStorableObjects.add(testScenario);
+//			innerStorableObjects.addAll(testScenario.getAllInnerStorableObjects());
+//		}
 
 		return innerStorableObjects;
 	}

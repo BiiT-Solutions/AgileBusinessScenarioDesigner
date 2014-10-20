@@ -10,15 +10,14 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.persistence.entity.Category;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputNumber;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioObject;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestionAnswer;
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.exceptions.NotValidFormException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -28,8 +27,14 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 @Test(groups = { "testScenarioDao" })
 public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTests {
 
+	private static final String FORM_LABEL = "Form";
+	private static final String FORM_LABEL_ERROR = "Bad_Form";
+	private static final Long FORM_ORGANIZATION_ID = 0l;
+	private static final Integer FORM_VERSION = 1;
 	private static final String TEST_SCENARIO_NAME = "test1";
 	private static final Double TEST_ANSWER_VALUE = 5.0;
+	private static final String CATEGORY_NAME = "Category";
+	private static final String QUESTION_NAME = "Question";
 
 	@Autowired
 	private ITestScenarioDao testScenarioDao;
@@ -39,6 +44,9 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void storeRemoveTestScenarios() throws NotValidFormException, FieldTooLongException {
 		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
+		testScenario.setFormLabel(FORM_LABEL);
+		testScenario.setFormOrganizationId(FORM_ORGANIZATION_ID);
+		testScenario.setFormVersion(FORM_VERSION);
 
 		testScenarioDao.makePersistent(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
@@ -47,102 +55,36 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
 
+		persistedList = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(FORM_LABEL, FORM_VERSION,
+				FORM_ORGANIZATION_ID);
+		Assert.assertEquals(persistedList.size(), 1);
+		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
+		
+		persistedList = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(FORM_LABEL_ERROR, FORM_VERSION,
+				FORM_ORGANIZATION_ID);
+		Assert.assertEquals(persistedList.size(), 0);
+
 		testScenarioDao.makeTransient(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 0);
-	}
-	
-	@Test
-	public void storeRemoveTestScenariosFromForm() throws NotValidFormException, FieldTooLongException {
-		Form form = new Form();
-		form.setOrganizationId(0l);
-		form.setLabel("Form");
-		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
-		form.addTestScenario(testScenario);
-
-		formDao.makePersistent(form);
-		Assert.assertEquals(formDao.getRowCount(), 1);
-
-		List<Form> persistedList = formDao.getAll();
-		Assert.assertEquals(persistedList.size(), 1);
-		Assert.assertEquals(persistedList.get(0).getTestScenarios().size(), 1);
-		Assert.assertEquals(persistedList.get(0).getTestScenarios().iterator().next().getName(), TEST_SCENARIO_NAME);
-
-		formDao.makeTransient(form);
-		Assert.assertEquals(formDao.getRowCount(), 0);
-	}
-	
-	@Test
-	public void storeRemoveTestScenariosMapDataFromForm() throws NotValidFormException, FieldTooLongException,
-			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException {
-		Form form = new Form();
-		form.setOrganizationId(0l);
-		form.setLabel("Form");
-
-		Category category = new Category();
-		category.setName("Category1");
-		form.addChild(category);
-
-		Group group = new Group();
-		group.setName("Group1");
-		category.addChild(group);
-
-		Question question1 = new Question();
-		question1.setName("Question1");
-		group.addChild(question1);
-
-		Question question2 = new Question();
-		question2.setName("Question1");
-		group.addChild(question2);
-
-		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
-		TestAnswer testAnswer1 = new TestAnswerInputNumber(TEST_ANSWER_VALUE);
-		testScenario.addData(question1, testAnswer1);
-
-		form.addTestScenario(testScenario);
-		formDao.makePersistent(form);
-		Assert.assertEquals(formDao.getRowCount(), 1);
-
-		List<Form> persistedList = formDao.getAll();
-		Assert.assertEquals(persistedList.size(), 1);
-
-		testScenario = persistedList.get(0).getTestScenarios().iterator().next();
-		Assert.assertEquals(testScenario.getName(), TEST_SCENARIO_NAME);
-		Assert.assertEquals(testScenario.getTestAnswer(question1), testAnswer1);
-		TestAnswer testAnswer = testScenario.getTestAnswer(question1);
-		Assert.assertEquals(testAnswer.getValue(), TEST_ANSWER_VALUE);
-
-		formDao.makeTransient(form);
-		Assert.assertEquals(formDao.getRowCount(), 0);
 	}
 
 	@Test
 	public void storeRemoveTestScenariosMapData() throws NotValidFormException, FieldTooLongException,
-			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException {
-		Form form = new Form();
-		form.setOrganizationId(0l);
-		form.setLabel("Form");
-
-		Category category = new Category();
-		category.setName("Category1");
-		form.addChild(category);
-
-		Group group = new Group();
-		group.setName("Group1");
-		category.addChild(group);
-
-		Question question1 = new Question();
-		question1.setName("Question1");
-		group.addChild(question1);
-
-		Question question2 = new Question();
-		question2.setName("Question1");
-		group.addChild(question2);
-
+			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException, ChildrenNotFoundException {
 		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
-		TestAnswer testAnswer1 = new TestAnswerInputNumber(TEST_ANSWER_VALUE);
-		testScenario.addData(question1, testAnswer1);
+		testScenario.setFormLabel("Form");
+		testScenario.setFormOrganizationId(0l);
+		testScenario.setFormVersion(1);
 
-		formDao.makePersistent(form);
+		TestScenarioObject categoryObject = new TestScenarioObject();
+		categoryObject.setName(CATEGORY_NAME);
+		testScenario.addTestScenarioObject(categoryObject);
+
+		TestAnswer testAnswerNumber = new TestAnswerInputNumber(TEST_ANSWER_VALUE);
+		TestScenarioQuestionAnswer testScenarioQuestionAnswer = new TestScenarioQuestionAnswer(testAnswerNumber);
+		testScenarioQuestionAnswer.setName(QUESTION_NAME);
+		categoryObject.addChild(testScenarioQuestionAnswer);
+
 		testScenarioDao.makePersistent(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
 
@@ -151,12 +93,16 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 
 		testScenario = persistedList.get(0);
 		Assert.assertEquals(testScenario.getName(), TEST_SCENARIO_NAME);
-		Assert.assertEquals(testScenario.getTestAnswer(question1), testAnswer1);
-		TestAnswer testAnswer = testScenario.getTestAnswer(question1);
-		Assert.assertEquals(testAnswer.getValue(), TEST_ANSWER_VALUE);
+
+		List<TestScenarioObject> testScenarioObjects = testScenario.getTestScenarioObjects();
+		TestScenarioObject testScenarioObject = testScenarioObjects.get(0);
+		Assert.assertEquals(testScenarioObject.getChildren().size(), 1);
+
+		TestAnswer answer = ((TestScenarioQuestionAnswer) testScenarioObject.getChild(0)).getTestAnswer();
+		Assert.assertEquals(answer, testAnswerNumber);
+		Assert.assertEquals(answer.getValue(), TEST_ANSWER_VALUE);
 
 		testScenarioDao.makeTransient(testScenario);
-		formDao.makeTransient(form);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 0);
 	}
 }

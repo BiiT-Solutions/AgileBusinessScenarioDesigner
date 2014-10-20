@@ -16,7 +16,6 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
@@ -31,7 +30,6 @@ public class FormController {
 	private TableRule lastAccessTable;
 	private Rule lastAccessRule;
 	private List<TableRuleRow> copiedRows;
-	private TestScenario lastAccessTestScenario;
 
 	private IFormDao formDao;
 
@@ -150,14 +148,6 @@ public class FormController {
 		this.lastAccessRule = lastAccessRule;
 	}
 
-	public TestScenario getLastAccessTestScenario() {
-		return lastAccessTestScenario;
-	}
-
-	public void setLastAccessTestScenario(TestScenario lastAccessTestScenario) {
-		this.lastAccessTestScenario = lastAccessTestScenario;
-	}
-
 	/**
 	 * Gets rules with treeObject as the common element for all the references in the rule.
 	 * 
@@ -208,7 +198,6 @@ public class FormController {
 		this.lastAccessExpression = null;
 		this.lastAccessTable = null;
 		this.lastAccessRule = null;
-		this.lastAccessTestScenario = null;
 		this.copiedRows = null;
 	}
 }
