@@ -54,7 +54,9 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		addIconButton(exportToCsvButton);
 
 		for (Button button : getDisabledButtons()) {
-			button.setEnabled(false);
+			if (!button.equals(exportToCsvButton)) {
+				button.setEnabled(false);
+			}
 		}
 	}
 
