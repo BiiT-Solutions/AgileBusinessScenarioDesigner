@@ -2,10 +2,12 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 
+import com.biit.form.interfaces.IBaseFormView;
+
 /**
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
  */
-public class SimpleFormView {
+public class SimpleFormView implements IBaseFormView{
 	private String name;
 	private String label;
 	private Integer version;
@@ -132,11 +134,11 @@ public class SimpleFormView {
 		return getName();
 	}
 
-	public long getOrganizationId() {
+	public Long getOrganizationId() {
 		return organizationId;
 	}
 
-	public void setOrganizationId(long organizationId) {
+	public void setOrganizationId(Long organizationId) {
 		this.organizationId = organizationId;
 	}
 
