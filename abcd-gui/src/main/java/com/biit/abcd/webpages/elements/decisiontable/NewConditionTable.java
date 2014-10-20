@@ -206,8 +206,8 @@ public class NewConditionTable extends Table {
 	public void updateRow(TableRuleRow decisionRule) {
 		Item item = getItem(decisionRule);
 		for (final Object propertyId : getContainerPropertyIds()) {
-			if (decisionRule.getConditions().size() > 0) {
-				Expression expression = decisionRule.getConditions().get((Integer) propertyId);
+			if (decisionRule.getConditions().getExpressions().size() > 0) {
+				Expression expression = decisionRule.getConditions().getExpressions().get((Integer) propertyId);
 				((ExpressionEditCell) item.getItemProperty(propertyId).getValue()).setLabel(expression
 						.getRepresentation());
 			}
@@ -271,24 +271,24 @@ public class NewConditionTable extends Table {
 	// ********************
 
 	public Expression getExpressionValue(TableRuleRow row, Object propertyId) {
-		return row.getConditions().get((Integer) propertyId);
+		return row.getConditions().getExpressions().get((Integer) propertyId);
 	}
 
 	public void setExpressionValue(TableRuleRow row, Object propertyId, Expression expression) {
-		row.getConditions().set(((Integer) propertyId), expression);
+		row.getConditions().getExpressions().set(((Integer) propertyId), expression);
 	}
 
 	public Expression getNextExpressionValue(TableRuleRow row, Object propertyId) {
 		int index = ((Integer) propertyId) + 1;
-		if (index >= row.getConditions().size()) {
+		if (index >= row.getConditions().getExpressions().size()) {
 			return null;
 		} else {
-			return row.getConditions().get(index);
+			return row.getConditions().getExpressions().get(index);
 		}
 	}
 
 	public Expression getPreviousExpressionValue(TableRuleRow row, Object propertyId) {
-		return row.getConditions().get(((Integer) propertyId) - 1);
+		return row.getConditions().getExpressions().get(((Integer) propertyId) - 1);
 	}
 
 	// ******************

@@ -67,8 +67,8 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 				List<TableRuleRow> tableRuleRows = tableRule.getRules();
 				if (tableRuleRows != null && !tableRuleRows.isEmpty()) {
 					for (TableRuleRow tableRuleRow : tableRuleRows) {
-						tableRuleRow.getConditionChain().updateChildrenSortSeqs();
-						tableRuleRow.getActionChain().updateChildrenSortSeqs();
+						tableRuleRow.getConditions().updateChildrenSortSeqs();
+						tableRuleRow.getAction().updateChildrenSortSeqs();
 					}
 				}
 			}
@@ -189,8 +189,8 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 					List<TableRuleRow> tableRuleRows = tableRule.getRules();
 					if (tableRuleRows != null && !tableRuleRows.isEmpty()) {
 						for (TableRuleRow tableRuleRow : tableRuleRows) {
-							sortChildren(tableRuleRow.getConditionChain());
-							sortChildren(tableRuleRow.getActionChain());
+							sortChildren(tableRuleRow.getConditions());
+							sortChildren(tableRuleRow.getAction());
 						}
 					}
 				}
