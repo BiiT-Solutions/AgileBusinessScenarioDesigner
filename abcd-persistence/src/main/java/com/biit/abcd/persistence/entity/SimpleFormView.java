@@ -7,7 +7,7 @@ import com.biit.form.interfaces.IBaseFormView;
 /**
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
  */
-public class SimpleFormView implements IBaseFormView{
+public class SimpleFormView implements IBaseFormView {
 	private String name;
 	private String label;
 	private Integer version;
