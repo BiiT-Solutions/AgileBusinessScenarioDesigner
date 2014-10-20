@@ -33,7 +33,7 @@
 		<property name="user" value="${hibernate.connection.username}" />
 		<property name="password" value="${hibernate.connection.password}" />
 		
-		<!-- C3p0 -->
+		<!-- C3P0 -->
 		<property name="minPoolSize" value="${c3p0.min_size}" />
 		<property name="maxPoolSize" value="${c3p0.max_size}" />
 		<property name="maxStatements" value="${c3p0.max_statements}" />
@@ -72,6 +72,7 @@
 				<prop key="hibernate.order_updates">${hibernate.order_updates}</prop>
 				<prop key="hibernate.jdbc.batch_versioned_data">${hibernate.jdbc.batch_versioned_data}</prop>
 				<prop key="hibernate.jdbc.use_streams_for_binary">${hibernate.jdbc.use_streams_for_binary}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
 				
 				<!-- Second Level Cache-->
 				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
@@ -82,8 +83,7 @@
 				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
 				<prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}</prop>
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
-				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
-				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>				
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>								
 			</props>
 		</property>
 		<property name="packagesToScan">
