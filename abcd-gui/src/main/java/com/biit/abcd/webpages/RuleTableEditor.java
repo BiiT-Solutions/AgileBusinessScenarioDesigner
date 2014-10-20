@@ -296,14 +296,6 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 				}
 			}
 		});
-
-		// decisionTableEditorUpperMenu.addExportToCsvClickListener(new ClickListener() {
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		// });
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
