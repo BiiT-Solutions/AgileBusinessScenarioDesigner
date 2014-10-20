@@ -38,14 +38,14 @@ public class TableRuleToDroolsRule {
 			String tableRuleName = tableRule.getName();
 			int i = 0;
 			for (TableRuleRow row : tableRule.getRules()) {
-				if (row.getActionChain() != null && row.getActionChain().getExpressions() != null
-						&& !row.getActionChain().getExpressions().isEmpty()) {
+				if (row.getAction() != null && row.getAction().getExpressions() != null
+						&& !row.getAction().getExpressions().isEmpty()) {
 					DroolsRule newRule = new DroolsRule();
-					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditionChain());
+					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
 					newRule.setName(RulesUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
 					newRule.setCondition(rowConditionExpression);
 					newRule.addConditions(extraConditions);
-					newRule.setActions(row.getActionChain());
+					newRule.setActions(row.getAction());
 					newRules.add(newRule);
 				}
 				i++;

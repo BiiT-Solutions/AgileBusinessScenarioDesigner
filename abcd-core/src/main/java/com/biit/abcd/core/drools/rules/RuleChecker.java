@@ -36,7 +36,7 @@ public class RuleChecker {
 	 * @throws ExpressionInvalidException
 	 */
 	public static void checkRowExpressionValid(TableRuleRow row, int rowIndex) throws ExpressionInvalidException {
-		List<Expression> conditionList = row.getConditions();
+		List<Expression> conditionList = row.getConditions().getExpressions();
 		for (Expression condition : conditionList) {
 			// Check the conditions that are ExpressionChains, i.e. the answers
 			if (condition instanceof ExpressionChain) {
@@ -49,9 +49,9 @@ public class RuleChecker {
 		}
 		// Check the action
 		try {
-			row.getActionChain().getExpressionEvaluator().eval();
+			row.getAction().getExpressionEvaluator().eval();
 		} catch (Exception e) {
-			throw new ExpressionInvalidException("Expression invalid", (ExpressionChain) row.getActionChain());
+			throw new ExpressionInvalidException("Expression invalid", (ExpressionChain) row.getAction());
 		}
 	}
 

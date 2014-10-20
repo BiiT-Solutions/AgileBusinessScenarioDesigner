@@ -135,7 +135,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 		ExpressionChain condition = new ExpressionChain();
 		condition.addExpression(new ExpressionValueString(CONDITION_EXPRESSION));
-		tableRuleRow.getConditions().add(condition);
+		tableRuleRow.getConditions().getExpressions().add(condition);
 
 		tableRule.getRules().add(tableRuleRow);
 

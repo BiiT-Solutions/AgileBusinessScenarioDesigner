@@ -123,7 +123,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 
 	public void removeConditions(TableRuleRow row, List<Expression> values) {
 		for (Expression value : values) {
-			row.getConditions().remove(value);
+			row.getConditions().getExpressions().remove(value);
 		}
 	}
 

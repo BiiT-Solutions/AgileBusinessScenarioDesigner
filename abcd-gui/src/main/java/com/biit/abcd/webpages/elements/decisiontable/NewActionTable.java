@@ -61,8 +61,8 @@ public class NewActionTable extends Table {
 	public void updateRow(TableRuleRow row) {
 		Item rowItem = getItem(row);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) rowItem.getItemProperty(Columns.ACTION).getValue());
-		if (row.getActionChain() != null) {
-			String representation = row.getActionChain().getRepresentation();
+		if (row.getAction() != null) {
+			String representation = row.getAction().getRepresentation();
 			if (representation.length() > CHARACTER_LIMIT) {
 				representation = "..."
 						+ representation.substring(representation.length() - CHARACTER_LIMIT, representation.length());

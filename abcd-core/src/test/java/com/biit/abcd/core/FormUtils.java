@@ -25,6 +25,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.TreeObject;
@@ -38,6 +39,7 @@ public class FormUtils {
 	private static HashMap<String, TableRule> tableMap = new HashMap<>();
 	private static HashMap<String, ExpressionChain> expressionsMap = new HashMap<>();
 	private static HashMap<String, TreeObject> elementsMap = new HashMap<>();
+	private static HashMap<String, Rule> rulesMap = new HashMap<>();
 	private static Random random = new Random();
 
 	public static Form createCompleteForm() throws FieldTooLongException, NotValidChildException,
@@ -50,6 +52,7 @@ public class FormUtils {
 		addFormCustomVariables(form);
 		addFormExpressions(form);
 		addFormTableRules(form);
+		addFormRules(form);
 
 		return form;
 	}
@@ -204,7 +207,7 @@ public class FormUtils {
 		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
 				elementsMap.get("Answer1"));
 		expressionChain.addExpression(answerReference);
-		tableRuleRow1.getConditions().add(expressionChain);
+		tableRuleRow1.getConditions().getExpressions().add(expressionChain);
 
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
 				variableMap.get("cScore"));
@@ -216,7 +219,7 @@ public class FormUtils {
 				.get("cScore")));
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
-		tableRuleRow1.getActionChain().addExpression(expressionChain);
+		tableRuleRow1.getAction().addExpression(expressionChain);
 		tableRule.getRules().add(tableRuleRow1);
 
 		// Copy row (total 2 rows).
@@ -235,16 +238,49 @@ public class FormUtils {
 		int i = 1;
 		for (TableRuleRow tableRuleRow : tableRule.getRules()) {
 			// Question1=AnswerX
-			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().get(0))
+			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().getExpressions().get(0))
 					.getExpressions().get(2)).setReference(elementsMap.get("Answer" + i));
 			// Category1.score=Category1.score+X;
-			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getActionChain().getExpressions().get(0))
+			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getAction().getExpressions().get(0))
 					.getExpressions().get(4)).setValue(i);
 			i++;
 		}
 
 		form.getTableRules().add(tableRule);
 		tableMap.put("Table1", tableRule);
+	}
+
+	private static void addFormRules(Form form) {
+		Rule rule = new Rule();
+		rule.setName("rule1");
+
+		// Condition Question1=Answer1
+		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(
+				elementsMap.get("ChooseOne"));
+		expressionChain.addExpression(questionReference);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
+				elementsMap.get("Answer1"));
+		expressionChain.addExpression(answerReference);
+		rule.setCondition(expressionChain);
+
+		
+		//Action Category1.score=Category1.score+1;
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
+				variableMap.get("cScore"));
+		// Category1.score=Category1.score+1;
+		expressionChain = new ExpressionChain();
+		expressionChain.addExpression(customVariable);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap
+				.get("cScore")));
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
+		expressionChain.addExpression(new ExpressionValueNumber(1d));
+		rule.setActions(expressionChain);
+		
+		form.getRules().add(rule);
+		rulesMap.put("rule1", rule);
 	}
 
 	private static String randomName(String prefix) {

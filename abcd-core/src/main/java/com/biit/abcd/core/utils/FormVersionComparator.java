@@ -379,8 +379,8 @@ public class FormVersionComparator {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
-		compare(object1.getConditionChain(), object2.getConditionChain());
-		compare(object1.getActionChain(), object2.getActionChain());
+		compare(object1.getConditions(), object2.getConditions());
+		compare(object1.getAction(), object2.getAction());
 	}
 
 	/**

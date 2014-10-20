@@ -30,8 +30,8 @@ public class TableRuleRowDao extends GenericDao<TableRuleRow> implements ITableR
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
 		// with @Orderby or @OrderColumn we use our own order manager.
-		entity.getConditionChain().updateChildrenSortSeqs();
-		entity.getActionChain().updateChildrenSortSeqs();
+		entity.getConditions().updateChildrenSortSeqs();
+		entity.getAction().updateChildrenSortSeqs();
 		return super.makePersistent(entity);
 	}
 
@@ -48,8 +48,8 @@ public class TableRuleRowDao extends GenericDao<TableRuleRow> implements ITableR
 
 	private void sortChildren(List<TableRuleRow> rules) {
 		for (TableRuleRow rule : rules) {
-			sortChildren(rule.getConditionChain());
-			sortChildren(rule.getActionChain());
+			sortChildren(rule.getConditions());
+			sortChildren(rule.getAction());
 		}
 	}
 

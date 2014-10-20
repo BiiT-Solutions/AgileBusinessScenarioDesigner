@@ -685,9 +685,9 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 
 	@Override
 	public void editAction(final TableRuleRow row) {
-		if (row.getActionChain() != null) {
+		if (row.getAction() != null) {
 			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(
-					row.getActionChain());
+					row.getAction());
 
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -696,10 +696,10 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 					ExpressionChain expChain = newActionValueWindow.getExpressionChain();
 
 					if (expChain != null) {
-						row.getActionChain().setExpressions(expChain.getExpressions());
+						row.getAction().setExpressions(expChain.getExpressions());
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Action '"
-								+ row.getActionChain().getRepresentation() + "' to row '" + row.getId()
+								+ row.getAction().getRepresentation() + "' to row '" + row.getId()
 								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 					} else {
 						removeAction(row);
@@ -725,11 +725,11 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 
 	@Override
 	public void removeAction(TableRuleRow row) {
-		ExpressionChain action = row.getActionChain();
+		ExpressionChain action = row.getAction();
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "' has removed Action '" + action.getRepresentation() + "' from row '" + row.getId()
 				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
-		row.getActionChain().removeAllExpressions();
+		row.getAction().removeAllExpressions();
 		ruleTable.update(getSelectedTableRule());
 	}
 
