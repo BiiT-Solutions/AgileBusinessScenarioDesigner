@@ -10,7 +10,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
@@ -22,7 +21,6 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 
 	private Class<SimpleFormView> type;
 
-	@Autowired
 	private SessionFactory sessionFactory = null;
 
 	public SimpleFormViewDao() {

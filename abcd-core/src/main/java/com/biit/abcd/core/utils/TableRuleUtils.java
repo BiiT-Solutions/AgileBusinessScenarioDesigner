@@ -24,7 +24,9 @@ public class TableRuleUtils {
 		});
 		copiedRows = new ArrayList<TableRuleRow>();
 		for (TableRuleRow rowToCopy : listOfRowsToCopy) {
-			copiedRows.add(rowToCopy.generateCopy());
+			TableRuleRow copiedRow = rowToCopy.generateCopy();
+			copiedRow.resetIds();
+			copiedRows.add(copiedRow);
 		}
 		return copiedRows;
 	}
@@ -42,7 +44,9 @@ public class TableRuleUtils {
 	private static List<TableRuleRow> getNewInstanceOfCopiedElements(List<TableRuleRow> copiedRows) {
 		List<TableRuleRow> newCopiedRows = new ArrayList<TableRuleRow>();
 		for (TableRuleRow row : copiedRows) {
-			newCopiedRows.add(row.generateCopy());
+			TableRuleRow copiedRow = row.generateCopy();
+			copiedRow.resetIds();
+			newCopiedRows.add(copiedRow);
 		}
 		return newCopiedRows;
 	}

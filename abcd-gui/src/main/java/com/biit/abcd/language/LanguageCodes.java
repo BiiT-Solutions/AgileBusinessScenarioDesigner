@@ -76,6 +76,7 @@ public enum LanguageCodes {
 	WARNING_FORM_IN_USE_DESCRIPTION("warning.form.used.description"),
 	WARNING_FORM_READ_ONLY("warning.form.read.only"),
 	WARNING_FORM_READ_ONLY_DESCRIPTION("warning.form.read.only.description"),
+	WARNING_NEW_VERSION("warning.new.version"),
 
 
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),

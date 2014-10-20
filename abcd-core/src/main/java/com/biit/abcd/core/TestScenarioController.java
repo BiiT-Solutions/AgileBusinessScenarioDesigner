@@ -40,11 +40,6 @@ public class TestScenarioController {
 	 * @return
 	 */
 	public List<TestScenario> getTestScenarios(Form form) {
-
-		System.out.println("FORM LABEL: " + form.getLabel());
-		System.out.println("FORM VERSION: " + form.getVersion());
-		System.out.println("FORM ORGANIZATION: " + form.getOrganizationId());
-
 		if (testScenarios == null) {
 			synchronized (TestScenarioController.class) {
 				if (testScenarios == null) {

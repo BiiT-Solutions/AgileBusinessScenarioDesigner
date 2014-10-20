@@ -57,8 +57,8 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
-public class RuleTableEditor extends FormWebPageComponent implements EditExpressionListener,
-		ClearExpressionListener, EditActionListener, ClearActionListener {
+public class RuleTableEditor extends FormWebPageComponent implements EditExpressionListener, ClearExpressionListener,
+		EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private RuleTable ruleTable;
@@ -287,19 +287,15 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				int rowsToCopy = UserSessionHandler.getFormController().rowsToCopy();
 				paste();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has pasted rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				if (rowsToCopy > 0) {
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has pasted " + rowsToCopy
+							+ " rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				}
 			}
 		});
-		
-//		decisionTableEditorUpperMenu.addExportToCsvClickListener(new ClickListener() {
-//			@Override
-//			public void buttonClick(ClickEvent event) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
@@ -689,9 +685,9 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 
 	@Override
 	public void editAction(final TableRuleRow row) {
-		if (row.getActionChain() != null) {
+		if (row.getAction() != null) {
 			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(
-					row.getActionChain());
+					row.getAction());
 
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -700,10 +696,10 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 					ExpressionChain expChain = newActionValueWindow.getExpressionChain();
 
 					if (expChain != null) {
-						row.getActionChain().setExpressions(expChain.getExpressions());
+						row.getAction().setExpressions(expChain.getExpressions());
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Action '"
-								+ row.getActionChain().getRepresentation() + "' to row '" + row.getId()
+								+ row.getAction().getRepresentation() + "' to row '" + row.getId()
 								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 					} else {
 						removeAction(row);
@@ -729,11 +725,11 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 
 	@Override
 	public void removeAction(TableRuleRow row) {
-		ExpressionChain action = row.getActionChain();
+		ExpressionChain action = row.getAction();
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "' has removed Action '" + action.getRepresentation() + "' from row '" + row.getId()
 				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
-		row.getActionChain().removeAllExpressions();
+		row.getAction().removeAllExpressions();
 		ruleTable.update(getSelectedTableRule());
 	}
 

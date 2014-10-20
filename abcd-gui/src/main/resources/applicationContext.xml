@@ -27,11 +27,19 @@
 	
 	<!-- Data Source -->
 	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
-		<property name="url" value="${hibernate.connection.url}" />
-		<property name="username" value="${hibernate.connection.username}" />
+		class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${hibernate.connection.driver_class}" />
+		<property name="jdbcUrl" value="${hibernate.connection.url}" />
+		<property name="user" value="${hibernate.connection.username}" />
 		<property name="password" value="${hibernate.connection.password}" />
+		
+		<!-- C3P0 -->
+		<property name="minPoolSize" value="${c3p0.min_size}" />
+		<property name="maxPoolSize" value="${c3p0.max_size}" />
+		<property name="maxStatements" value="${c3p0.max_statements}" />
+		<property name="idleConnectionTestPeriod" value="${c3p0.idle_test_period}" />
+		<property name="loginTimeout" value="${c3p0.timeout}" />
+		<property name="acquireIncrement" value="${c3p0.acquire_increment}" />		
 	</bean>
 	
 	<!-- Transaction Manager -->
@@ -50,6 +58,8 @@
 			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.use_sql_comments">${hibernate.use_sql_comments}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
 				<!-- New ID creator -->
 				<prop key="hibernate.id.new_generator_mappings">${hibernate.id.new_generator_mappings}</prop>
 				<!-- Create table if not exists -->
@@ -60,6 +70,9 @@
 				<prop key="hibernate.use_identifier_rollback">${hibernate.use_identifier_rollback}</prop>
 				<prop key="hibernate.order_inserts">${hibernate.order_inserts}</prop>
 				<prop key="hibernate.order_updates">${hibernate.order_updates}</prop>
+				<prop key="hibernate.jdbc.batch_versioned_data">${hibernate.jdbc.batch_versioned_data}</prop>
+				<prop key="hibernate.jdbc.use_streams_for_binary">${hibernate.jdbc.use_streams_for_binary}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
 				
 				<!-- Second Level Cache-->
 				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
@@ -69,20 +82,8 @@
 				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
 				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
 				<prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}</prop>
-				
-				<!-- C3p0 -->
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
-				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
-				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
-				<prop key="hibernate.proxool.pool_alias">PoolDb1</prop>
-				<prop key="hibernate.jdbc.batch_versioned_data">${hibernate.jdbc.batch_versioned_data}</prop>
-				<prop key="hibernate.jdbc.use_streams_for_binary">${hibernate.jdbc.use_streams_for_binary}</prop>
-				<prop key="hibernate.c3p0.max_size">${hibernate.c3p0.max_size}</prop>
-				<prop key="hibernate.c3p0.min_size">${hibernate.c3p0.min_size}</prop>
-				<prop key="hibernate.c3p0.timeout">${hibernate.c3p0.timeout}</prop>
-				<prop key="hibernate.c3p0.max_statements">${hibernate.c3p0.max_statements}</prop>
-				<prop key="hibernate.c3p0.idle_test_period">${hibernate.c3p0.idle_test_period}</prop>
-				<prop key="hibernate.c3p0.acquire_increment">${hibernate.c3p0.acquire_increment}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>								
 			</props>
 		</property>
 		<property name="packagesToScan">

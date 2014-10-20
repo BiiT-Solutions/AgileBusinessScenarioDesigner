@@ -33,8 +33,8 @@ public class SaveTableToCsvAction implements SaveAction {
 			String tableRuleString = "";
 			TableRule tableRule = UserSessionHandler.getFormController().getLastAccessTable();
 			for (TableRuleRow row : tableRule.getRules()) {
-				ExpressionChain conditionChain = row.getConditionChain();
-				ExpressionChain actionChain = row.getActionChain();
+				ExpressionChain conditionChain = row.getConditions();
+				ExpressionChain actionChain = row.getAction();
 				for (Expression expression : conditionChain.getExpressions()) {
 					tableRuleString += expression.getRepresentation() + ";";
 				}

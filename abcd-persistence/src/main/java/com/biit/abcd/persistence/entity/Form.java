@@ -240,14 +240,15 @@ public class Form extends BaseForm {
 			formRules.put(children.getComparationId(), children);
 		}
 
-		// // Copy TestScenarios
-		// for (TestScenario testScenario : getTestScenarios()) {
-		// TestScenario copiedTestScenario = new TestScenario();
-		// copiedTestScenario.copyData(testScenario);
-		// updateTreeObjectReferences((Set<StorableObject>) new
-		// HashSet<StorableObject>(Arrays.asList(testScenario)),
-		// formElements);
-		// }
+//		// Copy TestScenarios
+//		getTestScenarios().clear();
+//		for (TestScenario testScenario : form.getTestScenarios()) {
+//			TestScenario copiedTestScenario = new TestScenario();
+//			copiedTestScenario.copyData(testScenario);
+//			updateTreeObjectReferences((Set<StorableObject>) new HashSet<StorableObject>(Arrays.asList(testScenario)),
+//					formElements);
+//			getTestScenarios().add(copiedTestScenario);
+//		}
 
 		// Copy Diagrams
 		getDiagrams().clear();
@@ -287,7 +288,6 @@ public class Form extends BaseForm {
 	private void updateDiagramDiagramReferences(Set<StorableObject> storableObjects, Map<String, Diagram> formDiagrams) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramChild) {
-				System.out.println(child);
 				DiagramChild diagramChild = (DiagramChild) child;
 				if (formDiagrams.get(diagramChild.getChildDiagram().getComparationId()) != null) {
 					diagramChild.setChildDiagram(formDiagrams.get(diagramChild.getChildDiagram().getComparationId()));
@@ -414,12 +414,14 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) child;
-				if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
-					expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
-							.getVariable().getComparationId()));
-				} else {
-					formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
-							expressionValueCustomVariable.getVariable());
+				if (expressionValueCustomVariable.getVariable() != null) {
+					if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
+						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
+								.getVariable().getComparationId()));
+					} else {
+						formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
+								expressionValueCustomVariable.getVariable());
+					}
 				}
 			} else if (child instanceof ExpressionValueGenericCustomVariable) {
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) child;

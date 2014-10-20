@@ -22,8 +22,7 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more
- * complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more complex expression.
  */
 @Entity
 @Table(name = "expressions_chain")
@@ -119,8 +118,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a
-	 * Expression Evaluator.
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
 	 * 
 	 * @return
 	 */
@@ -260,9 +258,11 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		for (Expression expression : getExpressions()) {
-			innerStorableObjects.add(expression);
-			innerStorableObjects.addAll(expression.getAllInnerStorableObjects());
+		if (getExpressions() != null) {
+			for (Expression expression : getExpressions()) {
+				innerStorableObjects.add(expression);
+				innerStorableObjects.addAll(expression.getAllInnerStorableObjects());
+			}
 		}
 		return innerStorableObjects;
 	}
@@ -274,10 +274,22 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			ExpressionChain expressionChain = (ExpressionChain) object;
 			setName(expressionChain.getName());
 			for (Expression expression : expressionChain.getExpressions()) {
-				getExpressions().add(expression.generateCopy());
+				try {
+					Expression expressionCopied = expression.getClass().newInstance();
+					expressionCopied.copyData(expression);
+					getExpressions().add(expressionCopied);
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new NotValidStorableObjectException("Object '" + object
+							+ "' is not an instance of ExpressionChain.");
+				}
 			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionChain.");
 		}
+	}
+
+	@Override
+	public Object getValue() {
+		return getExpressions();
 	}
 }

@@ -30,7 +30,7 @@ public abstract class Expression extends StorableObject {
 	@Column(nullable = false)
 	private long sortSeq = 0;
 
-	public void copy(Expression expression) {
+	public void copyBasicExpressionInfo(Expression expression) {
 		setCreatedBy(expression.getCreatedBy());
 		setCreationTime(expression.getCreationTime());
 		setEditable(expression.isEditable());
@@ -95,5 +95,7 @@ public abstract class Expression extends StorableObject {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Expression.");
 		}
 	}
+	
+	public abstract Object getValue();
 
 }

@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.entity.rules;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,16 +31,20 @@ public class TableRuleRow extends StorableObject {
 
 	public TableRuleRow() {
 		conditions = new ExpressionChain();
+		conditions.setName("TableRuleRowCondition");
 		action = new ExpressionChain();
+		action.setName("TableRuleRowAction");
 	}
 
 	// Simple (Question : Answer => Action) builder
 	public TableRuleRow(Expression question, Expression answer, ExpressionChain action) {
 		conditions = new ExpressionChain();
+		conditions.setName("TableRuleRowCondition");
 		this.action = new ExpressionChain();
-		getConditions().add(question);
-		getConditions().add(answer);
-		getActionChain().setExpressions(action.getExpressions());
+		this.action.setName("TableRuleRowAction");
+		getConditions().getExpressions().add(question);
+		getConditions().getExpressions().add(answer);
+		getAction().setExpressions(action.getExpressions());
 	}
 
 	@Override
@@ -63,15 +66,11 @@ public class TableRuleRow extends StorableObject {
 		conditions.removeExpression(expression);
 	}
 
-	public List<Expression> getConditions() {
-		return conditions.getExpressions();
-	}
-
-	public ExpressionChain getConditionChain() {
+	public ExpressionChain getConditions() {
 		return conditions;
 	}
 
-	public void setConditionsChain(ExpressionChain conditions) {
+	public void setConditions(ExpressionChain conditions) {
 		this.conditions = conditions;
 	}
 
@@ -79,17 +78,17 @@ public class TableRuleRow extends StorableObject {
 		conditions.removeAllExpressions();
 	}
 
-	public void setActionChain(ExpressionChain action) {
+	public void setAction(ExpressionChain action) {
 		this.action = action;
 	}
 
-	public ExpressionChain getActionChain() {
+	public ExpressionChain getAction() {
 		return action;
 	}
 
 	@Override
 	public String toString() {
-		return conditions.toString();
+		return conditions.toString() + " -> " + action.toString();
 	}
 
 	public int getConditionNumber() {
@@ -113,8 +112,7 @@ public class TableRuleRow extends StorableObject {
 	}
 
 	public void setExpression(int position, Expression expression) {
-		// TODO exception if bad expression?
-		getConditions().set(position, expression);
+		getConditions().getExpressions().set(position, expression);
 	}
 
 	@Override
@@ -132,12 +130,14 @@ public class TableRuleRow extends StorableObject {
 		if (object instanceof TableRuleRow) {
 			super.copyBasicInfo(object);
 			TableRuleRow tableRuleRow = (TableRuleRow) object;
+
 			ExpressionChain condition = new ExpressionChain();
-			condition.copyData(tableRuleRow.getConditionChain());
-			this.setConditionsChain(condition);
+			condition.copyData(tableRuleRow.getConditions());
+			setConditions(condition);
+
 			ExpressionChain action = new ExpressionChain();
-			action.copyData(tableRuleRow.getActionChain());
-			this.setActionChain(action);
+			action.copyData(tableRuleRow.getAction());
+			setAction(action);
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRuleRow.");
 		}

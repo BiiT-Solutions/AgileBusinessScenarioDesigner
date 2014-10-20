@@ -50,7 +50,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 		rules = new ArrayList<>();
 		setName(name);
 	}
-	
+
 	@Override
 	public void resetIds() {
 		super.resetIds();
@@ -82,7 +82,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 
 	@Override
 	public String toString() {
-		return getName() + rules;
+		return getName();
 	}
 
 	public TableRuleRow addRow() {
@@ -123,7 +123,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 
 	public void removeConditions(TableRuleRow row, List<Expression> values) {
 		for (Expression value : values) {
-			row.getConditions().remove(value);
+			row.getConditions().getExpressions().remove(value);
 		}
 	}
 
@@ -151,12 +151,11 @@ public class TableRule extends StorableObject implements INameAttribute {
 			super.copyBasicInfo(object);
 			TableRule tableRule = (TableRule) object;
 			this.setName(tableRule.getName());
-
 			rules.clear();
 			for (TableRuleRow row : tableRule.getRules()) {
 				TableRuleRow newRow = new TableRuleRow();
 				newRow.copyData(row);
-				addRow(newRow);
+				rules.add(newRow);
 			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRuleRow.");

@@ -28,6 +28,7 @@ import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.DroolsSubmittedFormResultWindow;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.components.IconButton;
@@ -122,7 +123,16 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						((FormManager) parent).newFormVersion();
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_NEW_VERSION);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								((FormManager) parent).newFormVersion();
+								windowAccept.close();
+							}
+						});
+						windowAccept.showCentered();
 					}
 
 				});
@@ -264,11 +274,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 									// }
 									//
 									// TestScenario testScenarioSelected = null;
-									// for (TestScenario testScenario :
-									// testScenarios) {
-									// if
-									// (testScenario.getId().equals(testScenarioId))
-									// {
+									// for (TestScenario testScenario : testScenarios) {
+									// if (testScenario.getId().equals(testScenarioId)) {
 									// testScenarioSelected = testScenario;
 									// break;
 									// }

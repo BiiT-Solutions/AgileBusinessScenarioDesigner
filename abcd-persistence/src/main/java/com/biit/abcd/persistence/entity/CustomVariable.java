@@ -79,6 +79,11 @@ public class CustomVariable extends StorableObject {
 		this.form = form;
 	}
 
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 	/**
 	 * Returns true if the custom variable compared has the same name and scope
 	 * 

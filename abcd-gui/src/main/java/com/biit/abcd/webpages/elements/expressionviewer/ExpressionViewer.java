@@ -168,8 +168,6 @@ public class ExpressionViewer extends CssLayout {
 											.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
 									stringInputWindow.setValue(((ExpressionValue) expression).getValue().toString());
 
-									System.out.println("EXPRESSION CLASS: " + expression.getClass());
-
 									if (expression instanceof ExpressionValuePostalCode) {
 										stringInputWindow.setFormat(AnswerFormat.POSTAL_CODE);
 
@@ -202,7 +200,7 @@ public class ExpressionViewer extends CssLayout {
 															Double valueAsDouble = Double.parseDouble(value);
 															ExpressionValueNumber exprValueNumber = new ExpressionValueNumber(
 																	valueAsDouble);
-															exprValueNumber.copy(expression);
+															exprValueNumber.copyBasicExpressionInfo(expression);
 															expressions.getExpressions().set(currentModified,
 																	exprValueNumber);
 															selectExpression = exprValueNumber;
@@ -216,7 +214,7 @@ public class ExpressionViewer extends CssLayout {
 														try {
 															ExpressionValueTimestamp exprValueDate = new ExpressionValueTimestamp(
 																	value);
-															exprValueDate.copy(expression);
+															exprValueDate.copyBasicExpressionInfo(expression);
 															expressions.getExpressions().set(currentModified,
 																	exprValueDate);
 															selectExpression = exprValueDate;
@@ -229,7 +227,7 @@ public class ExpressionViewer extends CssLayout {
 													case POSTAL_CODE:
 														ExpressionValuePostalCode exprValuePostCode = new ExpressionValuePostalCode(
 																value);
-														exprValuePostCode.copy(expression);
+														exprValuePostCode.copyBasicExpressionInfo(expression);
 														expressions.getExpressions().set(currentModified,
 																exprValuePostCode);
 														selectExpression = exprValuePostCode;
@@ -238,7 +236,7 @@ public class ExpressionViewer extends CssLayout {
 													case TEXT:
 														ExpressionValueString exprValueString = new ExpressionValueString(
 																value);
-														exprValueString.copy(expression);
+														exprValueString.copyBasicExpressionInfo(expression);
 														expressions.getExpressions().set(currentModified,
 																exprValueString);
 														selectExpression = exprValueString;
