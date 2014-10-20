@@ -187,15 +187,18 @@ public class NewConditionTable extends Table {
 
 	@SuppressWarnings("unchecked")
 	private void setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
-		for (final Object propertyId : getContainerPropertyIds()) {
-			if (item.getItemProperty(propertyId).getValue() == null) {
-				ExpressionEditCell editCellComponent = new ExpressionEditCell();
-				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId, propertyId));
-				editCellComponent.addRemoveButtonClickListener(new CellClearButtonClickListener(itemId, propertyId));
-				editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId, propertyId));
-				// Propagate element click.
-				editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId, propertyId));
-				item.getItemProperty(propertyId).setValue(editCellComponent);
+		if (item != null) {
+			for (final Object propertyId : getContainerPropertyIds()) {
+				if (item.getItemProperty(propertyId).getValue() == null) {
+					ExpressionEditCell editCellComponent = new ExpressionEditCell();
+					editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId, propertyId));
+					editCellComponent
+							.addRemoveButtonClickListener(new CellClearButtonClickListener(itemId, propertyId));
+					editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId, propertyId));
+					// Propagate element click.
+					editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId, propertyId));
+					item.getItemProperty(propertyId).setValue(editCellComponent);
+				}
 			}
 		}
 	}

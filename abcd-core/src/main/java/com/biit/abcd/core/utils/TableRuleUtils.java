@@ -44,7 +44,9 @@ public class TableRuleUtils {
 	private static List<TableRuleRow> getNewInstanceOfCopiedElements(List<TableRuleRow> copiedRows) {
 		List<TableRuleRow> newCopiedRows = new ArrayList<TableRuleRow>();
 		for (TableRuleRow row : copiedRows) {
-			newCopiedRows.add(row.generateCopy());
+			TableRuleRow copiedRow = row.generateCopy();
+			copiedRow.resetIds();
+			newCopiedRows.add(copiedRow);
 		}
 		return newCopiedRows;
 	}

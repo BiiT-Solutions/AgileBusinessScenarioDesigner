@@ -1484,3 +1484,8 @@
         add constraint FK_fqeidj7da9e5kofvo7xc6970x 
         foreign key (tree_forms_ID) 
         references tree_forms (ID);
+
+    create table hibernate_sequences (
+         sequence_name varchar(255),
+         sequence_next_hi_value integer 
+    );

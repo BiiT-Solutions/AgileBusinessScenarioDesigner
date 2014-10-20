@@ -74,8 +74,7 @@ public class NewActionTable extends Table {
 	}
 
 	/**
-	 * This action listener is called when the user press on the edit button of
-	 * the cell component
+	 * This action listener is called when the user press on the edit button of the cell component
 	 * 
 	 */
 	private class CellEditButtonClickListener implements ClickListener {
@@ -93,8 +92,7 @@ public class NewActionTable extends Table {
 	}
 
 	/**
-	 * This action listener is called when the user press on the remove button
-	 * of the cell component
+	 * This action listener is called when the user press on the remove button of the cell component
 	 * 
 	 */
 	private class CellDeleteButtonClickListener implements ClickListener {
@@ -113,14 +111,16 @@ public class NewActionTable extends Table {
 
 	@SuppressWarnings("unchecked")
 	private void setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
-		if (item.getItemProperty(Columns.ACTION).getValue() == null) {
-			EditCellComponent editCellComponent = new ActionValueEditCell();
-			editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId));
-			editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener(itemId));
-			editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId));
-			// Propagate element click.
-			editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId));
-			item.getItemProperty(Columns.ACTION).setValue(editCellComponent);
+		if (item != null) {
+			if (item.getItemProperty(Columns.ACTION).getValue() == null) {
+				EditCellComponent editCellComponent = new ActionValueEditCell();
+				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId));
+				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener(itemId));
+				editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId));
+				// Propagate element click.
+				editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId));
+				item.getItemProperty(Columns.ACTION).setValue(editCellComponent);
+			}
 		}
 	}
 

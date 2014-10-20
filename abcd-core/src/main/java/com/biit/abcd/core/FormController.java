@@ -202,6 +202,13 @@ public class FormController {
 		TableRuleUtils.pasteTableRuleRows(selectedTableRule, copiedRows);
 	}
 
+	public int rowsToCopy() {
+		if (copiedRows == null) {
+			return 0;
+		}
+		return copiedRows.size();
+	}
+
 	private void clearWorkVariables() {
 		this.lastAccessTreeObject = null;
 		this.lastAccessDiagram = null;

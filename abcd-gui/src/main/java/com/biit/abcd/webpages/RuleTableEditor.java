@@ -57,8 +57,8 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
-public class RuleTableEditor extends FormWebPageComponent implements EditExpressionListener,
-		ClearExpressionListener, EditActionListener, ClearActionListener {
+public class RuleTableEditor extends FormWebPageComponent implements EditExpressionListener, ClearExpressionListener,
+		EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private RuleTable ruleTable;
@@ -287,19 +287,23 @@ public class RuleTableEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				int rowsToCopy = UserSessionHandler.getFormController().rowsToCopy();
 				paste();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has pasted rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				if (rowsToCopy > 0) {
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has pasted " + rowsToCopy
+							+ " rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				}
 			}
 		});
-		
-//		decisionTableEditorUpperMenu.addExportToCsvClickListener(new ClickListener() {
-//			@Override
-//			public void buttonClick(ClickEvent event) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
+
+		// decisionTableEditorUpperMenu.addExportToCsvClickListener(new ClickListener() {
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		// });
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 
