@@ -160,10 +160,12 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					if (diagramLink.getSourceElement() instanceof DiagramFork) {
 						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
 						// ((DiagramFork) diagramLink.getSourceElement()).resetOutgoingLinks();
-						Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
-								.generateCopy();
-						expression.setEditable(false);
-						diagramLink.resetExpressions(expression);
+						if (diagramLink.getSourceElement() != null) {
+							Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
+									.generateCopy();
+							expression.setEditable(false);
+							diagramLink.resetExpressions(expression);
+						}
 					}
 				}
 			}
@@ -181,7 +183,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 							AbcdLogger.warning(this.getClass().getName(),
 									"The selected node can't have two incoming links");
 						} else if (!(diagramLink.getSourceElement() instanceof DiagramFork)) {
-							if (diagramLink.getSourceElement().getOutgoingLinks().size() > 1) {
+							if (diagramLink.getSourceElement() != null
+									&& diagramLink.getSourceElement().getOutgoingLinks().size() > 1) {
 								diagramBuilder.undo();
 								AbcdLogger.warning(this.getClass().getName(),
 										"The selected node can't have two outgoing links");
