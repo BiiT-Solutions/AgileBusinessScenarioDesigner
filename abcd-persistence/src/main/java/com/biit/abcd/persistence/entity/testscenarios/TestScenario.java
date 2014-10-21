@@ -1,8 +1,8 @@
 package com.biit.abcd.persistence.entity.testscenarios;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,9 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.utils.INameAttribute;
-import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -37,28 +35,49 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	// simultaneously fetch multiple bags
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private Map<TreeObject, TestAnswer> questionTestAnswerRelationship;
+	private List<TestScenarioObject> testScenarioObjects;
 	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 
+	// Form information
+	@Column(nullable = false)
+	private String formLabel;
+	@Column(nullable = false)
+	private Integer formVersion;
+	@Column(nullable = false, columnDefinition = "DOUBLE")
+	private Long formOrganizationId;
+
 	public TestScenario() {
 		super();
-		questionTestAnswerRelationship = new HashMap<>();
+		testScenarioObjects = new ArrayList<TestScenarioObject>();
 	}
 
 	public TestScenario(String name) throws FieldTooLongException {
 		super();
-		questionTestAnswerRelationship = new HashMap<>();
+		testScenarioObjects = new ArrayList<TestScenarioObject>();
 		setName(name);
+	}
+
+	public List<TestScenarioObject> getTestScenarioObjects() {
+		return testScenarioObjects;
+	}
+
+	public void setTestScenarioObjects(List<TestScenarioObject> testScenarioObjects) {
+		this.testScenarioObjects.clear();
+		this.testScenarioObjects.addAll(testScenarioObjects);
+	}
+
+	public void addTestScenarioObject(TestScenarioObject testScenarioObject) {
+		if (getTestScenarioObjects() != null) {
+			getTestScenarioObjects().add(testScenarioObject);
+		}
 	}
 
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		if (questionTestAnswerRelationship != null) {
-			for (TreeObject question : questionTestAnswerRelationship.keySet()) {
-				questionTestAnswerRelationship.get(question).resetIds();
-			}
+		for (TestScenarioObject testScenarioObject : getTestScenarioObjects()) {
+			testScenarioObject.resetIds();
 		}
 	}
 
@@ -74,60 +93,42 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		return name;
 	}
 
-	public Map<TreeObject, TestAnswer> getData() {
-		return questionTestAnswerRelationship;
-	}
-
-	public TestAnswer getTestAnswer(Question question) {
-		return questionTestAnswerRelationship.get(question);
-	}
-
-	public boolean containsQuestion(Question question) {
-		return questionTestAnswerRelationship.containsKey(question);
-	}
-
-	public void setData(Map<TreeObject, TestAnswer> questionTestAnswerRelation) {
-		questionTestAnswerRelationship.clear();
-		for (TreeObject question : questionTestAnswerRelation.keySet()) {
-			addData(question, questionTestAnswerRelation.get(question));
-		}
-	}
-
-	public void addData(TreeObject question, TestAnswer testAnswer) {
-		questionTestAnswerRelationship.put(question, testAnswer);
-	}
-
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		for (TreeObject question : questionTestAnswerRelationship.keySet()) {
-			innerStorableObjects.add(question);
-			if (questionTestAnswerRelationship.get(question) != null) {
-				innerStorableObjects.add(questionTestAnswerRelationship.get(question));
-			}
+		for (TestScenarioObject testScenarioObject : getTestScenarioObjects()) {
+			innerStorableObjects.add(testScenarioObject);
+			innerStorableObjects.addAll(testScenarioObject.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
 
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof TestScenario) {
-			super.copyBasicInfo(object);
-			TestScenario testScenario = (TestScenario) object;
-			name = testScenario.getName();
-			for (TreeObject question : testScenario.getData().keySet()) {
-				TestAnswer testAnswer;
-				try {
-					testAnswer = testScenario.getData().get(question).getClass().newInstance();
-					testAnswer.copyData(testScenario.getData().get(question));
-					questionTestAnswerRelationship.put(question, testAnswer);
-				} catch (InstantiationException | IllegalAccessException e) {
-					throw new NotValidStorableObjectException("Object '" + object
-							+ "' is not a valid instance of TestScenario.");
-				}
-			}
-		} else {
-			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TestScenario.");
-		}
+		// TODO
+	}
+
+	public String getFormLabel() {
+		return formLabel;
+	}
+
+	public void setFormLabel(String formLabel) {
+		this.formLabel = formLabel;
+	}
+
+	public Integer getFormVersion() {
+		return formVersion;
+	}
+
+	public void setFormVersion(Integer formVersion) {
+		this.formVersion = formVersion;
+	}
+
+	public Long getFormOrganizationId() {
+		return formOrganizationId;
+	}
+
+	public void setFormOrganizationId(Long formOrganizationId) {
+		this.formOrganizationId = formOrganizationId;
 	}
 }

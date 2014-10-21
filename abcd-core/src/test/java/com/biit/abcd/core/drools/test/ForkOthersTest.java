@@ -11,8 +11,13 @@ import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -53,7 +58,9 @@ public class ForkOthersTest extends KidsFormCreator {
 	public void testFork() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			CharacterNotAllowedException, NotCompatibleTypeException {
+			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -69,7 +76,9 @@ public class ForkOthersTest extends KidsFormCreator {
 	public void testNestedForks() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			CharacterNotAllowedException, NotCompatibleTypeException {
+			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -85,7 +94,9 @@ public class ForkOthersTest extends KidsFormCreator {
 	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException {
+			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException {
 
 		// Restart the form to avoid test cross references
 		initForm();

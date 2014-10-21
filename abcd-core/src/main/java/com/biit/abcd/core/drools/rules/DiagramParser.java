@@ -6,8 +6,13 @@ import java.util.List;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -36,7 +41,9 @@ import com.biit.form.TreeObject;
 public class DiagramParser {
 
 	public String getDroolsRulesAsText(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
-			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
+			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException {
 		List<Rule> newRules = parse(diagram, null);
 		String rulesAsString = DroolsParser.createDroolsRule(newRules);
 		return rulesAsString;
@@ -121,8 +128,10 @@ public class DiagramParser {
 	}
 
 	/**
-	 * A fork adds some extra condition or conditions to the rules that happen after <br>
-	 * A fork and its outgoing links define a condition that a question or a score must fulfill
+	 * A fork adds some extra condition or conditions to the rules that happen
+	 * after <br>
+	 * A fork and its outgoing links define a condition that a question or a
+	 * score must fulfill
 	 * 
 	 * @return
 	 * @throws RuleNotImplementedException

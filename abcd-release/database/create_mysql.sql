@@ -634,6 +634,21 @@
         primary key (ID)
     );
 
+    create table test_answer_list (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        primary key (ID)
+    );
+
+    create table test_answer_list_test_answer_basic (
+        test_answer_list_ID bigint not null,
+        testAnswerList_ID bigint not null
+    );
+
     create table test_answer_multi_checkbox (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -662,15 +677,46 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
+        formLabel varchar(255) not null,
+        formOrganizationId DOUBLE not null,
+        formVersion integer not null,
         name varchar(190),
         primary key (ID)
     );
 
-    create table test_scenario_test_answer_basic (
+    create table test_scenario_object (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label longtext,
+        name varchar(190),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        primary key (ID)
+    );
+
+    create table test_scenario_question_answer (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label longtext,
+        name varchar(190),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        originalReferenceId bigint not null,
+        testAnswer_ID bigint,
+        primary key (ID)
+    );
+
+    create table test_scenario_test_scenario_object (
         test_scenario_ID bigint not null,
-        questionTestAnswerRelationship_ID bigint not null,
-        questionTestAnswerRelationship_KEY bigint not null,
-        primary key (test_scenario_ID, questionTestAnswerRelationship_KEY)
+        testScenarioObjects_ID bigint not null
     );
 
     create table tree_answers (
@@ -747,12 +793,6 @@
         tree_forms_ID bigint not null,
         tableRules_ID bigint not null,
         primary key (tree_forms_ID, tableRules_ID)
-    );
-
-    create table tree_forms_test_scenario (
-        tree_forms_ID bigint not null,
-        testScenarios_ID bigint not null,
-        primary key (tree_forms_ID, testScenarios_ID)
     );
 
     create table tree_groups (
@@ -1065,6 +1105,15 @@
     alter table test_answer_input_text 
         add constraint UK_fm38doewevroqbh9w9yl6uy45  unique (comparationId);
 
+    alter table test_answer_list 
+        add constraint UK_4rh2n0h8kut89dnrp1p6yxqao  unique (ID);
+
+    alter table test_answer_list 
+        add constraint UK_1h1jnby3gascn5q6ahgkelilq  unique (comparationId);
+
+    alter table test_answer_list_test_answer_basic 
+        add constraint UK_70eapkpukk1o7veso7p8hhl0k  unique (testAnswerList_ID);
+
     alter table test_answer_multi_checkbox 
         add constraint UK_u2axqvpcnrfbj8tflcs5v8qu  unique (ID);
 
@@ -1086,8 +1135,20 @@
     alter table test_scenario 
         add constraint UK_jshq05r5jh9kw6obudq99vsee  unique (name);
 
-    alter table test_scenario_test_answer_basic 
-        add constraint UK_a50es1q5iamqr0xaqhnym6a9w  unique (questionTestAnswerRelationship_ID);
+    alter table test_scenario_object 
+        add constraint UK_ni4qkyh4avtnx2xxgj98xbnf0  unique (ID);
+
+    alter table test_scenario_object 
+        add constraint UK_s2jcrs64woh6taqwno31p9qbq  unique (comparationId);
+
+    alter table test_scenario_question_answer 
+        add constraint UK_kwt6r5hqjxegc137o8h9emnln  unique (ID);
+
+    alter table test_scenario_question_answer 
+        add constraint UK_nykl3acgrh43614ohdvjw18so  unique (comparationId);
+
+    alter table test_scenario_test_scenario_object 
+        add constraint UK_328cqlt1wm00trxs4fq2x6o7l  unique (testScenarioObjects_ID);
 
     alter table tree_answers 
         add constraint UK_413vxa542h86uqy4uvcnv6y2x  unique (ID);
@@ -1124,9 +1185,6 @@
 
     alter table tree_forms_rule_decision_table 
         add constraint UK_b274bmp72bu1n40rl4k5kvhas  unique (tableRules_ID);
-
-    alter table tree_forms_test_scenario 
-        add constraint UK_c0jjkkgcgpgx4o9h315avv5ev  unique (testScenarios_ID);
 
     alter table tree_groups 
         add constraint UK_sfdvxxi1k3p9pqsjl5nhmgdp  unique (ID);
@@ -1420,8 +1478,13 @@
         foreign key (rule_decision_table_ID) 
         references rule_decision_table (ID);
 
-    alter table test_scenario_test_answer_basic 
-        add constraint FK_a1lgwvamyrw44r3i3kfbvn0ti 
+    alter table test_answer_list_test_answer_basic 
+        add constraint FK_13u55f485qtvswc62ojpdrr1n 
+        foreign key (test_answer_list_ID) 
+        references test_answer_list (ID);
+
+    alter table test_scenario_test_scenario_object 
+        add constraint FK_b2sqpl48648pq604dx1n2k38v 
         foreign key (test_scenario_ID) 
         references test_scenario (ID);
 
@@ -1474,18 +1537,3 @@
         add constraint FK_mb6o16g0xsjlo3nx5xoc0i0g9 
         foreign key (tree_forms_ID) 
         references tree_forms (ID);
-
-    alter table tree_forms_test_scenario 
-        add constraint FK_c0jjkkgcgpgx4o9h315avv5ev 
-        foreign key (testScenarios_ID) 
-        references test_scenario (ID);
-
-    alter table tree_forms_test_scenario 
-        add constraint FK_fqeidj7da9e5kofvo7xc6970x 
-        foreign key (tree_forms_ID) 
-        references tree_forms (ID);
-
-    create table hibernate_sequences (
-         sequence_name varchar(255),
-         sequence_next_hi_value integer 
-    );

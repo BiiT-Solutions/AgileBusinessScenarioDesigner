@@ -10,6 +10,6 @@ public interface ISimpleTestScenarioViewDao {
 
 	List<SimpleTestScenarioView> getAll();
 	
-	List<SimpleTestScenarioView> getSimpleTestScenarioByFormId(Long formId);
+//	List<SimpleTestScenarioView> getSimpleTestScenarioByFormId(Long formId);
 
 }

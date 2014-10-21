@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
-import com.biit.abcd.core.TestScenariosController;
+import com.biit.abcd.core.TestScenarioController;
 import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
@@ -16,7 +16,7 @@ public class UserSessionHandler {
 	private User user = null;
 	private FormController formController;
 	private static GlobalVariablesController globalVariablesController;
-	private static TestScenariosController testScenariosController;
+	private static TestScenarioController testScenariosController;
 	// User Id --> UI
 	private static HashMap<Long, UI> usersSession = new HashMap<>();
 
@@ -125,10 +125,10 @@ public class UserSessionHandler {
 		return globalVariablesController;
 	}
 
-	public static TestScenariosController getTestScenariosController() {
+	public static TestScenarioController getTestScenariosController() {
 		if (testScenariosController == null) {
 			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-			testScenariosController = new TestScenariosController(helper);
+			testScenariosController = new TestScenarioController(helper);
 		}
 		return testScenariosController;
 	}

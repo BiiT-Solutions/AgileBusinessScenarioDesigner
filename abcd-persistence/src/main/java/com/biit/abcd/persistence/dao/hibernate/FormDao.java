@@ -109,7 +109,6 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			Hibernate.initialize(form.getCustomVariables());
 			Hibernate.initialize(form.getExpressionChains());
 			Hibernate.initialize(form.getRules());
-			Hibernate.initialize(form.getTestScenarios());
 		}
 	}
 
