@@ -160,7 +160,8 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					if (diagramLink.getSourceElement() instanceof DiagramFork) {
 						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
 						// ((DiagramFork) diagramLink.getSourceElement()).resetOutgoingLinks();
-						if (diagramLink.getSourceElement() != null) {
+						if (diagramLink.getSourceElement() != null
+								&& ((DiagramFork) diagramLink.getSourceElement()).getReference() != null) {
 							Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
 									.generateCopy();
 							expression.setEditable(false);

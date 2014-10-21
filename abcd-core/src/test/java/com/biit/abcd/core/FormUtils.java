@@ -18,6 +18,11 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
@@ -36,10 +41,11 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class FormUtils {
 	private static HashMap<String, CustomVariable> variableMap = new HashMap<>();
-	private static HashMap<String, TableRule> tableMap = new HashMap<>();
+	private static HashMap<String, TableRule> tablesMap = new HashMap<>();
 	private static HashMap<String, ExpressionChain> expressionsMap = new HashMap<>();
 	private static HashMap<String, TreeObject> elementsMap = new HashMap<>();
 	private static HashMap<String, Rule> rulesMap = new HashMap<>();
+	private static HashMap<String, Diagram> diagramsMap = new HashMap<>();
 	private static Random random = new Random();
 
 	public static Form createCompleteForm() throws FieldTooLongException, NotValidChildException,
@@ -53,6 +59,7 @@ public class FormUtils {
 		addFormExpressions(form);
 		addFormTableRules(form);
 		addFormRules(form);
+		addFormDiagram(form);
 
 		return form;
 	}
@@ -238,8 +245,8 @@ public class FormUtils {
 		int i = 1;
 		for (TableRuleRow tableRuleRow : tableRule.getRules()) {
 			// Question1=AnswerX
-			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().getExpressions().get(0))
-					.getExpressions().get(2)).setReference(elementsMap.get("Answer" + i));
+			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().getExpressions()
+					.get(0)).getExpressions().get(2)).setReference(elementsMap.get("Answer" + i));
 			// Category1.score=Category1.score+X;
 			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getAction().getExpressions().get(0))
 					.getExpressions().get(4)).setValue(i);
@@ -247,7 +254,7 @@ public class FormUtils {
 		}
 
 		form.getTableRules().add(tableRule);
-		tableMap.put("Table1", tableRule);
+		tablesMap.put("table1", tableRule);
 	}
 
 	private static void addFormRules(Form form) {
@@ -265,8 +272,7 @@ public class FormUtils {
 		expressionChain.addExpression(answerReference);
 		rule.setCondition(expressionChain);
 
-		
-		//Action Category1.score=Category1.score+1;
+		// Action Category1.score=Category1.score+1;
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
 				variableMap.get("cScore"));
 		// Category1.score=Category1.score+1;
@@ -278,9 +284,39 @@ public class FormUtils {
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		rule.setActions(expressionChain);
-		
+
 		form.getRules().add(rule);
 		rulesMap.put("rule1", rule);
+	}
+
+	/**
+	 *                             |-- (Answer1) -->   Table1    -->
+	 * Start --> Fork (question2) -|
+	 *                             |-- (Others)  --> Expression1 -->
+	 * 
+	 * @param form
+	 */
+	private static void addFormDiagram(Form form) {
+		Diagram diagram = new Diagram("diagram1");
+
+		DiagramSource startNode = new DiagramSource();
+		diagram.addDiagramObject(startNode);
+
+		DiagramFork forkNode = new DiagramFork();
+		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(
+				elementsMap.get("ChooseOne"));
+		forkNode.setReference(questionReference);
+		diagram.addDiagramObject(forkNode);
+
+		DiagramTable table1Node = new DiagramTable();
+		table1Node.setTable(tablesMap.get("table1"));
+
+		DiagramLink answer1Link = new DiagramLink();
+		answer1Link.setSource(forkNode);
+		answer1Link.setTarget(table1Node);
+
+		form.getDiagrams().add(diagram);
+		diagramsMap.put("diagram1", diagram);
 	}
 
 	private static String randomName(String prefix) {
