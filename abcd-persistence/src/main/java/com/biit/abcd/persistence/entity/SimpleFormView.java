@@ -5,9 +5,10 @@ import java.sql.Timestamp;
 import com.biit.form.interfaces.IBaseFormView;
 
 /**
- * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
+ * As Lazy is not correctly configured, we use this class to show basic form
+ * information in the Form Manager.
  */
-public class SimpleFormView implements IBaseFormView{
+public class SimpleFormView implements IBaseFormView {
 	private String name;
 	private String label;
 	private Integer version;
@@ -148,6 +149,36 @@ public class SimpleFormView implements IBaseFormView{
 
 	public void setLastVersion(boolean isLastVersion) {
 		this.isLastVersion = isLastVersion;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((comparationId == null) ? 0 : comparationId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		SimpleFormView other = (SimpleFormView) obj;
+		if (comparationId == null) {
+			if (other.comparationId != null) {
+				return false;
+			}
+		} else if (!comparationId.equals(other.comparationId)) {
+			return false;
+		}
+		return true;
 	}
 
 }
