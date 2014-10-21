@@ -16,8 +16,9 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm {
 	private IGroup parent;
 
 	public Group(String tag) {
-		this.setTag(tag);
-		this.setQuestions(new ArrayList<IQuestion>());
+		setTag(tag);
+		setText(tag);
+		setQuestions(new ArrayList<IQuestion>());
 	}
 
 	@Override

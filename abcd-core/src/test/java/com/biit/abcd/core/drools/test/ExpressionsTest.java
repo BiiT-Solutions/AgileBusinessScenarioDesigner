@@ -19,8 +19,13 @@ import com.biit.abcd.core.drools.facts.inputform.Question;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.utils.DateUtils;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -77,7 +82,9 @@ public class ExpressionsTest extends KidsFormCreator {
 			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
 			RuleNotImplementedException, InvalidAnswerFormatException, ActionNotImplementedException, ParseException,
 			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException,
-			NotValidTypeInVariableData, NotCompatibleTypeException {
+			NotValidTypeInVariableData, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -114,7 +121,7 @@ public class ExpressionsTest extends KidsFormCreator {
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
 
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT), 7.1);
-		
+
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
 	}
 

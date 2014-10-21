@@ -20,10 +20,6 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 		setTag(tag);
 		setGroups(new ArrayList<IGroup>());
 	}
-	
-	public void setText(String text){
-		super.setText(text);
-	}
 
 	@Override
 	public void addGroup(IGroup group) {

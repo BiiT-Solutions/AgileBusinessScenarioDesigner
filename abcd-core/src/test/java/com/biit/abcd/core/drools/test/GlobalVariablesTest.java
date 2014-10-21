@@ -15,8 +15,13 @@ import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -58,7 +63,9 @@ public class GlobalVariablesTest extends KidsFormCreator {
 	public void testGlobVarsInDroolsEngine() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, ActionNotImplementedException, DocumentException,
-			CategoryNameWithoutTranslation, CharacterNotAllowedException, NotCompatibleTypeException {
+			CategoryNameWithoutTranslation, CharacterNotAllowedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException {
 
 		// Create the form and the variables
 		initForm();
@@ -69,9 +76,9 @@ public class GlobalVariablesTest extends KidsFormCreator {
 		formDrools.generateDroolRules(getForm(), getGlobalVariables());
 		// Create the rules and launch the engine
 		DroolsForm submittedForm = createAndRunDroolsRules();
-		
+
 		// Check if the operation was correct
-		Assert.assertEquals(submittedForm.getSubmittedForm().getVariableValue(GLOBAL_VALUE), 55.4/(21.0/100.0));
+		Assert.assertEquals(submittedForm.getSubmittedForm().getVariableValue(GLOBAL_VALUE), 55.4 / (21.0 / 100.0));
 	}
 
 	private void createGlobalvariables() throws NotValidTypeInVariableData, FieldTooLongException {

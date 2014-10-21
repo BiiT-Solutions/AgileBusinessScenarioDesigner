@@ -30,7 +30,6 @@ import com.vaadin.ui.UI;
 public class TestScenarioEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -6743796589244668454L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
-	private SelectTestScenarioTableEditable tableSelectExpression;
 	private TestScenarioForm testScenarioForm;
 	private SelectTestScenarioTableEditable tableSelectTestScenario;
 	private TestScenarioEditorUpperMenu testScenarioUpperMenu;
@@ -54,7 +53,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				UserSessionHandler.getFormController().setLastAccessTestScenario(getSelectedTestScenario());
+				UserSessionHandler.getTestScenariosController().setLastAccessTestScenario(getSelectedTestScenario());
 				refreshTestScenario();
 			}
 
@@ -68,21 +67,27 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 		initUpperMenu();
 
-		if (UserSessionHandler.getFormController().getForm() != null) {
-			// Add tables
-			tableSelectTestScenario.update(UserSessionHandler.getFormController().getForm());
+		if ((UserSessionHandler.getFormController().getForm() != null)
+				&& (UserSessionHandler.getTestScenariosController().getTestScenarios(
+						UserSessionHandler.getFormController().getForm()) != null)) {
+
+			UserSessionHandler.getTestScenariosController().clearWorkVariables();
+			// Add tables		
+			tableSelectTestScenario.updateTestScenarios(UserSessionHandler.getTestScenariosController()
+					.getTestScenarios(UserSessionHandler.getFormController().getForm()));
 
 			sortTableMenu();
 
-			if (UserSessionHandler.getFormController().getLastAccessExpression() != null) {
-				tableSelectTestScenario.setSelectedTestScenario(UserSessionHandler.getFormController()
+			if (UserSessionHandler.getTestScenariosController().getLastAccessTestScenario() != null) {
+				tableSelectTestScenario.setSelectedTestScenario(UserSessionHandler.getTestScenariosController()
 						.getLastAccessTestScenario());
 			} else {
 				// Select the first one if available.
-				if (UserSessionHandler.getFormController().getForm().getTestScenarios().size() > 0) {
+				if (UserSessionHandler.getTestScenariosController()
+						.getTestScenarios(UserSessionHandler.getFormController().getForm()).size() > 0) {
 
-					Iterator<TestScenario> iterator = (UserSessionHandler.getFormController().getForm()
-							.getTestScenarios().iterator());
+					Iterator<TestScenario> iterator = (UserSessionHandler.getTestScenariosController()
+							.getTestScenarios(UserSessionHandler.getFormController().getForm()).iterator());
 					tableSelectTestScenario.setSelectedTestScenario(iterator.next());
 				}
 			}
@@ -155,12 +160,10 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 	private void save() {
 		try {
-			
-			
-			UserSessionHandler.getFormController().save();
+			UserSessionHandler.getTestScenariosController().update(tableSelectTestScenario.getTestScenarios(),
+					UserSessionHandler.getFormController().getForm());
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
-			System.out.println(e);
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(TestScenarioEditor.class.getName(), e);
 		}
@@ -172,8 +175,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	}
 
 	private void removeSelectedTestScenario() {
-		UserSessionHandler.getFormController().getForm().getTestScenarios()
-				.remove(tableSelectTestScenario.getSelectedTestScenario());
+		UserSessionHandler.getTestScenariosController().removeTestScenario(getSelectedTestScenario());
 		tableSelectTestScenario.removeSelectedRow();
 		refreshTestScenario();
 	}
@@ -195,7 +197,5 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	private void refreshTestScenario() {
 		testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
 	}
-	
-	
 
 }

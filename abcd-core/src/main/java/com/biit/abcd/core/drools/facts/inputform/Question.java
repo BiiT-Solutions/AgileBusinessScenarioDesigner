@@ -18,7 +18,8 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 	private ICategory categoryParent;
 
 	public Question(String tag) {
-		this.setTag(tag);
+		setTag(tag);
+		setText(tag);
 	}
 
 	@Override

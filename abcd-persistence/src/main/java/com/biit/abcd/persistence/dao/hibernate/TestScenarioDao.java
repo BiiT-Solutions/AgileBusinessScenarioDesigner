@@ -3,12 +3,15 @@ package com.biit.abcd.persistence.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioObject;
+import com.biit.form.TreeObject;
 import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
@@ -20,9 +23,31 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 
 	@Override
 	protected void initializeSets(List<TestScenario> elements) {
+		for (TestScenario testScenario : elements) {
+			Hibernate.initialize(testScenario.getTestScenarioObjects());
+			initializeTestScenarioObjects(testScenario.getTestScenarioObjects());
+		}
 	}
-	
-	@Override	
+
+	private void initializeTestScenarioObjects(List<TestScenarioObject> elements) {
+		for (TestScenarioObject entity : elements) {
+			if (entity != null) {
+				Hibernate.initialize(entity.getChildren());
+				initializeChildsSets(entity.getChildren());
+			}
+		}
+	}
+
+	private void initializeChildsSets(List<TreeObject> elements) {
+		for (TreeObject entity : elements) {
+			if (entity != null) {
+				Hibernate.initialize(entity.getChildren());
+				initializeChildsSets(entity.getChildren());
+			}
+		}
+	}
+
+	@Override
 	public TestScenario getTestScenarioById(Long scenarioId) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
@@ -32,6 +57,26 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			TestScenario testScenario = (TestScenario) criteria.uniqueResult();
 			session.getTransaction().commit();
 			return testScenario;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TestScenario> getTestScenarioByFormLabelVersionOrganizationId(String label, Integer version,
+			Long organizationId) {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			Criteria criteria = session.createCriteria(TestScenario.class);
+			criteria.add(Restrictions.eq("formLabel", label));
+			criteria.add(Restrictions.eq("formVersion", version));
+			criteria.add(Restrictions.eq("formOrganizationId", organizationId));
+			List<TestScenario> testScenarios = criteria.list();
+			session.getTransaction().commit();
+			return testScenarios;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
 			throw e;

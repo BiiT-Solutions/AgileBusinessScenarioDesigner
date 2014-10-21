@@ -36,7 +36,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	private static final long serialVersionUID = 6042328256995069412L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
 	private HorizontalLayout rootLayout;
-	private GlobalVariablesTable variableTable;
+	private GlobalVariablesTable globalVariableTable;
 	private VariableDataTable variableDataTable;
 
 	public GlobalVariablesCreator() {
@@ -50,31 +50,31 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		rootLayout.setMargin(true);
 		rootLayout.setSpacing(true);
 
-		variableTable = new GlobalVariablesTable();
+		globalVariableTable = new GlobalVariablesTable();
 		variableDataTable = new VariableDataTable();
 
-		variableTable.setSizeFull();
+		globalVariableTable.setSizeFull();
 		variableDataTable.setSizeFull();
 
-		rootLayout.addComponent(variableTable);
+		rootLayout.addComponent(globalVariableTable);
 		rootLayout.addComponent(variableDataTable);
 
 		getWorkingAreaLayout().addComponent(rootLayout);
 		setUpperMenu(createUpperMenu());
 
-		variableTable.addValueChangeListener(new ValueChangeListener() {
+		globalVariableTable.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -8155028206136931686L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				variableDataTable.removeAllItems();
-				variableDataTable.setVariable((GlobalVariable) variableTable.getValue());
+				variableDataTable.setVariable((GlobalVariable) globalVariableTable.getValue());
 			}
 		});
 
 		// Add already existing GlobalVariables.
 		for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
-			variableTable.addItem(globalVariable);
+			globalVariableTable.addItem(globalVariable);
 		}
 	}
 
@@ -101,9 +101,9 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Object selectedVariable = variableTable.getValue();
+				Object selectedVariable = globalVariableTable.getValue();
 				if (selectedVariable != null) {
-					variableTable.removeItem(selectedVariable);
+					globalVariableTable.removeItem(selectedVariable);
 				} else {
 					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
 							LanguageCodes.WARNING_SELECT_VARIABLE_TO_DELETE);
@@ -137,10 +137,10 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				if (selectedVariable != null) {
 					// Check if the value is the last of the list, if not, it
 					// can't be deleted
-					if (isLastValueOfVariableList(((GlobalVariable) variableTable.getValue()).getVariableData(),
+					if (isLastValueOfVariableList(((GlobalVariable) globalVariableTable.getValue()).getVariableData(),
 							selectedVariable)) {
 						variableDataTable.removeItem(selectedVariable);
-						((GlobalVariable) variableTable.getValue()).getVariableData().remove(selectedVariable);
+						((GlobalVariable) globalVariableTable.getValue()).getVariableData().remove(selectedVariable);
 					} else {
 						MessageManager.showWarning(LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID_TITLE,
 								LanguageCodes.WARNING_SELECT_VARIABLE_DATA_INVALID);
@@ -172,8 +172,8 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			public void acceptAction(AcceptCancelWindow window) {
 				GlobalVariable value = ((VariableWindow) window).getValue();
 				if (value != null) {
-					variableTable.addItem(value);
-					variableTable.setValue(value);
+					globalVariableTable.addItem(value);
+					globalVariableTable.setValue(value);
 				}
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' has created a " + value.getClass() + " with 'Name: " + value.getName() + " - Type: "
@@ -194,7 +194,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	}
 
 	private void createEditVariableWindow() {
-		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
+		final GlobalVariable variable = globalVariableTable.getSelectedGlobalVariable();
 
 		if (variable != null) {
 			VariableWindow window = new VariableWindow(
@@ -210,7 +210,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						// Update the internal value
 						variable.updateValues(editedVariable);
 						// Update the view of the value
-						variableTable.updateItem(variable);
+						globalVariableTable.updateItem(variable);
 					}
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has edited a " + variable.getClass()
@@ -223,7 +223,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	}
 
 	private void createValueDataWindow() {
-		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
+		final GlobalVariable variable = globalVariableTable.getSelectedGlobalVariable();
 
 		if (variable != null) {
 			// Check if the previous value has "value to" set to infinite
@@ -236,7 +236,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 				// If the global variable has values, we manage the
 				// "value from"/"value to" properties
-				List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getVariableData();
+				List<VariableData> auxVariableList = ((GlobalVariable) globalVariableTable.getValue()).getVariableData();
 				if (auxVariableList.size() > 0) {
 					// Set the "value from" value related to the previous one
 					VariableData auxVariableData = auxVariableList.get(auxVariableList.size() - 1);
@@ -253,7 +253,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						if (variableData != null) {
 							// Add item.
 							variableDataTable.addItem(variableData);
-							((GlobalVariable) variableTable.getValue()).getVariableData().add(variableData);
+							((GlobalVariable) globalVariableTable.getValue()).getVariableData().add(variableData);
 							AbcdLogger.info(this.getClass().getName(),
 									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
 											+ variableData.getClass() + " with 'Value: " + variableData.getValue()
@@ -269,7 +269,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	}
 
 	private void createEditValueDataWindow() {
-		final GlobalVariable variable = variableTable.getSelectedGlobalVariable();
+		final GlobalVariable variable = globalVariableTable.getSelectedGlobalVariable();
 
 		if (variable != null) {
 			final VariableData selectedValue = variableDataTable.getSelectedVariableData();
@@ -319,7 +319,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	}
 
 	private boolean isLastValidToInfinite(GlobalVariable variable) {
-		List<VariableData> auxVariableList = ((GlobalVariable) variableTable.getValue()).getVariableData();
+		List<VariableData> auxVariableList = ((GlobalVariable) globalVariableTable.getValue()).getVariableData();
 		if (auxVariableList.size() > 0) {
 			VariableData auxVariableData = auxVariableList.get(auxVariableList.size() - 1);
 			if (auxVariableData.getValidTo() == null) {
@@ -335,7 +335,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	}
 
 	private void save() {
-		UserSessionHandler.getGlobalVariablesController().update(variableTable.getGlobalVariables());
+		UserSessionHandler.getGlobalVariablesController().update(globalVariableTable.getGlobalVariables());
 		MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 	}
 }

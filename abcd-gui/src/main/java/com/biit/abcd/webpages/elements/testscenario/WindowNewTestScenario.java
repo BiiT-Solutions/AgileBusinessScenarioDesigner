@@ -21,7 +21,8 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 
 	@Override
 	public void acceptAction(TextField inputTextField) {
-		for (TestScenario existingScenarios : UserSessionHandler.getFormController().getForm().getTestScenarios()) {
+		for (TestScenario existingScenarios : UserSessionHandler.getTestScenariosController().getTestScenarios(
+				UserSessionHandler.getFormController().getForm())) {
 			if (existingScenarios.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_TEST_SCENARIO_NAME);
 				return;
@@ -33,14 +34,18 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 			testScenario.setCreatedBy(UserSessionHandler.getUser());
 			testScenario.setUpdatedBy(UserSessionHandler.getUser());
 			testScenario.setUpdateTime();
-			UserSessionHandler.getFormController().getForm().getTestScenarios().add(testScenario);
+			testScenario.setFormLabel(UserSessionHandler.getFormController().getForm().getLabel());
+			testScenario.setFormOrganizationId(UserSessionHandler.getFormController().getForm().getOrganizationId());
+			testScenario.setFormVersion(UserSessionHandler.getFormController().getForm().getVersion());
+			UserSessionHandler.getTestScenariosController()
+					.getTestScenarios(UserSessionHandler.getFormController().getForm()).add(testScenario);
 			((TestScenarioEditor) getParentWindow()).addTestScenarioToMenu(testScenario);
 			((TestScenarioEditor) getParentWindow()).sortTableMenu();
 
 			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 					+ "' has created a " + testScenario.getClass() + " with 'Name: " + testScenario.getName() + "'.");
 			close();
-			
+
 		} catch (FieldTooLongException e) {
 			AbcdLogger.warning(this.getClass().getName(), e.toString());
 			MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_TITLE),

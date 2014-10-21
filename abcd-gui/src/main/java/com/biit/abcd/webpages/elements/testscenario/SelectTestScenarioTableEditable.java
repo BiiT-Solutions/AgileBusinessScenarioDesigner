@@ -7,11 +7,10 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.abcd.webpages.components.EditCellComponent;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.EditCellComponent;
 import com.biit.abcd.webpages.components.TableCellLabelEdit;
 import com.biit.abcd.webpages.components.TableCellLabelEditWindow;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -60,8 +59,8 @@ public class SelectTestScenarioTableEditable extends TableCellLabelEdit {
 			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					for (TestScenario existingTestScenario : UserSessionHandler.getFormController().getForm()
-							.getTestScenarios()) {
+					for (TestScenario existingTestScenario : UserSessionHandler.getTestScenariosController()
+							.getTestScenarios(UserSessionHandler.getFormController().getForm())) {
 						if (existingTestScenario != testScenario
 								&& existingTestScenario.getName().equals(newTableCellEditWindow.getValue())) {
 							MessageManager.showError(LanguageCodes.ERROR_REPEATED_TEST_SCENARIO_NAME);
@@ -82,16 +81,9 @@ public class SelectTestScenarioTableEditable extends TableCellLabelEdit {
 		}
 	}
 
-//	public void updateTable(Set<TestScenario> testScenarios) {
-//		this.removeAllItems();
-//		for (TestScenario value : testScenarios) {
-//			addRow(value);
-//		}
-//	}
-	
-	public void update(Form form) {
+	public void updateTestScenarios(List<TestScenario> testScenarios) {
 		this.removeAllItems();
-		for (TestScenario value : form.getTestScenarios()) {
+		for (TestScenario value : testScenarios) {
 			addRow(value);
 		}
 	}
