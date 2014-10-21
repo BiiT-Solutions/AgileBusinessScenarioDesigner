@@ -57,8 +57,8 @@ public class RuleChecker {
 
 	public static void checkRuleValid(Rule rule) throws RuleInvalidException {
 		try {
-			rule.getConditionChain().getExpressionEvaluator().eval();
-			rule.getActionChain().getExpressionEvaluator().eval();
+			rule.getConditions().getExpressionEvaluator().eval();
+			rule.getActions().getExpressionEvaluator().eval();
 		} catch (Exception e) {
 			throw new RuleInvalidException("Rule " + rule.getName() + " invalid");
 		}

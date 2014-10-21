@@ -42,8 +42,8 @@ public class DiagramPropertiesDiagramChild extends SecuredDiagramElementProperti
 		fieldWithSearchButton.setNullCaption(ServerTranslate
 				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_LINK_INPUT_FIELD_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
-		if (instance.getChildDiagram() != null) {
-			fieldWithSearchButton.setValue(instance.getChildDiagram(), instance.getChildDiagram().getName());
+		if (instance.getDiagram() != null) {
+			fieldWithSearchButton.setValue(instance.getDiagram(), instance.getDiagram().getName());
 		}
 		fieldWithSearchButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -1215227801957570166L;
@@ -70,14 +70,14 @@ public class DiagramPropertiesDiagramChild extends SecuredDiagramElementProperti
 								return;
 							}
 
-							instance.setChildDiagram(diagram);
+							instance.setDiagram(diagram);
 							fieldWithSearchButton.setValue(diagram, diagram.getName());
 							selectAnswerWindow.close();
 							firePropertyUpdateListener(instance);
 
 							AbcdLogger.info(this.getClass().getName(),
 									"User '" + UserSessionHandler.getUser().getEmailAddress()
-											+ "' added Child diagram " + instance.getChildDiagram().getName()
+											+ "' added Child diagram " + instance.getDiagram().getName()
 											+ " to Diagram node with ID:" + instance.getId() + "'.");
 						} else {
 							MessageManager.showError(LanguageCodes.ERROR_SELECT_DIAGRAM);
@@ -92,7 +92,7 @@ public class DiagramPropertiesDiagramChild extends SecuredDiagramElementProperti
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				instance.setChildDiagram(null);
+				instance.setDiagram(null);
 				firePropertyUpdateListener(instance);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' removed diagram from Diagram node with ID:" + instance.getId() + "'.");

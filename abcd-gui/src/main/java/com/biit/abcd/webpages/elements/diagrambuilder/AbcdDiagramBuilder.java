@@ -97,8 +97,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 				DiagramObject object = getObjectOfDiagram(jsonString);
 				switch (object.getType()) {
 				case CALCULATION:
-					if (((DiagramExpression) object).getFormExpression() != null) {
-						fireJumpToListener(((DiagramExpression) object).getFormExpression());
+					if (((DiagramExpression) object).getExpression() != null) {
+						fireJumpToListener(((DiagramExpression) object).getExpression());
 					} else {
 						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
 								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
@@ -113,8 +113,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					}
 					break;
 				case DIAGRAM_CHILD:
-					if (((DiagramChild) object).getChildDiagram() != null) {
-						fireJumpToListener(((DiagramChild) object).getChildDiagram());
+					if (((DiagramChild) object).getDiagram() != null) {
+						fireJumpToListener(((DiagramChild) object).getDiagram());
 					} else {
 						MessageManager.showWarning(LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED,
 								LanguageCodes.FORM_DIAGRAM_BUILDER_ELEMENT_NOT_ASSIGNED_DESCRIPTION);
@@ -129,8 +129,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 					}
 					break;
 				case SINK:
-					if (((DiagramSink) object).getFormExpression() != null) {
-						fireJumpToListener(((DiagramSink) object).getFormExpression());
+					if (((DiagramSink) object).getExpression() != null) {
+						fireJumpToListener(((DiagramSink) object).getExpression());
 					}
 					break;
 				case TABLE:

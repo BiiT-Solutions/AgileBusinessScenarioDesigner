@@ -292,12 +292,12 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramChild) {
 				DiagramChild diagramChild = (DiagramChild) child;
-				if (formDiagrams.get(diagramChild.getChildDiagram().getComparationId()) != null) {
-					diagramChild.setChildDiagram(formDiagrams.get(diagramChild.getChildDiagram().getComparationId()));
+				if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
+					diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
 				} else {
-					AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getChildDiagram()
+					AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram()
 							+ "'.");
-					formDiagrams.put(diagramChild.getChildDiagram().getComparationId(), diagramChild.getChildDiagram());
+					formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
 				}
 			}
 		}
@@ -314,15 +314,15 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramExpression) {
 				DiagramExpression diagramExpression = (DiagramExpression) child;
-				if (diagramExpression.getFormExpression() != null) {
-					if (formExpressionChains.get(diagramExpression.getFormExpression().getComparationId()) != null) {
-						diagramExpression.setFormExpression(formExpressionChains.get(diagramExpression
-								.getFormExpression().getComparationId()));
+				if (diagramExpression.getExpression() != null) {
+					if (formExpressionChains.get(diagramExpression.getExpression().getComparationId()) != null) {
+						diagramExpression.setExpression(formExpressionChains.get(diagramExpression
+								.getExpression().getComparationId()));
 					} else {
 						AbcdLogger.warning(this.getClass().getName(),
-								"Adding expression '" + diagramExpression.getFormExpression() + "'.");
-						formExpressionChains.put(diagramExpression.getFormExpression().getComparationId(),
-								diagramExpression.getFormExpression());
+								"Adding expression '" + diagramExpression.getExpression() + "'.");
+						formExpressionChains.put(diagramExpression.getExpression().getComparationId(),
+								diagramExpression.getExpression());
 					}
 				}
 			}
@@ -470,8 +470,8 @@ public class Form extends BaseForm {
 			for (DiagramObject diagramObject : diagramParent.getDiagramObjects()) {
 				if (diagramObject instanceof DiagramChild) {
 					DiagramChild diagramChild = (DiagramChild) diagramObject;
-					if (diagramChild.getChildDiagram().equals(diagram)) {
-						diagramChild.setChildDiagram(null);
+					if (diagramChild.getDiagram().equals(diagram)) {
+						diagramChild.setDiagram(null);
 					}
 				}
 			}

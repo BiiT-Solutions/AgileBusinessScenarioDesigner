@@ -3,6 +3,7 @@ package com.biit.abcd.core;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import junit.framework.Assert;
@@ -19,10 +20,16 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
@@ -33,6 +40,7 @@ import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
@@ -40,61 +48,81 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class FormUtils {
-	private static HashMap<String, CustomVariable> variableMap = new HashMap<>();
-	private static HashMap<String, TableRule> tablesMap = new HashMap<>();
-	private static HashMap<String, ExpressionChain> expressionsMap = new HashMap<>();
-	private static HashMap<String, TreeObject> elementsMap = new HashMap<>();
-	private static HashMap<String, Rule> rulesMap = new HashMap<>();
-	private static HashMap<String, Diagram> diagramsMap = new HashMap<>();
 	private static Random random = new Random();
 
 	public static Form createCompleteForm() throws FieldTooLongException, NotValidChildException,
 			CharacterNotAllowedException, InvalidAnswerFormatException {
+		Map<String, CustomVariable> variableMap;
+		Map<String, TableRule> tablesMap;
+		Map<String, ExpressionChain> expressionsMap;
+		Map<String, TreeObject> elementsMap;
+		Map<String, Rule> rulesMap;
+		Map<String, Diagram> diagramsMap;
+
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(randomName("Form"));
 
-		addFormStructure(form);
-		addFormCustomVariables(form);
-		addFormExpressions(form);
-		addFormTableRules(form);
-		addFormRules(form);
-		addFormDiagram(form);
+		elementsMap = createCategory();
+		form.addChild(elementsMap.get("Category1"));
+
+		variableMap = addFormCustomVariables(form);
+		for (CustomVariable variable : variableMap.values()) {
+			form.getCustomVariables().add(variable);
+		}
+
+		expressionsMap = addFormExpressions(elementsMap, variableMap);
+		for (ExpressionChain expression : expressionsMap.values()) {
+			form.getExpressionChains().add(expression);
+		}
+
+		tablesMap = addFormTableRules(elementsMap, variableMap);
+		for (TableRule tableRule : tablesMap.values()) {
+			form.getTableRules().add(tableRule);
+		}
+
+		rulesMap = addFormRules(elementsMap, variableMap);
+		for (Rule rule : rulesMap.values()) {
+			form.getRules().add(rule);
+		}
+
+		diagramsMap = createComplexDiagram(elementsMap, variableMap, expressionsMap, tablesMap, rulesMap);
+		for (Diagram diagram : diagramsMap.values()) {
+			form.getDiagrams().add(diagram);
+		}
 
 		return form;
 	}
 
-	public static void addFormStructure(Form form) throws NotValidChildException, FieldTooLongException,
+	/**
+	 * Create a Category called "Category1" with different groups and questions.
+	 * 
+	 * @return a hashmap with all elements.
+	 * @throws NotValidChildException
+	 * @throws FieldTooLongException
+	 * @throws CharacterNotAllowedException
+	 * @throws InvalidAnswerFormatException
+	 */
+	public static Map<String, TreeObject> createCategory() throws NotValidChildException, FieldTooLongException,
 			CharacterNotAllowedException, InvalidAnswerFormatException {
-		elementsMap = new HashMap<>();
+		Map<String, TreeObject> elementsMap = new HashMap<>();
 		Category category = new Category();
 		category.setName("Category1");
-		form.addChild(category);
 		elementsMap.put("Category1", category);
-
-		Category category2 = new Category();
-		category2.setName("Category2");
-		form.addChild(category2);
-		elementsMap.put("Category2", category2);
-
-		Category category3 = new Category();
-		category3.setName("Category3");
-		form.addChild(category3);
-		elementsMap.put("Category3", category3);
 
 		Group group1 = new Group();
 		group1.setName("Group1");
-		category2.addChild(group1);
+		category.addChild(group1);
 		elementsMap.put("Group1", group1);
 
 		Group group2 = new Group();
 		group2.setName("Group2");
-		category2.addChild(group2);
+		category.addChild(group2);
 		elementsMap.put("Group2", group2);
 
 		Group group3 = new Group();
 		group3.setName("Group3");
-		category2.addChild(group3);
+		category.addChild(group3);
 		elementsMap.put("Group3", group3);
 
 		// Input field text.
@@ -158,22 +186,25 @@ public class FormUtils {
 		Answer answer7 = new Answer();
 		answer7.setName("Answer7");
 		question4.addChild(answer7);
+
+		return elementsMap;
 	}
 
-	private static void addFormCustomVariables(Form form) {
-		variableMap = new HashMap<>();
+	public static Map<String, CustomVariable> addFormCustomVariables(Form form) {
+		Map<String, CustomVariable> variableMap = new HashMap<>();
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-		form.getCustomVariables().add(customVarCategory);
 		variableMap.put("cScore", customVarCategory);
 
 		CustomVariable customVarQuestion = new CustomVariable(form, "bonus", CustomVariableType.NUMBER,
 				CustomVariableScope.QUESTION);
-		form.getCustomVariables().add(customVarQuestion);
 		variableMap.put("bonus", customVarQuestion);
+		return variableMap;
 	}
 
-	private static void addFormExpressions(Form form) {
+	public static Map<String, ExpressionChain> addFormExpressions(Map<String, TreeObject> elementsMap,
+			Map<String, CustomVariable> variableMap) {
+		Map<String, ExpressionChain> expressionsMap = new HashMap<>();
 		ExpressionChain expressionChain = new ExpressionChain();
 		expressionChain.setName("Expression1");
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
@@ -184,7 +215,6 @@ public class FormUtils {
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
-		form.getExpressionChains().add(expressionChain);
 		expressionsMap.put("Expression1", expressionChain);
 
 		// Category2.bonus=InsertDate(Y)
@@ -196,11 +226,15 @@ public class FormUtils {
 		expressionChain2.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		expressionChain2.addExpression(new ExpressionValueTreeObjectReference(elementsMap.get("InsertDate"),
 				QuestionDateUnit.YEARS));
-		form.getExpressionChains().add(expressionChain2);
 		expressionsMap.put("Expression2", expressionChain2);
+
+		return expressionsMap;
 	}
 
-	private static void addFormTableRules(Form form) {
+	public static Map<String, TableRule> addFormTableRules(Map<String, TreeObject> elementsMap,
+			Map<String, CustomVariable> variableMap) {
+		Map<String, TableRule> tablesMap = new HashMap<>();
+
 		TableRule tableRule = new TableRule();
 		tableRule.setName("Table1");
 
@@ -253,13 +287,17 @@ public class FormUtils {
 			i++;
 		}
 
-		form.getTableRules().add(tableRule);
 		tablesMap.put("table1", tableRule);
+
+		return tablesMap;
 	}
 
-	private static void addFormRules(Form form) {
+	public static Map<String, Rule> addFormRules(Map<String, TreeObject> elementsMap,
+			Map<String, CustomVariable> variableMap) {
+		Map<String, Rule> rulesMap = new HashMap<>();
+
 		Rule rule = new Rule();
-		rule.setName("rule1");
+		rule.setName("Rule1");
 
 		// Condition Question1=Answer1
 		ExpressionChain expressionChain = new ExpressionChain();
@@ -270,7 +308,7 @@ public class FormUtils {
 		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
 				elementsMap.get("Answer1"));
 		expressionChain.addExpression(answerReference);
-		rule.setCondition(expressionChain);
+		rule.setConditions(expressionChain);
 
 		// Action Category1.score=Category1.score+1;
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
@@ -285,38 +323,161 @@ public class FormUtils {
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		rule.setActions(expressionChain);
 
-		form.getRules().add(rule);
-		rulesMap.put("rule1", rule);
+		rulesMap.put(rule.getName(), rule);
+		return rulesMap;
 	}
 
-	/**
-	 *                             |-- (Answer1) -->   Table1    -->
+	/*-
+	 *                             |-- (Answer1) -->   Table1    --> End1
 	 * Start --> Fork (question2) -|
-	 *                             |-- (Others)  --> Expression1 -->
+	 *                             |-- (Others)  --> Expression1 --> Diagram2 --> End2
 	 * 
 	 * @param form
 	 */
-	private static void addFormDiagram(Form form) {
+	public static Map<String, Diagram> createComplexDiagram(Map<String, TreeObject> elementsMap,
+			Map<String, CustomVariable> variableMap, Map<String, ExpressionChain> expressionsMap,
+			Map<String, TableRule> tablesMap, Map<String, Rule> rulesMap) {
+		Map<String, Diagram> diagramsMap = new HashMap<>();
+
 		Diagram diagram = new Diagram("diagram1");
 
 		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		Node nodeSource = new Node(startNode.getJointjsId());
 		diagram.addDiagramObject(startNode);
 
 		DiagramFork forkNode = new DiagramFork();
 		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(
 				elementsMap.get("ChooseOne"));
 		forkNode.setReference(questionReference);
+		forkNode.setJointjsId(IdGenerator.createId());
+		forkNode.setType(DiagramObjectType.FORK);
+		Node nodeFork = new Node(forkNode.getJointjsId());
 		diagram.addDiagramObject(forkNode);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeFork);
+		diagram.addDiagramObject(startLink);
 
 		DiagramTable table1Node = new DiagramTable();
 		table1Node.setTable(tablesMap.get("table1"));
+		table1Node.setJointjsId(IdGenerator.createId());
+		table1Node.setType(DiagramObjectType.TABLE);
+		Node nodeTable = new Node(table1Node.getJointjsId());
+		diagram.addDiagramObject(forkNode);
 
 		DiagramLink answer1Link = new DiagramLink();
-		answer1Link.setSource(forkNode);
-		answer1Link.setTarget(table1Node);
+		answer1Link.setSource(nodeFork);
+		answer1Link.setJointjsId(IdGenerator.createId());
+		answer1Link.setType(DiagramObjectType.LINK);
+		answer1Link.setTarget(nodeTable);
+		diagram.addDiagramObject(answer1Link);
 
-		form.getDiagrams().add(diagram);
-		diagramsMap.put("diagram1", diagram);
+		DiagramSink diagramEndNode1 = new DiagramSink();
+		diagramEndNode1.setJointjsId(IdGenerator.createId());
+		diagramEndNode1.setType(DiagramObjectType.SINK);
+		Node nodeSink1 = new Node(diagramEndNode1.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode1);
+
+		DiagramLink tableLink = new DiagramLink();
+		tableLink.setSource(nodeTable);
+		tableLink.setJointjsId(IdGenerator.createId());
+		tableLink.setType(DiagramObjectType.LINK);
+		tableLink.setTarget(nodeSink1);
+		diagram.addDiagramObject(tableLink);
+
+		DiagramExpression expressionNode = new DiagramExpression();
+		expressionNode.setExpression(expressionsMap.get("Expression1"));
+		expressionNode.setJointjsId(IdGenerator.createId());
+		expressionNode.setType(DiagramObjectType.CALCULATION);
+		Node nodeExpression = new Node(expressionNode.getJointjsId());
+		diagram.addDiagramObject(expressionNode);
+
+		DiagramLink answer2Link = new DiagramLink();
+		answer2Link.setSource(nodeFork);
+		answer2Link.setJointjsId(IdGenerator.createId());
+		answer2Link.setType(DiagramObjectType.LINK);
+		answer2Link.setTarget(nodeExpression);
+		diagram.addDiagramObject(answer2Link);
+
+		diagramsMap.putAll(createSimpleDiagram(rulesMap));
+		DiagramChild subDiagramNode = new DiagramChild();
+		subDiagramNode.setDiagram(diagramsMap.get("Diagram2"));
+		subDiagramNode.setJointjsId(IdGenerator.createId());
+		subDiagramNode.setType(DiagramObjectType.SINK);
+		Node diagramNode = new Node(subDiagramNode.getJointjsId());
+		diagram.addDiagramObject(subDiagramNode);
+
+		DiagramLink diagramLink = new DiagramLink();
+		diagramLink.setSource(nodeExpression);
+		diagramLink.setJointjsId(IdGenerator.createId());
+		diagramLink.setType(DiagramObjectType.LINK);
+		diagramLink.setTarget(diagramNode);
+		diagram.addDiagramObject(diagramLink);
+
+		DiagramSink diagramEndNode2 = new DiagramSink();
+		diagramEndNode2.setJointjsId(IdGenerator.createId());
+		diagramEndNode2.setType(DiagramObjectType.SINK);
+		Node nodeSink2 = new Node(diagramEndNode2.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode2);
+
+		DiagramLink expressionLink = new DiagramLink();
+		expressionLink.setSource(diagramNode);
+		expressionLink.setJointjsId(IdGenerator.createId());
+		expressionLink.setType(DiagramObjectType.LINK);
+		expressionLink.setTarget(nodeSink2);
+		diagram.addDiagramObject(expressionLink);
+
+		diagramsMap.put(diagram.getName(), diagram);
+		return diagramsMap;
+	}
+
+	/*-
+	 * Start --> Rule1 --> End
+	 */
+	public static Map<String, Diagram> createSimpleDiagram(Map<String, Rule> rulesMap) {
+		Map<String, Diagram> diagramsMap = new HashMap<>();
+		Diagram diagram = new Diagram("Diagram2");
+
+		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		Node nodeSource = new Node(startNode.getJointjsId());
+		diagram.addDiagramObject(startNode);
+
+		DiagramRule ruleNode = new DiagramRule();
+		ruleNode.setRule(rulesMap.get("Rule1"));
+		ruleNode.setJointjsId(IdGenerator.createId());
+		ruleNode.setType(DiagramObjectType.RULE);
+		Node nodeRule = new Node(ruleNode.getJointjsId());
+		diagram.addDiagramObject(ruleNode);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeRule);
+		diagram.addDiagramObject(startLink);
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode);
+
+		DiagramLink expressionLink = new DiagramLink();
+		expressionLink.setSource(nodeRule);
+		expressionLink.setJointjsId(IdGenerator.createId());
+		expressionLink.setType(DiagramObjectType.LINK);
+		expressionLink.setTarget(nodeSink);
+		diagram.addDiagramObject(expressionLink);
+
+		diagramsMap.put(diagram.getName(), diagram);
+		return diagramsMap;
 	}
 
 	private static String randomName(String prefix) {

@@ -135,7 +135,7 @@ public class GlobalVariablesTest extends KidsFormCreator {
 			Node nodeSource = new Node(diagramSource.getJointjsId());
 
 			DiagramExpression diagramExpression = new DiagramExpression();
-			diagramExpression.setFormExpression(expressionChain);
+			diagramExpression.setExpression(expressionChain);
 			diagramExpression.setJointjsId(IdGenerator.createId());
 			diagramExpression.setType(DiagramObjectType.CALCULATION);
 			Node nodeRule = new Node(diagramExpression.getJointjsId());

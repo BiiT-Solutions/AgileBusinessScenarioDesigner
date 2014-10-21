@@ -14,8 +14,8 @@ JsonSerializer<DiagramSink> {
 	@Override
 	public JsonElement serialize(DiagramSink element, Type type, JsonSerializationContext context) {
 
-		if(element.getFormExpression()!=null){
-			element.getBiitText().setText(element.getFormExpression().getName());
+		if(element.getExpression()!=null){
+			element.getBiitText().setText(element.getExpression().getName());
 		}else{
 			element.getBiitText().setText("End");
 		}

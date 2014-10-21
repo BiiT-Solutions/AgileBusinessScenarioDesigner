@@ -166,7 +166,7 @@ public class GenericsTest extends KidsFormCreator {
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
 		DiagramChild subDiagramExpressionNode = new DiagramChild();
-		subDiagramExpressionNode.setChildDiagram(createExpressionsSubdiagram());
+		subDiagramExpressionNode.setDiagram(createExpressionsSubdiagram());
 		subDiagramExpressionNode.setJointjsId(IdGenerator.createId());
 		subDiagramExpressionNode.setType(DiagramObjectType.DIAGRAM_CHILD);
 		Node nodeTable = new Node(subDiagramExpressionNode.getJointjsId());
@@ -202,7 +202,7 @@ public class GenericsTest extends KidsFormCreator {
 			Node nodeSource = new Node(diagramSource.getJointjsId());
 
 			DiagramExpression diagramExpression = new DiagramExpression();
-			diagramExpression.setFormExpression(expressionChain);
+			diagramExpression.setExpression(expressionChain);
 			diagramExpression.setJointjsId(IdGenerator.createId());
 			diagramExpression.setType(DiagramObjectType.CALCULATION);
 			Node nodeRule = new Node(diagramExpression.getJointjsId());

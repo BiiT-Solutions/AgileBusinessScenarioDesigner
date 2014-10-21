@@ -406,7 +406,7 @@ public class TestScenarioForm extends Panel {
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
 		DiagramChild subDiagramExpressionNode = new DiagramChild();
-		subDiagramExpressionNode.setChildDiagram(createRulesSubdiagram(rules));
+		subDiagramExpressionNode.setDiagram(createRulesSubdiagram(rules));
 		subDiagramExpressionNode.setJointjsId(IdGenerator.createId());
 		subDiagramExpressionNode.setType(DiagramObjectType.DIAGRAM_CHILD);
 		Node nodeTable = new Node(subDiagramExpressionNode.getJointjsId());

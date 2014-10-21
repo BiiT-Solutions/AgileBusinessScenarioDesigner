@@ -331,27 +331,27 @@ public class DroolsParserOO {
 			return null;
 		}
 
-		System.out.println("OO RULE CONDITIONS: " + rule.getConditionChain());
-		System.out.println("OO RULE ACTIONS: " + rule.getActionChain());
+		System.out.println("OO RULE CONDITIONS: " + rule.getConditions());
+		System.out.println("OO RULE ACTIONS: " + rule.getActions());
 
 		String result = "";
 		treeObjectDroolsname = new HashMap<TreeObject, String>();
 		result += "\t$droolsForm: DroolsForm()\n";
 
 		// Obtain conditions if exists.
-		if ((rule.getConditionChain() != null) && (rule.getConditionChain().getExpressions() != null)
-				&& (!rule.getConditionChain().getExpressions().isEmpty())) {
+		if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null)
+				&& (!rule.getConditions().getExpressions().isEmpty())) {
 
-			ITreeElement prattResult = calculatePrattParserResult(rule.getConditionChain());
+			ITreeElement prattResult = calculatePrattParserResult(rule.getConditions());
 			System.out.println("CONDITION PRATT RESULT: " + prattResult.getExpressionChain());
 			createDroolsVariables(prattResult);
 
-			result += parseConditions(rule.getConditionChain());
+			result += parseConditions(rule.getConditions());
 		}
-		if ((rule.getActionChain() != null) && (rule.getActionChain().getExpressions() != null)
-				&& (!rule.getActionChain().getExpressions().isEmpty())) {
+		if ((rule.getActions() != null) && (rule.getActions().getExpressions() != null)
+				&& (!rule.getActions().getExpressions().isEmpty())) {
 
-			ITreeElement prattResult = calculatePrattParserResult(rule.getActionChain());
+			ITreeElement prattResult = calculatePrattParserResult(rule.getActions());
 			System.out.println("ACTION PRATT RESULT: " + prattResult.getExpressionChain());
 			createDroolsVariables(prattResult);
 

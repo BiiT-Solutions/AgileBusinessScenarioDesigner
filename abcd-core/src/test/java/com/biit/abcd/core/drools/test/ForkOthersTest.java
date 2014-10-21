@@ -129,7 +129,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
-		secondEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(7.5)));
 		Node secondNodeSink = new Node(secondEndNode.getJointjsId());
@@ -137,7 +137,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
-		thirdEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(3.78)));
 		Node thirdNodeSink = new Node(thirdEndNode.getJointjsId());
@@ -145,7 +145,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink fourthEndNode = new DiagramSink();
 		fourthEndNode.setJointjsId(IdGenerator.createId());
 		fourthEndNode.setType(DiagramObjectType.SINK);
-		fourthEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		fourthEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(4.75)));
 		Node fourthNodeSink = new Node(fourthEndNode.getJointjsId());
@@ -201,7 +201,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
 		DiagramExpression diagramExpression = new DiagramExpression();
-		diagramExpression.setFormExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
+		diagramExpression.setExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
 				getForm(), formCustomVariableInCondition), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(6.5)));
 		diagramExpression.setJointjsId(IdGenerator.createId());
@@ -209,7 +209,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		Node nodeExpression = new Node(diagramExpression.getJointjsId());
 
 		DiagramExpression diagramExpression2 = new DiagramExpression();
-		diagramExpression2.setFormExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
+		diagramExpression2.setExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
 				getTreeObject("Lifestyle"), categoryCustomVariableInCondition), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueNumber(2.5)));
 		diagramExpression2.setJointjsId(IdGenerator.createId());
@@ -225,7 +225,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink firstEndNode = new DiagramSink();
 		firstEndNode.setJointjsId(IdGenerator.createId());
 		firstEndNode.setType(DiagramObjectType.SINK);
-		firstEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		firstEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(7.5)));
 		Node secondNodeSink = new Node(firstEndNode.getJointjsId());
@@ -233,7 +233,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
-		secondEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(3.78)));
 		Node thirdNodeSink = new Node(secondEndNode.getJointjsId());
@@ -241,7 +241,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
-		thirdEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(4.75)));
 		Node fourthNodeSink = new Node(thirdEndNode.getJointjsId());
@@ -328,7 +328,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink firstEndNode = new DiagramSink();
 		firstEndNode.setJointjsId(IdGenerator.createId());
 		firstEndNode.setType(DiagramObjectType.SINK);
-		firstEndNode.setFormExpression(new ExpressionChain(END3, new ExpressionValueCustomVariable(getForm(),
+		firstEndNode.setExpression(new ExpressionChain(END3, new ExpressionValueCustomVariable(getForm(),
 				end3CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(2.1)));
 		Node firstNodeSink = new Node(firstEndNode.getJointjsId());
@@ -342,7 +342,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
-		secondEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(7.5)));
 		Node secondNodeSink = new Node(secondEndNode.getJointjsId());
@@ -350,7 +350,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
-		thirdEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(3.78)));
 		Node thirdNodeSink = new Node(thirdEndNode.getJointjsId());
@@ -358,7 +358,7 @@ public class ForkOthersTest extends KidsFormCreator {
 		DiagramSink fourthEndNode = new DiagramSink();
 		fourthEndNode.setJointjsId(IdGenerator.createId());
 		fourthEndNode.setType(DiagramObjectType.SINK);
-		fourthEndNode.setFormExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+		fourthEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(4.75)));
 		Node fourthNodeSink = new Node(fourthEndNode.getJointjsId());

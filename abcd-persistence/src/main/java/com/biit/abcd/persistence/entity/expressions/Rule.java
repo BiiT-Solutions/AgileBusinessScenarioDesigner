@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,26 +26,26 @@ public class Rule extends StorableObject implements INameAttribute {
 	private String name;
 
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	private ExpressionChain condition;
+	private ExpressionChain conditions;
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	private ExpressionChain actions;
 
 	public Rule() {
 		super();
-		setCondition(new ExpressionChain());
+		setConditions(new ExpressionChain());
 		setActions(new ExpressionChain());
 	}
 
 	public Rule(String name) {
 		super();
-		setCondition(new ExpressionChain());
+		setConditions(new ExpressionChain());
 		setActions(new ExpressionChain());
 		setName(name);
 	}
 
 	public Rule(String name, ExpressionChain conditions, ExpressionChain actions) {
 		super();
-		setCondition(conditions);
+		setConditions(conditions);
 		setActions(actions);
 		setName(name);
 	}
@@ -54,45 +53,37 @@ public class Rule extends StorableObject implements INameAttribute {
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		if (condition != null) {
-			condition.resetIds();
+		if (conditions != null) {
+			conditions.resetIds();
 		}
 		if (actions != null) {
 			actions.resetIds();
 		}
 	}
 
-	// public ExpressionChain getCondition() {
-	// return condition;
-	// }
-
 	/**
 	 * Add more conditions to the existing one (with 'AND' operator)
 	 */
-	public void addConditions(ExpressionChain extraConditions) {
+	public void addExtraConditions(ExpressionChain extraConditions) {
 		if (extraConditions != null) {
-			if (condition.getExpressions().isEmpty()) {
-				condition.getExpressions().addAll(extraConditions.getExpressions());
+			if (conditions.getExpressions().isEmpty()) {
+				conditions.getExpressions().addAll(extraConditions.getExpressions());
 			} else {
-				condition.getExpressions().add(new ExpressionOperatorLogic(AvailableOperator.AND));
-				condition.getExpressions().addAll(extraConditions.getExpressions());
+				conditions.getExpressions().add(new ExpressionOperatorLogic(AvailableOperator.AND));
+				conditions.getExpressions().addAll(extraConditions.getExpressions());
 			}
 		}
 	}
 
-	public List<Expression> getConditions() {
-		return condition.getExpressions();
+	public ExpressionChain getConditions() {
+		return conditions;
 	}
 
-	public ExpressionChain getConditionChain() {
-		return condition;
+	public void setConditions(ExpressionChain condition) {
+		this.conditions = condition;
 	}
 
-	public void setCondition(ExpressionChain condition) {
-		this.condition = condition;
-	}
-
-	public ExpressionChain getActionChain() {
+	public ExpressionChain getActions() {
 		return actions;
 	}
 
@@ -112,8 +103,8 @@ public class Rule extends StorableObject implements INameAttribute {
 
 	public boolean isAssignedTo(TreeObject treeObject) {
 		Set<TreeObject> references = new HashSet<>();
-		references.addAll(getConditionChain().getReferencedTreeObjects());
-		references.addAll(getActionChain().getReferencedTreeObjects());
+		references.addAll(getConditions().getReferencedTreeObjects());
+		references.addAll(getActions().getReferencedTreeObjects());
 		if (!references.isEmpty()) {
 			TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
 			if (commonTreeObject.equals(treeObject)) {
@@ -126,8 +117,8 @@ public class Rule extends StorableObject implements INameAttribute {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.add(condition);
-		innerStorableObjects.addAll(condition.getAllInnerStorableObjects());
+		innerStorableObjects.add(conditions);
+		innerStorableObjects.addAll(conditions.getAllInnerStorableObjects());
 		innerStorableObjects.add(actions);
 		innerStorableObjects.addAll(actions.getAllInnerStorableObjects());
 		return innerStorableObjects;
@@ -151,10 +142,10 @@ public class Rule extends StorableObject implements INameAttribute {
 			Rule rule = (Rule) object;
 			this.setName(rule.getName());
 			ExpressionChain condition = new ExpressionChain();
-			condition.copyData(rule.getConditionChain());
-			this.setCondition(condition);
+			condition.copyData(rule.getConditions());
+			this.setConditions(condition);
 			ExpressionChain action = new ExpressionChain();
-			action.copyData(rule.getActionChain());
+			action.copyData(rule.getActions());
 			this.setActions(action);
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Rule.");

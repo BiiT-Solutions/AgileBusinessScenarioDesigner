@@ -18,7 +18,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class DiagramExpression extends DiagramElement {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private ExpressionChain formExpression;
+	private ExpressionChain expression;
 
 	public DiagramExpression() {
 		super();
@@ -27,19 +27,19 @@ public class DiagramExpression extends DiagramElement {
 		setBiitText(biitText);
 	}
 
-	public ExpressionChain getFormExpression() {
-		return formExpression;
+	public ExpressionChain getExpression() {
+		return expression;
 	}
 
-	public void setFormExpression(ExpressionChain formExpression) {
-		this.formExpression = formExpression;
+	public void setExpression(ExpressionChain expression) {
+		this.expression = expression;
 	}
 
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		if (formExpression != null) {
-			formExpression.resetIds();
+		if (expression != null) {
+			expression.resetIds();
 		}
 	}
 
@@ -49,9 +49,9 @@ public class DiagramExpression extends DiagramElement {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		if (formExpression != null) {
-			innerStorableObjects.add(formExpression);
-			innerStorableObjects.addAll(formExpression.getAllInnerStorableObjects());
+		if (expression != null) {
+			innerStorableObjects.add(expression);
+			innerStorableObjects.addAll(expression.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
@@ -62,10 +62,10 @@ public class DiagramExpression extends DiagramElement {
 			super.copyData(object);
 			DiagramExpression diagramCalculation = (DiagramExpression) object;
 
-			if (diagramCalculation.getFormExpression() != null) {
+			if (diagramCalculation.getExpression() != null) {
 				ExpressionChain formExpression = new ExpressionChain();
-				formExpression.copyData(diagramCalculation.getFormExpression());
-				setFormExpression(formExpression);
+				formExpression.copyData(diagramCalculation.getExpression());
+				setExpression(formExpression);
 			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object

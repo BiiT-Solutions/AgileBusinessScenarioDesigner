@@ -37,8 +37,8 @@ public class DiagramPropertiesSink extends SecuredDiagramElementProperties<Diagr
 		fieldWithSearchButton.setNullCaption(ServerTranslate
 				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_SINK_EXPRESSION_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
-		if (instance.getFormExpression() != null) {
-			fieldWithSearchButton.setValue(instance.getFormExpression(), instance.getFormExpression().getName());
+		if (instance.getExpression() != null) {
+			fieldWithSearchButton.setValue(instance.getExpression(), instance.getExpression().getName());
 		}
 		fieldWithSearchButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = 8612691233380693806L;
@@ -53,11 +53,11 @@ public class DiagramPropertiesSink extends SecuredDiagramElementProperties<Diagr
 						if (formExpressionWindow.getSelectedExpression() != null) {
 							fieldWithSearchButton.setValue(formExpressionWindow.getSelectedExpression(),
 									formExpressionWindow.getSelectedExpression().getName());
-							instance.setFormExpression(formExpressionWindow.getSelectedExpression());
+							instance.setExpression(formExpressionWindow.getSelectedExpression());
 							firePropertyUpdateListener(instance);
 							AbcdLogger.info(this.getClass().getName(), "User '"
 									+ UserSessionHandler.getUser().getEmailAddress() + "' added expression "
-									+ instance.getFormExpression().getRepresentation() + " to Sink node with ID:"
+									+ instance.getExpression().getRepresentation() + " to Sink node with ID:"
 									+ instance.getId() + "'.");
 							window.close();
 						} else {
@@ -65,8 +65,8 @@ public class DiagramPropertiesSink extends SecuredDiagramElementProperties<Diagr
 						}
 					}
 				});
-				if (instance != null && instance.getFormExpression() != null) {
-					formExpressionWindow.setSelectedExpression(instance.getFormExpression());
+				if (instance != null && instance.getExpression() != null) {
+					formExpressionWindow.setSelectedExpression(instance.getExpression());
 				}
 				formExpressionWindow.showCentered();
 			}
@@ -76,7 +76,7 @@ public class DiagramPropertiesSink extends SecuredDiagramElementProperties<Diagr
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				instance.setFormExpression(null);
+				instance.setExpression(null);
 				firePropertyUpdateListener(instance);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' removed expression from Sink node with ID:" + instance.getId() + "'.");

@@ -308,13 +308,13 @@ public class DroolsParser {
 		result += "\t$droolsForm: DroolsForm()\n";
 
 		// Obtain conditions if exists.
-		if ((rule.getConditionChain() != null) && (rule.getConditionChain().getExpressions() != null)
-				&& (!rule.getConditionChain().getExpressions().isEmpty())) {
-			result += parseConditions(rule.getConditionChain());
+		if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null)
+				&& (!rule.getConditions().getExpressions().isEmpty())) {
+			result += parseConditions(rule.getConditions());
 		}
-		if ((rule.getActionChain() != null) && (rule.getActionChain().getExpressions() != null)
-				&& (!rule.getActionChain().getExpressions().isEmpty())) {
-			String actionString = parseActions(rule.getActionChain());
+		if ((rule.getActions() != null) && (rule.getActions().getExpressions() != null)
+				&& (!rule.getActions().getExpressions().isEmpty())) {
+			String actionString = parseActions(rule.getActions());
 			if (actionString != null) {
 				result += actionString;
 			} else {

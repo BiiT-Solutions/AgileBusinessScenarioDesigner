@@ -68,7 +68,7 @@ public class ExpressionToDroolsRule {
 		DroolsRule droolsRule = new DroolsRule();
 		droolsRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
 		if (extraConditions != null) {
-			droolsRule.addConditions((ExpressionChain) extraConditions.generateCopy());
+			droolsRule.addExtraConditions((ExpressionChain) extraConditions.generateCopy());
 		}
 		// If the expression chain contains generic variables, we have to unwrap
 		// them
@@ -115,7 +115,7 @@ public class ExpressionToDroolsRule {
 		// Creation of the rules that represent the if
 		DroolsRule ifThenRule = new DroolsRule();
 		ifThenRule.setName(RulesUtils.getRuleName(expressionChain.getName(), extraConditions));
-		ifThenRule.setCondition(ifCondition);
+		ifThenRule.setConditions(ifCondition);
 		ifThenRule.setActions(ifActionThen);
 		droolsRules.add(ifThenRule);
 
@@ -127,7 +127,7 @@ public class ExpressionToDroolsRule {
 		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
 		negatedCondition.addExpressions(ifCondition.getExpressions());
 		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		ifElseRule.setCondition(negatedCondition);
+		ifElseRule.setConditions(negatedCondition);
 		ifElseRule.setActions(ifActionElse);
 		droolsRules.add(ifElseRule);
 

@@ -11,6 +11,7 @@ import com.biit.abcd.core.utils.exceptions.FormNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.GlobalVariableNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.GroupNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.QuestionNotEqualsException;
+import com.biit.abcd.core.utils.exceptions.RuleNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.StorableObjectNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.TreeObjectNotEqualsException;
@@ -44,7 +45,8 @@ public class NewVersionTest {
 			InvalidAnswerFormatException, NotValidStorableObjectException, TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, FormNotEqualsException, GroupNotEqualsException,
 			QuestionNotEqualsException, CustomVariableNotEqualsException, ExpressionNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException, TableRuleNotEqualsException {
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException, TableRuleNotEqualsException,
+			RuleNotEqualsException {
 		newVersionForm = form.createNewVersion(null);
 		Assert.assertNotNull(newVersionForm);
 		Assert.assertEquals((int) form.getVersion() + 1, (int) newVersionForm.getVersion());

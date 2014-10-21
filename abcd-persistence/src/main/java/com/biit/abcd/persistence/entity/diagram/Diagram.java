@@ -221,8 +221,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 		for (DiagramObject object : diagramElements) {
 			if (object instanceof DiagramChild) {
 				DiagramChild diagramChild = (DiagramChild) object;
-				if (diagramChild.getChildDiagram() != null) {
-					childDiagrams.add(diagramChild.getChildDiagram());
+				if (diagramChild.getDiagram() != null) {
+					childDiagrams.add(diagramChild.getDiagram());
 				}
 			}
 		}
