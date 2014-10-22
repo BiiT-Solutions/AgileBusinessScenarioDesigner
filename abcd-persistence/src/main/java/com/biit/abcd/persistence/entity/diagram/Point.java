@@ -19,6 +19,16 @@ public class Point extends StorableObject {
 	@Expose
 	private int y;
 
+	public Point() {
+		super();
+	}
+
+	public Point(int x, int y) {
+		super();
+		setX(x);
+		setY(y);
+	}
+
 	public int getY() {
 		return y;
 	}

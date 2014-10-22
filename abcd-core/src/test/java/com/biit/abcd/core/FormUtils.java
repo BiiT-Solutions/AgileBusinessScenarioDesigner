@@ -30,6 +30,8 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.diagram.Point;
+import com.biit.abcd.persistence.entity.diagram.Size;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
@@ -217,10 +219,10 @@ public class FormUtils {
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		expressionsMap.put("Expression1", expressionChain);
 
-		// Category2.bonus=InsertDate(Y)
+		// Category1.bonus=InsertDate(Y)
 		ExpressionChain expressionChain2 = new ExpressionChain();
 		expressionChain2.setName("Expression2");
-		ExpressionValueCustomVariable customVariable2 = new ExpressionValueCustomVariable(elementsMap.get("Category2"),
+		ExpressionValueCustomVariable customVariable2 = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
 				variableMap.get("bonus"));
 		expressionChain2.addExpression(customVariable2);
 		expressionChain2.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
@@ -344,6 +346,8 @@ public class FormUtils {
 		DiagramSource startNode = new DiagramSource();
 		startNode.setJointjsId(IdGenerator.createId());
 		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1,1));
 		Node nodeSource = new Node(startNode.getJointjsId());
 		diagram.addDiagramObject(startNode);
 
@@ -352,6 +356,8 @@ public class FormUtils {
 				elementsMap.get("ChooseOne"));
 		forkNode.setReference(questionReference);
 		forkNode.setJointjsId(IdGenerator.createId());
+		forkNode.setSize(new Size(2, 2));
+		forkNode.setPosition(new Point(1,1));
 		forkNode.setType(DiagramObjectType.FORK);
 		Node nodeFork = new Node(forkNode.getJointjsId());
 		diagram.addDiagramObject(forkNode);
@@ -366,9 +372,11 @@ public class FormUtils {
 		DiagramTable table1Node = new DiagramTable();
 		table1Node.setTable(tablesMap.get("table1"));
 		table1Node.setJointjsId(IdGenerator.createId());
+		table1Node.setSize(new Size(3, 3));
+		table1Node.setPosition(new Point(1,1));
 		table1Node.setType(DiagramObjectType.TABLE);
 		Node nodeTable = new Node(table1Node.getJointjsId());
-		diagram.addDiagramObject(forkNode);
+		diagram.addDiagramObject(table1Node);
 
 		DiagramLink answer1Link = new DiagramLink();
 		answer1Link.setSource(nodeFork);
@@ -380,6 +388,8 @@ public class FormUtils {
 		DiagramSink diagramEndNode1 = new DiagramSink();
 		diagramEndNode1.setJointjsId(IdGenerator.createId());
 		diagramEndNode1.setType(DiagramObjectType.SINK);
+		diagramEndNode1.setSize(new Size(3, 3));
+		diagramEndNode1.setPosition(new Point(1,1));
 		Node nodeSink1 = new Node(diagramEndNode1.getJointjsId());
 		diagram.addDiagramObject(diagramEndNode1);
 
@@ -393,6 +403,8 @@ public class FormUtils {
 		DiagramExpression expressionNode = new DiagramExpression();
 		expressionNode.setExpression(expressionsMap.get("Expression1"));
 		expressionNode.setJointjsId(IdGenerator.createId());
+		expressionNode.setSize(new Size(4, 4));
+		expressionNode.setPosition(new Point(1,1));
 		expressionNode.setType(DiagramObjectType.CALCULATION);
 		Node nodeExpression = new Node(expressionNode.getJointjsId());
 		diagram.addDiagramObject(expressionNode);
@@ -408,6 +420,8 @@ public class FormUtils {
 		DiagramChild subDiagramNode = new DiagramChild();
 		subDiagramNode.setDiagram(diagramsMap.get("Diagram2"));
 		subDiagramNode.setJointjsId(IdGenerator.createId());
+		subDiagramNode.setSize(new Size(5, 5));
+		subDiagramNode.setPosition(new Point(1,1));
 		subDiagramNode.setType(DiagramObjectType.SINK);
 		Node diagramNode = new Node(subDiagramNode.getJointjsId());
 		diagram.addDiagramObject(subDiagramNode);
@@ -422,6 +436,8 @@ public class FormUtils {
 		DiagramSink diagramEndNode2 = new DiagramSink();
 		diagramEndNode2.setJointjsId(IdGenerator.createId());
 		diagramEndNode2.setType(DiagramObjectType.SINK);
+		diagramEndNode2.setSize(new Size(6, 6));
+		diagramEndNode2.setPosition(new Point(1,1));
 		Node nodeSink2 = new Node(diagramEndNode2.getJointjsId());
 		diagram.addDiagramObject(diagramEndNode2);
 
@@ -446,12 +462,16 @@ public class FormUtils {
 		DiagramSource startNode = new DiagramSource();
 		startNode.setJointjsId(IdGenerator.createId());
 		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1,1));
 		Node nodeSource = new Node(startNode.getJointjsId());
 		diagram.addDiagramObject(startNode);
 
 		DiagramRule ruleNode = new DiagramRule();
 		ruleNode.setRule(rulesMap.get("Rule1"));
 		ruleNode.setJointjsId(IdGenerator.createId());
+		ruleNode.setSize(new Size(2, 2));
+		ruleNode.setPosition(new Point(1,1));
 		ruleNode.setType(DiagramObjectType.RULE);
 		Node nodeRule = new Node(ruleNode.getJointjsId());
 		diagram.addDiagramObject(ruleNode);
@@ -465,6 +485,8 @@ public class FormUtils {
 
 		DiagramSink diagramEndNode = new DiagramSink();
 		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setSize(new Size(3, 3));
+		diagramEndNode.setPosition(new Point(1,1));
 		diagramEndNode.setType(DiagramObjectType.SINK);
 		Node nodeSink = new Node(diagramEndNode.getJointjsId());
 		diagram.addDiagramObject(diagramEndNode);

@@ -37,6 +37,7 @@ public class DiagramFork extends DiagramElement {
 		super.resetIds();
 		if (references != null) {
 			for (ExpressionValueTreeObjectReference expressionValueTreeObjectReference : references) {
+				System.out.println(this + " reset " + expressionValueTreeObjectReference);
 				expressionValueTreeObjectReference.resetIds();
 			}
 		}
@@ -93,19 +94,17 @@ public class DiagramFork extends DiagramElement {
 		if (object instanceof DiagramFork) {
 			super.copyData(object);
 			DiagramFork diagramFork = (DiagramFork) object;
-			if (references != null) {
-				references.clear();
-				for (ExpressionValueTreeObjectReference child : diagramFork.references) {
-					ExpressionValueTreeObjectReference newReference;
-					try {
-						newReference = child.getClass().newInstance();
-						newReference.copyData(child);
-						references.add(newReference);
-					} catch (InstantiationException | IllegalAccessException e) {
-						throw new NotValidStorableObjectException("Object '" + object
-								+ "' is not an instance of DiagramFork.");
-					}
-				}
+			if (references == null) {
+				references = new ArrayList<>();
+			}
+			references.clear();
+			ExpressionValueTreeObjectReference newReference;
+			try {
+				newReference = diagramFork.getReference().getClass().newInstance();
+				newReference.copyData(diagramFork.getReference());
+				references.add(newReference);
+			} catch (InstantiationException | IllegalAccessException e) {
+				throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramFork.");
 			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramFork.");

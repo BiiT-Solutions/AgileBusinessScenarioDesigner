@@ -93,14 +93,6 @@ public class Form extends BaseForm {
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
-//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@LazyCollection(LazyCollectionOption.FALSE)
-//	// Cannot be JOIN
-//	@Fetch(FetchMode.SUBSELECT)
-//	@OrderBy(value = "name ASC")
-//	@Cache(region = "testScenarios", usage = CacheConcurrencyStrategy.READ_WRITE)
-//	private Set<TestScenario> testScenarios;
-
 	@Transient
 	private transient boolean isLastVersion = true;
 
@@ -111,7 +103,6 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
-//		testScenarios = new HashSet<>();
 	}
 
 	public Form(String name) throws FieldTooLongException, CharacterNotAllowedException {
@@ -121,7 +112,6 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
-//		testScenarios = new HashSet<>();
 	}
 
 	@Override
@@ -142,9 +132,6 @@ public class Form extends BaseForm {
 		for (Rule rule : getRules()) {
 			rule.resetIds();
 		}
-//		for (TestScenario testScenario : getTestScenarios()) {
-//			testScenario.resetIds();
-//		}
 	}
 
 	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
@@ -239,16 +226,6 @@ public class Form extends BaseForm {
 		for (Rule children : formRulesChildren) {
 			formRules.put(children.getComparationId(), children);
 		}
-
-//		// Copy TestScenarios
-//		getTestScenarios().clear();
-//		for (TestScenario testScenario : form.getTestScenarios()) {
-//			TestScenario copiedTestScenario = new TestScenario();
-//			copiedTestScenario.copyData(testScenario);
-//			updateTreeObjectReferences((Set<StorableObject>) new HashSet<StorableObject>(Arrays.asList(testScenario)),
-//					formElements);
-//			getTestScenarios().add(copiedTestScenario);
-//		}
 
 		// Copy Diagrams
 		getDiagrams().clear();
@@ -388,17 +365,6 @@ public class Form extends BaseForm {
 							expressionValueTreeObjectReference.getReference());
 				}
 			} 
-			// else if (child instanceof TestScenario) {
-			// TestScenario testScenario = ((TestScenario) child);
-			// Map<TreeObject, TestAnswerList> questionTestAnswerRelationship =
-			// new HashMap<>();
-			// for (TreeObject question : testScenario.getData().keySet()) {
-			// questionTestAnswerRelationship.put(formElements.get(question.getComparationId()),
-			// testScenario
-			// .getData().get(question));
-			// }
-			// testScenario.setData(questionTestAnswerRelationship);
-			// }
 		}
 	}
 
@@ -586,23 +552,6 @@ public class Form extends BaseForm {
 		return null;
 	}
 
-//	public Set<TestScenario> getTestScenarios() {
-//		return testScenarios;
-//	}
-//
-//	public void setTestScenarios(Set<TestScenario> testScenarios) {
-//		this.tableRules.clear();
-//		this.testScenarios.addAll(testScenarios);
-//	}
-//
-//	public void addTestScenario(TestScenario testScenario) {
-//		testScenarios.add(testScenario);
-//	}
-//
-//	public void removeTestScenario(TestScenario testScenario) {
-//		testScenarios.remove(testScenario);
-//	}
-
 	public boolean isLastVersion() {
 		return isLastVersion;
 	}
@@ -640,11 +589,6 @@ public class Form extends BaseForm {
 			innerStorableObjects.add(rule);
 			innerStorableObjects.addAll(rule.getAllInnerStorableObjects());
 		}
-
-//		for (TestScenario testScenario : getTestScenarios()) {
-//			innerStorableObjects.add(testScenario);
-//			innerStorableObjects.addAll(testScenario.getAllInnerStorableObjects());
-//		}
 
 		return innerStorableObjects;
 	}

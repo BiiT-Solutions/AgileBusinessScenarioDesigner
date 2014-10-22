@@ -76,6 +76,9 @@ public abstract class DiagramElement extends DiagramObject {
 		if (position != null) {
 			position.resetIds();
 		}
+		if (biitText != null) {
+			biitText.resetIds();
+		}
 	}
 
 	public Point getPosition() {
@@ -178,11 +181,6 @@ public abstract class DiagramElement extends DiagramObject {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "Element: " + getJointjsId();
-	}
-
 	public List<DiagramLink> getOutgoingLinks() {
 		return getParent().getOutgoingLinks(this);
 	}
@@ -238,7 +236,8 @@ public abstract class DiagramElement extends DiagramObject {
 			DiagramElement diagramSource = (DiagramElement) object;
 			tooltip = diagramSource.getTooltip();
 			angle = diagramSource.getAngle();
-			biitText = diagramSource.getBiitText();
+			biitText = new DiagramBiitText();
+			biitText.copyData(diagramSource.getBiitText());
 
 			Size size = new Size();
 			size.copyData(diagramSource.getSize());

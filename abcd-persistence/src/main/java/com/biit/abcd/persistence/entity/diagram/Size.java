@@ -18,6 +18,16 @@ public class Size extends StorableObject {
 	private int width;
 	@Expose
 	private int height;
+	
+	public Size(){
+		super();
+	}
+	
+	public Size(int width, int heigh){
+		super();
+		setWidth(width);
+		setHeight(heigh);
+	}
 
 	public int getWidth() {
 		return width;

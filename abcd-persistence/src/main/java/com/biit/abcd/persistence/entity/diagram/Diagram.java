@@ -51,23 +51,23 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
 	@BatchSize(size = 10)
-	private List<DiagramObject> diagramElements;
+	private List<DiagramObject> diagramObjects;
 
 	public Diagram() {
 		super();
-		diagramElements = new ArrayList<>();
+		diagramObjects = new ArrayList<>();
 	}
 
 	public Diagram(String name) {
 		super();
 		this.name = name;
-		diagramElements = new ArrayList<>();
+		diagramObjects = new ArrayList<>();
 	}
 
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		for (DiagramObject diagramObject : diagramElements) {
+		for (DiagramObject diagramObject : diagramObjects) {
 			diagramObject.resetIds();
 		}
 	}
@@ -85,8 +85,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	public void updateFromJson(String jsonString) {
 		Diagram tempDiagram = Diagram.fromJson(jsonString);
-		diagramElements.clear();
-		diagramElements.addAll(tempDiagram.getDiagramObjects());
+		diagramObjects.clear();
+		diagramObjects.addAll(tempDiagram.getDiagramObjects());
 	}
 
 	public String toJson() {
@@ -115,7 +115,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 * @return
 	 */
 	public List<DiagramObject> getDiagramObjects() {
-		return Collections.unmodifiableList(diagramElements);
+		return Collections.unmodifiableList(diagramObjects);
 	}
 
 	/**
@@ -124,11 +124,11 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 * @return
 	 */
 	public List<DiagramObject> getDiagramObjectForInitializeSet() {
-		return diagramElements;
+		return diagramObjects;
 	}
 
 	public void removeDiagramObject(DiagramObject object) {
-		diagramElements.remove(object);
+		diagramObjects.remove(object);
 		// Some orphan removal are not working correctly. Force it!
 		if (object instanceof DiagramFork) {
 			((DiagramFork) object).setReference(null);
@@ -139,13 +139,13 @@ public class Diagram extends StorableObject implements INameAttribute {
 	}
 
 	public void setDiagramObjects(List<DiagramObject> objects) {
-		diagramElements.clear();
+		diagramObjects.clear();
 		addDiagramObjects(objects);
 	}
 
 	public void addDiagramObjects(List<DiagramObject> objects) {
 		if (objects != null) {
-			diagramElements.addAll(objects);
+			diagramObjects.addAll(objects);
 			for (DiagramObject object : objects) {
 				object.setParent(this);
 			}
@@ -154,7 +154,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	public void addDiagramObject(DiagramObject object) {
 		if (object != null) {
-			diagramElements.add(object);
+			diagramObjects.add(object);
 			object.setParent(this);
 		}
 	}
@@ -170,7 +170,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	}
 
 	public DiagramObject findDiagramObjectByJointJsId(String jointJsId) {
-		for (DiagramObject element : diagramElements) {
+		for (DiagramObject element : diagramObjects) {
 			if (element.getJointjsId().equals(jointJsId)) {
 				return element;
 			}
@@ -186,7 +186,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 */
 	public List<DiagramLink> getOutgoingLinks(DiagramElement source) {
 		List<DiagramLink> links = new ArrayList<>();
-		for (DiagramObject element : diagramElements) {
+		for (DiagramObject element : diagramObjects) {
 			if (element instanceof DiagramLink) {
 				DiagramLink link = (DiagramLink) element;
 				if (link.getSource().getJointjsId().equals(source.getJointjsId())) {
@@ -205,7 +205,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 */
 	public List<DiagramLink> getIncomingLinks(DiagramElement source) {
 		List<DiagramLink> links = new ArrayList<>();
-		for (DiagramObject element : diagramElements) {
+		for (DiagramObject element : diagramObjects) {
 			if (element instanceof DiagramLink) {
 				DiagramLink link = (DiagramLink) element;
 				if (link.getTarget().getJointjsId().equals(source.getJointjsId())) {
@@ -218,7 +218,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	public List<Diagram> getChildDiagrams() {
 		List<Diagram> childDiagrams = new ArrayList<Diagram>();
-		for (DiagramObject object : diagramElements) {
+		for (DiagramObject object : diagramObjects) {
 			if (object instanceof DiagramChild) {
 				DiagramChild diagramChild = (DiagramChild) object;
 				if (diagramChild.getDiagram() != null) {
@@ -246,7 +246,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 			Diagram diagram = (Diagram) object;
 			name = diagram.getName();
 
-			diagramElements.clear();
+			diagramObjects.clear();
 			for (DiagramObject child : diagram.getDiagramObjects()) {
 				try {
 					DiagramObject diagramElement = child.getClass().newInstance();

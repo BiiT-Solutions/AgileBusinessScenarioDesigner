@@ -47,7 +47,7 @@
         biitText_ID bigint,
         position_ID bigint,
         size_ID bigint,
-        formExpression_ID bigint,
+        expression_ID bigint,
         primary key (ID)
     );
 
@@ -68,7 +68,7 @@
         biitText_ID bigint,
         position_ID bigint,
         size_ID bigint,
-        childDiagram_ID bigint,
+        diagram_ID bigint,
         primary key (ID)
     );
 
@@ -203,7 +203,7 @@
         biitText_ID bigint,
         position_ID bigint,
         size_ID bigint,
-        formExpression_ID bigint,
+        expression_ID bigint,
         primary key (ID)
     );
 
@@ -262,7 +262,7 @@
 
     create table elements_of_diagram (
         diagram_ID bigint not null,
-        diagramElements_ID bigint not null
+        diagramObjects_ID bigint not null
     );
 
     create table expression_function (
@@ -558,7 +558,7 @@
         updatedBy DOUBLE,
         name varchar(255),
         actions_ID bigint,
-        condition_ID bigint,
+        conditions_ID bigint,
         primary key (ID)
     );
 
@@ -914,7 +914,7 @@
         add constraint UK_8f7iwv857341khhqhi12jharn  unique (comparationId);
 
     alter table elements_of_diagram 
-        add constraint UK_a91dlb8ggcm3dkxl70tcjspe  unique (diagramElements_ID);
+        add constraint UK_40p43sjr90wg4lyo7gwcbybok  unique (diagramObjects_ID);
 
     alter table expression_function 
         add constraint UK_7hl0l4oq4hokig8i3g30hv3s4  unique (ID);
@@ -1204,8 +1204,8 @@
         references test_answer_multi_checkbox (ID);
 
     alter table diagram_calculation 
-        add constraint FK_hsl3um574sjl43jv8ne0qyq1 
-        foreign key (formExpression_ID) 
+        add constraint FK_psofb7hd6w4ofxlvoas1fae45 
+        foreign key (expression_ID) 
         references expressions_chain (ID);
 
     alter table diagram_calculation 
@@ -1229,8 +1229,8 @@
         references diagram (ID);
 
     alter table diagram_child 
-        add constraint FK_6vxec3l99gphfdbj8b4u9gcas 
-        foreign key (childDiagram_ID) 
+        add constraint FK_6ox0s0pktxy9rvcdmdcju248e 
+        foreign key (diagram_ID) 
         references diagram (ID);
 
     alter table diagram_child 
@@ -1344,8 +1344,8 @@
         references diagram (ID);
 
     alter table diagram_sink 
-        add constraint FK_itbnin1nehkac81mo4qx0msvy 
-        foreign key (formExpression_ID) 
+        add constraint FK_mq3iht3l8ij5iuild1l44ejeu 
+        foreign key (expression_ID) 
         references expressions_chain (ID);
 
     alter table diagram_sink 
@@ -1454,8 +1454,8 @@
         references expressions_chain (ID);
 
     alter table rule 
-        add constraint FK_9617cunyhxob1svrhrvs3xc1u 
-        foreign key (condition_ID) 
+        add constraint FK_d3x0ml61bkukmrngffyh2coko 
+        foreign key (conditions_ID) 
         references expressions_chain (ID);
 
     alter table rule_decision_table_row 

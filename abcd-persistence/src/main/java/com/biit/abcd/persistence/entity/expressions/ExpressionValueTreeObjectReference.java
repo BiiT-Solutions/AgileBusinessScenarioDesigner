@@ -66,7 +66,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 
 	@Override
 	protected String getExpression() {
-		return "" + reference;
+		return "" + getReference();
 	}
 
 	@Override
@@ -98,8 +98,9 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 			super.copyData(object);
 			ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) object;
 			try {
-				this.setUnit(expressionValueTreeObjectReference.getUnit());
-				this.setValue(expressionValueTreeObjectReference.getValue());
+				setUnit(expressionValueTreeObjectReference.getUnit());
+				// Later the reference must be updated with current TreeObject
+				setValue(expressionValueTreeObjectReference.getValue());
 			} catch (NotValidExpressionValue e) {
 				throw new NotValidStorableObjectException("Object '" + object
 						+ "' is not a valid instance of ExpressionValueTreeObjectReference.");

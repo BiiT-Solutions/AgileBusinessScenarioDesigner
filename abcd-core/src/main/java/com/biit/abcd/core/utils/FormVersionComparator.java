@@ -8,13 +8,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.core.utils.exceptions.BiitTextNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.CustomVariableNotEqualsException;
+import com.biit.abcd.core.utils.exceptions.DiagramNotEqualsException;
+import com.biit.abcd.core.utils.exceptions.DiagramObjectNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.ExpressionNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.FormNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.GlobalVariableNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.GroupNotEqualsException;
+import com.biit.abcd.core.utils.exceptions.NodeNotEqualsException;
+import com.biit.abcd.core.utils.exceptions.PointNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.QuestionNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.RuleNotEqualsException;
+import com.biit.abcd.core.utils.exceptions.SizeNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.StorableObjectNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.TreeObjectNotEqualsException;
@@ -23,6 +29,22 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramBiitText;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.DiagramRepeat;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.diagram.Point;
+import com.biit.abcd.persistence.entity.diagram.Size;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -47,6 +69,11 @@ public class FormVersionComparator {
 		// throw new StorableObjectNotEqualsException("Storable objects has different ids state: " + object1.getId()
 		// + " <-> " + object2.getId());
 		// }
+
+		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
+			throw new StorableObjectNotEqualsException("One of the Storable objects is null: '" + object1 + "' and '"
+					+ object2 + "'.");
+		}
 
 		if (object1.getId() != null && object2.getId() != null && object1.getId().equals(object2.getId())) {
 			throw new StorableObjectNotEqualsException("Storable objects has same id!: '" + object1.getId() + "'");
@@ -78,11 +105,7 @@ public class FormVersionComparator {
 	private static void compare(CustomVariable object1, CustomVariable object2)
 			throws CustomVariableNotEqualsException, StorableObjectNotEqualsException {
 
-		if (object1 == null || object2 == null) {
-			throw new CustomVariableNotEqualsException("One value is null '" + object1 + "' and '" + object2 + "'.");
-		}
-
-		if (object1 instanceof StorableObject) {
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
@@ -114,6 +137,14 @@ public class FormVersionComparator {
 
 	private static void compare(GlobalVariable object1, GlobalVariable object2)
 			throws GlobalVariableNotEqualsException, VariableDataNotEqualsException, StorableObjectNotEqualsException {
+
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
 				|| (object1.getName() != null && object2.getName() != null && !object1.getName().equals(
@@ -130,33 +161,32 @@ public class FormVersionComparator {
 					+ "' and '" + object2 + "'.");
 		}
 
-		if (object1 instanceof StorableObject) {
-			compare((StorableObject) object1, (StorableObject) object2);
-		}
-
 		// Compare Expressions
 		Iterator<VariableData> variableDataIterator1 = object1.getVariableData().iterator();
 		Iterator<VariableData> variableDataIterator2 = object2.getVariableData().iterator();
-		do {
+		while (variableDataIterator1.hasNext() || variableDataIterator2.hasNext()) {
 			if (variableDataIterator1.hasNext() != variableDataIterator2.hasNext()) {
 				throw new GlobalVariableNotEqualsException("VariableData list length differs!");
 			}
 			compare(variableDataIterator1.next(), variableDataIterator2.next());
-		} while (variableDataIterator1.hasNext() || variableDataIterator2.hasNext());
+		}
 	}
 
 	private static void compare(VariableData object1, VariableData object2) throws VariableDataNotEqualsException,
 			StorableObjectNotEqualsException {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
 		if ((object1.getValidFrom() != null && object2.getValidFrom() == null)
 				|| (object1.getValidFrom() == null && object2.getValidFrom() != null)
 				|| (object1.getValidFrom() != null && object2.getValidFrom() != null && !object1.getValidFrom().equals(
 						object2.getValidFrom()))) {
 			throw new VariableDataNotEqualsException("ValidFrom information is not equals between '" + object1
 					+ "' and '" + object2 + "'.");
-		}
-
-		if (object1 instanceof StorableObject) {
-			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
 		if ((object1.getValidTo() != null && object2.getValidTo() == null)
@@ -180,13 +210,15 @@ public class FormVersionComparator {
 	private static void compare(Expression object1, Expression object2) throws StorableObjectNotEqualsException,
 			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
 			CustomVariableNotEqualsException {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
 		if (object1.getClass() != object2.getClass()) {
 			throw new ExpressionNotEqualsException("Classes are different between expressions '" + object1 + "' and '"
 					+ object2 + "'");
-		}
-
-		if (object1 instanceof StorableObject) {
-			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
 		if (object1.isEditable() != object2.isEditable()) {
@@ -217,35 +249,39 @@ public class FormVersionComparator {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void compareExpressionValue(Object value1, Object value2) throws TreeObjectNotEqualsException,
+	private static void compareExpressionValue(Object object1, Object object2) throws TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, GroupNotEqualsException, QuestionNotEqualsException,
 			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
 			CustomVariableNotEqualsException {
 
-		if (value1 instanceof StorableObject) {
-			compare((StorableObject) value1, (StorableObject) value2);
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
-		if ((value1 != null && value2 == null) || (value1 == null && value2 != null)) {
-			throw new ExpressionNotEqualsException("Value fields are different: '" + value1 + "' and '" + value2 + "'");
+		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
+			throw new ExpressionNotEqualsException("Value fields are different: '" + object1 + "' and '" + object2
+					+ "'");
 		}
-		if (value1.getClass() != value2.getClass()) {
-			throw new ExpressionNotEqualsException("Classes are different: '" + value1 + "' and '" + value2 + "'");
+		if (object1.getClass() != object2.getClass()) {
+			throw new ExpressionNotEqualsException("Classes are different: '" + object1 + "' and '" + object2 + "'");
 		}
 		// Special cases.
-		if (value1 instanceof TreeObject) {
-			compare((TreeObject) value1, (TreeObject) value2);
-		} else if (value1 instanceof ExpressionChain) {
-			compare((ExpressionChain) value1, (ExpressionChain) value2);
-		} else if (value1 instanceof GlobalVariable) {
-			compare((GlobalVariable) value1, (GlobalVariable) value2);
-		} else if (value1 instanceof List) {
-			if (!((List<?>) value1).isEmpty() && ((List<?>) value1).get(0) instanceof Expression) {
-				compare((List<Expression>) value1, (List<Expression>) value2);
+		if (object1 instanceof TreeObject) {
+			compare((TreeObject) object1, (TreeObject) object2);
+		} else if (object1 instanceof ExpressionChain) {
+			compare((ExpressionChain) object1, (ExpressionChain) object2);
+		} else if (object1 instanceof GlobalVariable) {
+			compare((GlobalVariable) object1, (GlobalVariable) object2);
+		} else if (object1 instanceof List) {
+			if (!((List<?>) object1).isEmpty() && ((List<?>) object1).get(0) instanceof Expression) {
+				compare((List<Expression>) object1, (List<Expression>) object2);
 			}
-		} else if (!value1.equals(value2)) {
-			throw new ExpressionNotEqualsException("Value fields are different: '" + value1 + "' and '" + value2
-					+ "' -> " + value1.getClass().getName());
+		} else if (!object1.equals(object2)) {
+			throw new ExpressionNotEqualsException("Value fields are different: '" + object1 + "' and '" + object2
+					+ "' -> " + object1.getClass().getName());
 		}
 	}
 
@@ -253,7 +289,11 @@ public class FormVersionComparator {
 			throws StorableObjectNotEqualsException, ExpressionNotEqualsException, GlobalVariableNotEqualsException,
 			VariableDataNotEqualsException, CustomVariableNotEqualsException {
 
-		if (object1 instanceof StorableObject) {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
@@ -268,7 +308,7 @@ public class FormVersionComparator {
 		// Compare Expressions
 		Iterator<Expression> expressionsIterator1 = object1.getExpressions().iterator();
 		Iterator<Expression> expressionsIterator2 = object2.getExpressions().iterator();
-		do {
+		while (expressionsIterator1.hasNext() || expressionsIterator2.hasNext()) {
 			if (expressionsIterator1.hasNext() != expressionsIterator2.hasNext()) {
 				throw new ExpressionNotEqualsException("ExpressionChain list length differs!");
 			}
@@ -279,8 +319,7 @@ public class FormVersionComparator {
 				compare((ExpressionChain) expression1, (ExpressionChain) expression2);
 			}
 			compare(expression1, expression2);
-		} while (expressionsIterator1.hasNext() || expressionsIterator2.hasNext());
-
+		}
 	}
 
 	private static void compare(List<Expression> object1, List<Expression> object2)
@@ -289,7 +328,7 @@ public class FormVersionComparator {
 		// Compare Expressions
 		Iterator<Expression> expressionsIterator1 = object1.iterator();
 		Iterator<Expression> expressionsIterator2 = object2.iterator();
-		do {
+		while (expressionsIterator1.hasNext() || expressionsIterator2.hasNext()) {
 			if (expressionsIterator1.hasNext() != expressionsIterator2.hasNext()) {
 				throw new ExpressionNotEqualsException("ExpressionChain list length differs!");
 			}
@@ -300,29 +339,35 @@ public class FormVersionComparator {
 				compare((ExpressionChain) expression1, (ExpressionChain) expression2);
 			}
 			compare(expression1, expression2);
-		} while (expressionsIterator1.hasNext() || expressionsIterator2.hasNext());
+		}
 	}
 
 	private static void compare(TreeObject object1, TreeObject object2) throws TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, GroupNotEqualsException, QuestionNotEqualsException {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+
 		// Already compared because it is a child of a compared element.
 		if (alreadyComparedForm1Element.contains(object1)) {
 			return;
 		}
 
-		if (object1 instanceof StorableObject) {
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| !object1.getName().equals(object2.getName())) {
+				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
+						object2.getName()))) {
 			throw new TreeObjectNotEqualsException("Names are different between tree objects '" + object1 + "' and '"
 					+ object2 + "'.");
 		}
 		if ((object1.getLabel() != null && object2.getLabel() == null)
 				|| (object1.getLabel() == null && object2.getLabel() != null)
-				|| !object1.getLabel().equals(object2.getLabel())) {
+				|| ((object1.getLabel() != null && object2.getLabel() != null) && !object1.getLabel().equals(
+						object2.getLabel()))) {
 			throw new TreeObjectNotEqualsException("Labels are different between tree objects '" + object1 + "' and '"
 					+ object2 + "'.");
 		}
@@ -352,13 +397,17 @@ public class FormVersionComparator {
 	private static void compare(TableRule object1, TableRule object2) throws StorableObjectNotEqualsException,
 			TableRuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
-		if (object1 instanceof StorableObject) {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| !object1.getName().equals(object2.getName())) {
+				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
+						object2.getName()))) {
 			throw new TableRuleNotEqualsException("Names are different between table rules '" + object1 + "' and '"
 					+ object2 + "'.");
 		}
@@ -366,18 +415,21 @@ public class FormVersionComparator {
 		// Compare table rules rows.
 		Iterator<TableRuleRow> tableRuleRowIterator1 = object1.getRules().iterator();
 		Iterator<TableRuleRow> tableRuleRowIterator2 = object2.getRules().iterator();
-		do {
+		while (tableRuleRowIterator1.hasNext() || tableRuleRowIterator2.hasNext()) {
 			if (tableRuleRowIterator1.hasNext() != tableRuleRowIterator2.hasNext()) {
 				throw new TableRuleNotEqualsException("Row list length differs!");
 			}
 			compare(tableRuleRowIterator1.next(), tableRuleRowIterator2.next());
-		} while (tableRuleRowIterator1.hasNext() || tableRuleRowIterator2.hasNext());
+		}
 	}
 
 	private static void compare(TableRuleRow object1, TableRuleRow object2) throws StorableObjectNotEqualsException,
 			TableRuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
-		if (object1 instanceof StorableObject) {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
@@ -388,19 +440,420 @@ public class FormVersionComparator {
 	private static void compare(Rule object1, Rule object2) throws StorableObjectNotEqualsException,
 			RuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
-		if (object1 instanceof StorableObject) {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| !object1.getName().equals(object2.getName())) {
+				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
+						object2.getName()))) {
 			throw new RuleNotEqualsException("Names are different between rules '" + object1 + "' and '" + object2
 					+ "'.");
 		}
 
 		compare(object1.getConditions(), object2.getConditions());
 		compare(object1.getActions(), object2.getActions());
+	}
+
+	private static void compare(Size object1, Size object2) throws StorableObjectNotEqualsException,
+			SizeNotEqualsException {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
+		if (object1.getWidth() != object2.getWidth()) {
+			throw new SizeNotEqualsException("Widths are different between Sizes '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+
+		if (object1.getHeight() != object2.getHeight()) {
+			throw new SizeNotEqualsException("Heights are different between Sizes '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+	}
+
+	private static void compare(Point object1, Point object2) throws StorableObjectNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException {
+
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
+		if (object1.getX() != object2.getX()) {
+			throw new PointNotEqualsException("Widths are different between Points '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+
+		if (object1.getY() != object2.getY()) {
+			throw new PointNotEqualsException("Heights are different between Points '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+	}
+
+	private static void compare(DiagramBiitText object1, DiagramBiitText object2)
+			throws StorableObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException {
+
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
+		if ((object1.getText() != null && object2.getText() == null)
+				|| (object1.getText() == null && object2.getText() != null)
+				|| ((object1.getText() != null && object2.getText() != null) && !object1.getText().equals(
+						object2.getText()))) {
+			throw new BiitTextNotEqualsException("Text are different between BiitTexts '" + object1 + "' and '"
+					+ object2 + "'.");
+		}
+
+		if ((object1.getFill() != null && object2.getFill() == null)
+				|| (object1.getFill() == null && object2.getFill() != null)
+				|| ((object1.getFill() != null && object2.getFill() != null) && !object1.getFill().equals(
+						object2.getFill()))) {
+			throw new BiitTextNotEqualsException("Fill values are different between BiitTexts '" + object1 + "' and '"
+					+ object2 + "'.");
+		}
+
+		if ((object1.getFontSize() != null && object2.getFontSize() == null)
+				|| (object1.getFontSize() == null && object2.getFontSize() != null)
+				|| ((object1.getFontSize() != null && object2.getFontSize() != null) && !object1.getFontSize().equals(
+						object2.getFontSize()))) {
+			throw new BiitTextNotEqualsException("FontSize values are different between BiitTexts '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getStroke() != null && object2.getStroke() == null)
+				|| (object1.getStroke() == null && object2.getStroke() != null)
+				|| ((object1.getStroke() != null && object2.getStroke() != null) && !object1.getStroke().equals(
+						object2.getStroke()))) {
+			throw new BiitTextNotEqualsException("Stroke values are different between BiitTexts '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getStrokeWidth() != null && object2.getStrokeWidth() == null)
+				|| (object1.getStrokeWidth() == null && object2.getStrokeWidth() != null)
+				|| ((object1.getStrokeWidth() != null && object2.getStrokeWidth() != null) && !object1.getStrokeWidth()
+						.equals(object2.getStrokeWidth()))) {
+			throw new BiitTextNotEqualsException("StrokeWidth values are different between BiitTexts '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+	}
+
+	private static void compare(DiagramElement object1, DiagramElement object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException {
+		if ((object1.getTooltip() != null && object2.getTooltip() == null)
+				|| (object1.getTooltip() == null && object2.getTooltip() != null)
+				|| ((object1.getTooltip() != null && object2.getTooltip() != null) && !object1.getTooltip().equals(
+						object2.getTooltip()))) {
+			throw new DiagramObjectNotEqualsException("ToolTip are different between DiagramElements '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if (object1.getAngle() != object2.getAngle()) {
+			throw new DiagramObjectNotEqualsException("Anges are different between DiagramElements '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getSize() != null && object2.getSize() == null)
+				|| (object1.getSize() == null && object2.getSize() != null)) {
+			throw new DiagramObjectNotEqualsException("Size are different between DiagramElements '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+		compare(object1.getSize(), object2.getSize());
+
+		if ((object1.getPosition() != null && object2.getPosition() == null)
+				|| (object1.getPosition() == null && object2.getPosition() != null)) {
+			throw new DiagramObjectNotEqualsException("Points are different between DiagramElements '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+		compare(object1.getPosition(), object2.getPosition());
+
+		if ((object1.getBiitText() != null && object2.getBiitText() == null)
+				|| (object1.getBiitText() == null && object2.getBiitText() != null)) {
+			throw new DiagramObjectNotEqualsException("BiitTexts are different between DiagramElements '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+		compare(object1.getBiitText(), object2.getBiitText());
+	}
+
+	private static void compare(DiagramChild object1, DiagramChild object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException, DiagramNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, NodeNotEqualsException, TableRuleNotEqualsException,
+			RuleNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+		compare((DiagramElement) object1, (DiagramElement) object2);
+		if ((object1.getDiagram() != null && object2.getDiagram() == null)
+				|| (object1.getDiagram() == null && object2.getDiagram() != null)) {
+			throw new DiagramObjectNotEqualsException("Diagrams are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+		compare(object1.getDiagram(), object2.getDiagram());
+	}
+
+	private static void compare(DiagramExpression object1, DiagramExpression object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
+		compare((DiagramElement) object1, (DiagramElement) object2);
+		compare(object1.getExpression(), object2.getExpression());
+	}
+
+	private static void compare(DiagramFork object1, DiagramFork object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException {
+		compare((DiagramElement) object1, (DiagramElement) object2);
+
+		if ((object1.getReference() != null && object2.getReference() == null)
+				|| (object1.getReference() == null && object2.getReference() != null)) {
+			throw new DiagramObjectNotEqualsException(
+					"ExpressionValueTreeObjectReference are different between diagram objects '" + object1 + "' and '"
+							+ object2 + "'.");
+		}
+		compare(object1.getReference(), object2.getReference());
+	}
+
+	private static void compare(Node object1, Node object2) throws StorableObjectNotEqualsException,
+			NodeNotEqualsException {
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
+		if ((object1.getJointjsId() != null && object2.getJointjsId() == null)
+				|| (object1.getJointjsId() == null && object2.getJointjsId() != null)
+				|| ((object1.getJointjsId() != null && object2.getJointjsId() != null) && !object1.getJointjsId()
+						.equals(object2.getJointjsId()))) {
+			throw new NodeNotEqualsException("JointjsId are different between Nodes '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+
+		if ((object1.getSelector() != null && object2.getSelector() == null)
+				|| (object1.getSelector() == null && object2.getSelector() != null)
+				|| ((object1.getSelector() != null && object2.getSelector() != null) && !object1.getSelector().equals(
+						object2.getSelector()))) {
+			throw new NodeNotEqualsException("Selectors are different between Nodes '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+
+		if ((object1.getPort() != null && object2.getPort() == null)
+				|| (object1.getPort() == null && object2.getPort() != null)
+				|| ((object1.getPort() != null && object2.getPort() != null) && !object1.getPort().equals(
+						object2.getPort()))) {
+			throw new NodeNotEqualsException("Ports are different between Nodes '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+	}
+
+	private static void compare(DiagramLink object1, DiagramLink object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException, NodeNotEqualsException {
+
+		if ((object1.getAttrs() != null && object2.getAttrs() == null)
+				|| (object1.getAttrs() == null && object2.getAttrs() != null)
+				|| ((object1.getAttrs() != null && object2.getAttrs() != null) && !object1.getAttrs().equals(
+						object2.getAttrs()))) {
+			throw new DiagramObjectNotEqualsException("Attrs are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getVertices() != null && object2.getVertices() == null)
+				|| (object1.getVertices() == null && object2.getVertices() != null)
+				|| ((object1.getVertices() != null && object2.getVertices() != null) && !object1.getVertices().equals(
+						object2.getVertices()))) {
+			throw new DiagramObjectNotEqualsException("Vertices are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.isManhattan() != object2.isManhattan())) {
+			throw new DiagramObjectNotEqualsException("Manhattan values are different between diagram objects '"
+					+ object1 + "' and '" + object2 + "'.");
+		}
+
+		if ((object1.isSmooth() != object2.isSmooth())) {
+			throw new DiagramObjectNotEqualsException("Smooth values are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getText() != null && object2.getText() == null)
+				|| (object1.getText() == null && object2.getText() != null)
+				|| ((object1.getText() != null && object2.getText() != null) && !object1.getText().equals(
+						object2.getText()))) {
+			throw new DiagramObjectNotEqualsException("Texts are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		compare(object1.getSource(), object2.getSource());
+		compare(object1.getTarget(), object2.getTarget());
+		compare(object1.getExpressionChain(), object2.getExpressionChain());
+
+	}
+
+	private static void compare(DiagramRepeat object1, DiagramRepeat object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException {
+		compare((DiagramElement) object1, (DiagramElement) object2);
+	}
+
+	private static void compare(DiagramRule object1, DiagramRule object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException, RuleNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+		compare((DiagramElement) object1, (DiagramElement) object2);
+		if ((object1.getRule() != null && object2.getRule() == null)
+				|| (object1.getRule() == null && object2.getRule() != null)) {
+			throw new DiagramObjectNotEqualsException("Rules are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+		compare(object1.getRule(), object2.getRule());
+	}
+
+	private static void compare(DiagramSink object1, DiagramSink object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException {
+		compare((DiagramExpression) object1, (DiagramExpression) object2);
+	}
+
+	private static void compare(DiagramSource object1, DiagramSource object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException {
+		compare((DiagramElement) object1, (DiagramElement) object2);
+	}
+
+	private static void compare(DiagramTable object1, DiagramTable object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException, TableRuleNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+		compare((DiagramElement) object1, (DiagramElement) object2);
+		if ((object1.getTable() != null && object2.getTable() == null)
+				|| (object1.getTable() == null && object2.getTable() != null)) {
+			throw new DiagramObjectNotEqualsException("Tables are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+		compare(object1.getTable(), object2.getTable());
+	}
+
+	private static void compare(DiagramObject object1, DiagramObject object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException, NodeNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException, TableRuleNotEqualsException,
+			RuleNotEqualsException, DiagramNotEqualsException {
+
+		if (object1 == null && object2 == null) {
+			return;
+		}
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
+		if ((object1.getParent().getName() != null && object2.getParent().getName() == null)
+				|| (object1.getParent().getName() == null && object2.getParent().getName() != null)
+				|| ((object1.getParent() != null && object2.getParent() != null) && !object1.getParent().getName()
+						.equals(object2.getParent().getName()))) {
+			throw new DiagramObjectNotEqualsException("Parents are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getType() != null && object2.getType() == null)
+				|| (object1.getType() == null && object2.getType() != null)
+				|| ((object1.getType() != null && object2.getType() != null) && !object1.getType().equals(
+						object2.getType()))) {
+			throw new DiagramObjectNotEqualsException("Types are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getJointjsId() != null && object2.getJointjsId() == null)
+				|| (object1.getJointjsId() == null && object2.getJointjsId() != null)
+				|| ((object1.getJointjsId() != null && object2.getJointjsId() != null) && !object1.getJointjsId()
+						.equals(object2.getJointjsId()))) {
+			throw new DiagramObjectNotEqualsException("JointJsIds are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if ((object1.getEmbeds() != null && object2.getEmbeds() == null)
+				|| (object1.getEmbeds() == null && object2.getEmbeds() != null)
+				|| ((object1.getEmbeds() != null && object2.getEmbeds() != null) && !object1.getEmbeds().equals(
+						object2.getEmbeds()))) {
+			throw new DiagramObjectNotEqualsException("Embeds are different between diagram objects '" + object1
+					+ "' and '" + object2 + "'.");
+		}
+
+		if (object1.getZ() != object2.getZ()) {
+			throw new DiagramObjectNotEqualsException("Z is different between diagram objects '" + object1 + "' and '"
+					+ object2 + "'.");
+		}
+
+		// For each diagram element.
+		if (object1 instanceof DiagramSink) {
+			compare((DiagramSink) object1, (DiagramSink) object2);
+		} else if (object1 instanceof DiagramSource) {
+			compare((DiagramSource) object1, (DiagramSource) object2);
+		} else if (object1 instanceof DiagramRepeat) {
+			compare((DiagramRepeat) object1, (DiagramRepeat) object2);
+		} else if (object1 instanceof DiagramFork) {
+			compare((DiagramFork) object1, (DiagramFork) object2);
+		} else if (object1 instanceof DiagramLink) {
+			compare((DiagramLink) object1, (DiagramLink) object2);
+		} else if (object1 instanceof DiagramTable) {
+			compare((DiagramTable) object1, (DiagramTable) object2);
+		} else if (object1 instanceof DiagramRule) {
+			compare((DiagramRule) object1, (DiagramRule) object2);
+		} else if (object1 instanceof DiagramChild) {
+			compare((DiagramChild) object1, (DiagramChild) object2);
+		} else if (object1 instanceof DiagramElement) {
+			compare((DiagramElement) object1, (DiagramElement) object2);
+		}
+
+	}
+
+	private static void compare(Diagram object1, Diagram object2) throws StorableObjectNotEqualsException,
+			DiagramNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
+			NodeNotEqualsException, SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException,
+			TableRuleNotEqualsException, RuleNotEqualsException {
+		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
+		if ((object1.getName() != null && object2.getName() == null)
+				|| (object1.getName() == null && object2.getName() != null)
+				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
+						object2.getName()))) {
+			throw new DiagramNotEqualsException("Names are different between diagrams '" + object1 + "' and '"
+					+ object2 + "'.");
+		}
+
+		// Compare Expressions
+		Iterator<DiagramObject> diagramObjectsIterator1 = object1.getDiagramObjects().iterator();
+		Iterator<DiagramObject> diagramObjectsIterator2 = object2.getDiagramObjects().iterator();
+		while (diagramObjectsIterator1.hasNext() || diagramObjectsIterator2.hasNext()) {
+			if (diagramObjectsIterator1.hasNext() != diagramObjectsIterator2.hasNext()) {
+				throw new DiagramNotEqualsException("Diagram Objects list length differs!");
+			}
+			DiagramObject diagramObject1 = diagramObjectsIterator1.next();
+			DiagramObject diagramObject2 = diagramObjectsIterator2.next();
+			// ExpressionChain inside an ExpressionChain.
+			if (diagramObject1 instanceof DiagramObject) {
+				compare((DiagramObject) diagramObject1, (DiagramObject) diagramObject2);
+			}
+		}
 	}
 
 	/**
@@ -419,12 +872,19 @@ public class FormVersionComparator {
 	 * @throws VariableDataNotEqualsException
 	 * @throws TableRuleNotEqualsException
 	 * @throws RuleNotEqualsException
+	 * @throws DiagramNotEqualsException
+	 * @throws DiagramObjectNotEqualsException
+	 * @throws NodeNotEqualsException
+	 * @throws SizeNotEqualsException
+	 * @throws PointNotEqualsException
+	 * @throws BiitTextNotEqualsException
 	 */
 	public static void compare(Form form1, Form form2) throws TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, FormNotEqualsException, GroupNotEqualsException,
 			QuestionNotEqualsException, CustomVariableNotEqualsException, ExpressionNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException, TableRuleNotEqualsException,
-			RuleNotEqualsException {
+			RuleNotEqualsException, DiagramNotEqualsException, DiagramObjectNotEqualsException, NodeNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
 		if ((form1 == null || form2 == null) && (form1 != null || form2 != null)) {
 			throw new FormNotEqualsException("Obtained form is null");
 		}
@@ -459,12 +919,12 @@ public class FormVersionComparator {
 		Collections.sort(customVariables2, new CustomVariableSorter());
 		Iterator<CustomVariable> variableIterator1 = customVariables1.iterator();
 		Iterator<CustomVariable> variableIterator2 = customVariables2.iterator();
-		do {
+		while (variableIterator1.hasNext() || variableIterator2.hasNext()) {
 			if (variableIterator1.hasNext() != variableIterator2.hasNext()) {
 				throw new CustomVariableNotEqualsException("CustomVariables list length differs!");
 			}
 			compare(variableIterator1.next(), variableIterator2.next());
-		} while (variableIterator1.hasNext() || variableIterator2.hasNext());
+		}
 
 		// Compare Expressions. First sort the set to be sure the comparation is correct.
 		List<ExpressionChain> expressionChain1 = new ArrayList<>(form1.getExpressionChains());
@@ -473,32 +933,54 @@ public class FormVersionComparator {
 		Collections.sort(expressionChain2, new ExpressionSorter());
 		Iterator<ExpressionChain> expressionsIterator1 = expressionChain1.iterator();
 		Iterator<ExpressionChain> expressionsIterator2 = expressionChain2.iterator();
-		do {
+		while (expressionsIterator1.hasNext() || expressionsIterator2.hasNext()) {
 			if (expressionsIterator1.hasNext() != expressionsIterator2.hasNext()) {
 				throw new ExpressionNotEqualsException("ExpressionChain list length differs!");
 			}
 			compare(expressionsIterator1.next(), expressionsIterator2.next());
-		} while (expressionsIterator1.hasNext() || expressionsIterator2.hasNext());
+		}
 
 		// Compare TableRules
-		Iterator<TableRule> tableRulesIterator1 = form1.getTableRules().iterator();
-		Iterator<TableRule> tableRulesIterator2 = form2.getTableRules().iterator();
-		do {
+		List<TableRule> tableRules1 = new ArrayList<>(form1.getTableRules());
+		Collections.sort(tableRules1, new TableRulesSorter());
+		List<TableRule> tableRules2 = new ArrayList<>(form2.getTableRules());
+		Collections.sort(tableRules2, new TableRulesSorter());
+		Iterator<TableRule> tableRulesIterator1 = tableRules1.iterator();
+		Iterator<TableRule> tableRulesIterator2 = tableRules2.iterator();
+		while (tableRulesIterator1.hasNext() || tableRulesIterator2.hasNext()) {
 			if (tableRulesIterator1.hasNext() != tableRulesIterator2.hasNext()) {
 				throw new ExpressionNotEqualsException("TableRules list length differs!");
 			}
 			compare(tableRulesIterator1.next(), tableRulesIterator2.next());
-		} while (tableRulesIterator1.hasNext() || tableRulesIterator2.hasNext());
+		}
 
 		// Compare Rules
-		Iterator<Rule> rulesIterator1 = form1.getRules().iterator();
-		Iterator<Rule> rulesIterator2 = form2.getRules().iterator();
-		do {
+		List<Rule> rules1 = new ArrayList<>(form1.getRules());
+		Collections.sort(rules1, new RulesSorter());
+		List<Rule> rules2 = new ArrayList<>(form2.getRules());
+		Collections.sort(rules2, new RulesSorter());
+		Iterator<Rule> rulesIterator1 = rules1.iterator();
+		Iterator<Rule> rulesIterator2 = rules2.iterator();
+		while (rulesIterator1.hasNext() || rulesIterator2.hasNext()) {
 			if (rulesIterator1.hasNext() != rulesIterator2.hasNext()) {
 				throw new ExpressionNotEqualsException("TableRules list length differs!");
 			}
 			compare(rulesIterator1.next(), rulesIterator2.next());
-		} while (rulesIterator1.hasNext() || rulesIterator2.hasNext());
+		}
+
+		// Compare Diagrams
+		List<Diagram> diagrams1 = new ArrayList<>(form1.getDiagrams());
+		Collections.sort(diagrams1, new DiagramSorter());
+		List<Diagram> diagrams2 = new ArrayList<>(form2.getDiagrams());
+		Collections.sort(diagrams2, new DiagramSorter());
+		Iterator<Diagram> diagramIterator1 = diagrams1.iterator();
+		Iterator<Diagram> diagramIterator2 = diagrams2.iterator();
+		while (diagramIterator1.hasNext() || diagramIterator2.hasNext()) {
+			if (diagramIterator1.hasNext() != diagramIterator2.hasNext()) {
+				throw new ExpressionNotEqualsException("TableRules list length differs!");
+			}
+			compare(diagramIterator1.next(), diagramIterator2.next());
+		}
 	}
 }
 
@@ -512,6 +994,27 @@ class ExpressionSorter implements Comparator<ExpressionChain> {
 class CustomVariableSorter implements Comparator<CustomVariable> {
 	@Override
 	public int compare(CustomVariable arg0, CustomVariable arg1) {
+		return arg0.getName().compareTo(arg1.getName());
+	}
+}
+
+class TableRulesSorter implements Comparator<TableRule> {
+	@Override
+	public int compare(TableRule arg0, TableRule arg1) {
+		return arg0.getName().compareTo(arg1.getName());
+	}
+}
+
+class RulesSorter implements Comparator<Rule> {
+	@Override
+	public int compare(Rule arg0, Rule arg1) {
+		return arg0.getName().compareTo(arg1.getName());
+	}
+}
+
+class DiagramSorter implements Comparator<Diagram> {
+	@Override
+	public int compare(Diagram arg0, Diagram arg1) {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 }
