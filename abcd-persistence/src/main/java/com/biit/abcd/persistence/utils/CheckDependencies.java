@@ -54,7 +54,7 @@ public class CheckDependencies {
 
 	/**
 	 * Check dependencies inside the expression chain hierarchy
-	 *
+	 * 
 	 * @param expressionChain
 	 * @throws DependencyExistException
 	 */
@@ -78,12 +78,11 @@ public class CheckDependencies {
 
 	/**
 	 * Look for tree object dependencies inside the diagram<br>
-	 * Only three node types can create new dependencies that hasn't been
-	 * checked yet:<br>
+	 * Only three node types can create new dependencies that hasn't been checked yet:<br>
 	 * - DiagramLink<br>
 	 * - DiagramFork<br>
 	 * - DiagramChild: to check internal dependencies<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -114,7 +113,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for table rule dependencies inside the diagram<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -142,7 +141,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for rule dependencies inside the diagram<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -170,7 +169,7 @@ public class CheckDependencies {
 
 	/**
 	 * Look for rule dependencies inside the diagram<br>
-	 *
+	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
 	 */
@@ -179,13 +178,13 @@ public class CheckDependencies {
 		List<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjectsList) {
 			if (diagramObject instanceof DiagramExpression) {
-				if (((DiagramExpression) diagramObject).getExpression().equals(expressionChain)) {
+				if (((DiagramExpression) diagramObject).getExpression() != null
+						&& ((DiagramExpression) diagramObject).getExpression().equals(expressionChain)) {
 					throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName()
 							+ ", with name: " + expressionChain.getName() + " referenced in the form.");
 				}
 			} else if (diagramObject instanceof DiagramChild) {
-				checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(),
-						expressionChain);
+				checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), expressionChain);
 			}
 		}
 	}
