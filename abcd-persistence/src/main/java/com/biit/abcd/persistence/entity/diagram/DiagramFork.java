@@ -100,9 +100,11 @@ public class DiagramFork extends DiagramElement {
 			references.clear();
 			ExpressionValueTreeObjectReference newReference;
 			try {
-				newReference = diagramFork.getReference().getClass().newInstance();
-				newReference.copyData(diagramFork.getReference());
-				references.add(newReference);
+				if (diagramFork.getReference() != null) {
+					newReference = diagramFork.getReference().getClass().newInstance();
+					newReference.copyData(diagramFork.getReference());
+					references.add(newReference);
+				}
 			} catch (InstantiationException | IllegalAccessException e) {
 				throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramFork.");
 			}
