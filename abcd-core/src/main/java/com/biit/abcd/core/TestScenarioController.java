@@ -15,25 +15,6 @@ public class TestScenarioController {
 		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
 	}
 
-	// /**
-	// * Read all test scenarios from database. This method is synchronized.
-	// *
-	// * @return
-	// */
-	// public List<TestScenario> getTestScenarios() {
-	// if (testScenarios == null) {
-	// synchronized (TestScenarioController.class) {
-	// if (testScenarios == null) {
-	// testScenarios =
-	// testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(label,
-	// version,
-	// organizationId);
-	// }
-	// }
-	// }
-	// return testScenarios;
-	// }
-
 	/**
 	 * Read all test scenarios from database. This method is synchronized.
 	 * 
@@ -70,6 +51,7 @@ public class TestScenarioController {
 		clearWorkVariables();
 	}
 
+	
 	/**
 	 * Remove all old test scenarios and store all the new ones. This method is
 	 * synchronized.
@@ -77,22 +59,16 @@ public class TestScenarioController {
 	public void update(List<TestScenario> testScenarios, Form form) {
 		synchronized (TestScenarioController.class) {
 			// Remove unused variables.
-			for (TestScenario testScenario : this.testScenarios) {
-				if (!testScenarios.contains(testScenario)) {
-					testScenarioDao.makeTransient(testScenario);
+			if (this.testScenarios != null) {
+				for (TestScenario testScenario : this.testScenarios) {
+					if (!testScenarios.contains(testScenario)) {
+						testScenarioDao.makeTransient(testScenario);
+					}
+				}
+				for (TestScenario testScenario : testScenarios) {
+					testScenarioDao.makePersistent(testScenario);
 				}
 			}
-
-			for (TestScenario testScenario : testScenarios) {
-				testScenarioDao.makePersistent(testScenario);
-			}
-			setTestScenarios(testScenarios, form);
-		}
-	}
-
-	public void removeTestScenario(TestScenario testScenario) {
-		synchronized (TestScenarioController.class) {
-			testScenarioDao.makeTransient(testScenario);
 		}
 	}
 

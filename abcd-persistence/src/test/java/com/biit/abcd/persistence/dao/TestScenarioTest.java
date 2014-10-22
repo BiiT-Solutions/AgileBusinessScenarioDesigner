@@ -33,6 +33,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	private static final Integer FORM_VERSION = 1;
 	private static final String TEST_SCENARIO_NAME = "test1";
 	private static final Double TEST_ANSWER_VALUE = 5.0;
+	private static final String FORM_NAME = "Form";
 	private static final String CATEGORY_NAME = "Category";
 	private static final String QUESTION_NAME = "Question";
 
@@ -59,7 +60,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 				FORM_ORGANIZATION_ID);
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
-		
+
 		persistedList = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(FORM_LABEL_ERROR, FORM_VERSION,
 				FORM_ORGANIZATION_ID);
 		Assert.assertEquals(persistedList.size(), 0);
@@ -76,9 +77,13 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		testScenario.setFormOrganizationId(0l);
 		testScenario.setFormVersion(1);
 
+		TestScenarioObject formObject = new TestScenarioObject();
+		formObject.setName(FORM_NAME);
+		testScenario.setTestScenarioForm(formObject);
+
 		TestScenarioObject categoryObject = new TestScenarioObject();
 		categoryObject.setName(CATEGORY_NAME);
-		testScenario.addTestScenarioObject(categoryObject);
+		formObject.addChild(categoryObject);
 
 		TestAnswer testAnswerNumber = new TestAnswerInputNumber(TEST_ANSWER_VALUE);
 		TestScenarioQuestionAnswer testScenarioQuestionAnswer = new TestScenarioQuestionAnswer(testAnswerNumber);
@@ -94,11 +99,14 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		testScenario = persistedList.get(0);
 		Assert.assertEquals(testScenario.getName(), TEST_SCENARIO_NAME);
 
-		List<TestScenarioObject> testScenarioObjects = testScenario.getTestScenarioObjects();
-		TestScenarioObject testScenarioObject = testScenarioObjects.get(0);
-		Assert.assertEquals(testScenarioObject.getChildren().size(), 1);
+		TestScenarioObject testScenarioForm = testScenario.getTestScenarioForm();
+		Assert.assertEquals(testScenarioForm, formObject);
+		Assert.assertEquals(testScenarioForm.getChildren().size(), 1);
+		
+		TestScenarioObject testScenarioCategory = (TestScenarioObject) testScenarioForm.getChild(0);
+		Assert.assertEquals(testScenarioCategory.getChildren().size(), 1);
 
-		TestAnswer answer = ((TestScenarioQuestionAnswer) testScenarioObject.getChild(0)).getTestAnswer();
+		TestAnswer answer = ((TestScenarioQuestionAnswer) testScenarioCategory.getChild(0)).getTestAnswer();
 		Assert.assertEquals(answer, testAnswerNumber);
 		Assert.assertEquals(answer.getValue(), TEST_ANSWER_VALUE);
 

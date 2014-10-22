@@ -856,382 +856,763 @@
     );
 
     alter table diagram 
+        drop constraint UK_cqcepkojqmp1r8a42yb1hh1c4;
+
+    alter table diagram 
         add constraint UK_cqcepkojqmp1r8a42yb1hh1c4  unique (ID);
+
+    alter table diagram 
+        drop constraint UK_i991a76ub6cc04w67skutnlft;
 
     alter table diagram 
         add constraint UK_i991a76ub6cc04w67skutnlft  unique (comparationId);
 
     alter table diagram_biit_text 
+        drop constraint UK_jcm4u3t3e37kkjb5mltbs5mha;
+
+    alter table diagram_biit_text 
         add constraint UK_jcm4u3t3e37kkjb5mltbs5mha  unique (ID);
+
+    alter table diagram_biit_text 
+        drop constraint UK_26e5ksw8ie3l7k0gtpdghwxr8;
 
     alter table diagram_biit_text 
         add constraint UK_26e5ksw8ie3l7k0gtpdghwxr8  unique (comparationId);
 
     alter table diagram_calculation 
+        drop constraint UK_telsgfj7x5yb9vr3tyes22dfo;
+
+    alter table diagram_calculation 
         add constraint UK_telsgfj7x5yb9vr3tyes22dfo  unique (ID);
+
+    alter table diagram_calculation 
+        drop constraint UK_skg33psaqtjwx1oevy1wp7tfa;
 
     alter table diagram_calculation 
         add constraint UK_skg33psaqtjwx1oevy1wp7tfa  unique (comparationId);
 
     alter table diagram_child 
+        drop constraint UK_g7xdiesweik5op9e9onvswkbc;
+
+    alter table diagram_child 
         add constraint UK_g7xdiesweik5op9e9onvswkbc  unique (ID);
+
+    alter table diagram_child 
+        drop constraint UK_r7oc8jgmhkeagu3emxy90ttof;
 
     alter table diagram_child 
         add constraint UK_r7oc8jgmhkeagu3emxy90ttof  unique (comparationId);
 
     alter table diagram_fork 
+        drop constraint UK_hsf0g6nuli7nv6ypx60d3n4dg;
+
+    alter table diagram_fork 
         add constraint UK_hsf0g6nuli7nv6ypx60d3n4dg  unique (ID);
+
+    alter table diagram_fork 
+        drop constraint UK_efh14aqc52m2bt7suefmq12qn;
 
     alter table diagram_fork 
         add constraint UK_efh14aqc52m2bt7suefmq12qn  unique (comparationId);
 
     alter table diagram_fork_expression_value_tree_object_reference 
+        drop constraint UK_41wpgkw0p4oj65dmnb34e4lqj;
+
+    alter table diagram_fork_expression_value_tree_object_reference 
         add constraint UK_41wpgkw0p4oj65dmnb34e4lqj  unique (references_ID);
+
+    alter table diagram_links 
+        drop constraint UK_h604hokhqdqbq8jnjxeupxokf;
 
     alter table diagram_links 
         add constraint UK_h604hokhqdqbq8jnjxeupxokf  unique (ID);
 
     alter table diagram_links 
+        drop constraint UK_ph2m4o4wkkd1ls8xxffxf0q4;
+
+    alter table diagram_links 
         add constraint UK_ph2m4o4wkkd1ls8xxffxf0q4  unique (comparationId);
+
+    alter table diagram_nodes 
+        drop constraint UK_8a8ejpu1o9334lnd8qaxmngtc;
 
     alter table diagram_nodes 
         add constraint UK_8a8ejpu1o9334lnd8qaxmngtc  unique (ID);
 
     alter table diagram_nodes 
+        drop constraint UK_r73mc67afakc2crvohrek8qk4;
+
+    alter table diagram_nodes 
         add constraint UK_r73mc67afakc2crvohrek8qk4  unique (comparationId);
+
+    alter table diagram_points 
+        drop constraint UK_hlburchqkc9q4ahhvbtm8r9p9;
 
     alter table diagram_points 
         add constraint UK_hlburchqkc9q4ahhvbtm8r9p9  unique (ID);
 
     alter table diagram_points 
+        drop constraint UK_nmcm8lwfgn9lwd2kg6e77mlpx;
+
+    alter table diagram_points 
         add constraint UK_nmcm8lwfgn9lwd2kg6e77mlpx  unique (comparationId);
+
+    alter table diagram_repeat 
+        drop constraint UK_cmfc1l3o05vfhv0pt6mgqm3nd;
 
     alter table diagram_repeat 
         add constraint UK_cmfc1l3o05vfhv0pt6mgqm3nd  unique (ID);
 
     alter table diagram_repeat 
+        drop constraint UK_5jgfcctfdg2s0qbkuaekf6m0g;
+
+    alter table diagram_repeat 
         add constraint UK_5jgfcctfdg2s0qbkuaekf6m0g  unique (comparationId);
+
+    alter table diagram_rule 
+        drop constraint UK_o4hrkbic99uuo11mqks328fv9;
 
     alter table diagram_rule 
         add constraint UK_o4hrkbic99uuo11mqks328fv9  unique (ID);
 
     alter table diagram_rule 
+        drop constraint UK_l4rl73pva0mblx0df1ntrb3m7;
+
+    alter table diagram_rule 
         add constraint UK_l4rl73pva0mblx0df1ntrb3m7  unique (comparationId);
+
+    alter table diagram_sink 
+        drop constraint UK_cjl3d4py1hd5d5tvo23yd780y;
 
     alter table diagram_sink 
         add constraint UK_cjl3d4py1hd5d5tvo23yd780y  unique (ID);
 
     alter table diagram_sink 
+        drop constraint UK_bo43xa2d2veyl1w7o8xfjse1m;
+
+    alter table diagram_sink 
         add constraint UK_bo43xa2d2veyl1w7o8xfjse1m  unique (comparationId);
+
+    alter table diagram_sizes 
+        drop constraint UK_ipg7ga5eq6253uw0hwppg86ub;
 
     alter table diagram_sizes 
         add constraint UK_ipg7ga5eq6253uw0hwppg86ub  unique (ID);
 
     alter table diagram_sizes 
+        drop constraint UK_lpwfoljk42ognggvtk6m0w75j;
+
+    alter table diagram_sizes 
         add constraint UK_lpwfoljk42ognggvtk6m0w75j  unique (comparationId);
+
+    alter table diagram_source 
+        drop constraint UK_ff46qqbboep27fpldjifb16ou;
 
     alter table diagram_source 
         add constraint UK_ff46qqbboep27fpldjifb16ou  unique (ID);
 
     alter table diagram_source 
+        drop constraint UK_2skl3aj5ivhq9i7j7vun9eak3;
+
+    alter table diagram_source 
         add constraint UK_2skl3aj5ivhq9i7j7vun9eak3  unique (comparationId);
+
+    alter table diagram_table 
+        drop constraint UK_rdrkegb0jykxqg5jxtb2fbhc5;
 
     alter table diagram_table 
         add constraint UK_rdrkegb0jykxqg5jxtb2fbhc5  unique (ID);
 
     alter table diagram_table 
+        drop constraint UK_8f7iwv857341khhqhi12jharn;
+
+    alter table diagram_table 
         add constraint UK_8f7iwv857341khhqhi12jharn  unique (comparationId);
+
+    alter table elements_of_diagram 
+        drop constraint UK_a91dlb8ggcm3dkxl70tcjspe;
 
     alter table elements_of_diagram 
         add constraint UK_a91dlb8ggcm3dkxl70tcjspe  unique (diagramElements_ID);
 
     alter table expression_function 
+        drop constraint UK_7hl0l4oq4hokig8i3g30hv3s4;
+
+    alter table expression_function 
         add constraint UK_7hl0l4oq4hokig8i3g30hv3s4  unique (ID);
+
+    alter table expression_function 
+        drop constraint UK_lbyra8yeo77q9okjte7yh5mck;
 
     alter table expression_function 
         add constraint UK_lbyra8yeo77q9okjte7yh5mck  unique (comparationId);
 
     alter table expression_operator_logic 
+        drop constraint UK_5nv4rm0dcwpx72pidk99uqdcv;
+
+    alter table expression_operator_logic 
         add constraint UK_5nv4rm0dcwpx72pidk99uqdcv  unique (ID);
+
+    alter table expression_operator_logic 
+        drop constraint UK_joflju3ccpgq1r4y7ro8egx3g;
 
     alter table expression_operator_logic 
         add constraint UK_joflju3ccpgq1r4y7ro8egx3g  unique (comparationId);
 
     alter table expression_operator_math 
+        drop constraint UK_blgg3hvajwkh0url70tu2l3nc;
+
+    alter table expression_operator_math 
         add constraint UK_blgg3hvajwkh0url70tu2l3nc  unique (ID);
+
+    alter table expression_operator_math 
+        drop constraint UK_8thp00x8evlgl3w2guass30ql;
 
     alter table expression_operator_math 
         add constraint UK_8thp00x8evlgl3w2guass30ql  unique (comparationId);
 
     alter table expression_symbol 
+        drop constraint UK_d5pgsndfldjl77mxwesg47oyy;
+
+    alter table expression_symbol 
         add constraint UK_d5pgsndfldjl77mxwesg47oyy  unique (ID);
+
+    alter table expression_symbol 
+        drop constraint UK_sw4rg5w1mhkjtuhmshj7jeh5w;
 
     alter table expression_symbol 
         add constraint UK_sw4rg5w1mhkjtuhmshj7jeh5w  unique (comparationId);
 
     alter table expression_value_boolean 
+        drop constraint UK_8ji8c5v2rtu64hu7fd6w16wds;
+
+    alter table expression_value_boolean 
         add constraint UK_8ji8c5v2rtu64hu7fd6w16wds  unique (ID);
+
+    alter table expression_value_boolean 
+        drop constraint UK_9ji3f3ooll872c0bitchknl29;
 
     alter table expression_value_boolean 
         add constraint UK_9ji3f3ooll872c0bitchknl29  unique (comparationId);
 
     alter table expression_value_custom_variable 
+        drop constraint UK_g4ftxu9duvw2yoonn0mjb5sku;
+
+    alter table expression_value_custom_variable 
         add constraint UK_g4ftxu9duvw2yoonn0mjb5sku  unique (ID);
+
+    alter table expression_value_custom_variable 
+        drop constraint UK_6be9j8k8bp0uudvgtk61e4tu4;
 
     alter table expression_value_custom_variable 
         add constraint UK_6be9j8k8bp0uudvgtk61e4tu4  unique (comparationId);
 
     alter table expression_value_generic_custom_variable 
+        drop constraint UK_1ilcykdnhd0ixr9iaomtrog3h;
+
+    alter table expression_value_generic_custom_variable 
         add constraint UK_1ilcykdnhd0ixr9iaomtrog3h  unique (ID);
+
+    alter table expression_value_generic_custom_variable 
+        drop constraint UK_72ucvxvkp3dgy4ci55hda72p5;
 
     alter table expression_value_generic_custom_variable 
         add constraint UK_72ucvxvkp3dgy4ci55hda72p5  unique (comparationId);
 
     alter table expression_value_generic_variable 
+        drop constraint UK_cqsa891g9cu7egmcxep74o4gh;
+
+    alter table expression_value_generic_variable 
         add constraint UK_cqsa891g9cu7egmcxep74o4gh  unique (ID);
+
+    alter table expression_value_generic_variable 
+        drop constraint UK_1qdyf7b9pdbtg7ugajlcbuy99;
 
     alter table expression_value_generic_variable 
         add constraint UK_1qdyf7b9pdbtg7ugajlcbuy99  unique (comparationId);
 
     alter table expression_value_global_variable 
+        drop constraint UK_gbcgljgnhew0ftkmyyjo9ef0k;
+
+    alter table expression_value_global_variable 
         add constraint UK_gbcgljgnhew0ftkmyyjo9ef0k  unique (ID);
+
+    alter table expression_value_global_variable 
+        drop constraint UK_thug7lch6aqrx4iwq0dtwabrr;
 
     alter table expression_value_global_variable 
         add constraint UK_thug7lch6aqrx4iwq0dtwabrr  unique (comparationId);
 
     alter table expression_value_number 
+        drop constraint UK_4iv29s41m049yhnm25ykovg2j;
+
+    alter table expression_value_number 
         add constraint UK_4iv29s41m049yhnm25ykovg2j  unique (ID);
+
+    alter table expression_value_number 
+        drop constraint UK_5pr6kfc8ssvjg8bcoxs7iaxo6;
 
     alter table expression_value_number 
         add constraint UK_5pr6kfc8ssvjg8bcoxs7iaxo6  unique (comparationId);
 
     alter table expression_value_postal_code 
+        drop constraint UK_jnl1ff1sox87eqvsa3w1nugx9;
+
+    alter table expression_value_postal_code 
         add constraint UK_jnl1ff1sox87eqvsa3w1nugx9  unique (ID);
+
+    alter table expression_value_postal_code 
+        drop constraint UK_65y7nqlko6hgjo6b3go7lwa82;
 
     alter table expression_value_postal_code 
         add constraint UK_65y7nqlko6hgjo6b3go7lwa82  unique (comparationId);
 
     alter table expression_value_string 
+        drop constraint UK_ssjam0lpu4ptut6q7uiyinb46;
+
+    alter table expression_value_string 
         add constraint UK_ssjam0lpu4ptut6q7uiyinb46  unique (ID);
+
+    alter table expression_value_string 
+        drop constraint UK_imteh9r9im4ctld1b9b5kkacw;
 
     alter table expression_value_string 
         add constraint UK_imteh9r9im4ctld1b9b5kkacw  unique (comparationId);
 
     alter table expression_value_systemdate 
+        drop constraint UK_mj1pnbvm8gv3gngq2yh15502f;
+
+    alter table expression_value_systemdate 
         add constraint UK_mj1pnbvm8gv3gngq2yh15502f  unique (ID);
+
+    alter table expression_value_systemdate 
+        drop constraint UK_co43pbqqg7civhr3g8p752mt8;
 
     alter table expression_value_systemdate 
         add constraint UK_co43pbqqg7civhr3g8p752mt8  unique (comparationId);
 
     alter table expression_value_timestamp 
+        drop constraint UK_kju72l70wu9w63min4j3y59jw;
+
+    alter table expression_value_timestamp 
         add constraint UK_kju72l70wu9w63min4j3y59jw  unique (ID);
+
+    alter table expression_value_timestamp 
+        drop constraint UK_ser5ax80v1g2co9dbdqstv81l;
 
     alter table expression_value_timestamp 
         add constraint UK_ser5ax80v1g2co9dbdqstv81l  unique (comparationId);
 
     alter table expression_value_tree_object_reference 
+        drop constraint UK_57lm65prgqk32q1w0rd3jptux;
+
+    alter table expression_value_tree_object_reference 
         add constraint UK_57lm65prgqk32q1w0rd3jptux  unique (ID);
+
+    alter table expression_value_tree_object_reference 
+        drop constraint UK_an3mu4deq3muvltuwdawkfbhc;
 
     alter table expression_value_tree_object_reference 
         add constraint UK_an3mu4deq3muvltuwdawkfbhc  unique (comparationId);
 
     alter table expressions_chain 
+        drop constraint UK_l2k0vcoohq76m4cl2k8g3y9hc;
+
+    alter table expressions_chain 
         add constraint UK_l2k0vcoohq76m4cl2k8g3y9hc  unique (ID);
+
+    alter table expressions_chain 
+        drop constraint UK_qageeu0ehecelhxmn5qdv93am;
 
     alter table expressions_chain 
         add constraint UK_qageeu0ehecelhxmn5qdv93am  unique (comparationId);
 
     alter table expressions_chain_expression_basic 
+        drop constraint UK_6n86noaf7rpgu2qagq951m5da;
+
+    alter table expressions_chain_expression_basic 
         add constraint UK_6n86noaf7rpgu2qagq951m5da  unique (expressions_ID);
+
+    alter table form_custom_variables 
+        drop constraint UK_2pj0qoh0ntvs9laf9sh42rqap;
 
     alter table form_custom_variables 
         add constraint UK_2pj0qoh0ntvs9laf9sh42rqap  unique (form, name, scope);
 
     alter table form_custom_variables 
+        drop constraint UK_891b13251e3pkyk1k5vccpmnh;
+
+    alter table form_custom_variables 
         add constraint UK_891b13251e3pkyk1k5vccpmnh  unique (ID);
+
+    alter table form_custom_variables 
+        drop constraint UK_sq1dj9kjhkv951lr0o3pu42fc;
 
     alter table form_custom_variables 
         add constraint UK_sq1dj9kjhkv951lr0o3pu42fc  unique (comparationId);
 
     alter table global_variable_data_date 
+        drop constraint UK_mylp5k1001col2n4rpdshrea7;
+
+    alter table global_variable_data_date 
         add constraint UK_mylp5k1001col2n4rpdshrea7  unique (ID);
+
+    alter table global_variable_data_date 
+        drop constraint UK_sptr6kn7psib0u6dqt8r7stkq;
 
     alter table global_variable_data_date 
         add constraint UK_sptr6kn7psib0u6dqt8r7stkq  unique (comparationId);
 
     alter table global_variable_data_number 
+        drop constraint UK_ksal0k0qkvv2v95wvysufcap3;
+
+    alter table global_variable_data_number 
         add constraint UK_ksal0k0qkvv2v95wvysufcap3  unique (ID);
+
+    alter table global_variable_data_number 
+        drop constraint UK_jbkxahvrsxikil188orj2bion;
 
     alter table global_variable_data_number 
         add constraint UK_jbkxahvrsxikil188orj2bion  unique (comparationId);
 
     alter table global_variable_data_postalcode 
+        drop constraint UK_o8e2he19y5wsa4bxopiih4ewp;
+
+    alter table global_variable_data_postalcode 
         add constraint UK_o8e2he19y5wsa4bxopiih4ewp  unique (ID);
+
+    alter table global_variable_data_postalcode 
+        drop constraint UK_1g8ysiehft4rrd3aiheq1cktx;
 
     alter table global_variable_data_postalcode 
         add constraint UK_1g8ysiehft4rrd3aiheq1cktx  unique (comparationId);
 
     alter table global_variable_data_set 
+        drop constraint UK_2o1wa9axcmlhv1c8knoh3b7bw;
+
+    alter table global_variable_data_set 
         add constraint UK_2o1wa9axcmlhv1c8knoh3b7bw  unique (variableData_ID);
+
+    alter table global_variable_data_text 
+        drop constraint UK_t91aqfdhy6wnrrg749k2een9u;
 
     alter table global_variable_data_text 
         add constraint UK_t91aqfdhy6wnrrg749k2een9u  unique (ID);
 
     alter table global_variable_data_text 
+        drop constraint UK_mowohsw3lf7j5hh676yr34en8;
+
+    alter table global_variable_data_text 
         add constraint UK_mowohsw3lf7j5hh676yr34en8  unique (comparationId);
+
+    alter table global_variables 
+        drop constraint UK_nggea8kl5cb894e5du3cwsrd0;
 
     alter table global_variables 
         add constraint UK_nggea8kl5cb894e5du3cwsrd0  unique (ID);
 
     alter table global_variables 
+        drop constraint UK_kr7p6k3u1po5mbamq95rvh6gj;
+
+    alter table global_variables 
         add constraint UK_kr7p6k3u1po5mbamq95rvh6gj  unique (comparationId);
+
+    alter table global_variables 
+        drop constraint UK_ba2w3ms6v9agn6ac5ois703u2;
 
     alter table global_variables 
         add constraint UK_ba2w3ms6v9agn6ac5ois703u2  unique (name);
 
     alter table rule 
+        drop constraint UK_8rqluiaunf9galin639sd894c;
+
+    alter table rule 
         add constraint UK_8rqluiaunf9galin639sd894c  unique (ID);
+
+    alter table rule 
+        drop constraint UK_bmfhvbjf4kaugtlg6wom9crg9;
 
     alter table rule 
         add constraint UK_bmfhvbjf4kaugtlg6wom9crg9  unique (comparationId);
 
     alter table rule_decision_table 
+        drop constraint UK_bumgbl5omimxtvvhvthstr882;
+
+    alter table rule_decision_table 
         add constraint UK_bumgbl5omimxtvvhvthstr882  unique (ID);
+
+    alter table rule_decision_table 
+        drop constraint UK_20los6ndm6d9errmf4erx9f12;
 
     alter table rule_decision_table 
         add constraint UK_20los6ndm6d9errmf4erx9f12  unique (comparationId);
 
     alter table rule_decision_table_row 
+        drop constraint UK_ondmt5ex56yathpd70q11lwgg;
+
+    alter table rule_decision_table_row 
         add constraint UK_ondmt5ex56yathpd70q11lwgg  unique (ID);
+
+    alter table rule_decision_table_row 
+        drop constraint UK_r7njhoe2s46aht07exgq5hp5f;
 
     alter table rule_decision_table_row 
         add constraint UK_r7njhoe2s46aht07exgq5hp5f  unique (comparationId);
 
     alter table rule_decision_table_rule_decision_table_row 
+        drop constraint UK_9357dg3c4e5y9gkaggcdxrfnb;
+
+    alter table rule_decision_table_rule_decision_table_row 
         add constraint UK_9357dg3c4e5y9gkaggcdxrfnb  unique (rules_ID);
+
+    alter table test_answer_input_date 
+        drop constraint UK_cctx6br59kggymqx6ltv65iv9;
 
     alter table test_answer_input_date 
         add constraint UK_cctx6br59kggymqx6ltv65iv9  unique (ID);
 
     alter table test_answer_input_date 
+        drop constraint UK_8r0jv8nwetnhcx3mwixg6uhn6;
+
+    alter table test_answer_input_date 
         add constraint UK_8r0jv8nwetnhcx3mwixg6uhn6  unique (comparationId);
+
+    alter table test_answer_input_number 
+        drop constraint UK_rrf27v5jka8vvm7pvp3846qac;
 
     alter table test_answer_input_number 
         add constraint UK_rrf27v5jka8vvm7pvp3846qac  unique (ID);
 
     alter table test_answer_input_number 
+        drop constraint UK_aljs5lkmjtgb0ys9oxac2jo5m;
+
+    alter table test_answer_input_number 
         add constraint UK_aljs5lkmjtgb0ys9oxac2jo5m  unique (comparationId);
+
+    alter table test_answer_input_postalcode 
+        drop constraint UK_9n169jx3xa3jv40g097bb6k4g;
 
     alter table test_answer_input_postalcode 
         add constraint UK_9n169jx3xa3jv40g097bb6k4g  unique (ID);
 
     alter table test_answer_input_postalcode 
+        drop constraint UK_gmbj48islivqbak8uhqn4acra;
+
+    alter table test_answer_input_postalcode 
         add constraint UK_gmbj48islivqbak8uhqn4acra  unique (comparationId);
+
+    alter table test_answer_input_text 
+        drop constraint UK_hdccu2j9fjpphcxxt6wsuqo1v;
 
     alter table test_answer_input_text 
         add constraint UK_hdccu2j9fjpphcxxt6wsuqo1v  unique (ID);
 
     alter table test_answer_input_text 
+        drop constraint UK_fm38doewevroqbh9w9yl6uy45;
+
+    alter table test_answer_input_text 
         add constraint UK_fm38doewevroqbh9w9yl6uy45  unique (comparationId);
+
+    alter table test_answer_list 
+        drop constraint UK_4rh2n0h8kut89dnrp1p6yxqao;
 
     alter table test_answer_list 
         add constraint UK_4rh2n0h8kut89dnrp1p6yxqao  unique (ID);
 
     alter table test_answer_list 
+        drop constraint UK_1h1jnby3gascn5q6ahgkelilq;
+
+    alter table test_answer_list 
         add constraint UK_1h1jnby3gascn5q6ahgkelilq  unique (comparationId);
+
+    alter table test_answer_list_test_answer_basic 
+        drop constraint UK_70eapkpukk1o7veso7p8hhl0k;
 
     alter table test_answer_list_test_answer_basic 
         add constraint UK_70eapkpukk1o7veso7p8hhl0k  unique (testAnswerList_ID);
 
     alter table test_answer_multi_checkbox 
+        drop constraint UK_u2axqvpcnrfbj8tflcs5v8qu;
+
+    alter table test_answer_multi_checkbox 
         add constraint UK_u2axqvpcnrfbj8tflcs5v8qu  unique (ID);
+
+    alter table test_answer_multi_checkbox 
+        drop constraint UK_neljyd1uorqx4rh8nwh89pofm;
 
     alter table test_answer_multi_checkbox 
         add constraint UK_neljyd1uorqx4rh8nwh89pofm  unique (comparationId);
 
     alter table test_answer_radio_button 
+        drop constraint UK_eakcce3ybd0073kdajy217yju;
+
+    alter table test_answer_radio_button 
         add constraint UK_eakcce3ybd0073kdajy217yju  unique (ID);
+
+    alter table test_answer_radio_button 
+        drop constraint UK_rrv3rw7jasepphc1943fqgis5;
 
     alter table test_answer_radio_button 
         add constraint UK_rrv3rw7jasepphc1943fqgis5  unique (comparationId);
 
     alter table test_scenario 
+        drop constraint UK_j17qvfqb5wcp4c3bgknvdii31;
+
+    alter table test_scenario 
         add constraint UK_j17qvfqb5wcp4c3bgknvdii31  unique (ID);
+
+    alter table test_scenario 
+        drop constraint UK_eh6es7t34ldoxns3sswdj6vku;
 
     alter table test_scenario 
         add constraint UK_eh6es7t34ldoxns3sswdj6vku  unique (comparationId);
 
     alter table test_scenario 
+        drop constraint UK_jshq05r5jh9kw6obudq99vsee;
+
+    alter table test_scenario 
         add constraint UK_jshq05r5jh9kw6obudq99vsee  unique (name);
+
+    alter table test_scenario_object 
+        drop constraint UK_ni4qkyh4avtnx2xxgj98xbnf0;
 
     alter table test_scenario_object 
         add constraint UK_ni4qkyh4avtnx2xxgj98xbnf0  unique (ID);
 
     alter table test_scenario_object 
+        drop constraint UK_s2jcrs64woh6taqwno31p9qbq;
+
+    alter table test_scenario_object 
         add constraint UK_s2jcrs64woh6taqwno31p9qbq  unique (comparationId);
+
+    alter table test_scenario_question_answer 
+        drop constraint UK_kwt6r5hqjxegc137o8h9emnln;
 
     alter table test_scenario_question_answer 
         add constraint UK_kwt6r5hqjxegc137o8h9emnln  unique (ID);
 
     alter table test_scenario_question_answer 
+        drop constraint UK_nykl3acgrh43614ohdvjw18so;
+
+    alter table test_scenario_question_answer 
         add constraint UK_nykl3acgrh43614ohdvjw18so  unique (comparationId);
+
+    alter table test_scenario_repeated_group 
+        drop constraint UK_n7s3rk6nq2p68tvqrdeaa8v9h;
 
     alter table test_scenario_repeated_group 
         add constraint UK_n7s3rk6nq2p68tvqrdeaa8v9h  unique (ID);
 
     alter table test_scenario_repeated_group 
+        drop constraint UK_8tqsm47ih91l88wvfbe44qlf8;
+
+    alter table test_scenario_repeated_group 
         add constraint UK_8tqsm47ih91l88wvfbe44qlf8  unique (comparationId);
+
+    alter table test_scenario_repeated_group_container 
+        drop constraint UK_igdi7wnq94aa4y5rigfiq3vhm;
 
     alter table test_scenario_repeated_group_container 
         add constraint UK_igdi7wnq94aa4y5rigfiq3vhm  unique (ID);
 
     alter table test_scenario_repeated_group_container 
+        drop constraint UK_jq45qrlxt9wwmnfoqxxa4u93o;
+
+    alter table test_scenario_repeated_group_container 
         add constraint UK_jq45qrlxt9wwmnfoqxxa4u93o  unique (comparationId);
+
+    alter table tree_answers 
+        drop constraint UK_413vxa542h86uqy4uvcnv6y2x;
 
     alter table tree_answers 
         add constraint UK_413vxa542h86uqy4uvcnv6y2x  unique (ID);
 
     alter table tree_answers 
+        drop constraint UK_5xuj3de6ide6evpo4sijpqa4o;
+
+    alter table tree_answers 
         add constraint UK_5xuj3de6ide6evpo4sijpqa4o  unique (comparationId);
+
+    alter table tree_categories 
+        drop constraint UK_ec3bvy7lletc6jmyvyfwuroqv;
 
     alter table tree_categories 
         add constraint UK_ec3bvy7lletc6jmyvyfwuroqv  unique (ID);
 
     alter table tree_categories 
+        drop constraint UK_gtcyh8mle277igwtb5dvhjkr1;
+
+    alter table tree_categories 
         add constraint UK_gtcyh8mle277igwtb5dvhjkr1  unique (comparationId);
+
+    alter table tree_forms 
+        drop constraint UK_iwgivd7sy9sfbjyj0hlyccrxt;
 
     alter table tree_forms 
         add constraint UK_iwgivd7sy9sfbjyj0hlyccrxt  unique (label, version);
 
     alter table tree_forms 
+        drop constraint UK_plkq2e2pj19uak2ncrgf1ft6v;
+
+    alter table tree_forms 
         add constraint UK_plkq2e2pj19uak2ncrgf1ft6v  unique (ID);
+
+    alter table tree_forms 
+        drop constraint UK_k9mhkly9g8lqwf1m9esm50y6m;
 
     alter table tree_forms 
         add constraint UK_k9mhkly9g8lqwf1m9esm50y6m  unique (comparationId);
 
     alter table tree_forms_diagram 
+        drop constraint UK_otbxhecixo9rbriamr8v44nik;
+
+    alter table tree_forms_diagram 
         add constraint UK_otbxhecixo9rbriamr8v44nik  unique (diagrams_ID);
+
+    alter table tree_forms_expressions_chain 
+        drop constraint UK_melu1cfpayuydi8fv6gxnoufq;
 
     alter table tree_forms_expressions_chain 
         add constraint UK_melu1cfpayuydi8fv6gxnoufq  unique (expressionChains_ID);
 
     alter table tree_forms_form_custom_variables 
+        drop constraint UK_8javwlxk4w7hc1g5g52yecvtt;
+
+    alter table tree_forms_form_custom_variables 
         add constraint UK_8javwlxk4w7hc1g5g52yecvtt  unique (customVariables_ID);
+
+    alter table tree_forms_rule 
+        drop constraint UK_t8v6e3oyk0k56toxk97afkpvc;
 
     alter table tree_forms_rule 
         add constraint UK_t8v6e3oyk0k56toxk97afkpvc  unique (rules_ID);
 
     alter table tree_forms_rule_decision_table 
+        drop constraint UK_b274bmp72bu1n40rl4k5kvhas;
+
+    alter table tree_forms_rule_decision_table 
         add constraint UK_b274bmp72bu1n40rl4k5kvhas  unique (tableRules_ID);
+
+    alter table tree_groups 
+        drop constraint UK_sfdvxxi1k3p9pqsjl5nhmgdp;
 
     alter table tree_groups 
         add constraint UK_sfdvxxi1k3p9pqsjl5nhmgdp  unique (ID);
 
     alter table tree_groups 
+        drop constraint UK_sno2xl7o9nxmt3xh48ywus36u;
+
+    alter table tree_groups 
         add constraint UK_sno2xl7o9nxmt3xh48ywus36u  unique (comparationId);
 
     alter table tree_questions 
+        drop constraint UK_9lkt55st6up2vyh38lrmu0dc5;
+
+    alter table tree_questions 
         add constraint UK_9lkt55st6up2vyh38lrmu0dc5  unique (ID);
+
+    alter table tree_questions 
+        drop constraint UK_nu1epukynjltak450rhyp6eu0;
 
     alter table tree_questions 
         add constraint UK_nu1epukynjltak450rhyp6eu0  unique (comparationId);

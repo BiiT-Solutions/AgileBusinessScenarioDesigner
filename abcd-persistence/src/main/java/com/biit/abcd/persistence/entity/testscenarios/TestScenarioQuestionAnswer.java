@@ -14,8 +14,6 @@ import com.biit.persistence.entity.StorableObject;
 @Table(name = "test_scenario_question_answer")
 public class TestScenarioQuestionAnswer extends TestScenarioObject {
 
-	private static final String DEFAULT_QUESTION_TECHNICAL_NAME = "testScenarioObject";
-
 	private long originalReferenceId;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -23,9 +21,15 @@ public class TestScenarioQuestionAnswer extends TestScenarioObject {
 	private TestAnswer testAnswer;
 
 	public TestScenarioQuestionAnswer() {
+		super();
+	}
+
+	public TestScenarioQuestionAnswer(String name) {
+		super(name);
 	}
 
 	public TestScenarioQuestionAnswer(TestAnswer testAnswer) {
+		super();
 		setTestAnswer(testAnswer);
 	}
 
@@ -51,7 +55,12 @@ public class TestScenarioQuestionAnswer extends TestScenarioObject {
 
 	@Override
 	protected String getDefaultTechnicalName() {
-		return DEFAULT_QUESTION_TECHNICAL_NAME;
+		return super.getDefaultTechnicalName();
 	}
 
+	@Override
+	public void resetIds() {
+		super.resetIds();
+		testAnswer.resetIds();
+	}
 }
