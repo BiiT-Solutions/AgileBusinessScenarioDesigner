@@ -179,9 +179,6 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private void addRow(RootForm form) {
 		if (form != null) {
 			Item item = addItem(form);
-			System.out.println("ITEM: " + item);
-			System.out.println("ITEM PROPERTY: " + item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL));
-			System.out.println("LABEL: " + form.getLabel());
 			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 		}
 	}

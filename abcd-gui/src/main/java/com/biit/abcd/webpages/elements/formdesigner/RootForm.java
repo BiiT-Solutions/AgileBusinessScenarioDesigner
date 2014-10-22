@@ -12,6 +12,7 @@ public class RootForm extends SimpleFormView {
 
 	public RootForm(String label, long organizationId) {
 		setLabel(label);
+		setOrganizationId(organizationId);
 		childForms = new ArrayList<SimpleFormView>();
 	}
 
