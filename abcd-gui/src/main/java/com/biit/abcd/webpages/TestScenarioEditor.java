@@ -21,6 +21,7 @@ import com.biit.abcd.webpages.elements.testscenario.SelectTestScenarioTableEdita
 import com.biit.abcd.webpages.elements.testscenario.TestScenarioEditorUpperMenu;
 import com.biit.abcd.webpages.elements.testscenario.TestScenarioForm;
 import com.biit.abcd.webpages.elements.testscenario.WindowNewTestScenario;
+import com.biit.form.exceptions.NotValidChildException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -72,7 +73,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 						UserSessionHandler.getFormController().getForm()) != null)) {
 
 			UserSessionHandler.getTestScenariosController().clearWorkVariables();
-			// Add tables		
+			// Add tables
 			tableSelectTestScenario.updateTestScenarios(UserSessionHandler.getTestScenariosController()
 					.getTestScenarios(UserSessionHandler.getFormController().getForm()));
 
@@ -92,8 +93,12 @@ public class TestScenarioEditor extends FormWebPageComponent {
 				}
 			}
 			// Create form panel content
-			testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
-
+			try {
+				testScenarioForm
+						.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
+			} catch (NotValidChildException e) {
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			}
 			refreshTestScenario();
 
 		} else {
@@ -101,6 +106,8 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
+
+		getBottomMenu().setEnabled(false);
 	}
 
 	private void initUpperMenu() {
@@ -175,7 +182,6 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	}
 
 	private void removeSelectedTestScenario() {
-		UserSessionHandler.getTestScenariosController().removeTestScenario(getSelectedTestScenario());
 		tableSelectTestScenario.removeSelectedRow();
 		refreshTestScenario();
 	}
@@ -195,7 +201,11 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	}
 
 	private void refreshTestScenario() {
-		testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
+		try {
+			testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
+		} catch (NotValidChildException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 }

@@ -9,9 +9,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
@@ -23,14 +26,31 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class TestScenarioObject extends TreeObject {
 
-	private static final String DEFAULT_QUESTION_TECHNICAL_NAME = "testScenarioObject";
+	private static final String DEFAULT_QUESTION_TECHNICAL_NAME = "";
+	private String absoluteGenericPath = "";
 	private static final List<Class<? extends TreeObject>> ALLOWED_CHILDS = new ArrayList<Class<? extends TreeObject>>(
 			Arrays.asList(TestScenarioObject.class, TestScenarioQuestionAnswer.class));
 
 	public TestScenarioObject() {
 		super();
 	}
-	
+
+	public TestScenarioObject(String name) {
+		super();
+		try {
+			setName(name);
+		} catch (FieldTooLongException | CharacterNotAllowedException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+	public String getAbsoluteGenericPath() {
+		return absoluteGenericPath;
+	}
+
+	public void setAbsoluteGenericPath(String absoluteGenericPath) {
+		this.absoluteGenericPath = absoluteGenericPath;
+	}
+
 	@Override
 	public void checkDependencies() throws DependencyExistException {
 		// No dependencies yet.

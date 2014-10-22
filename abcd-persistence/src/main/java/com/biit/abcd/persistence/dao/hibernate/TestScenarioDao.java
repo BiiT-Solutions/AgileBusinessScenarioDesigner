@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenarioObject;
 import com.biit.form.TreeObject;
 import com.biit.persistence.dao.hibernate.GenericDao;
 
@@ -24,17 +23,20 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 	@Override
 	protected void initializeSets(List<TestScenario> elements) {
 		for (TestScenario testScenario : elements) {
-			Hibernate.initialize(testScenario.getTestScenarioObjects());
-			initializeTestScenarioObjects(testScenario.getTestScenarioObjects());
+			initializeTestScenario(testScenario);
 		}
 	}
 
-	private void initializeTestScenarioObjects(List<TestScenarioObject> elements) {
-		for (TestScenarioObject entity : elements) {
-			if (entity != null) {
-				Hibernate.initialize(entity.getChildren());
-				initializeChildsSets(entity.getChildren());
-			}
+	protected void initializeTestScenario(TestScenario testScenario) {
+		Hibernate.initialize(testScenario);
+		Hibernate.initialize(testScenario.getTestScenarioForm());
+		initializeChildsSets(testScenario.getTestScenarioForm());
+	}
+
+	private void initializeChildsSets(TreeObject entity) {
+		if (entity != null) {
+			Hibernate.initialize(entity.getChildren());
+			initializeChildsSets(entity.getChildren());
 		}
 	}
 
@@ -55,6 +57,7 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			Criteria criteria = session.createCriteria(TestScenario.class);
 			criteria.add(Restrictions.eq("id", scenarioId));
 			TestScenario testScenario = (TestScenario) criteria.uniqueResult();
+			initializeTestScenario(testScenario);
 			session.getTransaction().commit();
 			return testScenario;
 		} catch (RuntimeException e) {
@@ -75,6 +78,7 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			criteria.add(Restrictions.eq("formVersion", version));
 			criteria.add(Restrictions.eq("formOrganizationId", organizationId));
 			List<TestScenario> testScenarios = criteria.list();
+			initializeSets(testScenarios);
 			session.getTransaction().commit();
 			return testScenarios;
 		} catch (RuntimeException e) {

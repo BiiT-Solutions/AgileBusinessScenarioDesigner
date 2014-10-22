@@ -1,8 +1,6 @@
 package com.biit.abcd.persistence.entity.testscenarios;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,7 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
@@ -30,12 +28,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class TestScenario extends StorableObject implements INameAttribute {
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// For avoiding error org.hibernate.loader.MultipleBagFetchException: cannot
-	// simultaneously fetch multiple bags
-	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<TestScenarioObject> testScenarioObjects;
+	private TestScenarioObject testScenarioForm;
 	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 
@@ -49,36 +44,26 @@ public class TestScenario extends StorableObject implements INameAttribute {
 
 	public TestScenario() {
 		super();
-		testScenarioObjects = new ArrayList<TestScenarioObject>();
 	}
 
 	public TestScenario(String name) throws FieldTooLongException {
 		super();
-		testScenarioObjects = new ArrayList<TestScenarioObject>();
 		setName(name);
 	}
 
-	public List<TestScenarioObject> getTestScenarioObjects() {
-		return testScenarioObjects;
+	public TestScenarioObject getTestScenarioForm() {
+		return testScenarioForm;
 	}
 
-	public void setTestScenarioObjects(List<TestScenarioObject> testScenarioObjects) {
-		this.testScenarioObjects.clear();
-		this.testScenarioObjects.addAll(testScenarioObjects);
-	}
-
-	public void addTestScenarioObject(TestScenarioObject testScenarioObject) {
-		if (getTestScenarioObjects() != null) {
-			getTestScenarioObjects().add(testScenarioObject);
-		}
+	public void setTestScenarioForm(TestScenarioObject testScenarioForm) {
+		this.testScenarioForm = testScenarioForm;
 	}
 
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		for (TestScenarioObject testScenarioObject : getTestScenarioObjects()) {
-			testScenarioObject.resetIds();
-		}
+		getTestScenarioForm().resetIds();
+
 	}
 
 	public void setName(String name) throws FieldTooLongException {
@@ -96,9 +81,9 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		for (TestScenarioObject testScenarioObject : getTestScenarioObjects()) {
-			innerStorableObjects.add(testScenarioObject);
-			innerStorableObjects.addAll(testScenarioObject.getAllInnerStorableObjects());
+		if (getTestScenarioForm() != null) {
+			innerStorableObjects.add(getTestScenarioForm());
+			innerStorableObjects.addAll(getTestScenarioForm().getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
