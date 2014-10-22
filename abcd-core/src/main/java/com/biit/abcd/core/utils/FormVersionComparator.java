@@ -14,6 +14,7 @@ import com.biit.abcd.core.utils.exceptions.FormNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.GlobalVariableNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.GroupNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.QuestionNotEqualsException;
+import com.biit.abcd.core.utils.exceptions.RuleNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.StorableObjectNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.core.utils.exceptions.TreeObjectNotEqualsException;
@@ -26,6 +27,7 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -50,8 +52,8 @@ public class FormVersionComparator {
 			throw new StorableObjectNotEqualsException("Storable objects has same id!: '" + object1.getId() + "'");
 		}
 		if (object1.getComparationId().equals(object2.getComparationId())) {
-			throw new StorableObjectNotEqualsException("Storable objects are the same objects: '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new StorableObjectNotEqualsException("Storable objects are the same objects: '" + object1 + "' and '"
+					+ object2 + "'.");
 		}
 	}
 
@@ -383,6 +385,24 @@ public class FormVersionComparator {
 		compare(object1.getAction(), object2.getAction());
 	}
 
+	private static void compare(Rule object1, Rule object2) throws StorableObjectNotEqualsException,
+			RuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+		if (object1 instanceof StorableObject) {
+			compare((StorableObject) object1, (StorableObject) object2);
+		}
+
+		if ((object1.getName() != null && object2.getName() == null)
+				|| (object1.getName() == null && object2.getName() != null)
+				|| !object1.getName().equals(object2.getName())) {
+			throw new RuleNotEqualsException("Names are different between rules '" + object1 + "' and '" + object2
+					+ "'.");
+		}
+
+		compare(object1.getConditions(), object2.getConditions());
+		compare(object1.getActions(), object2.getActions());
+	}
+
 	/**
 	 * Form1 is the previous version of Form2.
 	 * 
@@ -398,11 +418,13 @@ public class FormVersionComparator {
 	 * @throws GlobalVariableNotEqualsException
 	 * @throws VariableDataNotEqualsException
 	 * @throws TableRuleNotEqualsException
+	 * @throws RuleNotEqualsException
 	 */
 	public static void compare(Form form1, Form form2) throws TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, FormNotEqualsException, GroupNotEqualsException,
 			QuestionNotEqualsException, CustomVariableNotEqualsException, ExpressionNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException, TableRuleNotEqualsException {
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException, TableRuleNotEqualsException,
+			RuleNotEqualsException {
 		if ((form1 == null || form2 == null) && (form1 != null || form2 != null)) {
 			throw new FormNotEqualsException("Obtained form is null");
 		}
@@ -467,6 +489,16 @@ public class FormVersionComparator {
 			}
 			compare(tableRulesIterator1.next(), tableRulesIterator2.next());
 		} while (tableRulesIterator1.hasNext() || tableRulesIterator2.hasNext());
+
+		// Compare Rules
+		Iterator<Rule> rulesIterator1 = form1.getRules().iterator();
+		Iterator<Rule> rulesIterator2 = form2.getRules().iterator();
+		do {
+			if (rulesIterator1.hasNext() != rulesIterator2.hasNext()) {
+				throw new ExpressionNotEqualsException("TableRules list length differs!");
+			}
+			compare(rulesIterator1.next(), rulesIterator2.next());
+		} while (rulesIterator1.hasNext() || rulesIterator2.hasNext());
 	}
 }
 

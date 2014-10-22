@@ -56,8 +56,8 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		Set<Rule> rulesList = entity.getRules();
 		if (rulesList != null && !rulesList.isEmpty()) {
 			for (Rule rule : rulesList) {
-				rule.getConditionChain().updateChildrenSortSeqs();
-				rule.getActionChain().updateChildrenSortSeqs();
+				rule.getConditions().updateChildrenSortSeqs();
+				rule.getActions().updateChildrenSortSeqs();
 			}
 		}
 		// Sort the table rule rows
@@ -177,8 +177,8 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			Set<Rule> rulesList = form.getRules();
 			if (rulesList != null && !rulesList.isEmpty()) {
 				for (Rule rule : rulesList) {
-					sortChildren(rule.getConditionChain());
-					sortChildren(rule.getActionChain());
+					sortChildren(rule.getConditions());
+					sortChildren(rule.getActions());
 				}
 			}
 			// Sort the table rule rows

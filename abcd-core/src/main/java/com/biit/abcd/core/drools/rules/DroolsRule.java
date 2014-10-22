@@ -19,8 +19,8 @@ public class DroolsRule extends Rule {
 	public DroolsRule(Rule rule) {
 		super();
 		setName(rule.getName());
-		setCondition(rule.getConditionChain());
-		setActions(rule.getActionChain());
+		setConditions(rule.getConditions());
+		setActions(rule.getActions());
 	}
 
 	public String getDroolsRule() {

@@ -43,8 +43,8 @@ public class TableRuleToDroolsRule {
 					DroolsRule newRule = new DroolsRule();
 					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
 					newRule.setName(RulesUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
-					newRule.setCondition(rowConditionExpression);
-					newRule.addConditions(extraConditions);
+					newRule.setConditions(rowConditionExpression);
+					newRule.addExtraConditions(extraConditions);
 					newRule.setActions(row.getAction());
 					newRules.add(newRule);
 				}

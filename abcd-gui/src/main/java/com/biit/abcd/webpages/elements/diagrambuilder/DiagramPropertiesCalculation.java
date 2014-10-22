@@ -37,8 +37,8 @@ public class DiagramPropertiesCalculation extends SecuredDiagramElementPropertie
 		fieldWithSearchButton.setNullCaption(ServerTranslate
 				.translate(LanguageCodes.JSON_DIAGRAM_PROPERTIES_CALCULATION_EXPRESSION_NULL_CAPTION));
 		fieldWithSearchButton.setValue(null);
-		if (instance.getFormExpression() != null) {
-			fieldWithSearchButton.setValue(instance.getFormExpression(), instance.getFormExpression().getName());
+		if (instance.getExpression() != null) {
+			fieldWithSearchButton.setValue(instance.getExpression(), instance.getExpression().getName());
 		}
 		fieldWithSearchButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -8500340609293771339L;
@@ -53,11 +53,11 @@ public class DiagramPropertiesCalculation extends SecuredDiagramElementPropertie
 						if (formExpressionWindow.getSelectedExpression() != null) {
 							fieldWithSearchButton.setValue(formExpressionWindow.getSelectedExpression(),
 									formExpressionWindow.getSelectedExpression().getName());
-							instance.setFormExpression(formExpressionWindow.getSelectedExpression());
+							instance.setExpression(formExpressionWindow.getSelectedExpression());
 							firePropertyUpdateListener(instance);
 							AbcdLogger.info(this.getClass().getName(), "User '"
 									+ UserSessionHandler.getUser().getEmailAddress() + "' added Expression "
-									+ instance.getFormExpression().getName() + " to Calculation node with ID:"
+									+ instance.getExpression().getName() + " to Calculation node with ID:"
 									+ instance.getId() + "'.");
 							window.close();
 						} else {
@@ -73,7 +73,7 @@ public class DiagramPropertiesCalculation extends SecuredDiagramElementPropertie
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				instance.setFormExpression(null);
+				instance.setExpression(null);
 				firePropertyUpdateListener(instance);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' removed expression from Calculation node with ID:" + instance.getId() + "'.");

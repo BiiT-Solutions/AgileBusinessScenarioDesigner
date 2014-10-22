@@ -29,8 +29,8 @@ public class RuleDao extends GenericDao<Rule> implements IRuleDao {
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
 		// with @Orderby or @OrderColumn we use our own order manager.
-		entity.getConditionChain().updateChildrenSortSeqs();
-		entity.getActionChain().updateChildrenSortSeqs();
+		entity.getConditions().updateChildrenSortSeqs();
+		entity.getActions().updateChildrenSortSeqs();
 		return super.makePersistent(entity);
 	}
 
@@ -47,8 +47,8 @@ public class RuleDao extends GenericDao<Rule> implements IRuleDao {
 
 	private void sortChildren(List<Rule> rules) {
 		for (Rule rule : rules) {
-			sortChildren(rule.getConditionChain());
-			sortChildren(rule.getActionChain());
+			sortChildren(rule.getConditions());
+			sortChildren(rule.getActions());
 		}
 	}
 

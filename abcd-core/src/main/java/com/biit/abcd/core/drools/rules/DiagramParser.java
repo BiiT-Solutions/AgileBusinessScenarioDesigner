@@ -93,14 +93,14 @@ public class DiagramParser {
 			break;
 		case CALCULATION:
 			DiagramExpression expressionNode = (DiagramExpression) node;
-			if (expressionNode.getFormExpression() != null) {
-				newRules.addAll(ExpressionToDroolsRule.parse(expressionNode.getFormExpression(), extraConditions));
+			if (expressionNode.getExpression() != null) {
+				newRules.addAll(ExpressionToDroolsRule.parse(expressionNode.getExpression(), extraConditions));
 			}
 			break;
 		case DIAGRAM_CHILD:
 			DiagramChild diagramNode = (DiagramChild) node;
-			if (diagramNode.getChildDiagram() != null) {
-				newRules.addAll(parse(diagramNode.getChildDiagram(), extraConditions));
+			if (diagramNode.getDiagram() != null) {
+				newRules.addAll(parse(diagramNode.getDiagram(), extraConditions));
 			}
 			break;
 		case FORK:
@@ -108,8 +108,8 @@ public class DiagramParser {
 			break;
 		case SINK:
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
-			if (sinkExpressionNode.getFormExpression() != null) {
-				newRules.addAll(ExpressionToDroolsRule.parse(sinkExpressionNode.getFormExpression(), extraConditions));
+			if (sinkExpressionNode.getExpression() != null) {
+				newRules.addAll(ExpressionToDroolsRule.parse(sinkExpressionNode.getExpression(), extraConditions));
 			}
 			break;
 		default:

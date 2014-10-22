@@ -26,7 +26,6 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void testSecondLevelCache() throws FieldTooLongException {
-
 		formDao.getSessionFactory().getStatistics().clear();
 
 		Form form = new Form();

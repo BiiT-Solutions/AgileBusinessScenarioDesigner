@@ -17,7 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class DiagramChild extends DiagramElement {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Diagram childDiagram;
+	private Diagram diagram;
 
 	public DiagramChild() {
 		super();
@@ -29,17 +29,17 @@ public class DiagramChild extends DiagramElement {
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		if (childDiagram != null) {
-			childDiagram.resetIds();
+		if (diagram != null) {
+			diagram.resetIds();
 		}
 	}
 
-	public Diagram getChildDiagram() {
-		return childDiagram;
+	public Diagram getDiagram() {
+		return diagram;
 	}
 
-	public void setChildDiagram(Diagram childDiagram) {
-		this.childDiagram = childDiagram;
+	public void setDiagram(Diagram diagram) {
+		this.diagram = diagram;
 	}
 
 	/**
@@ -48,9 +48,9 @@ public class DiagramChild extends DiagramElement {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		if (childDiagram != null) {
-			innerStorableObjects.add(childDiagram);
-			innerStorableObjects.addAll(childDiagram.getAllInnerStorableObjects());
+		if (diagram != null) {
+			innerStorableObjects.add(diagram);
+			innerStorableObjects.addAll(diagram.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
@@ -62,8 +62,8 @@ public class DiagramChild extends DiagramElement {
 			DiagramChild diagramChild = (DiagramChild) object;
 
 			Diagram childDiagram = new Diagram();
-			childDiagram.copyData(diagramChild.getChildDiagram());
-			setChildDiagram(childDiagram);
+			childDiagram.copyData(diagramChild.getDiagram());
+			setDiagram(childDiagram);
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramChild.");
 		}
