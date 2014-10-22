@@ -2,10 +2,12 @@ package com.biit.abcd.authentication;
 
 import java.util.HashMap;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.TestScenarioController;
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
@@ -19,8 +21,6 @@ public class UserSessionHandler {
 	private static TestScenarioController testScenariosController;
 	// User Id --> UI
 	private static HashMap<Long, UI> usersSession = new HashMap<>();
-
-	// Store the user object of the currently inlogged user
 
 	/**
 	 * Initializes the {@link UserSessionHandler} for the given {@link Application}
@@ -38,6 +38,7 @@ public class UserSessionHandler {
 		if (usersSession.get(user.getUserId()) != null) {
 			usersSession.get(user.getUserId()).close();
 			usersSession.get(user.getUserId()).getNavigator().navigateTo(WebMap.LOGIN_PAGE.toString());
+			MessageManager.showWarning(LanguageCodes.INFO_USER_SESSION_EXPIRED);
 		}
 		usersSession.put(user.getUserId(), ui);
 	}
@@ -114,6 +115,9 @@ public class UserSessionHandler {
 	 * Method for logging out a user
 	 */
 	public static void logout() {
+		if (getUser() != null) {
+			usersSession.remove(getUser().getUserId());
+		}
 		setUser(null);
 	}
 
