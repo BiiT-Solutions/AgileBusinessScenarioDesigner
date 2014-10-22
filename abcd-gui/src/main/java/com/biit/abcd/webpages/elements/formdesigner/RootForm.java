@@ -10,7 +10,7 @@ public class RootForm extends SimpleFormView {
 	private List<SimpleFormView> childForms;
 	private String rootName;
 
-	public RootForm(String label) {
+	public RootForm(String label, long organizationId) {
 		setLabel(label);
 		childForms = new ArrayList<SimpleFormView>();
 	}
@@ -66,4 +66,34 @@ public class RootForm extends SimpleFormView {
 	public void setRootName(String rootName) {
 		this.rootName = rootName;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((getLabel() == null) ? 0 : getLabel().hashCode());
+		result = prime * result + (int) (getOrganizationId() ^ (getOrganizationId() >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RootForm other = (RootForm) obj;
+		if (getLabel() == null) {
+			if (other.getLabel() != null)
+				return false;
+		} else if (!getLabel().equals(other.getLabel()))
+			return false;
+		if (getOrganizationId() != other.getOrganizationId())
+			return false;
+		return true;
+	}
+	
+	
 }

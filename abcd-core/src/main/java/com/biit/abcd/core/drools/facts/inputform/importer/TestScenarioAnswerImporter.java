@@ -21,9 +21,16 @@ public class TestScenarioAnswerImporter {
 		return testScenario;
 	}
 
+//	private static void checkFormTestScenarioStructure(Form form, TestScenario testScenario) {
+//		testScenario.getTestScenarioForm()
+//	}
+
 	public static ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario) {
 		ISubmittedForm submittedForm = null;
 		if ((form != null) && (testScenario != null)) {
+
+//			checkFormTestScenarioStructure(form, testScenario);
+
 			setTestScenario(testScenario);
 			submittedForm = new SubmittedForm(form.getName());
 			// Get the categories

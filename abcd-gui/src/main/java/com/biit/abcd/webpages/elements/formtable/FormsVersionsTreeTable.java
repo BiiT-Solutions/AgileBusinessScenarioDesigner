@@ -109,7 +109,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function adds a row to the table only if the list of forms is not empty.
+	 * This function adds a row to the table only if the list of forms is not
+	 * empty.
 	 * 
 	 * @param forms
 	 */
@@ -178,6 +179,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private void addRow(RootForm form) {
 		if (form != null) {
 			Item item = addItem(form);
+			System.out.println("ITEM: " + item);
+			System.out.println("ITEM PROPERTY: " + item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL));
+			System.out.println("LABEL: " + form.getLabel());
 			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 		}
 	}
@@ -185,7 +189,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	public void addForm(SimpleFormView form) {
 		RootForm parent = getFormRoot(form);
 		if (parent == null) {
-			parent = new RootForm(form.getLabel());
+			parent = new RootForm(form.getLabel(), form.getOrganizationId());
 			// Needed to look form the children forms in the launch test window
 			parent.setName(form.getName());
 			addRow(parent);
@@ -212,7 +216,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 		for (Object item : getItemIds()) {
 			if (item instanceof RootForm) {
 				if ((form != null) && (((RootForm) item).getLabel() != null)) {
-					if (((RootForm) item).getLabel().equals(form.getLabel())) {
+					if (((RootForm) item).getLabel().equals(form.getLabel())
+							&& ((RootForm) item).getOrganizationId().equals(form.getOrganizationId())) {
 						return (RootForm) item;
 					}
 				}
@@ -240,8 +245,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function loads from database all form elements and groups them by name. At the end it orders each form list
-	 * by version number.
+	 * This function loads from database all form elements and groups them by
+	 * name. At the end it orders each form list by version number.
 	 * 
 	 * @return
 	 * @throws NotConnectedToDatabaseException
@@ -330,7 +335,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function returns an string with read only if the form can't be edited by the user
+	 * This function returns an string with read only if the form can't be
+	 * edited by the user
 	 * 
 	 * @param form
 	 * @return

@@ -59,8 +59,6 @@ public class TestScenarioForm extends Panel {
 	private TestScenario testScenario;
 	private static final String NUMBER_FIELD_VALIDATOR_REGEX = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 	private Accordion backgroundAccordion = null;
-	private static final Boolean NOT_REPEATABLE_GROUP = false;
-	private static final Boolean REPEATABLE_GROUP = true;
 	private Map<Field, TestScenarioQuestionAnswer> fieldQuestionMap;
 	private HashMap<String, TreeObject> absolutePathTestScenarioObjectMap;
 
@@ -200,7 +198,7 @@ public class TestScenarioForm extends Panel {
 				repeatedGroupContainerObject = (TestScenarioRepeatedGroupContainer) genericTestObject;
 			} else {
 				// The group was previously not repeatable and now it is
-				repeatedGroupContainerObject = new TestScenarioRepeatedGroupContainer(group.getUniqueNameReadable());
+				repeatedGroupContainerObject = new TestScenarioRepeatedGroupContainer(group.getName());
 				testScenarioObjectParent.addChild(repeatedGroupContainerObject);
 				repeatedGroupContainerObject.setAbsoluteGenericPath(group.getUniqueNameReadable());
 				absolutePathTestScenarioObjectMap.put(group.getUniqueNameReadable(), repeatedGroupContainerObject);
@@ -242,6 +240,9 @@ public class TestScenarioForm extends Panel {
 	 * @param categorVerticalLayoutChildIndex
 	 *            : index to know where to put the new group generated inside
 	 *            the background container
+	 * @param testScenarioObjectParent
+	 * @param groupIndex
+	 *            : index to know what name assign to the repeated group
 	 * @return
 	 */
 	private Button createRepeatableGroupsButton(final VerticalLayout background, final Group group,
