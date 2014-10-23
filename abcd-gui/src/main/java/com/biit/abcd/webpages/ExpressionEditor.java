@@ -148,6 +148,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 							// Forbid the remove action if exist dependency.
 							MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
 									LanguageCodes.EXPRESSION_DESIGNER_WARNING_CANNOT_REMOVE_EXPRESSION);
+							windowAccept.close();
 						}
 					}
 				});

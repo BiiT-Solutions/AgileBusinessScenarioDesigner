@@ -17,7 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "diagram_calculation")
 public class DiagramExpression extends DiagramElement {
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private ExpressionChain expression;
 
 	public DiagramExpression() {

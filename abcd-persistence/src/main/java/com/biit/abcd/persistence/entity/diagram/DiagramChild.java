@@ -16,7 +16,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "diagram_child")
 public class DiagramChild extends DiagramElement {
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Diagram diagram;
 
 	public DiagramChild() {
