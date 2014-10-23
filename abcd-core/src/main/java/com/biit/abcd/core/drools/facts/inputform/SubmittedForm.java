@@ -28,7 +28,7 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 		this.applicationName = applicationName;
 		this.setCategories(new ArrayList<ICategory>());
 	}
-	
+
 	public SubmittedForm(String formName) {
 		this.formName = formName;
 		this.setCategories(new ArrayList<ICategory>());
@@ -48,12 +48,13 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 
 	/**
 	 * Needed for generalization purposes
+	 * 
 	 * @return
 	 */
 	public List<ICategory> getCategorys() {
 		return this.categories;
 	}
-	
+
 	public List<ICategory> getCategories() {
 		return this.categories;
 	}
@@ -93,7 +94,7 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 		// Retrieve the form which will have the variables
 		return isScoreSet(this, varName);
 	}
-	
+
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		if ((formVariables == null) || (formVariables.get(submittedFormTreeObject) == null)
 				|| (formVariables.get(submittedFormTreeObject).get(varName) == null)) {
@@ -122,7 +123,18 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 	}
 
 	public String toString() {
-		return this.getFormName();
+		return getFormName();
+	}
+
+	public String generateXML() {
+		String xmlFile = "<" + getFormName() + ">\n";
+		if (getCategories() != null) {
+			for (ICategory iCategory : getCategories()) {
+				xmlFile += ((IXmlGenerator) iCategory).generateXML("\t");
+			}
+		}
+		xmlFile += "</" + getFormName() + ">";
+		return xmlFile;
 	}
 
 	public HashMap<Object, HashMap<String, Object>> getFormVariables() {

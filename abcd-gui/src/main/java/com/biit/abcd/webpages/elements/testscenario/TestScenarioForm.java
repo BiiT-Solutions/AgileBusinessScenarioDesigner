@@ -28,8 +28,12 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestionAnswer
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioRepeatedGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioRepeatedGroupContainer;
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
+import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
@@ -68,7 +72,8 @@ public class TestScenarioForm extends Panel {
 		setStyleName(Runo.PANEL_LIGHT);
 	}
 
-	public void setContent(Form form, TestScenario testScenario) throws NotValidChildException {
+	public void setContent(Form form, TestScenario testScenario) throws NotValidChildException, FieldTooLongException,
+			CharacterNotAllowedException {
 		createContent(form, testScenario);
 	}
 
@@ -78,48 +83,90 @@ public class TestScenarioForm extends Panel {
 	 * @param form
 	 * @param testScenario
 	 * @throws NotValidChildException
+	 * @throws CharacterNotAllowedException
+	 * @throws FieldTooLongException
 	 */
-	private void createContent(Form form, TestScenario testScenario) throws NotValidChildException {
-		if ((form != null) && (testScenario != null)) {
-			this.form = form;
-			this.testScenario = testScenario;
-			createTestScenarioObjectAbsolutePathNameMap();
+	private void createContent(Form form, TestScenario testScenario) throws NotValidChildException,
+			FieldTooLongException, CharacterNotAllowedException {
+		if (form != null) {
+			try {
+				testScenario = new TestScenario(form);
+				if (testScenario != null) {
+					setContent(new TreeObjectTable());
+					getContent().setCaption(
+							ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_ELEMENTS));
+					((TreeObjectTable) getContent()).setSizeFull();
+					((TreeObjectTable) getContent()).setRootElement(testScenario.getTestScenarioForm());
+					((TreeObjectTable) getContent()).setSelectable(true);
+					((TreeObjectTable) getContent()).setNullSelectionAllowed(false);
+					((TreeObjectTable) getContent()).setImmediate(true);
+					((TreeObjectTable) getContent()).setValue(testScenario.getTestScenarioForm());
+					((TreeObjectTable) getContent()).addValueChangeListener(new ValueChangeListener() {
+						private static final long serialVersionUID = 4088237440489679127L;
 
-			fieldQuestionMap = new HashMap<Field, TestScenarioQuestionAnswer>();
-			backgroundAccordion = new Accordion();
-			setCaption(form.getName());
-			backgroundAccordion.setSizeFull();
-			backgroundAccordion.setStyleName(Runo.ACCORDION_LIGHT);
-
-			TestScenarioObject testForm;
-			if (absolutePathTestScenarioObjectMap.containsKey(form.getUniqueNameReadable())) {
-				testForm = (TestScenarioObject) absolutePathTestScenarioObjectMap.get(form.getUniqueNameReadable());
-			} else {
-				testForm = new TestScenarioObject(form.getUniqueNameReadable());
-				testForm.setAbsoluteGenericPath(form.getUniqueNameReadable());
-				this.testScenario.setTestScenarioForm(testForm);
-				absolutePathTestScenarioObjectMap.put(form.getUniqueNameReadable(), testForm);
-			}
-			// Get the categories
-			List<TreeObject> categories = form.getChildren();
-			if (categories != null) {
-				for (TreeObject category : categories) {
-					TestScenarioObject testCategory = getTestScenarioObject(testForm, category.getUniqueNameReadable(),
-							false);
-					backgroundAccordion.addTab(createCategoryContent((Category) category, testCategory),
-							category.getName());
+						@Override
+						public void valueChange(ValueChangeEvent event) {
+							// setFormVariableSelectionValues();
+						}
+					});
+//					((TreeObjectTable) getContent()).collapseFrom(Category.class);
 				}
+			} catch (NotValidStorableObjectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			setContent(backgroundAccordion);
-			setHeight(100.0f, Unit.PERCENTAGE);
-		} else {
-			setCaption("");
-			setContent(null);
 		}
+
+		// if ((form != null) && (testScenario != null)) {
+		// this.form = form;
+		// this.testScenario = testScenario;
+		// createTestScenarioObjectAbsolutePathNameMap();
+		//
+		// fieldQuestionMap = new HashMap<Field, TestScenarioQuestionAnswer>();
+		// backgroundAccordion = new Accordion();
+		// setCaption(form.getName());
+		// backgroundAccordion.setSizeFull();
+		// backgroundAccordion.setStyleName(Runo.ACCORDION_LIGHT);
+		//
+		// TestScenarioObject testForm;
+		// if
+		// (absolutePathTestScenarioObjectMap.containsKey(form.getUniqueNameReadable()))
+		// {
+		// testForm = (TestScenarioObject)
+		// absolutePathTestScenarioObjectMap.get(form.getUniqueNameReadable());
+		// } else {
+		// testForm = new TestScenarioObject(form.getUniqueNameReadable());
+		// testForm.setAbsoluteGenericPath(form.getUniqueNameReadable());
+		// this.testScenario.setTestScenarioForm(testForm);
+		// absolutePathTestScenarioObjectMap.put(form.getUniqueNameReadable(),
+		// testForm);
+		// }
+		// testForm.setXmlTag(form.getName());
+		// // Get the categories
+		// List<TreeObject> categories = form.getChildren();
+		// if (categories != null) {
+		// for (TreeObject category : categories) {
+		// TestScenarioObject testCategory = getTestScenarioObject(testForm,
+		// category.getUniqueNameReadable(),
+		// false);
+		// testCategory.setXmlTag(category.getName());
+		// backgroundAccordion.addTab(createCategoryContent((Category) category,
+		// testCategory),
+		// category.getName());
+		// }
+		// }
+		// setContent(backgroundAccordion);
+		// setHeight(100.0f, Unit.PERCENTAGE);
+		// } else {
+		// setCaption("");
+		// setContent(null);
+		// }
 	}
 
+	// private void createTestScenario(){}
+
 	private Component createCategoryContent(Category category, TestScenarioObject testCategory)
-			throws NotValidChildException {
+			throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		// Create the category panels
 		VerticalLayout categoryBackground = new VerticalLayout();
 		// Put category children variables
@@ -143,8 +190,8 @@ public class TestScenarioForm extends Panel {
 							category.getUniqueNameReadable());
 					if (field != null) {
 						categoryFormLayout.addComponent(field);
+						categoryVerticalLayoutChildIndex++;
 					}
-					categoryVerticalLayoutChildIndex++;
 				}
 			}
 			// Add the form to the category background
@@ -155,25 +202,38 @@ public class TestScenarioForm extends Panel {
 	}
 
 	private Component createGroupContent(Group group, TestScenarioObject testScenarioObjectParent,
-			String groupIdentifier) throws NotValidChildException {
+			String groupIdentifier) throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 
-		TestScenarioObject testgroup = getTestScenarioObject(testScenarioObjectParent, groupIdentifier, false);
+		TestScenarioObject testGroup = getTestScenarioObject(testScenarioObjectParent, groupIdentifier, false);
+		testGroup.setXmlTag(group.getName());
 
 		// Create the group panels
 		Panel groupPanel = new Panel(group.getSimpleAsciiName());
 		VerticalLayout groupBackground = new VerticalLayout();
 		List<TreeObject> groupChildren = group.getChildren();
 		if (groupChildren != null) {
-			FormLayout groupFormLayout = new FormLayout();
 
+			FormLayout groupFormLayout = new FormLayout();
 			for (TreeObject groupChild : groupChildren) {
+				int groupVerticalLayoutChildIndex = 0;
 				if (groupChild instanceof Group) {
-					createGroupContent((Group) groupChild, testgroup, groupChild.getUniqueNameReadable());
+					groupBackground.addComponent(createGroupContent((Group) groupChild, testGroup,
+							groupChild.getUniqueNameReadable()));
+
+					if (((Group) groupChild).isRepeatable()) {
+						createRepeatedGroupContent((Group) groupChild, testGroup, groupBackground,
+								groupVerticalLayoutChildIndex);
+					} else {
+						groupBackground.addComponent(createGroupContent((Group) groupChild, testGroup,
+								groupChild.getUniqueNameReadable()));
+						groupVerticalLayoutChildIndex++;
+					}
 
 				} else if (groupChild instanceof Question) {
-					Field field = getFormLayoutField((Question) groupChild, testgroup, groupIdentifier);
+					Field field = getFormLayoutField((Question) groupChild, testGroup, groupIdentifier);
 					if (field != null) {
 						groupFormLayout.addComponent(field);
+						groupVerticalLayoutChildIndex++;
 					}
 				}
 			}
@@ -186,7 +246,8 @@ public class TestScenarioForm extends Panel {
 	}
 
 	private void createRepeatedGroupContent(Group group, TestScenarioObject testScenarioObjectParent,
-			VerticalLayout parentVerticalLayout, Integer categoryVerticalLayoutIndex) throws NotValidChildException {
+			VerticalLayout parentVerticalLayout, Integer categoryVerticalLayoutIndex) throws NotValidChildException,
+			FieldTooLongException, CharacterNotAllowedException {
 		int groupIndex = 0;
 
 		// Creation/Retrieve of the container for the repeated groups
@@ -211,7 +272,7 @@ public class TestScenarioForm extends Panel {
 		}
 		if (repeatedGroupContainerObject.getChildren().isEmpty()) {
 			// Creation of the first child in the container
-			String repeatedGroupIdentifier = group.getUniqueNameReadable() + group.getName() + groupIndex;
+			String repeatedGroupIdentifier = group.getUniqueNameReadable() + "_" + group.getName() + groupIndex;
 			TestScenarioRepeatedGroup repeatedGroupObject = new TestScenarioRepeatedGroup(repeatedGroupIdentifier);
 			repeatedGroupContainerObject.addChild(repeatedGroupObject);
 			repeatedGroupObject.setAbsoluteGenericPath(repeatedGroupIdentifier);
@@ -257,7 +318,7 @@ public class TestScenarioForm extends Panel {
 			public void buttonClick(ClickEvent event) {
 				try {
 					// Create a new repeated group
-					String repeatedGroupIdentifier = group.getUniqueNameReadable() + group.getName() + groupIndex;
+					String repeatedGroupIdentifier = group.getUniqueNameReadable() + "_" + group.getName() + groupIndex;
 					TestScenarioRepeatedGroup repeatedGroupObject = new TestScenarioRepeatedGroup(
 							repeatedGroupIdentifier);
 					testScenarioObjectParent.addChild(repeatedGroupObject);
@@ -267,7 +328,7 @@ public class TestScenarioForm extends Panel {
 					background.addComponent(createGroupContent(group, repeatedGroupObject, repeatedGroupIdentifier),
 							layoutIndex);
 					layoutIndex++;
-				} catch (NotValidChildException e) {
+				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -276,13 +337,18 @@ public class TestScenarioForm extends Panel {
 	}
 
 	private Field<Field> getFormLayoutField(Question question, TestScenarioObject testScenarioObject,
-			String parentIdentifier) throws NotValidChildException {
+			String parentIdentifier) throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		TestAnswer testAnswer = null;
 		Field field = null;
-		String questionIdentifier = question.getUniqueNameReadable();
-		TestScenarioObject testObject = getTestScenarioObject(testScenarioObject, questionIdentifier, true);
-		if (testObject instanceof TestScenarioQuestionAnswer) {
-			TestScenarioQuestionAnswer testQuestionAnswer = (TestScenarioQuestionAnswer) testObject;
+		String questionIdentifier = parentIdentifier + "_" + question.getDefaultTechnicalName()
+				+ question.getParent().getChildren().indexOf(question) + question.getSimpleAsciiName();
+
+		TestScenarioObject testQuestion = getTestScenarioObject(testScenarioObject, questionIdentifier, true);
+		testQuestion.setXmlTag(question.getName());
+
+		testQuestion.setName(question.getUniqueNameReadable());
+		if (testQuestion instanceof TestScenarioQuestionAnswer) {
+			TestScenarioQuestionAnswer testQuestionAnswer = (TestScenarioQuestionAnswer) testQuestion;
 			testAnswer = testQuestionAnswer.getTestAnswer();
 
 			switch (question.getAnswerType()) {
@@ -529,6 +595,7 @@ public class TestScenarioForm extends Panel {
 					// the form structure
 					// We have to create a new parent
 					testScenarioObjectParent = new TestScenarioObject(testScenarioObjectParent.getAbsoluteGenericPath());
+					testScenarioObjectParent.setXmlTag(testScenarioObjectParent.getXmlTag());
 					absolutePathTestScenarioObjectMap.put(testScenarioObjectParent.getAbsoluteGenericPath(),
 							testScenarioObjectParent);
 					getTestScenarioObject(testScenarioObjectParent, absolutePathName, question);

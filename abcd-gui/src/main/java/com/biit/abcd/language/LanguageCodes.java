@@ -426,6 +426,7 @@ public enum LanguageCodes {
 	TEST_SCENARIOS_TABLE_COLUMN_NAME("test.scenarios.table.column.name"),
 	TEST_SCENARIOS_TABLE_COLUMN_UPDATE("test.scenarios.table.column.update"),
 	TEST_SCENARIOS_WARNING_NAME_TOO_LONG("test.scenarios.warning.name.too.long"),
+	TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED("test.scenarios.warning.character.not.allowed"),
 	TEST_SCENARIOS_EDITOR_BUTTON_SAVE_CAPTION("test.scenarios.editor.button.save.caption"),
 	TEST_SCENARIOS_EDITOR_BUTTON_SAVE_TOOLTIP("test.scenarios.editor.button.save.tooltip"),
 	TEST_SCENARIOS_EDITOR_BUTTON_ADD_CAPTION("test.scenarios.editor.button.add.caption"),

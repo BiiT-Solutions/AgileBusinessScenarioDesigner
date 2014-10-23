@@ -332,7 +332,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 		addIconButton(newFormButton);
 		addIconButton(newVersion);
 		addIconButton(exportToDrools);
+		// TODO remove disabled
+		createTestScenario.setEnabled(false);
 		addIconButton(createTestScenario);
+		launchTestScenario.setEnabled(false);
 		addIconButton(launchTestScenario);
 	}
 

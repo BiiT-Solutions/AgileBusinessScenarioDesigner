@@ -10,7 +10,7 @@ import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 
-public class Question extends SubmittedFormObject implements IQuestion, IDroolsForm {
+public class Question extends SubmittedFormObject implements IQuestion, IDroolsForm, IXmlGenerator {
 
 	private String answer;
 	private String name;
@@ -156,5 +156,10 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 		} else {
 			((Group) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		}
+	}
+
+	@Override
+	public String generateXML(String tabs) {
+		return tabs + "<" + getTag() + ">" + answer + "</" + getTag() + ">\n";
 	}
 }

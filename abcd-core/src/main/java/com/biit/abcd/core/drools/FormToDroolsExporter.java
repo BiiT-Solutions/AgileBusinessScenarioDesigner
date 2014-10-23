@@ -29,6 +29,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.OrbeonImporter;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -182,12 +183,14 @@ public class FormToDroolsExporter {
 	 * @throws TreeObjectParentNotValidException
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws NullTreeObjectException
+	 * @throws ChildrenNotFoundException
 	 */
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, TestScenario testScenario)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			ChildrenNotFoundException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Generate the submitted form based on the test scenario

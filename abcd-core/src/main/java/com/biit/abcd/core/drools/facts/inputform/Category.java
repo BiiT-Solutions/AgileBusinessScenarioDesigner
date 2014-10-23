@@ -10,7 +10,7 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class Category extends SubmittedFormObject implements ICategory, IDroolsForm {
+public class Category extends SubmittedFormObject implements ICategory, IDroolsForm, IXmlGenerator {
 
 	private List<IGroup> groups;
 	private ISubmittedForm parent;
@@ -142,5 +142,22 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 
 	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
 		((SubmittedForm) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+	}
+
+	@Override
+	public String generateXML(String tabs) {
+		String xmlFile = tabs + "<" + getTag() + ">\n";
+		if (getGroups() != null) {
+			for (IGroup iGroup : getGroups()) {
+				xmlFile += ((IXmlGenerator) iGroup).generateXML(tabs + "\t");
+			}
+		}
+		if (getQuestions() != null) {
+			for (IQuestion iQuestion : getQuestions()) {
+				xmlFile += ((IXmlGenerator) iQuestion).generateXML(tabs + "\t");
+			}
+		}
+		xmlFile += tabs + "</" + getTag() + ">\n";
+		return xmlFile;
 	}
 }

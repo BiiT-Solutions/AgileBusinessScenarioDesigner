@@ -697,6 +697,7 @@
         sortSeq bigint not null,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
+        xmlTag varchar(255),
         primary key (ID)
     );
 
@@ -712,6 +713,7 @@
         sortSeq bigint not null,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
+        xmlTag varchar(255),
         originalReferenceId bigint not null,
         testAnswer_ID bigint,
         primary key (ID)
@@ -729,6 +731,7 @@
         sortSeq bigint not null,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
+        xmlTag varchar(255),
         groupIndex integer not null,
         primary key (ID)
     );
@@ -745,6 +748,7 @@
         sortSeq bigint not null,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
+        xmlTag varchar(255),
         primary key (ID)
     );
 

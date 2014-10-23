@@ -8,6 +8,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.TestScenarioEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.TextField;
 
@@ -50,6 +51,10 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 			AbcdLogger.warning(this.getClass().getName(), e.toString());
 			MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_TITLE),
 					ServerTranslate.translate(LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG));
+		} catch (CharacterNotAllowedException e) {
+			AbcdLogger.warning(this.getClass().getName(), e.toString());
+			MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_TITLE),
+					ServerTranslate.translate(LanguageCodes.TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED));
 		}
 	}
 }

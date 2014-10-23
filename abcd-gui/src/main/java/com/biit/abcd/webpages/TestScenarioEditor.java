@@ -21,7 +21,9 @@ import com.biit.abcd.webpages.elements.testscenario.SelectTestScenarioTableEdita
 import com.biit.abcd.webpages.elements.testscenario.TestScenarioEditorUpperMenu;
 import com.biit.abcd.webpages.elements.testscenario.TestScenarioForm;
 import com.biit.abcd.webpages.elements.testscenario.WindowNewTestScenario;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -54,8 +56,13 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				UserSessionHandler.getTestScenariosController().setLastAccessTestScenario(getSelectedTestScenario());
-				refreshTestScenario();
+				try {
+					UserSessionHandler.getTestScenariosController()
+							.setLastAccessTestScenario(getSelectedTestScenario());
+					refreshTestScenario();
+				} catch (FieldTooLongException | CharacterNotAllowedException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+				}
 			}
 
 		});
@@ -96,10 +103,10 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			try {
 				testScenarioForm
 						.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
-			} catch (NotValidChildException e) {
+				refreshTestScenario();
+			} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
-			refreshTestScenario();
 
 		} else {
 			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
@@ -146,12 +153,17 @@ public class TestScenarioEditor extends FormWebPageComponent {
 				windowAccept.addAcceptActionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
-						TestScenario testScenario = getSelectedTestScenario();
-						removeSelectedTestScenario();
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-										+ testScenario.getClass() + " with 'Name: " + testScenario.getName() + "'.");
-						windowAccept.close();
+						try {
+							TestScenario testScenario = getSelectedTestScenario();
+							removeSelectedTestScenario();
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+									+ testScenario.getClass() + " with 'Name: " + testScenario.getName() + "'.");
+							windowAccept.close();
+						} catch (FieldTooLongException | CharacterNotAllowedException e) {
+							AbcdLogger.errorMessage(this.getClass().getName(), e);
+						}
+
 					}
 				});
 				windowAccept.showCentered();
@@ -181,12 +193,13 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		return activityPermissions;
 	}
 
-	private void removeSelectedTestScenario() {
+	private void removeSelectedTestScenario() throws FieldTooLongException, CharacterNotAllowedException {
 		tableSelectTestScenario.removeSelectedRow();
 		refreshTestScenario();
 	}
 
-	public void addTestScenarioToMenu(TestScenario testScenario) {
+	public void addTestScenarioToMenu(TestScenario testScenario) throws FieldTooLongException,
+			CharacterNotAllowedException {
 		tableSelectTestScenario.addRow(testScenario);
 		tableSelectTestScenario.setSelectedTestScenario(testScenario);
 		refreshTestScenario();
@@ -200,7 +213,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		tableSelectTestScenario.setSelectedTestScenario(testScenario);
 	}
 
-	private void refreshTestScenario() {
+	private void refreshTestScenario() throws FieldTooLongException, CharacterNotAllowedException {
 		try {
 			testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
 		} catch (NotValidChildException e) {
