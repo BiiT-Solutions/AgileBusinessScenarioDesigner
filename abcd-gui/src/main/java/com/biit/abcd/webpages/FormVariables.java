@@ -15,10 +15,12 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formvariables.FormVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.formvariables.VariableTable;
+import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -93,10 +95,19 @@ public class FormVariables extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				CustomVariable customVariable = (CustomVariable) variableTable.getValue();
-				removeSelectedVariable();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has removed a " + customVariable.getClass() + " with 'Name: " + customVariable.getName()
-						+ " - Type: " + customVariable.getType() + " - Scope: " + customVariable.getScope() + "'.");
+				try {
+					CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController().getForm(),
+							customVariable);
+					removeSelectedVariable();
+					AbcdLogger.info(this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+									+ customVariable.getClass() + " with 'Name: " + customVariable.getName()
+									+ " - Type: " + customVariable.getType() + " - Scope: " + customVariable.getScope()
+									+ "'.");
+				} catch (DependencyExistException e) {
+					// Forbid the remove action if exist dependency.
+					MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
+				}
 			}
 		});
 
@@ -121,12 +132,12 @@ public class FormVariables extends FormWebPageComponent {
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
+				e.printStackTrace();
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
 
 			} catch (ConstraintViolationException cve) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
 			}
 		}
 	}
