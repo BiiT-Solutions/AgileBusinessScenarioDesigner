@@ -77,6 +77,7 @@ public enum LanguageCodes {
 	WARNING_FORM_READ_ONLY("warning.form.read.only"),
 	WARNING_FORM_READ_ONLY_DESCRIPTION("warning.form.read.only.description"),
 	WARNING_NEW_VERSION("warning.new.version"),
+	WARNING_CLEAR_CACHE("warning.clear.cache"),
 
 
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),
@@ -109,6 +110,7 @@ public enum LanguageCodes {
 	EXPRESSION_DESIGNER_WARNING_CANNOT_REMOVE_EXPRESSION("warning.expression.not.removable"),
 	RULE_DESIGNER_WARNING_CANNOT_REMOVE_RULE("warning.rule.not.removable"),
 	TABLE_RULE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE("warning.tablerule.not.removable"),
+	VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE("warning.tablerule.not.removable"),
 
 	BOTTOM_MENU_FORM_MANAGER("page.bottommenu.formManager"),
 	BOTTOM_MENU_TREE_DESIGNER("page.bottommenu.treeDesigner"),
@@ -237,6 +239,7 @@ public enum LanguageCodes {
 	ERROR_INCOMPATIBLE_TYPES_MORE_INFO("error.incompatible.types.more.info"),
 	
 	INFO_DATA_STORED("info.data.store"),
+	INFO_CACHE_CLEARED("info.cache.cleared"),
 
 	ANSWER_TYPE_INPUT("answer.type.input"),
 	ANSWER_TYPE_RADIO("answer.type.radio"),
@@ -286,6 +289,7 @@ public enum LanguageCodes {
 	SETTINGS_DROOLS_ENGINE("settings.drools.engine"),
 	SETTINGS_LOG_OUT("settings.log.out"),
 	SETTINGS_CLOSE("settings.close"),
+	SETTINGS_CLEAR_CACHE("settings.clear.cache"),
 
 	GLOBAL_VARIABLE_ADD_WINDOW_TITLE("global.variable.window.title"),
 	GLOBAL_VARIABLE_EDIT_WINDOW_TITLE("global.variable.edit.window.title"),

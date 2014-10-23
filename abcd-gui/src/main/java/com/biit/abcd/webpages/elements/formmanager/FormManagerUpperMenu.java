@@ -41,6 +41,7 @@ import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.biit.liferay.security.AuthorizationService;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -373,7 +374,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	public void updateNewVersionButton(SimpleFormView selected) {
 		if (selected != null && !(selected instanceof RootForm)) {
-			newVersion.setEnabled(selected.isLastVersion());
+			newVersion.setEnabled(selected.isLastVersion()
+					&& !AbcdAuthorizationService.getInstance().isFormReadOnly(selected, UserSessionHandler.getUser()));
 		} else {
 			newVersion.setEnabled(false);
 		}

@@ -2,6 +2,7 @@ package com.biit.abcd.persistence.utils;
 
 import java.util.List;
 
+import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
@@ -187,5 +188,11 @@ public class CheckDependencies {
 				checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), expressionChain);
 			}
 		}
+	}
+
+	public static void checkCustomVariableDependencies(Form form, CustomVariable customVariable)
+			throws DependencyExistException {
+		// TODO Auto-generated method stub
+
 	}
 }

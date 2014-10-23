@@ -14,6 +14,8 @@ public enum AbcdRoles {
 
 	FORM_ADMIN("abcd_administration"),
 
+	APPLICATION_ADMIN("abcd_application-administration"),
+
 	GLOBAL_CONSTANTS("abcd_manage-global-constants");
 
 	private String stringTag;

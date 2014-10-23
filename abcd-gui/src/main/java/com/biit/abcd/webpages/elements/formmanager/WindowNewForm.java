@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.formmanager;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -65,7 +65,7 @@ public class WindowNewForm extends AcceptCancelWindow {
 		organizationField.setNullSelectionAllowed(false);
 		organizationField.setWidth("100%");
 		try {
-			List<Organization> organizations = AbcdAuthorizationService.getInstance().getUserOrganizations(
+			Set<Organization> organizations = AbcdAuthorizationService.getInstance().getUserOrganizations(
 					UserSessionHandler.getUser());
 			Iterator<Organization> itr = organizations.iterator();
 			while (itr.hasNext()) {
@@ -84,7 +84,8 @@ public class WindowNewForm extends AcceptCancelWindow {
 				organizationField.setItemCaption(organization, organization.getName());
 			}
 			if (!organizations.isEmpty()) {
-				organizationField.setValue(organizations.get(0));
+				Iterator<Organization> organizationIterator = organizations.iterator();
+				organizationField.setValue(organizationIterator.next());
 			}
 		} catch (IOException | AuthenticationRequired e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);

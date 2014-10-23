@@ -20,6 +20,8 @@ public enum DActivity implements IActivity {
 	USER_EDIT_OWN_DATA("UserEditOwnData"),
 
 	ADMIN_FORMS("AdminForms"),
+	
+	EVICT_CACHE("EvictCache"),
 
 	GLOBAL_VARIABLE_EDITOR("GlobalVariables");
 

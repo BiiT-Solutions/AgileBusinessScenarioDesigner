@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -55,6 +56,7 @@ public abstract class DiagramElement extends DiagramObject {
 
 	@Expose
 	private float angle;
+
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private DiagramBiitText biitText;

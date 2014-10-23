@@ -253,7 +253,7 @@ public class ExpressionViewer extends CssLayout {
 										}
 									});
 									stringInputWindow.showCentered();
-									// For Numbers
+									// For Global
 								} else if (expression instanceof ExpressionValueGlobalConstant) {
 									SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
 									globalWindow.showCentered();
