@@ -38,7 +38,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
-	@Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
+	//@Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {

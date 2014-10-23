@@ -238,6 +238,7 @@ public enum LanguageCodes {
 	ERROR_INCOMPATIBLE_TYPES_MORE_INFO("error.incompatible.types.more.info"),
 	
 	INFO_DATA_STORED("info.data.store"),
+	INFO_CACHE_CLEARED("info.cache.cleared"),
 
 	ANSWER_TYPE_INPUT("answer.type.input"),
 	ANSWER_TYPE_RADIO("answer.type.radio"),

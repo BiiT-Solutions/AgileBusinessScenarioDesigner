@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.components;
 import java.io.IOException;
 
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
@@ -97,6 +98,7 @@ public class SettingsWindow extends PopupWindow {
 										AbcdLogger.info(this.getClass().getName(), "User '"
 												+ UserSessionHandler.getUser().getEmailAddress()
 												+ "' has cleared all the 2nd level cache.");
+										MessageManager.showInfo(LanguageCodes.INFO_CACHE_CLEARED);
 										windowAccept.close();
 									}
 								});

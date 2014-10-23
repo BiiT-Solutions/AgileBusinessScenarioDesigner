@@ -53,7 +53,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
 	@BatchSize(size = 10)
-	@Cache(region = "diagramObjects", usage = CacheConcurrencyStrategy.READ_WRITE)
+	//@Cache(region = "diagramObjects", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<DiagramObject> diagramObjects;
 
 	public Diagram() {

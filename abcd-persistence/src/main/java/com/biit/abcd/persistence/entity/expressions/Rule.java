@@ -29,9 +29,9 @@ public class Rule extends StorableObject implements INameAttribute {
 	private String name;
 
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
+	//@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private ExpressionChain conditions;
-	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
+	//@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	private ExpressionChain actions;
 
