@@ -52,11 +52,11 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	};
 
 	/**
-	 * Can do administration task for forms. Has by default all Webforms manager permissions.
+	 * Can do administration task for forms. Also has by default all ABCD manager permissions.
 	 */
-	private static final DActivity[] ADMINISTRATOR_EXTRA_PERMISSIONS = {
+	private static final DActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
-	DActivity.ADMIN_FORMS
+	DActivity.ADMIN_FORMS,
 
 	};
 
@@ -66,28 +66,38 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	};
 
+	/**
+	 * Manage general application options.
+	 */
+	private static final DActivity[] APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS = {
+
+	DActivity.EVICT_CACHE
+
+	};
+
 	private static List<IActivity> formManagerPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> readOnlyPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> formAdministratorPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> globalConstantsAdministratorPermissions = new ArrayList<IActivity>();
+	private static List<IActivity> applicationAdministratorPermissions = new ArrayList<IActivity>();
 
 	private static AbcdAuthorizationService instance = new AbcdAuthorizationService();
 
 	static {
-		for (DActivity activity : ADMINISTRATOR_EXTRA_PERMISSIONS) {
+		for (DActivity activity : FORM_ADMINISTRATOR_EXTRA_PERMISSIONS) {
 			formAdministratorPermissions.add(activity);
 		}
 		for (DActivity activity : MANAGE_FORMS_ACTIVITIES) {
-			formAdministratorPermissions.add(activity);
 			formManagerPermissions.add(activity);
 		}
 		for (DActivity activity : READ_ONLY) {
 			readOnlyPermissions.add(activity);
-			formAdministratorPermissions.add(activity);
-			formManagerPermissions.add(activity);
 		}
 		for (DActivity activity : MANAGE_GLOBAL_CONSTANTS) {
 			globalConstantsAdministratorPermissions.add(activity);
+		}
+		for (DActivity activity : APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS) {
+			applicationAdministratorPermissions.add(activity);
 		}
 	}
 
@@ -100,14 +110,15 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	}
 
 	@Override
-	public List<IActivity> getRoleActivities(Role role) {
-		List<IActivity> activities = new ArrayList<IActivity>();
+	public Set<IActivity> getRoleActivities(Role role) {
+		Set<IActivity> activities = new HashSet<IActivity>();
 		AbcdRoles webFormRole = AbcdRoles.parseTag(role.getName());
 		switch (webFormRole) {
 		case FORM_ADMIN:
 			activities.addAll(formAdministratorPermissions);
 			activities.addAll(formManagerPermissions);
 			activities.addAll(readOnlyPermissions);
+			activities.addAll(globalConstantsAdministratorPermissions);
 			break;
 		case FORM_EDIT:
 			activities.addAll(formManagerPermissions);
@@ -120,6 +131,11 @@ public class AbcdAuthorizationService extends AuthorizationService {
 			break;
 		case GLOBAL_CONSTANTS:
 			activities.addAll(globalConstantsAdministratorPermissions);
+			activities.addAll(readOnlyPermissions);
+			break;
+		case APPLICATION_ADMIN:
+			activities.addAll(readOnlyPermissions);
+			activities.addAll(applicationAdministratorPermissions);
 			break;
 		}
 		return activities;
@@ -158,7 +174,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		}
 
 		// Get all organizations of user
-		List<Organization> organizations = getUserOrganizations(user);
+		Set<Organization> organizations = getUserOrganizations(user);
 		for (Organization organization : organizations) {
 			if (isAuthorizedActivity(user, organization, activity)) {
 				return true;
@@ -203,7 +219,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	private Organization getOrganization(User user, Long organizationId) {
 		try {
-			List<Organization> organizations = getUserOrganizations(user);
+			Set<Organization> organizations = getUserOrganizations(user);
 			for (Organization organization : organizations) {
 				if (organization.getOrganizationId() == organizationId) {
 					return organization;
@@ -216,8 +232,8 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return null;
 	}
 
-	public List<Organization> getUserOrganizationsWhereIsAuthorized(User user, IActivity activity) {
-		List<Organization> organizations = new ArrayList<>();
+	public Set<Organization> getUserOrganizationsWhereIsAuthorized(User user, IActivity activity) {
+		Set<Organization> organizations = new HashSet<>();
 		try {
 			organizations = getUserOrganizations(user);
 			Iterator<Organization> itr = organizations.iterator();

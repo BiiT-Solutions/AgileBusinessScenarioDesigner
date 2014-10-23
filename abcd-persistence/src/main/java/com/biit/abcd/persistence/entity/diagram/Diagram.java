@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -51,6 +53,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
 	@BatchSize(size = 10)
+	@Cache(region = "diagramObjects", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<DiagramObject> diagramObjects;
 
 	public Diagram() {

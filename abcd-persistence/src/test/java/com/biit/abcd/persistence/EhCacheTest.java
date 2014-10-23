@@ -62,6 +62,57 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		formDao.makeTransient(form);
 		form = formDao.read(id);
 		Assert.assertNull(form);
+	}
+
+	@Test
+	public void testSecondLevelCacheClear() throws FieldTooLongException {
+		formDao.getSessionFactory().getStatistics().clear();
+
+		Form form = new Form();
+		form.setOrganizationId(0l);
+		form.setLabel(DUMMY_FORM);
+		formDao.makePersistent(form);
+
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount(), 0);
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
+
+		// fetch the form entity from database first time
+		form = formDao.getForm(DUMMY_FORM, 0l);
+		Assert.assertNotNull(form);
+
+		EntityStatistics entityStats = formDao.getSessionFactory().getStatistics()
+				.getEntityStatistics(Form.class.getName());
+		Assert.assertEquals(entityStats.getLoadCount(), 1);
+		Assert.assertEquals(entityStats.getFetchCount(), 0);
+
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
+		Assert.assertTrue(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount() > 0);
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
+
+		// Here entity is already in second level cache (session has been closed) so no database query will be hit
+		form = formDao.getForm(DUMMY_FORM, 0l);
+		Assert.assertNotNull(form);
+
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
+		long cacheHits = formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount();
+		Assert.assertTrue(cacheHits > 0);
+
+		// Clear the cache and retrieve again the form. No new cache hits.
+		formDao.evictAllCache();
+		form = formDao.getForm(DUMMY_FORM, 0l);
+		Assert.assertNotNull(form);
+
+		// Cache hits does not change.
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), cacheHits);
+
+		// But new access increases hits counter.
+		form = formDao.getForm(DUMMY_FORM, 0l);
+		Assert.assertNotNull(form);
+
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
+		// Cache hits now change.
+		Assert.assertTrue(cacheHits < formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
 
 	}
 }

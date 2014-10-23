@@ -20,7 +20,7 @@ public class JpaSchemaExporter {
 	private static final String DEFAULT_DATABASE_PORT = "3306";
 	private static final String DEFAULT_DATABASE_USER = "testuser";
 	private static final String DEFAULT_DATABASE_PASSWORD = "asd123";
-	private static final String PACKET_TO_SCAN[] = { "com.biit.abcd.persistence.entity" };
+	private static final String PACKETS_TO_SCAN[] = { "com.biit.abcd.persistence.entity" };
 	private static final String DEFAULT_OUTPUT_DIRECTORY = "../abcd-release/database/";
 	private Configuration cfg;
 
@@ -134,7 +134,7 @@ public class JpaSchemaExporter {
 	 *            args[0] -> directory, args[1] -> user, args[2] -> password, args[3] -> host, args[4] -> port
 	 */
 	public static void main(String[] args) {
-		JpaSchemaExporter gen = new JpaSchemaExporter(PACKET_TO_SCAN);
+		JpaSchemaExporter gen = new JpaSchemaExporter(PACKETS_TO_SCAN);
 		String directory;
 		if (args.length == 0) {
 			directory = DEFAULT_OUTPUT_DIRECTORY;

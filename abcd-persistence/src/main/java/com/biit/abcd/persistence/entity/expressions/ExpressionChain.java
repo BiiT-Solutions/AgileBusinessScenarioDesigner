@@ -13,6 +13,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
@@ -36,6 +38,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
+	@Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {

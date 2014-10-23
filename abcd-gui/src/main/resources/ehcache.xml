@@ -9,7 +9,7 @@
 	<cache name="tableRules" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
 	<cache name="tableRuleRows" maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
 	<cache name="customVariables" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
-	<cache name="expressionChains" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
+	<cache name="expressionChains" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
 	<cache name="expressions" maxElementsInMemory="20000" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
-	<cache name="rules" maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
+	<cache name="rules" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" />
 </ehcache>

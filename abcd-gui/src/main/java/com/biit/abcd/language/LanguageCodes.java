@@ -77,6 +77,7 @@ public enum LanguageCodes {
 	WARNING_FORM_READ_ONLY("warning.form.read.only"),
 	WARNING_FORM_READ_ONLY_DESCRIPTION("warning.form.read.only.description"),
 	WARNING_NEW_VERSION("warning.new.version"),
+	WARNING_CLEAR_CACHE("warning.clear.cache"),
 
 
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),
@@ -286,6 +287,7 @@ public enum LanguageCodes {
 	SETTINGS_DROOLS_ENGINE("settings.drools.engine"),
 	SETTINGS_LOG_OUT("settings.log.out"),
 	SETTINGS_CLOSE("settings.close"),
+	SETTINGS_CLEAR_CACHE("settings.clear.cache"),
 
 	GLOBAL_VARIABLE_ADD_WINDOW_TITLE("global.variable.window.title"),
 	GLOBAL_VARIABLE_EDIT_WINDOW_TITLE("global.variable.edit.window.title"),
