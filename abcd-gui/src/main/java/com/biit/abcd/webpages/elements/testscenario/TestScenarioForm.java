@@ -279,7 +279,7 @@ public class TestScenarioForm extends Panel {
 			String parentIdentifier) throws NotValidChildException {
 		TestAnswer testAnswer = null;
 		Field field = null;
-		String questionIdentifier = parentIdentifier + question.getName();
+		String questionIdentifier = question.getUniqueNameReadable();
 		TestScenarioObject testObject = getTestScenarioObject(testScenarioObject, questionIdentifier, true);
 		if (testObject instanceof TestScenarioQuestionAnswer) {
 			TestScenarioQuestionAnswer testQuestionAnswer = (TestScenarioQuestionAnswer) testObject;

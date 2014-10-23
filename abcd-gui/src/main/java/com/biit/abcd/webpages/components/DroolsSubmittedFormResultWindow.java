@@ -209,7 +209,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				if (questionTreeObject.getAnswerType().equals(AnswerType.INPUT)
 						&& questionTreeObject.getAnswerFormat().equals(AnswerFormat.DATE)) {
 					try {
-						if (questionSubForm.getAnswer() != null) {
+						if ((questionSubForm.getAnswer() != null) && (questionSubForm.getAnswer() != "")) {
 							SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 							String formattedDate = dateFormat.format(questionSubForm.getAnswer());
 							formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
@@ -222,7 +222,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 						AbcdLogger.errorMessage(this.getClass().getName(), e);
 					}
 				} else {
-					if (questionSubForm.getAnswer() != null) {
+					if ((questionSubForm.getAnswer() != null) && (questionSubForm.getAnswer() != "")) {
 						formTreeTable.getItem(question).getItemProperty(TreeObjectTableProperties.ORIGINAL_VALUE)
 								.setValue(questionSubForm.getAnswer().toString());
 					} else {
