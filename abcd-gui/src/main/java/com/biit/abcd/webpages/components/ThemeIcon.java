@@ -184,7 +184,11 @@ public enum ThemeIcon {
 	
 	TEST_REMOVE("page.form.tests.remove.svg"),
 	
-	EXPORT_CSV_FILE("appbar.page.csv.svg");
+	EXPORT_CSV_FILE("appbar.page.csv.svg"),
+	
+	TEST_COPY_GROUP("page.form.tests.remove.svg"),
+	
+	TEST_REMOVE_GROUP("page.form.tests.remove.svg");
 	
 
 	private String value;

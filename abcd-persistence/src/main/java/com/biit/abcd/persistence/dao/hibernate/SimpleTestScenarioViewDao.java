@@ -75,7 +75,7 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 				testScenarioView.setCreatedBy(((Double) row[3]).longValue());
 			}
 			testScenarioView.setUpdateTime((Timestamp) row[4]);
-			if (row[4] != null) {
+			if (row[5] != null) {
 				testScenarioView.setUpdatedBy(((Double) row[5]).longValue());
 			}
 			testScenarioView.setName((String) row[6]);

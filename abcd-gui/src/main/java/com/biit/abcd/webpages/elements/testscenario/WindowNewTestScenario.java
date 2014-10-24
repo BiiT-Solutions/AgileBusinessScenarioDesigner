@@ -9,7 +9,9 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.TestScenarioEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.ui.TextField;
 
 public class WindowNewTestScenario extends WindowCreateNewObject {
@@ -30,14 +32,8 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 			}
 		}
 		try {
-			TestScenario testScenario = new TestScenario();
-			testScenario.setName(inputTextField.getValue());
-			testScenario.setCreatedBy(UserSessionHandler.getUser());
-			testScenario.setUpdatedBy(UserSessionHandler.getUser());
-			testScenario.setUpdateTime();
-			testScenario.setFormLabel(UserSessionHandler.getFormController().getForm().getLabel());
-			testScenario.setFormOrganizationId(UserSessionHandler.getFormController().getForm().getOrganizationId());
-			testScenario.setFormVersion(UserSessionHandler.getFormController().getForm().getVersion());
+			TestScenario testScenario = new TestScenario(inputTextField.getValue(), UserSessionHandler
+					.getFormController().getForm());
 			UserSessionHandler.getTestScenariosController()
 					.getTestScenarios(UserSessionHandler.getFormController().getForm()).add(testScenario);
 			((TestScenarioEditor) getParentWindow()).addTestScenarioToMenu(testScenario);
@@ -55,6 +51,10 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 			AbcdLogger.warning(this.getClass().getName(), e.toString());
 			MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_TITLE),
 					ServerTranslate.translate(LanguageCodes.TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED));
+		} catch (NotValidStorableObjectException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		} catch (NotValidChildException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 }

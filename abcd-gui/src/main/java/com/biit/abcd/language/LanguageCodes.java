@@ -439,6 +439,12 @@ public enum LanguageCodes {
 	TEST_SCENARIOS_EDITOR_BUTTON_REMOVE_TOOLTIP("test.scenarios.editor.button.remove.tooltip"),
 	TEST_SCENARIOS_EDITOR_NEW_WINDOW_CAPTION("test.scenarios.editor.new.window.caption"),
 	TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION("test.scenarios.editor.new.window.field.caption"),
+	TEST_SCENARIOS_EDITOR_COPY_REPEATABLE_GROUP_CAPTION("test.scenarios.editor.copy.repeatable.group.caption"),
+	TEST_SCENARIOS_EDITOR_COPY_REPEATABLE_GROUP_TOOLTIP("test.scenarios.editor.copy.repeatable.group.tooltip"),
+	TEST_SCENARIOS_EDITOR_REMOVE_REPEATABLE_GROUP_CAPTION("test.scenarios.editor.remove.repeatable.group.caption"),
+	TEST_SCENARIOS_EDITOR_REMOVE_REPEATABLE_GROUP_TOOLTIP("test.scenarios.editor.remove.repeatable.group.tooltip"),
+	TEST_SCENARIOS_WARNING_NO_REMOVE("test.scenarios.warning.no.remove"),
+	TEST_SCENARIOS_WARNING_NO_REMOVE_DESCRIPTION("test.scenarios.warning.no.remove.description"),
 	
 	TECHNICAL_NAME_ERROR("technical.name.error"),
 	

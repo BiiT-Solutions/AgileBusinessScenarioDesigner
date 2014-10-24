@@ -30,25 +30,25 @@ public class TestScenarioAnswerImporter {
 
 	public static ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario)
 			throws ChildrenNotFoundException {
-		ISubmittedForm submittedForm = null;
-		if ((form != null) && (testScenario != null)) {
-			// If the test scenario is a subset of the form passed, we parse the
-			// structure
-			if (TestScenarioValidator.isSubset(form, testScenario.getTestScenarioForm())) {
-				// setTestScenario(testScenario);
-				TestScenarioObject testForm = testScenario.getTestScenarioForm();
-				submittedForm = new SubmittedForm(testForm.getName());
-				// Get the categories
-				List<TreeObject> categories = testForm.getChildren();
-				if (categories != null) {
-					for (TreeObject category : categories) {
-						createCategory((TestScenarioObject) category, submittedForm);
-					}
-				}
-
-			}
-		}
-		createSubmittedFormFile(submittedForm);
+//		ISubmittedForm submittedForm = null;
+//		if ((form != null) && (testScenario != null)) {
+//			// If the test scenario is a subset of the form passed, we parse the
+//			// structure
+//			if (TestScenarioValidator.isSubset(form, testScenario.getTestScenarioForm())) {
+//				// setTestScenario(testScenario);
+//				TestScenarioObject testForm = testScenario.getTestScenarioForm();
+//				submittedForm = new SubmittedForm(testForm.getName());
+//				// Get the categories
+//				List<TreeObject> categories = testForm.getChildren();
+//				if (categories != null) {
+//					for (TreeObject category : categories) {
+//						createCategory((TestScenarioObject) category, submittedForm);
+//					}
+//				}
+//
+//			}
+//		}
+//		createSubmittedFormFile(submittedForm);
 		return null;
 		// return submittedForm;
 	}

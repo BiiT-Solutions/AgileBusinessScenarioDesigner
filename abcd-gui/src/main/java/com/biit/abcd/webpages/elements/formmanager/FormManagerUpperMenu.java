@@ -41,7 +41,6 @@ import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.biit.liferay.security.AuthorizationService;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -333,10 +332,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		addIconButton(newFormButton);
 		addIconButton(newVersion);
 		addIconButton(exportToDrools);
-		// TODO remove disabled
-		createTestScenario.setEnabled(false);
 		addIconButton(createTestScenario);
-		launchTestScenario.setEnabled(false);
 		addIconButton(launchTestScenario);
 	}
 

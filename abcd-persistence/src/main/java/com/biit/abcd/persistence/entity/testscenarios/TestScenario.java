@@ -32,7 +32,8 @@ public class TestScenario extends StorableObject implements INameAttribute {
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private TestScenarioObject testScenarioForm;
+	// private TestScenarioObject testScenarioForm;
+	private TestScenarioForm testScenarioForm;
 	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 
@@ -48,16 +49,14 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		super();
 	}
 
-	/**
-	 * Creates a new test scenario with the structure based on the form passed
-	 * 
-	 * @param form
-	 * @throws NotValidStorableObjectException
-	 * @throws NotValidChildException
-	 */
-	public TestScenario(Form form) throws NotValidStorableObjectException, NotValidChildException {
+	public TestScenario(String scenarioName, Form form) throws NotValidStorableObjectException, NotValidChildException,
+			FieldTooLongException {
 		super();
-		testScenarioForm = new TestScenarioObject(form);
+		setName(scenarioName);
+		testScenarioForm = new TestScenarioForm(form);
+		setFormLabel(testScenarioForm.getLabel());
+		setFormVersion(testScenarioForm.getVersion());
+		setFormOrganizationId(testScenarioForm.getOrganizationId());
 	}
 
 	public TestScenario(String name) throws FieldTooLongException {
@@ -65,11 +64,11 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		setName(name);
 	}
 
-	public TestScenarioObject getTestScenarioForm() {
+	public TestScenarioForm getTestScenarioForm() {
 		return testScenarioForm;
 	}
 
-	public void setTestScenarioForm(TestScenarioObject testScenarioForm) {
+	public void setTestScenarioForm(TestScenarioForm testScenarioForm) {
 		this.testScenarioForm = testScenarioForm;
 	}
 
@@ -77,7 +76,6 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	public void resetIds() {
 		super.resetIds();
 		getTestScenarioForm().resetIds();
-
 	}
 
 	public void setName(String name) throws FieldTooLongException {
@@ -108,26 +106,27 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	}
 
 	public String getFormLabel() {
-		return formLabel;
-	}
-
-	public void setFormLabel(String formLabel) {
-		this.formLabel = formLabel;
+		return testScenarioForm.getLabel();
 	}
 
 	public Integer getFormVersion() {
-		return formVersion;
-	}
-
-	public void setFormVersion(Integer formVersion) {
-		this.formVersion = formVersion;
+		return testScenarioForm.getVersion();
 	}
 
 	public Long getFormOrganizationId() {
-		return formOrganizationId;
+		return testScenarioForm.getOrganizationId();
 	}
 
-	public void setFormOrganizationId(Long formOrganizationId) {
+	private void setFormLabel(String formLabel) {
+		this.formLabel = formLabel;
+	}
+
+	private void setFormVersion(Integer formVersion) {
+		this.formVersion = formVersion;
+	}
+
+	private void setFormOrganizationId(Long formOrganizationId) {
 		this.formOrganizationId = formOrganizationId;
 	}
+
 }

@@ -10,17 +10,24 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.Category;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputNumber;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenarioObject;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestionAnswer;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
+import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.exceptions.NotValidFormException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -30,10 +37,8 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	private static final String FORM_LABEL = "Form";
 	private static final String FORM_LABEL_ERROR = "Bad_Form";
 	private static final Long FORM_ORGANIZATION_ID = 0l;
-	private static final Integer FORM_VERSION = 1;
+	private static final Integer FORM_VERSION = 0;
 	private static final String TEST_SCENARIO_NAME = "test1";
-	private static final Double TEST_ANSWER_VALUE = 5.0;
-	private static final String FORM_NAME = "Form";
 	private static final String CATEGORY_NAME = "Category";
 	private static final String QUESTION_NAME = "Question";
 
@@ -43,11 +48,16 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	private IFormDao formDao;
 
 	@Test
-	public void storeRemoveTestScenarios() throws NotValidFormException, FieldTooLongException {
-		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
-		testScenario.setFormLabel(FORM_LABEL);
-		testScenario.setFormOrganizationId(FORM_ORGANIZATION_ID);
-		testScenario.setFormVersion(FORM_VERSION);
+	public void storeRemoveTestScenarios() throws NotValidFormException, FieldTooLongException,
+			NotValidStorableObjectException, CharacterNotAllowedException, NotValidChildException {
+		Form form = new Form();
+		form.setOrganizationId(FORM_ORGANIZATION_ID);
+		form.setLabel(FORM_LABEL);
+		Category category = new Category();
+		category.setName(CATEGORY_NAME);
+		form.addChild(category);
+
+		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME, form);
 
 		testScenarioDao.makePersistent(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
@@ -56,8 +66,8 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
 
-		persistedList = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(FORM_LABEL, FORM_VERSION,
-				FORM_ORGANIZATION_ID);
+		persistedList = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(form.getLabel(), form.getVersion(),
+				form.getOrganizationId());
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
 
@@ -71,24 +81,33 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 
 	@Test
 	public void storeRemoveTestScenariosMapData() throws NotValidFormException, FieldTooLongException,
-			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException, ChildrenNotFoundException {
-		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME);
-		testScenario.setFormLabel("Form");
-		testScenario.setFormOrganizationId(0l);
-		testScenario.setFormVersion(1);
+			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException, ChildrenNotFoundException,
+			InvalidAnswerFormatException, NotValidStorableObjectException {
+		Form form = new Form();
+		form.setOrganizationId(FORM_ORGANIZATION_ID);
+		form.setLabel(FORM_LABEL);
+		Category category = new Category();
+		category.setName(CATEGORY_NAME);
+		form.addChild(category);
+		Question question = new Question();
+		question.setName(QUESTION_NAME);
+		question.setAnswerType(AnswerType.INPUT);
+		question.setAnswerFormat(AnswerFormat.NUMBER);
+		category.addChild(question);
 
-		TestScenarioObject formObject = new TestScenarioObject();
-		formObject.setName(FORM_NAME);
-		testScenario.setTestScenarioForm(formObject);
+		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME, form);
+		TestScenarioForm testScenarioForm = testScenario.getTestScenarioForm();
+		Assert.assertEquals(testScenarioForm.getLabel(), FORM_LABEL);
+		Assert.assertEquals(testScenarioForm.getChildren().size(), 1);
 
-		TestScenarioObject categoryObject = new TestScenarioObject();
-		categoryObject.setName(CATEGORY_NAME);
-		formObject.addChild(categoryObject);
+		TreeObject testScenarioCategory = testScenarioForm.getChild(0);
+		Assert.assertEquals(testScenarioCategory.getName(), CATEGORY_NAME);
+		Assert.assertEquals(testScenarioCategory.getChildren().size(), 1);
 
-		TestAnswer testAnswerNumber = new TestAnswerInputNumber(TEST_ANSWER_VALUE);
-		TestScenarioQuestionAnswer testScenarioQuestionAnswer = new TestScenarioQuestionAnswer(testAnswerNumber);
-		testScenarioQuestionAnswer.setName(QUESTION_NAME);
-		categoryObject.addChild(testScenarioQuestionAnswer);
+		TreeObject testQuestion = testScenarioCategory.getChild(0);
+		Assert.assertTrue(testQuestion instanceof TestScenarioQuestion);
+		TestScenarioQuestion testScenarioQuestion = (TestScenarioQuestion) testQuestion;
+		Assert.assertTrue(testScenarioQuestion.getTestAnswer() instanceof TestAnswerInputNumber);
 
 		testScenarioDao.makePersistent(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
@@ -99,16 +118,18 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		testScenario = persistedList.get(0);
 		Assert.assertEquals(testScenario.getName(), TEST_SCENARIO_NAME);
 
-		TestScenarioObject testScenarioForm = testScenario.getTestScenarioForm();
-		Assert.assertEquals(testScenarioForm, formObject);
+		testScenarioForm = testScenario.getTestScenarioForm();
+		Assert.assertEquals(testScenarioForm.getLabel(), FORM_LABEL);
 		Assert.assertEquals(testScenarioForm.getChildren().size(), 1);
-		
-		TestScenarioObject testScenarioCategory = (TestScenarioObject) testScenarioForm.getChild(0);
+
+		testScenarioCategory = testScenarioForm.getChild(0);
+		Assert.assertEquals(testScenarioCategory.getName(), CATEGORY_NAME);
 		Assert.assertEquals(testScenarioCategory.getChildren().size(), 1);
 
-		TestAnswer answer = ((TestScenarioQuestionAnswer) testScenarioCategory.getChild(0)).getTestAnswer();
-		Assert.assertEquals(answer, testAnswerNumber);
-		Assert.assertEquals(answer.getValue(), TEST_ANSWER_VALUE);
+		testQuestion = testScenarioCategory.getChild(0);
+		Assert.assertTrue(testQuestion instanceof TestScenarioQuestion);
+		testScenarioQuestion = (TestScenarioQuestion) testQuestion;
+		Assert.assertTrue(testScenarioQuestion.getTestAnswer() instanceof TestAnswerInputNumber);
 
 		testScenarioDao.makeTransient(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 0);
