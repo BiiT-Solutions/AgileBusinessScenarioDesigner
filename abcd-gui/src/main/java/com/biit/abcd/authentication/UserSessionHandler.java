@@ -36,8 +36,10 @@ public class UserSessionHandler {
 
 	public static void checkOnlyOneSession(User user, UI ui) {
 		if (usersSession.get(user.getUserId()) != null) {
+			//usersSession.get(user.getUserId()).getNavigator().navigateTo(WebMap.LOGIN_PAGE.toString());
+			System.out.println(usersSession.get(user.getUserId()).getConnectorId() + " --> " + ui.getConnectorId());
+			System.out.println(usersSession.get(user.getUserId()).equals(ui));
 			usersSession.get(user.getUserId()).close();
-			usersSession.get(user.getUserId()).getNavigator().navigateTo(WebMap.LOGIN_PAGE.toString());
 			MessageManager.showWarning(LanguageCodes.INFO_USER_SESSION_EXPIRED);
 		}
 		usersSession.put(user.getUserId(), ui);
@@ -72,6 +74,7 @@ public class UserSessionHandler {
 	 * @param user
 	 */
 	public static void setUser(User user) {
+		System.out.println("########################## "+user);
 		UserSessionHandler session = getCurrent();
 		session.user = user;
 		if (user != null) {

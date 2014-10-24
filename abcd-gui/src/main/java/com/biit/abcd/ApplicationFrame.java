@@ -32,11 +32,10 @@ public class ApplicationFrame extends UI {
 
 	private void releaseResources() {
 		if (UserSessionHandler.getUser() != null) {
-			// Log user ui expired.
+			// Log user UI expired.
 			AbcdLogger.info(this.getClass().getName(), UserSessionHandler.getUser().getEmailAddress()
 					+ " UI has expired.");
 			UiAccesser.releaseForm(UserSessionHandler.getUser());
-			UserSessionHandler.setUser(null);
 		}
 	}
 
