@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.formtable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
@@ -19,7 +21,9 @@ import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
+import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
+import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
 import com.vaadin.data.Item;
 import com.vaadin.server.VaadinServlet;
@@ -31,7 +35,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private HashMap<String, List<SimpleFormView>> formMap;
 
 	enum FormsVersionsTreeTableProperties {
-		FORM_LABEL, VERSION, ACCESS, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
+		FORM_LABEL, VERSION, ACCESS, GROUP, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
 	};
 
 	public FormsVersionsTreeTable() {
@@ -55,6 +59,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 		addContainerProperty(FormsVersionsTreeTableProperties.VERSION, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_VERSION), null, Align.CENTER);
+
+		addContainerProperty(FormsVersionsTreeTableProperties.GROUP, String.class, "",
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_GROUP), null, Align.CENTER);
 
 		addContainerProperty(FormsVersionsTreeTableProperties.ACCESS, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_ACCESS), null, Align.CENTER);
@@ -83,6 +90,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.FORM_LABEL, false);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.VERSION, false);
+		setColumnCollapsible(FormsVersionsTreeTableProperties.GROUP, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.ACCESS, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.AVAILABLE_FROM, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.AVAILABLE_TO, true);
@@ -96,6 +104,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.FORM_LABEL, 3);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.VERSION, 0.5f);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.GROUP, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.ACCESS, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.AVAILABLE_FROM, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.AVAILABLE_TO, 1);
@@ -109,8 +118,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function adds a row to the table only if the list of forms is not
-	 * empty.
+	 * This function adds a row to the table only if the list of forms is not empty.
 	 * 
 	 * @param forms
 	 */
@@ -134,6 +142,17 @@ public class FormsVersionsTreeTable extends TreeTable {
 			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 			item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
 			item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
+
+			Organization organization;
+			try {
+				organization = AbcdAuthorizationService.getInstance().getOrganization(form.getOrganizationId());
+				if (organization != null) {
+					item.getItemProperty(FormsVersionsTreeTableProperties.GROUP).setValue(organization.getName());
+				}
+			} catch (IOException | AuthenticationRequired e1) {
+				AbcdLogger.errorMessage(this.getClass().getName(), e1);
+			}
+
 			item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM).setValue(
 					(DateManager.convertDateToString(form.getAvailableFrom())));
 			if (form.getAvailableTo() != null) {
@@ -242,8 +261,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function loads from database all form elements and groups them by
-	 * name. At the end it orders each form list by version number.
+	 * This function loads from database all form elements and groups them by name. At the end it orders each form list
+	 * by version number.
 	 * 
 	 * @return
 	 * @throws NotConnectedToDatabaseException
@@ -332,8 +351,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	}
 
 	/**
-	 * This function returns an string with read only if the form can't be
-	 * edited by the user
+	 * This function returns an string with read only if the form can't be edited by the user
 	 * 
 	 * @param form
 	 * @return

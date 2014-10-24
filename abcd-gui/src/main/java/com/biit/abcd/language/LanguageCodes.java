@@ -89,6 +89,7 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_NAME("formTable.column.name"),
 	FORM_TABLE_COLUMN_VERSION("formTable.column.version"),
 	FORM_TABLE_COLUMN_ACCESS("formTable.column.access"),
+	FORM_TABLE_COLUMN_GROUP("formTable.column.group"),
 	FORM_TABLE_COLUMN_AVAILABLETO("formTable.column.availableTo"),
 	FORM_TABLE_COLUMN_AVAILABLEFROM("formTable.column.availableFrom"),
 	FORM_TABLE_COLUMN_USEDBY("formTable.column.usedBy"),
