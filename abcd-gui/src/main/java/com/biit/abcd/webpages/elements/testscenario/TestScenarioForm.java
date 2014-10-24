@@ -340,8 +340,9 @@ public class TestScenarioForm extends Panel {
 			String parentIdentifier) throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		TestAnswer testAnswer = null;
 		Field field = null;
-		String questionIdentifier = parentIdentifier + "_" + question.getDefaultTechnicalName()
-				+ question.getParent().getChildren().indexOf(question) + question.getSimpleAsciiName();
+//		String questionIdentifier = parentIdentifier + "_" + question.getDefaultTechnicalName()
+//				+ question.getParent().getChildren().indexOf(question) + question.getSimpleAsciiName();
+		String questionIdentifier = "";
 
 		TestScenarioObject testQuestion = getTestScenarioObject(testScenarioObject, questionIdentifier, true);
 		testQuestion.setXmlTag(question.getName());
