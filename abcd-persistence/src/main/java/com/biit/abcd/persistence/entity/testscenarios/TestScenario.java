@@ -14,7 +14,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.utils.INameAttribute;
+import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -44,6 +46,18 @@ public class TestScenario extends StorableObject implements INameAttribute {
 
 	public TestScenario() {
 		super();
+	}
+
+	/**
+	 * Creates a new test scenario with the structure based on the form passed
+	 * 
+	 * @param form
+	 * @throws NotValidStorableObjectException
+	 * @throws NotValidChildException
+	 */
+	public TestScenario(Form form) throws NotValidStorableObjectException, NotValidChildException {
+		super();
+		testScenarioForm = new TestScenarioObject(form);
 	}
 
 	public TestScenario(String name) throws FieldTooLongException {

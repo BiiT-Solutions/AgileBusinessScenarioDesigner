@@ -13,6 +13,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -27,12 +28,23 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class TestScenarioObject extends TreeObject {
 
 	private static final String DEFAULT_QUESTION_TECHNICAL_NAME = "";
-	private String absoluteGenericPath = "";
+	private String absoluteGenericPath;
+	private String xmlTag;
 	private static final List<Class<? extends TreeObject>> ALLOWED_CHILDS = new ArrayList<Class<? extends TreeObject>>(
 			Arrays.asList(TestScenarioObject.class, TestScenarioQuestionAnswer.class));
 
 	public TestScenarioObject() {
 		super();
+	}
+
+	public TestScenarioObject(TreeObject treeObject) throws NotValidStorableObjectException, NotValidChildException {
+		super();
+		copyBasicInfo(treeObject);
+		if (treeObject.getChildren() != null) {
+			for (TreeObject child : treeObject.getChildren()) {
+				addChild(new TestScenarioObject(child));
+			}
+		}
 	}
 
 	public TestScenarioObject(String name) {
@@ -43,6 +55,7 @@ public class TestScenarioObject extends TreeObject {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
+
 	public String getAbsoluteGenericPath() {
 		return absoluteGenericPath;
 	}
@@ -69,5 +82,13 @@ public class TestScenarioObject extends TreeObject {
 	@Override
 	protected String getDefaultTechnicalName() {
 		return DEFAULT_QUESTION_TECHNICAL_NAME;
+	}
+
+	public String getXmlTag() {
+		return xmlTag;
+	}
+
+	public void setXmlTag(String xmlTag) {
+		this.xmlTag = xmlTag;
 	}
 }
