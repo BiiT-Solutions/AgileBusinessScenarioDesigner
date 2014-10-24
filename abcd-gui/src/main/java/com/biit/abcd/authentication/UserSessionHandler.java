@@ -74,7 +74,6 @@ public class UserSessionHandler {
 	 * @param user
 	 */
 	public static void setUser(User user) {
-		System.out.println("########################## "+user);
 		UserSessionHandler session = getCurrent();
 		session.user = user;
 		if (user != null) {
