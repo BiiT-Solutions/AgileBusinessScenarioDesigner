@@ -124,8 +124,8 @@ public class SettingsWindow extends PopupWindow {
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								UserSessionHandler.logout();
 								ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+								UserSessionHandler.logout();
 								windowAccept.close();
 							}
 						});
