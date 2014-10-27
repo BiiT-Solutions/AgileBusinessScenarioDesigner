@@ -8,62 +8,47 @@ import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.biit.abcd.persistence.entity.Question;
-import com.biit.form.exceptions.CharacterNotAllowedException;
-import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.form.BaseQuestion;
+import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "test_scenario_question")
-public class TestScenarioQuestion extends Question {
-
+public class TestScenarioQuestion extends BaseQuestion {
+	
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private TestAnswer testAnswer;
+	private String originalId;
+	private static final String DEFAULT_QUESTION_NAME = "TestScenarioQuestion";
 
 	public TestScenarioQuestion() {
 		super();
 	}
 
-	public TestScenarioQuestion(Question question) throws FieldTooLongException, CharacterNotAllowedException,
-			NotValidStorableObjectException {
-		super();
-		this.copyData(question);
-		switch (question.getAnswerType()) {
-		case RADIO:
-			testAnswer = new TestAnswerRadioButton();
-			break;
-		case MULTI_CHECKBOX:
-			testAnswer = new TestAnswerMultiCheckBox();
-			break;
-		case INPUT:
-			switch (question.getAnswerFormat()) {
-			case NUMBER:
-				testAnswer = new TestAnswerInputNumber();
-				break;
-			case POSTAL_CODE:
-				testAnswer = new TestAnswerInputPostalCode();
-				break;
-			case TEXT:
-				testAnswer = new TestAnswerInputText();
-				break;
-			case DATE:
-				testAnswer = new TestAnswerInputDate();
-				break;
-			}
-			break;
-		}
+	public String getOriginalId() {
+		return originalId;
 	}
 
-	public TestScenarioQuestion(String name) throws FieldTooLongException, CharacterNotAllowedException {
-		super(name);
+	public void setOriginalId(String originalId) {
+		this.originalId = originalId;
 	}
-
+	
 	public TestAnswer getTestAnswer() {
 		return testAnswer;
 	}
 
 	public void setTestAnswer(TestAnswer testAnswer) {
 		this.testAnswer = testAnswer;
+	}
+
+	@Override
+	public void copyData(StorableObject object) throws NotValidStorableObjectException {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public String getDefaultTechnicalName() {
+		return DEFAULT_QUESTION_NAME;
 	}
 }

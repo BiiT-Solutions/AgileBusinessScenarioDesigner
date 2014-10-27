@@ -27,6 +27,7 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 	private static final String FORM_LABEL = "Form";
 	private static final String CATEGORY_NAME = "Category";
 	private static final Long FORM_ORGANIZATION_ID = 0l;
+	private static final Integer FORM_VERSION = 1;
 
 	@Autowired
 	private ITestScenarioDao testScenarioDao;
@@ -39,8 +40,9 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 			NotValidStorableObjectException {
 		
 		Form form = new Form();
-		form.setOrganizationId(FORM_ORGANIZATION_ID);
 		form.setLabel(FORM_LABEL);
+		form.setVersion(FORM_VERSION);
+		form.setOrganizationId(FORM_ORGANIZATION_ID);
 		Category category = new Category();
 		category.setName(CATEGORY_NAME);
 		form.addChild(category);

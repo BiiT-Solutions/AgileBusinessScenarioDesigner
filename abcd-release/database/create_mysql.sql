@@ -685,6 +685,21 @@
         primary key (ID)
     );
 
+    create table test_scenario_category (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label longtext,
+        name varchar(190),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        originalId varchar(255),
+        primary key (ID)
+    );
+
     create table test_scenario_form (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -698,10 +713,11 @@
         parent_ID bigint,
         organizationId DOUBLE not null,
         version integer,
+        originalId varchar(255),
         primary key (ID)
     );
 
-    create table test_scenario_object (
+    create table test_scenario_group (
         ID bigint not null,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
@@ -712,8 +728,8 @@
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
-        absoluteGenericPath varchar(255),
-        xmlTag varchar(255),
+        repeatable bit not null,
+        originalId varchar(255),
         primary key (ID)
     );
 
@@ -728,60 +744,8 @@
         name varchar(190),
         sortSeq bigint not null,
         parent_ID bigint,
-        answerFormat varchar(255),
-        answerType varchar(255),
+        originalId varchar(255),
         testAnswer_ID bigint,
-        primary key (ID)
-    );
-
-    create table test_scenario_question_answer (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        label longtext,
-        name varchar(190),
-        sortSeq bigint not null,
-        parent_ID bigint,
-        absoluteGenericPath varchar(255),
-        xmlTag varchar(255),
-        originalReferenceId bigint not null,
-        testAnswer_ID bigint,
-        primary key (ID)
-    );
-
-    create table test_scenario_repeated_group (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        label longtext,
-        name varchar(190),
-        sortSeq bigint not null,
-        parent_ID bigint,
-        absoluteGenericPath varchar(255),
-        xmlTag varchar(255),
-        groupIndex integer not null,
-        primary key (ID)
-    );
-
-    create table test_scenario_repeated_group_container (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        label longtext,
-        name varchar(190),
-        sortSeq bigint not null,
-        parent_ID bigint,
-        absoluteGenericPath varchar(255),
-        xmlTag varchar(255),
         primary key (ID)
     );
 
@@ -1201,8 +1165,11 @@
     alter table test_scenario 
         add constraint UK_jshq05r5jh9kw6obudq99vsee  unique (name);
 
-    alter table test_scenario_form 
-        add constraint UK_2flghuuwi77g4gw5w3y7ommeb  unique (label, version);
+    alter table test_scenario_category 
+        add constraint UK_sxenkuftpjjmjl0x3ivk62wix  unique (ID);
+
+    alter table test_scenario_category 
+        add constraint UK_1ln5mm1bq3hr60pot8sy0n1aq  unique (comparationId);
 
     alter table test_scenario_form 
         add constraint UK_9r8dmwthkqgo9m88ojlm64v2q  unique (ID);
@@ -1210,35 +1177,17 @@
     alter table test_scenario_form 
         add constraint UK_evdf8bumu8vh0fbr289dn3q2d  unique (comparationId);
 
-    alter table test_scenario_object 
-        add constraint UK_ni4qkyh4avtnx2xxgj98xbnf0  unique (ID);
+    alter table test_scenario_group 
+        add constraint UK_rrp9g1ti6yd73kgp0mf1gtyol  unique (ID);
 
-    alter table test_scenario_object 
-        add constraint UK_s2jcrs64woh6taqwno31p9qbq  unique (comparationId);
+    alter table test_scenario_group 
+        add constraint UK_hoi1e3fa5bm2kj18od8m9r6x6  unique (comparationId);
 
     alter table test_scenario_question 
         add constraint UK_fdol3obofu4t5i6nh6flvwado  unique (ID);
 
     alter table test_scenario_question 
         add constraint UK_rbe8hkt0j1069ml9qxt8324hw  unique (comparationId);
-
-    alter table test_scenario_question_answer 
-        add constraint UK_kwt6r5hqjxegc137o8h9emnln  unique (ID);
-
-    alter table test_scenario_question_answer 
-        add constraint UK_nykl3acgrh43614ohdvjw18so  unique (comparationId);
-
-    alter table test_scenario_repeated_group 
-        add constraint UK_n7s3rk6nq2p68tvqrdeaa8v9h  unique (ID);
-
-    alter table test_scenario_repeated_group 
-        add constraint UK_8tqsm47ih91l88wvfbe44qlf8  unique (comparationId);
-
-    alter table test_scenario_repeated_group_container 
-        add constraint UK_igdi7wnq94aa4y5rigfiq3vhm  unique (ID);
-
-    alter table test_scenario_repeated_group_container 
-        add constraint UK_jq45qrlxt9wwmnfoqxxa4u93o  unique (comparationId);
 
     alter table tree_answers 
         add constraint UK_413vxa542h86uqy4uvcnv6y2x  unique (ID);

@@ -3,19 +3,19 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.form.BaseForm;
+import com.biit.form.BaseRepeatableGroup;
 
 @Entity
-@Table(name = "test_scenario_form")
-public class TestScenarioForm extends BaseForm {
+@Table(name = "test_scenario_group")
+public class TestScenarioGroup extends BaseRepeatableGroup {
 
 	private String originalId;
-	private static final String DEFAULT_FORM_NAME = "TestScenarioForm";
-	
-	public TestScenarioForm() {
+	private static final String DEFAULT_GROUP_NAME = "TestScenarioGroup";
+
+	public TestScenarioGroup() {
 		super();
 	}
-	
+
 	public String getOriginalId() {
 		return originalId;
 	}
@@ -26,6 +26,6 @@ public class TestScenarioForm extends BaseForm {
 	
 	@Override
 	protected String getDefaultTechnicalName() {
-		return DEFAULT_FORM_NAME;
+		return DEFAULT_GROUP_NAME;
 	}
 }
