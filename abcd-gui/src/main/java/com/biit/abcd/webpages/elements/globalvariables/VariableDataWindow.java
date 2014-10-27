@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components;
+package com.biit.abcd.webpages.elements.globalvariables;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -13,6 +13,7 @@ import com.biit.abcd.persistence.entity.globalvariables.VariableDataNumber;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalCode;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataText;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -117,6 +118,10 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	public void setValidFromEditable(boolean editable) {
 		validFrom.setEnabled(editable);
 	}
+	
+	public void setValidToEditable(boolean editable) {
+		validTo.setEnabled(editable);
+	}
 
 	public void setValidFromValue(Date newDate) {
 		validFrom.setValue(newDate);
@@ -134,11 +139,6 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		}
 		validFrom.setValue(variable.getValidFrom());
 		validTo.setValue(variable.getValidTo());
-	}
-
-	public void disableValueFromTo() {
-		validFrom.setEnabled(false);
-		validTo.setEnabled(false);
 	}
 
 	public VariableData createVariable() {

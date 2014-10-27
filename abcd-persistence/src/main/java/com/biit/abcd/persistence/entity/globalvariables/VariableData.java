@@ -47,16 +47,6 @@ public abstract class VariableData extends StorableObject {
 		this.validTo = validTo;
 	}
 
-	public boolean updateValues(VariableData editedVariable) throws NotValidTypeInVariableData {
-		Object aux = editedVariable.getValue();
-		if (aux != null) {
-			setValue(editedVariable.getValue());
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	@Override
 	public String toString() {
 		return getValue().toString();

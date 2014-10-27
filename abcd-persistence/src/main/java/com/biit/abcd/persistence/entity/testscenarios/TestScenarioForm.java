@@ -100,7 +100,7 @@ public class TestScenarioForm extends BaseForm {
 					TreeObject newChildInstance = generateCopy(child);
 					newInstance.addChild(newChildInstance);
 				}
-				newInstance.copyBasicInfo(treeObject);
+//				newInstance.copyBasicInfo(treeObject);
 				newInstance.copyData(treeObject);
 			}
 		} catch (InstantiationException | IllegalAccessException | NotValidChildException | FieldTooLongException e) {
