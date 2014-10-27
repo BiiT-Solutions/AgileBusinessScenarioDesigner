@@ -37,7 +37,6 @@ public class DiagramFork extends DiagramElement {
 		super.resetIds();
 		if (references != null) {
 			for (ExpressionValueTreeObjectReference expressionValueTreeObjectReference : references) {
-				System.out.println(this + " reset " + expressionValueTreeObjectReference);
 				expressionValueTreeObjectReference.resetIds();
 			}
 		}

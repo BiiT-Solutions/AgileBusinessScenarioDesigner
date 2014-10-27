@@ -9,6 +9,7 @@ import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementPrintVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -257,7 +258,7 @@ public class PrattParserTest {
 			resultVisitor.accept(treePrint);
 
 		} catch (PrattParserException ex) {
-			System.out.println(" Error: " + ex.getMessage());
+			AbcdLogger.errorMessage(PrattParser.class.getName(), ex);
 		}
 		if (treePrint != null) {
 			return treePrint.getBuilder().toString();
@@ -275,7 +276,7 @@ public class PrattParserTest {
 		try {
 			return parser.parseExpression().getExpressionChain().toString();
 		} catch (PrattParserException ex) {
-			System.out.println("Error: " + ex.getMessage());
+			AbcdLogger.errorMessage(PrattParser.class.getName(), ex);
 		}
 		return "";
 	}

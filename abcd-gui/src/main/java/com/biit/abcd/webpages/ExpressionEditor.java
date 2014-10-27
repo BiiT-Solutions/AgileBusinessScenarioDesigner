@@ -173,7 +173,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 			UserSessionHandler.getFormController().save();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
-			System.out.println(e);
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(TableRuleEditor.class.getName(), e);
 		}

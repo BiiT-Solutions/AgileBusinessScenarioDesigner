@@ -695,6 +695,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
         xmlTag varchar(255),
@@ -711,6 +712,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
         xmlTag varchar(255),
@@ -729,6 +731,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
         xmlTag varchar(255),
@@ -746,6 +749,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         absoluteGenericPath varchar(255),
         xmlTag varchar(255),
@@ -762,6 +766,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         primary key (ID)
     );
@@ -776,6 +781,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         primary key (ID)
     );
@@ -790,6 +796,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         organizationId DOUBLE not null,
         version integer,
@@ -838,6 +845,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         repeatable bit not null,
         primary key (ID)
@@ -853,6 +861,7 @@
         label longtext,
         name varchar(190),
         sortSeq bigint not null,
+        comparatorId bigint,
         parent_ID bigint,
         answerFormat varchar(255),
         answerType varchar(255),
