@@ -685,6 +685,22 @@
         primary key (ID)
     );
 
+    create table test_scenario_form (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label longtext,
+        name varchar(190),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        organizationId DOUBLE not null,
+        version integer,
+        primary key (ID)
+    );
+
     create table test_scenario_object (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -699,6 +715,23 @@
         parent_ID bigint,
         absoluteGenericPath varchar(255),
         xmlTag varchar(255),
+        primary key (ID)
+    );
+
+    create table test_scenario_question (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        label longtext,
+        name varchar(190),
+        sortSeq bigint not null,
+        parent_ID bigint,
+        answerFormat varchar(255),
+        answerType varchar(255),
+        testAnswer_ID bigint,
         primary key (ID)
     );
 
@@ -1177,11 +1210,26 @@
     alter table test_scenario 
         add constraint UK_jshq05r5jh9kw6obudq99vsee  unique (name);
 
+    alter table test_scenario_form 
+        add constraint UK_2flghuuwi77g4gw5w3y7ommeb  unique (label, version);
+
+    alter table test_scenario_form 
+        add constraint UK_9r8dmwthkqgo9m88ojlm64v2q  unique (ID);
+
+    alter table test_scenario_form 
+        add constraint UK_evdf8bumu8vh0fbr289dn3q2d  unique (comparationId);
+
     alter table test_scenario_object 
         add constraint UK_ni4qkyh4avtnx2xxgj98xbnf0  unique (ID);
 
     alter table test_scenario_object 
         add constraint UK_s2jcrs64woh6taqwno31p9qbq  unique (comparationId);
+
+    alter table test_scenario_question 
+        add constraint UK_fdol3obofu4t5i6nh6flvwado  unique (ID);
+
+    alter table test_scenario_question 
+        add constraint UK_rbe8hkt0j1069ml9qxt8324hw  unique (comparationId);
 
     alter table test_scenario_question_answer 
         add constraint UK_kwt6r5hqjxegc137o8h9emnln  unique (ID);
@@ -1533,6 +1581,11 @@
         add constraint FK_13u55f485qtvswc62ojpdrr1n 
         foreign key (test_answer_list_ID) 
         references test_answer_list (ID);
+
+    alter table test_scenario 
+        add constraint FK_thnxvj85s3nk6u7k6f91dfbr6 
+        foreign key (testScenarioForm_ID) 
+        references test_scenario_form (ID);
 
     alter table tree_forms_diagram 
         add constraint FK_otbxhecixo9rbriamr8v44nik 

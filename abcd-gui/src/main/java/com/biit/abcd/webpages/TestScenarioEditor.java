@@ -10,7 +10,9 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -19,11 +21,14 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.HorizontalCollapsiblePanel;
 import com.biit.abcd.webpages.elements.testscenario.SelectTestScenarioTableEditable;
 import com.biit.abcd.webpages.elements.testscenario.TestScenarioEditorUpperMenu;
-import com.biit.abcd.webpages.elements.testscenario.TestScenarioForm;
+import com.biit.abcd.webpages.elements.testscenario.TestScenarioMainLayout;
 import com.biit.abcd.webpages.elements.testscenario.WindowNewTestScenario;
+import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -33,7 +38,7 @@ import com.vaadin.ui.UI;
 public class TestScenarioEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -6743796589244668454L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
-	private TestScenarioForm testScenarioForm;
+	private TestScenarioMainLayout testScenarioForm;
 	private SelectTestScenarioTableEditable tableSelectTestScenario;
 	private TestScenarioEditorUpperMenu testScenarioUpperMenu;
 
@@ -43,6 +48,8 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
+		initUpperMenu();
+
 		updateButtons(true);
 
 		// Create container
@@ -69,11 +76,9 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		collapsibleLayout.createMenu(tableSelectTestScenario);
 
 		// Create empty form
-		testScenarioForm = new TestScenarioForm();
+		testScenarioForm = new TestScenarioMainLayout();
 		collapsibleLayout.setContent(testScenarioForm);
 		getWorkingAreaLayout().addComponent(collapsibleLayout);
-
-		initUpperMenu();
 
 		if ((UserSessionHandler.getFormController().getForm() != null)
 				&& (UserSessionHandler.getTestScenariosController().getTestScenarios(
@@ -101,10 +106,8 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			}
 			// Create form panel content
 			try {
-				testScenarioForm
-						.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
 				refreshTestScenario();
-			} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
+			} catch (FieldTooLongException | CharacterNotAllowedException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 
@@ -170,6 +173,24 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			}
 		});
 
+		testScenarioUpperMenu.addCopyRepeatableGroupButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 2686401229375020712L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				copySelected();
+			}
+		});
+
+		testScenarioUpperMenu.addRemoveRepeatableGroupButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -5178078135324410744L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				removeSelected();
+			}
+		});
+
 		setUpperMenu(testScenarioUpperMenu);
 	}
 
@@ -216,9 +237,97 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	private void refreshTestScenario() throws FieldTooLongException, CharacterNotAllowedException {
 		try {
 			testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
+			if (testScenarioForm.getTreeTestTable() != null) {
+				testScenarioForm.getTreeTestTable().addValueChangeListener(new ValueChangeListener() {
+					private static final long serialVersionUID = -7746810456696297935L;
+
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+						Object valueSelected = event.getProperty().getValue();
+						if ((valueSelected instanceof Group) && ((Group) valueSelected).isRepeatable()) {
+							testScenarioUpperMenu.enableRepeatableGroupsButtons(true);
+						} else {
+							testScenarioUpperMenu.enableRepeatableGroupsButtons(false);
+						}
+					}
+				});
+			}
 		} catch (NotValidChildException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 
+	public void removeSelected() {
+		if (testScenarioForm.getTreeTestTable() != null) {
+			TreeObject selected = testScenarioForm.getTreeTestTable().getTreeObjectSelected();
+			if ((selected != null) && (selected.getParent() != null) && !isLastRepeatableGroup(selected)) {
+				try {
+					selected.remove();
+					removeElementFromUI(selected);
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + selected.getClass()
+							+ " from the Form, with 'Name: " + selected.getName() + "'.");
+				} catch (DependencyExistException e) {
+					// Forbid the remove action if exist dependency.
+					MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+
+				}
+			}
+		}
+	}
+
+	private boolean isLastRepeatableGroup(TreeObject treeObject) {
+		if ((treeObject instanceof Group) && ((Group) treeObject).isRepeatable()) {
+			TreeObject parent = treeObject.getParent();
+			List<TreeObject> groups = parent.getChildren(Group.class);
+			int repeatedGroups = 0;
+			for (TreeObject group : groups) {
+				// Repeated groups have the same name at the same level
+				if (group.getName().equals(treeObject.getName())) {
+					repeatedGroups++;
+				}
+			}
+			if (repeatedGroups == 1) {
+				// Forbid the remove action when is the last repeatable group
+				MessageManager.showWarning(LanguageCodes.TEST_SCENARIOS_WARNING_NO_REMOVE,
+						LanguageCodes.TEST_SCENARIOS_WARNING_NO_REMOVE_DESCRIPTION);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void removeElementFromUI(TreeObject element) {
+		for (TreeObject child : element.getChildren()) {
+			removeElementFromUI(child);
+		}
+		testScenarioForm.getTreeTestTable().removeItem(element);
+	}
+
+	public void copySelected() {
+		if (testScenarioForm.getTreeTestTable() != null) {
+			TreeObject selected = testScenarioForm.getTreeTestTable().getTreeObjectSelected();
+			if ((selected != null) && (selected.getParent() != null) && (selected instanceof Group)
+					&& ((Group) selected).isRepeatable()
+					&& (testScenarioForm.getTreeTestTable().getRootElement() != null)) {
+				try {
+					TestScenarioForm testForm = (TestScenarioForm) testScenarioForm.getTreeTestTable().getRootElement();
+					TreeObject newGroup = testForm.generateCopy(selected);
+					int childIndex = selected.getParent().getIndex(selected);
+					selected.getParent().addChild(childIndex + 1, newGroup);
+					testScenarioForm.refreshTable(testForm);
+
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress()
+							+ "' has copied the repeatable group with 'Name: " + selected.getName() + "'.");
+				} catch (CharacterNotAllowedException | NotValidStorableObjectException | NotValidChildException e) {
+					// Forbid the remove action if exist dependency.
+					MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+
+				}
+			}
+		}
+	}
 }
