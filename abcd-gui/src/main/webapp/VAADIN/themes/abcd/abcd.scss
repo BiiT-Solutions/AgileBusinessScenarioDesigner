@@ -772,4 +772,21 @@ $open-sans-pathPrefix: "./fonts/";
 	    width: 16px;
 	}
 	
+	.v-test-scenario-group-editor{
+		border: 1px;
+		border-color: #c2c3c4;
+		border-style:  solid;
+	}
+	
+	.v-test-scenario-group-header-editor{
+		margin-top: 10px;	
+		margin-left: 10px;	
+		font-weight: bold;
+	}
+	
+	.v-test-scenario-category-header-editor{
+		margin-top: 10px;	
+		margin-left: 10px;	
+		font-weight: bold;
+	}
 }

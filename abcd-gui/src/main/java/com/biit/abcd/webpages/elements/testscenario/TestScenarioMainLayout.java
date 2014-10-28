@@ -1,29 +1,27 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.HashMap;
-import java.util.List;
 
-import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.Runo;
 
 public class TestScenarioMainLayout extends HorizontalLayout {
 	private static final long serialVersionUID = -3526986076061463631L;
+	private static final String PANEL_STYLE = "v-test-scenario-background-panel";
 	private TestScenarioTable treeTestTable;
-	private VerticalLayout formsLayout;
 	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
+	private Panel editorBackground;
 
 	public TestScenarioMainLayout() {
 		super();
@@ -34,8 +32,11 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 	public void setContent(Form form, TestScenario testScenario) throws NotValidChildException, FieldTooLongException,
 			CharacterNotAllowedException {
 		removeAllComponents();
-		originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
-		createContent(form, testScenario);
+		if (form != null && testScenario != null) {
+			TestScenarioValidator.checkTestScenarioStructure(form, testScenario);
+			originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
+			createContent(form, testScenario);
+		}
 	}
 
 	/**
@@ -52,9 +53,8 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 		if (form != null && testScenario != null) {
 			createTreeTable(testScenario);
 			createEditForm();
-
 			addComponent(treeTestTable);
-			addComponent(formsLayout);
+			addComponent(editorBackground);
 		}
 	}
 
@@ -72,57 +72,21 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				Object valueSelected = event.getProperty().getValue();
-				formsLayout.removeAllComponents();
-				int componentIndex = 0;
-				if (valueSelected instanceof Category) {
-					List<TreeObject> questions = ((Category) valueSelected).getChildren(Question.class);
-					if (!questions.isEmpty()) {
-						// Add the questions of the category
-						CustomGroupEditor categoryEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
-								(TreeObject) valueSelected, componentIndex);
-						formsLayout.addComponent(categoryEditor);
-					}
-					// Add the groups of the category
-					List<TreeObject> groups = ((Category) valueSelected).getChildren(Group.class);
-					for (TreeObject group : groups) {
-						createGroupEditor(group);
-					}
+				if (valueSelected instanceof TestScenarioCategory) {
+					editorBackground.setContent(new CustomCategoryEditor(originalReferenceTreeObjectMap,
+							(TreeObject) valueSelected));
+				} else {
+					editorBackground.setContent(null);
 				}
 			}
 		});
 	}
 
-	private void createEditForm() {
-		formsLayout = new VerticalLayout();
-		formsLayout.setMargin(new MarginInfo(false, false, false, true));
-		formsLayout.setWidth("100%");
-		formsLayout.setHeight(null);
-	}
-
-	private void createGroupEditor(final TreeObject group) {
-		// final CustomGroupEditor groupEditor = new CustomGroupEditor(group);
-		// if ((group instanceof Group) && ((Group) group).isRepeatable()) {
-		//
-		// groupEditor.addCopyRepeatableGroupButtonClickListener(new
-		// ClickListener() {
-		// private static final long serialVersionUID = 3621778613512091320L;
-		//
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// createGroupEditor(group);
-		// }
-		// });
-		// groupEditor.addRemoveRepeatableGroupButtonClickListener(new
-		// ClickListener() {
-		// private static final long serialVersionUID = -3315540873270544669L;
-		//
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// formsLayout.removeComponent(groupEditor);
-		// }
-		// });
-		// }
-		// formsLayout.addComponent(groupEditor);
+	private Component createEditForm() {
+		editorBackground = new Panel();
+		editorBackground.setSizeFull();
+		editorBackground.setStyleName(PANEL_STYLE);
+		return editorBackground;
 	}
 
 	public TestScenarioTable getTreeTestTable() {
@@ -137,339 +101,7 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 		this.treeTestTable.setRootElement(treeObject);
 	}
 
-	// private void setEditFormFields(List<TreeObject> questions) {
-	// getRightFormLayout().removeAllComponents();
-	// for (TreeObject question : questions) {
-	// if (question instanceof TestScenarioQuestion) {
-	// TestScenarioQuestion testQuestion = (TestScenarioQuestion) question;
-	// getRightFormLayout().addComponent(getFormLayoutField(testQuestion));
 	// }
-	// }
-	// }
-
-	// private Field<Field> getFormLayoutField(TestScenarioQuestion
-	// testQuestion) {
-	// TestAnswer testAnswer = null;
-	// Field field = null;
-	// switch (testQuestion.getAnswerType()) {
-	// case RADIO:
-	// field = new ComboBox(testQuestion.getName());
-	// for (TreeObject answer : testQuestion.getChildren()) {
-	// ((ComboBox) field).addItem(answer.getName());
-	// }
-	//
-	// break;
-	// case MULTI_CHECKBOX:
-	// field = new ListSelect(testQuestion.getName());
-	// ((ListSelect) field).setMultiSelect(true);
-	// ((ListSelect) field).setRows(4);
-	// for (TreeObject answer : testQuestion.getChildren()) {
-	// ((ListSelect) field).addItem(answer.getName());
-	// }
-	// break;
-	// case INPUT:
-	// switch (testQuestion.getAnswerFormat()) {
-	// case TEXT:
-	// field = new TextField(testQuestion.getName());
-	// ((TextField) field).setInputPrompt("TEXT");
-	// break;
-	// case POSTAL_CODE:
-	// field = new TextField(testQuestion.getName());
-	// ((TextField) field).setInputPrompt("0000AA");
-	// break;
-	// case NUMBER:
-	// field = new TextField(testQuestion.getName());
-	// ((TextField) field).setInputPrompt("1.234");
-	// ((TextField) field).addValidator(new
-	// RegexpValidator(NUMBER_FIELD_VALIDATOR_REGEX, ServerTranslate
-	// .translate(LanguageCodes.INPUT_DATA_FORMAT_INCORRECT_ERROR)));
-	// break;
-	// case DATE:
-	// field = new PopupDateField(testQuestion.getName());
-	// ((PopupDateField) field).setInputPrompt("dd/mm/yy");
-	// break;
-	// }
-	// }
-	// if (field != null) {
-	// ((AbstractComponent) field).setImmediate(true);
-	// field.addValueChangeListener(new
-	// FieldValueChangeListener((AbstractField<?>) field));
-	// // Add the value to a map to be consulted later
-	// fieldQuestionMap.put(field, testQuestion);
-	// }
-	// return field;
-	// }
-	//
-	// private class FieldValueChangeListener implements ValueChangeListener {
-	// private static final long serialVersionUID = 2277281871213884287L;
-	// AbstractField<?> field;
-	//
-	// public FieldValueChangeListener(AbstractField<?> field) {
-	// this.field = field;
-	// }
-	//
-	// @Override
-	// public void valueChange(ValueChangeEvent event) {
-	// if (field.isAttached() && field.isEnabled()) {
-	// if ((field.getValidators() != null) &&
-	// (!field.getValidators().isEmpty())) {
-	// Collection<Validator> validators = field.getValidators();
-	// for (Validator validator : validators) {
-	// try {
-	// validator.validate(field.getValue());
-	// updateTestScenario(field);
-	// } catch (InvalidValueException e) {
-	// AbcdLogger.warning(this.getClass().getName(), e.toString());
-	// }
-	// }
-	// } else {
-	// updateTestScenario(field);
-	// }
-	// }
-	// }
-	// }
-
-	// private void updateTestScenario(Field field) {
-	// try {
-	// TestScenarioQuestion questionAnswer = fieldQuestionMap.get(field);
-	// if (questionAnswer.getTestAnswer() instanceof TestAnswerInputNumber) {
-	// try {
-	// Double value = Double.parseDouble(field.getValue().toString());
-	// questionAnswer.getTestAnswer().setValue(value);
-	// } catch (NumberFormatException | NullPointerException e) {
-	// AbcdLogger.errorMessage(this.getClass().getName(), e);
-	// }
-	// } else {
-	// questionAnswer.getTestAnswer().setValue(field.getValue());
-	// }
-	// } catch (NotValidAnswerValue | NullPointerException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
-	// private Field<Field> getFormLayoutField(Question question,
-	// TestScenarioObject testScenarioObject,
-	// String parentIdentifier) throws NotValidChildException,
-	// FieldTooLongException, CharacterNotAllowedException {
-	// TestAnswer testAnswer = null;
-	// Field field = null;
-	// String questionIdentifier = parentIdentifier + "_" +
-	// question.getDefaultTechnicalName()
-	// + question.getParent().getChildren().indexOf(question) +
-	// question.getSimpleAsciiName();
-	//
-	// TestScenarioObject testQuestion =
-	// getTestScenarioObject(testScenarioObject, questionIdentifier, true);
-	// testQuestion.setXmlTag(question.getName());
-	//
-	// testQuestion.setName(question.getUniqueNameReadable());
-	// if (testQuestion instanceof TestScenarioQuestionAnswer) {
-	// TestScenarioQuestionAnswer testQuestionAnswer =
-	// (TestScenarioQuestionAnswer) testQuestion;
-	// testAnswer = testQuestionAnswer.getTestAnswer();
-	//
-	// switch (question.getAnswerType()) {
-	// case RADIO:
-	// field = new ComboBox(question.getName());
-	// for (TreeObject answer : question.getChildren()) {
-	// ((ComboBox) field).addItem(answer.getName());
-	// }
-	// if (testAnswer == null) {
-	// testAnswer = new TestAnswerRadioButton();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// } else {
-	// if (checkQuestionTestAnswerIntegrity(TestAnswerRadioButton.class,
-	// testAnswer)) {
-	// if (testAnswer.getValue() != null) {
-	// ((ComboBox) field).select(testAnswer.getValue());
-	// }
-	// } else {
-	// testAnswer = new TestAnswerRadioButton();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// }
-	// }
-	// break;
-	// case MULTI_CHECKBOX:
-	// field = new ListSelect(question.getName());
-	// ((ListSelect) field).setMultiSelect(true);
-	// ((ListSelect) field).setRows(4);
-	// for (TreeObject answer : question.getChildren()) {
-	// ((ListSelect) field).addItem(answer.getName());
-	// }
-	// if (testAnswer == null) {
-	// testAnswer = new TestAnswerMultiCheckBox();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// } else {
-	// if (testAnswer.getValue() != null) {
-	// if (checkQuestionTestAnswerIntegrity(TestAnswerMultiCheckBox.class,
-	// testAnswer)) {
-	// Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
-	// for (String value : values) {
-	// ((ListSelect) field).select(value);
-	// }
-	// } else {
-	// testAnswer = new TestAnswerMultiCheckBox();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// }
-	// }
-	// }
-	// break;
-	// case INPUT:
-	// switch (question.getAnswerFormat()) {
-	// case TEXT:
-	// field = new TextField(question.getName());
-	// ((TextField) field).setInputPrompt("TEXT");
-	// if (testAnswer == null) {
-	// testAnswer = new TestAnswerInputText();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// } else {
-	// if (checkQuestionTestAnswerIntegrity(TestAnswerInputText.class,
-	// testAnswer)) {
-	// if (testAnswer.getValue() != null) {
-	// ((TextField) field).setValue(testAnswer.getValue().toString());
-	// }
-	// } else {
-	// testAnswer = new TestAnswerInputText();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// }
-	// }
-	// break;
-	// case POSTAL_CODE:
-	// field = new TextField(question.getName());
-	// ((TextField) field).setInputPrompt("0000AA");
-	// if (testAnswer == null) {
-	// testAnswer = new TestAnswerInputPostalCode();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// } else {
-	// if (checkQuestionTestAnswerIntegrity(TestAnswerInputPostalCode.class,
-	// testAnswer)) {
-	// if (testAnswer.getValue() != null) {
-	// ((TextField) field).setValue(testAnswer.getValue().toString());
-	// }
-	// } else {
-	// testAnswer = new TestAnswerInputPostalCode();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// }
-	// }
-	// break;
-	// case NUMBER:
-	// field = new TextField(question.getName());
-	// ((TextField) field).setInputPrompt("1.234");
-	// if (testAnswer == null) {
-	// testAnswer = new TestAnswerInputNumber();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// } else {
-	// if (checkQuestionTestAnswerIntegrity(TestAnswerInputNumber.class,
-	// testAnswer)) {
-	// if (testAnswer.getValue() != null) {
-	// ((TextField) field).setValue(testAnswer.getValue().toString());
-	// }
-	// } else {
-	// testAnswer = new TestAnswerInputNumber();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// }
-	// }
-	// ((TextField) field).addValidator(new
-	// RegexpValidator(NUMBER_FIELD_VALIDATOR_REGEX, ServerTranslate
-	// .translate(LanguageCodes.INPUT_DATA_FORMAT_INCORRECT_ERROR)));
-	// break;
-	// case DATE:
-	// field = new PopupDateField(question.getName());
-	// ((PopupDateField) field).setInputPrompt("dd/mm/yy");
-	// if (testAnswer == null) {
-	// testAnswer = new TestAnswerInputDate();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// } else {
-	// if (checkQuestionTestAnswerIntegrity(TestAnswerInputDate.class,
-	// testAnswer)) {
-	// if (testAnswer.getValue() != null) {
-	// Timestamp value = ((TestAnswerInputDate) testAnswer).getValue();
-	// ((PopupDateField) field).setValue(new Date(value.getTime()));
-	// }
-	// } else {
-	// testAnswer = new TestAnswerInputDate();
-	// testQuestionAnswer.setTestAnswer(testAnswer);
-	// }
-	// }
-	// break;
-	// }
-	// }
-	//
-	// if (field != null) {
-	// ((AbstractComponent) field).setImmediate(true);
-	// field.addValueChangeListener(new
-	// FieldValueChangeListener((AbstractField<?>) field));
-	// // Add the value to a map to be consulted later
-	// fieldQuestionMap.put(field, testQuestionAnswer);
-	// }
-	// }
-	// return field;
-	// }
-	//
-	// private class FieldValueChangeListener implements ValueChangeListener {
-	// private static final long serialVersionUID = 2277281871213884287L;
-	// AbstractField<?> field;
-	//
-	// public FieldValueChangeListener(AbstractField<?> field) {
-	// this.field = field;
-	// }
-	//
-	// @Override
-	// public void valueChange(ValueChangeEvent event) {
-	// if (field.isAttached() && field.isEnabled()) {
-	// if ((field.getValidators() != null) &&
-	// (!field.getValidators().isEmpty())) {
-	// Collection<Validator> validators = field.getValidators();
-	// for (Validator validator : validators) {
-	// try {
-	// validator.validate(field.getValue());
-	// updateTestScenario(field);
-	// } catch (InvalidValueException e) {
-	// AbcdLogger.warning(this.getClass().getName(), e.toString());
-	// }
-	// }
-	// } else {
-	// updateTestScenario(field);
-	// }
-	// }
-	// }
-	// }
-	//
-	// private void updateTestScenario(Field field) {
-	// try {
-	// TestScenarioQuestionAnswer questionAnswer = fieldQuestionMap.get(field);
-	// if (questionAnswer.getTestAnswer() instanceof TestAnswerInputNumber) {
-	// try {
-	// Double value = Double.parseDouble(field.getValue().toString());
-	// questionAnswer.getTestAnswer().setValue(value);
-	// } catch (NumberFormatException | NullPointerException e) {
-	// AbcdLogger.errorMessage(this.getClass().getName(), e);
-	// }
-	// } else {
-	// questionAnswer.getTestAnswer().setValue(field.getValue());
-	// }
-	// } catch (NotValidAnswerValue | NullPointerException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// private boolean checkQuestionTestAnswerIntegrity(Class<?> answerType,
-	// TestAnswer answer) {
-	// if (answerType.isInstance(answer)) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
-	//
-	// public TestScenario getTestScenario() {
-	// return testScenario;
-	// }
-	//
-	// public Form getForm() {
-	// return form;
-	// }
-	//
 	// /**
 	// * Creates the map that stores the test scenario objects information
 	// */

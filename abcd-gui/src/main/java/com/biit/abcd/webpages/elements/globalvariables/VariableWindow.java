@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components;
+package com.biit.abcd.webpages.elements.globalvariables;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.AnswerFormatUi;
@@ -6,6 +6,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;

@@ -22,6 +22,7 @@ import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerV
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.exceptions.NotValidFormException;
@@ -82,7 +83,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void storeRemoveTestScenariosMapData() throws NotValidFormException, FieldTooLongException,
 			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException, ChildrenNotFoundException,
-			InvalidAnswerFormatException, NotValidStorableObjectException {
+			InvalidAnswerFormatException, NotValidStorableObjectException, DependencyExistException {
 		Form form = new Form();
 		form.setLabel(FORM_LABEL);
 		form.setVersion(FORM_VERSION);
@@ -101,13 +102,11 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(testScenarioForm.getChildren().size(), 1);
 
 		TreeObject testScenarioCategory = testScenarioForm.getChild(0);
-//		Assert.assertEquals(testScenarioCategory.getName(), CATEGORY_NAME);
+		Assert.assertEquals(testScenarioCategory.getName(), CATEGORY_NAME);
 		Assert.assertEquals(testScenarioCategory.getChildren().size(), 1);
 
 		TreeObject testQuestion = testScenarioCategory.getChild(0);
 		Assert.assertTrue(testQuestion instanceof TestScenarioQuestion);
-//		TestScenarioQuestion testScenarioQuestion = (TestScenarioQuestion) testQuestion;
-//		Assert.assertTrue(testScenarioQuestion.getTestAnswer() instanceof TestAnswerInputNumber);
 
 		testScenarioDao.makePersistent(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
@@ -122,13 +121,18 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(testScenarioForm.getChildren().size(), 1);
 
 		testScenarioCategory = testScenarioForm.getChild(0);
-//		Assert.assertEquals(testScenarioCategory.getName(), CATEGORY_NAME);
+		Assert.assertEquals(testScenarioCategory.getName(), CATEGORY_NAME);
 		Assert.assertEquals(testScenarioCategory.getChildren().size(), 1);
 
 		testQuestion = testScenarioCategory.getChild(0);
 		Assert.assertTrue(testQuestion instanceof TestScenarioQuestion);
-//		testScenarioQuestion = (TestScenarioQuestion) testQuestion;
-//		Assert.assertTrue(testScenarioQuestion.getTestAnswer() instanceof TestAnswerInputNumber);
+		
+		// Check element deletion
+		testQuestion.remove();
+		testScenarioDao.makePersistent(testScenario);
+		persistedList = testScenarioDao.getAll();
+		testScenarioCategory = persistedList.get(0).getTestScenarioForm().getChild(0);
+		Assert.assertEquals(testScenarioCategory.getChildren().size(), 0);
 
 		testScenarioDao.makeTransient(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 0);

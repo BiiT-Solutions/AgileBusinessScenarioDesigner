@@ -64,11 +64,6 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		createTestScenarioForm(form, null);
 	}
 
-	public TestScenario(String name) throws FieldTooLongException {
-		super();
-		setName(name);
-	}
-
 	public TestScenarioForm getTestScenarioForm() {
 		return testScenarioForm;
 	}
@@ -111,15 +106,15 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	}
 
 	public String getFormLabel() {
-		return testScenarioForm.getLabel();
+		return formLabel;
 	}
 
 	public Integer getFormVersion() {
-		return testScenarioForm.getVersion();
+		return formVersion;
 	}
 
 	public Long getFormOrganizationId() {
-		return testScenarioForm.getOrganizationId();
+		return formOrganizationId;
 	}
 
 	private void setFormLabel(String formLabel) {

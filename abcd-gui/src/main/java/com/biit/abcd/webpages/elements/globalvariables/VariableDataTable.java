@@ -75,6 +75,13 @@ public class VariableDataTable extends Table {
 		Item item = getItem(variableData);
 		if (item != null) {
 			item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.toString());
+			if (variableData.getValidTo() == null) {
+				// Value set to infinite (null)
+				item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(null);
+			} else {
+				item.getItemProperty(Properties.VARIABLE_VALID_TO).setValue(
+						DateManager.convertDateToString(variableData.getValidTo(), DateManager.DATE_FORMAT_SIMPLE));
+			}
 		}
 	}
 }

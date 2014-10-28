@@ -9,13 +9,15 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import com.biit.form.BaseQuestion;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "test_scenario_question")
 public class TestScenarioQuestion extends BaseQuestion {
-	
+
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private TestAnswer testAnswer;
@@ -37,9 +39,16 @@ public class TestScenarioQuestion extends BaseQuestion {
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public String getDefaultTechnicalName() {
 		return DEFAULT_QUESTION_NAME;
+	}
+
+	public TestScenarioQuestion copyTestScenarioQuestion() throws FieldTooLongException, CharacterNotAllowedException {
+		TestScenarioQuestion testScenarioQuestion = new TestScenarioQuestion();
+		testScenarioQuestion.setOriginalReference(getOriginalReference());
+		testScenarioQuestion.setName(getName());
+		return testScenarioQuestion;
 	}
 }

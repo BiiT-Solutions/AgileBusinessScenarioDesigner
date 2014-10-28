@@ -19,11 +19,11 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.UpperMenu;
-import com.biit.abcd.webpages.components.VariableDataWindow;
-import com.biit.abcd.webpages.components.VariableWindow;
 import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesTable;
 import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataTable;
+import com.biit.abcd.webpages.elements.globalvariables.VariableDataWindow;
+import com.biit.abcd.webpages.elements.globalvariables.VariableWindow;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -236,7 +236,8 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 				// If the global variable has values, we manage the
 				// "value from"/"value to" properties
-				List<VariableData> auxVariableList = ((GlobalVariable) globalVariableTable.getValue()).getVariableData();
+				List<VariableData> auxVariableList = ((GlobalVariable) globalVariableTable.getValue())
+						.getVariableData();
 				if (auxVariableList.size() > 0) {
 					// Set the "value from" value related to the previous one
 					VariableData auxVariableData = auxVariableList.get(auxVariableList.size() - 1);
@@ -259,8 +260,8 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 											+ variableData.getClass() + " with 'Value: " + variableData.getValue()
 											+ " - Valid from: " + variableData.getValidFrom() + " - Valid to: "
 											+ variableData.getValidTo() + "'.");
+							window.close();
 						}
-						window.close();
 					}
 				});
 				variableDataWindow.showCentered();
@@ -279,7 +280,12 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE_EDIT_WINDOW_TITLE));
 
 				variableDataWindow.setValue(selectedValue);
-				variableDataWindow.disableValueFromTo();
+				variableDataWindow.setValidFromEditable(false);
+				// Valid To only can be edited in the last row.
+				if (!variable.getVariableData().isEmpty()
+						&& !variable.getVariableData().get(variable.getVariableData().size() - 1).equals(selectedValue)) {
+					variableDataWindow.setValidToEditable(false);
+				}
 
 				variableDataWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
@@ -287,11 +293,12 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						VariableData editedVariable = ((VariableDataWindow) window).getValue();
 						if (editedVariable != null) {
 							try {
+								// Update validTo.
+								selectedValue.setValidTo(editedVariable.getValidTo());
 								// Update the internal value
-								if (selectedValue.updateValues(editedVariable)) {
-									// Update the view of the value
-									variableDataTable.updateItem(selectedValue);
-								}
+								selectedValue.setValue(editedVariable.getValue());
+								// Update the view of the value
+								variableDataTable.updateItem(selectedValue);
 							} catch (NotValidTypeInVariableData e) {
 								MessageManager.showError(e.getMessage());
 							}
@@ -300,8 +307,8 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 									+ selectedValue.getClass() + " with 'Value: " + selectedValue.getValue()
 									+ " - Valid from: " + selectedValue.getValidFrom() + " - Valid to: "
 									+ selectedValue.getValidTo() + "'.");
+							window.close();
 						}
-						window.close();
 					}
 				});
 				variableDataWindow.showCentered();

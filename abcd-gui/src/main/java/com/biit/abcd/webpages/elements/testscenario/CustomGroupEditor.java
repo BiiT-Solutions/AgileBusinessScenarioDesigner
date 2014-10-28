@@ -1,101 +1,104 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
-import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputNumber;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
-import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
-import com.biit.form.BaseGroup;
 import com.biit.form.TreeObject;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.Validator;
-import com.vaadin.data.Validator.InvalidValueException;
-import com.vaadin.data.validator.RegexpValidator;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.AbstractField;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.ListSelect;
-import com.vaadin.ui.PopupDateField;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class CustomGroupEditor extends CustomComponent {
 	private static final long serialVersionUID = 3099517634702528173L;
-	private FormLayout questionsLayout;
+	private static final String CLASSNAME = "v-test-scenario-group-editor";
+	private static final String HEADER_STYLE_NAME = "v-test-scenario-group-header-editor";
+	private FormLayout editorLayout;
 	private HorizontalLayout groupButtonsLayout;
 	private Button copyRepeatableGroup, removeRepeatableGroup;
-	private Map<Field, TestScenarioQuestion> fieldQuestionMap;
-	private static final String NUMBER_FIELD_VALIDATOR_REGEX = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
-	private Integer componentIndex;
 	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
+	private TestScenarioGroup testScenarioGroup;
 
-	public CustomGroupEditor() {
-		setCompositionRoot(generateContent());
-	}
-
-	public CustomGroupEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap, TreeObject treeObject,
-			int componentIndex) {
+	public CustomGroupEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap, TreeObject testScenarioObject) {
 		this.originalReferenceTreeObjectMap = originalReferenceTreeObjectMap;
-		setComponentIndex(componentIndex);
+		testScenarioGroup = (TestScenarioGroup) testScenarioObject;
 		setCompositionRoot(generateContent());
-		setContent(treeObject);
-	}
-
-	public Integer getComponentIndex() {
-		return componentIndex;
-	}
-
-	public void setComponentIndex(Integer componentIndex) {
-		this.componentIndex = componentIndex;
+		setStyleName(CLASSNAME);
+		setContent(testScenarioObject);
 	}
 
 	private Component generateContent() {
-		fieldQuestionMap = new HashMap<Field, TestScenarioQuestion>();
-
 		VerticalLayout rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
 
 		groupButtonsLayout = new HorizontalLayout();
 		groupButtonsLayout.setHeight("25px");
 		groupButtonsLayout.setWidth("100%");
+		groupButtonsLayout.setMargin(new MarginInfo(false, true, false, false));
+		groupButtonsLayout.setStyleName(HEADER_STYLE_NAME);
 
-		questionsLayout = new FormLayout();
-		questionsLayout.setWidth("100%");
-		questionsLayout.setHeight(null);
+		editorLayout = new FormLayout();
+		editorLayout.setWidth("100%");
+		editorLayout.setHeight(null);
+		editorLayout.setMargin(new MarginInfo(false, true, true, true));
 
 		rootLayout.addComponent(groupButtonsLayout);
-		rootLayout.addComponent(questionsLayout);
+		rootLayout.addComponent(editorLayout);
 
 		return rootLayout;
 	}
 
-	public void setContent(TreeObject treeObject) {
-		createGroupHeader(treeObject);
-		createQuestionsFormLayout(treeObject);
+	public void setContent(TreeObject testScenarioObject) {
+		createGroupHeader(testScenarioObject);
+
+		List<TreeObject> questions = testScenarioObject.getChildren(TestScenarioQuestion.class);
+		if ((questions != null) && !questions.isEmpty()) {
+			// Add the questions of the group
+			addEditor(new CustomQuestionEditor(originalReferenceTreeObjectMap, questions));
+		}
+		// Add the groups of the group (if any)
+		List<TreeObject> testScenarioGroups = testScenarioObject.getChildren(TestScenarioGroup.class);
+		if ((testScenarioGroups != null) && !testScenarioGroups.isEmpty()) {
+			for (TreeObject testScenarioGroup : testScenarioGroups) {
+				CustomGroupEditor customGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
+						testScenarioGroup);
+				addEditor(customGroupEditor);
+				setGroupButtonsListeners(customGroupEditor);
+			}
+		}
 	}
 
-	private void createGroupHeader(TreeObject treeObject) {
-		Label groupName = new Label(treeObject.getName());
+	public void addEditor(CustomComponent groupEditor) {
+		editorLayout.addComponent(groupEditor);
+	}
+
+	public void removeEditor(CustomComponent groupEditor) {
+		editorLayout.removeComponent(groupEditor);
+	}
+
+	private void createGroupHeader(TreeObject testScenarioObject) {
+		Label groupName = new Label(testScenarioObject.getName());
 		groupName.setWidth("100%");
 		groupButtonsLayout.addComponent(groupName);
+
+		TreeObject treeObject = originalReferenceTreeObjectMap.get(testScenarioObject.getOriginalReference());
 
 		if ((treeObject instanceof Group) && (((Group) treeObject).isRepeatable())) {
 			copyRepeatableGroup = new Button("+");
@@ -104,20 +107,9 @@ public class CustomGroupEditor extends CustomComponent {
 			groupButtonsLayout.addComponent(removeRepeatableGroup);
 			groupButtonsLayout.setComponentAlignment(copyRepeatableGroup, Alignment.MIDDLE_RIGHT);
 			groupButtonsLayout.setComponentAlignment(removeRepeatableGroup, Alignment.MIDDLE_RIGHT);
-
-			if (isLastRepeatableGroup(treeObject)) {
-				removeRepeatableGroup.setEnabled(false);
-			}
+			enableDisableRemoveButton(testScenarioObject);
 		}
 		groupButtonsLayout.setExpandRatio(groupName, 1);
-
-	}
-
-	private void createQuestionsFormLayout(TreeObject treeObject) {
-		if (treeObject instanceof BaseGroup) {
-			List<TreeObject> questions = ((BaseGroup) treeObject).getChildren(Question.class);
-			setQuestionLayoutFields(questions);
-		}
 	}
 
 	public void addCopyRepeatableGroupButtonClickListener(Button.ClickListener listener) {
@@ -144,195 +136,94 @@ public class CustomGroupEditor extends CustomComponent {
 		}
 	}
 
-	private void setQuestionLayoutFields(List<TreeObject> questions) {
-		for (TreeObject question : questions) {
-			if (question instanceof TestScenarioQuestion) {
-				TestScenarioQuestion testQuestion = (TestScenarioQuestion) question;
-				questionsLayout.addComponent(getFormLayoutField(testQuestion));
-			}
+	public TestScenarioGroup getTestScenarioGroup() {
+		return testScenarioGroup;
+	}
+
+	public void setAddGroupButtonEnable(boolean enable) {
+		if (copyRepeatableGroup != null) {
+			copyRepeatableGroup.setEnabled(enable);
 		}
 	}
 
-	private Field<Field> getFormLayoutField(TestScenarioQuestion testQuestion) {
-		TreeObject treeObject = originalReferenceTreeObjectMap.get(testQuestion.getOriginalReference());
-		Question question = (Question) treeObject;
-		TestAnswer testAnswer = null;
-		Field field = null;
-		switch (question.getAnswerType()) {
-		case RADIO:
-			field = new ComboBox(testQuestion.getName());
-			for (TreeObject answer : testQuestion.getChildren()) {
-				((ComboBox) field).addItem(answer.getName());
-			}
-
-			break;
-		case MULTI_CHECKBOX:
-			field = new ListSelect(testQuestion.getName());
-			((ListSelect) field).setMultiSelect(true);
-			((ListSelect) field).setRows(4);
-			for (TreeObject answer : testQuestion.getChildren()) {
-				((ListSelect) field).addItem(answer.getName());
-			}
-			break;
-		case INPUT:
-			switch (question.getAnswerFormat()) {
-			case TEXT:
-				field = new TextField(testQuestion.getName());
-				((TextField) field).setInputPrompt("TEXT");
-				break;
-			case POSTAL_CODE:
-				field = new TextField(testQuestion.getName());
-				((TextField) field).setInputPrompt("0000AA");
-				break;
-			case NUMBER:
-				field = new TextField(testQuestion.getName());
-				((TextField) field).setInputPrompt("1.234");
-				((TextField) field).addValidator(new RegexpValidator(NUMBER_FIELD_VALIDATOR_REGEX, ServerTranslate
-						.translate(LanguageCodes.INPUT_DATA_FORMAT_INCORRECT_ERROR)));
-				break;
-			case DATE:
-				field = new PopupDateField(testQuestion.getName());
-				((PopupDateField) field).setInputPrompt("dd/mm/yy");
-				break;
-			}
-		}
-		if (field != null) {
-			((AbstractComponent) field).setImmediate(true);
-			field.addValueChangeListener(new FieldValueChangeListener((AbstractField<?>) field));
-			// Add the value to a map to be consulted later
-			fieldQuestionMap.put(field, testQuestion);
-		}
-		return field;
-	}
-
-	private class FieldValueChangeListener implements ValueChangeListener {
-		private static final long serialVersionUID = 2277281871213884287L;
-		AbstractField<?> field;
-
-		public FieldValueChangeListener(AbstractField<?> field) {
-			this.field = field;
-		}
-
-		@Override
-		public void valueChange(ValueChangeEvent event) {
-			if (field.isAttached() && field.isEnabled()) {
-				if ((field.getValidators() != null) && (!field.getValidators().isEmpty())) {
-					Collection<Validator> validators = field.getValidators();
-					for (Validator validator : validators) {
-						try {
-							validator.validate(field.getValue());
-							updateTestScenario(field);
-						} catch (InvalidValueException e) {
-							AbcdLogger.warning(this.getClass().getName(), e.toString());
-						}
-					}
-				} else {
-					updateTestScenario(field);
-				}
-			}
+	public void setRemoveGroupButtonEnable(boolean enable) {
+		if (removeRepeatableGroup != null) {
+			removeRepeatableGroup.setEnabled(enable);
 		}
 	}
 
-	private void updateTestScenario(Field field) {
-		try {
-			TestScenarioQuestion questionAnswer = fieldQuestionMap.get(field);
-			if (questionAnswer.getTestAnswer() instanceof TestAnswerInputNumber) {
+	private void setGroupButtonsListeners(final CustomGroupEditor customGroupEditor) {
+		customGroupEditor.addCopyRepeatableGroupButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 7746273894922691271L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
 				try {
-					Double value = Double.parseDouble(field.getValue().toString());
-					questionAnswer.getTestAnswer().setValue(value);
-				} catch (NumberFormatException | NullPointerException e) {
+					TestScenarioGroup newTestScenarioGroup = customGroupEditor.getTestScenarioGroup()
+							.copyTestScenarioGroup();
+					getTestScenarioGroup().addChild(newTestScenarioGroup);
+					CustomGroupEditor newCustomGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
+							newTestScenarioGroup);
+					addEditor(newCustomGroupEditor);
+					setGroupButtonsListeners(newCustomGroupEditor);
+					customGroupEditor.setAddGroupButtonEnable(false);
+					customGroupEditor.setRemoveGroupButtonEnable(true);
+				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
-			} else {
-				questionAnswer.getTestAnswer().setValue(field.getValue());
 			}
-		} catch (NotValidAnswerValue | NullPointerException e) {
-			e.printStackTrace();
-		}
+		});
+
+		customGroupEditor.addRemoveRepeatableGroupButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 2921945959002763631L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				TreeObject testScenarioGroup = customGroupEditor.getTestScenarioGroup();
+				try {
+					testScenarioGroup.remove();
+					removeEditor(customGroupEditor);
+
+					Iterator<Component> iterator = editorLayout.iterator();
+					while (iterator.hasNext()) {
+						Component nextComponent = iterator.next();
+						if (nextComponent instanceof CustomGroupEditor) {
+							CustomGroupEditor groupEditor = (CustomGroupEditor) nextComponent;
+							groupEditor.enableDisableRemoveButton(groupEditor.getTestScenarioGroup());
+						}
+					}
+
+				} catch (DependencyExistException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+				}
+			}
+		});
 	}
 
-	// public void removeSelected() {
-	// if (testScenarioForm.getTreeTestTable() != null) {
-	// TreeObject selected =
-	// testScenarioForm.getTreeTestTable().getTreeObjectSelected();
-	// if ((selected != null) && (selected.getParent() != null) &&
-	// !isLastRepeatableGroup(selected)) {
-	// try {
-	// selected.remove();
-	// removeElementFromUI(selected);
-	// AbcdLogger.info(this.getClass().getName(), "User '"
-	// + UserSessionHandler.getUser().getEmailAddress() + "' has removed a " +
-	// selected.getClass()
-	// + " from the Form, with 'Name: " + selected.getName() + "'.");
-	// } catch (DependencyExistException e) {
-	// // Forbid the remove action if exist dependency.
-	// MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-	// LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
-	//
-	// }
-	// }
-	// }
-	// }
-	//
-	private boolean isLastRepeatableGroup(TreeObject treeObject) {
+	/**
+	 * If the group is the last repeatable group the remove button is disabled
+	 * 
+	 * @param testScenarioGroup
+	 */
+	public void enableDisableRemoveButton(TreeObject testScenarioGroup) {
+		TreeObject treeObject = originalReferenceTreeObjectMap.get(testScenarioGroup.getOriginalReference());
 		if ((treeObject instanceof Group) && ((Group) treeObject).isRepeatable()) {
-			TreeObject parent = treeObject.getParent();
-			List<TreeObject> groups = parent.getChildren(Group.class);
+			TreeObject parent = testScenarioGroup.getParent();
+			Set<TreeObject> elementsToDelete = parent.getElementsToDelete();
+			List<TreeObject> groups = parent.getChildren(TestScenarioGroup.class);
 			int repeatedGroups = 0;
 			for (TreeObject group : groups) {
 				// Repeated groups have the same name at the same level
-				if (group.getName().equals(treeObject.getName())) {
+				// The group shouldn't be in the list to delete
+				if (group.getName().equals(testScenarioGroup.getName()) && !elementsToDelete.contains(group)) {
 					repeatedGroups++;
 				}
 			}
 			if (repeatedGroups == 1) {
-				// Forbid the remove action when is the last repeatable group
-				// MessageManager.showWarning(LanguageCodes.TEST_SCENARIOS_WARNING_NO_REMOVE,
-				// LanguageCodes.TEST_SCENARIOS_WARNING_NO_REMOVE_DESCRIPTION);
-				return true;
+				removeRepeatableGroup.setEnabled(false);
+			} else {
+				removeRepeatableGroup.setEnabled(true);
 			}
 		}
-		return false;
 	}
-
-	// private void removeElementFromUI(TreeObject element) {
-	// for (TreeObject child : element.getChildren()) {
-	// removeElementFromUI(child);
-	// }
-	// testScenarioForm.getTreeTestTable().removeItem(element);
-	// }
-	//
-	// public void copySelected() {
-	// if (testScenarioForm.getTreeTestTable() != null) {
-	// TreeObject selected =
-	// testScenarioForm.getTreeTestTable().getTreeObjectSelected();
-	// if ((selected != null) && (selected.getParent() != null) && (selected
-	// instanceof Group)
-	// && ((Group) selected).isRepeatable()
-	// && (testScenarioForm.getTreeTestTable().getRootElement() != null)) {
-	// try {
-	// TestScenarioForm testForm = (TestScenarioForm)
-	// testScenarioForm.getTreeTestTable().getRootElement();
-	// TreeObject newGroup = testForm.generateCopy(selected);
-	//
-	// TreeObject parent = selected.getParent();// Ancestor(Group.class);
-	// // int childIndex = parent.getIndex(selected);
-	// parent.addChild(newGroup);
-	//
-	// testScenarioForm.getTreeTestTable().setRootElement(testForm);
-	//
-	// AbcdLogger.info(this.getClass().getName(), "User '"
-	// + UserSessionHandler.getUser().getEmailAddress()
-	// + "' has copied the repeatable group with 'Name: " + selected.getName() +
-	// "'.");
-	// } catch (CharacterNotAllowedException | NotValidStorableObjectException |
-	// NotValidChildException e) {
-	// // Forbid the remove action if exist dependency.
-	// MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-	// LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
-	//
-	// }
-	// }
-	// }
-	// }
 }
