@@ -167,9 +167,9 @@ public class ExpressionToDroolsRule {
 				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
 						expressionValueGenericVariable.getVariable());
 				// Remove the generic
-				expressionChainCopy.getExpressions().remove(0);
+				expressionChainCopy.removeExpression(0);
 				// Add the specific
-				expressionChainCopy.getExpressions().add(0, expValCat);
+				expressionChainCopy.addExpression(0, expValCat);
 				// Add to the rule set
 				droolsRules.add(createExpressionRule(expressionChainCopy, extraConditions));
 			}
@@ -288,7 +288,7 @@ public class ExpressionToDroolsRule {
 		if (((generatedExpressionChain.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2) instanceof ExpressionSymbol) && (((ExpressionSymbol) generatedExpressionChain
 				.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2)).getValue()
 				.equals(AvailableSymbol.COMMA)))) {
-			generatedExpressionChain.getExpressions().remove(generatedExpressionChain.getExpressions().size() - 2);
+			generatedExpressionChain.removeExpression(generatedExpressionChain.getExpressions().size() - 2);
 		}
 
 		return generatedExpressionChain;

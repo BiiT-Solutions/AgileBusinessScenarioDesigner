@@ -380,7 +380,7 @@ public class ExpressionViewer extends CssLayout {
 	public boolean removeSelectedExpression() {
 		if (isFocused() && (getSelectedExpression() != null) && getSelectedExpression().isEditable()) {
 			int index = expressions.getExpressions().indexOf(getSelectedExpression());
-			expressions.getExpressions().remove(getSelectedExpression());
+			expressions.removeExpression(getSelectedExpression());
 			updateExpression();
 			selectExpressionByIndex(index);
 			return true;
@@ -396,7 +396,7 @@ public class ExpressionViewer extends CssLayout {
 		while (expressionIterator.hasNext()) {
 			Expression expression = expressionIterator.next();
 			if (expression.isEditable()) {
-				expressions.getExpressions().remove(expression);
+				expressions.removeExpression(expression);
 			}
 		}
 		updateExpression();
@@ -424,9 +424,9 @@ public class ExpressionViewer extends CssLayout {
 				}
 			}
 			if ((index >= 0) && (index < expressions.getExpressions().size())) {
-				expressions.getExpressions().add(index, newElement);
+				expressions.addExpression(index, newElement);
 			} else {
-				expressions.getExpressions().add(newElement);
+				expressions.addExpression(newElement);
 			}
 			updateExpression();
 			setSelectedExpression(newElement);

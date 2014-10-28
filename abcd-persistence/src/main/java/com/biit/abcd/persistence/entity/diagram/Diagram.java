@@ -51,18 +51,18 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@JoinTable(name = "elements_of_diagram")
 	@Fetch(value = FetchMode.SUBSELECT)
 	@BatchSize(size = 10)
-	//@Cache(region = "diagramObjects", usage = CacheConcurrencyStrategy.READ_WRITE)
-	private List<DiagramObject> diagramObjects;
+	// @Cache(region = "diagramObjects", usage = CacheConcurrencyStrategy.READ_WRITE)
+	private Set<DiagramObject> diagramObjects;
 
 	public Diagram() {
 		super();
-		diagramObjects = new ArrayList<>();
+		diagramObjects = new HashSet<>();
 	}
 
 	public Diagram(String name) {
 		super();
 		this.name = name;
-		diagramObjects = new ArrayList<>();
+		diagramObjects = new HashSet<>();
 	}
 
 	@Override
@@ -115,8 +115,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 * 
 	 * @return
 	 */
-	public List<DiagramObject> getDiagramObjects() {
-		return Collections.unmodifiableList(diagramObjects);
+	public Set<DiagramObject> getDiagramObjects() {
+		return Collections.unmodifiableSet(diagramObjects);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 * 
 	 * @return
 	 */
-	public List<DiagramObject> getDiagramObjectForInitializeSet() {
+	public Set<DiagramObject> getDiagramObjectForInitializeSet() {
 		return diagramObjects;
 	}
 

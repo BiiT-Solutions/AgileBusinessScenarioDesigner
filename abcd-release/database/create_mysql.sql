@@ -262,7 +262,8 @@
 
     create table elements_of_diagram (
         diagram_ID bigint not null,
-        diagramObjects_ID bigint not null
+        diagramObjects_ID bigint not null,
+        primary key (diagram_ID, diagramObjects_ID)
     );
 
     create table expression_function (

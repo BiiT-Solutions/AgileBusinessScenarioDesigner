@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,10 +34,10 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-3577
 	// we cannot use the list of children with @Orderby or @OrderColumn we use
 	// our own order manager.
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy="parent")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "parent")
 	@OrderBy(clause = "sortSeq")
 	@BatchSize(size = 500)
-	//@Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
+	// @Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
@@ -100,12 +101,14 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	public void addExpressions(Expression... expressions) {
 		for (Expression expression : expressions) {
+			expression.setParent(this);
 			addExpression(expression);
 		}
 	}
 
 	public void addExpressions(List<Expression> expressions) {
 		for (Expression expression : expressions) {
+			expression.setParent(this);
 			addExpression(expression);
 		}
 	}
@@ -179,6 +182,19 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	public List<Expression> getExpressions() {
+		return Collections.unmodifiableList(expressions);
+	}
+
+	public void removeExpression(int index) {
+		expressions.remove(index);
+	}
+
+	/**
+	 * Only for using with hibernate.
+	 * 
+	 * @return
+	 */
+	public List<Expression> getExpressionsForInitializeSet() {
 		return expressions;
 	}
 
@@ -233,6 +249,9 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	public void setExpressions(List<Expression> expressions) {
 		removeAllExpressions();
+		for (Expression expression : expressions) {
+			expression.setParent(this);
+		}
 		this.expressions.addAll(expressions);
 	}
 
@@ -276,11 +295,11 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			super.copyData(object);
 			ExpressionChain expressionChain = (ExpressionChain) object;
 			setName(expressionChain.getName());
-			for (Expression expression : expressionChain.getExpressions()) {
+			for (Expression expression : expressionChain.expressions) {
 				try {
 					Expression expressionCopied = expression.getClass().newInstance();
 					expressionCopied.copyData(expression);
-					getExpressions().add(expressionCopied);
+					addExpression(expressionCopied);
 				} catch (InstantiationException | IllegalAccessException e) {
 					throw new NotValidStorableObjectException("Object '" + object
 							+ "' is not an instance of ExpressionChain.");

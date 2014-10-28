@@ -82,14 +82,14 @@ public class TableRuleToDroolsRule {
 					&& (!((ExpressionChain) answerExpression).getExpressions().isEmpty())) {
 
 				if (index > 0) {
-					preParsedConditions.getExpressions().add(new ExpressionOperatorLogic(AvailableOperator.AND));
+					preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 				}
-				preParsedConditions.getExpressions().add(questionExpression);
+				preParsedConditions.addExpression(questionExpression);
 
 				if (((ExpressionChain) answerExpression).getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
-					preParsedConditions.getExpressions().add(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+					preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
 				}
-				preParsedConditions.getExpressions().add(answerExpression);
+				preParsedConditions.addExpression(answerExpression);
 			}
 		}
 		return preParsedConditions;

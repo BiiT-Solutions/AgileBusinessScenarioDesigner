@@ -342,7 +342,7 @@ public class FormUtils {
 		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
 				elementsMap.get("Answer1"));
 		expressionChain.addExpression(answerReference);
-		tableRuleRow1.getConditions().getExpressions().add(expressionChain);
+		tableRuleRow1.getConditions().addExpression(expressionChain);
 
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
 				variableMap.get("cScore"));

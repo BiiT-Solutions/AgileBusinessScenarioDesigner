@@ -75,7 +75,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		Set<Diagram> diagrams = entity.getDiagrams();
 		if (diagrams != null && !diagrams.isEmpty()) {
 			for (Diagram diagram : diagrams) {
-				List<DiagramObject> nodes = diagram.getDiagramObjects();
+				Set<DiagramObject> nodes = diagram.getDiagramObjects();
 				if (nodes != null && !nodes.isEmpty()) {
 					for (DiagramObject node : nodes) {
 						if (node instanceof DiagramLink) {
@@ -152,11 +152,6 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	@Cacheable(value = "forms")
 	public List<Form> getAll() {
 		List<Form> result = super.getAll();
-		// For solving Hibernate bug
-		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
-		// list of children
-		// with @Orderby or @OrderColumn we use our own order manager.
-		//sortChildren(result);
 		return result;
 	}
 
