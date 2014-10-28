@@ -11,19 +11,10 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "test_scenario_category")
 public class TestScenarioCategory extends BaseCategory {
 
-	private String originalId;
 	private static final String DEFAULT_CATEGORY_NAME = "TestScenarioCategory";
 
 	public TestScenarioCategory() {
 		super();
-	}
-
-	public String getOriginalId() {
-		return originalId;
-	}
-
-	public void setOriginalId(String originalId) {
-		this.originalId = originalId;
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package com.biit.abcd.webpages.components;
 
-import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.Category;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.webpages.components.TreeObjectTable.TreeObjectTableProperties;
+import com.biit.form.BaseAnswer;
+import com.biit.form.BaseCategory;
+import com.biit.form.BaseForm;
+import com.biit.form.BaseQuestion;
+import com.biit.form.BaseRepeatableGroup;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.CellStyleGenerator;
 
@@ -20,19 +20,19 @@ public class TreeObjectTableCellStyleGenerator implements CellStyleGenerator {
 	@Override
 	public String getStyle(Table source, Object itemId, Object propertyId) {
 		if (propertyId == TreeObjectTableProperties.ELEMENT_NAME) {
-			if (itemId instanceof Form) {
+			if (itemId instanceof BaseForm) {
 				return "tree-cell-form";
 			}
-			if (itemId instanceof Category) {
+			if (itemId instanceof BaseCategory) {
 				return "tree-cell-category";
 			}
-			if (itemId instanceof Group) {
+			if (itemId instanceof BaseRepeatableGroup) {
 				return "tree-cell-group";
 			}
-			if (itemId instanceof Question) {
+			if (itemId instanceof BaseQuestion) {
 				return "tree-cell-question";
 			}
-			if (itemId instanceof Answer) {
+			if (itemId instanceof BaseAnswer) {
 				return "tree-cell-answer";
 			}
 		}

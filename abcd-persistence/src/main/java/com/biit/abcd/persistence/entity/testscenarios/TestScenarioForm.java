@@ -8,22 +8,25 @@ import com.biit.form.BaseForm;
 @Entity
 @Table(name = "test_scenario_form")
 public class TestScenarioForm extends BaseForm {
+	
+	String testFormName;
 
-	private String originalId;
 	private static final String DEFAULT_FORM_NAME = "TestScenarioForm";
 	
 	public TestScenarioForm() {
 		super();
 	}
 	
-	public String getOriginalId() {
-		return originalId;
-	}
-
-	public void setOriginalId(String originalId) {
-		this.originalId = originalId;
+	@Override
+	public String getName() {
+		return testFormName;
 	}
 	
+	@Override
+	public void setName(String name) {
+		this.testFormName = name;
+	}
+
 	@Override
 	protected String getDefaultTechnicalName() {
 		return DEFAULT_FORM_NAME;

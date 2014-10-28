@@ -1,9 +1,8 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
-import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.webpages.components.TreeObjectTable;
+import com.biit.form.BaseQuestion;
+import com.biit.form.BaseRepeatableGroup;
 import com.biit.form.TreeObject;
 
 /**
@@ -24,8 +23,7 @@ public class TestScenarioTable extends TreeObjectTable {
 
 	public void addItem(TreeObject element, TreeObject parent) {
 		// Not representing the groups, questions and answers
-		if (element != null && !(element instanceof Group) && !(element instanceof Question)
-				&& !(element instanceof Answer)) {
+		if (element != null && !(element instanceof BaseRepeatableGroup) && !(element instanceof BaseQuestion)) {
 			super.addItem(element, parent);
 		}
 	}

@@ -19,21 +19,12 @@ public class TestScenarioQuestion extends BaseQuestion {
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private TestAnswer testAnswer;
-	private String originalId;
 	private static final String DEFAULT_QUESTION_NAME = "TestScenarioQuestion";
 
 	public TestScenarioQuestion() {
 		super();
 	}
 
-	public String getOriginalId() {
-		return originalId;
-	}
-
-	public void setOriginalId(String originalId) {
-		this.originalId = originalId;
-	}
-	
 	public TestAnswer getTestAnswer() {
 		return testAnswer;
 	}

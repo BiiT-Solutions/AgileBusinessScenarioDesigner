@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -54,7 +55,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	}
 
 	public TestScenario(String scenarioName, Form form) throws NotValidStorableObjectException, NotValidChildException,
-			FieldTooLongException {
+			FieldTooLongException, CharacterNotAllowedException {
 		super();
 		setName(scenarioName);
 		setFormLabel(form.getLabel());
@@ -134,20 +135,20 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	}
 
 	private void createTestScenarioForm(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent)
-			throws NotValidChildException {
+			throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		if (formTreeObject instanceof Form) {
 			testScenarioForm = new TestScenarioForm();
-			// TODO Change to originalID
-			testScenarioForm.setOriginalId(formTreeObject.getComparationId());
+			testScenarioForm.setOriginalReference(formTreeObject.getOriginalReference());
 			testScenarioForm.setOrganizationId(((Form) formTreeObject).getOrganizationId());
+			testScenarioForm.setName(formTreeObject.getName());
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
 				createTestScenarioForm(treeObject, testScenarioForm);
 			}
 		} else if (formTreeObject instanceof Category) {
 			TestScenarioCategory testScenarioCategory = new TestScenarioCategory();
-			// TODO Copy the comparation ID
-			testScenarioCategory.setOriginalId(formTreeObject.getComparationId());
+			testScenarioCategory.setOriginalReference(formTreeObject.getOriginalReference());
+			testScenarioCategory.setName(formTreeObject.getName());
 			testScenarioTreeObjectParent.addChild(testScenarioCategory);
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
@@ -155,8 +156,8 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			}
 		} else if (formTreeObject instanceof Group) {
 			TestScenarioGroup testScenarioGroup = new TestScenarioGroup();
-			// TODO Copy the comparation ID
-			testScenarioGroup.setOriginalId(formTreeObject.getComparationId());
+			testScenarioGroup.setOriginalReference(formTreeObject.getOriginalReference());
+			testScenarioGroup.setName(formTreeObject.getName());
 			testScenarioTreeObjectParent.addChild(testScenarioGroup);
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
@@ -164,8 +165,8 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			}
 		} else if (formTreeObject instanceof Question) {
 			TestScenarioQuestion testScenarioQuestion = new TestScenarioQuestion();
-			// TODO Copy the comparation ID
-			testScenarioQuestion.setOriginalId(formTreeObject.getComparationId());
+			testScenarioQuestion.setOriginalReference(formTreeObject.getOriginalReference());
+			testScenarioQuestion.setName(formTreeObject.getName());
 			testScenarioTreeObjectParent.addChild(testScenarioQuestion);
 		}
 		// Any other tree object type not taken into account

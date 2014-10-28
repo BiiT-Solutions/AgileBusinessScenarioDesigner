@@ -45,16 +45,20 @@ public class CustomGroupEditor extends CustomComponent {
 	private Map<Field, TestScenarioQuestion> fieldQuestionMap;
 	private static final String NUMBER_FIELD_VALIDATOR_REGEX = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 	private Integer componentIndex;
+	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
 
 	public CustomGroupEditor() {
 		setCompositionRoot(generateContent());
 	}
 
-	public CustomGroupEditor(TreeObject treeObject, int componentIndex) {
+	public CustomGroupEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap, TreeObject treeObject,
+			int componentIndex) {
+		this.originalReferenceTreeObjectMap = originalReferenceTreeObjectMap;
+		setComponentIndex(componentIndex);
 		setCompositionRoot(generateContent());
 		setContent(treeObject);
 	}
-	
+
 	public Integer getComponentIndex() {
 		return componentIndex;
 	}
@@ -149,7 +153,9 @@ public class CustomGroupEditor extends CustomComponent {
 		}
 	}
 
-	private Field<Field> getFormLayoutField(Question question, TestScenarioQuestion testQuestion) {
+	private Field<Field> getFormLayoutField(TestScenarioQuestion testQuestion) {
+		TreeObject treeObject = originalReferenceTreeObjectMap.get(testQuestion.getOriginalReference());
+		Question question = (Question) treeObject;
 		TestAnswer testAnswer = null;
 		Field field = null;
 		switch (question.getAnswerType()) {

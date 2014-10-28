@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.persistence.entity.Category;
@@ -14,8 +15,6 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Runo;
@@ -24,6 +23,7 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 	private static final long serialVersionUID = -3526986076061463631L;
 	private TestScenarioTable treeTestTable;
 	private VerticalLayout formsLayout;
+	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
 
 	public TestScenarioMainLayout() {
 		super();
@@ -34,7 +34,7 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 	public void setContent(Form form, TestScenario testScenario) throws NotValidChildException, FieldTooLongException,
 			CharacterNotAllowedException {
 		removeAllComponents();
-
+		originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
 		createContent(form, testScenario);
 	}
 
@@ -73,11 +73,13 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 			public void valueChange(ValueChangeEvent event) {
 				Object valueSelected = event.getProperty().getValue();
 				formsLayout.removeAllComponents();
+				int componentIndex = 0;
 				if (valueSelected instanceof Category) {
 					List<TreeObject> questions = ((Category) valueSelected).getChildren(Question.class);
 					if (!questions.isEmpty()) {
 						// Add the questions of the category
-						CustomGroupEditor categoryEditor = new CustomGroupEditor((TreeObject) valueSelected);
+						CustomGroupEditor categoryEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
+								(TreeObject) valueSelected, componentIndex);
 						formsLayout.addComponent(categoryEditor);
 					}
 					// Add the groups of the category
@@ -98,27 +100,29 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 	}
 
 	private void createGroupEditor(final TreeObject group) {
-		final CustomGroupEditor groupEditor = new CustomGroupEditor(group);
-		if ((group instanceof Group) && ((Group) group).isRepeatable()) {
-
-			groupEditor.addCopyRepeatableGroupButtonClickListener(new ClickListener() {
-				private static final long serialVersionUID = 3621778613512091320L;
-
-				@Override
-				public void buttonClick(ClickEvent event) {
-					createGroupEditor(group);
-				}
-			});
-			groupEditor.addRemoveRepeatableGroupButtonClickListener(new ClickListener() {
-				private static final long serialVersionUID = -3315540873270544669L;
-
-				@Override
-				public void buttonClick(ClickEvent event) {
-					formsLayout.removeComponent(groupEditor);
-				}
-			});
-		}
-		formsLayout.addComponent(groupEditor);
+		// final CustomGroupEditor groupEditor = new CustomGroupEditor(group);
+		// if ((group instanceof Group) && ((Group) group).isRepeatable()) {
+		//
+		// groupEditor.addCopyRepeatableGroupButtonClickListener(new
+		// ClickListener() {
+		// private static final long serialVersionUID = 3621778613512091320L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// createGroupEditor(group);
+		// }
+		// });
+		// groupEditor.addRemoveRepeatableGroupButtonClickListener(new
+		// ClickListener() {
+		// private static final long serialVersionUID = -3315540873270544669L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// formsLayout.removeComponent(groupEditor);
+		// }
+		// });
+		// }
+		// formsLayout.addComponent(groupEditor);
 	}
 
 	public TestScenarioTable getTreeTestTable() {
