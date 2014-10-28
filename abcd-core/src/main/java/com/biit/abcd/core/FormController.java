@@ -16,9 +16,29 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.persistence.utils.FormComparator;
+import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.DiagramNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.DiagramObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.ExpressionNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.FormNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.GlobalVariableNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.GroupNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.NodeNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.PointNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.QuestionNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.RuleNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.SizeNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.liferay.portal.model.User;
 
 public class FormController {
@@ -30,6 +50,7 @@ public class FormController {
 	private TableRule lastAccessTable;
 	private Rule lastAccessRule;
 	private List<TableRuleRow> copiedRows;
+	private Form originalForm;
 
 	private IFormDao formDao;
 
@@ -101,7 +122,20 @@ public class FormController {
 
 	public void setForm(Form form) {
 		this.form = form;
+		try {
+			this.originalForm = (Form) form.generateCopy(true, true);
+		} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
+		}
 		this.clearWorkVariables();
+	}
+
+	public void checkUnsavedChanges() throws TreeObjectNotEqualsException, StorableObjectNotEqualsException,
+			FormNotEqualsException, GroupNotEqualsException, QuestionNotEqualsException,
+			CustomVariableNotEqualsException, ExpressionNotEqualsException, TableRuleNotEqualsException,
+			RuleNotEqualsException, DiagramNotEqualsException, DiagramObjectNotEqualsException, NodeNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+		new FormComparator().compare(form, originalForm);
 	}
 
 	public User getUser() {

@@ -4,6 +4,23 @@ import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.DiagramNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.DiagramObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.ExpressionNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.FormNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.GlobalVariableNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.GroupNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.NodeNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.PointNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.QuestionNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.RuleNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.SizeNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -48,17 +65,29 @@ public abstract class UpperMenu extends SecuredMenu {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(
-								LanguageCodes.WARNING_LOST_UNSAVED_DATA);
-						windowAccept.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								UiAccesser.releaseForm(UserSessionHandler.getUser());
-								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-								windowAccept.close();
-							}
-						});
-						windowAccept.showCentered();
+						try {
+							UserSessionHandler.getFormController().checkUnsavedChanges();
+							UiAccesser.releaseForm(UserSessionHandler.getUser());
+							ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
+								| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
+								| CustomVariableNotEqualsException | ExpressionNotEqualsException
+								| TableRuleNotEqualsException | RuleNotEqualsException | DiagramNotEqualsException
+								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
+								| PointNotEqualsException | BiitTextNotEqualsException
+								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+							final AlertMessageWindow windowAccept = new AlertMessageWindow(
+									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+							windowAccept.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									UiAccesser.releaseForm(UserSessionHandler.getUser());
+									ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+									windowAccept.close();
+								}
+							});
+							windowAccept.showCentered();
+						}
 					}
 				});
 		formManagerButton.setEnabled(true);

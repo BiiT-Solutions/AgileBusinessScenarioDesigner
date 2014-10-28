@@ -8,7 +8,6 @@ import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.TestScenarioController;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
