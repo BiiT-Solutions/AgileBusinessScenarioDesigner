@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -128,10 +129,8 @@ public class DiagramParser {
 	}
 
 	/**
-	 * A fork adds some extra condition or conditions to the rules that happen
-	 * after <br>
-	 * A fork and its outgoing links define a condition that a question or a
-	 * score must fulfill
+	 * A fork adds some extra condition or conditions to the rules that happen after <br>
+	 * A fork and its outgoing links define a condition that a question or a score must fulfill
 	 * 
 	 * @return
 	 * @throws RuleNotImplementedException

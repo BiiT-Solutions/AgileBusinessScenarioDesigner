@@ -8,12 +8,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -40,7 +37,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@BatchSize(size = 20)
 	//@Cache(region = "tableRuleRows", usage = CacheConcurrencyStrategy.READ_WRITE)
-	@OrderBy(value = "creationTime ASC")
+	//@OrderBy(clause = "creationTime ASC")
 	private List<TableRuleRow> rules;
 
 	public TableRule() {

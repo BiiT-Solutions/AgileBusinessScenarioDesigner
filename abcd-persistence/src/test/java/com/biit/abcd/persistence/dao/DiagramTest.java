@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -45,15 +46,26 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 		diagram = Diagram.fromJson(DIAGRAM_IN_JSON);
 		Assert.assertNotNull(diagram);
 		Assert.assertEquals(diagram.getDiagramObjects().size(), 5);
-		// Test first child.
-		Assert.assertEquals(diagram.getDiagramObjects().get(0).getType(), DiagramObjectType.SOURCE);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getTooltip(), "Source Tooltip");
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getSize().getWidth(), 30);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getSize().getHeight(), 30);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getPosition().getX(), 328);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getPosition().getY(), 470);
-		Assert.assertEquals(((DiagramElement) diagram.getDiagramObjects().get(0)).getAngle(), 0f);
-		Assert.assertEquals(diagram.getDiagramObjects().get(0).getJointjsId(), "a052d3a6-007c-4057-a789-c7aa19008b0f");
+		// Test source child.
+		Iterator<DiagramObject> iterator = diagram.getDiagramObjects().iterator();
+		Assert.assertTrue(iterator.hasNext());
+		DiagramObject diagramObject = null;
+		while (iterator.hasNext()) {
+			DiagramObject iteratedObject = iterator.next();
+			if (iteratedObject.getType().equals(DiagramObjectType.SOURCE)) {
+				diagramObject = iteratedObject;
+			}
+		}
+
+		Assert.assertNotNull(diagramObject);
+		Assert.assertEquals(diagramObject.getType(), DiagramObjectType.SOURCE);
+		Assert.assertEquals(((DiagramElement) diagramObject).getTooltip(), "Source Tooltip");
+		Assert.assertEquals(((DiagramElement) diagramObject).getSize().getWidth(), 30);
+		Assert.assertEquals(((DiagramElement) diagramObject).getSize().getHeight(), 30);
+		Assert.assertEquals(((DiagramElement) diagramObject).getPosition().getX(), 328);
+		Assert.assertEquals(((DiagramElement) diagramObject).getPosition().getY(), 470);
+		Assert.assertEquals(((DiagramElement) diagramObject).getAngle(), 0f);
+		Assert.assertEquals(diagramObject.getJointjsId(), "a052d3a6-007c-4057-a789-c7aa19008b0f");
 	}
 
 	@Test

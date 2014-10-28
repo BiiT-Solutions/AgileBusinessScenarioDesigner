@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OrderBy;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.INameAttribute;

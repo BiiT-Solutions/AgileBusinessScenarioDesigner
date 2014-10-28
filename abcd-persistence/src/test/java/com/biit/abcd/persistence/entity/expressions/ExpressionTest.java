@@ -138,8 +138,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		// Create the custom variables
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
-				CustomVariableScope.QUESTION);
+//		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
+//				CustomVariableScope.QUESTION);
 
 		ExpressionChain expressionChain = new ExpressionChain();
 		ExpressionValueCustomVariable customCategoryVariable = new ExpressionValueCustomVariable(category,
@@ -169,8 +169,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		// Create the custom variables
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
-				CustomVariableScope.QUESTION);
+//		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
+//				CustomVariableScope.QUESTION);
 
 		ExpressionChain expressionChain = new ExpressionChain();
 		ExpressionValueCustomVariable customCategoryVariable = new ExpressionValueCustomVariable(category,

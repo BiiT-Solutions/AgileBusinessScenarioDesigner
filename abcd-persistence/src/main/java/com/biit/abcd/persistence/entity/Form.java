@@ -13,7 +13,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -59,14 +58,12 @@ public class Form extends BaseForm {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.JOIN)
-	@OrderBy(value = "name ASC")
 	@Cache(region = "diagrams", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy(value = "name ASC")
 	@Cache(region = "tableRules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<TableRule> tableRules;
 
@@ -74,14 +71,12 @@ public class Form extends BaseForm {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy(value = "name ASC")
 	@Cache(region = "customVariables", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy(value = "name ASC")
 	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<ExpressionChain> expressionChains;
 
@@ -89,7 +84,6 @@ public class Form extends BaseForm {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy(value = "name ASC")
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
@@ -142,6 +136,10 @@ public class Form extends BaseForm {
 		newVersion.setUpdatedBy(user);
 		newVersion.setCreationTime();
 		newVersion.setUpdateTime();
+		// Update ValidTo of current version: 84600000 milliseconds in a day
+		long newValidTo = newVersion.getAvailableFrom().getTime() - 84600000;
+		Timestamp validTo = newValidTo > getAvailableFrom().getTime() ? new Timestamp(newValidTo) : getAvailableFrom();
+		setAvailableTo(validTo);
 		return newVersion;
 	}
 
@@ -269,8 +267,8 @@ public class Form extends BaseForm {
 				if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
 					diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
 				} else {
-					AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram()
-							+ "'.");
+					AbcdLogger
+							.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram() + "'.");
 					formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
 				}
 			}
@@ -290,8 +288,8 @@ public class Form extends BaseForm {
 				DiagramExpression diagramExpression = (DiagramExpression) child;
 				if (diagramExpression.getExpression() != null) {
 					if (formExpressionChains.get(diagramExpression.getExpression().getComparationId()) != null) {
-						diagramExpression.setExpression(formExpressionChains.get(diagramExpression
-								.getExpression().getComparationId()));
+						diagramExpression.setExpression(formExpressionChains.get(diagramExpression.getExpression()
+								.getComparationId()));
 					} else {
 						AbcdLogger.warning(this.getClass().getName(),
 								"Adding expression '" + diagramExpression.getExpression() + "'.");
@@ -364,7 +362,7 @@ public class Form extends BaseForm {
 					formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
 							expressionValueTreeObjectReference.getReference());
 				}
-			} 
+			}
 		}
 	}
 

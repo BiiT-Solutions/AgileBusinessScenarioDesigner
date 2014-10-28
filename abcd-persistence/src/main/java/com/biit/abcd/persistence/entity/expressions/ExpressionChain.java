@@ -9,12 +9,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OrderBy;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
@@ -32,11 +30,11 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	private String name;
 
-	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
+	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-3577
 	// we cannot use the list of children with @Orderby or @OrderColumn we use
 	// our own order manager.
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@OrderBy(value = "sortSeq ASC")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy="parent")
+	@OrderBy(clause = "sortSeq")
 	@BatchSize(size = 500)
 	//@Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<Expression> expressions;
@@ -83,10 +81,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	public void addExpression(Expression expression) {
+		expression.setParent(this);
 		expressions.add(expression);
 	}
 
 	public void addExpression(int index, Expression expression) {
+		expression.setParent(this);
 		expressions.add(index, expression);
 	}
 

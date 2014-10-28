@@ -273,6 +273,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value varchar(255),
         primary key (ID)
     );
@@ -285,6 +286,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         currentValue varchar(255),
         primary key (ID)
     );
@@ -297,6 +299,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         currentValue varchar(255),
         primary key (ID)
     );
@@ -309,6 +312,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value varchar(255),
         primary key (ID)
     );
@@ -321,6 +325,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value bit not null,
         primary key (ID)
     );
@@ -333,6 +338,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         unit varchar(255),
         reference_ID bigint,
         variable_ID bigint,
@@ -347,6 +353,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         type varchar(255),
         variable_ID bigint,
         primary key (ID)
@@ -360,6 +367,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         type varchar(255),
         primary key (ID)
     );
@@ -372,6 +380,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         constant_ID bigint,
         primary key (ID)
     );
@@ -384,6 +393,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value double precision not null,
         primary key (ID)
     );
@@ -396,6 +406,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value TEXT,
         primary key (ID)
     );
@@ -408,6 +419,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value TEXT,
         primary key (ID)
     );
@@ -420,6 +432,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value datetime,
         primary key (ID)
     );
@@ -432,6 +445,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         value datetime,
         primary key (ID)
     );
@@ -444,6 +458,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         unit varchar(255),
         reference_ID bigint,
         primary key (ID)
@@ -457,13 +472,9 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
+        parent_ID bigint,
         name varchar(255),
         primary key (ID)
-    );
-
-    create table expressions_chain_expression_basic (
-        expressions_chain_ID bigint not null,
-        expressions_ID bigint not null
     );
 
     create table form_custom_variables (
@@ -1089,9 +1100,6 @@
     alter table expressions_chain 
         add constraint UK_qageeu0ehecelhxmn5qdv93am  unique (comparationId);
 
-    alter table expressions_chain_expression_basic 
-        add constraint UK_6n86noaf7rpgu2qagq951m5da  unique (expressions_ID);
-
     alter table form_custom_variables 
         add constraint UK_2pj0qoh0ntvs9laf9sh42rqap  unique (form, name, scope);
 
@@ -1519,24 +1527,99 @@
         foreign key (diagram_ID) 
         references diagram (ID);
 
+    alter table expression_function 
+        add constraint FK_d6ogxhykhk1rnnr1sd6yps6kx 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_operator_logic 
+        add constraint FK_3crqmvldbj44i6r5nu6oogrii 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_operator_math 
+        add constraint FK_tbwsjci6j34y2x8rast0niicv 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_symbol 
+        add constraint FK_s3jrr9w195itw4wcl1fgvy5x0 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_boolean 
+        add constraint FK_cv46xqo6y1non3d38caiqmw07 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
     alter table expression_value_custom_variable 
         add constraint FK_nfs9s2t4plx74r3n105o09sjx 
         foreign key (variable_ID) 
         references form_custom_variables (ID);
+
+    alter table expression_value_custom_variable 
+        add constraint FK_d11hujtpkd5jr5ykf2kd1pqkr 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
 
     alter table expression_value_generic_custom_variable 
         add constraint FK_4u49ngxh67i7rqxx3xb7379yi 
         foreign key (variable_ID) 
         references form_custom_variables (ID);
 
+    alter table expression_value_generic_custom_variable 
+        add constraint FK_6dae9gmrya0xyr2fvptsjb7ov 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_generic_variable 
+        add constraint FK_4hkar5cjkyc2moda0ewi6v3r9 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
     alter table expression_value_global_variable 
         add constraint FK_42woqe4atagm0r4oxgcnk6qwo 
         foreign key (constant_ID) 
         references global_variables (ID);
 
-    alter table expressions_chain_expression_basic 
-        add constraint FK_5u04lt24nd5qdcqdc9s5htsy8 
-        foreign key (expressions_chain_ID) 
+    alter table expression_value_global_variable 
+        add constraint FK_a5kycedecdmry2gj670itd96q 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_number 
+        add constraint FK_aq9y384fu7rtfiqt5fel3ggj 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_postal_code 
+        add constraint FK_f14jv1aw7hndkdjakwjecqe20 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_string 
+        add constraint FK_cxi8iirswnlr0ip8x7wwkljo7 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_systemdate 
+        add constraint FK_4ovu5w08ob00o2wgaa5k7e3w9 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_timestamp 
+        add constraint FK_5jhmnn5wxahriakbikv1r0vp5 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expression_value_tree_object_reference 
+        add constraint FK_hn75mtp2elpfej8j2uuawur7e 
+        foreign key (parent_ID) 
+        references expressions_chain (ID);
+
+    alter table expressions_chain 
+        add constraint FK_19ydht9bc6ijhb8j90x25dawv 
+        foreign key (parent_ID) 
         references expressions_chain (ID);
 
     alter table form_custom_variables 
