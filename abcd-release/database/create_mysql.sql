@@ -694,9 +694,9 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
-        originalId varchar(255),
         primary key (ID)
     );
 
@@ -709,11 +709,12 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
         organizationId DOUBLE not null,
         version integer,
-        originalId varchar(255),
+        testFormName varchar(255),
         primary key (ID)
     );
 
@@ -726,10 +727,10 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
         repeatable bit not null,
-        originalId varchar(255),
         primary key (ID)
     );
 
@@ -742,9 +743,9 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
-        originalId varchar(255),
         testAnswer_ID bigint,
         primary key (ID)
     );
@@ -758,6 +759,7 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
         primary key (ID)
@@ -772,6 +774,7 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
         primary key (ID)
@@ -786,6 +789,7 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
         organizationId DOUBLE not null,
@@ -834,6 +838,7 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
         repeatable bit not null,
@@ -849,6 +854,7 @@
         updatedBy DOUBLE,
         label longtext,
         name varchar(190),
+        originalReference varchar(190) not null,
         sortSeq bigint not null,
         parent_ID bigint,
         answerFormat varchar(255),
