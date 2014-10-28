@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.OrderBy;
+import org.hibernate.annotations.SortComparator;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
@@ -34,10 +34,10 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-3577
 	// we cannot use the list of children with @Orderby or @OrderColumn we use
 	// our own order manager.
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "parent")
-	@OrderBy(clause = "sortSeq")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	// @OrderBy(clause = "sortSeq")
 	@BatchSize(size = 500)
-	// @Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
+	@SortComparator(value = ExpressionSort.class)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
@@ -82,12 +82,10 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	public void addExpression(Expression expression) {
-		expression.setParent(this);
 		expressions.add(expression);
 	}
 
 	public void addExpression(int index, Expression expression) {
-		expression.setParent(this);
 		expressions.add(index, expression);
 	}
 
@@ -101,14 +99,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	public void addExpressions(Expression... expressions) {
 		for (Expression expression : expressions) {
-			expression.setParent(this);
 			addExpression(expression);
 		}
 	}
 
 	public void addExpressions(List<Expression> expressions) {
 		for (Expression expression : expressions) {
-			expression.setParent(this);
 			addExpression(expression);
 		}
 	}
@@ -182,7 +178,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	public List<Expression> getExpressions() {
-		return Collections.unmodifiableList(expressions);
+		return expressions;
 	}
 
 	public void removeExpression(int index) {
@@ -249,9 +245,6 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	public void setExpressions(List<Expression> expressions) {
 		removeAllExpressions();
-		for (Expression expression : expressions) {
-			expression.setParent(this);
-		}
 		this.expressions.addAll(expressions);
 	}
 
