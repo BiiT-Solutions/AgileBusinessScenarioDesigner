@@ -44,25 +44,40 @@ public class TabOperatorLayout extends TabLayout {
 
 		GridLayout operatorLayout = new GridLayout(GRID_COLUMNS, 4);
 		operatorLayout.setWidth("100%");
-
 		createMathOperators(operatorLayout);
 		createMathFunctionsOperators(operatorLayout);
 		createBaseTab(operatorLayout);
-
 		matLayout.addComponent(inputLayout);
 		matLayout.addComponent(operatorLayout);
-
 		accordion.addTab(matLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_MATH), true);
 
 		GridLayout logicalLayout = new GridLayout(GRID_COLUMNS, 4);
 		logicalLayout.setWidth("100%");
 		createLogicalOperators(logicalLayout);
 		createLogicalFunctionsOperators(logicalLayout);
-
 		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
+		
+		GridLayout controlsLayout = new GridLayout(GRID_COLUMNS, 4);
+		controlsLayout.setWidth("100%");
+		createControlOperators(controlsLayout);		
+		accordion.addTab(controlsLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS), true);
+
 		addComponent(accordion);
 		setComponentAlignment(accordion, Alignment.MIDDLE_CENTER);
+
 		this.setMargin(false);
+	}
+
+	private void createControlOperators(GridLayout layout) {
+		Button carriageReturnButton = createButton("\u00B6", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addSymbolExpression(AvailableSymbol.PILCROW);
+			}
+		});
+		layout.addComponent(carriageReturnButton);
 	}
 
 	private void createMathOperators(GridLayout layout) {
@@ -140,7 +155,6 @@ public class TabOperatorLayout extends TabLayout {
 	}
 
 	private void createMathFunctionsOperators(AbstractLayout layout) {
-
 		Button maxButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_MAX),
 				new ClickListener() {
 					private static final long serialVersionUID = -3339234972234970277L;

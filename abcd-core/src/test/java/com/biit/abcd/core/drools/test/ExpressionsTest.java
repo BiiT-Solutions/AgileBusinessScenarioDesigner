@@ -182,11 +182,11 @@ public class ExpressionsTest extends KidsFormCreator {
 				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
 						getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
 				new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-				new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionSymbol(
-						AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject("height")),
-				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+				new ExpressionSymbol(AvailableSymbol.PILCROW), new ExpressionOperatorMath(
+						AvailableOperator.MULTIPLICATION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueTreeObjectReference(getTreeObject("height")), new ExpressionOperatorMath(
+						AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression5);
 
 		// If expression

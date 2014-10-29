@@ -11,7 +11,9 @@ public enum AvailableSymbol {
 	LEFT_BRACKET("(", true),
 
 	// Comma is used for separating parameters of a function.
-	COMMA(",", false);
+	COMMA(",", false),
+
+	PILCROW("\u00B6", false);
 
 	private String value;
 	// Some symbols are composed as a pair. This flag indicates if the left part or the right one.

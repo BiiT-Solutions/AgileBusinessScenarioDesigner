@@ -12,6 +12,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
@@ -43,6 +44,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ExpressionViewer extends CssLayout {
 	private static final long serialVersionUID = -3032370197806581430L;
 	public static String CLASSNAME = "v-expression-viewer";
+	private static final String LINE_HEIGHT = "32px";
 	private ExpressionChain expressions;
 	private Expression selectedExpression = null;
 	private VerticalLayout rootLayout;
@@ -52,6 +54,8 @@ public class ExpressionViewer extends CssLayout {
 	// If this editor has the focus.
 	private boolean focused;
 	private List<LayoutClickedListener> clickedListeners;
+	private List<HorizontalLayout> lines;
+	private HorizontalLayout selectedLine = null;
 
 	public interface LayoutClickedListener {
 		public void clickedAction(ExpressionViewer viewer);
@@ -59,6 +63,7 @@ public class ExpressionViewer extends CssLayout {
 
 	public ExpressionViewer() {
 		setImmediate(true);
+		lines = new ArrayList<>();
 		expressionOfElement = new HashMap<>();
 		setStyleName(CLASSNAME);
 		clickedListeners = new ArrayList<LayoutClickedListener>();
@@ -77,34 +82,28 @@ public class ExpressionViewer extends CssLayout {
 		rootLayout.setMargin(true);
 		rootLayout.setSpacing(false);
 		rootLayout.setImmediate(true);
-		rootLayout.setSizeFull();
+		rootLayout.setWidth("100%");
+		rootLayout.setHeight(null);
 		addClickController();
 
 		this.expressions = expressions;
 
 		// Evaluator
 		HorizontalLayout evaluatorLayout = createEvaluatorLayout();
+		rootLayout.addComponent(evaluatorLayout);
 
-		// One line for the expressions.
-		HorizontalLayout lineLayout = new HorizontalLayout();
-		lineLayout.setMargin(false);
-		lineLayout.setSpacing(false);
-		lineLayout.setImmediate(true);
-		lineLayout.setSizeUndefined();
+		addNewLine();
 
 		if (expressions != null) {
-			addExpressions(lineLayout, expressions);
+			addExpressions(expressions);
 		} else {
 			selectedExpression = null;
 		}
 
-		rootLayout.addComponent(evaluatorLayout);
 		// If expand ratio is 0, component is not shown.
 		rootLayout.setExpandRatio(evaluatorLayout, 0.00001f);
 		rootLayout.setComponentAlignment(evaluatorLayout, Alignment.BOTTOM_RIGHT);
 
-		rootLayout.addComponent(lineLayout);
-		rootLayout.setExpandRatio(lineLayout, 0.99999f);
 		updateExpressionSelectionStyles();
 
 		addComponent(rootLayout);
@@ -112,9 +111,34 @@ public class ExpressionViewer extends CssLayout {
 		updateEvaluator();
 	}
 
-	private void addExpressions(HorizontalLayout lineLayout, ExpressionChain expressions) {
+	private void addNewLine() {
+		if (rootLayout != null) {
+			// One line for the expressions.
+			HorizontalLayout lineLayout = new HorizontalLayout();
+			lineLayout.setMargin(false);
+			lineLayout.setSpacing(false);
+			lineLayout.setImmediate(true);
+			lineLayout.setWidth(null);
+			lineLayout.setHeight(LINE_HEIGHT);
+			rootLayout.addComponent(lineLayout);
+			rootLayout.setExpandRatio(lineLayout, 0.99999f);
+
+			selectedLine = lineLayout;
+			lines.add(lineLayout);
+		}
+	}
+
+	private void addExpressions(ExpressionChain expressions) {
+		if (selectedLine == null) {
+			addNewLine();
+		}
 		for (Expression expression : expressions.getExpressions()) {
-			addExpression(lineLayout, expression);
+			addExpression(selectedLine, expression);
+			if (expression instanceof ExpressionSymbol) {
+				if (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW)) {
+					addNewLine();
+				}
+			}
 		}
 	}
 
@@ -122,7 +146,7 @@ public class ExpressionViewer extends CssLayout {
 		return expression.isEditable();
 	}
 
-	public void addExpression(HorizontalLayout lineLayout, final Expression expression) {
+	private void addExpression(HorizontalLayout lineLayout, final Expression expression) {
 		final ExpressionElement expressionElement = new ExpressionElement(expression.getRepresentation(),
 				new LayoutClickListener() {
 					private static final long serialVersionUID = -4305606865801828692L;
@@ -403,8 +427,8 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	/**
-	 * Adds a new element in the position of the selected element. Depending of
-	 * the element, can be inserted after or before.
+	 * Adds a new element in the position of the selected element. Depending of the element, can be inserted after or
+	 * before.
 	 * 
 	 * @param newElement
 	 */
