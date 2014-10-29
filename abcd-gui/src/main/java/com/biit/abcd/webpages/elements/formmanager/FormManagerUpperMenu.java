@@ -263,10 +263,6 @@ public class FormManagerUpperMenu extends UpperMenu {
 								Long testScenarioId = launchTestScenarioWindow.getSelectedTestScenarioId();
 								if ((formId != null) && (testScenarioId != null)) {
 									parent.setFormById(formId);
-									// Set<TestScenario> testScenarios =
-									// UserSessionHandler.getFormController().getForm()
-									// .getTestScenarios();
-
 									TestScenario testScenarioDB = UserSessionHandler.getTestScenariosController()
 											.getTestScenarioById(testScenarioId);
 									// if(testScenarioDB != null){

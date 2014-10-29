@@ -72,6 +72,13 @@ public class CustomQuestionEditor extends CustomComponent {
 		}
 	}
 
+	/**
+	 * Creates the field based on the type of the question and retrieves the
+	 * answer information if there is any.
+	 * 
+	 * @param testQuestion
+	 * @return
+	 */
 	private Field<Field> getFormLayoutField(TestScenarioQuestion testQuestion) {
 		TreeObject treeObject = originalReferenceTreeObjectMap.get(testQuestion.getOriginalReference());
 		Question question = (Question) treeObject;
@@ -87,7 +94,7 @@ public class CustomQuestionEditor extends CustomComponent {
 				testAnswer = new TestAnswerRadioButton();
 				testQuestion.setTestAnswer(testAnswer);
 			} else {
-				if (checkQuestionTestAnswerIntegrity(TestAnswerRadioButton.class, testAnswer)) {
+				if (testAnswer instanceof TestAnswerRadioButton) {
 					if (testAnswer.getValue() != null) {
 						((ComboBox) field).select(testAnswer.getValue());
 					}
@@ -110,7 +117,7 @@ public class CustomQuestionEditor extends CustomComponent {
 				testQuestion.setTestAnswer(testAnswer);
 			} else {
 				if (testAnswer.getValue() != null) {
-					if (checkQuestionTestAnswerIntegrity(TestAnswerMultiCheckBox.class, testAnswer)) {
+					if (testAnswer instanceof TestAnswerMultiCheckBox) {
 						Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
 						for (String value : values) {
 							((ListSelect) field).select(value);
@@ -131,7 +138,7 @@ public class CustomQuestionEditor extends CustomComponent {
 					testAnswer = new TestAnswerInputText();
 					testQuestion.setTestAnswer(testAnswer);
 				} else {
-					if (checkQuestionTestAnswerIntegrity(TestAnswerInputText.class, testAnswer)) {
+					if (testAnswer instanceof TestAnswerInputText) {
 						if (testAnswer.getValue() != null) {
 							((TextField) field).setValue(testAnswer.getValue().toString());
 						}
@@ -148,7 +155,7 @@ public class CustomQuestionEditor extends CustomComponent {
 					testAnswer = new TestAnswerInputPostalCode();
 					testQuestion.setTestAnswer(testAnswer);
 				} else {
-					if (checkQuestionTestAnswerIntegrity(TestAnswerInputPostalCode.class, testAnswer)) {
+					if (testAnswer instanceof TestAnswerInputPostalCode) {
 						if (testAnswer.getValue() != null) {
 							((TextField) field).setValue(testAnswer.getValue().toString());
 						}
@@ -167,7 +174,7 @@ public class CustomQuestionEditor extends CustomComponent {
 					testAnswer = new TestAnswerInputNumber();
 					testQuestion.setTestAnswer(testAnswer);
 				} else {
-					if (checkQuestionTestAnswerIntegrity(TestAnswerInputNumber.class, testAnswer)) {
+					if (testAnswer instanceof TestAnswerInputNumber) {
 						if (testAnswer.getValue() != null) {
 							((TextField) field).setValue(testAnswer.getValue().toString());
 						}
@@ -184,7 +191,7 @@ public class CustomQuestionEditor extends CustomComponent {
 					testAnswer = new TestAnswerInputDate();
 					testQuestion.setTestAnswer(testAnswer);
 				} else {
-					if (checkQuestionTestAnswerIntegrity(TestAnswerInputDate.class, testAnswer)) {
+					if (testAnswer instanceof TestAnswerInputDate) {
 						if (testAnswer.getValue() != null) {
 							Timestamp value = ((TestAnswerInputDate) testAnswer).getValue();
 							((PopupDateField) field).setValue(new Date(value.getTime()));
@@ -206,6 +213,10 @@ public class CustomQuestionEditor extends CustomComponent {
 		return field;
 	}
 
+	/**
+	 * Sets the listeners and validators for the created fields
+	 * 
+	 */
 	private class FieldValueChangeListener implements ValueChangeListener {
 		private static final long serialVersionUID = 2277281871213884287L;
 		AbstractField<?> field;
@@ -234,6 +245,11 @@ public class CustomQuestionEditor extends CustomComponent {
 		}
 	}
 
+	/**
+	 * Stores the value of the field in the test scenario answer
+	 * 
+	 * @param field
+	 */
 	private void updateTestScenario(Field field) {
 		try {
 			TestScenarioQuestion questionAnswer = fieldQuestionMap.get(field);
@@ -249,14 +265,6 @@ public class CustomQuestionEditor extends CustomComponent {
 			}
 		} catch (NotValidAnswerValue | NullPointerException e) {
 			e.printStackTrace();
-		}
-	}
-
-	private boolean checkQuestionTestAnswerIntegrity(Class<?> answerType, TestAnswer answer) {
-		if (answerType.isInstance(answer)) {
-			return true;
-		} else {
-			return false;
 		}
 	}
 }

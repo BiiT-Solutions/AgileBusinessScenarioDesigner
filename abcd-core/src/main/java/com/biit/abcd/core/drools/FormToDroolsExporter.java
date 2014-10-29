@@ -13,6 +13,7 @@ import org.junit.Assert;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
+import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioAnswerImporter;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -193,12 +194,11 @@ public class FormToDroolsExporter {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Generate the submitted form based on the test scenario
-		//TODO uncomment when methods working
-//		ISubmittedForm iSubmittedForm = TestScenarioAnswerImporter.createSubmittedForm(form, testScenario);
+		ISubmittedForm iSubmittedForm = TestScenarioAnswerImporter.createSubmittedForm(form, testScenario);
 		// Obtain results
-//		if ((rulesGenerator != null) && (iSubmittedForm != null)) {
-//			return applyDrools(iSubmittedForm, rulesGenerator.getRules(), rulesGenerator.getGlobalVariables());
-//		} else
+		if ((rulesGenerator != null) && (iSubmittedForm != null)) {
+			return applyDrools(iSubmittedForm, rulesGenerator.getRules(), rulesGenerator.getGlobalVariables());
+		} else
 			return null;
 	}
 

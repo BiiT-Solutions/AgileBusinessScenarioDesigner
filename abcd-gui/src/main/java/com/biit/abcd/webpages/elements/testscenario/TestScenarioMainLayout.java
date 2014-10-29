@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.HashMap;
 
+import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioValidator;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
@@ -100,82 +101,4 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 	public void refreshTable(TreeObject treeObject) {
 		this.treeTestTable.setRootElement(treeObject);
 	}
-
-	// }
-	// /**
-	// * Creates the map that stores the test scenario objects information
-	// */
-	// private void createTestScenarioObjectAbsolutePathNameMap() {
-	// absolutePathTestScenarioObjectMap = new HashMap<String, TreeObject>();
-	// TestScenarioObject testForm = testScenario.getTestScenarioForm();
-	// if (testForm != null) {
-	// fillAbsolutePathTestScenarioObjectMap(testForm);
-	// }
-	// }
-	//
-	// private void fillAbsolutePathTestScenarioObjectMap(TestScenarioObject
-	// testScenarioObject) {
-	// absolutePathTestScenarioObjectMap.put(testScenarioObject.getAbsoluteGenericPath(),
-	// testScenarioObject);
-	// for (TreeObject child : testScenarioObject.getChildren()) {
-	// fillAbsolutePathTestScenarioObjectMap((TestScenarioObject) child);
-	// }
-	// }
-	//
-	// /**
-	// * Returns the test scenario object or a new test scenario object if not
-	// * found
-	// *
-	// * @param testScenarioObjectParent
-	// * : parent of the object searched
-	// * @param absolutePathName
-	// * : absolute name path of the object searched
-	// * @return
-	// * @throws NotValidChildException
-	// */
-	// private TestScenarioObject getTestScenarioObject(TestScenarioObject
-	// testScenarioObjectParent,
-	// String absolutePathName, boolean question) throws NotValidChildException
-	// {
-	// TestScenarioObject testScenarioObject;
-	// if (absolutePathTestScenarioObjectMap.containsKey(absolutePathName)) {
-	// testScenarioObject = (TestScenarioObject)
-	// absolutePathTestScenarioObjectMap.get(absolutePathName);
-	// System.out.println("TREE OBJECT RETRIEVED: " +
-	// testScenarioObject.getAbsoluteGenericPath());
-	// } else {
-	// if (question) {
-	// testScenarioObject = new TestScenarioQuestionAnswer(absolutePathName);
-	// } else {
-	// testScenarioObject = new TestScenarioObject(absolutePathName);
-	// }
-	// try {
-	// testScenarioObjectParent.addChild(testScenarioObject);
-	// testScenarioObject.setAbsoluteGenericPath(absolutePathName);
-	// absolutePathTestScenarioObjectMap.put(absolutePathName,
-	// testScenarioObject);
-	// System.out.println("TREE OBJECT CREATED: " +
-	// testScenarioObject.getAbsoluteGenericPath());
-	// } catch (NotValidChildException e) {
-	// if (testScenarioObjectParent instanceof
-	// TestScenarioRepeatedGroupContainer) {
-	// // The user changed the property repeatable of the group in
-	// // the form structure
-	// // We have to create a new parent
-	// testScenarioObjectParent = new
-	// TestScenarioObject(testScenarioObjectParent.getAbsoluteGenericPath());
-	// testScenarioObjectParent.setXmlTag(testScenarioObjectParent.getXmlTag());
-	// absolutePathTestScenarioObjectMap.put(testScenarioObjectParent.getAbsoluteGenericPath(),
-	// testScenarioObjectParent);
-	// getTestScenarioObject(testScenarioObjectParent, absolutePathName,
-	// question);
-	// System.out.println("TREE OBJECT MODIFIED: " +
-	// testScenarioObjectParent.getAbsoluteGenericPath());
-	// }
-	// // throw new NotValidChildException(e.getMessage());
-	// }
-	//
-	// }
-	// return testScenarioObject;
-	// }
 }

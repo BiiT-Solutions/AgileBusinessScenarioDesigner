@@ -13,8 +13,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
