@@ -19,7 +19,6 @@ import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
 
 public class SelectDiagramTable extends TreeTable {
@@ -41,7 +40,7 @@ public class SelectDiagramTable extends TreeTable {
 		setMultiSelect(false);
 		setSizeFull();
 
-		addContainerProperty(MenuProperties.DIAGRAM_NAME, Component.class, "",
+		addContainerProperty(MenuProperties.DIAGRAM_NAME, EditCellComponent.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_DIAGRAM_BUILDER_TABLE_DIAGRAM_NAME), null, Align.LEFT);
 
 		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
@@ -59,7 +58,7 @@ public class SelectDiagramTable extends TreeTable {
 		this.setColumnExpandRatio(MenuProperties.DIAGRAM_NAME, 1);
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 
-		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
+		setSortContainerPropertyId(MenuProperties.DIAGRAM_NAME);
 		setSortAscending(false);
 	}
 
@@ -87,6 +86,7 @@ public class SelectDiagramTable extends TreeTable {
 	public void addRow(Diagram diagram) {
 		addDiagram(diagram);
 		updateItemInGui(diagram);
+		sort();
 	}
 
 	public void addRows(Set<Diagram> diagrams) {

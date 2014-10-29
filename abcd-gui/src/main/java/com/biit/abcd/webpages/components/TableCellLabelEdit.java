@@ -13,7 +13,6 @@ import com.biit.persistence.entity.StorableObject;
 import com.vaadin.data.Item;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
 public class TableCellLabelEdit extends Table {
@@ -41,11 +40,11 @@ public class TableCellLabelEdit extends Table {
 		setMultiSelect(false);
 		setSizeFull();
 
-		addContainerProperty(MenuProperties.TABLE_NAME, Component.class, null,
+		addContainerProperty(MenuProperties.TABLE_NAME, EditCellComponent.class, null,
 				ServerTranslate.translate(header1), null, Align.LEFT);
 
-		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "",
-				ServerTranslate.translate(header2), null, Align.LEFT);
+		addContainerProperty(MenuProperties.UPDATE_TIME, String.class, "", ServerTranslate.translate(header2), null,
+				Align.LEFT);
 
 		cellRowSelector = new CellRowSelector();
 		addItemClickListener(cellRowSelector);
@@ -60,15 +59,15 @@ public class TableCellLabelEdit extends Table {
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 
 		setSortContainerPropertyId(MenuProperties.TABLE_NAME);
-		setSortAscending(true);
-		sort();
+		setSortAscending(false);
 	}
 
 	public void addRow(Object object) {
 		if (object != null) {
 			setDefaultNewItemPropertyValues(object, super.addItem(object));
-			updateItemTableRuleInGui((StorableObject)object);
+			updateItemTableRuleInGui((StorableObject) object);
 		}
+		sort();
 	}
 
 	public void removeSelectedRow() {
@@ -92,7 +91,8 @@ public class TableCellLabelEdit extends Table {
 				}
 			});
 			item.getItemProperty(MenuProperties.TABLE_NAME).setValue(editCellComponent);
-			item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToStringWithHours(((StorableObject)itemId).getUpdateTime()));
+			item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
+					DateManager.convertDateToStringWithHours(((StorableObject) itemId).getUpdateTime()));
 			return editCellComponent;
 		}
 		return null;
@@ -106,12 +106,13 @@ public class TableCellLabelEdit extends Table {
 	@SuppressWarnings("unchecked")
 	protected void updateItemTableRuleInGui(StorableObject object) {
 		Item row = getItem(object);
-		SelectTableEditCell tableCell = ((SelectTableEditCell) row
-				.getItemProperty(MenuProperties.TABLE_NAME).getValue());
-		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(DateManager.convertDateToStringWithHours(object.getUpdateTime()));
+		SelectTableEditCell tableCell = ((SelectTableEditCell) row.getItemProperty(MenuProperties.TABLE_NAME)
+				.getValue());
+		row.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
+				DateManager.convertDateToStringWithHours(object.getUpdateTime()));
 		tableCell.setLabel(object);
 	}
-	
+
 	@Override
 	public void setValue(Object itemId) {
 		if (itemId != null) {
@@ -124,4 +125,5 @@ public class TableCellLabelEdit extends Table {
 		}
 		super.setValue(itemId);
 	}
+
 }

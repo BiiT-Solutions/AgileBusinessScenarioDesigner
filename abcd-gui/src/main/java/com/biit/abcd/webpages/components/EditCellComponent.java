@@ -15,7 +15,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 
-public class EditCellComponent extends CustomComponent {
+public class EditCellComponent extends CustomComponent implements Comparable<EditCellComponent> {
 	private static final long serialVersionUID = -5757196311785954280L;
 	private static final String CLASSNAME = "v-edit-cell-component";
 
@@ -160,5 +160,10 @@ public class EditCellComponent extends CustomComponent {
 
 	protected IconButton getRemoveButton() {
 		return removeButton;
+	}
+
+	@Override
+	public int compareTo(EditCellComponent arg0) {
+		return textLabel.getValue().compareTo(arg0.textLabel.getValue());
 	}
 }
