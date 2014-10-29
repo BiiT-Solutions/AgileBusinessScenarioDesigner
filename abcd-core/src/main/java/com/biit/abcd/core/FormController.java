@@ -120,10 +120,19 @@ public class FormController {
 		return this.form;
 	}
 
+	public void clearUnsavedChangesChecker() {
+		originalForm = null;
+	}
+
 	public void setForm(Form form) {
 		this.form = form;
 		try {
-			this.originalForm = (Form) form.generateCopy(true, true);
+			if (form == null) {
+				originalForm = null;
+			} else {
+				originalForm = (Form) form.generateCopy(true, true);
+				originalForm.resetIds();
+			}
 		} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
 		}
 		this.clearWorkVariables();
@@ -135,7 +144,9 @@ public class FormController {
 			RuleNotEqualsException, DiagramNotEqualsException, DiagramObjectNotEqualsException, NodeNotEqualsException,
 			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
-		new FormComparator().compare(form, originalForm);
+		if (form != null && originalForm != null) {
+			new FormComparator().compare(form, originalForm);
+		}
 	}
 
 	public User getUser() {

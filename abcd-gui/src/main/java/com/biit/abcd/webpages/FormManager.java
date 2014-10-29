@@ -76,6 +76,8 @@ public class FormManager extends FormWebPageComponent {
 				}
 			}
 		});
+
+		UserSessionHandler.getFormController().clearUnsavedChangesChecker();
 	}
 
 	private FormsVersionsTreeTable createTreeTable() {

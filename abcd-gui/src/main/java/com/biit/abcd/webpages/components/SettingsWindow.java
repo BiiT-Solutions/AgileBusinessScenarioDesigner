@@ -79,6 +79,7 @@ public class SettingsWindow extends PopupWindow {
 								try {
 									UserSessionHandler.getFormController().checkUnsavedChanges();
 									ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
+									close();
 								} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
 										| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
 										| CustomVariableNotEqualsException | ExpressionNotEqualsException
@@ -152,6 +153,7 @@ public class SettingsWindow extends PopupWindow {
 							UserSessionHandler.getFormController().checkUnsavedChanges();
 							ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
 							UserSessionHandler.logout();
+							close();
 						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
 								| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
 								| CustomVariableNotEqualsException | ExpressionNotEqualsException

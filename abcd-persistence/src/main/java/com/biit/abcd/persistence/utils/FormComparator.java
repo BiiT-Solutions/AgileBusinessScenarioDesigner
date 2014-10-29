@@ -210,7 +210,7 @@ public class FormComparator {
 		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
-		if (object1.getClass() != object2.getClass()) {
+		if (!object1.getClass().equals(object2.getClass())) {
 			throw new ExpressionNotEqualsException("Classes are different between expressions '" + object1 + "' and '"
 					+ object2 + "'");
 		}
@@ -259,8 +259,12 @@ public class FormComparator {
 			throw new ExpressionNotEqualsException("Value fields are different: '" + object1 + "' and '" + object2
 					+ "'");
 		}
-		if (object1.getClass() != object2.getClass()) {
-			throw new ExpressionNotEqualsException("Classes are different: '" + object1 + "' and '" + object2 + "'");
+		// Hibernate replace arrays. Check if it is the case.
+		if (!object1.getClass().getName().equals("org.hibernate.collection.internal.PersistentBag")
+				&& !object2.getClass().getName().equals("org.hibernate.collection.internal.PersistentBag")) {
+			if (!object1.getClass().equals(object2.getClass())) {
+				throw new ExpressionNotEqualsException("Classes are different: '" + object1 + "' and '" + object2 + "'");
+			}
 		}
 		// Special cases.
 		if (object1 instanceof TreeObject) {
@@ -839,7 +843,7 @@ public class FormComparator {
 		Collections.sort(diagramObjectList1, new DiagramObjectsSorter());
 		List<DiagramObject> diagramObjectList2 = new ArrayList<>(object2.getDiagramObjects());
 		Collections.sort(diagramObjectList2, new DiagramObjectsSorter());
-		
+
 		Iterator<DiagramObject> diagramObjectsIterator1 = diagramObjectList1.iterator();
 		Iterator<DiagramObject> diagramObjectsIterator2 = diagramObjectList2.iterator();
 		while (diagramObjectsIterator1.hasNext() || diagramObjectsIterator2.hasNext()) {
@@ -1042,4 +1046,3 @@ class DiagramObjectsSorter implements Comparator<DiagramObject> {
 		return arg0.getJointjsId().compareTo(arg1.getJointjsId());
 	}
 }
-
