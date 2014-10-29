@@ -60,7 +60,7 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
-				.createSQLQuery("SELECT ts.ID, ts.comparationId, ts.creationTime, ts.createdBy, ts.updateTime, ts.updatedBy, ts.name FROM test_scenario ts");
+				.createSQLQuery("SELECT ts.ID, ts.comparationId, ts.creationTime, ts.createdBy, ts.updateTime, ts.updatedBy, ts.name, ts.formLabel, ts.formOrganizationId, ts.formVersion FROM test_scenario ts");
 
 		List<Object[]> rows = query.list();
 		session.getTransaction().commit();
@@ -79,6 +79,9 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 				testScenarioView.setUpdatedBy(((Double) row[5]).longValue());
 			}
 			testScenarioView.setName((String) row[6]);
+			testScenarioView.setFormLabel((String) row[7]);
+			testScenarioView.setFormOrganizationId(((Double) row[8]).longValue());
+			testScenarioView.setFormVersion((Integer) row[9]);
 			testScenarioViews.add(testScenarioView);
 		}
 		return testScenarioViews;

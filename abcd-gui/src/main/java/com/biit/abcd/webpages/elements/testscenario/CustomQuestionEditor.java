@@ -107,6 +107,7 @@ public class CustomQuestionEditor extends CustomComponent {
 		case MULTI_CHECKBOX:
 			field = new ListSelect(testQuestion.getName());
 			((ListSelect) field).setMultiSelect(true);
+			((ListSelect) field).setNullSelectionAllowed(true);
 			((ListSelect) field).setRows(4);
 			for (TreeObject answer : question.getChildren()) {
 				((ListSelect) field).addItem(answer.getName());

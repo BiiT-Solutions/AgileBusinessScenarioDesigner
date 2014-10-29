@@ -157,12 +157,14 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 	@SuppressWarnings("unchecked")
 	private void createFormVariables(Form form, SubmittedForm submittedForm) {
-		List<String> formVariables = customVariablesScopeMap.get(CustomVariableScope.FORM);
-		if (formVariables != null) {
-			for (String variable : formVariables) {
-				if (submittedForm.getVariableValue(variable) != null) {
-					formTreeTable.getItem(form).getItemProperty(variable)
-							.setValue(submittedForm.getVariableValue(variable).toString());
+		if (customVariablesScopeMap != null) {
+			List<String> formVariables = customVariablesScopeMap.get(CustomVariableScope.FORM);
+			if (formVariables != null) {
+				for (String variable : formVariables) {
+					if (submittedForm.getVariableValue(variable) != null) {
+						formTreeTable.getItem(form).getItemProperty(variable)
+								.setValue(submittedForm.getVariableValue(variable).toString());
+					}
 				}
 			}
 		}
@@ -170,14 +172,16 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 	@SuppressWarnings("unchecked")
 	private void createCategoryVariables(TreeObject category, Category categorySubForm) {
-		List<String> categoryVariables = customVariablesScopeMap.get(CustomVariableScope.CATEGORY);
-		if ((categoryVariables != null) && (categorySubForm != null)) {
-			for (String variable : categoryVariables) {
-				if (categorySubForm.getVariableValue(variable) != null) {
-					formTreeTable.getItem(category).getItemProperty(variable)
-							.setValue(categorySubForm.getVariableValue(variable).toString());
-				} else {
-					formTreeTable.getItem(category).getItemProperty(variable).setValue("-");
+		if (customVariablesScopeMap != null) {
+			List<String> categoryVariables = customVariablesScopeMap.get(CustomVariableScope.CATEGORY);
+			if ((categoryVariables != null) && (categorySubForm != null)) {
+				for (String variable : categoryVariables) {
+					if (categorySubForm.getVariableValue(variable) != null) {
+						formTreeTable.getItem(category).getItemProperty(variable)
+								.setValue(categorySubForm.getVariableValue(variable).toString());
+					} else {
+						formTreeTable.getItem(category).getItemProperty(variable).setValue("-");
+					}
 				}
 			}
 		}
@@ -185,15 +189,17 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 	@SuppressWarnings("unchecked")
 	private void createGroupVariables(TreeObject group, Group groupSubForm) {
-		List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
+		if (customVariablesScopeMap != null) {
+			List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
 
-		if ((groupVariables != null) && (groupSubForm != null)) {
-			for (String variable : groupVariables) {
-				if (groupSubForm.getVariableValue(variable) != null) {
-					formTreeTable.getItem(group).getItemProperty(variable)
-							.setValue(groupSubForm.getVariableValue(variable).toString());
-				} else {
-					formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
+			if ((groupVariables != null) && (groupSubForm != null)) {
+				for (String variable : groupVariables) {
+					if (groupSubForm.getVariableValue(variable) != null) {
+						formTreeTable.getItem(group).getItemProperty(variable)
+								.setValue(groupSubForm.getVariableValue(variable).toString());
+					} else {
+						formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
+					}
 				}
 			}
 		}
@@ -201,7 +207,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 	@SuppressWarnings("unchecked")
 	private void createQuestionVariables(TreeObject question, Question questionSubForm) {
-		List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
 		if ((questionSubForm != null) && (question != null)) {
 			// Set the original value of the question
 			if (question instanceof com.biit.abcd.persistence.entity.Question) {
@@ -231,14 +236,17 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 					}
 				}
 			}
-			// Set the variable value of the question
-			if ((questionVariables != null)) {
-				for (String variable : questionVariables) {
-					if (questionSubForm.getVariableValue(variable) != null) {
-						formTreeTable.getItem(question).getItemProperty(variable)
-								.setValue(questionSubForm.getVariableValue(variable).toString());
-					} else {
-						formTreeTable.getItem(question).getItemProperty(variable).setValue("-");
+			if (customVariablesScopeMap != null) {
+				List<String> questionVariables = customVariablesScopeMap.get(CustomVariableScope.QUESTION);
+				// Set the variable value of the question
+				if ((questionVariables != null)) {
+					for (String variable : questionVariables) {
+						if (questionSubForm.getVariableValue(variable) != null) {
+							formTreeTable.getItem(question).getItemProperty(variable)
+									.setValue(questionSubForm.getVariableValue(variable).toString());
+						} else {
+							formTreeTable.getItem(question).getItemProperty(variable).setValue("-");
+						}
 					}
 				}
 			}
@@ -247,19 +255,20 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
 	@SuppressWarnings("unchecked")
 	private void createNestedGroupVariables(TreeObject group, Group groupSubForm) {
-		List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
+		if (customVariablesScopeMap != null) {
+			List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
 
-		if ((groupVariables != null) && (groupSubForm != null)) {
-			for (String variable : groupVariables) {
-				if (groupSubForm.getVariableValue(variable) != null) {
-					formTreeTable.getItem(group).getItemProperty(variable)
-							.setValue(groupSubForm.getVariableValue(variable).toString());
-				} else {
-					formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
+			if ((groupVariables != null) && (groupSubForm != null)) {
+				for (String variable : groupVariables) {
+					if (groupSubForm.getVariableValue(variable) != null) {
+						formTreeTable.getItem(group).getItemProperty(variable)
+								.setValue(groupSubForm.getVariableValue(variable).toString());
+					} else {
+						formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
+					}
 				}
 			}
 		}
-
 		// Manage the nested values
 		List<TreeObject> groupChildren = group.getChildren();
 		if (groupChildren != null) {

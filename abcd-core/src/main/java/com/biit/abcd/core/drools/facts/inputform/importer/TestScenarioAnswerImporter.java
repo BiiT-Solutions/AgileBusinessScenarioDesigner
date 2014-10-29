@@ -30,7 +30,7 @@ import com.biit.orbeon.form.ISubmittedForm;
 public class TestScenarioAnswerImporter {
 
 	public static ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario)
-			throws ChildrenNotFoundException {
+			throws ChildrenNotFoundException, IncompatibleFormStructureException {
 		ISubmittedForm submittedForm = null;
 		if ((form != null) && (testScenario != null)) {
 			// If the test scenario is a subset of the form passed, we parse the
@@ -45,12 +45,13 @@ public class TestScenarioAnswerImporter {
 						createCategory((TestScenarioCategory) category, submittedForm);
 					}
 				}
-
+			} else {
+				throw new IncompatibleFormStructureException(
+						"Form version and test scenario selected are not compatible");
 			}
 		}
 		createSubmittedFormFile(submittedForm);
-		return null;
-		// return submittedForm;
+		return submittedForm;
 	}
 
 	private static void createCategory(TestScenarioCategory testCategory, ISubmittedForm submittedForm) {
@@ -103,13 +104,15 @@ public class TestScenarioAnswerImporter {
 			// orbeon importer
 			if (testAnswer instanceof TestAnswerMultiCheckBox) {
 				Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
-				String valueSet = "";
-				for (String value : values) {
-					valueSet += value + " ";
+				if (!values.isEmpty()) {
+					String valueSet = "";
+					for (String value : values) {
+						valueSet += value + " ";
+					}
+					// Remove the last space
+					valueSet = valueSet.substring(0, valueSet.length() - 2);
+					iQuestion.setAnswer(valueSet);
 				}
-				// Remove the last space
-				valueSet = valueSet.substring(0, valueSet.length() - 2);
-				iQuestion.setAnswer(valueSet);
 			}
 			// Transform the timestamp to a date
 			else if (testAnswer instanceof TestAnswerInputDate) {

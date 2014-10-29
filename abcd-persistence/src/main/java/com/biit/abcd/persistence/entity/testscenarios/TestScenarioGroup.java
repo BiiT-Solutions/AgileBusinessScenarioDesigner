@@ -14,6 +14,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class TestScenarioGroup extends BaseRepeatableGroup {
 
 	private static final String DEFAULT_GROUP_NAME = "TestScenarioGroup";
+	private boolean addEnabled;
 
 	public TestScenarioGroup() {
 		super();
@@ -30,6 +31,7 @@ public class TestScenarioGroup extends BaseRepeatableGroup {
 		testScenarioGroup.setOriginalReference(getOriginalReference());
 		testScenarioGroup.setName(getName());
 		testScenarioGroup.setRepeatable(isRepeatable());
+		testScenarioGroup.setAddEnabled(true);
 		// Copy children
 		if ((getChildren() != null) && !getChildren().isEmpty()) {
 			for (TreeObject treeObject : getChildren()) {
@@ -42,5 +44,13 @@ public class TestScenarioGroup extends BaseRepeatableGroup {
 			}
 		}
 		return testScenarioGroup;
+	}
+
+	public boolean isAddEnabled() {
+		return addEnabled;
+	}
+
+	public void setAddEnabled(boolean addEnabled) {
+		this.addEnabled = addEnabled;
 	}
 }

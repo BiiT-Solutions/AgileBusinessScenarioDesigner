@@ -18,7 +18,10 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 
 	public Category(String tag) {
 		setTag(tag);
+		// Needed to make compatible the different importers
+		setText(tag);
 		setGroups(new ArrayList<IGroup>());
+		setQuestions(new ArrayList<IQuestion>());
 	}
 
 	@Override

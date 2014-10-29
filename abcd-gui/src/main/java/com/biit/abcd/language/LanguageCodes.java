@@ -455,7 +455,10 @@ public enum LanguageCodes {
 	
 	LAUNCH_TEST_WINDOW_CAPTION("launch.test.window.caption"),
 	LAUNCH_TEST_WINDOW_FORM_LABEL("launch.test.window.form.label"),
-	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label");
+	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label"),
+	
+	ERROR_INCOMPATIBLE_FORM_STRUCTURE("error.incompatible.form.structure"),
+	ERROR_INCOMPATIBLE_FORM_STRUCTURE_MORE_INFO("error.incompatible.form.structure.more.info");
 
 
 	private String value;

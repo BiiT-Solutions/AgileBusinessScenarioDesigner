@@ -12,6 +12,7 @@ import org.junit.Assert;
 
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
+import com.biit.abcd.core.drools.facts.inputform.importer.IncompatibleFormStructureException;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioAnswerImporter;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
@@ -184,13 +185,14 @@ public class FormToDroolsExporter {
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws NullTreeObjectException
 	 * @throws ChildrenNotFoundException
+	 * @throws IncompatibleFormStructureException
 	 */
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, TestScenario testScenario)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			ChildrenNotFoundException {
+			ChildrenNotFoundException, IncompatibleFormStructureException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Generate the submitted form based on the test scenario

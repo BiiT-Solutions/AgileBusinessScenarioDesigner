@@ -731,6 +731,7 @@
         sortSeq bigint not null,
         parent_ID bigint,
         repeatable bit not null,
+        addEnabled bit not null,
         primary key (ID)
     );
 

@@ -107,7 +107,10 @@ public class CustomGroupEditor extends CustomComponent {
 			groupButtonsLayout.addComponent(removeRepeatableGroup);
 			groupButtonsLayout.setComponentAlignment(copyRepeatableGroup, Alignment.MIDDLE_RIGHT);
 			groupButtonsLayout.setComponentAlignment(removeRepeatableGroup, Alignment.MIDDLE_RIGHT);
-			enableDisableRemoveButton(testScenarioObject);
+			if(!getTestScenarioGroup().isAddEnabled()){
+				setAddGroupButtonEnable(false);
+			}
+			enableDisableAddRemoveButton(testScenarioObject);
 		}
 		groupButtonsLayout.setExpandRatio(groupName, 1);
 	}
@@ -167,6 +170,7 @@ public class CustomGroupEditor extends CustomComponent {
 					addEditor(newCustomGroupEditor);
 					setGroupButtonsListeners(newCustomGroupEditor);
 					customGroupEditor.setAddGroupButtonEnable(false);
+					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);
 					customGroupEditor.setRemoveGroupButtonEnable(true);
 				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -189,10 +193,9 @@ public class CustomGroupEditor extends CustomComponent {
 						Component nextComponent = iterator.next();
 						if (nextComponent instanceof CustomGroupEditor) {
 							CustomGroupEditor groupEditor = (CustomGroupEditor) nextComponent;
-							groupEditor.enableDisableRemoveButton(groupEditor.getTestScenarioGroup());
+							groupEditor.enableDisableAddRemoveButton(groupEditor.getTestScenarioGroup());
 						}
 					}
-
 				} catch (DependencyExistException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
@@ -205,7 +208,7 @@ public class CustomGroupEditor extends CustomComponent {
 	 * 
 	 * @param testScenarioGroup
 	 */
-	public void enableDisableRemoveButton(TreeObject testScenarioGroup) {
+	public void enableDisableAddRemoveButton(TreeObject testScenarioGroup) {
 		TreeObject treeObject = originalReferenceTreeObjectMap.get(testScenarioGroup.getOriginalReference());
 		if ((treeObject instanceof Group) && ((Group) treeObject).isRepeatable()) {
 			TreeObject parent = testScenarioGroup.getParent();
@@ -220,9 +223,11 @@ public class CustomGroupEditor extends CustomComponent {
 				}
 			}
 			if (repeatedGroups == 1) {
-				removeRepeatableGroup.setEnabled(false);
+				setAddGroupButtonEnable(true);
+				getTestScenarioGroup().setAddEnabled(true);
+				setRemoveGroupButtonEnable(false);
 			} else {
-				removeRepeatableGroup.setEnabled(true);
+				setRemoveGroupButtonEnable(true);
 			}
 		}
 	}

@@ -56,8 +56,12 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 		testScenario.setNullSelectionAllowed(false);
 		initializeTestScenarioData();
 		for (SimpleTestScenarioView testScenarioView : testScenarioData) {
-			testScenario.addItem(testScenarioView);
-			testScenario.setItemCaption(testScenarioView, testScenarioView.getName());
+			if (testScenarioView.getFormOrganizationId().equals(formView.getOrganizationId())
+					&& testScenarioView.getFormLabel().equals(formView.getLabel())) {
+				testScenario.addItem(testScenarioView);
+				testScenario.setItemCaption(testScenarioView,
+						testScenarioView.getName() + " (v" + testScenarioView.getFormVersion()+")");
+			}
 		}
 
 		formVersion.setWidth(100.0f, Unit.PERCENTAGE);

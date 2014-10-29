@@ -15,6 +15,9 @@ public class SimpleTestScenarioView {
 	private Timestamp updateTime;
 	private Long updatedBy;
 	private String name;
+	private String formLabel;
+	private Long formOrganizationId;
+	private Integer formVersion;
 
 	public SimpleTestScenarioView() {
 	}
@@ -83,6 +86,30 @@ public class SimpleTestScenarioView {
 
 	public void setComparationId(String comparationId) {
 		this.comparationId = comparationId;
+	}
+
+	public String getFormLabel() {
+		return formLabel;
+	}
+
+	public void setFormLabel(String formLabel) {
+		this.formLabel = formLabel;
+	}
+
+	public Long getFormOrganizationId() {
+		return formOrganizationId;
+	}
+
+	public void setFormOrganizationId(Long formOrganizationId) {
+		this.formOrganizationId = formOrganizationId;
+	}
+
+	public Integer getFormVersion() {
+		return formVersion;
+	}
+
+	public void setFormVersion(Integer formVersion) {
+		this.formVersion = formVersion;
 	}
 
 	@Override

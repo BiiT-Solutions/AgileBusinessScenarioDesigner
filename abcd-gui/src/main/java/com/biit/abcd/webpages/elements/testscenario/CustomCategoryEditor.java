@@ -114,7 +114,7 @@ public class CustomCategoryEditor extends CustomComponent {
 						Component nextComponent = iterator.next();
 						if (nextComponent instanceof CustomGroupEditor) {
 							CustomGroupEditor groupEditor = (CustomGroupEditor) nextComponent;
-							groupEditor.enableDisableRemoveButton(groupEditor.getTestScenarioGroup());
+							groupEditor.enableDisableAddRemoveButton(groupEditor.getTestScenarioGroup());
 						}
 					}
 

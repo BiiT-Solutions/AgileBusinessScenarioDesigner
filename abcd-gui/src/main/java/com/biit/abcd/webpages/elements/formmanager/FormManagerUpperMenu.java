@@ -10,6 +10,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.importer.IncompatibleFormStructureException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -270,8 +271,11 @@ public class FormManagerUpperMenu extends UpperMenu {
 									// }
 									//
 									// TestScenario testScenarioSelected = null;
-									// for (TestScenario testScenario : testScenarios) {
-									// if (testScenario.getId().equals(testScenarioId)) {
+									// for (TestScenario testScenario :
+									// testScenarios) {
+									// if
+									// (testScenario.getId().equals(testScenarioId))
+									// {
 									// testScenarioSelected = testScenario;
 									// break;
 									// }
@@ -313,6 +317,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 												ServerTranslate.translate(
 														LanguageCodes.ERROR_INCOMPATIBLE_TYPES_MORE_INFO,
 														new Object[] { e.getExpressionValue().getValue().toString() }));
+									} catch (IncompatibleFormStructureException e) {
+										MessageManager.showWarning(LanguageCodes.ERROR_INCOMPATIBLE_FORM_STRUCTURE,
+												LanguageCodes.ERROR_INCOMPATIBLE_FORM_STRUCTURE_MORE_INFO);
 									} catch (Exception e) {
 										MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
 												LanguageCodes.ERROR_DROOLS_ENGINE);
