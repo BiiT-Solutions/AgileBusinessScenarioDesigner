@@ -59,7 +59,7 @@ public class SelectDiagramTable extends TreeTable {
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 
 		setSortContainerPropertyId(MenuProperties.DIAGRAM_NAME);
-		setSortAscending(false);
+		//setSortAscending(false);
 	}
 
 	@SuppressWarnings("unchecked")

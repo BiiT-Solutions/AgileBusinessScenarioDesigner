@@ -59,7 +59,7 @@ public class TableCellLabelEdit extends Table {
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 
 		setSortContainerPropertyId(MenuProperties.TABLE_NAME);
-		setSortAscending(false);
+		//setSortAscending(false);
 	}
 
 	public void addRow(Object object) {

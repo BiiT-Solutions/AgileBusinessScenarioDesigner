@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
@@ -35,9 +35,9 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	// we cannot use the list of children with @Orderby or @OrderColumn we use
 	// our own order manager.
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	// @OrderBy(clause = "sortSeq")
+	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
-	@SortComparator(value = ExpressionSort.class)
+	//@SortComparator(value = ExpressionSort.class)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
