@@ -444,8 +444,8 @@ public class ExpressionViewer extends CssLayout {
 						// Brackets always at right position in '=' symbol.
 						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
 								.getValue().equals(AvailableOperator.ASSIGNATION))) {
-					index--;
-				}
+						index--;
+					}
 			}
 			if ((index >= 0) && (index < expressions.getExpressions().size())) {
 				expressions.addExpression(index, newElement);
