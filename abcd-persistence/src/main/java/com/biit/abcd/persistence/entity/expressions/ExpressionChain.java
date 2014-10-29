@@ -13,7 +13,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.SortComparator;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
@@ -31,13 +30,11 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	private String name;
 
-	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-3577
-	// we cannot use the list of children with @Orderby or @OrderColumn we use
-	// our own order manager.
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	// Orderby not works correctly but help the 2nd level cache to not unsort elements.
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
-	//@SortComparator(value = ExpressionSort.class)
+	// @SortComparator(value = ExpressionSort.class)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
