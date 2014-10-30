@@ -455,7 +455,13 @@ public enum LanguageCodes {
 	
 	LAUNCH_TEST_WINDOW_CAPTION("launch.test.window.caption"),
 	LAUNCH_TEST_WINDOW_FORM_LABEL("launch.test.window.form.label"),
-	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label");
+	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label"), 
+	
+	INPUT_PROMPT_FLOAT("input.prompt.float"),
+	INPUT_PROMPT_DATE("input.prompt.date"),
+	INPUT_PROMPT_TEXT("input.prompt.text"),
+	INPUT_PROMPT_POSTAL_CODE("input.prompt.postalcode")
+	;
 
 
 	private String value;

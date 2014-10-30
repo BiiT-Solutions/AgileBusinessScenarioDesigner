@@ -48,7 +48,7 @@ public class ExpressionValueNumber extends ExpressionValue {
 		return getValueWithoutTrailingZeroes();
 	}
 
-	private String getValueWithoutTrailingZeroes() {
+	public String getValueWithoutTrailingZeroes() {
 		Double convertedValue = new Double(value);
 		return convertedValue.toString().indexOf(".") < 0 ? convertedValue.toString() : convertedValue.toString()
 				.replaceAll("0*$", "").replaceAll("\\.$", "");

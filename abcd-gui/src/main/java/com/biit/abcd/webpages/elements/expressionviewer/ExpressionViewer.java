@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
@@ -147,189 +149,186 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	private void addExpression(HorizontalLayout lineLayout, final Expression expression) {
-		final ExpressionElement expressionElement = new ExpressionElement(expression.getRepresentation(),
-				new LayoutClickListener() {
-					private static final long serialVersionUID = -4305606865801828692L;
+		final ExpressionElement expressionElement = new ExpressionElement(expression, new LayoutClickListener() {
+			private static final long serialVersionUID = -4305606865801828692L;
 
-					@Override
-					public void layoutClick(LayoutClickEvent event) {
-						setSelectedExpression(expression);
-						// Double click open operator popup.
+			@Override
+			public void layoutClick(LayoutClickEvent event) {
+				setSelectedExpression(expression);
+				// Double click open operator popup.
 
-						if (event.isDoubleClick()) {
-							// For Operators.
-							if (isExpressionEditable(expression)) {
-								if (expression instanceof ExpressionOperator) {
+				if (event.isDoubleClick()) {
+					// For Operators.
+					if (isExpressionEditable(expression)) {
+						if (expression instanceof ExpressionOperator) {
 
-									ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
-											expression);
-									operatorWindow.showCentered();
-									operatorWindow.addAcceptActionListener(new AcceptActionListener() {
-										@Override
-										public void acceptAction(AcceptCancelWindow window) {
-											try {
-												((ExpressionOperator) expression)
-														.setValue(((ChangeExpressionOperatorWindow) window)
-																.getOperator());
-												window.close();
-												updateExpression();
-												setSelectedExpression(expression);
-											} catch (NotValidOperatorInExpression e) {
-												e.printStackTrace();
-												// Not possible
-											}
-
-										}
-									});
-									// For Input fields.
-								} else if (expression instanceof ExpressionValueString
-										|| expression instanceof ExpressionValueNumber
-										|| expression instanceof ExpressionValuePostalCode
-										|| expression instanceof ExpressionValueTimestamp) {
-									StringInputWindow stringInputWindow = new StringInputWindow();
-									// stringInputWindow.enableExpressionType(false);
-									stringInputWindow.setCaption(ServerTranslate
-											.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
-									stringInputWindow.setValue(((ExpressionValue) expression).getValue().toString());
-
-									if (expression instanceof ExpressionValuePostalCode) {
-										stringInputWindow.setFormat(AnswerFormat.POSTAL_CODE);
-
-									} else if (expression instanceof ExpressionValueString) {
-										stringInputWindow.setFormat(AnswerFormat.TEXT);
-
-									} else if (expression instanceof ExpressionValueNumber) {
-										stringInputWindow.setFormat(AnswerFormat.NUMBER);
-
-									} else if (expression instanceof ExpressionValueTimestamp) {
-										stringInputWindow.setFormat(AnswerFormat.DATE);
+							ChangeExpressionOperatorWindow operatorWindow = new ChangeExpressionOperatorWindow(
+									expression);
+							operatorWindow.showCentered();
+							operatorWindow.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									try {
+										((ExpressionOperator) expression)
+												.setValue(((ChangeExpressionOperatorWindow) window).getOperator());
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									} catch (NotValidOperatorInExpression e) {
+										e.printStackTrace();
+										// Not possible
 									}
 
-									stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
-										@Override
-										public void acceptAction(AcceptCancelWindow window) {
-											String value = ((StringInputWindow) window).getValue();
-											if ((value == null) || value.isEmpty()) {
-												MessageManager.showError(ServerTranslate
-														.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-											} else {
-												try {
-													// It is a number.
-													int currentModified = expressions.getExpressions().indexOf(
-															expression);
-													Expression selectExpression = expression;
-													switch (((StringInputWindow) window).getFormat()) {
-													case NUMBER:
-														try {
-															Double valueAsDouble = Double.parseDouble(value);
-															ExpressionValueNumber exprValueNumber = new ExpressionValueNumber(
-																	valueAsDouble);
-															exprValueNumber.copyBasicExpressionInfo(expression);
-															expressions.getExpressions().set(currentModified,
-																	exprValueNumber);
-															selectExpression = exprValueNumber;
-															window.close();
-														} catch (NumberFormatException nfe) {
-															throw new NotValidExpressionValue("Value '" + value
-																	+ "' is not a number!");
-														}
-														break;
-													case DATE:
-														try {
-															ExpressionValueTimestamp exprValueDate = new ExpressionValueTimestamp(
-																	value);
-															exprValueDate.copyBasicExpressionInfo(expression);
-															expressions.getExpressions().set(currentModified,
-																	exprValueDate);
-															selectExpression = exprValueDate;
-															window.close();
-														} catch (ParseException e) {
-															throw new NotValidExpressionValue("Value '" + value
-																	+ "' is not a date!");
-														}
-														break;
-													case POSTAL_CODE:
-														ExpressionValuePostalCode exprValuePostCode = new ExpressionValuePostalCode(
-																value);
-														exprValuePostCode.copyBasicExpressionInfo(expression);
-														expressions.getExpressions().set(currentModified,
-																exprValuePostCode);
-														selectExpression = exprValuePostCode;
-														window.close();
-														break;
-													case TEXT:
-														ExpressionValueString exprValueString = new ExpressionValueString(
-																value);
-														exprValueString.copyBasicExpressionInfo(expression);
-														expressions.getExpressions().set(currentModified,
-																exprValueString);
-														selectExpression = exprValueString;
-														window.close();
-														break;
-													}
-													// Update expression
-													updateExpression();
-													setSelectedExpression(selectExpression);
-												} catch (NotValidExpressionValue e1) {
-													MessageManager.showError(LanguageCodes.ERROR_INVALID_VALUE);
-												}
-											}
-										}
-									});
-									stringInputWindow.showCentered();
-									// For Global
-								} else if (expression instanceof ExpressionValueGlobalConstant) {
-									SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
-									globalWindow.showCentered();
-									globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getVariable());
-									globalWindow.addAcceptActionListener(new AcceptActionListener() {
-										@Override
-										public void acceptAction(AcceptCancelWindow window) {
-											GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window)
-													.getValue();
-											if (globalVariable != null) {
-												((ExpressionValueGlobalConstant) expression)
-														.setVariable(globalVariable);
-												window.close();
-												updateExpression();
-												setSelectedExpression(expression);
-											} else {
-												MessageManager.showError(ServerTranslate
-														.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-											}
-										}
-									});
-									// Form variables.
-								} else if (expression instanceof ExpressionValueCustomVariable) {
-									SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
-									variableWindow.showCentered();
-									variableWindow.setvalue((ExpressionValueCustomVariable) expression);
-									variableWindow.addAcceptActionListener(new AcceptActionListener() {
-										@Override
-										public void acceptAction(AcceptCancelWindow window) {
-											ExpressionValueCustomVariable formReference = ((SelectFormElementVariableWindow) window)
-													.getValue();
-											if (formReference != null) {
-												// Update the already existing
-												// expression.
-												((ExpressionValueCustomVariable) expression).setReference(formReference
-														.getReference());
-												((ExpressionValueCustomVariable) expression).setVariable(formReference
-														.getVariable());
-												window.close();
-												updateExpression();
-												setSelectedExpression(expression);
-											} else {
-												MessageManager.showError(ServerTranslate
-														.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-											}
-										}
-									});
 								}
+							});
+							// For Input fields.
+						} else if (expression instanceof ExpressionValueString
+								|| expression instanceof ExpressionValueNumber
+								|| expression instanceof ExpressionValuePostalCode
+								|| expression instanceof ExpressionValueTimestamp) {
+							StringInputWindow stringInputWindow = new StringInputWindow();
+							// stringInputWindow.enableExpressionType(false);
+							stringInputWindow.setCaption(ServerTranslate
+									.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_CAPTION));
+
+							if (expression instanceof ExpressionValuePostalCode) {
+								stringInputWindow.setFormat(AnswerFormat.POSTAL_CODE);
+
+							} else if (expression instanceof ExpressionValueString) {
+								stringInputWindow.setFormat(AnswerFormat.TEXT);
+
+							} else if (expression instanceof ExpressionValueNumber) {
+								stringInputWindow.setFormat(AnswerFormat.NUMBER);
+
+							} else if (expression instanceof ExpressionValueTimestamp) {
+								stringInputWindow.setFormat(AnswerFormat.DATE);
 							}
+
+							if (expression instanceof ExpressionValueTimestamp) {
+								stringInputWindow.setValue(DateManager.convertDateToString(
+										(Timestamp) expression.getValue(),
+										ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_DATE)));
+							} else {
+								stringInputWindow.setValue(((ExpressionValue) expression).getValue());
+							}
+
+							stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									String value = ((StringInputWindow) window).getValue();
+									if ((value == null) || value.isEmpty()) {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									} else {
+										try {
+											// It is a number.
+											int currentModified = expressions.getExpressions().indexOf(expression);
+											Expression selectExpression = expression;
+											switch (((StringInputWindow) window).getFormat()) {
+											case NUMBER:
+												try {
+													Double valueAsDouble = Double.parseDouble(value);
+													ExpressionValueNumber exprValueNumber = new ExpressionValueNumber(
+															valueAsDouble);
+													exprValueNumber.copyBasicExpressionInfo(expression);
+													expressions.getExpressions().set(currentModified, exprValueNumber);
+													selectExpression = exprValueNumber;
+													window.close();
+												} catch (NumberFormatException nfe) {
+													throw new NotValidExpressionValue("Value '" + value
+															+ "' is not a number!");
+												}
+												break;
+											case DATE:
+												try {
+													ExpressionValueTimestamp exprValueDate = new ExpressionValueTimestamp(
+															value);
+													exprValueDate.copyBasicExpressionInfo(expression);
+													expressions.getExpressions().set(currentModified, exprValueDate);
+													selectExpression = exprValueDate;
+													window.close();
+												} catch (ParseException e) {
+													throw new NotValidExpressionValue("Value '" + value
+															+ "' is not a date!");
+												}
+												break;
+											case POSTAL_CODE:
+												ExpressionValuePostalCode exprValuePostCode = new ExpressionValuePostalCode(
+														value);
+												exprValuePostCode.copyBasicExpressionInfo(expression);
+												expressions.getExpressions().set(currentModified, exprValuePostCode);
+												selectExpression = exprValuePostCode;
+												window.close();
+												break;
+											case TEXT:
+												ExpressionValueString exprValueString = new ExpressionValueString(value);
+												exprValueString.copyBasicExpressionInfo(expression);
+												expressions.getExpressions().set(currentModified, exprValueString);
+												selectExpression = exprValueString;
+												window.close();
+												break;
+											}
+											// Update expression
+											updateExpression();
+											setSelectedExpression(selectExpression);
+										} catch (NotValidExpressionValue e1) {
+											MessageManager.showError(LanguageCodes.ERROR_INVALID_VALUE);
+										}
+									}
+								}
+							});
+							stringInputWindow.showCentered();
+							// For Global
+						} else if (expression instanceof ExpressionValueGlobalConstant) {
+							SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
+							globalWindow.showCentered();
+							globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getVariable());
+							globalWindow.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window).getValue();
+									if (globalVariable != null) {
+										((ExpressionValueGlobalConstant) expression).setVariable(globalVariable);
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									} else {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									}
+								}
+							});
+							// Form variables.
+						} else if (expression instanceof ExpressionValueCustomVariable) {
+							SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
+							variableWindow.showCentered();
+							variableWindow.setvalue((ExpressionValueCustomVariable) expression);
+							variableWindow.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									ExpressionValueCustomVariable formReference = ((SelectFormElementVariableWindow) window)
+											.getValue();
+									if (formReference != null) {
+										// Update the already existing
+										// expression.
+										((ExpressionValueCustomVariable) expression).setReference(formReference
+												.getReference());
+										((ExpressionValueCustomVariable) expression).setVariable(formReference
+												.getVariable());
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									} else {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									}
+								}
+							});
 						}
 					}
-				});
+				}
+			}
+		});
 
 		expressionOfElement.put(expressionElement, expression);
 		lineLayout.addComponent(expressionElement);
@@ -444,8 +443,8 @@ public class ExpressionViewer extends CssLayout {
 						// Brackets always at right position in '=' symbol.
 						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
 								.getValue().equals(AvailableOperator.ASSIGNATION))) {
-						index--;
-					}
+					index--;
+				}
 			}
 			if ((index >= 0) && (index < expressions.getExpressions().size())) {
 				expressions.addExpression(index, newElement);

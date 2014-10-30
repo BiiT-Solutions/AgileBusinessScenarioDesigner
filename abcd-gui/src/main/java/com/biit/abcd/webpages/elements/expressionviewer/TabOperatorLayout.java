@@ -57,10 +57,10 @@ public class TabOperatorLayout extends TabLayout {
 		createLogicalFunctionsOperators(logicalLayout);
 		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
 		
-		GridLayout controlsLayout = new GridLayout(GRID_COLUMNS, 4);
-		controlsLayout.setWidth("100%");
-		createControlOperators(controlsLayout);		
-		accordion.addTab(controlsLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS), true);
+//		GridLayout controlsLayout = new GridLayout(GRID_COLUMNS, 4);
+//		controlsLayout.setWidth("100%");
+//		createControlOperators(controlsLayout);		
+//		accordion.addTab(controlsLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS), true);
 
 		addComponent(accordion);
 		setComponentAlignment(accordion, Alignment.MIDDLE_CENTER);
@@ -81,6 +81,14 @@ public class TabOperatorLayout extends TabLayout {
 	}
 
 	private void createMathOperators(GridLayout layout) {
+		Button carriageReturnButton = createButton("\u00B6", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addSymbolExpression(AvailableSymbol.PILCROW);
+			}
+		});
 		Button assignButton = createButton("=", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
@@ -146,6 +154,8 @@ public class TabOperatorLayout extends TabLayout {
 
 		assignButton.setWidth("100%");
 		layout.addComponent(assignButton, 0, 0, GRID_COLUMNS - 1, 0);
+		carriageReturnButton.setWidth("100%");
+		layout.addComponent(carriageReturnButton, 0, 1, GRID_COLUMNS - 1, 1);
 		layout.addComponent(plusButton);
 		layout.addComponent(minusButton);
 		layout.addComponent(multButton);
