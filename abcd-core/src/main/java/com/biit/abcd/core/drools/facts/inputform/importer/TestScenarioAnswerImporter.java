@@ -35,20 +35,22 @@ public class TestScenarioAnswerImporter {
 		if ((form != null) && (testScenario != null)) {
 			// If the test scenario is a subset of the form passed, we parse the
 			// structure
-			if (TestScenarioValidator.validateToLaunch(form, testScenario)) {
-				TestScenarioForm testForm = testScenario.getTestScenarioForm();
-				submittedForm = new SubmittedForm(testForm.getName());
-				// Get the categories
-				List<TreeObject> categories = testForm.getChildren();
-				if (categories != null) {
-					for (TreeObject category : categories) {
-						createCategory((TestScenarioCategory) category, submittedForm);
-					}
+			// if (TestScenarioValidator.validateToLaunch(form, testScenario)) {
+			System.out.println("FORM VERSION: " + form.getVersion());
+			TestScenarioValidator.checkAndModifyTestScenarioStructure(form, testScenario);
+			TestScenarioForm testForm = testScenario.getTestScenarioForm();
+			submittedForm = new SubmittedForm(testForm.getName());
+			// Get the categories
+			List<TreeObject> categories = testForm.getChildren();
+			if (categories != null) {
+				for (TreeObject category : categories) {
+					createCategory((TestScenarioCategory) category, submittedForm);
 				}
-			} else {
-				throw new IncompatibleFormStructureException(
-						"Form version and test scenario selected are not compatible");
 			}
+			// } else {
+			// throw new IncompatibleFormStructureException(
+			// "Form version and test scenario selected are not compatible");
+			// }
 		}
 		createSubmittedFormFile(submittedForm);
 		return submittedForm;

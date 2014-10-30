@@ -10,6 +10,13 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputDate;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputNumber;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputPostalCode;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputText;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswerMultiCheckBox;
+import com.biit.abcd.persistence.entity.testscenarios.TestAnswerRadioButton;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
@@ -17,6 +24,7 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -24,6 +32,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class TestScenarioValidator {
 
 	private static HashMap<String, TreeObject> originalReferenceTreeObjectMap;
+	private static TestScenario testScenarioAnalyzed;
 
 	/**
 	 * Compares the test scenario structure against the form structure and
@@ -32,26 +41,29 @@ public class TestScenarioValidator {
 	 * @param form
 	 * @param testScenario
 	 */
-	public static void checkTestScenarioStructure(Form form, TestScenario testScenario) {
-		// First check the changes in the structure already existent
-		originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
-		TestScenarioForm testScenarioForm = testScenario.getTestScenarioForm();
-		if (originalReferenceTreeObjectMap.containsKey(testScenarioForm.getOriginalReference())) {
-			List<TreeObject> children = testScenarioForm.getChildren();
-			for (int i = 0; i < children.size(); i++) {
-				TreeObject treeObject = children.get(i);
-				if (treeObject instanceof TestScenarioCategory) {
-					checkTestScenarioCategoryStructure((TestScenarioCategory) treeObject);
+	public static void checkAndModifyTestScenarioStructure(Form form, TestScenario testScenario) {
+		if (form != null && testScenario != null) {
+			testScenarioAnalyzed = testScenario;
+			// First check the changes in the structure already existent
+			originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
+			TestScenarioForm testScenarioForm = testScenario.getTestScenarioForm();
+			if (originalReferenceTreeObjectMap.containsKey(testScenarioForm.getOriginalReference())) {
+				List<TreeObject> children = testScenarioForm.getChildren();
+				for (int i = 0; i < children.size(); i++) {
+					TreeObject treeObject = children.get(i);
+					if (treeObject instanceof TestScenarioCategory) {
+						checkTestScenarioCategoryStructure((TestScenarioCategory) treeObject);
+					}
 				}
+			} else {
+				// TODO send form not found exception
 			}
-		} else {
-			// TODO send form not found exception
-		}
 
-		// Second add the new structure needed
-		originalReferenceTreeObjectMap = testScenario.getTestScenarioForm().getOriginalReferenceTreeObjectMap();
-		for (TreeObject treeObject : form.getChildren()) {
-			checkRemainingFormStructure(treeObject, testScenario.getTestScenarioForm());
+			// Second add the new structure needed
+			originalReferenceTreeObjectMap = testScenario.getTestScenarioForm().getOriginalReferenceTreeObjectMap();
+			for (TreeObject treeObject : form.getChildren()) {
+				checkRemainingFormStructure(treeObject, testScenario.getTestScenarioForm());
+			}
 		}
 	}
 
@@ -86,19 +98,27 @@ public class TestScenarioValidator {
 			if (!originalReferenceTreeObjectMap.containsKey(testScenarioGroup.getOriginalReference())) {
 				testScenarioGroup.remove();
 			} else {
-				// If the group exists but has different attributes
 				TreeObject group = originalReferenceTreeObjectMap.get(testScenarioGroup.getOriginalReference());
-				if ((group instanceof Group)) {
-					if (!testScenarioGroup.isRepeatable() && (((Group) group).isRepeatable())) {
-						TestScenarioGroup newTestScenarioGroup = testScenarioGroup.copyTestScenarioGroup();
-						newTestScenarioGroup.setRepeatable(true);
-						replaceTestScenarioGroup(testScenarioGroup, newTestScenarioGroup);
+				if (group.getPathName().equals(testScenarioGroup.getPathName())) {
+					// If the group exists but has different attributes
+					if ((group instanceof Group)) {
+						if (!testScenarioGroup.isRepeatable() && (((Group) group).isRepeatable())) {
+							TestScenarioGroup newTestScenarioGroup = testScenarioGroup.copyTestScenarioGroup();
+							newTestScenarioGroup.setRepeatable(true);
+							replaceTestScenarioGroup(testScenarioGroup, newTestScenarioGroup);
 
-					} else if (testScenarioGroup.isRepeatable() && !((Group) group).isRepeatable()) {
-						TestScenarioGroup newTestScenarioGroup = testScenarioGroup.copyTestScenarioGroup();
-						newTestScenarioGroup.setRepeatable(false);
-						replaceTestScenarioGroup(testScenarioGroup, newTestScenarioGroup);
+						} else if (testScenarioGroup.isRepeatable() && !((Group) group).isRepeatable()) {
+							TestScenarioGroup newTestScenarioGroup = testScenarioGroup.copyTestScenarioGroup();
+							newTestScenarioGroup.setRepeatable(false);
+							replaceTestScenarioGroup(testScenarioGroup, newTestScenarioGroup);
+						}
 					}
+				} else {
+					// If the group exists but is in a different position
+					TreeObject whatToMove = testScenarioGroup;
+					TreeObject whereToMove = testScenarioAnalyzed.getTestScenarioForm()
+							.getOriginalReferenceTreeObjectMap().get(group.getParent().getOriginalReference());
+					TreeObject.move(whatToMove, whereToMove);
 				}
 				if (!group.getName().equals(testScenarioGroup.getName())) {
 					testScenarioGroup.setName(group.getName());
@@ -115,7 +135,7 @@ public class TestScenarioValidator {
 				}
 			}
 		} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException
-				| DependencyExistException e) {
+				| DependencyExistException | ChildrenNotFoundException e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -130,6 +150,7 @@ public class TestScenarioValidator {
 				if (!treeObject.getName().equals(testScenarioQuestion.getName())) {
 					testScenarioQuestion.setName(treeObject.getName());
 				}
+				checkAnswerType((Question) treeObject, testScenarioQuestion);
 			}
 		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
@@ -217,25 +238,93 @@ public class TestScenarioValidator {
 	 */
 	public static boolean validateToLaunch(Form form, TestScenario testScenario) {
 		originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
-		TestScenarioForm testScenarioForm = testScenario.getTestScenarioForm();
-		if (originalReferenceTreeObjectMap.containsKey(testScenarioForm.getOriginalReference())) {
-			for (TreeObject testScenarioObject : testScenarioForm.getChildren()) {
-				return validateToLaunch(testScenarioObject);
-			}
-		}
-		return false;
+		return validateToLaunch(testScenario.getTestScenarioForm());
 	}
 
 	private static boolean validateToLaunch(TreeObject testScenarioObject) {
 		if (originalReferenceTreeObjectMap.containsKey(testScenarioObject.getOriginalReference())) {
-			if (testScenarioObject instanceof TestScenarioQuestion) {
-				return true;
-			} else {
-				for (TreeObject treeObject : testScenarioObject.getChildren()) {
-					return validateToLaunch(treeObject);
+			for (TreeObject treeObject : testScenarioObject.getChildren()) {
+				if (!validateToLaunch(treeObject)) {
+					return false;
 				}
 			}
+		} else {
+			return false;
 		}
-		return false;
+		return true;
+	}
+
+	/**
+	 * Returns true if the test answer matches the question type
+	 */
+	private static void checkAnswerType(Question question, TestScenarioQuestion testScenarioQuestion) {
+		TestAnswer testAnswer = testScenarioQuestion.getTestAnswer();
+		switch (question.getAnswerType()) {
+		case RADIO:
+			if (!(testAnswer instanceof TestAnswerRadioButton)) {
+				TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
+				if (newTestScenarioQuestion != null) {
+					newTestScenarioQuestion.setTestAnswer(new TestAnswerRadioButton());
+				}
+			}
+			break;
+		case MULTI_CHECKBOX:
+			if (!(testAnswer instanceof TestAnswerMultiCheckBox)) {
+				TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
+				if (newTestScenarioQuestion != null) {
+					newTestScenarioQuestion.setTestAnswer(new TestAnswerMultiCheckBox());
+				}
+			}
+			break;
+		case INPUT:
+			switch (question.getAnswerFormat()) {
+			case TEXT:
+				if (!(testAnswer instanceof TestAnswerInputText)) {
+					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
+					if (newTestScenarioQuestion != null) {
+						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputText());
+					}
+				}
+				break;
+			case POSTAL_CODE:
+				if (!(testAnswer instanceof TestAnswerInputPostalCode)) {
+					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
+					if (newTestScenarioQuestion != null) {
+						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputPostalCode());
+					}
+				}
+				break;
+			case NUMBER:
+				if (!(testAnswer instanceof TestAnswerInputNumber)) {
+					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
+					if (newTestScenarioQuestion != null) {
+						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputNumber());
+					}
+				}
+				break;
+			case DATE:
+				if (!(testAnswer instanceof TestAnswerInputDate)) {
+					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
+					if (newTestScenarioQuestion != null) {
+						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputDate());
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	private static TestScenarioQuestion replaceTestScenarioQuestion(TestScenarioQuestion testScenarioQuestion) {
+		TestScenarioQuestion newTestScenarioQuestion = null;
+		try {
+			newTestScenarioQuestion = testScenarioQuestion.copyTestScenarioQuestion();
+			testScenarioQuestion.getParent().addChild(newTestScenarioQuestion);
+			testScenarioQuestion.remove();
+		} catch (FieldTooLongException | CharacterNotAllowedException | NotValidChildException
+				| DependencyExistException e) {
+			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
+		}
+
+		return newTestScenarioQuestion;
 	}
 }

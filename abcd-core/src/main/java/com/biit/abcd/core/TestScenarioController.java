@@ -23,10 +23,8 @@ public class TestScenarioController {
 	public List<TestScenario> getTestScenarios(Form form) {
 		if (testScenarios == null) {
 			synchronized (TestScenarioController.class) {
-				if (testScenarios == null) {
-					testScenarios = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(form.getLabel(),
-							form.getVersion(), form.getOrganizationId());
-				}
+				testScenarios = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(form.getLabel(),
+						form.getVersion(), form.getOrganizationId());
 			}
 		}
 		return testScenarios;
@@ -51,7 +49,6 @@ public class TestScenarioController {
 		clearWorkVariables();
 	}
 
-	
 	/**
 	 * Remove all old test scenarios and store all the new ones. This method is
 	 * synchronized.
@@ -65,9 +62,9 @@ public class TestScenarioController {
 						testScenarioDao.makeTransient(testScenario);
 					}
 				}
-				for (TestScenario testScenario : testScenarios) {
-					testScenarioDao.makePersistent(testScenario);
-				}
+			}
+			for (TestScenario testScenario : testScenarios) {
+				testScenarioDao.makePersistent(testScenario);
 			}
 		}
 	}

@@ -51,9 +51,9 @@ public class ExpressionToDroolsRule {
 				droolsRules = Arrays.asList(createExpressionRule(expressionChain, extraConditions));
 			}
 		}
-//		for (DroolsRule droolsRule : droolsRules) {
-//			RuleChecker.checkRuleValid(droolsRule);
-//		}
+		// for (DroolsRule droolsRule : droolsRules) {
+		// RuleChecker.checkRuleValid(droolsRule);
+		// }
 		return droolsRules;
 	}
 
@@ -72,7 +72,11 @@ public class ExpressionToDroolsRule {
 		}
 		// If the expression chain contains generic variables, we have to unwrap
 		// them
+
+		System.out.println("EXPRESSION CHAIN ANALYZED: " + expressionChain.getExpression());
+
 		if (checkForGenericVariables(expressionChain)) {
+			System.out.println("EXPRESSION CHAIN HAS GENERIC VARIABLES");
 			ExpressionChain expressionChainUnwrapped = unwrapGenericVariables(expressionChain);
 			if (expressionChainUnwrapped != null) {
 				droolsRule.setActions(expressionChainUnwrapped);
@@ -137,16 +141,15 @@ public class ExpressionToDroolsRule {
 	private static List<DroolsRule> createExpressionRuleSet(ExpressionChain expressionChain,
 			ExpressionChain extraConditions) {
 		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
-
-		ExpressionValueGenericCustomVariable expressionValueGenericVariable = (ExpressionValueGenericCustomVariable) expressionChain
+		ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) expressionChain
 				.getExpressions().get(0);
 		List<TreeObject> treeObjects = new ArrayList<TreeObject>();
-		switch (expressionValueGenericVariable.getType()) {
+		switch (expressionValueGenericCustomVariable.getType()) {
 		case CATEGORY:
-			treeObjects.addAll(expressionValueGenericVariable.getVariable().getForm().getChildren());
+			treeObjects.addAll(expressionValueGenericCustomVariable.getVariable().getForm().getChildren());
 			break;
 		case GROUP:
-			for (TreeObject category : expressionValueGenericVariable.getVariable().getForm().getChildren()) {
+			for (TreeObject category : expressionValueGenericCustomVariable.getVariable().getForm().getChildren()) {
 				List<TreeObject> groups = category.getAll(Group.class);
 				// We need to reverse the groups to correctly generate the rules
 				// for nested groups
@@ -165,7 +168,7 @@ public class ExpressionToDroolsRule {
 			for (TreeObject category : treeObjects) {
 				ExpressionChain expressionChainCopy = (ExpressionChain) expressionChain.generateCopy();
 				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
-						expressionValueGenericVariable.getVariable());
+						expressionValueGenericCustomVariable.getVariable());
 				// Remove the generic
 				expressionChainCopy.getExpressions().remove(0);
 				// Add the specific
@@ -205,15 +208,15 @@ public class ExpressionToDroolsRule {
 	private static ExpressionChain unwrapGenericVariables(ExpressionChain expressionChain) {
 
 		// // To avoid modifying the original expression
-		// ExpressionChain expressionChainCopy = expressionChain.generateCopy();
-		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChain
+		ExpressionChain expressionChainCopy = (ExpressionChain) expressionChain.generateCopy();
+		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChainCopy
 				.getExpressions().get(0);
 		// The rule is different if the variable to assign is a Form, a Category
 		// a Group or a Question
 		TreeObject leftTreeObject = expressionValueLeftTreeObject.getReference();
 		ExpressionChain generatedExpressionChain = new ExpressionChain();
-		for (int originalExpressionIndex = 0; originalExpressionIndex < expressionChain.getExpressions().size(); originalExpressionIndex++) {
-			Expression expression = expressionChain.getExpressions().get(originalExpressionIndex);
+		for (int originalExpressionIndex = 0; originalExpressionIndex < expressionChainCopy.getExpressions().size(); originalExpressionIndex++) {
+			Expression expression = expressionChainCopy.getExpressions().get(originalExpressionIndex);
 			if (expression instanceof ExpressionValueGenericCustomVariable) {
 				// The generic variable being analyzed
 				ExpressionValueGenericCustomVariable expressionValueGenericVariable = (ExpressionValueGenericCustomVariable) expression;
@@ -290,7 +293,8 @@ public class ExpressionToDroolsRule {
 				.equals(AvailableSymbol.COMMA)))) {
 			generatedExpressionChain.getExpressions().remove(generatedExpressionChain.getExpressions().size() - 2);
 		}
-
+		System.out.println("GENERATED EXPRESSION CHAIN: " + generatedExpressionChain.getExpression());
+		
 		return generatedExpressionChain;
 	}
 }

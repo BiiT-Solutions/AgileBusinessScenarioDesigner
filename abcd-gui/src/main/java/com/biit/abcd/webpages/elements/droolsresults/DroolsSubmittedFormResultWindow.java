@@ -1,11 +1,11 @@
-package com.biit.abcd.webpages.components;
+package com.biit.abcd.webpages.elements.droolsresults;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.facts.inputform.Category;
 import com.biit.abcd.core.drools.facts.inputform.Group;
 import com.biit.abcd.core.drools.facts.inputform.Question;
@@ -16,11 +16,16 @@ import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.form.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.NotValidChildException;
+import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
@@ -28,31 +33,10 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	private HashMap<CustomVariableScope, List<String>> customVariablesScopeMap;
 	private DroolsTreeObjectTable formTreeTable;
 	private Form form;
+	private List<ElementsToDuplicate> elementsToDuplicate;
 
 	protected enum TreeObjectTableProperties {
 		ORIGINAL_VALUE
-	}
-
-	public DroolsSubmittedFormResultWindow(ISubmittedForm submittedForm) throws CategoryDoesNotExistException,
-			GroupDoesNotExistException {
-		super();
-		setCaption("Submitted form scores");
-		setWidth("60%");
-		setHeight("60%");
-		setClosable(false);
-		setModal(true);
-		setResizable(false);
-
-		formTreeTable = new DroolsTreeObjectTable();
-		formTreeTable.setSizeFull();
-		formTreeTable.setSelectable(true);
-		formTreeTable.setImmediate(true);
-		form = UserSessionHandler.getFormController().getForm();
-		formTreeTable.setRootElement(form);
-		if (submittedForm != null) {
-			generateContent((SubmittedForm) submittedForm);
-		}
-		setContent(formTreeTable);
 	}
 
 	/**
@@ -77,9 +61,14 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		formTreeTable.setSizeFull();
 		formTreeTable.setSelectable(true);
 		formTreeTable.setImmediate(true);
-		this.form = form;
-		formTreeTable.setRootElement(this.form);
 		if (submittedForm != null) {
+			this.form = form;
+			elementsToDuplicate = new ArrayList<ElementsToDuplicate>();
+			adaptFormToRepeatableGroups(submittedForm);
+			if (!elementsToDuplicate.isEmpty()) {
+				duplicateRepeatedGroups();
+			}
+			formTreeTable.setRootElement(this.form);
 			generateContent((SubmittedForm) submittedForm);
 		}
 		setContent(formTreeTable);
@@ -125,27 +114,34 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 						// Put category children variables
 						List<TreeObject> categoryChildren = category.getChildren();
 						if (categoryChildren != null) {
+							TreeObject repeatedGroup = null;
+							int repeatedGroupIndex = 0;
 							for (TreeObject categoryChild : categoryChildren) {
 								if (categoryChild instanceof com.biit.abcd.persistence.entity.Group) {
-									// Get the subform group
-									Group groupSubForm = getSubmittedFormGroup(categoryChild, categorySubForm);
-									createGroupVariables(categoryChild, groupSubForm);
-									List<TreeObject> groupChildren = categoryChild.getChildren();
-									if (groupChildren != null) {
-										for (TreeObject groupChild : groupChildren) {
-											if (groupChild instanceof com.biit.abcd.persistence.entity.Group) {
-												createNestedGroupVariables(groupChild,
-														getSubmittedFormGroup(groupChild, groupSubForm));
-
-											} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
-												createQuestionVariables(groupChild,
-														getSubmittedFormGroupQuestion(groupChild, groupSubForm));
+									com.biit.abcd.persistence.entity.Group formGroup = (com.biit.abcd.persistence.entity.Group) categoryChild;
+									if (formGroup.isRepeatable()) {
+										if (repeatedGroup != null) {
+											if (repeatedGroup.getName().equals(formGroup.getName())) {
+												repeatedGroupIndex++;
+											} else {
+												repeatedGroup = formGroup;
+												repeatedGroupIndex = 0;
 											}
+										} else {
+											repeatedGroup = formGroup;
 										}
+										createGroupVariables(
+												categoryChild,
+												getSubmittedFormRepeatableGroup(categoryChild, categorySubForm,
+														repeatedGroupIndex));
+
+									} else {
+										createGroupVariables(categoryChild,
+												getSubmittedFormGroup(categoryChild, categorySubForm));
 									}
 								} else if (categoryChild instanceof com.biit.abcd.persistence.entity.Question) {
 									createQuestionVariables(categoryChild,
-											getSubmittedFormCategoryQuestion(categoryChild, categorySubForm));
+											getSubmittedFormIGroupQuestion(categoryChild, categorySubForm));
 								}
 							}
 						}
@@ -188,18 +184,48 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createGroupVariables(TreeObject group, Group groupSubForm) {
+	private void createGroupVariables(TreeObject group, IGroup groupSubForm) {
 		if (customVariablesScopeMap != null) {
 			List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
 
 			if ((groupVariables != null) && (groupSubForm != null)) {
 				for (String variable : groupVariables) {
-					if (groupSubForm.getVariableValue(variable) != null) {
+					if (((Group) groupSubForm).getVariableValue(variable) != null) {
 						formTreeTable.getItem(group).getItemProperty(variable)
-								.setValue(groupSubForm.getVariableValue(variable).toString());
+								.setValue(((Group) groupSubForm).getVariableValue(variable).toString());
 					} else {
 						formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
 					}
+				}
+			}
+		}
+		// Manage the nested values
+		List<TreeObject> groupChildren = group.getChildren();
+		if (groupChildren != null) {
+			TreeObject repeatedGroup = null;
+			int repeatedGroupIndex = 0;
+			for (TreeObject groupChild : groupChildren) {
+				if (groupChild instanceof com.biit.abcd.persistence.entity.Group) {
+					com.biit.abcd.persistence.entity.Group formGroup = (com.biit.abcd.persistence.entity.Group) groupChild;
+					if (formGroup.isRepeatable()) {
+						if (repeatedGroup != null) {
+							if (repeatedGroup.getName().equals(formGroup.getName())) {
+								repeatedGroupIndex++;
+							} else {
+								repeatedGroup = formGroup;
+								repeatedGroupIndex = 0;
+							}
+						} else {
+							repeatedGroup = formGroup;
+						}
+						createGroupVariables(groupChild,
+								getSubmittedFormRepeatableGroup(groupChild, groupSubForm, repeatedGroupIndex));
+					} else {
+						createGroupVariables(groupChild, getSubmittedFormGroup(groupChild, groupSubForm));
+					}
+
+				} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
+					createQuestionVariables(groupChild, getSubmittedFormIGroupQuestion(groupChild, groupSubForm));
 				}
 			}
 		}
@@ -253,36 +279,6 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void createNestedGroupVariables(TreeObject group, Group groupSubForm) {
-		if (customVariablesScopeMap != null) {
-			List<String> groupVariables = customVariablesScopeMap.get(CustomVariableScope.GROUP);
-
-			if ((groupVariables != null) && (groupSubForm != null)) {
-				for (String variable : groupVariables) {
-					if (groupSubForm.getVariableValue(variable) != null) {
-						formTreeTable.getItem(group).getItemProperty(variable)
-								.setValue(groupSubForm.getVariableValue(variable).toString());
-					} else {
-						formTreeTable.getItem(group).getItemProperty(variable).setValue("-");
-					}
-				}
-			}
-		}
-		// Manage the nested values
-		List<TreeObject> groupChildren = group.getChildren();
-		if (groupChildren != null) {
-			for (TreeObject groupChild : groupChildren) {
-				if (groupChild instanceof com.biit.abcd.persistence.entity.Group) {
-					createNestedGroupVariables(groupChild, getSubmittedFormGroup(groupChild, groupSubForm));
-
-				} else if (groupChild instanceof com.biit.abcd.persistence.entity.Question) {
-					createQuestionVariables(groupChild, getSubmittedFormGroupQuestion(groupChild, groupSubForm));
-				}
-			}
-		}
-	}
-
 	private Category getSubmittedFormCategory(TreeObject category, SubmittedForm submittedForm) {
 		Category categorySubForm = null;
 		try {
@@ -293,11 +289,11 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		return categorySubForm;
 	}
 
-	private Group getSubmittedFormGroup(TreeObject group, Category categorySubForm) {
+	private Group getSubmittedFormGroup(TreeObject group, IGroup iGroupSubForm) {
 		Group groupSubForm = null;
 		try {
-			if (categorySubForm != null) {
-				groupSubForm = (Group) categorySubForm.getGroup(group.getName());
+			if (iGroupSubForm != null) {
+				groupSubForm = (Group) iGroupSubForm.getGroup(group.getName());
 			}
 		} catch (GroupDoesNotExistException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -305,23 +301,28 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		return groupSubForm;
 	}
 
-	private Group getSubmittedFormGroup(TreeObject group, Group groupSubForm) {
-		Group nestedGroupSubForm = null;
-		try {
-			if (groupSubForm != null) {
-				nestedGroupSubForm = (Group) groupSubForm.getGroup(group.getName());
-			}
-		} catch (GroupDoesNotExistException e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
+	private IGroup getSubmittedFormRepeatableGroup(TreeObject group, IGroup igroupSubForm, int repeatedGroupIndex) {
+		List<IGroup> groups = getSubmittedFormRepeatableGroups(group, igroupSubForm);
+		if (groups != null && !groups.isEmpty()) {
+			return getSubmittedFormRepeatableGroups(group, igroupSubForm).get(repeatedGroupIndex);
+		} else {
+			return null;
 		}
-		return nestedGroupSubForm;
 	}
 
-	private Question getSubmittedFormCategoryQuestion(TreeObject question, Category categorySubForm) {
+	private List<IGroup> getSubmittedFormRepeatableGroups(TreeObject group, IGroup igroupSubForm) {
+		List<IGroup> groupSubForm = null;
+		if (igroupSubForm != null) {
+			groupSubForm = igroupSubForm.getRepeatableGroups(group.getName());
+		}
+		return groupSubForm;
+	}
+
+	private Question getSubmittedFormIGroupQuestion(TreeObject question, IGroup igroupSubForm) {
 		Question questionSubForm = null;
 		try {
-			if (categorySubForm != null) {
-				questionSubForm = (Question) categorySubForm.getQuestion(question.getName());
+			if (igroupSubForm != null) {
+				questionSubForm = (Question) igroupSubForm.getQuestion(question.getName());
 			}
 		} catch (QuestionDoesNotExistException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -329,15 +330,81 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		return questionSubForm;
 	}
 
-	private Question getSubmittedFormGroupQuestion(TreeObject question, Group groupSubForm) {
-		Question questionSubForm = null;
-		try {
-			if (groupSubForm != null) {
-				questionSubForm = (Question) groupSubForm.getQuestion(question.getName());
+	private void adaptFormToRepeatableGroups(ISubmittedForm submittedForm) {
+		// Get categories
+		for (TreeObject category : this.form.getChildren()) {
+			// Get groups (or questions)
+			for (TreeObject categoryChild : category.getChildren()) {
+				Category categorySubForm = getSubmittedFormCategory(category, (SubmittedForm) submittedForm);
+				adaptFormToRepeatableGroups(categoryChild, categorySubForm);
 			}
-		} catch (QuestionDoesNotExistException e) {
+		}
+	}
+
+	private void adaptFormToRepeatableGroups(TreeObject treeObject, IGroup parentIGroupSubmitted) {
+		if ((treeObject instanceof com.biit.abcd.persistence.entity.Group)
+				&& ((com.biit.abcd.persistence.entity.Group) treeObject).isRepeatable()) {
+			List<IGroup> repeatedGroups = getSubmittedFormRepeatableGroups(treeObject, parentIGroupSubmitted);
+			// Duplicating elements this way to avoid concurrent modification
+			// exception
+			if (repeatedGroups != null && !repeatedGroups.isEmpty()) {
+				elementsToDuplicate.add(new ElementsToDuplicate(repeatedGroups.size() - 1, treeObject));
+			}
+		}
+		for (TreeObject child : treeObject.getChildren()) {
+			if (treeObject instanceof com.biit.abcd.persistence.entity.Group) {
+				adaptFormToRepeatableGroups(child, getSubmittedFormGroup(child, parentIGroupSubmitted));
+			}
+		}
+	}
+
+	private void duplicateRepeatedGroups() {
+		
+		System.out.println("ELEMENTS TO DUPLICATE: " + elementsToDuplicate.size());
+		
+		Collections.reverse(elementsToDuplicate);
+		for (ElementsToDuplicate element : elementsToDuplicate) {
+			for (int i = 0; i < element.getNumberOfCopies(); i++) {
+				duplicateGroup(element.getElementToCopy());
+			}
+		}
+	}
+
+	private void duplicateGroup(TreeObject treeObject) {
+		try {
+			TreeObject parent = treeObject.getParent();
+			TreeObject newGroup = treeObject.generateCopy(false, true);
+			newGroup.resetIds();
+			parent.addChild(newGroup);
+		} catch (CharacterNotAllowedException | NotValidStorableObjectException | NotValidChildException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
-		return questionSubForm;
+	}
+
+	class ElementsToDuplicate {
+		private int numberOfCopies;
+		private TreeObject elementToCopy;
+
+		public ElementsToDuplicate(int numberOfCopies, TreeObject elementToCopy) {
+			super();
+			this.numberOfCopies = numberOfCopies;
+			this.elementToCopy = elementToCopy;
+		}
+
+		public int getNumberOfCopies() {
+			return numberOfCopies;
+		}
+
+		public void setNumberOfCopies(int numberOfCopies) {
+			this.numberOfCopies = numberOfCopies;
+		}
+
+		public TreeObject getElementToCopy() {
+			return elementToCopy;
+		}
+
+		public void setElementToCopy(TreeObject elementToCopy) {
+			this.elementToCopy = elementToCopy;
+		}
 	}
 }

@@ -1,12 +1,22 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import java.util.List;
+
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.form.TreeObject;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
@@ -32,6 +42,10 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		updatedBy.setEnabled(false);
 		updateTime = new TextField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
 		updateTime.setEnabled(false);
+		clearOriginalReference = new Button(
+				ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CLEAR_REFERENCE_ID));
+		clearOriginalReference.setEnabled(false);
+		updateTime.setEnabled(false);
 		// init values;
 		initCommonPropertiesValues((TreeObject) element);
 
@@ -42,12 +56,13 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		commonProperties.addComponent(creationTime);
 		commonProperties.addComponent(updatedBy);
 		commonProperties.addComponent(updateTime);
+		commonProperties.addComponent(clearOriginalReference);
 
 		addTab(commonProperties, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION),
 				false);
 	}
 
-	protected void initCommonPropertiesValues(TreeObject element) {
+	protected void initCommonPropertiesValues(final TreeObject element) {
 		String valueCreatedBy = "";
 		String valueUpdatedBy = "";
 		try {
@@ -71,6 +86,34 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		creationTime.setValue(valueCreationTime);
 		updatedBy.setValue(valueUpdatedBy);
 		updateTime.setValue(valueUpdatedTime);
+
+		if (!element.getOriginalReference().equals(element.getComparationId())) {
+			clearOriginalReference.setEnabled(true);
+			clearOriginalReference.addClickListener(new ClickListener() {
+				private static final long serialVersionUID = -6636243712290823803L;
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+					if (existTestScenariosLinked()) {
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								modifyTestScenarioElementOriginalReference(element);
+								element.setOriginalReference(element.getComparationId());
+								clearOriginalReference.setEnabled(false);
+								windowAccept.close();
+							}
+						});
+						windowAccept.showCentered();
+					} else {
+						element.setOriginalReference(element.getComparationId());
+						clearOriginalReference.setEnabled(false);
+					}
+				}
+			});
+		}
 	}
 
 	@Override
@@ -91,5 +134,33 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(getTreeObjectInstance());
+	}
+
+	private boolean existTestScenariosLinked() {
+		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
+				UserSessionHandler.getFormController().getForm());
+		return !testScenarios.isEmpty();
+	}
+
+	private void modifyTestScenarioElementOriginalReference(TreeObject element) {
+		
+//		System.out.println("ORIGINAL REFERENCE: " + element.getOriginalReference());
+		Form currentForm = UserSessionHandler.getFormController().getForm();
+		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController()
+				.getTestScenarios(currentForm);
+		for (TestScenario testScenario : testScenarios) {
+			TreeObject testScenarioObject = testScenario.getTestScenarioForm().getOriginalReferenceTreeObjectMap()
+					.get(element.getOriginalReference());
+			
+//			System.out.println("TEST SCENARIO OBJECT: " + testScenarioObject);
+//			System.out.println("COMPARATION ID: " + element.getComparationId());
+			
+			if (testScenarioObject != null) {
+				testScenarioObject.setOriginalReference(element.getComparationId());
+//				System.out.println("ORIGINAL REFERENCE RESTARTED");
+			}
+		}
+		UserSessionHandler.getTestScenariosController().update(testScenarios,
+				UserSessionHandler.getFormController().getForm());
 	}
 }

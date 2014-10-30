@@ -127,7 +127,7 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 	}
 
 	public String generateXML() {
-		String xmlFile = "<" + getFormName() + ">\n";
+		String xmlFile = "<" + getFormName() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
 		if (getCategories() != null) {
 			for (ICategory iCategory : getCategories()) {
 				xmlFile += ((IXmlGenerator) iCategory).generateXML("\t");

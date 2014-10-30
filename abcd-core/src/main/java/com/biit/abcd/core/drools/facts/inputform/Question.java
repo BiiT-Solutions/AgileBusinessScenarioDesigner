@@ -160,6 +160,7 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 
 	@Override
 	public String generateXML(String tabs) {
-		return tabs + "<" + getTag() + ">" + answer + "</" + getTag() + ">\n";
+		return tabs + "<" + getTag() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">" + answer + "</"
+				+ getTag() + ">\n";
 	}
 }

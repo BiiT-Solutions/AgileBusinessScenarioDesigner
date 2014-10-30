@@ -213,16 +213,6 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	private void refreshTestScenario() throws FieldTooLongException, CharacterNotAllowedException {
 		try {
 			testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
-			if (testScenarioForm.getTreeTestTable() != null) {
-				testScenarioForm.getTreeTestTable().addValueChangeListener(new ValueChangeListener() {
-					private static final long serialVersionUID = -7746810456696297935L;
-
-					@Override
-					public void valueChange(ValueChangeEvent event) {
-						Object valueSelected = event.getProperty().getValue();
-					}
-				});
-			}
 		} catch (NotValidChildException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}

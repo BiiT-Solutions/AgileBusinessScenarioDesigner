@@ -34,7 +34,7 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 			CharacterNotAllowedException {
 		removeAllComponents();
 		if (form != null && testScenario != null) {
-			TestScenarioValidator.checkTestScenarioStructure(form, testScenario);
+			TestScenarioValidator.checkAndModifyTestScenarioStructure(form, testScenario);
 			originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
 			createContent(form, testScenario);
 		}

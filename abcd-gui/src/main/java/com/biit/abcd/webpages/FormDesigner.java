@@ -11,6 +11,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioValidator;
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
@@ -20,9 +21,11 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.PropertieUpdateListener;
 import com.biit.abcd.webpages.components.SelectTreeObjectWindow;
@@ -49,6 +52,7 @@ public class FormDesigner extends FormWebPageComponent {
 	private FormDesignerUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 	private boolean tableIsGoingToDetach;
+	private boolean testScenariosModified = false;
 
 	public FormDesigner() {
 		updateButtons(true);
@@ -150,6 +154,10 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				save();
+				if (testScenariosModified) {
+					UserSessionHandler.getTestScenariosController().update(modifyTestScenariosLinked(),
+							UserSessionHandler.getFormController().getForm());
+				}
 			}
 		});
 
@@ -212,7 +220,21 @@ public class FormDesigner extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				removeSelected();
+				if (existTestScenariosLinked()) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							removeSelected();
+							testScenariosModified = true;
+							windowAccept.close();
+						}
+					});
+					windowAccept.showCentered();
+				} else {
+					removeSelected();
+				}
 			}
 		});
 
@@ -240,17 +262,43 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				if (formTreeTable.getTreeObjectSelected() != null && moveWindow.getSelectedTreeObject() != null) {
-					try {
-						TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
-						TreeObject whereToMove = moveWindow.getSelectedTreeObject();
-						TreeObject.move(whatToMove, whereToMove);
-						window.close();
-						clearAndUpdateFormTable();
-						formTreeTable.setValue(whatToMove);
-						formTreeTable.collapseFrom(Question.class);
-					} catch (ChildrenNotFoundException | NotValidChildException e) {
-						MessageManager.showWarning(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
-								LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
+					if (existTestScenariosLinked()) {
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								try {
+									TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
+									TreeObject whereToMove = moveWindow.getSelectedTreeObject();
+									TreeObject.move(whatToMove, whereToMove);
+									window.close();
+									clearAndUpdateFormTable();
+									formTreeTable.setValue(whatToMove);
+									formTreeTable.collapseFrom(Question.class);
+								} catch (ChildrenNotFoundException | NotValidChildException e) {
+									MessageManager.showWarning(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
+											LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
+								}
+								testScenariosModified = true;
+								windowAccept.close();
+								moveWindow.close();
+							}
+						});
+						windowAccept.showCentered();
+					} else {
+						try {
+							TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
+							TreeObject whereToMove = moveWindow.getSelectedTreeObject();
+							TreeObject.move(whatToMove, whereToMove);
+							window.close();
+							clearAndUpdateFormTable();
+							formTreeTable.setValue(whatToMove);
+							formTreeTable.collapseFrom(Question.class);
+						} catch (ChildrenNotFoundException | NotValidChildException e) {
+							MessageManager.showWarning(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
+									LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
+						}
 					}
 				}
 			}
@@ -609,4 +657,19 @@ public class FormDesigner extends FormWebPageComponent {
 		}
 	}
 
+	private boolean existTestScenariosLinked() {
+		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
+				UserSessionHandler.getFormController().getForm());
+		return !testScenarios.isEmpty();
+	}
+
+	private List<TestScenario> modifyTestScenariosLinked() {
+		Form currentForm = UserSessionHandler.getFormController().getForm();
+		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController()
+				.getTestScenarios(currentForm);
+		for (TestScenario testScenario : testScenarios) {
+			TestScenarioValidator.checkAndModifyTestScenarioStructure(currentForm, testScenario);
+		}
+		return testScenarios;
+	}
 }

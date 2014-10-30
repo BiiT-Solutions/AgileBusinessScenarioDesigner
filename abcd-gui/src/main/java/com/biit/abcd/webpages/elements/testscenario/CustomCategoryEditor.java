@@ -92,6 +92,7 @@ public class CustomCategoryEditor extends CustomComponent {
 					addEditor(newCustomGroupEditor);
 					setGroupButtonsListeners(newCustomGroupEditor);
 					customGroupEditor.setAddGroupButtonEnable(false);
+					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);
 					customGroupEditor.setRemoveGroupButtonEnable(true);
 				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);

@@ -12,6 +12,7 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.AbstractComponentContainer;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TextField;
@@ -24,6 +25,7 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 	private List<PropertieUpdateListener> propertyUpdateListeners;
 	private List<ElementAddedListener> newElementListeners;
 	protected TextField createdBy, creationTime, updatedBy, updateTime;
+	protected Button clearOriginalReference;
 
 	public PropertiesForClassComponent(Class<? extends T> type) {
 		this.type = type;

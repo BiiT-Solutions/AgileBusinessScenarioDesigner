@@ -253,8 +253,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		// System.out.println("RULE CONDITIONS: " + rule.getConditionChain());
-		// System.out.println("RULE ACTIONS: " + rule.getActionChain());
+		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "";
 		// treeObjectDroolsname = new HashMap<TreeObject, String>();

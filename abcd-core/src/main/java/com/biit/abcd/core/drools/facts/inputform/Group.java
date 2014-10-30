@@ -64,6 +64,23 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 	public List<IGroup> getGroups() {
 		return this.groups;
 	}
+	
+	/**
+	 * For retrieving all the repeatable groups corresponding the same name
+	 * @param tag
+	 * @return
+	 * @throws GroupDoesNotExistException
+	 */
+	@Override
+	public List<IGroup> getRepeatableGroups(String tag) {
+		List<IGroup> groups = new ArrayList<IGroup>();
+		for (IGroup group : getGroups()) {
+			if (group.getTag().equals(tag)) {
+				groups.add(group);
+			}
+		}
+		return groups;
+	}
 
 	public void setQuestions(List<IQuestion> questions) {
 		this.questions = questions;
@@ -149,7 +166,7 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 
 	@Override
 	public String generateXML(String tabs) {
-		String xmlFile = tabs + "<" + getTag() + ">\n";
+		String xmlFile = tabs + "<" + getTag() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
 		if (getGroups() != null) {
 			for (IGroup iGroup : getGroups()) {
 				xmlFile += ((IXmlGenerator) iGroup).generateXML(tabs + "\t");

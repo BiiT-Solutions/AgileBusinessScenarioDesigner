@@ -78,7 +78,7 @@ public enum LanguageCodes {
 	WARNING_FORM_READ_ONLY_DESCRIPTION("warning.form.read.only.description"),
 	WARNING_NEW_VERSION("warning.new.version"),
 	WARNING_CLEAR_CACHE("warning.clear.cache"),
-
+	WARNING_TEST_SCENARIOS_LINKED("warning.test.scenarios.linked"),
 
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),
 	FORM_MANAGER_NEW_FORM_VERSION("formManager.form.new.version"),
@@ -170,6 +170,7 @@ public enum LanguageCodes {
 	TREE_OBJECT_PROPERTIES_UPDATE_TIME("treeObjectProperties.updateTime"),
 	TREE_OBJECT_PROPERTIES_CREATED_BY("treeObjectProperties.createdBy"),
 	TREE_OBJECT_PROPERTIES_UPDATED_BY("treeObjectProperties.updatedBy"),
+	TREE_OBJECT_PROPERTIES_CLEAR_REFERENCE_ID("treeObjectProperties.clear.reference.id"),
 	FORM_PROPERTIES_NAME("formProperties.name"),
 	FORM_PROPERTIES_VERSION("formProperties.version"),
 	CATEGORY_PROPERTIES_LABEL("categoryProperties.label"),
