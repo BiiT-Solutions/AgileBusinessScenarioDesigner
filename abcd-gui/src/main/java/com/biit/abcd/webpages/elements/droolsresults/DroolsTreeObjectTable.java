@@ -5,7 +5,6 @@ import java.util.List;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.vaadin.data.Item;
 import com.vaadin.ui.TreeTable;
 
@@ -32,7 +31,8 @@ public class DroolsTreeObjectTable extends TreeTable {
 				ServerTranslate.translate(LanguageCodes.SUBMITTED_FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		addContainerProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE, String.class, null,
 				ServerTranslate.translate(LanguageCodes.SUBMITTED_FORM_TREE_PROPERTY_ORIGINAL_VALUE), null, Align.LEFT);
-		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
+		setColumnWidth(DroolsTreeObjectTableProperties.ORIGINAL_VALUE, 150);
+		setCellStyleGenerator(new DroolsObjectTableCellStyleGenerator());
 	}
 
 	@SuppressWarnings("unchecked")

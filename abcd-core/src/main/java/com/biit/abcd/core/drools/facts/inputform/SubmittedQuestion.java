@@ -7,15 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 
-public class SubmittedQuestion extends SubmittedFormObject implements IQuestion, IXmlGenerator,
-		ISubmittedFormElement {
+public class SubmittedQuestion extends SubmittedFormObject implements IQuestion, ISubmittedFormElement {
 
 	private String answer;
 	private IGroup groupParent;

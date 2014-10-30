@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
@@ -13,7 +12,7 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class SubmittedCategory extends SubmittedFormObject implements ICategory, IXmlGenerator, ISubmittedFormElement {
+public class SubmittedCategory extends SubmittedFormObject implements ICategory, ISubmittedFormElement {
 
 	private List<IGroup> groups;
 	private ISubmittedForm parent;
@@ -173,12 +172,12 @@ public class SubmittedCategory extends SubmittedFormObject implements ICategory,
 		String xmlFile = tabs + "<" + getTag() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
 		if (getGroups() != null) {
 			for (IGroup iGroup : getGroups()) {
-				xmlFile += ((IXmlGenerator) iGroup).generateXML(tabs + "\t");
+				xmlFile += ((ISubmittedFormElement) iGroup).generateXML(tabs + "\t");
 			}
 		}
 		if (getQuestions() != null) {
 			for (IQuestion iQuestion : getQuestions()) {
-				xmlFile += ((IXmlGenerator) iQuestion).generateXML(tabs + "\t");
+				xmlFile += ((ISubmittedFormElement) iQuestion).generateXML(tabs + "\t");
 			}
 		}
 		xmlFile += tabs + "</" + getTag() + ">\n";

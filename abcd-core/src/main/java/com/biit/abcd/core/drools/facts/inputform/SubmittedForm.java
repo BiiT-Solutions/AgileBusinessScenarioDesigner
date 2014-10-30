@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IQuestion;
@@ -129,17 +128,6 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 		return getFormName();
 	}
 
-	public String generateXML() {
-		String xmlFile = "<" + getFormName() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
-		if (getCategories() != null) {
-			for (ICategory iCategory : getCategories()) {
-				xmlFile += ((IXmlGenerator) iCategory).generateXML("\t");
-			}
-		}
-		xmlFile += "</" + getFormName() + ">";
-		return xmlFile;
-	}
-
 	public HashMap<Object, HashMap<String, Object>> getFormVariables() {
 		return formVariables;
 	}
@@ -175,5 +163,21 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.FORM;
+	}
+
+	@Override
+	public String generateXML(String tabs) {
+		String xmlFile = "<" + getFormName() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
+		if (getCategories() != null) {
+			for (ICategory iCategory : getCategories()) {
+				xmlFile += ((ISubmittedFormElement) iCategory).generateXML("\t");
+			}
+		}
+		xmlFile += "</" + getFormName() + ">";
+		return xmlFile;
+	}
+	
+	public String generateXML(){
+		return generateXML("");
 	}
 }
