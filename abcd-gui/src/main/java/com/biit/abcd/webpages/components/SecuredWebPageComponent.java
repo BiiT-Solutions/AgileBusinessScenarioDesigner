@@ -46,7 +46,8 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 						for (DActivity activity : accessAuthorizationsRequired()) {
 							if (!AbcdAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(user,
 									activity)) {
-								AbcdLogger.debug(this.getClass().getName(), "Activity '" + activity
+								MessageManager.showError(LanguageCodes.ERROR_NOT_AUTHORIZED);
+								AbcdLogger.warning(this.getClass().getName(), "Activity '" + activity
 										+ "' not authorized for user '" + user.getEmailAddress()
 										+ "'. Returned to login screen.");
 								ApplicationFrame.navigateTo(WebMap.getLoginPage());
