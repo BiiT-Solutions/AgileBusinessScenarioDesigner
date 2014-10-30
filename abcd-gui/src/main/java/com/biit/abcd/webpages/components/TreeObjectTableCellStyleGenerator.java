@@ -38,5 +38,4 @@ public class TreeObjectTableCellStyleGenerator implements CellStyleGenerator {
 		}
 		return "";
 	}
-
 }

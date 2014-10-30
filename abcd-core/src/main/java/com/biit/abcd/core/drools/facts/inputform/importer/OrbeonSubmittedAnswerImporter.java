@@ -1,8 +1,8 @@
 package com.biit.abcd.core.drools.facts.inputform.importer;
 
-import com.biit.abcd.core.drools.facts.inputform.Category;
-import com.biit.abcd.core.drools.facts.inputform.Group;
-import com.biit.abcd.core.drools.facts.inputform.Question;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
+import com.biit.abcd.core.drools.facts.inputform.SubmmitedGroup;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.orbeon.OrbeonImporter;
 import com.biit.orbeon.form.ICategory;
@@ -17,7 +17,7 @@ public class OrbeonSubmittedAnswerImporter extends OrbeonImporter {
 
 	@Override
 	public ICategory createCategory(String tag) {
-		return new Category(tag);
+		return new SubmittedCategory(tag);
 	}
 
 	@Override
@@ -27,21 +27,21 @@ public class OrbeonSubmittedAnswerImporter extends OrbeonImporter {
 
 	@Override
 	public IGroup createGroup(ICategory category, String tag) {
-		return new Group(tag);
+		return new SubmmitedGroup(tag);
 	}
 	
 	@Override
 	public IGroup createGroup(IGroup group, String tag) {
-		return new Group(tag);
+		return new SubmmitedGroup(tag);
 	}
 
 	@Override
 	public IQuestion createQuestion(ICategory category, String tag) {
-		return new Question(tag);
+		return new SubmittedQuestion(tag);
 	}
 
 	@Override
 	public IQuestion createQuestion(IGroup group, String tag) {
-		return new Question(tag);
+		return new SubmittedQuestion(tag);
 	}
 }

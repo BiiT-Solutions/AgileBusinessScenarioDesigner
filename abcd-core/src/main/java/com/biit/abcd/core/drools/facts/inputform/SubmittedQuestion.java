@@ -4,20 +4,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 
-public class Question extends SubmittedFormObject implements IQuestion, IDroolsForm, IXmlGenerator {
+public class SubmittedQuestion extends SubmittedFormObject implements IQuestion, IDroolsForm, IXmlGenerator,
+		IDroolsTableElement {
 
 	private String answer;
-	private String name;
 	private IGroup groupParent;
 	private ICategory categoryParent;
 
-	public Question(String tag) {
+	public SubmittedQuestion(String tag) {
 		setTag(tag);
 		setText(tag);
 	}
@@ -94,14 +98,6 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 		return parsedValue;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public void setParent(Object parent) {
 		if (parent instanceof ICategory) {
 			this.categoryParent = (ICategory) parent;
@@ -124,9 +120,9 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
-			return ((Category) getParent()).isScoreSet(submittedFormTreeObject, varName);
+			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		} else {
-			return ((Group) getParent()).isScoreSet(submittedFormTreeObject, varName);
+			return ((SubmmitedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		}
 	}
 
@@ -140,9 +136,9 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 
 	public Object getVariableValue(Object submmitedFormObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
-			return ((Category) this.getParent()).getVariableValue(this, varName);
+			return ((SubmittedCategory) this.getParent()).getVariableValue(this, varName);
 		} else {
-			return ((Group) this.getParent()).getVariableValue(this, varName);
+			return ((SubmmitedGroup) this.getParent()).getVariableValue(this, varName);
 		}
 	}
 
@@ -152,9 +148,9 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 
 	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
 		if (this.getParent() instanceof ICategory) {
-			((Category) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+			((SubmittedCategory) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		} else {
-			((Group) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+			((SubmmitedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		}
 	}
 
@@ -162,5 +158,20 @@ public class Question extends SubmittedFormObject implements IQuestion, IDroolsF
 	public String generateXML(String tabs) {
 		return tabs + "<" + getTag() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">" + answer + "</"
 				+ getTag() + ">\n";
+	}
+
+	@Override
+	public String getName() {
+		return getTag();
+	}
+	
+	@Override
+	public String getOriginalValue() {
+		return answer;
+	}
+	
+	@Override
+	public List<IDroolsTableElement> getChildren() {
+		return null;
 	}
 }

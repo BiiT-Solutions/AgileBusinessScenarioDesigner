@@ -6,7 +6,7 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.Question;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -77,7 +77,7 @@ public class NestedGroupsTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 
-		Assert.assertEquals(QUESTION_EQUALS_ANSWER, ((Question) droolsForm.getCategory("Lifestyle").getGroup("voeding")
+		Assert.assertEquals(QUESTION_EQUALS_ANSWER, ((SubmittedQuestion) droolsForm.getCategory("Lifestyle").getGroup("voeding")
 				.getQuestion("breakfast")).getVariableValue("qVar"));
 	}
 

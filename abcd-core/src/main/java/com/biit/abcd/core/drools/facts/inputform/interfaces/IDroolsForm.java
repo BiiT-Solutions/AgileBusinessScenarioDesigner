@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.facts.inputform;
+package com.biit.abcd.core.drools.facts.inputform.interfaces;
 
 public interface IDroolsForm {
 

@@ -12,10 +12,10 @@ import org.dom4j.DocumentException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.Category;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.Group;
-import com.biit.abcd.core.drools.facts.inputform.Question;
+import com.biit.abcd.core.drools.facts.inputform.SubmmitedGroup;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -103,19 +103,19 @@ public class ExpressionsTest extends KidsFormCreator {
 				DateUtils.returnYearsDistanceFromDate(birthdate));
 		// Check months
 		Assert.assertEquals(
-				((Category) droolsForm.getSubmittedForm().getCategory("Algemeen")).getVariableValue(MONTHS),
+				((SubmittedCategory) droolsForm.getSubmittedForm().getCategory("Algemeen")).getVariableValue(MONTHS),
 				DateUtils.returnMonthsDistanceFromDate(birthdate));
 		// Check days
-		Assert.assertEquals(((Group) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
+		Assert.assertEquals(((SubmmitedGroup) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
 				.getVariableValue(DAYS), DateUtils.returnDaysDistanceFromDate(birthdate));
 		// Check date
-		Assert.assertEquals(((Question) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")
+		Assert.assertEquals(((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")
 				.getQuestion("fruit")).getVariableValue(DATE), birthdate);
 
 		// Check bmi
-		Double height = ((Double) ((Question) droolsForm.getSubmittedForm().getCategory("Algemeen")
+		Double height = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
 				.getQuestion("height")).getAnswer());
-		Double weight = ((Double) ((Question) droolsForm.getSubmittedForm().getCategory("Algemeen")
+		Double weight = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
 				.getQuestion("weight")).getAnswer());
 		Double bmi = weight / ((height / 100) * (height / 100));
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);

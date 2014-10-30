@@ -1,8 +1,13 @@
 package com.biit.abcd.webpages.elements.droolsresults;
 
-import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.webpages.components.TreeObjectTable;
-import com.biit.form.TreeObject;
+import java.util.List;
+
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
+import com.vaadin.data.Item;
+import com.vaadin.ui.TreeTable;
 
 /**
  * TreeObjectTable component
@@ -10,13 +15,60 @@ import com.biit.form.TreeObject;
  * This is a customized component to represent a TreeObject in a tree table.
  * 
  */
-public class DroolsTreeObjectTable extends TreeObjectTable {
-	private static final long serialVersionUID = 2056310678127658383L;
+public class DroolsTreeObjectTable extends TreeTable {
 
-	public void addItem(TreeObject element, TreeObject parent) {
-		// Not representing the answers
-		if (element != null && !(element instanceof Answer)) {
-			super.addItem(element, parent);
+	protected enum DroolsTreeObjectTableProperties {
+		ELEMENT_NAME, ORIGINAL_VALUE
+	}
+
+	public DroolsTreeObjectTable() {
+		initContainerProperties();
+		setImmediate(true);
+	}
+	
+	protected void initContainerProperties() {
+		addContainerProperty(DroolsTreeObjectTableProperties.ELEMENT_NAME, String.class, null,
+				ServerTranslate.translate(LanguageCodes.SUBMITTED_FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
+		addContainerProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE, String.class, null,
+				ServerTranslate.translate(LanguageCodes.SUBMITTED_FORM_TREE_PROPERTY_ORIGINAL_VALUE), null, Align.LEFT);
+		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addItem(IDroolsTableElement element, IDroolsTableElement parent) {
+		if (element != null) {
+			Item item = addItem((Object) element);
+			if (parent != null) {
+				setChildrenAllowed(parent, true);
+				setParent(element, parent);
+				setCollapsed(parent, false);
+			}
+			item.getItemProperty(DroolsTreeObjectTableProperties.ELEMENT_NAME).setValue(element.getName());
+			item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue(element.getOriginalValue());
+			setValue(element);
+			setChildrenAllowed(element, false);
+		}
+	}
+
+	private void loadTreeObject(IDroolsTableElement element, IDroolsTableElement parent) {
+		addItem(element, parent);
+
+		List<IDroolsTableElement> children = element.getChildren();
+		for (IDroolsTableElement child : children) {
+			loadTreeObject(child, element);
+		}
+	}
+
+	public void setRootElement(IDroolsTableElement root) {
+		this.removeAllItems();
+		select(null);
+		if (root != null) {
+			loadTreeObject(root, null);
+			try {
+				setCollapsed(root, false);
+			} catch (Exception e) {
+				// Root is not inserted. Ignore error.
+			}
 		}
 	}
 }

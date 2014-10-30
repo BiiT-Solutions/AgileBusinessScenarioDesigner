@@ -3,19 +3,23 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, IXmlGenerator {
+public class SubmmitedGroup extends SubmittedFormObject implements IGroup, IDroolsForm, IXmlGenerator,
+		IDroolsTableElement {
 
 	private List<IQuestion> questions;
 	private List<IGroup> groups;
 	private IGroup parent;
 
-	public Group(String tag) {
+	public SubmmitedGroup(String tag) {
 		setTag(tag);
 		setText(tag);
 		setQuestions(new ArrayList<IQuestion>());
@@ -64,9 +68,10 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 	public List<IGroup> getGroups() {
 		return this.groups;
 	}
-	
+
 	/**
 	 * For retrieving all the repeatable groups corresponding the same name
+	 * 
 	 * @param tag
 	 * @return
 	 * @throws GroupDoesNotExistException
@@ -91,7 +96,7 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 		if (this.groups == null) {
 			this.setGroups(new ArrayList<IGroup>());
 		}
-		((Group) group).setParent(this);
+		((SubmmitedGroup) group).setParent(this);
 		this.groups.add(group);
 	}
 
@@ -108,7 +113,7 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 		if (this.questions == null) {
 			this.setQuestions(new ArrayList<IQuestion>());
 		}
-		((Question) question).setParent(this);
+		((SubmittedQuestion) question).setParent(this);
 		this.questions.add(question);
 	}
 
@@ -130,9 +135,9 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
-			return ((Category) getParent()).isScoreSet(submittedFormTreeObject, varName);
+			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		} else {
-			return ((Group) getParent()).isScoreSet(submittedFormTreeObject, varName);
+			return ((SubmmitedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		}
 	}
 
@@ -146,9 +151,9 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 
 	public Object getVariableValue(Object submmitedFormObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
-			return ((Category) this.getParent()).getVariableValue(submmitedFormObject, varName);
+			return ((SubmittedCategory) this.getParent()).getVariableValue(submmitedFormObject, varName);
 		} else {
-			return ((Group) this.getParent()).getVariableValue(submmitedFormObject, varName);
+			return ((SubmmitedGroup) this.getParent()).getVariableValue(submmitedFormObject, varName);
 		}
 	}
 
@@ -158,9 +163,9 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 
 	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
 		if (this.getParent() instanceof ICategory) {
-			((Category) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+			((SubmittedCategory) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		} else {
-			((Group) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+			((SubmmitedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		}
 	}
 
@@ -179,5 +184,27 @@ public class Group extends SubmittedFormObject implements IGroup, IDroolsForm, I
 		}
 		xmlFile += tabs + "</" + getTag() + ">\n";
 		return xmlFile;
+	}
+
+	@Override
+	public String getName() {
+		return getTag();
+	}
+
+	@Override
+	public String getOriginalValue() {
+		return "";
+	}
+	
+	@Override
+	public List<IDroolsTableElement> getChildren() {
+		List<IDroolsTableElement> elements = new ArrayList<>();
+		for (IGroup child : getGroups()) {
+			elements.add((IDroolsTableElement) child);
+		}
+		for (IQuestion child : getQuestions()) {
+			elements.add((IDroolsTableElement) child);
+		}
+		return elements;
 	}
 }

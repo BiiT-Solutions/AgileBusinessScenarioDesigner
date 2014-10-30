@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -15,7 +18,7 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
  * questions.
  * 
  */
-public class SubmittedForm implements ISubmittedForm, IDroolsForm {
+public class SubmittedForm implements ISubmittedForm, IDroolsForm, IDroolsTableElement {
 
 	private String applicationName;
 	private List<ICategory> categories;
@@ -38,7 +41,7 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 		if (this.categories == null) {
 			this.setCategories(new ArrayList<ICategory>());
 		}
-		((Category) category).setParent(this);
+		((SubmittedCategory) category).setParent(this);
 		this.categories.add(category);
 	}
 
@@ -148,5 +151,24 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm {
 	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
 			CategoryDoesNotExistException {
 		return getCategory(categoryName).getQuestion(questionName);
+	}
+
+	@Override
+	public String getName() {
+		return formName;
+	}
+
+	@Override
+	public String getOriginalValue() {
+		return "";
+	}
+
+	@Override
+	public List<IDroolsTableElement> getChildren() {
+		List<IDroolsTableElement> elements = new ArrayList<>();
+		for (ICategory child : getCategories()) {
+			elements.add((IDroolsTableElement) child);
+		}
+		return elements;
 	}
 }

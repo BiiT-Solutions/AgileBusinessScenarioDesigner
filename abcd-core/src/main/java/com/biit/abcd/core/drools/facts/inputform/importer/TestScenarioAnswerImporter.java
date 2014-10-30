@@ -58,7 +58,7 @@ public class TestScenarioAnswerImporter {
 
 	private static void createCategory(TestScenarioCategory testCategory, ISubmittedForm submittedForm) {
 		// Add the category to the submittedForm
-		ICategory iCategory = new com.biit.abcd.core.drools.facts.inputform.Category(testCategory.getName());
+		ICategory iCategory = new com.biit.abcd.core.drools.facts.inputform.SubmittedCategory(testCategory.getName());
 		submittedForm.addCategory(iCategory);
 		// Put category children variables
 		List<TreeObject> categoryChildren = testCategory.getChildren();
@@ -76,7 +76,7 @@ public class TestScenarioAnswerImporter {
 	}
 
 	private static void createGroupVariables(TestScenarioGroup testScenarioGroup, IGroup parentGroup) {
-		IGroup iGroup = new com.biit.abcd.core.drools.facts.inputform.Group(testScenarioGroup.getName());
+		IGroup iGroup = new com.biit.abcd.core.drools.facts.inputform.SubmmitedGroup(testScenarioGroup.getName());
 		parentGroup.addGroup(iGroup);
 		List<TreeObject> groupChildren = testScenarioGroup.getChildren();
 		if (groupChildren != null) {
@@ -94,7 +94,7 @@ public class TestScenarioAnswerImporter {
 	}
 
 	private static void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, IGroup parentGroup) {
-		IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.Question(testScenarioQuestion.getName());
+		IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(testScenarioQuestion.getName());
 		setQuestionAnswer(testScenarioQuestion, iQuestion);
 		parentGroup.addQuestion(iQuestion);
 	}

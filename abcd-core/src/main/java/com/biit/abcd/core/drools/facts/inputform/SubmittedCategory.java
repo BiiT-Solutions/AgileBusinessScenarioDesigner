@@ -3,6 +3,9 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
@@ -10,13 +13,14 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class Category extends SubmittedFormObject implements ICategory, IDroolsForm, IXmlGenerator {
+public class SubmittedCategory extends SubmittedFormObject implements ICategory, IDroolsForm, IXmlGenerator,
+		IDroolsTableElement {
 
 	private List<IGroup> groups;
 	private ISubmittedForm parent;
 	private List<IQuestion> questions;
 
-	public Category(String tag) {
+	public SubmittedCategory(String tag) {
 		setTag(tag);
 		// Needed to make compatible the different importers
 		setText(tag);
@@ -29,7 +33,7 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 		if (this.groups == null) {
 			setGroups(new ArrayList<IGroup>());
 		}
-		((Group) group).setParent(this);
+		((SubmmitedGroup) group).setParent(this);
 		this.groups.add(group);
 	}
 
@@ -48,7 +52,7 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 		if (this.questions == null) {
 			setQuestions(new ArrayList<IQuestion>());
 		}
-		((Question) question).setParent(this);
+		((SubmittedQuestion) question).setParent(this);
 		this.questions.add(question);
 	}
 
@@ -71,9 +75,10 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 		}
 		throw new GroupDoesNotExistException("Group '" + tag + "' does not exists.");
 	}
-	
+
 	/**
 	 * For retrieving all the repeatable groups corresponding the same name
+	 * 
 	 * @param tag
 	 * @return
 	 * @throws GroupDoesNotExistException
@@ -179,5 +184,27 @@ public class Category extends SubmittedFormObject implements ICategory, IDroolsF
 		}
 		xmlFile += tabs + "</" + getTag() + ">\n";
 		return xmlFile;
+	}
+
+	@Override
+	public String getName() {
+		return getTag();
+	}
+
+	@Override
+	public String getOriginalValue() {
+		return "";
+	}
+	
+	@Override
+	public List<IDroolsTableElement> getChildren() {
+		List<IDroolsTableElement> elements = new ArrayList<>();
+		for (IGroup child : getGroups()) {
+			elements.add((IDroolsTableElement) child);
+		}
+		for (IQuestion child : getQuestions()) {
+			elements.add((IDroolsTableElement) child);
+		}
+		return elements;
 	}
 }
