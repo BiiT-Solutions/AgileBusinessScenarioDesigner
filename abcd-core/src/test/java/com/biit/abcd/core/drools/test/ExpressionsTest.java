@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmmitedGroup;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -106,7 +106,7 @@ public class ExpressionsTest extends KidsFormCreator {
 				((SubmittedCategory) droolsForm.getSubmittedForm().getCategory("Algemeen")).getVariableValue(MONTHS),
 				DateUtils.returnMonthsDistanceFromDate(birthdate));
 		// Check days
-		Assert.assertEquals(((SubmmitedGroup) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
+		Assert.assertEquals(((SubmittedGroup) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
 				.getVariableValue(DAYS), DateUtils.returnDaysDistanceFromDate(birthdate));
 		// Check date
 		Assert.assertEquals(((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")

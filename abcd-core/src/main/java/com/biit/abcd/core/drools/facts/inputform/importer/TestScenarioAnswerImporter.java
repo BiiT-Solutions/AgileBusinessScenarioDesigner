@@ -76,7 +76,7 @@ public class TestScenarioAnswerImporter {
 	}
 
 	private static void createGroupVariables(TestScenarioGroup testScenarioGroup, IGroup parentGroup) {
-		IGroup iGroup = new com.biit.abcd.core.drools.facts.inputform.SubmmitedGroup(testScenarioGroup.getName());
+		IGroup iGroup = new com.biit.abcd.core.drools.facts.inputform.SubmittedGroup(testScenarioGroup.getName());
 		parentGroup.addGroup(iGroup);
 		List<TreeObject> groupChildren = testScenarioGroup.getChildren();
 		if (groupChildren != null) {

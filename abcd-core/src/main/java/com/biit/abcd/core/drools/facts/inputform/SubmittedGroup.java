@@ -3,25 +3,25 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class SubmmitedGroup extends SubmittedFormObject implements IGroup, IDroolsForm, IXmlGenerator,
-		IDroolsTableElement {
+public class SubmittedGroup extends SubmittedFormObject implements IGroup, IXmlGenerator, ISubmittedFormElement {
 
 	private List<IQuestion> questions;
 	private List<IGroup> groups;
 	private IGroup parent;
 
-	public SubmmitedGroup(String tag) {
+	public SubmittedGroup(String tag) {
 		setTag(tag);
 		setText(tag);
+		setGroups(new ArrayList<IGroup>());
 		setQuestions(new ArrayList<IQuestion>());
 	}
 
@@ -96,7 +96,7 @@ public class SubmmitedGroup extends SubmittedFormObject implements IGroup, IDroo
 		if (this.groups == null) {
 			this.setGroups(new ArrayList<IGroup>());
 		}
-		((SubmmitedGroup) group).setParent(this);
+		((SubmittedGroup) group).setParent(this);
 		this.groups.add(group);
 	}
 
@@ -137,7 +137,7 @@ public class SubmmitedGroup extends SubmittedFormObject implements IGroup, IDroo
 		if (this.getParent() instanceof ICategory) {
 			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		} else {
-			return ((SubmmitedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
+			return ((SubmittedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		}
 	}
 
@@ -153,7 +153,7 @@ public class SubmmitedGroup extends SubmittedFormObject implements IGroup, IDroo
 		if (this.getParent() instanceof ICategory) {
 			return ((SubmittedCategory) this.getParent()).getVariableValue(submmitedFormObject, varName);
 		} else {
-			return ((SubmmitedGroup) this.getParent()).getVariableValue(submmitedFormObject, varName);
+			return ((SubmittedGroup) this.getParent()).getVariableValue(submmitedFormObject, varName);
 		}
 	}
 
@@ -165,7 +165,7 @@ public class SubmmitedGroup extends SubmittedFormObject implements IGroup, IDroo
 		if (this.getParent() instanceof ICategory) {
 			((SubmittedCategory) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		} else {
-			((SubmmitedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+			((SubmittedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		}
 	}
 
@@ -195,16 +195,21 @@ public class SubmmitedGroup extends SubmittedFormObject implements IGroup, IDroo
 	public String getOriginalValue() {
 		return "";
 	}
-	
+
 	@Override
-	public List<IDroolsTableElement> getChildren() {
-		List<IDroolsTableElement> elements = new ArrayList<>();
+	public List<ISubmittedFormElement> getChildren() {
+		List<ISubmittedFormElement> elements = new ArrayList<>();
 		for (IGroup child : getGroups()) {
-			elements.add((IDroolsTableElement) child);
+			elements.add((ISubmittedFormElement) child);
 		}
 		for (IQuestion child : getQuestions()) {
-			elements.add((IDroolsTableElement) child);
+			elements.add((ISubmittedFormElement) child);
 		}
 		return elements;
+	}
+	
+	@Override
+	public CustomVariableScope getVariableScope() {
+		return CustomVariableScope.GROUP;
 	}
 }

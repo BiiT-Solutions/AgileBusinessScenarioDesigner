@@ -6,16 +6,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 
-public class SubmittedQuestion extends SubmittedFormObject implements IQuestion, IDroolsForm, IXmlGenerator,
-		IDroolsTableElement {
+public class SubmittedQuestion extends SubmittedFormObject implements IQuestion, IXmlGenerator,
+		ISubmittedFormElement {
 
 	private String answer;
 	private IGroup groupParent;
@@ -122,7 +122,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 		if (this.getParent() instanceof ICategory) {
 			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		} else {
-			return ((SubmmitedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
+			return ((SubmittedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
 		}
 	}
 
@@ -138,7 +138,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 		if (this.getParent() instanceof ICategory) {
 			return ((SubmittedCategory) this.getParent()).getVariableValue(this, varName);
 		} else {
-			return ((SubmmitedGroup) this.getParent()).getVariableValue(this, varName);
+			return ((SubmittedGroup) this.getParent()).getVariableValue(this, varName);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 		if (this.getParent() instanceof ICategory) {
 			((SubmittedCategory) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		} else {
-			((SubmmitedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+			((SubmittedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
 		}
 	}
 
@@ -171,7 +171,12 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 	}
 	
 	@Override
-	public List<IDroolsTableElement> getChildren() {
+	public List<ISubmittedFormElement> getChildren() {
 		return null;
+	}
+	
+	@Override
+	public CustomVariableScope getVariableScope() {
+		return CustomVariableScope.QUESTION;
 	}
 }

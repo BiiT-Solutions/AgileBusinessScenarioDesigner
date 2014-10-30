@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.droolsresults;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
-import com.biit.abcd.core.drools.facts.inputform.SubmmitedGroup;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.webpages.elements.droolsresults.DroolsTreeObjectTable.DroolsTreeObjectTableProperties;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.CellStyleGenerator;
@@ -25,7 +25,7 @@ public class DroolsObjectTableCellStyleGenerator implements CellStyleGenerator {
 			if (itemId instanceof SubmittedCategory) {
 				return "tree-cell-category";
 			}
-			if (itemId instanceof SubmmitedGroup) {
+			if (itemId instanceof SubmittedGroup) {
 				return "tree-cell-group";
 			}
 			if (itemId instanceof SubmittedQuestion) {

@@ -38,6 +38,7 @@ import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 
+@SuppressWarnings("rawtypes")
 public class CustomQuestionEditor extends CustomComponent {
 	private static final long serialVersionUID = 3099517634702528173L;
 	private FormLayout questionsLayout;
@@ -79,6 +80,7 @@ public class CustomQuestionEditor extends CustomComponent {
 	 * @param testQuestion
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private Field<Field> getFormLayoutField(TestScenarioQuestion testQuestion) {
 		TreeObject treeObject = originalReferenceTreeObjectMap.get(testQuestion.getOriginalReference());
 		Question question = (Question) treeObject;

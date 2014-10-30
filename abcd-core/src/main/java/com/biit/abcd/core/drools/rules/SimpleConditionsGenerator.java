@@ -58,7 +58,7 @@ public class SimpleConditionsGenerator {
 	 */
 	private static String getCategoryGroupQuestionCondition(TreeObject parent, TreeObject treeObject) {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
-		return "\t$" + treeObject.getUniqueNameReadable() + " : " + treeObjectClass + "( getText() == '"
+		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( getText() == '"
 				+ treeObject.getName() + "') from $" + parent.getUniqueNameReadable() + ".get" + treeObjectClass
 				+ "s() \n";
 	}
@@ -160,7 +160,7 @@ public class SimpleConditionsGenerator {
 	private static String getCategoryGroupQuestionCustomVariableCondition(CustomVariable customVariable,
 			TreeObject parent, TreeObject treeObject) throws TreeObjectInstanceNotRecognizedException {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
-		return "\t$" + treeObject.getUniqueNameReadable() + " : " + treeObjectClass + "( getText() == '"
+		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( getText() == '"
 				+ treeObject.getName() + "', isScoreSet('" + customVariable.getName() + "')) from $"
 				+ parent.getUniqueNameReadable() + ".get" + treeObjectClass + "s() \n";
 	}

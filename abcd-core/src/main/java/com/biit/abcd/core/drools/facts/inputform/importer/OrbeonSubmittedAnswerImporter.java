@@ -1,7 +1,7 @@
 package com.biit.abcd.core.drools.facts.inputform.importer;
 
 import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
-import com.biit.abcd.core.drools.facts.inputform.SubmmitedGroup;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.orbeon.OrbeonImporter;
@@ -27,12 +27,12 @@ public class OrbeonSubmittedAnswerImporter extends OrbeonImporter {
 
 	@Override
 	public IGroup createGroup(ICategory category, String tag) {
-		return new SubmmitedGroup(tag);
+		return new SubmittedGroup(tag);
 	}
 	
 	@Override
 	public IGroup createGroup(IGroup group, String tag) {
-		return new SubmmitedGroup(tag);
+		return new SubmittedGroup(tag);
 	}
 
 	@Override

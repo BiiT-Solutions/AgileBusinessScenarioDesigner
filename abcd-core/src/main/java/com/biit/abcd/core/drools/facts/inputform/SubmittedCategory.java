@@ -3,9 +3,9 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
@@ -13,8 +13,7 @@ import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public class SubmittedCategory extends SubmittedFormObject implements ICategory, IDroolsForm, IXmlGenerator,
-		IDroolsTableElement {
+public class SubmittedCategory extends SubmittedFormObject implements ICategory, IXmlGenerator, ISubmittedFormElement {
 
 	private List<IGroup> groups;
 	private ISubmittedForm parent;
@@ -33,7 +32,7 @@ public class SubmittedCategory extends SubmittedFormObject implements ICategory,
 		if (this.groups == null) {
 			setGroups(new ArrayList<IGroup>());
 		}
-		((SubmmitedGroup) group).setParent(this);
+		((SubmittedGroup) group).setParent(this);
 		this.groups.add(group);
 	}
 
@@ -195,16 +194,21 @@ public class SubmittedCategory extends SubmittedFormObject implements ICategory,
 	public String getOriginalValue() {
 		return "";
 	}
-	
+
 	@Override
-	public List<IDroolsTableElement> getChildren() {
-		List<IDroolsTableElement> elements = new ArrayList<>();
+	public List<ISubmittedFormElement> getChildren() {
+		List<ISubmittedFormElement> elements = new ArrayList<>();
 		for (IGroup child : getGroups()) {
-			elements.add((IDroolsTableElement) child);
+			elements.add((ISubmittedFormElement) child);
 		}
 		for (IQuestion child : getQuestions()) {
-			elements.add((IDroolsTableElement) child);
+			elements.add((ISubmittedFormElement) child);
 		}
 		return elements;
+	}
+	
+	@Override
+	public CustomVariableScope getVariableScope() {
+		return CustomVariableScope.CATEGORY;
 	}
 }

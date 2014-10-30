@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.IXmlGenerator;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -18,7 +18,7 @@ import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
  * questions.
  * 
  */
-public class SubmittedForm implements ISubmittedForm, IDroolsForm, IDroolsTableElement {
+public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 
 	private String applicationName;
 	private List<ICategory> categories;
@@ -164,11 +164,16 @@ public class SubmittedForm implements ISubmittedForm, IDroolsForm, IDroolsTableE
 	}
 
 	@Override
-	public List<IDroolsTableElement> getChildren() {
-		List<IDroolsTableElement> elements = new ArrayList<>();
+	public List<ISubmittedFormElement> getChildren() {
+		List<ISubmittedFormElement> elements = new ArrayList<>();
 		for (ICategory child : getCategories()) {
-			elements.add((IDroolsTableElement) child);
+			elements.add((ISubmittedFormElement) child);
 		}
 		return elements;
+	}
+
+	@Override
+	public CustomVariableScope getVariableScope() {
+		return CustomVariableScope.FORM;
 	}
 }

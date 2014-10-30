@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.droolsresults;
 
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.interfaces.IDroolsTableElement;
+import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
@@ -16,6 +16,7 @@ import com.vaadin.ui.TreeTable;
  * 
  */
 public class DroolsTreeObjectTable extends TreeTable {
+	private static final long serialVersionUID = 7444822513424426513L;
 
 	protected enum DroolsTreeObjectTableProperties {
 		ELEMENT_NAME, ORIGINAL_VALUE
@@ -25,7 +26,7 @@ public class DroolsTreeObjectTable extends TreeTable {
 		initContainerProperties();
 		setImmediate(true);
 	}
-	
+
 	protected void initContainerProperties() {
 		addContainerProperty(DroolsTreeObjectTableProperties.ELEMENT_NAME, String.class, null,
 				ServerTranslate.translate(LanguageCodes.SUBMITTED_FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
@@ -35,7 +36,7 @@ public class DroolsTreeObjectTable extends TreeTable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addItem(IDroolsTableElement element, IDroolsTableElement parent) {
+	private void addItem(ISubmittedFormElement element, ISubmittedFormElement parent) {
 		if (element != null) {
 			Item item = addItem((Object) element);
 			if (parent != null) {
@@ -50,16 +51,17 @@ public class DroolsTreeObjectTable extends TreeTable {
 		}
 	}
 
-	private void loadTreeObject(IDroolsTableElement element, IDroolsTableElement parent) {
+	private void loadTreeObject(ISubmittedFormElement element, ISubmittedFormElement parent) {
 		addItem(element, parent);
-
-		List<IDroolsTableElement> children = element.getChildren();
-		for (IDroolsTableElement child : children) {
-			loadTreeObject(child, element);
+		List<ISubmittedFormElement> children = element.getChildren();
+		if (children != null) {
+			for (ISubmittedFormElement child : children) {
+				loadTreeObject(child, element);
+			}
 		}
 	}
 
-	public void setRootElement(IDroolsTableElement root) {
+	public void setRootElement(ISubmittedFormElement root) {
 		this.removeAllItems();
 		select(null);
 		if (root != null) {
