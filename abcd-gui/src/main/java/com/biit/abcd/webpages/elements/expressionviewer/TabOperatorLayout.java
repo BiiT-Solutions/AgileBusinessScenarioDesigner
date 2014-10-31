@@ -33,6 +33,7 @@ import com.vaadin.ui.VerticalLayout;
 public class TabOperatorLayout extends TabLayout {
 	private static final long serialVersionUID = -6980953550185164306L;
 	private static final int GRID_COLUMNS = 4;
+	private Button assignButton;
 
 	public TabOperatorLayout() {
 		AccordionMultiple accordion = new AccordionMultiple();
@@ -78,7 +79,7 @@ public class TabOperatorLayout extends TabLayout {
 				addSymbolExpression(AvailableSymbol.PILCROW);
 			}
 		});
-		Button assignButton = createButton("=", new ClickListener() {
+		assignButton = createButton("=", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -392,7 +393,7 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		Button distinctButton = createButton("!=", new ClickListener() {
+		Button distinctButton = createButton("<>", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
@@ -518,5 +519,9 @@ public class TabOperatorLayout extends TabLayout {
 		} catch (NotValidOperatorInExpression e) {
 
 		}
+	}
+
+	protected void enableAssignOperator(boolean enabled) {
+		assignButton.setEnabled(enabled);
 	}
 }

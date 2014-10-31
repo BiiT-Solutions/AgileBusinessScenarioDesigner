@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.droolsrule;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.Rule;
@@ -15,9 +18,15 @@ public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 	private ExpressionViewer conditionViewer;
 	private ExpressionViewer actionViewer;
 	private ExpressionViewer selectedViewer;
+	private List<SelectedViewerListener> selectedViewerListeners;
+
+	public interface SelectedViewerListener {
+		void viewerClicked(boolean isActionViewer);
+	}
 
 	public ConditionActionEditorComponent() {
 		super();
+		selectedViewerListeners = new ArrayList<>();
 	}
 
 	protected ExpressionViewer createExpressionViewer() {
@@ -41,6 +50,8 @@ public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 			public void clickedAction(ExpressionViewer viewer) {
 				selectedViewer = conditionViewer;
 				updateSelectionStyles();
+				launchViewerSelectedAction();
+				enableAssignOperator();
 			}
 		});
 
@@ -57,6 +68,8 @@ public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 			public void clickedAction(ExpressionViewer viewer) {
 				selectedViewer = actionViewer;
 				updateSelectionStyles();
+				launchViewerSelectedAction();
+				enableAssignOperator();
 			}
 		});
 
@@ -74,7 +87,16 @@ public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 		// First one is the default selected.
 		selectedViewer = conditionViewer;
 		updateSelectionStyles();
+		enableAssignOperator();
 		return viewLayout;
+	}
+
+	protected void enableAssignOperator() {
+		if (selectedViewer != null && selectedViewer.equals(actionViewer)) {
+			enableAssignOperator(true);
+		} else {
+			enableAssignOperator(false);
+		}
 	}
 
 	@Override
@@ -116,6 +138,20 @@ public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 
 	public ExpressionViewer getActionViewer() {
 		return actionViewer;
+	}
+
+	private void launchViewerSelectedAction() {
+		for (SelectedViewerListener selectedViewerListener : selectedViewerListeners) {
+			selectedViewerListener.viewerClicked(getSelectedViewer().equals(actionViewer));
+		}
+	}
+
+	public void addSelectedViewerListener(SelectedViewerListener selectedViewerListener) {
+		selectedViewerListeners.add(selectedViewerListener);
+	}
+
+	public void removeSelectedViewerListener(SelectedViewerListener selectedViewerListener) {
+		selectedViewerListeners.remove(selectedViewerListener);
 	}
 
 }

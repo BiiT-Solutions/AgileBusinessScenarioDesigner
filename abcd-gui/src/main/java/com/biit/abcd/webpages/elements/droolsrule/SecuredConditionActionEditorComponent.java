@@ -42,4 +42,14 @@ public class SecuredConditionActionEditorComponent extends ConditionActionEditor
 			getConditionViewer().addStyleName("expression-unselected");
 		}
 	}
+
+	@Override
+	protected void enableAssignOperator() {
+		if (!AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+				UserSessionHandler.getUser())) {
+			super.enableAssignOperator();
+		} else {
+			enableAssignOperator(false);
+		}
+	}
 }

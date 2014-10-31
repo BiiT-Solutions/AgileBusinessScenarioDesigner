@@ -18,6 +18,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 public abstract class ExpressionEditorComponent extends ExpressionEditorTabComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
+	private TabOperatorLayout operatorLayout;
 
 	public abstract VerticalLayout createViewersLayout();
 
@@ -64,7 +65,6 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 		setTab(formVariablesLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
 
 		// Second Tab
-		TabLayout operatorLayout;
 		operatorLayout = new TabOperatorLayout();
 		operatorLayout.addNewElementListener(new ElementAddedListener() {
 
@@ -96,6 +96,10 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 
 		});
 		setTab(globalConstantLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
+	}
+
+	protected void enableAssignOperator(boolean enabled) {
+		operatorLayout.enableAssignOperator(enabled);
 	}
 
 	protected void addElementToView(Object newElement) {
