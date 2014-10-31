@@ -13,6 +13,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
@@ -47,7 +48,7 @@ public class TreeObjectTable extends TreeTable {
 	 */
 	public static String getItemName(TreeObject element) {
 		String name = null;
-		if (element instanceof Form) {
+		if ((element instanceof Form) || (element instanceof TestScenarioForm)) {
 			name = element.getLabel();
 		} else {
 			name = element.getName();

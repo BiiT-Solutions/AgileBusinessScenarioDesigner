@@ -57,6 +57,8 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 			createEditForm();
 			addComponent(treeTestTable);
 			addComponent(editorBackground);
+			setExpandRatio(treeTestTable, 1);
+			setExpandRatio(editorBackground, 3);
 		}
 	}
 

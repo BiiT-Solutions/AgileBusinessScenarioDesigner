@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.components;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.form.TreeObject;
 
 public class ComponentCellTreeObject extends ComponentCell {
@@ -11,7 +12,7 @@ public class ComponentCellTreeObject extends ComponentCell {
 	public void update(TreeObject treeObject) {
 		clear();
 		String name = null;
-		if (treeObject instanceof Form) {
+		if ((treeObject instanceof Form) || (treeObject instanceof TestScenarioForm)) {
 			name = treeObject.getLabel();
 		} else {
 			name = treeObject.getName();

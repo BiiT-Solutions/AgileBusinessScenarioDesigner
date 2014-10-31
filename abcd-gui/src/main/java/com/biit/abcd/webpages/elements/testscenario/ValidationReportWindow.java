@@ -32,8 +32,9 @@ public class ValidationReportWindow extends AcceptCancelWindow {
 		modificationsTable.addContainerProperty(ValidationReportWindowTableProperties.ELEMENT_NAME, String.class, null,
 				ServerTranslate.translate(LanguageCodes.TEST_SCENARIO_VALIDATOR_REPORT_TABLE_HEADER), null, Align.LEFT);
 		for (String modification : modifications) {
-			modificationsTable.addItem(modification)
-					.getItemProperty(ValidationReportWindowTableProperties.ELEMENT_NAME).setValue(modification);
+			Object itemId = modificationsTable.addItem();
+			modificationsTable.getItem(itemId).getItemProperty(ValidationReportWindowTableProperties.ELEMENT_NAME)
+					.setValue(modification);
 		}
 
 		return modificationsTable;

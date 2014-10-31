@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.biit.form.BaseQuestion;
 import com.biit.form.BaseRepeatableGroup;
@@ -30,6 +31,19 @@ public class TestScenarioTable extends TreeObjectTable {
 
 	public TreeObject getRootElement() {
 		return rootElement;
+	}
+	
+	public static String getItemName(TreeObject element) {
+		String name = null;
+		if (element instanceof TestScenarioForm) {
+			name = element.getLabel();
+		} else {
+			name = element.getName();
+		}
+		if (name == null) {
+			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
+		}
+		return name;
 	}
 
 }
