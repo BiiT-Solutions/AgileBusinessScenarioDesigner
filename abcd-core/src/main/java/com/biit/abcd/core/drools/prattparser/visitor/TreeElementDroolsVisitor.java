@@ -29,7 +29,6 @@ public class TreeElementDroolsVisitor implements ITreeElementVisitor {
 	@Override
 	public void visit(NameExpression name) {
 		// TODO Auto-generated method stub
-//		System.out.println("NAME");
 	}
 
 	@Override

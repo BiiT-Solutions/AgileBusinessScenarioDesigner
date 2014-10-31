@@ -75,10 +75,7 @@ public class ExpressionToDroolsRule {
 		// If the expression chain contains generic variables, we have to unwrap
 		// them
 
-		System.out.println("EXPRESSION CHAIN ANALYZED: " + expressionChain.getExpression());
-
 		if (checkForGenericVariables(expressionChain)) {
-			System.out.println("EXPRESSION CHAIN HAS GENERIC VARIABLES");
 			ExpressionChain expressionChainUnwrapped = unwrapGenericVariables(expressionChain);
 			if (expressionChainUnwrapped != null) {
 				droolsRule.setActions(expressionChainUnwrapped);
@@ -210,8 +207,6 @@ public class ExpressionToDroolsRule {
 	 */
 	private static ExpressionChain unwrapGenericVariables(ExpressionChain expressionChain) {
 
-		System.out.println("EXPRESSION CHAIN TO UNWRAP: " + expressionChain.getExpression());
-
 		// // To avoid modifying the original expression
 		ExpressionChain expressionChainCopy = (ExpressionChain) expressionChain.generateCopy();
 		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChainCopy
@@ -267,8 +262,6 @@ public class ExpressionToDroolsRule {
 				.equals(AvailableSymbol.COMMA)))) {
 			generatedExpressionChain.removeExpression(generatedExpressionChain.getExpressions().size() - 2);
 		}
-		System.out.println("GENERATED EXPRESSION CHAIN: " + generatedExpressionChain.getExpression());
-
 		return generatedExpressionChain;
 	}
 

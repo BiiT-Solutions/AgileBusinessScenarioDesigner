@@ -90,7 +90,8 @@ public class ForkOthersTest extends KidsFormCreator {
 		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
 	}
 
-	@Test(groups = { "rules" })
+	// TODO
+	@Test(groups = { "rules2" })
 	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,

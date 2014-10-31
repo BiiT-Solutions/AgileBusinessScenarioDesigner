@@ -11,6 +11,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.ChildrenNotFoundException;
@@ -38,14 +39,19 @@ public class TreeObjectTable extends TreeTable {
 	private static final long serialVersionUID = -6949123334668973540L;;
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
-	 * {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't
+	 * be defined, then raises a {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
 	 */
 	public static String getItemName(TreeObject element) {
-		String name = element.getName();
+		String name = null;
+		if (element instanceof Form) {
+			name = element.getLabel();
+		} else {
+			name = element.getName();
+		}
 		if (name == null) {
 			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
 		}
@@ -53,7 +59,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -74,8 +81,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
-	 * members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -96,7 +103,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
+	 * Collapse the tree in a specific hierarchy level to inner levels. The
+	 * level is specified by a class.
 	 * 
 	 * @param collapseFrom
 	 */

@@ -54,8 +54,6 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 
 	@Override
 	public void visit(NameExpression name) {
-		System.out.println("NAME:" + name.getName());
-		
 		// The answers have a label not a technical name
 		if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
 			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain()
