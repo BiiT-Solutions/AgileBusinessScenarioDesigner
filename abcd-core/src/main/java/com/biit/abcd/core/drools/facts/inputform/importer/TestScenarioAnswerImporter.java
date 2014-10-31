@@ -35,8 +35,6 @@ public class TestScenarioAnswerImporter {
 		if ((form != null) && (testScenario != null)) {
 			// If the test scenario is a subset of the form passed, we parse the
 			// structure
-			// if (TestScenarioValidator.validateToLaunch(form, testScenario)) {
-			System.out.println("FORM VERSION: " + form.getVersion());
 			TestScenarioValidator.checkAndModifyTestScenarioStructure(form, testScenario);
 			TestScenarioForm testForm = testScenario.getTestScenarioForm();
 			submittedForm = new SubmittedForm(testForm.getName());
@@ -47,10 +45,6 @@ public class TestScenarioAnswerImporter {
 					createCategory((TestScenarioCategory) category, submittedForm);
 				}
 			}
-			// } else {
-			// throw new IncompatibleFormStructureException(
-			// "Form version and test scenario selected are not compatible");
-			// }
 		}
 		createSubmittedFormFile(submittedForm);
 		return submittedForm;
@@ -94,7 +88,8 @@ public class TestScenarioAnswerImporter {
 	}
 
 	private static void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, IGroup parentGroup) {
-		IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(testScenarioQuestion.getName());
+		IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(
+				testScenarioQuestion.getName());
 		setQuestionAnswer(testScenarioQuestion, iQuestion);
 		parentGroup.addQuestion(iQuestion);
 	}

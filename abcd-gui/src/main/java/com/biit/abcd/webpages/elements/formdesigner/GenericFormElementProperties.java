@@ -144,20 +144,14 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 
 	private void modifyTestScenarioElementOriginalReference(TreeObject element) {
 		
-//		System.out.println("ORIGINAL REFERENCE: " + element.getOriginalReference());
 		Form currentForm = UserSessionHandler.getFormController().getForm();
 		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController()
 				.getTestScenarios(currentForm);
 		for (TestScenario testScenario : testScenarios) {
 			TreeObject testScenarioObject = testScenario.getTestScenarioForm().getOriginalReferenceTreeObjectMap()
 					.get(element.getOriginalReference());
-			
-//			System.out.println("TEST SCENARIO OBJECT: " + testScenarioObject);
-//			System.out.println("COMPARATION ID: " + element.getComparationId());
-			
 			if (testScenarioObject != null) {
 				testScenarioObject.setOriginalReference(element.getComparationId());
-//				System.out.println("ORIGINAL REFERENCE RESTARTED");
 			}
 		}
 		UserSessionHandler.getTestScenariosController().update(testScenarios,

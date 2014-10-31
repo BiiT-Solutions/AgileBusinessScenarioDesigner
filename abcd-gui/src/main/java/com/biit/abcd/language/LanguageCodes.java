@@ -462,9 +462,7 @@ public enum LanguageCodes {
 	INPUT_PROMPT_FLOAT("input.prompt.float"),
 	INPUT_PROMPT_DATE("input.prompt.date"),
 	INPUT_PROMPT_TEXT("input.prompt.text"),
-	INPUT_PROMPT_POSTAL_CODE("input.prompt.postalcode")
-	;
-	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label"),
+	INPUT_PROMPT_POSTAL_CODE("input.prompt.postalcode"),
 	
 	ERROR_INCOMPATIBLE_FORM_STRUCTURE("error.incompatible.form.structure"),
 	ERROR_INCOMPATIBLE_FORM_STRUCTURE_MORE_INFO("error.incompatible.form.structure.more.info"),

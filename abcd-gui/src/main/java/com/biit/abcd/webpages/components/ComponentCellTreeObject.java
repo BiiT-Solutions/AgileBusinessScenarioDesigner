@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.components;
 
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.TreeObject;
@@ -9,7 +10,13 @@ public class ComponentCellTreeObject extends ComponentCell {
 
 	public void update(TreeObject treeObject) {
 		clear();
-		addLabel(treeObject.getName());
+		String name = null;
+		if (treeObject instanceof Form) {
+			name = treeObject.getLabel();
+		} else {
+			name = treeObject.getName();
+		}
+		addLabel(name);
 		addIcon(getIcon(treeObject));
 	}
 
