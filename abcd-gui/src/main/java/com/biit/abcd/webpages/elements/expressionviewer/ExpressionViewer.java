@@ -8,10 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.Category;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -27,6 +30,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -34,7 +38,10 @@ import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
+import com.biit.abcd.webpages.components.SelectTreeObjectWindow;
 import com.biit.abcd.webpages.components.StringInputWindow;
+import com.biit.abcd.webpages.components.WindowSelectDateUnit;
+import com.biit.form.TreeObject;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Alignment;
@@ -302,6 +309,7 @@ public class ExpressionViewer extends CssLayout {
 						} else if (expression instanceof ExpressionValueCustomVariable) {
 							SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
 							variableWindow.showCentered();
+							variableWindow.collapseFrom(Category.class);
 							variableWindow.setvalue((ExpressionValueCustomVariable) expression);
 							variableWindow.addAcceptActionListener(new AcceptActionListener() {
 								@Override
@@ -309,8 +317,7 @@ public class ExpressionViewer extends CssLayout {
 									ExpressionValueCustomVariable formReference = ((SelectFormElementVariableWindow) window)
 											.getValue();
 									if (formReference != null) {
-										// Update the already existing
-										// expression.
+										// Update the already existing expression.
 										((ExpressionValueCustomVariable) expression).setReference(formReference
 												.getReference());
 										((ExpressionValueCustomVariable) expression).setVariable(formReference
@@ -322,6 +329,47 @@ public class ExpressionViewer extends CssLayout {
 										MessageManager.showError(ServerTranslate
 												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
 									}
+								}
+							});
+						} else if (expression instanceof ExpressionValueTreeObjectReference) {
+							final SelectTreeObjectWindow selectElementWindow = new SelectTreeObjectWindow(
+									UserSessionHandler.getFormController().getForm(), false);
+							selectElementWindow.showCentered();
+							selectElementWindow.collapseFrom(Category.class);
+							selectElementWindow.select(((ExpressionValueTreeObjectReference) expression).getReference());
+							selectElementWindow.addAcceptActionListener(new AcceptActionListener() {
+
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									TreeObject treeObject = selectElementWindow.getSelectedTreeObject();
+									if (treeObject != null) {
+										((ExpressionValueTreeObjectReference) expression).setReference(treeObject);
+										((ExpressionValueTreeObjectReference) expression).setUnit(null);
+
+										// Detect if it is a date question to add units
+										if ((treeObject instanceof Question)
+												&& ((((Question) treeObject).getAnswerFormat()) != null)
+												&& ((Question) treeObject).getAnswerFormat().equals(AnswerFormat.DATE)) {
+											// Create a window for selecting the unit and assign
+											// it to the expression.
+											WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
+													.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
+											windowDate.addAcceptActionListener(new AcceptActionListener() {
+												@Override
+												public void acceptAction(AcceptCancelWindow window) {
+													((ExpressionValueTreeObjectReference) expression)
+															.setUnit(((WindowSelectDateUnit) window).getValue());
+													updateExpression();
+													setSelectedExpression(expression);
+													window.close();
+												}
+											});
+											windowDate.showCentered();
+										}
+									}
+									window.close();
+									updateExpression();
+									setSelectedExpression(expression);
 								}
 							});
 						}

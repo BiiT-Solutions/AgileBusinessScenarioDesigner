@@ -127,4 +127,13 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		variableSelection.setValue(expression.getVariable());
 	}
 
+	/**
+	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
+	 * 
+	 * @param collapseFrom
+	 */
+	public void collapseFrom(Class<?> collapseFrom) {
+		formQuestionTable.collapseFrom(collapseFrom);
+	}
+
 }

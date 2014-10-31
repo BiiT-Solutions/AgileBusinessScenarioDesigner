@@ -54,4 +54,13 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 			treeObjectTable.setValue(null);
 		}
 	}
+
+	/**
+	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
+	 * 
+	 * @param collapseFrom
+	 */
+	public void collapseFrom(Class<?> collapseFrom) {
+		treeObjectTable.collapseFrom(collapseFrom);
+	}
 }
