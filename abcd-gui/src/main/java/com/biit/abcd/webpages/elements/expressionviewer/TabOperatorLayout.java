@@ -56,28 +56,17 @@ public class TabOperatorLayout extends TabLayout {
 		createLogicalOperators(logicalLayout);
 		createLogicalFunctionsOperators(logicalLayout);
 		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
-		
-//		GridLayout controlsLayout = new GridLayout(GRID_COLUMNS, 4);
-//		controlsLayout.setWidth("100%");
-//		createControlOperators(controlsLayout);		
-//		accordion.addTab(controlsLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS), true);
+
+		// GridLayout controlsLayout = new GridLayout(GRID_COLUMNS, 4);
+		// controlsLayout.setWidth("100%");
+		// createControlOperators(controlsLayout);
+		// accordion.addTab(controlsLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS),
+		// true);
 
 		addComponent(accordion);
 		setComponentAlignment(accordion, Alignment.MIDDLE_CENTER);
 
 		this.setMargin(false);
-	}
-
-	private void createControlOperators(GridLayout layout) {
-		Button carriageReturnButton = createButton("\u00B6", new ClickListener() {
-			private static final long serialVersionUID = -8611397253545833133L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				addSymbolExpression(AvailableSymbol.PILCROW);
-			}
-		});
-		layout.addComponent(carriageReturnButton);
 	}
 
 	private void createMathOperators(GridLayout layout) {
