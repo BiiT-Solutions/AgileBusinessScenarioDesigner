@@ -10,6 +10,23 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.DiagramNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.DiagramObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.ExpressionNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.FormNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.GlobalVariableNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.GroupNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.NodeNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.PointNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.QuestionNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.RuleNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.SizeNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.WebMap;
@@ -59,17 +76,30 @@ public class SettingsWindow extends PopupWindow {
 
 							@Override
 							public void buttonClick(ClickEvent event) {
-								final AlertMessageWindow windowAccept = new AlertMessageWindow(
-										LanguageCodes.WARNING_LOST_UNSAVED_DATA);
-								windowAccept.addAcceptActionListener(new AcceptActionListener() {
-									@Override
-									public void acceptAction(AcceptCancelWindow window) {
-										ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
-										windowAccept.close();
-									}
-								});
-								windowAccept.showCentered();
-								close();
+								try {
+									UserSessionHandler.getFormController().checkUnsavedChanges();
+									ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
+									close();
+								} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
+										| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
+										| CustomVariableNotEqualsException | ExpressionNotEqualsException
+										| TableRuleNotEqualsException | RuleNotEqualsException
+										| DiagramNotEqualsException | DiagramObjectNotEqualsException
+										| NodeNotEqualsException | SizeNotEqualsException | PointNotEqualsException
+										| BiitTextNotEqualsException | GlobalVariableNotEqualsException
+										| VariableDataNotEqualsException e) {
+									final AlertMessageWindow windowAccept = new AlertMessageWindow(
+											LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+									windowAccept.addAcceptActionListener(new AcceptActionListener() {
+										@Override
+										public void acceptAction(AcceptCancelWindow window) {
+											ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
+											windowAccept.close();
+										}
+									});
+									windowAccept.showCentered();
+									close();
+								}
 							}
 						});
 				globalConstantsButton.setWidth("100%");
@@ -119,18 +149,31 @@ public class SettingsWindow extends PopupWindow {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(
-								LanguageCodes.WARNING_LOST_UNSAVED_DATA);
-						windowAccept.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
-								UserSessionHandler.logout();
-								windowAccept.close();
-							}
-						});
-						windowAccept.showCentered();
-						close();
+						try {
+							UserSessionHandler.getFormController().checkUnsavedChanges();
+							ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+							UserSessionHandler.logout();
+							close();
+						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
+								| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
+								| CustomVariableNotEqualsException | ExpressionNotEqualsException
+								| TableRuleNotEqualsException | RuleNotEqualsException | DiagramNotEqualsException
+								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
+								| PointNotEqualsException | BiitTextNotEqualsException
+								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+							final AlertMessageWindow windowAccept = new AlertMessageWindow(
+									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+							windowAccept.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+									UserSessionHandler.logout();
+									windowAccept.close();
+								}
+							});
+							windowAccept.showCentered();
+							close();
+						}
 					}
 				});
 		logoutButton.setWidth("100%");

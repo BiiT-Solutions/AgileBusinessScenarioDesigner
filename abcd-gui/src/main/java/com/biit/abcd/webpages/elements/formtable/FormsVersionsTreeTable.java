@@ -51,7 +51,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setSelectable(true);
 		setImmediate(true);
 		setMultiSelect(false);
-		setNullSelectionAllowed(true);
+		setNullSelectionAllowed(false);
 		setSizeFull();
 
 		addContainerProperty(FormsVersionsTreeTableProperties.FORM_LABEL, String.class, "",

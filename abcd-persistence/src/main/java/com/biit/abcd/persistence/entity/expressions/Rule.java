@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OrderBy;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.INameAttribute;
@@ -72,10 +73,10 @@ public class Rule extends StorableObject implements INameAttribute {
 	public void addExtraConditions(ExpressionChain extraConditions) {
 		if (extraConditions != null) {
 			if (conditions.getExpressions().isEmpty()) {
-				conditions.getExpressions().addAll(extraConditions.getExpressions());
+				conditions.addExpressions(extraConditions.getExpressions());
 			} else {
-				conditions.getExpressions().add(new ExpressionOperatorLogic(AvailableOperator.AND));
-				conditions.getExpressions().addAll(extraConditions.getExpressions());
+				conditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+				conditions.addExpressions(extraConditions.getExpressions());
 			}
 		}
 	}

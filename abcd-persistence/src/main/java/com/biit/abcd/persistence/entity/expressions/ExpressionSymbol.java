@@ -53,6 +53,9 @@ public class ExpressionSymbol extends Expression implements IExpressionType<Avai
 
 	@Override
 	protected String getExpression() {
+		if (value.equals(AvailableSymbol.PILCROW)) {
+			return "";
+		}
 		return getRepresentation();
 	}
 

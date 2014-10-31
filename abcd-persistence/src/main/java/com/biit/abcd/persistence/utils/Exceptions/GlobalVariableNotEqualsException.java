@@ -1,4 +1,4 @@
-package com.biit.abcd.core.utils.exceptions;
+package com.biit.abcd.persistence.utils.Exceptions;
 
 public class GlobalVariableNotEqualsException extends Exception {
 	private static final long serialVersionUID = 7930432834772660303L;

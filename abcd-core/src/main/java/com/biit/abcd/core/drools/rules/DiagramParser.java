@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -52,7 +53,7 @@ public class DiagramParser {
 	private List<Rule> parse(Diagram diagram, ExpressionChain extraConditions) throws ExpressionInvalidException,
 			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
 		List<Rule> newRules = new ArrayList<>();
-		List<DiagramObject> diagramNodes = diagram.getDiagramObjects();
+		Set<DiagramObject> diagramNodes = diagram.getDiagramObjects();
 		for (DiagramObject diagramNode : diagramNodes) {
 			// Start the algorithm for each diagram source defined in the main
 			// diagram
@@ -128,10 +129,8 @@ public class DiagramParser {
 	}
 
 	/**
-	 * A fork adds some extra condition or conditions to the rules that happen
-	 * after <br>
-	 * A fork and its outgoing links define a condition that a question or a
-	 * score must fulfill
+	 * A fork adds some extra condition or conditions to the rules that happen after <br>
+	 * A fork and its outgoing links define a condition that a question or a score must fulfill
 	 * 
 	 * @return
 	 * @throws RuleNotImplementedException
@@ -147,9 +146,6 @@ public class DiagramParser {
 		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
 			ExpressionChain expressionOfLinkCopy = (ExpressionChain) outLink.getExpressionChain().generateCopy();
 
-			// System.out.println("EXPRESSION LINK OF THE FORK: " +
-			// expressionOfLinkCopy);
-
 			if (forkNodeExpression != null) {
 				TreeObject treeObject = forkNodeExpression.getReference();
 				if ((treeObject instanceof Question)) {
@@ -161,10 +157,10 @@ public class DiagramParser {
 						// complete expression 'sex == male'.
 						if ((expressionOfLinkCopy.getExpressions().size() > 1)
 								&& !(expressionOfLinkCopy.getExpressions().get(1) instanceof ExpressionOperatorLogic)) {
-							expressionOfLinkCopy.getExpressions().add(1,
-									new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+							expressionOfLinkCopy
+									.addExpression(1, new ExpressionOperatorLogic(AvailableOperator.EQUALS));
 						} else {
-							expressionOfLinkCopy.getExpressions().clear();
+							expressionOfLinkCopy.removeAllExpressions();
 						}
 
 						break;
@@ -177,19 +173,15 @@ public class DiagramParser {
 						// In case of input we only have to add a copy of the
 						// link, which we do at the bottom of the loop.
 						if (expressionOfLinkCopy.getExpressions().size() <= 1) {
-							expressionOfLinkCopy.getExpressions().clear();
+							expressionOfLinkCopy.removeAllExpressions();
 						}
 						break;
 					}
 				}
-				// System.out.println("EXPRESSION ADDED TO FORK CONDITIONS: " +
-				// expressionOfLinkCopy);
 				// Add the condition of the fork path to the array of conditions
 				forkConditions.add(expressionOfLinkCopy);
 			}
 		}
-
-		// System.out.println("FORK CONDITIONS: " + forkConditions);
 
 		int forkConditionToRemove = 0;
 		for (ExpressionChain forkExpressionChain : forkConditions) {
@@ -201,8 +193,6 @@ public class DiagramParser {
 					if (!forkExpressionChainToNegate.equals(forkExpressionChain)) {
 
 						if (chekForAndsOrOrs(forkExpressionChainToNegate)) {
-							// System.out.println("CHAIN NEGATED: " +
-							// negateAndOrConditions(forkExpressionChainToNegate));
 							resultOfNegation.addExpressions(negateAndOrConditions(forkExpressionChainToNegate)
 									.getExpressions());
 							resultOfNegation.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
@@ -217,37 +207,20 @@ public class DiagramParser {
 				}
 				// Remove the last AND
 				if (resultOfNegation.getExpressions().size() > 1) {
-					resultOfNegation.getExpressions().remove(resultOfNegation.getExpressions().size() - 1);
+					resultOfNegation.removeExpression(resultOfNegation.getExpressions().size() - 1);
 				}
-				// System.out.println("RESULT OF NEGATION: " +
-				// resultOfNegation);
 				forkConditions.set(forkConditionToRemove, resultOfNegation);
 			}
 			forkConditionToRemove++;
 		}
 
-		// System.out.println("FORK CONDITIONS AFTER NEGATION, BEFORE PREVIOUS CONDITIONS: "
-		// + forkConditions);
-
 		if ((previousConditions != null) && (previousConditions.getExpressions() != null)
 				&& !(previousConditions.getExpressions().isEmpty())) {
 			for (ExpressionChain forkExpressionChain : forkConditions) {
-
-				// System.out.println("FORK EXPRESSION CHAIN BEFORE: " +
-				// forkExpressionChain);
-				// System.out.println("PREVIOUS EXPRESSIONS: " +
-				// previousConditions);
-
 				forkExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 				forkExpressionChain.addExpressions(previousConditions.getExpressions());
-
-				// System.out.println("FORK EXPRESSION CHAIN AFTER: " +
-				// forkExpressionChain);
 			}
 		}
-
-		// System.out.println("FORK CONDITIONS AFTER NEGATION, AFTER PREVIOUS CONDITIONS: "
-		// + forkConditions);
 
 		return forkConditions;
 	}
@@ -262,24 +235,6 @@ public class DiagramParser {
 			}
 		}
 		return false;
-	}
-
-	private static List<ExpressionChain> divideConditions(ExpressionChain expressionChain) {
-		List<ExpressionChain> expressionChainList = new ArrayList<ExpressionChain>();
-
-		ExpressionChain newExpressionChain = new ExpressionChain();
-		for (Expression expression : expressionChain.getExpressions()) {
-			if ((expression instanceof ExpressionOperatorLogic)
-					&& ((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.OR)) {
-				expressionChainList.add(newExpressionChain);
-				expressionChainList.add(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.OR)));
-				newExpressionChain = new ExpressionChain();
-			} else {
-				newExpressionChain.addExpression(expression);
-			}
-		}
-		expressionChainList.add(newExpressionChain);
-		return expressionChainList;
 	}
 
 	private static ExpressionChain negateAndOrConditions(ExpressionChain expressionChain) {

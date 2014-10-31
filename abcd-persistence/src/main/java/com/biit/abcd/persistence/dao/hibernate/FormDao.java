@@ -1,8 +1,6 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +20,6 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
-import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -52,6 +49,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 				expressionChain.updateChildrenSortSeqs();
 			}
 		}
+
 		// Sort the rules
 		Set<Rule> rulesList = entity.getRules();
 		if (rulesList != null && !rulesList.isEmpty()) {
@@ -77,7 +75,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		Set<Diagram> diagrams = entity.getDiagrams();
 		if (diagrams != null && !diagrams.isEmpty()) {
 			for (Diagram diagram : diagrams) {
-				List<DiagramObject> nodes = diagram.getDiagramObjects();
+				Set<DiagramObject> nodes = diagram.getDiagramObjects();
 				if (nodes != null && !nodes.isEmpty()) {
 					for (DiagramObject node : nodes) {
 						if (node instanceof DiagramLink) {
@@ -88,7 +86,6 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 				}
 			}
 		}
-
 		// Update previous versions validTo.
 		if (entity.getVersion() > 0) {
 			// 84600000 milliseconds in a day
@@ -155,85 +152,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	@Cacheable(value = "forms")
 	public List<Form> getAll() {
 		List<Form> result = super.getAll();
-		// For solving Hibernate bug
-		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
-		// list of children
-		// with @Orderby or @OrderColumn we use our own order manager.
-		sortChildren(result);
 		return result;
-	}
-
-	@Override
-	protected void sortChildren(List<Form> forms) {
-		for (Form form : forms) {
-			// Sort the expressions
-			Set<ExpressionChain> expressionChainList = form.getExpressionChains();
-			if (expressionChainList != null && !expressionChainList.isEmpty()) {
-				for (ExpressionChain expressionChain : expressionChainList) {
-					sortChildren(expressionChain);
-				}
-			}
-			// Sort the rules
-			Set<Rule> rulesList = form.getRules();
-			if (rulesList != null && !rulesList.isEmpty()) {
-				for (Rule rule : rulesList) {
-					sortChildren(rule.getConditions());
-					sortChildren(rule.getActions());
-				}
-			}
-			// Sort the table rule rows
-			Set<TableRule> tableRules = form.getTableRules();
-			if (tableRules != null && !tableRules.isEmpty()) {
-				for (TableRule tableRule : tableRules) {
-					List<TableRuleRow> tableRuleRows = tableRule.getRules();
-					if (tableRuleRows != null && !tableRuleRows.isEmpty()) {
-						for (TableRuleRow tableRuleRow : tableRuleRows) {
-							sortChildren(tableRuleRow.getConditions());
-							sortChildren(tableRuleRow.getAction());
-						}
-					}
-				}
-			}
-			// Sort the expressions inside the diagram links
-			Set<Diagram> diagrams = form.getDiagrams();
-			if (diagrams != null && !diagrams.isEmpty()) {
-				for (Diagram diagram : diagrams) {
-					List<DiagramObject> nodes = diagram.getDiagramObjects();
-					if (nodes != null && !nodes.isEmpty()) {
-						for (DiagramObject node : nodes) {
-							if (node instanceof DiagramLink) {
-								DiagramLink nodeLink = (DiagramLink) node;
-								sortChildren(nodeLink.getExpressionChain());
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private void sortChildren(ExpressionChain expressionChain) {
-		Collections.sort(expressionChain.getExpressions(), new ExpressionSort());
-		for (Expression child : expressionChain.getExpressions()) {
-			sortChildren(child);
-		}
-	}
-
-	private void sortChildren(Expression expression) {
-		if (expression instanceof ExpressionChain) {
-			ExpressionChain expressionChain = (ExpressionChain) expression;
-			Collections.sort(expressionChain.getExpressions(), new ExpressionSort());
-			for (Expression child : expressionChain.getExpressions()) {
-				sortChildren(child);
-			}
-		}
-	}
-
-	class ExpressionSort implements Comparator<Expression> {
-		@Override
-		public int compare(Expression o1, Expression o2) {
-			return (o1.getSortSeq() < o2.getSortSeq() ? -1 : (o1 == o2 ? 0 : 1));
-		}
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.IExpressionChainDao;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSort;
 import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
@@ -66,10 +66,4 @@ public class ExpressionChainDao extends GenericDao<ExpressionChain> implements I
 		}
 	}
 
-	class ExpressionSort implements Comparator<Expression> {
-		@Override
-		public int compare(Expression o1, Expression o2) {
-			return (o1.getSortSeq() < o2.getSortSeq() ? -1 : (o1 == o2 ? 0 : 1));
-		}
-	}
 }

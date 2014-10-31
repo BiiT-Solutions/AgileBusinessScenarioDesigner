@@ -2,7 +2,9 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
 import com.biit.abcd.webpages.components.ExpressionEditorTabComponent;
@@ -144,6 +146,15 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 			@Override
 			public void handleAction(Object sender, Object target) {
 				getSelectedViewer().selectPreviousExpression();
+			}
+		});
+
+		addShortcutListener(new ShortcutListener("NEW_LINE", KeyCode.ENTER, null) {
+			private static final long serialVersionUID = 1836548908896874267L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				getSelectedViewer().addElementToSelected(new ExpressionSymbol(AvailableSymbol.PILCROW));
 			}
 		});
 	}

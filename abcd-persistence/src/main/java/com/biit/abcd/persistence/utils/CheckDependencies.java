@@ -1,12 +1,13 @@
 package com.biit.abcd.persistence.utils;
 
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
@@ -89,7 +90,7 @@ public class CheckDependencies {
 	 */
 	private static void checkTreeObjectDependenciesInDiagram(Diagram diagram, TreeObject treeObject)
 			throws DependencyExistException {
-		List<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjectsList) {
 			if (diagramObject instanceof DiagramLink) {
 				checkTreeObjectDependeciesInExpressionChain(((DiagramLink) diagramObject).getExpressionChain(),
@@ -120,7 +121,7 @@ public class CheckDependencies {
 	 */
 	private static void checkTableRuleDependenciesInDiagram(Diagram diagram, TableRule tableRule)
 			throws DependencyExistException {
-		List<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjectsList) {
 			if (diagramObject instanceof DiagramTable) {
 				if (((DiagramTable) diagramObject).getTable().equals(tableRule)) {
@@ -147,7 +148,7 @@ public class CheckDependencies {
 	 * @throws DependencyExistException
 	 */
 	private static void checkRuleDependenciesInDiagram(Diagram diagram, Rule rule) throws DependencyExistException {
-		List<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjectsList) {
 			if (diagramObject instanceof DiagramRule) {
 				if (((DiagramRule) diagramObject).getRule().equals(rule)) {
@@ -176,7 +177,7 @@ public class CheckDependencies {
 	 */
 	private static void checkExpressionChainDependenciesInDiagram(Diagram diagram, ExpressionChain expressionChain)
 			throws DependencyExistException {
-		List<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 		for (DiagramObject diagramObject : diagramObjectsList) {
 			if (diagramObject instanceof DiagramExpression) {
 				if (((DiagramExpression) diagramObject).getExpression() != null

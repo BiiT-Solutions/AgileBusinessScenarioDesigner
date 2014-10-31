@@ -1,7 +1,6 @@
-package com.biit.abcd.core.utils;
+package com.biit.abcd.persistence.utils;
 
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.utils.FormComparator;
 import com.biit.abcd.persistence.utils.Exceptions.FormNotEqualsException;
 
 /**

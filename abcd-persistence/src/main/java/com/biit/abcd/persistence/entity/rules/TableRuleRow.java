@@ -42,8 +42,8 @@ public class TableRuleRow extends StorableObject {
 		conditions.setName("TableRuleRowCondition");
 		this.action = new ExpressionChain();
 		this.action.setName("TableRuleRowAction");
-		getConditions().getExpressions().add(question);
-		getConditions().getExpressions().add(answer);
+		getConditions().addExpression(question);
+		getConditions().addExpression(answer);
 		getAction().setExpressions(action.getExpressions());
 	}
 

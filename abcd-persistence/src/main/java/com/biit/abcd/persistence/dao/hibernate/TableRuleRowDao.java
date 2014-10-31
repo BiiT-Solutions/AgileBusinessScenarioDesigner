@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -9,12 +8,13 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.ITableRuleRowDao;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSort;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
 public class TableRuleRowDao extends GenericDao<TableRuleRow> implements ITableRuleRowDao {
-	
+
 	public TableRuleRowDao() {
 		super(TableRuleRow.class);
 	}
@@ -67,13 +67,6 @@ public class TableRuleRowDao extends GenericDao<TableRuleRow> implements ITableR
 			for (Expression child : expressionChain.getExpressions()) {
 				sortChildren(child);
 			}
-		}
-	}
-
-	class ExpressionSort implements Comparator<Expression> {
-		@Override
-		public int compare(Expression o1, Expression o2) {
-			return (o1.getSortSeq() < o2.getSortSeq() ? -1 : (o1 == o2 ? 0 : 1));
 		}
 	}
 }

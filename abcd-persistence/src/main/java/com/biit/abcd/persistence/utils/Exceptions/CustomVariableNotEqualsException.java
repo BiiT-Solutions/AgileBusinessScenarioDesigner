@@ -1,4 +1,4 @@
-package com.biit.abcd.core.utils.exceptions;
+package com.biit.abcd.persistence.utils.Exceptions;
 
 public class CustomVariableNotEqualsException extends NotEqualsException {
 	private static final long serialVersionUID = 6515195976214181420L;

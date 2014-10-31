@@ -51,7 +51,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		rootLayout.setSpacing(true);
 
 		globalVariableTable = new GlobalVariablesTable();
-		variableDataTable = new VariableDataTable();
+		variableDataTable = new VariableDataTable(null);
 
 		globalVariableTable.setSizeFull();
 		variableDataTable.setSizeFull();
@@ -67,7 +67,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				variableDataTable.removeAllItems();
+				createVariableDataTable((GlobalVariable) globalVariableTable.getValue());
 				variableDataTable.setVariable((GlobalVariable) globalVariableTable.getValue());
 			}
 		});
@@ -76,6 +76,16 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
 			globalVariableTable.addItem(globalVariable);
 		}
+	}
+
+	private void createVariableDataTable(GlobalVariable globalVariable) {
+		if (variableDataTable != null) {
+			rootLayout.removeComponent(variableDataTable);
+		}
+		variableDataTable = new VariableDataTable(globalVariable);
+		variableDataTable.setSizeFull();
+
+		rootLayout.addComponent(variableDataTable, 1);
 	}
 
 	private UpperMenu createUpperMenu() {
@@ -253,7 +263,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 						VariableData variableData = ((VariableDataWindow) window).getValue();
 						if (variableData != null) {
 							// Add item.
-							variableDataTable.addItem(variableData);
+							variableDataTable.addRow(variableData);
 							((GlobalVariable) globalVariableTable.getValue()).getVariableData().add(variableData);
 							AbcdLogger.info(this.getClass().getName(),
 									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "

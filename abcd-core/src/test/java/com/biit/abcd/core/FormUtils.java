@@ -127,6 +127,36 @@ public class FormUtils {
 		category.addChild(group3);
 		elementsMap.put("Group3", group3);
 
+		Group group4 = new Group();
+		group4.setName("Group4");
+		category.addChild(group4);
+		elementsMap.put("Group4", group4);
+
+		Group group5 = new Group();
+		group5.setName("Group5");
+		category.addChild(group5);
+		elementsMap.put("Group5", group5);
+
+		Group group6 = new Group();
+		group6.setName("Group6");
+		category.addChild(group6);
+		elementsMap.put("Group6", group6);
+
+		Group group7 = new Group();
+		group7.setName("Group7");
+		category.addChild(group7);
+		elementsMap.put("Group7", group7);
+
+		Group group8 = new Group();
+		group8.setName("Group8");
+		category.addChild(group8);
+		elementsMap.put("Group8", group8);
+
+		Group group9 = new Group();
+		group9.setName("Group9");
+		category.addChild(group9);
+		elementsMap.put("Group9", group9);
+
 		// Input field text.
 		Question question1 = new Question();
 		question1.setName("InsertText");
@@ -141,6 +171,48 @@ public class FormUtils {
 		question2.setAnswerType(AnswerType.RADIO);
 		group2.addChild(question2);
 		elementsMap.put("ChooseOne", question2);
+
+		Question question3 = new Question();
+		question3.setName("question3");
+		question3.setAnswerType(AnswerType.INPUT);
+		group2.addChild(question3);
+		elementsMap.put("question3", question3);
+
+		Question question4 = new Question();
+		question4.setName("question4");
+		question4.setAnswerType(AnswerType.INPUT);
+		group2.addChild(question4);
+		elementsMap.put("question4", question4);
+
+		Question question5 = new Question();
+		question5.setName("question5");
+		question5.setAnswerType(AnswerType.INPUT);
+		group2.addChild(question5);
+		elementsMap.put("question5", question5);
+
+		Question question6 = new Question();
+		question6.setName("question6");
+		question6.setAnswerType(AnswerType.INPUT);
+		group2.addChild(question6);
+		elementsMap.put("question6", question6);
+
+		Question question7 = new Question();
+		question7.setName("question7");
+		question7.setAnswerType(AnswerType.INPUT);
+		group2.addChild(question7);
+		elementsMap.put("question7", question7);
+
+		Question question8 = new Question();
+		question8.setName("question8");
+		question8.setAnswerType(AnswerType.INPUT);
+		group2.addChild(question8);
+		elementsMap.put("question8", question8);
+
+		Question question9 = new Question();
+		question9.setName("question9");
+		question9.setAnswerType(AnswerType.INPUT);
+		group2.addChild(question9);
+		elementsMap.put("question9", question9);
 
 		Answer answer1 = new Answer();
 		answer1.setName("Answer1");
@@ -163,31 +235,51 @@ public class FormUtils {
 		elementsMap.put("Answer4", answer4);
 
 		// Date
-		Question question3 = new Question();
-		question3.setName("InsertDate");
+		Question insertDate = new Question();
+		insertDate.setName("InsertDate");
 		question1.setAnswerType(AnswerType.INPUT);
 		question1.setAnswerFormat(AnswerFormat.DATE);
-		group2.addChild(question3);
-		elementsMap.put("InsertDate", question3);
+		group2.addChild(insertDate);
+		elementsMap.put("InsertDate", insertDate);
 
 		// Radio Button
-		Question question4 = new Question();
-		question4.setName("ChooseMore");
-		question4.setAnswerType(AnswerType.MULTI_CHECKBOX);
-		group2.addChild(question4);
-		elementsMap.put("ChooseMore", question4);
+		Question chooseMore = new Question();
+		chooseMore.setName("ChooseMore");
+		chooseMore.setAnswerType(AnswerType.MULTI_CHECKBOX);
+		group2.addChild(chooseMore);
+		elementsMap.put("ChooseMore", chooseMore);
 
 		Answer answer5 = new Answer();
 		answer5.setName("Answer5");
-		question4.addChild(answer5);
+		chooseMore.addChild(answer5);
 
 		Answer answer6 = new Answer();
 		answer6.setName("Answer6");
-		question4.addChild(answer6);
+		chooseMore.addChild(answer6);
 
 		Answer answer7 = new Answer();
 		answer7.setName("Answer7");
-		question4.addChild(answer7);
+		chooseMore.addChild(answer7);
+
+		Answer answer8 = new Answer();
+		answer8.setName("answer8");
+		chooseMore.addChild(answer8);
+
+		Answer answer9 = new Answer();
+		answer9.setName("Answer9");
+		chooseMore.addChild(answer9);
+
+		Answer answer10 = new Answer();
+		answer10.setName("Answer10");
+		chooseMore.addChild(answer10);
+
+		Answer answer11 = new Answer();
+		answer11.setName("Answer11");
+		chooseMore.addChild(answer11);
+
+		Answer answer12 = new Answer();
+		answer12.setName("Answer12");
+		chooseMore.addChild(answer12);
 
 		return elementsMap;
 	}
@@ -250,7 +342,7 @@ public class FormUtils {
 		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
 				elementsMap.get("Answer1"));
 		expressionChain.addExpression(answerReference);
-		tableRuleRow1.getConditions().getExpressions().add(expressionChain);
+		tableRuleRow1.getConditions().addExpression(expressionChain);
 
 		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
 				variableMap.get("cScore"));
@@ -347,7 +439,7 @@ public class FormUtils {
 		startNode.setJointjsId(IdGenerator.createId());
 		startNode.setType(DiagramObjectType.SOURCE);
 		startNode.setSize(new Size(1, 1));
-		startNode.setPosition(new Point(1,1));
+		startNode.setPosition(new Point(1, 1));
 		Node nodeSource = new Node(startNode.getJointjsId());
 		diagram.addDiagramObject(startNode);
 
@@ -357,7 +449,7 @@ public class FormUtils {
 		forkNode.setReference(questionReference);
 		forkNode.setJointjsId(IdGenerator.createId());
 		forkNode.setSize(new Size(2, 2));
-		forkNode.setPosition(new Point(1,1));
+		forkNode.setPosition(new Point(1, 1));
 		forkNode.setType(DiagramObjectType.FORK);
 		Node nodeFork = new Node(forkNode.getJointjsId());
 		diagram.addDiagramObject(forkNode);
@@ -373,7 +465,7 @@ public class FormUtils {
 		table1Node.setTable(tablesMap.get("table1"));
 		table1Node.setJointjsId(IdGenerator.createId());
 		table1Node.setSize(new Size(3, 3));
-		table1Node.setPosition(new Point(1,1));
+		table1Node.setPosition(new Point(1, 1));
 		table1Node.setType(DiagramObjectType.TABLE);
 		Node nodeTable = new Node(table1Node.getJointjsId());
 		diagram.addDiagramObject(table1Node);
@@ -389,7 +481,7 @@ public class FormUtils {
 		diagramEndNode1.setJointjsId(IdGenerator.createId());
 		diagramEndNode1.setType(DiagramObjectType.SINK);
 		diagramEndNode1.setSize(new Size(3, 3));
-		diagramEndNode1.setPosition(new Point(1,1));
+		diagramEndNode1.setPosition(new Point(1, 1));
 		Node nodeSink1 = new Node(diagramEndNode1.getJointjsId());
 		diagram.addDiagramObject(diagramEndNode1);
 
@@ -404,7 +496,7 @@ public class FormUtils {
 		expressionNode.setExpression(expressionsMap.get("Expression1"));
 		expressionNode.setJointjsId(IdGenerator.createId());
 		expressionNode.setSize(new Size(4, 4));
-		expressionNode.setPosition(new Point(1,1));
+		expressionNode.setPosition(new Point(1, 1));
 		expressionNode.setType(DiagramObjectType.CALCULATION);
 		Node nodeExpression = new Node(expressionNode.getJointjsId());
 		diagram.addDiagramObject(expressionNode);
@@ -421,7 +513,7 @@ public class FormUtils {
 		subDiagramNode.setDiagram(diagramsMap.get("Diagram2"));
 		subDiagramNode.setJointjsId(IdGenerator.createId());
 		subDiagramNode.setSize(new Size(5, 5));
-		subDiagramNode.setPosition(new Point(1,1));
+		subDiagramNode.setPosition(new Point(1, 1));
 		subDiagramNode.setType(DiagramObjectType.SINK);
 		Node diagramNode = new Node(subDiagramNode.getJointjsId());
 		diagram.addDiagramObject(subDiagramNode);
@@ -437,7 +529,7 @@ public class FormUtils {
 		diagramEndNode2.setJointjsId(IdGenerator.createId());
 		diagramEndNode2.setType(DiagramObjectType.SINK);
 		diagramEndNode2.setSize(new Size(6, 6));
-		diagramEndNode2.setPosition(new Point(1,1));
+		diagramEndNode2.setPosition(new Point(1, 1));
 		Node nodeSink2 = new Node(diagramEndNode2.getJointjsId());
 		diagram.addDiagramObject(diagramEndNode2);
 
@@ -463,7 +555,7 @@ public class FormUtils {
 		startNode.setJointjsId(IdGenerator.createId());
 		startNode.setType(DiagramObjectType.SOURCE);
 		startNode.setSize(new Size(1, 1));
-		startNode.setPosition(new Point(1,1));
+		startNode.setPosition(new Point(1, 1));
 		Node nodeSource = new Node(startNode.getJointjsId());
 		diagram.addDiagramObject(startNode);
 
@@ -471,7 +563,7 @@ public class FormUtils {
 		ruleNode.setRule(rulesMap.get("Rule1"));
 		ruleNode.setJointjsId(IdGenerator.createId());
 		ruleNode.setSize(new Size(2, 2));
-		ruleNode.setPosition(new Point(1,1));
+		ruleNode.setPosition(new Point(1, 1));
 		ruleNode.setType(DiagramObjectType.RULE);
 		Node nodeRule = new Node(ruleNode.getJointjsId());
 		diagram.addDiagramObject(ruleNode);
@@ -486,7 +578,7 @@ public class FormUtils {
 		DiagramSink diagramEndNode = new DiagramSink();
 		diagramEndNode.setJointjsId(IdGenerator.createId());
 		diagramEndNode.setSize(new Size(3, 3));
-		diagramEndNode.setPosition(new Point(1,1));
+		diagramEndNode.setPosition(new Point(1, 1));
 		diagramEndNode.setType(DiagramObjectType.SINK);
 		Node nodeSink = new Node(diagramEndNode.getJointjsId());
 		diagram.addDiagramObject(diagramEndNode);

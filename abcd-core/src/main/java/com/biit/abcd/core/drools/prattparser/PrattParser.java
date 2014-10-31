@@ -11,10 +11,12 @@ import com.biit.abcd.core.drools.prattparser.parselets.PrefixParselet;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
 
@@ -32,8 +34,7 @@ public class PrattParser {
 
 	/**
 	 * Simplifies the posterior calculus<br>
-	 * Transforms the list of expressions in a list of expression tokens, with
-	 * the type more accessible
+	 * Transforms the list of expressions in a list of expression tokens, with the type more accessible
 	 * 
 	 * @param tokens
 	 * @return
@@ -77,6 +78,12 @@ public class PrattParser {
 					&& ((ExpressionFunction) expression).getValue().equals(AvailableFunction.IF)) {
 				expTokenList.add(new ExpressionToken(ExpressionTokenType.NAME, new ExpressionValueString(
 						"DummyVariable")));
+			}
+			// Ignore new line symbols.
+			if (expression instanceof ExpressionSymbol) {
+				if (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW)) {
+					continue;
+				}
 			}
 			// If it is an operator
 			if (expression instanceof IExpressionType<?>) {

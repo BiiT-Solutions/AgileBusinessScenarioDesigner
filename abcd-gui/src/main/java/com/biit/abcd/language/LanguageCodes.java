@@ -211,6 +211,7 @@ public enum LanguageCodes {
 	ERROR_SELECT_VARIABLE("error.select.variable"),
 	ERROR_DROOLS_ENGINE("error.drools.engine"),
 	ERROR_REPEATED_TEST_SCENARIO_NAME("error.testscenario.repeatedName"),
+	ERROR_NOT_AUTHORIZED("error.not.authorized"),
 
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
@@ -456,6 +457,13 @@ public enum LanguageCodes {
 	
 	LAUNCH_TEST_WINDOW_CAPTION("launch.test.window.caption"),
 	LAUNCH_TEST_WINDOW_FORM_LABEL("launch.test.window.form.label"),
+	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label"), 
+	
+	INPUT_PROMPT_FLOAT("input.prompt.float"),
+	INPUT_PROMPT_DATE("input.prompt.date"),
+	INPUT_PROMPT_TEXT("input.prompt.text"),
+	INPUT_PROMPT_POSTAL_CODE("input.prompt.postalcode")
+	;
 	LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL("launch.test.window.test.scenario.label"),
 	
 	ERROR_INCOMPATIBLE_FORM_STRUCTURE("error.incompatible.form.structure"),

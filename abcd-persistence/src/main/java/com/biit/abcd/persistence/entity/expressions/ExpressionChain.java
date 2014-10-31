@@ -30,13 +30,11 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	private String name;
 
-	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
-	// we cannot use the list of children with @Orderby or @OrderColumn we use
-	// our own order manager.
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	// Orderby not works correctly but help the 2nd level cache to not unsort elements.
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
-	//@Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
+	// @SortComparator(value = ExpressionSort.class)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
@@ -180,6 +178,19 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		return expressions;
 	}
 
+	public void removeExpression(int index) {
+		expressions.remove(index);
+	}
+
+	/**
+	 * Only for using with hibernate.
+	 * 
+	 * @return
+	 */
+	public List<Expression> getExpressionsForInitializeSet() {
+		return expressions;
+	}
+
 	@Override
 	public String getName() {
 		return name;
@@ -274,11 +285,11 @@ public class ExpressionChain extends Expression implements INameAttribute {
 			super.copyData(object);
 			ExpressionChain expressionChain = (ExpressionChain) object;
 			setName(expressionChain.getName());
-			for (Expression expression : expressionChain.getExpressions()) {
+			for (Expression expression : expressionChain.expressions) {
 				try {
 					Expression expressionCopied = expression.getClass().newInstance();
 					expressionCopied.copyData(expression);
-					getExpressions().add(expressionCopied);
+					addExpression(expressionCopied);
 				} catch (InstantiationException | IllegalAccessException e) {
 					throw new NotValidStorableObjectException("Object '" + object
 							+ "' is not an instance of ExpressionChain.");

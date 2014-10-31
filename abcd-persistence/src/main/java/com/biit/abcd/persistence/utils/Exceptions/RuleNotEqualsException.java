@@ -1,4 +1,4 @@
-package com.biit.abcd.core.utils.exceptions;
+package com.biit.abcd.persistence.utils.Exceptions;
 
 public class RuleNotEqualsException extends NotEqualsException {
 	private static final long serialVersionUID = -7062533937986595286L;

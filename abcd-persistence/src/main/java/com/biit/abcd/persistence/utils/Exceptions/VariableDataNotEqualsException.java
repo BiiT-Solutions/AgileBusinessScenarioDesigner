@@ -1,4 +1,4 @@
-package com.biit.abcd.core.utils.exceptions;
+package com.biit.abcd.persistence.utils.Exceptions;
 
 public class VariableDataNotEqualsException extends Exception {
 	private static final long serialVersionUID = -5058916736512820531L;

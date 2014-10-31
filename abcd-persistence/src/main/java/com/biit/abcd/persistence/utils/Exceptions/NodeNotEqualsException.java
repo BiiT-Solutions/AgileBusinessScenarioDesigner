@@ -1,4 +1,4 @@
-package com.biit.abcd.core.utils.exceptions;
+package com.biit.abcd.persistence.utils.Exceptions;
 
 public class NodeNotEqualsException extends NotEqualsException {
 	private static final long serialVersionUID = -503526616442468963L;

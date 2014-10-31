@@ -16,6 +16,13 @@ public class DateManager {
 		return new SimpleDateFormat(dateFormat).format(date);
 	}
 
+	public static String convertDateToString(Timestamp timestamp, String dateFormat) {
+		if (timestamp == null) {
+			return new SimpleDateFormat(dateFormat).format(new Timestamp(0));
+		}
+		return new SimpleDateFormat(dateFormat).format(timestamp);
+	}
+
 	public static String convertDateToStringWithHours(Timestamp time) {
 		Date date = new Date(time.getTime());
 		return convertDateToString(date, DATE_FORMAT);

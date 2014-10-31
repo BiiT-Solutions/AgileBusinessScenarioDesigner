@@ -12,8 +12,7 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * Basic class for defining an expression. Any other expression must inherit
- * from this class.
+ * Basic class for defining an expression. Any other expression must inherit from this class.
  * 
  */
 @Entity
@@ -49,9 +48,8 @@ public abstract class Expression extends StorableObject {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a
-	 * Expression Evaluator. Not allowed characters are ',', '.', ':',
-	 * operators, ... that must filtered of the expression if necessary.
+	 * Returns the expression in string format that can be evaluated by a Expression Evaluator. Not allowed characters
+	 * are ',', '.', ':', operators, ... that must filtered of the expression if necessary.
 	 * 
 	 * @return
 	 */
@@ -95,7 +93,7 @@ public abstract class Expression extends StorableObject {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Expression.");
 		}
 	}
-	
+
 	public abstract Object getValue();
 
 }

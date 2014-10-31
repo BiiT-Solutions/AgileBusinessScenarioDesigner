@@ -4,8 +4,10 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.configuration.AbcdConfigurationReader;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.language.UserLocaleStringToDoubleConverter;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataDate;
@@ -14,6 +16,7 @@ import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalCode;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataText;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -59,8 +62,23 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		case DATE:
 			valueField = new DateField();
 			break;
-		default:
+		case NUMBER:
 			valueField = new TextField();
+			((TextField) valueField).setConverter(new UserLocaleStringToDoubleConverter());
+			((TextField) valueField).setNullRepresentation("");
+			((TextField) valueField).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_FLOAT));
+			break;
+		case POSTAL_CODE:
+			valueField = new TextField();
+			((TextField) valueField).setConverter(String.class);
+			((TextField) valueField).setNullRepresentation("");
+			((TextField) valueField).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_POSTAL_CODE));
+			break;
+		case TEXT:
+			valueField = new TextField();
+			((TextField) valueField).setConverter(String.class);
+			((TextField) valueField).setNullRepresentation("");
+			((TextField) valueField).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_TEXT));
 			break;
 		}
 		valueField.setCaption(ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_VALUE));
@@ -99,7 +117,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		}
 
 		try {
-			variableData.setValue(valueField.getValue());
+			variableData.setValue(valueField.getConvertedValue());
 		} catch (NotValidTypeInVariableData e) {
 			MessageManager.showError(e.getMessage());
 		}
@@ -118,7 +136,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	public void setValidFromEditable(boolean editable) {
 		validFrom.setEnabled(editable);
 	}
-	
+
 	public void setValidToEditable(boolean editable) {
 		validTo.setEnabled(editable);
 	}
@@ -131,7 +149,8 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		if (variable instanceof VariableDataText) {
 			((TextField) valueField).setValue(variable.toString());
 		} else if (variable instanceof VariableDataNumber) {
-			((TextField) valueField).setValue(variable.toString());
+			ObjectProperty<Double> property = new ObjectProperty<Double>((Double) variable.getValue());
+			((TextField) valueField).setPropertyDataSource(property);
 		} else if (variable instanceof VariableDataPostalCode) {
 			((TextField) valueField).setValue(variable.toString());
 		} else if (variable instanceof VariableDataDate) {
@@ -158,11 +177,14 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		switch (format) {
 		case NUMBER:
 			try {
-				Double.parseDouble(valueField.getValue().toString());
+				Double.parseDouble(valueField.getConvertedValue().toString());
 			} catch (Exception e) {
 				return false;
 			}
 			return true;
+		case POSTAL_CODE:
+			return valueField.getConvertedValue().toString()
+					.matches(AbcdConfigurationReader.getInstance().getPostalCodeMask());
 		default:
 			return true;
 		}
