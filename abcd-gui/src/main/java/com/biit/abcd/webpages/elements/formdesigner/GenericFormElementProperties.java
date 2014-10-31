@@ -94,7 +94,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					if (existTestScenariosLinked()) {
+//					if (existTestScenariosLinked()) {
 						final AlertMessageWindow windowAccept = new AlertMessageWindow(
 								LanguageCodes.WARNING_TEST_SCENARIOS_CLEAR_ID);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
@@ -107,10 +107,10 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 							}
 						});
 						windowAccept.showCentered();
-					} else {
-						element.setOriginalReference(element.getComparationId());
-						clearOriginalReference.setEnabled(false);
-					}
+//					} else {
+//						element.setOriginalReference(element.getComparationId());
+//						clearOriginalReference.setEnabled(false);
+//					}
 				}
 			});
 		}
