@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.core.SpringContextHelper;
@@ -77,6 +78,8 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	private void initializeTestScenarioData() {
 		testScenarioData = new ArrayList<SimpleTestScenarioView>();
 		testScenarioData.addAll(simpleTestScenarioViewDao.getAll());
+		// To show first the newer versions
+		Collections.reverse(testScenarioData);
 	}
 
 	/**

@@ -22,6 +22,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.TreeObject;
 
 /**
@@ -191,7 +193,8 @@ public class ExpressionToDroolsRule {
 	 */
 	private static boolean checkForGenericVariables(ExpressionChain expressionChain) {
 		for (Expression expression : expressionChain.getExpressions()) {
-			if (expression instanceof ExpressionValueGenericCustomVariable) {
+			if ((expression instanceof ExpressionValueGenericCustomVariable)
+					|| (expression instanceof ExpressionValueGenericVariable)) {
 				return true;
 			}
 		}
@@ -207,6 +210,8 @@ public class ExpressionToDroolsRule {
 	 */
 	private static ExpressionChain unwrapGenericVariables(ExpressionChain expressionChain) {
 
+		System.out.println("EXPRESSION CHAIN TO UNWRAP: " + expressionChain.getExpression());
+
 		// // To avoid modifying the original expression
 		ExpressionChain expressionChainCopy = (ExpressionChain) expressionChain.generateCopy();
 		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChainCopy
@@ -218,55 +223,11 @@ public class ExpressionToDroolsRule {
 		for (int originalExpressionIndex = 0; originalExpressionIndex < expressionChainCopy.getExpressions().size(); originalExpressionIndex++) {
 			Expression expression = expressionChainCopy.getExpressions().get(originalExpressionIndex);
 			if (expression instanceof ExpressionValueGenericCustomVariable) {
-				// The generic variable being analyzed
-				ExpressionValueGenericCustomVariable expressionValueGenericVariable = (ExpressionValueGenericCustomVariable) expression;
-				List<TreeObject> treeObjects = null;
-				CustomVariable customVariableOfGeneric = expressionValueGenericVariable.getVariable();
-				switch (expressionValueGenericVariable.getType()) {
-				case CATEGORY:
-					if (leftTreeObject instanceof Form) {
-						treeObjects = leftTreeObject.getAll(Category.class);
-					}
-					break;
-				case GROUP:
-					if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
-						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-							treeObjects = new ArrayList<TreeObject>();
-							for (TreeObject child : leftTreeObject.getChildren()) {
-								if (child instanceof Group) {
-									treeObjects.add(child);
-								}
-							}
-						}
-					}
-					break;
-				case QUESTION_CATEGORY:
-					if (leftTreeObject instanceof Category) {
-						// We only want the questions for the category
-						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-							treeObjects = new ArrayList<TreeObject>();
-							for (TreeObject child : leftTreeObject.getChildren()) {
-								if (child instanceof Question) {
-									treeObjects.add(child);
-								}
-							}
-						}
-					}
-					break;
-				case QUESTION_GROUP:
-					if (leftTreeObject instanceof Group) {
-						// We only want the questions for the group
-						if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-							treeObjects = new ArrayList<TreeObject>();
-							for (TreeObject child : leftTreeObject.getChildren()) {
-								if (child instanceof Question) {
-									treeObjects.add(child);
-								}
-							}
-						}
-					}
-					break;
-				}
+				// Unwrap the generic variables being analyzed
+				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
+				CustomVariable customVariableOfGeneric = expressionValueGenericCustomVariable.getVariable();
+				List<TreeObject> treeObjects = getUnwrappedTreeObjects(expressionValueGenericCustomVariable,
+						leftTreeObject);
 
 				// We have to create a CustomVariable for each treeObject found
 				// and add it to the expression
@@ -277,8 +238,21 @@ public class ExpressionToDroolsRule {
 						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 					}
 				}
+			} else if (expression instanceof ExpressionValueGenericVariable) {
+				// Unwrap the generic variables being analyzed
+				List<TreeObject> treeObjects = getUnwrappedTreeObjects((ExpressionValueGenericVariable) expression,
+						leftTreeObject);
+				// We have to create a TreeObjecReference for each treeObject
+				// found
+				// and add it to the expression
+				if ((treeObjects != null) && (!treeObjects.isEmpty())) {
+					for (TreeObject treeObject : treeObjects) {
+						generatedExpressionChain.addExpression(new ExpressionValueTreeObjectReference(treeObject));
+						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
+					}
+				}
 			} else {
-				// if it is not a generic value, we copy the same value
+				// if it is not a generic variable, we copy the same value
 				if (!((expression instanceof ExpressionSymbol) && (((ExpressionSymbol) expression).getValue()
 						.equals(AvailableSymbol.COMMA)))) {
 					generatedExpressionChain.addExpression(expression);
@@ -294,7 +268,58 @@ public class ExpressionToDroolsRule {
 			generatedExpressionChain.getExpressions().remove(generatedExpressionChain.getExpressions().size() - 2);
 		}
 		System.out.println("GENERATED EXPRESSION CHAIN: " + generatedExpressionChain.getExpression());
-		
+
 		return generatedExpressionChain;
+	}
+
+	private static List<TreeObject> getUnwrappedTreeObjects(
+			ExpressionValueGenericVariable expressionValueGenericVariable, TreeObject leftTreeObject) {
+		List<TreeObject> treeObjects = null;
+		switch (expressionValueGenericVariable.getType()) {
+		case CATEGORY:
+			if (leftTreeObject instanceof Form) {
+				treeObjects = leftTreeObject.getAll(Category.class);
+			}
+			break;
+		case GROUP:
+			if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
+				if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+					treeObjects = new ArrayList<TreeObject>();
+					for (TreeObject child : leftTreeObject.getChildren()) {
+						if (child instanceof Group) {
+							treeObjects.add(child);
+						}
+					}
+				}
+			}
+			break;
+		case QUESTION_CATEGORY:
+			if (leftTreeObject instanceof Category) {
+				// We only want the questions for the category
+				if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+					treeObjects = new ArrayList<TreeObject>();
+					for (TreeObject child : leftTreeObject.getChildren()) {
+						if (child instanceof Question) {
+							treeObjects.add(child);
+						}
+					}
+				}
+			}
+			break;
+		case QUESTION_GROUP:
+			if (leftTreeObject instanceof Group) {
+				// We only want the questions for the group
+				if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
+					treeObjects = new ArrayList<TreeObject>();
+					for (TreeObject child : leftTreeObject.getChildren()) {
+						if (child instanceof Question) {
+							treeObjects.add(child);
+						}
+					}
+				}
+			}
+			break;
+		}
+		return treeObjects;
 	}
 }

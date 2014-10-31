@@ -517,7 +517,7 @@ public class DroolsParser {
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 					ruleCore += "\tdouble avgValue = 0;\n";
 					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tavgValue+=variable\n";
+					ruleCore += "\t\tavgValue += variable;\n";
 					ruleCore += "\t}\n";
 					ruleCore += "\tavgValue = avgValue/(double)variablesList.size()\n";
 
@@ -532,7 +532,7 @@ public class DroolsParser {
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 					ruleCore += "\tdouble sumValue = 0;\n";
 					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tsumValue+=variable\n";
+					ruleCore += "\t\tsumValue += variable;\n";
 					ruleCore += "\t}\n";
 
 					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
