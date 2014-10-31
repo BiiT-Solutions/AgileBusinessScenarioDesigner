@@ -86,10 +86,14 @@ public class CustomCategoryEditor extends CustomComponent {
 				try {
 					TestScenarioGroup newTestScenarioGroup = customGroupEditor.getTestScenarioGroup()
 							.copyTestScenarioGroup();
-					getTestScenarioCategory().addChild(newTestScenarioGroup);
+
+					Integer childIndex = getTestScenarioCategory().getIndex(customGroupEditor.getTestScenarioGroup());
+					getTestScenarioCategory().addChild(childIndex+1, newTestScenarioGroup);
+					
 					CustomGroupEditor newCustomGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
 							newTestScenarioGroup);
-					addEditor(newCustomGroupEditor);
+					addEditor(newCustomGroupEditor, childIndex+1);
+					
 					setGroupButtonsListeners(newCustomGroupEditor);
 					customGroupEditor.setAddGroupButtonEnable(false);
 					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);
@@ -128,6 +132,10 @@ public class CustomCategoryEditor extends CustomComponent {
 
 	public void addEditor(CustomComponent groupEditor) {
 		editorLayout.addComponent(groupEditor);
+	}
+	
+	public void addEditor(CustomComponent groupEditor, int index) {
+		editorLayout.addComponent(groupEditor, index);
 	}
 
 	public void removeEditor(CustomComponent groupEditor) {

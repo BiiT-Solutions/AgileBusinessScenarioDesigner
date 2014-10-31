@@ -136,34 +136,48 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			testScenarioForm.setOriginalReference(formTreeObject.getOriginalReference());
 			testScenarioForm.setOrganizationId(((Form) formTreeObject).getOrganizationId());
 			testScenarioForm.setName(formTreeObject.getName());
+
+			System.out.println("FORM CREATED : " + testScenarioForm.getName());
+
 			// Copy children
-			for (TreeObject treeObject : formTreeObject.getChildren()) {
-				createTestScenarioForm(treeObject, testScenarioForm);
+			for (TreeObject child : formTreeObject.getChildren()) {
+				createTestScenarioForm(child, testScenarioForm);
 			}
 		} else if (formTreeObject instanceof Category) {
-			TestScenarioCategory testScenarioCategory = new TestScenarioCategory();
-			testScenarioCategory.setOriginalReference(formTreeObject.getOriginalReference());
-			testScenarioCategory.setName(formTreeObject.getName());
-			testScenarioTreeObjectParent.addChild(testScenarioCategory);
+			TreeObject testScenarioCategory = addChild(formTreeObject, testScenarioTreeObjectParent,
+					new TestScenarioCategory());
+
+			System.out.println("CATEGORY CREATED : " + testScenarioCategory.getName());
+
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
 				createTestScenarioForm(treeObject, testScenarioCategory);
 			}
 		} else if (formTreeObject instanceof Group) {
-			TestScenarioGroup testScenarioGroup = new TestScenarioGroup();
-			testScenarioGroup.setOriginalReference(formTreeObject.getOriginalReference());
-			testScenarioGroup.setName(formTreeObject.getName());
-			testScenarioTreeObjectParent.addChild(testScenarioGroup);
+			TreeObject testScenarioGroup = addChild(formTreeObject, testScenarioTreeObjectParent,
+					new TestScenarioGroup());
+			((TestScenarioGroup) testScenarioGroup).setRepeatable(((Group) formTreeObject).isRepeatable());
+
+			System.out.println("GROUP CREATED : " + testScenarioGroup.getName());
+
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
 				createTestScenarioForm(treeObject, testScenarioGroup);
 			}
 		} else if (formTreeObject instanceof Question) {
-			TestScenarioQuestion testScenarioQuestion = new TestScenarioQuestion();
-			testScenarioQuestion.setOriginalReference(formTreeObject.getOriginalReference());
-			testScenarioQuestion.setName(formTreeObject.getName());
-			testScenarioTreeObjectParent.addChild(testScenarioQuestion);
+			TreeObject testScenarioQuestion = addChild(formTreeObject, testScenarioTreeObjectParent,
+					new TestScenarioQuestion());
+
+			System.out.println("QUESTION CREATED : " + testScenarioQuestion.getName());
 		}
 		// Any other tree object type not taken into account
+	}
+
+	private TreeObject addChild(TreeObject formTreeObject, TreeObject testScenarioParent, TreeObject testScenarioChild)
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException {
+		testScenarioChild.setOriginalReference(formTreeObject.getOriginalReference());
+		testScenarioChild.setName(formTreeObject.getName());
+		testScenarioParent.addChild(testScenarioChild);
+		return testScenarioChild;
 	}
 }

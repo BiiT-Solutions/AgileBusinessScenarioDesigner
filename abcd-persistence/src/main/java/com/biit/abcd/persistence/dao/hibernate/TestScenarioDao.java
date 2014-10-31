@@ -1,7 +1,5 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -108,7 +106,6 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			TestScenario testScenario = (TestScenario) criteria.uniqueResult();
 			initializeTestScenario(testScenario);
 			session.getTransaction().commit();
-			sortTestScenarioTreeObjects(testScenario);
 			return testScenario;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
@@ -130,45 +127,11 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			List<TestScenario> testScenarios = criteria.list();
 			initializeSets(testScenarios);
 			session.getTransaction().commit();
-			sortTestScenarioTreeObjects(testScenarios);
 			return testScenarios;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
 			throw e;
 		}
 	}
-	
-	protected void sortTestScenarioTreeObjects(List<TestScenario> testScenarios) {
-		for (TestScenario testScenario : testScenarios) {
-			sortTestScenarioTreeObjects(testScenario);
-		}
-	}
-	
-	protected void sortTestScenarioTreeObjects(TestScenario testScenario) {
-		for (TreeObject treeObject : testScenario.getTestScenarioForm().getChildren()) {
-			sortChildren((TreeObject) treeObject);
-		}
-	}
-	
-	protected void sortChildren(List<TreeObject> treeObjects) {
-		for (TreeObject treeObject : treeObjects) {
-			sortChildren((TreeObject) treeObject);
-		}
-	}
 
-	protected void sortChildren(TreeObject treeObject) {
-		if (treeObject != null) {
-			Collections.sort(treeObject.getChildren(), new ChildrenSort());
-			for (TreeObject child : treeObject.getChildren()) {
-				sortChildren(child);
-			}
-		}
-	}
-
-	class ChildrenSort implements Comparator<TreeObject> {
-		@Override
-		public int compare(TreeObject o1, TreeObject o2) {
-			return (o1.getSortSeq() < o2.getSortSeq() ? -1 : (o1 == o2 ? 0 : 1));
-		}
-	}
 }
