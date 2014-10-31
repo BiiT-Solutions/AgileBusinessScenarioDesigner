@@ -15,12 +15,15 @@ import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.persistence.entity.StorableObject;
 
 public class CheckDependencies {
 
@@ -170,7 +173,7 @@ public class CheckDependencies {
 	}
 
 	/**
-	 * Look for rule dependencies inside the diagram<br>
+	 * Look up for rule dependencies inside the diagram<br>
 	 * 
 	 * @param diagram
 	 * @throws DependencyExistException
@@ -191,9 +194,62 @@ public class CheckDependencies {
 		}
 	}
 
+	/**
+	 * Look up for custom variables.<br>
+	 * 
+	 * @param diagram
+	 * @throws DependencyExistException
+	 */
 	public static void checkCustomVariableDependencies(Form form, CustomVariable customVariable)
 			throws DependencyExistException {
-		// TODO Auto-generated method stub
+		for (ExpressionChain expressionChain : form.getExpressionChains()) {
+			for (StorableObject storableObject : expressionChain.getAllInnerStorableObjects()) {
+				if (storableObject instanceof Expression) {
+					checkCustomVariableDependencies((Expression) storableObject, customVariable);
+				}
+			}
+		}
 
+		for (Rule rule : form.getRules()) {
+			for (StorableObject storableObject : rule.getAllInnerStorableObjects()) {
+				if (storableObject instanceof Expression) {
+					checkCustomVariableDependencies((Expression) storableObject, customVariable);
+				}
+			}
+		}
+
+		for (TableRule tableRule : form.getTableRules()) {
+			for (StorableObject storableObject : tableRule.getAllInnerStorableObjects()) {
+				if (storableObject instanceof Expression) {
+					checkCustomVariableDependencies((Expression) storableObject, customVariable);
+				}
+			}
+		}
+
+		for (Diagram diagram : form.getDiagrams()) {
+			for (StorableObject storableObject : diagram.getAllInnerStorableObjects()) {
+				if (storableObject instanceof Expression) {
+					checkCustomVariableDependencies((Expression) storableObject, customVariable);
+				}
+			}
+		}
+
+	}
+
+	private static void checkCustomVariableDependencies(Expression expression, CustomVariable customVariable)
+			throws DependencyExistException {
+		if (expression instanceof ExpressionValueCustomVariable) {
+			if (((ExpressionValueCustomVariable) expression).getVariable().equals(customVariable)) {
+				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName()
+						+ "'. Used in expression '" + expression.getRepresentation() + "'");
+			}
+		}
+
+		if (expression instanceof ExpressionValueGenericCustomVariable) {
+			if (((ExpressionValueGenericCustomVariable) expression).getVariable().equals(customVariable)) {
+				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName()
+						+ "'. Used in expression '" + expression.getRepresentation() + "'");
+			}
+		}
 	}
 }

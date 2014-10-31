@@ -101,6 +101,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 											// Impossible.
 										}
 									}
+									form.setLastVersion(true);
 									form.setCreatedBy(UserSessionHandler.getUser());
 									form.setUpdatedBy(UserSessionHandler.getUser());
 									form.setOrganizationId(newFormWindow.getOrganization().getOrganizationId());
