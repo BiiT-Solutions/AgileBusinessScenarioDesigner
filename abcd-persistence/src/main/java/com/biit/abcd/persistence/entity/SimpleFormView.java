@@ -5,8 +5,7 @@ import java.sql.Timestamp;
 import com.biit.form.interfaces.IBaseFormView;
 
 /**
- * As Lazy is not correctly configured, we use this class to show basic form
- * information in the Form Manager.
+ * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
  */
 public class SimpleFormView implements IBaseFormView {
 	private String name;
@@ -40,6 +39,7 @@ public class SimpleFormView implements IBaseFormView {
 		setAvailableFrom(form.getAvailableFrom());
 		setAvailableTo(form.getAvailableTo());
 		setOrganizationId(form.getOrganizationId());
+		setLastVersion(form.isLastVersion());
 	}
 
 	public String getName() {

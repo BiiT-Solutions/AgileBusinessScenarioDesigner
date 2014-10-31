@@ -106,7 +106,7 @@ public class FormVariables extends FormWebPageComponent {
 									+ "'.");
 				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
-					MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
+					MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
 				}
 			}
 		});
@@ -137,7 +137,7 @@ public class FormVariables extends FormWebPageComponent {
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
 
 			} catch (ConstraintViolationException cve) {
-				MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
+				MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
 			}
 		}
 	}

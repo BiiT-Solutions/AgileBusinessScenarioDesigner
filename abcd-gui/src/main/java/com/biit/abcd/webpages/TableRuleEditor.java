@@ -195,7 +195,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 							windowAccept.close();
 						} catch (DependencyExistException e) {
 							// Forbid the remove action if exist dependency.
-							MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+							MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
 									LanguageCodes.TABLE_RULE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
 						}
 
