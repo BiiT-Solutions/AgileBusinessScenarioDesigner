@@ -29,6 +29,15 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 
 	private List<CellSelectionListener> listeners;
 
+	private Action tab_next = new ShortcutAction("Tab", ShortcutAction.KeyCode.TAB, null);
+	private Action tab_prev = new ShortcutAction("Shift+Tab", ShortcutAction.KeyCode.TAB,
+			new int[] { ShortcutAction.ModifierKey.SHIFT });
+	private Action cur_down = new ShortcutAction("Down", ShortcutAction.KeyCode.ARROW_DOWN, null);
+	private Action cur_up = new ShortcutAction("Up", ShortcutAction.KeyCode.ARROW_UP, null);
+	private Action cur_left = new ShortcutAction("Left", ShortcutAction.KeyCode.ARROW_LEFT, null);
+	private Action cur_right = new ShortcutAction("Right", ShortcutAction.KeyCode.ARROW_RIGHT, null);
+	private Action enter = new ShortcutAction("Enter", ShortcutAction.KeyCode.ENTER, null);
+
 	public CellRowSelector() {
 		cursorCell = null;
 		selectedCells = new HashSet<Cell>();
@@ -231,7 +240,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 	@Override
 	public String getStyle(Table source, Object itemId, Object propertyId) {
 		if (propertyId == null) {
-			return "row-kiwi";
+			return "null";
 		}
 
 		if ((new Cell(itemId, propertyId)).equals(cursorCell)) {
@@ -270,15 +279,6 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 		}
 	}
 
-	Action tab_next = new ShortcutAction("Tab", ShortcutAction.KeyCode.TAB, null);
-	Action tab_prev = new ShortcutAction("Shift+Tab", ShortcutAction.KeyCode.TAB,
-			new int[] { ShortcutAction.ModifierKey.SHIFT });
-	Action cur_down = new ShortcutAction("Down", ShortcutAction.KeyCode.ARROW_DOWN, null);
-	Action cur_up = new ShortcutAction("Up", ShortcutAction.KeyCode.ARROW_UP, null);
-	Action cur_left = new ShortcutAction("Left", ShortcutAction.KeyCode.ARROW_LEFT, null);
-	Action cur_right = new ShortcutAction("Right", ShortcutAction.KeyCode.ARROW_RIGHT, null);
-	Action enter = new ShortcutAction("Enter", ShortcutAction.KeyCode.ENTER, null);
-
 	@Override
 	public Action[] getActions(Object target, Object sender) {
 		return new Action[] { tab_next, tab_prev, cur_down, cur_up, cur_left, cur_right, enter };
@@ -291,7 +291,7 @@ public class CellRowSelector implements ItemClickListener, CellStyleGenerator, H
 	// Fixes the error created when creating a mixed table
 	/**
 	 * Allows having a table with Cell Editors and Strings
-	 *
+	 * 
 	 * @param value
 	 *            : true to set the table as mixed
 	 */

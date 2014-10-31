@@ -41,10 +41,10 @@ public class NewConditionTable extends Table {
 		setSizeFull();
 
 		cellRowSelector = new CellRowSelector();
-
 		addItemClickListener(cellRowSelector);
 		setCellStyleGenerator(cellRowSelector);
 		addActionHandler(cellRowSelector);
+		
 		setSelectable(false);
 	}
 

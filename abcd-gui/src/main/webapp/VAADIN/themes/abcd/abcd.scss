@@ -442,21 +442,11 @@ $open-sans-pathPrefix: "./fonts/";
 		line-height: normal;
 	}
 	
-	.v-table-cell-content-cursor-cell {
-		box-shadow: inset 0px 0px 5px #000000;
-	}
-	
 	//Scrollable hack
 	#main-table .v-scrollable {
 		overflow-y: hidden !important;
 	}
-	
-	.v-table-cell-content-rowheader {
-		border-color: #c2c3c4;
-		background: transparent repeat-x;
-		background-image: linear-gradient(to bottom, #fefefe 0%, #efefef 51%, #e0e0e0 80%);
-	}
-	
+		
 	.v-table .v-selected, .black .v-table .v-selected {
 		background: #4d749f url(../reindeer/common/img/sel-bg.png) repeat-x;
 		color: #fff;
@@ -609,11 +599,23 @@ $open-sans-pathPrefix: "./fonts/";
 		padding: 0px;
 	}
 	
+	.v-table-cell-content-rowheader {
+		border-color: #c2c3c4;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #efefef 51%, #e0e0e0 80%);
+	}
+	
 	/* Cell/Row selector */
 	.v-table-cell-content-selected {
 		background: #6C94C0;
 		color: #fff;
 		text-shadow: #3b5a7a 0 1px 0;
+	}
+	
+	.v-table-cell-content-cursor-cell {
+		box-shadow: inset 0px 0px 5px #000000;
+		background: #6C94C0;
+		color: #fff;
 	}
 
 	/* Formula editor*/
