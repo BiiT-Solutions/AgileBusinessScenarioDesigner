@@ -25,6 +25,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
@@ -370,6 +371,30 @@ public class ExpressionViewer extends CssLayout {
 									window.close();
 									updateExpression();
 									setSelectedExpression(expression);
+								}
+							});
+						} else if(expression instanceof ExpressionValueGenericCustomVariable){
+							SelectFormGenericVariablesWindow genericVariableWindow = new SelectFormGenericVariablesWindow();
+							genericVariableWindow.showCentered();
+							genericVariableWindow.setvalue((ExpressionValueGenericCustomVariable) expression);
+							genericVariableWindow.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									ExpressionValueGenericCustomVariable formReference = ((SelectFormGenericVariablesWindow) window)
+											.getValue();
+									if (formReference != null) {
+										// Update the already existing expression.
+										((ExpressionValueGenericCustomVariable) expression).setType(formReference
+												.getType());
+										((ExpressionValueGenericCustomVariable) expression).setVariable(formReference
+												.getVariable());
+										window.close();
+										updateExpression();
+										setSelectedExpression(expression);
+									} else {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									}
 								}
 							});
 						}
