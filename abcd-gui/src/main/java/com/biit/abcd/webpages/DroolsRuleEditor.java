@@ -34,9 +34,9 @@ import com.vaadin.ui.UI;
 public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -1017932957756165996L;
 	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
-	private ExpressionEditorComponent ruleExpressionEditorComponent;
 	private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
 	private SelectDroolsRuleEditable tableSelectRule;
+	private ExpressionEditorComponent ruleExpressionEditorComponent;
 
 	public DroolsRuleEditor() {
 		super();

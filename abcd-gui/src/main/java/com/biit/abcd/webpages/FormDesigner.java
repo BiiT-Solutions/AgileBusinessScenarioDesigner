@@ -668,7 +668,8 @@ public class FormDesigner extends FormWebPageComponent {
 		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController()
 				.getTestScenarios(currentForm);
 		for (TestScenario testScenario : testScenarios) {
-			TestScenarioValidator.checkAndModifyTestScenarioStructure(currentForm, testScenario);
+			TestScenarioValidator testScenarioValidator = new TestScenarioValidator();
+			testScenarioValidator.checkAndModifyTestScenarioStructure(currentForm, testScenario);
 		}
 		return testScenarios;
 	}

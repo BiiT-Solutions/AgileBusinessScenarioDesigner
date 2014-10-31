@@ -14,7 +14,6 @@ import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.IncompatibleFormStructureException;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
-import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioAnswerImporter;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -29,7 +28,6 @@ import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidExcept
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.OrbeonImporter;
@@ -187,7 +185,7 @@ public class FormToDroolsExporter {
 	 * @throws ChildrenNotFoundException
 	 * @throws IncompatibleFormStructureException
 	 */
-	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, TestScenario testScenario)
+	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm iSubmittedForm)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
@@ -195,8 +193,6 @@ public class FormToDroolsExporter {
 			ChildrenNotFoundException, IncompatibleFormStructureException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
-		// Generate the submitted form based on the test scenario
-		ISubmittedForm iSubmittedForm = TestScenarioAnswerImporter.createSubmittedForm(form, testScenario);
 		// Obtain results
 		if ((rulesGenerator != null) && (iSubmittedForm != null)) {
 			return applyDrools(iSubmittedForm, rulesGenerator.getRules(), rulesGenerator.getGlobalVariables());

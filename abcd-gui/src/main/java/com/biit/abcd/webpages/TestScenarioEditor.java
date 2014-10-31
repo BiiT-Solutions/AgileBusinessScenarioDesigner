@@ -43,6 +43,14 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 	@Override
 	protected void initContent() {
+		// If there is no form, then go back to form manager.
+		if (UserSessionHandler.getFormController().getForm() == null) {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+			return;
+		}
+
 		initUpperMenu();
 
 		updateButtons(true);
@@ -75,9 +83,8 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		collapsibleLayout.setContent(testScenarioForm);
 		getWorkingAreaLayout().addComponent(collapsibleLayout);
 
-		if ((UserSessionHandler.getFormController().getForm() != null)
-				&& (UserSessionHandler.getTestScenariosController().getTestScenarios(
-						UserSessionHandler.getFormController().getForm()) != null)) {
+		if (UserSessionHandler.getTestScenariosController().getTestScenarios(
+				UserSessionHandler.getFormController().getForm()) != null) {
 
 			UserSessionHandler.getTestScenariosController().clearWorkVariables();
 			// Add tables

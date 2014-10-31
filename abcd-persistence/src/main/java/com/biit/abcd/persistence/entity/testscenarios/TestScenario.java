@@ -136,9 +136,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			testScenarioForm.setOriginalReference(formTreeObject.getOriginalReference());
 			testScenarioForm.setOrganizationId(((Form) formTreeObject).getOrganizationId());
 			testScenarioForm.setName(formTreeObject.getName());
-
-			System.out.println("FORM CREATED : " + testScenarioForm.getName());
-
+			testScenarioForm.setLabel(formTreeObject.getLabel());
 			// Copy children
 			for (TreeObject child : formTreeObject.getChildren()) {
 				createTestScenarioForm(child, testScenarioForm);
@@ -146,9 +144,6 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		} else if (formTreeObject instanceof Category) {
 			TreeObject testScenarioCategory = addChild(formTreeObject, testScenarioTreeObjectParent,
 					new TestScenarioCategory());
-
-			System.out.println("CATEGORY CREATED : " + testScenarioCategory.getName());
-
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
 				createTestScenarioForm(treeObject, testScenarioCategory);
@@ -157,9 +152,6 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			TreeObject testScenarioGroup = addChild(formTreeObject, testScenarioTreeObjectParent,
 					new TestScenarioGroup());
 			((TestScenarioGroup) testScenarioGroup).setRepeatable(((Group) formTreeObject).isRepeatable());
-
-			System.out.println("GROUP CREATED : " + testScenarioGroup.getName());
-
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
 				createTestScenarioForm(treeObject, testScenarioGroup);
@@ -167,8 +159,6 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		} else if (formTreeObject instanceof Question) {
 			TreeObject testScenarioQuestion = addChild(formTreeObject, testScenarioTreeObjectParent,
 					new TestScenarioQuestion());
-
-			System.out.println("QUESTION CREATED : " + testScenarioQuestion.getName());
 		}
 		// Any other tree object type not taken into account
 	}

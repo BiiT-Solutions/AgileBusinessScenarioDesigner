@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
@@ -29,13 +30,16 @@ import com.biit.orbeon.form.ISubmittedForm;
 
 public class TestScenarioAnswerImporter {
 
-	public static ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario)
+	private TestScenarioValidator testValidator = null;
+	
+	public ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario)
 			throws ChildrenNotFoundException, IncompatibleFormStructureException {
 		ISubmittedForm submittedForm = null;
 		if ((form != null) && (testScenario != null)) {
 			// If the test scenario is a subset of the form passed, we parse the
 			// structure
-			TestScenarioValidator.checkAndModifyTestScenarioStructure(form, testScenario);
+			testValidator = new TestScenarioValidator();
+			testValidator.checkAndModifyTestScenarioStructure(form, testScenario);
 			TestScenarioForm testForm = testScenario.getTestScenarioForm();
 			submittedForm = new SubmittedForm(testForm.getName());
 			// Get the categories
@@ -50,7 +54,7 @@ public class TestScenarioAnswerImporter {
 		return submittedForm;
 	}
 
-	private static void createCategory(TestScenarioCategory testCategory, ISubmittedForm submittedForm) {
+	private  void createCategory(TestScenarioCategory testCategory, ISubmittedForm submittedForm) {
 		// Add the category to the submittedForm
 		ICategory iCategory = new com.biit.abcd.core.drools.facts.inputform.SubmittedCategory(testCategory.getName());
 		submittedForm.addCategory(iCategory);
@@ -69,8 +73,8 @@ public class TestScenarioAnswerImporter {
 		}
 	}
 
-	private static void createGroupVariables(TestScenarioGroup testScenarioGroup, IGroup parentGroup) {
-		IGroup iGroup = new com.biit.abcd.core.drools.facts.inputform.SubmittedGroup(testScenarioGroup.getName());
+	private  void createGroupVariables(TestScenarioGroup testScenarioGroup, IGroup parentGroup) {
+		IGroup iGroup = new SubmittedGroup(testScenarioGroup.getName());
 		parentGroup.addGroup(iGroup);
 		List<TreeObject> groupChildren = testScenarioGroup.getChildren();
 		if (groupChildren != null) {
@@ -87,14 +91,14 @@ public class TestScenarioAnswerImporter {
 		}
 	}
 
-	private static void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, IGroup parentGroup) {
+	private  void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, IGroup parentGroup) {
 		IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(
 				testScenarioQuestion.getName());
 		setQuestionAnswer(testScenarioQuestion, iQuestion);
 		parentGroup.addQuestion(iQuestion);
 	}
 
-	private static void setQuestionAnswer(TestScenarioQuestion testScenarioQuestion, IQuestion iQuestion) {
+	private  void setQuestionAnswer(TestScenarioQuestion testScenarioQuestion, IQuestion iQuestion) {
 		TestAnswer testAnswer = testScenarioQuestion.getTestAnswer();
 		if ((testAnswer != null) && (testAnswer.getValue() != null)) {
 			// We have to separate the set of values to copy the behavior of the
@@ -124,7 +128,7 @@ public class TestScenarioAnswerImporter {
 		}
 	}
 
-	private static void createSubmittedFormFile(ISubmittedForm submittedForm) {
+	private  void createSubmittedFormFile(ISubmittedForm submittedForm) {
 		if (submittedForm != null) {
 			try {
 				String submmitedFormXml = ((SubmittedForm) submittedForm).generateXML();
@@ -135,5 +139,9 @@ public class TestScenarioAnswerImporter {
 				AbcdLogger.errorMessage(TestScenarioAnswerImporter.class.getName(), e);
 			}
 		}
+	}
+	
+	public List<String> getScenarioModifications(){
+		return testValidator.getScenarioModifications();
 	}
 }

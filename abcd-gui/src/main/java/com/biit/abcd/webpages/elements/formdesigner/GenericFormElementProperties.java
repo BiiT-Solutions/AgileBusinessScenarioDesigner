@@ -96,7 +96,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 				public void buttonClick(ClickEvent event) {
 					if (existTestScenariosLinked()) {
 						final AlertMessageWindow windowAccept = new AlertMessageWindow(
-								LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+								LanguageCodes.WARNING_TEST_SCENARIOS_CLEAR_ID);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {

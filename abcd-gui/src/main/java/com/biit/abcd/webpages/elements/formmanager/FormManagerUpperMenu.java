@@ -11,6 +11,7 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.IncompatibleFormStructureException;
+import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioAnswerImporter;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
@@ -40,6 +41,7 @@ import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.abcd.webpages.elements.droolsresults.DroolsSubmittedFormResultWindow;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
+import com.biit.abcd.webpages.elements.testscenario.ValidationReportWindow;
 import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -56,6 +58,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
 	private IFormDao formDao;
+	private ISubmittedForm submittedForm;
 
 	public FormManagerUpperMenu(FormManager parent) {
 		super();
@@ -182,26 +185,72 @@ public class FormManagerUpperMenu extends UpperMenu {
 									parent.setFormById(formId);
 									TestScenario testScenarioDB = UserSessionHandler.getTestScenariosController()
 											.getTestScenarioById(testScenarioId);
-									FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-									ISubmittedForm submittedForm;
-									try {
-										submittedForm = droolsExporter.processForm(UserSessionHandler
-												.getFormController().getForm(), UserSessionHandler
-												.getGlobalVariablesController().getGlobalVariables(), testScenarioDB);
+									final FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
 
-										if (submittedForm instanceof DroolsForm) {
-											final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-													((DroolsForm) submittedForm).getSubmittedForm(), UserSessionHandler
-															.getFormController().getForm());
-											droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
+									try {
+										// Generate the submitted form based on
+										// the test scenario
+										TestScenarioAnswerImporter testAnswerImporter = new TestScenarioAnswerImporter();
+										final ISubmittedForm generatedSumbittedForm = testAnswerImporter
+												.createSubmittedForm(UserSessionHandler.getFormController().getForm(),
+														testScenarioDB);
+
+										if ((testAnswerImporter.getScenarioModifications() != null)
+												&& !testAnswerImporter.getScenarioModifications().isEmpty()) {
+
+											final ValidationReportWindow windowAccept = new ValidationReportWindow(
+													LanguageCodes.WARNING_TEST_SCENARIOS_VALIDATOR_WINDOW_CAPTION,
+													testAnswerImporter.getScenarioModifications());
+											windowAccept.addAcceptActionListener(new AcceptActionListener() {
 												@Override
 												public void acceptAction(AcceptCancelWindow window) {
-													droolsResultWindow.close();
+													try {
+														submittedForm = droolsExporter.processForm(UserSessionHandler
+																.getFormController().getForm(), UserSessionHandler
+																.getGlobalVariablesController().getGlobalVariables(),
+																generatedSumbittedForm);
+
+														if (submittedForm instanceof DroolsForm) {
+															final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
+																	((DroolsForm) submittedForm).getSubmittedForm(),
+																	UserSessionHandler.getFormController().getForm());
+															droolsResultWindow
+																	.addAcceptActionListener(new AcceptActionListener() {
+																		@Override
+																		public void acceptAction(
+																				AcceptCancelWindow window) {
+																			droolsResultWindow.close();
+																		}
+																	});
+															droolsResultWindow.showCentered();
+														}
+													} catch (Exception e) {
+													}
+													windowAccept.close();
+													launchTestScenarioWindow.close();
 												}
 											});
-											droolsResultWindow.showCentered();
+											windowAccept.showCentered();
+										} else {
+											submittedForm = droolsExporter.processForm(UserSessionHandler
+													.getFormController().getForm(), UserSessionHandler
+													.getGlobalVariablesController().getGlobalVariables(),
+													generatedSumbittedForm);
+
+											if (submittedForm instanceof DroolsForm) {
+												final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
+														((DroolsForm) submittedForm).getSubmittedForm(),
+														UserSessionHandler.getFormController().getForm());
+												droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
+													@Override
+													public void acceptAction(AcceptCancelWindow window) {
+														droolsResultWindow.close();
+													}
+												});
+												droolsResultWindow.showCentered();
+											}
+											launchTestScenarioWindow.close();
 										}
-										launchTestScenarioWindow.close();
 									} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
 										MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE,
 												e.getMessage());

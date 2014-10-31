@@ -1,5 +1,6 @@
 package com.biit.abcd.core.drools.facts.inputform.importer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,8 +32,9 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class TestScenarioValidator {
 
-	private static HashMap<String, TreeObject> originalReferenceTreeObjectMap;
-	private static TestScenario testScenarioAnalyzed;
+	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
+	private TestScenario testScenarioAnalyzed;
+	private List<String> scenarioModifications;
 
 	/**
 	 * Compares the test scenario structure against the form structure and
@@ -41,11 +43,9 @@ public class TestScenarioValidator {
 	 * @param form
 	 * @param testScenario
 	 */
-	public static void checkAndModifyTestScenarioStructure(Form form, TestScenario testScenario) {
+	public void checkAndModifyTestScenarioStructure(Form form, TestScenario testScenario) {
 		if (form != null && testScenario != null) {
-
-			printTestScenarioOrder(testScenario.getTestScenarioForm(), "");
-
+			scenarioModifications = new ArrayList<String>();
 			testScenarioAnalyzed = testScenario;
 			// First check the changes in the structure already existent
 			originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
@@ -67,31 +67,21 @@ public class TestScenarioValidator {
 			for (TreeObject treeObject : form.getChildren()) {
 				checkRemainingFormStructure(treeObject, testScenario.getTestScenarioForm());
 			}
-
-			printTestScenarioOrder(testScenario.getTestScenarioForm(), "");
 		}
 	}
 
-	private static void printTestScenarioOrder(TreeObject treeObject, String tabs) {
-		System.out.println(tabs + treeObject.getName());
-		if (treeObject.getChildren() != null) {
-			for (TreeObject child : treeObject.getChildren()) {
-				printTestScenarioOrder(child, tabs + "\t");
-			}
-		}
-	}
-
-	private static void checkTestScenarioCategoryStructure(TestScenarioCategory testScenarioCategory) {
+	private void checkTestScenarioCategoryStructure(TestScenarioCategory testScenarioCategory) {
 		try {
 			if (!originalReferenceTreeObjectMap.containsKey(testScenarioCategory.getOriginalReference())) {
+				getScenarioModifications().add("Category: " + testScenarioCategory.getName() + " deleted.");
 				testScenarioCategory.remove();
-				System.out.println("CATEGORY DELETED");
 			} else {
 				TreeObject category = originalReferenceTreeObjectMap.get(testScenarioCategory.getOriginalReference());
 				if (!category.getName().equals(testScenarioCategory.getName())) {
 					String oldName = testScenarioCategory.getName();
 					testScenarioCategory.setName(category.getName());
-					System.out.println("CATEGORY NAME CHANGED FROM: " + oldName + " TO:" + category.getName());
+					getScenarioModifications().add(
+							"Category name changed from: " + oldName + " to:" + category.getName());
 				}
 				List<TreeObject> children = testScenarioCategory.getChildren();
 				for (int i = 0; i < children.size(); i++) {
@@ -109,12 +99,12 @@ public class TestScenarioValidator {
 		}
 	}
 
-	private static void checkTestScenarioGroupStructure(TestScenarioGroup testScenarioGroup) {
+	private void checkTestScenarioGroupStructure(TestScenarioGroup testScenarioGroup) {
 		try {
 			// If the group doesn't exists in the original form
 			if (!originalReferenceTreeObjectMap.containsKey(testScenarioGroup.getOriginalReference())) {
+				getScenarioModifications().add("Group: " + testScenarioGroup.getName() + " deleted.");
 				testScenarioGroup.remove();
-				System.out.println("GROUP DELETED");
 			} else {
 				TreeObject group = originalReferenceTreeObjectMap.get(testScenarioGroup.getOriginalReference());
 				if (group.getPathName().equals(testScenarioGroup.getPathName())) {
@@ -124,27 +114,35 @@ public class TestScenarioValidator {
 							TestScenarioGroup newTestScenarioGroup = testScenarioGroup.copyTestScenarioGroup();
 							newTestScenarioGroup.setRepeatable(true);
 							replaceTestScenarioGroup(testScenarioGroup, newTestScenarioGroup);
-							System.out.println("GROUP REPLACED - Test scenario group not repeatable, Form group repeatable");
+							getScenarioModifications().add(
+									"Group: " + testScenarioGroup.getName()
+											+ " replaced - Test scenario group not repeatable, Form group repeatable");
 
 						} else if (testScenarioGroup.isRepeatable() && !((Group) group).isRepeatable()) {
 							TestScenarioGroup newTestScenarioGroup = testScenarioGroup.copyTestScenarioGroup();
 							newTestScenarioGroup.setRepeatable(false);
 							replaceTestScenarioGroup(testScenarioGroup, newTestScenarioGroup);
-							System.out.println("GROUP REPLACED - Test scenario group repeatable, Form group not repeatable");
+							getScenarioModifications().add(
+									"Group: " + testScenarioGroup.getName()
+											+ " replaced - Test scenario group repeatable, Form group not repeatable");
 						}
 					}
 				} else {
 					// If the group exists but is in a different position
 					TreeObject whatToMove = testScenarioGroup;
+					TreeObject oldParent = testScenarioGroup.getParent();
 					TreeObject whereToMove = testScenarioAnalyzed.getTestScenarioForm()
 							.getOriginalReferenceTreeObjectMap().get(group.getParent().getOriginalReference());
 					TreeObject.move(whatToMove, whereToMove);
-					System.out.println("GROUP MOVED");
+					getScenarioModifications().add(
+							"Group " + testScenarioGroup.getName() + " moved from: " + oldParent.getName() + " to: "
+									+ testScenarioGroup.getParent().getName());
+
 				}
 				if (!group.getName().equals(testScenarioGroup.getName())) {
 					String oldName = testScenarioGroup.getName();
 					testScenarioGroup.setName(group.getName());
-					System.out.println("CATEGORY NAME CHANGED FROM: " + oldName + " TO:" + testScenarioGroup.getName());
+					getScenarioModifications().add("Group name changed from: " + oldName + " to:" + group.getName());
 				}
 				List<TreeObject> children = testScenarioGroup.getChildren();
 				for (int i = 0; i < children.size(); i++) {
@@ -163,27 +161,28 @@ public class TestScenarioValidator {
 		}
 	}
 
-	private static void checkTestScenarioQuestionStructure(TestScenarioQuestion testScenarioQuestion) {
+	private void checkTestScenarioQuestionStructure(TestScenarioQuestion testScenarioQuestion) {
 		try {
 			if (!originalReferenceTreeObjectMap.containsKey(testScenarioQuestion.getOriginalReference())) {
+				getScenarioModifications().add("Question: " + testScenarioQuestion.getName() + " deleted.");
 				testScenarioQuestion.remove();
-				System.out.println("QUESTION DELETED");
 
 			} else {
-				TreeObject treeObject = originalReferenceTreeObjectMap.get(testScenarioQuestion.getOriginalReference());
-				if (!treeObject.getName().equals(testScenarioQuestion.getName())) {
+				TreeObject question = originalReferenceTreeObjectMap.get(testScenarioQuestion.getOriginalReference());
+				if (!question.getName().equals(testScenarioQuestion.getName())) {
 					String oldName = testScenarioQuestion.getName();
-					testScenarioQuestion.setName(treeObject.getName());
-					System.out.println("QUESTION NAME CHANGED FROM: " + oldName + " TO:" + treeObject.getName());
+					testScenarioQuestion.setName(question.getName());
+					getScenarioModifications().add(
+							"Question name changed from: " + oldName + " to:" + question.getName());
 				}
-				checkAnswerType((Question) treeObject, testScenarioQuestion);
+				checkAnswerType((Question) question, testScenarioQuestion);
 			}
 		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
 
-	private static void replaceTestScenarioGroup(TestScenarioGroup oldValue, TestScenarioGroup newValue) {
+	private void replaceTestScenarioGroup(TestScenarioGroup oldValue, TestScenarioGroup newValue) {
 		try {
 			TreeObject parent = oldValue.getParent();
 			Integer oldChildIndex = parent.getIndex(oldValue);
@@ -206,7 +205,7 @@ public class TestScenarioValidator {
 		}
 	}
 
-	private static void checkRemainingFormStructure(TreeObject treeObject, TreeObject testScenarioObjectParent) {
+	private void checkRemainingFormStructure(TreeObject treeObject, TreeObject testScenarioObjectParent) {
 		if (!originalReferenceTreeObjectMap.containsKey(treeObject.getOriginalReference())) {
 			createTestScenarioObject(treeObject, testScenarioObjectParent);
 		} else {
@@ -217,7 +216,7 @@ public class TestScenarioValidator {
 		}
 	}
 
-	private static void createTestScenarioObject(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent) {
+	private void createTestScenarioObject(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent) {
 		if (!originalReferenceTreeObjectMap.containsKey(formTreeObject.getOriginalReference())) {
 			try {
 				if (formTreeObject instanceof Category) {
@@ -227,6 +226,7 @@ public class TestScenarioValidator {
 					testScenarioTreeObjectParent.addChild(testScenarioCategory);
 					originalReferenceTreeObjectMap.put(testScenarioCategory.getOriginalReference(),
 							testScenarioCategory);
+					getScenarioModifications().add("Category " + testScenarioCategory.getName() + " created empty.");
 					// Copy children
 					for (TreeObject treeObject : formTreeObject.getChildren()) {
 						createTestScenarioObject(treeObject, testScenarioCategory);
@@ -235,8 +235,10 @@ public class TestScenarioValidator {
 					TestScenarioGroup testScenarioGroup = new TestScenarioGroup();
 					testScenarioGroup.setOriginalReference(formTreeObject.getOriginalReference());
 					testScenarioGroup.setName(formTreeObject.getName());
+					testScenarioGroup.setRepeatable(((Group) formTreeObject).isRepeatable());
 					testScenarioTreeObjectParent.addChild(testScenarioGroup);
 					originalReferenceTreeObjectMap.put(testScenarioGroup.getOriginalReference(), testScenarioGroup);
+					getScenarioModifications().add("Group " + testScenarioGroup.getName() + " created empty.");
 					// Copy children
 					for (TreeObject treeObject : formTreeObject.getChildren()) {
 						createTestScenarioObject(treeObject, testScenarioGroup);
@@ -248,6 +250,7 @@ public class TestScenarioValidator {
 					testScenarioTreeObjectParent.addChild(testScenarioQuestion);
 					originalReferenceTreeObjectMap.put(testScenarioQuestion.getOriginalReference(),
 							testScenarioQuestion);
+					getScenarioModifications().add("Question " + testScenarioQuestion.getName() + " created empty.");
 				}
 				// Any other tree object type not taken into account
 			} catch (FieldTooLongException | CharacterNotAllowedException | NotValidChildException e) {
@@ -263,12 +266,12 @@ public class TestScenarioValidator {
 	 * @param testScenario
 	 * @return
 	 */
-	public static boolean validateToLaunch(Form form, TestScenario testScenario) {
+	public boolean validateToLaunch(Form form, TestScenario testScenario) {
 		originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
 		return validateToLaunch(testScenario.getTestScenarioForm());
 	}
 
-	private static boolean validateToLaunch(TreeObject testScenarioObject) {
+	private boolean validateToLaunch(TreeObject testScenarioObject) {
 		if (originalReferenceTreeObjectMap.containsKey(testScenarioObject.getOriginalReference())) {
 			for (TreeObject treeObject : testScenarioObject.getChildren()) {
 				if (!validateToLaunch(treeObject)) {
@@ -284,7 +287,7 @@ public class TestScenarioValidator {
 	/**
 	 * Returns true if the test answer matches the question type
 	 */
-	private static void checkAnswerType(Question question, TestScenarioQuestion testScenarioQuestion) {
+	private void checkAnswerType(Question question, TestScenarioQuestion testScenarioQuestion) {
 		TestAnswer oldTestAnswer = testScenarioQuestion.getTestAnswer();
 		TestAnswer testAnswer = testScenarioQuestion.getTestAnswer();
 		switch (question.getAnswerType()) {
@@ -293,8 +296,7 @@ public class TestScenarioValidator {
 				TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
 				if (newTestScenarioQuestion != null) {
 					newTestScenarioQuestion.setTestAnswer(new TestAnswerRadioButton());
-					System.out.println("QUESTION TEST ANSWER REPLACED: " + oldTestAnswer.getClass().getName()
-							+ " TO: TestAnswerRadioButton");
+					setTestAnswerReplaceMessage(oldTestAnswer, newTestScenarioQuestion.getTestAnswer());
 				}
 			}
 			break;
@@ -303,8 +305,7 @@ public class TestScenarioValidator {
 				TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
 				if (newTestScenarioQuestion != null) {
 					newTestScenarioQuestion.setTestAnswer(new TestAnswerMultiCheckBox());
-					System.out.println("QUESTION TEST ANSWER REPLACED: " + oldTestAnswer.getClass().getName()
-							+ " TO: TestAnswerMultiCheckBox");
+					setTestAnswerReplaceMessage(oldTestAnswer, newTestScenarioQuestion.getTestAnswer());
 				}
 			}
 			break;
@@ -315,8 +316,7 @@ public class TestScenarioValidator {
 					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
 					if (newTestScenarioQuestion != null) {
 						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputText());
-						System.out.println("QUESTION TEST ANSWER REPLACED: " + oldTestAnswer.getClass().getName()
-								+ " TO: TestAnswerInputText");
+						setTestAnswerReplaceMessage(oldTestAnswer, newTestScenarioQuestion.getTestAnswer());
 					}
 				}
 				break;
@@ -325,8 +325,7 @@ public class TestScenarioValidator {
 					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
 					if (newTestScenarioQuestion != null) {
 						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputPostalCode());
-						System.out.println("QUESTION TEST ANSWER REPLACED: " + oldTestAnswer.getClass().getName()
-								+ " TO: TestAnswerInputPostalCode");
+						setTestAnswerReplaceMessage(oldTestAnswer, newTestScenarioQuestion.getTestAnswer());
 					}
 				}
 				break;
@@ -335,8 +334,7 @@ public class TestScenarioValidator {
 					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
 					if (newTestScenarioQuestion != null) {
 						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputNumber());
-						System.out.println("QUESTION TEST ANSWER REPLACED: " + oldTestAnswer.getClass().getName()
-								+ " TO: TestAnswerInputNumber");
+						setTestAnswerReplaceMessage(oldTestAnswer, newTestScenarioQuestion.getTestAnswer());
 					}
 				}
 				break;
@@ -345,8 +343,7 @@ public class TestScenarioValidator {
 					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);
 					if (newTestScenarioQuestion != null) {
 						newTestScenarioQuestion.setTestAnswer(new TestAnswerInputDate());
-						System.out.println("QUESTION TEST ANSWER REPLACED: " + oldTestAnswer.getClass().getName()
-								+ " TO: TestAnswerInputDate");
+						setTestAnswerReplaceMessage(oldTestAnswer, newTestScenarioQuestion.getTestAnswer());
 					}
 				}
 				break;
@@ -354,10 +351,17 @@ public class TestScenarioValidator {
 		}
 	}
 
-	private static TestScenarioQuestion replaceTestScenarioQuestion(TestScenarioQuestion testScenarioQuestion) {
+	private void setTestAnswerReplaceMessage(TestAnswer oldTestAnswer, TestAnswer newTestAnswer) {
+		getScenarioModifications().add(
+				"Test answer replaced. Old class: " + oldTestAnswer.getClass().getSimpleName() + ". New class: "
+						+ newTestAnswer.getClass().getSimpleName() + ".");
+	}
+
+	private TestScenarioQuestion replaceTestScenarioQuestion(TestScenarioQuestion testScenarioQuestion) {
 		TestScenarioQuestion newTestScenarioQuestion = null;
 		try {
 			replaceTreeObjectChild(testScenarioQuestion, testScenarioQuestion.copyTestScenarioQuestion());
+			getScenarioModifications().add("Question " + testScenarioQuestion.getName() + " test answer replaced.");
 		} catch (FieldTooLongException | CharacterNotAllowedException e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
@@ -370,7 +374,7 @@ public class TestScenarioValidator {
 	 * @param oldChild
 	 * @param newChild
 	 */
-	private static void replaceTreeObjectChild(TreeObject oldChild, TreeObject newChild) {
+	private void replaceTreeObjectChild(TreeObject oldChild, TreeObject newChild) {
 		try {
 			TreeObject parent = oldChild.getParent();
 			Integer childIndex = parent.getIndex(oldChild);
@@ -379,5 +383,9 @@ public class TestScenarioValidator {
 		} catch (NotValidChildException | DependencyExistException e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
+	}
+
+	public List<String> getScenarioModifications() {
+		return scenarioModifications;
 	}
 }

@@ -79,6 +79,8 @@ public enum LanguageCodes {
 	WARNING_NEW_VERSION("warning.new.version"),
 	WARNING_CLEAR_CACHE("warning.clear.cache"),
 	WARNING_TEST_SCENARIOS_LINKED("warning.test.scenarios.linked"),
+	WARNING_TEST_SCENARIOS_CLEAR_ID("warning.test.scenarios.clear.id"),
+	WARNING_TEST_SCENARIOS_VALIDATOR_WINDOW_CAPTION("warning.test.scenarios.validator.window.caption"),
 
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),
 	FORM_MANAGER_NEW_FORM_VERSION("formManager.form.new.version"),
@@ -468,7 +470,9 @@ public enum LanguageCodes {
 	ERROR_INCOMPATIBLE_FORM_STRUCTURE_MORE_INFO("error.incompatible.form.structure.more.info"),
 	
 	SUBMITTED_FORM_TREE_PROPERTY_NAME("submitted.form.tree.property.name"),
-	SUBMITTED_FORM_TREE_PROPERTY_ORIGINAL_VALUE("submitted.form.tree.property.original.value");
+	SUBMITTED_FORM_TREE_PROPERTY_ORIGINAL_VALUE("submitted.form.tree.property.original.value"),
+	
+	TEST_SCENARIO_VALIDATOR_REPORT_TABLE_HEADER("test.scenario.validator.report.table.header");
 
 
 	private String value;
