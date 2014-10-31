@@ -45,6 +45,8 @@ public class RuleTable extends CustomComponent {
 
 		conditionTable.setId("main-table");
 		actionTable.setId("freeze-pane");
+
+		// Sincronize both Action Table and Question Answer.
 		JavaScript
 				.getCurrent()
 				.execute(
