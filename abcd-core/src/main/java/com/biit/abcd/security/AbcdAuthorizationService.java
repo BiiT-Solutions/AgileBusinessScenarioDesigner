@@ -78,6 +78,8 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	private static List<IActivity> globalConstantsAdministratorPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> applicationAdministratorPermissions = new ArrayList<IActivity>();
 
+	private static AbcdAuthorizationService instance = new AbcdAuthorizationService();
+
 	static {
 		for (DActivity activity : FORM_ADMINISTRATOR_EXTRA_PERMISSIONS) {
 			formAdministratorPermissions.add(activity);
@@ -98,6 +100,10 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	public AbcdAuthorizationService() {
 		super();
+	}
+
+	public static AbcdAuthorizationService getInstance() {
+		return instance;
 	}
 
 	@Override
