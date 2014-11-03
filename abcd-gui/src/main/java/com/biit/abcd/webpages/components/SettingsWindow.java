@@ -27,7 +27,7 @@ import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsExcepti
 import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
@@ -68,7 +68,7 @@ public class SettingsWindow extends PopupWindow {
 
 		// Global Constant Button can be only used by users with an specific role.
 		try {
-			if (AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
 					DActivity.GLOBAL_VARIABLE_EDITOR)) {
 				Button globalConstantsButton = new Button(
 						ServerTranslate.translate(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS), new ClickListener() {
@@ -111,7 +111,7 @@ public class SettingsWindow extends PopupWindow {
 
 		// Clear cache for admin users.
 		try {
-			if (AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
 					DActivity.EVICT_CACHE)) {
 				Button clearCacheButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_CLEAR_CACHE),
 						new ClickListener() {

@@ -9,7 +9,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
@@ -65,14 +65,14 @@ public class WindowNewForm extends AcceptCancelWindow {
 		organizationField.setNullSelectionAllowed(false);
 		organizationField.setWidth("100%");
 		try {
-			Set<Organization> organizations = AbcdAuthorizationService.getInstance().getUserOrganizations(
+			Set<Organization> organizations = AbcdFormAuthorizationService.getInstance().getUserOrganizations(
 					UserSessionHandler.getUser());
 			Iterator<Organization> itr = organizations.iterator();
 			while (itr.hasNext()) {
 				Organization organization = itr.next();
 				for (IActivity activity : exclusivePermissionFilter) {
 					// If the user doesn't comply to all activities in the filter in the group, then exit
-					if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+					if (!AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
 							organization, activity)) {
 						itr.remove();
 						break;

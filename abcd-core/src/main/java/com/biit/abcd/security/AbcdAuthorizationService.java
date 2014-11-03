@@ -8,11 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.biit.abcd.MessageManager;
-import com.biit.abcd.UiAccesser;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
 import com.biit.liferay.security.AuthenticationService;
@@ -101,7 +98,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		}
 	}
 
-	public AbcdAuthorizationService() {
+	protected AbcdAuthorizationService() {
 		super();
 	}
 
@@ -149,7 +146,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		} catch (NotConnectedToWebServiceException e) {
 			e.printStackTrace();
 		} catch (IOException | AuthenticationRequired e) {
-			MessageManager.showError(e.getMessage());
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 		return null;
 	}
@@ -249,7 +246,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return organizations;
 	}
 
-	private boolean isAuthorizedToForm(Form form, User user) {
+	protected boolean isAuthorizedToForm(Form form, User user) {
 		return isAuthorizedActivity(user, form, DActivity.FORM_EDITING);
 	}
 
@@ -257,23 +254,4 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return isAuthorizedActivity(user, formOrganizationId, DActivity.FORM_EDITING);
 	}
 
-	public boolean isFormReadOnly(Form form, User user) {
-		if (form == null || user == null) {
-			return true;
-		}
-		return !isAuthorizedToForm(form, user) || isFormAlreadyInUse(form.getId(), user) || !form.isLastVersion();
-	}
-
-	public boolean isFormReadOnly(SimpleFormView form, User user) {
-		if (form == null || user == null) {
-			return true;
-		}
-		return !isAuthorizedToForm(form.getOrganizationId(), user) || isFormAlreadyInUse(form.getId(), user)
-				|| !form.isLastVersion();
-	}
-
-	public boolean isFormAlreadyInUse(Long formId, User user) {
-		User userUsingForm = UiAccesser.getUserUsingForm(formId);
-		return (userUsingForm != null) && userUsingForm.getUserId() != user.getUserId();
-	}
 }

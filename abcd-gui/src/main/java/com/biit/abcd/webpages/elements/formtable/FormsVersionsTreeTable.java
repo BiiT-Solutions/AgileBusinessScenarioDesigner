@@ -18,7 +18,7 @@ import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
@@ -145,7 +145,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 			Organization organization;
 			try {
-				organization = AbcdAuthorizationService.getInstance().getOrganization(form.getOrganizationId());
+				organization = AbcdFormAuthorizationService.getInstance().getOrganization(form.getOrganizationId());
 				if (organization != null) {
 					item.getItemProperty(FormsVersionsTreeTableProperties.GROUP).setValue(organization.getName());
 				}
@@ -357,10 +357,10 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * @return
 	 */
 	private String getFormPermissionsTag(SimpleFormView form) {
-		if (AbcdAuthorizationService.getInstance().isFormReadOnly(form, UserSessionHandler.getUser())) {
+		if (AbcdFormAuthorizationService.getInstance().isFormReadOnly(form, UserSessionHandler.getUser())) {
 			return "read only";
 		}
-		if (AbcdAuthorizationService.getInstance().isFormAlreadyInUse(form.getId(), UserSessionHandler.getUser())) {
+		if (AbcdFormAuthorizationService.getInstance().isFormAlreadyInUse(form.getId(), UserSessionHandler.getUser())) {
 			return "in use";
 		}
 		return "";
