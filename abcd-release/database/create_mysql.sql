@@ -678,7 +678,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        formLabel varchar(255) not null,
+        formLabel varchar(190),
         formOrganizationId DOUBLE not null,
         formVersion integer not null,
         name varchar(190),
@@ -1165,13 +1165,13 @@
         add constraint UK_rrv3rw7jasepphc1943fqgis5  unique (comparationId);
 
     alter table test_scenario 
+        add constraint UK_4af5pwhrmqlflgp411ynjh872  unique (name, formLabel, formVersion, formOrganizationId);
+
+    alter table test_scenario 
         add constraint UK_j17qvfqb5wcp4c3bgknvdii31  unique (ID);
 
     alter table test_scenario 
         add constraint UK_eh6es7t34ldoxns3sswdj6vku  unique (comparationId);
-
-    alter table test_scenario 
-        add constraint UK_jshq05r5jh9kw6obudq99vsee  unique (name);
 
     alter table test_scenario_category 
         add constraint UK_sxenkuftpjjmjl0x3ivk62wix  unique (ID);

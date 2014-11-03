@@ -111,7 +111,7 @@ public class TestScenarioValidator {
 							testScenarioGroup.setRepeatable(true);
 							getScenarioModifications().add(
 									"Group '" + testScenarioGroup.getName()
-											+ "' set to repetible - Test scenario group not repeatable, Form group repeatable");
+											+ "' set to repeatable - Test scenario group not repeatable, Form group repeatable");
 
 						} else if (testScenarioGroup.isRepeatable() && !((Group) group).isRepeatable()) {
 							keepFirstBornGroup(testScenarioGroup);
