@@ -10,16 +10,16 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.listeners.DoubleClickListener;
 import com.biit.jointjs.diagram.builder.server.listeners.ElementActionListener;
@@ -241,7 +241,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		this.diagram = diagram;
 		if (diagram != null) {
 			// Initialize the map of diagramElements.
-			if (!AbcdAuthorizationService.getInstance().isFormReadOnly(
+			if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
 					UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
 				setEnabled(true);
 			}

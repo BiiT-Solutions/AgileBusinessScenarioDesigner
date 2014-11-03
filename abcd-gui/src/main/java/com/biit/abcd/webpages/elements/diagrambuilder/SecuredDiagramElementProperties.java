@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.vaadin.ui.AbstractComponent;
 
@@ -21,7 +21,7 @@ public abstract class SecuredDiagramElementProperties<T> extends PropertiesForCl
 	}
 
 	protected void disableProtectedElements() {
-		if (AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (AbcdFormAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			for (AbstractComponent component : getProtectedElements()) {
 				if (component != null) {

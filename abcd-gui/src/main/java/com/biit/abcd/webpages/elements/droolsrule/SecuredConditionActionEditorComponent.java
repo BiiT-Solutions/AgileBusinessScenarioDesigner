@@ -1,7 +1,7 @@
 package com.biit.abcd.webpages.elements.droolsrule;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionViewer;
 import com.biit.abcd.webpages.elements.expressionviewer.SecuredExpressionViewer;
 
@@ -10,16 +10,16 @@ public class SecuredConditionActionEditorComponent extends ConditionActionEditor
 
 	@Override
 	protected void addKeyController() {
-		if (!AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
-				UserSessionHandler.getUser())) {
+		if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
+				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
 			super.addKeyController();
 		}
 	}
 
 	@Override
 	protected void addElementToView(Object newElement) {
-		if (!AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
-				UserSessionHandler.getUser())) {
+		if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
+				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
 			super.addElementToView(newElement);
 		}
 	}
@@ -34,8 +34,8 @@ public class SecuredConditionActionEditorComponent extends ConditionActionEditor
 
 	@Override
 	public void updateSelectionStyles() {
-		if (!AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
-				UserSessionHandler.getUser())) {
+		if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
+				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
 			super.updateSelectionStyles();
 		} else {
 			getActionViewer().addStyleName("expression-unselected");
@@ -45,8 +45,8 @@ public class SecuredConditionActionEditorComponent extends ConditionActionEditor
 
 	@Override
 	protected void enableAssignOperator() {
-		if (!AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
-				UserSessionHandler.getUser())) {
+		if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
+				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
 			super.enableAssignOperator();
 		} else {
 			enableAssignOperator(false);

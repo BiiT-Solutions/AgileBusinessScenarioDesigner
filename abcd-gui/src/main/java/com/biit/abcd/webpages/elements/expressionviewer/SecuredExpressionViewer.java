@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.vaadin.ui.HorizontalLayout;
 
 /**
@@ -18,7 +18,7 @@ public class SecuredExpressionViewer extends ExpressionViewer {
 	@Override
 	protected boolean isExpressionEditable(Expression expression) {
 		return expression.isEditable()
-				&& !AbcdAuthorizationService.getInstance().isFormReadOnly(
+				&& !AbcdFormAuthorizationService.getInstance().isFormReadOnly(
 						UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser());
 	}
 
@@ -26,8 +26,8 @@ public class SecuredExpressionViewer extends ExpressionViewer {
 	 * if disabled, no expression can be selected.
 	 */
 	protected void updateExpressionSelectionStyles() {
-		if (!AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
-				UserSessionHandler.getUser())) {
+		if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
+				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
 			super.updateExpressionSelectionStyles();
 		} else {
 			for (int i = 0; i < getRootLayout().getComponentCount(); i++) {

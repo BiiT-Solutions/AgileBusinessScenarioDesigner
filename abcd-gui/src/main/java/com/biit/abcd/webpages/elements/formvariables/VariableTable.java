@@ -6,7 +6,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.vaadin.data.Item;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -24,8 +24,8 @@ public class VariableTable extends Table {
 
 	public VariableTable() {
 		initContainerProperties();
-		protectedElements = AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
-				UserSessionHandler.getUser());
+		protectedElements = AbcdFormAuthorizationService.getInstance().isFormReadOnly(
+				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser());
 	}
 
 	private void initContainerProperties() {
@@ -90,6 +90,7 @@ public class VariableTable extends Table {
 		});
 		nameTextField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 8130288971788878223L;
+
 			@Override
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 				customVariable.setName(nameTextField.getValue());
@@ -117,9 +118,10 @@ public class VariableTable extends Table {
 		});
 		typeComboBox.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = -4030501323342468951L;
+
 			@Override
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				customVariable.setType((CustomVariableType)typeComboBox.getValue());
+				customVariable.setType((CustomVariableType) typeComboBox.getValue());
 				updateInfo(customVariable);
 			}
 		});
@@ -131,7 +133,8 @@ public class VariableTable extends Table {
 		final ComboBox scopeComboBox = new ComboBox();
 		for (CustomVariableScope variablesScope : CustomVariableScope.values()) {
 			scopeComboBox.addItem(variablesScope);
-			scopeComboBox.setItemCaption(variablesScope, ServerTranslate.translate(variablesScope.getTranslationCode()));
+			scopeComboBox
+					.setItemCaption(variablesScope, ServerTranslate.translate(variablesScope.getTranslationCode()));
 		}
 		scopeComboBox.setNullSelectionAllowed(false);
 		scopeComboBox.addFocusListener(new FocusListener() {
@@ -147,7 +150,7 @@ public class VariableTable extends Table {
 
 			@Override
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				customVariable.setScope((CustomVariableScope)scopeComboBox.getValue());
+				customVariable.setScope((CustomVariableScope) scopeComboBox.getValue());
 				updateInfo(customVariable);
 			}
 		});

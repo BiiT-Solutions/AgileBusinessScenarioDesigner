@@ -57,12 +57,6 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
-		<!-- Liferay Authentication -->
-		<dependency>
-			<groupId>com.biit.liferay</groupId>
-			<artifactId>liferay-authentication-client</artifactId>
-			<version>${liferay-authentication-client.version}</version>
-		</dependency>
 		<!-- Vaadin plugins -->
 		<!-- Vaadin -->
 		<dependency>

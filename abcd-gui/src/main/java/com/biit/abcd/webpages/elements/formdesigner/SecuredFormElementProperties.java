@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.formdesigner;
 import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.vaadin.ui.AbstractComponent;
 
 /**
@@ -23,7 +23,7 @@ public abstract class SecuredFormElementProperties<T> extends GenericFormElement
 	}
 
 	protected void disableProtectedElements() {
-		if (AbcdAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (AbcdFormAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			for (AbstractComponent component : getProtectedElements()) {
 				if (component != null) {

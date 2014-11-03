@@ -11,7 +11,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
@@ -38,11 +38,11 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 			ApplicationFrame.navigateTo(WebMap.getLoginPage());
 		} else {
 			// Form is not in use.
-			if (!AbcdAuthorizationService.getInstance().isFormAlreadyInUse(
+			if (!AbcdFormAuthorizationService.getInstance().isFormAlreadyInUse(
 					UserSessionHandler.getFormController().getForm().getId(), user)) {
 				inUse = false;
 				// user has permissions to edit this form.
-				if (!AbcdAuthorizationService.getInstance().isFormReadOnly(
+				if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
 						UserSessionHandler.getFormController().getForm(), user)) {
 					editionEnabled = true;
 				}

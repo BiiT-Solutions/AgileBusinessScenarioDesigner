@@ -24,7 +24,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.security.DActivity;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.WebMap;
@@ -292,7 +292,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	public void setEnabledButtons() {
 		try {
-			newFormButton.setEnabled(AbcdAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
+			newFormButton.setEnabled(AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
 					UserSessionHandler.getUser(), DActivity.FORM_CREATE));
 		} catch (IOException | AuthenticationRequired e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -325,7 +325,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void updateNewVersionButton(SimpleFormView selected) {
 		if (selected != null && !(selected instanceof RootForm)) {
 			newVersion.setEnabled(selected.isLastVersion()
-					&& !AbcdAuthorizationService.getInstance().isFormReadOnly(selected, UserSessionHandler.getUser()));
+					&& !AbcdFormAuthorizationService.getInstance().isFormReadOnly(selected,
+							UserSessionHandler.getUser()));
 		} else {
 			newVersion.setEnabled(false);
 		}
