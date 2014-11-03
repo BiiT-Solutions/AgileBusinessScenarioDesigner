@@ -98,7 +98,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		}
 	}
 
-	public AbcdAuthorizationService() {
+	protected AbcdAuthorizationService() {
 		super();
 	}
 

@@ -9,7 +9,7 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 
 	private static AbcdFormAuthorizationService instance = new AbcdFormAuthorizationService();
 
-	public AbcdFormAuthorizationService() {
+	protected AbcdFormAuthorizationService() {
 		super();
 	}
 
