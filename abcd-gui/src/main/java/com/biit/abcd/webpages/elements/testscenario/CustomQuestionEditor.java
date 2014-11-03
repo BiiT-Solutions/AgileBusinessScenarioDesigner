@@ -86,132 +86,134 @@ public class CustomQuestionEditor extends CustomComponent {
 		Question question = (Question) treeObject;
 		TestAnswer testAnswer = testQuestion.getTestAnswer();
 		Field field = null;
-		switch (question.getAnswerType()) {
-		case RADIO:
-			field = new ComboBox(testQuestion.getName());
-			for (TreeObject answer : question.getChildren()) {
-				((ComboBox) field).addItem(answer.getName());
-			}
-			if (testAnswer == null) {
-				testAnswer = new TestAnswerRadioButton();
-				testQuestion.setTestAnswer(testAnswer);
-			} else {
-				if (testAnswer instanceof TestAnswerRadioButton) {
-					if (testAnswer.getValue() != null) {
-						((ComboBox) field).select(testAnswer.getValue());
-					}
-				} else {
+		if (question != null) {
+			switch (question.getAnswerType()) {
+			case RADIO:
+				field = new ComboBox(testQuestion.getName());
+				for (TreeObject answer : question.getChildren()) {
+					((ComboBox) field).addItem(answer.getName());
+				}
+				if (testAnswer == null) {
 					testAnswer = new TestAnswerRadioButton();
 					testQuestion.setTestAnswer(testAnswer);
-				}
-			}
-			break;
-		case MULTI_CHECKBOX:
-			field = new ListSelect(testQuestion.getName());
-			((ListSelect) field).setMultiSelect(true);
-			((ListSelect) field).setNullSelectionAllowed(true);
-			((ListSelect) field).setRows(4);
-			for (TreeObject answer : question.getChildren()) {
-				((ListSelect) field).addItem(answer.getName());
-			}
-
-			if (testAnswer == null) {
-				testAnswer = new TestAnswerMultiCheckBox();
-				testQuestion.setTestAnswer(testAnswer);
-			} else {
-				if (testAnswer.getValue() != null) {
-					if (testAnswer instanceof TestAnswerMultiCheckBox) {
-						Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
-						for (String value : values) {
-							((ListSelect) field).select(value);
+				} else {
+					if (testAnswer instanceof TestAnswerRadioButton) {
+						if (testAnswer.getValue() != null) {
+							((ComboBox) field).select(testAnswer.getValue());
 						}
 					} else {
-						testAnswer = new TestAnswerMultiCheckBox();
+						testAnswer = new TestAnswerRadioButton();
 						testQuestion.setTestAnswer(testAnswer);
 					}
 				}
-			}
-			break;
-		case INPUT:
-			switch (question.getAnswerFormat()) {
-			case TEXT:
-				field = new TextField(testQuestion.getName());
-				((TextField) field).setInputPrompt("TEXT");
+				break;
+			case MULTI_CHECKBOX:
+				field = new ListSelect(testQuestion.getName());
+				((ListSelect) field).setMultiSelect(true);
+				((ListSelect) field).setNullSelectionAllowed(true);
+				((ListSelect) field).setRows(4);
+				for (TreeObject answer : question.getChildren()) {
+					((ListSelect) field).addItem(answer.getName());
+				}
+
 				if (testAnswer == null) {
-					testAnswer = new TestAnswerInputText();
+					testAnswer = new TestAnswerMultiCheckBox();
 					testQuestion.setTestAnswer(testAnswer);
 				} else {
-					if (testAnswer instanceof TestAnswerInputText) {
-						if (testAnswer.getValue() != null) {
-							((TextField) field).setValue(testAnswer.getValue().toString());
+					if (testAnswer.getValue() != null) {
+						if (testAnswer instanceof TestAnswerMultiCheckBox) {
+							Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
+							for (String value : values) {
+								((ListSelect) field).select(value);
+							}
+						} else {
+							testAnswer = new TestAnswerMultiCheckBox();
+							testQuestion.setTestAnswer(testAnswer);
 						}
-					} else {
+					}
+				}
+				break;
+			case INPUT:
+				switch (question.getAnswerFormat()) {
+				case TEXT:
+					field = new TextField(testQuestion.getName());
+					((TextField) field).setInputPrompt("TEXT");
+					if (testAnswer == null) {
 						testAnswer = new TestAnswerInputText();
 						testQuestion.setTestAnswer(testAnswer);
-					}
-				}
-				break;
-			case POSTAL_CODE:
-				field = new TextField(testQuestion.getName());
-				((TextField) field).setInputPrompt("0000AA");
-				if (testAnswer == null) {
-					testAnswer = new TestAnswerInputPostalCode();
-					testQuestion.setTestAnswer(testAnswer);
-				} else {
-					if (testAnswer instanceof TestAnswerInputPostalCode) {
-						if (testAnswer.getValue() != null) {
-							((TextField) field).setValue(testAnswer.getValue().toString());
-						}
 					} else {
+						if (testAnswer instanceof TestAnswerInputText) {
+							if (testAnswer.getValue() != null) {
+								((TextField) field).setValue(testAnswer.getValue().toString());
+							}
+						} else {
+							testAnswer = new TestAnswerInputText();
+							testQuestion.setTestAnswer(testAnswer);
+						}
+					}
+					break;
+				case POSTAL_CODE:
+					field = new TextField(testQuestion.getName());
+					((TextField) field).setInputPrompt("0000AA");
+					if (testAnswer == null) {
 						testAnswer = new TestAnswerInputPostalCode();
 						testQuestion.setTestAnswer(testAnswer);
-					}
-				}
-				break;
-			case NUMBER:
-				field = new TextField(testQuestion.getName());
-				((TextField) field).setInputPrompt("1.234");
-				((TextField) field).addValidator(new RegexpValidator(NUMBER_FIELD_VALIDATOR_REGEX, ServerTranslate
-						.translate(LanguageCodes.INPUT_DATA_FORMAT_INCORRECT_ERROR)));
-				if (testAnswer == null) {
-					testAnswer = new TestAnswerInputNumber();
-					testQuestion.setTestAnswer(testAnswer);
-				} else {
-					if (testAnswer instanceof TestAnswerInputNumber) {
-						if (testAnswer.getValue() != null) {
-							((TextField) field).setValue(testAnswer.getValue().toString());
-						}
 					} else {
+						if (testAnswer instanceof TestAnswerInputPostalCode) {
+							if (testAnswer.getValue() != null) {
+								((TextField) field).setValue(testAnswer.getValue().toString());
+							}
+						} else {
+							testAnswer = new TestAnswerInputPostalCode();
+							testQuestion.setTestAnswer(testAnswer);
+						}
+					}
+					break;
+				case NUMBER:
+					field = new TextField(testQuestion.getName());
+					((TextField) field).setInputPrompt("1.234");
+					((TextField) field).addValidator(new RegexpValidator(NUMBER_FIELD_VALIDATOR_REGEX, ServerTranslate
+							.translate(LanguageCodes.INPUT_DATA_FORMAT_INCORRECT_ERROR)));
+					if (testAnswer == null) {
 						testAnswer = new TestAnswerInputNumber();
 						testQuestion.setTestAnswer(testAnswer);
-					}
-				}
-				break;
-			case DATE:
-				field = new PopupDateField(testQuestion.getName());
-				((PopupDateField) field).setInputPrompt("dd/mm/yy");
-				if (testAnswer == null) {
-					testAnswer = new TestAnswerInputDate();
-					testQuestion.setTestAnswer(testAnswer);
-				} else {
-					if (testAnswer instanceof TestAnswerInputDate) {
-						if (testAnswer.getValue() != null) {
-							Timestamp value = ((TestAnswerInputDate) testAnswer).getValue();
-							((PopupDateField) field).setValue(new Date(value.getTime()));
-						}
 					} else {
+						if (testAnswer instanceof TestAnswerInputNumber) {
+							if (testAnswer.getValue() != null) {
+								((TextField) field).setValue(testAnswer.getValue().toString());
+							}
+						} else {
+							testAnswer = new TestAnswerInputNumber();
+							testQuestion.setTestAnswer(testAnswer);
+						}
+					}
+					break;
+				case DATE:
+					field = new PopupDateField(testQuestion.getName());
+					((PopupDateField) field).setInputPrompt("dd/mm/yy");
+					if (testAnswer == null) {
 						testAnswer = new TestAnswerInputDate();
 						testQuestion.setTestAnswer(testAnswer);
+					} else {
+						if (testAnswer instanceof TestAnswerInputDate) {
+							if (testAnswer.getValue() != null) {
+								Timestamp value = ((TestAnswerInputDate) testAnswer).getValue();
+								((PopupDateField) field).setValue(new Date(value.getTime()));
+							}
+						} else {
+							testAnswer = new TestAnswerInputDate();
+							testQuestion.setTestAnswer(testAnswer);
+						}
 					}
+					break;
 				}
-				break;
 			}
-		}
-		if (field != null) {
-			((AbstractComponent) field).setImmediate(true);
-			field.addValueChangeListener(new FieldValueChangeListener((AbstractField<?>) field));
-			// Add the value to a map to be consulted later
-			fieldQuestionMap.put(field, testQuestion);
+			if (field != null) {
+				((AbstractComponent) field).setImmediate(true);
+				field.addValueChangeListener(new FieldValueChangeListener((AbstractField<?>) field));
+				// Add the value to a map to be consulted later
+				fieldQuestionMap.put(field, testQuestion);
+			}
 		}
 		return field;
 	}

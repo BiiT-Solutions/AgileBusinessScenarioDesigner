@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.formdesigner;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.MessageManager;
@@ -10,11 +11,12 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -41,7 +43,7 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 		
 		groupIsRepeatable = new CheckBox(ServerTranslate.translate(LanguageCodes.GROUP_PROPERTIES_REPEAT));
 		groupIsRepeatable.setValue(instance.isRepeatable());
-
+		
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
 		answerForm.addComponent(groupTechnicalLabel);
@@ -107,5 +109,11 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 	@Override
 	protected Set<AbstractComponent> getProtectedElements() {
 		return new HashSet<AbstractComponent>(Arrays.asList(groupTechnicalLabel, groupIsRepeatable));
+	}
+	
+	private boolean existTestScenariosLinked() {
+		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
+				UserSessionHandler.getFormController().getForm());
+		return !testScenarios.isEmpty();
 	}
 }
