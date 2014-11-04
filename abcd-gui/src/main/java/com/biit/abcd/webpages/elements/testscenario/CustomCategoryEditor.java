@@ -85,7 +85,7 @@ public class CustomCategoryEditor extends CustomComponent {
 			public void buttonClick(ClickEvent event) {
 				try {
 					TestScenarioGroup newTestScenarioGroup = customGroupEditor.getTestScenarioGroup()
-							.copyTestScenarioGroup();
+							.copyTestScenarioGroup(false);
 
 					Integer childIndex = getTestScenarioCategory().getIndex(customGroupEditor.getTestScenarioGroup());
 					getTestScenarioCategory().addChild(childIndex+1, newTestScenarioGroup);
@@ -93,7 +93,6 @@ public class CustomCategoryEditor extends CustomComponent {
 					CustomGroupEditor newCustomGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
 							newTestScenarioGroup);
 					addEditor(newCustomGroupEditor, childIndex+1);
-					
 					setGroupButtonsListeners(newCustomGroupEditor);
 					customGroupEditor.setAddGroupButtonEnable(false);
 					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);
