@@ -10,6 +10,9 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Category;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -33,6 +36,9 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 	public void setElementForProperties(Category element) {
 		instance = element;
 		categoryLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		categoryLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
+		categoryLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
+		categoryLabel.addValidator(new ValidatorTreeObjectNameLength());
 		categoryLabel.setValue(instance.getName());
 		categoryLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
 				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
@@ -45,52 +51,53 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 				ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
 
 		// TODO finish functionality to allow test individual categories
-//		addTab(createLaunchCategoryTestButton(), "TEST", true);
+		// addTab(createLaunchCategoryTestButton(), "TEST", true);
 	}
 
 	@Override
 	protected void updateConcreteFormElement() {
-		String instanceName = instance.getName();
-		try {
-			instance.setName(categoryLabel.getValue());
-			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-					+ "' has modified the Category '" + instanceName + "' property 'Name' to '" + instance.getName()
-					+ "'.");
-		} catch (FieldTooLongException e) {
-			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+		if (categoryLabel.isValid()) {
+			String instanceName = instance.getName();
 			try {
+				instance.setName(categoryLabel.getValue());
+				AbcdLogger.info(this.getClass().getName(),
+						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Category '"
+								+ instanceName + "' property 'Name' to '" + instance.getName() + "'.");
+			} catch (FieldTooLongException e) {
+				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 				try {
-					instance.setName(categoryLabel.getValue().substring(0, 185));
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Category '"
-							+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
-				} catch (CharacterNotAllowedException e1) {
-					MessageManager.showWarning(
-							ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
-									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-											instance.getName(), instance.getSimpleAsciiName() }));
 					try {
-						instance.setName(instance.getSimpleAsciiName());
-					} catch (CharacterNotAllowedException e2) {
-						// Impossible.
+						instance.setName(categoryLabel.getValue().substring(0, 185));
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Category '"
+								+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
+					} catch (CharacterNotAllowedException e1) {
+						MessageManager.showWarning(ServerTranslate
+								.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate.translate(
+								LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
+								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
+						try {
+							instance.setName(instance.getSimpleAsciiName());
+						} catch (CharacterNotAllowedException e2) {
+							// Impossible.
+						}
 					}
+				} catch (FieldTooLongException e1) {
+					// Impossible.
 				}
-			} catch (FieldTooLongException e1) {
-				// Impossible.
+			} catch (CharacterNotAllowedException e) {
+				MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
+						ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
+								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
+				try {
+					instance.setName(instance.getSimpleAsciiName());
+				} catch (FieldTooLongException | CharacterNotAllowedException e1) {
+					// Impossible.
+				}
 			}
-		} catch (CharacterNotAllowedException e) {
-			MessageManager.showWarning(
-					ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
-					ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-							instance.getName(), instance.getSimpleAsciiName() }));
-			try {
-				instance.setName(instance.getSimpleAsciiName());
-			} catch (FieldTooLongException | CharacterNotAllowedException e1) {
-				// Impossible.
-			}
+			firePropertyUpdateListener(getTreeObjectInstance());
 		}
-		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	@Override

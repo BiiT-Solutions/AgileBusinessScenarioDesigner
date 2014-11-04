@@ -12,6 +12,9 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -28,7 +31,7 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 	private TextField groupTechnicalLabel;
 	private CheckBox groupIsRepeatable;
 	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "([A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff_])([0-9A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff\\_\\xb7]){2,}";
-	
+
 	public GroupProperties() {
 		super(Group.class);
 	}
@@ -37,13 +40,16 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 	public void setElementForProperties(Group element) {
 		instance = element;
 		groupTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		groupTechnicalLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
+		groupTechnicalLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
+		groupTechnicalLabel.addValidator(new ValidatorTreeObjectNameLength());
 		groupTechnicalLabel.setValue(instance.getName());
 		groupTechnicalLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
 				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
-		
+
 		groupIsRepeatable = new CheckBox(ServerTranslate.translate(LanguageCodes.GROUP_PROPERTIES_REPEAT));
 		groupIsRepeatable.setValue(instance.isRepeatable());
-		
+
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
 		answerForm.addComponent(groupTechnicalLabel);
@@ -54,51 +60,53 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		String instanceName = instance.getName();
-		try {
-			instance.setName(groupTechnicalLabel.getValue());
-			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-					+ "' has modified the Group '" + instanceName + "' property 'Name' to '" + instance.getName()
-					+ "'.");
-		} catch (FieldTooLongException e) {
-			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+		if (groupTechnicalLabel.isValid()) {
+			String instanceName = instance.getName();
 			try {
+				instance.setName(groupTechnicalLabel.getValue());
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has modified the Group '" + instanceName + "' property 'Name' to '" + instance.getName()
+						+ "'.");
+			} catch (FieldTooLongException e) {
+				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 				try {
-					instance.setName(groupTechnicalLabel.getValue().substring(0, 185));
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Group '"
-							+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
-				} catch (CharacterNotAllowedException e1) {
-					MessageManager.showWarning(
-							ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
-									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-											instance.getName(), instance.getSimpleAsciiName() }));
 					try {
-						instance.setName(instance.getSimpleAsciiName());
-					} catch (CharacterNotAllowedException e2) {
-						// Impossible.
+						instance.setName(groupTechnicalLabel.getValue().substring(0, 185));
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Group '"
+								+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
+					} catch (CharacterNotAllowedException e1) {
+						MessageManager.showWarning(ServerTranslate
+								.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate.translate(
+								LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
+								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
+						try {
+							instance.setName(instance.getSimpleAsciiName());
+						} catch (CharacterNotAllowedException e2) {
+							// Impossible.
+						}
 					}
+				} catch (FieldTooLongException e1) {
+					// Impossible.
 				}
-			} catch (FieldTooLongException e1) {
-				// Impossible.
+			} catch (CharacterNotAllowedException e) {
+				MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
+						ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
+								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
+				try {
+					instance.setName(instance.getSimpleAsciiName());
+				} catch (FieldTooLongException | CharacterNotAllowedException e1) {
+					// Impossible.
+				}
 			}
-		} catch (CharacterNotAllowedException e) {
-			MessageManager.showWarning(
-					ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
-					ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-							instance.getName(), instance.getSimpleAsciiName() }));
-			try {
-				instance.setName(instance.getSimpleAsciiName());
-			} catch (FieldTooLongException | CharacterNotAllowedException e1) {
-				// Impossible.
-			}
-		}
-		instance.setRepeatable(groupIsRepeatable.getValue());
-		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-				+ "'Group '" + instance.getName() + "' value 'Repeat' set to '" + groupIsRepeatable.getValue() + "'.");
+			instance.setRepeatable(groupIsRepeatable.getValue());
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "'Group '" + instance.getName() + "' value 'Repeat' set to '" + groupIsRepeatable.getValue()
+					+ "'.");
 
-		firePropertyUpdateListener(getTreeObjectInstance());
+			firePropertyUpdateListener(getTreeObjectInstance());
+		}
 	}
 
 	@Override
@@ -110,7 +118,7 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 	protected Set<AbstractComponent> getProtectedElements() {
 		return new HashSet<AbstractComponent>(Arrays.asList(groupTechnicalLabel, groupIsRepeatable));
 	}
-	
+
 	private boolean existTestScenariosLinked() {
 		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
 				UserSessionHandler.getFormController().getForm());

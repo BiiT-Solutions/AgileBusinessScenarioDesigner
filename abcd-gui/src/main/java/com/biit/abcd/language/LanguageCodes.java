@@ -472,7 +472,11 @@ public enum LanguageCodes {
 	SUBMITTED_FORM_TREE_PROPERTY_NAME("submitted.form.tree.property.name"),
 	SUBMITTED_FORM_TREE_PROPERTY_ORIGINAL_VALUE("submitted.form.tree.property.original.value"),
 	
-	TEST_SCENARIO_VALIDATOR_REPORT_TABLE_HEADER("test.scenario.validator.report.table.header");
+	TEST_SCENARIO_VALIDATOR_REPORT_TABLE_HEADER("test.scenario.validator.report.table.header"),
+	
+	CAPTION_VALIDATE_DUPLICATE_ANSWER_VALUE("caption.validate.duplicate.answer.value"),
+	CAPTION_NAME_TOO_LARGE("caption.name.too.large"),
+	CAPTION_VALIDATE_DUPLICATE_NAME("caption.validate.duplicate.name");
 
 
 	private String value;
