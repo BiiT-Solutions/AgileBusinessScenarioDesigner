@@ -11,7 +11,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
@@ -32,7 +32,7 @@ import com.vaadin.ui.UI;
 
 public class TestScenarioEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -6743796589244668454L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private TestScenarioMainLayout testScenarioForm;
 	private SelectTestScenarioTableEditable tableSelectTestScenario;
 	private TestScenarioEditorUpperMenu testScenarioUpperMenu;
@@ -193,7 +193,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	}
 
 	@Override
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 

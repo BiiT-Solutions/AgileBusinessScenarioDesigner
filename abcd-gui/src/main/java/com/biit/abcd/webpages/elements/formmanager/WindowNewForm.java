@@ -10,7 +10,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.security.IActivity;
@@ -31,7 +31,7 @@ public class WindowNewForm extends AcceptCancelWindow {
 	private IActivity[] exclusivePermissionFilter;
 
 	public WindowNewForm(LanguageCodes windowsCaption, LanguageCodes inputFieldCaption, LanguageCodes groupCaption,
-			DActivity[] exclusivePermissionFilter) {
+			AbcdActivity[] exclusivePermissionFilter) {
 		super();
 		this.exclusivePermissionFilter = exclusivePermissionFilter;
 		setContent(generateContent(inputFieldCaption, groupCaption));

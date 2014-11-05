@@ -6,7 +6,7 @@ import com.biit.liferay.security.IActivity;
  * Activities are used for authorization system to define what a user can do and cannot do. The string for each activity
  * must be unique.
  */
-public enum DActivity implements IActivity {
+public enum AbcdActivity implements IActivity {
 	READ("Read"),
 
 	FORM_EDITING("FormEditing"),
@@ -27,7 +27,7 @@ public enum DActivity implements IActivity {
 
 	private String tag;
 
-	DActivity(String tag) {
+	AbcdActivity(String tag) {
 		this.tag = tag;
 	}
 

@@ -9,7 +9,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.liferay.portal.model.User;
@@ -43,7 +43,7 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 			} else {
 				try {
 					if (accessAuthorizationsRequired() != null && !accessAuthorizationsRequired().isEmpty()) {
-						for (DActivity activity : accessAuthorizationsRequired()) {
+						for (AbcdActivity activity : accessAuthorizationsRequired()) {
 							if (!AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(user,
 									activity)) {
 								MessageManager.showError(LanguageCodes.ERROR_NOT_AUTHORIZED);
@@ -72,6 +72,6 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 	 * 
 	 * @return
 	 */
-	public abstract List<DActivity> accessAuthorizationsRequired();
+	public abstract List<AbcdActivity> accessAuthorizationsRequired();
 
 }

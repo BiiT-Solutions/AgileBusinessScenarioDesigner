@@ -217,7 +217,7 @@ public class ExpressionViewer extends CssLayout {
 										(Timestamp) expression.getValue(),
 										ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_DATE)));
 							} else {
-								stringInputWindow.setValue(((ExpressionValue) expression).getValue());
+								stringInputWindow.setValue(((ExpressionValue) expression).getValue().toString());
 							}
 
 							stringInputWindow.addAcceptActionListener(new AcceptActionListener() {

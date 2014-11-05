@@ -12,7 +12,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.utils.CheckDependencies;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
@@ -33,7 +33,7 @@ import com.vaadin.ui.UI;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -1017932957756165996L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
 	private SelectDroolsRuleEditable tableSelectRule;
 	private ExpressionEditorComponent ruleExpressionEditorComponent;
@@ -178,7 +178,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	}
 
 	@Override
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 

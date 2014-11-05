@@ -13,7 +13,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
@@ -29,7 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private FormsVersionsTreeTable formTable;
 	private FormManagerUpperMenu upperMenu;
 
@@ -107,7 +107,7 @@ public class FormManager extends FormWebPageComponent {
 	}
 
 	@Override
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 

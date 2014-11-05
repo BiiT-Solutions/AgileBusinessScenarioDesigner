@@ -28,7 +28,7 @@ import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
@@ -69,7 +69,7 @@ public class SettingsWindow extends PopupWindow {
 		// Global Constant Button can be only used by users with an specific role.
 		try {
 			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					DActivity.GLOBAL_VARIABLE_EDITOR)) {
+					AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
 				Button globalConstantsButton = new Button(
 						ServerTranslate.translate(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS), new ClickListener() {
 							private static final long serialVersionUID = 5662848461729745562L;
@@ -112,7 +112,7 @@ public class SettingsWindow extends PopupWindow {
 		// Clear cache for admin users.
 		try {
 			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					DActivity.EVICT_CACHE)) {
+					AbcdActivity.EVICT_CACHE)) {
 				Button clearCacheButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_CLEAR_CACHE),
 						new ClickListener() {
 							private static final long serialVersionUID = -1121572145945309858L;

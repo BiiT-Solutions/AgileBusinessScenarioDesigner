@@ -25,7 +25,7 @@ import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.CheckDependencies;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow.ClearElementsActionListener;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -60,7 +60,7 @@ import com.vaadin.ui.UI;
 public class TableRuleEditor extends FormWebPageComponent implements EditExpressionListener, ClearExpressionListener,
 		EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private RuleTable ruleTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableRuleTableEditable tableSelectionMenu;
@@ -320,7 +320,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	}
 
 	@Override
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 
