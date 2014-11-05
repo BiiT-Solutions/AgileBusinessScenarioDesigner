@@ -1,6 +1,10 @@
 package com.biit.abcd.core;
 
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,8 +34,10 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 @Test(groups = { "newVersion" })
-public class NewVersionTest {
+public class NewVersionTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Autowired
 	private IFormDao formDao;
@@ -44,6 +50,7 @@ public class NewVersionTest {
 			InvalidAnswerFormatException {
 		form = FormUtils.createCompleteForm();
 		Assert.assertNotNull(form);
+		formDao.makePersistent(form);
 	}
 
 	@Test(dependsOnMethods = { "createForm" })
@@ -59,6 +66,10 @@ public class NewVersionTest {
 		Assert.assertEquals((int) form.getVersion() + 1, (int) newVersionForm.getVersion());
 
 		new FormVersionComparator().compare(form, newVersionForm);
+		formDao.makePersistent(newVersionForm);
+		
+		formDao.makeTransient(form);
+		formDao.makeTransient(newVersionForm);
 	}
 
 }
