@@ -11,6 +11,9 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.DateField;
@@ -33,6 +36,9 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	public void setElementForProperties(Form element) {
 		instance = element;
 		formName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
+		formName.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
+		formName.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
+		formName.addValidator(new ValidatorTreeObjectNameLength());
 		formName.setValue(instance.getName());
 		formName.setEnabled(false);
 
@@ -54,23 +60,25 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		if (availableFrom.getValue() != null) {
-			
-			Calendar cal = Calendar.getInstance(); // locale-specific
-			cal.setTime(availableFrom.getValue());
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			long time = cal.getTimeInMillis();			
-			
-			instance.setAvailableFrom(new Timestamp(time));
-			AbcdLogger.info(
-					this.getClass().getName(),
-					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
-							+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom() + "'.");
+		if (formName.isValid()) {
+			if (availableFrom.getValue() != null) {
+
+				Calendar cal = Calendar.getInstance(); // locale-specific
+				cal.setTime(availableFrom.getValue());
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MILLISECOND, 0);
+				long time = cal.getTimeInMillis();
+
+				instance.setAvailableFrom(new Timestamp(time));
+				AbcdLogger.info(this.getClass().getName(),
+						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
+								+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom()
+								+ "'.");
+			}
+			firePropertyUpdateListener(getTreeObjectInstance());
 		}
-		firePropertyUpdateListener(getTreeObjectInstance());
 	}
 
 	@Override

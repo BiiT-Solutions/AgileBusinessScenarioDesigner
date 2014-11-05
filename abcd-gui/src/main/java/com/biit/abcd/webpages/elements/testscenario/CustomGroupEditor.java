@@ -88,7 +88,7 @@ public class CustomGroupEditor extends CustomComponent {
 	public void addEditor(CustomComponent groupEditor) {
 		editorLayout.addComponent(groupEditor);
 	}
-	
+
 	public void addEditor(CustomComponent groupEditor, int index) {
 		editorLayout.addComponent(groupEditor, index);
 	}
@@ -111,7 +111,7 @@ public class CustomGroupEditor extends CustomComponent {
 			groupButtonsLayout.addComponent(removeRepeatableGroup);
 			groupButtonsLayout.setComponentAlignment(copyRepeatableGroup, Alignment.MIDDLE_RIGHT);
 			groupButtonsLayout.setComponentAlignment(removeRepeatableGroup, Alignment.MIDDLE_RIGHT);
-			if(!getTestScenarioGroup().isAddEnabled()){
+			if (!getTestScenarioGroup().isAddEnabled()) {
 				setAddGroupButtonEnable(false);
 			}
 			enableDisableAddRemoveButton(testScenarioObject);
@@ -167,14 +167,14 @@ public class CustomGroupEditor extends CustomComponent {
 			public void buttonClick(ClickEvent event) {
 				try {
 					TestScenarioGroup newTestScenarioGroup = customGroupEditor.getTestScenarioGroup()
-							.copyTestScenarioGroup();
-					
+							.copyTestScenarioGroup(false);
+
 					Integer childIndex = getTestScenarioGroup().getIndex(customGroupEditor.getTestScenarioGroup());
-					getTestScenarioGroup().addChild(childIndex+1, newTestScenarioGroup);
-					
+					getTestScenarioGroup().addChild(childIndex + 1, newTestScenarioGroup);
+
 					CustomGroupEditor newCustomGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
 							newTestScenarioGroup);
-					addEditor(newCustomGroupEditor, childIndex+1);
+					addEditor(newCustomGroupEditor, childIndex + 1);
 					setGroupButtonsListeners(newCustomGroupEditor);
 					customGroupEditor.setAddGroupButtonEnable(false);
 					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);

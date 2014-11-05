@@ -11,7 +11,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioValidator;
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
@@ -52,7 +51,8 @@ public class FormDesigner extends FormWebPageComponent {
 	private FormDesignerUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 	private boolean tableIsGoingToDetach;
-	private boolean testScenariosModified = false;
+
+	// private boolean testScenariosModified = false;
 
 	public FormDesigner() {
 		updateButtons(true);
@@ -89,7 +89,7 @@ public class FormDesigner extends FormWebPageComponent {
 					return;
 				}
 				formTreeTable.updateItem((TreeObject) element);
-				updateUpperMenu(formTreeTable.getTreeObjectSelected());
+				updateUpperMenu(formTreeTable.getTreeObjectSelected());	
 			}
 		});
 
@@ -154,10 +154,10 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				save();
-				if (testScenariosModified) {
-					UserSessionHandler.getTestScenariosController().update(modifyTestScenariosLinked(),
-							UserSessionHandler.getFormController().getForm());
-				}
+				// if (testScenariosModified) {
+				// UserSessionHandler.getTestScenariosController().update(modifyTestScenariosLinked(),
+				// UserSessionHandler.getFormController().getForm());
+				// }
 			}
 		});
 
@@ -227,7 +227,7 @@ public class FormDesigner extends FormWebPageComponent {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {
 							removeSelected();
-							testScenariosModified = true;
+							// testScenariosModified = true;
 							windowAccept.close();
 						}
 					});
@@ -280,7 +280,7 @@ public class FormDesigner extends FormWebPageComponent {
 									MessageManager.showWarning(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
 											LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
 								}
-								testScenariosModified = true;
+								// testScenariosModified = true;
 								windowAccept.close();
 								moveWindow.close();
 							}
@@ -663,14 +663,17 @@ public class FormDesigner extends FormWebPageComponent {
 		return !testScenarios.isEmpty();
 	}
 
-	private List<TestScenario> modifyTestScenariosLinked() {
-		Form currentForm = UserSessionHandler.getFormController().getForm();
-		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController()
-				.getTestScenarios(currentForm);
-		for (TestScenario testScenario : testScenarios) {
-			TestScenarioValidator testScenarioValidator = new TestScenarioValidator();
-			testScenarioValidator.checkAndModifyTestScenarioStructure(currentForm, testScenario);
-		}
-		return testScenarios;
-	}
+	// private List<TestScenario> modifyTestScenariosLinked() {
+	// Form currentForm = UserSessionHandler.getFormController().getForm();
+	// List<TestScenario> testScenarios =
+	// UserSessionHandler.getTestScenariosController()
+	// .getTestScenarios(currentForm);
+	// for (TestScenario testScenario : testScenarios) {
+	// TestScenarioValidator testScenarioValidator = new
+	// TestScenarioValidator();
+	// testScenarioValidator.checkAndModifyTestScenarioStructure(currentForm,
+	// testScenario);
+	// }
+	// return testScenarios;
+	// }
 }

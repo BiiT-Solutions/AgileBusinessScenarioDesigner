@@ -14,14 +14,17 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -43,6 +46,9 @@ public class QuestionProperties extends SecuredFormElementProperties<Question> {
 	public void setElementForProperties(Question element) {
 		instance = element;
 		questionTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		questionTechnicalLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
+		questionTechnicalLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
+		questionTechnicalLabel.addValidator(new ValidatorTreeObjectNameLength());
 		questionTechnicalLabel.setValue(instance.getName());
 		questionTechnicalLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
 				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
@@ -102,69 +108,70 @@ public class QuestionProperties extends SecuredFormElementProperties<Question> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		String instanceName = instance.getName();
-		try {
-			instance.setName(questionTechnicalLabel.getValue());
-			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-					+ "' has modified the Question '" + instanceName + "' property 'Name' to '" + instance.getName()
-					+ "'.");
-		} catch (FieldTooLongException e) {
-			MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-					LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+		if (questionTechnicalLabel.isValid()) {
+			String instanceName = instance.getName();
 			try {
+				instance.setName(questionTechnicalLabel.getValue());
+				AbcdLogger.info(this.getClass().getName(),
+						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Question '"
+								+ instanceName + "' property 'Name' to '" + instance.getName() + "'.");
+			} catch (FieldTooLongException e) {
+				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 				try {
-					instance.setName(questionTechnicalLabel.getValue().substring(0, 185));
+					try {
+						instance.setName(questionTechnicalLabel.getValue().substring(0, 185));
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Question '"
+								+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
+					} catch (CharacterNotAllowedException e1) {
+						MessageManager.showWarning(ServerTranslate
+								.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate.translate(
+								LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
+								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
+						try {
+							instance.setName(instance.getSimpleAsciiName());
+						} catch (CharacterNotAllowedException e2) {
+							// Impossible.
+						}
+					}
+				} catch (FieldTooLongException e1) {
+					// Impossible.
+				}
+			} catch (CharacterNotAllowedException e) {
+				MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
+						ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
+								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
+				try {
+					instance.setName(instance.getSimpleAsciiName());
+				} catch (FieldTooLongException | CharacterNotAllowedException e1) {
+					// Impossible.
+				}
+			}
+			try {
+				instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has modified the Question '" + instance.getName() + "' property 'AnswerType' to '"
+						+ instance.getAnswerFormat() + "'.");
+			} catch (InvalidAnswerFormatException e) {
+				// Not input fields must remove any answer format
+				try {
+					instance.setAnswerFormat(null);
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Question '"
-							+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
-				} catch (CharacterNotAllowedException e1) {
-					MessageManager.showWarning(
-							ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
-									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-											instance.getName(), instance.getSimpleAsciiName() }));
-					try {
-						instance.setName(instance.getSimpleAsciiName());
-					} catch (CharacterNotAllowedException e2) {
-						// Impossible.
-					}
+							+ instance.getName() + "' property 'AnswerType' to '" + null + "'.");
+				} catch (InvalidAnswerFormatException e1) {
+					// Do nothing.
 				}
-			} catch (FieldTooLongException e1) {
-				// Impossible.
 			}
-		} catch (CharacterNotAllowedException e) {
-			MessageManager.showWarning(
-					ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
-					ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-							instance.getName(), instance.getSimpleAsciiName() }));
-			try {
-				instance.setName(instance.getSimpleAsciiName());
-			} catch (FieldTooLongException | CharacterNotAllowedException e1) {
-				// Impossible.
-			}
-		}
-		try {
-			instance.setAnswerFormat((AnswerFormat) answerFormat.getValue());
-			AbcdLogger.info(this.getClass().getName(),
-					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Question '"
-							+ instance.getName() + "' property 'AnswerType' to '" + instance.getAnswerFormat() + "'.");
-		} catch (InvalidAnswerFormatException e) {
-			// Not input fields must remove any answer format
-			try {
-				instance.setAnswerFormat(null);
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has modified the Question '" + instance.getName() + "' property 'AnswerType' to '" + null
-						+ "'.");
-			} catch (InvalidAnswerFormatException e1) {
-				// Do nothing.
-			}
-		}
-		instance.setAnswerType((AnswerType) answerType.getValue());
-		AbcdLogger.info(
-				this.getClass().getName(),
-				"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has set the Question '"
-						+ instance.getName() + "' property 'AnswerFormat' to '" + instance.getAnswerType() + "'.");
+			instance.setAnswerType((AnswerType) answerType.getValue());
+			AbcdLogger.info(
+					this.getClass().getName(),
+					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has set the Question '"
+							+ instance.getName() + "' property 'AnswerFormat' to '" + instance.getAnswerType() + "'.");
 
-		firePropertyUpdateListener(getTreeObjectInstance());
+			firePropertyUpdateListener(getTreeObjectInstance());
+		}
 	}
 
 	@Override

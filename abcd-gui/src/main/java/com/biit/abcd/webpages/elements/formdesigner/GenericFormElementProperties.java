@@ -1,13 +1,9 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
-import java.util.List;
-
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
@@ -94,23 +90,17 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-//					if (existTestScenariosLinked()) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(
-								LanguageCodes.WARNING_TEST_SCENARIOS_CLEAR_ID);
-						windowAccept.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								modifyTestScenarioElementOriginalReference(element);
-								element.setOriginalReference(element.getComparationId());
-								clearOriginalReference.setEnabled(false);
-								windowAccept.close();
-							}
-						});
-						windowAccept.showCentered();
-//					} else {
-//						element.setOriginalReference(element.getComparationId());
-//						clearOriginalReference.setEnabled(false);
-//					}
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_TEST_SCENARIOS_CLEAR_ID);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							element.setOriginalReference(element.getComparationId());
+							clearOriginalReference.setEnabled(false);
+							windowAccept.close();
+						}
+					});
+					windowAccept.showCentered();
 				}
 			});
 		}
@@ -134,27 +124,5 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 	@Override
 	protected void firePropertyUpdateOnExitListener() {
 		firePropertyUpdateListener(getTreeObjectInstance());
-	}
-
-	private boolean existTestScenariosLinked() {
-		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
-				UserSessionHandler.getFormController().getForm());
-		return !testScenarios.isEmpty();
-	}
-
-	private void modifyTestScenarioElementOriginalReference(TreeObject element) {
-		
-		Form currentForm = UserSessionHandler.getFormController().getForm();
-		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController()
-				.getTestScenarios(currentForm);
-		for (TestScenario testScenario : testScenarios) {
-			TreeObject testScenarioObject = testScenario.getTestScenarioForm().getOriginalReferenceTreeObjectMap()
-					.get(element.getOriginalReference());
-			if (testScenarioObject != null) {
-				testScenarioObject.setOriginalReference(element.getComparationId());
-			}
-		}
-		UserSessionHandler.getTestScenariosController().update(testScenarios,
-				UserSessionHandler.getFormController().getForm());
 	}
 }

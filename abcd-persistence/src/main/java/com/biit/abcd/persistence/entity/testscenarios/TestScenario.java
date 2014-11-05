@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -31,7 +33,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  * 
  */
 @Entity
-@Table(name = "test_scenario")
+@Table(name = "test_scenario", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "formLabel",
+		"formVersion", "formOrganizationId" }) })
+@AttributeOverride(name = "formLabel", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH))
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class TestScenario extends StorableObject implements INameAttribute {
 
@@ -39,7 +43,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// private TestScenarioObject testScenarioForm;
 	private TestScenarioForm testScenarioForm;
-	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
+	@Column(length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 
 	// Form information

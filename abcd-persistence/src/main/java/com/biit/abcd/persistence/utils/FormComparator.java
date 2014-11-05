@@ -58,7 +58,8 @@ import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 
 /**
- * Compares two forms. Must be equals (but with different IDs and ComparationIds).
+ * Compares two forms. Must be equals (but with different IDs and
+ * ComparationIds).
  */
 public class FormComparator {
 	private static Set<StorableObject> alreadyComparedForm1Element = new HashSet<>();
@@ -379,6 +380,11 @@ public class FormComparator {
 		}
 
 		// Compare Children.
+		if (object1.getChildren().size() != object2.getChildren().size()) {
+			throw new TreeObjectNotEqualsException("TreeObject '" + object1 + "' has a different number of children '"
+					+ object1.getChildren().size() + "' than TreeObject '" + object2 + "' that has '"
+					+ object2.getChildren().size() + "' children.");
+		}
 		for (int i = 0; i < object1.getChildren().size(); i++) {
 			compare(object1.getChildren().get(i), object2.getChildren().get(i));
 		}
@@ -911,7 +917,8 @@ public class FormComparator {
 			compare(form1.getChildren().get(i), form2.getChildren().get(i));
 		}
 
-		// Compare custom variables. First sort the set to be sure the comparation is correct.
+		// Compare custom variables. First sort the set to be sure the
+		// comparation is correct.
 		List<CustomVariable> customVariables1 = new ArrayList<>(form1.getCustomVariables());
 		Collections.sort(customVariables1, new CustomVariableSorter());
 		List<CustomVariable> customVariables2 = new ArrayList<>(form2.getCustomVariables());
@@ -925,7 +932,8 @@ public class FormComparator {
 			compare(variableIterator1.next(), variableIterator2.next());
 		}
 
-		// Compare Expressions. First sort the set to be sure the comparation is correct.
+		// Compare Expressions. First sort the set to be sure the comparation is
+		// correct.
 		List<ExpressionChain> expressionChain1 = new ArrayList<>(form1.getExpressionChains());
 		Collections.sort(expressionChain1, new ExpressionSorter());
 		List<ExpressionChain> expressionChain2 = new ArrayList<>(form2.getExpressionChains());

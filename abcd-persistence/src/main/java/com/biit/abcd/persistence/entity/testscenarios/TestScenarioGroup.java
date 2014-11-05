@@ -25,18 +25,34 @@ public class TestScenarioGroup extends BaseRepeatableGroup {
 		return DEFAULT_GROUP_NAME;
 	}
 
-	public TestScenarioGroup copyTestScenarioGroup() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException {
+	/**
+	 * Creates a copy of the group and its children.<br>
+	 * The father needs a clean enabled attribute, but the children have to
+	 * maintain their attribute value.
+	 * 
+	 * @param isChildren
+	 * @return
+	 * @throws NotValidChildException
+	 * @throws FieldTooLongException
+	 * @throws CharacterNotAllowedException
+	 */
+	public TestScenarioGroup copyTestScenarioGroup(boolean isChildren) throws NotValidChildException,
+			FieldTooLongException, CharacterNotAllowedException {
 		TestScenarioGroup testScenarioGroup = new TestScenarioGroup();
 		testScenarioGroup.setOriginalReference(getOriginalReference());
 		testScenarioGroup.setName(getName());
 		testScenarioGroup.setRepeatable(isRepeatable());
-		testScenarioGroup.setAddEnabled(true);
+		if (isChildren) {
+			testScenarioGroup.setAddEnabled(isAddEnabled());
+		} else {
+			testScenarioGroup.setAddEnabled(true);
+		}
+
 		// Copy children
 		if ((getChildren() != null) && !getChildren().isEmpty()) {
 			for (TreeObject treeObject : getChildren()) {
 				if (treeObject instanceof TestScenarioGroup) {
-					testScenarioGroup.addChild(((TestScenarioGroup) treeObject).copyTestScenarioGroup());
+					testScenarioGroup.addChild(((TestScenarioGroup) treeObject).copyTestScenarioGroup(true));
 
 				} else if (treeObject instanceof TestScenarioQuestion) {
 					testScenarioGroup.addChild(((TestScenarioQuestion) treeObject).copyTestScenarioQuestion());
