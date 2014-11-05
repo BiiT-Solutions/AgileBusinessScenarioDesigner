@@ -45,8 +45,8 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 
 			@Override
 			public void detach(DetachEvent event) {
-				focus();
-				updateAndExit();
+//				focus();
+//				updateAndExit();
 			}
 		});
 	}
