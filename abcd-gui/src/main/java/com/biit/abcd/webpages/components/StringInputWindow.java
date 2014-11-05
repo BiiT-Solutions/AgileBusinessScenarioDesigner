@@ -20,7 +20,6 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private static final String WIDTH = "400px";
 	private static final String HEIGHT = "250px";
 	private static final String FIELD_WIDTH = "150px";
-	private AnswerFormat previousValueType = null;
 
 	private TextField expressionValue;
 	private ComboBox expressionType;
