@@ -39,7 +39,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 	}
 
 	public String getValue() {
-		if (getFormat().equals(AnswerFormat.NUMBER)) {
+		if (getFormat().equals(AnswerFormat.NUMBER) && expressionValue.getConvertedValue() != null) {
 			return expressionValue.getConvertedValue().toString();
 		}
 		return expressionValue.getValue();
@@ -47,16 +47,6 @@ public class StringInputWindow extends AcceptCancelWindow {
 
 	public AnswerFormat getFormat() {
 		return (AnswerFormat) expressionType.getValue();
-	}
-
-	/**
-	 * Remove the expression value if the new type is not suitable to the old value.
-	 */
-	private void clearExpressionValue() {
-		if (previousValueType != null && previousValueType != (AnswerFormat) expressionType.getValue()) {
-			expressionValue.setValue(null);
-		}
-		previousValueType = (AnswerFormat) expressionType.getValue();
 	}
 
 	private Component generateContent() {
@@ -69,8 +59,6 @@ public class StringInputWindow extends AcceptCancelWindow {
 		formLayout.setSizeUndefined();
 		formLayout.setSpacing(true);
 		formLayout.setImmediate(true);
-
-		createTextField();
 
 		expressionType = new ComboBox(ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TYPE));
 		expressionType.setImmediate(true);
@@ -85,7 +73,9 @@ public class StringInputWindow extends AcceptCancelWindow {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
+				String prevValue = getValue();
 				createTextField();
+				setValue(prevValue);
 				setLocale();
 				setPromt();
 			}
@@ -95,6 +85,8 @@ public class StringInputWindow extends AcceptCancelWindow {
 		expressionType.setWidth(FIELD_WIDTH);
 
 		formLayout.addComponent(expressionType);
+
+		createTextField();
 
 		rootLayout.addComponent(formLayout);
 		rootLayout.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
@@ -113,18 +105,23 @@ public class StringInputWindow extends AcceptCancelWindow {
 		expressionValue.setWidth(FIELD_WIDTH);
 		expressionValue.setNullRepresentation("");
 
-		formLayout.addComponent(expressionValue, 0);
+		formLayout.addComponent(expressionValue);
 	}
 
-	public void setValue(Object value) {
-		if (value instanceof Double) {
-			ObjectProperty<Double> property = new ObjectProperty<Double>((Double) value);
-			expressionValue.setPropertyDataSource(property);
-			// } else if (value instanceof Timestamp) {
-			// ObjectProperty<Date> property = new ObjectProperty<Date>(new Date(((Timestamp) value).getTime()));
-			// expressionValue.setPropertyDataSource(property);
-		} else {
-			expressionValue.setValue(value.toString());
+	public void setValue(String value) {
+		if (value != null) {
+			if (getFormat().equals(AnswerFormat.NUMBER)) {
+				try {
+					ObjectProperty<Double> property = new ObjectProperty<Double>(Double.parseDouble(value));
+					expressionValue.setPropertyDataSource(property);
+				} catch (NumberFormatException nfe) {
+					setValue(null);
+				}
+			} else if (getFormat().equals(AnswerFormat.TEXT)) {
+				expressionValue.setValue(value.toString());
+			} else {
+				setValue(null);
+			}
 		}
 	}
 
