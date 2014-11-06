@@ -106,7 +106,7 @@ public class DiagramPropertiesLink extends SecuredDiagramElementProperties<Diagr
 			public void buttonClick(ClickEvent event) {
 				// Remove all but not the fork element.
 				Expression auxExp = diagramLink.getExpressionChain().getExpressions().get(0);
-				diagramLink.resetExpressions(auxExp);
+				diagramLink.replaceExpressions(auxExp);
 				updateText(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' removed expression from Link with ID:" + diagramLink.getId() + "'.");

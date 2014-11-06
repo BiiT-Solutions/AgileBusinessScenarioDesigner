@@ -159,13 +159,13 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					DiagramLink diagramLink = (DiagramLink) diagramObject;
 					if (diagramLink.getSourceElement() instanceof DiagramFork) {
 						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
-						// ((DiagramFork) diagramLink.getSourceElement()).resetOutgoingLinks();
 						if (diagramLink.getSourceElement() != null
 								&& ((DiagramFork) diagramLink.getSourceElement()).getReference() != null) {
 							Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
 									.generateCopy();
+							expression.resetIds();
 							expression.setEditable(false);
-							diagramLink.resetExpressions(expression);
+							diagramLink.replaceExpressions(expression);
 						}
 					}
 				}
