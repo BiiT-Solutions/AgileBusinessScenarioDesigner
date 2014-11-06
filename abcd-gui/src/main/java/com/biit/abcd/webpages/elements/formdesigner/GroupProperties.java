@@ -105,7 +105,7 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 					+ "'Group '" + instance.getName() + "' value 'Repeat' set to '" + groupIsRepeatable.getValue()
 					+ "'.");
 
-			firePropertyUpdateListener(getTreeObjectInstance());
+			// firePropertyUpdateListener(getTreeObjectInstance());
 		}
 	}
 

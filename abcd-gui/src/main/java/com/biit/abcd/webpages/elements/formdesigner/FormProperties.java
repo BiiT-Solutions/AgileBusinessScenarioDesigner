@@ -77,7 +77,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 								+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom()
 								+ "'.");
 			}
-			firePropertyUpdateListener(getTreeObjectInstance());
+		//	firePropertyUpdateListener(getTreeObjectInstance());
 		}
 	}
 

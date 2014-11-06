@@ -96,7 +96,7 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 					// Impossible.
 				}
 			}
-			firePropertyUpdateListener(getTreeObjectInstance());
+			// firePropertyUpdateListener(getTreeObjectInstance());
 		}
 	}
 
@@ -110,83 +110,4 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 		return new HashSet<AbstractComponent>(Arrays.asList(categoryLabel));
 	}
 
-	// private Button createLaunchCategoryTestButton() {
-	// Button launchCategoryTest = new Button("Test");
-	// launchCategoryTest.addClickListener(new ClickListener() {
-	// private static final long serialVersionUID = -1430183207737163347L;
-	//
-	// @Override
-	// public void buttonClick(ClickEvent event) {
-	// try {
-	// final WindowLaunchTestScenarioCategory testCategoryWindow = new
-	// WindowLaunchTestScenarioCategory(
-	// instance);
-	// testCategoryWindow.addAcceptActionListener(new AcceptActionListener() {
-	// @Override
-	// public void acceptAction(AcceptCancelWindow window) {
-	// TestScenario categoryTestScenario = testCategoryWindow.getTestScenario();
-	// Form form = testCategoryWindow.getForm();
-	// if ((form != null) && (categoryTestScenario != null)) {
-	// try {
-	// FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-	// ISubmittedForm submittedForm;
-	// submittedForm = droolsExporter.processForm(form, UserSessionHandler
-	// .getGlobalVariablesController().getGlobalVariables(),
-	// categoryTestScenario);
-	// if (submittedForm instanceof DroolsForm) {
-	// final DroolsSubmittedFormResultWindow droolsResultWindow = new
-	// DroolsSubmittedFormResultWindow(
-	// ((DroolsForm) submittedForm).getSubmittedForm(), form);
-	// droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
-	// @Override
-	// public void acceptAction(AcceptCancelWindow window) {
-	// droolsResultWindow.close();
-	// }
-	// });
-	// droolsResultWindow.showCentered();
-	// }
-	// } catch (ExpressionInvalidException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (RuleInvalidException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (RuleNotImplementedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (DocumentException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (CategoryNameWithoutTranslation e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (ActionNotImplementedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (CategoryDoesNotExistException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (GroupDoesNotExistException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (NotCompatibleTypeException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// testCategoryWindow.close();
-	// }
-	// }
-	// });
-	// testCategoryWindow.showCentered();
-	// } catch (NotValidChildException | FieldTooLongException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	// return launchCategoryTest;
-	// }
 }

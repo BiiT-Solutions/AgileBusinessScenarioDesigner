@@ -154,10 +154,6 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				save();
-				// if (testScenariosModified) {
-				// UserSessionHandler.getTestScenariosController().update(modifyTestScenariosLinked(),
-				// UserSessionHandler.getFormController().getForm());
-				// }
 			}
 		});
 
