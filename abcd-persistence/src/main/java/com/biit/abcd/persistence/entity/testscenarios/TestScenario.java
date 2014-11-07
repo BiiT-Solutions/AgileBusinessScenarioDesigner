@@ -134,9 +134,10 @@ public class TestScenario extends StorableObject implements INameAttribute {
 				createTestScenarioForm(treeObject, testScenarioGroup);
 			}
 		} else if (formTreeObject instanceof Question) {
-			addChild(formTreeObject, testScenarioTreeObjectParent, new TestScenarioQuestion());
+			TreeObject testScenarioQuestion = addChild(formTreeObject, testScenarioTreeObjectParent,
+					new TestScenarioQuestion());
+			createTestScenatioAnswer((Question) formTreeObject, (TestScenarioQuestion) testScenarioQuestion);
 		}
-		// Any other tree object type not taken into account
 	}
 
 	private TreeObject addChild(TreeObject formTreeObject, TreeObject testScenarioParent, TreeObject testScenarioChild)
@@ -145,5 +146,31 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		testScenarioChild.setName(formTreeObject.getName());
 		testScenarioParent.addChild(testScenarioChild);
 		return testScenarioChild;
+	}
+
+	private void createTestScenatioAnswer(Question formQuestion, TestScenarioQuestion testQuestion) {
+		switch (formQuestion.getAnswerType()) {
+		case RADIO:
+			testQuestion.setTestAnswer(new TestAnswerRadioButton());
+			break;
+		case MULTI_CHECKBOX:
+			testQuestion.setTestAnswer(new TestAnswerMultiCheckBox());
+			break;
+		case INPUT:
+			switch (formQuestion.getAnswerFormat()) {
+			case NUMBER:
+				testQuestion.setTestAnswer(new TestAnswerInputNumber());
+				break;
+			case POSTAL_CODE:
+				testQuestion.setTestAnswer(new TestAnswerInputPostalCode());
+			case TEXT:
+				testQuestion.setTestAnswer(new TestAnswerInputText());
+				break;
+			case DATE:
+				testQuestion.setTestAnswer(new TestAnswerInputDate());
+				break;
+			}
+			break;
+		}
 	}
 }
