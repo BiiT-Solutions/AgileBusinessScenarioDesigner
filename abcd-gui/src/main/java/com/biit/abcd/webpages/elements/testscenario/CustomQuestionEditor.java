@@ -190,7 +190,7 @@ public class CustomQuestionEditor extends CustomComponent {
 					break;
 				case DATE:
 					field = new PopupDateField(testQuestion.getName());
-					((PopupDateField) field).setInputPrompt("dd/mm/yy");
+					((PopupDateField) field).setInputPrompt("dd/mm/yyyy");
 					if (testAnswer == null) {
 						testAnswer = new TestAnswerInputDate();
 						testQuestion.setTestAnswer(testAnswer);
