@@ -1,6 +1,5 @@
 package com.biit.abcd.persistence.entity;
 
-import java.sql.Timestamp;
 
 /**
  * As Lazy is not correctly configured, we use this class to show basic form
@@ -9,27 +8,11 @@ import java.sql.Timestamp;
 public class SimpleTestScenarioView {
 
 	private Long id;
-	private String comparationId;
-	private Long createdBy;
-	private Timestamp creationTime;
-	private Timestamp updateTime;
-	private Long updatedBy;
 	private String name;
-	private String formLabel;
-	private Long formOrganizationId;
+	private Long formId;
 	private Integer formVersion;
 
 	public SimpleTestScenarioView() {
-	}
-
-	public SimpleTestScenarioView(Form form) {
-		setId(form.getId());
-		setComparationId(form.getComparationId());
-		setCreatedBy(form.getCreatedBy());
-		setCreationTime(form.getCreationTime());
-		setUpdateTime(form.getUpdateTime());
-		setUpdatedBy(form.getUpdatedBy());
-		setName(form.getName());
 	}
 
 	public String getName() {
@@ -48,62 +31,14 @@ public class SimpleTestScenarioView {
 		this.id = id;
 	}
 
-	public Timestamp getCreationTime() {
-		return creationTime;
+	public Long getFormId() {
+		return formId;
 	}
 
-	public void setCreationTime(Timestamp creationTime) {
-		this.creationTime = creationTime;
+	public void setFormId(Long formId) {
+		this.formId = formId;
 	}
-
-	public Long getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Long createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Timestamp getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public Long getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(Long updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public String getComparationId() {
-		return comparationId;
-	}
-
-	public void setComparationId(String comparationId) {
-		this.comparationId = comparationId;
-	}
-
-	public String getFormLabel() {
-		return formLabel;
-	}
-
-	public void setFormLabel(String formLabel) {
-		this.formLabel = formLabel;
-	}
-
-	public Long getFormOrganizationId() {
-		return formOrganizationId;
-	}
-
-	public void setFormOrganizationId(Long formOrganizationId) {
-		this.formOrganizationId = formOrganizationId;
-	}
-
+	
 	public Integer getFormVersion() {
 		return formVersion;
 	}

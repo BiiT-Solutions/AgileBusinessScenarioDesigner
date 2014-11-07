@@ -1,7 +1,6 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +55,12 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<SimpleTestScenarioView> getAll() {
+	public List<SimpleTestScenarioView> getSimpleTestScenariosByFormId(Long formId) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
-				.createSQLQuery("SELECT ts.ID, ts.comparationId, ts.creationTime, ts.createdBy, ts.updateTime, ts.updatedBy, ts.name, ts.formLabel, ts.formOrganizationId, ts.formVersion FROM test_scenario ts");
+				.createSQLQuery("SELECT tests.ID, tests.name, tests.formId, formsOfTest.form_version FROM test_scenario AS tests JOIN (SELECT t2.id form_Id, t2.version form_version FROM tree_forms AS t2 JOIN tree_forms AS t1 ON t1.organizationId=t2.organizationId AND t1.label=t2.label WHERE t1.id="
+						+ formId +") AS formsOfTest WHERE tests.formId=formsOfTest.form_Id;");
 
 		List<Object[]> rows = query.list();
 		session.getTransaction().commit();
@@ -69,19 +69,9 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 		for (Object[] row : rows) {
 			SimpleTestScenarioView testScenarioView = new SimpleTestScenarioView();
 			testScenarioView.setId(((BigInteger) row[0]).longValue());
-			testScenarioView.setComparationId((String) row[1]);
-			testScenarioView.setCreationTime((Timestamp) row[2]);
-			if (row[3] != null) {
-				testScenarioView.setCreatedBy(((Double) row[3]).longValue());
-			}
-			testScenarioView.setUpdateTime((Timestamp) row[4]);
-			if (row[5] != null) {
-				testScenarioView.setUpdatedBy(((Double) row[5]).longValue());
-			}
-			testScenarioView.setName((String) row[6]);
-			testScenarioView.setFormLabel((String) row[7]);
-			testScenarioView.setFormOrganizationId(((Double) row[8]).longValue());
-			testScenarioView.setFormVersion((Integer) row[9]);
+			testScenarioView.setName((String) row[1]);
+			testScenarioView.setFormId(((BigInteger) row[2]).longValue());
+			testScenarioView.setFormVersion((Integer) row[3]);
 			testScenarioViews.add(testScenarioView);
 		}
 		return testScenarioViews;

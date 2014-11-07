@@ -57,6 +57,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		Category category = new Category();
 		category.setName(CATEGORY_NAME);
 		form.addChild(category);
+		formDao.makePersistent(form);
 
 		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME, form);
 
@@ -67,15 +68,11 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
 
-		persistedList = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(form.getLabel(), form.getVersion(),
-				form.getOrganizationId());
+		persistedList = testScenarioDao.getTestScenarioByFormId(form.getId());
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
 
-		persistedList = testScenarioDao.getTestScenarioByFormLabelVersionOrganizationId(FORM_LABEL_ERROR, FORM_VERSION,
-				FORM_ORGANIZATION_ID);
-		Assert.assertEquals(persistedList.size(), 0);
-
+		formDao.makeTransient(form);
 		testScenarioDao.makeTransient(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 0);
 	}
@@ -96,6 +93,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		question.setAnswerType(AnswerType.INPUT);
 		question.setAnswerFormat(AnswerFormat.NUMBER);
 		category.addChild(question);
+		formDao.makePersistent(form);
 
 		TestScenario testScenario = new TestScenario(TEST_SCENARIO_NAME, form);
 		TestScenarioForm testScenarioForm = testScenario.getTestScenarioForm();
@@ -134,6 +132,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		testScenarioCategory = persistedList.get(0).getTestScenarioForm().getChild(0);
 		Assert.assertEquals(testScenarioCategory.getChildren().size(), 0);
 
+		formDao.makeTransient(form);
 		testScenarioDao.makeTransient(testScenario);
 		Assert.assertEquals(testScenarioDao.getRowCount(), 0);
 	}

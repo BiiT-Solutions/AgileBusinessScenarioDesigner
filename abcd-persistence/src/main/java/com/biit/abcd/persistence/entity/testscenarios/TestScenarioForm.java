@@ -9,7 +9,6 @@ import com.biit.form.BaseForm;
 @Table(name = "test_scenario_form")
 public class TestScenarioForm extends BaseForm {
 	
-	String testFormName;
 
 	private static final String DEFAULT_FORM_NAME = "TestScenarioForm";
 	
@@ -17,16 +16,6 @@ public class TestScenarioForm extends BaseForm {
 		super();
 	}
 	
-	@Override
-	public String getName() {
-		return testFormName;
-	}
-	
-	@Override
-	public void setName(String name) {
-		this.testFormName = name;
-	}
-
 	@Override
 	protected String getDefaultTechnicalName() {
 		return DEFAULT_FORM_NAME;

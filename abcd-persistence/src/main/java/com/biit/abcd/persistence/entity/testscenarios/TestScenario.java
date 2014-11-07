@@ -3,7 +3,6 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,26 +32,19 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  * 
  */
 @Entity
-@Table(name = "test_scenario", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "formLabel",
-		"formVersion", "formOrganizationId" }) })
-@AttributeOverride(name = "formLabel", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH))
+@Table(name = "test_scenario", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "formId" }) })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class TestScenario extends StorableObject implements INameAttribute {
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	// private TestScenarioObject testScenarioForm;
 	private TestScenarioForm testScenarioForm;
 	@Column(length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 
 	// Form information
 	@Column(nullable = false)
-	private String formLabel;
-	@Column(nullable = false)
-	private Integer formVersion;
-	@Column(nullable = false, columnDefinition = "DOUBLE")
-	private Long formOrganizationId;
+	private Long formId;
 
 	public TestScenario() {
 		super();
@@ -62,9 +54,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			FieldTooLongException, CharacterNotAllowedException {
 		super();
 		setName(scenarioName);
-		setFormLabel(form.getLabel());
-		setFormVersion(form.getVersion());
-		setFormOrganizationId(form.getOrganizationId());
+		setFormId(form.getId());
 		createTestScenarioForm(form, null);
 	}
 
@@ -94,6 +84,14 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		return name;
 	}
 
+	public Long getFormId() {
+		return formId;
+	}
+
+	public void setFormId(Long formId) {
+		this.formId = formId;
+	}
+
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
@@ -109,37 +107,12 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		// TODO
 	}
 
-	public String getFormLabel() {
-		return formLabel;
-	}
-
-	public Integer getFormVersion() {
-		return formVersion;
-	}
-
-	public Long getFormOrganizationId() {
-		return formOrganizationId;
-	}
-
-	private void setFormLabel(String formLabel) {
-		this.formLabel = formLabel;
-	}
-
-	private void setFormVersion(Integer formVersion) {
-		this.formVersion = formVersion;
-	}
-
-	private void setFormOrganizationId(Long formOrganizationId) {
-		this.formOrganizationId = formOrganizationId;
-	}
-
 	private void createTestScenarioForm(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent)
 			throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
 		if (formTreeObject instanceof Form) {
 			testScenarioForm = new TestScenarioForm();
 			testScenarioForm.setOriginalReference(formTreeObject.getOriginalReference());
 			testScenarioForm.setOrganizationId(((Form) formTreeObject).getOrganizationId());
-			testScenarioForm.setName(formTreeObject.getName());
 			testScenarioForm.setLabel(formTreeObject.getLabel());
 			// Copy children
 			for (TreeObject child : formTreeObject.getChildren()) {
@@ -161,8 +134,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 				createTestScenarioForm(treeObject, testScenarioGroup);
 			}
 		} else if (formTreeObject instanceof Question) {
-			TreeObject testScenarioQuestion = addChild(formTreeObject, testScenarioTreeObjectParent,
-					new TestScenarioQuestion());
+			addChild(formTreeObject, testScenarioTreeObjectParent, new TestScenarioQuestion());
 		}
 		// Any other tree object type not taken into account
 	}

@@ -678,9 +678,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        formLabel varchar(190),
-        formOrganizationId DOUBLE not null,
-        formVersion integer not null,
+        formId bigint not null,
         name varchar(190),
         testScenarioForm_ID bigint,
         primary key (ID)
@@ -715,7 +713,6 @@
         parent_ID bigint,
         organizationId DOUBLE not null,
         version integer,
-        testFormName varchar(255),
         primary key (ID)
     );
 
@@ -1165,7 +1162,7 @@
         add constraint UK_rrv3rw7jasepphc1943fqgis5  unique (comparationId);
 
     alter table test_scenario 
-        add constraint UK_4af5pwhrmqlflgp411ynjh872  unique (name, formLabel, formVersion, formOrganizationId);
+        add constraint UK_49e2vwe0pem0fb31dxr3ed6b0  unique (name, formId);
 
     alter table test_scenario 
         add constraint UK_j17qvfqb5wcp4c3bgknvdii31  unique (ID);

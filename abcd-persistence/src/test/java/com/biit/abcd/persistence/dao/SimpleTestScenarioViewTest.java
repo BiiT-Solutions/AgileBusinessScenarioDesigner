@@ -31,6 +31,9 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 
 	@Autowired
 	private ITestScenarioDao testScenarioDao;
+	
+	@Autowired
+	private IFormDao formDao;
 
 	@Autowired
 	private ISimpleTestScenarioViewDao simpleTestScenarioViewDao;
@@ -46,6 +49,7 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 		Category category = new Category();
 		category.setName(CATEGORY_NAME);
 		form.addChild(category);
+		formDao.makePersistent(form);
 		
 		TestScenario testScenario = new TestScenario(DUMMY_TEST_SCENARIO, form);
 		testScenarioDao.makePersistent(testScenario);
@@ -53,10 +57,11 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
 		Assert.assertEquals(simpleTestScenarioViewDao.getRowCount(), 1);
 		
-		List<SimpleTestScenarioView> views = simpleTestScenarioViewDao.getAll();
+		List<SimpleTestScenarioView> views = simpleTestScenarioViewDao.getSimpleTestScenariosByFormId(form.getId());
 		Assert.assertEquals(views.size(), 1);
 		Assert.assertEquals(views.get(0).getName(), DUMMY_TEST_SCENARIO);
 		
+		formDao.makeTransient(form);
 		testScenarioDao.makeTransient(testScenario);
 	}
 }

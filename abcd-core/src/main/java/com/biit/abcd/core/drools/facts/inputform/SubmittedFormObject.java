@@ -2,6 +2,11 @@ package com.biit.abcd.core.drools.facts.inputform;
 
 import com.biit.orbeon.form.ICommonAttributes;
 
+/**
+ * Class containing the common attributes to categories, groups and questions of
+ * the submitted form
+ * 
+ */
 public abstract class SubmittedFormObject implements ICommonAttributes {
 
 	// Tags of the Orbeon form

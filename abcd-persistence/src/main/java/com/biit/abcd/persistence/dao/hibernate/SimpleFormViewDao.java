@@ -65,9 +65,10 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 		session.beginTransaction();
 		SQLQuery query = session
 				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion "
-						+ "FROM tree_forms tf "
-						+ "INNER JOIN (SELECT MAX(version) AS maxversion, name FROM tree_forms GROUP BY name) AS max  ON max.name = tf.name "
-						+ "ORDER BY name, tf.version DESC");
+						+ "FROM tree_forms tf INNER JOIN "
+						+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
+						+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
+						+ "ORDER BY label, tf.version DESC");
 
 		List<Object[]> rows = query.list();
 
@@ -101,14 +102,19 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<SimpleFormView> getSimpleFormViewByName(String name) {
+	public List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
 				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion "
-						+ "FROM tree_forms tf "
-						+ "INNER JOIN (SELECT MAX(version) AS maxversion, name FROM tree_forms GROUP BY name) AS max  ON max.name = tf.name "
-						+ "WHERE tf.name='" + name + "' ORDER BY tf.version DESC");
+						+ "FROM tree_forms tf INNER JOIN "
+						+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
+						+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
+						+ "WHERE tf.label='"
+						+ label
+						+ "' AND tf.organizationId='"
+						+ organizationId
+						+ "' ORDER BY label, tf.version DESC");
 
 		List<Object[]> rows = query.list();
 

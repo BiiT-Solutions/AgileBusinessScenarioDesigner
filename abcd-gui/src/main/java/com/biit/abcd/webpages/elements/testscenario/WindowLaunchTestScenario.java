@@ -55,14 +55,11 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 		testScenario = new ComboBox(ServerTranslate.translate(LanguageCodes.LAUNCH_TEST_WINDOW_TEST_SCENARIO_LABEL));
 		testScenario.setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		testScenario.setNullSelectionAllowed(false);
-		initializeTestScenarioData();
+		initializeTestScenarioData(formView);
 		for (SimpleTestScenarioView testScenarioView : testScenarioData) {
-			if (testScenarioView.getFormOrganizationId().equals(formView.getOrganizationId())
-					&& testScenarioView.getFormLabel().equals(formView.getLabel())) {
-				testScenario.addItem(testScenarioView);
-				testScenario.setItemCaption(testScenarioView,
-						testScenarioView.getName() + " (v" + testScenarioView.getFormVersion()+")");
-			}
+			testScenario.addItem(testScenarioView);
+			testScenario.setItemCaption(testScenarioView,
+					testScenarioView.getName() + " (v" + testScenarioView.getFormVersion() + ")");
 		}
 
 		formVersion.setWidth(100.0f, Unit.PERCENTAGE);
@@ -75,9 +72,9 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	/**
 	 * Loads all the test scenarios related with all the form versions
 	 */
-	private void initializeTestScenarioData() {
+	private void initializeTestScenarioData(SimpleFormView formView) {
 		testScenarioData = new ArrayList<SimpleTestScenarioView>();
-		testScenarioData.addAll(simpleTestScenarioViewDao.getAll());
+		testScenarioData.addAll(simpleTestScenarioViewDao.getSimpleTestScenariosByFormId(formView.getId()));
 		// To show first the newer versions
 		Collections.reverse(testScenarioData);
 	}
@@ -90,7 +87,8 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	 * @throws NotConnectedToDatabaseException
 	 */
 	private void initializeFormData(SimpleFormView formView) {
-		formData = simpleFormViewDao.getSimpleFormViewByName(formView.getName());
+		formData = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(formView.getLabel(),
+				formView.getOrganizationId());
 	}
 
 	public Long getSelectedFormId() {

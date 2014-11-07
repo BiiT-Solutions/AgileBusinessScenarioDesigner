@@ -24,30 +24,26 @@
 		base-package="com.biit.abcd, com.biit.form, com.biit.persistence" />
 	<!-- Read any *.properties file -->
 	<context:property-placeholder location="classpath*:*.properties" />
-	
 	<!-- Data Source -->
-	<bean id="dataSource"
-		class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
 		<property name="driverClass" value="${hibernate.connection.driver_class}" />
 		<property name="jdbcUrl" value="${hibernate.connection.url}" />
 		<property name="user" value="${hibernate.connection.username}" />
 		<property name="password" value="${hibernate.connection.password}" />
-		
 		<!-- C3P0 -->
 		<property name="minPoolSize" value="${c3p0.min_size}" />
 		<property name="maxPoolSize" value="${c3p0.max_size}" />
 		<property name="maxStatements" value="${c3p0.max_statements}" />
 		<property name="idleConnectionTestPeriod" value="${c3p0.idle_test_period}" />
 		<property name="loginTimeout" value="${c3p0.timeout}" />
-		<property name="acquireIncrement" value="${c3p0.acquire_increment}" />		
+		<property name="acquireIncrement" value="${c3p0.acquire_increment}" />
 	</bean>
-	
 	<!-- Transaction Manager -->
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
 	<!-- Hibernate session factory -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -73,17 +69,17 @@
 				<prop key="hibernate.jdbc.batch_versioned_data">${hibernate.jdbc.batch_versioned_data}</prop>
 				<prop key="hibernate.jdbc.use_streams_for_binary">${hibernate.jdbc.use_streams_for_binary}</prop>
 				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
-				
-				<!-- Second Level Cache-->
+				<!-- Second Level Cache -->
 				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
 				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
 				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
-				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>				
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
 				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
 				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
-				<prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}
+				</prop>
 				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
-				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>								
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
 			</props>
 		</property>
 		<property name="packagesToScan">
@@ -94,7 +90,6 @@
 			</list>
 		</property>
 	</bean>
-	
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />
 	<!-- Aspect -->
@@ -106,13 +101,14 @@
 		<property name="fallbackToSystemLocale" value="false"></property>
 	</bean>
 	<!-- DAOS -->
-	<bean name="formDao" class="com.biit.abcd.persistence.dao.hibernate.FormDao" >
+	<bean name="formDao" class="com.biit.abcd.persistence.dao.hibernate.FormDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	<bean name="simpleFormViewDao" class="com.biit.abcd.persistence.dao.hibernate.SimpleFormViewDao" >
+	<bean name="simpleFormViewDao"
+		class="com.biit.abcd.persistence.dao.hibernate.SimpleFormViewDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	<bean name="diagramDao" class="com.biit.abcd.persistence.dao.hibernate.DiagramDao" >
+	<bean name="diagramDao" class="com.biit.abcd.persistence.dao.hibernate.DiagramDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<!-- Liferay Services -->

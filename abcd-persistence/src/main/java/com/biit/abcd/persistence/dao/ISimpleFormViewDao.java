@@ -12,7 +12,7 @@ public interface ISimpleFormViewDao {
 
 	List<SimpleFormView> getAll();
 	
-	List<SimpleFormView> getSimpleFormViewByName(String name);
+	List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId);
 
 	void setSessionFactory(SessionFactory sessionFactory);
 

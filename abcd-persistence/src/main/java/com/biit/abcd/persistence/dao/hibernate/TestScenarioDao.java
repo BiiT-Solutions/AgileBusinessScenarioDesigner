@@ -112,18 +112,15 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			throw e;
 		}
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TestScenario> getTestScenarioByFormLabelVersionOrganizationId(String label, Integer version,
-			Long organizationId) {
+	public List<TestScenario> getTestScenarioByFormId(Long formId) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
 			Criteria criteria = session.createCriteria(TestScenario.class);
-			criteria.add(Restrictions.eq("formLabel", label));
-			criteria.add(Restrictions.eq("formVersion", version));
-			criteria.add(Restrictions.eq("formOrganizationId", organizationId));
+			criteria.add(Restrictions.eq("formId", formId));
 			List<TestScenario> testScenarios = criteria.list();
 			initializeSets(testScenarios);
 			session.getTransaction().commit();
@@ -133,5 +130,4 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			throw e;
 		}
 	}
-
 }
