@@ -25,50 +25,50 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	/**
 	 * Can create and edit forms.
 	 */
-	private static final DActivity[] MANAGE_FORMS_ACTIVITIES = {
+	private static final AbcdActivity[] MANAGE_FORMS_ACTIVITIES = {
 
-	DActivity.FORM_EDITING,
+	AbcdActivity.FORM_EDITING,
 
-	DActivity.FORM_CREATE,
+	AbcdActivity.FORM_CREATE,
 
-	DActivity.FORM_CHANGE_GROUP,
+	AbcdActivity.FORM_CHANGE_GROUP,
 
-	DActivity.FORM_VERSION
+	AbcdActivity.FORM_VERSION
 
 	};
 
 	/**
 	 * Can only read forms.
 	 */
-	private static final DActivity[] READ_ONLY = {
+	private static final AbcdActivity[] READ_ONLY = {
 
-	DActivity.READ,
+	AbcdActivity.READ,
 
-	DActivity.USER_EDIT_OWN_DATA
+	AbcdActivity.USER_EDIT_OWN_DATA
 
 	};
 
 	/**
 	 * Can do administration task for forms. Also has by default all ABCD manager permissions.
 	 */
-	private static final DActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
+	private static final AbcdActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
-	DActivity.ADMIN_FORMS,
+	AbcdActivity.ADMIN_FORMS,
 
 	};
 
-	private static final DActivity[] MANAGE_GLOBAL_CONSTANTS = {
+	private static final AbcdActivity[] MANAGE_GLOBAL_CONSTANTS = {
 
-	DActivity.GLOBAL_VARIABLE_EDITOR
+	AbcdActivity.GLOBAL_VARIABLE_EDITOR
 
 	};
 
 	/**
 	 * Manage general application options.
 	 */
-	private static final DActivity[] APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS = {
+	private static final AbcdActivity[] APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
-	DActivity.EVICT_CACHE
+	AbcdActivity.EVICT_CACHE
 
 	};
 
@@ -81,19 +81,19 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	private static AbcdAuthorizationService instance = new AbcdAuthorizationService();
 
 	static {
-		for (DActivity activity : FORM_ADMINISTRATOR_EXTRA_PERMISSIONS) {
+		for (AbcdActivity activity : FORM_ADMINISTRATOR_EXTRA_PERMISSIONS) {
 			formAdministratorPermissions.add(activity);
 		}
-		for (DActivity activity : MANAGE_FORMS_ACTIVITIES) {
+		for (AbcdActivity activity : MANAGE_FORMS_ACTIVITIES) {
 			formManagerPermissions.add(activity);
 		}
-		for (DActivity activity : READ_ONLY) {
+		for (AbcdActivity activity : READ_ONLY) {
 			readOnlyPermissions.add(activity);
 		}
-		for (DActivity activity : MANAGE_GLOBAL_CONSTANTS) {
+		for (AbcdActivity activity : MANAGE_GLOBAL_CONSTANTS) {
 			globalConstantsAdministratorPermissions.add(activity);
 		}
-		for (DActivity activity : APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS) {
+		for (AbcdActivity activity : APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS) {
 			applicationAdministratorPermissions.add(activity);
 		}
 	}
@@ -247,11 +247,11 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	}
 
 	protected boolean isAuthorizedToForm(Form form, User user) {
-		return isAuthorizedActivity(user, form, DActivity.FORM_EDITING);
+		return isAuthorizedActivity(user, form, AbcdActivity.FORM_EDITING);
 	}
 
 	public boolean isAuthorizedToForm(Long formOrganizationId, User user) {
-		return isAuthorizedActivity(user, formOrganizationId, DActivity.FORM_EDITING);
+		return isAuthorizedActivity(user, formOrganizationId, AbcdActivity.FORM_EDITING);
 	}
 
 }

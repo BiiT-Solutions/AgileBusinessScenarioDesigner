@@ -50,13 +50,13 @@ public class DiagramFork extends DiagramElement {
 	}
 
 	public void setReference(ExpressionValueTreeObjectReference reference) {
-		if (this.references == null) {
-			this.references = new ArrayList<>();
+		if (references == null) {
+			references = new ArrayList<>();
 		}
-		if (!this.references.isEmpty()) {
-			this.references.clear();
+		if (!references.isEmpty()) {
+			references.clear();
 		}
-		this.references.add(reference);
+		references.add(reference);
 	}
 
 	/**
@@ -67,8 +67,9 @@ public class DiagramFork extends DiagramElement {
 		for (DiagramLink outLink : getOutgoingLinks()) {
 			if (getReference() != null) {
 				Expression expression = getReference().generateCopy();
+				expression.resetIds();
 				expression.setEditable(false);
-				outLink.resetExpressions(expression);
+				outLink.replaceExpressions(expression);
 			}
 		}
 	}

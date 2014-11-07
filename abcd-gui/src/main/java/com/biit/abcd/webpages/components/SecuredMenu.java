@@ -12,7 +12,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.ui.Button;
@@ -23,8 +23,8 @@ import com.vaadin.ui.Button;
  */
 public abstract class SecuredMenu extends HorizontalButtonGroup {
 	private static final long serialVersionUID = -5461554340968281793L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(
-			Arrays.asList(DActivity.FORM_EDITING));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.FORM_EDITING));
 	private Set<Button> disabledButtons = null;
 
 	private Set<Button> calculateDisabledButtons() {
@@ -78,7 +78,7 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 		return disabledButtons;
 	}
 
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 

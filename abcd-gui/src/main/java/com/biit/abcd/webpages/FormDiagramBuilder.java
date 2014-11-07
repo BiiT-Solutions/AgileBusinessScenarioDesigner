@@ -20,7 +20,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
@@ -45,7 +45,7 @@ import com.vaadin.ui.UI;
 
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private SelectDiagramTable diagramBuilderTable;
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
@@ -159,13 +159,13 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 					DiagramLink diagramLink = (DiagramLink) diagramObject;
 					if (diagramLink.getSourceElement() instanceof DiagramFork) {
 						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
-						// ((DiagramFork) diagramLink.getSourceElement()).resetOutgoingLinks();
 						if (diagramLink.getSourceElement() != null
 								&& ((DiagramFork) diagramLink.getSourceElement()).getReference() != null) {
 							Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
 									.generateCopy();
+							expression.resetIds();
 							expression.setEditable(false);
-							diagramLink.resetExpressions(expression);
+							diagramLink.replaceExpressions(expression);
 						}
 					}
 				}
@@ -406,7 +406,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	}
 
 	@Override
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 

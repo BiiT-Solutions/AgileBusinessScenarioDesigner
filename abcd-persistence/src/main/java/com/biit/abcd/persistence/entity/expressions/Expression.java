@@ -29,6 +29,10 @@ public abstract class Expression extends StorableObject {
 	@Column(nullable = false)
 	private long sortSeq = 0;
 
+	public Expression() {
+		super();
+	}
+
 	public void copyBasicExpressionInfo(Expression expression) {
 		setCreatedBy(expression.getCreatedBy());
 		setCreationTime(expression.getCreationTime());

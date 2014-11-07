@@ -170,7 +170,7 @@ public class QuestionProperties extends SecuredFormElementProperties<Question> {
 					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has set the Question '"
 							+ instance.getName() + "' property 'AnswerFormat' to '" + instance.getAnswerType() + "'.");
 
-			firePropertyUpdateListener(getTreeObjectInstance());
+			// firePropertyUpdateListener(getTreeObjectInstance());
 		}
 	}
 

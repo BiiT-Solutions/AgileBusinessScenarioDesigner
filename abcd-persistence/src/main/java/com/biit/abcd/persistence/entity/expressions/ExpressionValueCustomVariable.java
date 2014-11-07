@@ -31,9 +31,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		if (variable != null) {
-			variable.resetIds();
-		}
+		// Custom variables cannot be reseted, if they are, we duplicate it when storing into database.
 	}
 
 	public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable) {

@@ -25,7 +25,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -80,7 +80,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 					public void buttonClick(ClickEvent event) {
 						final WindowNewForm newFormWindow = new WindowNewForm(
 								LanguageCodes.WINDOW_NEWFORM_WINDOW_TITLE, LanguageCodes.WINDOW_NEWFORM_NAME_TEXTFIELD,
-								LanguageCodes.WINDOW_NEWFORM_NAME_COMBOBOX, new DActivity[] { DActivity.FORM_EDITING });
+								LanguageCodes.WINDOW_NEWFORM_NAME_COMBOBOX, new AbcdActivity[] { AbcdActivity.FORM_EDITING });
 						newFormWindow.showCentered();
 						newFormWindow.addAcceptActionListener(new AcceptActionListener() {
 
@@ -293,7 +293,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void setEnabledButtons() {
 		try {
 			newFormButton.setEnabled(AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
-					UserSessionHandler.getUser(), DActivity.FORM_CREATE));
+					UserSessionHandler.getUser(), AbcdActivity.FORM_CREATE));
 		} catch (IOException | AuthenticationRequired e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}

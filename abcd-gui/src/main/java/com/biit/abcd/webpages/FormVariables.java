@@ -16,7 +16,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.utils.CheckDependencies;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formvariables.FormVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.formvariables.VariableTable;
@@ -26,7 +26,7 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class FormVariables extends FormWebPageComponent {
 	private static final long serialVersionUID = 8796076485600899730L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private FormVariablesUpperMenu upperMenu;
 	private VariableTable variableTable;
 
@@ -143,7 +143,7 @@ public class FormVariables extends FormWebPageComponent {
 	}
 
 	@Override
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 }

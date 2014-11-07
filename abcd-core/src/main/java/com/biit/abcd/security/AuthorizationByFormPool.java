@@ -18,12 +18,12 @@ public class AuthorizationByFormPool {
 	// Form -> user -> time.
 	private Hashtable<Form, Hashtable<User, Long>> userTime;
 	// Form -> user -> activity -> allowed.
-	private Hashtable<Form, Hashtable<User, Hashtable<DActivity, Boolean>>> usersActivities;
+	private Hashtable<Form, Hashtable<User, Hashtable<AbcdActivity, Boolean>>> usersActivities;
 
 	public AuthorizationByFormPool() {
 		formTime = new Hashtable<Form, Long>();
 		userTime = new Hashtable<Form, Hashtable<User, Long>>();
-		usersActivities = new Hashtable<Form, Hashtable<User, Hashtable<DActivity, Boolean>>>();
+		usersActivities = new Hashtable<Form, Hashtable<User, Hashtable<AbcdActivity, Boolean>>>();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class AuthorizationByFormPool {
 	 * @param activity
 	 * @return
 	 */
-	public Boolean isAuthorizedActivity(Form form, User user, DActivity activity) {
+	public Boolean isAuthorizedActivity(Form form, User user, AbcdActivity activity) {
 		long now = System.currentTimeMillis();
 		User userForm = null;
 
@@ -74,18 +74,18 @@ public class AuthorizationByFormPool {
 		return null;
 	}
 
-	public void addUser(Form form, User user, DActivity activity, boolean allowed) {
+	public void addUser(Form form, User user, AbcdActivity activity, boolean allowed) {
 		if (form != null && user != null && activity != null) {
 			if (userTime.get(form) == null) {
 				userTime.put(form, new Hashtable<User, Long>());
 			}
 
 			if (usersActivities.get(form) == null) {
-				usersActivities.put(form, new Hashtable<User, Hashtable<DActivity, Boolean>>());
+				usersActivities.put(form, new Hashtable<User, Hashtable<AbcdActivity, Boolean>>());
 			}
 
 			if (usersActivities.get(form).get(user) == null) {
-				usersActivities.get(form).put(user, new Hashtable<DActivity, Boolean>());
+				usersActivities.get(form).put(user, new Hashtable<AbcdActivity, Boolean>());
 			}
 
 			userTime.get(form).put(user, System.currentTimeMillis());

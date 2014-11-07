@@ -13,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.gson.utils.DiagramLinkDeserializer;
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -145,17 +144,6 @@ public class DiagramLink extends DiagramObject {
 
 	public String getVertices() {
 		return vertices;
-	}
-
-	public static DiagramLink fromJson(String jsonString) {
-		if (jsonString != null) {
-			GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-			gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkDeserializer());
-			Gson gson = gsonBuilder.create();
-			DiagramLink object = gson.fromJson(jsonString, DiagramLink.class);
-			return object;
-		}
-		return null;
 	}
 
 	@Override
@@ -330,12 +318,8 @@ public class DiagramLink extends DiagramObject {
 	 * 
 	 * @param expression
 	 */
-	public void resetExpressions(Expression expression) {
+	public void replaceExpressions(Expression expression) {
 		getExpressionChain().setExpressions(Arrays.asList(expression));
-	}
-
-	public void addExpressionToExpressionChain(Expression expression) {
-		getExpressionChain().addExpression(expression);
 	}
 
 	public String getTextWithoutFirstExpression() {

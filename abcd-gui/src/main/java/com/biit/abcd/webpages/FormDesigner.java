@@ -21,7 +21,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.abcd.security.DActivity;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
@@ -45,7 +45,7 @@ import com.vaadin.ui.HorizontalLayout;
 
 public class FormDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-	private static final List<DActivity> activityPermissions = new ArrayList<DActivity>(Arrays.asList(DActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private FormTreeTable formTreeTable;
 	private FormDesignerPropertiesComponent propertiesComponent;
 	private FormDesignerUpperMenu upperMenu;
@@ -137,7 +137,7 @@ public class FormDesigner extends FormWebPageComponent {
 	}
 
 	@Override
-	public List<DActivity> accessAuthorizationsRequired() {
+	public List<AbcdActivity> accessAuthorizationsRequired() {
 		return activityPermissions;
 	}
 
@@ -154,10 +154,6 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				save();
-				// if (testScenariosModified) {
-				// UserSessionHandler.getTestScenariosController().update(modifyTestScenariosLinked(),
-				// UserSessionHandler.getFormController().getForm());
-				// }
 			}
 		});
 
