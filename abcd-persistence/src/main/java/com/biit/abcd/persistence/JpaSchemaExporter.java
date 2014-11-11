@@ -1,6 +1,10 @@
 package com.biit.abcd.persistence;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.webforms.persistence.HibernateDialect;
 
 @SuppressWarnings("rawtypes")
 public class JpaSchemaExporter {
@@ -170,12 +175,29 @@ public class JpaSchemaExporter {
 		}
 		gen.createDatabaseScript(HibernateDialect.MYSQL, directory, true);
 		gen.updateDatabaseScript(HibernateDialect.MYSQL, directory, host, port, user, password);
+
+		addTextToFile(createHibernateSequenceTable(), directory + File.separator + "create_"
+				+ HibernateDialect.MYSQL.name().toLowerCase() + ".sql");
 	}
 
 	private static String getDate() {
 		Date ahora = new Date();
 		SimpleDateFormat formateador = new SimpleDateFormat("dd-MM-yyyy_HHmmss");
 		return formateador.format(ahora);
+	}
+
+	private static String createHibernateSequenceTable() {
+		String table = "\n\tCREATE TABLE `hibernate_sequence` (\n";
+		table += "\t\t`next_val` bigint(20) DEFAULT NULL\n";
+		table += "\t);\n";
+		return table;
+	}
+
+	private static void addTextToFile(String text, String file) {
+		try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)))) {
+			out.println(text);
+		} catch (IOException e) {
+		}
 	}
 
 }

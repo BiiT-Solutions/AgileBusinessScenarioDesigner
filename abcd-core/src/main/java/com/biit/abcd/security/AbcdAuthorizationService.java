@@ -184,7 +184,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		if (form == null || form.getOrganizationId() == null) {
 			return false;
 		}
-		return isAuthorizedActivity(user, form, activity);
+		return isAuthorizedActivity(user, form.getOrganizationId(), activity);
 	}
 
 	public boolean isAuthorizedActivity(User user, Long organizationId, IActivity activity) {
