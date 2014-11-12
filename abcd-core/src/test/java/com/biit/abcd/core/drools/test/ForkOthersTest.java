@@ -40,6 +40,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
@@ -60,7 +61,7 @@ public class ForkOthersTest extends KidsFormCreator {
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+			NullExpressionValueException, NotValidTypeInVariableData {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -78,7 +79,7 @@ public class ForkOthersTest extends KidsFormCreator {
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+			NullExpressionValueException, NotValidTypeInVariableData {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -90,14 +91,14 @@ public class ForkOthersTest extends KidsFormCreator {
 		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
 	}
 
-	// TODO
-	@Test(groups = { "rules2" })
+	// TODO fix random creation rule behaviour
+	@Test(groups = { "rules3" })
 	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException {
+			NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData {
 
 		// Restart the form to avoid test cross references
 		initForm();

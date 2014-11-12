@@ -1,19 +1,16 @@
 package com.biit.abcd.core.drools.test;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
@@ -27,18 +24,9 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.utils.DateUtils;
-import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramChild;
-import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
-import com.biit.abcd.persistence.entity.diagram.DiagramLink;
-import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
-import com.biit.abcd.persistence.entity.diagram.DiagramSink;
-import com.biit.abcd.persistence.entity.diagram.DiagramSource;
-import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -52,12 +40,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstan
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidOperatorInExpression;
-import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
-import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
-import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
@@ -73,24 +57,23 @@ public class ExpressionsTest extends KidsFormCreator {
 	private final static String DATE = "date";
 	private final static String BMI = "bmi";
 	private final static String IF_RESULT = "ifResult";
+	private final static String MIN = "min";
+	private final static String MAX = "max";
+	private final static String AVG = "avg";
 	private final static String PMT = "pmt";
-	private GlobalVariable globalVariableNumber = null;
 
 	@Test(groups = { "rules" })
-	public void testExpressions() throws ExpressionInvalidException, NotValidChildException,
-			NotValidOperatorInExpression, ChildrenNotFoundException, RuleInvalidException, FieldTooLongException,
-			IOException, CategoryDoesNotExistException, DocumentException, CategoryNameWithoutTranslation,
-			RuleNotImplementedException, InvalidAnswerFormatException, ActionNotImplementedException, ParseException,
-			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException,
-			NotValidTypeInVariableData, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
-
+	public void testDateExpressions() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			ParseException, QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException {
 		// Restart the form to avoid test cross references
 		initForm();
-		createGlobalvariables();
 		// Create the table and form diagram
-		createKidsFormSimpleExpressions();
+		createDateExpressions();
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules();
 
@@ -106,12 +89,43 @@ public class ExpressionsTest extends KidsFormCreator {
 				((SubmittedCategory) droolsForm.getSubmittedForm().getCategory("Algemeen")).getVariableValue(MONTHS),
 				DateUtils.returnMonthsDistanceFromDate(birthdate));
 		// Check days
-		Assert.assertEquals(((SubmittedGroup) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding"))
-				.getVariableValue(DAYS), DateUtils.returnDaysDistanceFromDate(birthdate));
+		Assert.assertEquals(((SubmittedGroup) droolsForm.getSubmittedForm().getCategory("Lifestyle")
+				.getGroup("voeding")).getVariableValue(DAYS), DateUtils.returnDaysDistanceFromDate(birthdate));
 		// Check date
-		Assert.assertEquals(((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")
-				.getQuestion("fruit")).getVariableValue(DATE), birthdate);
+		Assert.assertEquals(
+				((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Lifestyle").getGroup("voeding")
+						.getQuestion("fruit")).getVariableValue(DATE), birthdate);
+	}
 
+	@Test(groups = { "rules" })
+	public void testComplexExpression() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			QuestionDoesNotExistException, CategoryDoesNotExistException, ExpressionInvalidException,
+			RuleInvalidException, IOException, RuleNotImplementedException, DocumentException,
+			CategoryNameWithoutTranslation, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// Mathematical expression
+		CustomVariable bmiCustomVariable = new CustomVariable(getForm(), BMI, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(getForm(),
+				bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorMath(
+						AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
+						getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
+				new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.PILCROW), new ExpressionOperatorMath(
+						AvailableOperator.MULTIPLICATION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueTreeObjectReference(getTreeObject("height")), new ExpressionOperatorMath(
+						AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
 		// Check bmi
 		Double height = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
 				.getQuestion("height")).getAnswer());
@@ -119,24 +133,165 @@ public class ExpressionsTest extends KidsFormCreator {
 				.getQuestion("weight")).getAnswer());
 		Double bmi = weight / ((height / 100) * (height / 100));
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
+	}
+
+	@Test(groups = { "rules" })
+	public void testIfOperatorWithoutGenerics() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// If expression
+		CustomVariable ifResultCustomVariable = new CustomVariable(getForm(), IF_RESULT, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
+				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorLogic(
+						AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(), ifResultCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
+						ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
 
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT), 7.1);
+	}
 
+	@Test(groups = { "rules" })
+	public void testMinOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// MIN expression
+		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), MIN, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("minExpression", new ExpressionValueCustomVariable(getForm(),
+				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGlobalConstant(
+						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check result
+		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+		Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+				.getQuestion("heightFather")).getAnswer());
+		Double thirdVal = 1000.0;
+		Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MIN), minVal);
+	}
+
+	@Test(groups = { "rules" })
+	public void testMaxOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// MAX expression
+		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), MAX, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("maxExpression", new ExpressionValueCustomVariable(getForm(),
+				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MAX), new ExpressionValueGlobalConstant(
+						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check result
+		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+		Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+				.getQuestion("heightFather")).getAnswer());
+		Double thirdVal = 1000.0;
+		Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MAX), maxVal);
+	}
+
+	@Test(groups = { "rules" })
+	public void testAvgOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// AVG expression
+		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), AVG, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("avgExpression", new ExpressionValueCustomVariable(getForm(),
+				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.AVG), new ExpressionValueGlobalConstant(
+						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check result
+		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+		Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+				.getQuestion("heightFather")).getAnswer());
+		Double thirdVal = 1000.0;
+		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(AVG),
+				(firstVal + secondVal + thirdVal) / 3.0);
+	}
+
+	@Test(groups = { "rules" })
+	public void testPmtOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
+			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// PMT expression
+		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), PMT, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("pmtExpression", new ExpressionValueCustomVariable(getForm(),
+				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalConstant(
+						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check result
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
 	}
 
-	private void createKidsFormSimpleExpressions() throws FieldTooLongException, NotValidChildException,
+	private void createDateExpressions() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException {
 
 		// Create custom variables
 		// Assign to form
 		CustomVariable yearsCustomVariable = new CustomVariable(getForm(), YEARS, CustomVariableType.NUMBER,
-				CustomVariableScope.FORM);
-		CustomVariable bmiCustomVariable = new CustomVariable(getForm(), BMI, CustomVariableType.NUMBER,
-				CustomVariableScope.FORM);
-		CustomVariable ifResultCustomVariable = new CustomVariable(getForm(), IF_RESULT, CustomVariableType.NUMBER,
-				CustomVariableScope.FORM);
-		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), PMT, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 		// Assign to category
 		CustomVariable monthsCustomVariable = new CustomVariable(getForm(), MONTHS, CustomVariableType.NUMBER,
@@ -174,145 +329,6 @@ public class ExpressionsTest extends KidsFormCreator {
 				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.DATE));
 		getForm().getExpressionChains().add(expression4);
 
-		// Mathematical expression
-		ExpressionChain expression5 = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(
-				getForm(), bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorMath(
-						AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
-						getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
-				new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-				new ExpressionSymbol(AvailableSymbol.PILCROW), new ExpressionOperatorMath(
-						AvailableOperator.MULTIPLICATION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-				new ExpressionValueTreeObjectReference(getTreeObject("height")), new ExpressionOperatorMath(
-						AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression5);
-
-		// If expression
-		ExpressionChain expression6 = new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
-				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorLogic(
-						AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(), ifResultCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
-						ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression6);
-
-		// PMT expression
-		ExpressionChain expression7 = new ExpressionChain("pmtExpression", new ExpressionValueCustomVariable(getForm(),
-				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalConstant(globalVariableNumber),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
-						getTreeObject("heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueNumber(1000), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression7);
-
-		getForm().addDiagram(createSimpleDiagram());
-	}
-
-	private void createGlobalvariables() throws NotValidTypeInVariableData, FieldTooLongException {
-		List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
-		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
-		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
-		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
-		Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
-
-		// Should get the second value
-		globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);
-		globalVariableNumber.setName("Percentage");
-		globalVariableNumber.addVariableData(19.0, validFrom, validToPast);
-		globalVariableNumber.addVariableData(21.0, validToPast, null);
-		// Should not represent this constant
-		GlobalVariable globalVariableText = new GlobalVariable(AnswerFormat.TEXT);
-		globalVariableText.setName("TestText");
-		globalVariableText.addVariableData("Hello", validFromFuture, validToFuture);
-		// Should get the value
-		GlobalVariable globalVariablePostalCode = new GlobalVariable(AnswerFormat.POSTAL_CODE);
-		globalVariablePostalCode.setName("TestPC");
-		globalVariablePostalCode.addVariableData("Postal", validFrom, validToFuture);
-		// Should enter a valid date as constant
-		GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
-		globalVariableDate.setName("TestDate");
-		globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
-
-		globalVarList.add(globalVariableNumber);
-		globalVarList.add(globalVariableText);
-		globalVarList.add(globalVariablePostalCode);
-		globalVarList.add(globalVariableDate);
-
-		setGlobalVariables(globalVarList);
-	}
-
-	private Diagram createSimpleDiagram() {
-		Diagram mainDiagram = new Diagram("main");
-
-		DiagramSource diagramStartNode = new DiagramSource();
-		diagramStartNode.setJointjsId(IdGenerator.createId());
-		diagramStartNode.setType(DiagramObjectType.SOURCE);
-		Node nodeSource = new Node(diagramStartNode.getJointjsId());
-
-		DiagramChild subDiagramExpressionNode = new DiagramChild();
-		subDiagramExpressionNode.setDiagram(createExpressionsSubdiagram());
-		subDiagramExpressionNode.setJointjsId(IdGenerator.createId());
-		subDiagramExpressionNode.setType(DiagramObjectType.DIAGRAM_CHILD);
-		Node nodeTable = new Node(subDiagramExpressionNode.getJointjsId());
-
-		DiagramSink diagramEndNode = new DiagramSink();
-		diagramEndNode.setJointjsId(IdGenerator.createId());
-		diagramEndNode.setType(DiagramObjectType.SINK);
-		Node nodeSink = new Node(diagramEndNode.getJointjsId());
-
-		DiagramLink startExpression = new DiagramLink(nodeSource, nodeTable);
-		startExpression.setJointjsId(IdGenerator.createId());
-		startExpression.setType(DiagramObjectType.LINK);
-		DiagramLink expressionEnd = new DiagramLink(nodeTable, nodeSink);
-		expressionEnd.setJointjsId(IdGenerator.createId());
-		expressionEnd.setType(DiagramObjectType.LINK);
-
-		mainDiagram.addDiagramObject(diagramStartNode);
-		mainDiagram.addDiagramObject(subDiagramExpressionNode);
-		mainDiagram.addDiagramObject(diagramEndNode);
-		mainDiagram.addDiagramObject(startExpression);
-		mainDiagram.addDiagramObject(expressionEnd);
-
-		return mainDiagram;
-	}
-
-	private Diagram createExpressionsSubdiagram() {
-		Diagram subDiagram = new Diagram("expressionDiagram");
-		for (ExpressionChain expressionChain : getForm().getExpressionChains()) {
-
-			DiagramSource diagramSource = new DiagramSource();
-			diagramSource.setJointjsId(IdGenerator.createId());
-			diagramSource.setType(DiagramObjectType.SOURCE);
-			Node nodeSource = new Node(diagramSource.getJointjsId());
-
-			DiagramExpression diagramExpression = new DiagramExpression();
-			diagramExpression.setExpression(expressionChain);
-			diagramExpression.setJointjsId(IdGenerator.createId());
-			diagramExpression.setType(DiagramObjectType.CALCULATION);
-			Node nodeRule = new Node(diagramExpression.getJointjsId());
-
-			DiagramSink diagramSink = new DiagramSink();
-			diagramSink.setJointjsId(IdGenerator.createId());
-			diagramSink.setType(DiagramObjectType.SINK);
-			Node nodeSink = new Node(diagramSink.getJointjsId());
-
-			DiagramLink diagramLinkSourceRule = new DiagramLink(nodeSource, nodeRule);
-			diagramLinkSourceRule.setJointjsId(IdGenerator.createId());
-			diagramLinkSourceRule.setType(DiagramObjectType.LINK);
-			DiagramLink diagramLinkRuleSink = new DiagramLink(nodeRule, nodeSink);
-			diagramLinkRuleSink.setJointjsId(IdGenerator.createId());
-			diagramLinkRuleSink.setType(DiagramObjectType.LINK);
-
-			subDiagram.addDiagramObject(diagramSource);
-			subDiagram.addDiagramObject(diagramExpression);
-			subDiagram.addDiagramObject(diagramSink);
-			subDiagram.addDiagramObject(diagramLinkSourceRule);
-			subDiagram.addDiagramObject(diagramLinkRuleSink);
-		}
-		return subDiagram;
+		getForm().addDiagram(createExpressionsDiagram());
 	}
 }

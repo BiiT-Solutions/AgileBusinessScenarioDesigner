@@ -125,14 +125,14 @@ public class SimpleConditionsGenerator {
 		if (expressionValueCustomVariable != null) {
 			TreeObject treeObject = expressionValueCustomVariable.getReference();
 			if (treeObject != null) {
-				CustomVariable treeObjectCustomvariable = expressionValueCustomVariable.getVariable();
-				if (treeObjectCustomvariable != null) {
+				CustomVariable treeObjectCustomVariable = expressionValueCustomVariable.getVariable();
+				if (treeObjectCustomVariable != null) {
 					if (treeObject instanceof Form) {
-						return simpleFormCustomVariableConditions(treeObject, treeObjectCustomvariable);
+						return simpleFormCustomVariableConditions(treeObject, treeObjectCustomVariable);
 					} else if (treeObject instanceof Category) {
-						return simpleCategoryCustomVariableConditions(treeObject, treeObjectCustomvariable);
+						return simpleCategoryCustomVariableConditions(treeObject, treeObjectCustomVariable);
 					} else if ((treeObject instanceof Group) || (treeObject instanceof Question)) {
-						return simpleGroupQuestionCustomVariableConditions(treeObject, treeObjectCustomvariable);
+						return simpleGroupQuestionCustomVariableConditions(treeObject, treeObjectCustomVariable);
 					} else {
 						throw new TreeObjectInstanceNotRecognizedException(treeObject);
 					}

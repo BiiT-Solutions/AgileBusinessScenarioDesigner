@@ -206,6 +206,7 @@ public enum LanguageCodes {
 	ERROR_NAME_NOT_VALID("error.nameNotValid"),
 	ERROR_DIAGRAM_REPEATED_NAME("error.diagram.repeatedName"),
 	ERROR_SELECT_QUESTION("error.select.question"),
+	ERROR_SELECT_QUESTION_OR_CUSTOM_VARIABLE("error.select.question.or.custom.variable"),
 	ERROR_SELECT_TABLE("error.select.table"),
 	ERROR_SELECT_EXPRESSION("error.select.expression"),
 	ERROR_SELECT_ANSWER("error.select.answer"),
