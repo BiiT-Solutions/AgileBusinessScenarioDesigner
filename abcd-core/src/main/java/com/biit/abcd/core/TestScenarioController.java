@@ -5,6 +5,7 @@ import java.util.List;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 public class TestScenarioController {
 	private List<TestScenario> testScenarios = null;
@@ -49,10 +50,11 @@ public class TestScenarioController {
 	}
 
 	/**
-	 * Remove all old test scenarios and store all the new ones. This method is
-	 * synchronized.
+	 * Remove all old test scenarios and store all the new ones. This method is synchronized.
+	 * 
+	 * @throws UnexpectedDatabaseException
 	 */
-	public void update(List<TestScenario> testScenarios, Form form) {
+	public void update(List<TestScenario> testScenarios, Form form) throws UnexpectedDatabaseException {
 		synchronized (TestScenarioController.class) {
 			// Remove unused variables.
 			if (this.testScenarios != null) {

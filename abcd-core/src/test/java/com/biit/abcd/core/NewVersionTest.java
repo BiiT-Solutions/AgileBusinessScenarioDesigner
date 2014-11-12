@@ -31,6 +31,7 @@ import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -47,7 +48,7 @@ public class NewVersionTest extends AbstractTransactionalTestNGSpringContextTest
 
 	@Test
 	public void createForm() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException,
-			InvalidAnswerFormatException {
+			InvalidAnswerFormatException, UnexpectedDatabaseException {
 		form = FormUtils.createCompleteForm();
 		Assert.assertNotNull(form);
 		formDao.makePersistent(form);
@@ -60,14 +61,14 @@ public class NewVersionTest extends AbstractTransactionalTestNGSpringContextTest
 			QuestionNotEqualsException, CustomVariableNotEqualsException, ExpressionNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException, TableRuleNotEqualsException,
 			RuleNotEqualsException, DiagramNotEqualsException, DiagramObjectNotEqualsException, NodeNotEqualsException,
-			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException, UnexpectedDatabaseException {
 		newVersionForm = form.createNewVersion(null);
 		Assert.assertNotNull(newVersionForm);
 		Assert.assertEquals((int) form.getVersion() + 1, (int) newVersionForm.getVersion());
 
 		new FormVersionComparator().compare(form, newVersionForm);
 		formDao.makePersistent(newVersionForm);
-		
+
 		formDao.makeTransient(form);
 		formDao.makeTransient(newVersionForm);
 	}

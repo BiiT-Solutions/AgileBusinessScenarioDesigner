@@ -244,6 +244,9 @@ public enum LanguageCodes {
 	ERROR_INCOMPATIBLE_TYPES("error.incompatible.types"),
 	ERROR_INCOMPATIBLE_TYPES_MORE_INFO("error.incompatible.types.more.info"),
 	
+	ERROR_ACCESSING_DATABASE("error.database.access"),
+	ERROR_ACCESSING_DATABASE_DESCRIPTION("error.database.description"),
+	
 	INFO_DATA_STORED("info.data.store"),
 	INFO_CACHE_CLEARED("info.cache.cleared"),
 

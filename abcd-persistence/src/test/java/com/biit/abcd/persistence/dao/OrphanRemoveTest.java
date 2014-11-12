@@ -22,6 +22,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 /**
@@ -53,7 +54,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	private IExpressionValueTreeObjectReferenceDao expressionValueTreeObjectReferenceDao;
 
 	@Test
-	public void removeBasicRule() {
+	public void removeBasicRule() throws UnexpectedDatabaseException {
 		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
 		// Rule already has two chains inside.
 		Rule rule = new Rule();
@@ -66,7 +67,8 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	}
 
 	@Test
-	public void removeRuleOfForm() throws FieldTooLongException, CharacterNotAllowedException {
+	public void removeRuleOfForm() throws FieldTooLongException, CharacterNotAllowedException,
+			UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -84,7 +86,8 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	}
 
 	@Test
-	public void removeDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
+	public void removeDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
+			UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM + "1");
@@ -156,7 +159,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 
 	@Test
 	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM + "2");

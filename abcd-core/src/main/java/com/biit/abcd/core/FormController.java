@@ -38,6 +38,7 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.liferay.portal.model.User;
 
@@ -63,7 +64,7 @@ public class FormController {
 		this.user = user;
 	}
 
-	public void save() throws DuplicatedVariableException {
+	public void save() throws DuplicatedVariableException, UnexpectedDatabaseException {
 		this.checkDuplicatedVariables();
 		if (this.getForm() != null) {
 			this.formDao.makePersistent(this.getForm());
@@ -85,7 +86,7 @@ public class FormController {
 		}
 	}
 
-	public void remove() {
+	public void remove() throws UnexpectedDatabaseException {
 		if (this.getForm() != null) {
 			this.formDao.makeTransient(this.getForm());
 		}

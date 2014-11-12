@@ -16,6 +16,7 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidFormException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,7 +32,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	private IFormDao formDao;
 
 	@Test
-	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException {
+	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -46,7 +47,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test
-	public void storeIntegerVariables() throws FieldTooLongException, CharacterNotAllowedException {
+	public void storeIntegerVariables() throws FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v2");
@@ -72,7 +73,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test
-	public void storeStringVariables() throws FieldTooLongException, CharacterNotAllowedException {
+	public void storeStringVariables() throws FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v3");
@@ -99,7 +100,8 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test
-	public void storeDateVariables() throws FieldTooLongException, CharacterNotAllowedException {
+	public void storeDateVariables() throws FieldTooLongException, CharacterNotAllowedException,
+			UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v4");

@@ -2,8 +2,13 @@ package com.biit.abcd.webpages.components;
 
 import java.util.List;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.webpages.FormManager;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.vaadin.ui.ListSelect;
 
 /**
@@ -17,7 +22,13 @@ public class GlobalConstantsListSelect extends ListSelect {
 		setNullSelectionAllowed(false);
 		setImmediate(true);
 
-		initializeVariableSelectionValues(UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
+		try {
+			initializeVariableSelectionValues(UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
+		} catch (UnexpectedDatabaseException e) {
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+		}
 	}
 
 	private void initializeVariableSelectionValues(List<GlobalVariable> globalVariables) {

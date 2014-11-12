@@ -10,6 +10,7 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSort;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
@@ -25,7 +26,7 @@ public class TableRuleRowDao extends GenericDao<TableRuleRow> implements ITableR
 	}
 
 	@Override
-	public TableRuleRow makePersistent(TableRuleRow entity) {
+	public TableRuleRow makePersistent(TableRuleRow entity) throws UnexpectedDatabaseException {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
@@ -36,7 +37,7 @@ public class TableRuleRowDao extends GenericDao<TableRuleRow> implements ITableR
 	}
 
 	@Override
-	public List<TableRuleRow> getAll() {
+	public List<TableRuleRow> getAll() throws UnexpectedDatabaseException {
 		List<TableRuleRow> result = super.getAll();
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the

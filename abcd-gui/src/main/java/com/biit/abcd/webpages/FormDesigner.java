@@ -36,6 +36,7 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -507,6 +508,9 @@ public class FormDesigner extends FormWebPageComponent {
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+			} catch (UnexpectedDatabaseException e) {
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 			}
 		}
 	}

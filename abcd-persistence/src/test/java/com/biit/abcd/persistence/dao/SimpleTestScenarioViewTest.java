@@ -16,6 +16,7 @@ import com.biit.abcd.persistence.entity.SimpleTestScenarioView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -40,7 +41,7 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 
 	@Test
 	public void getView() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			NotValidStorableObjectException {
+			NotValidStorableObjectException, UnexpectedDatabaseException {
 		
 		Form form = new Form();
 		form.setLabel(FORM_LABEL);

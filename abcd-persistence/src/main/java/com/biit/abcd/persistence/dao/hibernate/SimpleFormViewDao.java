@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 @Repository
 public class SimpleFormViewDao implements ISimpleFormViewDao {
@@ -43,7 +44,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 	}
 
 	@Override
-	public int getRowCount() {
+	public int getRowCount() throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
@@ -54,7 +55,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			return rows;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
-			throw e;
+			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
 	}
 

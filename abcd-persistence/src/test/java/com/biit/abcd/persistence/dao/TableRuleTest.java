@@ -24,6 +24,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.exceptions.NotValidFormException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,7 +45,8 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 	private IFormDao formDao;
 
 	@Test
-	public void storeDummyTableRule() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException {
+	public void storeDummyTableRule() throws NotValidFormException, FieldTooLongException,
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -69,7 +71,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 	@Test
 	public void storeTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		// Define form.
 		Form form = new Form();
 		form.setOrganizationId(0l);
@@ -100,7 +102,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 
 	@Test
 	public void storeFormTableRule() throws NotValidChildException, NotValidExpression, FieldTooLongException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(TABLE_RULE_FORM);
