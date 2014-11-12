@@ -184,20 +184,10 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		if (form == null || form.getOrganizationId() == null) {
 			return false;
 		}
-		Organization organization = getOrganization(user, form.getOrganizationId());
-		if (organization == null) {
-			return false;
-		}
-		try {
-			return isAuthorizedActivity(user, organization, activity);
-		} catch (IOException | AuthenticationRequired e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
-			// For security
-			return false;
-		}
+		return isAuthorizedActivity(user, form.getOrganizationId(), activity);
 	}
 
-	private boolean isAuthorizedActivity(User user, Long organizationId, IActivity activity) {
+	public boolean isAuthorizedActivity(User user, Long organizationId, IActivity activity) {
 		if (organizationId == null) {
 			return false;
 		}
