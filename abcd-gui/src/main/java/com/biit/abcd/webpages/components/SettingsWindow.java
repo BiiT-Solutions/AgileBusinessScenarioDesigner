@@ -27,8 +27,8 @@ import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsExcepti
 import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.security.AbcdActivity;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
@@ -125,6 +125,7 @@ public class SettingsWindow extends PopupWindow {
 									@Override
 									public void acceptAction(AcceptCancelWindow window) {
 										formDao.evictAllCache();
+										ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 										AbcdLogger.info(this.getClass().getName(), "User '"
 												+ UserSessionHandler.getUser().getEmailAddress()
 												+ "' has cleared all the 2nd level cache.");
