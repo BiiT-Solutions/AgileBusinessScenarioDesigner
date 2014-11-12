@@ -34,6 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
@@ -68,7 +69,7 @@ public class TableRuleTest extends KidsFormCreator {
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
 			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException {
+			NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData {
 
 		// Restart the form to avoid test cross references
 		initForm();

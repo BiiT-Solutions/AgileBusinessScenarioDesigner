@@ -60,7 +60,8 @@ import com.vaadin.ui.UI;
 public class TableRuleEditor extends FormWebPageComponent implements EditExpressionListener, ClearExpressionListener,
 		EditActionListener, ClearActionListener {
 	static final long serialVersionUID = -5547452506556261601L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private RuleTable ruleTable;
 	private DecisionTableEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectTableRuleTableEditable tableSelectionMenu;
@@ -313,7 +314,8 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information of the currently selected table.
+	 * Updates the table where the user defines the rules with the information
+	 * of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
 		ruleTable.update(getSelectedTableRule());
@@ -477,16 +479,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 									+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 							setTreeObjectExpression(row, (Integer) propertyId, selectedQuestion);
 						}
-
-					} else if (selectedElement instanceof TreeObject) {
-						TreeObject treeObject = (TreeObject) selectedElement;
-						answerExpression.removeAllExpressions();
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the tree object '"
-								+ treeObject.getName() + "' to Table rule '"
-								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
-						setTreeObjectExpression(row, (Integer) propertyId, treeObject);
-
+						newQuestionConditionWindow.close();
 					} else if (selectedElement instanceof ExpressionValueCustomVariable) {
 						ExpressionValueCustomVariable customVariable = (ExpressionValueCustomVariable) selectedElement;
 						TreeObject treeObject = customVariable.getReference();
@@ -496,32 +489,16 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 								+ customVariable.getRepresentation() + "' to Table rule '"
 								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 						setCustomVariableExpression(row, (Integer) propertyId, treeObject, customVariable.getVariable());
+						newQuestionConditionWindow.close();
 
-					} else if (selectedElement instanceof GenericTreeObjectType) {
-						GenericTreeObjectType genericType = (GenericTreeObjectType) selectedElement;
-						answerExpression.removeAllExpressions();
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the generic type '"
-								+ genericType.getExpressionName() + "' to Table rule '"
-								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
-						setGenericTreeObjectExpression(row, (Integer) propertyId, genericType);
-
-					} else if (selectedElement instanceof ExpressionValueGenericCustomVariable) {
-						ExpressionValueGenericCustomVariable customVariable = (ExpressionValueGenericCustomVariable) selectedElement;
-						GenericTreeObjectType genericTO = customVariable.getType();
-						answerExpression.removeAllExpressions();
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the custom variable '"
-								+ customVariable.getRepresentation() + "' to Table rule '"
-								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
-						setGenericCustomVariableExpression(row, (Integer) propertyId, genericTO,
-								customVariable.getVariable());
+					} else {
+						MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION_OR_CUSTOM_VARIABLE);
 					}
 				} else {
-					// MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION);
+					// MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION_OR_CUSTOM_VARIABLE);
 					removeQuestion(row, propertyId);
+					newQuestionConditionWindow.close();
 				}
-				newQuestionConditionWindow.close();
 			}
 		});
 		newQuestionConditionWindow.addClearActionListener(new ClearElementsActionListener() {
@@ -686,8 +663,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	@Override
 	public void editAction(final TableRuleRow row) {
 		if (row.getAction() != null) {
-			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(
-					row.getAction());
+			final AddNewActionExpressionWindow newActionValueWindow = new AddNewActionExpressionWindow(row.getAction());
 
 			newActionValueWindow.showCentered();
 			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {

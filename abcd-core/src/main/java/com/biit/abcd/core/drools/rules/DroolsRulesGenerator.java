@@ -41,42 +41,42 @@ public class DroolsRulesGenerator {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
-		this.initParser();
+		initParser();
 	}
 
 	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException {
-		if (this.form != null) {
-			this.rules = "package com.biit.drools \n\n";
-			this.rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
-			this.rules += "import com.biit.abcd.core.drools.utils.* \n";
-			this.rules += "import java.lang.Math \n";
-			this.rules += "import java.util.Date \n";
-			this.rules += "import java.util.List \n";
-			this.rules += "import java.util.ArrayList \n";
-			this.rules += "import com.biit.abcd.logger.AbcdLogger \n\n";
+		if (form != null) {
+			rules = "package com.biit.drools \n\n";
+			rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
+			rules += "import com.biit.abcd.core.drools.utils.* \n";
+			rules += "import java.lang.Math \n";
+			rules += "import java.util.Date \n";
+			rules += "import java.util.List \n";
+			rules += "import java.util.ArrayList \n";
+			rules += "import com.biit.abcd.logger.AbcdLogger \n\n";
 			// Creation of the global variables
-			if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
-				this.rules += this.parseGlobalVariables();
-				this.rules += "\n";
+			if ((globalVariables != null) && !globalVariables.isEmpty()) {
+				rules += parseGlobalVariables();
+				rules += "\n";
 			}
 
 			// Follow the diagram to parse and launch the rules
-			Set<Diagram> diagrams = this.form.getDiagrams();
+			Set<Diagram> diagrams = form.getDiagrams();
 			if (diagrams != null) {
 				// Look for the root diagrams
 				List<Diagram> rootDiagrams = new ArrayList<Diagram>();
 				for (Diagram diagram : diagrams) {
-					if (this.form.getDiagramParent(diagram) == null) {
+					if (form.getDiagramParent(diagram) == null) {
 						rootDiagrams.add(diagram);
 					}
 				}
 				DiagramParser diagParser = new DiagramParser();
 				// Parse the root diagrams
 				for (Diagram diagram : rootDiagrams) {
-					this.rules += diagParser.getDroolsRulesAsText(diagram);
+					rules += diagParser.getDroolsRulesAsText(diagram);
 				}
 			}
 		}

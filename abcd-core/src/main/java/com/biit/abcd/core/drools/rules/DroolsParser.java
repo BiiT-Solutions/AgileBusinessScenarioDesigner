@@ -96,9 +96,11 @@ public class DroolsParser {
 						}
 					}
 				}
+				if ((i == conditions.size() - 1) && (inValues.length() > 2)) {
+					// Remove the last comma
+					inValues = inValues.substring(0, inValues.length() - 2);
+				}
 			}
-			// Remove the last comma
-			inValues = inValues.substring(0, inValues.length() - 2);
 			// Creates the rule
 			if (!inValues.isEmpty()) {
 				if (leftReference instanceof Question) {
@@ -253,8 +255,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-//		System.out.println("RULE ACTIONS: " + rule.getActions());
+		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "";
 		// treeObjectDroolsname = new HashMap<TreeObject, String>();
@@ -489,7 +491,7 @@ public class DroolsParser {
 					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 					ruleCore += "\tdouble maxValue = -1;\n";
 					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tif(maxValue > variable){ maxValue = variable; }\n";
+					ruleCore += "\t\tif(maxValue < variable){ maxValue = variable; }\n";
 					ruleCore += "\t}\n";
 					ruleCore += "\tif(maxValue != -1){\n";
 					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
@@ -519,7 +521,7 @@ public class DroolsParser {
 					ruleCore += "\tfor(double variable: variablesList){\n";
 					ruleCore += "\t\tavgValue += variable;\n";
 					ruleCore += "\t}\n";
-					ruleCore += "\tavgValue = avgValue/(double)variablesList.size()\n";
+					ruleCore += "\tavgValue = avgValue/(double)variablesList.size();\n";
 
 					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
@@ -575,12 +577,12 @@ public class DroolsParser {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
 				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isScoreSet('"
 						+ expressionValueCustomVariable.getVariable().getName() + "')){";
-				ruleCore += "\tvariablesList.add((double)"
+				ruleCore += "\tvariablesList.add((Double)"
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable) + ");}\n";
 
 			} else if (variable instanceof ExpressionValueTreeObjectReference) {
 				ExpressionValueTreeObjectReference expressionValueTreeObject = (ExpressionValueTreeObjectReference) variable;
-				ruleCore += "\tvariablesList.add((double)"
+				ruleCore += "\tvariablesList.add((Double)"
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
 
 			} else if (variable instanceof ExpressionValueGlobalConstant) {
@@ -597,7 +599,7 @@ public class DroolsParser {
 				}
 			} else if (variable instanceof ExpressionValue) {
 				if (variable instanceof ExpressionValueNumber) {
-					ruleCore += "\tvariablesList.add((double)" + ((ExpressionValueNumber) variable).getValue() + ");\n";
+					ruleCore += "\tvariablesList.add((Double)" + ((ExpressionValueNumber) variable).getValue() + ");\n";
 				}
 			}
 		}

@@ -5,6 +5,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.dom4j.DocumentException;
@@ -33,7 +36,19 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.persistence.entity.globalvariables.VariableData;
+import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
@@ -51,17 +66,15 @@ public class KidsFormCreator {
 	private final static String FORM = "Form1";
 	private Form form = null;
 	private List<GlobalVariable> globalVariables = null;
+	private GlobalVariable globalVariableNumber = null;
 
 	static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 	}
 
-	public KidsFormCreator() {
-	}
-
 	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, NotValidTypeInVariableData {
 
 		form = new Form("KidsScreen");
 
@@ -197,6 +210,69 @@ public class KidsFormCreator {
 		drinks1.addChild(drinksC1);
 		drinks1.addChild(drinksD1);
 		voeding2.addChild(drinks1);
+
+		// Creation of the global variables
+		createGlobalvariables();
+	}
+
+	private void createGlobalvariables() throws NotValidTypeInVariableData, FieldTooLongException {
+		List<GlobalVariable> globalVarList = new ArrayList<GlobalVariable>();
+		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
+		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
+		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
+		Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
+
+		// Should get the second value
+		globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);
+		globalVariableNumber.setName("IVA");
+		globalVariableNumber.addVariableData(19.0, validFrom, validToPast);
+		globalVariableNumber.addVariableData(21.0, validToPast, null);
+		// Should not represent this constant
+		GlobalVariable globalVariableText = new GlobalVariable(AnswerFormat.TEXT);
+		globalVariableText.setName("TestText");
+		globalVariableText.addVariableData("Hello", validFromFuture, validToFuture);
+		// Should get the value
+		GlobalVariable globalVariablePostalCode = new GlobalVariable(AnswerFormat.POSTAL_CODE);
+		globalVariablePostalCode.setName("TestPC");
+		globalVariablePostalCode.addVariableData("Postal", validFrom, validToFuture);
+		// Should enter a valid date as constant
+		GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
+		globalVariableDate.setName("TestDate");
+		globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
+
+		globalVarList.add(globalVariableNumber);
+		globalVarList.add(globalVariableText);
+		globalVarList.add(globalVariablePostalCode);
+		globalVarList.add(globalVariableDate);
+
+		setGlobalVariables(globalVarList);
+	}
+
+	public GlobalVariable getGlobalVariableNumber() {
+		return globalVariableNumber;
+	}
+
+	public Object getGlobalVariableValue(GlobalVariable globalVariable) {
+		// First check if the data inside the variable has a valid date
+		List<VariableData> varDataList = globalVariable.getVariableData();
+		if ((varDataList != null) && !varDataList.isEmpty()) {
+			for (VariableData variableData : varDataList) {
+				Timestamp currentTime = new Timestamp(new Date().getTime());
+				Timestamp initTime = variableData.getValidFrom();
+				Timestamp endTime = variableData.getValidTo();
+				// Sometimes endtime can be null, meaning that the
+				// variable data has no ending time
+				if ((currentTime.after(initTime) && (endTime == null))
+						|| (currentTime.after(initTime) && currentTime.before(endTime))) {
+					return variableData.getValue();
+				}
+			}
+		}
+		return null;
+	}
+
+	public void setGlobalVariableNumber(GlobalVariable globalVariableNumber) {
+		this.globalVariableNumber = globalVariableNumber;
 	}
 
 	public DroolsForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException, IOException,
@@ -206,7 +282,7 @@ public class KidsFormCreator {
 			NullExpressionValueException {
 		// Generate the drools rules.
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), globalVariables);
+		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), getGlobalVariables());
 		readStaticSubmittedForm();
 		translateFormCategories();
 		// Test the rules with the submitted form and returns a DroolsForm
@@ -289,5 +365,76 @@ public class KidsFormCreator {
 
 	public void setGlobalVariables(List<GlobalVariable> globalVariables) {
 		this.globalVariables = globalVariables;
+	}
+	
+	protected Diagram createExpressionsDiagram() {
+		Diagram mainDiagram = new Diagram("main");
+
+		DiagramSource diagramStartNode = new DiagramSource();
+		diagramStartNode.setJointjsId(IdGenerator.createId());
+		diagramStartNode.setType(DiagramObjectType.SOURCE);
+		Node nodeSource = new Node(diagramStartNode.getJointjsId());
+
+		DiagramChild subDiagramExpressionNode = new DiagramChild();
+		subDiagramExpressionNode.setDiagram(createExpressionsSubdiagram());
+		subDiagramExpressionNode.setJointjsId(IdGenerator.createId());
+		subDiagramExpressionNode.setType(DiagramObjectType.DIAGRAM_CHILD);
+		Node nodeTable = new Node(subDiagramExpressionNode.getJointjsId());
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+
+		DiagramLink startExpression = new DiagramLink(nodeSource, nodeTable);
+		startExpression.setJointjsId(IdGenerator.createId());
+		startExpression.setType(DiagramObjectType.LINK);
+		DiagramLink expressionEnd = new DiagramLink(nodeTable, nodeSink);
+		expressionEnd.setJointjsId(IdGenerator.createId());
+		expressionEnd.setType(DiagramObjectType.LINK);
+
+		mainDiagram.addDiagramObject(diagramStartNode);
+		mainDiagram.addDiagramObject(subDiagramExpressionNode);
+		mainDiagram.addDiagramObject(diagramEndNode);
+		mainDiagram.addDiagramObject(startExpression);
+		mainDiagram.addDiagramObject(expressionEnd);
+
+		return mainDiagram;
+	}
+
+	private Diagram createExpressionsSubdiagram() {
+		Diagram subDiagram = new Diagram("expressionDiagram");
+		for (ExpressionChain expressionChain : getForm().getExpressionChains()) {
+
+			DiagramSource diagramSource = new DiagramSource();
+			diagramSource.setJointjsId(IdGenerator.createId());
+			diagramSource.setType(DiagramObjectType.SOURCE);
+			Node nodeSource = new Node(diagramSource.getJointjsId());
+
+			DiagramExpression diagramExpression = new DiagramExpression();
+			diagramExpression.setExpression(expressionChain);
+			diagramExpression.setJointjsId(IdGenerator.createId());
+			diagramExpression.setType(DiagramObjectType.CALCULATION);
+			Node nodeRule = new Node(diagramExpression.getJointjsId());
+
+			DiagramSink diagramSink = new DiagramSink();
+			diagramSink.setJointjsId(IdGenerator.createId());
+			diagramSink.setType(DiagramObjectType.SINK);
+			Node nodeSink = new Node(diagramSink.getJointjsId());
+
+			DiagramLink diagramLinkSourceRule = new DiagramLink(nodeSource, nodeRule);
+			diagramLinkSourceRule.setJointjsId(IdGenerator.createId());
+			diagramLinkSourceRule.setType(DiagramObjectType.LINK);
+			DiagramLink diagramLinkRuleSink = new DiagramLink(nodeRule, nodeSink);
+			diagramLinkRuleSink.setJointjsId(IdGenerator.createId());
+			diagramLinkRuleSink.setType(DiagramObjectType.LINK);
+
+			subDiagram.addDiagramObject(diagramSource);
+			subDiagram.addDiagramObject(diagramExpression);
+			subDiagram.addDiagramObject(diagramSink);
+			subDiagram.addDiagramObject(diagramLinkSourceRule);
+			subDiagram.addDiagramObject(diagramLinkRuleSink);
+		}
+		return subDiagram;
 	}
 }
