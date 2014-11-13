@@ -18,6 +18,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -60,13 +61,14 @@ public class FormToDroolsExporter {
 	 * @throws TreeObjectParentNotValidException
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws NullTreeObjectException
-	 * @throws BetweenFunctionInvalidException 
+	 * @throws BetweenFunctionInvalidException
+	 * @throws DateComparisonNotPossibleException
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
+			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -87,7 +89,7 @@ public class FormToDroolsExporter {
 			RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -138,7 +140,7 @@ public class FormToDroolsExporter {
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
+			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
@@ -170,14 +172,16 @@ public class FormToDroolsExporter {
 	 * @throws NullTreeObjectException
 	 * @throws ChildrenNotFoundException
 	 * @throws IncompatibleFormStructureException
-	 * @throws BetweenFunctionInvalidException 
+	 * @throws BetweenFunctionInvalidException
+	 * @throws DateComparisonNotPossibleException
 	 */
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm iSubmittedForm)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			ChildrenNotFoundException, IncompatibleFormStructureException, BetweenFunctionInvalidException {
+			ChildrenNotFoundException, IncompatibleFormStructureException, BetweenFunctionInvalidException,
+			DateComparisonNotPossibleException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results

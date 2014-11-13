@@ -22,6 +22,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -105,13 +106,19 @@ public class KidsFormCreator {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Generate the drools rules.
-		FormToDroolsExporter formDrools = new FormToDroolsExporter();
-		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), getGlobalVariables());
-		readStaticSubmittedForm();
-		translateFormCategories();
-		// Test the rules with the submitted form and returns a DroolsForm
-		return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(),
-				rulesGenerator.getGlobalVariables());
+		try {
+			FormToDroolsExporter formDrools = new FormToDroolsExporter();
+			DroolsRulesGenerator rulesGenerator;
+			rulesGenerator = formDrools.generateDroolRules(getForm(), getGlobalVariables());
+			readStaticSubmittedForm();
+			translateFormCategories();
+			// Test the rules with the submitted form and returns a DroolsForm
+			return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(),
+					rulesGenerator.getGlobalVariables());
+		} catch (DateComparisonNotPossibleException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -138,8 +145,8 @@ public class KidsFormCreator {
 		groupNumberCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.NUMBER,
 				CustomVariableScope.GROUP);
 		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
-				getGroup(), groupNumberCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.));
+				getGroup(), groupNumberCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(10.));
 		getForm().getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
@@ -175,8 +182,6 @@ public class KidsFormCreator {
 
 		List<Node> diagramNodes = new ArrayList<Node>();
 		for (DiagramElement element : diagramElements) {
-			System.out.println("ELEMENT TYPE: " + element.getType());
-
 			diagramNodes.add(new Node(element.getJointjsId()));
 			mainDiagram.addDiagramObject(element);
 		}

@@ -15,6 +15,8 @@ import com.biit.orbeon.form.IQuestion;
 
 public class SubmittedQuestion extends SubmittedFormObject implements IQuestion, ISubmittedFormElement {
 
+	// Date format based on the input received by the Orbeon forms
+	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	private String answer;
 	private IGroup groupParent;
 	private ICategory categoryParent;
@@ -36,7 +38,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 			parsedValue = Double.parseDouble(this.answer);
 		} catch (Exception e) {
 			try {
-				parsedValue = new SimpleDateFormat("yyyy-MM-dd").parse(this.answer);
+				parsedValue = new SimpleDateFormat(DATE_FORMAT).parse(this.answer);
 			} catch (Exception e1) {
 				parsedValue = this.answer;
 			}
@@ -73,7 +75,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 		case "DATE":
 			if (answer != null && !answer.isEmpty()) {
 				try {
-					return new SimpleDateFormat("yyyy-MM-dd").parse(answer);
+					return new SimpleDateFormat(DATE_FORMAT).parse(answer);
 
 				} catch (ParseException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -82,7 +84,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 					cal.setTime(new Date());
 					cal.add(Calendar.DAY_OF_YEAR, 1);
 					Date tomorrow = cal.getTime();
-					return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
+					return new SimpleDateFormat(DATE_FORMAT).format(tomorrow);
 				}
 			} else {
 				// Default, create tomorrow's date
@@ -90,7 +92,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 				cal.setTime(new Date());
 				cal.add(Calendar.DAY_OF_YEAR, 1);
 				Date tomorrow = cal.getTime();
-				return new SimpleDateFormat("yyyy-MM-dd").format(tomorrow);
+				return new SimpleDateFormat(DATE_FORMAT).format(tomorrow);
 			}
 		}
 		return parsedValue;
@@ -162,17 +164,17 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 	public String getName() {
 		return getTag();
 	}
-	
+
 	@Override
 	public String getOriginalValue() {
 		return answer;
 	}
-	
+
 	@Override
 	public List<ISubmittedFormElement> getChildren() {
 		return null;
 	}
-	
+
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.QUESTION;

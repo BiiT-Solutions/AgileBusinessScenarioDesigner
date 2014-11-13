@@ -37,7 +37,6 @@ public class DateUtils {
 		Calendar now = Calendar.getInstance();
 		Calendar compareDate = Calendar.getInstance();
 		compareDate.setTime(date);
-
 		int diff = now.get(Calendar.YEAR) - compareDate.get(Calendar.YEAR);
 		// if ((now.get(Calendar.MONTH) > compareDate.get(Calendar.MONTH))
 		// || ((now.get(Calendar.MONTH) == compareDate.get(Calendar.MONTH)) &&

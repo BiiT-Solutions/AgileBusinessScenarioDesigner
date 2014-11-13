@@ -4,12 +4,11 @@
 		<groups>
 			<run>
 				<exclude name="orbeon" />
-				<exclude name="rules" />
+				<include name="rules" />
 				<exclude name="rulesWithOrbeon" />
-				<exclude name="simpleParser" />
-				<exclude name="gson" />
-				<exclude name="newVersion" />
-				<include name="rules2" />
+				<include name="simpleParser" />
+				<include name="gson" />
+				<include name="newVersion" />
 			</run>
 		</groups>
 		<classes>

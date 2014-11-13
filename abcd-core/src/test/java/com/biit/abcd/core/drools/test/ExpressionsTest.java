@@ -63,6 +63,7 @@ public class ExpressionsTest extends KidsFormCreator {
 	private final static String AVG = "avg";
 	private final static String PMT = "pmt";
 	private final static String BREAKFAST_QUESTION = "breakfast";
+	private final static String DATE_FORMAT = "yyyy-MM-dd";
 
 	@Test(groups = { "rules" })
 	public void testDateExpressions() throws FieldTooLongException, NotValidChildException,
@@ -80,7 +81,7 @@ public class ExpressionsTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules();
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		// Kid's birthdate in the parsed form
 		Date birthdate = sdf.parse("2007-09-01");
 

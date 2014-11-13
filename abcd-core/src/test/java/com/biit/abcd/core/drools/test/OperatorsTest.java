@@ -36,7 +36,9 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -58,6 +60,7 @@ public class OperatorsTest extends KidsFormCreator {
 	private static final String CUSTOM_VARIABLE_TO_COMPARE = "customVariableToCompare";
 	private static final String CATEGORY_LIFESTYLE = "Lifestyle";
 	private static final String TEST_EXPRESSION_NAME = "testExpression";
+	private final static String BRITHDATE_QUESTION = "birthdate";
 
 	@Test(groups = { "rules" })
 	public void testInOperatorQuestionAnswer() throws FieldTooLongException, NotValidChildException,
@@ -565,6 +568,40 @@ public class OperatorsTest extends KidsFormCreator {
 		runConditionInRuleAndTestResult(condition);
 	}
 
+	@Test(groups = { "rules" })
+	public void testNotEqualsDateOperator() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// Create condition
+		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
+				getTreeObject(BRITHDATE_QUESTION), QuestionDateUnit.DATE), new ExpressionOperatorLogic(
+				AvailableOperator.NOT_EQUALS), new ExpressionValueSystemDate());
+		runConditionInRuleAndTestResult(condition);
+	}
+
+	@Test(groups = { "rules" })
+	public void testNotEqualsDateYearOperator() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException {
+		// Restart the form to avoid test cross references
+		initForm();
+		// Create condition
+		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
+				getTreeObject(BRITHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionOperatorLogic(
+				AvailableOperator.NOT_EQUALS), new ExpressionValueNumber(2014.));
+		runConditionInRuleAndTestResult(condition);
+	}
+
 	private void runConditionInRuleAndTestResult(ExpressionChain condition) throws ExpressionInvalidException,
 			RuleInvalidException, IOException, RuleNotImplementedException, DocumentException,
 			CategoryNameWithoutTranslation, ActionNotImplementedException, NotCompatibleTypeException,
@@ -587,9 +624,11 @@ public class OperatorsTest extends KidsFormCreator {
 		createDiagram();
 		// Create the drools rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-				CUSTOM_VARIABLE_RESULT_VALUE);
+		if (droolsForm != null) {
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		}
 	}
 
 }
