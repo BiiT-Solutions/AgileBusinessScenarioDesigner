@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.ISimpleTestScenarioViewDao;
 import com.biit.abcd.persistence.entity.SimpleTestScenarioView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 @Repository
 public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
@@ -38,7 +39,7 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 	}
 
 	@Override
-	public int getRowCount() {
+	public int getRowCount() throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
@@ -49,7 +50,7 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 			return rows;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
-			throw e;
+			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
 	}
 

@@ -5,13 +5,14 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 public interface ISimpleFormViewDao {
 
-	int getRowCount();
+	int getRowCount() throws UnexpectedDatabaseException;
 
 	List<SimpleFormView> getAll();
-	
+
 	List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId);
 
 	void setSessionFactory(SessionFactory sessionFactory);

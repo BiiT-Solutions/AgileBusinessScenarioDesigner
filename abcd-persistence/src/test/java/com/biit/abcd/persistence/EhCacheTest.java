@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,7 +26,7 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 	private IFormDao formDao;
 
 	@Test
-	public void testSecondLevelCache() throws FieldTooLongException {
+	public void testSecondLevelCache() throws FieldTooLongException, UnexpectedDatabaseException {
 		formDao.getSessionFactory().getStatistics().clear();
 
 		Form form = new Form();
@@ -65,7 +66,7 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test
-	public void testSecondLevelCacheClear() throws FieldTooLongException {
+	public void testSecondLevelCacheClear() throws FieldTooLongException, UnexpectedDatabaseException {
 		formDao.getSessionFactory().getStatistics().clear();
 
 		Form form = new Form();

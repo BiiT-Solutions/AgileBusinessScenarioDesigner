@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,7 +29,7 @@ public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContext
 	private ISimpleFormViewDao simpleFormViewDao;
 
 	@Test
-	public void getView() throws FieldTooLongException, CharacterNotAllowedException {
+	public void getView() throws FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);

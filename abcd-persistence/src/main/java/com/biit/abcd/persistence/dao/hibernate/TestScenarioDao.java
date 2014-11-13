@@ -14,6 +14,7 @@ import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.form.TreeObject;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
@@ -24,7 +25,7 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 	}
 
 	@Override
-	public TestScenario makePersistent(TestScenario entity) {
+	public TestScenario makePersistent(TestScenario entity) throws UnexpectedDatabaseException {
 		purgeElementsToDelete(entity.getTestScenarioForm());
 		entity.getTestScenarioForm().updateChildrenSortSeqs();
 		return super.makePersistent(entity);
@@ -112,7 +113,7 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 			throw e;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TestScenario> getTestScenarioByFormId(Long formId) {

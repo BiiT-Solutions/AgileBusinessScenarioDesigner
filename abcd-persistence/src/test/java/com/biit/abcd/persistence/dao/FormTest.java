@@ -18,6 +18,7 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.persistence.dao.IBaseQuestionDao;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,7 +44,8 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private IBaseQuestionDao<Question> questionDao;
 
 	@Test
-	public void storeDummyForm() throws FieldTooLongException, CharacterNotAllowedException {
+	public void storeDummyForm() throws FieldTooLongException, CharacterNotAllowedException,
+			UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -56,7 +58,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void storeFormWithCategory() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM);
@@ -72,7 +74,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(OTHER_FORM);
@@ -89,7 +91,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel("MoveUp");

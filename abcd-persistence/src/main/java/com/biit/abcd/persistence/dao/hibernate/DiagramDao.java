@@ -12,17 +12,17 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.dao.hibernate.GenericDao;
 import com.biit.persistence.entity.StorableObject;
 
 @Repository
 public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 
-
 	public DiagramDao() {
 		super(Diagram.class);
 	}
-	
+
 	@Override
 	protected void initializeSets(List<Diagram> elements) {
 		for (Diagram diagram : elements) {
@@ -32,7 +32,7 @@ public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 	}
 
 	@Override
-	public Diagram read(Form form) {
+	public Diagram read(Form form) throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
@@ -48,7 +48,7 @@ public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 			return null;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
-			throw e;
+			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
 	}
 

@@ -25,6 +25,7 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.persistence.dao.hibernate.BaseFormDao;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.StorableObject;
 
 @Repository
@@ -36,7 +37,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Transactional
-	public Form makePersistent(Form entity) {
+	public Form makePersistent(Form entity) throws UnexpectedDatabaseException {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
@@ -127,7 +128,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Cacheable(value = "forms", key = "#id")
-	public Form read(Long id) {
+	public Form read(Long id) throws UnexpectedDatabaseException {
 		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		Form form = super.read(id);
 		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
@@ -138,19 +139,19 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label"),
 			@CacheEvict(value = "forms", key = "#form.id"),
 			@CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
-	public void makeTransient(Form form) {
+	public void makeTransient(Form form) throws UnexpectedDatabaseException {
 		super.makeTransient(form);
 	}
 
 	@Override
 	@Cacheable(value = "forms", key = "#label")
-	public Form getForm(String label, Long organizationId) {
+	public Form getForm(String label, Long organizationId) throws UnexpectedDatabaseException {
 		return super.getForm(label, organizationId);
 	}
 
 	@Override
 	@Cacheable(value = "forms")
-	public List<Form> getAll() {
+	public List<Form> getAll() throws UnexpectedDatabaseException {
 		List<Form> result = super.getAll();
 		return result;
 	}
@@ -162,8 +163,10 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	 * @param version
 	 * @param validTo
 	 * @return
+	 * @throws UnexpectedDatabaseException
 	 */
-	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo) {
+	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo)
+			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
@@ -178,11 +181,12 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			return rowCount;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
-			throw e;
+			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
 	}
 
-	public int updateValidFrom(String label, int version, Long organizationId, Timestamp validFrom) {
+	public int updateValidFrom(String label, int version, Long organizationId, Timestamp validFrom)
+			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
@@ -197,7 +201,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			return rowCount;
 		} catch (RuntimeException e) {
 			session.getTransaction().rollback();
-			throw e;
+			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
 	}
 }

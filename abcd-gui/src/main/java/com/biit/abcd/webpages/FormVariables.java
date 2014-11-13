@@ -21,12 +21,14 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.elements.formvariables.FormVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.formvariables.VariableTable;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
 public class FormVariables extends FormWebPageComponent {
 	private static final long serialVersionUID = 8796076485600899730L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private FormVariablesUpperMenu upperMenu;
 	private VariableTable variableTable;
 
@@ -138,6 +140,10 @@ public class FormVariables extends FormWebPageComponent {
 
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
+			} catch (UnexpectedDatabaseException e) {
+				AbcdLogger.errorMessage(FormManager.class.getName(), e);
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 			}
 		}
 	}

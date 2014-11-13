@@ -21,6 +21,7 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.jexeval.exceptions.ExpressionException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -138,8 +139,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		// Create the custom variables
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-//		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
-//				CustomVariableScope.QUESTION);
+		// CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
+		// CustomVariableScope.QUESTION);
 
 		ExpressionChain expressionChain = new ExpressionChain();
 		ExpressionValueCustomVariable customCategoryVariable = new ExpressionValueCustomVariable(category,
@@ -169,8 +170,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		// Create the custom variables
 		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-//		CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
-//				CustomVariableScope.QUESTION);
+		// CustomVariable customVarQuestion = new CustomVariable(form, "qScore", CustomVariableType.NUMBER,
+		// CustomVariableScope.QUESTION);
 
 		ExpressionChain expressionChain = new ExpressionChain();
 		ExpressionValueCustomVariable customCategoryVariable = new ExpressionValueCustomVariable(category,
@@ -191,7 +192,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 	@Test
 	public void checkExpressionStorageAndOrder() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException {
+			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		form.setOrganizationId(0l);

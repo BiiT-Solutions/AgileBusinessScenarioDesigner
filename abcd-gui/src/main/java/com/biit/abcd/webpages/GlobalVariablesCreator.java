@@ -24,6 +24,7 @@ import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataTable;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataWindow;
 import com.biit.abcd.webpages.elements.globalvariables.VariableWindow;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -34,7 +35,8 @@ import com.vaadin.ui.Window.CloseListener;
 
 public class GlobalVariablesCreator extends FormWebPageComponent {
 	private static final long serialVersionUID = 6042328256995069412L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private HorizontalLayout rootLayout;
 	private GlobalVariablesTable globalVariableTable;
 	private VariableDataTable variableDataTable;
@@ -73,8 +75,14 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		});
 
 		// Add already existing GlobalVariables.
-		for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
-			globalVariableTable.addItem(globalVariable);
+		try {
+			for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
+				globalVariableTable.addItem(globalVariable);
+			}
+		} catch (UnexpectedDatabaseException e) {
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 		}
 	}
 
@@ -352,7 +360,13 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 	}
 
 	private void save() {
-		UserSessionHandler.getGlobalVariablesController().update(globalVariableTable.getGlobalVariables());
-		MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+		try {
+			UserSessionHandler.getGlobalVariablesController().update(globalVariableTable.getGlobalVariables());
+			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
+		} catch (UnexpectedDatabaseException e) {
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+		}
 	}
 }

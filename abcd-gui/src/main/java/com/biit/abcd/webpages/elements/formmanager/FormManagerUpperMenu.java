@@ -45,6 +45,7 @@ import com.biit.abcd.webpages.elements.testscenario.ValidationReportWindow;
 import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.server.VaadinServlet;
@@ -80,7 +81,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 					public void buttonClick(ClickEvent event) {
 						final WindowNewForm newFormWindow = new WindowNewForm(
 								LanguageCodes.WINDOW_NEWFORM_WINDOW_TITLE, LanguageCodes.WINDOW_NEWFORM_NAME_TEXTFIELD,
-								LanguageCodes.WINDOW_NEWFORM_NAME_COMBOBOX, new AbcdActivity[] { AbcdActivity.FORM_EDITING });
+								LanguageCodes.WINDOW_NEWFORM_NAME_COMBOBOX,
+								new AbcdActivity[] { AbcdActivity.FORM_EDITING });
 						newFormWindow.showCentered();
 						newFormWindow.addAcceptActionListener(new AcceptActionListener() {
 
@@ -89,32 +91,38 @@ public class FormManagerUpperMenu extends UpperMenu {
 								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty()) {
 									return;
 								}
-								if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization()
-										.getOrganizationId())) {
-									form = new Form();
-									try {
-										form.setLabel(newFormWindow.getValue());
-									} catch (FieldTooLongException e) {
-										MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-												LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+								try {
+									if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization()
+											.getOrganizationId())) {
+										form = new Form();
 										try {
-											form.setLabel(newFormWindow.getValue().substring(0,
-													StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
-										} catch (FieldTooLongException e1) {
-											// Impossible.
+											form.setLabel(newFormWindow.getValue());
+										} catch (FieldTooLongException e) {
+											MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+													LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+											try {
+												form.setLabel(newFormWindow.getValue().substring(0,
+														StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
+											} catch (FieldTooLongException e1) {
+												// Impossible.
+											}
 										}
+										form.setLastVersion(true);
+										form.setCreatedBy(UserSessionHandler.getUser());
+										form.setUpdatedBy(UserSessionHandler.getUser());
+										form.setOrganizationId(newFormWindow.getOrganization().getOrganizationId());
+										((FormManager) parent).addNewForm(form);
+										AbcdLogger.info(this.getClass().getName(), "User '"
+												+ UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+												+ form.getClass() + " with 'Name: " + form.getName() + "'.");
+										newFormWindow.close();
+									} else {
+										MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);
 									}
-									form.setLastVersion(true);
-									form.setCreatedBy(UserSessionHandler.getUser());
-									form.setUpdatedBy(UserSessionHandler.getUser());
-									form.setOrganizationId(newFormWindow.getOrganization().getOrganizationId());
-									((FormManager) parent).addNewForm(form);
-									AbcdLogger.info(this.getClass().getName(), "User '"
-											+ UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-											+ form.getClass() + " with 'Name: " + form.getName() + "'.");
-									newFormWindow.close();
-								} else {
-									MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);
+								} catch (UnexpectedDatabaseException e) {
+									AbcdLogger.errorMessage(FormManager.class.getName(), e);
+									MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+											LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 								}
 							}
 						});

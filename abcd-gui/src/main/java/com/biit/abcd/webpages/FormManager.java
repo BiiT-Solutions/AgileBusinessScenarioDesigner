@@ -21,6 +21,7 @@ import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -29,7 +30,8 @@ import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private FormsVersionsTreeTable formTable;
 	private FormManagerUpperMenu upperMenu;
 
@@ -49,9 +51,16 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-					Form selectedForm = formDao.read(formTable.getValue().getId());
-					selectedForm.setLastVersion(formTable.getValue().isLastVersion());
-					UserSessionHandler.getFormController().setForm(selectedForm);
+					try {
+						Form selectedForm = formDao.read(formTable.getValue().getId());
+						selectedForm.setLastVersion(formTable.getValue().isLastVersion());
+						UserSessionHandler.getFormController().setForm(selectedForm);
+					} catch (UnexpectedDatabaseException e) {
+						AbcdLogger.errorMessage(FormManager.class.getName(), e);
+						MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+								LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+					}
+
 				}
 			}
 		});
@@ -69,10 +78,17 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-					Form form = formDao.read(formTable.getValue().getId());
-					form.setLastVersion(formTable.getValue().isLastVersion());
-					UserSessionHandler.getFormController().setForm(form);
-					UiAccesser.lockForm(form, UserSessionHandler.getUser());
+					try {
+						Form form = formDao.read(formTable.getValue().getId());
+						form.setLastVersion(formTable.getValue().isLastVersion());
+						UserSessionHandler.getFormController().setForm(form);
+						UiAccesser.lockForm(form, UserSessionHandler.getUser());
+					} catch (UnexpectedDatabaseException e) {
+						AbcdLogger.errorMessage(FormManager.class.getName(), e);
+						MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+								LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+					}
+
 				}
 			}
 		});
@@ -117,14 +133,27 @@ public class FormManager extends FormWebPageComponent {
 
 	public void addNewForm(Form form) {
 		SimpleFormView simpleView = new SimpleFormView(form);
-		formTable.addForm(simpleView);
-		formTable.selectForm(simpleView);
-		formDao.makePersistent(form);
-		simpleView.setId(form.getId());
+		try {
+			formDao.makePersistent(form);
+			formTable.addForm(simpleView);
+			formTable.selectForm(simpleView);
+			simpleView.setId(form.getId());
+		} catch (UnexpectedDatabaseException e) {
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+		}
+
 	}
 
 	public void setFormById(Long formId) {
-		UserSessionHandler.getFormController().setForm(formDao.read(formId));
+		try {
+			UserSessionHandler.getFormController().setForm(formDao.read(formId));
+		} catch (UnexpectedDatabaseException e) {
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+		}
 	}
 
 	public void newFormVersion() {
@@ -147,11 +176,15 @@ public class FormManager extends FormWebPageComponent {
 		} catch (NotValidStorableObjectException e) {
 			MessageManager.showError(LanguageCodes.ERROR_NEW_VERSION, LanguageCodes.ERROR_NEW_VERSION_DESCRIPTION);
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+		} catch (UnexpectedDatabaseException e) {
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 		}
 	}
 
 	public Form createNewFormVersion(SimpleFormView form) throws NotValidStorableObjectException,
-			CharacterNotAllowedException {
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
 				+ " createNewFormVersion " + form + " START");
 
@@ -163,6 +196,9 @@ public class FormManager extends FormWebPageComponent {
 			AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
 					+ " createForm " + ex.getMessage());
 			throw ex;
+		} catch (UnexpectedDatabaseException e) {
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+			throw e;
 		}
 
 		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()

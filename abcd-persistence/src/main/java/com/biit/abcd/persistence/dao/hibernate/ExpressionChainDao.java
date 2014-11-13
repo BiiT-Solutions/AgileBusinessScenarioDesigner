@@ -9,6 +9,7 @@ import com.biit.abcd.persistence.dao.IExpressionChainDao;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSort;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
@@ -23,7 +24,7 @@ public class ExpressionChainDao extends GenericDao<ExpressionChain> implements I
 	}
 
 	@Override
-	public ExpressionChain makePersistent(ExpressionChain entity) {
+	public ExpressionChain makePersistent(ExpressionChain entity) throws UnexpectedDatabaseException {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
@@ -33,7 +34,7 @@ public class ExpressionChainDao extends GenericDao<ExpressionChain> implements I
 	}
 
 	@Override
-	public List<ExpressionChain> getAll() {
+	public List<ExpressionChain> getAll() throws UnexpectedDatabaseException {
 		List<ExpressionChain> result = super.getAll();
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
