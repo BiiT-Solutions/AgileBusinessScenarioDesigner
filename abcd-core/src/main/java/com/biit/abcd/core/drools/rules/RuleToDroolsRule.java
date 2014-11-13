@@ -7,8 +7,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
 /**
- * Transforms a Rule to a Drools rule. Internally is the same. This class is used for
- * standardization purposes.
+ * Transforms a Rule to a Drools rule. Internally is the same. This class is
+ * used for standardization purposes.
  * 
  */
 public class RuleToDroolsRule {
@@ -18,7 +18,8 @@ public class RuleToDroolsRule {
 		DroolsRule droolsRule = null;
 		if (rule != null) {
 			droolsRule = new DroolsRule(rule.generateCopy());
-			RuleChecker.checkRuleValid(droolsRule);
+			// TODO Uncomment when changed the validator to the parser
+			// RuleChecker.checkRuleValid(droolsRule);
 			droolsRule.setName(RulesUtils.getRuleName(droolsRule.getName(), extraConditions));
 			if (extraConditions != null) {
 				droolsRule.addExtraConditions((ExpressionChain) extraConditions.generateCopy());

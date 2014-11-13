@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -69,7 +70,8 @@ public class NestedGroupsTest extends KidsFormCreator {
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
 			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData {
+			NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData,
+			BetweenFunctionInvalidException {
 
 		// Restart the form to avoid test cross references
 		initForm();

@@ -17,6 +17,7 @@ import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerI
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -59,12 +60,13 @@ public class FormToDroolsExporter {
 	 * @throws TreeObjectParentNotValidException
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws NullTreeObjectException
+	 * @throws BetweenFunctionInvalidException 
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -84,7 +86,8 @@ public class FormToDroolsExporter {
 	public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
 			RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			try {
@@ -130,29 +133,12 @@ public class FormToDroolsExporter {
 		OrbeonCategoryTranslator.getInstance().readXml(submittedForm);
 	}
 
-	// public ISubmittedForm processForm(Form form, String
-	// orbeonApplicationName, String orbeonFormName,
-	// String orbeonDocumentId) throws ExpressionInvalidException,
-	// RuleInvalidException, IOException,
-	// RuleNotImplementedException, DocumentException,
-	// CategoryNameWithoutTranslation, ActionNotImplementedException {
-	// // Generate all drools rules.
-	// DroolsRulesGenerator rulesGenerator = generateDroolRules(form, null);
-	// // Obtain results
-	// if (rulesGenerator != null) {
-	// return applyDrools(orbeonApplicationName, orbeonFormName,
-	// orbeonDocumentId, rulesGenerator.getRules(),
-	// rulesGenerator.getGlobalVariables());
-	// } else
-	// return null;
-	// }
-
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName,
 			String orbeonFormName, String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
@@ -184,13 +170,14 @@ public class FormToDroolsExporter {
 	 * @throws NullTreeObjectException
 	 * @throws ChildrenNotFoundException
 	 * @throws IncompatibleFormStructureException
+	 * @throws BetweenFunctionInvalidException 
 	 */
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm iSubmittedForm)
 			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			ChildrenNotFoundException, IncompatibleFormStructureException {
+			ChildrenNotFoundException, IncompatibleFormStructureException, BetweenFunctionInvalidException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results

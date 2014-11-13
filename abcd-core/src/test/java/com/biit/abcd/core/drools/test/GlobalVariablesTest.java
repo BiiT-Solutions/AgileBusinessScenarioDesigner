@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -57,7 +58,7 @@ public class GlobalVariablesTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, ActionNotImplementedException, DocumentException,
 			CategoryNameWithoutTranslation, CharacterNotAllowedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException {
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
 
 		// Create the form and the variables
 		initForm();

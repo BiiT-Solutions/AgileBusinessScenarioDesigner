@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -65,7 +66,8 @@ public class GenericsTest extends KidsFormCreator {
 			RuleNotImplementedException, InvalidAnswerFormatException, ActionNotImplementedException, ParseException,
 			GroupDoesNotExistException, QuestionDoesNotExistException, CharacterNotAllowedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData {
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			NotValidTypeInVariableData, BetweenFunctionInvalidException {
 
 		// Restart the form to avoid test cross references
 		initForm();

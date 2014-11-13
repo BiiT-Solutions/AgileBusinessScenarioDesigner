@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -71,62 +72,6 @@ public class TableRuleTest extends KidsFormCreator {
 		super();
 	}
 
-	// // Simple table question answer
-	// @Test(groups = { "rules" }, dependsOnMethods = {
-	// "translateFormCategories" })
-	// public void testSimpleTableRule() throws FieldTooLongException,
-	// NotValidChildException,
-	// InvalidAnswerFormatException, ExpressionInvalidException,
-	// RuleInvalidException, IOException,
-	// RuleNotImplementedException, DocumentException,
-	// CategoryNameWithoutTranslation,
-	// QuestionDoesNotExistException, GroupDoesNotExistException,
-	// CategoryDoesNotExistException,
-	// ActionNotImplementedException, CharacterNotAllowedException,
-	// NotCompatibleTypeException,
-	// NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-	// TreeObjectParentNotValidException,
-	// NullCustomVariableException, NullExpressionValueException,
-	// NotValidTypeInVariableData {
-	//
-	// // Restart the form to avoid test cross references
-	// initForm();
-	// // Create the table and form diagram
-	// createKidsFormSimpleConditionsTable();
-	// // Create the rules and launch the engine
-	// ISubmittedForm droolsForm = createAndRunDroolsRules();
-	//
-	// Assert.assertEquals(QUESTION_EQUALS_ANSWER,
-	// ((SubmittedQuestion)
-	// droolsForm.getCategory("Lifestyle").getGroup("voeding").getQuestion("breakfast"))
-	// .getVariableValue("qVar"));
-	// }
-
-	// // Multiple table question answer
-	// @Test(groups = { "rules" }, dependsOnMethods = {
-	// "translateFormCategories" })
-	// public void testMultipleTableRule() throws FieldTooLongException,
-	// NotValidChildException,
-	// InvalidAnswerFormatException, ExpressionInvalidException,
-	// RuleInvalidException, IOException,
-	// RuleNotImplementedException, DocumentException,
-	// CategoryNameWithoutTranslation,
-	// QuestionDoesNotExistException, GroupDoesNotExistException,
-	// CategoryDoesNotExistException,
-	// ActionNotImplementedException, CharacterNotAllowedException {
-	//
-	// // Restart the form to avoid test cross references
-	// initForm();
-	// // Create the table and form diagram
-	// createKidsFormMultipleConditionsTable();
-	// // Create the rules and launch the engine
-	// ISubmittedForm droolsForm = createAndRunDroolsRules();
-	//
-	// Assert.assertEquals(QUESTION_EQUALS_ANSWER, ((Question)
-	// droolsForm.getCategory("Lifestyle").getGroup("voeding")
-	// .getQuestion("breakfast")).getVariableValue("qVar"));
-	// }
-
 	@Test(groups = { "rules" })
 	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
@@ -134,7 +79,7 @@ public class TableRuleTest extends KidsFormCreator {
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException {
+			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -152,7 +97,7 @@ public class TableRuleTest extends KidsFormCreator {
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -172,7 +117,7 @@ public class TableRuleTest extends KidsFormCreator {
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, CategoryDoesNotExistException {
+			NullExpressionValueException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -191,7 +136,7 @@ public class TableRuleTest extends KidsFormCreator {
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData {
+			CharacterNotAllowedException, NotValidTypeInVariableData, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram

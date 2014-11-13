@@ -10,6 +10,7 @@ import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -61,7 +62,7 @@ public class ForkOthersTest extends KidsFormCreator {
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, NotValidTypeInVariableData {
+			NullExpressionValueException, NotValidTypeInVariableData, BetweenFunctionInvalidException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -79,7 +80,7 @@ public class ForkOthersTest extends KidsFormCreator {
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, NotValidTypeInVariableData {
+			NullExpressionValueException, NotValidTypeInVariableData, BetweenFunctionInvalidException {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -98,7 +99,8 @@ public class ForkOthersTest extends KidsFormCreator {
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData {
+			NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData,
+			BetweenFunctionInvalidException {
 
 		// Restart the form to avoid test cross references
 		initForm();

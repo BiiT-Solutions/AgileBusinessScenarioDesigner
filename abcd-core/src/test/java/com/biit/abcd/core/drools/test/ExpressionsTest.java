@@ -15,6 +15,7 @@ import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -70,7 +71,8 @@ public class ExpressionsTest extends KidsFormCreator {
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			ParseException, QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException {
+			ParseException, QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
+			BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and form diagram
@@ -105,7 +107,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			RuleInvalidException, IOException, RuleNotImplementedException, DocumentException,
 			CategoryNameWithoutTranslation, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException {
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Mathematical expression
@@ -147,7 +149,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
 			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// If expression
@@ -175,7 +177,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException {
+			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// MIN expression
@@ -207,7 +209,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException {
+			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// MAX expression
@@ -239,7 +241,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException {
+			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// AVG expression
@@ -271,7 +273,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// PMT expression
