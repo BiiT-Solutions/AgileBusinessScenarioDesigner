@@ -21,7 +21,10 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
+import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
@@ -75,44 +78,94 @@ public class DroolsParser {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		String droolsConditions = "";
 		List<Expression> operatorLeft = ((ExpressionChain) conditions.get(0)).getExpressions();
-		TreeObject leftReference = null;
+		ExpressionValueTreeObjectReference leftExpressionValueTreeObject = null;
 		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)) {
-			leftReference = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
+			leftExpressionValueTreeObject = (ExpressionValueTreeObjectReference) operatorLeft.get(0);
 		}
-		if (leftReference != null) {
-			String inValues = "";
-			// Store the values inside the IN condition in a String
+		if (leftExpressionValueTreeObject != null) {
+			// Create the array of values to consult
+			List<ExpressionValue> inValues = new ArrayList<ExpressionValue>();
 			for (int i = 2; i < conditions.size(); i++) {
-				List<Expression> inParameter = ((ExpressionChain) conditions.get(i)).getExpressions();
-				if ((inParameter.size() == 1) && (inParameter.get(0) instanceof ExpressionValue)) {
-					if (inParameter.get(0) instanceof ExpressionValueTreeObjectReference) {
-						ExpressionValueTreeObjectReference inExpValTreeObj = (ExpressionValueTreeObjectReference) inParameter
-								.get(0);
-						if (inExpValTreeObj instanceof ExpressionValueCustomVariable) {
-							inValues += "'" + getDroolsVariableValueFromExpressionValueTreeObject(inExpValTreeObj)
-									+ "', ";
-						} else {
-							inValues += "'" + inExpValTreeObj.getReference().getName() + "', ";
-						}
-					}
-				}
-				if ((i == conditions.size() - 1) && (inValues.length() > 2)) {
-					// Remove the last comma
-					inValues = inValues.substring(0, inValues.length() - 2);
+				List<Expression> inValue = ((ExpressionChain) conditions.get(i)).getExpressions();
+				if ((inValue.size() == 1) && (inValue.get(0) instanceof ExpressionValue)) {
+					inValues.add((ExpressionValue) inValue.get(0));
 				}
 			}
-			// Creates the rule
-			if (!inValues.isEmpty()) {
-				if (leftReference instanceof Question) {
-					TreeObject leftReferenceParent = leftReference.getParent();
-					putTreeObjectName(leftReference, leftReference.getUniqueNameReadable());
-					// Get the drools conditions for the parent
-					droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
-					Question leftQuestion = (Question) leftReference;
-					droolsConditions += "	$" + leftQuestion.getUniqueNameReadable()
-							+ " : SubmittedQuestion(getTag() == '" + leftQuestion.getName() + "', getAnswer('"
-							+ getTreeObjectAnswerType(leftQuestion) + "') in( " + inValues + " )) from $"
-							+ leftReferenceParent.getUniqueNameReadable() + ".getQuestions()\n";
+			// Check if the types inside the between match
+			if (checkExpressionValueTypes(getExpressionValueTreeObjectAnswerFormat(leftExpressionValueTreeObject),
+					inValues)) {
+				String inValuesString = "";
+				for (ExpressionValue value : inValues) {
+					if (value instanceof ExpressionValueCustomVariable) {
+						inValuesString += "'"
+								+ getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueCustomVariable) value)
+								+ "', ";
+					} else if (value instanceof ExpressionValueTreeObjectReference) {
+						inValuesString += "'" + ((ExpressionValueTreeObjectReference) value).getReference().getName()
+								+ "', ";
+					} else if (value instanceof ExpressionValueNumber) {
+						inValuesString += value.getValue() + ", ";
+					} else {
+						inValuesString += "'" + value.getValue() + "', ";
+					}
+				}
+				if (inValuesString.length() > 2) {
+					// Remove the last comma
+					inValuesString = inValuesString.substring(0, inValuesString.length() - 2);
+				}
+
+				// Creates the rule
+				if (!inValuesString.isEmpty()) {
+					if (leftExpressionValueTreeObject instanceof ExpressionValueCustomVariable) {
+						ExpressionValueCustomVariable leftVariable = (ExpressionValueCustomVariable) leftExpressionValueTreeObject;
+						TreeObject leftReferenceParent = leftVariable.getReference().getParent();
+						String variableName = leftVariable.getVariable().getName();
+						// Get the drools conditions for the parent
+						switch (leftVariable.getVariable().getScope()) {
+						case FORM:
+							putTreeObjectName(leftVariable.getReference(), leftVariable.getReference()
+									.getUniqueNameReadable());
+							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
+									+ " : SubmittedForm(isScoreSet('" + variableName + "'), getVariableValue('"
+									+ variableName + "') in ( " + inValuesString
+									+ " )) from $droolsForm.getSubmittedForm() \n";
+							break;
+						case CATEGORY:
+						case GROUP:
+						case QUESTION:
+							droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
+							String className = leftVariable.getReference().getClass().getSimpleName();
+							droolsConditions += "\t$"
+									+ leftVariable.getReference().getUniqueNameReadable()
+									+ " : Submitted"
+									+ className
+									+ "( getText() == '"
+									+ leftVariable.getReference().getName()
+									+ "', isScoreSet('"
+									+ variableName
+									+ "'), getVariableValue('"
+									+ variableName
+									+ "') in( "
+									+ inValuesString
+									+ " )) from $"
+									+ leftReferenceParent.getUniqueNameReadable()
+									+ (leftVariable.getVariable().getScope().equals(CustomVariableScope.CATEGORY) ? ".getCategories()"
+											: ".get" + className + "s()") + "\n";
+							break;
+						}
+					} else if (leftExpressionValueTreeObject.getReference() instanceof Question) {
+						TreeObject leftReference = leftExpressionValueTreeObject.getReference();
+						TreeObject leftReferenceParent = leftReference.getParent();
+						putTreeObjectName(leftReference, leftReference.getUniqueNameReadable());
+						// Get the drools conditions for the parent
+						droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
+						Question leftQuestion = (Question) leftReference;
+						droolsConditions += "	$" + leftQuestion.getUniqueNameReadable()
+								+ " : SubmittedQuestion(getText() == '" + leftQuestion.getName() + "', getAnswer('"
+								+ getTreeObjectAnswerType(leftQuestion) + "') in( " + inValuesString + " )) from $"
+								+ leftReferenceParent.getUniqueNameReadable() + ".getQuestions()\n";
+
+					}
 				}
 			}
 		}
@@ -255,8 +308,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		// System.out.println("RULE ACTIONS: " + rule.getActions());
+		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "";
 		// treeObjectDroolsname = new HashMap<TreeObject, String>();
@@ -872,6 +925,14 @@ public class DroolsParser {
 		return true;
 	}
 
+	private static boolean checkExpressionValueTypes(AnswerFormat leftReferenceType, List<ExpressionValue> values) {
+		for (ExpressionValue value : values) {
+			if (!getFormatType(value).equals(leftReferenceType))
+				return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Retrieves the format of the variables inside the expression value
 	 * 
@@ -897,7 +958,7 @@ public class DroolsParser {
 		}
 		// ExpressionValueTreeObjectReference or ExpressionValueCustomVariable
 		else if (expressionValue instanceof ExpressionValueTreeObjectReference) {
-			return getTreeObjectAnswerFormat((ExpressionValueTreeObjectReference) expressionValue);
+			return getExpressionValueTreeObjectAnswerFormat((ExpressionValueTreeObjectReference) expressionValue);
 		}
 		// The remaining cases
 		return null;
@@ -909,7 +970,8 @@ public class DroolsParser {
 	 * @param expressionValueTreeObject
 	 * @return
 	 */
-	private static AnswerFormat getTreeObjectAnswerFormat(ExpressionValueTreeObjectReference expressionValueTreeObject) {
+	private static AnswerFormat getExpressionValueTreeObjectAnswerFormat(
+			ExpressionValueTreeObjectReference expressionValueTreeObject) {
 		if (expressionValueTreeObject instanceof ExpressionValueCustomVariable) {
 			switch (((ExpressionValueCustomVariable) expressionValueTreeObject).getVariable().getType()) {
 			case NUMBER:
@@ -942,7 +1004,15 @@ public class DroolsParser {
 					case TEXT:
 						return question.getAnswerFormat();
 					}
+				} else {
+					// Special case to match answers with radio button and multi
+					// checkbox questions
+					return AnswerFormat.NUMBER;
 				}
+			} else if (reference instanceof Answer) {
+				// Special case to match answers with radio button and multi
+				// checkbox questions
+				return AnswerFormat.NUMBER;
 			}
 		}
 		return null;
@@ -982,7 +1052,8 @@ public class DroolsParser {
 
 					if ((firstExpressionValue.size() == 1) && (secondExpressionValue.size() == 1)) {
 						// Check if the types inside the between match
-						if (checkExpressionValueTypes(getTreeObjectAnswerFormat(leftExpressionValueTreeObject),
+						if (checkExpressionValueTypes(
+								getExpressionValueTreeObjectAnswerFormat(leftExpressionValueTreeObject),
 								(ExpressionValue) firstExpressionValue.get(0),
 								(ExpressionValue) secondExpressionValue.get(0))) {
 
@@ -1097,7 +1168,7 @@ public class DroolsParser {
 					case FORM:
 						putTreeObjectName(leftVariable.getReference(), leftVariable.getReference()
 								.getUniqueNameReadable());
-						switch (getTreeObjectAnswerFormat(leftVariable)) {
+						switch (getExpressionValueTreeObjectAnswerFormat(leftVariable)) {
 						case DATE:
 						case NUMBER:
 							droolsConditions += "	$" + leftVariable.getReference().getUniqueNameReadable()
@@ -1115,7 +1186,7 @@ public class DroolsParser {
 						}
 						break;
 					case CATEGORY:
-						switch (getTreeObjectAnswerFormat(leftVariable)) {
+						switch (getExpressionValueTreeObjectAnswerFormat(leftVariable)) {
 						case DATE:
 						case NUMBER:
 							droolsConditions += "	$" + leftVariable.getReference().getUniqueNameReadable()
@@ -1135,7 +1206,7 @@ public class DroolsParser {
 						}
 						break;
 					case GROUP:
-						switch (getTreeObjectAnswerFormat(leftVariable)) {
+						switch (getExpressionValueTreeObjectAnswerFormat(leftVariable)) {
 						case DATE:
 						case NUMBER:
 							droolsConditions += "	$" + leftVariable.getReference().getUniqueNameReadable()
@@ -1155,7 +1226,7 @@ public class DroolsParser {
 						}
 						break;
 					case QUESTION:
-						switch (getTreeObjectAnswerFormat(leftVariable)) {
+						switch (getExpressionValueTreeObjectAnswerFormat(leftVariable)) {
 						case DATE:
 						case NUMBER:
 							droolsConditions += "	$" + leftVariable.getReference().getUniqueNameReadable()
@@ -1419,57 +1490,43 @@ public class DroolsParser {
 			if (treeObjectCustomVariable != null) {
 				CustomVariable customVariable = expressionValueCustomVariable.getVariable();
 				if (customVariable != null) {
-					switch (expressionValueCustomVariable.getVariable().getType()) {
-					case NUMBER:
-					case DATE:
-						if (treeObjectCustomVariable instanceof Form) {
-							putTreeObjectName(treeObjectCustomVariable,
-									treeObjectCustomVariable.getUniqueNameReadable());
-							ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable()
-									+ " : SubmittedForm( isScoreSet('" + customVariable.getName()
-									+ "'), getVariableValue('" + customVariable.getName() + "') "
-									+ operator.getValue().toString() + " " + droolsValue
-									+ ") from $droolsForm.getSubmittedForm() \n";
-						} else {
-							String treeObjectClassName = treeObjectCustomVariable.getClass().getSimpleName();
-							putTreeObjectName(treeObjectCustomVariable,
-									treeObjectCustomVariable.getUniqueNameReadable());
-							TreeObject parent = treeObjectCustomVariable.getParent();
-							// Check conditions for the parent
-							SimpleConditionsGenerator.getTreeObjectConditions(parent);
-							ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : Submitted"
-									+ treeObjectClassName + "( getText() == '" + treeObjectCustomVariable.getName()
-									+ "', isScoreSet('" + customVariable.getName() + "'), getVariableValue('"
-									+ customVariable.getName() + "') " + operator.getValue().toString() + " "
-									+ droolsValue + ") from $" + parent.getUniqueNameReadable() + ".get"
-									+ treeObjectClassName + "s() \n";
-						}
-						break;
-					case STRING:
-						if (treeObjectCustomVariable instanceof Form) {
-							putTreeObjectName(treeObjectCustomVariable,
-									treeObjectCustomVariable.getUniqueNameReadable());
-							ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable()
-									+ " : SubmittedForm( isScoreSet('" + customVariable.getName()
-									+ "'), getVariableValue('" + customVariable.getName() + "') "
-									+ operator.getValue().toString() + " '" + droolsValue
-									+ "') from $droolsForm.getSubmittedForm() \n";
+					CustomVariableType customVariableType = expressionValueCustomVariable.getVariable().getType();
+					putTreeObjectName(treeObjectCustomVariable, treeObjectCustomVariable.getUniqueNameReadable());
+					if (treeObjectCustomVariable instanceof Form) {
+						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable()
+								+ " : SubmittedForm( isScoreSet('" + customVariable.getName()
+								+ "'), getVariableValue('" + customVariable.getName() + "') "
+								+ operator.getValue().toString()
+								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
+								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ")
+								+ ") from $droolsForm.getSubmittedForm() \n";
 
-						} else {
-							String treeObjectClassName = treeObjectCustomVariable.getClass().getSimpleName();
-							putTreeObjectName(treeObjectCustomVariable,
-									treeObjectCustomVariable.getUniqueNameReadable());
-							TreeObject parent = treeObjectCustomVariable.getParent();
-							// Check conditions for the parent
-							SimpleConditionsGenerator.getTreeObjectConditions(parent);
-							ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : Submitted"
-									+ treeObjectClassName + "( getText() == '" + treeObjectCustomVariable.getName()
-									+ "', isScoreSet('" + customVariable.getName() + "'), getVariableValue('"
-									+ customVariable.getName() + "') " + operator.getValue().toString() + " "
-									+ droolsValue + ") from $" + parent.getUniqueNameReadable() + ".get"
-									+ treeObjectClassName + "s() \n";
-						}
+					} else {
+						String treeObjectClassName = treeObjectCustomVariable.getClass().getSimpleName();
+						TreeObject parent = treeObjectCustomVariable.getParent();
+						// Check conditions for the parent
+						ruleCore += SimpleConditionsGenerator.getTreeObjectConditions(parent);
+						ruleCore += "\t$"
+								+ treeObjectCustomVariable.getUniqueNameReadable()
+								+ " : Submitted"
+								+ treeObjectClassName
+								+ "( getText() == '"
+								+ treeObjectCustomVariable.getName()
+								+ "', isScoreSet('"
+								+ customVariable.getName()
+								+ "'), getVariableValue('"
+								+ customVariable.getName()
+								+ "') "
+								+ operator.getValue().toString()
+								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ")
+								+ droolsValue
+								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ")
+								+ ") from $"
+								+ parent.getUniqueNameReadable()
+								+ (treeObjectCustomVariable instanceof Category ? ".getCategories()" : ".get"
+										+ treeObjectClassName + "()") + " \n";
 					}
+
 				} else {
 					throw new NullCustomVariableException();
 				}

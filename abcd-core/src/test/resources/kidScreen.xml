@@ -1,61 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns:oxf="http://www.orbeon.com/oxf/processors" xmlns:xxi="http://orbeon.org/oxf/xml/xinclude" xmlns:xh="http://www.w3.org/1999/xhtml" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:saxon="http://saxon.sf.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:odt="http://orbeon.org/oxf/xml/datatypes" xmlns:fb="http://orbeon.org/oxf/xml/form-builder" xmlns:xxf="http://orbeon.org/oxf/xml/xforms" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xpl="java:org.orbeon.oxf.pipeline.api.FunctionLibrary" xmlns:sql="http://orbeon.org/oxf/xml/sql" xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:exf="http://www.exforms.org/exf/1-0">
-          <liferay_email_address>support@biit-solutions.com</liferay_email_address>
-          <category-1>
-            <subcategory-1-1/>
-            <name>Jan</name>
-            <school>niet</school>
-            <group>7</group>
-            <birthdate>2007-09-01</birthdate>
-            <gender>M</gender>
-            <height>162</height>
-            <heightFather>184</heightFather>
-            <originFather>1</originFather>
-            <heightMother>170</heightMother>
-            <originMother>2</originMother>
-            <weight>55.4</weight>
-          </category-1>
-          <category-2>
-            <subcategory-2-1/>
-            <health>Y</health>
-            <healthExtra/>
-          </category-2>
-          <category-3>
-            <subcategory-3-1/>
-            <group-voeding>
-              <breakfast>b</breakfast>
-              <fruit>d</fruit>
-              <fruitAmount>2</fruitAmount>
-              <vegetables>d</vegetables>
-              <vegetablesAmount>5</vegetablesAmount>
-              <drinks>c</drinks>
-              <group-voeding2>
-                <drinks>c</drinks>
-              </group-voeding2>             
-            </group-voeding>
-            <subcategory-3-2/>
-            <group-mentaal>
-              <life>N</life>
-              <family>Y</family>
-              <smile>N</smile>
-              <comfortable>a</comfortable>
-              <sleep>N</sleep>
-              <angry>Y</angry>
-              <sport>N</sport>
-              <happy>b</happy>
-              <sad>N</sad>
-              <friends>b</friends>
-              <tired>N</tired>
-              <energy>Y</energy>
-            </group-mentaal>
-          </category-3>
-          <category-4>
-            <subcategory-4-1/>
-            <infotext-4-1-1/>
-            <group-bewegen>
-              <nngbDays>3</nngbDays>
-              <activityDuration>45</activityDuration>
-              <activityIntensity>4</activityIntensity>
-            </group-bewegen>
-          </category-4>
-        </form>
+<form xmlns:oxf="http://www.orbeon.com/oxf/processors" xmlns:xxi="http://orbeon.org/oxf/xml/xinclude"
+	xmlns:xh="http://www.w3.org/1999/xhtml" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:saxon="http://saxon.sf.net/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:odt="http://orbeon.org/oxf/xml/datatypes"
+	xmlns:fb="http://orbeon.org/oxf/xml/form-builder" xmlns:xxf="http://orbeon.org/oxf/xml/xforms"
+	xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xpl="java:org.orbeon.oxf.pipeline.api.FunctionLibrary"
+	xmlns:sql="http://orbeon.org/oxf/xml/sql" xmlns:p="http://www.orbeon.com/oxf/pipeline"
+	xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:exf="http://www.exforms.org/exf/1-0">
+	<liferay_email_address>support@biit-solutions.com</liferay_email_address>
+	<category-1>
+		<subcategory-1-1 />
+		<name>Jan</name>
+		<school>niet</school>
+		<group>7</group>
+		<birthdate>2007-09-01</birthdate>
+		<gender>M</gender>
+		<height>162</height>
+		<heightFather>184</heightFather>
+		<originFather>1</originFather>
+		<heightMother>170</heightMother>
+		<originMother>2</originMother>
+		<weight>55.4</weight>
+	</category-1>
+	<category-2>
+		<subcategory-2-1 />
+		<health>Y</health>
+		<healthExtra />
+	</category-2>
+	<category-3>
+		<subcategory-3-1 />
+		<group-voeding>
+			<breakfast>b</breakfast>
+			<fruit>d</fruit>
+			<fruitAmount>2</fruitAmount>
+			<vegetables>d</vegetables>
+			<vegetablesAmount>5</vegetablesAmount>
+			<drinks>c</drinks>
+			<group-voeding2>
+				<drinks>c</drinks>
+			</group-voeding2>
+		</group-voeding>
+		<subcategory-3-2 />
+		<group-mentaal>
+			<life>N</life>
+			<family>Y</family>
+			<smile>N</smile>
+			<comfortable>a</comfortable>
+			<sleep>N</sleep>
+			<angry>Y</angry>
+			<sport>N</sport>
+			<happy>b</happy>
+			<sad>N</sad>
+			<friends>b</friends>
+			<tired>N</tired>
+			<energy>Y</energy>
+		</group-mentaal>
+	</category-3>
+	<category-4>
+		<subcategory-4-1 />
+		<infotext-4-1-1 />
+		<group-bewegen>
+			<nngbDays>3</nngbDays>
+			<activityDuration>45</activityDuration>
+			<activityIntensity>4</activityIntensity>
+		</group-bewegen>
+	</category-4>
+</form>

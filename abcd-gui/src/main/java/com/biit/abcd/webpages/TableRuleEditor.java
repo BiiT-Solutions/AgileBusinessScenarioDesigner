@@ -495,7 +495,6 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 						MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION_OR_CUSTOM_VARIABLE);
 					}
 				} else {
-					// MessageManager.showError(LanguageCodes.ERROR_SELECT_QUESTION_OR_CUSTOM_VARIABLE);
 					removeQuestion(row, propertyId);
 					newQuestionConditionWindow.close();
 				}

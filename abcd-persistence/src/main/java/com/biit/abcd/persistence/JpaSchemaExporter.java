@@ -16,7 +16,6 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.webforms.persistence.HibernateDialect;
 
 @SuppressWarnings("rawtypes")
 public class JpaSchemaExporter {

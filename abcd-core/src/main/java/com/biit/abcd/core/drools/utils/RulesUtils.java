@@ -78,7 +78,7 @@ public class RulesUtils {
 		boolean insideRHS = false;
 		HashSet<String> variablesAssigned = new HashSet<String>();
 		String[] lines = ruleCore.split("\n");
-		int sameVariableIndex = 0;
+//		int sameVariableIndex = 0;
 		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			String line = lines[lineIndex];
 			if (line.equals("then")) {
@@ -87,16 +87,23 @@ public class RulesUtils {
 			String[] auxRuleArray = line.split(" : ");
 			if (auxRuleArray.length > 1) {
 				if (variablesAssigned.contains(auxRuleArray[0].replace("(\t", ""))) {
-					if (insideRHS) {
-						auxRuleArray[0] = auxRuleArray[0] + "0";
-					} else {
-						auxRuleArray[0] = auxRuleArray[0] + sameVariableIndex;
-						sameVariableIndex++;
-					}
+					auxRuleArray[0] = "\t";
+//					if (insideRHS) {
+//						auxRuleArray[0] = auxRuleArray[0] + "0";
+//					} else {
+//						auxRuleArray[0] = auxRuleArray[0] + sameVariableIndex;
+//						sameVariableIndex++;
+//					}
 				} else {
 					variablesAssigned.add(auxRuleArray[0].replace("(\t", ""));
 				}
-				for (int i = 0; i < auxRuleArray.length; i++) {
+				
+				if(!auxRuleArray[0].equals("\t")){
+					cleanedResults += auxRuleArray[0] + " : ";
+				}else{
+					cleanedResults += auxRuleArray[0];
+				}
+				for (int i = 1; i < auxRuleArray.length; i++) {
 					if (i == (auxRuleArray.length - 1)) {
 						cleanedResults += auxRuleArray[i] + "\n";
 					} else {

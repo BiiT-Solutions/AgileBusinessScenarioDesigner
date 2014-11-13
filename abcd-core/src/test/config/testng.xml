@@ -9,6 +9,7 @@
 				<include name="simpleParser" />
 				<include name="gson" />
 				<include name="newVersion" />
+				<include name="rules2" />
 			</run>
 		</groups>
 		<classes>
@@ -22,6 +23,7 @@
 			<class name="com.biit.abcd.core.drools.test.GenericsTest" />
 			<class name="com.biit.abcd.core.drools.test.NestedGroupsTest" />
 			<class name="com.biit.abcd.core.drools.test.ForkOthersTest" />
+			<class name="com.biit.abcd.core.drools.test.OperatorsTest" />
 		</classes>
 	</test>
 </suite>

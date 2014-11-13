@@ -61,6 +61,7 @@ public class ExpressionsTest extends KidsFormCreator {
 	private final static String MAX = "max";
 	private final static String AVG = "avg";
 	private final static String PMT = "pmt";
+	private final static String BREAKFAST_QUESTION = "breakfast";
 
 	@Test(groups = { "rules" })
 	public void testDateExpressions() throws FieldTooLongException, NotValidChildException,
@@ -98,7 +99,7 @@ public class ExpressionsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testComplexExpression() throws FieldTooLongException, NotValidChildException,
+	public void testComplexMathematicalExpression() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			QuestionDoesNotExistException, CategoryDoesNotExistException, ExpressionInvalidException,
 			RuleInvalidException, IOException, RuleNotImplementedException, DocumentException,
@@ -111,17 +112,22 @@ public class ExpressionsTest extends KidsFormCreator {
 		CustomVariable bmiCustomVariable = new CustomVariable(getForm(), BMI, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(getForm(),
-				bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorMath(
-						AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
-						getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
-				new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-				new ExpressionSymbol(AvailableSymbol.PILCROW), new ExpressionOperatorMath(
-						AvailableOperator.MULTIPLICATION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionSymbol(
+				AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject("weight")),
+				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionSymbol(
+						AvailableSymbol.LEFT_BRACKET), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
 				new ExpressionValueTreeObjectReference(getTreeObject("height")), new ExpressionOperatorMath(
 						AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.PILCROW),
+				new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionSymbol(
+						AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject("height")),
+				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueNumber(25.), new ExpressionOperatorMath(AvailableOperator.MINUS),
+				new ExpressionValueNumber(50.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
 		// Create the rules and launch the engine
@@ -131,7 +137,7 @@ public class ExpressionsTest extends KidsFormCreator {
 				.getQuestion("height")).getAnswer());
 		Double weight = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
 				.getQuestion("weight")).getAnswer());
-		Double bmi = weight / ((height / 100) * (height / 100));
+		Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
 	}
 

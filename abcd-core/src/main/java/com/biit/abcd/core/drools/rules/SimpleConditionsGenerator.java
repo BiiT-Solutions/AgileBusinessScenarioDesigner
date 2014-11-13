@@ -56,13 +56,19 @@ public class SimpleConditionsGenerator {
 	 * @return
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 */
-	private static String getCategoryGroupQuestionCondition(TreeObject parent, TreeObject treeObject) {
+	private static String getGroupQuestionCondition(TreeObject parent, TreeObject treeObject) {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( getText() == '"
 				+ treeObject.getName() + "') from $" + parent.getUniqueNameReadable() + ".get" + treeObjectClass
 				+ "s() \n";
 	}
 
+	private static String getCategoryCondition(TreeObject parent, TreeObject treeObject) {
+		String treeObjectClass = treeObject.getClass().getSimpleName();
+		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( getText() == '"
+				+ treeObject.getName() + "') from $" + parent.getUniqueNameReadable() + ".getCategories() \n";
+	}
+	
 	private static String simpleFormCondition(TreeObject treeObject) throws NullTreeObjectException {
 		String conditions = "";
 		putTreeObjectInTreeObjectDroolsIdMap(treeObject);
@@ -70,7 +76,7 @@ public class SimpleConditionsGenerator {
 				+ " : SubmittedForm() from $droolsForm.getSubmittedForm() \n";
 		return conditions;
 	}
-
+	
 	private static String simpleCategoryConditions(TreeObject treeObject) throws NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		TreeObject parent = treeObject.getParent();
@@ -78,7 +84,7 @@ public class SimpleConditionsGenerator {
 			if (parent instanceof Form) {
 				putTreeObjectInTreeObjectDroolsIdMap(treeObject);
 				String conditions = getTreeObjectConditions(parent);
-				conditions += getCategoryGroupQuestionCondition(parent, treeObject);
+				conditions += getCategoryCondition(parent, treeObject);
 				return conditions;
 			} else {
 				throw new TreeObjectParentNotValidException(parent);
@@ -95,7 +101,7 @@ public class SimpleConditionsGenerator {
 			if ((parent instanceof Category) || (parent instanceof Group)) {
 				putTreeObjectInTreeObjectDroolsIdMap(treeObject);
 				String conditions = getTreeObjectConditions(parent);
-				conditions += getCategoryGroupQuestionCondition(parent, treeObject);
+				conditions += getGroupQuestionCondition(parent, treeObject);
 				return conditions;
 			} else {
 				throw new TreeObjectParentNotValidException(parent);
@@ -157,7 +163,15 @@ public class SimpleConditionsGenerator {
 	 * @return
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 */
-	private static String getCategoryGroupQuestionCustomVariableCondition(CustomVariable customVariable,
+	private static String getCategoryCustomVariableCondition(CustomVariable customVariable,
+			TreeObject parent, TreeObject treeObject) throws TreeObjectInstanceNotRecognizedException {
+		String treeObjectClass = treeObject.getClass().getSimpleName();
+		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( getText() == '"
+				+ treeObject.getName() + "', isScoreSet('" + customVariable.getName() + "')) from $"
+				+ parent.getUniqueNameReadable() + ".getCategories() \n";
+	}
+	
+	private static String getGroupQuestionCustomVariableCondition(CustomVariable customVariable,
 			TreeObject parent, TreeObject treeObject) throws TreeObjectInstanceNotRecognizedException {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( getText() == '"
@@ -180,7 +194,7 @@ public class SimpleConditionsGenerator {
 			if (parent instanceof Form) {
 				putTreeObjectInTreeObjectDroolsIdMap(treeObject);
 				String conditions = getTreeObjectConditions(parent);
-				conditions += getCategoryGroupQuestionCustomVariableCondition(customVariable, parent, treeObject);
+				conditions += getCategoryCustomVariableCondition(customVariable, parent, treeObject);
 				return conditions;
 			} else {
 				throw new TreeObjectParentNotValidException(parent);
@@ -198,7 +212,7 @@ public class SimpleConditionsGenerator {
 			if ((parent instanceof Category) || (parent instanceof Group)) {
 				putTreeObjectInTreeObjectDroolsIdMap(treeObject);
 				String conditions = getTreeObjectConditions(parent);
-				conditions += getCategoryGroupQuestionCustomVariableCondition(customVariable, parent, treeObject);
+				conditions += getGroupQuestionCustomVariableCondition(customVariable, parent, treeObject);
 				return conditions;
 			} else {
 				throw new TreeObjectParentNotValidException(parent);
