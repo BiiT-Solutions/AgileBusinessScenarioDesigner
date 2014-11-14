@@ -45,6 +45,7 @@ public class CustomQuestionEditor extends CustomComponent {
 	private Map<Field, TestScenarioQuestion> fieldQuestionMap;
 	private static final String NUMBER_FIELD_VALIDATOR_REGEX = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
+	private static String DATE_FORMAT = "dd/MM/yyyy";
 
 	public CustomQuestionEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap,
 			List<TreeObject> testScenarioObjects) {
@@ -190,7 +191,8 @@ public class CustomQuestionEditor extends CustomComponent {
 					break;
 				case DATE:
 					field = new PopupDateField(testQuestion.getName());
-					((PopupDateField) field).setInputPrompt("dd/mm/yyyy");
+					((PopupDateField) field).setInputPrompt(DATE_FORMAT);
+					((PopupDateField) field).setDateFormat(DATE_FORMAT);
 					if (testAnswer == null) {
 						testAnswer = new TestAnswerInputDate();
 						testQuestion.setTestAnswer(testAnswer);

@@ -7,7 +7,7 @@
 				<include name="rules" />
 				<exclude name="rulesWithOrbeon" />
 				<include name="droolsPrattParser" />
-				<exclude name="gson" />
+				<include name="gson" />
 				<exclude name="newVersion" />
 			</run>
 		</groups>

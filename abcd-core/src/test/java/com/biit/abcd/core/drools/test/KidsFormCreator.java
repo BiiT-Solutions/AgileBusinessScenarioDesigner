@@ -31,6 +31,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -64,9 +65,6 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
-import com.biit.form.exceptions.CharacterNotAllowedException;
-import com.biit.form.exceptions.InvalidAnswerFormatException;
-import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -491,149 +489,152 @@ public class KidsFormCreator {
 		return null;
 	}
 
-	public void initForm() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData {
+	public void initForm() {
+		try {
 
-		form = new Form("KidsScreen");
+			form = new Form("KidsScreen");
 
-		category = new Category(CATEGORY_NAME);
-		form.addChild(category);
+			category = new Category(CATEGORY_NAME);
+			form.addChild(category);
 
-		Question birthdate = new Question("birthdate");
-		birthdate.setAnswerType(AnswerType.INPUT);
-		birthdate.setAnswerFormat(AnswerFormat.DATE);
-		category.addChild(birthdate);
+			Question birthdate = new Question("birthdate");
+			birthdate.setAnswerType(AnswerType.INPUT);
+			birthdate.setAnswerFormat(AnswerFormat.DATE);
+			category.addChild(birthdate);
 
-		Question gender = new Question("gender");
-		Answer male = new Answer("M");
-		Answer female = new Answer("F");
-		gender.setAnswerType(AnswerType.RADIO);
-		gender.addChild(male);
-		gender.addChild(female);
-		category.addChild(gender);
+			Question gender = new Question("gender");
+			Answer male = new Answer("M");
+			Answer female = new Answer("F");
+			gender.setAnswerType(AnswerType.RADIO);
+			gender.addChild(male);
+			gender.addChild(female);
+			category.addChild(gender);
 
-		Question height = new Question("height");
-		height.setAnswerType(AnswerType.INPUT);
-		height.setAnswerFormat(AnswerFormat.NUMBER);
-		category.addChild(height);
+			Question height = new Question("height");
+			height.setAnswerType(AnswerType.INPUT);
+			height.setAnswerFormat(AnswerFormat.NUMBER);
+			category.addChild(height);
 
-		Question heightFather = new Question("heightFather");
-		heightFather.setAnswerType(AnswerType.INPUT);
-		heightFather.setAnswerFormat(AnswerFormat.NUMBER);
-		category.addChild(heightFather);
+			Question heightFather = new Question("heightFather");
+			heightFather.setAnswerType(AnswerType.INPUT);
+			heightFather.setAnswerFormat(AnswerFormat.NUMBER);
+			category.addChild(heightFather);
 
-		Question heightMother = new Question("heightMother");
-		heightMother.setAnswerType(AnswerType.INPUT);
-		heightMother.setAnswerFormat(AnswerFormat.NUMBER);
-		category.addChild(heightMother);
+			Question heightMother = new Question("heightMother");
+			heightMother.setAnswerType(AnswerType.INPUT);
+			heightMother.setAnswerFormat(AnswerFormat.NUMBER);
+			category.addChild(heightMother);
 
-		Question weight = new Question("weight");
-		weight.setAnswerType(AnswerType.INPUT);
-		weight.setAnswerFormat(AnswerFormat.NUMBER);
-		category.addChild(weight);
+			Question weight = new Question("weight");
+			weight.setAnswerType(AnswerType.INPUT);
+			weight.setAnswerFormat(AnswerFormat.NUMBER);
+			category.addChild(weight);
 
-		Category gezondheid = new Category("Gezondheid");
-		form.addChild(gezondheid);
+			Category gezondheid = new Category("Gezondheid");
+			form.addChild(gezondheid);
 
-		Question health = new Question("health");
-		Answer yes = new Answer("Y");
-		Answer no = new Answer("N");
-		health.setAnswerType(AnswerType.RADIO);
-		health.addChild(yes);
-		health.addChild(no);
-		gezondheid.addChild(health);
+			Question health = new Question("health");
+			Answer yes = new Answer("Y");
+			Answer no = new Answer("N");
+			health.setAnswerType(AnswerType.RADIO);
+			health.addChild(yes);
+			health.addChild(no);
+			gezondheid.addChild(health);
 
-		Category lifestyle = new Category("Lifestyle");
-		form.addChild(lifestyle);
+			Category lifestyle = new Category("Lifestyle");
+			form.addChild(lifestyle);
 
-		group = new Group("voeding");
-		lifestyle.addChild(group);
+			group = new Group("voeding");
+			lifestyle.addChild(group);
 
-		Question breakfast = new Question("breakfast");
-		Answer breakfastA = new Answer("a");
-		Answer breakfastB = new Answer("b");
-		Answer breakfastC = new Answer("c");
-		Answer breakfastD = new Answer("d");
-		Answer breakfastE = new Answer("e");
-		breakfast.setAnswerType(AnswerType.RADIO);
-		breakfast.addChild(breakfastA);
-		breakfast.addChild(breakfastB);
-		breakfast.addChild(breakfastC);
-		breakfast.addChild(breakfastD);
-		breakfast.addChild(breakfastE);
-		group.addChild(breakfast);
+			Question breakfast = new Question("breakfast");
+			Answer breakfastA = new Answer("a");
+			Answer breakfastB = new Answer("b");
+			Answer breakfastC = new Answer("c");
+			Answer breakfastD = new Answer("d");
+			Answer breakfastE = new Answer("e");
+			breakfast.setAnswerType(AnswerType.RADIO);
+			breakfast.addChild(breakfastA);
+			breakfast.addChild(breakfastB);
+			breakfast.addChild(breakfastC);
+			breakfast.addChild(breakfastD);
+			breakfast.addChild(breakfastE);
+			group.addChild(breakfast);
 
-		question = new Question("fruit");
-		Answer fruitA = new Answer("a");
-		Answer fruitB = new Answer("b");
-		Answer fruitC = new Answer("c");
-		Answer fruitD = new Answer("d");
-		Answer fruitE = new Answer("e");
-		question.setAnswerType(AnswerType.RADIO);
-		question.addChild(fruitA);
-		question.addChild(fruitB);
-		question.addChild(fruitC);
-		question.addChild(fruitD);
-		question.addChild(fruitE);
-		group.addChild(question);
+			question = new Question("fruit");
+			Answer fruitA = new Answer("a");
+			Answer fruitB = new Answer("b");
+			Answer fruitC = new Answer("c");
+			Answer fruitD = new Answer("d");
+			Answer fruitE = new Answer("e");
+			question.setAnswerType(AnswerType.RADIO);
+			question.addChild(fruitA);
+			question.addChild(fruitB);
+			question.addChild(fruitC);
+			question.addChild(fruitD);
+			question.addChild(fruitE);
+			group.addChild(question);
 
-		Question fruitAmount = new Question("fruitAmount");
-		fruitAmount.setAnswerType(AnswerType.INPUT);
-		fruitAmount.setAnswerFormat(AnswerFormat.NUMBER);
-		group.addChild(fruitAmount);
+			Question fruitAmount = new Question("fruitAmount");
+			fruitAmount.setAnswerType(AnswerType.INPUT);
+			fruitAmount.setAnswerFormat(AnswerFormat.NUMBER);
+			group.addChild(fruitAmount);
 
-		Question vegetables = new Question("vegetables");
-		Answer vegetablesA = new Answer("a");
-		Answer vegetablesB = new Answer("b");
-		Answer vegetablesC = new Answer("c");
-		Answer vegetablesD = new Answer("d");
-		Answer vegetablesE = new Answer("e");
-		vegetables.setAnswerType(AnswerType.RADIO);
-		vegetables.addChild(vegetablesA);
-		vegetables.addChild(vegetablesB);
-		vegetables.addChild(vegetablesC);
-		vegetables.addChild(vegetablesD);
-		vegetables.addChild(vegetablesE);
-		group.addChild(vegetables);
+			Question vegetables = new Question("vegetables");
+			Answer vegetablesA = new Answer("a");
+			Answer vegetablesB = new Answer("b");
+			Answer vegetablesC = new Answer("c");
+			Answer vegetablesD = new Answer("d");
+			Answer vegetablesE = new Answer("e");
+			vegetables.setAnswerType(AnswerType.RADIO);
+			vegetables.addChild(vegetablesA);
+			vegetables.addChild(vegetablesB);
+			vegetables.addChild(vegetablesC);
+			vegetables.addChild(vegetablesD);
+			vegetables.addChild(vegetablesE);
+			group.addChild(vegetables);
 
-		Question vegetablesAmount = new Question("vegetablesAmount");
-		vegetablesAmount.setAnswerType(AnswerType.INPUT);
-		vegetablesAmount.setAnswerFormat(AnswerFormat.NUMBER);
-		group.addChild(vegetablesAmount);
+			Question vegetablesAmount = new Question("vegetablesAmount");
+			vegetablesAmount.setAnswerType(AnswerType.INPUT);
+			vegetablesAmount.setAnswerFormat(AnswerFormat.NUMBER);
+			group.addChild(vegetablesAmount);
 
-		Question drinks = new Question("drinks");
-		Answer drinksA = new Answer("a");
-		Answer drinksB = new Answer("b");
-		Answer drinksC = new Answer("c");
-		Answer drinksD = new Answer("d");
-		drinks.setAnswerType(AnswerType.RADIO);
-		drinks.addChild(drinksA);
-		drinks.addChild(drinksB);
-		drinks.addChild(drinksC);
-		drinks.addChild(drinksD);
-		group.addChild(drinks);
+			Question drinks = new Question("drinks");
+			Answer drinksA = new Answer("a");
+			Answer drinksB = new Answer("b");
+			Answer drinksC = new Answer("c");
+			Answer drinksD = new Answer("d");
+			drinks.setAnswerType(AnswerType.RADIO);
+			drinks.addChild(drinksA);
+			drinks.addChild(drinksB);
+			drinks.addChild(drinksC);
+			drinks.addChild(drinksD);
+			group.addChild(drinks);
 
-		// Extra for testing generics
-		Group voeding2 = new Group("voeding2");
-		group.addChild(voeding2);
+			// Extra for testing generics
+			Group voeding2 = new Group("voeding2");
+			group.addChild(voeding2);
 
-		Question drinks1 = new Question("drinks1");
-		Answer drinksA1 = new Answer("a");
-		Answer drinksB1 = new Answer("b");
-		Answer drinksC1 = new Answer("c");
-		Answer drinksD1 = new Answer("d");
-		drinks1.setAnswerType(AnswerType.RADIO);
-		drinks1.addChild(drinksA1);
-		drinks1.addChild(drinksB1);
-		drinks1.addChild(drinksC1);
-		drinks1.addChild(drinksD1);
-		voeding2.addChild(drinks1);
+			Question drinks1 = new Question("drinks1");
+			Answer drinksA1 = new Answer("a");
+			Answer drinksB1 = new Answer("b");
+			Answer drinksC1 = new Answer("c");
+			Answer drinksD1 = new Answer("d");
+			drinks1.setAnswerType(AnswerType.RADIO);
+			drinks1.addChild(drinksA1);
+			drinks1.addChild(drinksB1);
+			drinks1.addChild(drinksC1);
+			drinks1.addChild(drinksD1);
+			voeding2.addChild(drinks1);
 
-		// Creation of the global variables
-		createGlobalvariables();
+			// Creation of the global variables
+			createGlobalvariables();
 
-		// Init the array of elements to create the diagram
-		diagramElements = new ArrayList<>();
+			// Init the array of elements to create the diagram
+			diagramElements = new ArrayList<>();
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(groups = { "orbeon" })

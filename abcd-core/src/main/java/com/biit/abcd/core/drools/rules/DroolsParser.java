@@ -278,7 +278,13 @@ public class DroolsParser {
 				if (parsedRule != null) {
 					parsedText += rule.getName();
 					parsedText += RulesUtils.getWhenRuleString();
+					if (rule instanceof DroolsRuleGroup) {
+						parsedText += ((DroolsRuleGroup)rule).getGroupCondition();
+					}
 					parsedText += parsedRule;
+					if (rule instanceof DroolsRuleGroup) {
+						parsedText += ((DroolsRuleGroup)rule).getGroupAction();
+					}
 					parsedText += RulesUtils.getEndRuleString();
 				}
 			}
@@ -317,8 +323,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		System.out.println("RULE ACTIONS: " + rule.getActions());
+//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+//		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "";
 		result += "\t$droolsForm: DroolsForm()\n";
@@ -518,9 +524,6 @@ public class DroolsParser {
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
 			ExpressionChain expressionChainToSearch = (ExpressionChain) actions.generateCopy();
 			expressionChainToSearch.removeFirstExpression();
-			
-//			System.out.println("EXPRESSION CHAIN TO SEARCH: " + expressionChainToSearch);
-			
 			List<Expression> variables = getExpressionChainVariables(expressionChainToSearch);
 			for (Expression expression : variables) {
 				if ((expression instanceof ExpressionValueCustomVariable)
@@ -530,13 +533,11 @@ public class DroolsParser {
 			}
 			ruleCore += RulesUtils.getThenRuleString();
 			String mathematicalExpression = "";
-
 			TreeElementMathExpressionVisitor treePrint = new TreeElementMathExpressionVisitor();
 			prattParserResult.accept(treePrint);
 			if (treePrint != null) {
 				mathematicalExpression = treePrint.getBuilder().toString();
 			}
-
 			ruleCore += "	$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', " + mathematicalExpression + ");\n";
 			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
@@ -859,13 +860,10 @@ public class DroolsParser {
 				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
 						.get(0) instanceof ExpressionValueCustomVariable)) {
 
-			System.out.println("ACTION EXPRESSION: " + prattParserResultExpressionChain);
-			
 			// In case the function is empty we don't need to generate the rule
-			if(prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionSymbol){
+			if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionSymbol) {
 				return null;
-			}
-			else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
+			} else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
 				switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
 				case MAX:
 				case MIN:
@@ -939,7 +937,7 @@ public class DroolsParser {
 			} else if ((expressions.size() > 1) && (expressions.get(0) instanceof ExpressionSymbol)) {
 				switch (((ExpressionSymbol) expressions.get(0)).getValue()) {
 				case LEFT_BRACKET:
-					// Parsing an expression of type "( something )" 
+					// Parsing an expression of type "( something )"
 					// Skip the parenthesis and parse again
 					return processResultConditionsFromPrattParser((ExpressionChain) expressions.get(1));
 				}
@@ -959,8 +957,6 @@ public class DroolsParser {
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		String ruleCore = "";
-
-		System.out.println("CHAIN TO PARSE: " + prattParserResultExpressionChain);
 
 		if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionChain) {
 			String auxRule = processResultConditionsFromPrattParser((ExpressionChain) prattParserResultExpressionChain

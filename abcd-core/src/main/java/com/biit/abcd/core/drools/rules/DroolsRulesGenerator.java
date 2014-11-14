@@ -55,6 +55,7 @@ public class DroolsRulesGenerator {
 			rules = "package com.biit.drools \n\n";
 			rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
 			rules += "import com.biit.abcd.core.drools.utils.* \n";
+			rules += "import com.biit.abcd.core.drools.rules.GroupRuleFired \n";
 			rules += "import java.lang.Math \n";
 			rules += "import java.util.Date \n";
 			rules += "import java.util.List \n";

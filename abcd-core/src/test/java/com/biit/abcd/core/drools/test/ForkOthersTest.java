@@ -93,7 +93,7 @@ public class ForkOthersTest extends KidsFormCreator {
 	}
 
 	// TODO fix random creation rule behaviour
-	@Test(groups = { "rules3" })
+	@Test(groups = { "rules4" })
 	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,

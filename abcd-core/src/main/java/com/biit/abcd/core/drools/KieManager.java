@@ -11,6 +11,7 @@ import org.kie.api.builder.Message.Level;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
+import com.biit.abcd.core.drools.rules.GroupRuleFired;
 import com.biit.orbeon.form.ISubmittedForm;
 
 public class KieManager {
@@ -45,8 +46,8 @@ public class KieManager {
 	public void buildSessionRules(String rules) {
 		this.ks = KieServices.Factory.get();
 		KieFileSystem kfs = this.ks.newKieFileSystem();
-		this.createRules(kfs, rules);
-		this.build(this.ks, kfs);
+		createRules(kfs, rules);
+		build(this.ks, kfs);
 	}
 
 	public void execute() {
@@ -93,6 +94,7 @@ public class KieManager {
 
 	// Insert any number of facts in the drools session
 	private void insertFacts(KieSession kSession, List<ISubmittedForm> facts) {
+		kSession.insert(new GroupRuleFired());
 		for (ISubmittedForm fact : facts) {
 			kSession.insert(fact);
 		}
