@@ -1,5 +1,9 @@
 package com.biit.abcd.core.drools.prattparser.visitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.biit.abcd.core.drools.prattparser.ExpressionTokenType;
 import com.biit.abcd.core.drools.prattparser.expressions.AssignExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.CallExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.ConditionalExpression;
@@ -9,96 +13,88 @@ import com.biit.abcd.core.drools.prattparser.expressions.OperatorExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.form.TreeObject;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 
+public class TreeElementOrVisitor implements ITreeElementVisitor {
 
-public class TreeElementPrintVisitor implements ITreeElementVisitor{
+	private List<ExpressionChain> conditions;
 
-	private StringBuilder builder;
-
-	public TreeElementPrintVisitor() {
-		this.builder = new StringBuilder();
+	public TreeElementOrVisitor() {
+		setConditions(new ArrayList<ExpressionChain>());
 	}
 
 	@Override
 	public void visit(AssignExpression assign) throws NotCompatibleTypeException {
-		this.builder.append("(").append(assign.getName()).append(" = ");
 		assign.getRightElement().accept(this);
-		this.builder.append(")");
 	}
 
 	@Override
 	public void visit(CallExpression call) throws NotCompatibleTypeException {
 		call.getFunction().accept(this);
-		this.builder.append("(");
 		for (int i = 0; i < call.getArgs().size(); i++) {
 			call.getArgs().get(i).accept(this);
-			if (i < (call.getArgs().size() - 1)) {
-				this.builder.append(", ");
-			}
 		}
-		this.builder.append(")");
 	}
 
 	@Override
 	public void visit(ConditionalExpression condition) throws NotCompatibleTypeException {
-		this.builder.append("(");
 		condition.getCondition().accept(this);
-		this.builder.append(" ? ");
 		condition.getThenArm().accept(this);
-		this.builder.append(" : ");
 		condition.getElseArm().accept(this);
-		this.builder.append(")");
 	}
 
 	@Override
 	public void visit(NameExpression name) {
-		// The answers have a label not a technical name
-		if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
-			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain()
-					.getExpressions().get(0);
-			TreeObject treeObject = expVal.getReference();
-			if (treeObject instanceof Answer) {
-				this.builder.append(((Answer)treeObject).getLabel());
-			}
-		}
-		// For everything else, get the technical name
-		this.builder.append(name.getName());
 	}
 
 	@Override
 	public void visit(OperatorExpression operator) throws NotCompatibleTypeException {
-		this.builder.append("(");
 		operator.getLeftElement().accept(this);
-		this.builder.append(" ").append(operator.getOperator().punctuator()).append(" ");
+		if (operator.getOperator().equals(ExpressionTokenType.OR)) {
+			if (!hasOrOperator(operator.getLeftElement().getExpressionChain())) {
+				getConditions().add(operator.getLeftElement().getExpressionChain());
+			}
+			if (!hasOrOperator(operator.getRightElement().getExpressionChain())) {
+				getConditions().add(operator.getRightElement().getExpressionChain());
+			}
+		}
 		operator.getRightElement().accept(this);
-		this.builder.append(")");
+	}
+
+	private boolean hasOrOperator(ExpressionChain expressionChain) {
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionOperatorLogic) {
+				if (((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.OR)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public void visit(PostfixExpression postfix) throws NotCompatibleTypeException {
-		this.builder.append("(");
 		postfix.getLeftElement().accept(this);
-		this.builder.append(postfix.getOperator().punctuator()).append(")");
 	}
 
 	@Override
 	public void visit(PrefixExpression prefix) throws NotCompatibleTypeException {
-		this.builder.append("(").append(prefix.getOperator().punctuator());
 		prefix.getRightElement().accept(this);
-		this.builder.append(")");
 	}
 	
 	@Override
 	public void visit(GroupExpression group) throws NotCompatibleTypeException {
-		this.builder.append("(");
 		group.getElement().accept(this);
-		this.builder.append(")");
 	}
 
-	public StringBuilder getBuilder() {
-		return this.builder;
+	public void setConditions(List<ExpressionChain> conditions) {
+		this.conditions = conditions;
+	}
+
+	public List<ExpressionChain> getConditions() {
+		return this.conditions;
 	}
 }

@@ -37,7 +37,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 		this.register(ExpressionTokenType.NAME, new NameParselet());
 		this.register(ExpressionTokenType.ASSIGNATION, new AssignParselet());
 		this.register(ExpressionTokenType.LEFT_BRACKET, new GroupParselet());
-		this.register(ExpressionTokenType.LEFT_BRACKET, new CallParselet());
+//		this.register(ExpressionTokenType.LEFT_BRACKET, new CallParselet());
 		this.register(ExpressionTokenType.BETWEEN, new CallParselet());
 		this.register(ExpressionTokenType.IN, new CallParselet());
 		this.register(ExpressionTokenType.MIN, new CallParselet());
@@ -50,8 +50,8 @@ public class ExpressionChainPrattParser extends PrattParser {
 //		this.register(ExpressionTokenType.IF, new CallParselet());
 
 		// Register the simple operator parselets.
-		this.prefix(ExpressionTokenType.PLUS, Precedence.PREFIX);
-		this.prefix(ExpressionTokenType.MINUS, Precedence.PREFIX);
+//		this.prefix(ExpressionTokenType.PLUS, Precedence.PREFIX);
+//		this.prefix(ExpressionTokenType.MINUS, Precedence.PREFIX);
 		this.prefix(ExpressionTokenType.NOT, Precedence.PREFIX);
 
 		// // For kicks, we'll make "!" both prefix and postfix, kind of like

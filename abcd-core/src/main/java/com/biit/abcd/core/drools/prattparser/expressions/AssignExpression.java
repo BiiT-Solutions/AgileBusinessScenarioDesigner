@@ -3,8 +3,10 @@ package com.biit.abcd.core.drools.prattparser.expressions;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 
 /**
  * An assignment expression like "a = b".
@@ -36,6 +38,7 @@ public class AssignExpression implements ITreeElement {
 	@Override
 	public ExpressionChain getExpressionChain() {
 		ExpressionChain expChain = new ExpressionChain(this.expression);
+		expChain.addExpressions(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		expChain.addExpressions(this.rightElement.getExpressionChain());
 		return expChain;
 	}

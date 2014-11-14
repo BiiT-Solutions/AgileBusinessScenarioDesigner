@@ -33,221 +33,435 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
-import com.biit.form.exceptions.CharacterNotAllowedException;
-import com.biit.form.exceptions.InvalidAnswerFormatException;
-import com.biit.form.exceptions.NotValidChildException;
-import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class PrattParserTest {
-	@Test(groups = { "simpleParser" })
-	public static void testParser() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException {
 
-		Form form = new Form("form");
-		Category category = new Category("categoryTest");
-		form.addChild(category);
-		Question question = new Question("QU1");
-		category.addChild(question);
-		Answer answer1 = new Answer("QU1A1");
-		question.addChild(answer1);
-		Answer answer2 = new Answer("QU1A2");
-		question.addChild(answer2);
-		CustomVariable cVar = new CustomVariable(form, "catVar", CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY);
-		CustomVariable qVar = new CustomVariable(form, "questVar", CustomVariableType.NUMBER,
-				CustomVariableScope.QUESTION);
-		CustomVariable fVar = new CustomVariable(form, "formVar", CustomVariableType.NUMBER, CustomVariableScope.FORM);
+	private ExpressionValueTreeObjectReference expValQU1 = null;
+	private ExpressionValueTreeObjectReference expValQU1A1 = null;
+	private ExpressionValueTreeObjectReference expValQU1A2 = null;
+	private ExpressionValueCustomVariable expValCVar = null;
+	private ExpressionValueCustomVariable expValQVar = null;
+	private ExpressionValueCustomVariable expValFormScore = null;
+	private ExpressionValueNumber expValNumber = null;
+	private ExpressionValueGenericCustomVariable expValGenericCatScore = null;
+	private ExpressionValueGenericCustomVariable expValGenericQuestScore = null;
+	private Category category = null;
+	private Question father = null;
+	private Question mother = null;
+	private Question birthDate = null;
+	private CustomVariable cVar = null;
 
-		Question father = new Question("fatherHeight");
-		father.setAnswerType(AnswerType.INPUT);
-		father.setAnswerFormat(AnswerFormat.NUMBER);
-		category.addChild(father);
+	private void createSimpleForm() {
+		try {
+			Form form = new Form("form");
+			setCategory(new Category("categoryTest"));
+			form.addChild(getCategory());
+			Question question = new Question("QU1");
+			getCategory().addChild(question);
+			Answer answer1 = new Answer("QU1A1");
+			question.addChild(answer1);
+			Answer answer2 = new Answer("QU1A2");
+			question.addChild(answer2);
+			setcVar(new CustomVariable(form, "catVar", CustomVariableType.NUMBER, CustomVariableScope.CATEGORY));
+			CustomVariable qVar = new CustomVariable(form, "questVar", CustomVariableType.NUMBER,
+					CustomVariableScope.QUESTION);
+			CustomVariable fVar = new CustomVariable(form, "formVar", CustomVariableType.NUMBER,
+					CustomVariableScope.FORM);
 
-		Question mother = new Question("motherHeight");
-		mother.setAnswerType(AnswerType.INPUT);
-		mother.setAnswerFormat(AnswerFormat.NUMBER);
-		category.addChild(mother);
+			setFather(new Question("fatherHeight"));
+			getFather().setAnswerType(AnswerType.INPUT);
+			getFather().setAnswerFormat(AnswerFormat.NUMBER);
+			getCategory().addChild(getFather());
 
-		Question birthDate = new Question("birthdate");
-		birthDate.setAnswerType(AnswerType.INPUT);
-		birthDate.setAnswerFormat(AnswerFormat.DATE);
-		category.addChild(birthDate);
+			setMother(new Question("motherHeight"));
+			getMother().setAnswerType(AnswerType.INPUT);
+			getMother().setAnswerFormat(AnswerFormat.NUMBER);
+			getCategory().addChild(getMother());
 
-		ExpressionValueTreeObjectReference expValQU1 = new ExpressionValueTreeObjectReference(question);
-		ExpressionValueTreeObjectReference expValQU1A1 = new ExpressionValueTreeObjectReference(answer1);
-		ExpressionValueTreeObjectReference expValQU1A2 = new ExpressionValueTreeObjectReference(answer2);
-		ExpressionValueCustomVariable expValCVar = new ExpressionValueCustomVariable(category, cVar);
-		ExpressionValueCustomVariable expValQVar = new ExpressionValueCustomVariable(question, qVar);
-		ExpressionValueCustomVariable expValFormScore = new ExpressionValueCustomVariable(form, fVar);
-		ExpressionValueNumber expValNumber = new ExpressionValueNumber(5.);
-		// Generics
-		ExpressionValueGenericCustomVariable expValGenericCatScore = new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.CATEGORY, cVar);
-		ExpressionValueGenericCustomVariable expValGenericQuestScore = new ExpressionValueGenericCustomVariable(
-				GenericTreeObjectType.QUESTION_CATEGORY, qVar);
+			setBirthDate(new Question("birthdate"));
+			getBirthDate().setAnswerType(AnswerType.INPUT);
+			getBirthDate().setAnswerFormat(AnswerFormat.DATE);
+			getCategory().addChild(getBirthDate());
 
+			setExpValQU1(new ExpressionValueTreeObjectReference(question));
+			setExpValQU1A1(new ExpressionValueTreeObjectReference(answer1));
+			setExpValQU1A2(new ExpressionValueTreeObjectReference(answer2));
+			setExpValCVar(new ExpressionValueCustomVariable(getCategory(), getcVar()));
+			setExpValQVar(new ExpressionValueCustomVariable(question, qVar));
+			setExpValFormScore(new ExpressionValueCustomVariable(form, fVar));
+			setExpValNumber(new ExpressionValueNumber(5.));
+			// Generics
+			setExpValGenericCatScore(new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, getcVar()));
+			setExpValGenericQuestScore(new ExpressionValueGenericCustomVariable(
+					GenericTreeObjectType.QUESTION_CATEGORY, qVar));
+
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void treeObjectNegationTest() {
+		createSimpleForm();
 		// Simple Negation TreeObject (e.g. NOT(QU1 == A1) )
 		String actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
-				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), expValQU1, new ExpressionOperatorLogic(
-						AvailableOperator.EQUALS), expValQU1A1, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		Assert.assertEquals(actual, "null[NOT(, null[null[QU1], ==, null[QU1A1]]]");
-
-		// Simple TreeObject equals TreeObject (e.g. QU1 == A1)
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				expValQU1A1));
-		Assert.assertEquals(actual, "null[null[QU1], ==, null[QU1A1]]");
-
-		// Simple TreeObject.Score equals ValueNumber (e.g. Cat1.score == 10)
-		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				expValNumber));
-		Assert.assertEquals(actual, "null[null[categoryTest.catVar], ==, null[5]]");
-
-		// Simple AND condition
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.AND),
-				expValQU1));
-		Assert.assertEquals(actual, "null[null[QU1], &&, null[QU1]]");
-
-		// Simple OR condition
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.OR),
-				expValQU1));
-		Assert.assertEquals(actual, "null[null[QU1], ||, null[QU1]]");
-
-		// AND|OR conditions combination
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				expValQU1A1, new ExpressionOperatorLogic(AvailableOperator.OR), expValQU1, new ExpressionOperatorLogic(
-						AvailableOperator.EQUALS), expValQU1A1, new ExpressionOperatorLogic(AvailableOperator.AND),
-				expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQU1A1));
-		Assert.assertEquals(
-				actual,
-				"null[null[null[QU1], ==, null[QU1A1]], ||, null[null[null[QU1], ==, null[QU1A1]], &&, null[null[QU1], ==, null[QU1A1]]]]");
-
-		// Simple TreeObject Between Function (e.g. QU1 between(0, 18))
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionFunction(AvailableFunction.BETWEEN),
-				new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
-						18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		Assert.assertEquals(actual, "null[null[QU1], BETWEEN(, null[0], null[18]]");
-
-		// Simple CustomVariable Between Function (e.g. QU1 between(0, 18))
-		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionFunction(AvailableFunction.BETWEEN),
-				new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
-						18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		Assert.assertEquals(actual, "null[null[categoryTest.catVar], BETWEEN(, null[0], null[18]]");
-
-		// IN function (e.g. Q IN(A, A, A) AND Q==A)
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionFunction(AvailableFunction.IN), expValQU1A1,
-				new ExpressionSymbol(AvailableSymbol.COMMA), expValQU1A2, new ExpressionSymbol(AvailableSymbol.COMMA),
-				expValQU1A2, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
-						AvailableOperator.AND), expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				expValQU1A1));
-		Assert.assertEquals(actual,
-				"null[null[null[QU1], IN(, null[QU1A1], null[QU1A2], null[QU1A2]], &&, null[null[QU1], ==, null[QU1A1]]]");
-
-		// AND function (e.g. Q==A AND Q==A)
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				expValQU1A1, new ExpressionOperatorLogic(AvailableOperator.AND), expValQU1,
-				new ExpressionOperatorLogic(AvailableOperator.EQUALS), expValQU1A1));
-		Assert.assertEquals(actual, "null[null[null[QU1], ==, null[QU1A1]], &&, null[null[QU1], ==, null[QU1A1]]]");
-
-		// Q IN (A1, A2) AND Q IN (A1, A2) AND Q==A
-		actual = parseDrools(new ExpressionChain(expValQU1, new ExpressionFunction(AvailableFunction.IN), expValQU1A1,
-				new ExpressionSymbol(AvailableSymbol.COMMA), expValQU1A2, new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.AND), expValQU1,
-				new ExpressionFunction(AvailableFunction.IN), expValQU1A1, new ExpressionSymbol(AvailableSymbol.COMMA),
-				expValQU1A2, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
-						AvailableOperator.AND), expValQU1, new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				expValQU1A1));
-		Assert.assertEquals(actual, "null[null[null[null[QU1], IN(, null[QU1A1], null[QU1A2]], "
-				+ "&&, null[null[QU1], IN(, null[QU1A1], null[QU1A2]]], " + "&&, null[null[QU1], ==, null[QU1A1]]]");
-
-		// Cat.score = Min(q.score, q.score)
-		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), expValQVar, new ExpressionSymbol(AvailableSymbol.COMMA),
-				expValQVar, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		Assert.assertEquals(actual, "null[null[categoryTest.catVar], MIN(, null[QU1.questVar], null[QU1.questVar]]");
-
-		// Cat.score = Quest.score
-		actual = parseDrools(new ExpressionChain(expValCVar, new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				expValQVar));
-		Assert.assertEquals(actual, "null[null[categoryTest.catVar], null[QU1.questVar]]");
-
-		// Generics test
-		actual = parseDrools(new ExpressionChain(expValGenericCatScore, new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), expValGenericQuestScore,
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), getExpValQU1(), new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), getExpValQU1A1(),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		Assert.assertEquals(actual, "null[null[Categories_catVar], MIN(, null[Category_Questions_questVar]]");
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
+				new ExpressionChain(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionChain(
+						new ExpressionChain(getExpValQU1()), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+						new ExpressionChain(getExpValQU1A1())), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
 
+	@Test(groups = { "droolsPrattParser" })
+	public void treeObjectScoreEqualsExpressionValueNumberTest() {
+		createSimpleForm();
+		// Simple TreeObject.Score equals ValueNumber (e.g. Cat1.score == 10)
+		String actual = parseDrools(new ExpressionChain(getExpValCVar(), new ExpressionOperatorLogic(
+				AvailableOperator.EQUALS), getExpValNumber()));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValCVar()),
+				new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(getExpValNumber()));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void simpleAndConditionTest() {
+		createSimpleForm();
+		// Simple AND condition
+		String actual = parseDrools(new ExpressionChain(getExpValQU1(), new ExpressionOperatorLogic(
+				AvailableOperator.AND), getExpValQU1()));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValQU1()),
+				new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionChain(getExpValQU1()));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void andConditionTest() {
+		createSimpleForm();
+		// AND condition (e.g. Q==A AND Q==A)
+		String actual = parseDrools(new ExpressionChain(getExpValQU1(), new ExpressionOperatorLogic(
+				AvailableOperator.EQUALS), getExpValQU1A1(), new ExpressionOperatorLogic(AvailableOperator.AND),
+				getExpValQU1(), new ExpressionOperatorLogic(AvailableOperator.EQUALS), getExpValQU1A1()));
+
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(new ExpressionChain(getExpValQU1()),
+				new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(getExpValQU1A1())),
+				new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionChain(new ExpressionChain(
+						getExpValQU1()), new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(
+						getExpValQU1A1())));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void simpleOrConditionTest() {
+		createSimpleForm();
+		// Simple OR condition
+		String actual = parseDrools(new ExpressionChain(getExpValQU1(), new ExpressionOperatorLogic(
+				AvailableOperator.OR), getExpValQU1()));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValQU1()),
+				new ExpressionOperatorLogic(AvailableOperator.OR), new ExpressionChain(getExpValQU1()));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void andOrCCombinationTest() {
+		createSimpleForm();
+		// AND|OR conditions combination
+		String actual = parseDrools(new ExpressionChain(getExpValQU1(), new ExpressionOperatorLogic(
+				AvailableOperator.EQUALS), getExpValQU1A1(), new ExpressionOperatorLogic(AvailableOperator.OR),
+				getExpValQU1(), new ExpressionOperatorLogic(AvailableOperator.EQUALS), getExpValQU1A1(),
+				new ExpressionOperatorLogic(AvailableOperator.AND), getExpValQU1(), new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), getExpValQU1A1()));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(new ExpressionChain(getExpValQU1()),
+				new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(getExpValQU1A1())),
+				new ExpressionOperatorLogic(AvailableOperator.OR), new ExpressionChain(new ExpressionChain(
+						new ExpressionChain(getExpValQU1()), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+						new ExpressionChain(getExpValQU1A1())), new ExpressionOperatorLogic(AvailableOperator.AND),
+						new ExpressionChain(new ExpressionChain(getExpValQU1()), new ExpressionOperatorLogic(
+								AvailableOperator.EQUALS), new ExpressionChain(getExpValQU1A1()))));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void treeObjectBetweenValueNumbersTest() {
+		createSimpleForm();
+		// Simple TreeObject Between Function (e.g. QU1 between(0, 18))
+		String actual = parseDrools(new ExpressionChain(getExpValQU1(), new ExpressionFunction(
+				AvailableFunction.BETWEEN), new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueNumber(18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValQU1()),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionChain(new ExpressionValueNumber(0.)),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(new ExpressionValueNumber(18.)),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void customVariableBetweenValueNumbersTest() {
+		createSimpleForm();
+		// Simple CustomVariable Between Function (e.g. QU1 between(0, 18))
+		String actual = parseDrools(new ExpressionChain(getExpValCVar(), new ExpressionFunction(
+				AvailableFunction.BETWEEN), new ExpressionValueNumber(0.), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueNumber(18.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValCVar()),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionChain(new ExpressionValueNumber(0.)),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(new ExpressionValueNumber(18.)),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void questionAnswersInFunctionTest() {
+		createSimpleForm();
+		// IN function (e.g. Q IN(A, A, A) AND Q==A)
+		String actual = parseDrools(new ExpressionChain(getExpValQU1(), new ExpressionFunction(AvailableFunction.IN),
+				getExpValQU1A1(), new ExpressionSymbol(AvailableSymbol.COMMA), getExpValQU1A2(), new ExpressionSymbol(
+						AvailableSymbol.COMMA), getExpValQU1A2(), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionOperatorLogic(AvailableOperator.AND), getExpValQU1(), new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), getExpValQU1A1()));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(new ExpressionChain(getExpValQU1()),
+				new ExpressionFunction(AvailableFunction.IN), new ExpressionChain(getExpValQU1A1()),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(getExpValQU1A2()),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(getExpValQU1A2()),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)),
+				new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionChain(new ExpressionChain(
+						getExpValQU1()), new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(
+						getExpValQU1A1())));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void functionsExpressionCombinationTest() {
+		createSimpleForm();
+		// Q IN (A1, A2) AND Q IN (A1, A2) AND Q==A
+		String actual = parseDrools(new ExpressionChain(getExpValQU1(), new ExpressionFunction(AvailableFunction.IN),
+				getExpValQU1A1(), new ExpressionSymbol(AvailableSymbol.COMMA), getExpValQU1A2(), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.AND),
+				getExpValQU1(), new ExpressionFunction(AvailableFunction.IN), getExpValQU1A1(), new ExpressionSymbol(
+						AvailableSymbol.COMMA), getExpValQU1A2(), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionOperatorLogic(AvailableOperator.AND), getExpValQU1(), new ExpressionOperatorLogic(
+						AvailableOperator.EQUALS), getExpValQU1A1()));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(new ExpressionChain(
+				new ExpressionChain(getExpValQU1()), new ExpressionFunction(AvailableFunction.IN), new ExpressionChain(
+						getExpValQU1A1()), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(
+						getExpValQU1A2()), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)),
+				new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionChain(new ExpressionChain(
+						getExpValQU1()), new ExpressionFunction(AvailableFunction.IN), new ExpressionChain(
+						getExpValQU1A1()), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(
+						getExpValQU1A2()), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET))),
+				new ExpressionOperatorLogic(AvailableOperator.AND), new ExpressionChain(new ExpressionChain(
+						getExpValQU1()), new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(
+						getExpValQU1A1())));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void treeObjectScoreMinFunctionTest() {
+		createSimpleForm();
+		// Cat.score = Min(q.score, q.score)
+		String actual = parseDrools(new ExpressionChain(getExpValCVar(), new ExpressionOperatorMath(
+				AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), getExpValQVar(),
+				new ExpressionSymbol(AvailableSymbol.COMMA), getExpValQVar(), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValCVar()),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionChain(getExpValQVar()),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(getExpValQVar()),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void treeObjectScoresComparationTest() {
+		createSimpleForm();
+		// Cat.score = Quest.score
+		String actual = parseDrools(new ExpressionChain(getExpValCVar(), new ExpressionOperatorMath(
+				AvailableOperator.ASSIGNATION), getExpValQVar()));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValCVar()),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionChain(getExpValQVar()));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void genericsTest() {
+		createSimpleForm();
+		// Generics test
+		String actual = parseDrools(new ExpressionChain(getExpValGenericCatScore(), new ExpressionFunction(
+				AvailableFunction.MIN), getExpValGenericQuestScore(), new ExpressionSymbol(
+				AvailableSymbol.RIGHT_BRACKET)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValGenericCatScore()),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionChain(getExpValGenericQuestScore()),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void mathematicalExpressionOneTest() {
+		createSimpleForm();
 		// Mathematical test
-		actual = parseDrools(new ExpressionChain(new ExpressionValueCustomVariable(category, cVar),
+		String actual = parseDrools(new ExpressionChain(new ExpressionValueCustomVariable(getCategory(), getcVar()),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.),
 				new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-				new ExpressionValueTreeObjectReference(mother), new ExpressionOperatorMath(
+				new ExpressionValueTreeObjectReference(getMother()), new ExpressionOperatorMath(
 						AvailableOperator.MULTIPLICATION), new ExpressionValueNumber(0.6), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorMath(AvailableOperator.PLUS),
-				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(father),
-				new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionValueNumber(0.4),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		Assert.assertEquals(
-				actual,
-				"null[null[categoryTest.catVar], null[null[null[10], +, null[null[motherHeight], *, null[0.6]]], +, null[null[fatherHeight], *, null[0.4]]]]");
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueTreeObjectReference(getFather()), new ExpressionOperatorMath(
+						AvailableOperator.MULTIPLICATION), new ExpressionValueNumber(0.4), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(new ExpressionValueCustomVariable(
+				getCategory(), getcVar())), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionChain(new ExpressionChain(new ExpressionChain(new ExpressionValueNumber(10.)),
+						new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionChain(new ExpressionSymbol(
+								AvailableSymbol.LEFT_BRACKET),
+								new ExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
+										getMother())), new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION),
+										new ExpressionChain(new ExpressionValueNumber(0.6))), new ExpressionSymbol(
+										AvailableSymbol.RIGHT_BRACKET))), new ExpressionOperatorMath(
+						AvailableOperator.PLUS), new ExpressionChain(
+						new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+						new ExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(getFather())),
+								new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionChain(
+										new ExpressionValueNumber(0.4))), new ExpressionSymbol(
+								AvailableSymbol.RIGHT_BRACKET))));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
 
+	@Test(groups = { "droolsPrattParser" })
+	public void equalsAndLessThanTest() {
+		createSimpleForm();
 		// Mathematical test
-		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate,
-				QuestionDateUnit.YEARS), new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND), expValFormScore,
-				new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
-						new ExpressionValueNumber(13.))));
-		Assert.assertEquals(actual,
-				"null[null[null[birthdate], ==, null[4]], &&, null[null[form.formVar], <, null[13]]]");
+		String actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(getBirthDate(),
+				QuestionDateUnit.YEARS), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				new ExpressionValueNumber(4.), new ExpressionOperatorLogic(AvailableOperator.AND),
+				getExpValFormScore(), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
+				new ExpressionValueNumber(13.)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(new ExpressionChain(
+				new ExpressionValueTreeObjectReference(getBirthDate(), QuestionDateUnit.YEARS)),
+				new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(
+						new ExpressionValueNumber(4.))), new ExpressionOperatorLogic(AvailableOperator.AND),
+				new ExpressionChain(new ExpressionChain(getExpValFormScore()), new ExpressionOperatorLogic(
+						AvailableOperator.LESS_THAN), new ExpressionChain(new ExpressionValueNumber(13.))));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
 
+	@Test(groups = { "droolsPrattParser" })
+	public void equalsAndBetweenTest() {
+		createSimpleForm();
 		// Mathematical test
-		actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(birthDate,
-				QuestionDateUnit.YEARS), new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				new ExpressionValueNumber(4.)), new ExpressionOperatorLogic(AvailableOperator.AND), expValFormScore,
-				new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(13.1),
-						new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(19.2),
-						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET))));
-		Assert.assertEquals(actual,
-				"null[null[null[birthdate], ==, null[4]], &&, null[null[form.formVar], BETWEEN(, null[13.1], null[19.2]]]");
+		String actual = parseDrools(new ExpressionChain(new ExpressionValueTreeObjectReference(getBirthDate(),
+				QuestionDateUnit.YEARS), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
+				new ExpressionValueNumber(4.), new ExpressionOperatorLogic(AvailableOperator.AND),
+				getExpValFormScore(), new ExpressionChain(new ExpressionFunction(AvailableFunction.BETWEEN),
+						new ExpressionValueNumber(13.1), new ExpressionSymbol(AvailableSymbol.COMMA),
+						new ExpressionValueNumber(19.2), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET))));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(new ExpressionChain(
+				new ExpressionValueTreeObjectReference(getBirthDate(), QuestionDateUnit.YEARS)),
+				new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionChain(
+						new ExpressionValueNumber(4.))), new ExpressionOperatorLogic(AvailableOperator.AND),
+				new ExpressionChain(new ExpressionChain(getExpValFormScore()), new ExpressionFunction(
+						AvailableFunction.BETWEEN), new ExpressionChain(new ExpressionValueNumber(13.1)),
+						new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(
+								new ExpressionValueNumber(19.2)), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
 
+	@Test(groups = { "droolsPrattParser" })
+	public void functionNegationTest() {
+		createSimpleForm();
 		// Negation of a Function
-		actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT), new ExpressionSymbol(
-				AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(father), new ExpressionFunction(
-				AvailableFunction.BETWEEN), new ExpressionValueNumber(13.1),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(19.2), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-
-		Assert.assertEquals(actual, "null[NOT(, null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]]]");
-
-		actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT), new ExpressionSymbol(
-				AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(father), new ExpressionFunction(
-				AvailableFunction.BETWEEN), new ExpressionValueNumber(13.1),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(19.2), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.OR),
-				new ExpressionValueTreeObjectReference(father), new ExpressionFunction(AvailableFunction.BETWEEN),
+		String actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueTreeObjectReference(getFather()), new ExpressionFunction(AvailableFunction.BETWEEN),
 				new ExpressionValueNumber(13.1), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueNumber(19.2), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
-		Assert.assertEquals(
-				actual,
-				"null[NOT(, null[null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]], ||, null[null[fatherHeight], BETWEEN(, null[13.1], null[19.2]]]]");
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
+				new ExpressionChain(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionChain(
+						new ExpressionChain(new ExpressionValueTreeObjectReference(getFather())),
+						new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionChain(
+								new ExpressionValueNumber(13.1)), new ExpressionSymbol(AvailableSymbol.COMMA),
+						new ExpressionChain(new ExpressionValueNumber(19.2)), new ExpressionSymbol(
+								AvailableSymbol.RIGHT_BRACKET)), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
 
-//		actual = parseDrools(new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
-//				new ExpressionValueTreeObjectReference(father),
-//				new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(25.),
-//				new ExpressionSymbol(AvailableSymbol.COMMA), expValFormScore, new ExpressionOperatorMath(
+	@Test(groups = { "droolsPrattParser" })
+	public void bracketsTest() {
+		createSimpleForm();
+		String actual = parseDrools(new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueTreeObjectReference(getFather()), new ExpressionFunction(AvailableFunction.BETWEEN),
+				new ExpressionValueNumber(13.1), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueNumber(19.2), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionOperatorLogic(AvailableOperator.OR), new ExpressionValueTreeObjectReference(getFather()),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(13.1),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(19.2), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
+				new ExpressionChain(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionChain(
+						new ExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(father)),
+								new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionChain(
+										new ExpressionValueNumber(13.1)), new ExpressionSymbol(AvailableSymbol.COMMA),
+								new ExpressionChain(new ExpressionValueNumber(19.2)), new ExpressionSymbol(
+										AvailableSymbol.RIGHT_BRACKET)), new ExpressionOperatorLogic(
+								AvailableOperator.OR), new ExpressionChain(new ExpressionChain(
+								new ExpressionValueTreeObjectReference(father)), new ExpressionFunction(
+								AvailableFunction.BETWEEN), new ExpressionChain(new ExpressionValueNumber(13.1)),
+								new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(
+										new ExpressionValueNumber(19.2)), new ExpressionSymbol(
+										AvailableSymbol.RIGHT_BRACKET))), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+//	@Test(groups = { "droolsPrattParser" })
+//	public void ifFunctionTest() {
+//		createSimpleForm();
+//		String actual = parseDrools(new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
+//				new ExpressionValueTreeObjectReference(getFather()), new ExpressionOperatorLogic(
+//						AvailableOperator.LESS_THAN), new ExpressionValueNumber(25.), new ExpressionSymbol(
+//						AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
 //						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1), new ExpressionSymbol(
-//						AvailableSymbol.COMMA), expValFormScore, new ExpressionOperatorMath(
+//						AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
 //						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(1.7), new ExpressionSymbol(
 //						AvailableSymbol.RIGHT_BRACKET)));
-//		
-//		Assert.assertEquals(
-//				actual,
-//				"null[IF(, null[null[fatherHeight], <, null[25]], null[null[form.formVar], null[7.1]], null[null[form.formVar], null[1.7]]]");
-	}
+//		// Check result
+//		ExpressionChain expectedResult = new ExpressionChain("ifExpression", new ExpressionFunction(
+//				AvailableFunction.IF), new ExpressionChain(new ExpressionValueTreeObjectReference(getFather())),
+//				new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionChain(
+//						new ExpressionValueNumber(25.)), new ExpressionSymbol(AvailableSymbol.COMMA),
+//				new ExpressionChain(getExpValFormScore()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+//				new ExpressionChain(new ExpressionValueNumber(7.1)), new ExpressionSymbol(AvailableSymbol.COMMA),
+//				new ExpressionChain(getExpValFormScore()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+//				new ExpressionChain(new ExpressionValueNumber(1.7)),
+//				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+//		System.out.println(actual);
+//		System.out.println(expectedResult.toString());
+//		Assert.assertEquals(actual, expectedResult.toString());
+//	}
 
 	/**
 	 * Parses the given chunk of code and returns pretty-printed result.
-	 * @throws NotCompatibleTypeException 
+	 * 
+	 * @throws NotCompatibleTypeException
 	 */
 	public static String parse(ExpressionChain source) throws NotCompatibleTypeException {
 		PrattParser parser = new ExpressionChainPrattParser(source);
@@ -279,5 +493,117 @@ public class PrattParserTest {
 			AbcdLogger.errorMessage(PrattParser.class.getName(), ex);
 		}
 		return "";
+	}
+
+	public ExpressionValueTreeObjectReference getExpValQU1() {
+		return expValQU1;
+	}
+
+	public void setExpValQU1(ExpressionValueTreeObjectReference expValQU1) {
+		this.expValQU1 = expValQU1;
+	}
+
+	public ExpressionValueTreeObjectReference getExpValQU1A1() {
+		return expValQU1A1;
+	}
+
+	public void setExpValQU1A1(ExpressionValueTreeObjectReference expValQU1A1) {
+		this.expValQU1A1 = expValQU1A1;
+	}
+
+	public ExpressionValueTreeObjectReference getExpValQU1A2() {
+		return expValQU1A2;
+	}
+
+	public void setExpValQU1A2(ExpressionValueTreeObjectReference expValQU1A2) {
+		this.expValQU1A2 = expValQU1A2;
+	}
+
+	public ExpressionValueCustomVariable getExpValCVar() {
+		return expValCVar;
+	}
+
+	public void setExpValCVar(ExpressionValueCustomVariable expValCVar) {
+		this.expValCVar = expValCVar;
+	}
+
+	public ExpressionValueCustomVariable getExpValQVar() {
+		return expValQVar;
+	}
+
+	public void setExpValQVar(ExpressionValueCustomVariable expValQVar) {
+		this.expValQVar = expValQVar;
+	}
+
+	public ExpressionValueCustomVariable getExpValFormScore() {
+		return expValFormScore;
+	}
+
+	public void setExpValFormScore(ExpressionValueCustomVariable expValFormScore) {
+		this.expValFormScore = expValFormScore;
+	}
+
+	public ExpressionValueNumber getExpValNumber() {
+		return expValNumber;
+	}
+
+	public void setExpValNumber(ExpressionValueNumber expValNumber) {
+		this.expValNumber = expValNumber;
+	}
+
+	public ExpressionValueGenericCustomVariable getExpValGenericCatScore() {
+		return expValGenericCatScore;
+	}
+
+	public void setExpValGenericCatScore(ExpressionValueGenericCustomVariable expValGenericCatScore) {
+		this.expValGenericCatScore = expValGenericCatScore;
+	}
+
+	public ExpressionValueGenericCustomVariable getExpValGenericQuestScore() {
+		return expValGenericQuestScore;
+	}
+
+	public void setExpValGenericQuestScore(ExpressionValueGenericCustomVariable expValGenericQuestScore) {
+		this.expValGenericQuestScore = expValGenericQuestScore;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public Question getFather() {
+		return father;
+	}
+
+	public void setFather(Question father) {
+		this.father = father;
+	}
+
+	public Question getMother() {
+		return mother;
+	}
+
+	public void setMother(Question mother) {
+		this.mother = mother;
+	}
+
+	public CustomVariable getcVar() {
+		return cVar;
+	}
+
+	public void setcVar(CustomVariable cVar) {
+		this.cVar = cVar;
+	}
+
+	public Question getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Question birthDate) {
+		this.birthDate = birthDate;
 	}
 }

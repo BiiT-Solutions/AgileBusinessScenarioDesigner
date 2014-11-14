@@ -36,6 +36,7 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
@@ -89,7 +90,7 @@ public class DroolsParser {
 		if (leftExpressionValueTreeObject != null) {
 			// Create the array of values to consult
 			List<ExpressionValue> inValues = new ArrayList<ExpressionValue>();
-			for (int i = 2; i < conditions.size(); i++) {
+			for (int i = 2; i < conditions.size() - 1; i += 2) {
 				List<Expression> inValue = ((ExpressionChain) conditions.get(i)).getExpressions();
 				if ((inValue.size() == 1) && (inValue.get(0) instanceof ExpressionValue)) {
 					inValues.add((ExpressionValue) inValue.get(0));
@@ -313,15 +314,13 @@ public class DroolsParser {
 		if (rule == null) {
 			return null;
 		}
-
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		// System.out.println("RULE ACTIONS: " + rule.getActions());
+		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "";
-		// treeObjectDroolsname = new HashMap<TreeObject, String>();
 		result += "\t$droolsForm: DroolsForm()\n";
 
 		// Obtain conditions if exists.
@@ -519,6 +518,9 @@ public class DroolsParser {
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
 			ExpressionChain expressionChainToSearch = (ExpressionChain) actions.generateCopy();
 			expressionChainToSearch.removeFirstExpression();
+			
+//			System.out.println("EXPRESSION CHAIN TO SEARCH: " + expressionChainToSearch);
+			
 			List<Expression> variables = getExpressionChainVariables(expressionChainToSearch);
 			for (Expression expression : variables) {
 				if ((expression instanceof ExpressionValueCustomVariable)
@@ -857,7 +859,13 @@ public class DroolsParser {
 				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
 						.get(0) instanceof ExpressionValueCustomVariable)) {
 
-			if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
+			System.out.println("ACTION EXPRESSION: " + prattParserResultExpressionChain);
+			
+			// In case the function is empty we don't need to generate the rule
+			if(prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionSymbol){
+				return null;
+			}
+			else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
 				switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
 				case MAX:
 				case MIN:
@@ -928,6 +936,13 @@ public class DroolsParser {
 				case BETWEEN:
 					return questionBetweenAnswersCondition(prattParserResultExpressionChain);
 				}
+			} else if ((expressions.size() > 1) && (expressions.get(0) instanceof ExpressionSymbol)) {
+				switch (((ExpressionSymbol) expressions.get(0)).getValue()) {
+				case LEFT_BRACKET:
+					// Parsing an expression of type "( something )" 
+					// Skip the parenthesis and parse again
+					return processResultConditionsFromPrattParser((ExpressionChain) expressions.get(1));
+				}
 			}
 			// NOT from FORK
 			else if (expressions.get(0) instanceof ExpressionFunction) {
@@ -944,6 +959,9 @@ public class DroolsParser {
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		String ruleCore = "";
+
+		System.out.println("CHAIN TO PARSE: " + prattParserResultExpressionChain);
+
 		if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionChain) {
 			String auxRule = processResultConditionsFromPrattParser((ExpressionChain) prattParserResultExpressionChain
 					.getExpressions().get(1));
@@ -1115,7 +1133,7 @@ public class DroolsParser {
 
 					List<Expression> firstExpressionValue = ((ExpressionChain) conditions.getExpressions().get(2))
 							.getExpressions();
-					List<Expression> secondExpressionValue = ((ExpressionChain) conditions.getExpressions().get(3))
+					List<Expression> secondExpressionValue = ((ExpressionChain) conditions.getExpressions().get(4))
 							.getExpressions();
 
 					if ((firstExpressionValue.size() == 1) && (secondExpressionValue.size() == 1)) {

@@ -3,6 +3,7 @@ package com.biit.abcd.core.drools.prattparser.visitor;
 import com.biit.abcd.core.drools.prattparser.expressions.AssignExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.CallExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.ConditionalExpression;
+import com.biit.abcd.core.drools.prattparser.expressions.GroupExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.NameExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.OperatorExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
@@ -192,34 +193,8 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 		return this.builder;
 	}
 
-	// /**
-	// * Creates the global constants for the drools session.<br>
-	// * Stores in memory the values to be inserted before the facts and
-	// generates
-	// * the global variables export file
-	// *
-	// *
-	// * @return The global constants in drools
-	// */
-	// private Object getGlobalVariableActiveValue(GlobalVariable
-	// globalVariable) {
-	// // First check if the data inside the variable has a valid date
-	// List<VariableData> varDataList = globalVariable.getData();
-	// if ((varDataList != null) && !varDataList.isEmpty()) {
-	// for (VariableData variableData : varDataList) {
-	//
-	// Timestamp currentTime = new Timestamp(new Date().getTime());
-	// Timestamp initTime = variableData.getValidFrom();
-	// Timestamp endTime = variableData.getValidTo();
-	// // Sometimes endtime can be null, meaning that the
-	// // variable data has no ending time
-	// if ((currentTime.after(initTime) && (endTime == null))
-	// || (currentTime.after(initTime) && currentTime.before(endTime))) {
-	// return variableData.getValue();
-	//
-	// }
-	// }
-	// }
-	// return "";
-	// }
+	@Override
+	public void visit(GroupExpression group) throws NotCompatibleTypeException {
+		group.getElement().accept(this);
+	}
 }

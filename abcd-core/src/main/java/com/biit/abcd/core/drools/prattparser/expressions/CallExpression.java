@@ -6,7 +6,9 @@ import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 
 /**
  * A function call like "a(b, c, d)".
@@ -46,7 +48,12 @@ public class CallExpression implements ITreeElement {
 		}
 		for (ITreeElement treeElem : args) {
 			expChain.addExpressions(treeElem.getExpressionChain());
+			expChain.addExpressions(new ExpressionSymbol(AvailableSymbol.COMMA));
 		}
+		// Add the missing right bracket and remove last comma
+		expChain.removeLastExpression();
+		expChain.addExpressions(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		
 		return expChain;
 	}
 }

@@ -6,9 +6,9 @@
 				<exclude name="orbeon" />
 				<include name="rules" />
 				<exclude name="rulesWithOrbeon" />
-				<include name="simpleParser" />
-				<include name="gson" />
-				<include name="newVersion" />
+				<include name="droolsPrattParser" />
+				<exclude name="gson" />
+				<exclude name="newVersion" />
 			</run>
 		</groups>
 		<classes>

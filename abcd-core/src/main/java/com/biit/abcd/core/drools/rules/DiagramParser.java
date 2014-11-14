@@ -92,7 +92,7 @@ public class DiagramParser {
 		case RULE:
 			DiagramRule ruleNode = (DiagramRule) node;
 			if (ruleNode.getRule() != null) {
-				newRules.add(RuleToDroolsRule.parse(ruleNode.getRule(), extraConditions));
+				newRules.addAll(RuleToDroolsRule.parse(ruleNode.getRule(), extraConditions));
 			}
 			break;
 		case CALCULATION:
