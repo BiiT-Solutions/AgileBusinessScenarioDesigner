@@ -4,10 +4,10 @@
 		<groups>
 			<run>
 				<exclude name="orbeon" />
-				<include name="rules" />
+				<exclude name="rules" />
 				<exclude name="rulesWithOrbeon" />
-				<include name="droolsPrattParser" />
-				<include name="gson" />
+				<include name="droolsPrattParser2" />
+				<exclude name="gson" />
 				<exclude name="newVersion" />
 			</run>
 		</groups>

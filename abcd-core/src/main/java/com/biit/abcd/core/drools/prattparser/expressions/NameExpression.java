@@ -12,16 +12,12 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
  */
 public class NameExpression implements ITreeElement {
 
-	private final String name;
 	private final Expression expression;
+	private final String name;
 
 	public NameExpression(ExpressionToken variable) {
 		this.name = variable.toString();
 		this.expression = variable.getExpression();
-	}
-
-	public String getName() {
-		return this.name;
 	}
 
 	@Override
@@ -29,8 +25,16 @@ public class NameExpression implements ITreeElement {
 		visitor.visit(this);
 	}
 
+	public Expression getExpression() {
+		return expression;
+	}
+
 	@Override
 	public ExpressionChain getExpressionChain() {
-		return new ExpressionChain(this.expression);
+		return new ExpressionChain(getExpression());
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 }
