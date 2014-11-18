@@ -66,8 +66,14 @@ public class FormController {
 
 	public void save() throws DuplicatedVariableException, UnexpectedDatabaseException {
 		this.checkDuplicatedVariables();
-		if (this.getForm() != null) {
-			this.formDao.makePersistent(this.getForm());
+		if (getForm() != null) {
+			formDao.makePersistent(getForm());
+			try {
+				originalForm = (Form) getForm().generateCopy(true, true);
+				originalForm.resetIds();
+			} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
+			}
+
 		}
 	}
 
