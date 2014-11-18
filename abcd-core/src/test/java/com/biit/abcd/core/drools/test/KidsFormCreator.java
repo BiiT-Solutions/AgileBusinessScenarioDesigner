@@ -86,7 +86,7 @@ public class KidsFormCreator {
 	private Group group = null;
 	private Question question = null;
 
-	static String readFile(String path, Charset encoding) throws IOException {
+	private static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 	}
@@ -106,8 +106,7 @@ public class KidsFormCreator {
 		// Generate the drools rules.
 		try {
 			FormToDroolsExporter formDrools = new FormToDroolsExporter();
-			DroolsRulesGenerator rulesGenerator;
-			rulesGenerator = formDrools.generateDroolRules(getForm(), getGlobalVariables());
+			DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), getGlobalVariables());
 			readStaticSubmittedForm();
 			translateFormCategories();
 			// Test the rules with the submitted form and returns a DroolsForm

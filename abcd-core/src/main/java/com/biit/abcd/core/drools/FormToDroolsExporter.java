@@ -111,7 +111,7 @@ public class FormToDroolsExporter {
 	 * 
 	 * @param form
 	 */
-	public void runDroolsRules(ISubmittedForm form, KieManager km) {
+	private void runDroolsRules(ISubmittedForm form, KieManager km) {
 		if ((form != null) && (km != null)) {
 			km.setFacts(Arrays.asList(form));
 			km.execute();

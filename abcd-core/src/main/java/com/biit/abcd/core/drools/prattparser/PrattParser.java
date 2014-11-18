@@ -98,7 +98,7 @@ public class PrattParser {
 				// System.out.println("INTERNAL EXPRESSION CHAIN: " +
 				// ((ExpressionChain) expression).getExpressions());
 
-				this.preParsing(((ExpressionChain) expression).getExpressions());
+				preParsing(((ExpressionChain) expression).getExpressions());
 			} else {
 				// All the other posibilities
 				expTokenList.add(new ExpressionToken(ExpressionTokenType.NAME, expression));

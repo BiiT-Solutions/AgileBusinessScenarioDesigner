@@ -1,0 +1,94 @@
+package com.biit.drools
+
+import com.biit.abcd.core.drools.facts.inputform.* 
+import com.biit.abcd.core.drools.utils.* 
+import java.lang.Math 
+import java.util.Date 
+import java.util.List 
+import java.util.ArrayList 
+import com.biit.abcd.logger.AbcdLogger 
+
+declare FiredRule
+	ruleName : String
+end
+
+rule "test1"
+when
+	$droolsForm: DroolsForm()
+	$formform : SubmittedForm() from $droolsForm.getSubmittedForm()
+then
+	$formform.setVariableValue('customVariableResult', 10.);
+	AbcdLogger.debug("DroolsRule", "Variable set (form, customVariableResult, 10.)");
+end
+
+rule "andOrTest_1_46dcac7c6a7845d09ac81a6283d9593c"
+when
+	$droolsForm: DroolsForm()
+	$formform : SubmittedForm() from $droolsForm.getSubmittedForm()
+	$formform_Category2Lifestyle : SubmittedCategory( getText() == 'Lifestyle') from $formform.getCategories()
+	$formform_Category2Lifestyle_group0voeding : SubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getGroups()
+	$formform_Category2Lifestyle_group0voeding_question0breakfast : SubmittedQuestion(getText() == 'breakfast', getAnswer('TEXT') in( 'a', 'b', 'd' )) from $formform_Category2Lifestyle_group0voeding.getQuestions()
+then
+	insert ( new FiredRule("andOrTest_1_46dcac7c6a7845d09ac81a6283d9593c"));
+	AbcdLogger.debug("DroolsRuleFired", "Rule andOrTest_1_46dcac7c6a7845d09ac81a6283d9593c fired");
+end
+
+rule "andOrTest_2_46dcac7c6a7845d09ac81a6283d9593carew"
+when
+	$droolsForm: DroolsForm()
+	$formform : SubmittedForm() from $droolsForm.getSubmittedForm()
+	$formform_Category2Lifestyle : SubmittedCategory( getText() == 'Lifestyle') from $formform.getCategories()
+	$formform_Category2Lifestyle_group0voeding : SubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getGroups()
+	$formform_Category2Lifestyle_group0voeding_question4vegetablesAmount : SubmittedQuestion(getText() == 'vegetablesAmount', getAnswer('NUMBER') >= 1.0 && < 6.0) from $formform_Category2Lifestyle_group0voeding.getQuestions()
+then
+	insert ( new FiredRule("andOrTest_2_46dcac7c6a7845d09ac81a6283d9593carew"));
+	AbcdLogger.debug("DroolsRuleFired", "Rule andOrTest_2_46dcac7c6a7845d09ac81a6283d9593carew fired");
+end
+
+rule "andOrTest_3_d4f9f86c51da405eaf568c709b3ddb80"
+when
+	$droolsForm: DroolsForm()
+	$formform : SubmittedForm() from $droolsForm.getSubmittedForm() 
+	$formform_Category2Lifestyle : SubmittedCategory( getText() == 'Lifestyle') from $formform.getCategories() 
+	$formform_Category2Lifestyle_group0voeding : SubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getGroups() 
+	$formform_Category2Lifestyle_group0voeding_question3vegetables : SubmittedQuestion(getText() == 'vegetables', getAnswer('TEXT')=='d') from $formform_Category2Lifestyle_group0voeding.getQuestions()
+then
+	insert ( new FiredRule("andOrTest_3_d4f9f86c51da405eaf568c709b3ddb80"));
+	AbcdLogger.debug("DroolsRuleFired", "Rule andOrTest_3_d4f9f86c51da405eaf568c709b3ddb80 fired");
+end
+
+rule "andOrTest_4_4fe4a25e1f564031968f15db34404399"
+when
+	$droolsForm: DroolsForm()
+	$formform : SubmittedForm() from $droolsForm.getSubmittedForm()
+	$formform_Category2Lifestyle : SubmittedCategory( getText() == 'Lifestyle') from $formform.getCategories()
+	$formform_Category2Lifestyle_group0voeding : SubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getGroups()
+	$formform_Category2Lifestyle_group0voeding_question4vegetablesAmount : SubmittedQuestion(getText() == 'vegetablesAmount', getAnswer('NUMBER') >= 2.0 && < 7.0) from $formform_Category2Lifestyle_group0voeding.getQuestions()
+then
+	insert ( new FiredRule("andOrTest_4_4fe4a25e1f564031968f15db34404399"));
+	AbcdLogger.debug("DroolsRuleFired", "Rule andOrTest_4_4fe4a25e1f564031968f15db34404399 fired");
+end
+
+rule "andOrTest_5_4fe4a25e1f564031968asdff15db34404399"
+when
+	not( FiredRule( getRuleName() == 'andOrTest_5_4fe4a25e1f564031968asdff15db34404399') ) and
+	$droolsForm: DroolsForm() and
+	(	
+		( 
+			FiredRule( getRuleName() == 'andOrTest_1_46dcac7c6a7845d09ac81a6283d9593c')
+			or
+			FiredRule( getRuleName() == 'andOrTest_2_46dcac7c6a7845d09ac81a6283d9593carew')
+		)
+	and	
+		(	
+			FiredRule( getRuleName() == 'andOrTest_3_d4f9f86c51da405eaf568c709b3ddb80')
+			or
+			FiredRule( getRuleName() == 'andOrTest_4_4fe4a25e1f564031968f15db34404399')
+		)
+	) and
+	$formform : SubmittedForm() from $droolsForm.getSubmittedForm()
+then
+	$formform.setVariableValue('customVariableResult', (Double)$formform.getVariableValue('customVariableResult') + 1.);
+	insert ( new FiredRule("andOrTest_5_4fe4a25e1f564031968asdff15db34404399"));
+	AbcdLogger.debug("DroolsRule", "Variable set (form, customVariableResult, 'ok')");
+end

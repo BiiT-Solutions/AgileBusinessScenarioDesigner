@@ -1,5 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.expressions;
 
+import java.util.UUID;
+
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
@@ -14,10 +16,12 @@ public class NameExpression implements ITreeElement {
 
 	private final Expression expression;
 	private final String name;
+	private final String treeElementId;
 
 	public NameExpression(ExpressionToken variable) {
 		this.name = variable.toString();
 		this.expression = variable.getExpression();
+		this.treeElementId = UUID.randomUUID().toString().replace("-", "").replace(" ", "");
 	}
 
 	@Override
@@ -31,7 +35,9 @@ public class NameExpression implements ITreeElement {
 
 	@Override
 	public ExpressionChain getExpressionChain() {
-		return new ExpressionChain(getExpression());
+		ExpressionChain expChain = new ExpressionChain(getExpression());
+		expChain.setName(this.treeElementId);
+		return expChain;
 	}
 	
 	public String getName() {

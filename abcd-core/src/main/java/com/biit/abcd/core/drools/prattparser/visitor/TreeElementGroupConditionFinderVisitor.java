@@ -13,26 +13,20 @@ import com.biit.abcd.core.drools.prattparser.expressions.OperatorExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
-import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 
-public class TreeElementBasicExpressionFinderVisitor implements
-		ITreeElementVisitor {
+public class TreeElementGroupConditionFinderVisitor implements ITreeElementVisitor {
 
 	private List<ExpressionChain> conditions;
-	
-	
 
-	public TreeElementBasicExpressionFinderVisitor() {
+	public TreeElementGroupConditionFinderVisitor() {
 		setConditions(new ArrayList<ExpressionChain>());
 	}
 
 	@Override
-	public void visit(AssignExpression assign)
-			throws NotCompatibleTypeException {
+	public void visit(AssignExpression assign) throws NotCompatibleTypeException {
 		assign.getRightElement().accept(this);
+		getConditions().add(assign.getExpressionChain());
 	}
 
 	@Override
@@ -41,11 +35,11 @@ public class TreeElementBasicExpressionFinderVisitor implements
 		for (int i = 0; i < call.getArgs().size(); i++) {
 			call.getArgs().get(i).accept(this);
 		}
+		getConditions().add(call.getExpressionChain());
 	}
 
 	@Override
-	public void visit(ConditionalExpression condition)
-			throws NotCompatibleTypeException {
+	public void visit(ConditionalExpression condition) throws NotCompatibleTypeException {
 		condition.getCondition().accept(this);
 		condition.getThenArm().accept(this);
 		condition.getElseArm().accept(this);
@@ -56,25 +50,26 @@ public class TreeElementBasicExpressionFinderVisitor implements
 	}
 
 	@Override
-	public void visit(OperatorExpression operator)
-			throws NotCompatibleTypeException {
+	public void visit(OperatorExpression operator) throws NotCompatibleTypeException {
 		operator.getLeftElement().accept(this);
-		operator.getRightElement().accept(this);
 		if (!operator.getOperator().equals(ExpressionTokenType.OR)
 				&& !operator.getOperator().equals(ExpressionTokenType.AND)) {
 			getConditions().add(operator.getExpressionChain());
 		}
+		operator.getRightElement().accept(this);
 	}
 
 	@Override
-	public void visit(PostfixExpression postfix)
-			throws NotCompatibleTypeException {
+	public void visit(PostfixExpression postfix) throws NotCompatibleTypeException {
 		postfix.getLeftElement().accept(this);
+		getConditions().add(postfix.getExpressionChain());
 	}
 
 	@Override
-	public void visit(PrefixExpression prefix)
-			throws NotCompatibleTypeException {
+	public void visit(PrefixExpression prefix) throws NotCompatibleTypeException {
+		if (!prefix.getOperator().equals(ExpressionTokenType.NOT)) {
+			getConditions().add(prefix.getExpressionChain());
+		}
 		prefix.getRightElement().accept(this);
 	}
 

@@ -6,6 +6,7 @@ public class DroolsRuleGroup extends DroolsRule {
 
 	private String groupCondition =  "";
 	private String groupAction = "";
+	private String conditionExpressionChainId = "";
 	
 	public DroolsRuleGroup() {
 		super();
@@ -29,5 +30,13 @@ public class DroolsRuleGroup extends DroolsRule {
 
 	public void setGroupAction(String groupAction) {
 		this.groupAction = groupAction;
+	}
+
+	public String getConditionExpressionChainId() {
+		return conditionExpressionChainId;
+	}
+
+	public void setConditionExpressionChainId(String expressionChainId) {
+		this.conditionExpressionChainId = expressionChainId;
 	}
 }
