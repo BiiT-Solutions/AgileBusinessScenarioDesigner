@@ -36,6 +36,7 @@ public class NewConditionTable extends Table {
 
 		setRowHeaderMode(RowHeaderMode.INDEX);
 		setColumnWidth(null, rowHeaderWidth);
+		setSortEnabled(false);
 
 		setImmediate(true);
 		setSizeFull();

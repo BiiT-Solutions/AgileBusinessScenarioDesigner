@@ -604,8 +604,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	// TODO fix not behavior (Parser problem)
-	@Test(groups = { "rules4" })
+	@Test(groups = { "rules" })
 	public void testNotAndCombinationOperator() throws ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
@@ -631,7 +630,7 @@ public class OperatorsTest extends KidsFormCreator {
 		ExpressionChain expressionThree = new ExpressionChain("expressionThree",
 				new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_QUESTION)),
 				new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(
-						getAnswer(VEGETABLES_QUESTION, "a")));
+						getAnswer(VEGETABLES_QUESTION, "d")));
 
 		// Merge NOT with AND
 		ExpressionChain conditions = new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT), expressionOne,
@@ -682,9 +681,11 @@ public class OperatorsTest extends KidsFormCreator {
 						7.0), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 
 		// Merge
-		ExpressionChain conditions = new ExpressionChain(expressionOne, new ExpressionOperatorLogic(
-				AvailableOperator.OR), expressionTwo, new ExpressionOperatorLogic(AvailableOperator.AND),
-				expressionThree, new ExpressionOperatorLogic(AvailableOperator.OR), expressionFour);
+		ExpressionChain conditions = new ExpressionChain(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				expressionOne, new ExpressionOperatorLogic(AvailableOperator.OR), expressionTwo, new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.AND),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), expressionThree, new ExpressionOperatorLogic(
+						AvailableOperator.OR), expressionFour, new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		// Create a a simple action
 		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.STRING, CustomVariableScope.FORM);

@@ -3,11 +3,13 @@ package com.biit.abcd.core.drools.rules;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
+import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupEndRuleConditionCreatorVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementMathExpressionVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
@@ -279,11 +281,11 @@ public class DroolsParser {
 					parsedText += rule.getName();
 					parsedText += RulesUtils.getWhenRuleString();
 					if (rule instanceof DroolsRuleGroup) {
-						parsedText += ((DroolsRuleGroup)rule).getGroupCondition();
+						parsedText += ((DroolsRuleGroup) rule).getGroupCondition();
 					}
 					parsedText += parsedRule;
 					if (rule instanceof DroolsRuleGroup) {
-						parsedText += ((DroolsRuleGroup)rule).getGroupAction();
+						parsedText += ((DroolsRuleGroup) rule).getGroupAction();
 					}
 					parsedText += RulesUtils.getEndRuleString();
 				}
@@ -323,16 +325,22 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-//		System.out.println("RULE ACTIONS: " + rule.getActions());
+		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
-		String result = "";
-		result += "\t$droolsForm: DroolsForm()\n";
-
+		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
 		if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null)
 				&& (!rule.getConditions().getExpressions().isEmpty())) {
-			result += parseConditions(rule.getConditions());
+			// Parse an special rule with OR and AND expressions
+			if (rule instanceof DroolsRuleGroupEndRule) {
+				// It needs the "and" due to the and/or expression parenthesis
+				// that will follow
+				result = result.replace("\n", " and\n");
+				result += parseDroolsRuleGroupEndRuleConditions(rule);
+			} else {
+				result += parseConditions(rule.getConditions());
+			}
 		}
 		if ((rule.getActions() != null) && (rule.getActions().getExpressions() != null)
 				&& (!rule.getActions().getExpressions().isEmpty())) {
@@ -346,9 +354,49 @@ public class DroolsParser {
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
 		// result = RulesUtils.removeExtraParenthesis(result);
-		if (orOperatorUsed)
-			result = RulesUtils.fixOrCondition(result);
+//		if (orOperatorUsed)
+//			result = RulesUtils.fixOrCondition(result);
 
+		return result;
+	}
+
+	/**
+	 * Parses the final rule of the OR/AND combination<br>
+	 * Based on the ids of the previous rules, it will create a combination of
+	 * them following the structure defined by the user.
+	 * 
+	 * @return
+	 * @throws NullExpressionValueException
+	 * @throws NullCustomVariableException
+	 * @throws TreeObjectParentNotValidException
+	 * @throws TreeObjectInstanceNotRecognizedException
+	 * @throws NullTreeObjectException
+	 * @throws NotCompatibleTypeException
+	 * @throws RuleNotImplementedException
+	 */
+	private static String parseDroolsRuleGroupEndRuleConditions(Rule rule) throws RuleNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+		String result = "";
+		DroolsRuleGroupEndRule endRule = (DroolsRuleGroupEndRule) rule;
+		ITreeElement prattResult = endRule.getParserResult();
+		if ((prattResult != null) && (prattResult.getExpressionChain() != null)) {
+			// Tree visitor that creates the drools rule special and/or
+			// conditions
+			TreeElementGroupEndRuleConditionCreatorVisitor treeVisitor = new TreeElementGroupEndRuleConditionCreatorVisitor();
+			try {
+				prattResult.accept(treeVisitor);
+				result += treeVisitor.getCompleteExpression().getRepresentation();
+				// Replace rule identifiers from the old parsed string
+				// (Needed because the rule has been parsed again and the ids have changed)
+				for (Entry<String, String> value : endRule.getMapEntry()) {
+					result = result.replace(value.getKey(), value.getValue());
+				}
+				result += " and \n";
+			} catch (NotCompatibleTypeException e) {
+				AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
+			}
+		}
 		return result;
 	}
 

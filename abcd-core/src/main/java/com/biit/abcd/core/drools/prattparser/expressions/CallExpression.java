@@ -1,6 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.expressions;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
@@ -18,11 +19,13 @@ public class CallExpression implements ITreeElement {
 	private final ITreeElement leftElement;
 	private final ExpressionToken function;
 	private final List<ITreeElement> args;
+	private final String treeElementId;
 
 	public CallExpression(ExpressionToken token, ITreeElement leftElement, List<ITreeElement> args) {
 		this.function = token;
 		this.leftElement = leftElement;
 		this.args = args;
+		this.treeElementId = UUID.randomUUID().toString().replace("-", "").replace(" ", "");
 	}
 
 	@Override
@@ -53,7 +56,7 @@ public class CallExpression implements ITreeElement {
 		// Add the missing right bracket and remove last comma
 		expChain.removeLastExpression();
 		expChain.addExpressions(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		
+		expChain.setName(this.treeElementId);
 		return expChain;
 	}
 }

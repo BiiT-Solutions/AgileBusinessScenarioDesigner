@@ -32,7 +32,7 @@ import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 public class DroolsRulesGenerator {
 
 	private Form form;
-	private String rules;
+	private StringBuilder builder;
 	private List<GlobalVariable> globalVariables;
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
@@ -52,20 +52,12 @@ public class DroolsRulesGenerator {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		if (form != null) {
-			rules = "package com.biit.drools \n\n";
-			rules += "import com.biit.abcd.core.drools.facts.inputform.* \n";
-			rules += "import com.biit.abcd.core.drools.utils.* \n";
-			rules += "import com.biit.abcd.core.drools.rules.GroupRuleFired \n";
-			rules += "import java.lang.Math \n";
-			rules += "import java.util.Date \n";
-			rules += "import java.util.List \n";
-			rules += "import java.util.ArrayList \n";
-			rules += "import com.biit.abcd.logger.AbcdLogger \n\n";
-			// Creation of the global variables
-			if ((globalVariables != null) && !globalVariables.isEmpty()) {
-				rules += parseGlobalVariables();
-				rules += "\n";
-			}
+			// Define imports
+			importsDeclaration();
+			// Define internal types
+			typesDeclaration();
+			// Define the global variables
+			globalVariablesDeclaration();
 
 			// Follow the diagram to parse and launch the rules
 			Set<Diagram> diagrams = form.getDiagrams();
@@ -80,9 +72,43 @@ public class DroolsRulesGenerator {
 				DiagramParser diagParser = new DiagramParser();
 				// Parse the root diagrams
 				for (Diagram diagram : rootDiagrams) {
-					rules += diagParser.getDroolsRulesAsText(diagram);
+					getRulesBuilder().append(diagParser.getDroolsRulesAsText(diagram));
 				}
 			}
+		}
+	}
+
+	/**
+	 * Defines the packages used by the drools file
+	 */
+	private void importsDeclaration() {
+		getRulesBuilder().append("package com.biit.drools \n\n");
+		getRulesBuilder().append("import com.biit.abcd.core.drools.facts.inputform.* \n");
+		getRulesBuilder().append("import com.biit.abcd.core.drools.utils.* \n");
+		getRulesBuilder().append("import java.lang.Math \n");
+		getRulesBuilder().append("import java.util.Date \n");
+		getRulesBuilder().append("import java.util.List \n");
+		getRulesBuilder().append("import java.util.ArrayList \n");
+		getRulesBuilder().append("import com.biit.abcd.logger.AbcdLogger \n\n");
+	}
+
+	/**
+	 * Defines the types (classes) used internally in the drools file
+	 */
+	private void typesDeclaration() {
+		// Internal type declaration
+		getRulesBuilder().append("declare FiredRule\n");
+		getRulesBuilder().append("\truleName : String\n");
+		getRulesBuilder().append("end\n\n");
+	}
+
+	/**
+	 * Defines the global variables that can be used in the drools file
+	 */
+	private void globalVariablesDeclaration() {
+		if ((globalVariables != null) && !globalVariables.isEmpty()) {
+			getRulesBuilder().append(parseGlobalVariables());
+			getRulesBuilder().append("\n");
 		}
 	}
 
@@ -195,7 +221,14 @@ public class DroolsRulesGenerator {
 	}
 
 	public String getRules() {
-		return this.rules;
+		return getRulesBuilder().toString();
+	}
+
+	private StringBuilder getRulesBuilder() {
+		if (this.builder == null) {
+			this.builder = new StringBuilder();
+		}
+		return this.builder;
 	}
 
 }

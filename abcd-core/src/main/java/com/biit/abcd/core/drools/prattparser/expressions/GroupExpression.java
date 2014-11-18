@@ -1,5 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.expressions;
 
+import java.util.UUID;
+
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElementVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
@@ -10,9 +12,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 public class GroupExpression implements ITreeElement {
 
 	private final ITreeElement element;
+	private final String treeElementId;
 
 	public GroupExpression(ITreeElement element) {
 		this.element = element;
+		this.treeElementId = UUID.randomUUID().toString().replace("-", "").replace(" ", "");
 	}
 
 	@Override
@@ -32,6 +36,7 @@ public class GroupExpression implements ITreeElement {
 			expChain.addExpressions(element.getExpressionChain());
 		}
 		expChain.addExpressions(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		expChain.setName(this.treeElementId);
 		return expChain;
 	}
 

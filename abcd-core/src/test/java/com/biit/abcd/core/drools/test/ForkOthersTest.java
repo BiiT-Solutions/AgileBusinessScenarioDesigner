@@ -93,7 +93,7 @@ public class ForkOthersTest extends KidsFormCreator {
 	}
 
 	// TODO fix random creation rule behaviour
-	@Test(groups = { "rules4" })
+	@Test(groups = { "rules" })
 	public void testForkWithMultipleConditions() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
@@ -135,67 +135,67 @@ public class ForkOthersTest extends KidsFormCreator {
 		diagramStartNode.setType(DiagramObjectType.SOURCE);
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
-		DiagramFork diagramSecondFork = new DiagramFork();
-		diagramSecondFork.setJointjsId(IdGenerator.createId());
-		diagramSecondFork.setType(DiagramObjectType.FORK);
-		diagramSecondFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetables")));
-		Node nodeSecondFork = new Node(diagramSecondFork.getJointjsId());
+		DiagramFork diagramForkNode = new DiagramFork();
+		diagramForkNode.setJointjsId(IdGenerator.createId());
+		diagramForkNode.setType(DiagramObjectType.FORK);
+		diagramForkNode.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetables")));
+		Node nodeSecondFork = new Node(diagramForkNode.getJointjsId());
+
+		DiagramSink firstEndNode = new DiagramSink();
+		firstEndNode.setJointjsId(IdGenerator.createId());
+		firstEndNode.setType(DiagramObjectType.SINK);
+		firstEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
+				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueNumber(7.5)));
+		Node secondNodeSink = new Node(firstEndNode.getJointjsId());
 
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
 		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(7.5)));
-		Node secondNodeSink = new Node(secondEndNode.getJointjsId());
+				new ExpressionValueNumber(3.78)));
+		Node thirdNodeSink = new Node(secondEndNode.getJointjsId());
 
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
 		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
 				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(3.78)));
-		Node thirdNodeSink = new Node(thirdEndNode.getJointjsId());
-
-		DiagramSink fourthEndNode = new DiagramSink();
-		fourthEndNode.setJointjsId(IdGenerator.createId());
-		fourthEndNode.setType(DiagramObjectType.SINK);
-		fourthEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(4.75)));
-		Node fourthNodeSink = new Node(fourthEndNode.getJointjsId());
+		Node fourthNodeSink = new Node(thirdEndNode.getJointjsId());
 
-		DiagramLink startSecondFork = new DiagramLink(nodeSource, nodeSecondFork);
-		startSecondFork.setJointjsId(IdGenerator.createId());
-		startSecondFork.setType(DiagramObjectType.LINK);
+		DiagramLink startFork = new DiagramLink(nodeSource, nodeSecondFork);
+		startFork.setJointjsId(IdGenerator.createId());
+		startFork.setType(DiagramObjectType.LINK);
 
-		DiagramLink secondForkSecondEnd = new DiagramLink(nodeSecondFork, secondNodeSink);
-		secondForkSecondEnd.setJointjsId(IdGenerator.createId());
-		secondForkSecondEnd.setType(DiagramObjectType.LINK);
-		secondForkSecondEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
+		DiagramLink forkFirstEnd = new DiagramLink(nodeSecondFork, secondNodeSink);
+		forkFirstEnd.setJointjsId(IdGenerator.createId());
+		forkFirstEnd.setType(DiagramObjectType.LINK);
+		forkFirstEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
 				getTreeObject("vegetables")), new ExpressionValueTreeObjectReference(getAnswer("vegetables", "b"))));
 
-		DiagramLink secondForkThirdEnd = new DiagramLink(nodeSecondFork, thirdNodeSink);
-		secondForkThirdEnd.setJointjsId(IdGenerator.createId());
-		secondForkThirdEnd.setType(DiagramObjectType.LINK);
-		secondForkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
+		DiagramLink forkSecondEnd = new DiagramLink(nodeSecondFork, thirdNodeSink);
+		forkSecondEnd.setJointjsId(IdGenerator.createId());
+		forkSecondEnd.setType(DiagramObjectType.LINK);
+		forkSecondEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
 				getTreeObject("vegetables"))));
 
-		DiagramLink secondForkFourthEnd = new DiagramLink(nodeSecondFork, fourthNodeSink);
-		secondForkFourthEnd.setJointjsId(IdGenerator.createId());
-		secondForkFourthEnd.setType(DiagramObjectType.LINK);
-		secondForkFourthEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
+		DiagramLink forkThirdEnd = new DiagramLink(nodeSecondFork, fourthNodeSink);
+		forkThirdEnd.setJointjsId(IdGenerator.createId());
+		forkThirdEnd.setType(DiagramObjectType.LINK);
+		forkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
 				getTreeObject("vegetables")), new ExpressionValueTreeObjectReference(getAnswer("vegetables", "a"))));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
-		mainDiagram.addDiagramObject(diagramSecondFork);
+		mainDiagram.addDiagramObject(diagramForkNode);
+		mainDiagram.addDiagramObject(firstEndNode);
 		mainDiagram.addDiagramObject(secondEndNode);
 		mainDiagram.addDiagramObject(thirdEndNode);
-		mainDiagram.addDiagramObject(fourthEndNode);
-		mainDiagram.addDiagramObject(startSecondFork);
-		mainDiagram.addDiagramObject(secondForkSecondEnd);
-		mainDiagram.addDiagramObject(secondForkThirdEnd);
-		mainDiagram.addDiagramObject(secondForkFourthEnd);
+		mainDiagram.addDiagramObject(startFork);
+		mainDiagram.addDiagramObject(forkFirstEnd);
+		mainDiagram.addDiagramObject(forkSecondEnd);
+		mainDiagram.addDiagramObject(forkThirdEnd);
 
 		return mainDiagram;
 	}

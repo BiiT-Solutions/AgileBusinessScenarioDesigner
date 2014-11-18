@@ -1,5 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.expressions;
 
+import java.util.UUID;
+
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.ExpressionTokenType;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
@@ -17,12 +19,14 @@ public class OperatorExpression implements ITreeElement {
 	private final ITreeElement rightElement;
 	private final ExpressionTokenType operatorTokenType;
 	private final Expression operatorExpression;
+	private final String treeElementId;
 
 	public OperatorExpression(ITreeElement left, ExpressionToken operator, ITreeElement right) {
 		this.leftElement = left;
 		this.rightElement = right;
 		this.operatorExpression = operator.getExpression();
 		this.operatorTokenType = operator.getType();
+		this.treeElementId = UUID.randomUUID().toString().replace("-", "").replace(" ", "");
 	}
 
 	@Override
@@ -51,6 +55,7 @@ public class OperatorExpression implements ITreeElement {
 		ExpressionChain expChain = new ExpressionChain(this.leftElement.getExpressionChain());
 		expChain.addExpressions(this.operatorExpression);
 		expChain.addExpressions(this.rightElement.getExpressionChain());
+		expChain.setName(this.treeElementId);
 		return expChain;
 	}
 }

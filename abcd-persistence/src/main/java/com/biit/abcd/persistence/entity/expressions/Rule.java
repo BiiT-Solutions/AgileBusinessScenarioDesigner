@@ -9,10 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OrderBy;
-
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
@@ -76,7 +72,9 @@ public class Rule extends StorableObject implements INameAttribute {
 				conditions.addExpressions(extraConditions.getExpressions());
 			} else {
 				conditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+				conditions.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
 				conditions.addExpressions(extraConditions.getExpressions());
+				conditions.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			}
 		}
 	}

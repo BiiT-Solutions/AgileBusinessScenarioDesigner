@@ -8,13 +8,21 @@ import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
-import com.biit.abcd.core.drools.prattparser.visitor.TreeElementOrVisitor;
+import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupConditionFinderVisitor;
+import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupEndConditionFinderVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
 /**
@@ -26,55 +34,208 @@ public class RuleToDroolsRule {
 
 	private static List<DroolsRule> droolsRules;
 
-	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions) throws RuleInvalidException,
+	public static List<DroolsRule> parse(List<DroolsRule> rules) throws RuleInvalidException,
 			RuleNotImplementedException {
-		DroolsRule droolsRule = null;
-		if (rule != null) {
-			if (!hasOrConditions(rule, extraConditions)) {
-				droolsRule = new DroolsRule(rule.generateCopy());
-				// TODO Uncomment when changed the validator to the parser
-				// RuleChecker.checkRuleValid(droolsRule);
-				droolsRule.setName(RulesUtils.getRuleName(droolsRule.getName(), extraConditions));
-				if (extraConditions != null) {
-					droolsRule.addExtraConditions((ExpressionChain) extraConditions.generateCopy());
+		droolsRules = new ArrayList<>();
+		if (rules != null && !rules.isEmpty()) {
+			for (DroolsRule droolsRule : rules) {
+				if (hasAndOrNotConditions(droolsRule.getConditions())) {
+					parseAndOrNotConditionsFromDroolsRule(droolsRule);
+
+				} else {
+					droolsRules.add(droolsRule);
 				}
-				droolsRules = Arrays.asList(droolsRule);
 			}
+
 		}
 		return droolsRules;
 	}
 
-	private static boolean hasOrConditions(Rule rule, ExpressionChain extraConditions) {
-		Rule copyRule = rule.generateCopy();
-		ITreeElement result = calculatePrattParserResult(copyRule.getConditions());
-		TreeElementOrVisitor treePrint = new TreeElementOrVisitor();
-		try {
-			result.accept(treePrint);
-			if (!treePrint.getConditions().isEmpty()) {
-				int ruleCounter = 1;
-				droolsRules = new ArrayList<DroolsRule>();
-				for (ExpressionChain visitorRules : treePrint.getConditions()) {
-					DroolsRuleGroup droolsRule = new DroolsRuleGroup();
-					droolsRule.setConditions(visitorRules);
-					droolsRule.setActions(copyRule.getActions());
-					droolsRule.setName(RulesUtils.getRuleName(copyRule.getName() + "_" + ruleCounter, extraConditions));
-					if (extraConditions != null) {
-						droolsRule.addExtraConditions((ExpressionChain) extraConditions.generateCopy());
+	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions) throws RuleInvalidException,
+			RuleNotImplementedException {
+		DroolsRule droolsRule = null;
+		droolsRules = new ArrayList<>();
+		if (rule != null) {
+			Rule ruleCopy = rule.generateCopy();
+			if (extraConditions != null) {
+				ruleCopy.addExtraConditions((ExpressionChain) extraConditions.generateCopy());
+			}
+			if (hasAndOrNotConditions(ruleCopy.getConditions())) {
+				parseAndOrNotConditions(ruleCopy, extraConditions);
+
+			} else {
+				droolsRule = new DroolsRule(ruleCopy);
+				// TODO Uncomment when changed the validator to the parser
+				// RuleChecker.checkRuleValid(droolsRule);
+				droolsRule.setName(RulesUtils.getRuleName(droolsRule.getName(), extraConditions));
+				droolsRules = Arrays.asList(droolsRule);
+			}
+
+		}
+		return droolsRules;
+	}
+
+	/**
+	 * Return true if the conditions of the rule have AND/OR or NOT expressions
+	 * 
+	 * @param expressionChain
+	 * @return
+	 */
+	private static boolean hasAndOrNotConditions(ExpressionChain expressionChain) {
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionChain) {
+				hasAndOrNotConditions((ExpressionChain) expression);
+			} else {
+				if (expression instanceof ExpressionOperatorLogic) {
+					ExpressionOperatorLogic expressionOperatorLogic = (ExpressionOperatorLogic) expression;
+					if (expressionOperatorLogic.getValue().equals(AvailableOperator.AND)
+							|| expressionOperatorLogic.getValue().equals(AvailableOperator.OR)) {
+						return true;
 					}
-					// Set the special parameters for the group rules
-					droolsRule.setGroupCondition("\t$groupRuleId : GroupRuleFired(!isRuleFired('" + copyRule.getName()
-							+ "'))\n");
-					droolsRule.setGroupAction("\t$groupRuleId.addRuleFired(\"" + copyRule.getName() + "\");\n"
-							+ "\tupdate($groupRuleId);\n");
+				} else if (expression instanceof ExpressionFunction) {
+					ExpressionFunction expressionFunction = (ExpressionFunction) expression;
+					if (expressionFunction.getValue().equals(AvailableFunction.NOT)) {
+						addBracketsToNotConditions(expressionChain, expression);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Add an extra parenthesis to NOT expressions
+	 * 
+	 * @param expressionChain
+	 * @return
+	 */
+	private static void addBracketsToNotConditions(ExpressionChain expressionChain, Expression notExpression) {
+		int notExpressionIndex = expressionChain.getExpressions().indexOf(notExpression);
+		Expression expression = expressionChain.getExpressions().get(notExpressionIndex + 1);
+
+		if (!(expression instanceof ExpressionSymbol)) {
+			expressionChain.getExpressions().add(notExpressionIndex + 1,
+					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		} else if (expression instanceof ExpressionSymbol
+				&& !(((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.LEFT_BRACKET))) {
+			expressionChain.getExpressions().add(notExpressionIndex + 1,
+					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		}
+	}
+
+	private static void parseAndOrNotConditionsFromDroolsRule(DroolsRule ruleCopy) {
+		ITreeElement result = calculatePrattParserResult(ruleCopy.getConditions());
+		TreeElementGroupConditionFinderVisitor treeVisitor = new TreeElementGroupConditionFinderVisitor();
+		try {
+			result.accept(treeVisitor);
+			if (!treeVisitor.getConditions().isEmpty()) {
+				int ruleCounter = 1;
+				for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
+					DroolsRuleGroup droolsRule = new DroolsRuleGroup();
+					droolsRule.setConditionExpressionChainId(visitorRules.getName());
+					droolsRule.setConditions(visitorRules);
+					String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_"
+							+ ruleCounter + "\"\n";
+					droolsRule.setName(ruleName);
+					// Set the special actions for the group rules
+					String groupAction = "then\n";
+					groupAction += "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
+							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
+					groupAction += "\tinsert ( new FiredRule(\""
+							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
+					droolsRule.setGroupAction(groupAction);
 					droolsRules.add(droolsRule);
 					ruleCounter++;
 				}
-				return true;
+				createEndCombinationDroolsRule(result, ruleCopy, ruleCounter);
 			}
 		} catch (NotCompatibleTypeException e) {
-			e.printStackTrace();
+			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
 		}
-		return false;
+	}
+
+	private static void parseAndOrNotConditions(Rule ruleCopy, ExpressionChain extraConditions) {
+		ITreeElement result = calculatePrattParserResult(ruleCopy.getConditions());
+		TreeElementGroupConditionFinderVisitor treeVisitor = new TreeElementGroupConditionFinderVisitor();
+		try {
+			result.accept(treeVisitor);
+			if (!treeVisitor.getConditions().isEmpty()) {
+				int ruleCounter = 1;
+				for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
+					DroolsRuleGroup droolsRule = new DroolsRuleGroup();
+					droolsRule.setConditionExpressionChainId(visitorRules.getName());
+					droolsRule.setConditions(visitorRules);
+					// droolsRule.setActions(copyRule.getActions());
+					String ruleName = ruleCopy.getName() + "_" + ruleCounter;
+					droolsRule.setName(RulesUtils.getRuleName(ruleName, extraConditions));
+					// Set the special actions for the group rules
+					String groupAction = "then\n";
+					groupAction += "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
+							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
+					groupAction += "\tinsert ( new FiredRule(\""
+							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
+					droolsRule.setGroupAction(groupAction);
+					droolsRules.add(droolsRule);
+					ruleCounter++;
+				}
+				createEndCombinationRule(result, ruleCopy, ruleCounter);
+			}
+		} catch (NotCompatibleTypeException e) {
+			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
+		}
+	}
+
+	private static void createEndCombinationDroolsRule(ITreeElement result, DroolsRule ruleCopy, int ruleCounter) {
+		TreeElementGroupEndConditionFinderVisitor treeVisitor = new TreeElementGroupEndConditionFinderVisitor();
+		try {
+			result.accept(treeVisitor);
+			DroolsRuleGroupEndRule droolsRule = new DroolsRuleGroupEndRule();
+			droolsRule.setConditions(treeVisitor.getCompleteExpression());
+			droolsRule.setActions(ruleCopy.getActions());
+			String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_"
+					+ ruleCounter + "\"\n";
+			droolsRule.setName(ruleName);
+			// Set the special conditions/actions for the group rules
+			droolsRule.setGroupCondition("\tnot( FiredRule( getRuleName() == '"
+					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n");
+			droolsRule.setGroupAction("\tinsert ( new FiredRule(\""
+					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n");
+			droolsRule.setParserResult(result);
+			for (DroolsRule generatedDroolsRule : droolsRules) {
+				droolsRule.putExpresionRuleIdentifiers(((DroolsRuleGroup) generatedDroolsRule)
+						.getConditionExpressionChainId(), generatedDroolsRule.getName().split(" ")[1].replace("\n", "")
+						.replace("\"", ""));
+			}
+			droolsRules.add(droolsRule);
+		} catch (NotCompatibleTypeException e) {
+			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
+		}
+	}
+
+	private static void createEndCombinationRule(ITreeElement result, Rule ruleCopy, int ruleCounter) {
+		TreeElementGroupEndConditionFinderVisitor treeVisitor = new TreeElementGroupEndConditionFinderVisitor();
+		try {
+			result.accept(treeVisitor);
+			DroolsRuleGroupEndRule droolsRule = new DroolsRuleGroupEndRule();
+			droolsRule.setConditions(treeVisitor.getCompleteExpression());
+			droolsRule.setActions(ruleCopy.getActions());
+			droolsRule.setName(RulesUtils.getRuleName(ruleCopy.getName() + "_" + ruleCounter, null));
+			// Set the special conditions/actions for the group rules
+			droolsRule.setGroupCondition("\tnot( FiredRule( getRuleName() == '"
+					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n");
+			droolsRule.setGroupAction("\tinsert ( new FiredRule(\""
+					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n");
+			droolsRule.setParserResult(result);
+			for (DroolsRule generatedDroolsRule : droolsRules) {
+				droolsRule.putExpresionRuleIdentifiers(((DroolsRuleGroup) generatedDroolsRule)
+						.getConditionExpressionChainId(), generatedDroolsRule.getName().split(" ")[1].replace("\n", "")
+						.replace("\"", ""));
+			}
+			droolsRules.add(droolsRule);
+		} catch (NotCompatibleTypeException e) {
+			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
+		}
 	}
 
 	private static ITreeElement calculatePrattParserResult(ExpressionChain expressionChain) {

@@ -11,7 +11,6 @@ import org.kie.api.builder.Message.Level;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
-import com.biit.abcd.core.drools.rules.GroupRuleFired;
 import com.biit.orbeon.form.ISubmittedForm;
 
 public class KieManager {
@@ -51,7 +50,7 @@ public class KieManager {
 	}
 
 	public void execute() {
-		this.startKie(this.globalVariables, this.facts);
+		startKie(this.globalVariables, this.facts);
 	}
 
 	/**
@@ -64,9 +63,11 @@ public class KieManager {
 	public void startKie(List<DroolsGlobalVariable> globalVars, List<ISubmittedForm> facts) {
 		KieRepository kr = ks.getRepository();
 		KieContainer kContainer = ks.newKieContainer(kr.getDefaultReleaseId());
+//		StatelessKieSession kSession = kContainer.newStatelessKieSession();
 		KieSession kSession = kContainer.newKieSession();
-		this.setGlobalVariables(kSession, globalVars);
-		this.insertFacts(kSession, facts);
+		setGlobalVariables(kSession, globalVars);
+//		executeFacts(kSession, facts);
+		insertFacts(kSession, facts);
 		kSession.fireAllRules();
 	}
 
@@ -94,9 +95,13 @@ public class KieManager {
 
 	// Insert any number of facts in the drools session
 	private void insertFacts(KieSession kSession, List<ISubmittedForm> facts) {
-		kSession.insert(new GroupRuleFired());
 		for (ISubmittedForm fact : facts) {
 			kSession.insert(fact);
 		}
 	};
+	
+//	// Insert any number of facts in the drools session
+//	private void executeFacts(StatelessKieSession kSession, List<ISubmittedForm> facts) {
+//		kSession.execute(facts);
+//	};
 }

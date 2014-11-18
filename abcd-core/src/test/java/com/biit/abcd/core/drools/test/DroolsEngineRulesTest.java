@@ -1,0 +1,98 @@
+package com.biit.abcd.core.drools.test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.biit.abcd.core.drools.KieManager;
+import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
+import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.orbeon.OrbeonCategoryTranslator;
+import com.biit.orbeon.form.ISubmittedForm;
+
+public class DroolsEngineRulesTest {
+
+	private final static String FORM = "Form1";
+	private final static String APP = "Application1";
+	private static final String CUSTOM_VARIABLE_RESULT = "customVariableResult";
+	private static final Double CUSTOM_VARIABLE_RESULT_VALUE = 11.;
+	private ISubmittedForm submittedForm;
+	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
+
+	private void createSubmittedForm() {
+		try {
+			setSubmittedForm(new SubmittedForm(APP, FORM));
+			String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
+			getOrbeonImporter().readXml(xmlFile, getSubmittedForm());
+			String xmlStructure = readFile("./src/test/resources/kidScreen.xhtml", StandardCharsets.UTF_8);
+			OrbeonCategoryTranslator.getInstance().readXml(getSubmittedForm(), xmlStructure);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+
+	private DroolsForm runDroolsRules(String drlFile) {
+		// Generate the drools rules.
+		try {
+			AbcdLogger.debug(this.getClass().getName(), drlFile);
+			Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"),
+					drlFile.getBytes("UTF-8"));
+			createSubmittedForm();
+			// Launch kie
+			KieManager km = new KieManager();
+			// Load the rules in memory
+			km.buildSessionRules(drlFile);
+			// Creation of the global constants
+			km.setGlobalVariables(null);
+			DroolsForm droolsForm = new DroolsForm((SubmittedForm) getSubmittedForm());
+			km.setFacts(Arrays.asList((ISubmittedForm) droolsForm));
+			km.execute();
+			return droolsForm;
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+		return null;
+	}
+
+	private static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
+	}
+
+	private ISubmittedForm getSubmittedForm() {
+		return submittedForm;
+	}
+
+	private void setSubmittedForm(ISubmittedForm submittedForm) {
+		this.submittedForm = submittedForm;
+	}
+
+	private OrbeonSubmittedAnswerImporter getOrbeonImporter() {
+		return orbeonImporter;
+	}
+
+	@Test(groups = { "droolsEngineRules" })
+	public void rulesTest() {
+		try {
+			String drlFile = readFile("./src/test/resources/droolsRulesFileTest.drl", StandardCharsets.UTF_8);
+			// Execution of the rules
+			DroolsForm droolsForm = runDroolsRules(drlFile);
+			if (submittedForm != null) {
+				// Check result
+				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+						CUSTOM_VARIABLE_RESULT_VALUE);
+			}
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+}
