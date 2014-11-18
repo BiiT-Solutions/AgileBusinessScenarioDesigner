@@ -354,8 +354,8 @@ public class DroolsParser {
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
 		// result = RulesUtils.removeExtraParenthesis(result);
-		if (orOperatorUsed)
-			result = RulesUtils.fixOrCondition(result);
+//		if (orOperatorUsed)
+//			result = RulesUtils.fixOrCondition(result);
 
 		return result;
 	}
@@ -387,7 +387,8 @@ public class DroolsParser {
 			try {
 				prattResult.accept(treeVisitor);
 				result += treeVisitor.getCompleteExpression().getRepresentation();
-
+				// Replace rule identifiers from the old parsed string
+				// (Needed because the rule has been parsed again and the ids have changed)
 				for (Entry<String, String> value : endRule.getMapEntry()) {
 					result = result.replace(value.getKey(), value.getValue());
 				}
@@ -397,12 +398,6 @@ public class DroolsParser {
 			}
 		}
 		return result;
-	}
-
-	private static void replaceRuleIdentifiers(DroolsRuleGroupEndRule endRule, String droolsRule) {
-		for (Entry<String, String> value : endRule.getMapEntry()) {
-			droolsRule.replace(value.getKey(), value.getValue());
-		}
 	}
 
 	private static String equalsNotEqualsOperator(List<Expression> expressions, AvailableOperator availableOperator)

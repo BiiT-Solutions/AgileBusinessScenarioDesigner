@@ -62,18 +62,23 @@ public class TreeElementGroupEndRuleConditionCreatorVisitor implements ITreeElem
 				|| operator.getOperator().equals(ExpressionTokenType.OR)) {
 			getCompleteExpression().addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
 		}
+
 		operator.getLeftElement().accept(this);
+		
 		if (operator.getOperator().equals(ExpressionTokenType.OR)) {
 			getCompleteExpression().addExpression(new ExpressionValueString("or"));
+			
 		} else if (operator.getOperator().equals(ExpressionTokenType.AND)) {
 			getCompleteExpression().addExpression(new ExpressionValueString("and"));
-		
+
 		} else {
 			String droolsCondition = "FiredRule( getRuleName() == '"
 					+ operator.getExpressionChain().getName().toString() + "')\n";
 			getCompleteExpression().addExpression(new ExpressionValueString(droolsCondition));
 		}
+		
 		operator.getRightElement().accept(this);
+
 		if (operator.getOperator().equals(ExpressionTokenType.AND)
 				|| operator.getOperator().equals(ExpressionTokenType.OR)) {
 			getCompleteExpression().addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
@@ -90,10 +95,10 @@ public class TreeElementGroupEndRuleConditionCreatorVisitor implements ITreeElem
 
 	@Override
 	public void visit(PrefixExpression prefix) throws NotCompatibleTypeException {
-		
+
 		if (prefix.getOperator().equals(ExpressionTokenType.NOT)) {
 			getCompleteExpression().addExpression(new ExpressionValueString("not( "));
-		}else{
+		} else {
 			String droolsCondition = "FiredRule( getRuleName() == '" + prefix.getExpressionChain().getName().toString()
 					+ "')\n";
 			getCompleteExpression().addExpression(new ExpressionValueString(droolsCondition));

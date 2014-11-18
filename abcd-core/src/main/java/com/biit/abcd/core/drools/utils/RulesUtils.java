@@ -54,7 +54,8 @@ public class RulesUtils {
 				String compareTo = auxSplit[i];
 				for (int j = i + 1; j < auxSplit.length; j++) {
 					if ((auxSplit[j] != null) && !auxSplit[i].equals("\tand") && !auxSplit[i].equals("\t(")
-							&& !auxSplit[i].equals("\t)") && !auxSplit[i].equals("\tor")
+							&& !auxSplit[i].equals("\t)") && !auxSplit[i].trim().equals("(")
+							&& !auxSplit[i].trim().equals(")") && !auxSplit[i].equals("\tor")
 							&& !auxSplit[i].equals("\tnot(")) {
 						if (auxSplit[j].equals(compareTo)) {
 							auxSplit[j] = null;
@@ -78,7 +79,7 @@ public class RulesUtils {
 		boolean insideRHS = false;
 		HashSet<String> variablesAssigned = new HashSet<String>();
 		String[] lines = ruleCore.split("\n");
-//		int sameVariableIndex = 0;
+		// int sameVariableIndex = 0;
 		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			String line = lines[lineIndex];
 			if (line.equals("then")) {
@@ -88,19 +89,19 @@ public class RulesUtils {
 			if (auxRuleArray.length > 1) {
 				if (variablesAssigned.contains(auxRuleArray[0].replace("(\t", ""))) {
 					auxRuleArray[0] = "\t";
-//					if (insideRHS) {
-//						auxRuleArray[0] = auxRuleArray[0] + "0";
-//					} else {
-//						auxRuleArray[0] = auxRuleArray[0] + sameVariableIndex;
-//						sameVariableIndex++;
-//					}
+					// if (insideRHS) {
+					// auxRuleArray[0] = auxRuleArray[0] + "0";
+					// } else {
+					// auxRuleArray[0] = auxRuleArray[0] + sameVariableIndex;
+					// sameVariableIndex++;
+					// }
 				} else {
 					variablesAssigned.add(auxRuleArray[0].replace("(\t", ""));
 				}
-				
-				if(!auxRuleArray[0].equals("\t")){
+
+				if (!auxRuleArray[0].equals("\t")) {
 					cleanedResults += auxRuleArray[0] + " : ";
-				}else{
+				} else {
 					cleanedResults += auxRuleArray[0];
 				}
 				for (int i = 1; i < auxRuleArray.length; i++) {
@@ -244,7 +245,7 @@ public class RulesUtils {
 			}
 			// If the previous line belongs to an OR but it has more lines after
 			// it, add an and
-			if (skipLines.contains(i - 1) && !skipLines.contains(i) && !lines[i-1].equals("\tnot(")) {
+			if (skipLines.contains(i - 1) && !skipLines.contains(i) && !lines[i - 1].equals("\tnot(")) {
 				lines[i - 1] = lines[i - 1] + " and";
 				lines[i] = lines[i] + " and";
 			}// If the line don't belong to an or, add an and

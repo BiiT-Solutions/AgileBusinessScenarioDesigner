@@ -86,7 +86,12 @@ public class DiagramParser {
 		case TABLE:
 			DiagramTable tableNode = (DiagramTable) node;
 			if (tableNode.getTable() != null) {
-				newRules.addAll(TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions));
+				if (extraConditions != null) {
+					newRules.addAll(RuleToDroolsRule.parse(TableRuleToDroolsRule.parse(tableNode.getTable(),
+							extraConditions)));
+				} else {
+					newRules.addAll(TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions));
+				}
 			}
 			break;
 		case RULE:
@@ -98,7 +103,12 @@ public class DiagramParser {
 		case CALCULATION:
 			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getExpression() != null) {
-				newRules.addAll(ExpressionToDroolsRule.parse(expressionNode.getExpression(), extraConditions));
+				if (extraConditions != null) {
+					newRules.addAll(RuleToDroolsRule.parse(ExpressionToDroolsRule.parse(expressionNode.getExpression(),
+							extraConditions)));
+				} else {
+					newRules.addAll(ExpressionToDroolsRule.parse(expressionNode.getExpression(), extraConditions));
+				}
 			}
 			break;
 		case DIAGRAM_CHILD:
@@ -113,7 +123,12 @@ public class DiagramParser {
 		case SINK:
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
 			if (sinkExpressionNode.getExpression() != null) {
-				newRules.addAll(ExpressionToDroolsRule.parse(sinkExpressionNode.getExpression(), extraConditions));
+				if (extraConditions != null) {
+					newRules.addAll(RuleToDroolsRule.parse(ExpressionToDroolsRule.parse(
+							sinkExpressionNode.getExpression(), extraConditions)));
+				} else {
+					newRules.addAll(ExpressionToDroolsRule.parse(sinkExpressionNode.getExpression(), extraConditions));
+				}
 			}
 			break;
 		default:
@@ -132,8 +147,10 @@ public class DiagramParser {
 	}
 
 	/**
-	 * A fork adds some extra condition or conditions to the rules that happen after <br>
-	 * A fork and its outgoing links define a condition that a question or a score must fulfill
+	 * A fork adds some extra condition or conditions to the rules that happen
+	 * after <br>
+	 * A fork and its outgoing links define a condition that a question or a
+	 * score must fulfill
 	 * 
 	 * @return
 	 * @throws RuleNotImplementedException
@@ -224,7 +241,6 @@ public class DiagramParser {
 				forkExpressionChain.addExpressions(previousConditions.getExpressions());
 			}
 		}
-
 		return forkConditions;
 	}
 
@@ -251,12 +267,14 @@ public class DiagramParser {
 				negatedExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 				negatedExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.NOT));
 				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+			
 			} else if ((expression instanceof ExpressionOperatorLogic)
 					&& ((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.AND)) {
 				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 				negatedExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.OR));
 				negatedExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.NOT));
 				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+			
 			} else {
 				negatedExpressionChain.addExpression(expression);
 			}
