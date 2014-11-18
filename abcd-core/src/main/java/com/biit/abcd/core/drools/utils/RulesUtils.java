@@ -259,4 +259,24 @@ public class RulesUtils {
 
 		return cleanedResults;
 	}
+
+	public static String addAndToMultipleConditionsAction(String ruleCore) {
+		String cleanedResults = "";
+		String[] lines = ruleCore.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			if (lines[i].equals("then")) {
+				if (i > 0) {
+					// Remove the "and"
+					lines[i - 1] = lines[i - 1].substring(0, lines[i - 1].length() - 3);
+				}
+				break;
+			}else{
+				lines[i] = lines[i].concat(" and");
+			}
+		}
+		for (int i = 0; i < lines.length; i++) {
+			cleanedResults += lines[i] + "\n";
+		}
+		return cleanedResults;
+	}
 }

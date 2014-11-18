@@ -34,19 +34,16 @@ public class RuleToDroolsRule {
 
 	private static List<DroolsRule> droolsRules;
 
-	public static List<DroolsRule> parse(List<DroolsRule> rules) throws RuleInvalidException,
+	public static List<DroolsRule> parse(DroolsRule droolsRule) throws RuleInvalidException,
 			RuleNotImplementedException {
 		droolsRules = new ArrayList<>();
-		if (rules != null && !rules.isEmpty()) {
-			for (DroolsRule droolsRule : rules) {
-				if (hasAndOrNotConditions(droolsRule.getConditions())) {
-					parseAndOrNotConditionsFromDroolsRule(droolsRule);
+		if (droolsRule != null) {
+			if (hasAndOrNotConditions(droolsRule.getConditions())) {
+				parseAndOrNotConditions(droolsRule, null);
 
-				} else {
-					droolsRules.add(droolsRule);
-				}
+			} else {
+				droolsRules.add(droolsRule);
 			}
-
 		}
 		return droolsRules;
 	}
@@ -70,7 +67,6 @@ public class RuleToDroolsRule {
 				droolsRule.setName(RulesUtils.getRuleName(droolsRule.getName(), extraConditions));
 				droolsRules = Arrays.asList(droolsRule);
 			}
-
 		}
 		return droolsRules;
 	}
@@ -124,37 +120,6 @@ public class RuleToDroolsRule {
 		}
 	}
 
-	private static void parseAndOrNotConditionsFromDroolsRule(DroolsRule ruleCopy) {
-		ITreeElement result = calculatePrattParserResult(ruleCopy.getConditions());
-		TreeElementGroupConditionFinderVisitor treeVisitor = new TreeElementGroupConditionFinderVisitor();
-		try {
-			result.accept(treeVisitor);
-			if (!treeVisitor.getConditions().isEmpty()) {
-				int ruleCounter = 1;
-				for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
-					DroolsRuleGroup droolsRule = new DroolsRuleGroup();
-					droolsRule.setConditionExpressionChainId(visitorRules.getName());
-					droolsRule.setConditions(visitorRules);
-					String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_"
-							+ ruleCounter + "\"\n";
-					droolsRule.setName(ruleName);
-					// Set the special actions for the group rules
-					String groupAction = "then\n";
-					groupAction += "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
-							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
-					groupAction += "\tinsert ( new FiredRule(\""
-							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
-					droolsRule.setGroupAction(groupAction);
-					droolsRules.add(droolsRule);
-					ruleCounter++;
-				}
-				createEndCombinationDroolsRule(result, ruleCopy, ruleCounter);
-			}
-		} catch (NotCompatibleTypeException e) {
-			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
-		}
-	}
-
 	private static void parseAndOrNotConditions(Rule ruleCopy, ExpressionChain extraConditions) {
 		ITreeElement result = calculatePrattParserResult(ruleCopy.getConditions());
 		TreeElementGroupConditionFinderVisitor treeVisitor = new TreeElementGroupConditionFinderVisitor();
@@ -166,9 +131,14 @@ public class RuleToDroolsRule {
 					DroolsRuleGroup droolsRule = new DroolsRuleGroup();
 					droolsRule.setConditionExpressionChainId(visitorRules.getName());
 					droolsRule.setConditions(visitorRules);
-					// droolsRule.setActions(copyRule.getActions());
-					String ruleName = ruleCopy.getName() + "_" + ruleCounter;
-					droolsRule.setName(RulesUtils.getRuleName(ruleName, extraConditions));
+					if (ruleCopy instanceof DroolsRule) {
+						String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_"
+								+ ruleCounter + "\"\n";
+						droolsRule.setName(ruleName);
+					} else {
+						String ruleName = ruleCopy.getName() + "_" + ruleCounter;
+						droolsRule.setName(RulesUtils.getRuleName(ruleName, extraConditions));
+					}
 					// Set the special actions for the group rules
 					String groupAction = "then\n";
 					groupAction += "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
@@ -186,33 +156,6 @@ public class RuleToDroolsRule {
 		}
 	}
 
-	private static void createEndCombinationDroolsRule(ITreeElement result, DroolsRule ruleCopy, int ruleCounter) {
-		TreeElementGroupEndConditionFinderVisitor treeVisitor = new TreeElementGroupEndConditionFinderVisitor();
-		try {
-			result.accept(treeVisitor);
-			DroolsRuleGroupEndRule droolsRule = new DroolsRuleGroupEndRule();
-			droolsRule.setConditions(treeVisitor.getCompleteExpression());
-			droolsRule.setActions(ruleCopy.getActions());
-			String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_"
-					+ ruleCounter + "\"\n";
-			droolsRule.setName(ruleName);
-			// Set the special conditions/actions for the group rules
-			droolsRule.setGroupCondition("\tnot( FiredRule( getRuleName() == '"
-					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n");
-			droolsRule.setGroupAction("\tinsert ( new FiredRule(\""
-					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n");
-			droolsRule.setParserResult(result);
-			for (DroolsRule generatedDroolsRule : droolsRules) {
-				droolsRule.putExpresionRuleIdentifiers(((DroolsRuleGroup) generatedDroolsRule)
-						.getConditionExpressionChainId(), generatedDroolsRule.getName().split(" ")[1].replace("\n", "")
-						.replace("\"", ""));
-			}
-			droolsRules.add(droolsRule);
-		} catch (NotCompatibleTypeException e) {
-			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
-		}
-	}
-
 	private static void createEndCombinationRule(ITreeElement result, Rule ruleCopy, int ruleCounter) {
 		TreeElementGroupEndConditionFinderVisitor treeVisitor = new TreeElementGroupEndConditionFinderVisitor();
 		try {
@@ -220,7 +163,13 @@ public class RuleToDroolsRule {
 			DroolsRuleGroupEndRule droolsRule = new DroolsRuleGroupEndRule();
 			droolsRule.setConditions(treeVisitor.getCompleteExpression());
 			droolsRule.setActions(ruleCopy.getActions());
-			droolsRule.setName(RulesUtils.getRuleName(ruleCopy.getName() + "_" + ruleCounter, null));
+			if (ruleCopy instanceof DroolsRule) {
+				String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_" + ruleCounter
+						+ "\"\n";
+				droolsRule.setName(ruleName);
+			} else {
+				droolsRule.setName(RulesUtils.getRuleName(ruleCopy.getName() + "_" + ruleCounter, null));
+			}
 			// Set the special conditions/actions for the group rules
 			droolsRule.setGroupCondition("\tnot( FiredRule( getRuleName() == '"
 					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n");

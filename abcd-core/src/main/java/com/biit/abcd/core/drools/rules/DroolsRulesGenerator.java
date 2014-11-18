@@ -55,7 +55,7 @@ public class DroolsRulesGenerator {
 			// Define imports
 			importsDeclaration();
 			// Define internal types
-			typesDeclaration();
+//			typesDeclaration();
 			// Define the global variables
 			globalVariablesDeclaration();
 

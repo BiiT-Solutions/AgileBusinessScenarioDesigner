@@ -54,7 +54,7 @@ import com.biit.form.TreeObject;
 
 public class DroolsParser {
 
-	private static boolean orOperatorUsed = false;
+	// private static boolean orOperatorUsed = false;
 
 	private static String andOperator(List<Expression> expressions) throws ExpressionInvalidException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -274,7 +274,7 @@ public class DroolsParser {
 			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		String parsedText = "";
 		for (Rule rule : rules) {
-			orOperatorUsed = false;
+			// orOperatorUsed = false;
 			if (rule != null) {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
@@ -325,8 +325,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		// System.out.println("RULE ACTIONS: " + rule.getActions());
+		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
@@ -346,7 +346,11 @@ public class DroolsParser {
 				&& (!rule.getActions().getExpressions().isEmpty())) {
 			String actionString = parseActions(rule.getActions());
 			if (actionString != null) {
-				result += actionString;
+				if (rule instanceof DroolsRuleGroupEndRule) {
+					result += RulesUtils.addAndToMultipleConditionsAction(actionString);
+				} else {
+					result += actionString;
+				}
 			} else {
 				return null;
 			}
@@ -354,8 +358,8 @@ public class DroolsParser {
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
 		// result = RulesUtils.removeExtraParenthesis(result);
-//		if (orOperatorUsed)
-//			result = RulesUtils.fixOrCondition(result);
+		// if (orOperatorUsed)
+		// result = RulesUtils.fixOrCondition(result);
 
 		return result;
 	}
@@ -388,7 +392,8 @@ public class DroolsParser {
 				prattResult.accept(treeVisitor);
 				result += treeVisitor.getCompleteExpression().getRepresentation();
 				// Replace rule identifiers from the old parsed string
-				// (Needed because the rule has been parsed again and the ids have changed)
+				// (Needed because the rule has been parsed again and the ids
+				// have changed)
 				for (Entry<String, String> value : endRule.getMapEntry()) {
 					result = result.replace(value.getKey(), value.getValue());
 				}
@@ -832,36 +837,41 @@ public class DroolsParser {
 		return "";
 	}
 
-	private static String orOperator(List<Expression> expressions) throws ExpressionInvalidException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			DateComparisonNotPossibleException {
-		// System.out.println("OR EXPRESSIONS: " + expressions);
-
-		String result = "";
-
-		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
-		ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
-
-		String leftPart = processResultConditionsFromPrattParser(leftChain);
-		String rigthPart = processResultConditionsFromPrattParser(rightChain);
-
-		String leftPartLastLine = RulesUtils.getLastLine(leftPart);
-		String rightPartLastLine = RulesUtils.getLastLine(rigthPart);
-		String leftPartWithoutLastLine = RulesUtils.removeLastNLines(leftPart, 1);
-		String rightPartWithoutLastLine = RulesUtils.removeLastNLines(rigthPart, 1);
-
-		result += leftPartWithoutLastLine;
-		result += rightPartWithoutLastLine;
-		result += "\t(";
-		result += leftPartLastLine;
-		result += "\n\tor\n";
-		result += rightPartLastLine;
-		result += "\t)\n";
-
-		orOperatorUsed = true;
-		return result;
-	}
+	// private static String orOperator(List<Expression> expressions) throws
+	// ExpressionInvalidException,
+	// NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+	// TreeObjectParentNotValidException,
+	// NullCustomVariableException, NullExpressionValueException,
+	// BetweenFunctionInvalidException,
+	// DateComparisonNotPossibleException {
+	// // System.out.println("OR EXPRESSIONS: " + expressions);
+	//
+	// String result = "";
+	//
+	// ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
+	// ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
+	//
+	// String leftPart = processResultConditionsFromPrattParser(leftChain);
+	// String rigthPart = processResultConditionsFromPrattParser(rightChain);
+	//
+	// String leftPartLastLine = RulesUtils.getLastLine(leftPart);
+	// String rightPartLastLine = RulesUtils.getLastLine(rigthPart);
+	// String leftPartWithoutLastLine = RulesUtils.removeLastNLines(leftPart,
+	// 1);
+	// String rightPartWithoutLastLine = RulesUtils.removeLastNLines(rigthPart,
+	// 1);
+	//
+	// result += leftPartWithoutLastLine;
+	// result += rightPartWithoutLastLine;
+	// result += "\t(";
+	// result += leftPartLastLine;
+	// result += "\n\tor\n";
+	// result += rightPartLastLine;
+	// result += "\t)\n";
+	//
+	// // orOperatorUsed = true;
+	// return result;
+	// }
 
 	/**
 	 * Parses and expressionChain using the Pratt parser
@@ -964,8 +974,8 @@ public class DroolsParser {
 							((ExpressionOperatorLogic) expressions.get(1)).getValue());
 				case AND:
 					return andOperator(expressions);
-				case OR:
-					return orOperator(expressions);
+					// case OR:
+					// return orOperator(expressions);
 				case GREATER_EQUALS:
 				case GREATER_THAN:
 				case LESS_EQUALS:

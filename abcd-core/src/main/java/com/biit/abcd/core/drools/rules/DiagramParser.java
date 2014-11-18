@@ -87,8 +87,10 @@ public class DiagramParser {
 			DiagramTable tableNode = (DiagramTable) node;
 			if (tableNode.getTable() != null) {
 				if (extraConditions != null) {
-					newRules.addAll(RuleToDroolsRule.parse(TableRuleToDroolsRule.parse(tableNode.getTable(),
-							extraConditions)));
+					List<DroolsRule> rulesList = TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions);
+					for (DroolsRule droolsRule : rulesList) {
+						newRules.addAll(RuleToDroolsRule.parse(droolsRule));
+					}
 				} else {
 					newRules.addAll(TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions));
 				}
@@ -104,8 +106,11 @@ public class DiagramParser {
 			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getExpression() != null) {
 				if (extraConditions != null) {
-					newRules.addAll(RuleToDroolsRule.parse(ExpressionToDroolsRule.parse(expressionNode.getExpression(),
-							extraConditions)));
+					List<DroolsRule> rulesList = ExpressionToDroolsRule.parse(expressionNode.getExpression(),
+							extraConditions);
+					for (DroolsRule droolsRule : rulesList) {
+						newRules.addAll(RuleToDroolsRule.parse(droolsRule));
+					}
 				} else {
 					newRules.addAll(ExpressionToDroolsRule.parse(expressionNode.getExpression(), extraConditions));
 				}
@@ -124,8 +129,11 @@ public class DiagramParser {
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
 			if (sinkExpressionNode.getExpression() != null) {
 				if (extraConditions != null) {
-					newRules.addAll(RuleToDroolsRule.parse(ExpressionToDroolsRule.parse(
-							sinkExpressionNode.getExpression(), extraConditions)));
+					List<DroolsRule> rulesList = ExpressionToDroolsRule.parse(sinkExpressionNode.getExpression(),
+							extraConditions);
+					for (DroolsRule droolsRule : rulesList) {
+						newRules.addAll(RuleToDroolsRule.parse(droolsRule));
+					}
 				} else {
 					newRules.addAll(ExpressionToDroolsRule.parse(sinkExpressionNode.getExpression(), extraConditions));
 				}
@@ -165,7 +173,9 @@ public class DiagramParser {
 		// For each outgoing link a new condition is created
 		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
 			ExpressionChain expressionOfLinkCopy = (ExpressionChain) outLink.getExpressionChain().generateCopy();
-
+			if(expressionOfLinkCopy.getExpressions().size() == 1){
+				expressionOfLinkCopy.removeAllExpressions();
+			}
 			if (forkNodeExpression != null) {
 				TreeObject treeObject = forkNodeExpression.getReference();
 				if ((treeObject instanceof Question)) {
@@ -188,6 +198,7 @@ public class DiagramParser {
 						// Fork with multicheckbox can cause problems. User can
 						// select answers from both different
 						// flows.
+						// TODO Add exception to warn the user
 						break;
 					case INPUT:
 						// In case of input we only have to add a copy of the
@@ -238,9 +249,14 @@ public class DiagramParser {
 				&& !(previousConditions.getExpressions().isEmpty())) {
 			for (ExpressionChain forkExpressionChain : forkConditions) {
 				forkExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+				forkExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
 				forkExpressionChain.addExpressions(previousConditions.getExpressions());
+				forkExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			}
 		}
+		
+		System.out.println("FORK CONDITIONS: " + forkConditions);
+		
 		return forkConditions;
 	}
 
@@ -267,14 +283,14 @@ public class DiagramParser {
 				negatedExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
 				negatedExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.NOT));
 				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-			
+
 			} else if ((expression instanceof ExpressionOperatorLogic)
 					&& ((ExpressionOperatorLogic) expression).getValue().equals(AvailableOperator.AND)) {
 				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 				negatedExpressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.OR));
 				negatedExpressionChain.addExpression(new ExpressionFunction(AvailableFunction.NOT));
 				negatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-			
+
 			} else {
 				negatedExpressionChain.addExpression(expression);
 			}
