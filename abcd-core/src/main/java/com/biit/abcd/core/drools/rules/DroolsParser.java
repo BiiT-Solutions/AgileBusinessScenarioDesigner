@@ -325,8 +325,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		System.out.println("RULE ACTIONS: " + rule.getActions());
+		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
@@ -378,24 +378,19 @@ public class DroolsParser {
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
 		String result = "";
-
-		System.out.println("SPECIAL CONDITIONS: " + rule.getConditions());
 		DroolsRuleGroupEndRule endRule = (DroolsRuleGroupEndRule) rule;
 		ITreeElement prattResult = endRule.getParserResult();
 		if ((prattResult != null) && (prattResult.getExpressionChain() != null)) {
-			// Tree visitor that creates the drools rule special and/or conditions
+			// Tree visitor that creates the drools rule special and/or
+			// conditions
 			TreeElementGroupEndRuleConditionCreatorVisitor treeVisitor = new TreeElementGroupEndRuleConditionCreatorVisitor();
 			try {
 				prattResult.accept(treeVisitor);
 				result += treeVisitor.getCompleteExpression().getRepresentation();
 
-				System.out.println("RESULT: " + result);
 				for (Entry<String, String> value : endRule.getMapEntry()) {
-					System.out.println("KEY: " + value.getKey());
-					System.out.println("VALUE: " + value.getValue());
 					result = result.replace(value.getKey(), value.getValue());
 				}
-
 				result += " and \n";
 			} catch (NotCompatibleTypeException e) {
 				AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
@@ -913,8 +908,6 @@ public class DroolsParser {
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
-
-		System.out.println("ACTIONS TO PARSE: " + expressionChain);
 
 		if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
 				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()

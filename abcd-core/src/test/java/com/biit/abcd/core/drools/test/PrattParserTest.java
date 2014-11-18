@@ -579,12 +579,7 @@ public class PrattParserTest {
 			AbcdLogger.errorMessage(PrattParser.class.getName(), ex);
 		}
 		if (treeVisitor != null) {
-			// System.out.println("AUX EXPRESSION: " +
-			// treeVisitor.getCompleteExpression());
 			return treeVisitor.getConditions();
-			// for (Expression expression : treePrint.getConditions()) {
-			// System.out.println("EXPRESSION: " + expression);
-			// }
 		}
 		return null;
 	}

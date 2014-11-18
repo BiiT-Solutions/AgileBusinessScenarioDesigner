@@ -95,19 +95,15 @@ public class RuleToDroolsRule {
 	private static void addBracketsToNotConditions(ExpressionChain expressionChain, Expression notExpression) {
 		int notExpressionIndex = expressionChain.getExpressions().indexOf(notExpression);
 		Expression expression = expressionChain.getExpressions().get(notExpressionIndex + 1);
-		System.out.println("CHECKING LEFT BRACKET" + expression);
 
 		if (!(expression instanceof ExpressionSymbol)) {
 			expressionChain.getExpressions().add(notExpressionIndex + 1,
 					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-			System.out.println("ADD LEFT BRACKET");
 		}
 		else if (expression instanceof ExpressionSymbol
 				&& !(((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.LEFT_BRACKET))) {
 			expressionChain.getExpressions().add(notExpressionIndex + 1,
 					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-
-			System.out.println("ADD LEFT BRACKET");
 		}
 	}
 
@@ -120,9 +116,6 @@ public class RuleToDroolsRule {
 				int ruleCounter = 1;
 				droolsRules = new ArrayList<DroolsRule>();
 				for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
-
-					System.out.println("BASIC EXPRESSION FOUND: " + visitorRules);
-
 					DroolsRuleGroup droolsRule = new DroolsRuleGroup();
 					droolsRule.setConditionExpressionChainId(visitorRules.getName());
 					droolsRule.setConditions(visitorRules);
@@ -170,7 +163,6 @@ public class RuleToDroolsRule {
 						.getConditionExpressionChainId(), generatedDroolsRule.getName().split(" ")[1].replace("\n", "")
 						.replace("\"", ""));
 			}
-			System.out.println("END GROUP RULE: " + droolsRule.getConditions());
 			droolsRules.add(droolsRule);
 		} catch (NotCompatibleTypeException e) {
 			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
