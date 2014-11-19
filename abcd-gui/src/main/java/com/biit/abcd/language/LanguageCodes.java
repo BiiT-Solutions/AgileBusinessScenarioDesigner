@@ -81,6 +81,8 @@ public enum LanguageCodes {
 	WARNING_TEST_SCENARIOS_LINKED("warning.test.scenarios.linked"),
 	WARNING_TEST_SCENARIOS_CLEAR_ID("warning.test.scenarios.clear.id"),
 	WARNING_TEST_SCENARIOS_VALIDATOR_WINDOW_CAPTION("warning.test.scenarios.validator.window.caption"),
+	COMMON_ERROR_NAME_IS_IN_USE("common.error.name.is.in.use"),
+	COMMON_ERROR_NAME_IS_IN_USE_DESCRIPTION("common.error.name.is.in.use.description"),
 
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),
 	FORM_MANAGER_NEW_FORM_VERSION("formManager.form.new.version"),
@@ -174,6 +176,7 @@ public enum LanguageCodes {
 	TREE_OBJECT_PROPERTIES_UPDATED_BY("treeObjectProperties.updatedBy"),
 	TREE_OBJECT_PROPERTIES_CLEAR_REFERENCE_ID("treeObjectProperties.clear.reference.id"),
 	FORM_PROPERTIES_NAME("formProperties.name"),
+	FORM_PROPERTIES_LABEL("formProperties.label"),
 	FORM_PROPERTIES_VERSION("formProperties.version"),
 	CATEGORY_PROPERTIES_LABEL("categoryProperties.label"),
 	GROUP_PROPERTIES_REPEAT("groupProperties.repeat"),

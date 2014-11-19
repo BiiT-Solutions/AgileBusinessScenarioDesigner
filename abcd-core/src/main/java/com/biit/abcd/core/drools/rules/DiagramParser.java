@@ -203,9 +203,6 @@ public class DiagramParser {
 					case INPUT:
 						// In case of input we only have to add a copy of the
 						// link, which we do at the bottom of the loop.
-						if (expressionOfLinkCopy.getExpressions().size() <= 1) {
-							expressionOfLinkCopy.removeAllExpressions();
-						}
 						break;
 					}
 				}
@@ -254,9 +251,6 @@ public class DiagramParser {
 				forkExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			}
 		}
-		
-		System.out.println("FORK CONDITIONS: " + forkConditions);
-		
 		return forkConditions;
 	}
 

@@ -6,15 +6,21 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.vaadin.data.Property.ReadOnlyException;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
@@ -24,23 +30,24 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Form instance;
-	private TextField formName;
+	private TextField formLabel;
 	private TextField formVersion;
 	private DateField availableFrom;
+	private IFormDao formDao;
 
 	public FormProperties() {
 		super(Form.class);
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 	}
 
 	@Override
 	public void setElementForProperties(Form element) {
 		instance = element;
-		formName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
-		formName.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
-		formName.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
-		formName.addValidator(new ValidatorTreeObjectNameLength());
-		formName.setValue(instance.getName());
-		formName.setEnabled(false);
+		formLabel = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_LABEL));
+		formLabel.addValidator(new ValidatorTreeObjectNameLength());
+		formLabel.setValue(instance.getLabel());
+		// formLabel.setEnabled(false);
 
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
@@ -51,7 +58,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 		FormLayout formForm = new FormLayout();
 		formForm.setWidth(null);
-		formForm.addComponent(formName);
+		formForm.addComponent(formLabel);
 		formForm.addComponent(formVersion);
 		formForm.addComponent(availableFrom);
 
@@ -60,9 +67,25 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		if (formName.isValid()) {
-			if (availableFrom.getValue() != null) {
+		if (formLabel.isValid()) {
+			try {
+				// Checks if already exists a form with this label and its
+				// version.
+				if (!formDao.exists(formLabel.getValue(), instance.getVersion(), instance.getOrganizationId(),
+						instance.getId())) {
+					UserSessionHandler.getFormController().updateForm(instance, formLabel.getValue());
+				} else {
+					formLabel.setValue(instance.getLabel());
+					MessageManager.showWarning(LanguageCodes.COMMON_ERROR_NAME_IS_IN_USE,
+							LanguageCodes.COMMON_ERROR_NAME_IS_IN_USE_DESCRIPTION);
+					UserSessionHandler.getFormController().updateForm(instance, instance.getLabel());
+				}
+			} catch (ReadOnlyException | UnexpectedDatabaseException e) {
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE);
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			}
 
+			if (availableFrom.getValue() != null) {
 				Calendar cal = Calendar.getInstance(); // locale-specific
 				cal.setTime(availableFrom.getValue());
 				cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -77,7 +100,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 								+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom()
 								+ "'.");
 			}
-		//	firePropertyUpdateListener(getTreeObjectInstance());
+			// firePropertyUpdateListener(getTreeObjectInstance());
 		}
 	}
 
@@ -88,7 +111,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 	@Override
 	protected Set<AbstractComponent> getProtectedElements() {
-		return new HashSet<AbstractComponent>(Arrays.asList(availableFrom));
+		return new HashSet<AbstractComponent>(Arrays.asList(formLabel, availableFrom));
 	}
 
 }

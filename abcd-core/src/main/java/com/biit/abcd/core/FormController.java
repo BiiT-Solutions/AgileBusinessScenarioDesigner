@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.core.utils.TableRuleUtils;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
@@ -39,6 +40,7 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.liferay.portal.model.User;
 
@@ -90,6 +92,49 @@ public class FormController {
 				}
 			}
 		}
+	}
+	
+	public void updateForm(Form form, String label) {
+		try {
+			if (!form.getLabel().equals(label)) {
+				logInfoStart("updateForm", form, label);
+			}
+			form.setLabel(label);
+			form.setUpdatedBy(getUser());
+			form.setUpdateTime();
+		} catch (FieldTooLongException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+	
+	private void logInfoStart(String functionName, Object... parameters) {
+		AbcdLogger.info(FormController.class.getName(),
+				getUserInfo() + " " + getFunctionInfo(functionName, parameters));
+	}
+	
+	protected String getUserInfo() {
+		String userInfo = new String("User: ");
+		if (getUser() == null) {
+			return userInfo + "NO USER";
+		} else {
+			return userInfo + getUser().getEmailAddress();
+		}
+	}
+	
+	protected String getFunctionInfo(String functionName, Object... parameters) {
+		String functionInfo = new String(functionName + "(");
+		int i = 0;
+		for (Object parameter : parameters) {
+			String parameterString = new String();
+			if (i > 0) {
+				parameterString += ", ";
+			}
+			parameterString += "arg" + i + ": '" + parameter + "'";
+			functionInfo += parameterString;
+			i++;
+		}
+		functionInfo += ")";
+		return functionInfo;
 	}
 
 	public void remove() throws UnexpectedDatabaseException {
