@@ -35,7 +35,6 @@ public class TestScenarioValidator {
 	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
 	private TestScenario testScenarioAnalyzed;
 	private List<String> scenarioModifications;
-	private List<TreeObject> testScenarioChildren;
 
 	/**
 	 * Compares the test scenario structure against the form structure and
@@ -52,6 +51,18 @@ public class TestScenarioValidator {
 			originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
 			TestScenarioForm testScenarioForm = testScenario.getTestScenarioForm();
 			if (originalReferenceTreeObjectMap.containsKey(testScenarioForm.getOriginalReference())) {
+
+				try {
+					if (!form.getLabel().equals(testScenarioForm.getLabel())) {
+						String oldName = testScenarioForm.getLabel();
+						testScenarioForm.setLabel(form.getLabel());
+						getScenarioModifications().add(
+								"Form label changed from '" + oldName + "' to '" + form.getLabel() + "'");
+					}
+				} catch (FieldTooLongException e) {
+					AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
+				}
+
 				List<TreeObject> children = testScenarioForm.getChildren();
 				for (int i = 0; i < children.size(); i++) {
 					TreeObject treeObject = children.get(i);
@@ -60,7 +71,6 @@ public class TestScenarioValidator {
 					}
 				}
 			}
-			testScenarioChildren = testScenario.getTestScenarioForm().getAll(TreeObject.class);
 			for (TreeObject treeObject : form.getChildren()) {
 				checkRemainingFormStructure(treeObject, testScenario.getTestScenarioForm());
 			}
@@ -109,8 +119,9 @@ public class TestScenarioValidator {
 					if ((group instanceof Group)) {
 						if (!testScenarioGroup.isRepeatable() && (((Group) group).isRepeatable())) {
 							testScenarioGroup.setRepeatable(true);
-							getScenarioModifications().add(
-									"Group '" + testScenarioGroup.getName()
+							getScenarioModifications()
+									.add("Group '"
+											+ testScenarioGroup.getName()
 											+ "' set to repeatable - Test scenario group not repeatable, Form group repeatable");
 
 						} else if (testScenarioGroup.isRepeatable() && !((Group) group).isRepeatable()) {

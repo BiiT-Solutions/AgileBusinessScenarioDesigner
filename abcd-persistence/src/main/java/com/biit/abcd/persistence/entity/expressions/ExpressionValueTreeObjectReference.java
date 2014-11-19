@@ -99,8 +99,12 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 			ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) object;
 			try {
 				setUnit(expressionValueTreeObjectReference.getUnit());
-				// Later the reference must be updated with current TreeObject
-				setValue(expressionValueTreeObjectReference.getValue());
+				// Rule tables can have empty expressions with null inside
+				if (expressionValueTreeObjectReference.getValue() != null) {
+					// Later the reference must be updated with current
+					// TreeObject
+					setValue(expressionValueTreeObjectReference.getValue());
+				}
 			} catch (NotValidExpressionValue e) {
 				throw new NotValidStorableObjectException("Object '" + object
 						+ "' is not a valid instance of ExpressionValueTreeObjectReference.");

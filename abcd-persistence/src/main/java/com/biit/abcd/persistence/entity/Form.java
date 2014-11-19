@@ -353,14 +353,16 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof ExpressionValueTreeObjectReference) {
 				ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) child;
-				if (formElements.get(expressionValueTreeObjectReference.getReference().getComparationId()) != null) {
-					expressionValueTreeObjectReference.setReference(formElements.get(expressionValueTreeObjectReference
-							.getReference().getComparationId()));
-				} else {
-					AbcdLogger.warning(this.getClass().getName(), "Adding reference '"
-							+ expressionValueTreeObjectReference.getReference() + "'.");
-					formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
-							expressionValueTreeObjectReference.getReference());
+				if (expressionValueTreeObjectReference.getReference() != null) {
+					if (formElements.get(expressionValueTreeObjectReference.getReference().getComparationId()) != null) {
+						expressionValueTreeObjectReference.setReference(formElements
+								.get(expressionValueTreeObjectReference.getReference().getComparationId()));
+					} else {
+						AbcdLogger.warning(this.getClass().getName(), "Adding reference '"
+								+ expressionValueTreeObjectReference.getReference() + "'.");
+						formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
+								expressionValueTreeObjectReference.getReference());
+					}
 				}
 			}
 		}
@@ -534,7 +536,8 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root
+	 * diagram.
 	 * 
 	 * @param diagram
 	 */
