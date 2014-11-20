@@ -22,7 +22,7 @@
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.GenericsTest" />
 			<class name="com.biit.abcd.core.drools.test.NestedGroupsTest" />
-			<class name="com.biit.abcd.core.drools.test.ForkTest" />
+			<class name="com.biit.abcd.core.drools.test.ForksTest" />
 			<class name="com.biit.abcd.core.drools.test.OperatorsTest" />
 			<class name="com.biit.abcd.core.drools.test.DroolsEngineRulesTest" />
 		</classes>

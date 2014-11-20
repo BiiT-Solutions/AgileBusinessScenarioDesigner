@@ -250,6 +250,8 @@ public enum LanguageCodes {
 	ERROR_ACCESSING_DATABASE("error.database.access"),
 	ERROR_ACCESSING_DATABASE_DESCRIPTION("error.database.description"),
 	
+	ERROR_DATA_FORMAT_INVALID("error.data.format.invalid"),
+	
 	INFO_DATA_STORED("info.data.store"),
 	INFO_CACHE_CLEARED("info.cache.cleared"),
 
