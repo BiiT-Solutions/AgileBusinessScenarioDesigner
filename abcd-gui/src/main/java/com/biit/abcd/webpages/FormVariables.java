@@ -112,7 +112,7 @@ public class FormVariables extends FormWebPageComponent {
 									+ "'.");
 				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
-					MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
+					MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
 				}
 			}
 		});

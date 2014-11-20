@@ -1,13 +1,17 @@
 package com.biit.abcd.webpages.elements.formvariables;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.ComparableTextField;
+import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -47,7 +51,7 @@ public class VariableTable extends Table {
 		setColumnExpandRatio(FormVariablesProperties.VARIABLE_NAME, 1);
 		setColumnExpandRatio(FormVariablesProperties.TYPE, 1);
 		setColumnExpandRatio(FormVariablesProperties.SCOPE, 1);
-		
+
 		setSortContainerPropertyId(FormVariablesProperties.VARIABLE_NAME);
 	}
 
@@ -62,11 +66,13 @@ public class VariableTable extends Table {
 		ComboBox typeComboBox = createTypeComboBox(customVariable);
 		typeComboBox.setValue(customVariable.getType());
 		typeComboBox.setEnabled(!protectedElements);
+		typeComboBox.setImmediate(true);
 		item.getItemProperty(FormVariablesProperties.TYPE).setValue(typeComboBox);
 
 		ComboBox scopeComboBox = createScopeComboBox(customVariable);
 		scopeComboBox.setValue(customVariable.getScope());
 		scopeComboBox.setEnabled(!protectedElements);
+		scopeComboBox.setImmediate(true);
 		item.getItemProperty(FormVariablesProperties.SCOPE).setValue(scopeComboBox);
 	}
 
@@ -122,8 +128,25 @@ public class VariableTable extends Table {
 
 			@Override
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				customVariable.setType((CustomVariableType) typeComboBox.getValue());
-				updateInfo(customVariable);
+				if (customVariable.getType() != null && typeComboBox.getValue() != null
+						&& !customVariable.getType().equals((CustomVariableType) typeComboBox.getValue())) {
+					try {
+						CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController()
+								.getForm(), customVariable);
+						CustomVariableType oldType = customVariable.getType();
+						customVariable.setType((CustomVariableType) typeComboBox.getValue());
+						updateInfo(customVariable);
+
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress()
+								+ "' has changed the property Type of the class '" + customVariable.getClass()
+								+ "' from '" + oldType + "' to '" + customVariable.getType() + "'.");
+					} catch (DependencyExistException e) {
+						// Forbid the edit action if exist dependency.
+						MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
+						typeComboBox.setValue(customVariable.getType());
+					}
+				}
 			}
 		});
 		return typeComboBox;
@@ -151,8 +174,25 @@ public class VariableTable extends Table {
 
 			@Override
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				customVariable.setScope((CustomVariableScope) scopeComboBox.getValue());
-				updateInfo(customVariable);
+				if (customVariable.getScope() != null && scopeComboBox.getValue() != null
+						&& !customVariable.getScope().equals((CustomVariableScope) scopeComboBox.getValue())) {
+					try {
+						CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController()
+								.getForm(), customVariable);
+						CustomVariableScope oldScope = customVariable.getScope();
+						customVariable.setScope((CustomVariableScope) scopeComboBox.getValue());
+						updateInfo(customVariable);
+
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress()
+								+ "' has changed the property Scope of the class '" + customVariable.getClass()
+								+ "' from '" + oldScope + "' to '" + customVariable.getScope() + "'.");
+					} catch (DependencyExistException e) {
+						// Forbid the edit action if exist dependency.
+						MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
+						scopeComboBox.setValue(customVariable.getScope());
+					}
+				}
 			}
 		});
 		return scopeComboBox;
