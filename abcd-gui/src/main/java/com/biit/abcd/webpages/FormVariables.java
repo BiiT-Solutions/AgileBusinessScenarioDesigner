@@ -60,6 +60,10 @@ public class FormVariables extends FormWebPageComponent {
 				}
 			}
 		}
+
+		// Sort the values
+		variableTable.setSortAscending(true);
+		variableTable.sort();
 	}
 
 	private FormVariablesUpperMenu initUpperMenu() {

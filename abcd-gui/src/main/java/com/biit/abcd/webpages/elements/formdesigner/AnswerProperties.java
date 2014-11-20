@@ -25,7 +25,7 @@ public class AnswerProperties extends SecuredFormElementProperties<Answer> {
 	private static final long serialVersionUID = -7673405239560362757L;
 
 	private Answer instance;
-	private TextField answerTechnicalLabel;
+	private TextField answerLabel;
 	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "[^<& ]+";
 
 	public AnswerProperties() {
@@ -35,64 +35,69 @@ public class AnswerProperties extends SecuredFormElementProperties<Answer> {
 	@Override
 	public void setElementForProperties(Answer element) {
 		instance = element;
-		answerTechnicalLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		answerTechnicalLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
-		answerTechnicalLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
-		answerTechnicalLabel.addValidator(new ValidatorTreeObjectNameLength());
-		answerTechnicalLabel.setValue(instance.getName());
-		answerTechnicalLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
+
+		answerLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		answerLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
+		answerLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
+		answerLabel.addValidator(new ValidatorTreeObjectNameLength());
+		answerLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
 				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
+		answerLabel.setValue(instance.getName());
 
 		FormLayout answerForm = new FormLayout();
 		answerForm.setWidth(null);
-		answerForm.addComponent(answerTechnicalLabel);
+		answerForm.addComponent(answerLabel);
 
 		addTab(answerForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_ANSWER_FORM_CAPTION), true, 0);
 	}
 
 	@Override
 	protected void updateConcreteFormElement() {
-		if (answerTechnicalLabel.isValid()) {
+		if (answerLabel.isValid()) {
 			String instanceName = instance.getName();
-			try {
-				instance.setName(answerTechnicalLabel.getValue());
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has modified the Answer '" + instanceName + "' property 'Name' to '" + instance.getName()
-						+ "'.");
-			} catch (FieldTooLongException e) {
-				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+			// To avoid setting repeated values
+			if (!answerLabel.getValue().equals(instanceName)) {
 				try {
+					instance.setName(answerLabel.getValue());
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Answer '"
+							+ instanceName + "' property 'Name' to '" + instance.getName() + "'.");
+				} catch (FieldTooLongException e) {
+					MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+							LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 					try {
-						instance.setName(answerTechnicalLabel.getValue().substring(0, 185));
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Answer '"
-								+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
-					} catch (CharacterNotAllowedException e1) {
-						MessageManager.showWarning(ServerTranslate
-								.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate.translate(
-								LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
-								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
 						try {
-							instance.setName(instance.getSimpleAsciiName());
-						} catch (CharacterNotAllowedException e2) {
-							// Impossible.
+							instance.setName(answerLabel.getValue().substring(0, 185));
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Answer '"
+									+ instanceName + "' property 'Name' to '" + instance.getName()
+									+ "' (Name too long).");
+						} catch (CharacterNotAllowedException e1) {
+							MessageManager.showWarning(ServerTranslate
+									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
+									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
+											instance.getName(), instance.getSimpleAsciiName() }));
+							try {
+								instance.setName(instance.getSimpleAsciiName());
+							} catch (CharacterNotAllowedException e2) {
+								// Impossible.
+							}
 						}
+					} catch (FieldTooLongException e1) {
+						// Impossible.
 					}
-				} catch (FieldTooLongException e1) {
-					// Impossible.
-				}
-			} catch (CharacterNotAllowedException e) {
-				MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
-						ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
-								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
-				try {
-					instance.setName(instance.getSimpleAsciiName());
-				} catch (FieldTooLongException | CharacterNotAllowedException e1) {
-					// Impossible.
+				} catch (CharacterNotAllowedException e) {
+					MessageManager.showWarning(
+							ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
+									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
+											instance.getName(), instance.getSimpleAsciiName() }));
+					try {
+						instance.setName(instance.getSimpleAsciiName());
+					} catch (FieldTooLongException | CharacterNotAllowedException e1) {
+						// Impossible.
+					}
 				}
 			}
-			firePropertyUpdateListener(getTreeObjectInstance());
 		}
 	}
 
@@ -103,6 +108,6 @@ public class AnswerProperties extends SecuredFormElementProperties<Answer> {
 
 	@Override
 	protected Set<AbstractComponent> getProtectedElements() {
-		return new HashSet<AbstractComponent>(Arrays.asList(answerTechnicalLabel));
+		return new HashSet<AbstractComponent>(Arrays.asList(answerLabel));
 	}
 }

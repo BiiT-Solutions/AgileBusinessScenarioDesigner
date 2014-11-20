@@ -119,6 +119,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
 
+		// Disable the bottom buttons
 		getBottomMenu().setEnabled(false);
 	}
 

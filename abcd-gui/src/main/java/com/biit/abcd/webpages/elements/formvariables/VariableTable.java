@@ -7,12 +7,12 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.webpages.components.ComparableTextField;
 import com.vaadin.data.Item;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
 
 public class VariableTable extends Table {
 	private static final long serialVersionUID = 3067131269771569684L;
@@ -35,8 +35,7 @@ public class VariableTable extends Table {
 		setSizeFull();
 
 		setColumnCollapsingAllowed(false);
-
-		addContainerProperty(FormVariablesProperties.VARIABLE_NAME, TextField.class, "",
+		addContainerProperty(FormVariablesProperties.VARIABLE_NAME, ComparableTextField.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_NAME), null, Align.LEFT);
 
 		addContainerProperty(FormVariablesProperties.TYPE, ComboBox.class, "",
@@ -48,12 +47,14 @@ public class VariableTable extends Table {
 		setColumnExpandRatio(FormVariablesProperties.VARIABLE_NAME, 1);
 		setColumnExpandRatio(FormVariablesProperties.TYPE, 1);
 		setColumnExpandRatio(FormVariablesProperties.SCOPE, 1);
+		
+		setSortContainerPropertyId(FormVariablesProperties.VARIABLE_NAME);
 	}
 
 	@SuppressWarnings({ "unchecked" })
 	public void addRow(CustomVariable customVariable) {
 		Item item = addItem(customVariable);
-		TextField nameTextField = createTextField(customVariable);
+		ComparableTextField nameTextField = createTextField(customVariable);
 		nameTextField.setValue(customVariable.getName());
 		nameTextField.setEnabled(!protectedElements);
 		item.getItemProperty(FormVariablesProperties.VARIABLE_NAME).setValue(nameTextField);
@@ -77,9 +78,9 @@ public class VariableTable extends Table {
 		}
 	}
 
-	public TextField createTextField(final CustomVariable customVariable) {
+	public ComparableTextField createTextField(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
-		final TextField nameTextField = new TextField();
+		final ComparableTextField nameTextField = new ComparableTextField();
 		nameTextField.addFocusListener(new FocusListener() {
 			private static final long serialVersionUID = -7714530380809948035L;
 
