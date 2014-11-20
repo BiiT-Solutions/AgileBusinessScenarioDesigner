@@ -68,17 +68,10 @@ public class OperatorsTest extends KidsFormCreator {
 	private final static String MAX = "max";
 	private final static String AVG = "avg";
 	private final static String PMT = "pmt";
-	private static final String CUSTOM_VARIABLE = "customVariable";
 	private static final Double OR_RESULT_VALUE = 11.;
 
 	@Test(groups = { "rules" })
-	public void testMathematicalOperators() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			QuestionDoesNotExistException, CategoryDoesNotExistException, ExpressionInvalidException,
-			RuleInvalidException, IOException, RuleNotImplementedException, DocumentException,
-			CategoryNameWithoutTranslation, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
+	public void mathematicalOperatorsTest() {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Mathematical expression
@@ -103,25 +96,23 @@ public class OperatorsTest extends KidsFormCreator {
 				new ExpressionValueNumber(50.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check bmi
-		Double height = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-				.getQuestion("height")).getAnswer());
-		Double weight = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-				.getQuestion("weight")).getAnswer());
-		Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
+		try {
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check bmi
+			Double height = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+					.getQuestion("height")).getAnswer());
+			Double weight = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+					.getQuestion("weight")).getAnswer());
+			Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testMinOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException,
-			BetweenFunctionInvalidException {
+	public void minOperatorTest() {
 		// Restart the form to avoid test cross references
 		initForm();
 		// MIN expression
@@ -136,25 +127,23 @@ public class OperatorsTest extends KidsFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-		Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-				.getQuestion("heightFather")).getAnswer());
-		Double thirdVal = 1000.0;
-		Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MIN), minVal);
+		try {
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+			Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+					.getQuestion("heightFather")).getAnswer());
+			Double thirdVal = 1000.0;
+			Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MIN), minVal);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testMaxOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException,
-			BetweenFunctionInvalidException {
+	public void maxOperatorTest() {
 		// Restart the form to avoid test cross references
 		initForm();
 		// MAX expression
@@ -169,19 +158,23 @@ public class OperatorsTest extends KidsFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-		Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-				.getQuestion("heightFather")).getAnswer());
-		Double thirdVal = 1000.0;
-		Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MAX), maxVal);
+		try {
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+			Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+					.getQuestion("heightFather")).getAnswer());
+			Double thirdVal = 1000.0;
+			Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MAX), maxVal);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testAvgOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+	public void avgOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
@@ -202,19 +195,23 @@ public class OperatorsTest extends KidsFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-		Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-				.getQuestion("heightFather")).getAnswer());
-		Double thirdVal = 1000.0;
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(AVG),
-				(firstVal + secondVal + thirdVal) / 3.0);
+		try {
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+			Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
+					.getQuestion("heightFather")).getAnswer());
+			Double thirdVal = 1000.0;
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(AVG),
+					(firstVal + secondVal + thirdVal) / 3.0);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testPmtOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+	public void pmtOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
@@ -234,10 +231,14 @@ public class OperatorsTest extends KidsFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
+		try {
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(groups = { "rules" })

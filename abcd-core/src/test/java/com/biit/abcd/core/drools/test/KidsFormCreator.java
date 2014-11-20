@@ -18,19 +18,7 @@ import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
-import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
-import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
-import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -98,11 +86,7 @@ public class KidsFormCreator {
 
 	private ISubmittedForm submittedForm;
 
-	public DroolsForm createAndRunDroolsRules() throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
+	public DroolsForm createAndRunDroolsRules() {
 		// Generate the drools rules.
 		try {
 			FormToDroolsExporter formDrools = new FormToDroolsExporter();
@@ -112,7 +96,7 @@ public class KidsFormCreator {
 			// Test the rules with the submitted form and returns a DroolsForm
 			return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(),
 					rulesGenerator.getGlobalVariables());
-		} catch (DateComparisonNotPossibleException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
