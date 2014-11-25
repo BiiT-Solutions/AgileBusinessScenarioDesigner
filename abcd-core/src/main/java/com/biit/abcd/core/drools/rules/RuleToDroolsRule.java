@@ -135,7 +135,7 @@ public class RuleToDroolsRule {
 	// variables unwrapped
 	private static List<DroolsRule> unwrapGenericVariables(Rule rule) {
 		List<DroolsRule> unwrappedRules = new ArrayList<DroolsRule>();
-		int numberOfRules = 0;
+		List<TreeObject> unwrappedObjects = null;
 
 		for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions().size(); originalExpressionIndex++) {
 			Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
@@ -143,41 +143,37 @@ public class RuleToDroolsRule {
 				// Unwrap the generic variables being analyzed
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
 				CustomVariable customVariableOfGeneric = expressionValueGenericCustomVariable.getVariable();
-				List<TreeObject> treeObjects = getUnwrappedTreeObjects(expressionValueGenericCustomVariable,
+				unwrappedObjects = getUnwrappedTreeObjects(expressionValueGenericCustomVariable,
 						customVariableOfGeneric.getForm());
-				// We have to create a rule for each treeObject found
-				// and add it to a new expression chain
-				if ((treeObjects != null) && (!treeObjects.isEmpty())) {
-					for (TreeObject treeObject : treeObjects) {
-						if (originalExpressionIndex == 0) {
-							DroolsRule droolsRule = new DroolsRule();
-							droolsRule.getConditions().addExpression(
-									new ExpressionValueCustomVariable(treeObject, customVariableOfGeneric));
-							unwrappedRules.add(droolsRule);
-						}
-					}
-				}
+				break;
 			} else if (expression instanceof ExpressionValueGenericVariable) {
-				// Unwrap the generic variables being analyzed
-				List<TreeObject> treeObjects = getUnwrappedTreeObjects((ExpressionValueGenericVariable) expression);
-				// We have to create a TreeObjecReference for each treeObject
-				// found
-				if ((treeObjects != null) && (!treeObjects.isEmpty())) {
-					for (TreeObject treeObject : treeObjects) {
-						if (originalExpressionIndex == 0) {
-							DroolsRule droolsRule = new DroolsRule();
-							droolsRule.getConditions()
-									.addExpression(new ExpressionValueTreeObjectReference(treeObject));
-							unwrappedRules.add(droolsRule);
-						}
-					}
-				}
-			} else {
-				for (DroolsRule droolsRule : unwrappedRules) {
-					droolsRule.getConditions().addExpression(expression);
-				}
+				unwrappedObjects = getUnwrappedTreeObjects((ExpressionValueGenericVariable) expression);
+				break;
 			}
 		}
+		if (unwrappedObjects != null && !unwrappedObjects.isEmpty()) {
+			for (TreeObject treeObject : unwrappedObjects) {
+				DroolsRule droolsRule = new DroolsRule();
+				for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions()
+						.size(); originalExpressionIndex++) {
+					Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
+					if (expression instanceof ExpressionValueGenericCustomVariable) {
+						CustomVariable customVariableOfGeneric = ((ExpressionValueGenericCustomVariable) expression)
+								.getVariable();
+						droolsRule.getConditions().addExpression(
+								new ExpressionValueCustomVariable(treeObject, customVariableOfGeneric));
+
+					} else if (expression instanceof ExpressionValueGenericVariable) {
+						droolsRule.getConditions().addExpression(new ExpressionValueTreeObjectReference(treeObject));
+
+					} else {
+						droolsRule.getConditions().addExpression(expression);
+					}
+				}
+				unwrappedRules.add(new DroolsRule());
+			}
+		}
+
 		// Copy the name and the actions of the rule
 		for (DroolsRule droolsRule : unwrappedRules) {
 			droolsRule.setName(rule.getName());
