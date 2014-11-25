@@ -279,13 +279,17 @@ public class DroolsParser {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
 					parsedText += rule.getName();
+
 					parsedText += RulesUtils.getWhenRuleString();
-					if (rule instanceof DroolsRuleGroup) {
-						parsedText += ((DroolsRuleGroup) rule).getGroupCondition();
+					if (rule instanceof DroolsRuleGroupEndRule) {
+						parsedText += RulesUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule);
 					}
 					parsedText += parsedRule;
 					if (rule instanceof DroolsRuleGroup) {
-						parsedText += ((DroolsRuleGroup) rule).getGroupAction();
+						if(!(rule instanceof DroolsRuleGroupEndRule)){
+							parsedText += RulesUtils.getThenRuleString();
+						}
+						parsedText += RulesUtils.getGroupRuleActions((DroolsRuleGroup) rule);
 					}
 					parsedText += RulesUtils.getEndRuleString();
 				}
@@ -325,8 +329,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-//		System.out.println("RULE ACTIONS: " + rule.getActions());
+		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
@@ -382,7 +386,9 @@ public class DroolsParser {
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
 		String result = "";
+		
 		DroolsRuleGroupEndRule endRule = (DroolsRuleGroupEndRule) rule;
+		
 		ITreeElement prattResult = endRule.getParserResult();
 		if ((prattResult != null) && (prattResult.getExpressionChain() != null)) {
 			// Tree visitor that creates the drools rule special and/or
@@ -658,83 +664,30 @@ public class DroolsParser {
 				}
 
 			} else if (variables.size() > 1) {
+				ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 				switch (function.getValue()) {
 				case MAX:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble maxValue = -1;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tif(maxValue < variable){ maxValue = variable; }\n";
-					ruleCore += "\t}\n";
-					ruleCore += "\tif(maxValue != -1){\n";
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', maxValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", maxValue)\");\t}\n";
+					ruleCore += "\tdouble value = RulesOperators.calculateMaxValueFunction(variablesList);\n";
 					break;
 				case MIN:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble minValue = 1000000;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tif(minValue > variable){ minValue = variable; }\n";
-					ruleCore += "\t}\n";
-					ruleCore += "\tif(minValue != 1000000){\n";
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', minValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", minValue)\");\t}\n";
+					ruleCore += "\tdouble value = RulesOperators.calculateMinValueFunction(variablesList);\n";
 					break;
 				case AVG:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble avgValue = 0;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tavgValue += variable;\n";
-					ruleCore += "\t}\n";
-					ruleCore += "\tavgValue = avgValue/(double)variablesList.size();\n";
-
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', avgValue);\n";
-					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", avgValue)\");\n";
+					ruleCore += "\tdouble value = RulesOperators.calculateAvgValueFunction(variablesList);\n";
 					break;
 				case SUM:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble sumValue = 0;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tsumValue += variable;\n";
-					ruleCore += "\t}\n";
-
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', sumValue);\n";
-					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", sumValue)\");\n";
+					ruleCore += "\tdouble value = RulesOperators.calculateSumValueFunction(variablesList);\n";
 					break;
 				case PMT:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tif(variablesList.size() == 3){\n";
-					ruleCore += "\t\tdouble rate = variablesList.get(0);\n";
-					ruleCore += "\t\tdouble term = variablesList.get(1);\n";
-					ruleCore += "\t\tdouble amount = variablesList.get(2);\n";
-
-					ruleCore += "\t\tdouble v = 1 + rate;\n";
-					ruleCore += "\t\tdouble t = -term;\n";
-					ruleCore += "\t\tdouble pmtValue = (amount*rate)/(1-Math.pow(v,t));\n";
-
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', pmtValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", pmtValue)\"); }\n";
+					ruleCore += "\tdouble value = RulesOperators.calculatePmtValueFunction(variablesList);\n";
 					break;
 				}
+				// Set the value calculated
+				ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+						+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName() + "', value);\n";
+				ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+						+ leftExpressionCustomVariable.getReference().getName() + ", "
+						+ leftExpressionCustomVariable.getVariable().getName() + ", value)\");\n";
 			}
 		}
 
@@ -743,7 +696,7 @@ public class DroolsParser {
 
 	private static String checkValueAssignedInCustomVariableInDrools(List<Expression> variables) {
 		String ruleCore = "";
-		ruleCore += "\tList<Double> variablesList = new ArrayList<>();\n";
+		ruleCore += "\tList<Double> variablesList = new ArrayList<Double>();\n";
 		for (Expression variable : variables) {
 			if (variable instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
@@ -836,42 +789,6 @@ public class DroolsParser {
 		}
 		return "";
 	}
-
-	// private static String orOperator(List<Expression> expressions) throws
-	// ExpressionInvalidException,
-	// NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-	// TreeObjectParentNotValidException,
-	// NullCustomVariableException, NullExpressionValueException,
-	// BetweenFunctionInvalidException,
-	// DateComparisonNotPossibleException {
-	// // System.out.println("OR EXPRESSIONS: " + expressions);
-	//
-	// String result = "";
-	//
-	// ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
-	// ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
-	//
-	// String leftPart = processResultConditionsFromPrattParser(leftChain);
-	// String rigthPart = processResultConditionsFromPrattParser(rightChain);
-	//
-	// String leftPartLastLine = RulesUtils.getLastLine(leftPart);
-	// String rightPartLastLine = RulesUtils.getLastLine(rigthPart);
-	// String leftPartWithoutLastLine = RulesUtils.removeLastNLines(leftPart,
-	// 1);
-	// String rightPartWithoutLastLine = RulesUtils.removeLastNLines(rigthPart,
-	// 1);
-	//
-	// result += leftPartWithoutLastLine;
-	// result += rightPartWithoutLastLine;
-	// result += "\t(";
-	// result += leftPartLastLine;
-	// result += "\n\tor\n";
-	// result += rightPartLastLine;
-	// result += "\t)\n";
-	//
-	// // orOperatorUsed = true;
-	// return result;
-	// }
 
 	/**
 	 * Parses and expressionChain using the Pratt parser

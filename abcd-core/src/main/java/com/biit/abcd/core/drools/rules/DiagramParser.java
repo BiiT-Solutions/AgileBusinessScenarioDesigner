@@ -106,13 +106,11 @@ public class DiagramParser {
 			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getExpression() != null) {
 				if (extraConditions != null) {
-					List<DroolsRule> rulesList = ExpressionToDroolsRule.parse(expressionNode.getExpression(),
-							extraConditions);
-					for (DroolsRule droolsRule : rulesList) {
-						newRules.addAll(RuleToDroolsRule.parse(droolsRule));
-					}
+					Rule rule = new Rule(expressionNode.getExpression().getName(), extraConditions, expressionNode.getExpression());
+					newRules.addAll(RuleToDroolsRule.parse(rule, null));
 				} else {
-					newRules.addAll(ExpressionToDroolsRule.parse(expressionNode.getExpression(), extraConditions));
+					Rule rule = new Rule(expressionNode.getExpression().getName(), null, expressionNode.getExpression());
+					newRules.addAll(RuleToDroolsRule.parse(rule, null));
 				}
 			}
 			break;
@@ -129,13 +127,11 @@ public class DiagramParser {
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
 			if (sinkExpressionNode.getExpression() != null) {
 				if (extraConditions != null) {
-					List<DroolsRule> rulesList = ExpressionToDroolsRule.parse(sinkExpressionNode.getExpression(),
-							extraConditions);
-					for (DroolsRule droolsRule : rulesList) {
-						newRules.addAll(RuleToDroolsRule.parse(droolsRule));
-					}
+					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), extraConditions, sinkExpressionNode.getExpression());
+					newRules.addAll(RuleToDroolsRule.parse(rule, null));
 				} else {
-					newRules.addAll(ExpressionToDroolsRule.parse(sinkExpressionNode.getExpression(), extraConditions));
+					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), null, sinkExpressionNode.getExpression());
+					newRules.addAll(RuleToDroolsRule.parse(rule, null));
 				}
 			}
 			break;
@@ -173,7 +169,7 @@ public class DiagramParser {
 		// For each outgoing link a new condition is created
 		for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
 			ExpressionChain expressionOfLinkCopy = (ExpressionChain) outLink.getExpressionChain().generateCopy();
-			if(expressionOfLinkCopy.getExpressions().size() == 1){
+			if (expressionOfLinkCopy.getExpressions().size() == 1) {
 				expressionOfLinkCopy.removeAllExpressions();
 			}
 			if (forkNodeExpression != null) {

@@ -1,5 +1,6 @@
 package com.biit.abcd.core.drools.test;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.logger.AbcdLogger;
@@ -34,11 +35,11 @@ public class GenericsTest extends KidsFormCreator {
 		initFormAndVariables();
 		// Generic expression (Generic category = generic category questions)
 		ExpressionChain expression = new ExpressionChain("genericCategoryQuestions",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, getCategoryCustomVariable()),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_CATEGORY, getQuestionCustomVariable()), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, getCategoryCustomVariable(),
+						getForm()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+						AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+						GenericTreeObjectType.QUESTION_CATEGORY, getQuestionCustomVariable(), getForm()),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		// Generate the drools rules
 		checkResults(expression);
 	}
@@ -49,10 +50,10 @@ public class GenericsTest extends KidsFormCreator {
 		initFormAndVariables();
 		// Generic expression (Generic group = generic group questions)
 		ExpressionChain expression = new ExpressionChain("genericGroupQuestions",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable, getForm()),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
+						GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable, getForm()), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
 		// Generate the drools rules
 		checkResults(expression);
@@ -64,10 +65,10 @@ public class GenericsTest extends KidsFormCreator {
 		initFormAndVariables();
 		// Generic expression (Generic category = generic category groups)
 		ExpressionChain expression = new ExpressionChain("genericCategoryGroups",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable, getForm()),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
+						GenericTreeObjectType.GROUP, groupCustomVariable, getForm()), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
 		// Generate the drools rules
 		checkResults(expression);
@@ -81,7 +82,7 @@ public class GenericsTest extends KidsFormCreator {
 		ExpressionChain expression = new ExpressionChain("formGenericCategories", new ExpressionValueCustomVariable(
 				getForm(), formCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionSymbol(
+						GenericTreeObjectType.CATEGORY, categoryCustomVariable, getForm()), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
 		// Generate the drools rules
 		checkResults(expression);
@@ -94,16 +95,16 @@ public class GenericsTest extends KidsFormCreator {
 		// Generic expression with several generics (Generic category =
 		// generic category groups, generic category questions)
 		ExpressionChain expression = new ExpressionChain("genericCategoryGroupsQuestions",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable, getForm()),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
+						GenericTreeObjectType.GROUP, groupCustomVariable, getForm()), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
-						questionCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+						questionCustomVariable, getForm()), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		// Generate the drools rules
 		checkResults(expression);
 	}
-	
+
 	@Test(groups = { "rules" })
 	private void genericCategoryQuestionsGroupsTest() {
 		// Generate the form
@@ -111,16 +112,16 @@ public class GenericsTest extends KidsFormCreator {
 		// Generic expression with several generics (Generic category =
 		// generic category questions, generic category groups)
 		ExpressionChain expression = new ExpressionChain("genericCategoryQuestionsGroups",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable, getForm()),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
+						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable, getForm()), new ExpressionSymbol(
 						AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
-						groupCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+						groupCustomVariable, getForm()), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		// Generate the drools rules
 		checkResults(expression);
 	}
-	
+
 	@Test(groups = { "rules" })
 	private void genericGroupQuestionsGroupsTest() {
 		// Generate the form
@@ -128,11 +129,11 @@ public class GenericsTest extends KidsFormCreator {
 		// Generic expression with several generics (Generic group = generic
 		// groups, generic group questions)
 		ExpressionChain expression = new ExpressionChain("genericGroupQuestionsGroups",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, categoryCustomVariable),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, categoryCustomVariable, getForm()),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable),
+						GenericTreeObjectType.GROUP, groupCustomVariable, getForm()), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable, getForm()),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		// Generate the drools rules
 		checkResults(expression);
@@ -152,6 +153,7 @@ public class GenericsTest extends KidsFormCreator {
 			setQuestionCustomVariable(new CustomVariable(getForm(), QUESTION_SCORE, CustomVariableType.NUMBER,
 					CustomVariableScope.QUESTION));
 		} catch (Exception e) {
+			Assert.fail();
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
@@ -167,6 +169,7 @@ public class GenericsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			createAndRunDroolsRules();
 		} catch (Exception e) {
+			Assert.fail();
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}

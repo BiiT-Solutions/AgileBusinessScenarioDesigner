@@ -59,4 +59,12 @@ public class DroolsRuleGroupEndRule extends DroolsRuleGroup {
 	public Set<Entry<String, String>> getMapEntry() {
 		return rulesIdentifierMap.entrySet();
 	}
+
+	public Map<String, String> getRulesIdentifierMap() {
+		return rulesIdentifierMap;
+	}
+
+	public void setRulesIdentifierMap(Map<String, String> rulesIdentifierMap) {
+		this.rulesIdentifierMap = rulesIdentifierMap;
+	}
 }

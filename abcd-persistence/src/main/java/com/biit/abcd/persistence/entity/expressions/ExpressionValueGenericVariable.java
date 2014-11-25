@@ -6,8 +6,11 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
@@ -19,21 +22,27 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 
 	@Enumerated(EnumType.STRING)
 	private GenericTreeObjectType type;
+	
+	// Used mainly for unique constraint.
+	@ManyToOne
+	@JoinColumn(name = "form")
+	private Form form;
 
 	public ExpressionValueGenericVariable() {
 		super();
 	}
 
-	public ExpressionValueGenericVariable(GenericTreeObjectType variable) {
+	public ExpressionValueGenericVariable(GenericTreeObjectType variable, Form form) {
 		super();
-		type = variable;
+		setType(variable);
+		setForm(form);
 	}
 
 	@Override
 	public String getRepresentation() {
 		String expressionString = new String();
-		if ((type != null)) {
-			expressionString += type.getExpressionName();
+		if ((getType() != null)) {
+			expressionString += getType().getExpressionName();
 		}
 		return expressionString;
 	}
@@ -45,12 +54,20 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 	public void setType(GenericTreeObjectType type) {
 		this.type = type;
 	}
+	
+	public Form getForm() {
+		return form;
+	}
+
+	public void setForm(Form form) {
+		this.form = form;
+	}
 
 	@Override
 	protected String getExpression() {
 		String expressionString = new String();
-		if (type != null) {
-			expressionString += type.getExpressionName().replace(".", "_");
+		if (getType() != null) {
+			expressionString += getType().getExpressionName().replace(".", "_");
 		}
 		return expressionString;
 	}
@@ -79,7 +96,7 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 		if (object instanceof ExpressionValueGenericVariable) {
 			super.copyData(object);
 			ExpressionValueGenericVariable expressionValueGenericVariable = (ExpressionValueGenericVariable) object;
-			type = expressionValueGenericVariable.getType();
+			setType(expressionValueGenericVariable.getType());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of ExpressionValueGenericVariable.");

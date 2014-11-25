@@ -38,51 +38,67 @@ public class ForksTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void simpleForkTest() {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create the table and form diagram
-		getForm().addDiagram(createForkWithThreeOutputsDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check Fork assignation
-		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create the table and form diagram
+			getForm().addDiagram(createForkWithThreeOutputsDiagram());
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check Fork assignation
+			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
 	public void nestedForksTest() {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create the table and form diagram
-		getForm().addDiagram(createNestedForksDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check Fork assignation
-		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create the table and form diagram
+			getForm().addDiagram(createNestedForksDiagram());
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check Fork assignation
+			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	// Test created to check if the or/and combination is generated correctly
 	@Test(groups = { "rules" })
 	public void nestedForksWithOrConditionsTest() {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create the table and form diagram
-		getForm().addDiagram(createNestedForksWithOrConditionsDiagram());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check Fork assignation
-		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create the table and form diagram
+			getForm().addDiagram(createNestedForksWithOrConditionsDiagram());
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check Fork assignation
+			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
 	public void forkWithMultipleConditionsTest() {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create the table and form diagram
-		getForm().addDiagram(createMultipleConditionsFork());
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check Fork assignation
-		Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 4.75);
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create the table and form diagram
+			getForm().addDiagram(createMultipleConditionsFork());
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check Fork assignation
+			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 4.75);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	private Diagram createForkWithThreeOutputsDiagram() {

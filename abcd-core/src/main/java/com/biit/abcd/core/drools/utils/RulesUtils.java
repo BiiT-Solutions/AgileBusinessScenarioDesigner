@@ -3,6 +3,8 @@ package com.biit.abcd.core.drools.utils;
 import java.util.HashSet;
 import java.util.UUID;
 
+import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
+import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 
 public class RulesUtils {
@@ -34,6 +36,19 @@ public class RulesUtils {
 
 	private static String getUniqueId() {
 		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
+
+	public static String getGroupEndRuleExtraCondition(DroolsRuleGroupEndRule rule){
+		return 	"\tnot( FiredRule( getRuleName() == '"
+				+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n";
+	}
+
+	public static String getGroupRuleActions(DroolsRuleGroup rule) {
+		String groupAction = "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
+				+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
+		groupAction += "\tinsert ( new FiredRule(\"" + rule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
+				+ "\"));\n";
+		return groupAction;
 	}
 
 	/**
@@ -270,7 +285,7 @@ public class RulesUtils {
 					lines[i - 1] = lines[i - 1].substring(0, lines[i - 1].length() - 3);
 				}
 				break;
-			}else{
+			} else {
 				lines[i] = lines[i].concat(" and");
 			}
 		}
@@ -279,4 +294,52 @@ public class RulesUtils {
 		}
 		return cleanedResults;
 	}
+
+	// private static List<Double> createValuesList(List<Expression> variables){
+	// List<Double> variablesList = new ArrayList<Double>();
+	// for (Expression variable : variables) {
+	// if (variable instanceof ExpressionValueCustomVariable) {
+	// ExpressionValueCustomVariable expressionValueCustomVariable =
+	// (ExpressionValueCustomVariable) variable;
+	// if(expressionValueCustomVariable.)
+	//
+	// ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) +
+	// ".isScoreSet('"
+	// + expressionValueCustomVariable.getVariable().getName() + "')){";
+	// ruleCore += "\tvariablesList.add((Double)"
+	// +
+	// getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable)
+	// + ");}\n";
+	//
+	// } else if (variable instanceof ExpressionValueTreeObjectReference) {
+	// ExpressionValueTreeObjectReference expressionValueTreeObject =
+	// (ExpressionValueTreeObjectReference) variable;
+	// ruleCore += "\tvariablesList.add((Double)"
+	// +
+	// getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject)
+	// + ");\n";
+	//
+	// } else if (variable instanceof ExpressionValueGlobalConstant) {
+	// GlobalVariable globalExpression = ((ExpressionValueGlobalConstant)
+	// variable).getVariable();
+	// switch (globalExpression.getFormat()) {
+	// case NUMBER:
+	// ruleCore += "\tvariablesList.add((Double)" + globalExpression.getName() +
+	// ");\n";
+	// break;
+	// case TEXT:
+	// case POSTAL_CODE:
+	// case DATE:
+	// ruleCore += "\tvariablesList.add(" + globalExpression.getName() + ");\n";
+	// break;
+	// }
+	// } else if (variable instanceof ExpressionValue) {
+	// if (variable instanceof ExpressionValueNumber) {
+	// ruleCore += "\tvariablesList.add((Double)" + ((ExpressionValueNumber)
+	// variable).getValue() + ");\n";
+	// }
+	// }
+	// }
+	// return variablesList;
+	// }
 }
