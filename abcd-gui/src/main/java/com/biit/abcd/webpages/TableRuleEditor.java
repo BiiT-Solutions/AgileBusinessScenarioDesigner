@@ -545,8 +545,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	 * @param customVariable
 	 */
 	private void setGenericTreeObjectExpression(TableRuleRow row, Integer propertyId, GenericTreeObjectType genericType) {
-		row.setExpression(propertyId, new ExpressionValueGenericVariable(genericType, UserSessionHandler
-				.getFormController().getForm()));
+		row.setExpression(propertyId, new ExpressionValueGenericVariable(genericType));
 		ruleTable.update(getSelectedTableRule());
 	}
 
@@ -560,8 +559,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	 */
 	private void setGenericCustomVariableExpression(TableRuleRow row, Integer propertyId,
 			GenericTreeObjectType genericType, CustomVariable customVariable) {
-		row.setExpression(propertyId, new ExpressionValueGenericCustomVariable(genericType, customVariable,
-				UserSessionHandler.getFormController().getForm()));
+		row.setExpression(propertyId, new ExpressionValueGenericCustomVariable(genericType, customVariable));
 		ruleTable.update(getSelectedTableRule());
 	}
 

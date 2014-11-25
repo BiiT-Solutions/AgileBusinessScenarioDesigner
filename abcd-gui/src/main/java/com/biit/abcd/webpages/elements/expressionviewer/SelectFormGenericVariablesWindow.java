@@ -142,7 +142,7 @@ public class SelectFormGenericVariablesWindow extends AcceptCancelWindow {
 			return null;
 		}
 		return new ExpressionValueGenericCustomVariable((GenericTreeObjectType) variableTable.getValue(),
-				(CustomVariable) variableSelection.getValue(), UserSessionHandler.getFormController().getForm());
+				(CustomVariable) variableSelection.getValue());
 	}
 
 	public void setvalue(ExpressionValueGenericCustomVariable expression) {

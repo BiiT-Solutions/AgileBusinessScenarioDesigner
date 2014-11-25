@@ -97,9 +97,9 @@ public class PrattParserTest {
 			setExpValNumber(new ExpressionValueNumber(5.));
 			// Generics
 			setExpValGenericCatScore(new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY,
-					getcVar(), form));
+					getcVar()));
 			setExpValGenericQuestScore(new ExpressionValueGenericCustomVariable(
-					GenericTreeObjectType.QUESTION_CATEGORY, qVar, form));
+					GenericTreeObjectType.QUESTION_CATEGORY, qVar));
 
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);

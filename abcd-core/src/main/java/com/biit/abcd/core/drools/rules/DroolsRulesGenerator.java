@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
+import com.biit.abcd.core.drools.DroolsHelper;
 import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -31,6 +32,9 @@ import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 
 public class DroolsRulesGenerator {
 
+	// Provides some extra functionalities to the drools parser
+	private DroolsHelper droolsHelper;
+	
 	private Form form;
 	private StringBuilder builder;
 	private List<GlobalVariable> globalVariables;
@@ -44,6 +48,7 @@ public class DroolsRulesGenerator {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
+		droolsHelper = new DroolsHelper(form);
 		initParser();
 	}
 
@@ -69,7 +74,7 @@ public class DroolsRulesGenerator {
 						rootDiagrams.add(diagram);
 					}
 				}
-				DiagramParser diagParser = new DiagramParser();
+				DiagramParser diagParser = new DiagramParser(droolsHelper);
 				// Parse the root diagrams
 				for (Diagram diagram : rootDiagrams) {
 					getRulesBuilder().append(diagParser.getDroolsRulesAsText(diagram));

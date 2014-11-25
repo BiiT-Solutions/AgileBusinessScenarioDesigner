@@ -6,11 +6,8 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
@@ -22,20 +19,14 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 
 	@Enumerated(EnumType.STRING)
 	private GenericTreeObjectType type;
-	
-	// Used mainly for unique constraint.
-	@ManyToOne
-	@JoinColumn(name = "form")
-	private Form form;
 
 	public ExpressionValueGenericVariable() {
 		super();
 	}
 
-	public ExpressionValueGenericVariable(GenericTreeObjectType variable, Form form) {
+	public ExpressionValueGenericVariable(GenericTreeObjectType variable) {
 		super();
 		setType(variable);
-		setForm(form);
 	}
 
 	@Override
@@ -53,14 +44,6 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 
 	public void setType(GenericTreeObjectType type) {
 		this.type = type;
-	}
-	
-	public Form getForm() {
-		return form;
-	}
-
-	public void setForm(Form form) {
-		this.form = form;
 	}
 
 	@Override

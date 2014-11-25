@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.biit.abcd.core.drools.DroolsHelper;
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
@@ -18,7 +19,6 @@ import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
@@ -44,20 +44,23 @@ import com.biit.form.TreeObject;
 public class RuleToDroolsRule {
 
 	private static List<DroolsRule> droolsRules;
+	private static DroolsHelper droolsHelper;
 
-	public static List<DroolsRule> parse(DroolsRule droolsRule) throws RuleInvalidException,
+	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper) throws RuleInvalidException,
 			RuleNotImplementedException, ExpressionInvalidException {
 
+		setDroolsHelper(droolsHelper);
 		if (droolsRule.getName().startsWith("rule \"")) {
 			droolsRule.setName(droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", ""));
 		}
 
-		return parse(droolsRule, null);
+		return parse(droolsRule, null, droolsHelper);
 	}
 
-	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions) throws RuleInvalidException,
-			RuleNotImplementedException, ExpressionInvalidException {
+	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions, DroolsHelper droolsHelper)
+			throws RuleInvalidException, RuleNotImplementedException, ExpressionInvalidException {
 		List<DroolsRule> conditionsRules = new ArrayList<>();
+		setDroolsHelper(droolsHelper);
 		if (rule != null) {
 			List<DroolsRule> droolsRuleList = null;
 			Rule ruleCopy = rule.generateCopy();
@@ -139,15 +142,10 @@ public class RuleToDroolsRule {
 
 		for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions().size(); originalExpressionIndex++) {
 			Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
-			if (expression instanceof ExpressionValueGenericCustomVariable) {
+			if ((expression instanceof ExpressionValueGenericCustomVariable)
+					|| (expression instanceof ExpressionValueGenericVariable)) {
 				// Unwrap the generic variables being analyzed
-				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
-				CustomVariable customVariableOfGeneric = expressionValueGenericCustomVariable.getVariable();
-				unwrappedObjects = getUnwrappedTreeObjects(expressionValueGenericCustomVariable,
-						customVariableOfGeneric.getForm());
-				break;
-			} else if (expression instanceof ExpressionValueGenericVariable) {
-				unwrappedObjects = getUnwrappedTreeObjects((ExpressionValueGenericVariable) expression);
+				unwrappedObjects = getUnwrappedTreeObjects((ExpressionValueGenericCustomVariable) expression);
 				break;
 			}
 		}
@@ -157,7 +155,7 @@ public class RuleToDroolsRule {
 				for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions()
 						.size(); originalExpressionIndex++) {
 					Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
-					
+
 					if (expression instanceof ExpressionValueGenericCustomVariable) {
 						CustomVariable customVariableOfGeneric = ((ExpressionValueGenericCustomVariable) expression)
 								.getVariable();
@@ -183,34 +181,6 @@ public class RuleToDroolsRule {
 		return unwrappedRules;
 	}
 
-	private static List<TreeObject> getUnwrappedTreeObjects(
-			ExpressionValueGenericVariable expressionValueGenericVariable, Form form) {
-		List<TreeObject> treeObjects = null;
-		switch (expressionValueGenericVariable.getType()) {
-		case CATEGORY:
-			treeObjects = form.getAll(Category.class);
-			break;
-		case GROUP:
-			treeObjects = form.getAll(Group.class);
-			break;
-		case QUESTION_CATEGORY:
-			List<TreeObject> categories = form.getAll(Category.class);
-			treeObjects = new ArrayList<TreeObject>();
-			for (TreeObject category : categories) {
-				treeObjects.addAll(category.getChildren(Question.class));
-			}
-			break;
-		case QUESTION_GROUP:
-			List<TreeObject> groups = form.getAll(Group.class);
-			treeObjects = new ArrayList<TreeObject>();
-			for (TreeObject group : groups) {
-				treeObjects.addAll(group.getChildren(Question.class));
-			}
-			break;
-		}
-		return treeObjects;
-	}
-
 	/**
 	 * Get the brothers of the tree object passed
 	 * 
@@ -220,23 +190,22 @@ public class RuleToDroolsRule {
 	private static List<TreeObject> getUnwrappedTreeObjects(
 			ExpressionValueGenericVariable expressionValueGenericVariable) {
 		List<TreeObject> treeObjects = null;
-		Form form = expressionValueGenericVariable.getForm();
 		switch (expressionValueGenericVariable.getType()) {
 		case CATEGORY:
-			treeObjects = form.getAll(Category.class);
+			treeObjects = getDroolsHelper().getForm().getAll(Category.class);
 			break;
 		case GROUP:
-			treeObjects = form.getAll(Group.class);
+			treeObjects = getDroolsHelper().getForm().getAll(Group.class);
 			break;
 		case QUESTION_CATEGORY:
-			List<TreeObject> categories = form.getAll(Category.class);
+			List<TreeObject> categories = getDroolsHelper().getForm().getAll(Category.class);
 			treeObjects = new ArrayList<TreeObject>();
 			for (TreeObject category : categories) {
 				treeObjects.addAll(category.getChildren(Question.class));
 			}
 			break;
 		case QUESTION_GROUP:
-			List<TreeObject> groups = form.getAll(Group.class);
+			List<TreeObject> groups = getDroolsHelper().getForm().getAll(Group.class);
 			treeObjects = new ArrayList<TreeObject>();
 			for (TreeObject group : groups) {
 				treeObjects.addAll(group.getChildren(Question.class));
@@ -414,5 +383,13 @@ public class RuleToDroolsRule {
 			AbcdLogger.errorMessage(DroolsParser.class.getName(), ex);
 		}
 		return prattParserResult;
+	}
+
+	public static DroolsHelper getDroolsHelper() {
+		return droolsHelper;
+	}
+
+	public static void setDroolsHelper(DroolsHelper droolsHelper) {
+		RuleToDroolsRule.droolsHelper = droolsHelper;
 	}
 }

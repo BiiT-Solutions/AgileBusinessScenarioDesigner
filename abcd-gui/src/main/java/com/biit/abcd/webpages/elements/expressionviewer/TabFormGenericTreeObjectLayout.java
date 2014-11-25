@@ -51,8 +51,7 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if (variableTable.getValue() != null) {
-					addExpression(new ExpressionValueGenericVariable((GenericTreeObjectType) variableTable.getValue(),
-							UserSessionHandler.getFormController().getForm()));
+					addExpression(new ExpressionValueGenericVariable((GenericTreeObjectType) variableTable.getValue()));
 				}
 			}
 		});
@@ -72,8 +71,7 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 			public void buttonClick(ClickEvent event) {
 				if ((variableSelection.getValue() != null) && (variableTable.getValue() != null)) {
 					addExpression(new ExpressionValueGenericCustomVariable((GenericTreeObjectType) variableTable
-							.getValue(), (CustomVariable) variableSelection.getValue(), UserSessionHandler
-							.getFormController().getForm()));
+							.getValue(), (CustomVariable) variableSelection.getValue()));
 				}
 			}
 		});

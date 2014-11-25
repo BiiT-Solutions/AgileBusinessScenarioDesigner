@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -29,19 +28,17 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 		super();
 	}
 
-	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable, Form form) {
+	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable) {
 		super();
 		setType(type);
 		setVariable(variable);
-		setForm(form);
 	}
 
-	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable, boolean editable, Form form) {
+	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable, boolean editable) {
 		super();
 		setType(type);
 		setVariable(variable);
 		setEditable(editable);
-		setForm(form);
 	}
 
 	@Override

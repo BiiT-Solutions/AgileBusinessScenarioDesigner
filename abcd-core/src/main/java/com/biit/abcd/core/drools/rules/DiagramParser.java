@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.core.drools.DroolsHelper;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
@@ -43,6 +44,12 @@ import com.biit.form.TreeObject;
 
 public class DiagramParser {
 
+	private DroolsHelper droolsHelper;
+	
+	public DiagramParser(DroolsHelper droolsHelper){
+		setDroolsHelper(droolsHelper);
+	}
+	
 	public String getDroolsRulesAsText(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
 			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -89,7 +96,7 @@ public class DiagramParser {
 				if (extraConditions != null) {
 					List<DroolsRule> rulesList = TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions);
 					for (DroolsRule droolsRule : rulesList) {
-						newRules.addAll(RuleToDroolsRule.parse(droolsRule));
+						newRules.addAll(RuleToDroolsRule.parse(droolsRule, getDroolsHelper()));
 					}
 				} else {
 					newRules.addAll(TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions));
@@ -99,7 +106,7 @@ public class DiagramParser {
 		case RULE:
 			DiagramRule ruleNode = (DiagramRule) node;
 			if (ruleNode.getRule() != null) {
-				newRules.addAll(RuleToDroolsRule.parse(ruleNode.getRule(), extraConditions));
+				newRules.addAll(RuleToDroolsRule.parse(ruleNode.getRule(), extraConditions, getDroolsHelper()));
 			}
 			break;
 		case CALCULATION:
@@ -107,10 +114,10 @@ public class DiagramParser {
 			if (expressionNode.getExpression() != null) {
 				if (extraConditions != null) {
 					Rule rule = new Rule(expressionNode.getExpression().getName(), extraConditions, expressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null));
+					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
 				} else {
 					Rule rule = new Rule(expressionNode.getExpression().getName(), null, expressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null));
+					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
 				}
 			}
 			break;
@@ -128,10 +135,10 @@ public class DiagramParser {
 			if (sinkExpressionNode.getExpression() != null) {
 				if (extraConditions != null) {
 					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), extraConditions, sinkExpressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null));
+					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
 				} else {
 					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), null, sinkExpressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null));
+					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
 				}
 			}
 			break;
@@ -289,4 +296,11 @@ public class DiagramParser {
 		return negatedExpressionChain;
 	}
 
+	public DroolsHelper getDroolsHelper() {
+		return droolsHelper;
+	}
+
+	public void setDroolsHelper(DroolsHelper droolsHelper) {
+		this.droolsHelper = droolsHelper;
+	}
 }
