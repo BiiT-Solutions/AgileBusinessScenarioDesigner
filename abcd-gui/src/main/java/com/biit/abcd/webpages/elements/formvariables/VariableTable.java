@@ -10,6 +10,7 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.webpages.components.ComparableComboBox;
 import com.biit.abcd.webpages.components.ComparableTextField;
 import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
@@ -45,7 +46,7 @@ public class VariableTable extends Table {
 		addContainerProperty(FormVariablesProperties.TYPE, ComboBox.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_TYPE), null, Align.LEFT);
 
-		addContainerProperty(FormVariablesProperties.SCOPE, ComboBox.class, "",
+		addContainerProperty(FormVariablesProperties.SCOPE, ComparableComboBox.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_SCOPE), null, Align.LEFT);
 
 		setColumnExpandRatio(FormVariablesProperties.VARIABLE_NAME, 1);
@@ -53,6 +54,11 @@ public class VariableTable extends Table {
 		setColumnExpandRatio(FormVariablesProperties.SCOPE, 1);
 
 		setSortContainerPropertyId(FormVariablesProperties.VARIABLE_NAME);
+	}
+
+	public void defaultSort() {
+		sort(new Object[] { FormVariablesProperties.SCOPE, FormVariablesProperties.VARIABLE_NAME }, new boolean[] {
+				true, true });
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -154,7 +160,7 @@ public class VariableTable extends Table {
 
 	public ComboBox createScopeComboBox(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
-		final ComboBox scopeComboBox = new ComboBox();
+		final ComboBox scopeComboBox = new ComparableComboBox();
 		for (CustomVariableScope variablesScope : CustomVariableScope.values()) {
 			scopeComboBox.addItem(variablesScope);
 			scopeComboBox

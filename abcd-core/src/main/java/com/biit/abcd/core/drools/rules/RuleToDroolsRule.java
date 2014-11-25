@@ -157,6 +157,7 @@ public class RuleToDroolsRule {
 				for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions()
 						.size(); originalExpressionIndex++) {
 					Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
+					
 					if (expression instanceof ExpressionValueGenericCustomVariable) {
 						CustomVariable customVariableOfGeneric = ((ExpressionValueGenericCustomVariable) expression)
 								.getVariable();
@@ -170,7 +171,7 @@ public class RuleToDroolsRule {
 						droolsRule.getConditions().addExpression(expression);
 					}
 				}
-				unwrappedRules.add(new DroolsRule());
+				unwrappedRules.add(droolsRule);
 			}
 		}
 

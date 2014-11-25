@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.form.TreeObject;
 
 public class RulesUtils {
 
@@ -294,52 +295,27 @@ public class RulesUtils {
 		}
 		return cleanedResults;
 	}
+	
+//	public static boolean hasSpecialCharacters(String text){
+//		if (Pattern.matches("[^a-zA-Z0-9]", text)){
+//			return true;
+//		}
+//		return false;
+//	}
 
-	// private static List<Double> createValuesList(List<Expression> variables){
-	// List<Double> variablesList = new ArrayList<Double>();
-	// for (Expression variable : variables) {
-	// if (variable instanceof ExpressionValueCustomVariable) {
-	// ExpressionValueCustomVariable expressionValueCustomVariable =
-	// (ExpressionValueCustomVariable) variable;
-	// if(expressionValueCustomVariable.)
-	//
-	// ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) +
-	// ".isScoreSet('"
-	// + expressionValueCustomVariable.getVariable().getName() + "')){";
-	// ruleCore += "\tvariablesList.add((Double)"
-	// +
-	// getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable)
-	// + ");}\n";
-	//
-	// } else if (variable instanceof ExpressionValueTreeObjectReference) {
-	// ExpressionValueTreeObjectReference expressionValueTreeObject =
-	// (ExpressionValueTreeObjectReference) variable;
-	// ruleCore += "\tvariablesList.add((Double)"
-	// +
-	// getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject)
-	// + ");\n";
-	//
-	// } else if (variable instanceof ExpressionValueGlobalConstant) {
-	// GlobalVariable globalExpression = ((ExpressionValueGlobalConstant)
-	// variable).getVariable();
-	// switch (globalExpression.getFormat()) {
-	// case NUMBER:
-	// ruleCore += "\tvariablesList.add((Double)" + globalExpression.getName() +
-	// ");\n";
-	// break;
-	// case TEXT:
-	// case POSTAL_CODE:
-	// case DATE:
-	// ruleCore += "\tvariablesList.add(" + globalExpression.getName() + ");\n";
-	// break;
-	// }
-	// } else if (variable instanceof ExpressionValue) {
-	// if (variable instanceof ExpressionValueNumber) {
-	// ruleCore += "\tvariablesList.add((Double)" + ((ExpressionValueNumber)
-	// variable).getValue() + ");\n";
-	// }
-	// }
-	// }
-	// return variablesList;
-	// }
+	public static String returnSimpleTreeObjectNameFunction(TreeObject treeObject) {
+//		if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
+//			return "getText() == '" + treeObject.getName().replaceAll("[^\\w\\s]","");
+//		} else {
+			return "getText() == '" + treeObject.getName();
+//		}
+	}
+
+	public static String addFinalCommentsIfNeeded(TreeObject treeObject) {
+//		if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
+//			return " // " + treeObject.getName();
+//		} else {
+			return "";
+//		}
+	}
 }
