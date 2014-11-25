@@ -86,7 +86,6 @@ public class VariableTable extends Table {
 		CustomVariable variable = (CustomVariable) getValue();
 		if (variable != null) {
 			removeItem(variable);
-			UserSessionHandler.getFormController().getForm().getCustomVariables().remove(variable);
 		}
 	}
 

@@ -812,12 +812,6 @@
         primary key (tree_forms_ID, expressionChains_ID)
     );
 
-    create table tree_forms_form_custom_variables (
-        tree_forms_ID bigint not null,
-        customVariables_ID bigint not null,
-        primary key (tree_forms_ID, customVariables_ID)
-    );
-
     create table tree_forms_rule (
         tree_forms_ID bigint not null,
         rules_ID bigint not null,
@@ -1223,9 +1217,6 @@
     alter table tree_forms_expressions_chain 
         add constraint UK_melu1cfpayuydi8fv6gxnoufq  unique (expressionChains_ID);
 
-    alter table tree_forms_form_custom_variables 
-        add constraint UK_8javwlxk4w7hc1g5g52yecvtt  unique (customVariables_ID);
-
     alter table tree_forms_rule 
         add constraint UK_t8v6e3oyk0k56toxk97afkpvc  unique (rules_ID);
 
@@ -1561,16 +1552,6 @@
 
     alter table tree_forms_expressions_chain 
         add constraint FK_5wekloqjwnu88bfqpn292su2w 
-        foreign key (tree_forms_ID) 
-        references tree_forms (ID);
-
-    alter table tree_forms_form_custom_variables 
-        add constraint FK_8javwlxk4w7hc1g5g52yecvtt 
-        foreign key (customVariables_ID) 
-        references form_custom_variables (ID);
-
-    alter table tree_forms_form_custom_variables 
-        add constraint FK_jprngt3ueexabb6la0oy6jv3o 
         foreign key (tree_forms_ID) 
         references tree_forms (ID);
 

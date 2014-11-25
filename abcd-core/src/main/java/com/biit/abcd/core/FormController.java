@@ -1,8 +1,8 @@
 package com.biit.abcd.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -67,7 +67,7 @@ public class FormController {
 	}
 
 	public void save() throws DuplicatedVariableException, UnexpectedDatabaseException {
-		this.checkDuplicatedVariables();
+		checkDuplicatedVariables();
 		if (getForm() != null) {
 			formDao.makePersistent(getForm());
 			try {
@@ -75,25 +75,21 @@ public class FormController {
 				originalForm.resetIds();
 			} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
 			}
-
 		}
 	}
 
 	public void checkDuplicatedVariables() throws DuplicatedVariableException {
-		Set<CustomVariable> customVariablesList = this.getForm().getCustomVariables();
-		Iterator<CustomVariable> startComparator = customVariablesList.iterator();
-		while (startComparator.hasNext()) {
-			CustomVariable comparedVariable = startComparator.next();
-			Iterator<CustomVariable> comparedWithIterator = startComparator;
-			while (comparedWithIterator.hasNext()) {
-				CustomVariable comparedWithVariable = comparedWithIterator.next();
-				if (comparedVariable.hasSameNameAndScope(comparedWithVariable)) {
+		Set<CustomVariable> customVariables = getForm().getCustomVariables();
+		List<CustomVariable> customVariablesList = new ArrayList<>(customVariables);
+		for (int i = 0; i < customVariablesList.size(); i++) {
+			for (int j = i + 1; j < customVariablesList.size(); j++) {
+				if (customVariablesList.get(i).hasSameNameAndScope(customVariablesList.get(j))) {
 					throw new DuplicatedVariableException("Duplicated variable in form variables.");
 				}
 			}
 		}
 	}
-	
+
 	public void updateForm(Form form, String label) {
 		try {
 			if (!form.getLabel().equals(label)) {
@@ -106,12 +102,12 @@ public class FormController {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
-	
+
 	private void logInfoStart(String functionName, Object... parameters) {
-		AbcdLogger.info(FormController.class.getName(),
-				getUserInfo() + " " + getFunctionInfo(functionName, parameters));
+		AbcdLogger
+				.info(FormController.class.getName(), getUserInfo() + " " + getFunctionInfo(functionName, parameters));
 	}
-	
+
 	protected String getUserInfo() {
 		String userInfo = new String("User: ");
 		if (getUser() == null) {
@@ -120,7 +116,7 @@ public class FormController {
 			return userInfo + getUser().getEmailAddress();
 		}
 	}
-	
+
 	protected String getFunctionInfo(String functionName, Object... parameters) {
 		String functionInfo = new String(functionName + "(");
 		int i = 0;

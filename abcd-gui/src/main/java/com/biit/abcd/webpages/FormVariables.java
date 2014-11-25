@@ -103,7 +103,8 @@ public class FormVariables extends FormWebPageComponent {
 				try {
 					CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController().getForm(),
 							customVariable);
-					removeSelectedVariable();
+					removeSelectedRow();
+					customVariable.remove();
 					AbcdLogger.info(this.getClass().getName(),
 							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
 									+ customVariable.getClass() + " with 'Name: " + customVariable.getName()
@@ -125,7 +126,7 @@ public class FormVariables extends FormWebPageComponent {
 		}
 	}
 
-	private void removeSelectedVariable() {
+	private void removeSelectedRow() {
 		if (variableTable != null) {
 			variableTable.removeSelectedRow();
 		}
@@ -137,10 +138,8 @@ public class FormVariables extends FormWebPageComponent {
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
-				e.printStackTrace();
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
-
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
 			} catch (UnexpectedDatabaseException e) {
