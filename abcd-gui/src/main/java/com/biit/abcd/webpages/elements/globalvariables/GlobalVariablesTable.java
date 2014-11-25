@@ -25,6 +25,8 @@ public class GlobalVariablesTable extends Table {
 				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_NAME), null, Align.CENTER);
 		addContainerProperty(Properties.VARIABLE_TYPE, String.class, "",
 				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_TYPE), null, Align.CENTER);
+		
+		setSortContainerPropertyId(Properties.VARIABLE_NAME);
 	}
 
 	@SuppressWarnings("unchecked")

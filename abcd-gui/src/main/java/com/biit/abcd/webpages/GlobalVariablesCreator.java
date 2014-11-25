@@ -84,6 +84,8 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 		}
+		
+		globalVariableTable.sort();
 	}
 
 	private void createVariableDataTable(GlobalVariable globalVariable) {
