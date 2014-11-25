@@ -8,6 +8,7 @@ import java.util.Set;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
@@ -31,6 +34,9 @@ import com.biit.persistence.entity.StorableObject;
 @Repository
 public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
+	@Autowired
+	private ICustomVariableDao customVariableDao;
+
 	public FormDao() {
 		super(Form.class);
 	}
@@ -38,6 +44,14 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	@Override
 	@Transactional
 	public Form makePersistent(Form entity) throws UnexpectedDatabaseException {
+
+		// For avoiding "ObjectDeletedException: deleted object would be re-saved by
+		// cascade (remove deleted object from
+		// associations)" launch when removing a customvariable and other is renamed as this
+		// one, we need to disable
+		// orphanRemoval=true of children and implement ourselves.
+		purgeCustomVariablesToDelete(entity);
+
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
@@ -94,6 +108,18 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			updateValidTo(entity.getLabel(), entity.getVersion() - 1, entity.getOrganizationId(), validTo);
 		}
 		return super.makePersistent(entity);
+	}
+
+	private Set<CustomVariable> purgeCustomVariablesToDelete(Form form) throws UnexpectedDatabaseException {
+		Set<CustomVariable> customVariablesToDelete = new HashSet<>();
+		customVariablesToDelete.addAll(form.getCustomVariablesToDelete());
+		form.setCustomVariablesToDelete(new HashSet<CustomVariable>());
+		for (CustomVariable customVariable : customVariablesToDelete) {
+			if (customVariable.getId() != null) {
+				customVariableDao.makeTransient(customVariable);
+			}
+		}
+		return customVariablesToDelete;
 	}
 
 	@Override

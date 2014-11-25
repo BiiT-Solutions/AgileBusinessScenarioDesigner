@@ -67,7 +67,7 @@ public class Form extends BaseForm {
 	@Cache(region = "tableRules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<TableRule> tableRules;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "form")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
@@ -86,6 +86,13 @@ public class Form extends BaseForm {
 	@Fetch(FetchMode.SUBSELECT)
 	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
+
+	// For avoiding "ObjectDeletedException: deleted object would be re-saved by
+	// cascade (remove deleted object from
+	// associations)" launch when removing a customvariable and other is renamed as this
+	// one, we need to disable
+	// orphanRemoval=true of children and implement ourselves.
+	private transient Set<CustomVariable> customVariablesToDelete = new HashSet<>();
 
 	@Transient
 	private transient boolean isLastVersion = true;
@@ -536,8 +543,7 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root
-	 * diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
 	 * 
 	 * @param diagram
 	 */
@@ -592,5 +598,18 @@ public class Form extends BaseForm {
 		}
 
 		return innerStorableObjects;
+	}
+
+	public Set<CustomVariable> getCustomVariablesToDelete() {
+		return customVariablesToDelete;
+	}
+
+	public void setCustomVariablesToDelete(Set<CustomVariable> customVariablesToDelete) {
+		this.customVariablesToDelete = customVariablesToDelete;
+	}
+
+	public void remove(CustomVariable customVariableToDelete) {
+		customVariables.remove(customVariableToDelete);
+		customVariablesToDelete.add(customVariableToDelete);
 	}
 }

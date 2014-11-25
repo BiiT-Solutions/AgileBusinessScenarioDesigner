@@ -122,4 +122,10 @@ public class CustomVariable extends StorableObject {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of CustomVariable.");
 		}
 	}
+
+	public void remove() {
+		if (form != null) {
+			form.remove(this);
+		}
+	}
 }

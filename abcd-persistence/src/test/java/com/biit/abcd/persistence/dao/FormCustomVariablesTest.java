@@ -26,13 +26,14 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	private final static String DUMMY_FORM = "Form with custom variables";
 
 	@Autowired
-	private IFormCustomVariablesDao formCustomVariablesDao;
+	private ICustomVariableDao customVariablesDao;
 
 	@Autowired
 	private IFormDao formDao;
 
 	@Test
-	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException {
+	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException,
+			CharacterNotAllowedException, UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -41,13 +42,14 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		form.getCustomVariables().add(formCustomVariables);
 		formDao.makePersistent(form);
 
-		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 1);
+		Assert.assertEquals(customVariablesDao.getRowCount(), 1);
 		formDao.makeTransient(form);
-		Assert.assertEquals(formCustomVariablesDao.getRowCount(), 0);
+		Assert.assertEquals(customVariablesDao.getRowCount(), 0);
 	}
 
 	@Test
-	public void storeIntegerVariables() throws FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException {
+	public void storeIntegerVariables() throws FieldTooLongException, CharacterNotAllowedException,
+			UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v2");
@@ -73,7 +75,8 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	@Test
-	public void storeStringVariables() throws FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException {
+	public void storeStringVariables() throws FieldTooLongException, CharacterNotAllowedException,
+			UnexpectedDatabaseException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v3");
@@ -125,6 +128,39 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		Assert.assertEquals(retrievedVariable.getName(), "CreationDate");
 		Assert.assertEquals(retrievedVariable.getType(), CustomVariableType.DATE);
 		Assert.assertEquals(retrievedVariable.getScope(), CustomVariableScope.FORM);
+		formDao.makeTransient(form);
+	}
+
+	/**
+	 * Removes a variable and other changes the name to the same that the previous one. 
+	 * @throws FieldTooLongException
+	 * @throws UnexpectedDatabaseException
+	 */
+	@Test
+	public void variableReplaced() throws FieldTooLongException, UnexpectedDatabaseException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+		form.setLabel(DUMMY_FORM + "_v5");
+		formDao.makePersistent(form);
+
+		int previousVariables = customVariablesDao.getRowCount();
+
+		CustomVariable formCustomVariables = new CustomVariable(form, "var1", CustomVariableType.DATE,
+				CustomVariableScope.FORM);
+		form.getCustomVariables().add(formCustomVariables);
+
+		CustomVariable formCustomVariables2 = new CustomVariable(form, "var2", CustomVariableType.DATE,
+				CustomVariableScope.FORM);
+		form.getCustomVariables().add(formCustomVariables2);
+
+		formDao.makePersistent(form);
+
+		formCustomVariables.remove();
+		formCustomVariables2.setName("var1");
+
+		formDao.makePersistent(form);
+
+		Assert.assertEquals(customVariablesDao.getRowCount(), previousVariables + 1);
 		formDao.makeTransient(form);
 	}
 
