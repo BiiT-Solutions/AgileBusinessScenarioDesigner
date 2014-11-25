@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.formdesigner;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +15,6 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
-import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
@@ -44,10 +43,10 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	@Override
 	public void setElementForProperties(Form element) {
 		instance = element;
+
 		formLabel = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_LABEL));
 		formLabel.addValidator(new ValidatorTreeObjectNameLength());
 		formLabel.setValue(instance.getLabel());
-		// formLabel.setEnabled(false);
 
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
@@ -68,21 +67,24 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	@Override
 	protected void updateConcreteFormElement() {
 		if (formLabel.isValid()) {
-			try {
-				// Checks if already exists a form with this label and its
-				// version.
-				if (!formDao.exists(formLabel.getValue(), instance.getVersion(), instance.getOrganizationId(),
-						instance.getId())) {
-					UserSessionHandler.getFormController().updateForm(instance, formLabel.getValue());
-				} else {
-					formLabel.setValue(instance.getLabel());
-					MessageManager.showWarning(LanguageCodes.COMMON_ERROR_NAME_IS_IN_USE,
-							LanguageCodes.COMMON_ERROR_NAME_IS_IN_USE_DESCRIPTION);
-					UserSessionHandler.getFormController().updateForm(instance, instance.getLabel());
+			// To avoid setting repeated values
+			if (!formLabel.getValue().equals(formLabel.getValue())) {
+				try {
+					// Checks if already exists a form with this label and its
+					// version.
+					if (!formDao.exists(formLabel.getValue(), instance.getVersion(), instance.getOrganizationId(),
+							instance.getId())) {
+						UserSessionHandler.getFormController().updateForm(instance, formLabel.getValue());
+					} else {
+						formLabel.setValue(instance.getLabel());
+						MessageManager.showWarning(LanguageCodes.COMMON_ERROR_NAME_IS_IN_USE,
+								LanguageCodes.COMMON_ERROR_NAME_IS_IN_USE_DESCRIPTION);
+						UserSessionHandler.getFormController().updateForm(instance, instance.getLabel());
+					}
+				} catch (ReadOnlyException | UnexpectedDatabaseException e) {
+					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE);
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
-			} catch (ReadOnlyException | UnexpectedDatabaseException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE);
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 
 			if (availableFrom.getValue() != null) {
@@ -94,14 +96,18 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 				cal.set(Calendar.MILLISECOND, 0);
 				long time = cal.getTimeInMillis();
 
-				instance.setAvailableFrom(new Timestamp(time));
-				AbcdLogger.info(this.getClass().getName(),
-						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
-								+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom()
-								+ "'.");
+				// To avoid setting repeated values
+				Date dateToCompare = new Date(time);
+				if (dateToCompare.compareTo(availableFrom.getValue()) != 0) {
+					instance.setAvailableFrom(new Timestamp(time));
+					AbcdLogger.info(this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
+									+ instance.getName() + "' property 'Valid From' to '" + instance.getAvailableFrom()
+									+ "'.");
+				}
 			}
-			// firePropertyUpdateListener(getTreeObjectInstance());
 		}
+
 	}
 
 	@Override

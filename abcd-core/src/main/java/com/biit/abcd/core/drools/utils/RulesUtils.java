@@ -3,7 +3,10 @@ package com.biit.abcd.core.drools.utils;
 import java.util.HashSet;
 import java.util.UUID;
 
+import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
+import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.form.TreeObject;
 
 public class RulesUtils {
 
@@ -34,6 +37,19 @@ public class RulesUtils {
 
 	private static String getUniqueId() {
 		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
+
+	public static String getGroupEndRuleExtraCondition(DroolsRuleGroupEndRule rule){
+		return 	"\tnot( FiredRule( getRuleName() == '"
+				+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n";
+	}
+
+	public static String getGroupRuleActions(DroolsRuleGroup rule) {
+		String groupAction = "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
+				+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
+		groupAction += "\tinsert ( new FiredRule(\"" + rule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
+				+ "\"));\n";
+		return groupAction;
 	}
 
 	/**
@@ -270,7 +286,7 @@ public class RulesUtils {
 					lines[i - 1] = lines[i - 1].substring(0, lines[i - 1].length() - 3);
 				}
 				break;
-			}else{
+			} else {
 				lines[i] = lines[i].concat(" and");
 			}
 		}
@@ -278,5 +294,28 @@ public class RulesUtils {
 			cleanedResults += lines[i] + "\n";
 		}
 		return cleanedResults;
+	}
+	
+//	public static boolean hasSpecialCharacters(String text){
+//		if (Pattern.matches("[^a-zA-Z0-9]", text)){
+//			return true;
+//		}
+//		return false;
+//	}
+
+	public static String returnSimpleTreeObjectNameFunction(TreeObject treeObject) {
+//		if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
+//			return "getText() == '" + treeObject.getName().replaceAll("[^\\w\\s]","");
+//		} else {
+			return "getText() == '" + treeObject.getName();
+//		}
+	}
+
+	public static String addFinalCommentsIfNeeded(TreeObject treeObject) {
+//		if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
+//			return " // " + treeObject.getName();
+//		} else {
+			return "";
+//		}
 	}
 }

@@ -146,8 +146,8 @@ public class DroolsParser {
 									+ leftVariable.getReference().getUniqueNameReadable()
 									+ " : Submitted"
 									+ className
-									+ "( getText() == '"
-									+ leftVariable.getReference().getName()
+									+ "( "
+									+ RulesUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference())
 									+ "', isScoreSet('"
 									+ variableName
 									+ "'), getVariableValue('"
@@ -157,7 +157,8 @@ public class DroolsParser {
 									+ " )) from $"
 									+ leftReferenceParent.getUniqueNameReadable()
 									+ (leftVariable.getVariable().getScope().equals(CustomVariableScope.CATEGORY) ? ".getCategories()"
-											: ".get" + className + "s()") + "\n";
+											: ".get" + className + "s()")
+									+ RulesUtils.addFinalCommentsIfNeeded(leftVariable.getReference()) + "\n";
 							break;
 						}
 					} else if (leftExpressionValueTreeObject.getReference() instanceof Question) {
@@ -167,10 +168,11 @@ public class DroolsParser {
 						// Get the drools conditions for the parent
 						droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
 						Question leftQuestion = (Question) leftReference;
-						droolsConditions += "	$" + leftQuestion.getUniqueNameReadable()
-								+ " : SubmittedQuestion(getText() == '" + leftQuestion.getName() + "', getAnswer('"
+						droolsConditions += "	$" + leftQuestion.getUniqueNameReadable() + " : SubmittedQuestion("
+								+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "', getAnswer('"
 								+ getTreeObjectAnswerType(leftQuestion) + "') in( " + inValuesString + " )) from $"
-								+ leftReferenceParent.getUniqueNameReadable() + ".getQuestions()\n";
+								+ leftReferenceParent.getUniqueNameReadable() + ".getQuestions()"
+								+ RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
 
 					}
 				}
@@ -279,13 +281,17 @@ public class DroolsParser {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
 					parsedText += rule.getName();
+
 					parsedText += RulesUtils.getWhenRuleString();
-					if (rule instanceof DroolsRuleGroup) {
-						parsedText += ((DroolsRuleGroup) rule).getGroupCondition();
+					if (rule instanceof DroolsRuleGroupEndRule) {
+						parsedText += RulesUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule);
 					}
 					parsedText += parsedRule;
 					if (rule instanceof DroolsRuleGroup) {
-						parsedText += ((DroolsRuleGroup) rule).getGroupAction();
+						if (!(rule instanceof DroolsRuleGroupEndRule)) {
+							parsedText += RulesUtils.getThenRuleString();
+						}
+						parsedText += RulesUtils.getGroupRuleActions((DroolsRuleGroup) rule);
 					}
 					parsedText += RulesUtils.getEndRuleString();
 				}
@@ -325,8 +331,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-//		System.out.println("RULE ACTIONS: " + rule.getActions());
+		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
@@ -382,7 +388,9 @@ public class DroolsParser {
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
 		String result = "";
+
 		DroolsRuleGroupEndRule endRule = (DroolsRuleGroupEndRule) rule;
+
 		ITreeElement prattResult = endRule.getParserResult();
 		if ((prattResult != null) && (prattResult.getExpressionChain() != null)) {
 			// Tree visitor that creates the drools rule special and/or
@@ -460,12 +468,13 @@ public class DroolsParser {
 					case NUMBER:
 					case POSTAL_CODE:
 					case TEXT:
-						droolsConditions += "\t$" + question.getUniqueNameReadable()
-								+ " : SubmittedQuestion(getText()== '" + question.getName() + "', getAnswer('"
+						droolsConditions += "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+								+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
 								+ getTreeObjectAnswerType(question) + "') " + operator.getValue()
 								+ (question.getAnswerFormat().equals(AnswerFormat.NUMBER) ? " " : " '") + value
 								+ (question.getAnswerFormat().equals(AnswerFormat.NUMBER) ? " " : "' ") + ") from $"
-								+ question.getParent().getUniqueNameReadable() + ".getQuestions()\n";
+								+ question.getParent().getUniqueNameReadable() + ".getQuestions()"
+								+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case DATE:
 						if (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit() != null) {
@@ -503,11 +512,12 @@ public class DroolsParser {
 							case DATE:
 								if (value instanceof Timestamp) {
 									droolsConditions += "\t$" + question.getUniqueNameReadable()
-											+ " : SubmittedQuestion(getText()== '" + question.getName()
+											+ " : SubmittedQuestion("
+											+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
 											+ "', getAnswer('" + getTreeObjectAnswerType(question) + "') "
 											+ operator.getValue() + " (new Date(" + ((Timestamp) value).getTime()
 											+ ")) ) from $" + question.getParent().getUniqueNameReadable()
-											+ ".getQuestions()\n";
+											+ ".getQuestions()" + RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 								} else {
 									throw new DateComparisonNotPossibleException(
 											"The value to compare with the Date is not a Timestamp",
@@ -658,83 +668,42 @@ public class DroolsParser {
 				}
 
 			} else if (variables.size() > 1) {
+				ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
 				switch (function.getValue()) {
 				case MAX:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble maxValue = -1;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tif(maxValue < variable){ maxValue = variable; }\n";
-					ruleCore += "\t}\n";
-					ruleCore += "\tif(maxValue != -1){\n";
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+					// ruleCore +=
+					// "\tdouble value = RulesOperators.calculateMaxValueFunction(variablesList);\n";
+					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', maxValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", maxValue)\");\t}\n";
+							+ "', RulesOperators.calculateMaxValueFunction(variablesList));\n";
 					break;
 				case MIN:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble minValue = 1000000;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tif(minValue > variable){ minValue = variable; }\n";
-					ruleCore += "\t}\n";
-					ruleCore += "\tif(minValue != 1000000){\n";
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+					// Set the value calculated
+					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', minValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", minValue)\");\t}\n";
+							+ "', RulesOperators.calculateMinValueFunction(variablesList));\n";
 					break;
 				case AVG:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble avgValue = 0;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tavgValue += variable;\n";
-					ruleCore += "\t}\n";
-					ruleCore += "\tavgValue = avgValue/(double)variablesList.size();\n";
-
 					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', avgValue);\n";
-					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", avgValue)\");\n";
+							+ "', RulesOperators.calculateAvgValueFunction(variablesList));\n";
 					break;
 				case SUM:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tdouble sumValue = 0;\n";
-					ruleCore += "\tfor(double variable: variablesList){\n";
-					ruleCore += "\t\tsumValue += variable;\n";
-					ruleCore += "\t}\n";
-
 					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', sumValue);\n";
-					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", sumValue)\");\n";
+							+ "', RulesOperators.calculateSumValueFunction(variablesList));\n";
 					break;
 				case PMT:
-					ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-					ruleCore += "\tif(variablesList.size() == 3){\n";
-					ruleCore += "\t\tdouble rate = variablesList.get(0);\n";
-					ruleCore += "\t\tdouble term = variablesList.get(1);\n";
-					ruleCore += "\t\tdouble amount = variablesList.get(2);\n";
-
-					ruleCore += "\t\tdouble v = 1 + rate;\n";
-					ruleCore += "\t\tdouble t = -term;\n";
-					ruleCore += "\t\tdouble pmtValue = (amount*rate)/(1-Math.pow(v,t));\n";
-
-					ruleCore += "\t\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
+					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
 							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', pmtValue);\n";
-					ruleCore += "\t\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", pmtValue)\"); }\n";
+							+ "', RulesOperators.calculatePmtValueFunction(variablesList));\n";
 					break;
 				}
+				// Set the value calculated
+				ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+						+ leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
+						+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
+						+ leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
 			}
 		}
 
@@ -743,7 +712,7 @@ public class DroolsParser {
 
 	private static String checkValueAssignedInCustomVariableInDrools(List<Expression> variables) {
 		String ruleCore = "";
-		ruleCore += "\tList<Double> variablesList = new ArrayList<>();\n";
+		ruleCore += "\tList<Double> variablesList = new ArrayList<Double>();\n";
 		for (Expression variable : variables) {
 			if (variable instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
@@ -836,42 +805,6 @@ public class DroolsParser {
 		}
 		return "";
 	}
-
-	// private static String orOperator(List<Expression> expressions) throws
-	// ExpressionInvalidException,
-	// NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-	// TreeObjectParentNotValidException,
-	// NullCustomVariableException, NullExpressionValueException,
-	// BetweenFunctionInvalidException,
-	// DateComparisonNotPossibleException {
-	// // System.out.println("OR EXPRESSIONS: " + expressions);
-	//
-	// String result = "";
-	//
-	// ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
-	// ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
-	//
-	// String leftPart = processResultConditionsFromPrattParser(leftChain);
-	// String rigthPart = processResultConditionsFromPrattParser(rightChain);
-	//
-	// String leftPartLastLine = RulesUtils.getLastLine(leftPart);
-	// String rightPartLastLine = RulesUtils.getLastLine(rigthPart);
-	// String leftPartWithoutLastLine = RulesUtils.removeLastNLines(leftPart,
-	// 1);
-	// String rightPartWithoutLastLine = RulesUtils.removeLastNLines(rigthPart,
-	// 1);
-	//
-	// result += leftPartWithoutLastLine;
-	// result += rightPartWithoutLastLine;
-	// result += "\t(";
-	// result += leftPartLastLine;
-	// result += "\n\tor\n";
-	// result += rightPartLastLine;
-	// result += "\t)\n";
-	//
-	// // orOperatorUsed = true;
-	// return result;
-	// }
 
 	/**
 	 * Parses and expressionChain using the Pratt parser
@@ -1040,10 +973,11 @@ public class DroolsParser {
 		droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(questionParent);
 
 		putTreeObjectName(question, question.getUniqueNameReadable());
-		droolsConditions += "	$" + question.getUniqueNameReadable() + " : SubmittedQuestion(getText() == '"
-				+ question.getName() + "', getAnswer('" + getTreeObjectAnswerType(question) + "')"
-				+ availableOperator.getValue().toString() + "'" + answer.getName() + "') from $"
-				+ questionParent.getUniqueNameReadable() + ".getQuestions()\n";
+		droolsConditions += "	$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
+				+ getTreeObjectAnswerType(question) + "')" + availableOperator.getValue().toString() + "'"
+				+ answer.getName() + "') from $" + questionParent.getUniqueNameReadable() + ".getQuestions()"
+				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 		// return droolsConditions + ")\n";
 		return droolsConditions;
 	}
@@ -1224,8 +1158,8 @@ public class DroolsParser {
 										case TEXT:
 											droolsConditions += "	$"
 													+ leftQuestion.getUniqueNameReadable()
-													+ " : SubmittedQuestion(getText() == '"
-													+ leftQuestion.getName()
+													+ " : SubmittedQuestion("
+													+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion)
 													+ "', getAnswer('"
 													+ getTreeObjectAnswerType(leftQuestion)
 													+ "') >= "
@@ -1240,8 +1174,8 @@ public class DroolsParser {
 													+ value2
 													+ (leftQuestion.getAnswerFormat().equals(AnswerFormat.NUMBER) ? ""
 															: "'") + ") from $"
-													+ leftReferenceParent.getUniqueNameReadable()
-													+ ".getQuestions() \n";
+													+ leftReferenceParent.getUniqueNameReadable() + ".getQuestions() "
+													+ RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
 											break;
 										case DATE:
 											String betweenDate = "";
@@ -1333,8 +1267,8 @@ public class DroolsParser {
 								+ leftVariable.getReference().getUniqueNameReadable()
 								+ " : Submitted"
 								+ scopeName
-								+ "( getText() == '"
-								+ leftVariable.getReference().getName()
+								+ "("
+								+ RulesUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference())
 								+ "', isScoreSet('"
 								+ varName
 								+ "'), getVariableValue('"
@@ -1350,7 +1284,8 @@ public class DroolsParser {
 								+ " ) from $"
 								+ leftReferenceParent.getUniqueNameReadable()
 								+ (leftVariable.getVariable().getScope().equals(CustomVariableScope.CATEGORY) ? "getCategories()"
-										: ".get" + scopeName + "s()") + "\n";
+										: ".get" + scopeName + "s()")
+								+ RulesUtils.addFinalCommentsIfNeeded(leftVariable.getReference()) + "\n";
 						break;
 
 					}
@@ -1362,18 +1297,22 @@ public class DroolsParser {
 
 	private static String questionDateDaysOperatorValueNumber(TreeObject question, Double value,
 			AvailableOperator operator) {
-		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion(getText()== '" + question.getName()
+		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
 				+ "', DateUtils.returnDaysDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable() + ".getQuestions()\n";
+				+ question.getParent().getUniqueNameReadable() + ".getQuestions()"
+				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 	}
 
 	private static String questionDateMonthsOperatorValueNumber(TreeObject question, Double value,
 			AvailableOperator operator) {
-		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion(getText()== '" + question.getName()
+		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
 				+ "', DateUtils.returnMonthsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable() + ".getQuestions()\n";
+				+ question.getParent().getUniqueNameReadable() + ".getQuestions()"
+				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 	}
 
 	private static String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
@@ -1383,19 +1322,22 @@ public class DroolsParser {
 		// Check if the reference exists in the rule, if not, it creates
 		// a new reference
 		rule += checkVariableAssignation(leftQuestion);
-		rule += "\t$" + leftQuestion.getUniqueNameReadable() + " : SubmittedQuestion(getText() == '"
-				+ leftQuestion.getName() + "', DateUtils.returnYearsDistanceFromDate(getAnswer('"
-				+ getTreeObjectAnswerType(leftQuestion) + "')) " + operator.getValue() + droolsValue + ") from $"
-				+ leftReferenceParent.getUniqueNameReadable() + ".getQuestions()\n";
+		rule += "\t$" + leftQuestion.getUniqueNameReadable() + " : SubmittedQuestion("
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion)
+				+ "', DateUtils.returnYearsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(leftQuestion)
+				+ "')) " + operator.getValue() + droolsValue + ") from $" + leftReferenceParent.getUniqueNameReadable()
+				+ ".getQuestions()" + RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
 		return rule;
 	}
 
 	private static String questionDateYearsOperatorValueNumber(TreeObject question, Double value,
 			AvailableOperator operator) {
-		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion(getText()== '" + question.getName()
+		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
 				+ "', DateUtils.returnYearsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
 				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable() + ".getQuestions()\n";
+				+ question.getParent().getUniqueNameReadable() + ".getQuestions()"
+				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 	}
 
 	private static String questionGeGtLeLtAnswer(List<Expression> conditions, AvailableOperator operator)
@@ -1438,14 +1380,16 @@ public class DroolsParser {
 								case TEXT:
 								case POSTAL_CODE:
 									droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable()
-											+ " : SubmittedQuestion(getText()== '" + leftQuestion.getName()
+											+ " : SubmittedQuestion("
+											+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion)
 											+ "', getAnswer('" + getTreeObjectAnswerType(leftQuestion) + "') "
 											+ operator.getValue() + " "
 											+ (leftQuestion.getAnswerFormat().equals(AnswerFormat.NUMBER) ? "" : "'")
 											+ droolsValue
 											+ (leftQuestion.getAnswerFormat().equals(AnswerFormat.NUMBER) ? "" : "'")
 											+ ") from $" + leftTreeObjectParent.getUniqueNameReadable()
-											+ ".getQuestions()\n";
+											+ ".getQuestions()" + RulesUtils.addFinalCommentsIfNeeded(leftQuestion)
+											+ "\n";
 									break;
 								}
 							}
@@ -1472,15 +1416,19 @@ public class DroolsParser {
 
 							droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable()
 									+ " : SubmittedQuestion(getAnswer('" + getTreeObjectAnswerType(leftQuestion)
-									+ "') instanceof Date, getText() == '" + leftQuestion.getName() + "') from $"
-									+ leftQuestionParent.getUniqueNameReadable() + ".getQuestions() \n";
+									+ "') instanceof Date, "
+									+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "') from $"
+									+ leftQuestionParent.getUniqueNameReadable() + ".getQuestions() "
+									+ RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
 							droolsConditions += "\t$" + rightQuestion.getUniqueNameReadable()
 									+ " : SubmittedQuestion(getAnswer('" + getTreeObjectAnswerType(rightQuestion)
-									+ "') instanceof Date, getText() == '" + rightQuestion.getName() + "', getAnswer('"
+									+ "') instanceof Date, "
+									+ RulesUtils.returnSimpleTreeObjectNameFunction(rightQuestion) + "', getAnswer('"
 									+ getTreeObjectAnswerType(rightQuestion) + "') " + operator.getValue() + " $"
 									+ leftQuestion.getUniqueNameReadable() + ".getAnswer('"
 									+ getTreeObjectAnswerType(rightQuestion) + "')) from $"
-									+ rightQuestionParent.getUniqueNameReadable() + ".getQuestions() \n";
+									+ rightQuestionParent.getUniqueNameReadable() + ".getQuestions() "
+									+ RulesUtils.addFinalCommentsIfNeeded(rightQuestion) + "\n";
 						}
 					}
 				}
@@ -1494,10 +1442,10 @@ public class DroolsParser {
 
 					droolsConditions += "\t$" + leftTreeObject.getUniqueNameReadable()
 							+ " : SubmittedQuestion(getAnswer('" + getTreeObjectAnswerType(leftTreeObject)
-							+ "') instanceof Date, getText() == '" + leftTreeObject.getName() + "', getAnswer('"
-							+ getTreeObjectAnswerType(leftTreeObject) + "') " + operator.getValue()
+							+ "') instanceof Date, " + RulesUtils.returnSimpleTreeObjectNameFunction(leftTreeObject)
+							+ "', getAnswer('" + getTreeObjectAnswerType(leftTreeObject) + "') " + operator.getValue()
 							+ " DateUtils.returnCurrentDate()) from $" + leftQuestionParent.getUniqueNameReadable()
-							+ ".getQuestions() \n";
+							+ ".getQuestions() " + RulesUtils.addFinalCommentsIfNeeded(leftTreeObject) + "\n";
 				}
 			}
 		} else {
@@ -1549,10 +1497,12 @@ public class DroolsParser {
 					// Check conditions for the parent
 					SimpleConditionsGenerator.getTreeObjectConditions(parent);
 					ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : Submitted"
-							+ treeObjectClassName + "( getText() == '" + treeObjectCustomVariable.getName()
+							+ treeObjectClassName + "( "
+							+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable)
 							+ "', isScoreSet('" + varName + "'), getVariableValue('" + varName + "') "
 							+ expressionOperatorLogic.getValue().toString() + " '" + valueNumber.getValue()
-							+ "' ) from $" + parent.getUniqueNameReadable() + ".get" + treeObjectClassName + "s() \n";
+							+ "' ) from $" + parent.getUniqueNameReadable() + ".get" + treeObjectClassName + "s() "
+							+ RulesUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable) + "\n";
 				}
 				return ruleCore;
 			} else {
@@ -1616,8 +1566,8 @@ public class DroolsParser {
 								+ treeObjectCustomVariable.getUniqueNameReadable()
 								+ " : Submitted"
 								+ treeObjectClassName
-								+ "( getText() == '"
-								+ treeObjectCustomVariable.getName()
+								+ "( "
+								+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable)
 								+ "', isScoreSet('"
 								+ customVariable.getName()
 								+ "'), getVariableValue('"
@@ -1630,7 +1580,8 @@ public class DroolsParser {
 								+ ") from $"
 								+ parent.getUniqueNameReadable()
 								+ (treeObjectCustomVariable instanceof Category ? ".getCategories()" : ".get"
-										+ treeObjectClassName + "()") + " \n";
+										+ treeObjectClassName + "()") + " "
+								+ RulesUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable) + "\n";
 					}
 
 				} else {

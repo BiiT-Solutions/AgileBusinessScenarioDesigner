@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.components;
 
+import com.biit.abcd.configuration.AbcdConfigurationReader;
 import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -8,6 +9,7 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -38,10 +40,14 @@ public class StringInputWindow extends AcceptCancelWindow {
 	}
 
 	public String getValue() {
-		if (getFormat().equals(AnswerFormat.NUMBER) && expressionValue.getConvertedValue() != null) {
-			return expressionValue.getConvertedValue().toString();
+		if (expressionValue != null) {
+			expressionValue.validate();
+			if (getFormat().equals(AnswerFormat.NUMBER) && expressionValue.getConvertedValue() != null) {
+				return expressionValue.getConvertedValue().toString();
+			}
+			return expressionValue.getValue();
 		}
-		return expressionValue.getValue();
+		return null;
 	}
 
 	public AnswerFormat getFormat() {
@@ -72,9 +78,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				String prevValue = getValue();
 				createTextField();
-				setValue(prevValue);
 				setLocale();
 				setPromt();
 			}
@@ -131,16 +135,23 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private void setPromt() {
 		switch (getFormat()) {
 		case DATE:
-			expressionValue.setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_DATE));
+			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getDatePromt());
+//			expressionValue.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getDateMask(),
+//					ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case NUMBER:
-			expressionValue.setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_FLOAT));
+			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getNumberPromt());
+			// expressionValue.addValidator(new
+			// RegexpValidator(AbcdConfigurationReader.getInstance().getNumberMask(),
+			// ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case POSTAL_CODE:
-			expressionValue.setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_POSTAL_CODE));
+			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getPostalCodePromt());
+			expressionValue.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getPostalCodeMask(),
+					ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case TEXT:
-			expressionValue.setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_TEXT));
+			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getTextPromt());
 			break;
 		}
 	}
@@ -148,7 +159,6 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private void setLocale() {
 		switch (getFormat()) {
 		case DATE:
-			// expressionValue.setConverter(new UserLocaleStringToDateConverter());
 			expressionValue.setConverter(String.class);
 			break;
 		case NUMBER:

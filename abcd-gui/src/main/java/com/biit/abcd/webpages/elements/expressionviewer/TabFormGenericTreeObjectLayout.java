@@ -47,10 +47,12 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 				ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_BUTTON_ADD_GENERIC_ELEMENT));
 		addTreeObjectButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -4754466212065015629L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if (variableTable.getValue() != null) {
-					addExpression(new ExpressionValueGenericVariable((GenericTreeObjectType) variableTable.getValue()));
+					addExpression(new ExpressionValueGenericVariable((GenericTreeObjectType) variableTable.getValue(),
+							UserSessionHandler.getFormController().getForm()));
 				}
 			}
 		});
@@ -70,7 +72,8 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 			public void buttonClick(ClickEvent event) {
 				if ((variableSelection.getValue() != null) && (variableTable.getValue() != null)) {
 					addExpression(new ExpressionValueGenericCustomVariable((GenericTreeObjectType) variableTable
-							.getValue(), (CustomVariable) variableSelection.getValue()));
+							.getValue(), (CustomVariable) variableSelection.getValue(), UserSessionHandler
+							.getFormController().getForm()));
 				}
 			}
 		});
@@ -110,6 +113,7 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 
 		variableTable.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 6333216923592191221L;
+
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				setFormVariableSelectionValues();
@@ -127,9 +131,7 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 			variableSelection.setValue(null);
 			variableSelection.removeAllItems();
 			if (variableTable.getValue() != null) {
-				List<CustomVariable> customVariables = UserSessionHandler
-						.getFormController()
-						.getForm()
+				List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
 						.getCustomVariables(((GenericTreeObjectType) variableTable.getValue()).getScope());
 				for (CustomVariable customvariable : customVariables) {
 					variableSelection.addItem(customvariable);

@@ -35,13 +35,14 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 	@Override
 	public void setElementForProperties(Category element) {
 		instance = element;
+
 		categoryLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		categoryLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
 		categoryLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
 		categoryLabel.addValidator(new ValidatorTreeObjectNameLength());
-		categoryLabel.setValue(instance.getName());
 		categoryLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
 				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
+		categoryLabel.setValue(instance.getName());
 
 		FormLayout categoryFormLayout = new FormLayout();
 		categoryFormLayout.setWidth(null);
@@ -49,54 +50,55 @@ public class CategoryProperties extends SecuredFormElementProperties<Category> {
 
 		addTab(categoryFormLayout,
 				ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CATEGORY_FORM_CAPTION), true, 0);
-
-		// TODO finish functionality to allow test individual categories
-		// addTab(createLaunchCategoryTestButton(), "TEST", true);
 	}
 
 	@Override
 	protected void updateConcreteFormElement() {
 		if (categoryLabel.isValid()) {
 			String instanceName = instance.getName();
-			try {
-				instance.setName(categoryLabel.getValue());
-				AbcdLogger.info(this.getClass().getName(),
-						"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Category '"
-								+ instanceName + "' property 'Name' to '" + instance.getName() + "'.");
-			} catch (FieldTooLongException e) {
-				MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-						LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+			// To avoid setting repeated values
+			if (!categoryLabel.getValue().equals(instanceName)) {
 				try {
+					instance.setName(categoryLabel.getValue());
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Category '"
+							+ instanceName + "' property 'Name' to '" + instance.getName() + "'.");
+				} catch (FieldTooLongException e) {
+					MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+							LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 					try {
-						instance.setName(categoryLabel.getValue().substring(0, 185));
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Category '"
-								+ instanceName + "' property 'Name' to '" + instance.getName() + "' (Name too long).");
-					} catch (CharacterNotAllowedException e1) {
-						MessageManager.showWarning(ServerTranslate
-								.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate.translate(
-								LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
-								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
 						try {
-							instance.setName(instance.getSimpleAsciiName());
-						} catch (CharacterNotAllowedException e2) {
-							// Impossible.
+							instance.setName(categoryLabel.getValue().substring(0, 185));
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Category '"
+									+ instanceName + "' property 'Name' to '" + instance.getName()
+									+ "' (Name too long).");
+						} catch (CharacterNotAllowedException e1) {
+							MessageManager.showWarning(ServerTranslate
+									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
+									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
+											instance.getName(), instance.getSimpleAsciiName() }));
+							try {
+								instance.setName(instance.getSimpleAsciiName());
+							} catch (CharacterNotAllowedException e2) {
+								// Impossible.
+							}
 						}
+					} catch (FieldTooLongException e1) {
+						// Impossible.
 					}
-				} catch (FieldTooLongException e1) {
-					// Impossible.
-				}
-			} catch (CharacterNotAllowedException e) {
-				MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS),
-						ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION,
-								new Object[] { instance.getName(), instance.getSimpleAsciiName() }));
-				try {
-					instance.setName(instance.getSimpleAsciiName());
-				} catch (FieldTooLongException | CharacterNotAllowedException e1) {
-					// Impossible.
+				} catch (CharacterNotAllowedException e) {
+					MessageManager.showWarning(
+							ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
+									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
+											instance.getName(), instance.getSimpleAsciiName() }));
+					try {
+						instance.setName(instance.getSimpleAsciiName());
+					} catch (FieldTooLongException | CharacterNotAllowedException e1) {
+						// Impossible.
+					}
 				}
 			}
-			// firePropertyUpdateListener(getTreeObjectInstance());
 		}
 	}
 

@@ -349,6 +349,7 @@
         updatedBy DOUBLE,
         sortSeq bigint not null,
         type varchar(255),
+        form bigint,
         variable_ID bigint,
         primary key (ID)
     );
@@ -362,6 +363,7 @@
         updatedBy DOUBLE,
         sortSeq bigint not null,
         type varchar(255),
+        form bigint,
         primary key (ID)
     );
 
@@ -1462,6 +1464,16 @@
         add constraint FK_4u49ngxh67i7rqxx3xb7379yi 
         foreign key (variable_ID) 
         references form_custom_variables (ID);
+
+    alter table expression_value_generic_custom_variable 
+        add constraint FK_l5sl3gomg9o31s00rl5s3ypx0 
+        foreign key (form) 
+        references tree_forms (ID);
+
+    alter table expression_value_generic_variable 
+        add constraint FK_bwikattrwwal7q7osrrvygh6 
+        foreign key (form) 
+        references tree_forms (ID);
 
     alter table expression_value_global_variable 
         add constraint FK_42woqe4atagm0r4oxgcnk6qwo 

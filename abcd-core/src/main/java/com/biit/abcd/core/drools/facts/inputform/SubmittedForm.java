@@ -47,7 +47,7 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 	public String getApplicationName() {
 		return this.applicationName;
 	}
-	
+
 	public List<ICategory> getCategories() {
 		return this.categories;
 	}
@@ -102,13 +102,15 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 	}
 
 	public void setVariableValue(Object submittedFormTreeObject, String varName, Object value) {
-		if (formVariables == null) {
-			formVariables = new HashMap<Object, HashMap<String, Object>>();
+		if (value != null) {
+			if (formVariables == null) {
+				formVariables = new HashMap<Object, HashMap<String, Object>>();
+			}
+			if (formVariables.get(submittedFormTreeObject) == null) {
+				formVariables.put(submittedFormTreeObject, new HashMap<String, Object>());
+			}
+			formVariables.get(submittedFormTreeObject).put(varName, value);
 		}
-		if (formVariables.get(submittedFormTreeObject) == null) {
-			formVariables.put(submittedFormTreeObject, new HashMap<String, Object>());
-		}
-		formVariables.get(submittedFormTreeObject).put(varName, value);
 	}
 
 	public void setVariableValue(String varName, Object value) {
@@ -167,8 +169,8 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 		xmlFile += "</" + getFormName() + ">";
 		return xmlFile;
 	}
-	
-	public String generateXML(){
+
+	public String generateXML() {
 		return generateXML("");
 	}
 }

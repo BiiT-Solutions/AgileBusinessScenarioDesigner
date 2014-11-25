@@ -8,7 +8,7 @@
 				<exclude name="rulesWithOrbeon" />
 				<include name="droolsPrattParser" />
 				<include name="gson" />
-				<include name="newVersion" />
+				<exclude name="newVersion" />
 				<include name="droolsEngineRules" />
 			</run>
 		</groups>
@@ -22,7 +22,7 @@
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.GenericsTest" />
 			<class name="com.biit.abcd.core.drools.test.NestedGroupsTest" />
-			<class name="com.biit.abcd.core.drools.test.ForkOthersTest" />
+			<class name="com.biit.abcd.core.drools.test.ForksTest" />
 			<class name="com.biit.abcd.core.drools.test.OperatorsTest" />
 			<class name="com.biit.abcd.core.drools.test.DroolsEngineRulesTest" />
 		</classes>

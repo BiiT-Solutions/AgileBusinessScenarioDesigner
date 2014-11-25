@@ -22,6 +22,7 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AccordionMultiple;
 import com.biit.abcd.webpages.components.StringInputWindow;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -61,7 +62,8 @@ public class TabOperatorLayout extends TabLayout {
 		// GridLayout controlsLayout = new GridLayout(GRID_COLUMNS, 4);
 		// controlsLayout.setWidth("100%");
 		// createControlOperators(controlsLayout);
-		// accordion.addTab(controlsLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS),
+		// accordion.addTab(controlsLayout,
+		// ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS),
 		// true);
 
 		addComponent(accordion);
@@ -425,52 +427,56 @@ public class TabOperatorLayout extends TabLayout {
 						stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								String value = ((StringInputWindow) window).getValue();
-								if ((value == null) || value.isEmpty()) {
-									MessageManager.showError(ServerTranslate
-											.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
-								} else {
-									// It is a number.
-									try {
-										switch (((StringInputWindow) window).getFormat()) {
-										case NUMBER:
-											try {
-												Double valueAsDouble = Double.parseDouble(value);
-												ExpressionValueNumber exprValueNumber = new ExpressionValueNumber(
-														valueAsDouble);
-												addExpression(exprValueNumber);
+								try {
+									String value = ((StringInputWindow) window).getValue();
+									if ((value == null) || value.isEmpty()) {
+										MessageManager.showError(ServerTranslate
+												.translate(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE));
+									} else {
+										// It is a number.
+										try {
+											switch (((StringInputWindow) window).getFormat()) {
+											case NUMBER:
+												try {
+													Double valueAsDouble = Double.parseDouble(value);
+													ExpressionValueNumber exprValueNumber = new ExpressionValueNumber(
+															valueAsDouble);
+													addExpression(exprValueNumber);
+													window.close();
+												} catch (NumberFormatException nfe) {
+													throw new NotValidExpressionValue("Value '" + value
+															+ "' is not a number!");
+												}
+												break;
+											case DATE:
+												try {
+													ExpressionValueTimestamp exprValueDate;
+													exprValueDate = new ExpressionValueTimestamp(value);
+													addExpression(exprValueDate);
+													window.close();
+												} catch (ParseException e) {
+													throw new NotValidExpressionValue("Value '" + value
+															+ "' is not a valid date!");
+												}
+												break;
+											case POSTAL_CODE:
+												ExpressionValuePostalCode exprValuePostCode = new ExpressionValuePostalCode(
+														value);
+												addExpression(exprValuePostCode);
 												window.close();
-											} catch (NumberFormatException nfe) {
-												throw new NotValidExpressionValue("Value '" + value
-														+ "' is not a number!");
-											}
-											break;
-										case DATE:
-											try {
-												ExpressionValueTimestamp exprValueDate;
-												exprValueDate = new ExpressionValueTimestamp(value);
-												addExpression(exprValueDate);
+												break;
+											case TEXT:
+												ExpressionValueString exprValueString = new ExpressionValueString(value);
+												addExpression(exprValueString);
 												window.close();
-											} catch (ParseException e) {
-												throw new NotValidExpressionValue("Value '" + value
-														+ "' is not a number!");
+												break;
 											}
-											break;
-										case POSTAL_CODE:
-											ExpressionValuePostalCode exprValuePostCode = new ExpressionValuePostalCode(
-													value);
-											addExpression(exprValuePostCode);
-											window.close();
-											break;
-										case TEXT:
-											ExpressionValueString exprValueString = new ExpressionValueString(value);
-											addExpression(exprValueString);
-											window.close();
-											break;
+										} catch (NotValidExpressionValue e1) {
+											MessageManager.showError(LanguageCodes.ERROR_INVALID_VALUE);
 										}
-									} catch (NotValidExpressionValue e1) {
-										MessageManager.showError(LanguageCodes.ERROR_INVALID_VALUE);
 									}
+								} catch (InvalidValueException e) {
+									MessageManager.showWarning(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE);
 								}
 							}
 						});

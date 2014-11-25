@@ -6,7 +6,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<name>Agile Business sCenario Designer Tool</name>
 
 	<modules>
@@ -47,7 +47,8 @@
 		<liferay-authentication-client.version>0.5.4</liferay-authentication-client.version>
 		<jointjs-widget.version>0.1.2-WIDGET</jointjs-widget.version>
 		<jexeval.version>1.0.4</jexeval.version>
-		<drools.version>6.2.0.CR2</drools.version>
+		<!-- Version 6.2 of drools is not accepting special characters like 'ë', do not update -->
+		<drools.version>6.1.0.CR2</drools.version>
 		<biit-common-utils.version>0.1.0</biit-common-utils.version>
 		<form-structure.version>0.1.9</form-structure.version>
 		<orbeon-form-reader.version>0.3.1</orbeon-form-reader.version>

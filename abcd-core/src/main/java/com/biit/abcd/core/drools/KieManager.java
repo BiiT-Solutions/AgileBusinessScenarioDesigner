@@ -50,7 +50,7 @@ public class KieManager {
 	}
 
 	public void execute() {
-		startKie(this.globalVariables, this.facts);
+		this.startKie(this.globalVariables, this.facts);
 	}
 
 	/**
@@ -63,11 +63,9 @@ public class KieManager {
 	public void startKie(List<DroolsGlobalVariable> globalVars, List<ISubmittedForm> facts) {
 		KieRepository kr = ks.getRepository();
 		KieContainer kContainer = ks.newKieContainer(kr.getDefaultReleaseId());
-//		StatelessKieSession kSession = kContainer.newStatelessKieSession();
 		KieSession kSession = kContainer.newKieSession();
-		setGlobalVariables(kSession, globalVars);
-//		executeFacts(kSession, facts);
-		insertFacts(kSession, facts);
+		this.setGlobalVariables(kSession, globalVars);
+		this.insertFacts(kSession, facts);
 		kSession.fireAllRules();
 	}
 
@@ -99,9 +97,4 @@ public class KieManager {
 			kSession.insert(fact);
 		}
 	};
-	
-//	// Insert any number of facts in the drools session
-//	private void executeFacts(StatelessKieSession kSession, List<ISubmittedForm> facts) {
-//		kSession.execute(facts);
-//	};
 }

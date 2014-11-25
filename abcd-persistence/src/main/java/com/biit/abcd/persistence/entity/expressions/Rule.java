@@ -26,9 +26,11 @@ public class Rule extends StorableObject implements INameAttribute {
 	private String name;
 
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	//@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
+	// @Cache(region = "expressionChains", usage =
+	// CacheConcurrencyStrategy.READ_WRITE)
 	private ExpressionChain conditions;
-	//@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
+	// @Cache(region = "expressionChains", usage =
+	// CacheConcurrencyStrategy.READ_WRITE)
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	private ExpressionChain actions;
 
@@ -145,12 +147,16 @@ public class Rule extends StorableObject implements INameAttribute {
 			super.copyBasicInfo(object);
 			Rule rule = (Rule) object;
 			this.setName(rule.getName());
-			ExpressionChain condition = new ExpressionChain();
-			condition.copyData(rule.getConditions());
-			this.setConditions(condition);
-			ExpressionChain action = new ExpressionChain();
-			action.copyData(rule.getActions());
-			this.setActions(action);
+			if (rule.getConditions() != null) {
+				ExpressionChain condition = new ExpressionChain();
+				condition.copyData(rule.getConditions());
+				this.setConditions(condition);
+			}
+			if (rule.getActions() != null) {
+				ExpressionChain action = new ExpressionChain();
+				action.copyData(rule.getActions());
+				this.setActions(action);
+			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Rule.");
 		}

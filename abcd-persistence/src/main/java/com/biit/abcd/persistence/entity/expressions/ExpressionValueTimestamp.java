@@ -22,7 +22,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_value_timestamp")
 public class ExpressionValueTimestamp extends ExpressionValue {
 	private Timestamp value;
-	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("d/MM/yy");
+	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
 
 	protected ExpressionValueTimestamp() {
 		super();

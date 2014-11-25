@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -28,32 +29,34 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 		super();
 	}
 
-	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable) {
+	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable, Form form) {
 		super();
 		setType(type);
-		this.variable = variable;
+		setVariable(variable);
+		setForm(form);
 	}
 
-	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable, boolean editable) {
+	public ExpressionValueGenericCustomVariable(GenericTreeObjectType type, CustomVariable variable, boolean editable, Form form) {
 		super();
 		setType(type);
-		this.variable = variable;
+		setVariable(variable);
 		setEditable(editable);
+		setForm(form);
 	}
 
 	@Override
 	public void resetIds() {
 		super.resetIds();
-		if (variable != null) {
-			variable.resetIds();
+		if (getVariable() != null) {
+			getVariable().resetIds();
 		}
 	}
 
 	@Override
 	public String getRepresentation() {
 		String expressionString = new String();
-		if ((getType() != null) && (variable != null)) {
-			expressionString += getType().getExpressionName() + "." + variable.getName();
+		if ((getType() != null) && (getVariable() != null)) {
+			expressionString += getType().getExpressionName() + "." + getVariable().getName();
 		}
 		return expressionString;
 	}
@@ -69,8 +72,8 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 	@Override
 	protected String getExpression() {
 		String expressionString = new String();
-		if ((getType() != null) && (variable != null)) {
-			expressionString += getType().getExpressionName().replace(".", "_") + "_" + variable.getName();
+		if ((getType() != null) && (getVariable() != null)) {
+			expressionString += getType().getExpressionName().replace(".", "_") + "_" + getVariable().getName();
 		}
 		return expressionString;
 	}
@@ -78,9 +81,9 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		if (variable != null) {
-			innerStorableObjects.add(variable);
-			innerStorableObjects.addAll(variable.getAllInnerStorableObjects());
+		if (getVariable() != null) {
+			innerStorableObjects.add(getVariable());
+			innerStorableObjects.addAll(getVariable().getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
