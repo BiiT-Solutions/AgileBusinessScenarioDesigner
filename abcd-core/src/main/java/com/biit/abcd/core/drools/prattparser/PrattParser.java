@@ -72,7 +72,7 @@ public class PrattParser {
 			// To correctly parse the IF function we have to introduce a dummy
 			// variable that we will remove before returning the parsed
 			// expression
-			// This is because the if function don't need to be assigned to
+			// This is due to the if function don't need to be assigned to
 			// any variable
 			else if ((expression instanceof ExpressionFunction)
 					&& ((ExpressionFunction) expression).getValue().equals(AvailableFunction.IF)) {

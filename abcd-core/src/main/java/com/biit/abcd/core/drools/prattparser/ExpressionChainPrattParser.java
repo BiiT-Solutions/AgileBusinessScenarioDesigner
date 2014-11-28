@@ -45,9 +45,9 @@ public class ExpressionChainPrattParser extends PrattParser {
 		this.register(ExpressionTokenType.AVG, new CallParselet());
 		this.register(ExpressionTokenType.SUM, new CallParselet());
 		this.register(ExpressionTokenType.PMT, new CallParselet());
-//		// Although it uses the CallParselet, we defined some special conditions
-//		// for the IF
-//		this.register(ExpressionTokenType.IF, new CallParselet());
+		// Although it uses the CallParselet, we defined some special conditions
+		// for the IF
+		this.register(ExpressionTokenType.IF, new CallParselet());
 
 		// Register the simple operator parselets.
 //		this.prefix(ExpressionTokenType.PLUS, Precedence.PREFIX);

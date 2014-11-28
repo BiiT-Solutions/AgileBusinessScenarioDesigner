@@ -43,22 +43,17 @@ import com.biit.form.TreeObject;
  */
 public class RuleToDroolsRule {
 
-	private static List<DroolsRule> droolsRules;
 	private static DroolsHelper droolsHelper;
 
 	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper) throws RuleInvalidException,
 			RuleNotImplementedException, ExpressionInvalidException {
-
 		setDroolsHelper(droolsHelper);
-		if (droolsRule.getName().startsWith("rule \"")) {
-			droolsRule.setName(droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", ""));
-		}
-
 		return parse(droolsRule, null, droolsHelper);
 	}
 
 	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions, DroolsHelper droolsHelper)
 			throws RuleInvalidException, RuleNotImplementedException, ExpressionInvalidException {
+		
 		List<DroolsRule> conditionsRules = new ArrayList<>();
 		setDroolsHelper(droolsHelper);
 		if (rule != null) {
@@ -84,19 +79,17 @@ public class RuleToDroolsRule {
 				// Set the name for the rules
 				int ruleNumber = 0;
 				for (DroolsRule droolsRule : droolsRuleList) {
-					String ruleName = droolsRule.getName() + "_" + ruleNumber;
-					droolsRule.setName(RulesUtils.getRuleName(ruleName, extraConditions));
-
+					droolsRule.setName(RulesUtils.createRuleName(droolsRule, extraConditions, "_" + ruleNumber));
 					// Add identifiers to the drools rule end group
 					if (droolsRule instanceof DroolsRuleGroupEndRule) {
 						for (DroolsRule generatedDroolsRule : droolsRuleList) {
 							if ((generatedDroolsRule instanceof DroolsRuleGroup)
 									&& !(generatedDroolsRule instanceof DroolsRuleGroupEndRule)) {
-								((DroolsRuleGroupEndRule) droolsRule)
-										.putExpresionRuleIdentifiers(
-												((DroolsRuleGroup) generatedDroolsRule).getConditionExpressionChainId(),
-												generatedDroolsRule.getName().split(" ")[1].replace("\n", "").replace(
-														"\"", ""));
+
+								String droolsRuleName = RulesUtils.getCleanRuleName(generatedDroolsRule.getName());
+								((DroolsRuleGroupEndRule) droolsRule).putExpresionRuleIdentifiers(
+										((DroolsRuleGroup) generatedDroolsRule).getConditionExpressionChainId(),
+										droolsRuleName);
 							}
 						}
 					}
@@ -107,14 +100,14 @@ public class RuleToDroolsRule {
 				DroolsRule droolsRule = new DroolsRule(ruleCopy);
 				// TODO Uncomment when changed the validator to the parser
 				// RuleChecker.checkRuleValid(droolsRule);
-				droolsRule.setName(RulesUtils.getRuleName(droolsRule.getName(), extraConditions));
+				droolsRule.setName(RulesUtils.createRuleName(droolsRule, extraConditions));
 				conditionsRules = Arrays.asList(droolsRule);
 			}
 		}
 
-		droolsRules = new ArrayList<>();
+		List<DroolsRule> droolsRules = new ArrayList<>();
 		for (DroolsRule droolsRule : conditionsRules) {
-			List<DroolsRule> actionsRules = ExpressionToDroolsRule.parse(droolsRule);
+			List<DroolsRule> actionsRules = ExpressionToDroolsRule.parse(droolsRule, droolsHelper);
 			if (actionsRules != null && !actionsRules.isEmpty()) {
 				droolsRules.addAll(actionsRules);
 			}
@@ -122,7 +115,7 @@ public class RuleToDroolsRule {
 		return droolsRules;
 	}
 
-	private static boolean hasGenericVariables(ExpressionChain conditions) {
+	protected static boolean hasGenericVariables(ExpressionChain conditions) {
 		for (Expression expression : conditions.getExpressions()) {
 			if (expression instanceof ExpressionChain) {
 				hasGenericVariables((ExpressionChain) expression);
@@ -175,7 +168,7 @@ public class RuleToDroolsRule {
 
 		// Copy the name and the actions of the rule
 		for (DroolsRule droolsRule : unwrappedRules) {
-			droolsRule.setName(rule.getName());
+			droolsRule.setName(RulesUtils.createRuleName(rule));
 			droolsRule.setActions(rule.getActions());
 		}
 		return unwrappedRules;
@@ -274,7 +267,7 @@ public class RuleToDroolsRule {
 				if (!treeVisitor.getConditions().isEmpty()) {
 					for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
 						DroolsRuleGroup droolsRuleGroup = new DroolsRuleGroup();
-						droolsRuleGroup.setName(droolsRule.getName());
+						droolsRuleGroup.setName(RulesUtils.createRuleName(droolsRule));
 						droolsRuleGroup.setConditionExpressionChainId(visitorRules.getName());
 						droolsRuleGroup.setConditions(visitorRules);
 						newConditions.add(droolsRuleGroup);
@@ -295,7 +288,7 @@ public class RuleToDroolsRule {
 		try {
 			result.accept(treeVisitor);
 			droolsEngGroupRule = new DroolsRuleGroupEndRule();
-			droolsEngGroupRule.setName(droolsRule.getName());
+			droolsEngGroupRule.setName(RulesUtils.createRuleName(droolsRule));
 			droolsEngGroupRule.setConditions(treeVisitor.getCompleteExpression());
 			// Set the special conditions/actions for the group rules
 			droolsEngGroupRule.setParserResult(result);
@@ -307,72 +300,86 @@ public class RuleToDroolsRule {
 		return droolsEngGroupRule;
 	}
 
-	private static void parseAndOrNotConditions(Rule ruleCopy, ExpressionChain extraConditions) {
-		ITreeElement result = calculatePrattParserResult(ruleCopy.getConditions());
-		TreeElementGroupConditionFinderVisitor treeVisitor = new TreeElementGroupConditionFinderVisitor();
-		try {
-			result.accept(treeVisitor);
-			if (!treeVisitor.getConditions().isEmpty()) {
-				int ruleCounter = 1;
-				for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
-					DroolsRuleGroup droolsRule = new DroolsRuleGroup();
-					droolsRule.setConditionExpressionChainId(visitorRules.getName());
-					droolsRule.setConditions(visitorRules);
-					if (ruleCopy instanceof DroolsRule) {
-						String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_"
-								+ ruleCounter + "\"\n";
-						droolsRule.setName(ruleName);
-					} else {
-						String ruleName = ruleCopy.getName() + "_" + ruleCounter;
-						droolsRule.setName(RulesUtils.getRuleName(ruleName, extraConditions));
-					}
-					// Set the special actions for the group rules
-					String groupAction = "then\n";
-					groupAction += "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
-							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
-					groupAction += "\tinsert ( new FiredRule(\""
-							+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
-					droolsRule.setGroupAction(groupAction);
-					droolsRules.add(droolsRule);
-					ruleCounter++;
-				}
-				createEndCombinationRule(result, ruleCopy, ruleCounter);
-			}
-		} catch (NotCompatibleTypeException e) {
-			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
-		}
-	}
+	// private static void parseAndOrNotConditions(Rule ruleCopy,
+	// ExpressionChain extraConditions) {
+	// ITreeElement result =
+	// calculatePrattParserResult(ruleCopy.getConditions());
+	// TreeElementGroupConditionFinderVisitor treeVisitor = new
+	// TreeElementGroupConditionFinderVisitor();
+	// try {
+	// result.accept(treeVisitor);
+	// if (!treeVisitor.getConditions().isEmpty()) {
+	// int ruleCounter = 1;
+	// for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
+	// DroolsRuleGroup droolsRule = new DroolsRuleGroup();
+	// droolsRule.setConditionExpressionChainId(visitorRules.getName());
+	// droolsRule.setConditions(visitorRules);
+	// if (ruleCopy instanceof DroolsRule) {
+	// String ruleName = ruleCopy.getName().substring(0,
+	// ruleCopy.getName().length() - 2) + "_"
+	// + ruleCounter + "\"\n";
+	// droolsRule.setName(ruleName);
+	// } else {
+	// String ruleName = ruleCopy.getName() + "_" + ruleCounter;
+	// droolsRule.setName(RulesUtils.getRuleName(ruleName, extraConditions));
+	// }
+	// // Set the special actions for the group rules
+	// String groupAction = "then\n";
+	// groupAction += "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
+	// + droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
+	// + " fired\");\n";
+	// groupAction += "\tinsert ( new FiredRule(\""
+	// + droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
+	// + "\"));\n";
+	// droolsRule.setGroupAction(groupAction);
+	// droolsRules.add(droolsRule);
+	// ruleCounter++;
+	// }
+	// createEndCombinationRule(result, ruleCopy, ruleCounter);
+	// }
+	// } catch (NotCompatibleTypeException e) {
+	// AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
+	// }
+	// }
 
-	private static void createEndCombinationRule(ITreeElement result, Rule ruleCopy, int ruleCounter) {
-		TreeElementGroupEndConditionFinderVisitor treeVisitor = new TreeElementGroupEndConditionFinderVisitor();
-		try {
-			result.accept(treeVisitor);
-			DroolsRuleGroupEndRule droolsRule = new DroolsRuleGroupEndRule();
-			droolsRule.setConditions(treeVisitor.getCompleteExpression());
-			droolsRule.setActions(ruleCopy.getActions());
-			if (ruleCopy instanceof DroolsRule) {
-				String ruleName = ruleCopy.getName().substring(0, ruleCopy.getName().length() - 2) + "_" + ruleCounter
-						+ "\"\n";
-				droolsRule.setName(ruleName);
-			} else {
-				droolsRule.setName(RulesUtils.getRuleName(ruleCopy.getName() + "_" + ruleCounter, null));
-			}
-			// Set the special conditions/actions for the group rules
-			droolsRule.setGroupCondition("\tnot( FiredRule( getRuleName() == '"
-					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n");
-			droolsRule.setGroupAction("\tinsert ( new FiredRule(\""
-					+ droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n");
-			droolsRule.setParserResult(result);
-			for (DroolsRule generatedDroolsRule : droolsRules) {
-				droolsRule.putExpresionRuleIdentifiers(((DroolsRuleGroup) generatedDroolsRule)
-						.getConditionExpressionChainId(), generatedDroolsRule.getName().split(" ")[1].replace("\n", "")
-						.replace("\"", ""));
-			}
-			droolsRules.add(droolsRule);
-		} catch (NotCompatibleTypeException e) {
-			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
-		}
-	}
+	// private static void createEndCombinationRule(ITreeElement result, Rule
+	// ruleCopy, int ruleCounter) {
+	// TreeElementGroupEndConditionFinderVisitor treeVisitor = new
+	// TreeElementGroupEndConditionFinderVisitor();
+	// try {
+	// result.accept(treeVisitor);
+	// DroolsRuleGroupEndRule droolsRule = new DroolsRuleGroupEndRule();
+	// droolsRule.setConditions(treeVisitor.getCompleteExpression());
+	// droolsRule.setActions(ruleCopy.getActions());
+	// if (ruleCopy instanceof DroolsRule) {
+	// String ruleName = ruleCopy.getName().substring(0,
+	// ruleCopy.getName().length() - 2) + "_" + ruleCounter
+	// + "\"\n";
+	// droolsRule.setName(ruleName);
+	// } else {
+	// droolsRule.setName(RulesUtils.getRuleName(ruleCopy.getName() + "_" +
+	// ruleCounter, null));
+	// }
+	// // Set the special conditions/actions for the group rules
+	// droolsRule.setGroupCondition("\tnot( FiredRule( getRuleName() == '"
+	// + droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
+	// + "') ) and\n");
+	// droolsRule.setGroupAction("\tinsert ( new FiredRule(\""
+	// + droolsRule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
+	// + "\"));\n");
+	// droolsRule.setParserResult(result);
+	// for (DroolsRule generatedDroolsRule : droolsRules) {
+	// droolsRule.putExpresionRuleIdentifiers(((DroolsRuleGroup)
+	// generatedDroolsRule)
+	// .getConditionExpressionChainId(),
+	// generatedDroolsRule.getName().split(" ")[1].replace("\n", "")
+	// .replace("\"", ""));
+	// }
+	// droolsRules.add(droolsRule);
+	// } catch (NotCompatibleTypeException e) {
+	// AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
+	// }
+	// }
 
 	private static ITreeElement calculatePrattParserResult(ExpressionChain expressionChain) {
 		PrattParser prattParser = new ExpressionChainPrattParser(expressionChain);

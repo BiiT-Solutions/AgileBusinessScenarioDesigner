@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
 
 public class RulesUtils {
@@ -39,16 +40,27 @@ public class RulesUtils {
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
 
-	public static String getGroupEndRuleExtraCondition(DroolsRuleGroupEndRule rule){
-		return 	"\tnot( FiredRule( getRuleName() == '"
-				+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n";
+	public static String getGroupEndRuleExtraCondition(DroolsRuleGroupEndRule rule) {
+		if (rule.getName().startsWith("rule \"")) {
+			return "\tnot( FiredRule( getRuleName() == '"
+					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n";
+		} else {
+			return "\tnot( FiredRule( getRuleName() == '" + rule.getName() + "') ) and\n";
+		}
 	}
 
 	public static String getGroupRuleActions(DroolsRuleGroup rule) {
-		String groupAction = "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
-				+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
-		groupAction += "\tinsert ( new FiredRule(\"" + rule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
-				+ "\"));\n";
+		String groupAction = "";
+		if (rule.getName().startsWith("rule \"")) {
+			groupAction = "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
+					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
+			groupAction += "\tinsert ( new FiredRule(\""
+					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
+		} else {
+			groupAction = "\tAbcdLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
+			groupAction += "\tinsert ( new FiredRule(\"" + rule.getName() + "\"));\n";
+		}
+
 		return groupAction;
 	}
 
@@ -295,27 +307,69 @@ public class RulesUtils {
 		}
 		return cleanedResults;
 	}
-	
-//	public static boolean hasSpecialCharacters(String text){
-//		if (Pattern.matches("[^a-zA-Z0-9]", text)){
-//			return true;
-//		}
-//		return false;
-//	}
+
+	// public static boolean hasSpecialCharacters(String text){
+	// if (Pattern.matches("[^a-zA-Z0-9]", text)){
+	// return true;
+	// }
+	// return false;
+	// }
 
 	public static String returnSimpleTreeObjectNameFunction(TreeObject treeObject) {
-//		if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
-//			return "getText() == '" + treeObject.getName().replaceAll("[^\\w\\s]","");
-//		} else {
-			return "getText() == '" + treeObject.getName();
-//		}
+		// if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
+		// return "getText() == '" +
+		// treeObject.getName().replaceAll("[^\\w\\s]","");
+		// } else {
+		return "getText() == '" + treeObject.getName();
+		// }
 	}
 
 	public static String addFinalCommentsIfNeeded(TreeObject treeObject) {
-//		if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
-//			return " // " + treeObject.getName();
-//		} else {
-			return "";
-//		}
+		// if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
+		// return " // " + treeObject.getName();
+		// } else {
+		return "";
+		// }
+	}
+
+	public static String createRuleName(String ruleName, ExpressionChain extraConditions, String valueToAppend) {
+		if (ruleName != null && ruleName.startsWith("rule \"")) {
+			if (valueToAppend != null) {
+				ruleName = "rule \"" + ruleName.split(" ")[1].replace("\n", "").replace("\"", "").concat(valueToAppend)
+						+ "\"\n";
+			}
+		} else {
+			ruleName = getRuleName(ruleName, extraConditions);
+		}
+		return ruleName;
+	}
+
+	public static String createRuleName(Rule rule, ExpressionChain extraConditions, String valueToAppend) {
+		return createRuleName(rule.getName(), extraConditions, valueToAppend);
+	}
+
+	public static String createRuleName(Rule rule, ExpressionChain extraConditions) {
+		return createRuleName(rule.getName(), extraConditions, null);
+	}
+
+	public static String createRuleName(Rule rule, String valueToAppend) {
+		return createRuleName(rule, null, valueToAppend);
+	}
+
+	public static String createRuleName(Rule rule) {
+		return createRuleName(rule.getName(), null, null);
+	}
+
+	/**
+	 * Return the rule name without the "rule " part
+	 * 
+	 * @param ruleName
+	 */
+	public static String getCleanRuleName(String ruleName) {
+		if (ruleName.startsWith("rule \"")) {
+			return ruleName.split(" ")[1].replace("\n", "").replace("\"", "");
+		} else {
+			return ruleName;
+		}
 	}
 }
