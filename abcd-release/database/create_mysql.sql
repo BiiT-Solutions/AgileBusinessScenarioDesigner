@@ -635,21 +635,6 @@
         primary key (ID)
     );
 
-    create table test_answer_list (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        primary key (ID)
-    );
-
-    create table test_answer_list_test_answer_basic (
-        test_answer_list_ID bigint not null,
-        testAnswerList_ID bigint not null
-    );
-
     create table test_answer_multi_checkbox (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -1134,15 +1119,6 @@
     alter table test_answer_input_text 
         add constraint UK_fm38doewevroqbh9w9yl6uy45  unique (comparationId);
 
-    alter table test_answer_list 
-        add constraint UK_4rh2n0h8kut89dnrp1p6yxqao  unique (ID);
-
-    alter table test_answer_list 
-        add constraint UK_1h1jnby3gascn5q6ahgkelilq  unique (comparationId);
-
-    alter table test_answer_list_test_answer_basic 
-        add constraint UK_70eapkpukk1o7veso7p8hhl0k  unique (testAnswerList_ID);
-
     alter table test_answer_multi_checkbox 
         add constraint UK_u2axqvpcnrfbj8tflcs5v8qu  unique (ID);
 
@@ -1512,11 +1488,6 @@
         add constraint FK_dk0yu4ajw581l5dpebmouwuce 
         foreign key (rule_decision_table_ID) 
         references rule_decision_table (ID);
-
-    alter table test_answer_list_test_answer_basic 
-        add constraint FK_13u55f485qtvswc62ojpdrr1n 
-        foreign key (test_answer_list_ID) 
-        references test_answer_list (ID);
 
     alter table test_scenario 
         add constraint FK_thnxvj85s3nk6u7k6f91dfbr6 

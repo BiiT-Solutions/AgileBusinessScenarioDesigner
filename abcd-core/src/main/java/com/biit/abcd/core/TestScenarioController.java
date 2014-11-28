@@ -1,6 +1,8 @@
 package com.biit.abcd.core;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.Form;
@@ -54,17 +56,25 @@ public class TestScenarioController {
 	 * 
 	 * @throws UnexpectedDatabaseException
 	 */
-	public void update(List<TestScenario> testScenarios, Form form) throws UnexpectedDatabaseException {
+	public void update(List<TestScenario> testScenariosFromTable, Form form) throws UnexpectedDatabaseException {
 		synchronized (TestScenarioController.class) {
 			// Remove unused variables.
-			if (this.testScenarios != null) {
-				for (TestScenario testScenario : this.testScenarios) {
-					if (!testScenarios.contains(testScenario)) {
-						testScenarioDao.makeTransient(testScenario);
+			if (testScenarios != null) {
+				Set<TestScenario> testScenariosToRemove = new HashSet<TestScenario>();
+				// Remove it from the database
+				for (TestScenario testScenarioFromMemory : testScenarios) {
+					if (!testScenariosFromTable.contains(testScenarioFromMemory)) {
+						testScenariosToRemove.add(testScenarioFromMemory);
+						testScenarioDao.makeTransient(testScenarioFromMemory);
 					}
 				}
+				// Remove it from memory
+				for(TestScenario testScenarioToRemove : testScenariosToRemove){
+					testScenarios.remove(testScenarioToRemove);
+				}
 			}
-			for (TestScenario testScenario : testScenarios) {
+			
+			for (TestScenario testScenario : testScenariosFromTable) {
 				testScenarioDao.makePersistent(testScenario);
 			}
 		}
