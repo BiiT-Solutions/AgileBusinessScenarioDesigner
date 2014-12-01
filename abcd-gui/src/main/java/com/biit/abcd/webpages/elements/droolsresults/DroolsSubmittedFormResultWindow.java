@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -12,7 +13,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.ISubmittedObject;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 
@@ -22,7 +23,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	private HashMap<CustomVariableScope, List<String>> customVariablesScopeMap;
 	private DroolsTreeObjectTable submittedFormTreeTable;
 
-	public DroolsSubmittedFormResultWindow(ISubmittedForm submittedForm, Form form)
+	public DroolsSubmittedFormResultWindow(SubmittedForm submittedForm, Form form)
 			throws CategoryDoesNotExistException, GroupDoesNotExistException {
 		super();
 		setCaption("Submitted form scores");
@@ -36,12 +37,12 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		submittedFormTreeTable.setSizeFull();
 		submittedFormTreeTable.setSelectable(true);
 		submittedFormTreeTable.setImmediate(true);
-		submittedFormTreeTable.setRootElement((ISubmittedFormElement) submittedForm);
-		generateContent((ISubmittedFormElement) submittedForm, form);
+		submittedFormTreeTable.setRootElement(submittedForm);
+		generateContent(submittedForm, form);
 		setContent(submittedFormTreeTable);
 	}
 
-	private void generateContent(ISubmittedFormElement submittedForm, Form form) {
+	private void generateContent(ISubmittedObject submittedForm, Form form) {
 		if ((form != null) && (submittedForm != null)) {
 			// Create the columns needed for the form variables
 			createVariableColumns(form);
@@ -76,21 +77,26 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setVariables(ISubmittedFormElement submittedFormElement) {
+	private void setVariables(ISubmittedObject submittedFormElement) {
 		if (customVariablesScopeMap != null) {
-			List<String> variables = customVariablesScopeMap.get(submittedFormElement.getVariableScope());
+			List<String> variables = customVariablesScopeMap.get(((ISubmittedFormElement) submittedFormElement)
+					.getVariableScope());
 			if (variables != null) {
 				for (String variable : variables) {
-					if (submittedFormElement.getVariableValue(variable) != null) {
-						submittedFormTreeTable.getItem(submittedFormElement).getItemProperty(variable)
-								.setValue(submittedFormElement.getVariableValue(variable).toString());
+					if (((ISubmittedFormElement) submittedFormElement).getVariableValue(variable) != null) {
+						submittedFormTreeTable
+								.getItem(submittedFormElement)
+								.getItemProperty(variable)
+								.setValue(
+										((ISubmittedFormElement) submittedFormElement).getVariableValue(variable)
+												.toString());
 					}
 				}
 			}
 		}
 		// Fill the children
 		if (submittedFormElement.getChildren() != null) {
-			for (ISubmittedFormElement child : submittedFormElement.getChildren()) {
+			for (ISubmittedObject child : submittedFormElement.getChildren()) {
 				setVariables(child);
 			}
 		}

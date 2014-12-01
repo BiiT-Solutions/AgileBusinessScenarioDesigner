@@ -1,77 +1,41 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.ISubmittedObject;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 /**
- * Basic implementation of an Orbeon Form that includes categories and
- * questions.
+ * Basic implementation of an Orbeon Form that includes categories and questions.
  * 
  */
-public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
-
-	private String applicationName;
-	private List<ICategory> categories;
-	private String formName;
-	// TreeObject -> VarName --> Value
+public class SubmittedForm extends com.biit.form.submitted.SubmittedForm implements ISubmittedFormElement {
+	// TreeObject -> VarName --> ValuegetVariableScope
 	private HashMap<Object, HashMap<String, Object>> formVariables;
 
 	public SubmittedForm(String applicationName, String formName) {
-		this.formName = formName;
-		this.applicationName = applicationName;
-		this.setCategories(new ArrayList<ICategory>());
+		super(applicationName, formName);
 	}
 
 	public SubmittedForm(String formName) {
-		this.formName = formName;
-		this.setCategories(new ArrayList<ICategory>());
+		super("", formName);
 	}
 
-	public void addCategory(ICategory category) {
-		if (this.categories == null) {
-			this.setCategories(new ArrayList<ICategory>());
-		}
-		((SubmittedCategory) category).setParent(this);
-		this.categories.add(category);
-	}
-
-	public String getApplicationName() {
-		return this.applicationName;
-	}
-
-	public List<ICategory> getCategories() {
-		return this.categories;
-	}
-
-	public ICategory getCategory(String categoryText) throws CategoryDoesNotExistException {
-		for (ICategory category : this.getCategories()) {
-			if (category.getText().equals(categoryText)) {
-				return category;
-			}
-		}
-		throw new CategoryDoesNotExistException("Category '" + categoryText + "' does not exists.");
-	}
-
-	public String getFormName() {
-		return this.formName;
-	}
-
+	@Override
 	public String getId() {
-		if ((this.getApplicationName() != null) && (this.getFormName() != null)) {
-			return this.getApplicationName() + "/" + this.getFormName();
+		if ((this.getApplicationName() != null) && (this.getName() != null)) {
+			return this.getApplicationName() + "/" + this.getName();
 		}
 		return null;
 	}
 
+	@Override
 	public Object getVariableValue(Object treeObject, String varName) {
 		if ((this.formVariables == null) || (this.formVariables.get(treeObject) == null)) {
 			return null;
@@ -79,15 +43,18 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 		return this.formVariables.get(treeObject).get(varName);
 	}
 
+	@Override
 	public Object getVariableValue(String varName) {
 		return getVariableValue(this, varName);
 	}
 
+	@Override
 	public boolean isScoreSet(String varName) {
 		// Retrieve the form which will have the variables
 		return isScoreSet(this, varName);
 	}
 
+	@Override
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		if ((formVariables == null) || (formVariables.get(submittedFormTreeObject) == null)
 				|| (formVariables.get(submittedFormTreeObject).get(varName) == null)) {
@@ -97,10 +64,7 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 		}
 	}
 
-	public void setCategories(List<ICategory> categories) {
-		this.categories = categories;
-	}
-
+	@Override
 	public void setVariableValue(Object submittedFormTreeObject, String varName, Object value) {
 		if (value != null) {
 			if (formVariables == null) {
@@ -113,12 +77,14 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 		}
 	}
 
+	@Override
 	public void setVariableValue(String varName, Object value) {
 		setVariableValue(this, varName, value);
 	}
 
+	@Override
 	public String toString() {
-		return getFormName();
+		return getName();
 	}
 
 	public HashMap<Object, HashMap<String, Object>> getFormVariables() {
@@ -131,26 +97,12 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 
 	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
 			CategoryDoesNotExistException {
-		return getCategory(categoryName).getQuestion(questionName);
-	}
-
-	@Override
-	public String getName() {
-		return formName;
+		return (IQuestion) getChild(ICategory.class, categoryName).getChild(IQuestion.class, questionName);
 	}
 
 	@Override
 	public String getOriginalValue() {
 		return "";
-	}
-
-	@Override
-	public List<ISubmittedFormElement> getChildren() {
-		List<ISubmittedFormElement> elements = new ArrayList<>();
-		for (ICategory child : getCategories()) {
-			elements.add((ISubmittedFormElement) child);
-		}
-		return elements;
 	}
 
 	@Override
@@ -160,13 +112,11 @@ public class SubmittedForm implements ISubmittedForm, ISubmittedFormElement {
 
 	@Override
 	public String generateXML(String tabs) {
-		String xmlFile = "<" + getFormName() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
-		if (getCategories() != null) {
-			for (ICategory iCategory : getCategories()) {
-				xmlFile += ((ISubmittedFormElement) iCategory).generateXML("\t");
-			}
+		String xmlFile = "<" + getName() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
+		for (ISubmittedObject child : getChildren()) {
+			xmlFile += ((ISubmittedFormElement) child).generateXML("\t");
 		}
-		xmlFile += "</" + getFormName() + ">";
+		xmlFile += "</" + getName() + ">";
 		return xmlFile;
 	}
 

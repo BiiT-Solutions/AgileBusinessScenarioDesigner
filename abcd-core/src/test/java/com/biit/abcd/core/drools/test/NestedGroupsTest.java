@@ -6,6 +6,7 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
@@ -43,6 +44,9 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.IGroup;
+import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
@@ -78,10 +82,12 @@ public class NestedGroupsTest extends KidsFormCreator {
 		// Create the table and form diagram
 		createKidsFormSimpleConditionsTable();
 		// Create the rules and launch the engine
-		ISubmittedForm droolsForm = createAndRunDroolsRules();
-
-		Assert.assertEquals(QUESTION_EQUALS_ANSWER, ((SubmittedQuestion) droolsForm.getCategory("Lifestyle").getGroup("voeding")
-				.getQuestion("breakfast")).getVariableValue("qVar"));
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		
+		Assert.assertEquals(QUESTION_EQUALS_ANSWER,
+				((SubmittedQuestion) droolsForm.getSubmittedForm().getChild(ICategory.class, "Lifestyle")
+						.getChild(IGroup.class, "voeding").getChild(IQuestion.class, "breakfast"))
+						.getVariableValue("qVar"));
 	}
 
 	private void createKidsFormSimpleConditionsTable() throws FieldTooLongException, NotValidChildException,

@@ -1,131 +1,14 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+import com.biit.orbeon.form.ISubmittedObject;
 
-public class SubmittedGroup extends SubmittedFormObject implements IGroup, ISubmittedFormElement {
-
-	private List<IQuestion> questions;
-	private List<IGroup> groups;
-	private IGroup parent;
+public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup implements ISubmittedFormElement {
 
 	public SubmittedGroup(String tag) {
-		setTag(tag);
-		setText(tag);
-		setGroups(new ArrayList<IGroup>());
-		setQuestions(new ArrayList<IQuestion>());
-	}
-
-	@Override
-	public List<IQuestion> getQuestions() {
-		return this.questions;
-	}
-
-	@Override
-	public IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException {
-		for (IQuestion question : this.getQuestions()) {
-			if (question.getTag().equals(questionTag)) {
-				return question;
-			}
-		}
-		// Check in inner groups.
-		if (groups != null) {
-			for (IGroup group : groups) {
-				try {
-					return group.getQuestion(questionTag);
-				} catch (QuestionDoesNotExistException qne) {
-					// Not found in group. Continue.
-				}
-			}
-		}
-		throw new QuestionDoesNotExistException("Question '" + questionTag + "' does not exists.");
-	}
-
-	public IGroup getGroup(String tag) throws GroupDoesNotExistException {
-		if (getGroups() != null) {
-			for (IGroup group : getGroups()) {
-				if (group.getTag().equals(tag)) {
-					return group;
-				}
-			}
-		}
-		throw new GroupDoesNotExistException("Group '" + tag + "' does not exists.");
-	}
-
-	public void setGroups(List<IGroup> groups) {
-		this.groups = groups;
-	}
-
-	public List<IGroup> getGroups() {
-		return this.groups;
-	}
-
-	/**
-	 * For retrieving all the repeatable groups corresponding the same name
-	 * 
-	 * @param tag
-	 * @return
-	 * @throws GroupDoesNotExistException
-	 */
-	@Override
-	public List<IGroup> getRepeatableGroups(String tag) {
-		List<IGroup> groups = new ArrayList<IGroup>();
-		for (IGroup group : getGroups()) {
-			if (group.getTag().equals(tag)) {
-				groups.add(group);
-			}
-		}
-		return groups;
-	}
-
-	public void setQuestions(List<IQuestion> questions) {
-		this.questions = questions;
-	}
-
-	@Override
-	public void addGroup(IGroup group) {
-		if (this.groups == null) {
-			this.setGroups(new ArrayList<IGroup>());
-		}
-		((SubmittedGroup) group).setParent(this);
-		this.groups.add(group);
-	}
-
-	@Override
-	public void addQuestions(List<IQuestion> questions) {
-		if (this.questions == null) {
-			this.setQuestions(new ArrayList<IQuestion>());
-		}
-		this.questions.addAll(questions);
-	}
-
-	@Override
-	public void addQuestion(IQuestion question) {
-		if (this.questions == null) {
-			this.setQuestions(new ArrayList<IQuestion>());
-		}
-		((SubmittedQuestion) question).setParent(this);
-		this.questions.add(question);
-	}
-
-	public IGroup getParent() {
-		return this.parent;
-	}
-
-	public void setParent(ICategory parent) {
-		this.parent = parent;
-	}
-
-	public void setParent(IGroup parent) {
-		this.parent = parent;
+		super(tag);
 	}
 
 	public boolean isScoreSet(String varName) {
@@ -171,15 +54,8 @@ public class SubmittedGroup extends SubmittedFormObject implements IGroup, ISubm
 	@Override
 	public String generateXML(String tabs) {
 		String xmlFile = tabs + "<" + getTag() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">\n";
-		if (getGroups() != null) {
-			for (IGroup iGroup : getGroups()) {
-				xmlFile += ((ISubmittedFormElement) iGroup).generateXML(tabs + "\t");
-			}
-		}
-		if (getQuestions() != null) {
-			for (IQuestion iQuestion : getQuestions()) {
-				xmlFile += ((ISubmittedFormElement) iQuestion).generateXML(tabs + "\t");
-			}
+		for (ISubmittedObject child : getChildren()) {
+			xmlFile += ((ISubmittedFormElement) child).generateXML(tabs + "\t");
 		}
 		xmlFile += tabs + "</" + getTag() + ">\n";
 		return xmlFile;
@@ -195,18 +71,6 @@ public class SubmittedGroup extends SubmittedFormObject implements IGroup, ISubm
 		return "";
 	}
 
-	@Override
-	public List<ISubmittedFormElement> getChildren() {
-		List<ISubmittedFormElement> elements = new ArrayList<>();
-		for (IGroup child : getGroups()) {
-			elements.add((ISubmittedFormElement) child);
-		}
-		for (IQuestion child : getQuestions()) {
-			elements.add((ISubmittedFormElement) child);
-		}
-		return elements;
-	}
-	
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.GROUP;

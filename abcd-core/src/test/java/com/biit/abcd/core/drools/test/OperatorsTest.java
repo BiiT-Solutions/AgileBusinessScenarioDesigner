@@ -47,6 +47,9 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.IGroup;
+import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
@@ -100,10 +103,10 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check bmi
-			Double height = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-					.getQuestion("height")).getAnswer());
-			Double weight = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-					.getQuestion("weight")).getAnswer());
+			Double height = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
+					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "height")).getAnswer());
+			Double weight = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
+					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "weight")).getAnswer());
 			Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
 			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
 		} catch (Exception e) {
@@ -132,8 +135,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-					.getQuestion("heightFather")).getAnswer());
+			Double secondVal = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
+					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "heightFather")).getAnswer());
 			Double thirdVal = 1000.0;
 			Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
 			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MIN), minVal);
@@ -163,8 +166,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-					.getQuestion("heightFather")).getAnswer());
+			Double secondVal = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
+					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "heightFather")).getAnswer());
 			Double thirdVal = 1000.0;
 			Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
 			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MAX), maxVal);
@@ -200,8 +203,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = ((Double) ((SubmittedQuestion) droolsForm.getSubmittedForm().getCategory("Algemeen")
-					.getQuestion("heightFather")).getAnswer());
+			Double secondVal = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
+					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "heightFather")).getAnswer());
 			Double thirdVal = 1000.0;
 			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(AVG),
 					(firstVal + secondVal + thirdVal) / 3.0);
@@ -392,7 +395,7 @@ public class OperatorsTest extends KidsFormCreator {
 		// Create the drools rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules();
 		// Check result
-		Assert.assertEquals(((SubmittedCategory) droolsForm.getCategory(getCategory().getName()))
+		Assert.assertEquals(((SubmittedCategory) droolsForm.getSubmittedForm().getChild(ICategory.class, getCategory().getName()))
 				.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
 				CUSTOM_VARIABLE_RESULT_VALUE);
@@ -418,8 +421,8 @@ public class OperatorsTest extends KidsFormCreator {
 		DroolsForm droolsForm = createAndRunDroolsRules();
 		// Check result
 		Assert.assertEquals(
-				((SubmittedGroup) droolsForm.getCategory(CATEGORY_LIFESTYLE).getGroup(getGroup().getName()))
-						.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
+				((SubmittedGroup) droolsForm.getSubmittedForm().getChild(ICategory.class, CATEGORY_LIFESTYLE).getChild(IGroup.class,
+						getGroup().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
 				CUSTOM_VARIABLE_RESULT_VALUE);
 	}
@@ -445,8 +448,10 @@ public class OperatorsTest extends KidsFormCreator {
 		DroolsForm droolsForm = createAndRunDroolsRules();
 		// Check result
 		Assert.assertEquals(
-				((SubmittedQuestion) droolsForm.getCategory(CATEGORY_LIFESTYLE).getGroup(getGroup().getName())
-						.getQuestion(getQuestion().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
+				((SubmittedQuestion) droolsForm.getSubmittedForm().getChild(ICategory.class, CATEGORY_LIFESTYLE)
+						.getChild(IGroup.class, getGroup().getName())
+						.getChild(IQuestion.class, getQuestion().getName()))
+						.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
 		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
 				CUSTOM_VARIABLE_RESULT_VALUE);
 	}

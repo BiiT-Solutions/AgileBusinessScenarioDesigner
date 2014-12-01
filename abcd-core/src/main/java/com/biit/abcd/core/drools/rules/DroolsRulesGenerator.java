@@ -94,6 +94,7 @@ public class DroolsRulesGenerator {
 		getRulesBuilder().append("import java.util.Date \n");
 		getRulesBuilder().append("import java.util.List \n");
 		getRulesBuilder().append("import java.util.ArrayList \n");
+		getRulesBuilder().append("import com.biit.orbeon.form.* \n");
 		getRulesBuilder().append("import com.biit.abcd.logger.AbcdLogger \n\n");
 	}
 

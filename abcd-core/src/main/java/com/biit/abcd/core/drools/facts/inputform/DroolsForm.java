@@ -5,6 +5,7 @@ import java.util.List;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.ISubmittedObject;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
@@ -21,30 +22,19 @@ public class DroolsForm implements ISubmittedForm {
 		this.submittedform = submittedForm;
 	}
 
-	public List<ICategory> getCategories() {
-		return submittedform.getCategories();
-	}
-
-	public void addCategory(ICategory category) {
-		submittedform.addCategory(category);
-
-	}
-
 	public SubmittedForm getSubmittedForm() {
 		return submittedform;
 	}
 
-	public ICategory getCategory(String categoryName) throws CategoryDoesNotExistException {
-		return submittedform.getCategory(categoryName);
-	}
-
 	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
 			CategoryDoesNotExistException {
-		return submittedform.getCategory(categoryName).getQuestion(questionName);
+		return (IQuestion) submittedform.getChild(ICategory.class, categoryName)
+				.getChild(IQuestion.class, questionName);
 	}
 
-	public String getFormName() {
-		return submittedform.getFormName();
+	@Override
+	public String getName() {
+		return submittedform.getName();
 	}
 
 	public String getApplicationName() {
@@ -59,4 +49,58 @@ public class DroolsForm implements ISubmittedForm {
 		this.submittedform = submittedForm;
 	}
 
+	@Override
+	public String getTag() {
+		return getSubmittedForm().getTag();
+	}
+
+	@Override
+	public void setTag(String tag) {
+		getSubmittedForm().setTag(tag);
+	}
+
+	@Override
+	public String getText() {
+		return getSubmittedForm().getText();
+	}
+
+	@Override
+	public void setText(String text) {
+		getSubmittedForm().setText(text);
+	}
+
+	@Override
+	public ISubmittedObject getParent() {
+		return getSubmittedForm().getParent();
+	}
+
+	@Override
+	public void setParent(ISubmittedObject parent) {
+		getSubmittedForm().setParent(parent);
+	}
+
+	@Override
+	public void addChild(ISubmittedObject child) {
+		getSubmittedForm().addChild(child);
+	}
+
+	@Override
+	public List<ISubmittedObject> getChildren() {
+		return getSubmittedForm().getChildren();
+	}
+
+	@Override
+	public void setChildren(List<ISubmittedObject> children) {
+		getSubmittedForm().setChildren(children);
+	}
+
+	@Override
+	public ISubmittedObject getChild(Class<?> type, String tag) {
+		return getSubmittedForm().getChild(type, tag);
+	}
+
+	@Override
+	public List<ISubmittedObject> getChildren(Class<?> type) {
+		return getSubmittedForm().getChildren(type);
+	}
 }

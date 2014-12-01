@@ -55,7 +55,6 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -64,7 +63,6 @@ public class KidsFormCreator {
 
 	private final static String APP = "Application1";
 	protected final static String CATEGORY_NAME = "Algemeen";
-	private static final String CUSTOM_VAR_NAME = "custom_var_name";
 	private final static String FORM = "Form1";
 
 	private CustomVariable formNumberCustomVariable = null;
@@ -624,7 +622,7 @@ public class KidsFormCreator {
 		String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
 		orbeonImporter.readXml(xmlFile, submittedForm);
 		Assert.assertNotNull(submittedForm);
-		Assert.assertFalse(submittedForm.getCategories().isEmpty());
+		Assert.assertFalse(submittedForm.getChildren().isEmpty());
 	}
 
 	public void setCategory(Category category) {
@@ -649,7 +647,7 @@ public class KidsFormCreator {
 
 	@Test(groups = { "orbeon" }, dependsOnMethods = { "readStaticSubmittedForm" })
 	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-		String xmlStructure = readFile("./src/test/resources/kidScreen.xhtml", StandardCharsets.UTF_8);
-		OrbeonCategoryTranslator.getInstance().readXml(submittedForm, xmlStructure);
+//		String xmlStructure = readFile("./src/test/resources/kidScreen.xhtml", StandardCharsets.UTF_8);
+//		OrbeonCategoryTranslator.getInstance().readXml(submittedForm, xmlStructure);
 	}
 }
