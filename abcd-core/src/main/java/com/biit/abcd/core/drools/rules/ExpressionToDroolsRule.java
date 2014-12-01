@@ -49,13 +49,13 @@ public class ExpressionToDroolsRule {
 			// generate the set of rules that represents the generic
 			if (droolsRule.getActions().getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				droolsRules = createExpressionDroolsRuleSet(droolsRule);
-				if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
-					List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
-					droolsRules.clear();
-					for (DroolsRule auxRule : auxDroolsRules) {
-						droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
-					}
-				}
+//				if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
+//					List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
+//					droolsRules.clear();
+//					for (DroolsRule auxRule : auxDroolsRules) {
+//						droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
+//					}
+//				}
 			} else if ((droolsRule.getActions().getExpressions().get(0) instanceof ExpressionFunction)
 					&& ((ExpressionFunction) droolsRule.getActions().getExpressions().get(0)).getValue().equals(
 							AvailableFunction.IF)) {
@@ -75,6 +75,19 @@ public class ExpressionToDroolsRule {
 		} else {
 			droolsRules = Arrays.asList(droolsRule);
 		}
+		
+		if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
+			List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
+			droolsRules = new ArrayList<DroolsRule>();
+			for (DroolsRule auxRule : auxDroolsRules) {
+				
+				System.out.println("EXPRESSION CONDITIONS: " + auxRule.getConditions());
+				System.out.println("EXPRESSION ACTIONS: " + auxRule.getActions());
+				
+				droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
+			}
+		}
+		
 		return droolsRules;
 	}
 
@@ -232,6 +245,7 @@ public class ExpressionToDroolsRule {
 	}
 
 	private static List<DroolsRule> parseIfRules(List<DroolsRule> droolsRules) {
+		System.out.println("ENTER IF");
 		List<DroolsRule> ifRules = new ArrayList<DroolsRule>();
 		for (DroolsRule auxRule : droolsRules) {
 			ifRules.addAll(parseIfRule(auxRule));
@@ -245,6 +259,9 @@ public class ExpressionToDroolsRule {
 		ExpressionChain ifActionThen = new ExpressionChain();
 		ExpressionChain ifActionElse = new ExpressionChain();
 
+		System.out.println("PARSING IF CONDITIONS: " + droolsRule.getConditions());
+		System.out.println("PARSING IF ACTIONS: " + droolsRule.getActions());
+		
 		ExpressionChain expressionCopy = (ExpressionChain) droolsRule.getActions().generateCopy();
 		// Set the first values of the if rules
 		ifCondition.addExpression(expressionCopy.getExpressions().get(0));

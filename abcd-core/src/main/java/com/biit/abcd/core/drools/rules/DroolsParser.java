@@ -330,8 +330,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		// System.out.println("RULE ACTIONS: " + rule.getActions());
+//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+//		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.

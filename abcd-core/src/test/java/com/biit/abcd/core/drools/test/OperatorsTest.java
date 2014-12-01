@@ -276,6 +276,56 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
+	public void ifOperatorWithoutGenericsTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// If expression
+			CustomVariable ifResultCustomVariable = new CustomVariable(getForm(), IF_RESULT, CustomVariableType.NUMBER,
+					CustomVariableScope.FORM);
+			ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueCustomVariable(
+					getForm(), ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionFunction(AvailableFunction.IF), new ExpressionOperatorLogic(
+							AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueNumber(7.1), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueNumber(1.7), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			getForm().getExpressionChains().add(expression);
+			getForm().addDiagram(createExpressionsDiagram());
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT), 1.7);
+		} catch (Exception e) {
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules" })
+	public void ifOperatorWithGenericsTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			CustomVariable categoryCustomVariable = new CustomVariable(getForm(), "catScore",
+					CustomVariableType.NUMBER, CustomVariableScope.QUESTION);
+			// If expression
+			ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueGenericCustomVariable(
+					GenericTreeObjectType.QUESTION_CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(
+					AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF),
+					new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.),
+					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(7.1), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueNumber(1.7), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			getForm().getExpressionChains().add(expression);
+			getForm().addDiagram(createExpressionsDiagram());
+			// Create the rules and launch the engine
+			createAndRunDroolsRules();
+		} catch (Exception e) {
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules" })
 	public void oldIfOperatorWithGenerics1Test() {
 		try {
 			// Restart the form to avoid test cross references
@@ -700,8 +750,8 @@ public class OperatorsTest extends KidsFormCreator {
 			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
 					CustomVariableType.STRING, CustomVariableScope.FORM);
 			ExpressionChain condition = new ExpressionChain("betweenDateExpression",
-					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionFunction(
-							AvailableFunction.BETWEEN), new ExpressionValueTreeObjectReference(
+					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS),
+					new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueTreeObjectReference(
 							getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionSymbol(
 							AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
 							getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionSymbol(
@@ -1003,9 +1053,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	// TODO fix behaviour (not working correctly generates more rules than
-	// expected)
-	@Test(groups = { "rules4" })
+	@Test(groups = { "rules" })
 	public void andOrBracketsCombinationTest() {
 		try {
 			// Restart the form to avoid test cross references
