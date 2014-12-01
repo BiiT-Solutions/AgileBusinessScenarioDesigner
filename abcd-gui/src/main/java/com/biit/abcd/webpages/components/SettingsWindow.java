@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
@@ -152,6 +153,7 @@ public class SettingsWindow extends PopupWindow {
 					public void buttonClick(ClickEvent event) {
 						try {
 							UserSessionHandler.getFormController().checkUnsavedChanges();
+							UiAccesser.releaseForm(UserSessionHandler.getUser());
 							ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
 							UserSessionHandler.logout();
 							close();
@@ -168,6 +170,7 @@ public class SettingsWindow extends PopupWindow {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {
 									ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+									UiAccesser.releaseForm(UserSessionHandler.getUser());
 									UserSessionHandler.logout();
 									windowAccept.close();
 								}
