@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -53,8 +54,6 @@ import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.TreeObject;
 
 public class DroolsParser {
-
-	// private static boolean orOperatorUsed = false;
 
 	private static String andOperator(List<Expression> expressions) throws ExpressionInvalidException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -331,8 +330,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		System.out.println("RULE ACTIONS: " + rule.getActions());
+		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
@@ -845,8 +844,6 @@ public class DroolsParser {
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
 
-		System.out.println("ACTION TO PARSE: " + expressionChain);
-
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 
@@ -896,8 +893,6 @@ public class DroolsParser {
 			throws ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException {
-
-		System.out.println("PRATT PARSED EXPRESSION: " + prattParserResultExpressionChain);
 
 		if ((prattParserResultExpressionChain != null) && (prattParserResultExpressionChain.getExpressions() != null)
 				&& (!prattParserResultExpressionChain.getExpressions().isEmpty())) {
@@ -1075,6 +1070,8 @@ public class DroolsParser {
 							case DATE:
 								return question.getAnswerFormat();
 							}
+						} else {
+							return question.getAnswerFormat();
 						}
 						break;
 					case NUMBER:
@@ -1207,6 +1204,10 @@ public class DroolsParser {
 													break;
 												}
 											} else {
+												betweenDate = "getAnswer('" + AnswerFormat.DATE.toString()
+														+ "') >= DateUtils.transformLongStringToDate('" + ((Date)value1).getTime()
+														+ "') && < DateUtils.transformLongStringToDate('" + ((Date)value2).getTime() + "')";
+
 												AbcdLogger.warning(DroolsParser.class.getName(),
 														"Question with format DATE don't have a selected unit");
 											}

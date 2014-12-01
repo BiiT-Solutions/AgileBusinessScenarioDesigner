@@ -1,6 +1,8 @@
 package com.biit.abcd.core.drools.test;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import org.dom4j.DocumentException;
 import org.testng.Assert;
@@ -41,6 +43,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstan
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
@@ -50,20 +53,21 @@ import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class OperatorsTest extends KidsFormCreator {
 	private static final String CUSTOM_VARIABLE_RESULT = "customVariableResult";
 	private static final String CUSTOM_VARIABLE_RESULT_VALUE = "ok";
+	private final static String NAME_QUESTION = "name";
 	private final static String BREAKFAST_QUESTION = "breakfast";
+	private final static String FRUIT_AMOUNT_QUESTION = "fruitAmount";
 	private final static String VEGETABLES_QUESTION = "vegetables";
 	private final static String VEGETABLES_AMOUNT_QUESTION = "vegetablesAmount";
 	private static final String CUSTOM_VARIABLE_TO_COMPARE = "customVariableToCompare";
 	private static final String CATEGORY_LIFESTYLE = "Lifestyle";
 	private static final String TEST_EXPRESSION_NAME = "testExpression";
-	private final static String BRITHDATE_QUESTION = "birthdate";
+	private final static String BIRTHDATE_QUESTION = "birthdate";
 	private final static String IF_RESULT = "ifResult";
 	private final static String BMI = "bmi";
 	private final static String MIN = "min";
@@ -244,7 +248,7 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testIfOperatorWithoutGenerics() {
+	public void oldIfOperatorWithoutGenericsTest() {
 		try {
 			// Restart the form to avoid test cross references
 			initForm();
@@ -272,7 +276,7 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testIfOperatorWithGenerics1() {
+	public void oldIfOperatorWithGenerics1Test() {
 		try {
 			// Restart the form to avoid test cross references
 			initForm();
@@ -294,17 +298,14 @@ public class OperatorsTest extends KidsFormCreator {
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
 			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
-
-			// Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT),
-			// 7.1);
+			createAndRunDroolsRules();
 		} catch (Exception e) {
 			Assert.fail();
 		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testIfOperatorWithGenerics2() {
+	public void oldIfOperatorWithGenerics2Test() {
 		try {
 			// Restart the form to avoid test cross references
 			initForm();
@@ -337,17 +338,14 @@ public class OperatorsTest extends KidsFormCreator {
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
 			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
-
-			// Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT),
-			// 7.1);
+			createAndRunDroolsRules();
 		} catch (Exception e) {
 			Assert.fail();
 		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testIfOperatorWithGenerics3() {
+	public void oldIfOperatorWithGenerics3Test() {
 		try {
 			// Restart the form to avoid test cross references
 			initForm();
@@ -379,193 +377,184 @@ public class OperatorsTest extends KidsFormCreator {
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
 			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
-
-			// Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT),
-			// 7.1);
+			createAndRunDroolsRules();
 		} catch (Exception e) {
 			Assert.fail();
 		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testInOperatorQuestionAnswer() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// IN rule
-		Rule rule = new Rule();
-		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
-				CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain condition = new ExpressionChain("inExpression", new ExpressionValueTreeObjectReference(
-				getTreeObject(BREAKFAST_QUESTION)), new ExpressionFunction(AvailableFunction.IN),
-				new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION, "a")), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION,
-						"b")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
-						getAnswer(BREAKFAST_QUESTION, "c")), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		rule.setConditions(condition);
-		ExpressionChain action = new ExpressionChain(
-				new ExpressionValueCustomVariable(getForm(), customVariableResult), new ExpressionOperatorMath(
-						AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
-		rule.setActions(action);
+	public void inOperatorQuestionAnswerTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// IN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("inExpression", new ExpressionValueTreeObjectReference(
+					getTreeObject(BREAKFAST_QUESTION)), new ExpressionFunction(AvailableFunction.IN),
+					new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION, "a")), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getAnswer(
+							BREAKFAST_QUESTION, "b")), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION, "c")), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
 
-		// Add the rule to the form
-		getForm().getRules().add(rule);
-		// Create the node rule
-		createRuleNode(rule);
-		// Create the diagram
-		createDiagram();
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-				CUSTOM_VARIABLE_RESULT_VALUE);
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testInOperatorQuestionInputNumber() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// IN rule
-		Rule rule = new Rule();
-		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
-				CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain condition = new ExpressionChain("inExpression", new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount")), new ExpressionFunction(AvailableFunction.IN),
-				new ExpressionValueNumber(3.0), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
-						4.0), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(5.0),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		rule.setConditions(condition);
-		ExpressionChain action = new ExpressionChain(
-				new ExpressionValueCustomVariable(getForm(), customVariableResult), new ExpressionOperatorMath(
-						AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
-		rule.setActions(action);
+	public void inOperatorQuestionInputNumberTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// IN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("inExpression", new ExpressionValueTreeObjectReference(
+					getTreeObject("vegetablesAmount")), new ExpressionFunction(AvailableFunction.IN),
+					new ExpressionValueNumber(3.0), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(4.0), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(5.0), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
 
-		// Add the rule to the form
-		getForm().getRules().add(rule);
-		// Create the node rule
-		createRuleNode(rule);
-		// Create the diagram
-		createDiagram();
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-				CUSTOM_VARIABLE_RESULT_VALUE);
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testInOperatorCustomVariableForm() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create a simple form custom variable
-		createFormNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
-		// IN rule
-		createInRule(getFormExpressionValueCustomVariable());
-		// Create the diagram
-		createDiagram();
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(
-				((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-				CUSTOM_VARIABLE_RESULT_VALUE);
+	public void inOperatorCustomVariableFormTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create a simple form custom variable
+			createFormNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
+			// IN rule
+			createInRule(getFormExpressionValueCustomVariable());
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(
+					((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testInOperatorCustomVariableCategory() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create a simple form custom variable
-		createCategoryNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
-		// IN rule
-		createInRule(getCategoryExpressionValueCustomVariable());
-		// Create the diagram
-		createDiagram();
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(((SubmittedCategory) droolsForm.getCategory(getCategory().getName()))
-				.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-				CUSTOM_VARIABLE_RESULT_VALUE);
+	public void inOperatorCustomVariableCategoryTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create a simple form custom variable
+			createCategoryNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
+			// IN rule
+			createInRule(getCategoryExpressionValueCustomVariable());
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(((SubmittedCategory) droolsForm.getCategory(getCategory().getName()))
+					.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testInOperatorCustomVariableGroup() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			CategoryDoesNotExistException, GroupDoesNotExistException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create a custom variable and the expression containing it
-		createGroupNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
-		// IN rule
-		createInRule(getGroupExpressionValueCustomVariable());
-		// Create the diagram
-		createDiagram();
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(
-				((SubmittedGroup) droolsForm.getCategory(CATEGORY_LIFESTYLE).getGroup(getGroup().getName()))
-						.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-				CUSTOM_VARIABLE_RESULT_VALUE);
+	public void inOperatorCustomVariableGroupTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create a custom variable and the expression containing it
+			createGroupNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
+			// IN rule
+			createInRule(getGroupExpressionValueCustomVariable());
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(
+					((SubmittedGroup) droolsForm.getCategory(CATEGORY_LIFESTYLE).getGroup(getGroup().getName()))
+							.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testInOperatorCustomVariableQuestion() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			CategoryDoesNotExistException, QuestionDoesNotExistException, GroupDoesNotExistException,
-			BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create a simple form custom variable
-		createQuestionNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
-		// IN rule
-		createInRule(getQuestionExpressionValueCustomVariable());
-		// Create the diagram
-		createDiagram();
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
-		// Check result
-		Assert.assertEquals(
-				((SubmittedQuestion) droolsForm.getCategory(CATEGORY_LIFESTYLE).getGroup(getGroup().getName())
-						.getQuestion(getQuestion().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-		Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-				CUSTOM_VARIABLE_RESULT_VALUE);
+	public void inOperatorCustomVariableQuestionTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create a simple form custom variable
+			createQuestionNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
+			// IN rule
+			createInRule(getQuestionExpressionValueCustomVariable());
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(
+					((SubmittedQuestion) droolsForm.getCategory(CATEGORY_LIFESTYLE).getGroup(getGroup().getName())
+							.getQuestion(getQuestion().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	public void createInRule(ExpressionValueCustomVariable expressionValueCustomVariable) {
@@ -589,8 +578,193 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testBetweenOperator() {
-		// TODO
+	public void betweenOperatorQuestionNumberValuesTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// BETWEEN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("betweenNumberExpression",
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(2.),
+					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(6.), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
+
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules" })
+	public void betweenOperatorQuestionStringValuesTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// BETWEEN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("betweenStringExpression",
+					new ExpressionValueTreeObjectReference(getTreeObject(NAME_QUESTION)), new ExpressionFunction(
+							AvailableFunction.BETWEEN), new ExpressionValueString("A"), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueString("z"), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
+
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules3" })
+	// TODO fix
+	public void betweenOperatorQuestionDateValuesTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// BETWEEN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("betweenDateExpression",
+					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION)), new ExpressionFunction(
+							AvailableFunction.BETWEEN), new ExpressionValueTimestamp(new Timestamp(0)),
+					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTimestamp(new Timestamp(
+							new Date().getTime())), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
+
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules3" })
+	// TODO fix
+	public void betweenOperatorQuestionDateYearsValuesTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// BETWEEN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("betweenDateExpression",
+					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionFunction(
+							AvailableFunction.BETWEEN), new ExpressionValueTreeObjectReference(
+							getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
+							getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
+
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules3" })
+	// TODO fix
+	public void betweenOperatorQuestionInputsTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// BETWEEN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("betweenExpression",
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueTreeObjectReference(
+							getTreeObject(FRUIT_AMOUNT_QUESTION)), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(6.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
+
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
@@ -1002,7 +1176,7 @@ public class OperatorsTest extends KidsFormCreator {
 		initForm();
 		// Create condition
 		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(BRITHDATE_QUESTION), QuestionDateUnit.DATE), new ExpressionOperatorLogic(
+				getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.DATE), new ExpressionOperatorLogic(
 				AvailableOperator.NOT_EQUALS), new ExpressionValueSystemDate());
 		runConditionInRuleAndTestResult(condition);
 	}
@@ -1019,7 +1193,7 @@ public class OperatorsTest extends KidsFormCreator {
 		initForm();
 		// Create condition
 		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(BRITHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionOperatorLogic(
+				getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionOperatorLogic(
 				AvailableOperator.NOT_EQUALS), new ExpressionValueNumber(2014.));
 		runConditionInRuleAndTestResult(condition);
 	}
