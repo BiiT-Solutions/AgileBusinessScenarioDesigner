@@ -112,17 +112,9 @@ public class DiagramParser {
 		case CALCULATION:
 			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getExpression() != null) {
-				// if (extraConditions != null) {
 				Rule rule = new Rule(expressionNode.getExpression().getName(), extraConditions,
 						expressionNode.getExpression());
 				newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
-				// } else {
-				// Rule rule = new
-				// Rule(expressionNode.getExpression().getName(), null,
-				// expressionNode.getExpression());
-				// newRules.addAll(RuleToDroolsRule.parse(rule, null,
-				// getDroolsHelper()));
-				// }
 			}
 			break;
 		case DIAGRAM_CHILD:

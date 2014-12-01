@@ -16,10 +16,12 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
@@ -49,7 +51,13 @@ public class ExpressionToDroolsRule {
 			// generate the set of rules that represents the generic
 			if (droolsRule.getActions().getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				droolsRules = createExpressionDroolsRuleSet(droolsRule);
-
+				if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
+					List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
+					droolsRules.clear();
+					for (DroolsRule auxRule : auxDroolsRules) {
+						droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
+					}
+				}
 			} else if ((droolsRule.getActions().getExpressions().get(0) instanceof ExpressionFunction)
 					&& ((ExpressionFunction) droolsRule.getActions().getExpressions().get(0)).getValue().equals(
 							AvailableFunction.IF)) {
@@ -179,6 +187,85 @@ public class ExpressionToDroolsRule {
 		// and the last parenthesis
 		expressionCopy.removeLastExpression();
 		int commaCounter = 0;
+		for (Expression expression : expressionCopy.getExpressions()) {
+			if ((expression instanceof ExpressionFunction)
+					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.IN) || ((ExpressionFunction) expression)
+							.getValue().equals(AvailableFunction.BETWEEN))) {
+				commaCounter++;
+			}
+			if ((expression instanceof ExpressionSymbol)
+					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.RIGHT_BRACKET)
+					&& commaCounter != 0) {
+				commaCounter = 0;
+			}
+			if ((expression instanceof ExpressionSymbol)
+					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.COMMA) && commaCounter == 0) {
+				ifIndex++;
+			} else {
+				if (ifIndex == 0) {
+					ifCondition.addExpression(expression);
+				} else if (ifIndex == 1) {
+					ifActionThen.addExpression(expression);
+				} else if (ifIndex == 2) {
+					ifActionElse.addExpression(expression);
+				}
+			}
+		}
+		// Creation of the rules that represent the if
+		DroolsRule ifThenRule = new DroolsRule();
+		ifThenRule.setName(RulesUtils.createRuleName(droolsRule, "_1stConditon"));
+		ifThenRule.setConditions(ifCondition);
+		ifThenRule.setActions(ifActionThen);
+		droolsRules.add(ifThenRule);
+
+		DroolsRule ifElseRule = new DroolsRule();
+		ifElseRule.setName(RulesUtils.createRuleName(droolsRule, "_2ndConditon"));
+		ExpressionChain negatedCondition = new ExpressionChain();
+		// For the ELSE part we negate the Condition part
+		negatedCondition.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		negatedCondition.addExpressions(ifCondition.getExpressions());
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		ifElseRule.setConditions(negatedCondition);
+		ifElseRule.setActions(ifActionElse);
+		droolsRules.add(ifElseRule);
+
+		return droolsRules;
+	}
+
+	private static List<DroolsRule> parseIfRules(List<DroolsRule> droolsRules) {
+		List<DroolsRule> ifRules = new ArrayList<DroolsRule>();
+		for (DroolsRule auxRule : droolsRules) {
+			ifRules.addAll(parseIfRule(auxRule));
+		}
+		return ifRules;
+	}
+
+	private static List<DroolsRule> parseIfRule(DroolsRule droolsRule) {
+		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
+		ExpressionChain ifCondition = new ExpressionChain();
+		ExpressionChain ifActionThen = new ExpressionChain();
+		ExpressionChain ifActionElse = new ExpressionChain();
+
+		ExpressionChain expressionCopy = (ExpressionChain) droolsRule.getActions().generateCopy();
+		// Set the first values of the if rules
+		ifCondition.addExpression(expressionCopy.getExpressions().get(0));
+		ifActionThen.addExpression(expressionCopy.getExpressions().get(0));
+		ifActionThen.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		ifActionElse.addExpression(expressionCopy.getExpressions().get(0));
+		ifActionElse.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		// Remove the left part of the expression
+		expressionCopy.removeFirstExpression();
+		// Remove the equals
+		expressionCopy.removeFirstExpression();
+		// Remove the if function
+		expressionCopy.removeFirstExpression();
+		// and the last parenthesis
+		expressionCopy.removeLastExpression();
+
+		int commaCounter = 0;
+		int ifIndex = 0;
+		System.out.println("EXPRESSION TO SEARCH: " + expressionCopy);
 		for (Expression expression : expressionCopy.getExpressions()) {
 			if ((expression instanceof ExpressionFunction)
 					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.IN) || ((ExpressionFunction) expression)
@@ -454,6 +541,15 @@ public class ExpressionToDroolsRule {
 								customVariableOfGeneric));
 						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 					}
+					// Remove the last comma
+					generatedExpressionChain.removeLastExpression();
+				} else {
+					// Remove the extra comma if there is no value
+					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
+							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
+									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
+						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
+					}
 				}
 			} else if (expression instanceof ExpressionValueGenericVariable) {
 				// Unwrap the generic variables being analyzed
@@ -467,13 +563,23 @@ public class ExpressionToDroolsRule {
 						generatedExpressionChain.addExpression(new ExpressionValueTreeObjectReference(treeObject));
 						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 					}
+					// Remove the last comma
+					generatedExpressionChain.removeLastExpression();
+				} else {
+					// Remove the extra comma if there is no value
+					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
+							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
+									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
+						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
+					}
 				}
 			} else {
 				// if it is not a generic variable, we copy the same value
-				if (!((expression instanceof ExpressionSymbol) && (((ExpressionSymbol) expression).getValue()
-						.equals(AvailableSymbol.COMMA)))) {
-					generatedExpressionChain.addExpression(expression);
-				}
+				// if (!((expression instanceof ExpressionSymbol) &&
+				// (((ExpressionSymbol) expression).getValue()
+				// .equals(AvailableSymbol.COMMA)))) {
+				generatedExpressionChain.addExpression(expression);
+				// }
 			}
 		}
 
@@ -564,11 +670,16 @@ public class ExpressionToDroolsRule {
 		return newDroolsRule;
 	}
 
-	public static DroolsHelper getDroolsHelper() {
+	private static boolean hasIfCondition(DroolsRule droolsRule) {
+		return RulesUtils.searchClassInExpressionChain(droolsRule.getActions(), ExpressionFunction.class,
+				AvailableFunction.IF);
+	}
+
+	private static DroolsHelper getDroolsHelper() {
 		return droolsHelper;
 	}
 
-	public static void setDroolsHelper(DroolsHelper droolsHelper) {
+	private static void setDroolsHelper(DroolsHelper droolsHelper) {
 		ExpressionToDroolsRule.droolsHelper = droolsHelper;
 	}
 }

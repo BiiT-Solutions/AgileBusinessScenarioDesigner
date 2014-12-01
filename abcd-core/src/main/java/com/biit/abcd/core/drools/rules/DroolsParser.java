@@ -844,6 +844,9 @@ public class DroolsParser {
 	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+
+		System.out.println("ACTION TO PARSE: " + expressionChain);
+
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 
@@ -893,6 +896,8 @@ public class DroolsParser {
 			throws ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException {
+
+		System.out.println("PRATT PARSED EXPRESSION: " + prattParserResultExpressionChain);
 
 		if ((prattParserResultExpressionChain != null) && (prattParserResultExpressionChain.getExpressions() != null)
 				&& (!prattParserResultExpressionChain.getExpressions().isEmpty())) {
@@ -1227,7 +1232,8 @@ public class DroolsParser {
 		return droolsConditions;
 	}
 
-	private static String customVariableBetweenValues(ExpressionChain conditions) {
+	private static String customVariableBetweenValues(ExpressionChain conditions) throws NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		String droolsConditions = "";
 		List<Expression> operatorLeft = ((ExpressionChain) conditions.getExpressions().get(0)).getExpressions();
 		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)) {
@@ -1237,14 +1243,12 @@ public class DroolsParser {
 
 				List<Expression> firstExpressionValue = ((ExpressionChain) conditions.getExpressions().get(2))
 						.getExpressions();
-				List<Expression> secondExpressionValue = ((ExpressionChain) conditions.getExpressions().get(3))
+				List<Expression> secondExpressionValue = ((ExpressionChain) conditions.getExpressions().get(4))
 						.getExpressions();
 				Object value1 = ((ExpressionValue) firstExpressionValue.get(0)).getValue();
 				Object value2 = ((ExpressionValue) secondExpressionValue.get(0)).getValue();
 
 				if ((value1 != null) && (value2 != null)) {
-
-					TreeObject leftReferenceParent = leftVariable.getReference().getParent();
 					String varName = leftVariable.getVariable().getName();
 					String adaptorValue = "";
 					if (getExpressionValueTreeObjectAnswerFormat(leftVariable).equals(AnswerFormat.TEXT)
@@ -1262,6 +1266,10 @@ public class DroolsParser {
 					case CATEGORY:
 					case GROUP:
 					case QUESTION:
+						// Create the conditions for parents
+						// hierarchy
+						TreeObject leftReferenceParent = leftVariable.getReference().getParent();
+						droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
 						String scopeName = leftVariable.getVariable().getScope().getName();
 						droolsConditions += "\t$"
 								+ leftVariable.getReference().getUniqueNameReadable()
@@ -1283,7 +1291,7 @@ public class DroolsParser {
 								+ adaptorValue
 								+ " ) from $"
 								+ leftReferenceParent.getUniqueNameReadable()
-								+ (leftVariable.getVariable().getScope().equals(CustomVariableScope.CATEGORY) ? "getCategories()"
+								+ (leftVariable.getVariable().getScope().equals(CustomVariableScope.CATEGORY) ? ".getCategories()"
 										: ".get" + scopeName + "s()")
 								+ RulesUtils.addFinalCommentsIfNeeded(leftVariable.getReference()) + "\n";
 						break;
