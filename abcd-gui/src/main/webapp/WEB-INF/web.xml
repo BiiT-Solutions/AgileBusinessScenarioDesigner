@@ -7,7 +7,8 @@
 	<context-param>
 		<description>Agile Business sCenario Designer Tool</description>
 		<param-name>heartbeatInterval</param-name>
-		<param-value>120</param-value>
+		<!-- 20 minutes that means full expiration time is 60 minutes -->
+		<param-value>1200</param-value>
 	</context-param>
 
 	<context-param>

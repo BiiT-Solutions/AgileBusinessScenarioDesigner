@@ -479,6 +479,11 @@ public class KidsFormCreator {
 		category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 
+		Question name = new Question("name");
+		name.setAnswerType(AnswerType.INPUT);
+		name.setAnswerFormat(AnswerFormat.TEXT);
+		category.addChild(name);
+		
 		Question birthdate = new Question("birthdate");
 		birthdate.setAnswerType(AnswerType.INPUT);
 		birthdate.setAnswerFormat(AnswerFormat.DATE);

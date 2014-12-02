@@ -31,112 +31,144 @@ public class GenericsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	private void genericCategoryQuestionsTest() {
-		// Generate the form
-		initFormAndVariables();
-		// Generic expression (Generic category = generic category questions)
-		ExpressionChain expression = new ExpressionChain("genericCategoryQuestions",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, getCategoryCustomVariable()),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_CATEGORY, getQuestionCustomVariable()), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
-		// Generate the drools rules
-		checkResults(expression);
+		try {
+			// Generate the form
+			initFormAndVariables();
+			// Generic expression (Generic category = generic category
+			// questions)
+			ExpressionChain expression = new ExpressionChain("genericCategoryQuestions",
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY,
+							getCategoryCustomVariable()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.QUESTION_CATEGORY, getQuestionCustomVariable()),
+					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			// Generate the drools rules
+			checkResults(expression);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
 	private void genericGroupQuestionsTest() {
-		// Generate the form
-		initFormAndVariables();
-		// Generic expression (Generic group = generic group questions)
-		ExpressionChain expression = new ExpressionChain("genericGroupQuestions",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
-		// Generate the drools rules
-		checkResults(expression);
+		try {
+			// Generate the form
+			initFormAndVariables();
+			// Generic expression (Generic group = generic group questions)
+			ExpressionChain expression = new ExpressionChain("genericGroupQuestions",
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
+					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+							AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			// Generate the drools rules
+			checkResults(expression);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
 	private void genericCategoryGroupsTest() {
-		// Generate the form
-		initFormAndVariables();
-		// Generic expression (Generic category = generic category groups)
-		ExpressionChain expression = new ExpressionChain("genericCategoryGroups",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
-		// Generate the drools rules
-		checkResults(expression);
+		try {
+			// Generate the form
+			initFormAndVariables();
+			// Generic expression (Generic category = generic category groups)
+			ExpressionChain expression = new ExpressionChain("genericCategoryGroups",
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+							AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			// Generate the drools rules
+			checkResults(expression);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
 	private void formGenericCategoriesTest() {
-		// Generate the form
-		initFormAndVariables();
-		// Generic expression (Form = generic categories)
-		ExpressionChain expression = new ExpressionChain("formGenericCategories", new ExpressionValueCustomVariable(
-				getForm(), formCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
-		// Generate the drools rules
-		checkResults(expression);
+		try {
+			// Generate the form
+			initFormAndVariables();
+			// Generic expression (Form = generic categories)
+			ExpressionChain expression = new ExpressionChain("formGenericCategories",
+					new ExpressionValueCustomVariable(getForm(), formCustomVariable), new ExpressionOperatorMath(
+							AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			// Generate the drools rules
+			checkResults(expression);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
 	private void genericCategoryGroupsQuestionsTest() {
-		// Generate the form
-		initFormAndVariables();
-		// Generic expression with several generics (Generic category =
-		// generic category groups, generic category questions)
-		ExpressionChain expression = new ExpressionChain("genericCategoryGroupsQuestions",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
-						questionCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		// Generate the drools rules
-		checkResults(expression);
+		try {
+			// Generate the form
+			initFormAndVariables();
+			// Generic expression with several generics (Generic category =
+			// generic category groups, generic category questions)
+			ExpressionChain expression = new ExpressionChain("genericCategoryGroupsQuestions",
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+							AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			// Generate the drools rules
+			checkResults(expression);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
 	private void genericCategoryQuestionsGroupsTest() {
-		// Generate the form
-		initFormAndVariables();
-		// Generic expression with several generics (Generic category =
-		// generic category questions, generic category groups)
-		ExpressionChain expression = new ExpressionChain("genericCategoryQuestionsGroups",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
-						groupCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		// Generate the drools rules
-		checkResults(expression);
+		try {
+			// Generate the form
+			initFormAndVariables();
+			// Generic expression with several generics (Generic category =
+			// generic category questions, generic category groups)
+			ExpressionChain expression = new ExpressionChain("genericCategoryQuestionsGroups",
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable),
+					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+							AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			// Generate the drools rules
+			checkResults(expression);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 	@Test(groups = { "rules" })
 	private void genericGroupQuestionsGroupsTest() {
-		// Generate the form
-		initFormAndVariables();
-		// Generic expression with several generics (Generic group = generic
-		// groups, generic group questions)
-		ExpressionChain expression = new ExpressionChain("genericGroupQuestionsGroups",
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, categoryCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
-						GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		// Generate the drools rules
-		checkResults(expression);
+		try {
+			// Generate the form
+			initFormAndVariables();
+			// Generic expression with several generics (Generic group = generic
+			// groups, generic group questions)
+			ExpressionChain expression = new ExpressionChain("genericGroupQuestionsGroups",
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, categoryCustomVariable),
+					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+							AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(
+							GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET));
+			// Generate the drools rules
+			checkResults(expression);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
 
 	private void initFormAndVariables() {

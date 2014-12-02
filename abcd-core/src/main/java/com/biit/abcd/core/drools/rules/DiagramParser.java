@@ -45,11 +45,11 @@ import com.biit.form.TreeObject;
 public class DiagramParser {
 
 	private DroolsHelper droolsHelper;
-	
-	public DiagramParser(DroolsHelper droolsHelper){
+
+	public DiagramParser(DroolsHelper droolsHelper) {
 		setDroolsHelper(droolsHelper);
 	}
-	
+
 	public String getDroolsRulesAsText(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
 			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -112,13 +112,9 @@ public class DiagramParser {
 		case CALCULATION:
 			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getExpression() != null) {
-				if (extraConditions != null) {
-					Rule rule = new Rule(expressionNode.getExpression().getName(), extraConditions, expressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
-				} else {
-					Rule rule = new Rule(expressionNode.getExpression().getName(), null, expressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
-				}
+				Rule rule = new Rule(expressionNode.getExpression().getName(), extraConditions,
+						expressionNode.getExpression());
+				newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
 			}
 			break;
 		case DIAGRAM_CHILD:
@@ -134,10 +130,12 @@ public class DiagramParser {
 			DiagramSink sinkExpressionNode = (DiagramSink) node;
 			if (sinkExpressionNode.getExpression() != null) {
 				if (extraConditions != null) {
-					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), extraConditions, sinkExpressionNode.getExpression());
+					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), extraConditions,
+							sinkExpressionNode.getExpression());
 					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
 				} else {
-					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), null, sinkExpressionNode.getExpression());
+					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), null,
+							sinkExpressionNode.getExpression());
 					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
 				}
 			}

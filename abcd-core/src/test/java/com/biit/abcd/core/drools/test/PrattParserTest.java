@@ -96,8 +96,7 @@ public class PrattParserTest {
 			setExpValFormScore(new ExpressionValueCustomVariable(form, fVar));
 			setExpValNumber(new ExpressionValueNumber(5.));
 			// Generics
-			setExpValGenericCatScore(new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY,
-					getcVar()));
+			setExpValGenericCatScore(new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, getcVar()));
 			setExpValGenericQuestScore(new ExpressionValueGenericCustomVariable(
 					GenericTreeObjectType.QUESTION_CATEGORY, qVar));
 
@@ -470,43 +469,65 @@ public class PrattParserTest {
 		Assert.assertEquals(actual, expectedResult.toString());
 	}
 
-	// @Test(groups = { "droolsPrattParser" })
-	// public void ifFunctionTest() {
-	// createSimpleForm();
-	// String actual = parseDrools(new ExpressionChain("ifExpression", new
-	// ExpressionFunction(AvailableFunction.IF),
-	// new ExpressionValueTreeObjectReference(getFather()), new
-	// ExpressionOperatorLogic(
-	// AvailableOperator.LESS_THAN), new ExpressionValueNumber(25.), new
-	// ExpressionSymbol(
-	// AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
-	// AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1), new
-	// ExpressionSymbol(
-	// AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
-	// AvailableOperator.ASSIGNATION), new ExpressionValueNumber(1.7), new
-	// ExpressionSymbol(
-	// AvailableSymbol.RIGHT_BRACKET)));
-	// // Check result
-	// ExpressionChain expectedResult = new ExpressionChain("ifExpression", new
-	// ExpressionFunction(
-	// AvailableFunction.IF), new ExpressionChain(new
-	// ExpressionValueTreeObjectReference(getFather())),
-	// new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new
-	// ExpressionChain(
-	// new ExpressionValueNumber(25.)), new
-	// ExpressionSymbol(AvailableSymbol.COMMA),
-	// new ExpressionChain(getExpValFormScore()), new
-	// ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-	// new ExpressionChain(new ExpressionValueNumber(7.1)), new
-	// ExpressionSymbol(AvailableSymbol.COMMA),
-	// new ExpressionChain(getExpValFormScore()), new
-	// ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-	// new ExpressionChain(new ExpressionValueNumber(1.7)),
-	// new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-	// System.out.println(actual);
-	// System.out.println(expectedResult.toString());
-	// Assert.assertEquals(actual, expectedResult.toString());
-	// }
+	@Test(groups = { "droolsPrattParser" })
+	public void ifFunctionTest() {
+		createSimpleForm();
+		String actual = parseDrools(new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
+				new ExpressionValueTreeObjectReference(getFather()), new ExpressionOperatorLogic(
+						AvailableOperator.LESS_THAN), new ExpressionValueNumber(25.), new ExpressionSymbol(
+						AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1), new ExpressionSymbol(
+						AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(1.7), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)));
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionFunction(AvailableFunction.IF),
+				new ExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(getFather())),
+						new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionChain(
+								new ExpressionValueNumber(25.))), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionChain(new ExpressionChain(getExpValFormScore()), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionChain(new ExpressionValueNumber(7.1))),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(new ExpressionChain(
+						getExpValFormScore()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+						new ExpressionChain(new ExpressionValueNumber(1.7))), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
+
+	@Test(groups = { "droolsPrattParser" })
+	public void ifFunctionTestWithFunctionsInConditions() {
+		createSimpleForm();
+		String actual = parseDrools(new ExpressionChain("ifExpression", new ExpressionFunction(AvailableFunction.IF),
+				getExpValGenericCatScore(), new ExpressionFunction(AvailableFunction.IN),
+				new ExpressionValueNumber(25.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+						29.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(65.),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+
+				new ExpressionSymbol(AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.1),
+
+				new ExpressionSymbol(AvailableSymbol.COMMA), getExpValFormScore(), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionValueNumber(1.7), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET)));
+
+		// Check result
+		ExpressionChain expectedResult = new ExpressionChain(new ExpressionFunction(AvailableFunction.IF),
+				new ExpressionChain(new ExpressionChain(getExpValGenericCatScore()), new ExpressionFunction(
+						AvailableFunction.IN), new ExpressionChain(new ExpressionValueNumber(25.)),
+						new ExpressionSymbol(AvailableSymbol.COMMA),
+						new ExpressionChain(new ExpressionValueNumber(29.)),
+						new ExpressionSymbol(AvailableSymbol.COMMA),
+						new ExpressionChain(new ExpressionValueNumber(65.)), new ExpressionSymbol(
+								AvailableSymbol.RIGHT_BRACKET)),
+
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionChain(new ExpressionChain(
+						getExpValFormScore()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+						new ExpressionChain(new ExpressionValueNumber(7.1))), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionChain(new ExpressionChain(getExpValFormScore()),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionChain(
+								new ExpressionValueNumber(1.7))), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		Assert.assertEquals(actual, expectedResult.toString());
+	}
 
 	/**
 	 * Parses the given chunk of code and returns pretty-printed result.

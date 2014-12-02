@@ -34,7 +34,7 @@ public class DroolsRulesGenerator {
 
 	// Provides some extra functionalities to the drools parser
 	private DroolsHelper droolsHelper;
-	
+
 	private Form form;
 	private StringBuilder builder;
 	private List<GlobalVariable> globalVariables;
@@ -120,8 +120,7 @@ public class DroolsRulesGenerator {
 
 	/**
 	 * Creates the global constants for the drools session.<br>
-	 * Stores in memory the values to be inserted before the facts and generates
-	 * the global variables export file
+	 * Stores in memory the values to be inserted before the facts and generates the global variables export file
 	 * 
 	 * 
 	 * @return The global constants in drools
@@ -160,8 +159,7 @@ public class DroolsRulesGenerator {
 	}
 
 	/**
-	 * Sets the global variable array that is going to be used in the drools
-	 * engine<br>
+	 * Sets the global variable array that is going to be used in the drools engine<br>
 	 * It does not create the drools rules
 	 * 
 	 * @param globalVariables

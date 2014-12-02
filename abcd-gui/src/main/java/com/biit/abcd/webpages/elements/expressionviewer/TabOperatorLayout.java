@@ -73,6 +73,15 @@ public class TabOperatorLayout extends TabLayout {
 	}
 
 	private void createMathOperators(GridLayout layout) {
+		assignButton = createButton("=", new ClickListener() {
+			private static final long serialVersionUID = -8611397253545833133L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addMathematicalExpression(AvailableOperator.ASSIGNATION);
+			}
+		});
+
 		Button carriageReturnButton = createButton("\u00B6", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
@@ -81,12 +90,13 @@ public class TabOperatorLayout extends TabLayout {
 				addSymbolExpression(AvailableSymbol.PILCROW);
 			}
 		});
-		assignButton = createButton("=", new ClickListener() {
+
+		Button commaButton = createButton(",", new ClickListener() {
 			private static final long serialVersionUID = -8611397253545833133L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				addMathematicalExpression(AvailableOperator.ASSIGNATION);
+				addSymbolExpression(AvailableSymbol.COMMA);
 			}
 		});
 
@@ -146,8 +156,10 @@ public class TabOperatorLayout extends TabLayout {
 
 		assignButton.setWidth("100%");
 		layout.addComponent(assignButton, 0, 0, GRID_COLUMNS - 1, 0);
+		commaButton.setWidth("100%");
 		carriageReturnButton.setWidth("100%");
-		layout.addComponent(carriageReturnButton, 0, 1, GRID_COLUMNS - 1, 1);
+		layout.addComponent(commaButton, 0, 1, (GRID_COLUMNS / 2) - 1, 1);
+		layout.addComponent(carriageReturnButton, GRID_COLUMNS / 2, 1, GRID_COLUMNS - 1, 1);
 		layout.addComponent(plusButton);
 		layout.addComponent(minusButton);
 		layout.addComponent(multButton);
@@ -220,6 +232,16 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
+		Button ifButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_IF),
+				new ClickListener() {
+					private static final long serialVersionUID = -1236836190814617814L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.IF);
+					}
+				});
+
 		Button pmtButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_PMT),
 				new ClickListener() {
 					private static final long serialVersionUID = 3549151891823532732L;
@@ -247,6 +269,7 @@ public class TabOperatorLayout extends TabLayout {
 		// layout.addComponent(roundButton);
 		layout.addComponent(averageButton);
 		layout.addComponent(sumButton);
+		layout.addComponent(ifButton);
 		layout.addComponent(pmtButton);
 	}
 
@@ -280,21 +303,9 @@ public class TabOperatorLayout extends TabLayout {
 					}
 				});
 
-		Button ifButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_IF),
-				new ClickListener() {
-					private static final long serialVersionUID = -1236836190814617814L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						addFunctionExpression(AvailableFunction.IF);
-					}
-				});
-
 		layout.addComponent(notButton);
 		layout.addComponent(inButton);
 		layout.addComponent(betweenButton);
-		ifButton.setEnabled(false);
-		layout.addComponent(ifButton);
 	}
 
 	private void createBaseTab(AbstractLayout layout) {
@@ -316,17 +327,8 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		Button commaButton = createButton(",", new ClickListener() {
-			private static final long serialVersionUID = -8611397253545833133L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				addSymbolExpression(AvailableSymbol.COMMA);
-			}
-		});
 		layout.addComponent(leftBracketButton);
 		layout.addComponent(rightBracketButton);
-		layout.addComponent(commaButton);
 	}
 
 	private void createLogicalOperators(AbstractLayout layout) {

@@ -1,9 +1,15 @@
 package com.biit.abcd.core.drools.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.biit.form.TreeObject;
+
 public class DateUtils {
+
+	private static String DATE_FORMAT = "yyyy-mm-dd";
 
 	public static Date returnCurrentDateMinusYears(int years) {
 		Calendar now = Calendar.getInstance();
@@ -77,5 +83,22 @@ public class DateUtils {
 
 	public static Date returnCurrentDate() {
 		return Calendar.getInstance().getTime();
+	}
+
+	public static Date transformLongStringToDate(String time) {
+		Date date = new Date(Long.valueOf(time).longValue());
+		try {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DATE_FORMAT");
+			return new SimpleDateFormat(DATE_FORMAT).parse(simpleDateFormat.format(date));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String questionDateYears(TreeObject question) {
+		return "DateUtils.returnYearsDistanceFromDate(getAnswer('" + RulesUtils.getTreeObjectAnswerType(question)
+				+ "'))";
 	}
 }

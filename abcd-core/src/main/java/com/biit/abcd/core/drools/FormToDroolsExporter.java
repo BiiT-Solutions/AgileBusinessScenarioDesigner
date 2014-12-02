@@ -11,7 +11,6 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.IncompatibleFormStructureException;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
@@ -34,6 +33,7 @@ import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.orbeon.OrbeonImporter;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.ISubmittedForm;
 
 public class FormToDroolsExporter {
@@ -126,7 +126,7 @@ public class FormToDroolsExporter {
 		orbeonImporter.readXml(OrbeonImporter.getXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId),
 				submittedForm);
 		Assert.assertNotNull(submittedForm);
-		Assert.assertFalse(submittedForm.getChildren(SubmittedCategory.class).isEmpty());
+		Assert.assertFalse(submittedForm.getChildren(ICategory.class).isEmpty());
 		return submittedForm;
 	}
 
