@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
@@ -371,5 +374,49 @@ public class RulesUtils {
 		} else {
 			return ruleName;
 		}
+	}
+
+	/**
+	 * Looks for the class that has an enum equals to the one passed in the
+	 * parameter
+	 * 
+	 * @param expressionChain
+	 * @param classToSearch
+	 * @param enumType
+	 * @return
+	 */
+	public static boolean searchClassInExpressionChain(ExpressionChain expressionChain, Class<?> classToSearch, Object enumType) {
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionChain) {
+				searchClassInExpressionChain((ExpressionChain) expression, classToSearch, enumType);
+			} else {
+				if (classToSearch.isInstance(expression)) {
+					if (expression.getValue().equals(enumType)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns the type of answer for the question in the parameter
+	 * 
+	 * @return
+	 */
+	public static String getTreeObjectAnswerType(TreeObject treeObject) {
+		if (treeObject instanceof Question) {
+			Question question = (Question) treeObject;
+			switch (question.getAnswerType()) {
+			case RADIO:
+			case MULTI_CHECKBOX:
+				return AnswerFormat.TEXT.toString();
+			case INPUT:
+				return question.getAnswerFormat().toString();
+			}
+			return "";
+		}
+		return "";
 	}
 }

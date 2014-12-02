@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.rules;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -53,8 +54,6 @@ import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.TreeObject;
 
 public class DroolsParser {
-
-	// private static boolean orOperatorUsed = false;
 
 	private static String andOperator(List<Expression> expressions) throws ExpressionInvalidException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -331,8 +330,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		System.out.println("RULE ACTIONS: " + rule.getActions());
+//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+//		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
@@ -844,6 +843,7 @@ public class DroolsParser {
 	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 
@@ -1070,6 +1070,8 @@ public class DroolsParser {
 							case DATE:
 								return question.getAnswerFormat();
 							}
+						} else {
+							return question.getAnswerFormat();
 						}
 						break;
 					case NUMBER:
@@ -1202,6 +1204,10 @@ public class DroolsParser {
 													break;
 												}
 											} else {
+												betweenDate = "getAnswer('" + AnswerFormat.DATE.toString()
+														+ "') >= DateUtils.transformLongStringToDate('" + ((Date)value1).getTime()
+														+ "') && < DateUtils.transformLongStringToDate('" + ((Date)value2).getTime() + "')";
+
 												AbcdLogger.warning(DroolsParser.class.getName(),
 														"Question with format DATE don't have a selected unit");
 											}
@@ -1227,7 +1233,8 @@ public class DroolsParser {
 		return droolsConditions;
 	}
 
-	private static String customVariableBetweenValues(ExpressionChain conditions) {
+	private static String customVariableBetweenValues(ExpressionChain conditions) throws NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		String droolsConditions = "";
 		List<Expression> operatorLeft = ((ExpressionChain) conditions.getExpressions().get(0)).getExpressions();
 		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)) {
@@ -1237,14 +1244,12 @@ public class DroolsParser {
 
 				List<Expression> firstExpressionValue = ((ExpressionChain) conditions.getExpressions().get(2))
 						.getExpressions();
-				List<Expression> secondExpressionValue = ((ExpressionChain) conditions.getExpressions().get(3))
+				List<Expression> secondExpressionValue = ((ExpressionChain) conditions.getExpressions().get(4))
 						.getExpressions();
 				Object value1 = ((ExpressionValue) firstExpressionValue.get(0)).getValue();
 				Object value2 = ((ExpressionValue) secondExpressionValue.get(0)).getValue();
 
 				if ((value1 != null) && (value2 != null)) {
-
-					TreeObject leftReferenceParent = leftVariable.getReference().getParent();
 					String varName = leftVariable.getVariable().getName();
 					String adaptorValue = "";
 					if (getExpressionValueTreeObjectAnswerFormat(leftVariable).equals(AnswerFormat.TEXT)
@@ -1262,6 +1267,10 @@ public class DroolsParser {
 					case CATEGORY:
 					case GROUP:
 					case QUESTION:
+						// Create the conditions for parents
+						// hierarchy
+						TreeObject leftReferenceParent = leftVariable.getReference().getParent();
+						droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
 						String scopeName = leftVariable.getVariable().getScope().getName();
 						droolsConditions += "\t$"
 								+ leftVariable.getReference().getUniqueNameReadable()
@@ -1283,7 +1292,7 @@ public class DroolsParser {
 								+ adaptorValue
 								+ " ) from $"
 								+ leftReferenceParent.getUniqueNameReadable()
-								+ (leftVariable.getVariable().getScope().equals(CustomVariableScope.CATEGORY) ? "getCategories()"
+								+ (leftVariable.getVariable().getScope().equals(CustomVariableScope.CATEGORY) ? ".getCategories()"
 										: ".get" + scopeName + "s()")
 								+ RulesUtils.addFinalCommentsIfNeeded(leftVariable.getReference()) + "\n";
 						break;

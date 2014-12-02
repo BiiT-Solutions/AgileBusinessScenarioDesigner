@@ -16,10 +16,12 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
@@ -42,14 +44,18 @@ public class ExpressionToDroolsRule {
 		List<DroolsRule> droolsRules = null;
 		setDroolsHelper(droolsHelper);
 
-		System.out.println("PARSING EXPRESSION: " + droolsRule.getActions());
-
 		if (droolsRule.getActions() != null && !droolsRule.getActions().getExpressions().isEmpty()) {
 			// If the expression is composed by a generic variable, we have to
 			// generate the set of rules that represents the generic
 			if (droolsRule.getActions().getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				droolsRules = createExpressionDroolsRuleSet(droolsRule);
-
+//				if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
+//					List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
+//					droolsRules.clear();
+//					for (DroolsRule auxRule : auxDroolsRules) {
+//						droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
+//					}
+//				}
 			} else if ((droolsRule.getActions().getExpressions().get(0) instanceof ExpressionFunction)
 					&& ((ExpressionFunction) droolsRule.getActions().getExpressions().get(0)).getValue().equals(
 							AvailableFunction.IF)) {
@@ -69,6 +75,15 @@ public class ExpressionToDroolsRule {
 		} else {
 			droolsRules = Arrays.asList(droolsRule);
 		}
+		
+		if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
+			List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
+			droolsRules = new ArrayList<DroolsRule>();
+			for (DroolsRule auxRule : auxDroolsRules) {
+				droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
+			}
+		}
+		
 		return droolsRules;
 	}
 
@@ -225,182 +240,82 @@ public class ExpressionToDroolsRule {
 		return droolsRules;
 	}
 
-	// public static List<DroolsRule> parse(ExpressionChain expressionChain,
-	// ExpressionChain extraConditions)
-	// throws ExpressionInvalidException, RuleNotImplementedException,
-	// RuleInvalidException {
-	// List<DroolsRule> droolsRules = null;
-	//
-	// if (expressionChain != null) {
-	// // If the expression is composed by a generic variable, we have to
-	// // generate the set of rules that represents the generic
-	// if (expressionChain.getExpressions().get(0) instanceof
-	// ExpressionValueGenericCustomVariable) {
-	// droolsRules = createExpressionRuleSet(expressionChain, extraConditions);
-	//
-	// } else if ((expressionChain.getExpressions().get(0) instanceof
-	// ExpressionFunction)
-	// && ((ExpressionFunction)
-	// expressionChain.getExpressions().get(0)).getValue().equals(
-	// AvailableFunction.IF)) {
-	// droolsRules = createIfRuleSet(expressionChain, extraConditions);
-	//
-	// } else {
-	// droolsRules = Arrays.asList(createExpressionRule(expressionChain,
-	// extraConditions));
-	// }
-	// }
-	// // for (DroolsRule droolsRule : droolsRules) {
-	// // RuleChecker.checkRuleValid(droolsRule);
-	// // }
-	// return droolsRules;
-	// }
+	private static List<DroolsRule> parseIfRules(List<DroolsRule> droolsRules) {
+		List<DroolsRule> ifRules = new ArrayList<DroolsRule>();
+		for (DroolsRule auxRule : droolsRules) {
+			ifRules.addAll(parseIfRule(auxRule));
+		}
+		return ifRules;
+	}
 
-	// /**
-	// * Transforms an expression into a rule
-	// *
-	// * @param expressionChain
-	// * @param extraConditions
-	// * @return
-	// */
-	// private static DroolsRule createExpressionRule(ExpressionChain
-	// expressionChain, ExpressionChain extraConditions) {
-	// DroolsRule droolsRule = new DroolsRule();
-	// // droolsRule.setName(RulesUtils.getRuleName(expressionChain.getName(),
-	// extraConditions));
-	// droolsRule.setName(RulesUtils.createRuleName(expressionChain.getName(),
-	// extraConditions));
-	// if (extraConditions != null) {
-	// droolsRule.addExtraConditions((ExpressionChain)
-	// extraConditions.generateCopy());
-	// }
-	// // If the expression chain contains generic variables, we have to unwrap
-	// // them
-	//
-	// if (checkForGenericVariables(expressionChain)) {
-	// ExpressionChain expressionChainUnwrapped =
-	// unwrapGenericVariables(expressionChain);
-	// if (expressionChainUnwrapped != null) {
-	// droolsRule.setActions(expressionChainUnwrapped);
-	// } else {
-	// // We don't want to create a rule if there is no actions
-	// return null;
-	// }
-	// } else {
-	// droolsRule.setActions((ExpressionChain) expressionChain.generateCopy());
-	// }
-	// return droolsRule;
-	// }
+	private static List<DroolsRule> parseIfRule(DroolsRule droolsRule) {
+		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
+		ExpressionChain ifCondition = new ExpressionChain();
+		ExpressionChain ifActionThen = new ExpressionChain();
+		ExpressionChain ifActionElse = new ExpressionChain();
+		ExpressionChain expressionCopy = (ExpressionChain) droolsRule.getActions().generateCopy();
+		// Set the first values of the if rules
+		ifCondition.addExpression(expressionCopy.getExpressions().get(0));
+		ifActionThen.addExpression(expressionCopy.getExpressions().get(0));
+		ifActionThen.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		ifActionElse.addExpression(expressionCopy.getExpressions().get(0));
+		ifActionElse.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		// Remove the left part of the expression
+		expressionCopy.removeFirstExpression();
+		// Remove the equals
+		expressionCopy.removeFirstExpression();
+		// Remove the if function
+		expressionCopy.removeFirstExpression();
+		// and the last parenthesis
+		expressionCopy.removeLastExpression();
 
-	// private static List<DroolsRule> createIfRuleSet(ExpressionChain
-	// expressionChain, ExpressionChain extraConditions) {
-	// List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
-	// ExpressionChain ifCondition = new ExpressionChain();
-	// ExpressionChain ifActionThen = new ExpressionChain();
-	// ExpressionChain ifActionElse = new ExpressionChain();
-	//
-	// System.out.println("CREATING IF RULE SET");
-	//
-	// int ifIndex = 0;
-	// ExpressionChain expressionCopy = (ExpressionChain)
-	// expressionChain.generateCopy();
-	// // Remove the IF from the expression
-	// expressionCopy.removeFirstExpression();
-	// // and the last parenthesis
-	// expressionCopy.removeLastExpression();
-	// for (Expression expression : expressionCopy.getExpressions()) {
-	// if ((expression instanceof ExpressionSymbol)
-	// && ((ExpressionSymbol)
-	// expression).getValue().equals(AvailableSymbol.COMMA)) {
-	// ifIndex++;
-	// } else {
-	// if (ifIndex == 0) {
-	// ifCondition.addExpression(expression);
-	// } else if (ifIndex == 1) {
-	// ifActionThen.addExpression(expression);
-	// } else if (ifIndex == 2) {
-	// ifActionElse.addExpression(expression);
-	// }
-	// }
-	// }
-	// // Creation of the rules that represent the if
-	// DroolsRule ifThenRule = new DroolsRule();
-	// // ifThenRule.setName(RulesUtils.getRuleName(expressionChain.getName(),
-	// // extraConditions));
-	// ifThenRule.setConditions(ifCondition);
-	// ifThenRule.setActions(ifActionThen);
-	// droolsRules.add(ifThenRule);
-	//
-	// DroolsRule ifElseRule = new DroolsRule();
-	// ifElseRule.setName(RulesUtils.getRuleName(expressionChain.getName(),
-	// extraConditions));
-	// ExpressionChain negatedCondition = new ExpressionChain();
-	// // For the ELSE part we negate the Condition part
-	// negatedCondition.addExpression(new
-	// ExpressionFunction(AvailableFunction.NOT));
-	// negatedCondition.addExpression(new
-	// ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-	// negatedCondition.addExpressions(ifCondition.getExpressions());
-	// negatedCondition.addExpression(new
-	// ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-	// ifElseRule.setConditions(negatedCondition);
-	// ifElseRule.setActions(ifActionElse);
-	// droolsRules.add(ifElseRule);
-	//
-	// return droolsRules;
-	// }
-	//
-	// private static List<DroolsRule> createExpressionRuleSet(ExpressionChain
-	// expressionChain,
-	// ExpressionChain extraConditions) {
-	// List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
-	// ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable
-	// = (ExpressionValueGenericCustomVariable) expressionChain
-	// .getExpressions().get(0);
-	// List<TreeObject> treeObjects = new ArrayList<TreeObject>();
-	// switch (expressionValueGenericCustomVariable.getType()) {
-	// case CATEGORY:
-	// treeObjects.addAll(expressionValueGenericCustomVariable.getVariable().getForm().getChildren());
-	// break;
-	// case GROUP:
-	// for (TreeObject category :
-	// expressionValueGenericCustomVariable.getVariable().getForm().getChildren())
-	// {
-	// List<TreeObject> groups = category.getAll(Group.class);
-	// // We need to reverse the groups to correctly generate the rules
-	// // for nested groups
-	// Collections.reverse(groups);
-	// treeObjects.addAll(groups);
-	// }
-	// break;
-	// case QUESTION_GROUP:
-	// case QUESTION_CATEGORY:
-	// // We only support Categories and groups on the left part of the
-	// // generic assignation
-	// break;
-	// }
-	// // For each category, we generate the expression to create a new rule
-	// if (treeObjects != null && !treeObjects.isEmpty()) {
-	// for (TreeObject category : treeObjects) {
-	// ExpressionChain expressionChainCopy = (ExpressionChain)
-	// expressionChain.generateCopy();
-	// ExpressionValueCustomVariable expValCat = new
-	// ExpressionValueCustomVariable(category,
-	// expressionValueGenericCustomVariable.getVariable());
-	// // Remove the generic
-	// expressionChainCopy.removeExpression(0);
-	// // Add the specific
-	// expressionChainCopy.addExpression(0, expValCat);
-	// // Add to the rule set
-	// droolsRules.add(createExpressionRule(expressionChainCopy,
-	// extraConditions));
-	// }
-	// } else {
-	// // We don't want to create a rule if there is no children
-	// return null;
-	// }
-	// return droolsRules;
-	// }
+		int commaCounter = 0;
+		int ifIndex = 0;
+		for (Expression expression : expressionCopy.getExpressions()) {
+			if ((expression instanceof ExpressionFunction)
+					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.IN) || ((ExpressionFunction) expression)
+							.getValue().equals(AvailableFunction.BETWEEN))) {
+				commaCounter++;
+			}
+			if ((expression instanceof ExpressionSymbol)
+					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.RIGHT_BRACKET)
+					&& commaCounter != 0) {
+				commaCounter = 0;
+			}
+			if ((expression instanceof ExpressionSymbol)
+					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.COMMA) && commaCounter == 0) {
+				ifIndex++;
+			} else {
+				if (ifIndex == 0) {
+					ifCondition.addExpression(expression);
+				} else if (ifIndex == 1) {
+					ifActionThen.addExpression(expression);
+				} else if (ifIndex == 2) {
+					ifActionElse.addExpression(expression);
+				}
+			}
+		}
+		// Creation of the rules that represent the if
+		DroolsRule ifThenRule = new DroolsRule();
+		ifThenRule.setName(RulesUtils.createRuleName(droolsRule, "_1stConditon"));
+		ifThenRule.setConditions(ifCondition);
+		ifThenRule.setActions(ifActionThen);
+		droolsRules.add(ifThenRule);
+
+		DroolsRule ifElseRule = new DroolsRule();
+		ifElseRule.setName(RulesUtils.createRuleName(droolsRule, "_2ndConditon"));
+		ExpressionChain negatedCondition = new ExpressionChain();
+		// For the ELSE part we negate the Condition part
+		negatedCondition.addExpression(new ExpressionFunction(AvailableFunction.NOT));
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		negatedCondition.addExpressions(ifCondition.getExpressions());
+		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		ifElseRule.setConditions(negatedCondition);
+		ifElseRule.setActions(ifActionElse);
+		droolsRules.add(ifElseRule);
+
+		return droolsRules;
+	}
 
 	/**
 	 * Checks if there are generic variables at the right side of the
@@ -426,10 +341,7 @@ public class ExpressionToDroolsRule {
 	 * @return
 	 */
 	private static ExpressionChain unwrapGenericVariables(ExpressionChain expressionChain) {
-
-		System.out.println("PARSING EXPRESSION CHAIN: " + expressionChain);
-
-		// // To avoid modifying the original expression
+		// To avoid modifying the original expression
 		ExpressionChain expressionChainCopy = (ExpressionChain) expressionChain.generateCopy();
 		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChainCopy
 				.getExpressions().get(0);
@@ -454,6 +366,15 @@ public class ExpressionToDroolsRule {
 								customVariableOfGeneric));
 						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 					}
+					// Remove the last comma
+					generatedExpressionChain.removeLastExpression();
+				} else {
+					// Remove the extra comma if there is no value
+					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
+							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
+									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
+						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
+					}
 				}
 			} else if (expression instanceof ExpressionValueGenericVariable) {
 				// Unwrap the generic variables being analyzed
@@ -467,13 +388,23 @@ public class ExpressionToDroolsRule {
 						generatedExpressionChain.addExpression(new ExpressionValueTreeObjectReference(treeObject));
 						generatedExpressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 					}
+					// Remove the last comma
+					generatedExpressionChain.removeLastExpression();
+				} else {
+					// Remove the extra comma if there is no value
+					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
+							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
+									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
+						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
+					}
 				}
 			} else {
 				// if it is not a generic variable, we copy the same value
-				if (!((expression instanceof ExpressionSymbol) && (((ExpressionSymbol) expression).getValue()
-						.equals(AvailableSymbol.COMMA)))) {
-					generatedExpressionChain.addExpression(expression);
-				}
+				// if (!((expression instanceof ExpressionSymbol) &&
+				// (((ExpressionSymbol) expression).getValue()
+				// .equals(AvailableSymbol.COMMA)))) {
+				generatedExpressionChain.addExpression(expression);
+				// }
 			}
 		}
 
@@ -496,7 +427,6 @@ public class ExpressionToDroolsRule {
 				treeObjects = leftTreeObject.getAll(Category.class);
 
 			} else if (leftTreeObject instanceof Category) {
-				System.out.println("CASE SAME CATEGORY");
 				// Is the same item (we don't want the brothers)
 				treeObjects = Arrays.asList(leftTreeObject);
 			}
@@ -564,11 +494,16 @@ public class ExpressionToDroolsRule {
 		return newDroolsRule;
 	}
 
-	public static DroolsHelper getDroolsHelper() {
+	private static boolean hasIfCondition(DroolsRule droolsRule) {
+		return RulesUtils.searchClassInExpressionChain(droolsRule.getActions(), ExpressionFunction.class,
+				AvailableFunction.IF);
+	}
+
+	private static DroolsHelper getDroolsHelper() {
 		return droolsHelper;
 	}
 
-	public static void setDroolsHelper(DroolsHelper droolsHelper) {
+	private static void setDroolsHelper(DroolsHelper droolsHelper) {
 		ExpressionToDroolsRule.droolsHelper = droolsHelper;
 	}
 }
