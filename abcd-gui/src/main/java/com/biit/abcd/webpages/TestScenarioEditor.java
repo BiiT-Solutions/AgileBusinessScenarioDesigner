@@ -46,7 +46,6 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
 			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
-			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
 		}

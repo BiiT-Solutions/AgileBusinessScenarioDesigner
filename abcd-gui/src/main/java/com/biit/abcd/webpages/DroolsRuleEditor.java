@@ -33,7 +33,8 @@ import com.vaadin.ui.UI;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -1017932957756165996L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
 	private SelectDroolsRuleEditable tableSelectRule;
 	private ExpressionEditorComponent ruleExpressionEditorComponent;
@@ -97,7 +98,6 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 			refreshRuleEditor();
 		} else {
 			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
-			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
 	}

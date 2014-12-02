@@ -94,7 +94,6 @@ public class ExpressionEditor extends FormWebPageComponent {
 			refreshExpressionEditor();
 		} else {
 			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
-			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
 	}
