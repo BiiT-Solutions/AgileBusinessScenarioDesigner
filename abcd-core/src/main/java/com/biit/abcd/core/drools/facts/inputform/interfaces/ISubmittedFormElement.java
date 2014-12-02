@@ -23,4 +23,23 @@ public interface ISubmittedFormElement {
 	public CustomVariableScope getVariableScope();
 
 	public String generateXML(String tabs);
+
+	/**
+	 * Returns the variable value for a element of selected type with defined name.
+	 * 
+	 * @param type
+	 * @param treeObjectName
+	 * @param varName
+	 * @return
+	 */
+	public Object getVariableValue(Class<?> type, String treeObjectName, String varName);
+
+	/**
+	 * Returns the variable value of the first element of the desired type.
+	 * 
+	 * @param type
+	 * @param varName
+	 * @return
+	 */
+	public Object getVariableValue(Class<?> type, String varName);
 }

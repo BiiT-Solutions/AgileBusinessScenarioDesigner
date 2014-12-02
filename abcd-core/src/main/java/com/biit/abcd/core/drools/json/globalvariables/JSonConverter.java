@@ -2,10 +2,7 @@ package com.biit.abcd.core.drools.json.globalvariables;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,9 +39,9 @@ public class JSonConverter {
 	 * @return
 	 * @throws IOException
 	 */
-	public static List<GlobalVariable> importGlobalVariables(String file) throws IOException {
-		Path newFile = Paths.get(file);
-		try (BufferedReader reader = Files.newBufferedReader(newFile, Charset.defaultCharset())) {
+	public static List<GlobalVariable> importGlobalVariables(String resource) throws IOException {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+				JSonConverter.class.getResourceAsStream("/" + resource)))) {
 			StringBuilder globalVariablesJson = new StringBuilder();
 			String lineFromFile = "";
 			while ((lineFromFile = reader.readLine()) != null) {

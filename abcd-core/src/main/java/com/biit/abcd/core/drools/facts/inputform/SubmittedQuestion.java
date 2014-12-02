@@ -4,11 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
+import com.biit.orbeon.form.ISubmittedObject;
 
 public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion implements ISubmittedFormElement {
 
@@ -105,12 +107,28 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 	}
 
 	@Override
-	public Object getVariableValue(Object submmitedFormObject, String varName) {
-		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedCategory) this.getParent()).getVariableValue(this, varName);
-		} else {
-			return ((SubmittedGroup) this.getParent()).getVariableValue(this, varName);
+	public Object getVariableValue(Class<?> type, String varName) {
+		List<ISubmittedObject> childs = getChildren(type);
+
+		if (childs != null && !childs.isEmpty()) {
+			return getVariableValue(childs.get(0), varName);
 		}
+		return null;
+	}
+
+	@Override
+	public Object getVariableValue(Class<?> type, String treeObjectName, String varName) {
+		ISubmittedObject child = getChild(type, treeObjectName);
+
+		if (child != null) {
+			return getVariableValue(child, varName);
+		}
+		return null;
+	}
+
+	@Override
+	public Object getVariableValue(Object submmitedFormObject, String varName) {
+		return ((ISubmittedFormElement) this.getParent()).getVariableValue(submmitedFormObject, varName);
 	}
 
 	@Override
@@ -120,11 +138,7 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 
 	@Override
 	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
-		if (this.getParent() instanceof ICategory) {
-			((SubmittedCategory) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
-		} else {
-			((SubmittedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
-		}
+		((ISubmittedFormElement) getParent()).setVariableValue(submmitedFormObject, varName, value);
 	}
 
 	@Override

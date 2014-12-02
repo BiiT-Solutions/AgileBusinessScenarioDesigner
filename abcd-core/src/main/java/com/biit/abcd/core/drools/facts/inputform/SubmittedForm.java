@@ -1,6 +1,7 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -36,11 +37,43 @@ public class SubmittedForm extends com.biit.form.submitted.SubmittedForm impleme
 	}
 
 	@Override
-	public Object getVariableValue(Object treeObject, String varName) {
-		if ((this.formVariables == null) || (this.formVariables.get(treeObject) == null)) {
+	public Object getVariableValue(Class<?> type, String varName) {
+		List<ISubmittedObject> childs = getChildren(type);
+
+		if (childs != null && !childs.isEmpty()) {
+			return getVariableValue(childs.get(0), varName);
+		}
+		return null;
+	}
+
+	@Override
+	public Object getVariableValue(Class<?> type, String treeObjectName, String varName) {
+
+		ISubmittedObject selectedObject = null;
+		// Check this element.
+		if (type.isInstance(this)) {
+			if (this.getTag().equals(treeObjectName)) {
+				return this;
+			}
+		}
+
+		// Check the children.
+		if (selectedObject == null) {
+			selectedObject = getChild(type, treeObjectName);
+		}
+
+		if (selectedObject != null) {
+			return getVariableValue(selectedObject, varName);
+		}
+		return null;
+	}
+
+	@Override
+	public Object getVariableValue(Object submmitedFormObject, String varName) {
+		if ((formVariables == null) || (formVariables.get(submmitedFormObject) == null)) {
 			return null;
 		}
-		return this.formVariables.get(treeObject).get(varName);
+		return formVariables.get(submmitedFormObject).get(varName);
 	}
 
 	@Override
@@ -56,12 +89,8 @@ public class SubmittedForm extends com.biit.form.submitted.SubmittedForm impleme
 
 	@Override
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
-		if ((formVariables == null) || (formVariables.get(submittedFormTreeObject) == null)
-				|| (formVariables.get(submittedFormTreeObject).get(varName) == null)) {
-			return false;
-		} else {
-			return true;
-		}
+		return !((formVariables == null) || (formVariables.get(submittedFormTreeObject) == null) || (formVariables.get(
+				submittedFormTreeObject).get(varName) == null));
 	}
 
 	@Override

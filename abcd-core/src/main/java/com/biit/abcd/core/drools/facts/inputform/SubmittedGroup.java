@@ -1,5 +1,7 @@
 package com.biit.abcd.core.drools.facts.inputform;
 
+import java.util.List;
+
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
@@ -11,10 +13,12 @@ public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup imple
 		super(tag);
 	}
 
+	@Override
 	public boolean isScoreSet(String varName) {
 		return isScoreSet(this, varName);
 	}
 
+	@Override
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
 			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
@@ -27,28 +31,44 @@ public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup imple
 		return !isScoreSet(varName);
 	}
 
+	@Override
 	public Object getVariableValue(String varName) {
 		return getVariableValue(this, varName);
 	}
 
+	@Override
 	public Object getVariableValue(Object submmitedFormObject, String varName) {
-		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedCategory) this.getParent()).getVariableValue(submmitedFormObject, varName);
-		} else {
-			return ((SubmittedGroup) this.getParent()).getVariableValue(submmitedFormObject, varName);
-		}
+		return ((ISubmittedFormElement) this.getParent()).getVariableValue(submmitedFormObject, varName);
 	}
 
+	@Override
 	public void setVariableValue(String varName, Object value) {
 		setVariableValue(this, varName, value);
 	}
 
-	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
-		if (this.getParent() instanceof ICategory) {
-			((SubmittedCategory) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
-		} else {
-			((SubmittedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
+	@Override
+	public Object getVariableValue(Class<?> type, String varName) {
+		List<ISubmittedObject> childs = getChildren(type);
+
+		if (childs != null && !childs.isEmpty()) {
+			return getVariableValue(childs.get(0), varName);
 		}
+		return null;
+	}
+
+	@Override
+	public Object getVariableValue(Class<?> type, String treeObjectName, String varName) {
+		ISubmittedObject child = getChild(type, treeObjectName);
+
+		if (child != null) {
+			return getVariableValue(child, varName);
+		}
+		return null;
+	}
+
+	@Override
+	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
+		((ISubmittedFormElement) getParent()).setVariableValue(submmitedFormObject, varName, value);
 	}
 
 	@Override
