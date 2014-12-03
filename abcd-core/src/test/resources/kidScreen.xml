@@ -10,7 +10,7 @@
 	xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:exf="http://www.exforms.org/exf/1-0">
 	<liferay_email_address>support@biit-solutions.com</liferay_email_address>
-	<category-1>
+	<Algemeen>
 		<subcategory-1-1 />
 		<name>Jan</name>
 		<school>niet</school>
@@ -23,27 +23,27 @@
 		<heightMother>170</heightMother>
 		<originMother>2</originMother>
 		<weight>55.4</weight>
-	</category-1>
-	<category-2>
+	</Algemeen>
+	<Gezondheid>
 		<subcategory-2-1 />
 		<health>Y</health>
 		<healthExtra />
-	</category-2>
-	<category-3>
+	</Gezondheid>
+	<Lifestyle>
 		<subcategory-3-1 />
-		<group-voeding>
+		<voeding>
 			<breakfast>b</breakfast>
 			<fruit>d</fruit>
 			<fruitAmount>2</fruitAmount>
 			<vegetables>d</vegetables>
 			<vegetablesAmount>5</vegetablesAmount>
 			<drinks>c</drinks>
-			<group-voeding2>
+			<voeding2>
 				<drinks>c</drinks>
-			</group-voeding2>
-		</group-voeding>
+			</voeding2>
+		</voeding>
 		<subcategory-3-2 />
-		<group-mentaal>
+		<mentaal>
 			<life>N</life>
 			<family>Y</family>
 			<smile>N</smile>
@@ -56,15 +56,15 @@
 			<friends>b</friends>
 			<tired>N</tired>
 			<energy>Y</energy>
-		</group-mentaal>
-	</category-3>
+		</mentaal>
+	</Lifestyle>
 	<category-4>
 		<subcategory-4-1 />
 		<infotext-4-1-1 />
-		<group-bewegen>
+		<bewegen>
 			<nngbDays>3</nngbDays>
 			<activityDuration>45</activityDuration>
 			<activityIntensity>4</activityIntensity>
-		</group-bewegen>
+		</bewegen>
 	</category-4>
 </form>

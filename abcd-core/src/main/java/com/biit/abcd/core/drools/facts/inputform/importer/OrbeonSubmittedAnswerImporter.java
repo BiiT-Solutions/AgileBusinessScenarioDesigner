@@ -9,6 +9,7 @@ import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.ISubmittedObject;
 
 /**
  * Reads data from Orbeon Form.
@@ -16,8 +17,10 @@ import com.biit.orbeon.form.ISubmittedForm;
 public class OrbeonSubmittedAnswerImporter extends OrbeonImporter {
 
 	@Override
-	public ICategory createCategory(String tag) {
-		return new SubmittedCategory(tag);
+	public ICategory createCategory(ISubmittedObject parent, String tag) {
+		ICategory category = new SubmittedCategory(tag);
+		category.setParent(parent);
+		return category;
 	}
 
 	@Override
@@ -26,22 +29,16 @@ public class OrbeonSubmittedAnswerImporter extends OrbeonImporter {
 	}
 
 	@Override
-	public IGroup createGroup(ICategory category, String tag) {
-		return new SubmittedGroup(tag);
-	}
-	
-	@Override
-	public IGroup createGroup(IGroup group, String tag) {
-		return new SubmittedGroup(tag);
+	public IGroup createGroup(ISubmittedObject parent, String tag) {
+		IGroup group = new SubmittedGroup(tag);
+		group.setParent(parent);
+		return group;
 	}
 
 	@Override
-	public IQuestion createQuestion(ICategory category, String tag) {
-		return new SubmittedQuestion(tag);
-	}
-
-	@Override
-	public IQuestion createQuestion(IGroup group, String tag) {
-		return new SubmittedQuestion(tag);
+	public IQuestion createQuestion(ISubmittedObject parent, String tag) {
+		IQuestion question = new SubmittedQuestion(tag);
+		question.setParent(parent);
+		return question;
 	}
 }

@@ -31,9 +31,9 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.exceptions.ChildrenNotFoundException;
-import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.OrbeonImporter;
 import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
+import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.ISubmittedForm;
 
 public class FormToDroolsExporter {
@@ -126,13 +126,8 @@ public class FormToDroolsExporter {
 		orbeonImporter.readXml(OrbeonImporter.getXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId),
 				submittedForm);
 		Assert.assertNotNull(submittedForm);
-		Assert.assertFalse(submittedForm.getCategories().isEmpty());
+		Assert.assertFalse(submittedForm.getChildren(ICategory.class).isEmpty());
 		return submittedForm;
-	}
-
-	public void translateFormCategories(ISubmittedForm submittedForm) throws DocumentException,
-			CategoryNameWithoutTranslation, IOException {
-		OrbeonCategoryTranslator.getInstance().readXml(submittedForm);
 	}
 
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName,
@@ -195,7 +190,6 @@ public class FormToDroolsExporter {
 			String droolsRules, List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,
 			CategoryNameWithoutTranslation {
 		ISubmittedForm submittedForm = readXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId);
-		translateFormCategories(submittedForm);
 		ISubmittedForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
 		if (droolsRules != null && droolsRules.length() > 0) {
 			// Launch kie

@@ -39,8 +39,8 @@
 		<!-- Orbeon importer -->
 		<dependency>
 			<groupId>com.biit</groupId>
-			<artifactId>orbeon-form-reader</artifactId>
-			<version>${orbeon-form-reader.version}</version>
+			<artifactId>form-structure-orbeon</artifactId>
+			<version>${form-structure-orbeon.version}</version>
 		</dependency>
 		<!-- File access -->
 		<dependency>

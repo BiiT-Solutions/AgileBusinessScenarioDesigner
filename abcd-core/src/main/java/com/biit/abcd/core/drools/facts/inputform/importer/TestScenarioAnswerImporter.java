@@ -27,6 +27,7 @@ import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.ISubmittedObject;
 
 public class TestScenarioAnswerImporter {
 
@@ -58,26 +59,26 @@ public class TestScenarioAnswerImporter {
 
 	private void createCategory(TestScenarioCategory testCategory, ISubmittedForm submittedForm) {
 		// Add the category to the submittedForm
-		ICategory iCategory = new com.biit.abcd.core.drools.facts.inputform.SubmittedCategory(testCategory.getName());
-		submittedForm.addCategory(iCategory);
+		ICategory category = new com.biit.abcd.core.drools.facts.inputform.SubmittedCategory(testCategory.getName());
+		submittedForm.addChild(category);
 		// Put category children variables
 		List<TreeObject> categoryChildren = testCategory.getChildren();
 		if (categoryChildren != null) {
 			for (TreeObject categoryChild : categoryChildren) {
 				if (categoryChild instanceof TestScenarioQuestion) {
-					createQuestionVariables((TestScenarioQuestion) categoryChild, iCategory);
+					createQuestionVariables((TestScenarioQuestion) categoryChild, category);
 				} else {
 					if (categoryChild instanceof TestScenarioGroup) {
-						createGroupVariables((TestScenarioGroup) categoryChild, iCategory);
+						createGroupVariables((TestScenarioGroup) categoryChild, category);
 					}
 				}
 			}
 		}
 	}
 
-	private void createGroupVariables(TestScenarioGroup testScenarioGroup, IGroup parentGroup) {
+	private void createGroupVariables(TestScenarioGroup testScenarioGroup, ISubmittedObject parentGroup) {
 		IGroup iGroup = new SubmittedGroup(testScenarioGroup.getName());
-		parentGroup.addGroup(iGroup);
+		parentGroup.addChild(iGroup);
 		List<TreeObject> groupChildren = testScenarioGroup.getChildren();
 		if (groupChildren != null) {
 
@@ -93,11 +94,11 @@ public class TestScenarioAnswerImporter {
 		}
 	}
 
-	private void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, IGroup parentGroup) {
-		IQuestion iQuestion = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(
+	private void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, ISubmittedObject parentGroup) {
+		IQuestion question = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(
 				testScenarioQuestion.getName());
-		setQuestionAnswer(testScenarioQuestion, iQuestion);
-		parentGroup.addQuestion(iQuestion);
+		setQuestionAnswer(testScenarioQuestion, question);
+		parentGroup.addChild(question);
 	}
 
 	private void setQuestionAnswer(TestScenarioQuestion testScenarioQuestion, IQuestion iQuestion) {

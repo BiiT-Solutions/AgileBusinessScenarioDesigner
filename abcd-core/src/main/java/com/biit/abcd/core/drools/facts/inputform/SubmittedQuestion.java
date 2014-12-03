@@ -10,40 +10,15 @@ import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElemen
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
+import com.biit.orbeon.form.ISubmittedObject;
 
-public class SubmittedQuestion extends SubmittedFormObject implements IQuestion, ISubmittedFormElement {
+public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion implements ISubmittedFormElement {
 
 	// Date format based on the input received by the Orbeon forms
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
-	private String answer;
-	private IGroup groupParent;
-	private ICategory categoryParent;
 
 	public SubmittedQuestion(String tag) {
-		setTag(tag);
-		setText(tag);
-	}
-
-	@Override
-	public void setAnswer(String answer) {
-		this.answer = answer;
-	}
-
-	@Override
-	public Object getAnswer() {
-		Object parsedValue = null;
-		try {
-			parsedValue = Double.parseDouble(this.answer);
-		} catch (Exception e) {
-			try {
-				parsedValue = new SimpleDateFormat(DATE_FORMAT).parse(this.answer);
-			} catch (Exception e1) {
-				parsedValue = this.answer;
-			}
-		}
-		return parsedValue;
+		super(tag);
 	}
 
 	public Object getAnswer(String answerFormat) {
@@ -51,15 +26,25 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 			return null;
 		}
 		if (answerFormat.isEmpty()) {
-			return getAnswer();
+			Object parsedValue = null;
+			try {
+				parsedValue = Double.parseDouble(getAnswer());
+			} catch (Exception e) {
+				try {
+					parsedValue = new SimpleDateFormat(DATE_FORMAT).parse(getAnswer());
+				} catch (Exception e1) {
+					parsedValue = getAnswer();
+				}
+			}
+			return parsedValue;
 		}
 
 		Object parsedValue = null;
 		switch (answerFormat) {
 		case "NUMBER":
-			if (answer != null && !answer.isEmpty()) {
+			if (getAnswer() != null && !getAnswer().isEmpty()) {
 				try {
-					return Double.parseDouble(this.answer);
+					return Double.parseDouble(getAnswer());
 				} catch (Exception e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 					return 0.0;
@@ -70,12 +55,12 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 
 		case "POSTAL_CODE":
 		case "TEXT":
-			return answer;
+			return getAnswer();
 
 		case "DATE":
-			if (answer != null && !answer.isEmpty()) {
+			if (getAnswer() != null && !getAnswer().isEmpty()) {
 				try {
-					return new SimpleDateFormat(DATE_FORMAT).parse(answer);
+					return new SimpleDateFormat(DATE_FORMAT).parse(getAnswer());
 
 				} catch (ParseException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -98,26 +83,12 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 		return parsedValue;
 	}
 
-	public void setParent(Object parent) {
-		if (parent instanceof ICategory) {
-			this.categoryParent = (ICategory) parent;
-		} else {
-			this.groupParent = (IGroup) parent;
-		}
-	}
-
-	public Object getParent() {
-		if (this.groupParent != null) {
-			return this.groupParent;
-		} else {
-			return this.categoryParent;
-		}
-	}
-
+	@Override
 	public boolean isScoreSet(String varName) {
 		return isScoreSet(this, varName);
 	}
 
+	@Override
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		if (this.getParent() instanceof ICategory) {
 			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
@@ -130,33 +101,49 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 		return !isScoreSet(varName);
 	}
 
+	@Override
 	public Object getVariableValue(String varName) {
 		return getVariableValue(this, varName);
 	}
 
-	public Object getVariableValue(Object submmitedFormObject, String varName) {
-		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedCategory) this.getParent()).getVariableValue(this, varName);
-		} else {
-			return ((SubmittedGroup) this.getParent()).getVariableValue(this, varName);
+	@Override
+	public Object getVariableValue(Class<?> type, String varName) {
+		List<ISubmittedObject> childs = getChildren(type);
+
+		if (childs != null && !childs.isEmpty()) {
+			return getVariableValue(childs.get(0), varName);
 		}
+		return null;
 	}
 
+	@Override
+	public Object getVariableValue(Class<?> type, String treeObjectName, String varName) {
+		ISubmittedObject child = getChild(type, treeObjectName);
+
+		if (child != null) {
+			return getVariableValue(child, varName);
+		}
+		return null;
+	}
+
+	@Override
+	public Object getVariableValue(Object submmitedFormObject, String varName) {
+		return ((ISubmittedFormElement) this.getParent()).getVariableValue(submmitedFormObject, varName);
+	}
+
+	@Override
 	public void setVariableValue(String varName, Object value) {
 		setVariableValue(this, varName, value);
 	}
 
+	@Override
 	public void setVariableValue(Object submmitedFormObject, String varName, Object value) {
-		if (this.getParent() instanceof ICategory) {
-			((SubmittedCategory) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
-		} else {
-			((SubmittedGroup) this.getParent()).setVariableValue(submmitedFormObject, varName, value);
-		}
+		((ISubmittedFormElement) getParent()).setVariableValue(submmitedFormObject, varName, value);
 	}
 
 	@Override
 	public String generateXML(String tabs) {
-		return tabs + "<" + getTag() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">" + answer + "</"
+		return tabs + "<" + getTag() + " type=\"" + this.getClass().getSimpleName() + "\"" + ">" + getAnswer() + "</"
 				+ getTag() + ">\n";
 	}
 
@@ -167,12 +154,7 @@ public class SubmittedQuestion extends SubmittedFormObject implements IQuestion,
 
 	@Override
 	public String getOriginalValue() {
-		return answer;
-	}
-
-	@Override
-	public List<ISubmittedFormElement> getChildren() {
-		return null;
+		return getAnswer();
 	}
 
 	@Override

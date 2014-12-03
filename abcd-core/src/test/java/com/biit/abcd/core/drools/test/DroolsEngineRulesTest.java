@@ -15,7 +15,6 @@ import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.orbeon.OrbeonCategoryTranslator;
 import com.biit.orbeon.form.ISubmittedForm;
 
 public class DroolsEngineRulesTest {
@@ -32,8 +31,6 @@ public class DroolsEngineRulesTest {
 			setSubmittedForm(new SubmittedForm(APP, FORM));
 			String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
 			getOrbeonImporter().readXml(xmlFile, getSubmittedForm());
-			String xmlStructure = readFile("./src/test/resources/kidScreen.xhtml", StandardCharsets.UTF_8);
-			OrbeonCategoryTranslator.getInstance().readXml(getSubmittedForm(), xmlStructure);
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}

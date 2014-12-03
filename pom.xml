@@ -51,7 +51,7 @@
 		<drools.version>6.1.0.CR2</drools.version>
 		<biit-common-utils.version>0.1.0</biit-common-utils.version>
 		<form-structure.version>0.1.9</form-structure.version>
-		<orbeon-form-reader.version>0.3.1</orbeon-form-reader.version>
+		<form-structure-orbeon.version>0.1.0</form-structure-orbeon.version>
 		<apache-poi.version>3.10.1</apache-poi.version>
 		<root.directory>${project.basedir}</root.directory>
 		<gson.version>2.3</gson.version>

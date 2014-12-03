@@ -50,7 +50,6 @@ public class FormVariables extends FormWebPageComponent {
 
 		if (UserSessionHandler.getFormController().getForm() == null) {
 			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
-			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		} else {
 			if (variableTable != null) {

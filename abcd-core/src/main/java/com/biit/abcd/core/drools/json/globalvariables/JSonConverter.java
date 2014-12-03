@@ -1,5 +1,8 @@
 package com.biit.abcd.core.drools.json.globalvariables;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,5 +30,24 @@ public class JSonConverter {
 		GlobalVariable[] globalVariablesArray = gson.fromJson(json, GlobalVariable[].class);
 		List<GlobalVariable> globalVariablesList = Arrays.asList(globalVariablesArray);
 		return globalVariablesList;
+	}
+
+	/**
+	 * Reads the global variable from a file.
+	 * 
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	public static List<GlobalVariable> importGlobalVariables(String resource) throws IOException {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+				JSonConverter.class.getResourceAsStream("/" + resource)))) {
+			StringBuilder globalVariablesJson = new StringBuilder();
+			String lineFromFile = "";
+			while ((lineFromFile = reader.readLine()) != null) {
+				globalVariablesJson.append(lineFromFile);
+			}
+			return convertJsonToGlobalVariableList(globalVariablesJson.toString());
+		}
 	}
 }

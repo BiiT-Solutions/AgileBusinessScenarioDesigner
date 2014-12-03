@@ -23,8 +23,7 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the simple conditions that look for a treeObject in the drools
-	 * memory and assign it to a variable
+	 * Returns the simple conditions that look for a treeObject in the drools memory and assign it to a variable
 	 * 
 	 * @param treeObject
 	 * @return
@@ -61,7 +60,7 @@ public class SimpleConditionsGenerator {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( "
 				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "') from $"
-				+ parent.getUniqueNameReadable() + ".get" + treeObjectClass + "s() "
+				+ parent.getUniqueNameReadable() + ".getChildren(I" + treeObjectClass + ".class)"
 				+ RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
@@ -69,7 +68,7 @@ public class SimpleConditionsGenerator {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( "
 				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "') from $"
-				+ parent.getUniqueNameReadable() + ".getCategories() "
+				+ parent.getUniqueNameReadable() + ".getChildren(ICategory.class) "
 				+ RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
@@ -116,8 +115,7 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the conditions that look for a treeObject in the drools memory
-	 * and assign it to a variable.<br>
+	 * Returns the conditions that look for a treeObject in the drools memory and assign it to a variable.<br>
 	 * Also checks if the treeObject has a custom variable with value set.
 	 * 
 	 * @param expressionValueCustomVariable
@@ -172,8 +170,8 @@ public class SimpleConditionsGenerator {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( "
 				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isScoreSet('"
-				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable() + ".getCategories() "
-				+ RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
+				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable()
+				+ ".getChildren(ICategory.class) " + RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
 	private static String getGroupQuestionCustomVariableCondition(CustomVariable customVariable, TreeObject parent,
@@ -181,8 +179,8 @@ public class SimpleConditionsGenerator {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( "
 				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isScoreSet('"
-				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable() + ".get" + treeObjectClass
-				+ "s() " + RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
+				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable() + ".getChildren(I"
+				+ treeObjectClass + ".class)" + RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
 	private static String simpleFormCustomVariableConditions(TreeObject treeObject, CustomVariable customVariable)
@@ -229,10 +227,9 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the conditions that look for a treeObject in the drools memory
-	 * and assign it to a variable.<br>
-	 * This method receives a custom variable but does not make the search for
-	 * the custom variable value set in the tree object.
+	 * Returns the conditions that look for a treeObject in the drools memory and assign it to a variable.<br>
+	 * This method receives a custom variable but does not make the search for the custom variable value set in the tree
+	 * object.
 	 * 
 	 * @param expressionValueCustomVariable
 	 * @return

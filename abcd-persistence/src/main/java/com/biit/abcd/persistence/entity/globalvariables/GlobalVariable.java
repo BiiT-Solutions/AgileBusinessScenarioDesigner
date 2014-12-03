@@ -149,4 +149,9 @@ public class GlobalVariable extends StorableObject {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of GlobalVariable.");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return name + " (" + format + ") " + variableData;
+	}
 }

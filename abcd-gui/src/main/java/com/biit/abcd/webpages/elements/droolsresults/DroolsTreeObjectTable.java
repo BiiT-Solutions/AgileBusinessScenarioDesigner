@@ -2,9 +2,11 @@ package com.biit.abcd.webpages.elements.droolsresults;
 
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.form.submitted.SubmittedQuestion;
+import com.biit.orbeon.form.ISubmittedObject;
 import com.vaadin.data.Item;
 import com.vaadin.ui.TreeTable;
 
@@ -36,7 +38,7 @@ public class DroolsTreeObjectTable extends TreeTable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addItem(ISubmittedFormElement element, ISubmittedFormElement parent) {
+	private void addItem(ISubmittedObject element, ISubmittedObject parent) {
 		if (element != null) {
 			Item item = addItem((Object) element);
 			if (parent != null) {
@@ -44,24 +46,29 @@ public class DroolsTreeObjectTable extends TreeTable {
 				setParent(element, parent);
 				setCollapsed(parent, false);
 			}
-			item.getItemProperty(DroolsTreeObjectTableProperties.ELEMENT_NAME).setValue(element.getName());
-			item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue(element.getOriginalValue());
+			item.getItemProperty(DroolsTreeObjectTableProperties.ELEMENT_NAME).setValue(element.getTag());
+			if (element instanceof SubmittedQuestion) {
+				item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue(
+						((SubmittedQuestion) element).getAnswer());
+			} else {
+				item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue("");
+			}
 			setValue(element);
 			setChildrenAllowed(element, false);
 		}
 	}
 
-	private void loadTreeObject(ISubmittedFormElement element, ISubmittedFormElement parent) {
+	private void loadTreeObject(ISubmittedObject element, ISubmittedObject parent) {
 		addItem(element, parent);
-		List<ISubmittedFormElement> children = element.getChildren();
+		List<ISubmittedObject> children = element.getChildren();
 		if (children != null) {
-			for (ISubmittedFormElement child : children) {
+			for (ISubmittedObject child : children) {
 				loadTreeObject(child, element);
 			}
 		}
 	}
 
-	public void setRootElement(ISubmittedFormElement root) {
+	public void setRootElement(SubmittedForm root) {
 		this.removeAllItems();
 		select(null);
 		if (root != null) {
