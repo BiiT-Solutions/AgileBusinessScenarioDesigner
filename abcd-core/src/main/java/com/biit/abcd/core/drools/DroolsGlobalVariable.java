@@ -42,4 +42,9 @@ public class DroolsGlobalVariable {
 	public void setFormat(AnswerFormat format) {
 		this.format = format;
 	}
+	
+	@Override
+	public String toString() {
+		return name + " (" + format + ") " + value;
+	}
 }

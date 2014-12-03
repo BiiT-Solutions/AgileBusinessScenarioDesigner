@@ -25,7 +25,7 @@ public class SubmittedCategory extends com.biit.form.submitted.SubmittedCategory
 	@Override
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
 		// Retrieve the form which will have the variables
-		return ((SubmittedForm) getParent()).isScoreSet(submittedFormTreeObject, varName);
+		return ((ISubmittedFormElement) getParent()).isScoreSet(submittedFormTreeObject, varName);
 	}
 
 	@Override
@@ -91,5 +91,14 @@ public class SubmittedCategory extends com.biit.form.submitted.SubmittedCategory
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.CATEGORY;
+	}
+
+	@Override
+	public String toString() {
+		String text = getName() + " (" + this.getClass().getSimpleName() + ")";
+		for (ISubmittedObject child : getChildren()) {
+			text += " " + child.toString();
+		}
+		return text;
 	}
 }

@@ -103,4 +103,9 @@ public class DroolsForm implements ISubmittedForm {
 	public List<ISubmittedObject> getChildren(Class<?> type) {
 		return getSubmittedForm().getChildren(type);
 	}
+
+	@Override
+	public String toString() {
+		return getSubmittedForm().toString();
+	}
 }

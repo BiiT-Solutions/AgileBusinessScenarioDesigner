@@ -113,7 +113,11 @@ public class SubmittedForm extends com.biit.form.submitted.SubmittedForm impleme
 
 	@Override
 	public String toString() {
-		return getName();
+		String text = getName() + " (" + this.getClass().getSimpleName() + ")";
+		for (ISubmittedObject child : getChildren()) {
+			text += " " + child.toString();
+		}
+		return text;
 	}
 
 	public HashMap<Object, HashMap<String, Object>> getFormVariables() {
@@ -152,4 +156,5 @@ public class SubmittedForm extends com.biit.form.submitted.SubmittedForm impleme
 	public String generateXML() {
 		return generateXML("");
 	}
+
 }

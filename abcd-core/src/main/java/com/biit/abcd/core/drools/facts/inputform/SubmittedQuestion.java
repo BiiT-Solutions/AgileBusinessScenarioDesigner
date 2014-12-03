@@ -9,7 +9,6 @@ import java.util.List;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
-import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.ISubmittedObject;
 
 public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion implements ISubmittedFormElement {
@@ -90,11 +89,7 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 
 	@Override
 	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
-		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
-		} else {
-			return ((SubmittedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
-		}
+		return ((ISubmittedFormElement) getParent()).isScoreSet(submittedFormTreeObject, varName);
 	}
 
 	public boolean isScoreNotSet(String varName) {
@@ -160,5 +155,14 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.QUESTION;
+	}
+
+	@Override
+	public String toString() {
+		String text = getName() + " (" + this.getClass().getSimpleName() + ")";
+		for (ISubmittedObject child : getChildren()) {
+			text += " " + child.toString();
+		}
+		return text;
 	}
 }
