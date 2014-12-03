@@ -82,13 +82,13 @@ public class SubmittedForm extends com.biit.form.submitted.SubmittedForm impleme
 	}
 
 	@Override
-	public boolean isScoreSet(String varName) {
+	public boolean isVariableDefined(String varName) {
 		// Retrieve the form which will have the variables
-		return isScoreSet(this, varName);
+		return isVariableDefined(this, varName);
 	}
 
 	@Override
-	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
+	public boolean isVariableDefined(Object submittedFormTreeObject, String varName) {
 		return !((formVariables == null) || (formVariables.get(submittedFormTreeObject) == null) || (formVariables.get(
 				submittedFormTreeObject).get(varName) == null));
 	}
@@ -152,4 +152,5 @@ public class SubmittedForm extends com.biit.form.submitted.SubmittedForm impleme
 	public String generateXML() {
 		return generateXML("");
 	}
+
 }

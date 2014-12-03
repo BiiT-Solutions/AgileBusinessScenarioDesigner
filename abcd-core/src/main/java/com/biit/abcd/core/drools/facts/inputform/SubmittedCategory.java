@@ -13,19 +13,19 @@ public class SubmittedCategory extends com.biit.form.submitted.SubmittedCategory
 	}
 
 	public boolean isScoreNotSet(String varName) {
-		return !isScoreSet(varName);
+		return !isVariableDefined(varName);
 	}
 
 	@Override
-	public boolean isScoreSet(String varName) {
+	public boolean isVariableDefined(String varName) {
 		// Retrieve the form which will have the variables
-		return isScoreSet(this, varName);
+		return isVariableDefined(this, varName);
 	}
 
 	@Override
-	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
+	public boolean isVariableDefined(Object submittedFormTreeObject, String varName) {
 		// Retrieve the form which will have the variables
-		return ((SubmittedForm) getParent()).isScoreSet(submittedFormTreeObject, varName);
+		return ((ISubmittedFormElement) getParent()).isVariableDefined(submittedFormTreeObject, varName);
 	}
 
 	@Override
@@ -91,5 +91,10 @@ public class SubmittedCategory extends com.biit.form.submitted.SubmittedCategory
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.CATEGORY;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 }

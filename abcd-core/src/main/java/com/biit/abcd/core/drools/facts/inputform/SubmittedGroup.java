@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
-import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.ISubmittedObject;
 
 public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup implements ISubmittedFormElement {
@@ -14,21 +13,17 @@ public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup imple
 	}
 
 	@Override
-	public boolean isScoreSet(String varName) {
-		return isScoreSet(this, varName);
+	public boolean isVariableDefined(String varName) {
+		return isVariableDefined(this, varName);
 	}
 
 	@Override
-	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
-		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
-		} else {
-			return ((SubmittedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
-		}
+	public boolean isVariableDefined(Object submittedFormTreeObject, String varName) {
+		return ((ISubmittedFormElement) getParent()).isVariableDefined(submittedFormTreeObject, varName);
 	}
 
 	public boolean isScoreNotSet(String varName) {
-		return !isScoreSet(varName);
+		return !isVariableDefined(varName);
 	}
 
 	@Override
@@ -94,5 +89,10 @@ public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup imple
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.GROUP;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 }

@@ -17,15 +17,15 @@ public class RulesOperators {
 	}
 
 	public static Double calculateMinValueFunction(List<Double> variables) {
-		Double min = 10000000.;
 		if (!variables.isEmpty()) {
+			Double min = 10000000.;
 			for (Double variable : variables) {
 				min = Math.min(min, variable);
 			}
+			return min;
 		} else {
 			return null;
 		}
-		return min;
 	}
 
 	public static Double calculateAvgValueFunction(List<Double> variables) {

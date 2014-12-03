@@ -61,6 +61,7 @@ public class TestScenarioAnswerImporter {
 		// Add the category to the submittedForm
 		ICategory category = new com.biit.abcd.core.drools.facts.inputform.SubmittedCategory(testCategory.getName());
 		submittedForm.addChild(category);
+		category.setParent(submittedForm);
 		// Put category children variables
 		List<TreeObject> categoryChildren = testCategory.getChildren();
 		if (categoryChildren != null) {
@@ -76,29 +77,31 @@ public class TestScenarioAnswerImporter {
 		}
 	}
 
-	private void createGroupVariables(TestScenarioGroup testScenarioGroup, ISubmittedObject parentGroup) {
-		IGroup iGroup = new SubmittedGroup(testScenarioGroup.getName());
-		parentGroup.addChild(iGroup);
+	private void createGroupVariables(TestScenarioGroup testScenarioGroup, ISubmittedObject parent) {
+		IGroup group = new SubmittedGroup(testScenarioGroup.getName());
+		parent.addChild(group);
+		group.setParent(parent);
 		List<TreeObject> groupChildren = testScenarioGroup.getChildren();
 		if (groupChildren != null) {
 
 			for (TreeObject groupChild : groupChildren) {
 				if (groupChild instanceof TestScenarioQuestion) {
-					createQuestionVariables((TestScenarioQuestion) groupChild, iGroup);
+					createQuestionVariables((TestScenarioQuestion) groupChild, group);
 				} else {
 					if (groupChild instanceof TestScenarioGroup) {
-						createGroupVariables((TestScenarioGroup) groupChild, iGroup);
+						createGroupVariables((TestScenarioGroup) groupChild, group);
 					}
 				}
 			}
 		}
 	}
 
-	private void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, ISubmittedObject parentGroup) {
+	private void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, ISubmittedObject parent) {
 		IQuestion question = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(
 				testScenarioQuestion.getName());
 		setQuestionAnswer(testScenarioQuestion, question);
-		parentGroup.addChild(question);
+		parent.addChild(question);
+		question.setParent(parent);
 	}
 
 	private void setQuestionAnswer(TestScenarioQuestion testScenarioQuestion, IQuestion iQuestion) {

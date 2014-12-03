@@ -9,7 +9,6 @@ import java.util.List;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
-import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.ISubmittedObject;
 
 public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion implements ISubmittedFormElement {
@@ -84,21 +83,17 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 	}
 
 	@Override
-	public boolean isScoreSet(String varName) {
-		return isScoreSet(this, varName);
+	public boolean isVariableDefined(String varName) {
+		return isVariableDefined(this, varName);
 	}
 
 	@Override
-	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
-		if (this.getParent() instanceof ICategory) {
-			return ((SubmittedCategory) getParent()).isScoreSet(submittedFormTreeObject, varName);
-		} else {
-			return ((SubmittedGroup) getParent()).isScoreSet(submittedFormTreeObject, varName);
-		}
+	public boolean isVariableDefined(Object submittedFormTreeObject, String varName) {
+		return ((ISubmittedFormElement) getParent()).isVariableDefined(submittedFormTreeObject, varName);
 	}
 
 	public boolean isScoreNotSet(String varName) {
-		return !isScoreSet(varName);
+		return !isVariableDefined(varName);
 	}
 
 	@Override
@@ -160,5 +155,10 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 	@Override
 	public CustomVariableScope getVariableScope() {
 		return CustomVariableScope.QUESTION;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 }
