@@ -13,17 +13,17 @@ public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup imple
 	}
 
 	@Override
-	public boolean isScoreSet(String varName) {
-		return isScoreSet(this, varName);
+	public boolean isVariableDefined(String varName) {
+		return isVariableDefined(this, varName);
 	}
 
 	@Override
-	public boolean isScoreSet(Object submittedFormTreeObject, String varName) {
-		return ((ISubmittedFormElement) getParent()).isScoreSet(submittedFormTreeObject, varName);
+	public boolean isVariableDefined(Object submittedFormTreeObject, String varName) {
+		return ((ISubmittedFormElement) getParent()).isVariableDefined(submittedFormTreeObject, varName);
 	}
 
 	public boolean isScoreNotSet(String varName) {
-		return !isScoreSet(varName);
+		return !isVariableDefined(varName);
 	}
 
 	@Override
@@ -93,10 +93,6 @@ public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup imple
 
 	@Override
 	public String toString() {
-		String text = getName() + " (" + this.getClass().getSimpleName() + ")";
-		for (ISubmittedObject child : getChildren()) {
-			text += " " + child.toString();
-		}
-		return text;
+		return getName();
 	}
 }

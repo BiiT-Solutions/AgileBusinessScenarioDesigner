@@ -8,9 +8,9 @@ public interface ISubmittedFormElement {
 
 	public String getOriginalValue();
 
-	public boolean isScoreSet(String varName);
+	public boolean isVariableDefined(String varName);
 
-	public boolean isScoreSet(Object submittedFormTreeObject, String varName);
+	public boolean isVariableDefined(Object submittedFormTreeObject, String varName);
 
 	public Object getVariableValue(String varName);
 

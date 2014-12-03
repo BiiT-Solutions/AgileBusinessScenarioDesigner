@@ -169,7 +169,7 @@ public class SimpleConditionsGenerator {
 			TreeObject treeObject) throws TreeObjectInstanceNotRecognizedException {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( "
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isScoreSet('"
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isVariableDefined('"
 				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable()
 				+ ".getChildren(ICategory.class) " + RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
@@ -178,7 +178,7 @@ public class SimpleConditionsGenerator {
 			TreeObject treeObject) throws TreeObjectInstanceNotRecognizedException {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : Submitted" + treeObjectClass + "( "
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isScoreSet('"
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isVariableDefined('"
 				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable() + ".getChildren(I"
 				+ treeObjectClass + ".class)" + RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
@@ -186,7 +186,7 @@ public class SimpleConditionsGenerator {
 	private static String simpleFormCustomVariableConditions(TreeObject treeObject, CustomVariable customVariable)
 			throws NullExpressionValueException, NullTreeObjectException, NullCustomVariableException {
 		putTreeObjectInTreeObjectDroolsIdMap(treeObject);
-		String conditions = "\t$" + treeObject.getUniqueNameReadable() + " : SubmittedForm( isScoreSet('"
+		String conditions = "\t$" + treeObject.getUniqueNameReadable() + " : SubmittedForm( isVariableDefined('"
 				+ customVariable.getName() + "')) from $droolsForm.getSubmittedForm() \n";
 		return conditions;
 	}

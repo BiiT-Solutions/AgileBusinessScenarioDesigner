@@ -130,7 +130,7 @@ public class DroolsParser {
 							putTreeObjectName(leftVariable.getReference(), leftVariable.getReference()
 									.getUniqueNameReadable());
 							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
-									+ " : SubmittedForm(isScoreSet('" + variableName + "'), getVariableValue('"
+									+ " : SubmittedForm(isVariableDefined('" + variableName + "'), getVariableValue('"
 									+ variableName + "') in ( " + inValuesString
 									+ " )) from $droolsForm.getSubmittedForm() \n";
 							break;
@@ -142,7 +142,7 @@ public class DroolsParser {
 							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
 									+ " : Submitted" + className + "( "
 									+ RulesUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference())
-									+ "', isScoreSet('" + variableName + "'), getVariableValue('" + variableName
+									+ "', isVariableDefined('" + variableName + "'), getVariableValue('" + variableName
 									+ "') in( " + inValuesString + " )) from $"
 									+ leftReferenceParent.getUniqueNameReadable() + ".getChildren(I" + className
 									+ ".class)" + RulesUtils.addFinalCommentsIfNeeded(leftVariable.getReference())
@@ -702,7 +702,7 @@ public class DroolsParser {
 		for (Expression variable : variables) {
 			if (variable instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
-				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isScoreSet('"
+				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isVariableDefined('"
 						+ expressionValueCustomVariable.getVariable().getName() + "')){";
 				ruleCore += "\tvariablesList.add((Double)"
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable) + ");}\n";
@@ -1248,7 +1248,7 @@ public class DroolsParser {
 						putTreeObjectName(leftVariable.getReference(), leftVariable.getReference()
 								.getUniqueNameReadable());
 						droolsConditions += "	$" + leftVariable.getReference().getUniqueNameReadable()
-								+ " : SubmittedForm(isScoreSet('" + varName + "'), getVariableValue('" + varName
+								+ " : SubmittedForm(isVariableDefined('" + varName + "'), getVariableValue('" + varName
 								+ "') >= " + adaptorValue + value1 + adaptorValue + " && < " + adaptorValue + value2
 								+ adaptorValue + " ) from $droolsForm.getSubmittedForm() \n";
 					case CATEGORY:
@@ -1262,7 +1262,7 @@ public class DroolsParser {
 						droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
 								+ " : Submitted" + scopeName + "("
 								+ RulesUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference())
-								+ "', isScoreSet('" + varName + "'), getVariableValue('" + varName + "') >= "
+								+ "', isVariableDefined('" + varName + "'), getVariableValue('" + varName + "') >= "
 								+ adaptorValue + value1 + adaptorValue + " && < " + adaptorValue + value2
 								+ adaptorValue + " ) from $" + leftReferenceParent.getUniqueNameReadable()
 								+ ".getChildren(I" + scopeName + ".class)"
@@ -1442,7 +1442,7 @@ public class DroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isVariableDefined('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param expressionOperatorLogic
 	 * 
@@ -1468,7 +1468,7 @@ public class DroolsParser {
 				if (treeObjectCustomVariable instanceof Form) {
 					putTreeObjectName(treeObjectCustomVariable, treeObjectCustomVariable.getUniqueNameReadable());
 					ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable()
-							+ " : SubmittedForm(isScoreSet('" + varName + "'), getVariableValue('" + varName + "') "
+							+ " : SubmittedForm(isVariableDefined('" + varName + "'), getVariableValue('" + varName + "') "
 							+ expressionOperatorLogic.getValue().toString() + " '" + valueNumber.getValue()
 							+ "') from $droolsForm.getSubmittedForm() \n";
 				} else {
@@ -1480,7 +1480,7 @@ public class DroolsParser {
 					ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : Submitted"
 							+ treeObjectClassName + "( "
 							+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable)
-							+ "', isScoreSet('" + varName + "'), getVariableValue('" + varName + "') "
+							+ "', isVariableDefined('" + varName + "'), getVariableValue('" + varName + "') "
 							+ expressionOperatorLogic.getValue().toString() + " '" + valueNumber.getValue()
 							+ "' ) from $" + parent.getUniqueNameReadable() + ".getChildren(I" + treeObjectClassName
 							+ ".class) " + RulesUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable) + "\n";
@@ -1496,7 +1496,7 @@ public class DroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isScoreSet('cScore'), getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isVariableDefined('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
@@ -1530,7 +1530,7 @@ public class DroolsParser {
 					putTreeObjectName(treeObjectCustomVariable, treeObjectCustomVariable.getUniqueNameReadable());
 					if (treeObjectCustomVariable instanceof Form) {
 						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable()
-								+ " : SubmittedForm( isScoreSet('" + customVariable.getName()
+								+ " : SubmittedForm( isVariableDefined('" + customVariable.getName()
 								+ "'), getVariableValue('" + customVariable.getName() + "') "
 								+ operator.getValue().toString()
 								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
@@ -1545,7 +1545,7 @@ public class DroolsParser {
 						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : Submitted"
 								+ treeObjectClassName + "( "
 								+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable)
-								+ "', isScoreSet('" + customVariable.getName() + "'), getVariableValue('"
+								+ "', isVariableDefined('" + customVariable.getName() + "'), getVariableValue('"
 								+ customVariable.getName() + "') " + operator.getValue().toString()
 								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
 								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ") + ") from $"
