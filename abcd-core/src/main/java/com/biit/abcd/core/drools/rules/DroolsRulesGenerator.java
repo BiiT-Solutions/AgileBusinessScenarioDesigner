@@ -25,6 +25,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.utils.DroolsUtils;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -34,7 +35,7 @@ public class DroolsRulesGenerator {
 
 	// Provides some extra functionalities to the drools parser
 	private DroolsHelper droolsHelper;
-	
+
 	private Form form;
 	private StringBuilder builder;
 	private List<GlobalVariable> globalVariables;
@@ -168,27 +169,7 @@ public class DroolsRulesGenerator {
 	public void setGlobalVariables(List<GlobalVariable> globalVariables) {
 		// In the GUI are called global variables, but regarding the forms are
 		// constants
-		if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
-			for (GlobalVariable globalVariable : this.globalVariables) {
-				// First check if the data inside the variable has a valid date
-				List<VariableData> varDataList = globalVariable.getVariableData();
-				if ((varDataList != null) && !varDataList.isEmpty()) {
-					for (VariableData variableData : varDataList) {
-						Timestamp currentTime = new Timestamp(new Date().getTime());
-						Timestamp initTime = variableData.getValidFrom();
-						Timestamp endTime = variableData.getValidTo();
-						// Sometimes endtime can be null, meaning that the
-						// variable data has no ending time
-						if ((currentTime.after(initTime) && (endTime == null))
-								|| (currentTime.after(initTime) && currentTime.before(endTime))) {
-							this.droolsGlobalVariables.add(new DroolsGlobalVariable(globalVariable.getName(),
-									globalVariable.getFormat(), variableData.getValue()));
-							break;
-						}
-					}
-				}
-			}
-		}
+		droolsGlobalVariables = DroolsUtils.calculateDroolsGlobalVariables(globalVariables);
 	}
 
 	/**

@@ -285,11 +285,11 @@ public class OperatorsTest extends KidsFormCreator {
 					CustomVariableScope.FORM);
 			ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueCustomVariable(
 					getForm(), ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionFunction(AvailableFunction.IF), new ExpressionOperatorLogic(
-							AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueNumber(7.1), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueNumber(1.7), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET));
+					new ExpressionFunction(AvailableFunction.IF), new ExpressionValueCustomVariable(getForm(),
+							ifResultCustomVariable), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
+					new ExpressionValueNumber(56.), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(7.1), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
 			// Create the rules and launch the engine
@@ -312,10 +312,11 @@ public class OperatorsTest extends KidsFormCreator {
 			ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueGenericCustomVariable(
 					GenericTreeObjectType.QUESTION_CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(
 					AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF),
-					new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.),
-					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(7.1), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueNumber(1.7), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET));
+					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
+							categoryCustomVariable), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
+					new ExpressionValueNumber(56.), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(7.1), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
 			// Create the rules and launch the engine

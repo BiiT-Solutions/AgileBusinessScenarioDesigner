@@ -49,13 +49,6 @@ public class ExpressionToDroolsRule {
 			// generate the set of rules that represents the generic
 			if (droolsRule.getActions().getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				droolsRules = createExpressionDroolsRuleSet(droolsRule);
-//				if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
-//					List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
-//					droolsRules.clear();
-//					for (DroolsRule auxRule : auxDroolsRules) {
-//						droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
-//					}
-//				}
 			} else if ((droolsRule.getActions().getExpressions().get(0) instanceof ExpressionFunction)
 					&& ((ExpressionFunction) droolsRule.getActions().getExpressions().get(0)).getValue().equals(
 							AvailableFunction.IF)) {
@@ -75,7 +68,7 @@ public class ExpressionToDroolsRule {
 		} else {
 			droolsRules = Arrays.asList(droolsRule);
 		}
-		
+		// CHech if the expression has an IF function
 		if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
 			List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
 			droolsRules = new ArrayList<DroolsRule>();
@@ -181,6 +174,15 @@ public class ExpressionToDroolsRule {
 		return newDroolsRule;
 	}
 
+	/**
+	 *  Maintained to allow the old if rule definition work<br>
+	 *  IF(Categories.score < 1 ,Categories.score = 1, Categories.score = Categories.score)<br><br>
+	 *  Use now parseIfRule: <br>
+	 *  Categories.score = IF(Categories.score < 1 , 1, Categories.score)
+	 * @param droolsRule
+	 * @return
+	 */
+	@Deprecated
 	private static List<DroolsRule> createIfRuleSet(DroolsRule droolsRule) {
 		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
 		ExpressionChain ifCondition = new ExpressionChain();
@@ -255,7 +257,6 @@ public class ExpressionToDroolsRule {
 		ExpressionChain ifActionElse = new ExpressionChain();
 		ExpressionChain expressionCopy = (ExpressionChain) droolsRule.getActions().generateCopy();
 		// Set the first values of the if rules
-		ifCondition.addExpression(expressionCopy.getExpressions().get(0));
 		ifActionThen.addExpression(expressionCopy.getExpressions().get(0));
 		ifActionThen.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		ifActionElse.addExpression(expressionCopy.getExpressions().get(0));
