@@ -28,7 +28,7 @@ public class ExpressionValueString extends ExpressionValue {
 
 	public ExpressionValueString(String value) {
 		super();
-		this.value = value;
+		setValue(value);
 	}
 
 	public String getValue() {
@@ -41,12 +41,12 @@ public class ExpressionValueString extends ExpressionValue {
 
 	@Override
 	public String getRepresentation() {
-		return value;
+		return getValue();
 	}
 
 	@Override
 	protected String getExpression() {
-		return value;
+		return getValue();
 	}
 
 	@Override

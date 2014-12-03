@@ -40,9 +40,8 @@ public class SelectExpressionTable extends Table {
 		this.setColumnExpandRatio(MenuProperties.EXPRESSION_NAME, 1);
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 
-		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
-		setSortAscending(false);
-		sort();
+		setSortContainerPropertyId(MenuProperties.EXPRESSION_NAME);
+		setSortAscending(true);
 	}
 
 	@SuppressWarnings({ "unchecked" })

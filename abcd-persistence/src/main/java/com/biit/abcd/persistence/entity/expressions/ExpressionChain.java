@@ -113,7 +113,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	 * @return
 	 */
 	private String filterVariables(Expression expression) {
-		return expression.getExpression().replaceAll("[^a-zA-Z0-9_]", "_");
+		// To avoid problems with text values staring with special characters 
+		String cleanedExpression = expression.getExpression().replaceAll("[^a-zA-Z0-9_]", "_");
+		if(cleanedExpression.startsWith("_")){
+			cleanedExpression = "a" + cleanedExpression;
+		}
+		return cleanedExpression;
 	}
 
 	/**

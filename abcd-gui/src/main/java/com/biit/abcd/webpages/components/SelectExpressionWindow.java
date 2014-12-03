@@ -34,6 +34,7 @@ public class SelectExpressionWindow extends AcceptCancelWindow {
 			selectExpressionTable.addRow(expression);
 		}
 
+		selectExpressionTable.sort();
 		rootLayout.addComponent(selectExpressionTable);
 
 		return rootLayout;
