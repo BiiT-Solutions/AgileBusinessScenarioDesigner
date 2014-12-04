@@ -144,7 +144,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 		}// In case is a global constant
 		else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueGlobalConstant) {
 			GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) name.getExpressionChain()
-					.getExpressions().get(0)).getVariable();
+					.getExpressions().get(0)).getValue();
 
 			switch (globalExpression.getFormat()) {
 			case NUMBER:

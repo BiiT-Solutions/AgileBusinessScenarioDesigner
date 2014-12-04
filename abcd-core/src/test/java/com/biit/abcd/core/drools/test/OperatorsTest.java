@@ -133,7 +133,7 @@ public class OperatorsTest extends KidsFormCreator {
 					new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGlobalConstant(
 							getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
 					new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 							AvailableSymbol.RIGHT_BRACKET));
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
@@ -164,7 +164,7 @@ public class OperatorsTest extends KidsFormCreator {
 					new ExpressionFunction(AvailableFunction.MAX), new ExpressionValueGlobalConstant(
 							getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
 					new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 							AvailableSymbol.RIGHT_BRACKET));
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
@@ -200,7 +200,7 @@ public class OperatorsTest extends KidsFormCreator {
 				new ExpressionFunction(AvailableFunction.AVG), new ExpressionValueGlobalConstant(
 						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
@@ -236,7 +236,7 @@ public class OperatorsTest extends KidsFormCreator {
 				new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalConstant(
 						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueNumber(1000), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
@@ -380,7 +380,7 @@ public class OperatorsTest extends KidsFormCreator {
 
 					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueGenericCustomVariable(
 							GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorLogic(
-							AvailableOperator.EQUALS), new ExpressionValueNumber(0), new ExpressionSymbol(
+							AvailableOperator.EQUALS), new ExpressionValueNumber(new Double(0)), new ExpressionSymbol(
 							AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
 
 					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),

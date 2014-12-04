@@ -8,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -19,35 +18,31 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "expression_value_global_variable")
-public class ExpressionValueGlobalConstant extends ExpressionValue {
+public class ExpressionValueGlobalConstant extends ExpressionValue<GlobalVariable> {
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private GlobalVariable constant;
+	private GlobalVariable globalVariable;
 
 	protected ExpressionValueGlobalConstant() {
 		super();
 	}
 
-	public ExpressionValueGlobalConstant(GlobalVariable constant) {
+	public ExpressionValueGlobalConstant(GlobalVariable globalVariable) {
 		super();
-		this.constant = constant;
+		this.globalVariable = globalVariable;
 	}
 
 	@Override
 	public String getRepresentation() {
 		String expressionString = "";
-		if (constant != null) {
-			expressionString += constant.getName();
+		if (globalVariable != null) {
+			expressionString += globalVariable.getName();
 		}
 		return expressionString;
 	}
 
-	public GlobalVariable getVariable() {
-		return constant;
-	}
-
 	public void setVariable(GlobalVariable variable) {
-		constant = variable;
+		globalVariable = variable;
 	}
 
 	@Override
@@ -56,24 +51,21 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 	}
 
 	@Override
-	public Object getValue() {
-		return getVariable();
+	public GlobalVariable getValue() {
+		return globalVariable;
 	}
 
 	@Override
-	public void setValue(Object value) throws NotValidExpressionValue {
-		if (!(value instanceof GlobalVariable)) {
-			throw new NotValidExpressionValue("Expected GlobalVariable object in '" + value + "'");
-		}
-		setVariable((GlobalVariable) value);
+	public void setValue(GlobalVariable globalVariable) {
+		this.globalVariable = globalVariable;
 	}
 
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		if (constant != null) {
-			innerStorableObjects.add(constant);
-			innerStorableObjects.addAll(constant.getAllInnerStorableObjects());
+		if (globalVariable != null) {
+			innerStorableObjects.add(globalVariable);
+			innerStorableObjects.addAll(globalVariable.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
@@ -83,12 +75,7 @@ public class ExpressionValueGlobalConstant extends ExpressionValue {
 		if (object instanceof ExpressionValueGlobalConstant) {
 			super.copyData(object);
 			ExpressionValueGlobalConstant expressionValueGlobalConstant = (ExpressionValueGlobalConstant) object;
-			try {
-				this.setValue(expressionValueGlobalConstant.getValue());
-			} catch (NotValidExpressionValue e) {
-				throw new NotValidStorableObjectException("Object '" + object
-						+ "' is not a valid instance of ExpressionValueGlobalConstant.");
-			}
+			this.setValue(expressionValueGlobalConstant.getValue());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of ExpressionValueGlobalConstant.");

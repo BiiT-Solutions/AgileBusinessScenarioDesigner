@@ -377,7 +377,7 @@ public class FormUtils {
 					.get(0)).getExpressions().get(2)).setReference(elementsMap.get("Answer" + i));
 			// Category1.score=Category1.score+X;
 			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getAction().getExpressions().get(0))
-					.getExpressions().get(4)).setValue(i);
+					.getExpressions().get(4)).setValue(new Double(i));
 			i++;
 		}
 

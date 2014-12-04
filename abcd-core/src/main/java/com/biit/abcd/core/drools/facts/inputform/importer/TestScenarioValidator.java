@@ -37,8 +37,7 @@ public class TestScenarioValidator {
 	private List<String> scenarioModifications;
 
 	/**
-	 * Compares the test scenario structure against the form structure and
-	 * modifies the objects needed
+	 * Compares the test scenario structure against the form structure and modifies the objects needed
 	 * 
 	 * @param form
 	 * @param testScenario
@@ -209,29 +208,6 @@ public class TestScenarioValidator {
 			oldValue.setRepeatable(false);
 
 		} catch (DependencyExistException e) {
-			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
-		}
-	}
-
-	private void replaceTestScenarioGroup(TestScenarioGroup oldValue, TestScenarioGroup newValue) {
-		try {
-			TreeObject parent = oldValue.getParent();
-			Integer oldChildIndex = parent.getIndex(oldValue);
-			// We have to check every possible child in case it is a repeatable
-			// group
-			Set<TreeObject> childToRemove = new HashSet<TreeObject>();
-			for (TreeObject child : parent.getChildren()) {
-				if (child.getName().equals(oldValue.getName())) {
-					childToRemove.add(child);
-				}
-			}
-			for (TreeObject treeObject : childToRemove) {
-				treeObject.remove();
-			}
-			// After removing the children we add the new child
-			parent.addChild(oldChildIndex, newValue);
-
-		} catch (DependencyExistException | NotValidChildException e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}

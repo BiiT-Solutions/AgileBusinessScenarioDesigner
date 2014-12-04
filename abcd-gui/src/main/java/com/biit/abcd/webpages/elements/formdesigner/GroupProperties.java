@@ -2,7 +2,6 @@ package com.biit.abcd.webpages.elements.formdesigner;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.MessageManager;
@@ -11,7 +10,6 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
@@ -124,11 +122,5 @@ public class GroupProperties extends SecuredFormElementProperties<Group> {
 	@Override
 	protected Set<AbstractComponent> getProtectedElements() {
 		return new HashSet<AbstractComponent>(Arrays.asList(groupLabel, groupIsRepeatable));
-	}
-
-	private boolean existTestScenariosLinked() {
-		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
-				UserSessionHandler.getFormController().getForm());
-		return !testScenarios.isEmpty();
 	}
 }

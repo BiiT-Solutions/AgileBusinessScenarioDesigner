@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -17,10 +16,10 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "expression_value_string")
-public class ExpressionValueString extends ExpressionValue {
+public class ExpressionValueString extends ExpressionValue<String> {
 
 	@Column(columnDefinition = "TEXT")
-	private String value;
+	private String text = "";
 
 	protected ExpressionValueString() {
 		super();
@@ -32,11 +31,7 @@ public class ExpressionValueString extends ExpressionValue {
 	}
 
 	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+		return text;
 	}
 
 	@Override
@@ -50,11 +45,8 @@ public class ExpressionValueString extends ExpressionValue {
 	}
 
 	@Override
-	public void setValue(Object value) throws NotValidExpressionValue {
-		if (!(value instanceof String)) {
-			throw new NotValidExpressionValue("Expected String object in '" + value + "'");
-		}
-		setValue((String) value);
+	public void setValue(String value) {
+		this.text = value;
 	}
 
 	@Override
@@ -73,5 +65,13 @@ public class ExpressionValueString extends ExpressionValue {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of ExpressionValueString.");
 		}
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 }
