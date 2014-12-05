@@ -40,9 +40,13 @@ public class PluginController {
 		Collection<IPlugin> plugins = pluginManagerUtil.getPlugins(IPlugin.class);
 		if (plugins != null) {
 			for (IPlugin plugin : plugins) {
-				System.out.println(plugin.sayHello());
+//				System.out.println(plugin.sayHello());
 			}
 		}
+	}
+	
+	public Collection<IPlugin> getAllPlugins(){
+		return pluginManagerUtil.getPlugins(IPlugin.class);
 	}
 	
 	public IDroolsRulePlugin getDroolsPlugin() {
