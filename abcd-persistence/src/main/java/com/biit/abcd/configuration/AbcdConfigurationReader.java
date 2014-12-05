@@ -7,7 +7,6 @@ import com.biit.utils.file.PropertiesFile;
 
 public class AbcdConfigurationReader {
 	private final String DATABASE_CONFIG_FILE = "settings.conf";
-
 	// Regex Tags
 	private final String NUMBER_REGEX_TAG = "numberRegEx";
 	private final String DATE_REGEX_TAG = "dateRegEx";
@@ -27,6 +26,9 @@ public class AbcdConfigurationReader {
 	private final String DEFAULT_DATE_CODE_REGEX = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)";
 	private final String DEFAULT_POSTAL_CODE_REGEX = "[0-9]{4}[a-zA-Z]{2}";
 	
+	private final String PLUGINS_PATH_TAG = "pluginsPath";
+	private final String DEFAULT_PLUGINS_PATH = "plugins/";
+	
 	private String textPromt;
 	private String numberPromt;
 	private String datePromt;
@@ -34,6 +36,8 @@ public class AbcdConfigurationReader {
 	private String numberMask;
 	private String dateMask;
 	private String postalCodeMask;
+	
+	private String pluginsPath;
 	
 
 	private static AbcdConfigurationReader instance;
@@ -69,6 +73,8 @@ public class AbcdConfigurationReader {
 			numberMask = prop.getProperty(NUMBER_REGEX_TAG);
 			dateMask = prop.getProperty(DATE_REGEX_TAG);
 			postalCodeMask = prop.getProperty(POSTALCODE_REGEX_TAG);
+			// Get plugins path
+			pluginsPath = prop.getProperty(PLUGINS_PATH_TAG);
 		} catch (IOException e) {
 			// Do nothing.
 		}
@@ -96,6 +102,9 @@ public class AbcdConfigurationReader {
 		}
 		if (postalCodeMask == null) {
 			postalCodeMask = DEFAULT_POSTAL_CODE_REGEX;
+		}
+		if (pluginsPath == null) {
+			pluginsPath = DEFAULT_PLUGINS_PATH;
 		}
 	}
 
@@ -125,5 +134,9 @@ public class AbcdConfigurationReader {
 
 	public String getPostalCodeMask() {
 		return postalCodeMask;
+	}
+
+	public String getPluginsPath() {
+		return pluginsPath;
 	}
 }

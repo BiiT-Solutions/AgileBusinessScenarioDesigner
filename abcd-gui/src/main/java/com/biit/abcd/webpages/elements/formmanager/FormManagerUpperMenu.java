@@ -7,6 +7,7 @@ import java.util.List;
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.PluginController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
@@ -24,8 +25,8 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.security.AbcdActivity;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -60,6 +61,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	private Form form;
 	private IFormDao formDao;
 	private ISubmittedForm submittedForm;
+	private IconButton testPlugins;
 
 	public FormManagerUpperMenu(FormManager parent) {
 		super();
@@ -291,11 +293,22 @@ public class FormManagerUpperMenu extends UpperMenu {
 					}
 				});
 
+		testPlugins = new IconButton(LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, ThemeIcon.FORM_TEST_LAUNCH,
+				LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM, new ClickListener() {
+					private static final long serialVersionUID = -3126160822538614928L;
+					@Override
+					public void buttonClick(ClickEvent event) {
+						PluginController.getInstance().runPlugins();
+					}
+				}
+		);
+
 		addIconButton(newFormButton);
 		addIconButton(newVersion);
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
 		addIconButton(launchTestScenario);
+		addIconButton(testPlugins);
 	}
 
 	public void setEnabledButtons() {

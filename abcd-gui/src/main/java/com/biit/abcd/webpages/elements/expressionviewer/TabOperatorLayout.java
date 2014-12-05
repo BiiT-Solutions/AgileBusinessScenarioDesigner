@@ -59,13 +59,6 @@ public class TabOperatorLayout extends TabLayout {
 		createLogicalFunctionsOperators(logicalLayout);
 		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
 
-		// GridLayout controlsLayout = new GridLayout(GRID_COLUMNS, 4);
-		// controlsLayout.setWidth("100%");
-		// createControlOperators(controlsLayout);
-		// accordion.addTab(controlsLayout,
-		// ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_CONTROLS),
-		// true);
-
 		addComponent(accordion);
 		setComponentAlignment(accordion, Alignment.MIDDLE_CENTER);
 

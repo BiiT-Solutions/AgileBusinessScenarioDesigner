@@ -122,6 +122,11 @@
 			<artifactId>gson</artifactId>
 			<version>${gson.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.biit.plugins</groupId>
+			<artifactId>plugin-interface</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

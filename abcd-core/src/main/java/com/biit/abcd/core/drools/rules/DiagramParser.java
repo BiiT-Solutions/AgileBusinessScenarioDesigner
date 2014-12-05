@@ -27,7 +27,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
-import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
@@ -110,6 +109,7 @@ public class DiagramParser {
 			}
 			break;
 		case CALCULATION:
+		case SINK:
 			DiagramExpression expressionNode = (DiagramExpression) node;
 			if (expressionNode.getExpression() != null) {
 				Rule rule = new Rule(expressionNode.getExpression().getName(), extraConditions,
@@ -125,20 +125,6 @@ public class DiagramParser {
 			break;
 		case FORK:
 			forkConditions = completeForkExpressions((DiagramFork) node, extraConditions);
-			break;
-		case SINK:
-			DiagramSink sinkExpressionNode = (DiagramSink) node;
-			if (sinkExpressionNode.getExpression() != null) {
-				if (extraConditions != null) {
-					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), extraConditions,
-							sinkExpressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
-				} else {
-					Rule rule = new Rule(sinkExpressionNode.getExpression().getName(), null,
-							sinkExpressionNode.getExpression());
-					newRules.addAll(RuleToDroolsRule.parse(rule, null, getDroolsHelper()));
-				}
-			}
 			break;
 		default:
 			break;

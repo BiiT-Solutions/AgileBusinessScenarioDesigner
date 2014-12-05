@@ -96,6 +96,18 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 
 		});
 		setTab(globalConstantLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
+		
+		// Fifth tab (Plugins tab)
+		TabPluginsLayout pluginsLayout = new TabPluginsLayout();
+		pluginsLayout.addNewElementListener(new ElementAddedListener() {
+			@Override
+			public void elementAdded(Object newElement) {
+				addElementToView(newElement);
+			}
+		});
+		setTab(pluginsLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
+		
+		
 	}
 
 	protected void enableAssignOperator(boolean enabled) {

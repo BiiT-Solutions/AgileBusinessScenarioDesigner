@@ -1,0 +1,19 @@
+package com.biit.drools
+
+import com.biit.abcd.core.drools.facts.inputform.* 
+import com.biit.abcd.core.drools.utils.* 
+import com.biit.abcd.core.PluginController
+
+rule "test1"
+when
+then
+	System.out.println("PLUGIN HELLO: " + PluginController.getInstance().getDroolsPlugin().getHelloWorld());
+end
+
+rule "test2"
+when
+	$droolsForm: DroolsForm()
+	$formform : SubmittedForm() from $droolsForm.getSubmittedForm()
+then
+	$formform.setVariableValue('customVariableResult', PluginController.getInstance().getDroolsPlugin().sumParameters(1,2,3,4));
+end
