@@ -9,13 +9,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "expression_value_generic_variable")
-public class ExpressionValueGenericVariable extends ExpressionValue {
+public class ExpressionValueGenericVariable extends ExpressionValue<GenericTreeObjectType> {
 
 	@Enumerated(EnumType.STRING)
 	private GenericTreeObjectType type;
@@ -56,15 +55,12 @@ public class ExpressionValueGenericVariable extends ExpressionValue {
 	}
 
 	@Override
-	public Object getValue() {
+	public GenericTreeObjectType getValue() {
 		return getType();
 	}
 
 	@Override
-	public void setValue(Object value) throws NotValidExpressionValue {
-		if (!(value instanceof GenericTreeObjectType)) {
-			throw new NotValidExpressionValue("Expected GenericTreeObjectType object in '" + value + "'");
-		}
+	public void setValue(GenericTreeObjectType value) {
 		setType((GenericTreeObjectType) value);
 	}
 

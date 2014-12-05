@@ -10,14 +10,13 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "expression_value_tree_object_reference")
-public class ExpressionValueTreeObjectReference extends ExpressionValue {
+public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObject> {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject reference;
@@ -70,16 +69,13 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 	}
 
 	@Override
-	public Object getValue() {
+	public TreeObject getValue() {
 		return getReference();
 	}
 
 	@Override
-	public void setValue(Object value) throws NotValidExpressionValue {
-		if (!(value instanceof TreeObject)) {
-			throw new NotValidExpressionValue("Expected TreeObject object in '" + value + "'");
-		}
-		setReference((TreeObject) value);
+	public void setValue(TreeObject value) {
+		this.reference = value;
 	}
 
 	@Override
@@ -97,17 +93,12 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue {
 		if (object instanceof ExpressionValueTreeObjectReference) {
 			super.copyData(object);
 			ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) object;
-			try {
-				setUnit(expressionValueTreeObjectReference.getUnit());
-				// Rule tables can have empty expressions with null inside
-				if (expressionValueTreeObjectReference.getValue() != null) {
-					// Later the reference must be updated with current
-					// TreeObject
-					setValue(expressionValueTreeObjectReference.getValue());
-				}
-			} catch (NotValidExpressionValue e) {
-				throw new NotValidStorableObjectException("Object '" + object
-						+ "' is not a valid instance of ExpressionValueTreeObjectReference.");
+			setUnit(expressionValueTreeObjectReference.getUnit());
+			// Rule tables can have empty expressions with null inside
+			if (expressionValueTreeObjectReference.getValue() != null) {
+				// Later the reference must be updated with current
+				// TreeObject
+				setValue(expressionValueTreeObjectReference.getValue());
 			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object

@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -16,16 +15,16 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "expression_value_number")
-public class ExpressionValueNumber extends ExpressionValue {
+public class ExpressionValueNumber extends ExpressionValue<Double> {
 
-	private double value;
+	private Double value;
 
 	protected ExpressionValueNumber() {
 		super();
 		value = 0d;
 	}
 
-	public ExpressionValueNumber(double value) {
+	public ExpressionValueNumber(Double value) {
 		super();
 		setValue(value);
 	}
@@ -35,12 +34,9 @@ public class ExpressionValueNumber extends ExpressionValue {
 		return getValueWithoutTrailingZeroes();
 	}
 
+	@Override
 	public Double getValue() {
 		return new Double(value);
-	}
-
-	public void setValue(double value) {
-		this.value = value;
 	}
 
 	@Override
@@ -55,11 +51,8 @@ public class ExpressionValueNumber extends ExpressionValue {
 	}
 
 	@Override
-	public void setValue(Object value) throws NotValidExpressionValue {
-		if (!(value instanceof Double)) {
-			throw new NotValidExpressionValue("Expected Double object in '" + value + "'");
-		}
-		setValue(((Double) value).doubleValue());
+	public void setValue(Double value) {
+		this.value = value;
 	}
 
 	@Override
@@ -73,12 +66,7 @@ public class ExpressionValueNumber extends ExpressionValue {
 		if (object instanceof ExpressionValueNumber) {
 			super.copyData(object);
 			ExpressionValueNumber expressionValueNumber = (ExpressionValueNumber) object;
-			try {
-				this.setValue(expressionValueNumber.getValue());
-			} catch (NotValidExpressionValue e) {
-				throw new NotValidStorableObjectException("Object '" + object
-						+ "' is not a valid instance of ExpressionValueNumber.");
-			}
+			this.setValue(expressionValueNumber.getValue());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of ExpressionValueNumber.");

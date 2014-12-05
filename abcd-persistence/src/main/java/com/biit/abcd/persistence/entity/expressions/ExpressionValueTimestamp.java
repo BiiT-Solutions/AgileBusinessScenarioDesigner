@@ -10,7 +10,6 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -20,7 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "expression_value_timestamp")
-public class ExpressionValueTimestamp extends ExpressionValue {
+public class ExpressionValueTimestamp extends ExpressionValue<Timestamp> {
 	private Timestamp value;
 	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -53,6 +52,7 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		return value;
 	}
 
+	@Override
 	public void setValue(Timestamp value) {
 		this.value = value;
 	}
@@ -64,14 +64,6 @@ public class ExpressionValueTimestamp extends ExpressionValue {
 		} else {
 			return "";
 		}
-	}
-
-	@Override
-	public void setValue(Object value) throws NotValidExpressionValue {
-		if (!(value instanceof Timestamp)) {
-			throw new NotValidExpressionValue("Expected Timestamp object in '" + value + "'");
-		}
-		setValue((Timestamp) value);
 	}
 
 	@Override

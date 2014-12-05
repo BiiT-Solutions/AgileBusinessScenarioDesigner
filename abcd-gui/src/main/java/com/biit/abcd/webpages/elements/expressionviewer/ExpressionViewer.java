@@ -217,7 +217,7 @@ public class ExpressionViewer extends CssLayout {
 										(Timestamp) expression.getValue(),
 										ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_DATE)));
 							} else {
-								stringInputWindow.setValue(((ExpressionValue) expression).getValue().toString());
+								stringInputWindow.setValue(((ExpressionValue<?>) expression).getValue().toString());
 							}
 
 							stringInputWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -290,7 +290,7 @@ public class ExpressionViewer extends CssLayout {
 						} else if (expression instanceof ExpressionValueGlobalConstant) {
 							SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
 							globalWindow.showCentered();
-							globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getVariable());
+							globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getValue());
 							globalWindow.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {

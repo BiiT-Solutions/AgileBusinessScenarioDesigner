@@ -322,7 +322,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
-        value bit not null,
+        value bit,
         primary key (ID)
     );
 
@@ -373,7 +373,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
-        constant_ID bigint,
+        globalVariable_ID bigint,
         primary key (ID)
     );
 
@@ -385,7 +385,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
-        value double precision not null,
+        value double precision,
         primary key (ID)
     );
 
@@ -397,7 +397,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
-        value TEXT,
+        text TEXT,
         primary key (ID)
     );
 
@@ -409,7 +409,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         sortSeq bigint not null,
-        value TEXT,
+        text TEXT,
         primary key (ID)
     );
 
@@ -1440,8 +1440,8 @@
         references form_custom_variables (ID);
 
     alter table expression_value_global_variable 
-        add constraint FK_42woqe4atagm0r4oxgcnk6qwo 
-        foreign key (constant_ID) 
+        add constraint FK_nycuefmhokoiteo0n5b257gmo 
+        foreign key (globalVariable_ID) 
         references global_variables (ID);
 
     alter table expressions_chain_expression_basic 

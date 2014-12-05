@@ -30,19 +30,14 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.form.TreeObject;
 
 /**
- * Transforms an Expression into a Drools rule. It also unwraps the generic
- * variables that can be used in the expressions and creates a set of rules if
- * necessary.
+ * Transforms an Expression into a Drools rule. It also unwraps the generic variables that can be used in the
+ * expressions and creates a set of rules if necessary.
  * 
  */
 public class ExpressionToDroolsRule {
-
-	private static DroolsHelper droolsHelper;
-
 	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper)
 			throws ExpressionInvalidException, RuleNotImplementedException, RuleInvalidException {
 		List<DroolsRule> droolsRules = null;
-		setDroolsHelper(droolsHelper);
 
 		if (droolsRule.getActions() != null && !droolsRule.getActions().getExpressions().isEmpty()) {
 			// If the expression is composed by a generic variable, we have to
@@ -76,7 +71,7 @@ public class ExpressionToDroolsRule {
 				droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
 			}
 		}
-		
+
 		return droolsRules;
 	}
 
@@ -175,10 +170,12 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 *  Maintained to allow the old if rule definition work<br>
-	 *  IF(Categories.score < 1 ,Categories.score = 1, Categories.score = Categories.score)<br><br>
-	 *  Use now parseIfRule: <br>
-	 *  Categories.score = IF(Categories.score < 1 , 1, Categories.score)
+	 * Maintained to allow the old if rule definition work<br>
+	 * IF(Categories.score < 1 ,Categories.score = 1, Categories.score = Categories.score)<br>
+	 * <br>
+	 * Use now parseIfRule: <br>
+	 * Categories.score = IF(Categories.score < 1 , 1, Categories.score)
+	 * 
 	 * @param droolsRule
 	 * @return
 	 */
@@ -319,8 +316,7 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 * Checks if there are generic variables at the right side of the
-	 * assignation expression
+	 * Checks if there are generic variables at the right side of the assignation expression
 	 * 
 	 * @return
 	 */
@@ -335,8 +331,7 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 * We have to substitute the generic for the list of tree objects that
-	 * represent
+	 * We have to substitute the generic for the list of tree objects that represent
 	 * 
 	 * @param expressionChain
 	 * @return
@@ -498,13 +493,5 @@ public class ExpressionToDroolsRule {
 	private static boolean hasIfCondition(DroolsRule droolsRule) {
 		return RulesUtils.searchClassInExpressionChain(droolsRule.getActions(), ExpressionFunction.class,
 				AvailableFunction.IF);
-	}
-
-	private static DroolsHelper getDroolsHelper() {
-		return droolsHelper;
-	}
-
-	private static void setDroolsHelper(DroolsHelper droolsHelper) {
-		ExpressionToDroolsRule.droolsHelper = droolsHelper;
 	}
 }

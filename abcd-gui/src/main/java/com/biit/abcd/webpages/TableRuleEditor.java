@@ -14,12 +14,9 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -313,8 +310,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information
-	 * of the currently selected table.
+	 * Updates the table where the user defines the rules with the information of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
 		ruleTable.update(getSelectedTableRule());
@@ -532,33 +528,6 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	private void setCustomVariableExpression(TableRuleRow row, Integer propertyId, TreeObject treeObject,
 			CustomVariable customVariable) {
 		row.setExpression(propertyId, new ExpressionValueCustomVariable(treeObject, customVariable));
-		ruleTable.update(getSelectedTableRule());
-	}
-
-	/**
-	 * Sets a custom variable as an expression inside the table
-	 * 
-	 * @param row
-	 * @param propertyId
-	 * @param treeObject
-	 * @param customVariable
-	 */
-	private void setGenericTreeObjectExpression(TableRuleRow row, Integer propertyId, GenericTreeObjectType genericType) {
-		row.setExpression(propertyId, new ExpressionValueGenericVariable(genericType));
-		ruleTable.update(getSelectedTableRule());
-	}
-
-	/**
-	 * Sets a custom variable as an expression inside the table
-	 * 
-	 * @param row
-	 * @param propertyId
-	 * @param treeObject
-	 * @param customVariable
-	 */
-	private void setGenericCustomVariableExpression(TableRuleRow row, Integer propertyId,
-			GenericTreeObjectType genericType, CustomVariable customVariable) {
-		row.setExpression(propertyId, new ExpressionValueGenericCustomVariable(genericType, customVariable));
 		ruleTable.update(getSelectedTableRule());
 	}
 

@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -16,16 +15,16 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "expression_value_boolean")
-public class ExpressionValueBoolean extends ExpressionValue {
+public class ExpressionValueBoolean extends ExpressionValue<Boolean> {
 
-	private boolean value;
+	private Boolean value;
 
 	protected ExpressionValueBoolean() {
 		super();
 		value = true;
 	}
 
-	public ExpressionValueBoolean(boolean value) {
+	public ExpressionValueBoolean(Boolean value) {
 		super();
 		setValue(value);
 	}
@@ -40,12 +39,8 @@ public class ExpressionValueBoolean extends ExpressionValue {
 	// }
 
 	@Override
-	public Object getValue() {
+	public Boolean getValue() {
 		return value;
-	}
-
-	public void setValue(boolean value) {
-		this.value = value;
 	}
 
 	@Override
@@ -58,11 +53,8 @@ public class ExpressionValueBoolean extends ExpressionValue {
 	}
 
 	@Override
-	public void setValue(Object value) throws NotValidExpressionValue {
-		if (!(value instanceof Boolean)) {
-			throw new NotValidExpressionValue("Expected Boolean object in '" + value + "'");
-		}
-		setValue((Boolean) value);
+	public void setValue(Boolean value) {
+		this.value = value;
 	}
 
 	@Override
@@ -76,12 +68,7 @@ public class ExpressionValueBoolean extends ExpressionValue {
 		if (object instanceof ExpressionValueBoolean) {
 			super.copyData(object);
 			ExpressionValueBoolean expressionValueBoolean = (ExpressionValueBoolean) object;
-			try {
-				this.setValue(expressionValueBoolean.getValue());
-			} catch (NotValidExpressionValue e) {
-				throw new NotValidStorableObjectException("Object '" + object
-						+ "' has an invalid ExpressionValueBoolean.");
-			}
+			this.setValue(expressionValueBoolean.getValue());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of ExpressionValueBoolean.");
