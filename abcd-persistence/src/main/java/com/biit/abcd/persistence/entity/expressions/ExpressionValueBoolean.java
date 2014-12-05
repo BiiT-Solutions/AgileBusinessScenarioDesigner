@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 

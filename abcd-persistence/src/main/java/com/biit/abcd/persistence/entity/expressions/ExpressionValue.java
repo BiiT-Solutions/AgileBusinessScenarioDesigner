@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "expression_value")
 public abstract class ExpressionValue<T> extends Expression {
+	
 
 	public abstract T getValue();
 
