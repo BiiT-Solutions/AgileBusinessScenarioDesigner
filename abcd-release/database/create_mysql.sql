@@ -302,6 +302,19 @@
         primary key (ID)
     );
 
+    create table expression_plugin_method (
+        ID bigint not null,
+        comparationId varchar(190) not null,
+        createdBy DOUBLE,
+        creationTime datetime not null,
+        updateTime datetime,
+        updatedBy DOUBLE,
+        sortSeq bigint not null,
+        pluginInterface varchar(255),
+        pluginMethodName varchar(255),
+        primary key (ID)
+    );
+
     create table expression_symbol (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -947,6 +960,12 @@
 
     alter table expression_operator_math 
         add constraint UK_8thp00x8evlgl3w2guass30ql  unique (comparationId);
+
+    alter table expression_plugin_method 
+        add constraint UK_6hn9bd5cyjqtohgaybvt22ujp  unique (ID);
+
+    alter table expression_plugin_method 
+        add constraint UK_tnq0p980rjfkyf5sal1oq6290  unique (comparationId);
 
     alter table expression_symbol 
         add constraint UK_d5pgsndfldjl77mxwesg47oyy  unique (ID);

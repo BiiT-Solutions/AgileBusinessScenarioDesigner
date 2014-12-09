@@ -7,7 +7,6 @@ import java.util.List;
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
@@ -61,7 +60,6 @@ public class FormManagerUpperMenu extends UpperMenu {
 	private Form form;
 	private IFormDao formDao;
 	private ISubmittedForm submittedForm;
-	private IconButton testPlugins;
 
 	public FormManagerUpperMenu(FormManager parent) {
 		super();
@@ -293,22 +291,11 @@ public class FormManagerUpperMenu extends UpperMenu {
 					}
 				});
 
-		testPlugins = new IconButton(LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, ThemeIcon.FORM_TEST_LAUNCH,
-				LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM, new ClickListener() {
-					private static final long serialVersionUID = -3126160822538614928L;
-					@Override
-					public void buttonClick(ClickEvent event) {
-						PluginController.getInstance().runPlugins();
-					}
-				}
-		);
-
 		addIconButton(newFormButton);
 		addIconButton(newVersion);
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
 		addIconButton(launchTestScenario);
-		addIconButton(testPlugins);
 	}
 
 	public void setEnabledButtons() {

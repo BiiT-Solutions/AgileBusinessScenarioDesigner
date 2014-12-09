@@ -45,6 +45,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
@@ -55,7 +56,6 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -66,8 +66,10 @@ public class KidsFormCreator {
 	private final static String FORM = "Form1";
 
 	private CustomVariable formNumberCustomVariable = null;
+	private CustomVariable formTextCustomVariable = null;
 	private CustomVariable categoryNumberCustomVariable = null;
 	private CustomVariable groupNumberCustomVariable = null;
+	private CustomVariable groupTextNumberCustomVariable = null;
 	private CustomVariable questionNumberCustomVariable = null;
 	private Form form = null;
 	private Category category = null;
@@ -92,7 +94,6 @@ public class KidsFormCreator {
 			FormToDroolsExporter formDrools = new FormToDroolsExporter();
 			DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), getGlobalVariables());
 			readStaticSubmittedForm();
-			translateFormCategories();
 			// Test the rules with the submitted form and returns a DroolsForm
 			return formDrools.applyDrools(getSubmittedForm(), rulesGenerator.getRules(),
 					rulesGenerator.getGlobalVariables());
@@ -289,7 +290,7 @@ public class KidsFormCreator {
 	}
 
 	/**
-	 * Creates a custom variable and assigns value of 10 to it
+	 * Creates a custom variable and assigns a value of 10 to it
 	 */
 	protected void createFormNumberCustomVariableExpression(String customVariableName) {
 		formNumberCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.NUMBER,
@@ -297,6 +298,19 @@ public class KidsFormCreator {
 		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
 				getForm(), formNumberCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueNumber(10.));
+		getForm().getExpressionChains().add(expression);
+		createExpressionNode(expression);
+	}
+	
+	/**
+	 * Creates a custom variable and assigns a value of "test"
+	 */
+	protected void createFormTextCustomVariableExpression(String customVariableName) {
+		formTextCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.STRING,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
+				getForm(), formTextCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString("test"));
 		getForm().getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
@@ -375,11 +389,19 @@ public class KidsFormCreator {
 	public CustomVariable getQuestionNumberCustomVariable() {
 		return questionNumberCustomVariable;
 	}
-
-	public ExpressionValueCustomVariable getFormExpressionValueCustomVariable() {
-		return new ExpressionValueCustomVariable(getForm(), getFormNumberCustomVariable());
+	
+	public CustomVariable getFormTextCustomVariable() {
+		return formTextCustomVariable;
 	}
 
+	public ExpressionValueCustomVariable getFormNumberExpressionValueCustomVariable() {
+		return new ExpressionValueCustomVariable(getForm(), getFormNumberCustomVariable());
+	}
+	
+	public ExpressionValueCustomVariable getFormTextExpressionValueCustomVariable() {
+		return new ExpressionValueCustomVariable(getForm(), getFormTextCustomVariable());
+	}
+	
 	public ExpressionValueCustomVariable getCategoryExpressionValueCustomVariable() {
 		return new ExpressionValueCustomVariable(getCategory(), getCategoryNumberCustomVariable());
 	}
@@ -648,11 +670,5 @@ public class KidsFormCreator {
 
 	public void setGlobalVariables(List<GlobalVariable> globalVariables) {
 		this.globalVariables = globalVariables;
-	}
-
-	@Test(groups = { "orbeon" }, dependsOnMethods = { "readStaticSubmittedForm" })
-	public void translateFormCategories() throws DocumentException, CategoryNameWithoutTranslation, IOException {
-//		String xmlStructure = readFile("./src/test/resources/kidScreen.xhtml", StandardCharsets.UTF_8);
-//		OrbeonCategoryTranslator.getInstance().readXml(submittedForm, xmlStructure);
 	}
 }

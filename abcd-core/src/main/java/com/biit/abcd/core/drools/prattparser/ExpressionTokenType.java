@@ -9,7 +9,10 @@ public enum ExpressionTokenType {
 	// Available symbols
 	RIGHT_BRACKET, LEFT_BRACKET, COMMA,
 	// Special types for the parser, end of file and generic name
-	EOF, NAME;
+	EOF, NAME,
+	// Special type for the plugin methods
+	IPLUGIN;
+	
 
 	/**
 	 * If the TokenType represents a punctuator (i.e. a token that can split an
@@ -71,6 +74,8 @@ public enum ExpressionTokenType {
 			return "<";
 		case LESS_EQUALS:
 			return "<=";
+		case IPLUGIN:
+			return "IPlugin";
 		default:
 			return null;
 		}

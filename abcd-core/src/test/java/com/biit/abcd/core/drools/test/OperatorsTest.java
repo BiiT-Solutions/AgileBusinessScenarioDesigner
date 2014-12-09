@@ -78,6 +78,7 @@ public class OperatorsTest extends KidsFormCreator {
 	private final static String AVG = "avg";
 	private final static String PMT = "pmt";
 	private static final Double OR_RESULT_VALUE = 11.;
+	private static final String BETWEEN_CUSTOM_VARIABLE = "betweenCustomVariable";
 
 	@Test(groups = { "rules" })
 	public void mathematicalOperatorsTest() {
@@ -521,7 +522,7 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create a simple form custom variable
 			createFormNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
 			// IN rule
-			createInRule(getFormExpressionValueCustomVariable());
+			createInRule(getFormNumberExpressionValueCustomVariable());
 			// Create the diagram
 			createDiagram();
 			// Create the drools rules and launch the engine
@@ -648,6 +649,82 @@ public class OperatorsTest extends KidsFormCreator {
 					new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(2.),
 					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(6.), new ExpressionSymbol(
 							AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
+
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules" })
+	public void betweenOperatorCustomVariableNumberValuesTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Set a value to check
+			createFormNumberCustomVariableExpression(BETWEEN_CUSTOM_VARIABLE);
+			// BETWEEN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("betweenNumberExpression",
+					getFormNumberExpressionValueCustomVariable(), new ExpressionFunction(AvailableFunction.BETWEEN),
+					new ExpressionValueNumber(2.), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueNumber(11.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			rule.setConditions(condition);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			rule.setActions(action);
+
+			// Add the rule to the form
+			getForm().getRules().add(rule);
+			// Create the node rule
+			createRuleNode(rule);
+			// Create the diagram
+			createDiagram();
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules();
+			// Check result
+			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					CUSTOM_VARIABLE_RESULT_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test(groups = { "rules" })
+	public void betweenOperatorCustomVariableStringValuesTest() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Set a value to check
+			createFormTextCustomVariableExpression(BETWEEN_CUSTOM_VARIABLE);
+			// BETWEEN rule
+			Rule rule = new Rule();
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain condition = new ExpressionChain("betweenNumberExpression",
+					getFormTextExpressionValueCustomVariable(), new ExpressionFunction(AvailableFunction.BETWEEN),
+					new ExpressionValueString("a"), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueString("z"), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			rule.setConditions(condition);
 			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
 					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),

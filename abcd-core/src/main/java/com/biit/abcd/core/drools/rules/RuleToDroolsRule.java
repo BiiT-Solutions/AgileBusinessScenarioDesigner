@@ -53,7 +53,6 @@ public class RuleToDroolsRule {
 
 	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions, DroolsHelper droolsHelper)
 			throws RuleInvalidException, RuleNotImplementedException, ExpressionInvalidException {
-		
 		List<DroolsRule> conditionsRules = new ArrayList<>();
 		setDroolsHelper(droolsHelper);
 		if (rule != null) {

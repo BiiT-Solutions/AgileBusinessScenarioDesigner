@@ -485,8 +485,11 @@ public enum LanguageCodes {
 	
 	CAPTION_VALIDATE_DUPLICATE_ANSWER_VALUE("caption.validate.duplicate.answer.value"),
 	CAPTION_NAME_TOO_LARGE("caption.name.too.large"),
-	CAPTION_VALIDATE_DUPLICATE_NAME("caption.validate.duplicate.name");
-
+	CAPTION_VALIDATE_DUPLICATE_NAME("caption.validate.duplicate.name"),
+	
+	PLUGINS_TAB_TABLE_CAPTION("plugins.tab.table.caption"),
+	PLUGINS_TAB_ADD_FUNCTION_BUTTON_CAPTION("plugins.tab.add.function.button.caption"),
+	PLUGINS_TAB_INFO_PANEL_CAPTION("plugins.tab.info.panel.caption");
 
 	private String value;
 

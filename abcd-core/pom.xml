@@ -124,7 +124,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.biit.plugins</groupId>
-			<artifactId>plugin-interface</artifactId>
+			<artifactId>generic-plugin</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>

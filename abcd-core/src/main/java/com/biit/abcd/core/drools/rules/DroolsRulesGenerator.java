@@ -21,6 +21,7 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
@@ -45,7 +46,7 @@ public class DroolsRulesGenerator {
 			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, DateComparisonNotPossibleException {
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
@@ -56,7 +57,8 @@ public class DroolsRulesGenerator {
 	private void initParser() throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException {
+			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
+			PluginInvocationException {
 		if (form != null) {
 			// Define imports
 			importsDeclaration();
@@ -96,6 +98,10 @@ public class DroolsRulesGenerator {
 		getRulesBuilder().append("import java.util.List \n");
 		getRulesBuilder().append("import java.util.ArrayList \n");
 		getRulesBuilder().append("import com.biit.orbeon.form.* \n");
+		getRulesBuilder().append("import com.biit.abcd.core.PluginController \n");
+		getRulesBuilder().append("import net.xeoh.plugins.base.Plugin \n");
+		getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
+		getRulesBuilder().append("import java.lang.reflect.Method \n");
 		getRulesBuilder().append("import com.biit.abcd.logger.AbcdLogger \n\n");
 	}
 
@@ -121,7 +127,8 @@ public class DroolsRulesGenerator {
 
 	/**
 	 * Creates the global constants for the drools session.<br>
-	 * Stores in memory the values to be inserted before the facts and generates the global variables export file
+	 * Stores in memory the values to be inserted before the facts and generates
+	 * the global variables export file
 	 * 
 	 * 
 	 * @return The global constants in drools
@@ -160,7 +167,8 @@ public class DroolsRulesGenerator {
 	}
 
 	/**
-	 * Sets the global variable array that is going to be used in the drools engine<br>
+	 * Sets the global variable array that is going to be used in the drools
+	 * engine<br>
 	 * It does not create the drools rules
 	 * 
 	 * @param globalVariables

@@ -3,6 +3,7 @@ package com.biit.abcd.core;
 import java.io.File;
 import java.util.Collection;
 
+import net.xeoh.plugins.base.Plugin;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
@@ -36,21 +37,27 @@ public class PluginController {
 		throw new CloneNotSupportedException();
 	}
 
-	public void runPlugins() {
-		Collection<IPlugin> plugins = pluginManagerUtil.getPlugins(IPlugin.class);
-		if (plugins != null) {
-			for (IPlugin plugin : plugins) {
-//				System.out.println(plugin.sayHello());
-			}
-		}
-	}
-	
-	public Collection<IPlugin> getAllPlugins(){
+	public Collection<IPlugin> getAllPlugins() {
 		return pluginManagerUtil.getPlugins(IPlugin.class);
 	}
-	
+
 	public IDroolsRulePlugin getDroolsPlugin() {
 		return pluginManagerUtil.getPlugin(IDroolsRulePlugin.class);
+	}
+
+	public Plugin getPlugin(Class pluginInterface) {
+		return pluginManagerUtil.getPlugin(pluginInterface);
+	}
+
+	public Plugin getPlugin(String pluginInterfaceName) {
+		try {
+			Class pluginInterface = Class.forName(pluginInterfaceName);
+			return getPlugin(pluginInterface);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void scanForPlugins() {

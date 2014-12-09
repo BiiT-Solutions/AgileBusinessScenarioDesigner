@@ -48,6 +48,8 @@ public class ExpressionChainPrattParser extends PrattParser {
 		// Although it uses the CallParselet, we defined some special conditions
 		// for the IF
 		this.register(ExpressionTokenType.IF, new CallParselet());
+		// Special token for parsing plugin calls
+		this.register(ExpressionTokenType.IPLUGIN, new CallParselet());
 
 		// Register the simple operator parselets.
 //		this.prefix(ExpressionTokenType.PLUS, Precedence.PREFIX);

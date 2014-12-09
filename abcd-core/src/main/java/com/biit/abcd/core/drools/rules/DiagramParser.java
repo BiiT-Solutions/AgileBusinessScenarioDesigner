@@ -13,6 +13,7 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
@@ -53,9 +54,13 @@ public class DiagramParser {
 			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			DateComparisonNotPossibleException {
+			DateComparisonNotPossibleException, PluginInvocationException {
 		List<Rule> newRules = parse(diagram, null);
-		String rulesAsString = DroolsParser.createDroolsRule(newRules);
+		String rulesAsString = NewDroolsParser.createDroolsRule(newRules);
+		
+		// TODO UNCOMMENT WHEN FINIDHED THE TESTS
+//		String rulesAsString = DroolsParser.createDroolsRule(newRules);
+		
 		return rulesAsString;
 	}
 

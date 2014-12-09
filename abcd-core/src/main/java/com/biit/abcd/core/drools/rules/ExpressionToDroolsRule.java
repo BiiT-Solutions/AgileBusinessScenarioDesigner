@@ -38,7 +38,7 @@ public class ExpressionToDroolsRule {
 	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper)
 			throws ExpressionInvalidException, RuleNotImplementedException, RuleInvalidException {
 		List<DroolsRule> droolsRules = null;
-
+		
 		if (droolsRule.getActions() != null && !droolsRule.getActions().getExpressions().isEmpty()) {
 			// If the expression is composed by a generic variable, we have to
 			// generate the set of rules that represents the generic

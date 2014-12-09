@@ -10,7 +10,8 @@
 				<exclude name="gson" />
 				<exclude name="newVersion" />
 				<exclude name="droolsEngineRules" />
-				<include name="externalDroolsFunctions" />
+				<exclude name="externalDroolsFunctions" />
+				<include name="rules2" />
 			</run>
 		</groups>
 		<classes>
@@ -27,6 +28,7 @@
 			<class name="com.biit.abcd.core.drools.test.OperatorsTest" />
 			<class name="com.biit.abcd.core.drools.test.DroolsEngineRulesTest" />
 			<class name="com.biit.abcd.core.drools.test.DroolsFunctionsTest" />
+			<class name="com.biit.abcd.core.drools.test.PluginsTest" />
 		</classes>
 	</test>
 </suite>
