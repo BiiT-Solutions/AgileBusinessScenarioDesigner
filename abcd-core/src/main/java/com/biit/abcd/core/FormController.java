@@ -69,6 +69,8 @@ public class FormController {
 	public void save() throws DuplicatedVariableException, UnexpectedDatabaseException {
 		checkDuplicatedVariables();
 		if (getForm() != null) {
+			getForm().setUpdatedBy(getUser());
+			getForm().setUpdateTime();
 			formDao.makePersistent(getForm());
 			try {
 				originalForm = (Form) getForm().generateCopy(true, true);
