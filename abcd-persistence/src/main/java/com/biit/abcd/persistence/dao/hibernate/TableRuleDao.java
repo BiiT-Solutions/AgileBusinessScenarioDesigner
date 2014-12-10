@@ -10,7 +10,7 @@ import com.biit.persistence.dao.hibernate.GenericDao;
 
 @Repository
 public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao {
-	
+
 	public TableRuleDao() {
 		super(TableRule.class);
 	}
@@ -19,4 +19,5 @@ public class TableRuleDao extends GenericDao<TableRule> implements ITableRuleDao
 	protected void initializeSets(List<TableRule> elements) {
 		// Nothing to do, all eager.
 	}
+
 }

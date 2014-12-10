@@ -46,7 +46,8 @@ import com.vaadin.ui.HorizontalLayout;
 
 public class FormDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private FormTreeTable formTreeTable;
 	private FormDesignerPropertiesComponent propertiesComponent;
 	private FormDesignerUpperMenu upperMenu;
@@ -89,7 +90,7 @@ public class FormDesigner extends FormWebPageComponent {
 					return;
 				}
 				formTreeTable.updateItem((TreeObject) element);
-				updateUpperMenu(formTreeTable.getTreeObjectSelected());	
+				updateUpperMenu(formTreeTable.getTreeObjectSelected());
 			}
 		});
 
@@ -273,7 +274,7 @@ public class FormDesigner extends FormWebPageComponent {
 									formTreeTable.setValue(whatToMove);
 									formTreeTable.collapseFrom(Question.class);
 								} catch (ChildrenNotFoundException | NotValidChildException e) {
-									MessageManager.showWarning(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
+									MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
 											LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
 								}
 								// testScenariosModified = true;
@@ -292,7 +293,7 @@ public class FormDesigner extends FormWebPageComponent {
 							formTreeTable.setValue(whatToMove);
 							formTreeTable.collapseFrom(Question.class);
 						} catch (ChildrenNotFoundException | NotValidChildException e) {
-							MessageManager.showWarning(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
+							MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
 									LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
 						}
 					}
@@ -503,13 +504,15 @@ public class FormDesigner extends FormWebPageComponent {
 			} catch (DuplicatedVariableException e) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
-
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				AbcdLogger.errorMessage(this.getClass().getName(), cve);
 			} catch (UnexpectedDatabaseException e) {
 				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
 	}
@@ -616,7 +619,7 @@ public class FormDesigner extends FormWebPageComponent {
 							+ " from the Form, with 'Name: " + selected.getName() + "'.");
 				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
-					MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+					MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
 							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
 
 				}
@@ -651,7 +654,7 @@ public class FormDesigner extends FormWebPageComponent {
 		if (formTreeTable.getItem(element) != null) {
 			formTreeTable.setValue(element);
 		} else {
-			MessageManager.showWarning(LanguageCodes.WARNING_ELEMENT_NOT_FOUND,
+			MessageManager.showError(LanguageCodes.WARNING_ELEMENT_NOT_FOUND,
 					LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
 		}
 	}
