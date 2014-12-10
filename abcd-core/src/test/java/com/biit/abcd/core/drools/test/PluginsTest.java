@@ -19,7 +19,7 @@ public class PluginsTest extends KidsFormCreator {
 	private final static Class<?> HELLO_WORLD_PLUGIN_INTERFACE = com.biit.plugins.interfaces.IHelloWorld.class;
 	private final static String HELLO_WORLD_PLUGIN_METHOD = "methodHelloWorld";
 
-	@Test(groups = { "rules2" })
+	@Test(groups = { "rules" })
 	public void helloWorldPluginTest() {
 		try {
 			// Restart the form to avoid test cross references

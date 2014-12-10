@@ -56,8 +56,6 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
  */
 public class TableRuleTest extends KidsFormCreator {
 
-	private final static String QUESTION_EQUALS_ANSWER = "works";
-	private final static String QUESTION_NOT_EQUALS_ANSWER = "notWorks";
 	private final static String GENDER_MALE = "male";
 	private final static String GENDER_FEMALE = "female";
 	private static final String GENDER_VARIABLE = "genderVariable";

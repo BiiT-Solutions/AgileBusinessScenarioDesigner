@@ -386,7 +386,7 @@ public class RuleToDroolsRule {
 		try {
 			prattParserResult = prattParser.parseExpression();
 		} catch (PrattParserException ex) {
-			AbcdLogger.errorMessage(DroolsParser.class.getName(), ex);
+			AbcdLogger.errorMessage(OldDroolsParser.class.getName(), ex);
 		}
 		return prattParserResult;
 	}

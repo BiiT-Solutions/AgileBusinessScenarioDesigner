@@ -47,7 +47,6 @@ import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
@@ -67,7 +66,7 @@ public class NestedGroupsTest extends KidsFormCreator {
 	}
 
 	// Simple table question answer
-	@Test(groups = { "rules" }, dependsOnMethods = { "translateFormCategories" })
+	@Test(groups = { "rules" })
 	public void testSimpleTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
 			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,

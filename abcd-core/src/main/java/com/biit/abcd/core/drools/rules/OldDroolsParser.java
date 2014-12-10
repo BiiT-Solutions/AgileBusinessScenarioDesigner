@@ -1,15 +1,11 @@
 package com.biit.abcd.core.drools.rules;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.xeoh.plugins.base.Plugin;
-
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
@@ -23,7 +19,6 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -42,7 +37,6 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
-import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -56,9 +50,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.TreeObject;
-import com.biit.plugins.interfaces.IPlugin;
 
-public class NewDroolsParser {
+public class OldDroolsParser {
 
 	private static String andOperator(List<Expression> expressions) throws ExpressionInvalidException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -177,9 +170,8 @@ public class NewDroolsParser {
 	}
 
 	/**
-	 * Checks the existence of a binding in drools with the the reference of the
-	 * variable passed If there is no binding, creates a new one (i.e. $var :
-	 * Question() ...)
+	 * Checks the existence of a binding in drools with the the reference of the variable passed If there is no binding,
+	 * creates a new one (i.e. $var : Question() ...)
 	 * 
 	 * @param expValVariable
 	 * @throws TreeObjectParentNotValidException
@@ -201,9 +193,8 @@ public class NewDroolsParser {
 	}
 
 	/**
-	 * Checks the existence of a binding in drools with the the reference of the
-	 * variable passed If there is no binding, creates a new one (i.e. $var :
-	 * Question() ...)
+	 * Checks the existence of a binding in drools with the the reference of the variable passed If there is no binding,
+	 * creates a new one (i.e. $var : Question() ...)
 	 * 
 	 * @param expValVariable
 	 * @throws TreeObjectParentNotValidException
@@ -264,14 +255,11 @@ public class NewDroolsParser {
 	 * @throws NullTreeObjectException
 	 * @throws BetweenFunctionInvalidException
 	 * @throws DateComparisonNotPossibleException
-	 * @throws PluginInvocationException
-	 * @throws NoSuchMethodException
 	 */
 	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException,
 			NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
-			PluginInvocationException {
+			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		String parsedText = "";
 		for (Rule rule : rules) {
 			// orOperatorUsed = false;
@@ -318,16 +306,11 @@ public class NewDroolsParser {
 	 * @throws NullTreeObjectException
 	 * @throws BetweenFunctionInvalidException
 	 * @throws DateComparisonNotPossibleException
-	 * @throws PluginInvocationException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
 	 */
 	private static String createDroolsRule(Rule rule) throws RuleNotImplementedException, NotCompatibleTypeException,
 			ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException {
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException {
 		if (rule == null) {
 			return null;
 		}
@@ -375,8 +358,8 @@ public class NewDroolsParser {
 
 	/**
 	 * Parses the final rule of the OR/AND combination<br>
-	 * Based on the ids of the previous rules, it will create a combination of
-	 * them following the structure defined by the user.
+	 * Based on the ids of the previous rules, it will create a combination of them following the structure defined by
+	 * the user.
 	 * 
 	 * @return
 	 * @throws NullExpressionValueException
@@ -617,13 +600,12 @@ public class NewDroolsParser {
 	}
 
 	/**
-	 * Expression parser. An expression is a rule without the condition part in
-	 * the definition, but not in the drools engine.<br>
+	 * Expression parser. An expression is a rule without the condition part in the definition, but not in the drools
+	 * engine.<br>
 	 * Parse actions like => Cat.score = min(q1.score, q2.score, ...) <br>
 	 * Create drools rule like => <br>
 	 * &nbsp&nbsp&nbsp $var : List() from collect( some conditions )<br>
-	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var);
-	 * $sol : min($value) )
+	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var); $sol : min($value) )
 	 * 
 	 * @param actions
 	 *            the expression being parsed
@@ -824,7 +806,7 @@ public class NewDroolsParser {
 		try {
 			prattParserResult = prattParser.parseExpression();
 		} catch (PrattParserException ex) {
-			AbcdLogger.errorMessage(NewDroolsParser.class.getName(), ex);
+			AbcdLogger.errorMessage(OldDroolsParser.class.getName(), ex);
 		}
 		return prattParserResult;
 	}
@@ -846,24 +828,13 @@ public class NewDroolsParser {
 	 * @throws TreeObjectParentNotValidException
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws NullTreeObjectException
-	 * @throws PluginInvocationException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
 	 */
 	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			PluginInvocationException {
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
 
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
-
-		System.out.println("ACTION EXPRESSION CHAIN: " + prattParserResultExpressionChain);
-		System.out.println("PARSING CLASS: "
-				+ ((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(2)).getExpressions().get(0)
-						.getClass());
 
 		if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
 				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
@@ -872,13 +843,7 @@ public class NewDroolsParser {
 			// In case the function is empty we don't need to generate the rule
 			if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionSymbol) {
 				return null;
-
-			}
-			// Its the first position because the parser removes the equals in
-			// the expression functions
-			// Could be changed to standardize the behavior of the parser but it
-			// works fine
-			else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
+			} else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
 				switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
 				case MAX:
 				case MIN:
@@ -889,11 +854,6 @@ public class NewDroolsParser {
 				default:
 					break;
 				}
-
-			} else if ((prattParserResultExpressionChain.getExpressions().get(2) instanceof ExpressionChain)
-					&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(2)).getExpressions()
-							.get(0) instanceof ExpressionPluginMethod)) {
-				return parsePluginMethods(prattParserResultExpressionChain);
 			}
 			// Mathematical expression
 			else {
@@ -901,40 +861,6 @@ public class NewDroolsParser {
 			}
 		}
 		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
-	}
-
-	/**
-	 * Creates the specific method calls defined by the expression<br>
-	 * These calls will be passed to the plugin controller and will be called
-	 * from the drools engine
-	 * 
-	 * @param actions
-	 * @return
-	 * @throws PluginInvocationException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 */
-	private static String parsePluginMethods(ExpressionChain actions) throws PluginInvocationException {
-		ExpressionPluginMethod expressionPlugin = (ExpressionPluginMethod) ((ExpressionChain) actions.getExpressions()
-				.get(2)).getExpressions().get(0);
-		String droolsActions = "";
-		droolsActions += RulesUtils.getThenRuleString();
-		try {
-			Plugin pluginInterface = PluginController.getInstance().getPlugin(expressionPlugin.getPluginInterface());
-			if (pluginInterface instanceof IPlugin) {
-				droolsActions += "\tPlugin pluginInterface = PluginController.getInstance().getPlugin(\""
-						+ expressionPlugin.getPluginInterface().getCanonicalName() + "\");\n";
-				droolsActions += "\tMethod method = ((IPlugin) pluginInterface).getPluginMethod(\""
-						+ expressionPlugin.getPluginMethodName() + "\");\n";
-				droolsActions += "\tSystem.out.println(\"PLUGIN RESULT: \" + method.invoke(pluginInterface));\n";
-			}
-		} catch (IllegalArgumentException e) {
-			throw new PluginInvocationException("Error ", expressionPlugin.getPluginInterface().getName(),
-					expressionPlugin.getPluginMethodName());
-		}
-		return droolsActions;
 	}
 
 	private static String parseConditions(ExpressionChain conditions) throws ExpressionInvalidException,
@@ -1052,8 +978,7 @@ public class NewDroolsParser {
 	}
 
 	/**
-	 * Return true if all the type of the left reference matches all the other
-	 * expression value types
+	 * Return true if all the type of the left reference matches all the other expression value types
 	 * 
 	 * @param leftReferenceType
 	 * @param values
@@ -1165,8 +1090,7 @@ public class NewDroolsParser {
 	/**
 	 * Parse conditions like => Question BETWEEN(Answer1, answer2). <br>
 	 * The values inside the between must be always numbers <br>
-	 * Create drools rule like => Question( (getAnswer() >= answer.getValue())
-	 * && (getAnswer() <= answer.getValue()))
+	 * Create drools rule like => Question( (getAnswer() >= answer.getValue()) && (getAnswer() <= answer.getValue()))
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule
@@ -1280,7 +1204,7 @@ public class NewDroolsParser {
 														+ "') && < DateUtils.transformLongStringToDate('"
 														+ ((Date) value2).getTime() + "')";
 
-												AbcdLogger.warning(NewDroolsParser.class.getName(),
+												AbcdLogger.warning(OldDroolsParser.class.getName(),
 														"Question with format DATE don't have a selected unit");
 											}
 											droolsConditions += "	$" + leftQuestion.getUniqueNameReadable()
@@ -1337,7 +1261,6 @@ public class NewDroolsParser {
 								+ " : SubmittedForm(isVariableDefined('" + varName + "'), getVariableValue('" + varName
 								+ "') >= " + adaptorValue + value1 + adaptorValue + " && < " + adaptorValue + value2
 								+ adaptorValue + " ) from $droolsForm.getSubmittedForm() \n";
-						break;
 					case CATEGORY:
 					case GROUP:
 					case QUESTION:
@@ -1529,8 +1452,7 @@ public class NewDroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isVariableDefined('cScore'),
-	 * getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isVariableDefined('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param expressionOperatorLogic
 	 * 
@@ -1584,8 +1506,7 @@ public class NewDroolsParser {
 
 	/**
 	 * Parse conditions like => Score (logic operator (==, <=, <, >=, >)) value. <br>
-	 * Create drools rule like => Category(isVariableDefined('cScore'),
-	 * getVariablevalue('cScore') == value )
+	 * Create drools rule like => Category(isVariableDefined('cScore'), getVariablevalue('cScore') == value )
 	 * 
 	 * @param conditions
 	 * @return LHS of the rule

@@ -17,6 +17,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -46,7 +47,8 @@ public class DroolsRulesGenerator {
 			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException {
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException,
+			DroolsRuleCreationException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
@@ -58,7 +60,7 @@ public class DroolsRulesGenerator {
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
-			PluginInvocationException {
+			PluginInvocationException, DroolsRuleCreationException {
 		if (form != null) {
 			// Define imports
 			importsDeclaration();
