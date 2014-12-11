@@ -47,6 +47,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 		formLabel = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_LABEL));
 		formLabel.addValidator(new ValidatorTreeObjectNameLength());
 		formLabel.setValue(instance.getLabel());
+		formLabel.setEnabled(element.getId() == null);
 
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
