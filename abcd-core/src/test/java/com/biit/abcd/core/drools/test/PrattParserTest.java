@@ -532,13 +532,13 @@ public class PrattParserTest {
 
 	@Test(groups = { "droolsPrattParser" })
 	public void pluginFunctionsTest() {
-		final Class<?> DROOLS_PLUGIN_INTERFACE = com.biit.plugins.interfaces.IDroolsRulePlugin.class;
+		final Class<?> PLUGIN_INTERFACE = com.biit.plugins.interfaces.IPlugin.class;
 		final String DROOLS_PLUGIN_NAME = "DroolsFunctions";
 		final String DROOLS_PLUGIN_METHOD = "methodSumParameters";
 		createSimpleForm();
 		String actual = parseDrools(new ExpressionChain("helloWorldExpression", getExpValFormScore(),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(
-						DROOLS_PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD), new ExpressionValueNumber(
+						PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD), new ExpressionValueNumber(
 						1.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(2.),
 				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(3.), new ExpressionSymbol(
 						AvailableSymbol.COMMA), new ExpressionValueNumber(4.), new ExpressionSymbol(
@@ -546,7 +546,7 @@ public class PrattParserTest {
 
 		// Check result
 		ExpressionChain expectedResult = new ExpressionChain(new ExpressionChain(getExpValFormScore()),
-				new ExpressionPluginMethod(DROOLS_PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD),
+				new ExpressionPluginMethod(PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD),
 				new ExpressionChain(new ExpressionValueNumber(1.)), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionChain(new ExpressionValueNumber(2.)), new ExpressionSymbol(AvailableSymbol.COMMA),
 				new ExpressionChain(new ExpressionValueNumber(3.)), new ExpressionSymbol(AvailableSymbol.COMMA),
