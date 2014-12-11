@@ -131,9 +131,10 @@ public class FormDesigner extends FormWebPageComponent {
 		}
 		// Collapse the table at question level
 		formTreeTable.collapseFrom(Question.class);
-		
-		//Set current selected element properties. 
+
+		// Set current selected element properties.
 		updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
+		updateUpperMenu(formTreeTable.getTreeObjectSelected());
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {
@@ -233,7 +234,20 @@ public class FormDesigner extends FormWebPageComponent {
 					});
 					windowAccept.showCentered();
 				} else {
-					removeSelected();
+					//No remove the form. 
+					TreeObject selected = formTreeTable.getTreeObjectSelected();
+					if ((selected != null) && (selected.getParent() != null)) {
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_REMOVE_ELEMENT);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								removeSelected();
+								windowAccept.close();
+							}
+						});
+						windowAccept.showCentered();
+					}
 				}
 			}
 		});

@@ -69,25 +69,31 @@ public class FormDesignerUpperMenu extends UpperMenu {
 	}
 
 	public void setEnabledButtons(TreeObject selectedObject) {
-		if (selectedObject instanceof Form) {
+		if (selectedObject == null) {
+			newCategoryButton.setEnabled(false);
+			newGroupButton.setEnabled(false);
+			newQuestionButton.setEnabled(false);
+			newAnswerButton.setEnabled(false);
+			removeButton.setEnabled(false);
+		} else if (selectedObject instanceof Form) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(false);
 			newQuestionButton.setEnabled(false);
 			newAnswerButton.setEnabled(false);
-		}
-		if (selectedObject instanceof Category) {
+			removeButton.setEnabled(false);
+		} else if (selectedObject instanceof Category) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 			newAnswerButton.setEnabled(false);
-		}
-		if (selectedObject instanceof Group) {
+			removeButton.setEnabled(true);
+		} else if (selectedObject instanceof Group) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 			newAnswerButton.setEnabled(false);
-		}
-		if (selectedObject instanceof Question) {
+			removeButton.setEnabled(true);
+		} else if (selectedObject instanceof Question) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
@@ -96,11 +102,12 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			} else {
 				newAnswerButton.setEnabled(true);
 			}
-		}
-		if (selectedObject instanceof Answer) {
+			removeButton.setEnabled(true);
+		} else if (selectedObject instanceof Answer) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
+			removeButton.setEnabled(true);
 		}
 
 		// Disable buttons that user has no permissions to use.
