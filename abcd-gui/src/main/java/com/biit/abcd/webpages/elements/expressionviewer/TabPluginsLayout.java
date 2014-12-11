@@ -27,7 +27,7 @@ public class TabPluginsLayout extends TabLayout {
 
 	private TreeTable pluginsTable;
 	private Panel pluginParametersInformation;
-	private Button addCustomFunction;
+	private Button addCustomFunctionButton;
 
 	public TabPluginsLayout() {
 		createContent();
@@ -40,8 +40,8 @@ public class TabPluginsLayout extends TabLayout {
 		getPluginsTable().setPageLength(8);
 		addComponent(getPluginsTable());
 		setExpandRatio(getPluginsTable(), 0.5f);
-		addCustomFunction = new Button(ServerTranslate.translate(LanguageCodes.PLUGINS_TAB_ADD_FUNCTION_BUTTON_CAPTION));
-		addCustomFunction.addClickListener(new ClickListener() {
+		addCustomFunctionButton = new Button(ServerTranslate.translate(LanguageCodes.PLUGINS_TAB_ADD_FUNCTION_BUTTON_CAPTION));
+		addCustomFunctionButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -4754466212065015629L;
 
 			@Override
@@ -58,9 +58,11 @@ public class TabPluginsLayout extends TabLayout {
 				}
 			}
 		});
-		addComponent(addCustomFunction);
-		setComponentAlignment(addCustomFunction, Alignment.TOP_RIGHT);
+		addCustomFunctionButton.setEnabled(false);
+		addComponent(addCustomFunctionButton);
+		setComponentAlignment(addCustomFunctionButton, Alignment.TOP_RIGHT);
 
+		
 		createPluginInformation();
 		addComponent(getPluginParametersInformation());
 	}
@@ -97,6 +99,10 @@ public class TabPluginsLayout extends TabLayout {
 					for (String parameterString : pluginSelected.getPluginMethodParametersString(methodSelected)) {
 						verticalLayout.addComponent(new Label(parameterString));
 					}
+					// Enable/disable the add function button based on the number of plugins available
+					addCustomFunctionButton.setEnabled(true);
+				}else{
+					addCustomFunctionButton.setEnabled(false);
 				}
 				getPluginParametersInformation().setContent(verticalLayout);
 			}

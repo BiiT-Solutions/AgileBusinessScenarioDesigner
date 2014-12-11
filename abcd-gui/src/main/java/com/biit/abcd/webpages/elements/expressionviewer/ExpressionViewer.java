@@ -544,10 +544,10 @@ public class ExpressionViewer extends CssLayout {
 	private void updateEvaluator() {
 		if (hasPluginMethodExpression(expressions)) {
 			// For the plugin we also check that the parameters match the method
-			if(PluginController.getInstance().validateExpressionChain(expressions)){
+			if (PluginController.getInstance().validateExpressionChain(expressions)) {
 				evaluatorOutput.setStyleName("expression-valid");
 				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
-			}else{
+			} else {
 				evaluatorOutput.setStyleName("expression-invalid");
 				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
 			}
@@ -615,11 +615,13 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	private boolean hasPluginMethodExpression(ExpressionChain expressions) {
-		for (Expression expression : expressions.getExpressions()) {
-			if (expression instanceof ExpressionPluginMethod) {
-				return true;
-			} else if (expression instanceof ExpressionChain) {
-				return hasPluginMethodExpression((ExpressionChain) expression);
+		if (expressions != null) {
+			for (Expression expression : expressions.getExpressions()) {
+				if (expression instanceof ExpressionPluginMethod) {
+					return true;
+				} else if (expression instanceof ExpressionChain) {
+					return hasPluginMethodExpression((ExpressionChain) expression);
+				}
 			}
 		}
 		return false;

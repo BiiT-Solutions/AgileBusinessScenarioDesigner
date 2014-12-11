@@ -71,6 +71,13 @@ public class PluginController {
 	public void scanForPlugins() {
 		pluginManager.addPluginsFrom(new File(AbcdConfigurationReader.getInstance().getPluginsPath()).toURI());
 	}
+	
+	public boolean existsPlugins(){
+		if((getAllPlugins() != null) && (!getAllPlugins().isEmpty())){
+			return true;
+		}
+		return false;
+	}
 
 	private Class getInterfaceClass(String interfaceName) {
 		try {
@@ -255,6 +262,9 @@ public class PluginController {
 			}
 		}
 		IPlugin pluginInterface = getPlugin(pluginMethod.getPluginInterface(), pluginMethod.getPluginName());
+		if(pluginInterface == null){
+			return false;
+		}
 		try {
 			pluginInterface.getPluginMethod(pluginMethod.getPluginMethodName(), listToArray(parameters));
 		} catch (NoSuchMethodException e) {

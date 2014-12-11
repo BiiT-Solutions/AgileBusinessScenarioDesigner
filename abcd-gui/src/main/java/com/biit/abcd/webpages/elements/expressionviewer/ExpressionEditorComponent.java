@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.PluginController;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -14,7 +15,8 @@ import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Component for editing an expression. Is composed by a viewer and a properties menu in tabs.
+ * Component for editing an expression. Is composed by a viewer and a properties
+ * menu in tabs.
  */
 public abstract class ExpressionEditorComponent extends ExpressionEditorTabComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
@@ -96,18 +98,18 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 
 		});
 		setTab(globalConstantLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
-		
+
 		// Fifth tab (Plugins tab)
-		TabPluginsLayout pluginsLayout = new TabPluginsLayout();
-		pluginsLayout.addNewElementListener(new ElementAddedListener() {
-			@Override
-			public void elementAdded(Object newElement) {
-				addElementToView(newElement);
-			}
-		});
-		setTab(pluginsLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
-		
-		
+		if (PluginController.getInstance().existsPlugins()) {
+			TabPluginsLayout pluginsLayout = new TabPluginsLayout();
+			pluginsLayout.addNewElementListener(new ElementAddedListener() {
+				@Override
+				public void elementAdded(Object newElement) {
+					addElementToView(newElement);
+				}
+			});
+			setTab(pluginsLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
+		}
 	}
 
 	protected void enableAssignOperator(boolean enabled) {
@@ -124,8 +126,8 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 	}
 
 	/**
-	 * A Expression editor can have more than one viewer. When user click into a viewer, this one gains the focus and is
-	 * selected.
+	 * A Expression editor can have more than one viewer. When user click into a
+	 * viewer, this one gains the focus and is selected.
 	 */
 	public abstract ExpressionViewer getSelectedViewer();
 
