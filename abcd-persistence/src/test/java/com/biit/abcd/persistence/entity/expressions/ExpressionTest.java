@@ -18,6 +18,7 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.jexeval.exceptions.ExpressionException;
@@ -226,5 +227,89 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		for (ExpressionChain expressionChainAux : retrievedForm.getExpressionChains()) {
 			Assert.assertEquals(expressionChainAux.getExpression(), "Category1_cScore = birthdate");
 		}
+	}
+
+	@Test(expectedExceptions = { DependencyExistException.class })
+	public void checkExpressionDependencies() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException,
+			DependencyExistException {
+		// Create the form
+		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
+		Category category = new Category(CATEGORY_NAME);
+		form.addChild(category);
+
+		Question birthdate = new Question("birthdate");
+		birthdate.setAnswerType(AnswerType.INPUT);
+		birthdate.setAnswerFormat(AnswerFormat.DATE);
+		category.addChild(birthdate);
+
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY);
+
+		form.getCustomVariables().add(customVarCategory);
+
+		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(category, customVarCategory);
+
+		expressionChain.addExpression(customVariable);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
+		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = birthdate");
+		expressionChain.getExpressionEvaluator().eval();
+		form.getExpressionChains().add(expressionChain);
+
+		// Persist.
+		formDao.makePersistent(form);
+
+		// Remove in incorrect order.
+		try {
+			birthdate.remove();
+		} finally {
+			formDao.makeTransient(form);
+		}
+	}
+
+	@Test
+	public void checkExpressionDependenciesAcomplished() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException,
+			DependencyExistException {
+		// Create the form
+		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
+		Category category = new Category(CATEGORY_NAME);
+		form.addChild(category);
+
+		Question birthdate = new Question("birthdate");
+		birthdate.setAnswerType(AnswerType.INPUT);
+		birthdate.setAnswerFormat(AnswerFormat.DATE);
+		category.addChild(birthdate);
+
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY);
+
+		form.getCustomVariables().add(customVarCategory);
+
+		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(category, customVarCategory);
+
+		expressionChain.addExpression(customVariable);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
+		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = birthdate");
+		expressionChain.getExpressionEvaluator().eval();
+		form.getExpressionChains().add(expressionChain);
+
+		// Persist.
+		formDao.makePersistent(form);
+
+		// Remove in order.
+		form.getExpressionChains().remove(form.getExpressionChains().iterator().next());
+		birthdate.remove();
+		form.remove(customVarCategory);
+
+		//No errors in database.
+		formDao.makePersistent(form);
+		formDao.makeTransient(form);
 	}
 }

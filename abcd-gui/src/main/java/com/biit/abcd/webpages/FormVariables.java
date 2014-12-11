@@ -99,19 +99,22 @@ public class FormVariables extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				CustomVariable customVariable = (CustomVariable) variableTable.getValue();
-				try {
-					CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController().getForm(),
-							customVariable);
-					removeSelectedRow();
-					customVariable.remove();
-					AbcdLogger.info(this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-									+ customVariable.getClass() + " with 'Name: " + customVariable.getName()
-									+ " - Type: " + customVariable.getType() + " - Scope: " + customVariable.getScope()
-									+ "'.");
-				} catch (DependencyExistException e) {
-					// Forbid the remove action if exist dependency.
-					MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
+				if (customVariable != null) {
+					try {
+						CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController()
+								.getForm(), customVariable);
+						removeSelectedRow();
+						customVariable.remove();
+						AbcdLogger.info(
+								this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+										+ customVariable.getClass() + " with 'Name: " + customVariable.getName()
+										+ " - Type: " + customVariable.getType() + " - Scope: "
+										+ customVariable.getScope() + "'.");
+					} catch (DependencyExistException e) {
+						// Forbid the remove action if exist dependency.
+						MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
+					}
 				}
 			}
 		});

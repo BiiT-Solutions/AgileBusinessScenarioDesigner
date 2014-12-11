@@ -10,7 +10,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -19,7 +18,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  * Sets all user defined custom variables that will be used in drools conditions and action.
  */
 @Entity
-@Table(name = "form_custom_variables", uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name", "scope" }) })
+// uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name", "scope" }) } removed due to an updating
+// customvariables name problem if a new custom variable has the same name that a previously deleted one.
+@Table(name = "form_custom_variables")
 public class CustomVariable extends StorableObject {
 
 	// Used mainly for unique constraint.

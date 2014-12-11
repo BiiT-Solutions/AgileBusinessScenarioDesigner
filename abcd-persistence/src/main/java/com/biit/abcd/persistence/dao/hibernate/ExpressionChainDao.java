@@ -66,5 +66,4 @@ public class ExpressionChainDao extends GenericDao<ExpressionChain> implements I
 			}
 		}
 	}
-
 }

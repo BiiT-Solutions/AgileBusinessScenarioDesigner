@@ -27,6 +27,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.form.TreeObject;
+import com.biit.form.exceptions.NotValidParentException;
 import com.biit.form.persistence.dao.hibernate.BaseFormDao;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.StorableObject;
@@ -44,13 +46,6 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	@Override
 	@Transactional
 	public Form makePersistent(Form entity) throws UnexpectedDatabaseException {
-
-		// For avoiding "ObjectDeletedException: deleted object would be re-saved by
-		// cascade (remove deleted object from
-		// associations)" launch when removing a customvariable and other is renamed as this
-		// one, we need to disable
-		// orphanRemoval=true of children and implement ourselves.
-		purgeCustomVariablesToDelete(entity);
 
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
@@ -101,19 +96,32 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 				}
 			}
 		}
+
 		// Update previous versions validTo.
 		if (entity.getVersion() > 0) {
 			// 84600000 milliseconds in a day
 			Timestamp validTo = new Timestamp(entity.getAvailableFrom().getTime() - 84600000);
 			updateValidTo(entity.getLabel(), entity.getVersion() - 1, entity.getOrganizationId(), validTo);
 		}
-		return super.makePersistent(entity);
+		Form form = super.makePersistent(entity);
+
+		// CustomVariables must be removed after expressions are removed.
+
+		// For avoiding "ObjectDeletedException: deleted object would be re-saved by
+		// cascade (remove deleted object from
+		// associations)" launch when removing a customvariable and other is renamed as this
+		// one, we need to disable
+		// orphanRemoval=true of children and implement ourselves.
+		purgeCustomVariablesToDelete(form.getCustomVariablesToDelete());
+		form.setCustomVariablesToDelete(new HashSet<CustomVariable>());
+
+		return form;
 	}
 
-	private Set<CustomVariable> purgeCustomVariablesToDelete(Form form) throws UnexpectedDatabaseException {
+	private Set<CustomVariable> purgeCustomVariablesToDelete(Set<CustomVariable> variablesToDelete)
+			throws UnexpectedDatabaseException {
 		Set<CustomVariable> customVariablesToDelete = new HashSet<>();
-		customVariablesToDelete.addAll(form.getCustomVariablesToDelete());
-		form.setCustomVariablesToDelete(new HashSet<CustomVariable>());
+		customVariablesToDelete.addAll(variablesToDelete);
 		for (CustomVariable customVariable : customVariablesToDelete) {
 			if (customVariable.getId() != null) {
 				customVariableDao.makeTransient(customVariable);
@@ -166,7 +174,29 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			@CacheEvict(value = "forms", key = "#form.id"),
 			@CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
 	public void makeTransient(Form form) throws UnexpectedDatabaseException {
-		super.makeTransient(form);
+		// Remove also children of elementsToDelete due CascadeType.ALL has been removed from TreeObject
+		for (TreeObject child : form.getAll(TreeObject.class)) {
+			// add to purge
+			form.getElementsToDelete().add(child);
+			form.getChildren().remove(child);
+			try {
+				child.setParent(null);
+			} catch (NotValidParentException e) {
+			}
+		}
+
+		// Set all current custom variables to delete.
+		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
+			form.remove(customVariable);
+			//Remove form reference in database BUT not remove custom variable. It is still used in expressions. 
+			customVariableDao.makePersistent(customVariable);
+		}
+
+		super.deleteStorableObject(form);
+
+		purgeCustomVariablesToDelete(form.getCustomVariablesToDelete());
+		form.setCustomVariablesToDelete(new HashSet<CustomVariable>());
+		purgeElementsToDelete(form);
 	}
 
 	@Override

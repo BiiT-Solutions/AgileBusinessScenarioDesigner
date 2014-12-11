@@ -55,20 +55,24 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 
 	@Test
 	public void removeBasicRule() throws UnexpectedDatabaseException {
-		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
+		int prevRules = ruleDao.getRowCount();
+		int prevExpressions = expressionChainDao.getRowCount();
 		// Rule already has two chains inside.
 		Rule rule = new Rule();
 		ruleDao.makePersistent(rule);
-		Assert.assertEquals(ruleDao.getRowCount(), 1);
-		Assert.assertEquals(expressionChainDao.getRowCount(), 2);
+		Assert.assertEquals(ruleDao.getRowCount(), prevRules + 1);
+		Assert.assertEquals(expressionChainDao.getRowCount(), prevExpressions + 2);
 		ruleDao.makeTransient(rule);
-		Assert.assertEquals(ruleDao.getRowCount(), 0);
-		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
+		Assert.assertEquals(ruleDao.getRowCount(), prevRules);
+		Assert.assertEquals(expressionChainDao.getRowCount(), prevExpressions);
 	}
 
 	@Test
 	public void removeRuleOfForm() throws FieldTooLongException, CharacterNotAllowedException,
 			UnexpectedDatabaseException {
+		int prevRules = ruleDao.getRowCount();
+		int prevExpressions = expressionChainDao.getRowCount();
+
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -77,17 +81,21 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		form.getRules().add(rule);
 
 		formDao.makePersistent(form);
-		Assert.assertEquals(ruleDao.getRowCount(), 1);
-		Assert.assertEquals(expressionChainDao.getRowCount(), 2);
+		Assert.assertEquals(ruleDao.getRowCount(), prevRules + 1);
+		Assert.assertEquals(expressionChainDao.getRowCount(), prevExpressions + 2);
 
 		formDao.makeTransient(form);
-		Assert.assertEquals(ruleDao.getRowCount(), 0);
-		Assert.assertEquals(expressionChainDao.getRowCount(), 0);
+		Assert.assertEquals(ruleDao.getRowCount(), prevRules);
+		Assert.assertEquals(expressionChainDao.getRowCount(), prevExpressions);
 	}
 
 	@Test
 	public void removeDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
 			UnexpectedDatabaseException {
+		int prevForm = formDao.getRowCount();
+		int prevDiagram = diagramDao.getRowCount();
+		int prevExpressions = expressionValueTreeObjectReferenceDao.getRowCount();
+
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM + "1");
@@ -147,19 +155,23 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		diagram.addDiagramObject(link2);
 
 		formDao.makePersistent(form);
-		Assert.assertEquals(formDao.getRowCount(), 1);
-		Assert.assertEquals(diagramDao.getRowCount(), 1);
-		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 3);
+		Assert.assertEquals(formDao.getRowCount(), prevForm + 1);
+		Assert.assertEquals(diagramDao.getRowCount(), prevDiagram + 1);
+		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), prevExpressions + 3);
 
 		formDao.makeTransient(form);
-		Assert.assertEquals(formDao.getRowCount(), 0);
-		Assert.assertEquals(diagramDao.getRowCount(), 0);
-		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 0);
+		Assert.assertEquals(formDao.getRowCount(), prevForm);
+		Assert.assertEquals(diagramDao.getRowCount(), prevDiagram);
+		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), prevExpressions);
 	}
 
 	@Test
 	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException,
 			CharacterNotAllowedException, UnexpectedDatabaseException {
+		int prevForm = formDao.getRowCount();
+		int prevDiagram = diagramDao.getRowCount();
+		int prevExpressions = expressionValueTreeObjectReferenceDao.getRowCount();
+
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM + "2");
@@ -219,17 +231,17 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 		diagram.addDiagramObject(link2);
 
 		formDao.makePersistent(form);
-		Assert.assertEquals(formDao.getRowCount(), 1);
-		Assert.assertEquals(diagramDao.getRowCount(), 1);
-		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 3);
+		Assert.assertEquals(formDao.getRowCount(), prevForm + 1);
+		Assert.assertEquals(diagramDao.getRowCount(), prevDiagram + 1);
+		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), prevExpressions + 3);
 
 		fork.setReference(new ExpressionValueTreeObjectReference(question2));
 		formDao.makePersistent(form);
 
 		formDao.makeTransient(form);
-		Assert.assertEquals(formDao.getRowCount(), 0);
-		Assert.assertEquals(diagramDao.getRowCount(), 0);
-		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), 0);
+		Assert.assertEquals(formDao.getRowCount(), prevForm);
+		Assert.assertEquals(diagramDao.getRowCount(), prevDiagram);
+		Assert.assertEquals(expressionValueTreeObjectReferenceDao.getRowCount(), prevExpressions);
 	}
 
 }

@@ -6,7 +6,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<name>Agile Business sCenario Designer Tool</name>
 
 	<modules>
@@ -50,7 +50,7 @@
 		<!-- Version 6.2 of drools is not accepting special characters like 'ë', do not update -->
 		<drools.version>6.1.0.CR2</drools.version>
 		<biit-common-utils.version>0.1.0</biit-common-utils.version>
-		<form-structure.version>0.1.9</form-structure.version>
+		<form-structure.version>0.2.0</form-structure.version>
 		<form-structure-orbeon.version>0.1.0</form-structure-orbeon.version>
 		<apache-poi.version>3.10.1</apache-poi.version>
 		<root.directory>${project.basedir}</root.directory>

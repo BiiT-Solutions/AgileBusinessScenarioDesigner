@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -18,6 +19,7 @@ import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
+import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
@@ -249,9 +251,18 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private void initializeFormTable() {
 		formMap = initializeFormData();
 		removeAllItems();
+
+		Set<Organization> userOrganizations = AbcdFormAuthorizationService.getInstance()
+				.getUserOrganizationsWhereIsAuthorized(UserSessionHandler.getUser(), AbcdActivity.READ);
+
+		// Add form if has enough permissions.
 		for (List<SimpleFormView> forms : formMap.values()) {
 			for (SimpleFormView form : forms) {
-				addForm(form);
+				for (Organization organization : userOrganizations) {
+					if (form.getOrganizationId().equals(organization.getOrganizationId())) {
+						addForm(form);
+					}
+				}
 			}
 		}
 
