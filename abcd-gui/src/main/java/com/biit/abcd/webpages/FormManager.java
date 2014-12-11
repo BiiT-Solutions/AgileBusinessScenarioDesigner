@@ -105,7 +105,6 @@ public class FormManager extends FormWebPageComponent {
 			public void valueChange(ValueChangeEvent event) {
 				updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 				formTable.refreshSelectedRow();
-				upperMenu.updateNewVersionButton(formTable.getValue());
 			}
 		});
 		return treeTable;
@@ -115,6 +114,7 @@ public class FormManager extends FormWebPageComponent {
 	public void updateButtons(boolean enableFormButtons) {
 		super.updateButtons(enableFormButtons);
 		upperMenu.updateButtons(enableFormButtons);
+		upperMenu.updateNewVersionButton(formTable.getValue());
 	}
 
 	private FormManagerUpperMenu createUpperMenu() {

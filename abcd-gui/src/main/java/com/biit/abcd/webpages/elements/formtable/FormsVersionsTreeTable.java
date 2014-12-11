@@ -251,17 +251,18 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private void initializeFormTable() {
 		formMap = initializeFormData();
 		removeAllItems();
-		
+
 		Set<Organization> userOrganizations = AbcdFormAuthorizationService.getInstance()
 				.getUserOrganizationsWhereIsAuthorized(UserSessionHandler.getUser(), AbcdActivity.READ);
-		
+
+		// Add form if has enough permissions.
 		for (List<SimpleFormView> forms : formMap.values()) {
 			for (SimpleFormView form : forms) {
-					for (Organization organization : userOrganizations) {
-						if (form.getOrganizationId().equals(organization.getOrganizationId())) {
-							addForm(form);
-						}
+				for (Organization organization : userOrganizations) {
+					if (form.getOrganizationId().equals(organization.getOrganizationId())) {
+						addForm(form);
 					}
+				}
 			}
 		}
 
