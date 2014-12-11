@@ -3,8 +3,6 @@ package com.biit.jexeval;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.biit.jexeval.ExpressionEvaluator;
-import com.biit.jexeval.Function;
 import com.biit.jexeval.exceptions.ExpressionException;
 
 /**

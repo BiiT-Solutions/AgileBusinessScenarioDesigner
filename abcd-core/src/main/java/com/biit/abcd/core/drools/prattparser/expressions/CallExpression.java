@@ -49,12 +49,14 @@ public class CallExpression implements ITreeElement {
 		} else {
 			expChain = new ExpressionChain(leftElement.getExpressionChain(), function.getExpression());
 		}
-		for (ITreeElement treeElem : args) {
-			expChain.addExpressions(treeElem.getExpressionChain());
-			expChain.addExpressions(new ExpressionSymbol(AvailableSymbol.COMMA));
+		if (!args.isEmpty()) {
+			for (ITreeElement treeElem : args) {
+				expChain.addExpressions(treeElem.getExpressionChain());
+				expChain.addExpressions(new ExpressionSymbol(AvailableSymbol.COMMA));
+			}
+			// Add the missing right bracket and remove last comma
+			expChain.removeLastExpression();
 		}
-		// Add the missing right bracket and remove last comma
-		expChain.removeLastExpression();
 		expChain.addExpressions(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		expChain.setName(this.treeElementId);
 		return expChain;

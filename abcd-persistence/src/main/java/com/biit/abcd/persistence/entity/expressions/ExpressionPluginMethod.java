@@ -14,15 +14,17 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class ExpressionPluginMethod extends Expression {
 
 	private Class<?> pluginInterface = null;
+	private String pluginName = null;
 	private String pluginMethodName = null;
 
 	public ExpressionPluginMethod() {
 		super();
 	}
 
-	public ExpressionPluginMethod(Class<?> pluginInterface, String pluginMethodName) {
+	public ExpressionPluginMethod(Class<?> pluginInterface, String pluginName, String pluginMethodName) {
 		super();
 		setPluginInterface(pluginInterface);
+		setPluginName(pluginName);
 		setPluginMethodName(pluginMethodName);
 	}
 
@@ -32,6 +34,14 @@ public class ExpressionPluginMethod extends Expression {
 
 	public void setPluginInterface(Class<?> pluginInterface) {
 		this.pluginInterface = pluginInterface;
+	}
+
+	public String getPluginName() {
+		return pluginName;
+	}
+
+	public void setPluginName(String pluginName) {
+		this.pluginName = pluginName;
 	}
 
 	public String getPluginMethodName() {
@@ -44,8 +54,8 @@ public class ExpressionPluginMethod extends Expression {
 
 	@Override
 	protected String getExpression() {
-		if (getPluginMethodName() != null) {
-			return getPluginMethodName().substring(6) + "(";
+		if (getPluginName() != null && getPluginMethodName() != null) {
+			return getPluginName() + "." + getPluginMethodName().substring(6) + "(";
 		} else {
 			return "";
 		}
@@ -53,8 +63,8 @@ public class ExpressionPluginMethod extends Expression {
 
 	@Override
 	public String getRepresentation() {
-		if (getPluginMethodName() != null) {
-			return getPluginMethodName().substring(6) + "(";
+		if (getPluginName() != null && getPluginMethodName() != null) {
+			return getPluginName() + "." + getPluginMethodName().substring(6) + "(";
 		} else {
 			return "";
 		}
@@ -70,13 +80,14 @@ public class ExpressionPluginMethod extends Expression {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		return innerStorableObjects;
 	}
-	
+
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		if (object instanceof ExpressionPluginMethod) {
 			ExpressionPluginMethod expressionMethod = (ExpressionPluginMethod) object;
 			super.copyData(expressionMethod);
 			setPluginInterface(expressionMethod.getPluginInterface());
+			setPluginName(expressionMethod.getPluginName());
 			setPluginMethodName(expressionMethod.getPluginMethodName());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object

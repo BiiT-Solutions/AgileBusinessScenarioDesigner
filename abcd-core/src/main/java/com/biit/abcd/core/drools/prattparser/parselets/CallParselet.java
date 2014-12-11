@@ -19,7 +19,6 @@ public class CallParselet implements InfixParselet {
 
 	@Override
 	public ITreeElement parse(PrattParser parser, ITreeElement left, ExpressionToken token) {
-
 		// When the IF function is used a dummy variable is introduces and have
 		// to be removed before returning the parsed expression
 		if ((token.getExpression() instanceof ExpressionFunction)

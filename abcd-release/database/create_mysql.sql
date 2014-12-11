@@ -312,6 +312,7 @@
         sortSeq bigint not null,
         pluginInterface varchar(255),
         pluginMethodName varchar(255),
+        pluginName varchar(255),
         primary key (ID)
     );
 

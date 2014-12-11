@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.PluginController;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
@@ -22,6 +23,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -318,7 +320,8 @@ public class ExpressionViewer extends CssLayout {
 									ExpressionValueCustomVariable formReference = ((SelectFormElementVariableWindow) window)
 											.getValue();
 									if (formReference != null) {
-										// Update the already existing expression.
+										// Update the already existing
+										// expression.
 										((ExpressionValueCustomVariable) expression).setReference(formReference
 												.getReference());
 										((ExpressionValueCustomVariable) expression).setVariable(formReference
@@ -347,11 +350,13 @@ public class ExpressionViewer extends CssLayout {
 										((ExpressionValueTreeObjectReference) expression).setReference(treeObject);
 										((ExpressionValueTreeObjectReference) expression).setUnit(null);
 
-										// Detect if it is a date question to add units
+										// Detect if it is a date question to
+										// add units
 										if ((treeObject instanceof Question)
 												&& ((((Question) treeObject).getAnswerFormat()) != null)
 												&& ((Question) treeObject).getAnswerFormat().equals(AnswerFormat.DATE)) {
-											// Create a window for selecting the unit and assign
+											// Create a window for selecting the
+											// unit and assign
 											// it to the expression.
 											WindowSelectDateUnit windowDate = new WindowSelectDateUnit(ServerTranslate
 													.translate(LanguageCodes.EXPRESSION_DATE_CAPTION));
@@ -373,7 +378,7 @@ public class ExpressionViewer extends CssLayout {
 									setSelectedExpression(expression);
 								}
 							});
-						} else if(expression instanceof ExpressionValueGenericCustomVariable){
+						} else if (expression instanceof ExpressionValueGenericCustomVariable) {
 							SelectFormGenericVariablesWindow genericVariableWindow = new SelectFormGenericVariablesWindow();
 							genericVariableWindow.showCentered();
 							genericVariableWindow.setvalue((ExpressionValueGenericCustomVariable) expression);
@@ -383,7 +388,8 @@ public class ExpressionViewer extends CssLayout {
 									ExpressionValueGenericCustomVariable formReference = ((SelectFormGenericVariablesWindow) window)
 											.getValue();
 									if (formReference != null) {
-										// Update the already existing expression.
+										// Update the already existing
+										// expression.
 										((ExpressionValueGenericCustomVariable) expression).setType(formReference
 												.getType());
 										((ExpressionValueGenericCustomVariable) expression).setVariable(formReference
@@ -499,8 +505,8 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	/**
-	 * Adds a new element in the position of the selected element. Depending of the element, can be inserted after or
-	 * before.
+	 * Adds a new element in the position of the selected element. Depending of
+	 * the element, can be inserted after or before.
 	 * 
 	 * @param newElement
 	 */
@@ -536,14 +542,25 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	private void updateEvaluator() {
-		try {
-			expressions.getExpressionEvaluator().eval();
-			evaluatorOutput.setStyleName("expression-valid");
-			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
-		} catch (Exception e) {
-			AbcdLogger.debug(ExpressionViewer.class.getName(), e.getMessage());
-			evaluatorOutput.setStyleName("expression-invalid");
-			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
+		if (hasPluginMethodExpression(expressions)) {
+			// For the plugin we also check that the parameters match the method
+			if(PluginController.getInstance().validateExpressionChain(expressions)){
+				evaluatorOutput.setStyleName("expression-valid");
+				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
+			}else{
+				evaluatorOutput.setStyleName("expression-invalid");
+				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
+			}
+		} else {
+			try {
+				expressions.getExpressionEvaluator().eval();
+				evaluatorOutput.setStyleName("expression-valid");
+				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
+			} catch (Exception e) {
+				AbcdLogger.debug(ExpressionViewer.class.getName(), e.getMessage());
+				evaluatorOutput.setStyleName("expression-invalid");
+				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
+			}
 		}
 	}
 
@@ -597,4 +614,14 @@ public class ExpressionViewer extends CssLayout {
 		return rootLayout;
 	}
 
+	private boolean hasPluginMethodExpression(ExpressionChain expressions) {
+		for (Expression expression : expressions.getExpressions()) {
+			if (expression instanceof ExpressionPluginMethod) {
+				return true;
+			} else if (expression instanceof ExpressionChain) {
+				return hasPluginMethodExpression((ExpressionChain) expression);
+			}
+		}
+		return false;
+	}
 }

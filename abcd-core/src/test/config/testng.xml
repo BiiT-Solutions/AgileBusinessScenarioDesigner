@@ -4,13 +4,13 @@
 		<groups>
 			<run>
 				<exclude name="orbeon" />
-				<include name="rules2" />
+				<include name="rules" />
 				<exclude name="rulesWithOrbeon" />
-				<exclude name="droolsPrattParser" />
-				<exclude name="gson" />
+				<include name="droolsPrattParser" />
+				<include name="gson" />
 				<exclude name="newVersion" />
-				<exclude name="droolsEngineRules" />
-				<exclude name="externalDroolsFunctions" />
+				<include name="droolsEngineRules" />
+				<include name="pluginsTest" />
 			</run>
 		</groups>
 		<classes>
@@ -26,7 +26,6 @@
 			<class name="com.biit.abcd.core.drools.test.ForksTest" />
 			<class name="com.biit.abcd.core.drools.test.OperatorsTest" />
 			<class name="com.biit.abcd.core.drools.test.DroolsEngineRulesTest" />
-			<class name="com.biit.abcd.core.drools.test.DroolsFunctionsTest" />
 			<class name="com.biit.abcd.core.drools.test.PluginsTest" />
 		</classes>
 	</test>

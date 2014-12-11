@@ -16,6 +16,7 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
@@ -34,7 +35,8 @@ public class PrattParser {
 
 	/**
 	 * Simplifies the posterior calculus<br>
-	 * Transforms the list of expressions in a list of expression tokens, with the type more accessible
+	 * Transforms the list of expressions in a list of expression tokens, with
+	 * the type more accessible
 	 * 
 	 * @param tokens
 	 * @return
@@ -63,7 +65,7 @@ public class PrattParser {
 					&& ((ExpressionOperatorMath) expression).getValue().equals(AvailableOperator.ASSIGNATION)
 					&& ((expIndex + 1) <= tokens.size())) {
 				Expression auxExp = tokens.get(expIndex + 1);
-				if (auxExp instanceof ExpressionFunction) {
+				if ((auxExp instanceof ExpressionFunction) || (auxExp instanceof ExpressionPluginMethod)) {
 					// We skip the assignation, because the function needs to be
 					// an infix operator
 					continue;
@@ -93,6 +95,12 @@ public class PrattParser {
 
 				if (this.mPunctuators.containsKey(expressionType)) {
 					expTokenList.add(new ExpressionToken(this.mPunctuators.get(expressionType), expression));
+				}
+			} else if (expression instanceof ExpressionPluginMethod) {
+				// System.out.println("PLUGIN METHOD : " + expression);
+
+				if (this.mPunctuators.containsKey("IPlugin")) {
+					expTokenList.add(new ExpressionToken(this.mPunctuators.get("IPlugin"), expression));
 				}
 			} else if (expression instanceof ExpressionChain) {
 				// System.out.println("INTERNAL EXPRESSION CHAIN: " +

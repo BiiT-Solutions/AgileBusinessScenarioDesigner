@@ -97,15 +97,8 @@ public class DroolsParser {
 		}
 		if (leftExpressionValueTreeObject != null) {
 			// Create the array of values to consult
-			List<ExpressionValue<?>> operatorValues = new ArrayList<ExpressionValue<?>>();
-			for (int i = 2; i < conditions.getExpressions().size() - 1; i += 2) {
-				List<Expression> operatorValue = ((ExpressionChain) conditions.getExpressions().get(i))
-						.getExpressions();
-				if ((operatorValue.size() == 1) && (operatorValue.get(0) instanceof ExpressionValue)) {
-					operatorValues.add((ExpressionValue<?>) operatorValue.get(0));
-				}
-			}
-			// Check if the types inside the in match
+			List<ExpressionValue<?>> operatorValues = getFunctionParameters(conditions);
+			// Check if the types inside match
 			if (checkExpressionValueTypes(getExpressionValueTreeObjectAnswerFormat(leftExpressionValueTreeObject),
 					operatorValues)) {
 				List<String> functionValues = new ArrayList<>();
@@ -255,7 +248,6 @@ public class DroolsParser {
 		return droolsConditions;
 	}
 
-
 	/**
 	 * Checks the existence of a binding in drools with the the reference of the
 	 * variable passed If there is no binding, creates a new one (i.e. $var :
@@ -400,7 +392,7 @@ public class DroolsParser {
 	 * @throws BetweenFunctionInvalidException
 	 * @throws DateComparisonNotPossibleException
 	 * @throws PluginInvocationException
-	 * @throws DroolsRuleCreationException 
+	 * @throws DroolsRuleCreationException
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 * @throws IllegalArgumentException
@@ -409,7 +401,8 @@ public class DroolsParser {
 	private static String createDroolsRule(Rule rule) throws RuleNotImplementedException, NotCompatibleTypeException,
 			ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException {
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException,
+			DroolsRuleCreationException {
 		if (rule == null) {
 			return null;
 		}
@@ -941,7 +934,7 @@ public class DroolsParser {
 
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
-
+		
 		if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
 				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
 						.get(0) instanceof ExpressionValueCustomVariable)) {
@@ -966,10 +959,7 @@ public class DroolsParser {
 				default:
 					break;
 				}
-
-			} else if ((prattParserResultExpressionChain.getExpressions().get(2) instanceof ExpressionChain)
-					&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(2)).getExpressions()
-							.get(0) instanceof ExpressionPluginMethod)) {
+			} else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionPluginMethod) {
 				return parsePluginMethods(prattParserResultExpressionChain);
 			}
 			// Mathematical expression
@@ -988,30 +978,77 @@ public class DroolsParser {
 	 * @param actions
 	 * @return
 	 * @throws PluginInvocationException
+	 * @throws TreeObjectParentNotValidException
+	 * @throws TreeObjectInstanceNotRecognizedException
+	 * @throws NullExpressionValueException
+	 * @throws NullTreeObjectException
+	 * @throws NullCustomVariableException
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
-	private static String parsePluginMethods(ExpressionChain actions) throws PluginInvocationException {
-		ExpressionPluginMethod expressionPlugin = (ExpressionPluginMethod) ((ExpressionChain) actions.getExpressions()
-				.get(2)).getExpressions().get(0);
-		String droolsActions = "";
-		droolsActions += RulesUtils.getThenRuleString();
-		try {
-			Plugin pluginInterface = PluginController.getInstance().getPlugin(expressionPlugin.getPluginInterface());
-			if (pluginInterface instanceof IPlugin) {
-				droolsActions += "\tPlugin pluginInterface = PluginController.getInstance().getPlugin(\""
-						+ expressionPlugin.getPluginInterface().getCanonicalName() + "\");\n";
-				droolsActions += "\tMethod method = ((IPlugin) pluginInterface).getPluginMethod(\""
-						+ expressionPlugin.getPluginMethodName() + "\");\n";
-				droolsActions += "\tSystem.out.println(\"PLUGIN RESULT: \" + method.invoke(pluginInterface));\n";
+	private static String parsePluginMethods(ExpressionChain actions) throws NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
+		String ruleCore = "";
+		List<Expression> chainList = actions.getExpressions();
+
+		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
+			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList
+					.get(0)).getExpressions().get(0);
+			// Check if the reference exists in the rule, if not, it creates
+			// a new reference
+			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
+			ExpressionChain expressionChainToSearch = (ExpressionChain) actions.generateCopy();
+			expressionChainToSearch.removeFirstExpression();
+			List<Expression> variables = getExpressionChainVariables(expressionChainToSearch);
+			for (Expression expression : variables) {
+				if ((expression instanceof ExpressionValueCustomVariable)
+						|| (expression instanceof ExpressionValueTreeObjectReference)) {
+					ruleCore += checkVariableAssignation(expression);
+				}
 			}
-		} catch (IllegalArgumentException e) {
-			throw new PluginInvocationException("Error ", expressionPlugin.getPluginInterface().getName(),
-					expressionPlugin.getPluginMethodName());
+			ruleCore += RulesUtils.getThenRuleString();
+			String pluginCall = createPluginMethodCall(actions);
+
+			ruleCore += "\tObject callResult = " + pluginCall + ";\n";
+			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
+					+ leftExpressionCustomVariable.getVariable().getName() + "', callResult);\n";
+			ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+					+ leftExpressionCustomVariable.getReference().getName() + ", "
+					+ leftExpressionCustomVariable.getVariable().getName() + ", callResult)\");\n";
+
 		}
-		return droolsActions;
+		// }
+		return ruleCore;
+	}
+
+	private static String createPluginMethodCall(ExpressionChain actions) {
+		ExpressionPluginMethod expressionPlugin = (ExpressionPluginMethod) actions.getExpressions().get(1);
+		String pluginCall = "";
+		Plugin pluginInterface = PluginController.getInstance().getPlugin(expressionPlugin.getPluginInterface());
+		if (pluginInterface instanceof IPlugin) {
+			String interfaceName = expressionPlugin.getPluginInterface().getCanonicalName();
+			String pluginName = expressionPlugin.getPluginName();
+			String methodName = expressionPlugin.getPluginMethodName();
+
+			// Create the array of values to consult
+			List<ExpressionValue<?>> funtionParameters = getFunctionParameters(actions);
+			String parametersValue = null;
+			if (!funtionParameters.isEmpty()) {
+				List<String> parameters = transformFunctionParametersToString(funtionParameters);
+				parametersValue = "";
+				for (int i = 0; i < parameters.size() - 1; i++) {
+					parametersValue += parameters.get(i) + ", ";
+				}
+				// Add last parameter
+				parametersValue += parameters.get(parameters.size() - 1);
+			}
+			pluginCall = "PluginController.getInstance().executePluginMethod('" + interfaceName + "', '" + pluginName
+					+ "', '" + methodName + "'" + (parametersValue != null ? ", " + parametersValue : "") + ")";
+		}
+		return pluginCall;
 	}
 
 	private static String parseConditions(ExpressionChain conditions) throws ExpressionInvalidException,
@@ -1063,10 +1100,11 @@ public class DroolsParser {
 				case IN:
 				case BETWEEN:
 					return createInBetweenFunctionConditions(prattParserResultExpressionChain);
-//				case IN:
-//					return answersInQuestionCondition(expressions);
-//				case BETWEEN:
-//					return questionBetweenAnswersCondition(prattParserResultExpressionChain);
+					// case IN:
+					// return answersInQuestionCondition(expressions);
+					// case BETWEEN:
+					// return
+					// questionBetweenAnswersCondition(prattParserResultExpressionChain);
 				default:
 					break;
 				}
@@ -1223,8 +1261,6 @@ public class DroolsParser {
 		}
 		return null;
 	}
-
-
 
 	private static String questionDateDaysOperatorValueNumber(TreeObject question, Double value,
 			AvailableOperator operator) {
@@ -1516,5 +1552,42 @@ public class DroolsParser {
 			throw new NullExpressionValueException();
 		}
 		return ruleCore;
+	}
+
+	/**
+	 * Returns the parameters of the functions as a list of expressions.
+	 * 
+	 * @param conditions
+	 * @return
+	 */
+	private static List<ExpressionValue<?>> getFunctionParameters(ExpressionChain conditions) {
+		List<ExpressionValue<?>> functionParameters = new ArrayList<ExpressionValue<?>>();
+		for (int i = 2; i < conditions.getExpressions().size() - 1; i += 2) {
+			List<Expression> operatorValue = ((ExpressionChain) conditions.getExpressions().get(i)).getExpressions();
+			if ((operatorValue.size() == 1) && (operatorValue.get(0) instanceof ExpressionValue)) {
+				functionParameters.add((ExpressionValue<?>) operatorValue.get(0));
+			}
+		}
+		return functionParameters;
+	}
+
+	private static List<String> transformFunctionParametersToString(List<ExpressionValue<?>> functionParameters) {
+		List<String> stringFunctionParameters = new ArrayList<>();
+		for (ExpressionValue<?> parameter : functionParameters) {
+			if (parameter instanceof ExpressionValueCustomVariable) {
+				stringFunctionParameters
+						.add("'"
+								+ getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueCustomVariable) parameter)
+								+ "'");
+			} else if (parameter instanceof ExpressionValueTreeObjectReference) {
+				stringFunctionParameters.add("'"
+						+ ((ExpressionValueTreeObjectReference) parameter).getReference().getName() + "'");
+			} else if (parameter instanceof ExpressionValueNumber) {
+				stringFunctionParameters.add(parameter.getValue().toString());
+			} else {
+				stringFunctionParameters.add("'" + parameter.getValue() + "'");
+			}
+		}
+		return stringFunctionParameters;
 	}
 }
