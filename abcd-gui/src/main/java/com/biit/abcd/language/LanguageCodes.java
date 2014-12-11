@@ -270,6 +270,8 @@ public enum LanguageCodes {
 
 	WARNING_NO_QUESTION_SELECTED_CAPTION("condition.table.noquestion.caption"),
 	WARNING_NO_QUESTION_SELECTED_BODY("condition.table.noquestion.body"),
+	
+	WARNING_REMOVE_ELEMENT("warning.element.remove"),
 
 	CONDITION_TABLE_EDITOR_ADD_TABLE("condition.table.editor.button.add.table"),
 	CONDITION_TABLE_EDITOR_ADD_TABLE_TOOLTIP("condition.table.editor.button.add.table.tooltip"),
