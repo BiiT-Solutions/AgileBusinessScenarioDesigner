@@ -131,6 +131,9 @@ public class FormDesigner extends FormWebPageComponent {
 		}
 		// Collapse the table at question level
 		formTreeTable.collapseFrom(Question.class);
+		
+		//Set current selected element properties. 
+		updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
 	}
 
 	protected void updatePropertiesComponent(TreeObject value) {
@@ -664,18 +667,4 @@ public class FormDesigner extends FormWebPageComponent {
 				UserSessionHandler.getFormController().getForm());
 		return !testScenarios.isEmpty();
 	}
-
-	// private List<TestScenario> modifyTestScenariosLinked() {
-	// Form currentForm = UserSessionHandler.getFormController().getForm();
-	// List<TestScenario> testScenarios =
-	// UserSessionHandler.getTestScenariosController()
-	// .getTestScenarios(currentForm);
-	// for (TestScenario testScenario : testScenarios) {
-	// TestScenarioValidator testScenarioValidator = new
-	// TestScenarioValidator();
-	// testScenarioValidator.checkAndModifyTestScenarioStructure(currentForm,
-	// testScenario);
-	// }
-	// return testScenarios;
-	// }
 }
