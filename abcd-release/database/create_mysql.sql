@@ -1030,9 +1030,6 @@
         add constraint UK_6n86noaf7rpgu2qagq951m5da  unique (expressions_ID);
 
     alter table form_custom_variables 
-        add constraint UK_2pj0qoh0ntvs9laf9sh42rqap  unique (form, name, scope);
-
-    alter table form_custom_variables 
         add constraint UK_891b13251e3pkyk1k5vccpmnh  unique (ID);
 
     alter table form_custom_variables 

@@ -19,6 +19,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
@@ -67,7 +68,8 @@ public class Form extends BaseForm {
 	@Cache(region = "tableRules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<TableRule> tableRules;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "form")
+	@OneToMany(mappedBy = "form")
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
@@ -609,6 +611,7 @@ public class Form extends BaseForm {
 	}
 
 	public void remove(CustomVariable customVariableToDelete) {
+		customVariableToDelete.setForm(null);
 		customVariables.remove(customVariableToDelete);
 		customVariablesToDelete.add(customVariableToDelete);
 	}
