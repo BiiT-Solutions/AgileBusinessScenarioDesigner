@@ -8,7 +8,6 @@ import java.util.Set;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.abcd.webpages.components.EditCellComponent;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
@@ -16,7 +15,6 @@ import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
 public class NewActionTable extends Table {
@@ -40,7 +38,7 @@ public class NewActionTable extends Table {
 		setImmediate(true);
 		setSizeFull();
 
-		addContainerProperty(Columns.ACTION, Component.class, null,
+		addContainerProperty(Columns.ACTION, ActionValueEditCell.class, null,
 				ServerTranslate.translate(LanguageCodes.ACTION_TABLE_HEADER_ACTION), null, Align.CENTER);
 
 		cellRowSelector = new CellRowSelector();
@@ -48,6 +46,8 @@ public class NewActionTable extends Table {
 		setCellStyleGenerator(cellRowSelector);
 
 		setSelectable(false);
+		setSortEnabled(false);
+		setSortContainerPropertyId(Columns.ACTION);
 	}
 
 	public void addRow(TableRuleRow row) {
@@ -71,6 +71,7 @@ public class NewActionTable extends Table {
 		} else {
 			actionValue.setLabel("null");
 		}
+		sort();
 	}
 
 	/**
@@ -110,10 +111,11 @@ public class NewActionTable extends Table {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
+	private void setDefaultNewItemPropertyValues(final TableRuleRow itemId, final Item item) {
 		if (item != null) {
 			if (item.getItemProperty(Columns.ACTION).getValue() == null) {
-				EditCellComponent editCellComponent = new ActionValueEditCell();
+				ActionValueEditCell editCellComponent = new ActionValueEditCell();
+				editCellComponent.setExpression(itemId.getConditions());
 				editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId));
 				editCellComponent.addRemoveButtonClickListener(new CellDeleteButtonClickListener(itemId));
 				editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId));

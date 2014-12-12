@@ -13,6 +13,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.form.utils.TreeObjectHierarchyComparator;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -21,7 +22,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "rule_decision_table_row")
-public class TableRuleRow extends StorableObject {
+public class TableRuleRow extends StorableObject implements Comparable<TableRuleRow> {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private ExpressionChain conditions;
@@ -140,6 +141,32 @@ public class TableRuleRow extends StorableObject {
 			setAction(action);
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRuleRow.");
+		}
+	}
+
+	@Override
+	public int compareTo(TableRuleRow otherRow) {
+		if (this.getConditions().getExpressions().size() > 0 && otherRow.getConditions().getExpressions().size() > 0) {
+			Expression expression1 = this.getConditions().getExpressions().get(0);
+			Expression expression2 = otherRow.getConditions().getExpressions().get(0);
+			if (expression1 instanceof ExpressionValueTreeObjectReference) {
+				if (expression2 instanceof ExpressionValueTreeObjectReference) {
+					return new TreeObjectHierarchyComparator().compare(
+							((ExpressionValueTreeObjectReference) expression1).getReference(),
+							((ExpressionValueTreeObjectReference) expression2).getReference());
+				}
+				// First null values.
+				return 1;
+			} else {
+				if (expression2 instanceof ExpressionValueTreeObjectReference) {
+					// First null values.
+					return -1;
+				}
+				return 0;
+			}
+		} else {
+			// First empty expressions.
+			return this.getConditions().getExpressions().size() - otherRow.getConditions().getExpressions().size();
 		}
 	}
 }

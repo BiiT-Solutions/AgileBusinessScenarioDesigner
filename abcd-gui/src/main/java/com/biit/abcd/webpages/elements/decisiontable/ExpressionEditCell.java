@@ -1,10 +1,9 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
-import com.biit.abcd.webpages.components.SecuredEditCellComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-public class ExpressionEditCell extends SecuredEditCellComponent {
+public class ExpressionEditCell extends EditCellSortableByExpression {
 	private static final long serialVersionUID = -3553182337703247712L;
 
 	public ExpressionEditCell() {

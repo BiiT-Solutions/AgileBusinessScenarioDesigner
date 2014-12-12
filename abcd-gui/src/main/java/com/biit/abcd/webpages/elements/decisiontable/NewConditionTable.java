@@ -45,7 +45,7 @@ public class NewConditionTable extends Table {
 		addItemClickListener(cellRowSelector);
 		setCellStyleGenerator(cellRowSelector);
 		addActionHandler(cellRowSelector);
-		
+
 		setSelectable(false);
 	}
 
@@ -70,6 +70,10 @@ public class NewConditionTable extends Table {
 				ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_HEADER_QUESTION_CONDITION), null, Align.CENTER);
 		addContainerProperty(columnId + 1, ExpressionEditCell.class, null,
 				ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_HEADER_ANSWER_CONDITION), null, Align.CENTER);
+		if (getContainerPropertyIds().size() >= 2) {
+			setSortContainerPropertyId(0);
+			sort();
+		}
 	}
 
 	private class RowDoubleClickedListener implements CellDoubleClickedListener {
@@ -187,11 +191,12 @@ public class NewConditionTable extends Table {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
+	private void setDefaultNewItemPropertyValues(final TableRuleRow itemId, final Item item) {
 		if (item != null) {
 			for (final Object propertyId : getContainerPropertyIds()) {
 				if (item.getItemProperty(propertyId).getValue() == null) {
 					ExpressionEditCell editCellComponent = new ExpressionEditCell();
+					editCellComponent.setExpression(itemId.getConditions());
 					editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId, propertyId));
 					editCellComponent
 							.addRemoveButtonClickListener(new CellClearButtonClickListener(itemId, propertyId));
@@ -213,6 +218,7 @@ public class NewConditionTable extends Table {
 						.getRepresentation());
 			}
 		}
+		sort();
 	}
 
 	public Collection<TableRuleRow> getSelectedRules() {

@@ -86,7 +86,7 @@ public class RuleTable extends CustomComponent {
 		}
 	}
 
-	private void setSelectedRows(Set<Object> selectedRows) {
+	public void setSelectedRows(Set<Object> selectedRows) {
 		conditionTable.selectRows(selectedRows, false);
 		actionTable.selectRows(selectedRows, false);
 	}
@@ -193,4 +193,5 @@ public class RuleTable extends CustomComponent {
 	public Collection<TableRuleRow> getSelectedRules() {
 		return conditionTable.getSelectedRules();
 	}
+
 }
