@@ -64,15 +64,15 @@ public class DroolsParser {
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
 			DateComparisonNotPossibleException, DroolsRuleCreationException {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 
 		ExpressionChain leftChain = (ExpressionChain) expressions.get(0);
 		ExpressionChain rightChain = (ExpressionChain) expressions.get(2);
 
-		result += processResultConditionsFromPrattParser(leftChain);
-		result += processResultConditionsFromPrattParser(rightChain);
+		result.append(processResultConditionsFromPrattParser(leftChain));
+		result.append(processResultConditionsFromPrattParser(rightChain));
 
-		return result;
+		return result.toString();
 	}
 
 	/**
@@ -346,30 +346,30 @@ public class DroolsParser {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
 			PluginInvocationException, DroolsRuleCreationException, PrattParserException {
-		String parsedText = "";
+		StringBuilder parsedText = new StringBuilder();
 		for (Rule rule : rules) {
 			// orOperatorUsed = false;
 			if (rule != null) {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
-					parsedText += rule.getName();
+					parsedText.append(rule.getName());
 
-					parsedText += RulesUtils.getWhenRuleString();
+					parsedText.append(RulesUtils.getWhenRuleString());
 					if (rule instanceof DroolsRuleGroupEndRule) {
-						parsedText += RulesUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule);
+						parsedText.append(RulesUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule));
 					}
-					parsedText += parsedRule;
+					parsedText.append(parsedRule);
 					if (rule instanceof DroolsRuleGroup) {
 						if (!(rule instanceof DroolsRuleGroupEndRule)) {
-							parsedText += RulesUtils.getThenRuleString();
+							parsedText.append(RulesUtils.getThenRuleString());
 						}
-						parsedText += RulesUtils.getGroupRuleActions((DroolsRuleGroup) rule);
+						parsedText.append(RulesUtils.getGroupRuleActions((DroolsRuleGroup) rule));
 					}
-					parsedText += RulesUtils.getEndRuleString();
+					parsedText.append(RulesUtils.getEndRuleString());
 				}
 			}
 		}
-		return parsedText;
+		return parsedText.toString();
 	}
 
 	/**
@@ -732,32 +732,13 @@ public class DroolsParser {
 			}
 			ruleCore += RulesUtils.getThenRuleString();
 
-			String mathematicalExpression = "";
-
 			ExpressionFunction function = (ExpressionFunction) actions.getExpressions().get(1);
 
-			// if (variables.size() == 1) {
-			// mathematicalExpression =
-			// getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference)
-			// variables
-			// .get(0));
-			// if (!mathematicalExpression.isEmpty()) {
-			// ruleCore += "\t$" +
-			// getTreeObjectName(leftExpressionCustomVariable.getReference())
-			// + ".setVariableValue('" +
-			// leftExpressionCustomVariable.getVariable().getName() + "', "
-			// + mathematicalExpression + ");\n";
-			// ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-			// + leftExpressionCustomVariable.getReference().getName() + ", "
-			// + leftExpressionCustomVariable.getVariable().getName() + ", " +
-			// mathematicalExpression
-			// + ")\");\n";
-			// }
-			//
-			// } else if (variables.size() > 1) {
 			ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
+			// First part of the action 'setVariable'
 			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', ";
+			// Second part of the action 'setVariable' (depends on the function)
 			switch (function.getValue()) {
 			case MAX:
 				ruleCore += "RulesOperators.calculateMaxValueFunction(variablesList));\n";
@@ -783,7 +764,6 @@ public class DroolsParser {
 					+ leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
 					+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
-			// }
 		}
 
 		return ruleCore;
