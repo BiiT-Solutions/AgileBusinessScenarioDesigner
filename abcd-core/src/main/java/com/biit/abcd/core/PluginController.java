@@ -34,9 +34,9 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.TreeObject;
-import com.biit.plugin.exceptions.InvalidMethodParametersException;
-import com.biit.plugin.exceptions.MethodInvocationException;
-import com.biit.plugin.exceptions.NoMethodFoundException;
+import com.biit.plugins.exceptions.InvalidMethodParametersException;
+import com.biit.plugins.exceptions.MethodInvocationException;
+import com.biit.plugins.exceptions.NoMethodFoundException;
 import com.biit.plugins.interfaces.IPlugin;
 
 /**

@@ -2,6 +2,7 @@ package com.biit.abcd.core.drools.prattparser.parselets;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
+import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 
@@ -18,7 +19,7 @@ public class PrefixOperatorParselet implements PrefixParselet {
 	}
 
 	@Override
-	public ITreeElement parse(PrattParser parser, ExpressionToken token) {
+	public ITreeElement parse(PrattParser parser, ExpressionToken token) throws PrattParserException {
 		// To handle right-associative operators like "^", we allow a slightly
 		// lower precedence when parsing the right-hand side. This will let a
 		// parselet with the same precedence appear on the right, which will

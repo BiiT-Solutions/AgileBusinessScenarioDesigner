@@ -6,6 +6,7 @@ import java.util.List;
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.ExpressionTokenType;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
+import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.Precedence;
 import com.biit.abcd.core.drools.prattparser.expressions.CallExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
@@ -18,7 +19,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 public class CallParselet implements InfixParselet {
 
 	@Override
-	public ITreeElement parse(PrattParser parser, ITreeElement left, ExpressionToken token) {
+	public ITreeElement parse(PrattParser parser, ITreeElement left, ExpressionToken token) throws PrattParserException {
 		// When the IF function is used a dummy variable is introduces and have
 		// to be removed before returning the parsed expression
 		if ((token.getExpression() instanceof ExpressionFunction)

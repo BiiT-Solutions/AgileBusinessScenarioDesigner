@@ -129,7 +129,7 @@ public class PrattParser {
 		this.mInfixParselets.put(token, parselet);
 	}
 
-	public ITreeElement parseExpression(int precedence) {
+	public ITreeElement parseExpression(int precedence) throws PrattParserException {
 		ExpressionToken token = this.consume();
 
 		// System.out.println("TOKEN CONSUMED 1: " + token);
@@ -157,7 +157,7 @@ public class PrattParser {
 		return left;
 	}
 
-	public ITreeElement parseExpression() {
+	public ITreeElement parseExpression() throws PrattParserException {
 		return this.parseExpression(0);
 	}
 

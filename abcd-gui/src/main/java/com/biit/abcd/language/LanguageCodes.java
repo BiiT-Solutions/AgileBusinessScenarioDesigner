@@ -222,6 +222,8 @@ public enum LanguageCodes {
 
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),
+	
+	ERROR_DATABASE_UNEXPECTED_EXCEPTION("error.database.unexpected.exception"),
 
 	ERROR_DATABASE_DUPLICATED_VARIABLE("error.database.duplicatedvariable"),
 	ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION("error.database.duplicatedvariablecatpion"),
@@ -492,7 +494,11 @@ public enum LanguageCodes {
 	
 	PLUGINS_TAB_TABLE_CAPTION("plugins.tab.table.caption"),
 	PLUGINS_TAB_ADD_FUNCTION_BUTTON_CAPTION("plugins.tab.add.function.button.caption"),
-	PLUGINS_TAB_INFO_PANEL_CAPTION("plugins.tab.info.panel.caption");
+	PLUGINS_TAB_INFO_PANEL_CAPTION("plugins.tab.info.panel.caption"),
+	
+	DROOLS_RULES_GENERATION_EXCEPTION("drools.rules.generation.exception"),
+	DROOLS_RULES_EXECUTION_EXCEPTION("drools.rules.execution.exception")
+	;
 
 	private String value;
 

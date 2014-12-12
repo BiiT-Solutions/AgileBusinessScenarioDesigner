@@ -12,36 +12,22 @@ import org.junit.Assert;
 
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.importer.IncompatibleFormStructureException;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
-import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
-import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
-import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleExecutionException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
+import com.biit.abcd.core.drools.rules.exceptions.OrbeonReaderException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.orbeon.OrbeonImporter;
-import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.ISubmittedForm;
 
 public class FormToDroolsExporter {
 
 	/**
-	 * Parses the vaadin form and loads the rules generated in the drools
+	 * Parses the abcd form and loads the rules generated in the drools
 	 * engine. <br>
 	 * If this method doesn't fails it means that the drools rules are correctly
 	 * defined. <br>
@@ -52,58 +38,34 @@ public class FormToDroolsExporter {
 	 *            form to be parsed
 	 * @param globalVariables
 	 *            array with the global constants to be created
-	 * @throws ExpressionInvalidException
-	 * @throws RuleInvalidException
-	 * @throws IOException
-	 * @throws RuleNotImplementedException
-	 * @throws ActionNotImplementedException
-	 * @throws NotCompatibleTypeException
-	 * @throws NullExpressionValueException
-	 * @throws NullCustomVariableException
-	 * @throws TreeObjectParentNotValidException
-	 * @throws TreeObjectInstanceNotRecognizedException
-	 * @throws NullTreeObjectException
-	 * @throws BetweenFunctionInvalidException
-	 * @throws DateComparisonNotPossibleException
-	 * @throws PluginInvocationException 
-	 * @throws DroolsRuleCreationException 
+	 * @throws DroolsRuleGenerationException
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables)
-			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException {
+			throws DroolsRuleGenerationException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
+
+			// Creation of the rules
+			formRules = new DroolsRulesGenerator(form, globalVariables);
+			AbcdLogger.debug(this.getClass().getName(), formRules.getRules());
 			try {
-				// Creation of the rules
-				formRules = new DroolsRulesGenerator(form, globalVariables);
-				AbcdLogger.debug(this.getClass().getName(), formRules.getRules());
 				Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"),
 						formRules.getRules().getBytes("UTF-8"));
-				return formRules;
-			} catch (ExpressionInvalidException e) {
-				throw e;
+			} catch (IOException e) {
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
+			return formRules;
+
 		}
 		return null;
 	}
 
-	public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws ExpressionInvalidException,
-			RuleInvalidException, IOException, RuleNotImplementedException, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException,
-			DroolsRuleCreationException {
+	public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
-			try {
-				// Creation of the rules
-				formRules = new DroolsRulesGenerator(form, globalVariables);
-				return formRules.getRules();
-			} catch (ExpressionInvalidException e) {
-				throw e;
-			}
+			// Creation of the rules
+			formRules = new DroolsRulesGenerator(form, globalVariables);
+			return formRules.getRules();
 		}
 		return null;
 	}
@@ -136,11 +98,8 @@ public class FormToDroolsExporter {
 	}
 
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, String orbeonApplicationName,
-			String orbeonFormName, String orbeonDocumentId) throws ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException {
+			String orbeonFormName, String orbeonDocumentId) throws DroolsRuleGenerationException,
+			OrbeonReaderException, DroolsRuleExecutionException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
@@ -157,33 +116,11 @@ public class FormToDroolsExporter {
 	 * @param form
 	 * @param globalVariables
 	 * @return
-	 * @throws ExpressionInvalidException
-	 * @throws RuleInvalidException
-	 * @throws IOException
-	 * @throws RuleNotImplementedException
-	 * @throws DocumentException
-	 * @throws CategoryNameWithoutTranslation
-	 * @throws ActionNotImplementedException
-	 * @throws NotCompatibleTypeException
-	 * @throws NullExpressionValueException
-	 * @throws NullCustomVariableException
-	 * @throws TreeObjectParentNotValidException
-	 * @throws TreeObjectInstanceNotRecognizedException
-	 * @throws NullTreeObjectException
-	 * @throws ChildrenNotFoundException
-	 * @throws IncompatibleFormStructureException
-	 * @throws BetweenFunctionInvalidException
-	 * @throws DateComparisonNotPossibleException
-	 * @throws PluginInvocationException
-	 * @throws DroolsRuleCreationException
+	 * @throws DroolsRuleGenerationException
+	 * @throws DroolsRuleExecutionException
 	 */
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm iSubmittedForm)
-			throws ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			ChildrenNotFoundException, IncompatibleFormStructureException, BetweenFunctionInvalidException,
-			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException {
+			throws DroolsRuleGenerationException, DroolsRuleExecutionException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
@@ -194,19 +131,28 @@ public class FormToDroolsExporter {
 	}
 
 	public ISubmittedForm applyDrools(String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId,
-			String droolsRules, List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,
-			CategoryNameWithoutTranslation {
-		ISubmittedForm submittedForm = readXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId);
-		ISubmittedForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
-		if (droolsRules != null && droolsRules.length() > 0) {
-			// Launch kie
-			KieManager km = new KieManager();
-			// Load the rules in memory
-			km.buildSessionRules(droolsRules);
-			// Creation of the global constants
-			km.setGlobalVariables(globalVariables);
+			String droolsRules, List<DroolsGlobalVariable> globalVariables) throws OrbeonReaderException,
+			DroolsRuleExecutionException {
+		ISubmittedForm droolsForm = null;
+		try {
+			ISubmittedForm submittedForm = readXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId);
+			droolsForm = new DroolsForm((SubmittedForm) submittedForm);
+			if (droolsRules != null && droolsRules.length() > 0) {
+				// Launch kie
+				KieManager km = new KieManager();
+				// Load the rules in memory
+				km.buildSessionRules(droolsRules);
+				// Creation of the global constants
+				km.setGlobalVariables(globalVariables);
 
-			runDroolsRules(droolsForm, km);
+				runDroolsRules(droolsForm, km);
+			}
+		} catch (IOException | DocumentException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			throw new OrbeonReaderException("Error reading the orbeon file", e);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			throw new DroolsRuleExecutionException("Error executing the drools rules", e);
 		}
 		return droolsForm;
 	}
@@ -219,24 +165,25 @@ public class FormToDroolsExporter {
 	 * @param droolsRules
 	 * @param globalVariables
 	 * @return submittedForm with the scores calculated by drools
-	 * @throws DocumentException
-	 * @throws IOException
-	 * @throws CategoryNameWithoutTranslation
+	 * @throws DroolsRuleExecutionException
 	 */
 	public DroolsForm applyDrools(ISubmittedForm submittedForm, String droolsRules,
-			List<DroolsGlobalVariable> globalVariables) throws DocumentException, IOException,
-			CategoryNameWithoutTranslation {
-		// Launch kie
-		KieManager km = new KieManager();
-		// Load the rules in memory
-		km.buildSessionRules(droolsRules);
-		// km.buildSessionRules(new
-		// String(Files.readAllBytes(Paths.get(System.getProperty("java.io.tmpdir")
-		// + File.separator + "generatedRules.drl"))));
-		// Creation of the global constants
-		km.setGlobalVariables(globalVariables);
-		DroolsForm droolsForm = new DroolsForm((SubmittedForm) submittedForm);
-		runDroolsRules(droolsForm, km);
+			List<DroolsGlobalVariable> globalVariables) throws DroolsRuleExecutionException {
+		DroolsForm droolsForm = null;
+		try {
+			// Launch kie
+			KieManager km = new KieManager();
+			// Load the rules in memory
+			km.buildSessionRules(droolsRules);
+			// Creation of the global constants
+			km.setGlobalVariables(globalVariables);
+			droolsForm = new DroolsForm((SubmittedForm) submittedForm);
+			runDroolsRules(droolsForm, km);
+
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			throw new DroolsRuleExecutionException("Error executing the drools rules", e);
+		}
 		return droolsForm;
 	}
 }

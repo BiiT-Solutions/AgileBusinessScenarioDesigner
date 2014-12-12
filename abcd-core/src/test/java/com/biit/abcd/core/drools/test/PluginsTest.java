@@ -28,11 +28,10 @@ import com.biit.plugins.interfaces.IPlugin;
 public class PluginsTest extends KidsFormCreator {
 
 	private final static String CUSTOM_VARIABLE_RESULT = "customVariableResult";
-	private final static Class<?> HELLO_WORLD_PLUGIN_INTERFACE = com.biit.plugins.interfaces.IHelloWorld.class;
+	private final static Class<?> PLUGIN_INTERFACE = com.biit.plugins.interfaces.IPlugin.class;
 	private final static String HELLO_WORLD_PLUGIN_NAME = "HelloWorld";
 	private final static String HELLO_WORLD_PLUGIN_RETURN = "Hello World";
 	private final static String HELLO_WORLD_PLUGIN_METHOD = "methodHelloWorld";
-	private final static Class<?> DROOLS_PLUGIN_INTERFACE = com.biit.plugins.interfaces.IDroolsRulePlugin.class;
 	private final static String DROOLS_PLUGIN_NAME = "DroolsFunctions";
 	private final static String DROOLS_PLUGIN_METHOD = "methodSumParameters";
 
@@ -40,7 +39,7 @@ public class PluginsTest extends KidsFormCreator {
 	public void helloWorldPluginSelectionTest1() {
 		try {
 			// Calling the first plugin
-			IPlugin pluginInterface = PluginController.getInstance().getPlugin(HELLO_WORLD_PLUGIN_INTERFACE,
+			IPlugin pluginInterface = PluginController.getInstance().getPlugin(PLUGIN_INTERFACE,
 					HELLO_WORLD_PLUGIN_NAME);
 			Method method = ((IPlugin) pluginInterface).getPluginMethod(HELLO_WORLD_PLUGIN_METHOD);
 			Assert.assertEquals(method.invoke(pluginInterface), HELLO_WORLD_PLUGIN_RETURN);
@@ -54,7 +53,7 @@ public class PluginsTest extends KidsFormCreator {
 		try {
 			// Calling the hello world plugin with only one call
 			Assert.assertEquals(
-					PluginController.getInstance().executePluginMethod(HELLO_WORLD_PLUGIN_INTERFACE,
+					PluginController.getInstance().executePluginMethod(PLUGIN_INTERFACE,
 							HELLO_WORLD_PLUGIN_NAME, HELLO_WORLD_PLUGIN_METHOD), HELLO_WORLD_PLUGIN_RETURN);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
@@ -70,7 +69,7 @@ public class PluginsTest extends KidsFormCreator {
 					CustomVariableType.STRING, CustomVariableScope.FORM);
 			ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(
 					getForm(), customvariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionPluginMethod(HELLO_WORLD_PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME,
+					new ExpressionPluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME,
 							HELLO_WORLD_PLUGIN_METHOD), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
@@ -92,7 +91,7 @@ public class PluginsTest extends KidsFormCreator {
 					CustomVariableType.NUMBER, CustomVariableScope.FORM);
 			ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(
 					getForm(), customVariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionPluginMethod(DROOLS_PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD),
+					new ExpressionPluginMethod(PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD),
 					new ExpressionValueNumber(4.), new ExpressionSymbol(AvailableSymbol.COMMA),
 					new ExpressionValueNumber(4.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			getForm().getExpressionChains().add(expression);
