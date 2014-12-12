@@ -29,7 +29,7 @@ public class GenericsTest extends KidsFormCreator {
 	private CustomVariable groupCustomVariable = null;
 	private CustomVariable questionCustomVariable = null;
 
-	@Test(groups = { "rules2" })
+	@Test(groups = { "rules" })
 	private void genericCategoryQuestionsTest() {
 		try {
 			// Generate the form

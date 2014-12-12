@@ -62,6 +62,7 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 					testScenarioView.getName() + " (v" + testScenarioView.getFormVersion() + ")");
 		}
 
+		formVersion.setValue(formView);
 		formVersion.setWidth(100.0f, Unit.PERCENTAGE);
 		testScenario.setWidth(100.0f, Unit.PERCENTAGE);
 		layout.addComponent(formVersion);

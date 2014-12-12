@@ -21,8 +21,6 @@ public class DroolsEngineRulesTest {
 
 	private final static String FORM = "Form1";
 	private final static String APP = "Application1";
-	private static final String CUSTOM_VARIABLE_RESULT = "customVariableResult";
-	private static final Double CUSTOM_VARIABLE_RESULT_VALUE = 11.;
 	private ISubmittedForm submittedForm;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 

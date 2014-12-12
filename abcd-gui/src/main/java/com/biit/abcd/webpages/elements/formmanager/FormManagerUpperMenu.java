@@ -10,15 +10,10 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.importer.IncompatibleFormStructureException;
 import com.biit.abcd.core.drools.facts.inputform.importer.TestScenarioAnswerImporter;
-import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleExecutionException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
@@ -259,30 +254,28 @@ public class FormManagerUpperMenu extends UpperMenu {
 											}
 											launchTestScenarioWindow.close();
 										}
-									} catch (ExpressionInvalidException | RuleInvalidException | IOException e) {
-										MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE,
-												e.getMessage());
+									} catch (UnexpectedDatabaseException e) {
 										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-									} catch (RuleNotImplementedException e) {
-										MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e
-												.getExpressionChain().getRepresentation());
-										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-									} catch (ActionNotImplementedException e) {
-										MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-												LanguageCodes.WARNING_RULE_INCOMPLETE);
-										AbcdLogger.warning(SettingsWindow.class.getName(), e.toString());
-									} catch (NotCompatibleTypeException e) {
-										MessageManager.showError(LanguageCodes.ERROR_INCOMPATIBLE_TYPES,
-												ServerTranslate.translate(
-														LanguageCodes.ERROR_INCOMPATIBLE_TYPES_MORE_INFO,
-														new Object[] { e.getExpressionValue().getValue().toString() }));
-									} catch (IncompatibleFormStructureException e) {
-										MessageManager.showWarning(LanguageCodes.ERROR_INCOMPATIBLE_FORM_STRUCTURE,
-												LanguageCodes.ERROR_INCOMPATIBLE_FORM_STRUCTURE_MORE_INFO);
-									} catch (Exception e) {
-										MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR,
-												LanguageCodes.ERROR_DROOLS_ENGINE);
-										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+										MessageManager.showError(LanguageCodes.ERROR_TITLE,
+												LanguageCodes.ERROR_DATABASE_UNEXPECTED_EXCEPTION);
+
+									} catch (DroolsRuleGenerationException e) {
+										// This is a generic exception for
+										// everything related with the rules
+										// generation
+										// The exception that triggered the
+										// launch of this exception is inside
+										// the received exception
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(),
+												e.getGeneratedException());
+										MessageManager.showError(LanguageCodes.ERROR_TITLE,
+												LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
+
+									} catch (DroolsRuleExecutionException e) {
+										AbcdLogger.errorMessage(SettingsWindow.class.getName(),
+												e.getGeneratedException());
+										MessageManager.showError(LanguageCodes.ERROR_TITLE,
+												LanguageCodes.DROOLS_RULES_EXECUTION_EXCEPTION);
 									}
 								}
 							}

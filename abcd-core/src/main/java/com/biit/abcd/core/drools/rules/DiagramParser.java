@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.drools.DroolsHelper;
+import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
@@ -19,6 +21,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -51,17 +54,30 @@ public class DiagramParser {
 		setDroolsHelper(droolsHelper);
 	}
 
-	public String getDroolsRulesAsText(Diagram diagram) throws ExpressionInvalidException, RuleInvalidException,
-			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException {
-		List<Rule> newRules = parse(diagram, null);
-		String rulesAsString = DroolsParser.createDroolsRule(newRules);
-		
-		// TODO UNCOMMENT WHEN FINIDHED THE TESTS
-//		String rulesAsString = DroolsParser.createDroolsRule(newRules);
-		
+	/**
+	 * Method called to convert the expressions to drools rules.<br>
+	 * Gathers all the exceptions generated and creates a new exception that
+	 * represents all of them.
+	 * 
+	 * @param diagram The diagram to be parsed
+	 * @return The string with all the rules generated
+	 * @throws DroolsRuleGenerationException
+	 */
+	public String getDroolsRulesAsText(Diagram diagram) throws DroolsRuleGenerationException {
+		String rulesAsString = "";
+		try {
+			List<Rule> newRules = parse(diagram, null);
+			rulesAsString = DroolsParser.createDroolsRule(newRules);
+		} catch (ExpressionInvalidException | RuleInvalidException | RuleNotImplementedException
+				| ActionNotImplementedException | NotCompatibleTypeException | NullTreeObjectException
+				| TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException
+				| NullCustomVariableException | NullExpressionValueException | BetweenFunctionInvalidException
+				| DateComparisonNotPossibleException | PluginInvocationException | DroolsRuleCreationException
+				| PrattParserException e) {
+
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			throw new DroolsRuleGenerationException("Error generating the drools rules", e);
+		}
 		return rulesAsString;
 	}
 
@@ -286,11 +302,11 @@ public class DiagramParser {
 		return negatedExpressionChain;
 	}
 
-	public DroolsHelper getDroolsHelper() {
+	private DroolsHelper getDroolsHelper() {
 		return droolsHelper;
 	}
 
-	public void setDroolsHelper(DroolsHelper droolsHelper) {
+	private void setDroolsHelper(DroolsHelper droolsHelper) {
 		this.droolsHelper = droolsHelper;
 	}
 }

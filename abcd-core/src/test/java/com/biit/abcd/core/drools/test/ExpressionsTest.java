@@ -13,7 +13,6 @@ import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.utils.DateUtils;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -30,7 +29,6 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.ISubmittedObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class ExpressionsTest extends KidsFormCreator {

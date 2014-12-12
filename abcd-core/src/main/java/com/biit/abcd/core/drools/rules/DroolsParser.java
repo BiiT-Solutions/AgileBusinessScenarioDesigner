@@ -338,13 +338,14 @@ public class DroolsParser {
 	 * @throws DateComparisonNotPossibleException
 	 * @throws PluginInvocationException
 	 * @throws DroolsRuleCreationException
+	 * @throws PrattParserException
 	 * @throws NoSuchMethodException
 	 */
 	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException,
 			NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
-			PluginInvocationException, DroolsRuleCreationException {
+			PluginInvocationException, DroolsRuleCreationException, PrattParserException {
 		String parsedText = "";
 		for (Rule rule : rules) {
 			// orOperatorUsed = false;
@@ -393,6 +394,7 @@ public class DroolsParser {
 	 * @throws DateComparisonNotPossibleException
 	 * @throws PluginInvocationException
 	 * @throws DroolsRuleCreationException
+	 * @throws PrattParserException
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 * @throws IllegalArgumentException
@@ -402,7 +404,7 @@ public class DroolsParser {
 			ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException,
-			DroolsRuleCreationException {
+			DroolsRuleCreationException, PrattParserException {
 		if (rule == null) {
 			return null;
 		}
@@ -709,10 +711,11 @@ public class DroolsParser {
 	 * @throws NullTreeObjectException
 	 * @throws NullExpressionValueException
 	 * @throws NullCustomVariableException
+	 * @throws DroolsRuleCreationException
 	 */
 	private static String assignationFunctionAction(ExpressionChain actions) throws NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+			NullExpressionValueException, DroolsRuleCreationException {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
 		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
@@ -733,59 +736,54 @@ public class DroolsParser {
 
 			ExpressionFunction function = (ExpressionFunction) actions.getExpressions().get(1);
 
-			if (variables.size() == 1) {
-				mathematicalExpression = getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference) variables
-						.get(0));
-				if (!mathematicalExpression.isEmpty()) {
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName() + "', "
-							+ mathematicalExpression + ");\n";
-					ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-							+ leftExpressionCustomVariable.getReference().getName() + ", "
-							+ leftExpressionCustomVariable.getVariable().getName() + ", " + mathematicalExpression
-							+ ")\");\n";
-				}
-
-			} else if (variables.size() > 1) {
-				ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
-				switch (function.getValue()) {
-				case MAX:
-					// ruleCore +=
-					// "\tdouble value = RulesOperators.calculateMaxValueFunction(variablesList);\n";
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', RulesOperators.calculateMaxValueFunction(variablesList));\n";
-					break;
-				case MIN:
-					// Set the value calculated
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', RulesOperators.calculateMinValueFunction(variablesList));\n";
-					break;
-				case AVG:
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', RulesOperators.calculateAvgValueFunction(variablesList));\n";
-					break;
-				case SUM:
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', RulesOperators.calculateSumValueFunction(variablesList));\n";
-					break;
-				case PMT:
-					ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference())
-							+ ".setVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-							+ "', RulesOperators.calculatePmtValueFunction(variablesList));\n";
-					break;
-				default:
-					break;
-				}
-				// Set the value calculated
-				ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
-						+ leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
-						+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
-						+ leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
+			// if (variables.size() == 1) {
+			// mathematicalExpression =
+			// getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference)
+			// variables
+			// .get(0));
+			// if (!mathematicalExpression.isEmpty()) {
+			// ruleCore += "\t$" +
+			// getTreeObjectName(leftExpressionCustomVariable.getReference())
+			// + ".setVariableValue('" +
+			// leftExpressionCustomVariable.getVariable().getName() + "', "
+			// + mathematicalExpression + ");\n";
+			// ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+			// + leftExpressionCustomVariable.getReference().getName() + ", "
+			// + leftExpressionCustomVariable.getVariable().getName() + ", " +
+			// mathematicalExpression
+			// + ")\");\n";
+			// }
+			//
+			// } else if (variables.size() > 1) {
+			ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
+			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
+					+ leftExpressionCustomVariable.getVariable().getName() + "', ";
+			switch (function.getValue()) {
+			case MAX:
+				ruleCore += "RulesOperators.calculateMaxValueFunction(variablesList));\n";
+				break;
+			case MIN:
+				ruleCore += "RulesOperators.calculateMinValueFunction(variablesList));\n";
+				break;
+			case AVG:
+				ruleCore += "RulesOperators.calculateAvgValueFunction(variablesList));\n";
+				break;
+			case SUM:
+				ruleCore += "RulesOperators.calculateSumValueFunction(variablesList));\n";
+				break;
+			case PMT:
+				ruleCore += "RulesOperators.calculatePmtValueFunction(variablesList));\n";
+				break;
+			default:
+				throw new DroolsRuleCreationException("Error parsing an Action. Function '" + function.getValue()
+						+ "' not found.", actions);
 			}
+			// Set the value calculated
+			ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+					+ leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
+					+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
+					+ leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
+			// }
 		}
 
 		return ruleCore;
@@ -893,14 +891,10 @@ public class DroolsParser {
 	 * @param expressionChain
 	 * @return An object with the expression chain parsed inside;
 	 */
-	private static ITreeElement calculatePrattParserResult(ExpressionChain expressionChain) {
+	private static ITreeElement calculatePrattParserResult(ExpressionChain expressionChain) throws PrattParserException {
 		PrattParser prattParser = new ExpressionChainPrattParser(expressionChain);
 		ITreeElement prattParserResult = null;
-		try {
-			prattParserResult = prattParser.parseExpression();
-		} catch (PrattParserException ex) {
-			AbcdLogger.errorMessage(DroolsParser.class.getName(), ex);
-		}
+		prattParserResult = prattParser.parseExpression();
 		return prattParserResult;
 	}
 
@@ -913,61 +907,63 @@ public class DroolsParser {
 	 * 
 	 * @param actions
 	 *            list of expressions to be parsed
-	 * @return RHS of the rule, and sometimes a modified LHS
 	 * @throws RuleNotImplementedException
-	 * @throws NotCompatibleTypeException
 	 * @throws NullExpressionValueException
 	 * @throws NullCustomVariableException
 	 * @throws TreeObjectParentNotValidException
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws NullTreeObjectException
-	 * @throws PluginInvocationException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
+	 * @throws NotCompatibleTypeException
+	 * @throws DroolsRuleCreationException
 	 */
 	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			PluginInvocationException {
+			PrattParserException, DroolsRuleCreationException {
 
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
-		ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
-		
-		if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
-				&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
-						.get(0) instanceof ExpressionValueCustomVariable)) {
+		if (prattParserResult != null) {
+			ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 
-			// In case the function is empty we don't need to generate the rule
-			if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionSymbol) {
-				return null;
+			if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
+					&& (((ExpressionChain) prattParserResultExpressionChain.getExpressions().get(0)).getExpressions()
+							.get(0) instanceof ExpressionValueCustomVariable)) {
 
-			}
-			// Its the first position because the parser removes the equals in
-			// the expression functions
-			// Could be changed to standardize the behavior of the parser but it
-			// works fine
-			else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
-				switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
-				case MAX:
-				case MIN:
-				case AVG:
-				case SUM:
-				case PMT:
-					return assignationFunctionAction(prattParserResultExpressionChain);
-				default:
-					break;
+				// In case the function is empty we don't need to generate the
+				// rule
+				if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionSymbol) {
+					return null;
+
 				}
-			} else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionPluginMethod) {
-				return parsePluginMethods(prattParserResultExpressionChain);
+				// Its the first position because the parser removes the equals
+				// in
+				// the expression functions
+				// Could be changed to standardize the behavior of the parser
+				// but it
+				// works fine
+				else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
+					switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
+					case MAX:
+					case MIN:
+					case AVG:
+					case SUM:
+					case PMT:
+						return assignationFunctionAction(prattParserResultExpressionChain);
+					default:
+						break;
+					}
+				} else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionPluginMethod) {
+					return parsePluginMethods(prattParserResultExpressionChain);
+				}
+				// Mathematical expression
+				else {
+					return mathAssignationAction(prattParserResultExpressionChain, prattParserResult);
+				}
 			}
-			// Mathematical expression
-			else {
-				return mathAssignationAction(prattParserResultExpressionChain, prattParserResult);
-			}
+		} else {
+			throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
 		}
-		throw new RuleNotImplementedException("Rule not implemented.", expressionChain);
+		return null;
 	}
 
 	/**
@@ -1054,7 +1050,7 @@ public class DroolsParser {
 	private static String parseConditions(ExpressionChain conditions) throws ExpressionInvalidException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			DateComparisonNotPossibleException, DroolsRuleCreationException {
+			DateComparisonNotPossibleException, DroolsRuleCreationException, PrattParserException {
 
 		ITreeElement result = calculatePrattParserResult(conditions);
 		// *******************************************************************************************************

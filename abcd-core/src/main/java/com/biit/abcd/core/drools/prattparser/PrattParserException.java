@@ -1,9 +1,9 @@
 package com.biit.abcd.core.drools.prattparser;
 
+public class PrattParserException extends Exception {
+	private static final long serialVersionUID = -3048123597064347435L;
 
-@SuppressWarnings("serial")
-public class PrattParserException extends RuntimeException {
-  public PrattParserException(String message) {
-    super(message);
-  }
+	public PrattParserException(String message) {
+		super(message);
+	}
 }

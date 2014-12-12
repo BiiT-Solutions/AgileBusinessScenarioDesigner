@@ -69,7 +69,6 @@ public class KidsFormCreator {
 	private CustomVariable formTextCustomVariable = null;
 	private CustomVariable categoryNumberCustomVariable = null;
 	private CustomVariable groupNumberCustomVariable = null;
-	private CustomVariable groupTextNumberCustomVariable = null;
 	private CustomVariable questionNumberCustomVariable = null;
 	private Form form = null;
 	private Category category = null;

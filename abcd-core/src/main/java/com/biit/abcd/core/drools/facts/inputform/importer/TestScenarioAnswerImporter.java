@@ -22,7 +22,6 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
 import com.biit.form.TreeObject;
-import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
@@ -33,8 +32,7 @@ public class TestScenarioAnswerImporter {
 
 	private TestScenarioValidator testValidator = null;
 
-	public ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario) throws ChildrenNotFoundException,
-			IncompatibleFormStructureException {
+	public ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario) {
 		ISubmittedForm submittedForm = null;
 		if ((form != null) && (testScenario != null)) {
 			// If the test scenario is a subset of the form passed, we parse the

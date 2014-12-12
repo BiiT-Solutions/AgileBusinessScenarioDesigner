@@ -3,6 +3,7 @@ package com.biit.abcd.core.drools.prattparser.parselets;
 import com.biit.abcd.core.drools.prattparser.ExpressionToken;
 import com.biit.abcd.core.drools.prattparser.ExpressionTokenType;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
+import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.expressions.GroupExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 /**
@@ -11,7 +12,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 public class GroupParselet implements PrefixParselet {
 
 	@Override
-	public ITreeElement parse(PrattParser parser, ExpressionToken token) {
+	public ITreeElement parse(PrattParser parser, ExpressionToken token) throws PrattParserException {
 		ITreeElement expression = parser.parseExpression();
 		parser.consume(ExpressionTokenType.RIGHT_BRACKET);
 		return new GroupExpression(expression);

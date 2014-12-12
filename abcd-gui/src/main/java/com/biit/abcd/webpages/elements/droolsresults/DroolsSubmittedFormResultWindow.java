@@ -14,8 +14,6 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.orbeon.form.ISubmittedObject;
-import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 
 public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
@@ -23,8 +21,7 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	private HashMap<CustomVariableScope, List<String>> customVariablesScopeMap;
 	private DroolsTreeObjectTable submittedFormTreeTable;
 
-	public DroolsSubmittedFormResultWindow(SubmittedForm submittedForm, Form form)
-			throws CategoryDoesNotExistException, GroupDoesNotExistException {
+	public DroolsSubmittedFormResultWindow(SubmittedForm submittedForm, Form form) {
 		super();
 		setCaption("Submitted form scores");
 		setWidth("60%");

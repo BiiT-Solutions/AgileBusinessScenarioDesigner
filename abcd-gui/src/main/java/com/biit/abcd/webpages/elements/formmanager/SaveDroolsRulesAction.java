@@ -8,16 +8,13 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
-import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.utils.ZipUtils;
 import com.biit.abcd.webpages.components.SaveAction;
 import com.biit.abcd.webpages.components.SettingsWindow;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 public class SaveDroolsRulesAction implements SaveAction {
 
@@ -53,26 +50,17 @@ public class SaveDroolsRulesAction implements SaveAction {
 				MessageManager.showError(LanguageCodes.ZIP_FILE_NOT_GENERATED);
 				AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 			}
-		} catch (RuleInvalidException | IOException e) {
-			MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, e.getMessage());
+		} catch (UnexpectedDatabaseException e) {
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-		} catch (RuleNotImplementedException e) {
-			MessageManager.showError(LanguageCodes.ERROR_RULE_NOT_IMPLEMENTED, e.getExpressionChain()
-					.getRepresentation());
-			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-		} catch (ExpressionInvalidException e) {
-			MessageManager.showError(LanguageCodes.ERROR_DROOLS_INVALID_RULE, ServerTranslate.translate(
-					LanguageCodes.ERROR_DROOLS_INVALID_TYPES_IN_FUNCTION, new Object[] { e.getExpressionChain()
-							.getRepresentation() }));
-			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-		} catch (NotCompatibleTypeException e) {
-			MessageManager.showError(
-					LanguageCodes.ERROR_INCOMPATIBLE_TYPES,
-					ServerTranslate.translate(LanguageCodes.ERROR_INCOMPATIBLE_TYPES_MORE_INFO, new Object[] { e
-							.getExpressionValue().getValue().toString() }));
-		} catch (Exception e) {
-			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.ERROR_DATABASE_UNEXPECTED_EXCEPTION);
+
+		} catch (DroolsRuleGenerationException e) {
+			// This is a generic exception for everything related with the rules
+			// generation
+			// The exception that triggered the launch of this exception is
+			// inside the received exception
+			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e.getGeneratedException());
+			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
 		}
 		return null;
 	}
