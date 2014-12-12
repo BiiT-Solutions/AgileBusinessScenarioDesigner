@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.core.PluginController;
 import com.biit.abcd.core.drools.DroolsGlobalVariable;
 import com.biit.abcd.core.drools.DroolsHelper;
 import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
@@ -30,7 +31,7 @@ public class DroolsRulesGenerator {
 	private List<GlobalVariable> globalVariables;
 	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
-	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException  {
+	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
@@ -38,7 +39,7 @@ public class DroolsRulesGenerator {
 		initParser();
 	}
 
-	private void initParser() throws DroolsRuleGenerationException  {
+	private void initParser() throws DroolsRuleGenerationException {
 		if (form != null) {
 			// Define imports
 			importsDeclaration();
@@ -78,10 +79,12 @@ public class DroolsRulesGenerator {
 		getRulesBuilder().append("import java.util.List \n");
 		getRulesBuilder().append("import java.util.ArrayList \n");
 		getRulesBuilder().append("import com.biit.orbeon.form.* \n");
-		getRulesBuilder().append("import com.biit.abcd.core.PluginController \n");
-		getRulesBuilder().append("import net.xeoh.plugins.base.Plugin \n");
-		getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
-		getRulesBuilder().append("import java.lang.reflect.Method \n");
+		if (PluginController.getInstance().existsPlugins()) {
+			getRulesBuilder().append("import com.biit.abcd.core.PluginController \n");
+			getRulesBuilder().append("import net.xeoh.plugins.base.Plugin \n");
+			getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
+			getRulesBuilder().append("import java.lang.reflect.Method \n");
+		}
 		getRulesBuilder().append("import com.biit.abcd.logger.AbcdLogger \n\n");
 	}
 
