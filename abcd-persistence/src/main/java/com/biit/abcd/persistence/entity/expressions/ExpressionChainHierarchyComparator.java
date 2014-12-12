@@ -5,11 +5,7 @@ import java.util.List;
 
 /**
  * Order an expression chain by the tree objects that compose the expression. Used in Table Decision Rules. Example:
- * question1 = answer1
- * question1 = answer2
- * question2 = answer1
- * question2 = answer2
- * .... 
+ * question1 = answer1, question1 = answer2, question2 = answer1, question2 = answer2 ....
  */
 public class ExpressionChainHierarchyComparator implements Comparator<ExpressionChain> {
 
@@ -19,20 +15,26 @@ public class ExpressionChainHierarchyComparator implements Comparator<Expression
 			List<Expression> expressions1 = expressionChain1.getExpressions();
 			List<Expression> expressions2 = expressionChain2.getExpressions();
 
-			// Compare expressions one by one.
-			for (int i = 0; i < Math.min(expressions1.size(), expressions2.size()); i++) {
-				int comparation = 0;
-				if (expressions1.get(i) instanceof ExpressionValueTreeObjectReference
-						&& expressions2.get(i) instanceof ExpressionValueTreeObjectReference) {
-					comparation = ((ExpressionValueTreeObjectReference) expressions1.get(i)).getReference().compareTo(
-							((ExpressionValueTreeObjectReference) expressions2.get(i)).getReference());
-				} else if (expressions1.get(i) instanceof ExpressionChain
-						&& expressions2.get(i) instanceof ExpressionChain) {
-					comparation = new ExpressionChainHierarchyComparator().compare(
-							(ExpressionChain) expressions1.get(i), (ExpressionChain) expressions2.get(i));
-				}
-				if (comparation != 0) {
-					return comparation;
+			if (expressions1 != null && expressions2 != null) {
+				// Compare expressions one by one.
+				for (int i = 0; i < Math.min(expressions1.size(), expressions2.size()); i++) {
+					int comparation = 0;
+					if (expressions1.get(i) instanceof ExpressionValueTreeObjectReference
+							&& expressions2.get(i) instanceof ExpressionValueTreeObjectReference) {
+						if (((ExpressionValueTreeObjectReference) expressions1.get(i)).getReference() != null
+								&& ((ExpressionValueTreeObjectReference) expressions2.get(i)).getReference() != null) {
+							comparation = ((ExpressionValueTreeObjectReference) expressions1.get(i)).getReference()
+									.compareTo(
+											((ExpressionValueTreeObjectReference) expressions2.get(i)).getReference());
+						}
+					} else if (expressions1.get(i) instanceof ExpressionChain
+							&& expressions2.get(i) instanceof ExpressionChain) {
+						comparation = new ExpressionChainHierarchyComparator().compare(
+								(ExpressionChain) expressions1.get(i), (ExpressionChain) expressions2.get(i));
+					}
+					if (comparation != 0) {
+						return comparation;
+					}
 				}
 			}
 			// No differences among TreeObjects. Use representation as comparation
