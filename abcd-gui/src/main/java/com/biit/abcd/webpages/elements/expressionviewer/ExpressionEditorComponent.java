@@ -108,7 +108,7 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 					addElementToView(newElement);
 				}
 			});
-			setTab(pluginsLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
+			setTab(pluginsLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_PLUGIN.getThemeResource());
 		}
 	}
 
