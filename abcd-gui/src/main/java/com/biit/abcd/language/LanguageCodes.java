@@ -42,6 +42,11 @@ public enum LanguageCodes {
 
 	INFO_USER_LOG("info.userLog"),
 	INFO_USER_SESSION_EXPIRED("info.userSessionExpired"),
+	
+	CAPTION_FORM_WORK_STATUS_DESIGN("caption.form.work.status.design"),
+	CAPTION_FORM_WORK_STATUS_FINAL_DESIGN("caption.form.work.status.final.design"),
+	
+	CAPTION_PROCEED_MODIFY_STATUS("caption.proceed.modify.status"),
 
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
@@ -96,6 +101,7 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_GROUP("formTable.column.group"),
 	FORM_TABLE_COLUMN_AVAILABLETO("formTable.column.availableTo"),
 	FORM_TABLE_COLUMN_AVAILABLEFROM("formTable.column.availableFrom"),
+	FORM_TABLE_COLUMN_STATUS("formTable.form.table.status"),
 	FORM_TABLE_COLUMN_USEDBY("formTable.column.usedBy"),
 	FORM_TABLE_COLUMN_CREATEDBY("formTable.column.createdBy"),
 	FORM_TABLE_COLUMN_CREATIONDATE("formTable.column.creationDate"),
@@ -175,7 +181,8 @@ public enum LanguageCodes {
 	TREE_OBJECT_PROPERTIES_CREATED_BY("treeObjectProperties.createdBy"),
 	TREE_OBJECT_PROPERTIES_UPDATED_BY("treeObjectProperties.updatedBy"),
 	TREE_OBJECT_PROPERTIES_CLEAR_REFERENCE_ID("treeObjectProperties.clear.reference.id"),
-	FORM_PROPERTIES_NAME("formProperties.name"),
+	FORM_PROPERTIES_TECHNICAL_NAME("formProperties.technical.name"),
+	FORM_PROPERTIES_NAME("formProperties.technical.name"),
 	FORM_PROPERTIES_LABEL("formProperties.label"),
 	FORM_PROPERTIES_VERSION("formProperties.version"),
 	CATEGORY_PROPERTIES_LABEL("categoryProperties.label"),
@@ -496,7 +503,12 @@ public enum LanguageCodes {
 	PLUGINS_TAB_INFO_PANEL_CAPTION("plugins.tab.info.panel.caption"),
 	
 	DROOLS_RULES_GENERATION_EXCEPTION("drools.rules.generation.exception"),
-	DROOLS_RULES_EXECUTION_EXCEPTION("drools.rules.execution.exception")
+	DROOLS_RULES_EXECUTION_EXCEPTION("drools.rules.execution.exception"),
+
+	COMMON_CAPTION_FINISH("caption.finish"), 
+	COMMON_TOOLTIP_FINISH("tooltip.finish"), 
+	
+	TEXT_PROCEED_FORM_CLOSE("text.proceed.form.close"),
 	;
 
 	private String value;

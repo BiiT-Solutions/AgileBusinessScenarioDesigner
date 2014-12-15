@@ -33,7 +33,9 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	AbcdActivity.FORM_CHANGE_GROUP,
 
-	AbcdActivity.FORM_VERSION
+	AbcdActivity.FORM_VERSION,
+	
+	AbcdActivity.FORM_STATUS_UPGRADE
 
 	};
 
@@ -54,6 +56,8 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	private static final AbcdActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
 	AbcdActivity.ADMIN_FORMS,
+	
+	AbcdActivity.FORM_STATUS_DOWNGRADE
 
 	};
 
@@ -149,10 +153,6 @@ public class AbcdAuthorizationService extends AuthorizationService {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 		return null;
-	}
-
-	public boolean isEditable(Form form) {
-		return false;
 	}
 
 	public Set<IActivity> getActivitiesOfRoles(List<Role> roles) {

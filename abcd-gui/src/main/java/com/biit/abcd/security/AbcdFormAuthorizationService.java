@@ -2,6 +2,7 @@ package com.biit.abcd.security;
 
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.liferay.portal.model.User;
 
@@ -21,7 +22,8 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 		if (form == null || user == null) {
 			return true;
 		}
-		return !isAuthorizedToForm(form, user) || isFormAlreadyInUse(form.getId(), user) || !form.isLastVersion();
+		return !isAuthorizedToForm(form, user) || isFormAlreadyInUse(form.getId(), user) || !form.isLastVersion()
+				|| !form.getStatus().equals(FormWorkStatus.DESIGN);
 	}
 
 	public boolean isFormReadOnly(SimpleFormView form, User user) {
@@ -29,7 +31,7 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 			return true;
 		}
 		return !isAuthorizedToForm(form.getOrganizationId(), user) || isFormAlreadyInUse(form.getId(), user)
-				|| !form.isLastVersion();
+				|| !form.isLastVersion() || !form.getStatus().equals(FormWorkStatus.DESIGN);
 	}
 
 	public boolean isFormAlreadyInUse(Long formId, User user) {

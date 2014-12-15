@@ -12,6 +12,8 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -98,6 +100,9 @@ public class Form extends BaseForm {
 
 	@Transient
 	private transient boolean isLastVersion = true;
+
+	@Enumerated(EnumType.STRING)
+	private FormWorkStatus status = FormWorkStatus.DESIGN;
 
 	public Form() {
 		super();
@@ -614,5 +619,13 @@ public class Form extends BaseForm {
 		customVariableToDelete.setForm(null);
 		customVariables.remove(customVariableToDelete);
 		customVariablesToDelete.add(customVariableToDelete);
+	}
+
+	public FormWorkStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(FormWorkStatus status) {
+		this.status = status;
 	}
 }

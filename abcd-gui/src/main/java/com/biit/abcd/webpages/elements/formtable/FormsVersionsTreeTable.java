@@ -8,42 +8,57 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.authentication.exceptions.NotEnoughRightsToChangeStatusException;
 import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.language.FormWorkStatusUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.AbcdActivity;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.CancelActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
 import com.vaadin.data.Item;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
 
 public class FormsVersionsTreeTable extends TreeTable {
 	private static final long serialVersionUID = -7776688515497328826L;
 	private ISimpleFormViewDao simpleFormViewDao;
+	private IFormDao formDao;
 	private HashMap<String, List<SimpleFormView>> formMap;
 
 	enum FormsVersionsTreeTableProperties {
-		FORM_LABEL, VERSION, ACCESS, GROUP, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
+		FORM_LABEL, VERSION, ACCESS, GROUP, STATUS, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
 	};
 
 	public FormsVersionsTreeTable() {
 		// Add Vaadin context to Spring, and get beans for DAOs.
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
+		formDao = (IFormDao) helper.getBean("formDao");
 
 		initContainerProperties();
 		initializeFormTable();
@@ -71,6 +86,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 		addContainerProperty(FormsVersionsTreeTableProperties.USED_BY, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_USEDBY), null, Align.CENTER);
 
+		addContainerProperty(FormsVersionsTreeTableProperties.STATUS, ComboBox.class, "",
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_STATUS), null, Align.CENTER);
+
 		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLEFROM), null, Align.CENTER);
 
@@ -94,6 +112,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setColumnCollapsible(FormsVersionsTreeTableProperties.VERSION, false);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.GROUP, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.ACCESS, true);
+		setColumnCollapsible(FormsVersionsTreeTableProperties.STATUS, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.AVAILABLE_FROM, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.AVAILABLE_TO, true);
 		setColumnCollapsible(FormsVersionsTreeTableProperties.USED_BY, true);
@@ -108,6 +127,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.VERSION, 0.5f);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.GROUP, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.ACCESS, 1);
+		setColumnExpandRatio(FormsVersionsTreeTableProperties.STATUS, 1.2f);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.AVAILABLE_FROM, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.AVAILABLE_TO, 1);
 		setColumnExpandRatio(FormsVersionsTreeTableProperties.USED_BY, 1);
@@ -144,6 +164,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 			item.getItemProperty(FormsVersionsTreeTableProperties.FORM_LABEL).setValue(form.getLabel());
 			item.getItemProperty(FormsVersionsTreeTableProperties.VERSION).setValue(form.getVersion() + "");
 			item.getItemProperty(FormsVersionsTreeTableProperties.ACCESS).setValue(getFormPermissionsTag(form));
+
+			// Status
+			item.getItemProperty(FormsVersionsTreeTableProperties.STATUS).setValue(generateStatusComboBox(form));
 
 			Organization organization;
 			try {
@@ -388,6 +411,95 @@ public class FormsVersionsTreeTable extends TreeTable {
 		} else {
 			return (RootForm) getParent(getValue());
 		}
+	}
+
+	private Component generateStatusComboBox(final SimpleFormView form) {
+		final ComboBox statusComboBox = new ComboBox();
+		statusComboBox.setImmediate(true);
+		statusComboBox.setNullSelectionAllowed(false);
+		for (FormWorkStatusUi formStatus : FormWorkStatusUi.values()) {
+			statusComboBox.addItem(formStatus.getFormWorkStatus());
+			statusComboBox.setItemCaption(formStatus.getFormWorkStatus(),
+					ServerTranslate.translate(formStatus.getLanguageCode()));
+		}
+		statusComboBox.setValue(form.getStatus());
+		
+		statusComboBox.setWidth("100%");
+
+		// Status can change if you are not in DESIGN phase and can advance form
+		// status
+		boolean userCanUpgradeStatus = AbcdAuthorizationService.getInstance().isAuthorizedActivity(
+				UserSessionHandler.getUser(), form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE);
+
+		statusComboBox.setEnabled(userCanUpgradeStatus);
+
+		statusComboBox.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 6270860285995563296L;
+
+			@Override
+			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+				if (form.getStatus().equals(statusComboBox.getValue())) {
+					// Its the same status. Don't do anything.
+					return;
+				}
+
+				final AlertMessageWindow windowAccept = new AlertMessageWindow(
+						LanguageCodes.CAPTION_PROCEED_MODIFY_STATUS);
+
+				windowAccept.addAcceptActionListener(new AcceptActionListener() {
+
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						try {
+							changeStatus(form, statusComboBox, (FormWorkStatus) statusComboBox.getValue());
+							form.setStatus((FormWorkStatus) statusComboBox.getValue());
+							refreshRow(form);
+							windowAccept.close();
+						} catch (NotEnoughRightsToChangeStatusException nercs) {
+
+						}
+					}
+				});
+
+				windowAccept.addCancelActionListener(new CancelActionListener() {
+
+					@Override
+					public void cancelAction(AcceptCancelWindow window) {
+						statusComboBox.setValue(form.getStatus());
+						windowAccept.close();
+					}
+				});
+
+				windowAccept.showCentered();
+			}
+		});
+
+		return statusComboBox;
+	}
+
+	private void changeStatus(SimpleFormView form, ComboBox statusComboBox, FormWorkStatus value)
+			throws NotEnoughRightsToChangeStatusException {
+		try {
+			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+					form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE)) {
+				throw new NotEnoughRightsToChangeStatusException("User '"
+						+ UserSessionHandler.getUser().getEmailAddress()
+						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
+			}
+
+			form.setStatus(value);
+			try {
+				formDao.updateFormStatus(form.getLabel(), form.getVersion(), form.getOrganizationId(), value);
+			} catch (UnexpectedDatabaseException e) {
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+			}
+
+		} catch (NotEnoughRightsToChangeStatusException e) {
+			statusComboBox.setValue(form.getStatus());
+			MessageManager.showWarning(LanguageCodes.ERROR_OPERATION_NOT_ALLOWED);
+		}
+		refreshRow(form);
 	}
 
 }

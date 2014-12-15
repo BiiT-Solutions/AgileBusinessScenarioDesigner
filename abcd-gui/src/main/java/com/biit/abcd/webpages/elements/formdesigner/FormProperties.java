@@ -15,6 +15,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
@@ -44,10 +45,10 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	public void setElementForProperties(Form element) {
 		instance = element;
 
-		formLabel = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_LABEL));
+		formLabel = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
+		formLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
 		formLabel.addValidator(new ValidatorTreeObjectNameLength());
 		formLabel.setValue(instance.getLabel());
-		formLabel.setEnabled(element.getId() == null);
 
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
 		formVersion.setValue(instance.getVersion().toString());
@@ -69,7 +70,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 	protected void updateConcreteFormElement() {
 		if (formLabel.isValid()) {
 			// To avoid setting repeated values
-			if (!formLabel.getValue().equals(formLabel.getValue())) {
+			if (!formLabel.getValue().equals(instance.getName())) {
 				try {
 					// Checks if already exists a form with this label and its
 					// version.

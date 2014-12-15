@@ -1,13 +1,18 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.security.AbcdActivity;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.webpages.components.IconButton;
+import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.form.TreeObject;
@@ -17,7 +22,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class FormDesignerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -4712688788270327039L;
 	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton, moveUpButton,
-			moveDownButton, removeButton, moveButton;
+			moveDownButton, removeButton, moveButton, finish;
 
 	public FormDesignerUpperMenu() {
 		super();
@@ -65,7 +70,17 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		// Remove
 		removeButton = new IconButton(LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE, ThemeIcon.DELETE,
 				LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE);
+
 		addIconButton(removeButton);
+
+		finish = new IconButton(LanguageCodes.COMMON_CAPTION_FINISH, ThemeIcon.FORM_FINISH,
+				LanguageCodes.COMMON_TOOLTIP_FINISH, IconSize.BIG);
+		finish.setEnabled(UserSessionHandler.getFormController().getForm().getStatus().equals(FormWorkStatus.DESIGN)
+				&& AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+						UserSessionHandler.getFormController().getForm().getOrganizationId(),
+						AbcdActivity.FORM_STATUS_UPGRADE));
+
+		addIconButton(finish);
 	}
 
 	public void setEnabledButtons(TreeObject selectedObject) {
@@ -173,5 +188,9 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		for (Button button : getDisabledButtons()) {
 			button.setEnabled(false);
 		}
+	}
+
+	public void addFinishListener(ClickListener clickListener) {
+		finish.addClickListener(clickListener);
 	}
 }

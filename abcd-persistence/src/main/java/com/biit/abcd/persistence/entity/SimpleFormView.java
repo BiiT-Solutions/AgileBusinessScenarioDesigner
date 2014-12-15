@@ -21,6 +21,7 @@ public class SimpleFormView implements IBaseFormView {
 	private Timestamp availableTo;
 	private long organizationId;
 	private boolean isLastVersion;
+	private FormWorkStatus status;
 
 	public SimpleFormView() {
 
@@ -40,6 +41,7 @@ public class SimpleFormView implements IBaseFormView {
 		setAvailableTo(form.getAvailableTo());
 		setOrganizationId(form.getOrganizationId());
 		setLastVersion(form.isLastVersion());
+		setStatus(form.getStatus());
 	}
 
 	public String getName() {
@@ -179,6 +181,14 @@ public class SimpleFormView implements IBaseFormView {
 			return false;
 		}
 		return true;
+	}
+
+	public FormWorkStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(FormWorkStatus status) {
+		this.status = status;
 	}
 
 }

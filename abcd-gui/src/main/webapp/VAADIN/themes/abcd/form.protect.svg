@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="76"
+   height="76"
+   viewBox="0 0 76.00 76.00"
+   enable-background="new 0 0 76.00 76.00"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="form.protect.svg"><metadata
+   id="metadata10"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs8" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1017"
+   id="namedview6"
+   showgrid="false"
+   inkscape:zoom="6.2105263"
+   inkscape:cx="-38.937224"
+   inkscape:cy="21.545739"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg2" />
+	
+<path
+   d="m 4.980842,1.0593243 39.704511,0 21.773441,21.7734417 0,14.884632 c -1.596669,0.09722 -4.059932,0.04479 -6.830883,0.04479 l 0,-7.671599 -22.200372,0 0,-22.2003721 -25.615813,0 0,58.0625101 26.49265,0 0,6.830884 -33.323534,0 z m 39.277581,8.9655347 0,13.234837 13.234837,0 z"
+   id="path4"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
+   sodipodi:nodetypes="cccccccccccccccccc" /><path
+   style="fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linejoin:round"
+   inkscape:connector-curvature="0"
+   d="m 43.257545,55.235121 2.724158,0 0,-4.086365 c 0,-6.018454 4.878864,-10.897319 10.897318,-10.897319 6.018453,0 10.897318,4.878865 10.897318,10.897319 l 0,4.086365 2.724502,0 8.6e-5,17.708357 -27.243382,0 0,-17.708357 z m 20.432343,-4.086365 c 0,-3.761555 -3.049312,-6.810867 -6.810867,-6.810867 -3.761555,0 -6.810868,3.049312 -6.810868,6.810867 l 0,4.086365 13.621649,0 8.6e-5,-4.086365 z"
+   id="path4-1" /></svg>

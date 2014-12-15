@@ -139,6 +139,8 @@ public enum ThemeIcon {
 	EXPRESSION_EDITOR_TAB_FORM_VARIABLES("appbar.form.variables.svg"),
 
 	EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES("appbar.page.svg"),
+	
+	EXPRESSION_EDITOR_TAB_PLUGIN("plugin.svg"),
 
 	SETTINGS("menu.lines.horizontal.svg"),
 
@@ -188,7 +190,9 @@ public enum ThemeIcon {
 	
 	TEST_COPY_GROUP("page.form.tests.remove.svg"),
 	
-	TEST_REMOVE_GROUP("page.form.tests.remove.svg");
+	TEST_REMOVE_GROUP("page.form.tests.remove.svg"),
+	
+	FORM_FINISH("form.protect.svg");
 	
 
 	private String value;

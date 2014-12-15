@@ -38,7 +38,7 @@ public class TableCellLabelEditWindow extends AcceptCancelWindow {
 		formLayout.setSizeUndefined();
 		formLayout.setSpacing(true);
 
-		variableName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
+		variableName = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_TECHNICAL_NAME));
 		variableName.setWidth(FIELD_WIDTH);
 
 		formLayout.addComponent(variableName);

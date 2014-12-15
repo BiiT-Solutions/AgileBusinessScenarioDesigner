@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
@@ -188,7 +189,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
 			form.remove(customVariable);
-			//Remove form reference in database BUT not remove custom variable. It is still used in expressions. 
+			// Remove form reference in database BUT not remove custom variable. It is still used in expressions.
 			customVariableDao.makePersistent(customVariable);
 		}
 
@@ -252,6 +253,27 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			query.setLong("version", version);
 			query.setLong("organizationId", organizationId);
 			query.setTimestamp("availableFrom", validFrom);
+			int rowCount = query.executeUpdate();
+			session.getTransaction().commit();
+			return rowCount;
+		} catch (RuntimeException e) {
+			session.getTransaction().rollback();
+			throw new UnexpectedDatabaseException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public int updateFormStatus(String label, int version, Long organizationId, FormWorkStatus formStatus)
+			throws UnexpectedDatabaseException {
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		try {
+			String hql = "update Form set status = :formStatus where label = :label and version = :version and organizationId = :organizationId";
+			Query query = session.createQuery(hql);
+			query.setString("label", label);
+			query.setLong("version", version);
+			query.setLong("organizationId", organizationId);
+			query.setString("formStatus", formStatus.toString());
 			int rowCount = query.executeUpdate();
 			session.getTransaction().commit();
 			return rowCount;

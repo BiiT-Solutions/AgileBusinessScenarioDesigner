@@ -3,8 +3,10 @@ package com.biit.abcd.webpages;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
@@ -381,6 +383,9 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	private void addNewRow(TableRule tableRule) {
 		TableRuleRow row = tableRule.addRow();
 		ruleTable.addRow(row);
+		Set<Object> selected = new HashSet<>();
+		selected.add(row);
+		ruleTable.setSelectedRows(selected);
 	}
 
 	private void removeRow(TableRule tableRule) {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
@@ -65,7 +66,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
-				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion "
+				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion, tf.status "
 						+ "FROM tree_forms tf INNER JOIN "
 						+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
 						+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
@@ -95,6 +96,9 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setAvailableTo((Timestamp) row[10]);
 			formView.setOrganizationId(((Double) row[11]).longValue());
 			formView.setLastVersion((Integer) row[12] == (Integer) row[3]);
+			if (row[13] != null) {
+				formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
+			}
 			formViews.add(formView);
 		}
 
@@ -107,7 +111,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SQLQuery query = session
-				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion "
+				.createSQLQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion, tf.status "
 						+ "FROM tree_forms tf INNER JOIN "
 						+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
 						+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
@@ -140,6 +144,10 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setAvailableFrom((Timestamp) row[9]);
 			formView.setAvailableTo((Timestamp) row[10]);
 			formView.setOrganizationId(((Double) row[11]).longValue());
+			formView.setLastVersion((Integer) row[12] == (Integer) row[3]);
+			if (row[13] != null) {
+				formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
+			}
 			formViews.add(formView);
 		}
 
