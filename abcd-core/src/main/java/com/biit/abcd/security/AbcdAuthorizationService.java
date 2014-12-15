@@ -155,10 +155,6 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return null;
 	}
 
-	public boolean isEditable(Form form) {
-		return false;
-	}
-
 	public Set<IActivity> getActivitiesOfRoles(List<Role> roles) {
 		Set<IActivity> activities = new HashSet<>();
 		for (Role role : roles) {

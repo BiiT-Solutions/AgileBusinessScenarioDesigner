@@ -10,18 +10,24 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.authentication.exceptions.NotEnoughRightsToChangeStatusException;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdActivity;
+import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
@@ -40,6 +46,7 @@ import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -54,9 +61,13 @@ public class FormDesigner extends FormWebPageComponent {
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 	private boolean tableIsGoingToDetach;
 
+	private IFormDao formDao;
+
 	// private boolean testScenariosModified = false;
 
 	public FormDesigner() {
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
 		updateButtons(true);
 	}
 
@@ -234,7 +245,7 @@ public class FormDesigner extends FormWebPageComponent {
 					});
 					windowAccept.showCentered();
 				} else {
-					//No remove the form. 
+					// No remove the form.
 					TreeObject selected = formTreeTable.getTreeObjectSelected();
 					if ((selected != null) && (selected.getParent() != null)) {
 						final AlertMessageWindow windowAccept = new AlertMessageWindow(
@@ -261,7 +272,57 @@ public class FormDesigner extends FormWebPageComponent {
 			}
 		});
 
+		upperMenu.addFinishListener(new ClickListener() {
+			private static final long serialVersionUID = 808012334552321887L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				finishForm();
+			}
+		});
+
 		return upperMenu;
+	}
+
+	protected void finishForm() {
+		AlertMessageWindow window = new AlertMessageWindow(LanguageCodes.TEXT_PROCEED_FORM_CLOSE);
+		window.addAcceptActionListener(new AcceptActionListener() {
+			@Override
+			public void acceptAction(AcceptCancelWindow window) {
+				try {
+					changeStatus(UserSessionHandler.getFormController().getForm(), FormWorkStatus.FINAL_DESIGN);
+					UiAccesser.releaseForm(UserSessionHandler.getUser());
+					ApplicationFrame.navigateTo(WebMap.getMainPage());
+					window.close();
+				} catch (Exception e) {
+					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+							LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+				}
+			}
+		});
+		window.showCentered();
+	}
+
+	private void changeStatus(Form form, FormWorkStatus value) throws NotEnoughRightsToChangeStatusException {
+		try {
+			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+					form.getOrganizationId(), AbcdActivity.FORM_STATUS_UPGRADE)) {
+				throw new NotEnoughRightsToChangeStatusException("User '"
+						+ UserSessionHandler.getUser().getEmailAddress()
+						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
+			}
+
+			form.setStatus(value);
+			try {
+				formDao.updateFormStatus(form.getLabel(), form.getVersion(), form.getOrganizationId(), value);
+			} catch (UnexpectedDatabaseException e) {
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+			}
+
+		} catch (NotEnoughRightsToChangeStatusException e) {
+			MessageManager.showWarning(LanguageCodes.ERROR_OPERATION_NOT_ALLOWED);
+		}
 	}
 
 	/**

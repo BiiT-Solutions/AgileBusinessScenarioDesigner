@@ -503,7 +503,12 @@ public enum LanguageCodes {
 	PLUGINS_TAB_INFO_PANEL_CAPTION("plugins.tab.info.panel.caption"),
 	
 	DROOLS_RULES_GENERATION_EXCEPTION("drools.rules.generation.exception"),
-	DROOLS_RULES_EXECUTION_EXCEPTION("drools.rules.execution.exception")
+	DROOLS_RULES_EXECUTION_EXCEPTION("drools.rules.execution.exception"),
+
+	COMMON_CAPTION_FINISH("caption.finish"), 
+	COMMON_TOOLTIP_FINISH("tooltip.finish"), 
+	
+	TEXT_PROCEED_FORM_CLOSE("text.proceed.form.close"),
 	;
 
 	private String value;

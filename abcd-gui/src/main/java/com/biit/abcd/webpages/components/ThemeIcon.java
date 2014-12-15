@@ -190,7 +190,9 @@ public enum ThemeIcon {
 	
 	TEST_COPY_GROUP("page.form.tests.remove.svg"),
 	
-	TEST_REMOVE_GROUP("page.form.tests.remove.svg");
+	TEST_REMOVE_GROUP("page.form.tests.remove.svg"),
+	
+	FORM_FINISH("form.protect.svg");
 	
 
 	private String value;
