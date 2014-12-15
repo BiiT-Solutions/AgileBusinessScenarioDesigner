@@ -775,7 +775,7 @@ $open-sans-pathPrefix: "./fonts/";
 	    opacity: 0.7;
 	    width: 16px;
 	}
-	
+
 	.v-test-scenario-group-editor{
 		border: 1px;
 		border-color: #c2c3c4;
@@ -792,5 +792,26 @@ $open-sans-pathPrefix: "./fonts/";
 		margin-top: 10px;	
 		margin-left: 10px;	
 		font-weight: bold;
+	}
+	
+	.v-button-wrap, .v-button-caption {
+		vertical-align: middle;
+		white-space: normal;
+		font: inherit;
+		color: inherit;
+		line-height: normal;
+	}
+
+	// Remove the repeatable node from the diagram builder
+	// Cannot remove the complete element at once
+	// Must remove each one of the elements individually
+	.stencil .elements .BaseRepeatNode text,
+	.stencil .elements .BaseRepeatNode .input,
+	.stencil .elements .BaseRepeatNode .output,
+	.stencil .elements .BaseRepeatNode .body,
+	.stencil .elements .BaseRepeatNode .inputRepeat,
+	.stencil .elements .BaseRepeatNode .outputRepeat,
+	.stencil .elements .BaseRepeatNode .behindBody {
+	   display: none;
 	}
 }
