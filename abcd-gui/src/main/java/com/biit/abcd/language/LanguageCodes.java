@@ -42,6 +42,11 @@ public enum LanguageCodes {
 
 	INFO_USER_LOG("info.userLog"),
 	INFO_USER_SESSION_EXPIRED("info.userSessionExpired"),
+	
+	CAPTION_FORM_WORK_STATUS_DESIGN("caption.form.work.status.design"),
+	CAPTION_FORM_WORK_STATUS_FINAL_DESIGN("caption.form.work.status.final.design"),
+	
+	CAPTION_PROCEED_MODIFY_STATUS("caption.proceed.modify.status"),
 
 	WARNING_TITLE("warning.title"),
 	WARNING_PERMISSIONS("warning.permissions"),
@@ -96,6 +101,7 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_GROUP("formTable.column.group"),
 	FORM_TABLE_COLUMN_AVAILABLETO("formTable.column.availableTo"),
 	FORM_TABLE_COLUMN_AVAILABLEFROM("formTable.column.availableFrom"),
+	FORM_TABLE_COLUMN_STATUS("formTable.form.table.status"),
 	FORM_TABLE_COLUMN_USEDBY("formTable.column.usedBy"),
 	FORM_TABLE_COLUMN_CREATEDBY("formTable.column.createdBy"),
 	FORM_TABLE_COLUMN_CREATIONDATE("formTable.column.creationDate"),

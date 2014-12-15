@@ -794,6 +794,7 @@
         version integer,
         availableFrom datetime not null,
         availableTo datetime,
+        status varchar(255),
         primary key (ID)
     );
 

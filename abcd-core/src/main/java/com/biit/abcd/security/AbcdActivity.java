@@ -20,8 +20,12 @@ public enum AbcdActivity implements IActivity {
 	USER_EDIT_OWN_DATA("UserEditOwnData"),
 
 	ADMIN_FORMS("AdminForms"),
-	
+
 	EVICT_CACHE("EvictCache"),
+
+	FORM_STATUS_UPGRADE("FormStatusUpgrade"),
+	
+	FORM_STATUS_DOWNGRADE("FormStatusDowngrade"), 
 
 	GLOBAL_VARIABLE_EDITOR("GlobalVariables");
 
