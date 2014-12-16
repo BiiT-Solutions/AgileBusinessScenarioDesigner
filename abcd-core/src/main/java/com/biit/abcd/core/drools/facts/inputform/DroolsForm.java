@@ -108,4 +108,24 @@ public class DroolsForm implements ISubmittedForm {
 	public String toString() {
 		return getSubmittedForm().toString();
 	}
+
+	@Override
+	public String getPathName() {
+		return submittedform.getPathName();
+	}
+
+	@Override
+	public Integer getIndex(ISubmittedObject child) {
+		return submittedform.getIndex(child);
+	}
+
+	@Override
+	public int compareTo(ISubmittedObject arg0) {
+		return submittedform.compareTo(arg0);
+	}
+
+	@Override
+	public int getLevel() {
+		return submittedform.getLevel();
+	}
 }
