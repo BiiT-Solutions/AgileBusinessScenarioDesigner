@@ -70,7 +70,6 @@ public class Login extends WebPageComponent {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// Nothing to do.
 		if (((ApplicationFrame) getUI()).getUser() != null && ((ApplicationFrame) getUI()).getPassword() != null) {
 			checkUserAndPassword(((ApplicationFrame) getUI()).getUser(), ((ApplicationFrame) getUI()).getPassword());
 		}
