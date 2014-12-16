@@ -37,7 +37,6 @@ public class ExpressionChainPrattParser extends PrattParser {
 		this.register(ExpressionTokenType.NAME, new NameParselet());
 		this.register(ExpressionTokenType.ASSIGNATION, new AssignParselet());
 		this.register(ExpressionTokenType.LEFT_BRACKET, new GroupParselet());
-//		this.register(ExpressionTokenType.LEFT_BRACKET, new CallParselet());
 		this.register(ExpressionTokenType.BETWEEN, new CallParselet());
 		this.register(ExpressionTokenType.IN, new CallParselet());
 		this.register(ExpressionTokenType.MIN, new CallParselet());
@@ -45,21 +44,12 @@ public class ExpressionChainPrattParser extends PrattParser {
 		this.register(ExpressionTokenType.AVG, new CallParselet());
 		this.register(ExpressionTokenType.SUM, new CallParselet());
 		this.register(ExpressionTokenType.PMT, new CallParselet());
-		// Although it uses the CallParselet, we defined some special conditions
-		// for the IF
 		this.register(ExpressionTokenType.IF, new CallParselet());
 		// Special token for parsing plugin calls
 		this.register(ExpressionTokenType.IPLUGIN, new CallParselet());
 
 		// Register the simple operator parselets.
-//		this.prefix(ExpressionTokenType.PLUS, Precedence.PREFIX);
-//		this.prefix(ExpressionTokenType.MINUS, Precedence.PREFIX);
 		this.prefix(ExpressionTokenType.NOT, Precedence.PREFIX);
-
-		// // For kicks, we'll make "!" both prefix and postfix, kind of like
-		// ++.
-		// postfix(ExpressionTokenType.NOT, Precedence.POSTFIX);
-
 		this.infixLeft(ExpressionTokenType.PLUS, Precedence.SUM);
 		this.infixLeft(ExpressionTokenType.MINUS, Precedence.SUM);
 		this.infixLeft(ExpressionTokenType.MULTIPLICATION, Precedence.PRODUCT);

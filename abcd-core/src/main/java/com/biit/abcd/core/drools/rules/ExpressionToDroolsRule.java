@@ -30,40 +30,28 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.form.TreeObject;
 
 /**
- * Transforms an Expression into a Drools rule. It also unwraps the generic variables that can be used in the
- * expressions and creates a set of rules if necessary.
+ * Transforms an Expression into a Drools rule. It also unwraps the generic
+ * variables that can be used in the expressions and creates a set of rules if
+ * necessary.
  * 
  */
 public class ExpressionToDroolsRule {
 	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper)
 			throws ExpressionInvalidException, RuleNotImplementedException, RuleInvalidException {
 		List<DroolsRule> droolsRules = null;
-		
+
 		if (droolsRule.getActions() != null && !droolsRule.getActions().getExpressions().isEmpty()) {
 			// If the expression is composed by a generic variable, we have to
 			// generate the set of rules that represents the generic
 			if (droolsRule.getActions().getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable) {
 				droolsRules = createExpressionDroolsRuleSet(droolsRule);
-			} else if ((droolsRule.getActions().getExpressions().get(0) instanceof ExpressionFunction)
-					&& ((ExpressionFunction) droolsRule.getActions().getExpressions().get(0)).getValue().equals(
-							AvailableFunction.IF)) {
-				List<DroolsRule> auxDroolsRules = createIfRuleSet(droolsRule);
-				// In case there are generic variables in the conditions
-				if (RuleToDroolsRule.hasGenericVariables(auxDroolsRules.get(0).getConditions())) {
-					droolsRules = new ArrayList<DroolsRule>();
-					for (DroolsRule rule : auxDroolsRules) {
-						droolsRules.addAll(RuleToDroolsRule.parse(rule, droolsHelper));
-					}
-				} else {
-					droolsRules = auxDroolsRules;
-				}
 			} else {
 				droolsRules = Arrays.asList(createExpressionDroolsRule(droolsRule));
 			}
 		} else {
 			droolsRules = Arrays.asList(droolsRule);
 		}
-		// CHech if the expression has an IF function
+		// Check if the expression has an IF function
 		if (droolsRules != null && !droolsRules.isEmpty() && hasIfCondition(droolsRules.get(0))) {
 			List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
 			droolsRules = new ArrayList<DroolsRule>();
@@ -169,76 +157,6 @@ public class ExpressionToDroolsRule {
 		return newDroolsRule;
 	}
 
-	/**
-	 * Maintained to allow the old if rule definition work<br>
-	 * IF(Categories.score < 1 ,Categories.score = 1, Categories.score = Categories.score)<br>
-	 * <br>
-	 * Use now parseIfRule: <br>
-	 * Categories.score = IF(Categories.score < 1 , 1, Categories.score)
-	 * 
-	 * @param droolsRule
-	 * @return
-	 */
-	@Deprecated
-	private static List<DroolsRule> createIfRuleSet(DroolsRule droolsRule) {
-		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
-		ExpressionChain ifCondition = new ExpressionChain();
-		ExpressionChain ifActionThen = new ExpressionChain();
-		ExpressionChain ifActionElse = new ExpressionChain();
-
-		int ifIndex = 0;
-		ExpressionChain expressionCopy = (ExpressionChain) droolsRule.getActions().generateCopy();
-		// Remove the IF from the expression
-		expressionCopy.removeFirstExpression();
-		// and the last parenthesis
-		expressionCopy.removeLastExpression();
-		int commaCounter = 0;
-		for (Expression expression : expressionCopy.getExpressions()) {
-			if ((expression instanceof ExpressionFunction)
-					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.IN) || ((ExpressionFunction) expression)
-							.getValue().equals(AvailableFunction.BETWEEN))) {
-				commaCounter++;
-			}
-			if ((expression instanceof ExpressionSymbol)
-					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.RIGHT_BRACKET)
-					&& commaCounter != 0) {
-				commaCounter = 0;
-			}
-			if ((expression instanceof ExpressionSymbol)
-					&& ((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.COMMA) && commaCounter == 0) {
-				ifIndex++;
-			} else {
-				if (ifIndex == 0) {
-					ifCondition.addExpression(expression);
-				} else if (ifIndex == 1) {
-					ifActionThen.addExpression(expression);
-				} else if (ifIndex == 2) {
-					ifActionElse.addExpression(expression);
-				}
-			}
-		}
-		// Creation of the rules that represent the if
-		DroolsRule ifThenRule = new DroolsRule();
-		ifThenRule.setName(RulesUtils.createRuleName(droolsRule, "_1stConditon"));
-		ifThenRule.setConditions(ifCondition);
-		ifThenRule.setActions(ifActionThen);
-		droolsRules.add(ifThenRule);
-
-		DroolsRule ifElseRule = new DroolsRule();
-		ifElseRule.setName(RulesUtils.createRuleName(droolsRule, "_2ndConditon"));
-		ExpressionChain negatedCondition = new ExpressionChain();
-		// For the ELSE part we negate the Condition part
-		negatedCondition.addExpression(new ExpressionFunction(AvailableFunction.NOT));
-		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-		negatedCondition.addExpressions(ifCondition.getExpressions());
-		negatedCondition.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		ifElseRule.setConditions(negatedCondition);
-		ifElseRule.setActions(ifActionElse);
-		droolsRules.add(ifElseRule);
-
-		return droolsRules;
-	}
-
 	private static List<DroolsRule> parseIfRules(List<DroolsRule> droolsRules) {
 		List<DroolsRule> ifRules = new ArrayList<DroolsRule>();
 		for (DroolsRule auxRule : droolsRules) {
@@ -316,7 +234,8 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 * Checks if there are generic variables at the right side of the assignation expression
+	 * Checks if there are generic variables at the right side of the
+	 * assignation expression
 	 * 
 	 * @return
 	 */
@@ -331,7 +250,8 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 * We have to substitute the generic for the list of tree objects that represent
+	 * We have to substitute the generic for the list of tree objects that
+	 * represent
 	 * 
 	 * @param expressionChain
 	 * @return

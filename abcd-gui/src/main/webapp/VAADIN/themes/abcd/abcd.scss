@@ -305,10 +305,10 @@ $open-sans-pathPrefix: "./fonts/";
 	
 	.v-button-wrap, .v-button-caption {
 		vertical-align: middle;
-		white-space: nowrap;
+		white-space: normal;
 		font: inherit;
 		color: inherit;
-		line-height: normal;
+		line-height: 0;
 	}
 	
 	.v-disabled.v-button {
@@ -792,14 +792,6 @@ $open-sans-pathPrefix: "./fonts/";
 		margin-top: 10px;	
 		margin-left: 10px;	
 		font-weight: bold;
-	}
-	
-	.v-button-wrap, .v-button-caption {
-		vertical-align: middle;
-		white-space: normal;
-		font: inherit;
-		color: inherit;
-		line-height: normal;
 	}
 
 	// Remove the repeatable node from the diagram builder

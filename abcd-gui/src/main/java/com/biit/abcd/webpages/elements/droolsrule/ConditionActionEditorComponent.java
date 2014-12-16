@@ -6,6 +6,7 @@ import java.util.List;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.webpages.elements.expressionviewer.ConditionExpressionViewer;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionViewer;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionViewer.LayoutClickedListener;
@@ -15,7 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 	private static final long serialVersionUID = -7858734121952085269L;
-	private ExpressionViewer conditionViewer;
+	private ConditionExpressionViewer conditionViewer;
 	private ExpressionViewer actionViewer;
 	private ExpressionViewer selectedViewer;
 	private List<SelectedViewerListener> selectedViewerListeners;
@@ -29,6 +30,13 @@ public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 		selectedViewerListeners = new ArrayList<>();
 	}
 
+	protected ConditionExpressionViewer createConditionExpressionViewer() {
+		ConditionExpressionViewer expressionViewer = new ConditionExpressionViewer();
+		expressionViewer.setSizeFull();
+		expressionViewer.setFocused(true);
+		return expressionViewer;
+	}
+	
 	protected ExpressionViewer createExpressionViewer() {
 		ExpressionViewer expressionViewer = new ExpressionViewer();
 		expressionViewer.setSizeFull();
@@ -43,7 +51,7 @@ public class ConditionActionEditorComponent extends ExpressionEditorComponent {
 		viewLayout.setMargin(false);
 		viewLayout.setSpacing(false);
 
-		conditionViewer = createExpressionViewer();
+		conditionViewer = createConditionExpressionViewer();
 		conditionViewer.addLayoutClickedListener(new LayoutClickedListener() {
 
 			@Override

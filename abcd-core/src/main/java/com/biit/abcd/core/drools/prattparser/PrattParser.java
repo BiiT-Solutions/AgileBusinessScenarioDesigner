@@ -9,7 +9,6 @@ import java.util.Map;
 import com.biit.abcd.core.drools.prattparser.parselets.InfixParselet;
 import com.biit.abcd.core.drools.prattparser.parselets.PrefixParselet;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
-import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -71,16 +70,6 @@ public class PrattParser {
 					continue;
 				}
 			}
-			// To correctly parse the IF function we have to introduce a dummy
-			// variable that we will remove before returning the parsed
-			// expression
-			// This is due to the if function don't need to be assigned to
-			// any variable
-			else if ((expression instanceof ExpressionFunction)
-					&& ((ExpressionFunction) expression).getValue().equals(AvailableFunction.IF)) {
-				expTokenList.add(new ExpressionToken(ExpressionTokenType.NAME, new ExpressionValueString(
-						"DummyVariable")));
-			}
 			// Ignore new line symbols.
 			if (expression instanceof ExpressionSymbol) {
 				if (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW)) {
@@ -90,9 +79,7 @@ public class PrattParser {
 			// If it is an operator
 			if (expression instanceof IExpressionType<?>) {
 				// System.out.println("EXPRESSION TYPE : " + expression);
-
 				String expressionType = ((IExpressionType<?>) expression).getValue().toString();
-
 				if (this.mPunctuators.containsKey(expressionType)) {
 					expTokenList.add(new ExpressionToken(this.mPunctuators.get(expressionType), expression));
 				}

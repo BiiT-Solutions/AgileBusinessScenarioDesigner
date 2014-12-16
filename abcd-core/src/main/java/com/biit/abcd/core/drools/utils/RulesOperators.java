@@ -4,6 +4,12 @@ import java.util.List;
 
 public class RulesOperators {
 
+	/**
+	 * Calculates the maximum of the variables array
+	 * 
+	 * @param variables
+	 * @return
+	 */
 	public static Double calculateMaxValueFunction(List<Double> variables) {
 		Double max = 0.;
 		if (!variables.isEmpty()) {
@@ -16,6 +22,12 @@ public class RulesOperators {
 		return max;
 	}
 
+	/**
+	 * Calculates the minimum of the variables array
+	 * 
+	 * @param variables
+	 * @return
+	 */
 	public static Double calculateMinValueFunction(List<Double> variables) {
 		if (!variables.isEmpty()) {
 			Double min = 10000000.;
@@ -28,6 +40,12 @@ public class RulesOperators {
 		}
 	}
 
+	/**
+	 * Calculates the average of the variables array
+	 * 
+	 * @param variables
+	 * @return
+	 */
 	public static Double calculateAvgValueFunction(List<Double> variables) {
 		Double avg = 0.;
 		if (!variables.isEmpty()) {
@@ -40,6 +58,12 @@ public class RulesOperators {
 		return (avg / (double) variables.size());
 	}
 
+	/**
+	 * Calculates the total sum of the variables array
+	 * 
+	 * @param variables
+	 * @return
+	 */
 	public static Double calculateSumValueFunction(List<Double> variables) {
 		Double sum = 0.;
 		if (!variables.isEmpty()) {
@@ -52,6 +76,13 @@ public class RulesOperators {
 		return sum;
 	}
 
+	/**
+	 * Calculates how much your monthly payment would be on a loan based on an
+	 * interest rate and a constant payment schedule.
+	 * 
+	 * @param variables
+	 * @return
+	 */
 	public static Double calculatePmtValueFunction(List<Double> variables) {
 		Double pmtValue = 0.0;
 		if (!variables.isEmpty()) {

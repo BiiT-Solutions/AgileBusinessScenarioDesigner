@@ -348,12 +348,10 @@ public class DroolsParser {
 			PluginInvocationException, DroolsRuleCreationException, PrattParserException {
 		StringBuilder parsedText = new StringBuilder();
 		for (Rule rule : rules) {
-			// orOperatorUsed = false;
 			if (rule != null) {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
 					parsedText.append(rule.getName());
-
 					parsedText.append(RulesUtils.getWhenRuleString());
 					if (rule instanceof DroolsRuleGroupEndRule) {
 						parsedText.append(RulesUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule));
@@ -1076,11 +1074,6 @@ public class DroolsParser {
 				case IN:
 				case BETWEEN:
 					return createInBetweenFunctionConditions(prattParserResultExpressionChain);
-					// case IN:
-					// return answersInQuestionCondition(expressions);
-					// case BETWEEN:
-					// return
-					// questionBetweenAnswersCondition(prattParserResultExpressionChain);
 				default:
 					break;
 				}

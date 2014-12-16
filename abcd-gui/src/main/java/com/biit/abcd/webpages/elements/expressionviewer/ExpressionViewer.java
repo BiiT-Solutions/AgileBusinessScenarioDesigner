@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.PluginController;
+import com.biit.abcd.core.drools.rules.validators.ExpressionValidator;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
@@ -23,7 +23,6 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -86,7 +85,6 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	public void updateExpression(ExpressionChain expressions) {
-		// rootLayout.removeAllComponents();
 		removeAllComponents();
 		expressionOfElement = new HashMap<>();
 
@@ -541,26 +539,16 @@ public class ExpressionViewer extends CssLayout {
 		return expressions;
 	}
 
-	private void updateEvaluator() {
-		if (hasPluginMethodExpression(expressions)) {
-			// For the plugin we also check that the parameters match the method
-			if (PluginController.getInstance().validateExpressionChain(expressions)) {
-				evaluatorOutput.setStyleName("expression-valid");
-				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
-			} else {
-				evaluatorOutput.setStyleName("expression-invalid");
-				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
-			}
-		} else {
-			try {
-				expressions.getExpressionEvaluator().eval();
-				evaluatorOutput.setStyleName("expression-valid");
-				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
-			} catch (Exception e) {
-				AbcdLogger.debug(ExpressionViewer.class.getName(), e.getMessage());
-				evaluatorOutput.setStyleName("expression-invalid");
-				evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
-			}
+	protected void updateEvaluator() {
+		try {
+			ExpressionValidator.validateActions(getExpressions());
+//			expressions.getExpressionEvaluator().eval();
+			evaluatorOutput.setStyleName("expression-valid");
+			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
+		} catch (Exception e) {
+			AbcdLogger.debug(ExpressionViewer.class.getName(), e.getMessage());
+			evaluatorOutput.setStyleName("expression-invalid");
+			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
 		}
 	}
 
@@ -614,16 +602,7 @@ public class ExpressionViewer extends CssLayout {
 		return rootLayout;
 	}
 
-	private boolean hasPluginMethodExpression(ExpressionChain expressions) {
-		if (expressions != null) {
-			for (Expression expression : expressions.getExpressions()) {
-				if (expression instanceof ExpressionPluginMethod) {
-					return true;
-				} else if (expression instanceof ExpressionChain) {
-					return hasPluginMethodExpression((ExpressionChain) expression);
-				}
-			}
-		}
-		return false;
+	protected Label getEvaluatorOutput() {
+		return evaluatorOutput;
 	}
 }
