@@ -31,7 +31,7 @@ import com.vaadin.ui.HorizontalLayout;
 
 public abstract class UpperMenu extends SecuredMenu {
 	private static final long serialVersionUID = 3501103183357307175L;
-	public static final String BUTTON_WIDTH = "100px";
+	public static final String BUTTON_WIDTH = "110px";
 	public static final String SEPARATOR_WIDTH = "10px";
 
 	public static final String CLASSNAME_HORIZONTAL_BUTTON_WRAPPER = "v-horizontal-button-group-wrapper";
