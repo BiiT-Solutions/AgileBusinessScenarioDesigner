@@ -107,6 +107,8 @@ public abstract class UpperMenu extends SecuredMenu {
 					public void buttonClick(ClickEvent event) {
 						SettingsWindow settings = new SettingsWindow();
 						settings.showRelativeToComponent(settingsButton);
+						settings.hideLogoutButton(((ApplicationFrame) getUI()).getUser() != null
+								&& ((ApplicationFrame) getUI()).getPassword() != null);
 					}
 				});
 		settingsButton.setHeight("100%");

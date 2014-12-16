@@ -44,6 +44,7 @@ public class SettingsWindow extends PopupWindow {
 
 	private static final long serialVersionUID = 4258182015635300330L;
 	private static final String width = "300px";
+	private Button logoutButton;
 
 	private IFormDao formDao;
 
@@ -145,41 +146,40 @@ public class SettingsWindow extends PopupWindow {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
-		Button logoutButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_LOG_OUT),
-				new ClickListener() {
-					private static final long serialVersionUID = -1121572145945309858L;
+		// Only if you are not connected using Liferay.
+		logoutButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_LOG_OUT), new ClickListener() {
+			private static final long serialVersionUID = -1121572145945309858L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						try {
-							UserSessionHandler.getFormController().checkUnsavedChanges();
-							UiAccesser.releaseForm(UserSessionHandler.getUser());
+			@Override
+			public void buttonClick(ClickEvent event) {
+				try {
+					UserSessionHandler.getFormController().checkUnsavedChanges();
+					UiAccesser.releaseForm(UserSessionHandler.getUser());
+					ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+					UserSessionHandler.logout();
+					close();
+				} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException | FormNotEqualsException
+						| GroupNotEqualsException | QuestionNotEqualsException | CustomVariableNotEqualsException
+						| ExpressionNotEqualsException | TableRuleNotEqualsException | RuleNotEqualsException
+						| DiagramNotEqualsException | DiagramObjectNotEqualsException | NodeNotEqualsException
+						| SizeNotEqualsException | PointNotEqualsException | BiitTextNotEqualsException
+						| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
 							ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+							UiAccesser.releaseForm(UserSessionHandler.getUser());
 							UserSessionHandler.logout();
-							close();
-						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
-								| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
-								| CustomVariableNotEqualsException | ExpressionNotEqualsException
-								| TableRuleNotEqualsException | RuleNotEqualsException | DiagramNotEqualsException
-								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
-								| PointNotEqualsException | BiitTextNotEqualsException
-								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
-							final AlertMessageWindow windowAccept = new AlertMessageWindow(
-									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
-							windowAccept.addAcceptActionListener(new AcceptActionListener() {
-								@Override
-								public void acceptAction(AcceptCancelWindow window) {
-									ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
-									UiAccesser.releaseForm(UserSessionHandler.getUser());
-									UserSessionHandler.logout();
-									windowAccept.close();
-								}
-							});
-							windowAccept.showCentered();
-							close();
+							windowAccept.close();
 						}
-					}
-				});
+					});
+					windowAccept.showCentered();
+					close();
+				}
+			}
+		});
 		logoutButton.setWidth("100%");
 		rootLayout.addComponent(logoutButton);
 
@@ -195,5 +195,9 @@ public class SettingsWindow extends PopupWindow {
 		rootLayout.addComponent(closeButton);
 
 		return rootLayout;
+	}
+
+	public void hideLogoutButton(boolean hide) {
+		logoutButton.setVisible(!hide);
 	}
 }
