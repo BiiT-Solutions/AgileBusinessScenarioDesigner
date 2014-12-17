@@ -37,6 +37,7 @@ import com.biit.abcd.webpages.components.SelectTreeObjectWindow;
 import com.biit.abcd.webpages.elements.formdesigner.FormDesignerPropertiesComponent;
 import com.biit.abcd.webpages.elements.formdesigner.FormDesignerUpperMenu;
 import com.biit.abcd.webpages.elements.formdesigner.FormTreeTable;
+import com.biit.form.BaseAnswer;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
@@ -62,8 +63,6 @@ public class FormDesigner extends FormWebPageComponent {
 	private boolean tableIsGoingToDetach;
 
 	private IFormDao formDao;
-
-	// private boolean testScenariosModified = false;
 
 	public FormDesigner() {
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
@@ -206,6 +205,14 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				addAnswer();
+			}
+		});
+		upperMenu.addNewSubanswerButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = -4159824066373029540L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				addSubanswer();
 			}
 		});
 
@@ -524,7 +531,7 @@ public class FormDesigner extends FormWebPageComponent {
 	/**
 	 * Adds a new answer into the UI and the Form object.
 	 */
-	public void addAnswer() {
+	private void addAnswer() {
 		if (getForm() != null) {
 			Answer newAnswer = new Answer();
 			setCreator(newAnswer);
@@ -536,7 +543,11 @@ public class FormDesigner extends FormWebPageComponent {
 						// If selected an answer, we consider the same that
 						// selecting the question.
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
-						parent = formTreeTable.getTreeObjectSelected().getParent();
+						if (((Answer) formTreeTable.getTreeObjectSelected()).isSubanswer()) {
+							parent = formTreeTable.getTreeObjectSelected().getParent().getParent();
+						} else {
+							parent = formTreeTable.getTreeObjectSelected().getParent();
+						}
 					}
 					if (parent != null) {
 						try {
@@ -550,6 +561,42 @@ public class FormDesigner extends FormWebPageComponent {
 						AbcdLogger.info(this.getClass().getName(),
 								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
 										+ newAnswer.getClass() + " with 'Name: " + newAnswer.getName() + "'.");
+					}
+				}
+			} catch (NotValidChildException e) {
+				// Not possible.
+			}
+		}
+	}
+
+	private void addSubanswer() {
+		TreeObject selectedRow = formTreeTable.getTreeObjectSelected();
+		if (selectedRow != null && selectedRow instanceof BaseAnswer) {
+			try {
+				Answer newAnswer = new Answer();
+				setCreator(newAnswer);
+				if (formTreeTable.getTreeObjectSelected() != null) {
+					TreeObject parent = formTreeTable.getTreeObjectSelected();
+					if (parent != null) {
+						if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
+							if (((Answer) formTreeTable.getTreeObjectSelected()).isSubanswer()) {
+								parent = formTreeTable.getTreeObjectSelected().getParent();
+							} else {
+								parent = formTreeTable.getTreeObjectSelected();
+							}
+						}
+						try {
+							//Default name must be unique in questions
+							newAnswer.setName(newAnswer.getDefaultName(parent.getParent(), 1));
+						} catch (FieldTooLongException | CharacterNotAllowedException e) {
+							// Default name is never so long.
+						}
+						// First add to UI and then add parent.
+						addElementToUI(newAnswer, parent);
+						parent.addChild(newAnswer);
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has created a subanswer "
+								+ newAnswer.getClass() + " with 'Name: " + newAnswer.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {

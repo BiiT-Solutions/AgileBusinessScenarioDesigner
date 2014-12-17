@@ -33,6 +33,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 		setValue(expression);
 	}
 
+	@Override
 	protected EditCellComponent setDefaultNewItemPropertyValues(final Object itemId, final Item item) {
 		EditCellComponent editCellComponent = super.setDefaultNewItemPropertyValues(itemId, item);
 		if (editCellComponent != null) {
