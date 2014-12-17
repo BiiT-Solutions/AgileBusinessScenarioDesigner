@@ -27,6 +27,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
 import com.biit.form.TreeObject;
 
 /**
@@ -284,8 +285,12 @@ public class ExpressionToDroolsRule {
 					// Remove the last comma
 					generatedExpressionChain.removeLastExpression();
 				} else {
-					// Return null if there is no tree object found
-					return null;
+					// Remove the extra comma if there is no value
+					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
+							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
+									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
+						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
+					}
 				}
 			} else if (expression instanceof ExpressionValueGenericVariable) {
 				// Unwrap the generic variables being analyzed
@@ -322,6 +327,14 @@ public class ExpressionToDroolsRule {
 				.equals(AvailableSymbol.COMMA)))) {
 			generatedExpressionChain.removeExpression(generatedExpressionChain.getExpressions().size() - 2);
 		}
+
+		// Check that the generated expression has parameters
+		Expression expression = generatedExpressionChain.getExpressions().get(
+				generatedExpressionChain.getExpressions().size() - 2);
+		if (expression instanceof IExpressionType<?>) {
+			return null;
+		}
+
 		return generatedExpressionChain;
 	}
 

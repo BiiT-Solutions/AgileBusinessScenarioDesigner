@@ -16,13 +16,10 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
@@ -512,17 +509,6 @@ public class ExpressionViewer extends CssLayout {
 		// Checks if there is at least one expression
 		if (expressions != null) {
 			int index = expressions.getExpressions().indexOf(getSelectedExpression()) + 1;
-			if (newElement instanceof ExpressionSymbol) {
-				// Brackets are added before selected expression in some cases.
-				if ((((ExpressionSymbol) newElement).getValue().getLeftSymbol() == true)
-				// Brackets always at right position in '<', '>', ... symbols.
-						&& !(getSelectedExpression() instanceof ExpressionOperatorLogic)
-						// Brackets always at right position in '=' symbol.
-						&& (!(getSelectedExpression() instanceof ExpressionOperatorMath) || !((ExpressionOperatorMath) getSelectedExpression())
-								.getValue().equals(AvailableOperator.ASSIGNATION))) {
-					index--;
-				}
-			}
 			if ((index >= 0) && (index < expressions.getExpressions().size())) {
 				expressions.addExpression(index, newElement);
 			} else {
@@ -542,7 +528,6 @@ public class ExpressionViewer extends CssLayout {
 	protected void updateEvaluator() {
 		try {
 			ExpressionValidator.validateActions(getExpressions());
-//			expressions.getExpressionEvaluator().eval();
 			evaluatorOutput.setStyleName("expression-valid");
 			evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
 		} catch (Exception e) {
