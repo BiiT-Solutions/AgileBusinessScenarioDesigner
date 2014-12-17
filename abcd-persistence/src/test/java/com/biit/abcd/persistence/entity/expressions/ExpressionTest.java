@@ -58,7 +58,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 
 		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = 1 + 1");
-		expressionChain.getExpressionEvaluator().eval();
 	}
 
 	@Test(expectedExceptions = ExpressionException.class)
@@ -89,8 +88,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		expressionChain.addExpression(customCategoryVariable);
 		expressionChain.addExpression(customQuestionVariable);
-
-		expressionChain.getExpressionEvaluator().eval();
 	}
 
 	@Test(expectedExceptions = ExpressionException.class)
@@ -123,8 +120,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueString("1"));
 		expressionChain.addExpression(customQuestionVariable);
-
-		expressionChain.getExpressionEvaluator().eval();
 	}
 
 	@Test
@@ -154,8 +149,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 		expressionChain.addExpression(new ExpressionValueString("1"));
 		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-
-		expressionChain.getExpressionEvaluator().eval();
 	}
 
 	@Test(expectedExceptions = ExpressionException.class)
@@ -187,8 +180,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.COMMA));
 		expressionChain.addExpression(new ExpressionValueString("1"));
 		expressionChain.addExpression(new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-
-		expressionChain.getExpressionEvaluator().eval();
 	}
 
 	@Test
@@ -217,7 +208,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
 		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = birthdate");
-		expressionChain.getExpressionEvaluator().eval();
 
 		// Check the order
 		form.getExpressionChains().add(expressionChain);
@@ -256,7 +246,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
 		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = birthdate");
-		expressionChain.getExpressionEvaluator().eval();
 		form.getExpressionChains().add(expressionChain);
 
 		// Persist.
@@ -297,7 +286,6 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		expressionChain.addExpression(new ExpressionValueTreeObjectReference(birthdate, QuestionDateUnit.YEARS));
 		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = birthdate");
-		expressionChain.getExpressionEvaluator().eval();
 		form.getExpressionChains().add(expressionChain);
 
 		// Persist.

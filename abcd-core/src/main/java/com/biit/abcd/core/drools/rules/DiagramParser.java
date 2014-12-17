@@ -13,11 +13,11 @@ import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleExcep
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -68,7 +68,7 @@ public class DiagramParser {
 		try {
 			List<Rule> newRules = parse(diagram, null);
 			rulesAsString = DroolsParser.createDroolsRule(newRules);
-		} catch (ExpressionInvalidException | RuleInvalidException | RuleNotImplementedException
+		} catch (ExpressionInvalidException | InvalidRuleException | RuleNotImplementedException
 				| ActionNotImplementedException | NotCompatibleTypeException | NullTreeObjectException
 				| TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException
 				| NullCustomVariableException | NullExpressionValueException | BetweenFunctionInvalidException
@@ -82,7 +82,7 @@ public class DiagramParser {
 	}
 
 	private List<Rule> parse(Diagram diagram, ExpressionChain extraConditions) throws ExpressionInvalidException,
-			RuleInvalidException, RuleNotImplementedException, ActionNotImplementedException {
+			InvalidRuleException, RuleNotImplementedException, ActionNotImplementedException {
 		List<Rule> newRules = new ArrayList<>();
 		Set<DiagramObject> diagramNodes = diagram.getDiagramObjects();
 		for (DiagramObject diagramNode : diagramNodes) {
@@ -101,12 +101,12 @@ public class DiagramParser {
 	 * @param node
 	 *            the node being parsed
 	 * @throws ExpressionInvalidException
-	 * @throws RuleInvalidException
+	 * @throws InvalidRuleException
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
 	 */
 	private List<Rule> parseDiagramElement(DiagramElement node, ExpressionChain extraConditions, List<Rule> newRules)
-			throws ExpressionInvalidException, RuleInvalidException, RuleNotImplementedException,
+			throws ExpressionInvalidException, InvalidRuleException, RuleNotImplementedException,
 			ActionNotImplementedException {
 		List<ExpressionChain> forkConditions = new ArrayList<>();
 		// Parse the corresponding node
@@ -171,10 +171,10 @@ public class DiagramParser {
 	 * 
 	 * @return
 	 * @throws RuleNotImplementedException
-	 * @throws RuleInvalidException
+	 * @throws InvalidRuleException
 	 */
 	private List<ExpressionChain> completeForkExpressions(DiagramFork forkNode, ExpressionChain previousConditions)
-			throws RuleNotImplementedException, RuleInvalidException {
+			throws RuleNotImplementedException, InvalidRuleException {
 		List<ExpressionChain> forkConditions = new ArrayList<>();
 
 		// Get the element to be checked

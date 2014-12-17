@@ -7,8 +7,12 @@ import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.TreeObject;
 
@@ -107,15 +111,15 @@ public class RulesUtils {
 
 	public static String checkForDuplicatedVariables(String ruleCore) {
 		String cleanedResults = "";
-		boolean insideRHS = false;
+		// boolean insideRHS = false;
 		HashSet<String> variablesAssigned = new HashSet<String>();
 		String[] lines = ruleCore.split("\n");
 		// int sameVariableIndex = 0;
 		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			String line = lines[lineIndex];
-			if (line.equals("then")) {
-				insideRHS = true;
-			}
+			// if (line.equals("then")) {
+			// insideRHS = true;
+			// }
 			String[] auxRuleArray = line.split(" : ");
 			if (auxRuleArray.length > 1) {
 				if (variablesAssigned.contains(auxRuleArray[0].replace("(\t", ""))) {
@@ -385,7 +389,8 @@ public class RulesUtils {
 	 * @param enumType
 	 * @return
 	 */
-	public static boolean searchClassInExpressionChain(ExpressionChain expressionChain, Class<?> classToSearch, Object enumType) {
+	public static boolean searchClassInExpressionChain(ExpressionChain expressionChain, Class<?> classToSearch,
+			Object enumType) {
 		for (Expression expression : expressionChain.getExpressions()) {
 			if (expression instanceof ExpressionChain) {
 				searchClassInExpressionChain((ExpressionChain) expression, classToSearch, enumType);
@@ -399,7 +404,7 @@ public class RulesUtils {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns the type of answer for the question in the parameter
 	 * 
@@ -418,5 +423,49 @@ public class RulesUtils {
 			return "";
 		}
 		return "";
+	}
+
+	/**
+	 * Takes the table rule conditions and returns a expression chain without
+	 * expression chains inside
+	 * 
+	 * @param expressionChain
+	 * @return
+	 */
+	public static ExpressionChain flattenExpressionChain(ExpressionChain expressionChain) {
+		ExpressionChain flattenedExpressionChain = new ExpressionChain();
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionChain) {
+				for (Expression insideExpression : ((ExpressionChain) expression).getExpressions()) {
+					flattenedExpressionChain.addExpression(insideExpression);
+				}
+			} else {
+				flattenedExpressionChain.addExpression(expression);
+			}
+		}
+		return flattenedExpressionChain;
+	}
+
+	/**
+	 * If there is a NOT function used, we add the required left parenthesis
+	 * 
+	 * @param expressionChain
+	 */
+	public static void fixNotConditions(ExpressionChain expressionChain) {
+		for (int index = 0; index < expressionChain.getExpressions().size(); index++) {
+			Expression expression = expressionChain.getExpressions().get(index);
+			if ((expression instanceof ExpressionFunction)
+					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.NOT))) {
+
+				if ((expressionChain.getExpressions().size() > index + 1)
+						&& (expressionChain.getExpressions().get(index + 1) instanceof ExpressionSymbol)
+						&& (((ExpressionSymbol) expressionChain.getExpressions().get(index + 1)).getValue()
+								.equals(AvailableSymbol.LEFT_BRACKET))) {
+				} else {
+					expressionChain.getExpressions().add(index + 1, new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+				}
+
+			}
+		}
 	}
 }

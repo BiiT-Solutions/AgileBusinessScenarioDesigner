@@ -15,7 +15,7 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -67,7 +67,7 @@ public class NestedGroupsTest extends KidsFormCreator {
 	// Simple table question answer
 	@Test(groups = { "rules" })
 	public void testSimpleTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, ExpressionInvalidException, RuleInvalidException, IOException,
+			InvalidAnswerFormatException, ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, 
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
 			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,

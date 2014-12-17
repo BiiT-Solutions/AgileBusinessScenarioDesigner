@@ -209,7 +209,7 @@ public class DroolsParser {
 						droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
 						Question leftQuestion = (Question) leftReference;
 						// First common part of the condition
-						droolsConditions += "t$" + leftQuestion.getUniqueNameReadable() + " : SubmittedQuestion("
+						droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable() + " : SubmittedQuestion("
 								+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "', getAnswer('"
 								+ getTreeObjectAnswerType(leftQuestion) + "')";
 						// Different part of the condition
@@ -441,10 +441,6 @@ public class DroolsParser {
 		}
 		result = RulesUtils.removeDuplicateLines(result);
 		result = RulesUtils.checkForDuplicatedVariables(result);
-		// result = RulesUtils.removeExtraParenthesis(result);
-		// if (orOperatorUsed)
-		// result = RulesUtils.fixOrCondition(result);
-
 		return result;
 	}
 

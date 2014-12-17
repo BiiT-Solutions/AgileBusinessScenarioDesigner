@@ -11,10 +11,10 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -53,7 +53,7 @@ public class GlobalVariablesTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void testGlobVarsInDroolsEngine() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, ActionNotImplementedException, DocumentException,
 			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,

@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.DroolsHelper;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.Category;
@@ -37,7 +37,7 @@ import com.biit.form.TreeObject;
  */
 public class ExpressionToDroolsRule {
 	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper)
-			throws ExpressionInvalidException, RuleNotImplementedException, RuleInvalidException {
+			throws ExpressionInvalidException, RuleNotImplementedException, InvalidRuleException {
 		List<DroolsRule> droolsRules = null;
 
 		if (droolsRule.getActions() != null && !droolsRule.getActions().getExpressions().isEmpty()) {
@@ -98,7 +98,10 @@ public class ExpressionToDroolsRule {
 				// Add the specific
 				expressionChainCopy.addExpression(0, expValCat);
 				// Add to the rule set
-				droolsRules.add(createExpressionDroolsRule(droolsRule, expressionChainCopy));
+				DroolsRule createdDroolsRule = createExpressionDroolsRule(droolsRule, expressionChainCopy);
+				if (createdDroolsRule != null) {
+					droolsRules.add(createdDroolsRule);
+				}
 			}
 		} else {
 			// We don't want to create a rule if there is no children
@@ -106,10 +109,6 @@ public class ExpressionToDroolsRule {
 		}
 		int expressionRuleIndex = 0;
 		for (DroolsRule dRule : droolsRules) {
-
-			// dRule.setName(dRule.getName().substring(0,
-			// dRule.getName().length() - 3) + "_" + expressionRuleIndex
-			// + "\"\n");
 			dRule.setName(RulesUtils.createRuleName(droolsRule, "_" + expressionRuleIndex));
 			expressionRuleIndex++;
 		}
@@ -285,12 +284,8 @@ public class ExpressionToDroolsRule {
 					// Remove the last comma
 					generatedExpressionChain.removeLastExpression();
 				} else {
-					// Remove the extra comma if there is no value
-					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
-							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
-									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
-						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
-					}
+					// Return null if there is no tree object found
+					return null;
 				}
 			} else if (expression instanceof ExpressionValueGenericVariable) {
 				// Unwrap the generic variables being analyzed
@@ -316,11 +311,7 @@ public class ExpressionToDroolsRule {
 				}
 			} else {
 				// if it is not a generic variable, we copy the same value
-				// if (!((expression instanceof ExpressionSymbol) &&
-				// (((ExpressionSymbol) expression).getValue()
-				// .equals(AvailableSymbol.COMMA)))) {
 				generatedExpressionChain.addExpression(expression);
-				// }
 			}
 		}
 
