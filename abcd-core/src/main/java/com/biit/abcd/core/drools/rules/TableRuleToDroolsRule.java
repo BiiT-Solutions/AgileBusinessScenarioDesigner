@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.validators.RuleChecker;
 import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -30,9 +32,11 @@ public class TableRuleToDroolsRule {
 	 * @throws ExpressionInvalidException
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
+	 * @throws InvalidRuleException
 	 */
 	public static List<DroolsRule> parse(TableRule tableRule, ExpressionChain extraConditions)
-			throws ExpressionInvalidException, RuleNotImplementedException, ActionNotImplementedException {
+			throws ExpressionInvalidException, RuleNotImplementedException, ActionNotImplementedException,
+			InvalidRuleException {
 		List<DroolsRule> newRules = new ArrayList<>();
 		if (tableRule != null) {
 			String tableRuleName = tableRule.getName();
@@ -42,10 +46,10 @@ public class TableRuleToDroolsRule {
 						&& !row.getAction().getExpressions().isEmpty()) {
 					DroolsRule newRule = new DroolsRule();
 					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
-					
+
 					newRule.setName(RulesUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
-					
-					newRule.setConditions(rowConditionExpression);
+
+					newRule.setConditions(RulesUtils.flattenExpressionChain(rowConditionExpression));
 					newRule.addExtraConditions(extraConditions);
 					newRule.setActions(row.getAction());
 					newRules.add(newRule);
@@ -53,9 +57,9 @@ public class TableRuleToDroolsRule {
 				i++;
 			}
 		}
-		// for (DroolsRule droolsRule : newRules) {
-		// RuleChecker.checkRuleValid(droolsRule);
-		// }
+		for (DroolsRule droolsRule : newRules) {
+			RuleChecker.checkRule(droolsRule);
+		}
 		return newRules;
 	}
 
@@ -96,5 +100,4 @@ public class TableRuleToDroolsRule {
 		}
 		return preParsedConditions;
 	}
-
 }

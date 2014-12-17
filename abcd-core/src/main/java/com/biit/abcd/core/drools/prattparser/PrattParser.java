@@ -75,7 +75,13 @@ public class PrattParser {
 				if (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW)) {
 					continue;
 				}
-			}
+			} 
+//			else if ((expression instanceof ExpressionFunction)
+//					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.NOT))) {
+//				expTokenList.add(new ExpressionToken(ExpressionTokenType.NOT, expression));
+//				expTokenList.add(new ExpressionToken(ExpressionTokenType.LEFT_BRACKET, new ExpressionSymbol(
+//						AvailableSymbol.LEFT_BRACKET)));
+//			}
 			// If it is an operator
 			if (expression instanceof IExpressionType<?>) {
 				// System.out.println("EXPRESSION TYPE : " + expression);

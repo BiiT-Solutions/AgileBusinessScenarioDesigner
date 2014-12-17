@@ -11,10 +11,10 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -72,7 +72,7 @@ public class TableRuleTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
@@ -90,7 +90,7 @@ public class TableRuleTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	private void testFormCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
 			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
-			NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException, IOException,
+			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
@@ -109,7 +109,7 @@ public class TableRuleTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	private void testCategoryCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
 			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
-			NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException, IOException,
+			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, CategoryDoesNotExistException,
@@ -127,7 +127,7 @@ public class TableRuleTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	private void testMultipleColumnsTableRule() throws ExpressionInvalidException, RuleInvalidException, IOException,
+	private void testMultipleColumnsTableRule() throws ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,

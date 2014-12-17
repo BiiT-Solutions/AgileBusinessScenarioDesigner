@@ -1,16 +1,17 @@
 package com.biit.abcd.core.drools.rules.validators;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.biit.abcd.core.PluginController;
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementExpressionValidatorVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.core.drools.utils.RulesUtils;
 import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
@@ -25,6 +26,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueBoolean;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
@@ -32,7 +34,9 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.TreeObject;
+import com.biit.plugins.interfaces.IPlugin;
 
 public class ExpressionValidator {
 
@@ -46,82 +50,106 @@ public class ExpressionValidator {
 	 */
 	public static void validateRule(Rule rule) throws PrattParserException, InvalidExpressionException,
 			NotCompatibleTypeException {
-		validateConditions(rule.getConditions());
+		validateConditions(RulesUtils.flattenExpressionChain(rule.getConditions()));
 		validateActions(rule.getActions());
 	}
 
 	public static void validateConditions(ExpressionChain expressionChain) throws PrattParserException,
 			InvalidExpressionException, NotCompatibleTypeException {
-
-		ExpressionChain cleanedExpression = removePilcrow(expressionChain);
-		ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
-		rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
-		ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
-		
-		if (hasPluginMethodExpression(cleanedExpression)) {
-			throw new InvalidExpressionException();
-		} else {
-			// Check the number of elements returned by the Pratt parser
-			// (sometimes,
-			// the parser doesn't fail, it only skips the invalid characters)
-			int parsedElements = countElementsInExpressionChain(prattExpressionChain);
-			if (cleanedExpression.getExpressions().size() != parsedElements) {
+		if (expressionChain != null) {
+			ExpressionChain cleanedExpression = removeNewLineSymbols(expressionChain);
+			// If there is a NOT expression, we have to add the remaining parenthesis
+			RulesUtils.fixNotConditions(cleanedExpression);
+			ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
+			rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
+			ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
+			if (hasPluginMethodExpression(cleanedExpression)) {
 				throw new InvalidExpressionException();
+			} else {
+				// Check the number of elements returned by the Pratt parser
+				// (sometimes,
+				// the parser doesn't fail, it only skips the invalid
+				// characters)
+				int parsedElements = countElementsInExpressionChain(prattExpressionChain);
+				if (cleanedExpression.getExpressions().size() != parsedElements) {
+					throw new InvalidExpressionException();
+				}
 			}
+		} else {
+			throw new InvalidExpressionException();
 		}
 	}
 
 	public static void validateActions(ExpressionChain expressionChain) throws PrattParserException,
 			InvalidExpressionException, NotCompatibleTypeException {
-		ValueType leftVariableFormat = null;
-		
-		ExpressionChain cleanedExpression = removePilcrow(expressionChain);
-		ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
-		rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
-		ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
+		if (expressionChain != null) {
+			ValueType leftVariableFormat = null;
+			ExpressionChain cleanedExpression = removeNewLineSymbols(expressionChain);
+			// If there is a NOT expression, we have to add the remaining parenthesis
+			RulesUtils.fixNotConditions(cleanedExpression);
+			ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
+			rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
+			ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
 
-		// The left value must be a variable
-		if (!(expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
-				&& !(expressionChain.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)) {
-			throw new InvalidExpressionException();
-		}
-		// Assign the value of the left variable
-		leftVariableFormat = getExpressionValueType((ExpressionValue<?>) expressionChain.getExpressions().get(0));
-		// The second expression of the expression chain must be ALWAYS an
-		// assignation operator unless it's an IN or BETWEEN function
-		if (!(expressionChain.getExpressions().get(1) instanceof ExpressionOperatorMath)
-				|| !(((ExpressionOperatorMath) expressionChain.getExpressions().get(1)).getValue()
-						.equals(AvailableOperator.ASSIGNATION))) {
-			if (expressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
-				ExpressionFunction expressionFunction = (ExpressionFunction) expressionChain.getExpressions().get(1);
-				switch (expressionFunction.getValue()) {
-				case IN:
-				case BETWEEN:
-					// Do nothing
-					break;
-				default:
-					throw new InvalidExpressionException();
-				}
-			} else {
+			// The left value must be a variable
+			if (!(cleanedExpression.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
+					&& !(cleanedExpression.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)) {
 				throw new InvalidExpressionException();
 			}
-		}
-		Integer parsedElements = null;
-		// If the third expression is a function, the pratt parser removes the
-		// assignation expression
-		if (prattExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
-			// If the expression is a function, we have to check the values
-			// inside
-			checkExpressionFunctionParameters(leftVariableFormat, prattExpressionChain);
-			// Due to the removal of the equals by the parser
-			parsedElements = countElementsInExpressionChain(prattExpressionChain) + 1;
+			// Assign the value of the left variable
+			leftVariableFormat = getExpressionValueType((ExpressionValue<?>) cleanedExpression.getExpressions().get(0));
+			// The second expression of the expression chain must be ALWAYS an
+			// assignation operator unless it's an IN or BETWEEN function
+			if (!(cleanedExpression.getExpressions().get(1) instanceof ExpressionOperatorMath)
+					|| !(((ExpressionOperatorMath) cleanedExpression.getExpressions().get(1)).getValue()
+							.equals(AvailableOperator.ASSIGNATION))) {
+				if (cleanedExpression.getExpressions().get(1) instanceof ExpressionFunction) {
+					ExpressionFunction expressionFunction = (ExpressionFunction) cleanedExpression.getExpressions()
+							.get(1);
+					switch (expressionFunction.getValue()) {
+					case IN:
+					case BETWEEN:
+						// Do nothing
+						break;
+					default:
+						throw new InvalidExpressionException();
+					}
+				} else {
+					throw new InvalidExpressionException();
+				}
+			}
+			Integer parsedElements = null;
+			// If the third expression is a function, the pratt parser removes
+			// the
+			// assignation expression
+			if (prattExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
+				// If the expression is a function, we have to check the values
+				// inside
+				checkExpressionFunctionParameters(leftVariableFormat, prattExpressionChain);
+				// Due to the removal of the equals by the parser
+				parsedElements = countElementsInExpressionChain(prattExpressionChain) + 1;
+
+			}
+			// Plugin calls validation
+			else if (prattExpressionChain.getExpressions().get(1) instanceof ExpressionPluginMethod) {
+				// If the expression is a function, we have to check the values
+				// inside
+				validatePluginCall(prattExpressionChain);
+				// Due to the removal of the equals by the parser
+				parsedElements = countElementsInExpressionChain(prattExpressionChain) + 1;
+			}
+
+			else {
+				// Check the number of elements returned by the Pratt parser
+				// (sometimes, the parser doesn't fail, it only skips the
+				// invalid
+				// characters)
+				parsedElements = countElementsInExpressionChain(prattExpressionChain);
+			}
+			if (cleanedExpression.getExpressions().size() != parsedElements) {
+				throw new InvalidExpressionException();
+			}
 		} else {
-			// Check the number of elements returned by the Pratt parser
-			// (sometimes, the parser doesn't fail, it only skips the invalid
-			// characters)
-			parsedElements = countElementsInExpressionChain(prattExpressionChain);
-		}
-		if (expressionChain.getExpressions().size() != parsedElements) {
 			throw new InvalidExpressionException();
 		}
 	}
@@ -254,6 +282,18 @@ public class ExpressionValidator {
 		} else if ((expression instanceof ExpressionValueTimestamp)
 				|| (expression instanceof ExpressionValueSystemDate)) {
 			return ValueType.DATE;
+		} else if (expression instanceof ExpressionValueGlobalConstant) {
+			GlobalVariable globalVariable = ((ExpressionValueGlobalConstant) expression).getValue();
+			switch (globalVariable.getFormat()) {
+			case TEXT:
+				return ValueType.TEXT;
+			case POSTAL_CODE:
+				return ValueType.POSTAL_CODE;
+			case NUMBER:
+				return ValueType.NUMBER;
+			case DATE:
+				return ValueType.DATE;
+			}
 		} else if (expression instanceof ExpressionValueCustomVariable) {
 			CustomVariable customVariable = ((ExpressionValueCustomVariable) expression).getVariable();
 			switch (customVariable.getType()) {
@@ -341,65 +381,6 @@ public class ExpressionValidator {
 	}
 
 	/**
-	 * Returns the class that represents the value inside the expression passed
-	 * (if there is any)
-	 * 
-	 * @param expression
-	 * @return
-	 */
-	private static Class<?> getExpressionValueClass(ExpressionValue<?> expression) {
-		if (expression instanceof ExpressionValueBoolean) {
-			return Boolean.class;
-		} else if (expression instanceof ExpressionValueNumber) {
-			return Double.class;
-		} else if ((expression instanceof ExpressionValuePostalCode) || (expression instanceof ExpressionValueString)) {
-			return String.class;
-		} else if ((expression instanceof ExpressionValueTimestamp)
-				|| (expression instanceof ExpressionValueSystemDate)) {
-			return Timestamp.class;
-		} else if (expression instanceof ExpressionValueCustomVariable) {
-			CustomVariable customVariable = ((ExpressionValueCustomVariable) expression).getVariable();
-			switch (customVariable.getType()) {
-			case STRING:
-				return String.class;
-			case NUMBER:
-				return Double.class;
-			case DATE:
-				return Date.class;
-			}
-		} else if (expression instanceof ExpressionValueTreeObjectReference) {
-			TreeObject treeObject = ((ExpressionValueTreeObjectReference) expression).getReference();
-			if (!(treeObject instanceof Question)
-					|| !(((Question) treeObject).getAnswerType().equals(AnswerType.INPUT))) {
-				return null;
-			} else {
-				switch (((Question) treeObject).getAnswerFormat()) {
-				case TEXT:
-				case POSTAL_CODE:
-					return String.class;
-				case NUMBER:
-					return Double.class;
-				case DATE:
-					if (((ExpressionValueTreeObjectReference) expression).getUnit() != null) {
-						switch (((ExpressionValueTreeObjectReference) expression).getUnit()) {
-						case YEARS:
-						case MONTHS:
-						case DAYS:
-							return Integer.class;
-						case DATE:
-							return Date.class;
-						}
-					} else {
-						return Date.class;
-					}
-					break;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Parses and expressionChain using the Pratt parser
 	 * 
 	 * @param expressionChain
@@ -458,56 +439,15 @@ public class ExpressionValidator {
 		return null;
 	}
 
-	// private static AnswerFormat
-	// checkValuesInsideExpressionChain(ExpressionChain expressionChain) {
-	// int expressionChainSize = expressionChain.getExpressions().size();
-	// if ((expressionChainSize == 1) &&
-	// (expressionChain.getExpressions().get(0) instanceof ExpressionValue<?>))
-	// {
-	// return getExpressionValueType((ExpressionValue<?>)
-	// expressionChain.getExpressions().get(0));
-	// } else if ((expressionChainSize == 3)
-	// && (expressionChain.getExpressions().get(0) instanceof
-	// ExpressionValue<?>)
-	// && (expressionChain.getExpressions().get(2) instanceof
-	// ExpressionValue<?>)) {
-	// AnswerFormat leftValue = getExpressionValueType((ExpressionValue<?>)
-	// expressionChain.getExpressions()
-	// .get(0));
-	// AnswerFormat rightValue = getExpressionValueType((ExpressionValue<?>)
-	// expressionChain.getExpressions().get(
-	// 2));
-	// if (leftValue != rightValue)
-	// return;
-	// }
-	// }
-
-	// if (hasPluginMethodExpression(expressions)) {
-	// // For the plugin we also check that the parameters match the method
-	// if (PluginController.getInstance().validateExpressionChain(expressions))
-	// {
-	// evaluatorOutput.setStyleName("expression-valid");
-	// evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
-	// } else {
-	// evaluatorOutput.setStyleName("expression-invalid");
-	// evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
-	// }
-	// } else {
-	// try {
-	// expressions.getExpressionEvaluator().eval();
-	// evaluatorOutput.setStyleName("expression-valid");
-	// evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_VALID));
-	// } catch (Exception e) {
-	// AbcdLogger.debug(ExpressionViewer.class.getName(), e.getMessage());
-	// evaluatorOutput.setStyleName("expression-invalid");
-	// evaluatorOutput.setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
-	// }
-	// }
-
-	private static ExpressionChain removePilcrow(ExpressionChain expressionChain) {
+	/**
+	 * Removes the 'PILCROW' symbol (new lines) of the expressions
+	 * 
+	 * @param expressionChain
+	 * @return
+	 */
+	private static ExpressionChain removeNewLineSymbols(ExpressionChain expressionChain) {
 		ExpressionChain cleanedExpression = (ExpressionChain) expressionChain.generateCopy();
 		for (int index = 0; index < cleanedExpression.getExpressions().size(); index++) {
-
 			if ((cleanedExpression.getExpressions().get(index) instanceof ExpressionSymbol)
 					&& (((ExpressionSymbol) cleanedExpression.getExpressions().get(index)).getValue()
 							.equals(AvailableSymbol.PILCROW))) {
@@ -516,5 +456,68 @@ public class ExpressionValidator {
 			}
 		}
 		return cleanedExpression;
+	}
+
+	/**
+	 * Returns true if the plugin method call is well formed and false otherwise
+	 * 
+	 * @param expressionChain
+	 * @return
+	 * @throws InvalidExpressionException
+	 */
+	private static void validatePluginCall(ExpressionChain prattExpressionChain) throws InvalidExpressionException {
+		// The last expression must be a right parenthesis
+		if (!(prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1) instanceof ExpressionSymbol)
+				|| !(((ExpressionSymbol) prattExpressionChain.getExpressions().get(
+						prattExpressionChain.getExpressions().size() - 1)).getValue()
+						.equals(AvailableSymbol.RIGHT_BRACKET))) {
+			throw new InvalidExpressionException();
+		}
+		checkPluginMethodParameters(prattExpressionChain);
+	}
+
+	/**
+	 * Checks that the parameters used in the expression chain matches the ones
+	 * neede by the plugin method
+	 * 
+	 * @param expressionChain
+	 * @return
+	 * @throws InvalidExpressionException
+	 */
+	private static void checkPluginMethodParameters(ExpressionChain prattExpressionChain)
+			throws InvalidExpressionException {
+		ExpressionPluginMethod pluginMethod = (ExpressionPluginMethod) prattExpressionChain.getExpressions().get(1);
+		List<Class<?>> parameters = new ArrayList<>();
+		for (int expressionIndex = 2; expressionIndex < prattExpressionChain.getExpressions().size(); expressionIndex++) {
+			Expression expression = prattExpressionChain.getExpressions().get(expressionIndex);
+			if ((expression instanceof ExpressionChain)
+					&& (((ExpressionChain) expression).getExpressions().get(0) instanceof ExpressionValue<?>)) {
+				ExpressionValue<?> expressionValue = (ExpressionValue<?>) ((ExpressionChain) expression)
+						.getExpressions().get(0);
+				ValueType valueType = getExpressionValueType(expressionValue);
+				if (valueType != null) {
+					parameters.add(valueType.getClassType());
+				}
+			}
+		}
+		IPlugin pluginInterface = PluginController.getInstance().getPlugin(pluginMethod.getPluginInterface(),
+				pluginMethod.getPluginName());
+		if (pluginInterface == null) {
+			throw new InvalidExpressionException();
+		}
+		try {
+			pluginInterface.getPluginMethod(pluginMethod.getPluginMethodName(), listToArray(parameters));
+		} catch (NoSuchMethodException e) {
+			// If the method is not found, the parameters don't match
+			throw new InvalidExpressionException();
+		}
+	}
+
+	private static Class<?>[] listToArray(List<Class<?>> parameterList) {
+		Class<?>[] parameters = new Class<?>[parameterList.size()];
+		for (int index = 0; index < parameterList.size(); index++) {
+			parameters[index] = parameterList.get(index);
+		}
+		return parameters;
 	}
 }

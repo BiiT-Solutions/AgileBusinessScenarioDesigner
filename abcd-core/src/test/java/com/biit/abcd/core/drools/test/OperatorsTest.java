@@ -17,10 +17,10 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -89,8 +89,9 @@ public class OperatorsTest extends KidsFormCreator {
 					CustomVariableScope.FORM);
 			ExpressionChain expression = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(
 					getForm(), bmiCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
-							getTreeObject("weight")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
+
+			new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
+					getTreeObject("weight")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
 					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionSymbol(
 							AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
 							getTreeObject("height")), new ExpressionOperatorMath(AvailableOperator.DIVISION),
@@ -184,7 +185,7 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void avgOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
@@ -220,7 +221,7 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void pmtOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
@@ -299,7 +300,6 @@ public class OperatorsTest extends KidsFormCreator {
 			Assert.fail();
 		}
 	}
-
 
 	@Test(groups = { "rules" })
 	public void inOperatorQuestionAnswerTest() {
@@ -765,7 +765,7 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testAndOperator() throws ExpressionInvalidException, RuleInvalidException, IOException,
+	public void testAndOperator() throws ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
@@ -813,7 +813,7 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void testOrOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
@@ -859,37 +859,36 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testNotOperator() throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
-			NotValidTypeInVariableData {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Expression one (false)
-		ExpressionChain condition = new ExpressionChain("expressionOne", new ExpressionFunction(AvailableFunction.NOT),
-				new ExpressionValueTreeObjectReference(getTreeObject(BREAKFAST_QUESTION)), new ExpressionFunction(
-						AvailableFunction.IN), new ExpressionValueTreeObjectReference(
-						getAnswer(BREAKFAST_QUESTION, "a")), new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION, "c")), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION,
-						"d")), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
+	public void testNotOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Expression one (false)
+			ExpressionChain condition = new ExpressionChain("expressionOne", new ExpressionFunction(
+					AvailableFunction.NOT), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+					new ExpressionValueTreeObjectReference(getTreeObject(BREAKFAST_QUESTION)), new ExpressionFunction(
+							AvailableFunction.IN), new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION,
+							"a")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
+							getAnswer(BREAKFAST_QUESTION, "c")), new ExpressionSymbol(AvailableSymbol.COMMA),
+					new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION, "d")), new ExpressionSymbol(
+							AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 
-		// Create a a simple action
-		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
-				CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain action = new ExpressionChain(
-				new ExpressionValueCustomVariable(getForm(), customVariableResult), new ExpressionOperatorMath(
-						AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			// Create a a simple action
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
 
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = launchRule(new Rule("notTest", condition, action));
-		if (droolsForm != null) {
-			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = launchRule(new Rule("notTest", condition, action));
+			if (droolsForm != null) {
+				// Check result
+				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+						CUSTOM_VARIABLE_RESULT_VALUE);
+			}
+		} catch (Exception e) {
+			Assert.fail();
 		}
 	}
 
@@ -919,10 +918,15 @@ public class OperatorsTest extends KidsFormCreator {
 							getAnswer(VEGETABLES_QUESTION, "d")));
 
 			// Merge NOT with AND
-			ExpressionChain conditions = new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
-					expressionOne, new ExpressionOperatorLogic(AvailableOperator.AND), expressionThree,
-					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
-							AvailableOperator.AND), expressionTwo);
+			ExpressionChain conditions = new ExpressionChain(
+					new ExpressionFunction(AvailableFunction.NOT),
+					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), 
+					expressionOne, 
+					new ExpressionOperatorLogic(AvailableOperator.AND), 
+					expressionThree,
+					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), 
+					new ExpressionOperatorLogic(AvailableOperator.AND), 
+					expressionTwo);
 			// Create a a simple action
 			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
 					CustomVariableType.STRING, CustomVariableScope.FORM);
@@ -1057,7 +1061,7 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testGreaterThanOperator() throws ExpressionInvalidException, RuleInvalidException, IOException,
+	public void testGreaterThanOperator() throws ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
@@ -1075,7 +1079,7 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testGreaterEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
@@ -1091,7 +1095,7 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testLessThanOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
@@ -1107,7 +1111,7 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testLessEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
@@ -1123,7 +1127,7 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
@@ -1139,7 +1143,7 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testNotEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
@@ -1155,7 +1159,7 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testNotEqualsDateOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
@@ -1171,7 +1175,7 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testNotEqualsDateYearOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
@@ -1185,7 +1189,7 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	private void runConditionInRuleAndTestResult(ExpressionChain condition) throws ExpressionInvalidException,
-			RuleInvalidException, IOException, RuleNotImplementedException, DocumentException,
+			InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException {
