@@ -11,7 +11,7 @@ import com.biit.abcd.core.drools.prattparser.expressions.PostfixExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.validators.ExpressionValidator;
-import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.core.drools.rules.validators.ValueType;
 
 public class TreeElementExpressionValidatorVisitor implements ITreeElementVisitor {
 
@@ -48,11 +48,22 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 
 			if ((operator.getLeftElement() instanceof NameExpression)
 					&& (operator.getRightElement() instanceof NameExpression)) {
-				AnswerFormat leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator
+				ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator
 						.getLeftElement()).getExpressionChain());
-				AnswerFormat rightType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator
+				ValueType rightType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator
 						.getRightElement()).getExpressionChain());
-				if(leftType != rightType){
+				if (leftType == rightType) {
+					if (operator.getOperator().equals(ExpressionTokenType.PLUS)
+							|| operator.getOperator().equals(ExpressionTokenType.MINUS)
+							|| operator.getOperator().equals(ExpressionTokenType.MULTIPLICATION)
+							|| operator.getOperator().equals(ExpressionTokenType.DIVISION)) {
+						// Cannot apply the operators '+', '-', '*','/' to
+						// anything but numbers
+						if (!leftType.equals(ValueType.NUMBER)) {
+							throw new NotCompatibleTypeException("Operator types not compatible", null);
+						}
+					}
+				} else {
 					throw new NotCompatibleTypeException("Operator types not compatible", null);
 				}
 			}

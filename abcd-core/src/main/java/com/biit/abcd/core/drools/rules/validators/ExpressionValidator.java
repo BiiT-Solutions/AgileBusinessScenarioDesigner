@@ -9,7 +9,7 @@ import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementExpressionValidatorVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
@@ -54,11 +54,10 @@ public class ExpressionValidator {
 			InvalidExpressionException, NotCompatibleTypeException {
 
 		ExpressionChain cleanedExpression = removePilcrow(expressionChain);
-		
 		ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
 		rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
-
 		ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
+		
 		if (hasPluginMethodExpression(cleanedExpression)) {
 			throw new InvalidExpressionException();
 		} else {
@@ -66,22 +65,20 @@ public class ExpressionValidator {
 			// (sometimes,
 			// the parser doesn't fail, it only skips the invalid characters)
 			int parsedElements = countElementsInExpressionChain(prattExpressionChain);
-			System.out.println("NUMBER OF ELEMENTS PARSED: " + parsedElements);
-			System.out.println("NUMBER OF ELEMENTS IN CHAIN: " + cleanedExpression.getExpressions().size());
 			if (cleanedExpression.getExpressions().size() != parsedElements) {
 				throw new InvalidExpressionException();
 			}
 		}
-		System.out.println("CONDITION CHAIN: " + prattExpressionChain);
-
 	}
 
 	public static void validateActions(ExpressionChain expressionChain) throws PrattParserException,
-			InvalidExpressionException {
-		AnswerFormat leftVariableFormat = null;
-		ExpressionChain prattExpressionChain = calculatePrattParserResult(expressionChain).getExpressionChain();
-
-		System.out.println("ACTION CHAIN: " + prattExpressionChain);
+			InvalidExpressionException, NotCompatibleTypeException {
+		ValueType leftVariableFormat = null;
+		
+		ExpressionChain cleanedExpression = removePilcrow(expressionChain);
+		ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
+		rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
+		ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
 
 		// The left value must be a variable
 		if (!(expressionChain.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
@@ -129,7 +126,7 @@ public class ExpressionValidator {
 		}
 	}
 
-	private static void checkExpressionFunctionParameters(AnswerFormat leftVariableFormat,
+	private static void checkExpressionFunctionParameters(ValueType leftVariableFormat,
 			ExpressionChain prattExpressionChain) throws InvalidExpressionException {
 		// The last expression must be a right parenthesis
 		if (!(prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1) instanceof ExpressionSymbol)
@@ -149,10 +146,10 @@ public class ExpressionValidator {
 	 * @return
 	 * @throws InvalidExpressionException
 	 */
-	private static void checkMethodParameters(AnswerFormat leftVariableFormat, ExpressionChain prattExpressionChain)
+	private static void checkMethodParameters(ValueType leftVariableFormat, ExpressionChain prattExpressionChain)
 			throws InvalidExpressionException {
 		int numberOfParameters = 0;
-		AnswerFormat parameterType = null;
+		ValueType parameterType = null;
 
 		// Check that the parameter type matches
 		for (int expressionIndex = 2; expressionIndex < prattExpressionChain.getExpressions().size(); expressionIndex++) {
@@ -199,7 +196,7 @@ public class ExpressionValidator {
 		case MAX:
 		case MIN:
 		case SUM:
-			if (!leftVariableFormat.equals(AnswerFormat.NUMBER) && !parameterType.equals(AnswerFormat.NUMBER)) {
+			if (!leftVariableFormat.equals(ValueType.NUMBER) && !parameterType.equals(ValueType.NUMBER)) {
 				throw new InvalidExpressionException();
 			}
 			break;
@@ -245,51 +242,76 @@ public class ExpressionValidator {
 	 * @param expression
 	 * @return
 	 */
-	private static AnswerFormat getExpressionValueType(ExpressionValue<?> expression) {
+	private static ValueType getExpressionValueType(ExpressionValue<?> expression) {
 		if (expression instanceof ExpressionValueBoolean) {
-			return AnswerFormat.NUMBER;
+			return ValueType.NUMBER;
 		} else if (expression instanceof ExpressionValueNumber) {
-			return AnswerFormat.NUMBER;
+			return ValueType.NUMBER;
 		} else if (expression instanceof ExpressionValuePostalCode) {
-			return AnswerFormat.POSTAL_CODE;
+			return ValueType.POSTAL_CODE;
 		} else if (expression instanceof ExpressionValueString) {
-			return AnswerFormat.TEXT;
+			return ValueType.TEXT;
 		} else if ((expression instanceof ExpressionValueTimestamp)
 				|| (expression instanceof ExpressionValueSystemDate)) {
-			return AnswerFormat.DATE;
+			return ValueType.DATE;
 		} else if (expression instanceof ExpressionValueCustomVariable) {
 			CustomVariable customVariable = ((ExpressionValueCustomVariable) expression).getVariable();
 			switch (customVariable.getType()) {
 			case STRING:
-				return AnswerFormat.TEXT;
+				return ValueType.TEXT;
 			case NUMBER:
-				return AnswerFormat.NUMBER;
+				return ValueType.NUMBER;
 			case DATE:
-				return getAnswerFormatWithUnitDate((ExpressionValueTreeObjectReference) expression);
+				return getValueTypeWithUnitDate((ExpressionValueTreeObjectReference) expression);
 			}
 		} else if (expression instanceof ExpressionValueGenericCustomVariable) {
 			CustomVariable customVariable = ((ExpressionValueGenericCustomVariable) expression).getVariable();
 			switch (customVariable.getType()) {
 			case STRING:
-				return AnswerFormat.TEXT;
+				return ValueType.TEXT;
 			case NUMBER:
-				return AnswerFormat.NUMBER;
+				return ValueType.NUMBER;
 			case DATE:
-				return AnswerFormat.DATE;
+				return ValueType.DATE;
 			}
 		} else if (expression instanceof ExpressionValueTreeObjectReference) {
 			TreeObject treeObject = ((ExpressionValueTreeObjectReference) expression).getReference();
-			if (!(treeObject instanceof Question)
-					|| !(((Question) treeObject).getAnswerType().equals(AnswerType.INPUT))) {
-				return null;
-			} else {
+			if (treeObject instanceof Question) {
+				return getQuestionValueType((ExpressionValueTreeObjectReference) expression);
+
+			} else if (treeObject instanceof Answer) {
+				TreeObject parent = ((Answer) treeObject).getParent();
+				return getQuestionValueType(new ExpressionValueTreeObjectReference(parent));
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the type of the question inside the expression value <br>
+	 * If the tree object inside is not a question returns null
+	 * 
+	 * @param expressionValue
+	 * @return
+	 */
+	private static ValueType getQuestionValueType(ExpressionValueTreeObjectReference expressionValue) {
+		TreeObject treeObject = expressionValue.getReference();
+		if (treeObject instanceof Question) {
+			switch (((Question) treeObject).getAnswerType()) {
+			case RADIO:
+				return ValueType.RADIO;
+			case MULTI_CHECKBOX:
+				return ValueType.MULTI_CHECKBOX;
+			case INPUT:
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case TEXT:
+					return ValueType.TEXT;
 				case POSTAL_CODE:
+					return ValueType.POSTAL_CODE;
 				case NUMBER:
-					return ((Question) treeObject).getAnswerFormat();
+					return ValueType.NUMBER;
 				case DATE:
-					return getAnswerFormatWithUnitDate((ExpressionValueTreeObjectReference) expression);
+					return getValueTypeWithUnitDate(expressionValue);
 				}
 			}
 		}
@@ -303,19 +325,19 @@ public class ExpressionValidator {
 	 * @param expressionValue
 	 * @return
 	 */
-	private static AnswerFormat getAnswerFormatWithUnitDate(ExpressionValueTreeObjectReference expressionValue) {
+	private static ValueType getValueTypeWithUnitDate(ExpressionValueTreeObjectReference expressionValue) {
 		if (((ExpressionValueTreeObjectReference) expressionValue).getUnit() != null) {
 			switch (((ExpressionValueTreeObjectReference) expressionValue).getUnit()) {
 			case YEARS:
 			case MONTHS:
 			case DAYS:
-				return AnswerFormat.NUMBER;
+				return ValueType.NUMBER;
 			case DATE:
-				return AnswerFormat.DATE;
+				return ValueType.DATE;
 			}
 		}
 		// Default value, if there is no unit selected
-		return AnswerFormat.DATE;
+		return ValueType.DATE;
 	}
 
 	/**
@@ -428,7 +450,7 @@ public class ExpressionValidator {
 	 * @param expressionChain
 	 * @return
 	 */
-	public static AnswerFormat getValueInsideExpressionChain(ExpressionChain expressionChain) {
+	public static ValueType getValueInsideExpressionChain(ExpressionChain expressionChain) {
 		int expressionChainSize = expressionChain.getExpressions().size();
 		if ((expressionChainSize == 1) && (expressionChain.getExpressions().get(0) instanceof ExpressionValue<?>)) {
 			return getExpressionValueType((ExpressionValue<?>) expressionChain.getExpressions().get(0));
