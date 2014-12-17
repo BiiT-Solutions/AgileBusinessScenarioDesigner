@@ -65,6 +65,8 @@ public enum ThemeIcon {
 	TREE_DESIGNER_ADD_GROUP("form.group.add.svg"),
 
 	TREE_DESIGNER_ADD_ANSWER("form.answer.add.svg"),
+	
+	TREE_DESIGNER_ADD_SUBANSWER("form.subanswer.add.svg"),
 
 	TREE_DESIGNER_QUESTION_TYPE_DATE("question.calendar.31.svg"),
 

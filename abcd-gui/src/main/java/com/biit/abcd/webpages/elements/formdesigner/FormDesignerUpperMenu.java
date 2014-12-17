@@ -24,8 +24,8 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class FormDesignerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = -4712688788270327039L;
-	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton, moveUpButton,
-			moveDownButton, removeButton, moveButton, finish;
+	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton,
+			newSubanswerButton, moveUpButton, moveDownButton, removeButton, moveButton, finish;
 
 	public FormDesignerUpperMenu() {
 		super();
@@ -57,6 +57,11 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		newAnswerButton = new IconButton(LanguageCodes.TREE_DESIGNER_ANSWER_ADD, ThemeIcon.TREE_DESIGNER_ADD_ANSWER,
 				LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
 		addIconButton(newAnswerButton);
+
+		// Add new Subanswer
+		newSubanswerButton = new IconButton(LanguageCodes.TREE_DESIGNER_SUBANSWER_ADD, ThemeIcon.TREE_DESIGNER_ADD_SUBANSWER,
+				LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
+		addIconButton(newSubanswerButton);
 
 		// Move up.
 		moveUpButton = new IconButton(LanguageCodes.MENU_MOVE_UP, ThemeIcon.MOVE_UP, LanguageCodes.MENU_MOVE_UP);
@@ -93,24 +98,28 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			newQuestionButton.setEnabled(false);
 			newAnswerButton.setEnabled(false);
 			removeButton.setEnabled(false);
+			newSubanswerButton.setEnabled(false);
 		} else if (selectedObject instanceof Form) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(false);
 			newQuestionButton.setEnabled(false);
 			newAnswerButton.setEnabled(false);
 			removeButton.setEnabled(false);
+			newSubanswerButton.setEnabled(false);
 		} else if (selectedObject instanceof Category) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 			newAnswerButton.setEnabled(false);
 			removeButton.setEnabled(true);
+			newSubanswerButton.setEnabled(false);
 		} else if (selectedObject instanceof Group) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 			newAnswerButton.setEnabled(false);
 			removeButton.setEnabled(true);
+			newSubanswerButton.setEnabled(false);
 		} else if (selectedObject instanceof Question) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
@@ -120,12 +129,14 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			} else {
 				newAnswerButton.setEnabled(true);
 			}
+			newSubanswerButton.setEnabled(false);
 			removeButton.setEnabled(true);
 		} else if (selectedObject instanceof Answer) {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 			removeButton.setEnabled(true);
+			newSubanswerButton.setEnabled(true);
 		}
 
 		// Disable buttons that user has no permissions to use.
@@ -159,6 +170,12 @@ public class FormDesignerUpperMenu extends UpperMenu {
 	public void addNewAnswerButtonClickListener(Button.ClickListener listener) {
 		if (!getDisabledButtons().contains(newAnswerButton)) {
 			newAnswerButton.addClickListener(listener);
+		}
+	}
+	
+	public void addNewSubanswerButtonClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(newSubanswerButton)) {
+			newSubanswerButton.addClickListener(listener);
 		}
 	}
 
