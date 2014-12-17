@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
@@ -162,5 +165,10 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		if (!getDisabledButtons().contains(exportToCsvButton)) {
 			exportToCsvButton.removeClickListener(listener);
 		}
+	}
+
+	@Override
+	public Set<Button> getSecuredButtons() {
+		return new HashSet<Button>();
 	}
 }

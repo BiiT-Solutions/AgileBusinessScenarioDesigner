@@ -70,11 +70,12 @@ public class Login extends WebPageComponent {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// Nothing to do.
+		if (((ApplicationFrame) getUI()).getUser() != null && ((ApplicationFrame) getUI()).getPassword() != null) {
+			checkUserAndPassword(((ApplicationFrame) getUI()).getUser(), ((ApplicationFrame) getUI()).getPassword());
+		}
 	}
 
 	private Panel buildLoginForm() {
-
 		Panel panel = new Panel();
 		panel.setSizeUndefined();
 
@@ -101,7 +102,7 @@ public class Login extends WebPageComponent {
 				// limit the enters to only from the password field from this
 				// form
 				if (target == passwordField) {
-					checkUserAndPassword();
+					checkUserAndPassword(usernameField.getValue(), passwordField.getValue());
 				}
 				// If write user name and press enter, go to pass field.
 				if (target == usernameField) {
@@ -117,7 +118,7 @@ public class Login extends WebPageComponent {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						checkUserAndPassword();
+						checkUserAndPassword(usernameField.getValue(), passwordField.getValue());
 					}
 				});
 		loginButton.setWidth(FIELD_SIZE);
@@ -139,11 +140,7 @@ public class Login extends WebPageComponent {
 		return label;
 	}
 
-	private void checkUserAndPassword() {
-		// Try to log in the user when the button is clicked
-		String userMail = usernameField.getValue();
-		String password = passwordField.getValue();
-
+	private void checkUserAndPassword(String userMail, String password) {
 		User user = null;
 		try {
 			user = AuthenticationService.getInstance().authenticate(userMail, password);

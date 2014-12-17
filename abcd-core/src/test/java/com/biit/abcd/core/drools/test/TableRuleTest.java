@@ -43,7 +43,6 @@ import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
@@ -74,10 +73,10 @@ public class TableRuleTest extends KidsFormCreator {
 	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
+			CategoryDoesNotExistException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -92,10 +91,9 @@ public class TableRuleTest extends KidsFormCreator {
 	private void testFormCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
 			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -112,10 +110,10 @@ public class TableRuleTest extends KidsFormCreator {
 	private void testCategoryCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
 			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, CategoryDoesNotExistException,
+			BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -130,11 +128,11 @@ public class TableRuleTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	private void testMultipleColumnsTableRule() throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, BetweenFunctionInvalidException {
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram

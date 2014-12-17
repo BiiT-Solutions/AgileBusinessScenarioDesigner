@@ -14,14 +14,22 @@ import com.vaadin.ui.UI;
 @Theme("abcd")
 @PreserveOnRefresh
 public class ApplicationFrame extends UI {
+	public final static String USER_PARAMETER_TAG = "user";
+	public final static String PASSWORD_PARAMETER_TAG = "password";
 	private static final long serialVersionUID = -704009283476930001L;
 	private Navigator navigator;
 	private View currentView;
+	private String user;
+	private String password;
 
 	@Override
 	protected void init(VaadinRequest request) {
 		getPage().setTitle("");
 		defineWebPages();
+
+		//Liferay send this data and automatically are used in the login screen. 
+		this.user = request.getParameter(USER_PARAMETER_TAG);
+		this.password = request.getParameter(PASSWORD_PARAMETER_TAG);
 	}
 
 	@Override
@@ -89,6 +97,14 @@ public class ApplicationFrame extends UI {
 
 	private void setCurrentView(View currentView) {
 		this.currentView = currentView;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 }

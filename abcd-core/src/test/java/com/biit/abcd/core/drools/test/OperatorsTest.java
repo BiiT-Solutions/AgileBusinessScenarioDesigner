@@ -51,7 +51,6 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
@@ -186,11 +185,10 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void avgOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, CategoryDoesNotExistException,
-			BetweenFunctionInvalidException {
+			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			QuestionDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// AVG expression
@@ -223,10 +221,10 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void pmtOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
+			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// PMT expression
@@ -768,11 +766,11 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void testAndOperator() throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, BetweenFunctionInvalidException {
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Expression one
@@ -816,10 +814,10 @@ public class OperatorsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testOrOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
-			IOException, RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
+			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 
@@ -862,11 +860,10 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void testNotOperator() throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, FieldTooLongException,
-			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
+			FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData {
 		// Restart the form to avoid test cross references
 		initForm();
@@ -1061,11 +1058,10 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void testGreaterThanOperator() throws ExpressionInvalidException, RuleInvalidException, IOException,
-			RuleNotImplementedException, DocumentException, CategoryNameWithoutTranslation,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, FieldTooLongException,
-			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
+			FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData {
 		// Restart the form to avoid test cross references
 		initForm();
@@ -1080,10 +1076,9 @@ public class OperatorsTest extends KidsFormCreator {
 	public void testGreaterEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create condition
@@ -1097,10 +1092,9 @@ public class OperatorsTest extends KidsFormCreator {
 	public void testLessThanOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create condition
@@ -1114,10 +1108,9 @@ public class OperatorsTest extends KidsFormCreator {
 	public void testLessEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create condition
@@ -1131,10 +1124,9 @@ public class OperatorsTest extends KidsFormCreator {
 	public void testEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create condition
@@ -1148,10 +1140,9 @@ public class OperatorsTest extends KidsFormCreator {
 	public void testNotEqualsOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create condition
@@ -1165,10 +1156,9 @@ public class OperatorsTest extends KidsFormCreator {
 	public void testNotEqualsDateOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create condition
@@ -1182,10 +1172,9 @@ public class OperatorsTest extends KidsFormCreator {
 	public void testNotEqualsDateYearOperator() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, RuleInvalidException, IOException, RuleNotImplementedException,
-			DocumentException, CategoryNameWithoutTranslation, ActionNotImplementedException,
-			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create condition
@@ -1197,9 +1186,9 @@ public class OperatorsTest extends KidsFormCreator {
 
 	private void runConditionInRuleAndTestResult(ExpressionChain condition) throws ExpressionInvalidException,
 			RuleInvalidException, IOException, RuleNotImplementedException, DocumentException,
-			CategoryNameWithoutTranslation, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
+			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 
 		// Create a a simple action
 		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,

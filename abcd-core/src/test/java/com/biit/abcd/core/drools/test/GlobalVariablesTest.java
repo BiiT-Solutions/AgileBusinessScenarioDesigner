@@ -42,7 +42,6 @@ import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.exceptions.CategoryNameWithoutTranslation;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 /**
@@ -56,9 +55,9 @@ public class GlobalVariablesTest extends KidsFormCreator {
 	public void testGlobVarsInDroolsEngine() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ExpressionInvalidException, RuleInvalidException,
 			IOException, RuleNotImplementedException, ActionNotImplementedException, DocumentException,
-			CategoryNameWithoutTranslation, CharacterNotAllowedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
+			CharacterNotAllowedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException {
 
 		// Create the form and the variables
 		initForm();

@@ -2,7 +2,9 @@ package com.biit.abcd.webpages.elements.formmanager;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
@@ -44,6 +46,7 @@ import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -331,5 +334,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 		} else {
 			newVersion.setEnabled(false);
 		}
+	}
+
+	@Override
+	public Set<Button> getSecuredButtons() {
+		return new HashSet<Button>();
 	}
 }

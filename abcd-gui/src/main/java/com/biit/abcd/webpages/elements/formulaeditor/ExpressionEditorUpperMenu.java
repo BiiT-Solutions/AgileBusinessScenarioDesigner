@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.formulaeditor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.ThemeIcon;
@@ -63,4 +66,8 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 		removeExpression.removeClickListener(listener);
 	}
 
+	@Override
+	public Set<Button> getSecuredButtons() {
+		return new HashSet<Button>();
+	}
 }

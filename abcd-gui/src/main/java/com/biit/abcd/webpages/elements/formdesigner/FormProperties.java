@@ -100,7 +100,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 				// To avoid setting repeated values
 				Date dateToCompare = new Date(time);
-				if (dateToCompare.compareTo(availableFrom.getValue()) != 0) {
+				if (dateToCompare.compareTo(instance.getAvailableFrom()) != 0) {
 					instance.setAvailableFrom(new Timestamp(time));
 					AbcdLogger.info(this.getClass().getName(),
 							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has modified the Form '"
@@ -109,7 +109,6 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -119,7 +118,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 	@Override
 	protected Set<AbstractComponent> getProtectedElements() {
-		return new HashSet<AbstractComponent>(Arrays.asList(formLabel, availableFrom));
+		return new HashSet<AbstractComponent>(Arrays.asList(formLabel));
 	}
 
 }
