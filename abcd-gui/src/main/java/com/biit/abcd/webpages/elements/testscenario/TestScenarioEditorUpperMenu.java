@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.ThemeIcon;
@@ -26,7 +29,6 @@ public class TestScenarioEditorUpperMenu extends UpperMenu {
 		addIconButton(saveButton);
 		addIconButton(newTestScenario);
 		addIconButton(removeTestScenario);
-
 
 		for (Button button : getDisabledButtons()) {
 			button.setEnabled(false);
@@ -61,5 +63,10 @@ public class TestScenarioEditorUpperMenu extends UpperMenu {
 
 	public void removeRemoveTestScenarioButtonClickListener(Button.ClickListener listener) {
 		removeTestScenario.removeClickListener(listener);
+	}
+
+	@Override
+	public Set<Button> getSecuredButtons() {
+		return new HashSet<Button>();
 	}
 }

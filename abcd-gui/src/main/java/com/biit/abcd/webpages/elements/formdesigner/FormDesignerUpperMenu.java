@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Answer;
@@ -192,5 +195,13 @@ public class FormDesignerUpperMenu extends UpperMenu {
 
 	public void addFinishListener(ClickListener clickListener) {
 		finish.addClickListener(clickListener);
+	}
+
+	@Override
+	public Set<Button> getSecuredButtons() {
+		// All except save form.
+		Set<Button> securedButtons = new HashSet<Button>(getButtons());
+		securedButtons.remove(saveButton);
+		return securedButtons;
 	}
 }

@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.formvariables;
 
+import java.util.Set;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.ThemeIcon;
@@ -51,6 +53,11 @@ public class FormVariablesUpperMenu extends UpperMenu {
 		if (!getDisabledButtons().contains(removeVariable)) {
 			removeVariable.addClickListener(listener);
 		}
+	}
+	
+	@Override
+	public Set<Button> getSecuredButtons() {
+		return getButtons();
 	}
 
 }

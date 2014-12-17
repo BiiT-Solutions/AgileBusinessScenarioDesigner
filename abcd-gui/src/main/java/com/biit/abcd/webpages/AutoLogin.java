@@ -8,6 +8,7 @@ import com.vaadin.ui.UI;
 @Theme("abcd")
 @PreserveOnRefresh
 public class AutoLogin extends UI {
+	private static final long serialVersionUID = 8519553505267393286L;
 	public final static String USER_PARAMETER_TAG = "user";
 	public final static String PASSWORD_PARAMETER_TAG = "password";
 	private String user;

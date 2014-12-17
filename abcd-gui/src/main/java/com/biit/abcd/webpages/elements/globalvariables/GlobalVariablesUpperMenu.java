@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.elements.globalvariables;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.ThemeIcon;
@@ -56,7 +59,7 @@ public class GlobalVariablesUpperMenu extends UpperMenu {
 	public void removeRemoveVariableButtonClickListener(Button.ClickListener listener) {
 		removeVariable.removeClickListener(listener);
 	}
-	
+
 	public void addEditVariableButtonClickListener(Button.ClickListener listener) {
 		editVariable.addClickListener(listener);
 	}
@@ -80,7 +83,7 @@ public class GlobalVariablesUpperMenu extends UpperMenu {
 	public void removeRemoveValueClickListener(Button.ClickListener listener) {
 		removeValue.removeClickListener(listener);
 	}
-	
+
 	public void addEditValueButtonClickListener(Button.ClickListener listener) {
 		editValue.addClickListener(listener);
 	}
@@ -91,5 +94,10 @@ public class GlobalVariablesUpperMenu extends UpperMenu {
 
 	public void addSaveButtonClickListener(Button.ClickListener listener) {
 		saveButton.addClickListener(listener);
+	}
+
+	@Override
+	public Set<Button> getSecuredButtons() {
+		return new HashSet<Button>();
 	}
 }

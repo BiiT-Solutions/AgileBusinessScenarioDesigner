@@ -28,6 +28,7 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 	private Set<Button> disabledButtons = null;
 
 	private Set<Button> calculateDisabledButtons() {
+		Set<Button> disabledButtons = new HashSet<>();
 		User user = UserSessionHandler.getUser();
 		// Check permissions.
 		boolean editionEnabled = false;
@@ -49,22 +50,30 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 			}
 		}
 
-		Set<Button> disabledButtons = new HashSet<>();
 		// Disable all Buttons
 		if (!editionEnabled) {
 			if (inUse) {
 				MessageManager.showWarning(LanguageCodes.WARNING_FORM_IN_USE,
 						LanguageCodes.WARNING_FORM_IN_USE_DESCRIPTION);
+				// In use, no buttons can be used.
+				for (Button button : getButtons()) {
+					disabledButtons.add(button);
+				}
 			} else {
-				MessageManager.showWarning(LanguageCodes.WARNING_FORM_READ_ONLY,
-						LanguageCodes.WARNING_FORM_READ_ONLY_DESCRIPTION);
-			}
-			for (Button button : getButtons()) {
-				disabledButtons.add(button);
+				if (!getSecuredButtons().isEmpty()) {
+					MessageManager.showWarning(LanguageCodes.WARNING_FORM_READ_ONLY,
+							LanguageCodes.WARNING_FORM_READ_ONLY_DESCRIPTION);
+					// Read only, some buttons are disabled, others allowed.
+					for (Button button : getSecuredButtons()) {
+						disabledButtons.add(button);
+					}
+				}
 			}
 		}
 		return disabledButtons;
 	}
+
+	public abstract Set<Button> getSecuredButtons();
 
 	/**
 	 * Return a list of buttons that must be disabled due to user permissions limitations.
