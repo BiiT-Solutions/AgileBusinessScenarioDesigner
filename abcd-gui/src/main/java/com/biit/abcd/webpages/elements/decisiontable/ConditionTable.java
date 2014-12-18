@@ -20,7 +20,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Table;
 
-public class NewConditionTable extends Table {
+public class ConditionTable extends Table {
 
 	private static final long serialVersionUID = 2760300775584165320L;
 	private static final int rowHeaderWidth = 32;
@@ -28,7 +28,7 @@ public class NewConditionTable extends Table {
 	private List<EditExpressionListener> editExpressionListeners;
 	private List<ClearExpressionListener> clearExpressionListeners;
 
-	public NewConditionTable() {
+	public ConditionTable() {
 		super();
 
 		editExpressionListeners = new ArrayList<EditExpressionListener>();

@@ -37,6 +37,7 @@ import com.biit.abcd.webpages.components.SelectTableRuleTableEditable;
 import com.biit.abcd.webpages.components.WindowSelectDateUnit;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewActionExpressionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
+import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionExpressionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewQuestionEditorWindow;
 import com.biit.abcd.webpages.elements.decisiontable.ClearActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.ClearExpressionListener;
@@ -553,7 +554,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 			answerExpressionWithQuestion.addExpression(0, questionExpression);
 			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
 
-			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewAnswerExpressionWindow(
+			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewConditionExpressionWindow(
 					questionExpression, answerExpressionWithQuestion);
 
 			newActionValueWindow.showCentered();

@@ -436,7 +436,8 @@ public class RulesUtils {
 		ExpressionChain flattenedExpressionChain = new ExpressionChain();
 		for (Expression expression : expressionChain.getExpressions()) {
 			if (expression instanceof ExpressionChain) {
-				for (Expression insideExpression : ((ExpressionChain) expression).getExpressions()) {
+				ExpressionChain auxExpressionFlattened = flattenExpressionChain((ExpressionChain) expression);
+				for (Expression insideExpression : auxExpressionFlattened.getExpressions()) {
 					flattenedExpressionChain.addExpression(insideExpression);
 				}
 			} else {

@@ -14,8 +14,8 @@ public class RuleTable extends CustomComponent {
 
 	private static final long serialVersionUID = -1214662437608420332L;
 	private HorizontalLayout rootLayout;
-	private NewConditionTable conditionTable;
-	private NewActionTable actionTable;
+	private ConditionTable conditionTable;
+	private ActionTable actionTable;
 
 	public RuleTable() {
 		super();
@@ -25,7 +25,7 @@ public class RuleTable extends CustomComponent {
 		rootLayout.setImmediate(true);
 		rootLayout.setSpacing(true);
 
-		conditionTable = new NewConditionTable();
+		conditionTable = new ConditionTable();
 		conditionTable.setSizeFull();
 		conditionTable.addCellSelectionListener(new CellSelectionListener() {
 			@Override
@@ -34,7 +34,7 @@ public class RuleTable extends CustomComponent {
 			}
 		});
 
-		actionTable = new NewActionTable();
+		actionTable = new ActionTable();
 		actionTable.setSizeFull();
 		actionTable.addCellSelectionListener(new CellSelectionListener() {
 			@Override

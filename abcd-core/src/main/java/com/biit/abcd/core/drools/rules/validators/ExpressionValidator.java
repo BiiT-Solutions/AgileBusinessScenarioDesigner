@@ -50,14 +50,14 @@ public class ExpressionValidator {
 	 */
 	public static void validateRule(Rule rule) throws PrattParserException, InvalidExpressionException,
 			NotCompatibleTypeException {
-		validateConditions(RulesUtils.flattenExpressionChain(rule.getConditions()));
+		validateConditions(rule.getConditions());
 		validateActions(rule.getActions());
 	}
 
 	public static void validateConditions(ExpressionChain expressionChain) throws PrattParserException,
 			InvalidExpressionException, NotCompatibleTypeException {
 		if (expressionChain != null) {
-			ExpressionChain cleanedExpression = removeNewLineSymbols(expressionChain);
+			ExpressionChain cleanedExpression = removeNewLineSymbols(RulesUtils.flattenExpressionChain(expressionChain));
 			// If there is a NOT expression, we have to add the remaining
 			// parenthesis
 			RulesUtils.fixNotConditions(cleanedExpression);
@@ -85,7 +85,7 @@ public class ExpressionValidator {
 			InvalidExpressionException, NotCompatibleTypeException {
 		if (expressionChain != null) {
 			ValueType leftVariableFormat = null;
-			ExpressionChain cleanedExpression = removeNewLineSymbols(expressionChain);
+			ExpressionChain cleanedExpression = removeNewLineSymbols(RulesUtils.flattenExpressionChain(expressionChain));
 			// If there is a NOT expression, we have to add the remaining
 			// parenthesis
 			RulesUtils.fixNotConditions(cleanedExpression);
