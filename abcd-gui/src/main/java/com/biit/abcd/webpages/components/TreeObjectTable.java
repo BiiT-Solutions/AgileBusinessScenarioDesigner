@@ -11,7 +11,6 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
-import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
@@ -273,7 +272,7 @@ public class TreeObjectTable extends TreeTable {
 		uncollapse(element);
 	}
 
-	private void uncollapse(TreeObject element) {
+	public void uncollapse(TreeObject element) {
 		if (element != null) {
 			List<TreeObject> ancestors = element.getAncestors();
 			Collections.reverse(ancestors);
@@ -282,6 +281,20 @@ public class TreeObjectTable extends TreeTable {
 			}
 			setCollapsed(element, false);
 		}
+	}
+
+	public void uncollapseAll() {
+		Collection<?> items = this.getItemIds();
+		for (Object item : items) {
+			setCollapsed(item, false);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void setValuesToItem(Item item, TreeObject element) {
+		Object treeObjectIcon = createElementWithIcon(element);
+		item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(
+				treeObjectIcon);
 	}
 
 }

@@ -511,6 +511,8 @@ public enum LanguageCodes {
 	COMMON_TOOLTIP_FINISH("tooltip.finish"), 
 	
 	TEXT_PROCEED_FORM_CLOSE("text.proceed.form.close"),
+	
+	CAPTION_SEARCH("field.search"),
 	;
 
 	private String value;

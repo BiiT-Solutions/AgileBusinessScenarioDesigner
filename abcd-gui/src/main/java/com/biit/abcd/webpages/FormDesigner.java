@@ -357,7 +357,7 @@ public class FormDesigner extends FormWebPageComponent {
 	/**
 	 * Opens move element window.
 	 */
-	protected void openMoveWindow() {
+	protected void openMoveWindow() {	
 		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(
 				UserSessionHandler.getFormController().getForm(), false);
 		moveWindow.showCentered();
