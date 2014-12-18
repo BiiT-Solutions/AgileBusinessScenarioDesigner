@@ -38,6 +38,7 @@ public class FormTreeTable extends TreeObjectTable {
 			ComponentCellRule rulesComponent = getRulesComponent(element, assignedRules, expressionChains);
 			Item item = getItem(element);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
+			setValue(element);
 		}
 	}
 

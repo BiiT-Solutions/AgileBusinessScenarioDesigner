@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.components;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.TreeObject;
 import com.vaadin.ui.Component;
@@ -40,6 +41,7 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 	}
 
 	public void select(TreeObject selected) {
+		collapseFrom(Category.class);
 		if (treeObjectTable != null) {
 			treeObjectTable.setValue(selected);
 		}
