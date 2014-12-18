@@ -505,6 +505,7 @@ public enum LanguageCodes {
 	
 	DROOLS_RULES_GENERATION_EXCEPTION("drools.rules.generation.exception"),
 	DROOLS_RULES_EXECUTION_EXCEPTION("drools.rules.execution.exception"),
+	DROOLS_RULE_INVALID("drools.rule.invalid"),
 
 	COMMON_CAPTION_FINISH("caption.finish"), 
 	COMMON_TOOLTIP_FINISH("tooltip.finish"), 
