@@ -19,6 +19,7 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
+import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionExpressionWindow;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -72,7 +73,7 @@ public class DiagramPropertiesLink extends SecuredDiagramElementProperties<Diagr
 				ExpressionChain answerExpressionWithQuestion = (ExpressionChain) diagramLink.getExpressionChain()
 						.generateCopy();
 
-				final AddNewAnswerExpressionWindow addNewAnswerExpressionWindow = new AddNewAnswerExpressionWindow(fork
+				final AddNewConditionExpressionWindow addNewAnswerExpressionWindow = new AddNewConditionExpressionWindow(fork
 						.getReference(), answerExpressionWithQuestion);
 				addNewAnswerExpressionWindow.addAcceptActionListener(new AcceptActionListener() {
 

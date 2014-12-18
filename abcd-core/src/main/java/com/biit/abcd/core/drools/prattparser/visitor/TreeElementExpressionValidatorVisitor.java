@@ -1,5 +1,7 @@
 package com.biit.abcd.core.drools.prattparser.visitor;
 
+import java.util.List;
+
 import com.biit.abcd.core.drools.prattparser.ExpressionTokenType;
 import com.biit.abcd.core.drools.prattparser.expressions.AssignExpression;
 import com.biit.abcd.core.drools.prattparser.expressions.CallExpression;
@@ -34,9 +36,32 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 
 	@Override
 	public void visit(CallExpression call) throws NotCompatibleTypeException {
-		call.getFunction().accept(this);
+		call.getLeftElement().accept(this);
 		for (int i = 0; i < call.getArgs().size(); i++) {
 			call.getArgs().get(i).accept(this);
+		}
+
+		// Special condition for the between
+		if ((call.getFunction().equals(ExpressionTokenType.BETWEEN) && (call.getArgs().size() != 2))) {
+			throw new NotCompatibleTypeException("Invalid number of arguments in the between function", null);
+		}
+		// Check the types of the arguments
+		if (call.getLeftElement() instanceof NameExpression) {
+			ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) call
+					.getLeftElement()).getExpressionChain());
+			checkCallArgumentsTypes(leftType, call.getArgs());
+		}
+	}
+
+	private void checkCallArgumentsTypes(ValueType leftType, List<ITreeElement> args) throws NotCompatibleTypeException {
+		for (ITreeElement arg : args) {
+			if (arg instanceof NameExpression) {
+				ValueType argumentType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) arg)
+						.getExpressionChain());
+				if (leftType != argumentType) {
+					throw new NotCompatibleTypeException("Argument types of the call not compatible", null);
+				}
+			}
 		}
 	}
 

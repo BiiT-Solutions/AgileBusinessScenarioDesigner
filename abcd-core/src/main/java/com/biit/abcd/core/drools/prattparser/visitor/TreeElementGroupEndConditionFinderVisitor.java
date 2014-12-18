@@ -36,7 +36,7 @@ public class TreeElementGroupEndConditionFinderVisitor implements ITreeElementVi
 
 	@Override
 	public void visit(CallExpression call) throws NotCompatibleTypeException {
-		call.getFunction().accept(this);
+		call.getLeftElement().accept(this);
 		for (int i = 0; i < call.getArgs().size(); i++) {
 			call.getArgs().get(i).accept(this);
 		}

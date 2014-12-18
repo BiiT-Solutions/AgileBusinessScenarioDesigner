@@ -21,7 +21,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 	private static final long serialVersionUID = 7699690992550597244L;
 	private SelectFormAnswerTable answerTable = null;
 	private ExpressionEditorComponent expressionEditorComponent;
-	private ExpressionChain expressionChain;
+	protected ExpressionChain expressionChain;
 
 	/**
 	 * Constructor.
@@ -34,6 +34,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 	public AddNewAnswerExpressionWindow(ExpressionValueTreeObjectReference reference, ExpressionChain expressionChain) {
 		super();
 		this.expressionChain = (ExpressionChain) expressionChain.generateCopy();
+		setFirstElementNotEditable(this.expressionChain);
 		if (reference instanceof ExpressionValueCustomVariable) {
 			// Custom variable
 			setContent(generateExpression());
@@ -112,12 +113,18 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 		return expressionChain;
 	}
 
-	public ExpressionChain getExpressionWithoutFirstElement() {
+	private ExpressionChain getExpressionWithoutFirstElement() {
 		ExpressionChain expressionChain = (ExpressionChain) this.expressionChain.generateCopy();
 		if ((expressionChain != null) && !expressionChain.getExpressions().isEmpty()) {
 			expressionChain.removeFirstExpression();
 		}
 		return expressionChain;
+	}
+	
+	private void setFirstElementNotEditable(ExpressionChain expressionChain){
+		if ((expressionChain != null) && !expressionChain.getExpressions().isEmpty()) {
+			expressionChain.getExpressions().get(0).setEditable(false);
+		}
 	}
 
 	public void clearSelection() {
@@ -128,5 +135,13 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
 			((SimpleExpressionEditorComponent) expressionEditorComponent).clear();
 		}
 		expressionChain = new ExpressionChain();
+	}
+
+	protected ExpressionEditorComponent getExpressionEditorComponent() {
+		return expressionEditorComponent;
+	}
+
+	protected void setExpressionEditorComponent(ExpressionEditorComponent expressionEditorComponent) {
+		this.expressionEditorComponent = expressionEditorComponent;
 	}
 }

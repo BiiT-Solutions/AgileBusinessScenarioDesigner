@@ -105,20 +105,7 @@ public class ExpressionValidator {
 			if (!(cleanedExpression.getExpressions().get(1) instanceof ExpressionOperatorMath)
 					|| !(((ExpressionOperatorMath) cleanedExpression.getExpressions().get(1)).getValue()
 							.equals(AvailableOperator.ASSIGNATION))) {
-				if (cleanedExpression.getExpressions().get(1) instanceof ExpressionFunction) {
-					ExpressionFunction expressionFunction = (ExpressionFunction) cleanedExpression.getExpressions()
-							.get(1);
-					switch (expressionFunction.getValue()) {
-					case IN:
-					case BETWEEN:
-						// Do nothing
-						break;
-					default:
-						throw new InvalidExpressionException();
-					}
-				} else {
-					throw new InvalidExpressionException();
-				}
+				throw new InvalidExpressionException();
 			}
 			Integer parsedElements = null;
 			// If the third expression is a function, the pratt parser removes
@@ -323,7 +310,7 @@ public class ExpressionValidator {
 
 			} else if (treeObject instanceof Answer) {
 				TreeObject parent = ((Answer) treeObject).getParent();
-				if(parent instanceof Answer){
+				if (parent instanceof Answer) {
 					// This is a subAnswer
 					TreeObject grandParent = ((Answer) parent).getParent();
 					return getQuestionValueType(new ExpressionValueTreeObjectReference(grandParent));

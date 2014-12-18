@@ -33,8 +33,12 @@ public class CallExpression implements ITreeElement {
 		visitor.visit(this);
 	}
 
-	public ITreeElement getFunction() {
+	public ITreeElement getLeftElement() {
 		return leftElement;
+	}
+	
+	public ExpressionToken getFunction(){
+		return function;
 	}
 
 	public List<ITreeElement> getArgs() {

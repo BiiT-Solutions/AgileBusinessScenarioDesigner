@@ -5,9 +5,11 @@ import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.language.UserLocaleStringToDoubleConverter;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.ui.Alignment;
@@ -41,11 +43,16 @@ public class StringInputWindow extends AcceptCancelWindow {
 
 	public String getValue() {
 		if (expressionValue != null) {
-			expressionValue.validate();
-			if (getFormat().equals(AnswerFormat.NUMBER) && expressionValue.getConvertedValue() != null) {
-				return expressionValue.getConvertedValue().toString();
+			try {
+				expressionValue.validate();
+				if (getFormat().equals(AnswerFormat.NUMBER) && expressionValue.getConvertedValue() != null) {
+					return expressionValue.getConvertedValue().toString();
+				}
+				return expressionValue.getValue();
+			} catch (InvalidValueException e) {
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+				// Error shown to the user in the caller class
 			}
-			return expressionValue.getValue();
 		}
 		return null;
 	}
@@ -136,8 +143,9 @@ public class StringInputWindow extends AcceptCancelWindow {
 		switch (getFormat()) {
 		case DATE:
 			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getDatePromt());
-//			expressionValue.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getDateMask(),
-//					ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
+			// expressionValue.addValidator(new
+			// RegexpValidator(AbcdConfigurationReader.getInstance().getDateMask(),
+			// ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case NUMBER:
 			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getNumberPromt());
