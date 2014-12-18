@@ -11,6 +11,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateSubAnswerNameInSameQuestion;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.TreeObject;
@@ -26,7 +27,7 @@ public class AnswerProperties extends SecuredFormElementProperties<Answer> {
 
 	private Answer instance;
 	private TextField answerLabel;
-	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "[^<& ]+";
+	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "[^<&/ ]+";
 
 	public AnswerProperties() {
 		super(Answer.class);
@@ -39,6 +40,7 @@ public class AnswerProperties extends SecuredFormElementProperties<Answer> {
 		answerLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
 		answerLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
 		answerLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
+		answerLabel.addValidator(new ValidatorDuplicateSubAnswerNameInSameQuestion(instance));
 		answerLabel.addValidator(new ValidatorTreeObjectNameLength());
 		answerLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
 				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));

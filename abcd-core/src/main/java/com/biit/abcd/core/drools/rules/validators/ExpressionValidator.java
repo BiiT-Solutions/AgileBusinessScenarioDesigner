@@ -323,6 +323,11 @@ public class ExpressionValidator {
 
 			} else if (treeObject instanceof Answer) {
 				TreeObject parent = ((Answer) treeObject).getParent();
+				if(parent instanceof Answer){
+					// This is a subAnswer
+					TreeObject grandParent = ((Answer) parent).getParent();
+					return getQuestionValueType(new ExpressionValueTreeObjectReference(grandParent));
+				}
 				return getQuestionValueType(new ExpressionValueTreeObjectReference(parent));
 			}
 		}
