@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.components;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.TreeObject;
 import com.vaadin.ui.Component;
@@ -12,6 +13,7 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 
 	private static final long serialVersionUID = -4090805671578721633L;
 	private TreeObjectTable treeObjectTable;
+	private TableWithSearch tableWithSearch;
 
 	public SelectTreeObjectWindow(Form form, boolean multiselect) {
 		super();
@@ -28,20 +30,27 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 	private Component generateContent() {
 		VerticalLayout layout = new VerticalLayout();
 		// Create content
-		treeObjectTable = new TreeObjectTable();
+		treeObjectTable = new TableTreeObjectLabel();
 		treeObjectTable.setSelectable(true);
 		treeObjectTable.setSizeFull();
 		treeObjectTable.setRootElement(UserSessionHandler.getFormController().getForm());
 
-		layout.addComponent(treeObjectTable);
 		layout.setSizeFull();
 		layout.setMargin(true);
+		
+		tableWithSearch = new TableWithSearch(treeObjectTable, new FilterTreeObjectTableContainsNameLabel());
+		tableWithSearch.setSizeFull();
+		
+		layout.addComponent(tableWithSearch);
+		treeObjectTable.uncollapseAll();
+		
 		return layout;
 	}
 
 	public void select(TreeObject selected) {
-		if (treeObjectTable != null) {
-			treeObjectTable.setValue(selected);
+		collapseFrom(Category.class);
+		if (tableWithSearch != null) {
+			tableWithSearch.setValue(selected);
 		}
 	}
 
@@ -50,8 +59,8 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 	}
 
 	public void clearSelection() {
-		if (treeObjectTable != null) {
-			treeObjectTable.setValue(null);
+		if (tableWithSearch != null) {
+			tableWithSearch.setValue(null);
 		}
 	}
 

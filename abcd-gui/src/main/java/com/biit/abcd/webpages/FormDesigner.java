@@ -65,7 +65,8 @@ public class FormDesigner extends FormWebPageComponent {
 	private IFormDao formDao;
 
 	public FormDesigner() {
-		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet
+				.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
 		updateButtons(true);
 	}
@@ -74,7 +75,8 @@ public class FormDesigner extends FormWebPageComponent {
 	protected void initContent() {
 		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
-			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
+			AbcdLogger.warning(this.getClass().getName(),
+					"No Form selected, redirecting to Form Manager.");
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
 		}
@@ -93,16 +95,17 @@ public class FormDesigner extends FormWebPageComponent {
 
 		propertiesComponent = new FormDesignerPropertiesComponent();
 		propertiesComponent.setSizeFull();
-		propertiesComponent.addPropertyUpdateListener(new PropertieUpdateListener() {
-			@Override
-			public void propertyUpdate(Object element) {
-				if (tableIsGoingToDetach) {
-					return;
-				}
-				formTreeTable.updateItem((TreeObject) element);
-				updateUpperMenu(formTreeTable.getTreeObjectSelected());
-			}
-		});
+		propertiesComponent
+				.addPropertyUpdateListener(new PropertieUpdateListener() {
+					@Override
+					public void propertyUpdate(Object element) {
+						if (tableIsGoingToDetach) {
+							return;
+						}
+						formTreeTable.updateItem((TreeObject) element);
+						updateUpperMenu(formTreeTable.getTreeObjectSelected());
+					}
+				});
 
 		HorizontalLayout rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
@@ -121,7 +124,8 @@ public class FormDesigner extends FormWebPageComponent {
 		// form.
 		formTreeTable.setValue(null);
 		formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
-		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
+		formTreeTable.setRootElement(UserSessionHandler.getFormController()
+				.getForm());
 		formTreeTable.addValueChangeListener(treeTableValueChangeListener);
 
 		formTreeTable.addDetachListener(new DetachListener() {
@@ -130,14 +134,17 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void detach(DetachEvent event) {
 				tableIsGoingToDetach = true;
-				formTreeTable.removeValueChangeListener(treeTableValueChangeListener);
+				formTreeTable
+						.removeValueChangeListener(treeTableValueChangeListener);
 			}
 		});
 
 		if (UserSessionHandler.getFormController().getLastAccessTreeObject() != null) {
-			selectComponent(UserSessionHandler.getFormController().getLastAccessTreeObject());
+			selectComponent(UserSessionHandler.getFormController()
+					.getLastAccessTreeObject());
 		} else {
-			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
+			formTreeTable.setValue(UserSessionHandler.getFormController()
+					.getForm());
 		}
 		// Collapse the table at question level
 		formTreeTable.collapseFrom(Question.class);
@@ -242,14 +249,16 @@ public class FormDesigner extends FormWebPageComponent {
 				if (existTestScenariosLinked()) {
 					final AlertMessageWindow windowAccept = new AlertMessageWindow(
 							LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
-					windowAccept.addAcceptActionListener(new AcceptActionListener() {
-						@Override
-						public void acceptAction(AcceptCancelWindow window) {
-							removeSelected();
-							// testScenariosModified = true;
-							windowAccept.close();
-						}
-					});
+					windowAccept
+							.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(
+										AcceptCancelWindow window) {
+									removeSelected();
+									// testScenariosModified = true;
+									windowAccept.close();
+								}
+							});
 					windowAccept.showCentered();
 				} else {
 					// No remove the form.
@@ -257,13 +266,15 @@ public class FormDesigner extends FormWebPageComponent {
 					if ((selected != null) && (selected.getParent() != null)) {
 						final AlertMessageWindow windowAccept = new AlertMessageWindow(
 								LanguageCodes.WARNING_REMOVE_ELEMENT);
-						windowAccept.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								removeSelected();
-								windowAccept.close();
-							}
-						});
+						windowAccept
+								.addAcceptActionListener(new AcceptActionListener() {
+									@Override
+									public void acceptAction(
+											AcceptCancelWindow window) {
+										removeSelected();
+										windowAccept.close();
+									}
+								});
 						windowAccept.showCentered();
 					}
 				}
@@ -292,17 +303,20 @@ public class FormDesigner extends FormWebPageComponent {
 	}
 
 	protected void finishForm() {
-		AlertMessageWindow window = new AlertMessageWindow(LanguageCodes.TEXT_PROCEED_FORM_CLOSE);
+		AlertMessageWindow window = new AlertMessageWindow(
+				LanguageCodes.TEXT_PROCEED_FORM_CLOSE);
 		window.addAcceptActionListener(new AcceptActionListener() {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				try {
-					changeStatus(UserSessionHandler.getFormController().getForm(), FormWorkStatus.FINAL_DESIGN);
+					changeStatus(UserSessionHandler.getFormController()
+							.getForm(), FormWorkStatus.FINAL_DESIGN);
 					UiAccesser.releaseForm(UserSessionHandler.getUser());
 					ApplicationFrame.navigateTo(WebMap.getMainPage());
 					window.close();
 				} catch (Exception e) {
-					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+					MessageManager.showError(
+							LanguageCodes.ERROR_ACCESSING_DATABASE,
 							LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				}
 			}
@@ -310,76 +324,100 @@ public class FormDesigner extends FormWebPageComponent {
 		window.showCentered();
 	}
 
-	private void changeStatus(Form form, FormWorkStatus value) throws NotEnoughRightsToChangeStatusException {
+	private void changeStatus(Form form, FormWorkStatus value)
+			throws NotEnoughRightsToChangeStatusException {
 		try {
-			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					form.getOrganizationId(), AbcdActivity.FORM_STATUS_UPGRADE)) {
-				throw new NotEnoughRightsToChangeStatusException("User '"
-						+ UserSessionHandler.getUser().getEmailAddress()
-						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
+			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(
+					UserSessionHandler.getUser(), form.getOrganizationId(),
+					AbcdActivity.FORM_STATUS_UPGRADE)) {
+				throw new NotEnoughRightsToChangeStatusException(
+						"User '"
+								+ UserSessionHandler.getUser()
+										.getEmailAddress()
+								+ "' has not enought rights to change the status of form '"
+								+ form.getLabel() + "'!");
 			}
 
 			form.setStatus(value);
 			try {
-				formDao.updateFormStatus(form.getLabel(), form.getVersion(), form.getOrganizationId(), value);
+				formDao.updateFormStatus(form.getLabel(), form.getVersion(),
+						form.getOrganizationId(), value);
 			} catch (UnexpectedDatabaseException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+				MessageManager.showError(
+						LanguageCodes.ERROR_ACCESSING_DATABASE,
 						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 			}
 
 		} catch (NotEnoughRightsToChangeStatusException e) {
-			MessageManager.showWarning(LanguageCodes.ERROR_OPERATION_NOT_ALLOWED);
+			MessageManager
+					.showWarning(LanguageCodes.ERROR_OPERATION_NOT_ALLOWED);
 		}
 	}
 
 	/**
 	 * Opens move element window.
 	 */
-	protected void openMoveWindow() {
-		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(UserSessionHandler.getFormController()
-				.getForm(), false);
+	protected void openMoveWindow() {	
+		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(
+				UserSessionHandler.getFormController().getForm(), false);
 		moveWindow.showCentered();
+		moveWindow.select(formTreeTable.getTreeObjectSelected());
 		moveWindow.addAcceptActionListener(new AcceptActionListener() {
 
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
-				if (formTreeTable.getTreeObjectSelected() != null && moveWindow.getSelectedTreeObject() != null) {
+				if (formTreeTable.getTreeObjectSelected() != null
+						&& moveWindow.getSelectedTreeObject() != null) {
 					if (existTestScenariosLinked()) {
 						final AlertMessageWindow windowAccept = new AlertMessageWindow(
 								LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
-						windowAccept.addAcceptActionListener(new AcceptActionListener() {
-							@Override
-							public void acceptAction(AcceptCancelWindow window) {
-								try {
-									TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
-									TreeObject whereToMove = moveWindow.getSelectedTreeObject();
-									TreeObject.move(whatToMove, whereToMove);
-									window.close();
-									clearAndUpdateFormTable();
-									formTreeTable.setValue(whatToMove);
-									formTreeTable.collapseFrom(Question.class);
-								} catch (ChildrenNotFoundException | NotValidChildException e) {
-									MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
-											LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
-								}
-								// testScenariosModified = true;
-								windowAccept.close();
-								moveWindow.close();
-							}
-						});
+						windowAccept
+								.addAcceptActionListener(new AcceptActionListener() {
+									@Override
+									public void acceptAction(
+											AcceptCancelWindow window) {
+										try {
+											TreeObject whatToMove = formTreeTable
+													.getTreeObjectSelected();
+											TreeObject whereToMove = moveWindow
+													.getSelectedTreeObject();
+											TreeObject.move(whatToMove,
+													whereToMove);
+											window.close();
+											clearAndUpdateFormTable();
+											formTreeTable.setValue(whatToMove);
+											formTreeTable
+													.collapseFrom(Question.class);
+										} catch (ChildrenNotFoundException
+												| NotValidChildException e) {
+											MessageManager
+													.showError(
+															LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
+															LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
+										}
+										// testScenariosModified = true;
+										windowAccept.close();
+										moveWindow.close();
+									}
+								});
 						windowAccept.showCentered();
 					} else {
 						try {
-							TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
-							TreeObject whereToMove = moveWindow.getSelectedTreeObject();
+							TreeObject whatToMove = formTreeTable
+									.getTreeObjectSelected();
+							TreeObject whereToMove = moveWindow
+									.getSelectedTreeObject();
 							TreeObject.move(whatToMove, whereToMove);
 							window.close();
 							clearAndUpdateFormTable();
 							formTreeTable.setValue(whatToMove);
 							formTreeTable.collapseFrom(Question.class);
-						} catch (ChildrenNotFoundException | NotValidChildException e) {
-							MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
-									LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
+						} catch (ChildrenNotFoundException
+								| NotValidChildException e) {
+							MessageManager
+									.showError(
+											LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
+											LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
 						}
 					}
 				}
@@ -390,7 +428,8 @@ public class FormDesigner extends FormWebPageComponent {
 	private void clearAndUpdateFormTable() {
 		// Clear and update form
 		TreeObject currentSelection = formTreeTable.getTreeObjectSelected();
-		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
+		formTreeTable.setRootElement(UserSessionHandler.getFormController()
+				.getForm());
 		formTreeTable.select(currentSelection);
 	}
 
@@ -407,12 +446,14 @@ public class FormDesigner extends FormWebPageComponent {
 			setCreator(newCategory);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
-					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(
-							Category.class);
+					Category selectedCategory = (Category) formTreeTable
+							.getTreeObjectSelected()
+							.getAncestor(Category.class);
 					if (selectedCategory == null) {
 						getForm().addChild(newCategory);
 					} else {
-						int index = getForm().getChildren().indexOf(selectedCategory);
+						int index = getForm().getChildren().indexOf(
+								selectedCategory);
 						if (index >= 0) {
 							getForm().addChild(index + 1, newCategory);
 						} else {
@@ -423,13 +464,16 @@ public class FormDesigner extends FormWebPageComponent {
 					getForm().addChild(newCategory);
 				}
 				try {
-					newCategory.setName(newCategory.getDefaultName(getForm(), getForm().getChildren().size()));
+					newCategory.setName(newCategory.getDefaultName(getForm(),
+							getForm().getChildren().size()));
 				} catch (FieldTooLongException | CharacterNotAllowedException e) {
 					// Default name is never so long.
 				}
 				addCategoryToUI(newCategory);
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has created a " + newCategory.getClass() + " with 'Name: " + newCategory.getName() + "'.");
+				AbcdLogger.info(this.getClass().getName(), "User '"
+						+ UserSessionHandler.getUser().getEmailAddress()
+						+ "' has created a " + newCategory.getClass()
+						+ " with name: '" + newCategory.getName() + "'.");
 			} catch (NotValidChildException e) {
 				// Not possible.
 			}
@@ -443,10 +487,13 @@ public class FormDesigner extends FormWebPageComponent {
 	 */
 	private void addCategoryToUI(Category category) {
 		if (formTreeTable.getTreeObjectSelected() != null) {
-			Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(Category.class);
+			Category selectedCategory = (Category) formTreeTable
+					.getTreeObjectSelected().getAncestor(Category.class);
 			if (selectedCategory != null) {
-				TreeObject getLastElementOfCategory = selectedCategory.getLastElement();
-				formTreeTable.addItemAfter(getLastElementOfCategory, category, getForm());
+				TreeObject getLastElementOfCategory = selectedCategory
+						.getLastElement();
+				formTreeTable.addItemAfter(getLastElementOfCategory, category,
+						getForm());
 			} else {
 				formTreeTable.addItem(category, getForm());
 			}
@@ -464,21 +511,27 @@ public class FormDesigner extends FormWebPageComponent {
 			setCreator(newGroup);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
-					TreeObject container = formTreeTable.getTreeObjectSelected().getAncestor(Group.class);
+					TreeObject container = formTreeTable
+							.getTreeObjectSelected().getAncestor(Group.class);
 					if (container == null) {
-						container = formTreeTable.getTreeObjectSelected().getAncestor(Category.class);
+						container = formTreeTable.getTreeObjectSelected()
+								.getAncestor(Category.class);
 					}
 					if (container != null) {
 						try {
-							newGroup.setName(newGroup.getDefaultName(container, 1));
-						} catch (FieldTooLongException | CharacterNotAllowedException e) {
+							newGroup.setName(newGroup.getDefaultName(container,
+									1));
+						} catch (FieldTooLongException
+								| CharacterNotAllowedException e) {
 							// Default name is never so long.
 						}
 						addElementToUI(newGroup, container);
 						container.addChild(newGroup);
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-										+ newGroup.getClass() + " with 'Name: " + newGroup.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser()
+										.getEmailAddress() + "' has created a "
+								+ newGroup.getClass() + " with name '"
+								+ newGroup.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -504,22 +557,28 @@ public class FormDesigner extends FormWebPageComponent {
 						// If selected a question, we consider the same that
 						// selecting the question's parent.
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Question) {
-						parent = formTreeTable.getTreeObjectSelected().getParent();
+						parent = formTreeTable.getTreeObjectSelected()
+								.getParent();
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
-						parent = formTreeTable.getTreeObjectSelected().getParent().getParent();
+						parent = formTreeTable.getTreeObjectSelected()
+								.getParent().getParent();
 					}
 					if (parent != null) {
 						try {
-							newQuestion.setName(newQuestion.getDefaultName(parent, 1));
-						} catch (FieldTooLongException | CharacterNotAllowedException e) {
+							newQuestion.setName(newQuestion.getDefaultName(
+									parent, 1));
+						} catch (FieldTooLongException
+								| CharacterNotAllowedException e) {
 							// Default name is never so long.
 						}
 						addElementToUI(newQuestion, parent);
 						parent.addChild(newQuestion);
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-										+ newQuestion.getClass() + " with 'Name: " + newQuestion.getName()
-										+ " - Type: " + newQuestion.getAnswerType() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser()
+										.getEmailAddress() + "' has created a "
+								+ newQuestion.getClass() + " with name '"
+								+ newQuestion.getName() + " - Type: "
+								+ newQuestion.getAnswerType() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -543,24 +602,31 @@ public class FormDesigner extends FormWebPageComponent {
 						// If selected an answer, we consider the same that
 						// selecting the question.
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
-						if (((Answer) formTreeTable.getTreeObjectSelected()).isSubanswer()) {
-							parent = formTreeTable.getTreeObjectSelected().getParent().getParent();
+						if (((Answer) formTreeTable.getTreeObjectSelected())
+								.isSubanswer()) {
+							parent = formTreeTable.getTreeObjectSelected()
+									.getParent().getParent();
 						} else {
-							parent = formTreeTable.getTreeObjectSelected().getParent();
+							parent = formTreeTable.getTreeObjectSelected()
+									.getParent();
 						}
 					}
 					if (parent != null) {
 						try {
-							newAnswer.setName(newAnswer.getDefaultName(parent, 1));
-						} catch (FieldTooLongException | CharacterNotAllowedException e) {
+							newAnswer.setName(newAnswer.getDefaultName(parent,
+									1));
+						} catch (FieldTooLongException
+								| CharacterNotAllowedException e) {
 							// Default name is never so long.
 						}
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-										+ newAnswer.getClass() + " with 'Name: " + newAnswer.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser()
+										.getEmailAddress() + "' has created a "
+								+ newAnswer.getClass() + " with name '"
+								+ newAnswer.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -579,24 +645,33 @@ public class FormDesigner extends FormWebPageComponent {
 					TreeObject parent = formTreeTable.getTreeObjectSelected();
 					if (parent != null) {
 						if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
-							if (((Answer) formTreeTable.getTreeObjectSelected()).isSubanswer()) {
-								parent = formTreeTable.getTreeObjectSelected().getParent();
+							if (((Answer) formTreeTable.getTreeObjectSelected())
+									.isSubanswer()) {
+								parent = formTreeTable.getTreeObjectSelected()
+										.getParent();
 							} else {
 								parent = formTreeTable.getTreeObjectSelected();
 							}
 						}
 						try {
-							//Default name must be unique in questions
-							newAnswer.setName(newAnswer.getDefaultName(parent.getParent(), 1));
-						} catch (FieldTooLongException | CharacterNotAllowedException e) {
+							// Default name must be unique in questions
+							newAnswer.setName(newAnswer.getDefaultName(
+									parent.getParent(), 1));
+						} catch (FieldTooLongException
+								| CharacterNotAllowedException e) {
 							// Default name is never so long.
 						}
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has created a subanswer "
-								+ newAnswer.getClass() + " with 'Name: " + newAnswer.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(),
+								"User '"
+										+ UserSessionHandler.getUser()
+												.getEmailAddress()
+										+ "' has created a subanswer "
+										+ newAnswer.getClass()
+										+ " with name '" + newAnswer.getName()
+										+ "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -627,15 +702,20 @@ public class FormDesigner extends FormWebPageComponent {
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				MessageManager
+						.showError(
+								LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
+								LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			} catch (ConstraintViolationException cve) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				MessageManager
+						.showError(
+								LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
+								LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), cve);
 			} catch (UnexpectedDatabaseException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+				MessageManager.showError(
+						LanguageCodes.ERROR_ACCESSING_DATABASE,
 						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
@@ -675,20 +755,26 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveUp() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if ((selected != null) && (selected.getParent() != null)
+			if ((selected != null)
+					&& (selected.getParent() != null)
 					&& (selected.getParent().getChildren().indexOf(selected) > 0)) {
 				try {
-					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
-							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
+					selected.getParent().switchChildren(
+							selected.getParent().getChildren()
+									.indexOf(selected),
+							selected.getParent().getChildren()
+									.indexOf(selected) - 1,
+							UserSessionHandler.getUser());
 					// Refresh the GUI.
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
 
-					AbcdLogger.info(
-							this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved up a "
-									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress()
+							+ "' has moved up a " + selected.getClass()
+							+ "in the Form, with 'Name: " + selected.getName()
+							+ "'.");
 
 					return true;
 				} catch (ChildrenNotFoundException e) {
@@ -709,19 +795,25 @@ public class FormDesigner extends FormWebPageComponent {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
 			if ((selected != null)
 					&& (selected.getParent() != null)
-					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren()
-							.size() - 1))) {
+					&& (selected.getParent().getChildren().indexOf(selected) < (selected
+							.getParent().getChildren().size() - 1))) {
 				try {
-					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
-							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
+					selected.getParent().switchChildren(
+							selected.getParent().getChildren()
+									.indexOf(selected),
+							selected.getParent().getChildren()
+									.indexOf(selected) + 1,
+							UserSessionHandler.getUser());
 					// Refresh the GUI.
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
 
-					AbcdLogger.info(this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved down a "
-									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress()
+							+ "' has moved down a " + selected.getClass()
+							+ "in the Form, with 'Name: " + selected.getName()
+							+ "'.");
 
 					return true;
 				} catch (ChildrenNotFoundException e) {
@@ -739,13 +831,20 @@ public class FormDesigner extends FormWebPageComponent {
 				try {
 					selected.remove();
 					removeElementFromUI(selected);
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + selected.getClass()
-							+ " from the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(
+							this.getClass().getName(),
+							"User '"
+									+ UserSessionHandler.getUser()
+											.getEmailAddress()
+									+ "' has removed a " + selected.getClass()
+									+ " from the Form, with 'Name: "
+									+ selected.getName() + "'.");
 				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
-					MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+					MessageManager
+							.showError(
+									LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+									LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
 
 				}
 			}
@@ -756,7 +855,8 @@ public class FormDesigner extends FormWebPageComponent {
 		for (TreeObject child : element.getChildren()) {
 			removeElementFromUI(child);
 		}
-		if ((element.getParent() != null) && element.getParent().getChildren().isEmpty()) {
+		if ((element.getParent() != null)
+				&& element.getParent().getChildren().isEmpty()) {
 			// formTreeTable.setChildrenAllowed(element.getParent(), false);
 		}
 		formTreeTable.removeItem(element);
@@ -768,7 +868,8 @@ public class FormDesigner extends FormWebPageComponent {
 		@Override
 		public void valueChange(ValueChangeEvent event) {
 			if (formTreeTable.getTreeObjectSelected() != null) {
-				UserSessionHandler.getFormController().setLastAccessTreeObject(formTreeTable.getTreeObjectSelected());
+				UserSessionHandler.getFormController().setLastAccessTreeObject(
+						formTreeTable.getTreeObjectSelected());
 			}
 			updateUpperMenu(formTreeTable.getTreeObjectSelected());
 			updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
@@ -785,8 +886,9 @@ public class FormDesigner extends FormWebPageComponent {
 	}
 
 	private boolean existTestScenariosLinked() {
-		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
-				UserSessionHandler.getFormController().getForm());
+		List<TestScenario> testScenarios = UserSessionHandler
+				.getTestScenariosController().getTestScenarios(
+						UserSessionHandler.getFormController().getForm());
 		return !testScenarios.isEmpty();
 	}
 }
