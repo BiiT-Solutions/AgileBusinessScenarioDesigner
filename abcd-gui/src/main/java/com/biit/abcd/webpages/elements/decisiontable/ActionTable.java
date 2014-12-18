@@ -17,7 +17,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Table;
 
-public class NewActionTable extends Table {
+public class ActionTable extends Table {
 
 	private static final long serialVersionUID = -5400952496906256671L;
 	private CellRowSelector cellRowSelector;
@@ -29,7 +29,7 @@ public class NewActionTable extends Table {
 		ACTION
 	};
 
-	public NewActionTable() {
+	public ActionTable() {
 		super();
 
 		editActionListeners = new ArrayList<EditActionListener>();

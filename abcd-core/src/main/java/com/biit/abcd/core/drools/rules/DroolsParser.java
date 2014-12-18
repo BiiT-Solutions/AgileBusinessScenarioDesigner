@@ -1257,21 +1257,6 @@ public class DroolsParser {
 		return null;
 	}
 
-	private static String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
-			AvailableOperator operator, String droolsValue) throws NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
-		String rule = "";
-		// Check if the reference exists in the rule, if not, it creates
-		// a new reference
-		rule += checkVariableAssignation(leftQuestion);
-		rule += "\t$" + leftQuestion.getUniqueNameReadable() + " : SubmittedQuestion("
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion)
-				+ "', DateUtils.returnYearsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(leftQuestion)
-				+ "')) " + operator.getValue() + droolsValue + ") from $" + leftReferenceParent.getUniqueNameReadable()
-				+ ".getChildren(IQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
-		return rule;
-	}
-
 	private static String questionGeGtLeLtAnswer(List<Expression> conditions, AvailableOperator operator)
 			throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
