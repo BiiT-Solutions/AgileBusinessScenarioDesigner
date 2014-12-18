@@ -38,6 +38,10 @@ public class AssignExpression implements ITreeElement {
 	public ITreeElement getRightElement() {
 		return this.rightElement;
 	}
+	
+	public Expression getLeftExpressionChain() {
+		return this.expression;
+	}
 
 	@Override
 	public ExpressionChain getExpressionChain() {

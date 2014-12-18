@@ -58,7 +58,8 @@ public class ExpressionValidator {
 			InvalidExpressionException, NotCompatibleTypeException {
 		if (expressionChain != null) {
 			ExpressionChain cleanedExpression = removeNewLineSymbols(expressionChain);
-			// If there is a NOT expression, we have to add the remaining parenthesis
+			// If there is a NOT expression, we have to add the remaining
+			// parenthesis
 			RulesUtils.fixNotConditions(cleanedExpression);
 			ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
 			rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
@@ -85,7 +86,8 @@ public class ExpressionValidator {
 		if (expressionChain != null) {
 			ValueType leftVariableFormat = null;
 			ExpressionChain cleanedExpression = removeNewLineSymbols(expressionChain);
-			// If there is a NOT expression, we have to add the remaining parenthesis
+			// If there is a NOT expression, we have to add the remaining
+			// parenthesis
 			RulesUtils.fixNotConditions(cleanedExpression);
 			ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
 			rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
@@ -425,8 +427,8 @@ public class ExpressionValidator {
 	}
 
 	/**
-	 * Returns the answer format of the expression value inside the expression
-	 * chain
+	 * Returns the answer format of the expression value inside a expression
+	 * chain of one element
 	 * 
 	 * @param expressionChain
 	 * @return
@@ -435,6 +437,24 @@ public class ExpressionValidator {
 		int expressionChainSize = expressionChain.getExpressions().size();
 		if ((expressionChainSize == 1) && (expressionChain.getExpressions().get(0) instanceof ExpressionValue<?>)) {
 			return getExpressionValueType((ExpressionValue<?>) expressionChain.getExpressions().get(0));
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the answer format of the expression value inside a expression
+	 * chain
+	 * 
+	 * @param expressionChain
+	 * @return
+	 */
+	public static ValueType getFirstValueInsideExpressionChain(ExpressionChain expressionChain) {
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionValue<?>) {
+				return getExpressionValueType((ExpressionValue<?>) expressionChain.getExpressions().get(0));
+			} else if (expression instanceof ExpressionChain) {
+				return getFirstValueInsideExpressionChain((ExpressionChain) expression);
+			}
 		}
 		return null;
 	}
