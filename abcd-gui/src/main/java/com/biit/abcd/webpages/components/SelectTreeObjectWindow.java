@@ -1,10 +1,10 @@
 package com.biit.abcd.webpages.components;
 
-import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.form.BaseForm;
 import com.biit.form.TreeObject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
@@ -15,7 +15,7 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 	private TreeObjectTable treeObjectTable;
 	private TableWithSearch tableWithSearch;
 
-	public SelectTreeObjectWindow(Form form, boolean multiselect) {
+	public SelectTreeObjectWindow(Form form, boolean multiselect, Class<?>... loadFilter) {
 		super();
 		setWidth("50%");
 		setHeight("75%");
@@ -24,16 +24,17 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 		cancelButton.setDescription(ServerTranslate.translate(LanguageCodes.CLOSE_BUTTON_TOOLTIP));
 		setCaption(ServerTranslate.translate(LanguageCodes.SELECT_TREE_OBJECT));
 		setModal(true);
-		setContent(generateContent());
+		setContent(generateContent(form, loadFilter ));
 	}
 
-	private Component generateContent() {
+	private Component generateContent(BaseForm form, Class<?>... loadFilter) {
 		VerticalLayout layout = new VerticalLayout();
 		// Create content
 		treeObjectTable = new TableTreeObjectLabel();
 		treeObjectTable.setSelectable(true);
 		treeObjectTable.setSizeFull();
-		treeObjectTable.setRootElement(UserSessionHandler.getFormController().getForm());
+		//treeObjectTable.setRootElement(form);
+		treeObjectTable.loadTreeObject(form, null, loadFilter);		
 
 		layout.setSizeFull();
 		layout.setMargin(true);
@@ -49,8 +50,8 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 
 	public void select(TreeObject selected) {
 		collapseFrom(Category.class);
-		if (tableWithSearch != null) {
-			tableWithSearch.setValue(selected);
+		if (treeObjectTable != null) {
+			treeObjectTable.setValue(selected);
 		}
 	}
 
@@ -59,8 +60,8 @@ public class SelectTreeObjectWindow extends AcceptCancelWindow {
 	}
 
 	public void clearSelection() {
-		if (tableWithSearch != null) {
-			tableWithSearch.setValue(null);
+		if (treeObjectTable != null) {
+			treeObjectTable.setValue(null);
 		}
 	}
 

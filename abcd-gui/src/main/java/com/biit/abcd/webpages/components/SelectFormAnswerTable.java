@@ -26,10 +26,10 @@ public class SelectFormAnswerTable extends TreeObjectTable {
 	 * @param element
 	 */
 	@Override
-	public void addItem(TreeObject element, TreeObject parent) {
+	public void addItem(TreeObject element, TreeObject parent, boolean select) {
 		// Only add answers.
 		if ((element instanceof Answer)) {
-			super.addItem(element, parent);
+			super.addItem(element, parent, select);
 		}
 	}
 }

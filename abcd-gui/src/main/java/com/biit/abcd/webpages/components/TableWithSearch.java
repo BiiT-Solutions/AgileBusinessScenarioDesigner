@@ -12,24 +12,24 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.TreeTable;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Custom component that takes a table and a filter with IFilterContainsText as
- * interface and creates a visualization that filters the table when the input
- * in the search field changes.
+ * Custom component that takes a table and a filter with IFilterContainsText as interface and creates a visualization
+ * that filters the table when the input in the search field changes.
  * 
  * 
  */
 public class TableWithSearch extends CustomComponent {
 	private static final long serialVersionUID = 8514074241552385601L;
-
 	private static final String FULL = "100%";
 
 	private final Table table;
 	private final IFilterContainsText filterContainText;
 	private VerticalLayout rootLayout;
 	private TextField searchField;
+	private int lastTextSize = 0;
 
 	public TableWithSearch(Table table, IFilterContainsText filterContainText) {
 		this.table = table;
@@ -56,6 +56,14 @@ public class TableWithSearch extends CustomComponent {
 				container.removeAllContainerFilters();
 				filterContainText.setFilterText(text);
 				container.addContainerFilter(filterContainText);
+				if (text.length() > 0 && lastTextSize == 0) {
+					if (table instanceof TreeTable) {
+						lastTextSize = text.length();
+						for (Object row : table.getItemIds()) {
+							((TreeTable) table).setCollapsed(row, false);
+						}
+					}
+				}
 			}
 		});
 
@@ -101,8 +109,8 @@ public class TableWithSearch extends CustomComponent {
 	public void focus() {
 		searchField.focus();
 	}
-	
-	public void setValue(TreeObject value){
+
+	public void setValue(TreeObject value) {
 		table.setValue(value);
 	}
 }

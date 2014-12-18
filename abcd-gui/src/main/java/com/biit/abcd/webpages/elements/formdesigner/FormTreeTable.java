@@ -28,8 +28,8 @@ public class FormTreeTable extends TreeObjectTable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void addItem(TreeObject element, TreeObject parent) {
-		super.addItem(element, parent);
+	public void addItem(TreeObject element, TreeObject parent, boolean select) {
+		super.addItem(element, parent, select);
 		if (element != null) {
 			Set<Rule> assignedRules = UserSessionHandler.getFormController().getRulesAssignedToTreeObject(element);
 			Set<ExpressionChain> expressionChains = UserSessionHandler.getFormController()

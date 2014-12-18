@@ -59,9 +59,13 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		addIconButton(newAnswerButton);
 
 		// Add new Subanswer
-		newSubanswerButton = new IconButton(LanguageCodes.TREE_DESIGNER_SUBANSWER_ADD, ThemeIcon.TREE_DESIGNER_ADD_SUBANSWER,
-				LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
+		newSubanswerButton = new IconButton(LanguageCodes.TREE_DESIGNER_SUBANSWER_ADD,
+				ThemeIcon.TREE_DESIGNER_ADD_SUBANSWER, LanguageCodes.BOTTOM_MENU_FORM_MANAGER);
 		addIconButton(newSubanswerButton);
+
+		// Move to
+		moveButton = new IconButton(LanguageCodes.MENU_MOVE_TO, ThemeIcon.MOVE_TO, LanguageCodes.MENU_MOVE_TO);
+		addIconButton(moveButton);
 
 		// Move up.
 		moveUpButton = new IconButton(LanguageCodes.MENU_MOVE_UP, ThemeIcon.MOVE_UP, LanguageCodes.MENU_MOVE_UP);
@@ -70,10 +74,6 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		// Move down.
 		moveDownButton = new IconButton(LanguageCodes.MENU_MOVE_DOWN, ThemeIcon.MOVE_DOWN, LanguageCodes.MENU_MOVE_DOWN);
 		addIconButton(moveDownButton);
-
-		// Move to
-		moveButton = new IconButton(LanguageCodes.MENU_MOVE_TO, ThemeIcon.MOVE_TO, LanguageCodes.MENU_MOVE_TO);
-		addIconButton(moveButton);
 
 		// Remove
 		removeButton = new IconButton(LanguageCodes.TREE_DESIGNER_ELEMENT_REMOVE, ThemeIcon.DELETE,
@@ -172,7 +172,7 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			newAnswerButton.addClickListener(listener);
 		}
 	}
-	
+
 	public void addNewSubanswerButtonClickListener(Button.ClickListener listener) {
 		if (!getDisabledButtons().contains(newSubanswerButton)) {
 			newSubanswerButton.addClickListener(listener);

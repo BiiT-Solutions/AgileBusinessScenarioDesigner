@@ -25,7 +25,7 @@ public class TestScenarioTable extends TreeObjectTable {
 	public void addItem(TreeObject element, TreeObject parent) {
 		// Not representing the groups, questions and answers
 		if (element != null && !(element instanceof BaseRepeatableGroup) && !(element instanceof BaseQuestion)) {
-			super.addItem(element, parent);
+			super.addItem(element, parent, false);
 		}
 	}
 

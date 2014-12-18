@@ -36,16 +36,15 @@ public class FormQuestionTable extends TreeObjectTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItem(Object)} for form members. in this table answers
-	 * are not shown.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members. in
+	 * this table answers are not shown.
 	 * 
 	 * @param element
 	 */
 	@Override
-	public void addItem(TreeObject element, TreeObject parent) {
+	public void addItem(TreeObject element, TreeObject parent, boolean select) {
 		if (!(element instanceof Answer)) {
-			super.addItem(element, parent);
+			super.addItem(element, parent, select);
 		}
 	}
 

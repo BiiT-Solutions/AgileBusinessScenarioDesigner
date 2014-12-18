@@ -39,8 +39,8 @@ public class TreeObjectTable extends TreeTable {
 	private static final long serialVersionUID = -6949123334668973540L;;
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't
-	 * be defined, then raises a {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
+	 * {@link UnsupportedOperationException}
 	 * 
 	 * @param element
 	 * @return
@@ -53,20 +53,18 @@ public class TreeObjectTable extends TreeTable {
 			name = element.getName();
 		}
 		if (name == null) {
-			throw new UnsupportedOperationException(TreeObject.class.getName()
-					+ " subtype unknown.");
+			throw new UnsupportedOperationException(TreeObject.class.getName() + " subtype unknown.");
 		}
 		return name;
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
 	@SuppressWarnings("unchecked")
-	public void addItem(TreeObject element, TreeObject parent) {
+	public void addItem(TreeObject element, TreeObject parent, boolean selectRow) {
 		if (element != null) {
 			Object treeObjectIcon = createElementWithIcon(element);
 			Item item = addItem((Object) element);
@@ -75,9 +73,10 @@ public class TreeObjectTable extends TreeTable {
 				setParent(element, parent);
 				setCollapsed(parent, false);
 			}
-			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME)
-					.setValue(treeObjectIcon);
-			setValue(element);
+			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
+			if (selectRow) {
+				setValue(element);
+			}
 			setChildrenAllowed(element, false);
 			// If it is a new element, still has no parent. Uncollapse the
 			// futureS parent.
@@ -89,14 +88,13 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of
-	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
+	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
+	 * members.
 	 * 
 	 * @param element
 	 */
 	@SuppressWarnings("unchecked")
-	public void addItemAfter(Object previousItemId, TreeObject element,
-			TreeObject parent) {
+	public void addItemAfter(Object previousItemId, TreeObject element, TreeObject parent) {
 		if (element != null) {
 			Object treeObjectIcon = createElementWithIcon(element);
 			Item item = addItemAfter(previousItemId, (Object) element);
@@ -105,8 +103,7 @@ public class TreeObjectTable extends TreeTable {
 				setParent(element, parent);
 				setCollapsed(parent, false);
 			}
-			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME)
-					.setValue(treeObjectIcon);
+			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
 			setChildrenAllowed(element, false);
 			// If it is a new element, still has no parent. Uncollapse the
 			// futureS parent.
@@ -119,8 +116,7 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels. The
-	 * level is specified by a class.
+	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
 	 * 
 	 * @param collapseFrom
 	 */
@@ -129,8 +125,7 @@ public class TreeObjectTable extends TreeTable {
 			if (item.getClass() == collapseFrom) {
 				this.setCollapsed(item, true);
 			} else {
-				if (this.getParent(item) != null
-						&& this.isCollapsed(this.getParent(item))) {
+				if (this.getParent(item) != null && this.isCollapsed(this.getParent(item))) {
 					this.setCollapsed(item, true);
 				}
 			}
@@ -173,11 +168,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	protected void initContainerProperties() {
-		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME,
-				Component.class, null,
-				ServerTranslate
-						.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME),
-				null, Align.LEFT);
+		addContainerProperty(TreeObjectTableProperties.ELEMENT_NAME, Component.class, null,
+				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
 		setCellStyleGenerator(new TreeObjectTableCellStyleGenerator());
 	}
 
@@ -186,7 +178,7 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	public void loadTreeObject(TreeObject element, TreeObject parent) {
-		addItem(element, parent);
+		addItem(element, parent, false);
 
 		List<TreeObject> children = element.getChildren();
 		for (TreeObject child : children) {
@@ -199,13 +191,11 @@ public class TreeObjectTable extends TreeTable {
 	 * 
 	 * @param element
 	 */
-	private void removeChildren(TreeObject element)
-			throws DependencyExistException {
+	private void removeChildren(TreeObject element) throws DependencyExistException {
 		if (element instanceof Question) {
 			if (((Question) element).getAnswerType().equals(AnswerType.INPUT)) {
 				try {
-					List<Object> children = new ArrayList<Object>(
-							getChildren(element));
+					List<Object> children = new ArrayList<Object>(getChildren(element));
 					for (Object child : children) {
 						((TreeObject) child).remove();
 						removeItem(child);
@@ -246,18 +236,15 @@ public class TreeObjectTable extends TreeTable {
 			try {
 				removeChildren(element);
 			} catch (DependencyExistException e) {
-				MessageManager
-						.showWarning(
-								LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-								LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
+				MessageManager.showWarning(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+						LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
 				// Impossible to remove children.
 				return;
 			}
 
 			// Update
-			ComponentCellTreeObject cell = (ComponentCellTreeObject) item
-					.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME)
-					.getValue();
+			ComponentCellTreeObject cell = (ComponentCellTreeObject) item.getItemProperty(
+					TreeObjectTableProperties.ELEMENT_NAME).getValue();
 			cell.update(element);
 		}
 	}
@@ -293,8 +280,45 @@ public class TreeObjectTable extends TreeTable {
 	@SuppressWarnings("unchecked")
 	protected void setValuesToItem(Item item, TreeObject element) {
 		Object treeObjectIcon = createElementWithIcon(element);
-		item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(
-				treeObjectIcon);
+		item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
+	}
+
+	/**
+	 * Loads a tree object structure recursively. At the end of the process selects the root element inserted. element.
+	 * It can also be specified an array of filterClasses. If this is not specified, then every kind of element is
+	 * allowed. Else only the elements in the hierarchy whose path is made of valid elements.
+	 * 
+	 * @param element
+	 * @param parent
+	 */
+	public void loadTreeObject(TreeObject element, TreeObject parent, Class<?>... filterClases) {
+		loadTreeObject(element, parent, true, filterClases);
+	}
+
+	public void loadTreeObject(TreeObject element, TreeObject parent, boolean select, Class<?>... filterClases) {
+		if (element != null) {
+			if (isAdmitedInFilter(element, filterClases)) {
+				addItem(element, parent, select);
+
+				List<TreeObject> children = element.getChildren();
+				for (TreeObject child : children) {
+					loadTreeObject(child, element, false, filterClases);
+				}
+			}
+		}
+	}
+
+	private boolean isAdmitedInFilter(TreeObject element, Class<?>... filterClases) {
+		if (filterClases == null || filterClases.length == 0) {
+			// No filter, then everything is admited.
+			return true;
+		}
+		for (Class<?> filterClass : filterClases) {
+			if (filterClass.isInstance(element)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
