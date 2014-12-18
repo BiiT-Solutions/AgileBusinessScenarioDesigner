@@ -19,6 +19,8 @@ public class ValidationReportWindow extends AcceptCancelWindow {
 	public ValidationReportWindow(LanguageCodes caption, List<String> modifications) {
 		super();
 		setModal(true);
+		setResizable(false);
+		setClosable(false);
 		setWidth("700px");
 		setHeight("400px");
 		setCaption(ServerTranslate.translate(caption));

@@ -53,6 +53,7 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 			}
 
 		case "POSTAL_CODE":
+			return getAnswer().toUpperCase();
 		case "TEXT":
 			return getAnswer();
 

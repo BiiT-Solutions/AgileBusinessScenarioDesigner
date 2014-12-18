@@ -120,6 +120,11 @@ public class DroolsParser {
 					} else if (value instanceof ExpressionValueNumber) {
 						inValuesString += value.getValue() + ", ";
 						functionValues.add(value.getValue().toString());
+						
+					} else if (value instanceof ExpressionValuePostalCode) {
+						inValuesString += "'" + value.getValue().toString().toUpperCase() + "', ";
+						functionValues.add("'" + value.getValue().toString().toUpperCase() + "'");
+					
 					} else {
 						inValuesString += "'" + value.getValue() + "', ";
 						functionValues.add("'" + value.getValue() + "'");
@@ -491,7 +496,7 @@ public class DroolsParser {
 			throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			DateComparisonNotPossibleException {
-		String droolsConditions = "";
+		StringBuilder droolsConditions = new StringBuilder();
 
 		List<Expression> operatorLeft = ((ExpressionChain) expressions.get(0)).getExpressions();
 		Expression operator = expressions.get(1);
@@ -503,23 +508,24 @@ public class DroolsParser {
 			TreeObject treeObject2 = ((ExpressionValueTreeObjectReference) operatorRight.get(0)).getReference();
 			// Question == Answer
 			if ((treeObject1 instanceof Question) && (treeObject2 instanceof Answer)) {
-				droolsConditions += questionAnswerEqualsCondition((Question) treeObject1, (Answer) treeObject2,
-						availableOperator);
+				droolsConditions.append(questionAnswerEqualsCondition((Question) treeObject1, (Answer) treeObject2,
+						availableOperator));
 			}
 		}
 		// TreeObject.score == Value
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
 				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueNumber)) {
 
-			droolsConditions += treeObjectScoreLogicOperatorValueExpression(
+			droolsConditions.append(treeObjectScoreLogicOperatorValueExpression(
 					(ExpressionValueCustomVariable) operatorLeft.get(0), (ExpressionOperatorLogic) expressions.get(1),
-					(ExpressionValueNumber) operatorRight.get(0));
+					(ExpressionValueNumber) operatorRight.get(0)));
 		}
 		// TreeObject.score == String
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
 				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueString)) {
-			droolsConditions += treeObjectScoreEqualsValueString((ExpressionValueCustomVariable) operatorLeft.get(0),
-					(ExpressionOperatorLogic) expressions.get(1), (ExpressionValueString) operatorRight.get(0));
+			droolsConditions.append(treeObjectScoreEqualsValueString(
+					(ExpressionValueCustomVariable) operatorLeft.get(0), (ExpressionOperatorLogic) expressions.get(1),
+					(ExpressionValueString) operatorRight.get(0)));
 		}
 		// Question INPUT
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
@@ -529,8 +535,9 @@ public class DroolsParser {
 			TreeObject leftTreeObject = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
 			if (leftTreeObject instanceof Question) {
 				// Create the conditions for parents hierarchy
-				droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftTreeObject.getParent());
+				droolsConditions.append(SimpleConditionsGenerator.getTreeObjectConditions(leftTreeObject.getParent()));
 				Question question = ((Question) leftTreeObject);
+				String questionCondition = "";
 				switch (question.getAnswerType()) {
 				case RADIO:
 				case MULTI_CHECKBOX:
@@ -538,29 +545,47 @@ public class DroolsParser {
 					// == answer
 					break;
 				case INPUT:
+					// Common part of NUMBER, POSTALCODE, TEXT condition
+					questionCondition += "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+							+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
+							+ getTreeObjectAnswerType(question) + "') " + operator.getValue();
 					switch (question.getAnswerFormat()) {
 					case NUMBER:
+						questionCondition += " " + value + " ) from $" + question.getParent().getUniqueNameReadable()
+								+ ".getChildren(IQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(question)
+								+ "\n";
+						break;
 					case POSTAL_CODE:
+						// Postal code comparisons should be in ALWAYS in upper
+						// case
+						questionCondition += " '" + value.toString().toUpperCase() + "' ) from $"
+								+ question.getParent().getUniqueNameReadable() + ".getChildren(IQuestion.class)"
+								+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
+						break;
 					case TEXT:
-						droolsConditions += "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
-								+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
-								+ getTreeObjectAnswerType(question) + "') " + operator.getValue()
-								+ (question.getAnswerFormat().equals(AnswerFormat.NUMBER) ? " " : " '") + value
-								+ (question.getAnswerFormat().equals(AnswerFormat.NUMBER) ? " " : "' ") + ") from $"
+						questionCondition += " '" + value.toString() + "' ) from $"
 								+ question.getParent().getUniqueNameReadable() + ".getChildren(IQuestion.class)"
 								+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case DATE:
+						// Clean the previous common value
+						questionCondition = "";
 						if (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit() != null) {
+							// Beginning common part of the DATE condition
+							questionCondition += "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+									+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', ";
+
 							switch (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit()) {
 							case YEARS:
 								if (value instanceof Timestamp) {
 									throw new DateComparisonNotPossibleException("Years and Date types incompatible",
 											new ExpressionChain(expressions));
 								} else {
-									droolsConditions += questionDateYearsOperatorValueNumber(leftTreeObject,
-											((ExpressionValueNumber) operatorRight.get(0)).getValue(),
-											((ExpressionOperatorLogic) operator).getValue());
+									questionCondition += "DateUtils.returnYearsDistanceFromDate(getAnswer('"
+											+ getTreeObjectAnswerType(question) + "')) "
+											+ ((ExpressionOperatorLogic) operator).getValue() + " "
+											+ ((ExpressionValueNumber) operatorRight.get(0)).getValue().intValue()
+											+ ") ";
 								}
 								break;
 							case MONTHS:
@@ -568,9 +593,11 @@ public class DroolsParser {
 									throw new DateComparisonNotPossibleException("Months and Date types incompatible",
 											new ExpressionChain(expressions));
 								} else {
-									droolsConditions += questionDateMonthsOperatorValueNumber(leftTreeObject,
-											((ExpressionValueNumber) operatorRight.get(0)).getValue(),
-											((ExpressionOperatorLogic) operator).getValue());
+									questionCondition += "DateUtils.returnMonthsDistanceFromDate(getAnswer('"
+											+ getTreeObjectAnswerType(question) + "')) "
+											+ ((ExpressionOperatorLogic) operator).getValue() + " "
+											+ ((ExpressionValueNumber) operatorRight.get(0)).getValue().intValue()
+											+ ") ";
 								}
 								break;
 							case DAYS:
@@ -578,21 +605,18 @@ public class DroolsParser {
 									throw new DateComparisonNotPossibleException("Days and Date types incompatible",
 											new ExpressionChain(expressions));
 								} else {
-									droolsConditions += questionDateDaysOperatorValueNumber(leftTreeObject,
-											((ExpressionValueNumber) operatorRight.get(0)).getValue(),
-											((ExpressionOperatorLogic) operator).getValue());
+									questionCondition += "DateUtils.returnDaysDistanceFromDate(getAnswer('"
+											+ getTreeObjectAnswerType(question) + "')) "
+											+ ((ExpressionOperatorLogic) operator).getValue() + " "
+											+ ((ExpressionValueNumber) operatorRight.get(0)).getValue().intValue()
+											+ ") ";
 								}
 								break;
 							case DATE:
 								if (value instanceof Timestamp) {
-									droolsConditions += "\t$" + question.getUniqueNameReadable()
-											+ " : SubmittedQuestion("
-											+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
-											+ "', getAnswer('" + getTreeObjectAnswerType(question) + "') "
+									questionCondition += "getAnswer('" + getTreeObjectAnswerType(question) + "') "
 											+ operator.getValue() + " (new Date(" + ((Timestamp) value).getTime()
-											+ ")) ) from $" + question.getParent().getUniqueNameReadable()
-											+ ".getChildren(IQuestion.class)"
-											+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
+											+ ")) ) ";
 								} else {
 									throw new DateComparisonNotPossibleException(
 											"The value to compare with the Date is not a Timestamp",
@@ -600,14 +624,18 @@ public class DroolsParser {
 								}
 								break;
 							}
+							// Ending common part of the DATE condition
+							questionCondition += "from $" + question.getParent().getUniqueNameReadable()
+									+ ".getChildren(IQuestion.class)\n";
 						}
 						break;
 					}
 					break;
 				}
+				droolsConditions.append(questionCondition);
 			}
 		}
-		return droolsConditions;
+		return droolsConditions.toString();
 	}
 
 	private static List<Expression> getExpressionChainVariables(ExpressionChain expressionChain) {
@@ -785,8 +813,10 @@ public class DroolsParser {
 				case NUMBER:
 					ruleCore += "\tvariablesList.add((Double)" + globalExpression.getName() + ");\n";
 					break;
-				case TEXT:
 				case POSTAL_CODE:
+					ruleCore += "\tvariablesList.add(((String)" + globalExpression.getName() + ").toUpperCase());\n";
+					break;
+				case TEXT:
 				case DATE:
 					ruleCore += "\tvariablesList.add(" + globalExpression.getName() + ");\n";
 					break;
@@ -1227,26 +1257,6 @@ public class DroolsParser {
 		return null;
 	}
 
-	private static String questionDateDaysOperatorValueNumber(TreeObject question, Double value,
-			AvailableOperator operator) {
-		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
-				+ "', DateUtils.returnDaysDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
-				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable() + ".getChildren(IQuestion.class)"
-				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
-	}
-
-	private static String questionDateMonthsOperatorValueNumber(TreeObject question, Double value,
-			AvailableOperator operator) {
-		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
-				+ "', DateUtils.returnMonthsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
-				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable() + ".getChildren(IQuestion.class)"
-				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
-	}
-
 	private static String questionDateOperatorValue(TreeObject leftReferenceParent, TreeObject leftQuestion,
 			AvailableOperator operator, String droolsValue) throws NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
@@ -1262,20 +1272,10 @@ public class DroolsParser {
 		return rule;
 	}
 
-	private static String questionDateYearsOperatorValueNumber(TreeObject question, Double value,
-			AvailableOperator operator) {
-		return "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(question)
-				+ "', DateUtils.returnYearsDistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
-				+ operator.getValue() + " " + value.intValue() + ") from $"
-				+ question.getParent().getUniqueNameReadable() + ".getChildren(IQuestion.class)"
-				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
-	}
-
 	private static String questionGeGtLeLtAnswer(List<Expression> conditions, AvailableOperator operator)
 			throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
-		String droolsConditions = "";
+		StringBuilder droolsConditions = new StringBuilder();
 		List<Expression> left = ((ExpressionChain) conditions.get(0)).getExpressions();
 		TreeObject leftTreeObject = null;
 
@@ -1289,7 +1289,7 @@ public class DroolsParser {
 					ExpressionValue<?> value = (ExpressionValue<?>) rightExpressions.get(0);
 					String droolsValue = "";
 					if (value instanceof ExpressionValueTreeObjectReference) {
-						droolsConditions += checkVariableAssignation((ExpressionValueTreeObjectReference) value);
+						droolsConditions.append(checkVariableAssignation((ExpressionValueTreeObjectReference) value));
 						droolsValue = getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference) value);
 
 					} else {
@@ -1300,31 +1300,24 @@ public class DroolsParser {
 						if (leftTreeObject instanceof Question) {
 							// Create the conditions for parents hierarchy
 							TreeObject leftTreeObjectParent = leftTreeObject.getParent();
-							droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftTreeObjectParent);
+							droolsConditions.append(SimpleConditionsGenerator
+									.getTreeObjectConditions(leftTreeObjectParent));
 							Question leftQuestion = (Question) leftTreeObject;
+							String questionCondition = "";
 							if (leftQuestion.getAnswerType().equals(AnswerType.INPUT)) {
 								switch (leftQuestion.getAnswerFormat()) {
-								case DATE:
-									droolsConditions += questionDateOperatorValue(leftTreeObjectParent, leftQuestion,
-											operator, droolsValue);
-									break;
 								case NUMBER:
 								case TEXT:
 								case POSTAL_CODE:
-									droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable()
-											+ " : SubmittedQuestion("
-											+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion)
-											+ "', getAnswer('" + getTreeObjectAnswerType(leftQuestion) + "') "
-											+ operator.getValue() + " "
-											+ (leftQuestion.getAnswerFormat().equals(AnswerFormat.NUMBER) ? "" : "'")
-											+ droolsValue
-											+ (leftQuestion.getAnswerFormat().equals(AnswerFormat.NUMBER) ? "" : "'")
-											+ ") from $" + leftTreeObjectParent.getUniqueNameReadable()
-											+ ".getChildren(IQuestion.class)"
-											+ RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
+								case DATE:
+									// TODO fix for different types of date
+									// units
+									questionCondition += getQuestionCondition(leftTreeObjectParent, leftQuestion,
+											operator, droolsValue, leftQuestion.getAnswerFormat());
 									break;
 								}
 							}
+							droolsConditions.append(questionCondition);
 						}
 					}
 				}
@@ -1341,18 +1334,20 @@ public class DroolsParser {
 
 							// Create the conditions for parents hierarchy
 							TreeObject leftQuestionParent = leftTreeObject.getParent();
-							droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftQuestionParent);
+							droolsConditions.append(SimpleConditionsGenerator
+									.getTreeObjectConditions(leftQuestionParent));
 							// Create the conditions for parents hierarchy
 							TreeObject rightQuestionParent = rightTreeObject.getParent();
-							droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(rightQuestionParent);
+							droolsConditions.append(SimpleConditionsGenerator
+									.getTreeObjectConditions(rightQuestionParent));
 
-							droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable()
+							droolsConditions.append("\t$" + leftQuestion.getUniqueNameReadable()
 									+ " : SubmittedQuestion(getAnswer('" + getTreeObjectAnswerType(leftQuestion)
 									+ "') instanceof Date, "
 									+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "') from $"
 									+ leftQuestionParent.getUniqueNameReadable() + ".getChildren(IQuestion.class) "
-									+ RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
-							droolsConditions += "\t$" + rightQuestion.getUniqueNameReadable()
+									+ RulesUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n");
+							droolsConditions.append("\t$" + rightQuestion.getUniqueNameReadable()
 									+ " : SubmittedQuestion(getAnswer('" + getTreeObjectAnswerType(rightQuestion)
 									+ "') instanceof Date, "
 									+ RulesUtils.returnSimpleTreeObjectNameFunction(rightQuestion) + "', getAnswer('"
@@ -1360,7 +1355,7 @@ public class DroolsParser {
 									+ leftQuestion.getUniqueNameReadable() + ".getAnswer('"
 									+ getTreeObjectAnswerType(rightQuestion) + "')) from $"
 									+ rightQuestionParent.getUniqueNameReadable() + ".getChildren(IQuestion.class) "
-									+ RulesUtils.addFinalCommentsIfNeeded(rightQuestion) + "\n";
+									+ RulesUtils.addFinalCommentsIfNeeded(rightQuestion) + "\n");
 						}
 					}
 				}
@@ -1370,25 +1365,53 @@ public class DroolsParser {
 
 					// Create the conditions for parents hierarchy
 					TreeObject leftQuestionParent = leftTreeObject.getParent();
-					droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftQuestionParent);
+					droolsConditions.append(SimpleConditionsGenerator.getTreeObjectConditions(leftQuestionParent));
 
-					droolsConditions += "\t$" + leftTreeObject.getUniqueNameReadable()
+					droolsConditions.append("\t$" + leftTreeObject.getUniqueNameReadable()
 							+ " : SubmittedQuestion(getAnswer('" + getTreeObjectAnswerType(leftTreeObject)
 							+ "') instanceof Date, " + RulesUtils.returnSimpleTreeObjectNameFunction(leftTreeObject)
 							+ "', getAnswer('" + getTreeObjectAnswerType(leftTreeObject) + "') " + operator.getValue()
 							+ " DateUtils.returnCurrentDate()) from $" + leftQuestionParent.getUniqueNameReadable()
 							+ ".getChildren(IQuestion.class) " + RulesUtils.addFinalCommentsIfNeeded(leftTreeObject)
-							+ "\n";
+							+ "\n");
 				}
 			}
 		} else {
 			ExpressionValueCustomVariable customVariable = (ExpressionValueCustomVariable) ((ExpressionChain) conditions
 					.get(0)).getExpressions().get(0);
 			Expression valueExpression = ((ExpressionChain) conditions.get(2)).getExpressions().get(0);
-			droolsConditions += treeObjectScoreLogicOperatorValueExpression(customVariable,
-					(ExpressionOperatorLogic) conditions.get(1), (ExpressionValue<?>) valueExpression);
+			droolsConditions.append(treeObjectScoreLogicOperatorValueExpression(customVariable,
+					(ExpressionOperatorLogic) conditions.get(1), (ExpressionValue<?>) valueExpression));
 		}
-		return droolsConditions;
+		return droolsConditions.toString();
+	}
+
+	private static String getQuestionCondition(TreeObject parent, Question question, AvailableOperator operator,
+			Object value, AnswerFormat answerFormat) {
+		String questionCondition = "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+				+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', ";
+		switch (answerFormat) {
+		case TEXT:
+			questionCondition += "getAnswer('" + getTreeObjectAnswerType(question) + "') " + operator.getValue() + " '"
+					+ value + "' ";
+			break;
+		case NUMBER:
+			questionCondition += "getAnswer('" + getTreeObjectAnswerType(question) + "') " + operator.getValue() + " "
+					+ value;
+			break;
+		case POSTAL_CODE:
+			questionCondition += "getAnswer('" + getTreeObjectAnswerType(question) + "') " + operator.getValue() + " '"
+					+ value.toString().toUpperCase() + "' ";
+			break;
+		case DATE:
+			questionCondition += "DateUtils.returnYearsDistanceFromDate(getAnswer('"
+					+ getTreeObjectAnswerType(question) + "')) " + operator.getValue() + " " + value;
+			break;
+		}
+		questionCondition += ") from $" + parent.getUniqueNameReadable() + ".getChildren(IQuestion.class)"
+				+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
+
+		return questionCondition;
 	}
 
 	/**
