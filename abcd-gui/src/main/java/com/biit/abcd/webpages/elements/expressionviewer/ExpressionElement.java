@@ -7,6 +7,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.language.UserLocaleStringToDoubleConverter;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.vaadin.data.util.ObjectProperty;
@@ -22,7 +23,7 @@ public class ExpressionElement extends CssLayout {
 
 	public ExpressionElement(Expression expression, LayoutClickListener clickListener) {
 		// Use language definition for dates.
-		if (expression instanceof ExpressionValueTimestamp) {
+		if ((expression instanceof ExpressionValueTimestamp) && !(expression instanceof ExpressionValueSystemDate)) {
 			elementName = new Label(DateManager.convertDateToString((Timestamp) expression.getValue(),
 					ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_DATE)));
 			// Decimals are showed depending on the liferay's user configuration

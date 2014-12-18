@@ -22,8 +22,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class ExpressionOperatorMath extends ExpressionOperator {
 	private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<AvailableOperator>(Arrays.asList(
 			AvailableOperator.NULL, AvailableOperator.ASSIGNATION, AvailableOperator.PLUS, AvailableOperator.MINUS,
-			AvailableOperator.MULTIPLICATION, AvailableOperator.DIVISION, AvailableOperator.MODULE,
-			AvailableOperator.POW));
+			AvailableOperator.MULTIPLICATION, AvailableOperator.DIVISION));
 
 	public ExpressionOperatorMath() {
 		super();

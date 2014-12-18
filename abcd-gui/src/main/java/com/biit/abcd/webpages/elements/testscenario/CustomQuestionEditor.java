@@ -92,7 +92,17 @@ public class CustomQuestionEditor extends CustomComponent {
 			case RADIO:
 				field = new ComboBox(testQuestion.getName());
 				for (TreeObject answer : question.getChildren()) {
-					((ComboBox) field).addItem(answer.getName());
+					// Check for subAnswers
+					List<TreeObject> subAnswerList = answer.getChildren();
+					if ((subAnswerList != null) && !(subAnswerList.isEmpty())) {
+						for (TreeObject subAnswer : subAnswerList) {
+							((ComboBox) field).addItem(subAnswer.getName());
+							((ComboBox) field).setItemCaption(subAnswer.getName(),
+									answer.getName() + "/" + subAnswer.getName());
+						}
+					} else {
+						((ComboBox) field).addItem(answer.getName());
+					}
 				}
 				if (testAnswer == null) {
 					testAnswer = new TestAnswerRadioButton();

@@ -29,7 +29,7 @@ public class RuleChecker {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new InvalidRuleException("Rule '" + rule.getName() + "' invalid");
+			throw new InvalidRuleException("Rule invalid", rule.getName());
 		}
 	}
 
