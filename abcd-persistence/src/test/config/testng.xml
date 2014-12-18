@@ -4,7 +4,7 @@
 		<groups>
 			<run>
 				<include name="ehCache" />
-				<include name="expressionEvaluator" />
+				<exclude name="expressionEvaluator" />
 				<include name="formDao" />
 				<include name="simpleFormViewDao" />
 				<include name="diagramDao" />
