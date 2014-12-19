@@ -179,29 +179,35 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final AlertMessageWindow windowAccept = new AlertMessageWindow(
-						LanguageCodes.WARNING_TABLE_RULE_DELETION);
-				windowAccept.addAcceptActionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
-						try {
-							CheckDependencies.checkTableRuleDependencies(UserSessionHandler.getFormController()
-									.getForm(), tableRule);
-							removeSelectedTable();
-							AbcdLogger.info(this.getClass().getName(),
-									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-											+ tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
-							windowAccept.close();
-						} catch (DependencyExistException e) {
-							// Forbid the remove action if exist dependency.
-							MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-									LanguageCodes.TABLE_RULE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
-						}
+				if (tableSelectionMenu.getSelectedTableRule() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please create a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+				} else {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_TABLE_RULE_DELETION);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+							try {
+								CheckDependencies.checkTableRuleDependencies(UserSessionHandler.getFormController()
+										.getForm(), tableRule);
+								removeSelectedTable();
+								AbcdLogger.info(this.getClass().getName(), "User '"
+										+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+										+ tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
+								windowAccept.close();
+							} catch (DependencyExistException e) {
+								// Forbid the remove action if exist dependency.
+								MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+										LanguageCodes.TABLE_RULE_DESIGNER_WARNING_CANNOT_REMOVE_TABLE_RULE);
+							}
 
-					}
-				});
-				windowAccept.showCentered();
+						}
+					});
+					windowAccept.showCentered();
+				}
 			}
 		});
 
@@ -210,14 +216,20 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
-				if (tableRule != null) {
-					addNewCondition(tableRule);
-					tableRule.setUpdateTime();
+				if (tableSelectionMenu.getSelectedTableRule() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please create a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+				} else {
+					TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+					if (tableRule != null) {
+						addNewCondition(tableRule);
+						tableRule.setUpdateTime();
 
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has added new conditions to '"
-							+ tableRule.getName() + "''.");
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has added new conditions to '"
+								+ tableRule.getName() + "''.");
+					}
 				}
 			}
 		});
@@ -227,13 +239,19 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
-				if (tableRule != null) {
-					removeCondition(tableRule);
-					tableRule.setUpdateTime();
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed conditions from '"
-							+ tableRule.getName() + "''.");
+				if (tableSelectionMenu.getSelectedTableRule() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please create a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+				} else {
+					TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+					if (tableRule != null) {
+						removeCondition(tableRule);
+						tableRule.setUpdateTime();
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed conditions from '"
+								+ tableRule.getName() + "''.");
+					}
 				}
 			}
 		});
@@ -243,14 +261,20 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
-				if (tableRule != null) {
-					addNewRow(tableRule);
-					tableRule.setUpdateTime();
+				if (tableSelectionMenu.getSelectedTableRule() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please create a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+				} else {
+					TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+					if (tableRule != null) {
+						addNewRow(tableRule);
+						tableRule.setUpdateTime();
 
-					AbcdLogger.info(this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has added a new row to '"
-									+ tableRule.getName() + "''.");
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has added a new row to '"
+								+ tableRule.getName() + "''.");
+					}
 				}
 			}
 		});
@@ -260,14 +284,20 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
-				if (tableRule != null) {
-					removeRow(tableRule);
-					tableRule.setUpdateTime();
+				if (tableSelectionMenu.getSelectedTableRule() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please create a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+				} else {
+					TableRule tableRule = tableSelectionMenu.getSelectedTableRule();
+					if (tableRule != null) {
+						removeRow(tableRule);
+						tableRule.setUpdateTime();
 
-					AbcdLogger.info(this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a row from '"
-									+ tableRule.getName() + "''.");
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a row from '"
+								+ tableRule.getName() + "''.");
+					}
 				}
 			}
 		});
@@ -277,9 +307,16 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				copy();
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has copied rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				if (tableSelectionMenu.getSelectedTableRule() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please create a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+				} else {
+					copy();
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has copied rows from '"
+							+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				}
 			}
 		});
 		decisionTableEditorUpperMenu.addPasteRowsClickListener(new ClickListener() {
@@ -287,12 +324,18 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				int rowsToCopy = UserSessionHandler.getFormController().rowsToCopy();
-				paste();
-				if (rowsToCopy > 0) {
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has pasted " + rowsToCopy
-							+ " rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				if (tableSelectionMenu.getSelectedTableRule() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please create a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+				} else {
+					int rowsToCopy = UserSessionHandler.getFormController().rowsToCopy();
+					paste();
+					if (rowsToCopy > 0) {
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has pasted " + rowsToCopy
+								+ " rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+					}
 				}
 			}
 		});
@@ -313,7 +356,8 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	}
 
 	/**
-	 * Updates the table where the user defines the rules with the information of the currently selected table.
+	 * Updates the table where the user defines the rules with the information
+	 * of the currently selected table.
 	 */
 	private void refreshDecisionTable() {
 		ruleTable.update(getSelectedTableRule());
