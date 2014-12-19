@@ -164,7 +164,6 @@ public abstract class UpperMenu extends SecuredMenu {
 	 */
 	public IconButton addSubMenu(ThemeIcon icon, LanguageCodes caption, LanguageCodes tooltip, List<IconButton> buttons) {
 		IconButton subMenu = generateSubMenu(icon, caption, tooltip, buttons);
-		addIconButton(subMenu);
 		return subMenu;
 	}
 
