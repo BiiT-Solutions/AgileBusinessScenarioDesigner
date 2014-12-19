@@ -45,6 +45,13 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 		if ((call.getFunction().equals(ExpressionTokenType.BETWEEN) && (call.getArgs().size() != 2))) {
 			throw new NotCompatibleTypeException("Invalid number of arguments in the between function", null);
 		}
+		// Rest of calls
+		else if (!(call.getFunction().toString().equals("IPLUGIN"))) {
+			if ((call.getArgs().size() < 1)) {
+				throw new NotCompatibleTypeException("Invalid number of arguments in the call function", null);
+			}
+		}
+
 		// Check the types of the arguments
 		if (call.getLeftElement() instanceof NameExpression) {
 			ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) call
@@ -102,6 +109,11 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 				} else {
 					throw new NotCompatibleTypeException("Operator types not compatible", null);
 				}
+			}
+		} else {
+			if ((operator.getLeftElement().getExpressionChain().getExpressions().size() <= 1)
+					|| (operator.getRightElement().getExpressionChain().getExpressions().size() <= 1)) {
+				throw new NotCompatibleTypeException("Invalid number of elements", null);
 			}
 		}
 	}

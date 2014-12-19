@@ -58,7 +58,7 @@ public class TableRuleToDroolsRule {
 			}
 		}
 		for (DroolsRule droolsRule : newRules) {
-			RuleChecker.checkRule(droolsRule);
+			RuleChecker.checkRule(droolsRule, tableRule.getName());
 		}
 		return newRules;
 	}

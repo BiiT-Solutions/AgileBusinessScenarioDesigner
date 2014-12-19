@@ -56,7 +56,7 @@ public class ExpressionValidator {
 
 	public static void validateConditions(ExpressionChain expressionChain) throws PrattParserException,
 			InvalidExpressionException, NotCompatibleTypeException {
-		if (expressionChain != null) {
+		if (expressionChain != null && expressionChain.getExpressions().size() > 1) {
 			ExpressionChain cleanedExpression = removeNewLineSymbols(RulesUtils.flattenExpressionChain(expressionChain));
 			// If there is a NOT expression, we have to add the remaining
 			// parenthesis

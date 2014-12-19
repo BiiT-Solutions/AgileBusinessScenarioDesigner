@@ -164,7 +164,6 @@ public abstract class UpperMenu extends SecuredMenu {
 	 */
 	public IconButton addSubMenu(ThemeIcon icon, LanguageCodes caption, LanguageCodes tooltip, List<IconButton> buttons) {
 		IconButton subMenu = generateSubMenu(icon, caption, tooltip, buttons);
-		addIconButton(subMenu);
 		return subMenu;
 	}
 
@@ -213,6 +212,19 @@ public abstract class UpperMenu extends SecuredMenu {
 		rootLayout.setWidth("100%");
 		rootLayout.setHeight(null);
 
+		// Settings menu.
+		IconButton aboutUsButton = new IconButton(LanguageCodes.CAPTION_ABOUT_US, ThemeIcon.ABOUT_US,
+				LanguageCodes.TOOLTIP_ABOUT_US, IconSize.MEDIUM);
+		aboutUsButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = -4996751752953783384L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				(new WindowAboutUs()).showCentered();
+			}
+		});
+		iconButtonList.add(aboutUsButton);
+
 		// Global Constant Button can be only used by users with an specific
 		// role.
 		try {
@@ -257,35 +269,35 @@ public abstract class UpperMenu extends SecuredMenu {
 		}
 
 		// Clear cache for admin users.
-		 try {
-		 if
-		 (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-		 AbcdActivity.EVICT_CACHE)) {
-		clearCacheButton = new IconButton(LanguageCodes.SETTINGS_CLEAR_CACHE, ThemeIcon.CLEAR_CACHE,
-				LanguageCodes.SETTINGS_CLEAR_CACHE, IconSize.MEDIUM);
-		clearCacheButton.addClickListener(new ClickListener() {
-			private static final long serialVersionUID = -1121572145945309858L;
+		try {
+			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+					AbcdActivity.EVICT_CACHE)) {
+				clearCacheButton = new IconButton(LanguageCodes.SETTINGS_CLEAR_CACHE, ThemeIcon.CLEAR_CACHE,
+						LanguageCodes.SETTINGS_CLEAR_CACHE, IconSize.MEDIUM);
+				clearCacheButton.addClickListener(new ClickListener() {
+					private static final long serialVersionUID = -1121572145945309858L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_CLEAR_CACHE);
-				windowAccept.addAcceptActionListener(new AcceptActionListener() {
 					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						formDao.evictAllCache();
-						ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress()
-								+ "' has cleared all the 2nd level cache.");
-						MessageManager.showInfo(LanguageCodes.INFO_CACHE_CLEARED);
-						windowAccept.close();
+					public void buttonClick(ClickEvent event) {
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_CLEAR_CACHE);
+						windowAccept.addAcceptActionListener(new AcceptActionListener() {
+							@Override
+							public void acceptAction(AcceptCancelWindow window) {
+								formDao.evictAllCache();
+								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+								AbcdLogger.info(this.getClass().getName(), "User '"
+										+ UserSessionHandler.getUser().getEmailAddress()
+										+ "' has cleared all the 2nd level cache.");
+								MessageManager.showInfo(LanguageCodes.INFO_CACHE_CLEARED);
+								windowAccept.close();
+							}
+						});
+						windowAccept.showCentered();
 					}
 				});
-				windowAccept.showCentered();
-			}
-		});
-		clearCacheButton.setWidth("100%");
-		iconButtonList.add(clearCacheButton);
+				clearCacheButton.setWidth("100%");
+				iconButtonList.add(clearCacheButton);
 			}
 		} catch (IOException | AuthenticationRequired e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);

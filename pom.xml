@@ -6,7 +6,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.9</version>
+	<version>1.1.0</version>
 	<name>Agile Business sCenario Designer Tool</name>
 
 	<modules>
@@ -59,6 +59,7 @@
 		<ehcache.version>2.6.9</ehcache.version>
 		<c3p0.version>0.9.2.1</c3p0.version>
 		<plugin-manager.version>0.0.2</plugin-manager.version>
+		<DES-encryption.version>1.0.0</DES-encryption.version>
 	</properties>
 
 	<dependencies>

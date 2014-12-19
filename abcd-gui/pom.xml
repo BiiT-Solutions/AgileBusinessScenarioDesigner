@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.0.9</version>
+		<version>1.1.0</version>
 	</parent>
 	<properties>
 		<maven-war-plugin.version>2.3</maven-war-plugin.version>
@@ -43,6 +43,12 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
+		<!-- DESEncryption -->
+		<dependency>
+			<groupId>com.biit.security</groupId>
+			<artifactId>DES-encryption</artifactId>
+			<version>${DES-encryption.version}</version>
+		</dependency>
 		<!-- Vaadin plugins -->
 		<!-- JointJs Calendar Widget -->
 		<dependency>
@@ -204,9 +210,9 @@
 					<!-- <runTarget>mobilemail</runTarget> -->
 					<!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This 
 						way compatible with Vaadin eclipse plugin. -->
-					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets 
+					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets
 					</webappDirectory>
-					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets 
+					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets
 					</hostedWebapp>
 					<noServer>true</noServer>
 					<!-- Remove draftCompile when project is ready -->
@@ -250,9 +256,9 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>com.vaadin</groupId>
-										<artifactId> vaadin-maven-plugin 
+										<artifactId> vaadin-maven-plugin
 										</artifactId>
-										<versionRange> [${vaadin.version},) 
+										<versionRange> [${vaadin.version},)
 										</versionRange>
 										<goals>
 											<goal>clean</goal>

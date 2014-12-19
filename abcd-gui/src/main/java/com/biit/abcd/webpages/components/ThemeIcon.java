@@ -197,7 +197,10 @@ public enum ThemeIcon {
 	FORM_FINISH("form.protect.svg"),
 	
 	CLEAR_CACHE("cache.clear.svg"), 
-	LOG_OUT("user.logout.svg");
+	
+	LOG_OUT("user.logout.svg"), 
+	
+	ABOUT_US("about.window.svg");
 	
 
 	private String value;

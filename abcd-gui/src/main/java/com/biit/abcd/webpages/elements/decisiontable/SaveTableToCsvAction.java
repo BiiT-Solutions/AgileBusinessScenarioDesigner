@@ -32,16 +32,18 @@ public class SaveTableToCsvAction implements SaveAction {
 		try {
 			String tableRuleString = "";
 			TableRule tableRule = UserSessionHandler.getFormController().getLastAccessTable();
-			for (TableRuleRow row : tableRule.getRules()) {
-				ExpressionChain conditionChain = row.getConditions();
-				ExpressionChain actionChain = row.getAction();
-				for (Expression expression : conditionChain.getExpressions()) {
-					tableRuleString += expression.getRepresentation() + ";";
+			if (tableRule != null) {
+				for (TableRuleRow row : tableRule.getRules()) {
+					ExpressionChain conditionChain = row.getConditions();
+					ExpressionChain actionChain = row.getAction();
+					for (Expression expression : conditionChain.getExpressions()) {
+						tableRuleString += expression.getRepresentation() + ";";
+					}
+					tableRuleString += actionChain.getRepresentation() + ";";
+					tableRuleString += "\n";
 				}
-				tableRuleString += actionChain.getRepresentation() + ";";
-				tableRuleString += "\n";
+				return tableRuleString.getBytes();
 			}
-			return tableRuleString.getBytes();
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
