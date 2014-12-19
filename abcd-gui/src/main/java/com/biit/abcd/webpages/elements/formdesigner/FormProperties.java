@@ -118,7 +118,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 	@Override
 	protected Set<AbstractComponent> getProtectedElements() {
-		return new HashSet<AbstractComponent>(Arrays.asList(formLabel));
+		return new HashSet<AbstractComponent>(Arrays.asList(formLabel, availableFrom));
 	}
 
 }

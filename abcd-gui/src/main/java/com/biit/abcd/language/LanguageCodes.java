@@ -513,6 +513,9 @@ public enum LanguageCodes {
 	TEXT_PROCEED_FORM_CLOSE("text.proceed.form.close"),
 	
 	CAPTION_SEARCH("field.search"),
+	
+	PERMISSIONS_READ_ONLY("permissions.read.only"),
+	PERMISSIONS_IN_USE("permissions.in.use"),
 	;
 
 	private String value;
