@@ -514,7 +514,9 @@ public enum LanguageCodes {
 	CAPTION_SEARCH("field.search"),
 	
 	PERMISSIONS_READ_ONLY("permissions.read.only"),
-	PERMISSIONS_IN_USE("permissions.in.use"),
+	PERMISSIONS_IN_USE("permissions.in.use"), 
+	CAPTION_ABOUT_US("caption.about.us"),
+	TOOLTIP_ABOUT_US("tooltip.about.us"),
 	;
 
 	private String value;
