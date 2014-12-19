@@ -13,7 +13,6 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.form.utils.TreeObjectHierarchyComparator;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -151,8 +150,7 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 			Expression expression2 = otherRow.getConditions().getExpressions().get(0);
 			if (expression1 instanceof ExpressionValueTreeObjectReference) {
 				if (expression2 instanceof ExpressionValueTreeObjectReference) {
-					return new TreeObjectHierarchyComparator().compare(
-							((ExpressionValueTreeObjectReference) expression1).getReference(),
+					return ((ExpressionValueTreeObjectReference) expression1).getReference().compareTo(
 							((ExpressionValueTreeObjectReference) expression2).getReference());
 				}
 				// First null values.
