@@ -257,10 +257,10 @@ public abstract class UpperMenu extends SecuredMenu {
 		}
 
 		// Clear cache for admin users.
-		// try {
-		// if
-		// (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-		// AbcdActivity.EVICT_CACHE)) {
+		 try {
+		 if
+		 (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+		 AbcdActivity.EVICT_CACHE)) {
 		clearCacheButton = new IconButton(LanguageCodes.SETTINGS_CLEAR_CACHE, ThemeIcon.CLEAR_CACHE,
 				LanguageCodes.SETTINGS_CLEAR_CACHE, IconSize.MEDIUM);
 		clearCacheButton.addClickListener(new ClickListener() {
@@ -286,10 +286,10 @@ public abstract class UpperMenu extends SecuredMenu {
 		});
 		clearCacheButton.setWidth("100%");
 		iconButtonList.add(clearCacheButton);
-		// }
-		// } catch (IOException | AuthenticationRequired e) {
-		// AbcdLogger.errorMessage(this.getClass().getName(), e);
-		// }
+			}
+		} catch (IOException | AuthenticationRequired e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 
 		// Only if you are not connected using Liferay.
 		logoutButton = new IconButton(LanguageCodes.SETTINGS_LOG_OUT, ThemeIcon.LOG_OUT,
