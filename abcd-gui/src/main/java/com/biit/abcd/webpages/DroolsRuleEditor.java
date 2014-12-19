@@ -131,27 +131,29 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_RULE_DELETION);
-				windowAccept.addAcceptActionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						Rule rule = tableSelectRule.getSelectedRule();
-						try {
-							CheckDependencies.checkRulesDependencies(UserSessionHandler.getFormController().getForm(),
-									rule);
-							removeSelectedRule();
-							AbcdLogger.info(this.getClass().getName(),
-									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-											+ rule.getClass() + " with 'Name: " + rule.getName() + "'.");
-							windowAccept.close();
-						} catch (DependencyExistException e) {
-							// Forbid the remove action if exist dependency.
-							MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-									LanguageCodes.RULE_DESIGNER_WARNING_CANNOT_REMOVE_RULE);
+				if (getSelectedRule() != null) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_RULE_DELETION);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							Rule rule = tableSelectRule.getSelectedRule();
+							try {
+								CheckDependencies.checkRulesDependencies(UserSessionHandler.getFormController()
+										.getForm(), rule);
+								removeSelectedRule();
+								AbcdLogger.info(this.getClass().getName(),
+										"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+												+ rule.getClass() + " with 'Name: " + rule.getName() + "'.");
+								windowAccept.close();
+							} catch (DependencyExistException e) {
+								// Forbid the remove action if exist dependency.
+								MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+										LanguageCodes.RULE_DESIGNER_WARNING_CANNOT_REMOVE_RULE);
+							}
 						}
-					}
-				});
-				windowAccept.showCentered();
+					});
+					windowAccept.showCentered();
+				}
 			}
 		});
 

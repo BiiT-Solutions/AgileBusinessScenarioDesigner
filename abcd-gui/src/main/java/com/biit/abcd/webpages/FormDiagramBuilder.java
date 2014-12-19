@@ -45,7 +45,8 @@ import com.vaadin.ui.UI;
 
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private SelectDiagramTable diagramBuilderTable;
 	private AbcdDiagramBuilder diagramBuilder;
 	private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
@@ -299,19 +300,22 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_DIAGRAM_DELETION);
-				windowAccept.addAcceptActionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						Diagram diagram = (Diagram) diagramBuilderTable.getValue();
-						deleteDiagram();
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has deleted a "
-										+ diagram.getClass() + " with 'Name: " + diagram.getName() + "'.");
-						windowAccept.close();
-					}
-				});
-				windowAccept.showCentered();
+				if (diagramBuilderTable.getValue() != null) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_DIAGRAM_DELETION);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							Diagram diagram = (Diagram) diagramBuilderTable.getValue();
+							deleteDiagram();
+							AbcdLogger.info(this.getClass().getName(),
+									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has deleted a "
+											+ diagram.getClass() + " with 'Name: " + diagram.getName() + "'.");
+							windowAccept.close();
+						}
+					});
+					windowAccept.showCentered();
+				}
 			}
 		});
 		diagramBuilderUpperMenu.addClearButtonClickListener(new ClickListener() {

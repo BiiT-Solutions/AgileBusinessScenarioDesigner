@@ -33,7 +33,8 @@ import com.vaadin.ui.UI;
 
 public class ExpressionEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -156277380420304738L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionEditorUpperMenu decisionTableEditorUpperMenu;
 	private SelectExpressionTableEditable tableSelectExpression;
@@ -129,29 +130,31 @@ public class ExpressionEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final AlertMessageWindow windowAccept = new AlertMessageWindow(
-						LanguageCodes.WARNING_EXPRESSION_DELETION);
-				windowAccept.addAcceptActionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						ExpressionChain expChain = getSelectedExpression();
-						try {
-							CheckDependencies.checkExpressionDependencies(UserSessionHandler.getFormController()
-									.getForm(), expChain);
-							removeSelectedExpression();
-							AbcdLogger.info(this.getClass().getName(),
-									"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-											+ expChain.getClass() + " with 'Name: " + expChain.getName() + "'.");
-							windowAccept.close();
-						} catch (DependencyExistException e) {
-							// Forbid the remove action if exist dependency.
-							MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
-									LanguageCodes.EXPRESSION_DESIGNER_WARNING_CANNOT_REMOVE_EXPRESSION);
-							windowAccept.close();
+				if (getSelectedExpression() != null) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_EXPRESSION_DELETION);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							ExpressionChain expChain = getSelectedExpression();
+							try {
+								CheckDependencies.checkExpressionDependencies(UserSessionHandler.getFormController()
+										.getForm(), expChain);
+								removeSelectedExpression();
+								AbcdLogger.info(this.getClass().getName(), "User '"
+										+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+										+ expChain.getClass() + " with 'Name: " + expChain.getName() + "'.");
+								windowAccept.close();
+							} catch (DependencyExistException e) {
+								// Forbid the remove action if exist dependency.
+								MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
+										LanguageCodes.EXPRESSION_DESIGNER_WARNING_CANNOT_REMOVE_EXPRESSION);
+								windowAccept.close();
+							}
 						}
-					}
-				});
-				windowAccept.showCentered();
+					});
+					windowAccept.showCentered();
+				}
 			}
 		});
 
