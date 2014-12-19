@@ -5,14 +5,7 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 
 public class RuleChecker {
 
-	/**
-	 * Checks if the rule is valid<br>
-	 * Invalid rules throw an exception
-	 * 
-	 * @throws InvalidRuleException
-	 */
-
-	public static void checkRule(Rule rule) throws InvalidRuleException {
+	public static void checkRule(Rule rule, String ruleName) throws InvalidRuleException {
 		try {
 			if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null)
 					&& !(rule.getConditions().getExpressions().isEmpty()) && (rule.getActions() != null)
@@ -29,8 +22,22 @@ public class RuleChecker {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new InvalidRuleException("Rule invalid", rule.getName());
+			if (ruleName != null) {
+				throw new InvalidRuleException("TableRule invalid", ruleName);
+			} else {
+				throw new InvalidRuleException("Rule invalid", rule.getName());
+			}
 		}
 	}
 
+	/**
+	 * Checks if the rule is valid<br>
+	 * Invalid rules throw an exception
+	 * 
+	 * @throws InvalidRuleException
+	 */
+
+	public static void checkRule(Rule rule) throws InvalidRuleException {
+		checkRule(rule, null);
+	}
 }
