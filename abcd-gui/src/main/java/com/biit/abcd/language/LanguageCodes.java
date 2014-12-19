@@ -70,6 +70,7 @@ public enum LanguageCodes {
 	WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION("warning.element.name.invalid.description"),
 	WARNING_LOST_UNSAVED_DATA("warning.unsaved.data.will.be.lost"),
 	WARNING_TABLE_RULE_DELETION("warning.table.rule.deletion"),
+	WARNING_CREATE_TABLE_RULE_FIRST("warning.create.table.rule.first"),
 	WARNING_RULE_DELETION("warning.rule.deletion"),
 	WARNING_EXPRESSION_DELETION("warning.expression.deletion"),
 	WARNING_DIAGRAM_DELETION("warning.diagram.deletion"),
@@ -107,8 +108,6 @@ public enum LanguageCodes {
 	FORM_TABLE_COLUMN_CREATIONDATE("formTable.column.creationDate"),
 	FORM_TABLE_COLUMN_MODIFIEDBY("formTable.column.modifiedBy"),
 	FORM_TABLE_COLUMN_MODIFICATIONDATE("formTable.column.modificationDate"),
-//	FORM_TABLE_COLLAPSIBLE_CELL_EXPAND_TOOLTIP("formTable.collapsible.cell.expand.tooltip"),
-//	FORM_TABLE_COLLAPSIBLE_CELL_CONTRACT_TOOLTIP("formTable.collapsible.cell.contract.tooltip"),
 
 	TREE_DESIGNER_CATEGORY_ADD("treeDesigner.category.add"),
 	TREE_DESIGNER_GROUP_ADD("treeDesigner.group.add"),

@@ -21,13 +21,15 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 /**
- * Open a window with a download button and allows the user to download a file with some data obtained from database.
+ * Open a window with a download button and allows the user to download a file
+ * with some data obtained from database.
  * 
  */
 public class SaveAsButton extends IconButton {
 	private static final long serialVersionUID = 972763993558067752L;
 	private SaveButtonWindow newSaveWindow;
 	private SaveAction saveAction;
+	private boolean launchAction = true;
 	private byte[] data;
 	private List<SaveActionListener> acceptListeners;
 
@@ -52,7 +54,7 @@ public class SaveAsButton extends IconButton {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				if (saveAction != null) {
+				if (saveAction != null && launchAction) {
 					if (saveAction.isValid()) {
 						newSaveWindow = new SaveButtonWindow("Download file...");
 						UI.getCurrent().addWindow(newSaveWindow);
@@ -222,6 +224,10 @@ public class SaveAsButton extends IconButton {
 		for (SaveActionListener listener : acceptListeners) {
 			listener.saveAction();
 		}
+	}
+
+	public void setLaunchAction(boolean launchAction) {
+		this.launchAction = launchAction;
 	}
 
 }

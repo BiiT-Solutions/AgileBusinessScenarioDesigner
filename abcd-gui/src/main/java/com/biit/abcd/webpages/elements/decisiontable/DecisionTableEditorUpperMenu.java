@@ -3,13 +3,18 @@ package com.biit.abcd.webpages.elements.decisiontable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.SaveAsButton;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 
 public class DecisionTableEditorUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 1878327027307547248L;
@@ -44,6 +49,21 @@ public class DecisionTableEditorUpperMenu extends UpperMenu {
 		exportToCsvButton = new SaveAsButton(LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_CAPTION,
 				ThemeIcon.EXPORT_CSV_FILE, LanguageCodes.CONDITION_TABLE_EDITOR_BUTTON_EXPORT_TO_CSV_TOOLTIP,
 				IconSize.MEDIUM, new SaveTableToCsvAction());
+		exportToCsvButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = -1570324598391360758L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if (UserSessionHandler.getFormController().getLastAccessTable() == null) {
+					AbcdLogger.warning(this.getClass().getName(), "No Table selected, please select a table first.");
+					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+							LanguageCodes.WARNING_CREATE_TABLE_RULE_FIRST);
+					((SaveAsButton) exportToCsvButton).setLaunchAction(false);
+				}else{
+					((SaveAsButton) exportToCsvButton).setLaunchAction(true);
+				}
+			}
+		});
 
 		addIconButton(saveButton);
 		addIconButton(newTable);
