@@ -36,7 +36,6 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	private static final String FORM_LABEL = "Form";
-	private static final String FORM_LABEL_ERROR = "Bad_Form";
 	private static final Long FORM_ORGANIZATION_ID = 0l;
 	private static final Integer FORM_VERSION = 1;
 	private static final String TEST_SCENARIO_NAME = "test1";

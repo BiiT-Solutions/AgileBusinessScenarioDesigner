@@ -29,7 +29,6 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 @Test(groups = { "expressionEvaluator" })
 public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String CATEGORY_NAME = "Category1";
-	private final static String QUESTION_NAME = "Question1";
 
 	@Autowired
 	private IFormDao formDao;

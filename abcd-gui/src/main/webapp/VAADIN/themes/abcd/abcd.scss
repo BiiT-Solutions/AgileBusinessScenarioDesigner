@@ -806,4 +806,57 @@ $open-sans-pathPrefix: "./fonts/";
 	.stencil .elements .BaseRepeatNode .behindBody {
 	   display: none;
 	}
+	
+	/* popover */
+	.v-touchkit-opacity-transition {
+		-webkit-transition: opacity 0.1s linear;
+	}
+	.v-window-modalitycurtain.v-touchkit-opacity-transition {
+		background: rgba(0, 0, 0, 0);
+	}
+	
+	.v-touchkit-popover.v-touchkit-relative .v-window-wrap {
+		overflow: visible;
+		background: transparent;
+		position: relative;
+		border: windowBorder;
+	}
+	
+	.v-touchkit-popover.v-touchkit-relative.v-touchkit-smallscreen .v-window-wrap,
+	.v-touchkit-popover.v-touchkit-relative.v-touchkit-smallscreen .v-window-contents {
+		padding: 0;
+		border: none;
+		border-radius: 0;
+	}
+	
+	.v-touchkit-popover.v-touchkit-relative.v-touchkit-smallscreen {
+		box-shadow: dropShadow;
+	}
+	
+	.v-touchkit-popover .v-window-closebox,
+	.v-touchkit-popover .v-window-outerheader,
+	.v-touchkit-popover .v-window-footer,
+	.v-touchkit-popover .v-window-maximizebox {
+		display: none;
+	}
+	
+	.v-touchkit-popover .v-window-contents {
+		border: rgb(195, 195, 195);
+		border-width: 1px;
+		border-style: solid;
+	}
+	
+	.v-button-opens-popover-menu, .v-button-opens-popover-menu.v-button:focus{
+		background: linear-gradient(-45deg, black 8%, white 9.5%, white 100%);
+	}
+	
+	.v-popover-upper-submenu .v-button-caption{
+		font-size: 14px !important;
+	}
+	
+	.v-popover-upper-submenu .v-icon{
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }

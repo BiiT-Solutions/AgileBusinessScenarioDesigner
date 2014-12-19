@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.KieManager;
@@ -17,6 +18,10 @@ import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerI
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.orbeon.form.ISubmittedForm;
 
+/**
+ *	Tests the rule loading from a static file<br>
+ *	Needs the files kidScreen.xml and droolsRulesFileTest.drl in test/resources
+ */
 public class DroolsEngineRulesTest {
 
 	private final static String FORM = "Form1";
@@ -82,8 +87,7 @@ public class DroolsEngineRulesTest {
 			DroolsForm droolsForm = runDroolsRules(drlFile);
 			if (submittedForm != null) {
 				// Check result
-//				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-//						CUSTOM_VARIABLE_RESULT_VALUE);
+				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue("customVariableResult"), 11.);
 			}
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
