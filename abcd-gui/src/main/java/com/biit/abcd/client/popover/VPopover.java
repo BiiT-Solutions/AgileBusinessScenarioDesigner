@@ -49,10 +49,6 @@ public class VPopover extends com.vaadin.client.ui.VWindow {
 		hideReferenceArrow();
 	}
 
-	private Element getWrapperElement() {
-		return getElement().getFirstChild().getFirstChild().cast();
-	}
-
 	public void showNextTo(Widget paintable) {
 		if (paintable == null || !paintable.isAttached()) {
 			// Vaadin may call this via setWidth/setHeight when reference

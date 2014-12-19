@@ -1,6 +1,5 @@
 package com.biit.abcd.client.popover;
 
-import com.biit.abcd.webpages.components.popover.Popover;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
@@ -19,7 +18,7 @@ import com.vaadin.client.ui.layout.ElementResizeListener;
 import com.vaadin.client.ui.window.WindowConnector;
 import com.vaadin.shared.ui.Connect;
 
-@Connect(com.biit.abcd.webpages.components.popover.Popover.class)
+@Connect(com.biit.abcd.webpages.components.Popover.class)
 public class PopoverConnector extends WindowConnector implements NativePreviewHandler {
 	private static final long serialVersionUID = -4059309009889339722L;
 	

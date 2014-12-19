@@ -1,4 +1,4 @@
-package com.biit.abcd.webpages.components.popover;
+package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.client.popover.PopoverRpc;
 import com.biit.abcd.client.popover.PopoverState;
