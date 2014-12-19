@@ -7,18 +7,26 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.authentication.exceptions.NotEnoughRightsToChangeStatusException;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.security.AbcdActivity;
+import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.CancelActionListener;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
+import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable.IFormStatusChange;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
@@ -26,6 +34,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
@@ -90,6 +99,14 @@ public class FormManager extends FormWebPageComponent {
 					}
 
 				}
+			}
+		});
+
+		formTable.addFormStatusChangeListeners(new IFormStatusChange() {
+
+			@Override
+			public void comboBoxValueChanged(ComboBox statusComboBox) {
+				formStatusValueChanged(statusComboBox);
 			}
 		});
 
@@ -205,4 +222,61 @@ public class FormManager extends FormWebPageComponent {
 				+ " createNewFormVersion " + form + " END");
 		return newFormVersion;
 	}
+
+	private void formStatusValueChanged(final ComboBox statusComboBox) {
+		if (getForm().getStatus().equals(statusComboBox.getValue())) {
+			// Its the same status. Don't do anything.
+			return;
+		}
+
+		final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.CAPTION_PROCEED_MODIFY_STATUS);
+
+		windowAccept.addAcceptActionListener(new AcceptActionListener() {
+			@Override
+			public void acceptAction(AcceptCancelWindow window) {
+				try {
+					getForm().setStatus((FormWorkStatus) statusComboBox.getValue());
+					changeStatusOnDatabase(getForm(), statusComboBox, (FormWorkStatus) statusComboBox.getValue());
+					formTable.refreshRow(getForm());
+					windowAccept.close();
+					upperMenu.updateNewVersionButton(getForm());
+				} catch (NotEnoughRightsToChangeStatusException nercs) {
+
+				}
+			}
+		});
+
+		windowAccept.addCancelActionListener(new CancelActionListener() {
+			@Override
+			public void cancelAction(AcceptCancelWindow window) {
+				statusComboBox.setValue(getForm().getStatus());
+				windowAccept.close();
+			}
+		});
+
+		windowAccept.showCentered();
+	}
+
+	private void changeStatusOnDatabase(SimpleFormView form, ComboBox statusComboBox, FormWorkStatus value)
+			throws NotEnoughRightsToChangeStatusException {
+		try {
+			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+					form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE)) {
+				throw new NotEnoughRightsToChangeStatusException("User '"
+						+ UserSessionHandler.getUser().getEmailAddress()
+						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
+			}
+			try {
+				formDao.updateFormStatus(form.getLabel(), form.getVersion(), form.getOrganizationId(), value);
+			} catch (UnexpectedDatabaseException e) {
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+			}
+
+		} catch (NotEnoughRightsToChangeStatusException e) {
+			statusComboBox.setValue(form.getStatus());
+			MessageManager.showWarning(LanguageCodes.ERROR_OPERATION_NOT_ALLOWED);
+		}
+	}
+
 }

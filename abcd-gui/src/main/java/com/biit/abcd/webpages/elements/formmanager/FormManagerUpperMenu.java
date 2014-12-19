@@ -21,6 +21,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdActivity;
@@ -342,7 +343,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void updateNewVersionButton(SimpleFormView selected) {
 		if (selected != null && !(selected instanceof RootForm)) {
 			newVersion.setEnabled(selected.isLastVersion()
-					&& !AbcdFormAuthorizationService.getInstance().isFormReadOnly(selected,
+					&& selected.getStatus().equals(FormWorkStatus.FINAL_DESIGN)
+					&& AbcdFormAuthorizationService.getInstance().isAuthorizedToForm(selected.getOrganizationId(),
+							UserSessionHandler.getUser())
+					&& !AbcdFormAuthorizationService.getInstance().isFormAlreadyInUse(selected.getId(),
 							UserSessionHandler.getUser()));
 		} else {
 			newVersion.setEnabled(false);

@@ -218,7 +218,6 @@ public class FormDesignerUpperMenu extends UpperMenu {
 	public Set<Button> getSecuredButtons() {
 		// All except save form.
 		Set<Button> securedButtons = new HashSet<Button>(getButtons());
-		securedButtons.remove(saveButton);
 		return securedButtons;
 	}
 }
