@@ -1,9 +1,17 @@
 package com.biit.abcd.webpages.components;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biit.abcd.ApplicationFrame;
+import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.DiagramNotEqualsException;
@@ -21,17 +29,24 @@ import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsExcepti
 import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
+import com.biit.abcd.security.AbcdActivity;
+import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.popover.Popover;
+import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 
 public abstract class UpperMenu extends SecuredMenu {
 	private static final long serialVersionUID = 3501103183357307175L;
 	public static final String BUTTON_WIDTH = "100px";
+	public static final String MENU_HEIGHT = "70px";
 	public static final String SEPARATOR_WIDTH = "10px";
 
 	public static final String CLASSNAME_HORIZONTAL_BUTTON_WRAPPER = "v-horizontal-button-group-wrapper";
@@ -40,11 +55,19 @@ public abstract class UpperMenu extends SecuredMenu {
 	private HorizontalLayout upperRootLayout;
 	private HorizontalLayout oldRootLayoutContainer;
 	private IconButton formManagerButton, settingsButton;
+	private IFormDao formDao;
+	// Settings buttons
+	private IconButton globalConstantsButton, clearCacheButton, logoutButton;
+
+	// private HashMap<IconButton, List<IconButton>> subMenuButtons;
 
 	public UpperMenu() {
 		super();
 		defineUpperMenu();
 		this.setContractIcons(true, BUTTON_WIDTH);
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		formDao = (IFormDao) helper.getBean("formDao");
+		// subMenuButtons = new HashMap<>();
 	}
 
 	@Override
@@ -99,18 +122,10 @@ public abstract class UpperMenu extends SecuredMenu {
 		separator.setWidth(SEPARATOR_WIDTH);
 		separator.setStyleName(SEPARATOR_STYLE);
 
-		settingsButton = new IconButton(LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, ThemeIcon.SETTINGS,
-				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, IconSize.BIG, new ClickListener() {
-					private static final long serialVersionUID = 3450355943436017152L;
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						SettingsWindow settings = new SettingsWindow();
-						settings.showRelativeToComponent(settingsButton);
-						settings.hideLogoutButton(((ApplicationFrame) getUI()).getUser() != null
-								&& ((ApplicationFrame) getUI()).getPassword() != null);
-					}
-				});
+		// First create the buttons of the submenu
+		List<IconButton> settingsButtonsList = createSettingButtons();
+		settingsButton = addSubMenu(ThemeIcon.SETTINGS, LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP,
+				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, settingsButtonsList);
 		settingsButton.setHeight("100%");
 		settingsButton.setWidth(BUTTON_WIDTH);
 
@@ -135,7 +150,184 @@ public abstract class UpperMenu extends SecuredMenu {
 
 	private void defineUpperMenu() {
 		this.setWidth("100%");
-		this.setHeight("70px");
+		this.setHeight(MENU_HEIGHT);
 		setStyleName("upper-menu v-horizontal-button-group");
+	}
+
+	/**
+	 * 
+	 * @param icon
+	 * @param caption
+	 * @param tooltip
+	 * @param buttons
+	 * @return
+	 */
+	public IconButton addSubMenu(ThemeIcon icon, LanguageCodes caption, LanguageCodes tooltip, List<IconButton> buttons) {
+		IconButton subMenu = generateSubMenu(icon, caption, tooltip, buttons);
+		addIconButton(subMenu);
+		return subMenu;
+	}
+
+	public IconButton generateSubMenu(ThemeIcon icon, LanguageCodes caption, LanguageCodes tooltip,
+			final List<IconButton> buttons) {
+		for (IconButton button : buttons) {
+			button.addStyleName("v-popover-upper-submenu");
+		}
+
+		final IconButton subMenu = new IconButton(caption, icon, tooltip, IconSize.BIG);
+		subMenu.addStyleName("opens-popover-menu");
+		subMenu.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = 9175409158532169878L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				VerticalLayout rootLayout = new VerticalLayout();
+				rootLayout.setSizeUndefined();
+
+				final Popover popover = new Popover(rootLayout);
+				popover.setClosable(true);
+
+				for (final IconButton button : buttons) {
+					button.setWidth(BUTTON_WIDTH);
+					button.setHeight(MENU_HEIGHT);
+					rootLayout.addComponent(button);
+					button.addClickListener(new ClickListener() {
+						private static final long serialVersionUID = -2214568128797434177L;
+
+						@Override
+						public void buttonClick(ClickEvent event) {
+							popover.close();
+						}
+					});
+				}
+				popover.showRelativeTo(subMenu);
+			}
+		});
+		// subMenuButtons.put(subMenu, buttons);
+		return subMenu;
+	}
+
+	private List<IconButton> createSettingButtons() {
+		List<IconButton> iconButtonList = new ArrayList<IconButton>();
+		VerticalLayout rootLayout = new VerticalLayout();
+		rootLayout.setWidth("100%");
+		rootLayout.setHeight(null);
+
+		// Global Constant Button can be only used by users with an specific
+		// role.
+		try {
+			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+					AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
+				globalConstantsButton = new IconButton(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS,
+						ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS, LanguageCodes.SETTINGS_GLOBAL_CONSTANTS,
+						IconSize.MEDIUM);
+				globalConstantsButton.addClickListener(new ClickListener() {
+					private static final long serialVersionUID = 5662848461729745562L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						try {
+							UserSessionHandler.getFormController().checkUnsavedChanges();
+							ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
+						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
+								| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
+								| CustomVariableNotEqualsException | ExpressionNotEqualsException
+								| TableRuleNotEqualsException | RuleNotEqualsException | DiagramNotEqualsException
+								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
+								| PointNotEqualsException | BiitTextNotEqualsException
+								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+							final AlertMessageWindow windowAccept = new AlertMessageWindow(
+									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+							windowAccept.addAcceptActionListener(new AcceptActionListener() {
+								@Override
+								public void acceptAction(AcceptCancelWindow window) {
+									ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
+									windowAccept.close();
+								}
+							});
+							windowAccept.showCentered();
+						}
+					}
+				});
+				globalConstantsButton.setWidth("100%");
+				iconButtonList.add(globalConstantsButton);
+			}
+		} catch (IOException | AuthenticationRequired e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+
+		// Clear cache for admin users.
+		// try {
+		// if
+		// (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+		// AbcdActivity.EVICT_CACHE)) {
+		clearCacheButton = new IconButton(LanguageCodes.SETTINGS_CLEAR_CACHE, ThemeIcon.CLEAR_CACHE,
+				LanguageCodes.SETTINGS_CLEAR_CACHE, IconSize.MEDIUM);
+		clearCacheButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = -1121572145945309858L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_CLEAR_CACHE);
+				windowAccept.addAcceptActionListener(new AcceptActionListener() {
+					@Override
+					public void acceptAction(AcceptCancelWindow window) {
+						formDao.evictAllCache();
+						ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress()
+								+ "' has cleared all the 2nd level cache.");
+						MessageManager.showInfo(LanguageCodes.INFO_CACHE_CLEARED);
+						windowAccept.close();
+					}
+				});
+				windowAccept.showCentered();
+			}
+		});
+		clearCacheButton.setWidth("100%");
+		iconButtonList.add(clearCacheButton);
+		// }
+		// } catch (IOException | AuthenticationRequired e) {
+		// AbcdLogger.errorMessage(this.getClass().getName(), e);
+		// }
+
+		// Only if you are not connected using Liferay.
+		logoutButton = new IconButton(LanguageCodes.SETTINGS_LOG_OUT, ThemeIcon.LOG_OUT,
+				LanguageCodes.SETTINGS_LOG_OUT, IconSize.MEDIUM);
+		logoutButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = -1121572145945309858L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				try {
+					UserSessionHandler.getFormController().checkUnsavedChanges();
+					UiAccesser.releaseForm(UserSessionHandler.getUser());
+					ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+					UserSessionHandler.logout();
+				} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException | FormNotEqualsException
+						| GroupNotEqualsException | QuestionNotEqualsException | CustomVariableNotEqualsException
+						| ExpressionNotEqualsException | TableRuleNotEqualsException | RuleNotEqualsException
+						| DiagramNotEqualsException | DiagramObjectNotEqualsException | NodeNotEqualsException
+						| SizeNotEqualsException | PointNotEqualsException | BiitTextNotEqualsException
+						| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
+							UiAccesser.releaseForm(UserSessionHandler.getUser());
+							UserSessionHandler.logout();
+							windowAccept.close();
+						}
+					});
+					windowAccept.showCentered();
+				}
+			}
+		});
+		logoutButton.setWidth("100%");
+		iconButtonList.add(logoutButton);
+
+		return iconButtonList;
 	}
 }

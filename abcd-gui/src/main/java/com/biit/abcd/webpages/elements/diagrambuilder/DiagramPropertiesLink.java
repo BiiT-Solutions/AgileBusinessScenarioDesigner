@@ -18,7 +18,6 @@ import com.biit.abcd.webpages.components.AcceptCancelClearWindow.ClearElementsAc
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.FieldWithSearchButton;
-import com.biit.abcd.webpages.elements.decisiontable.AddNewAnswerExpressionWindow;
 import com.biit.abcd.webpages.elements.decisiontable.AddNewConditionExpressionWindow;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button.ClickEvent;

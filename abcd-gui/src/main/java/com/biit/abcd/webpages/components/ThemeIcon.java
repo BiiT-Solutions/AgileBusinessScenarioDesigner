@@ -194,7 +194,10 @@ public enum ThemeIcon {
 	
 	TEST_REMOVE_GROUP("page.form.tests.remove.svg"),
 	
-	FORM_FINISH("form.protect.svg");
+	FORM_FINISH("form.protect.svg"),
+	
+	CLEAR_CACHE("cache.clear.svg"), 
+	LOG_OUT("user.logout.svg");
 	
 
 	private String value;
