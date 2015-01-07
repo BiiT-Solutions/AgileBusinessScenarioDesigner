@@ -7,8 +7,10 @@ import com.biit.persistence.dao.IGenericDao;
 
 public interface ITestScenarioDao extends IGenericDao<TestScenario> {
 
-	public TestScenario getTestScenarioById(Long scenarioId);
-	
-	public List<TestScenario> getTestScenarioByFormId(Long formId);
+	TestScenario getTestScenarioById(Long scenarioId);
+
+	List<TestScenario> getTestScenarioByForm(Long formId);
+
+	List<TestScenario> getTestScenarioByForm(String formLabel, Long formOrganizationId);
 
 }

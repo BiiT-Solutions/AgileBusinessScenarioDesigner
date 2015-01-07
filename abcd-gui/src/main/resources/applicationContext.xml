@@ -111,6 +111,9 @@
 	<bean name="diagramDao" class="com.biit.abcd.persistence.dao.hibernate.DiagramDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	<bean name="testScenarioDao" class="com.biit.abcd.persistence.dao.hibernate.TestScenarioDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 	<!-- Liferay Services -->
 	<bean id="userService" class="com.biit.liferay.access.UserService" />
 </beans>

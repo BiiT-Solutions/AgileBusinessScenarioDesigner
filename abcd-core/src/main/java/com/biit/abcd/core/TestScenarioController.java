@@ -26,7 +26,7 @@ public class TestScenarioController {
 	public List<TestScenario> getTestScenarios(Form form) {
 		if (testScenarios == null) {
 			synchronized (TestScenarioController.class) {
-				testScenarios = testScenarioDao.getTestScenarioByFormId(form.getId());
+				testScenarios = testScenarioDao.getTestScenarioByForm(form.getId());
 			}
 		}
 		return testScenarios;

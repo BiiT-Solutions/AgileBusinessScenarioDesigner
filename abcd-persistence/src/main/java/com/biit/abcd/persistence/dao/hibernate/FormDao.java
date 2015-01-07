@@ -174,18 +174,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label"),
 			@CacheEvict(value = "forms", key = "#form.id"),
 			@CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
-	public void makeTransient(Form form) throws UnexpectedDatabaseException {
-		// Remove also children of elementsToDelete due CascadeType.ALL has been removed from TreeObject
-		for (TreeObject child : form.getAll(TreeObject.class)) {
-			// add to purge
-			form.getElementsToDelete().add(child);
-			form.getChildren().remove(child);
-			try {
-				child.setParent(null);
-			} catch (NotValidParentException e) {
-			}
-		}
-
+	public void makeTransient(Form form) throws UnexpectedDatabaseException {	
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
 			form.remove(customVariable);
@@ -193,11 +182,10 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			customVariableDao.makePersistent(customVariable);
 		}
 
-		super.deleteStorableObject(form);
-
+		super.makeTransient(form);
+		
 		purgeCustomVariablesToDelete(form.getCustomVariablesToDelete());
 		form.setCustomVariablesToDelete(new HashSet<CustomVariable>());
-		purgeElementsToDelete(form);
 	}
 
 	@Override

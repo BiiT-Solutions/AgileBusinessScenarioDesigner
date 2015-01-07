@@ -45,6 +45,12 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	// Form information
 	@Column(nullable = false)
 	private Long formId;
+	@Column(nullable = false, length = TreeObject.MAX_LABEL_LENGTH, columnDefinition = "varchar("
+			+ TreeObject.MAX_LABEL_LENGTH + ")")
+	private String formLabel;
+
+	@Column(nullable = false, columnDefinition = "DOUBLE")
+	private Long formOrganization;
 
 	public TestScenario() {
 		super();
@@ -55,6 +61,8 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		super();
 		setName(scenarioName);
 		setFormId(form.getId());
+		setFormLabel(form.getLabel());
+		setFormOrganization(form.getOrganizationId());
 		createTestScenarioForm(form, null);
 	}
 
@@ -72,6 +80,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		getTestScenarioForm().resetIds();
 	}
 
+	@Override
 	public void setName(String name) throws FieldTooLongException {
 		if (name.length() > MAX_UNIQUE_COLUMN_LENGTH) {
 			throw new FieldTooLongException("Name is limited to " + MAX_UNIQUE_COLUMN_LENGTH
@@ -80,6 +89,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		this.name = name;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -104,7 +114,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		// TODO
+		// Not necessary
 	}
 
 	private void createTestScenarioForm(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent)
@@ -172,5 +182,21 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			}
 			break;
 		}
+	}
+
+	public String getFormLabel() {
+		return formLabel;
+	}
+
+	public void setFormLabel(String formLabel) {
+		this.formLabel = formLabel;
+	}
+
+	public Long getFormOrganization() {
+		return formOrganization;
+	}
+
+	public void setFormOrganization(Long formOrganization) {
+		this.formOrganization = formOrganization;
 	}
 }

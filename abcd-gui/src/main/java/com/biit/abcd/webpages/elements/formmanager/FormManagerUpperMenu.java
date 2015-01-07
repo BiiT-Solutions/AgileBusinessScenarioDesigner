@@ -55,12 +55,17 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
-	private IconButton newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario;
+	private IconButton newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario, removeForm;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
 	private IFormDao formDao;
 	private ISubmittedForm submittedForm;
+	private List<IFormRemove> removeFormListeners;
+
+	public interface IFormRemove {
+		void removeButtonPressed();
+	}
 
 	public FormManagerUpperMenu(FormManager parent) {
 		super();
@@ -68,6 +73,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		formDao = (IFormDao) helper.getBean("formDao");
 		this.parent = parent;
 		formSelectedListeners = new ArrayList<>();
+		removeFormListeners = new ArrayList<>();
 		defineMenu();
 		setEnabledButtons();
 	}
@@ -213,7 +219,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 											windowAccept.addAcceptActionListener(new AcceptActionListener() {
 												@Override
 												public void acceptAction(AcceptCancelWindow window) {
-													acceptActionTestScenarioReportWindow(droolsExporter, generatedSumbittedForm);
+													acceptActionTestScenarioReportWindow(droolsExporter,
+															generatedSumbittedForm);
 													windowAccept.close();
 													launchTestScenarioWindow.close();
 												}
@@ -283,14 +290,24 @@ public class FormManagerUpperMenu extends UpperMenu {
 					}
 				});
 
+		removeForm = new IconButton(LanguageCodes.FORM_MANAGER_REMOVE_FORM, ThemeIcon.FORM_MANAGER_REMOVE_FORM,
+				LanguageCodes.FORM_MANAGER_REMOVE_FORM, IconSize.MEDIUM, new ClickListener() {
+					@Override
+					public void buttonClick(ClickEvent event) {
+						launchFormRemoveListener();
+					}
+				});
+
 		addIconButton(newFormButton);
 		addIconButton(newVersion);
+		addIconButton(removeForm);
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
 		addIconButton(launchTestScenario);
 	}
 
-	private void acceptActionTestScenarioReportWindow(FormToDroolsExporter droolsExporter, ISubmittedForm generatedSumbittedForm) {
+	private void acceptActionTestScenarioReportWindow(FormToDroolsExporter droolsExporter,
+			ISubmittedForm generatedSumbittedForm) {
 		try {
 			submittedForm = droolsExporter.processForm(UserSessionHandler.getFormController().getForm(),
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables(), generatedSumbittedForm);
@@ -379,8 +396,27 @@ public class FormManagerUpperMenu extends UpperMenu {
 		}
 	}
 
+	public void updateRemoveFormButton(SimpleFormView selected) {
+		if (selected != null && !(selected instanceof RootForm)) {
+			removeForm.setEnabled(AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(
+					UserSessionHandler.getUser(), selected.getOrganizationId(), AbcdActivity.FORM_REMOVE));
+		} else {
+			removeForm.setEnabled(false);
+		}
+	}
+
 	@Override
 	public Set<Button> getSecuredButtons() {
 		return new HashSet<Button>();
+	}
+
+	public void addFormRemoveListener(IFormRemove listener) {
+		removeFormListeners.add(listener);
+	}
+
+	private void launchFormRemoveListener() {
+		for (IFormRemove listener : removeFormListeners) {
+			listener.removeButtonPressed();
+		}
 	}
 }

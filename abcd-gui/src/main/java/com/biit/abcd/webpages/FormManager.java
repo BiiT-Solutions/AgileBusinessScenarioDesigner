@@ -12,19 +12,22 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AcceptCancelWindow.CancelActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.abcd.webpages.components.AcceptCancelWindow.CancelActionListener;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu;
+import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu.IFormRemove;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable.IFormStatusChange;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -45,11 +48,13 @@ public class FormManager extends FormWebPageComponent {
 	private FormManagerUpperMenu upperMenu;
 
 	private IFormDao formDao;
+	private ITestScenarioDao testScenarioDao;
 
 	public FormManager() {
 		super();
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
+		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
 	}
 
 	@Override
@@ -70,6 +75,23 @@ public class FormManager extends FormWebPageComponent {
 								LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 					}
 
+				}
+			}
+		});
+		upperMenu.addFormRemoveListener(new IFormRemove() {
+
+			@Override
+			public void removeButtonPressed() {
+				if (formTable.getValue() != null) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_REMOVE_ELEMENT);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							removeSelectedForm();
+							windowAccept.close();
+						}
+					});
+					windowAccept.showCentered();
 				}
 			}
 		});
@@ -132,6 +154,7 @@ public class FormManager extends FormWebPageComponent {
 		super.updateButtons(enableFormButtons);
 		upperMenu.updateButtons(enableFormButtons);
 		upperMenu.updateNewVersionButton(formTable.getValue());
+		upperMenu.updateRemoveFormButton(formTable.getValue());
 	}
 
 	private FormManagerUpperMenu createUpperMenu() {
@@ -223,6 +246,38 @@ public class FormManager extends FormWebPageComponent {
 		return newFormVersion;
 	}
 
+	private void removeSelectedForm() {
+		Form selectedForm;
+		try {
+			selectedForm = formDao.read(formTable.getValue().getId());
+			if (selectedForm != null) {
+				// If it is the last form, remove all its tests.
+				RootForm rootForm = formTable.getSelectedRootForm();
+				if (rootForm.getChildForms().size() <= 1) {
+					List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm
+							.getLabel(), selectedForm.getOrganizationId());
+					for (TestScenario testScenario : testScenarios) {
+						testScenarioDao.makeTransient(testScenario);
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed test scenario '"
+								+ testScenario.getName() + "' for form '" + selectedForm.getLabel() + "' (version "
+								+ selectedForm.getVersion() + ").");
+					}
+				}
+				// Remove the form.
+				formDao.makeTransient(selectedForm);
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has removed form '" + selectedForm.getLabel() + "' (version " + selectedForm.getVersion()
+						+ ").");
+				formTable.refreshFormTable();
+			}
+		} catch (UnexpectedDatabaseException e) {
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
+
+	}
+
 	private void formStatusValueChanged(final ComboBox statusComboBox) {
 		if (getForm().getStatus().equals(statusComboBox.getValue())) {
 			// Its the same status. Don't do anything.
@@ -239,9 +294,9 @@ public class FormManager extends FormWebPageComponent {
 					changeStatusOnDatabase(getForm(), statusComboBox, (FormWorkStatus) statusComboBox.getValue());
 					formTable.refreshRow(getForm());
 					windowAccept.close();
-					upperMenu.updateNewVersionButton(getForm());
+					updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 				} catch (NotEnoughRightsToChangeStatusException nercs) {
-
+					// Nothing.
 				}
 			}
 		});
