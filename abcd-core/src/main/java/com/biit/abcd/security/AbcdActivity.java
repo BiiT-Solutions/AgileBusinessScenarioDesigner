@@ -10,6 +10,8 @@ public enum AbcdActivity implements IActivity {
 	READ("Read"),
 
 	FORM_EDITING("FormEditing"),
+	
+	FORM_REMOVE("RemoveForm"),
 
 	FORM_CHANGE_GROUP("ChangeFormGroup"),
 

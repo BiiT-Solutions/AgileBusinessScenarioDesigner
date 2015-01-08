@@ -91,6 +91,7 @@ public enum LanguageCodes {
 	COMMON_ERROR_NAME_IS_IN_USE_DESCRIPTION("common.error.name.is.in.use.description"),
 
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),
+	FORM_MANAGER_REMOVE_FORM("formManager.form.remove"),
 	FORM_MANAGER_NEW_FORM_VERSION("formManager.form.new.version"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
 	FORM_MANAGER_CREATE_TEST_SCENARIOS("formManager.create.test.scenarios"),

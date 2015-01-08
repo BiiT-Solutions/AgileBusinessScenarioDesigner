@@ -57,7 +57,9 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	AbcdActivity.ADMIN_FORMS,
 	
-	AbcdActivity.FORM_STATUS_DOWNGRADE
+	AbcdActivity.FORM_STATUS_DOWNGRADE,
+	
+	AbcdActivity.FORM_REMOVE
 
 	};
 

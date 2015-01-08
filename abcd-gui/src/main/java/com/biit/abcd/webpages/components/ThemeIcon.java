@@ -52,6 +52,8 @@ public enum ThemeIcon {
 
 	FORM_MANAGER_ADD_FORM("form.create.svg"),
 	
+	FORM_MANAGER_REMOVE_FORM("element.delete.svg"),
+	
 	FORM_MANAGER_FORM_NEW_VERSION("form.new.version.svg"),
 	
 	FORM_MANAGER_EXPORT_RULES("form.export.rules.svg"),

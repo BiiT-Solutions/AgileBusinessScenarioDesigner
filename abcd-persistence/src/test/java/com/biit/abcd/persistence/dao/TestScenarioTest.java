@@ -69,7 +69,7 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
 
-		persistedList = testScenarioDao.getTestScenarioByFormId(form.getId());
+		persistedList = testScenarioDao.getTestScenarioByForm(form.getId());
 		Assert.assertEquals(persistedList.size(), 1);
 		Assert.assertEquals(persistedList.get(0).getName(), TEST_SCENARIO_NAME);
 
