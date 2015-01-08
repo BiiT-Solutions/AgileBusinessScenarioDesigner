@@ -3,11 +3,15 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.INameAttribute;
@@ -26,12 +30,10 @@ public class Rule extends StorableObject implements INameAttribute {
 	private String name;
 
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	// @Cache(region = "expressionChains", usage =
-	// CacheConcurrencyStrategy.READ_WRITE)
+	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private ExpressionChain conditions;
-	// @Cache(region = "expressionChains", usage =
-	// CacheConcurrencyStrategy.READ_WRITE)
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private ExpressionChain actions;
 
 	public Rule() {

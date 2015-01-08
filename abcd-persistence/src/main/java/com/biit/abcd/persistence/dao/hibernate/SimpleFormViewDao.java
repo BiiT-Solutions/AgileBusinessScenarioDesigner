@@ -72,7 +72,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 						+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
 						+ "ORDER BY label, tf.version DESC");
 
-		List<Object[]> rows = query.list();
+		List<Object[]> rows = query.setCacheable(true).list();
 
 		session.getTransaction().commit();
 
