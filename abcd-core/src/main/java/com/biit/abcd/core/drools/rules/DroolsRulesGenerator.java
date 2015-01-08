@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -192,24 +194,22 @@ public class DroolsRulesGenerator {
 						+ "\'";
 				break;
 			case NUMBER:
-				try {
-					// To ensure the value is a double value, because the user
-					// can put an integer and drools doesn't like it
-					Double value = Double.parseDouble(expressionValueCustomVariable.getVariable().getDefaultValue());
-					customVariableDefaultValue = value.toString();
-				} catch (NullPointerException | NumberFormatException e) {
-					AbcdLogger.errorMessage(this.getClass().getName(), e);
-				}
+				customVariableDefaultValue = expressionValueCustomVariable.getVariable().getDefaultValue()+"d";
 				break;
 			case DATE:
-				customVariableDefaultValue = "\'" + expressionValueCustomVariable.getVariable().getDefaultValue()
-						+ "\'";
+				try {
+					SimpleDateFormat userInputFormat = new SimpleDateFormat("dd/mm/yyyy");
+					customVariableDefaultValue = "(new Date("
+							+ userInputFormat.parse(expressionValueCustomVariable.getVariable().getDefaultValue())
+									.getTime() + "l))";
+				} catch (ParseException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+				}
 				break;
 			}
 
 			// Rule name
-			ruleName = RulesUtils.getRuleName(expressionValueCustomVariable.getVariable().getName()
-					+ "_default_value");
+			ruleName = RulesUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
 			// Conditions
 			defaultCustomVariableValue.append("when\n");
 			defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
@@ -231,10 +231,10 @@ public class DroolsRulesGenerator {
 		if (!variablesList.contains(defaultCustomVariableValue.toString())) {
 			variablesList.add(defaultCustomVariableValue.toString());
 			return ruleName + defaultCustomVariableValue.toString();
-		}else{
+		} else {
 			return null;
 		}
-		
+
 	}
 
 	/**

@@ -6,6 +6,7 @@ import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
@@ -40,7 +41,10 @@ public class SimpleConditionsGenerator {
 				return simpleCategoryConditions(treeObject);
 			} else if ((treeObject instanceof Group) || (treeObject instanceof Question)) {
 				return simpleGroupQuestionConditions(treeObject);
-			} else {
+			} else if (treeObject instanceof Answer) {
+				// Answers ot parsed, checked here to avoid null pointers
+				return "";
+			}else {
 				throw new TreeObjectInstanceNotRecognizedException(treeObject);
 			}
 		} else {
