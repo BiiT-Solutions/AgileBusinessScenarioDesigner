@@ -377,15 +377,20 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
+	/**
+	 * Also tests the variable initialization to a default value (in this case
+	 * 10)
+	 */
 	@Test(groups = { "rules" })
 	public void inOperatorCustomVariableFormTest() {
 		try {
 			// Restart the form to avoid test cross references
 			initForm();
 			// Create a simple form custom variable
-			createFormNumberCustomVariableExpression(CUSTOM_VARIABLE_TO_COMPARE);
+			CustomVariable formNumberCustomVariable = new CustomVariable(getForm(), CUSTOM_VARIABLE_TO_COMPARE,
+					CustomVariableType.NUMBER, CustomVariableScope.FORM, "10");
 			// IN rule
-			createInRule(getFormNumberExpressionValueCustomVariable());
+			createInRule(new ExpressionValueCustomVariable(getForm(), formNumberCustomVariable));
 			// Create the diagram
 			createDiagram();
 			// Create the drools rules and launch the engine
@@ -918,15 +923,11 @@ public class OperatorsTest extends KidsFormCreator {
 							getAnswer(VEGETABLES_QUESTION, "d")));
 
 			// Merge NOT with AND
-			ExpressionChain conditions = new ExpressionChain(
-					new ExpressionFunction(AvailableFunction.NOT),
-					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), 
-					expressionOne, 
-					new ExpressionOperatorLogic(AvailableOperator.AND), 
-					expressionThree,
-					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), 
-					new ExpressionOperatorLogic(AvailableOperator.AND), 
-					expressionTwo);
+			ExpressionChain conditions = new ExpressionChain(new ExpressionFunction(AvailableFunction.NOT),
+					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), expressionOne, new ExpressionOperatorLogic(
+							AvailableOperator.AND), expressionThree,
+					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
+							AvailableOperator.AND), expressionTwo);
 			// Create a a simple action
 			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
 					CustomVariableType.STRING, CustomVariableScope.FORM);
@@ -1061,151 +1062,142 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "rules" })
-	public void testGreaterThanOperator() throws ExpressionInvalidException, InvalidRuleException, IOException,
-			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
-			NotValidTypeInVariableData {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
-				new ExpressionOperatorLogic(AvailableOperator.GREATER_THAN), new ExpressionValueNumber(1.0));
-		runConditionInRuleAndTestResult(condition);
+	public void testGreaterThanOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionOperatorLogic(AvailableOperator.GREATER_THAN), new ExpressionValueNumber(1.0));
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testGreaterEqualsOperator() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(VEGETABLES_AMOUNT_QUESTION)), new ExpressionOperatorLogic(
-				AvailableOperator.GREATER_EQUALS), new ExpressionValueNumber(5.0));
-		runConditionInRuleAndTestResult(condition);
+	public void testGreaterEqualsOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionOperatorLogic(AvailableOperator.GREATER_EQUALS), new ExpressionValueNumber(5.0));
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testLessThanOperator() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(VEGETABLES_AMOUNT_QUESTION)), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
-				new ExpressionValueNumber(7.0));
-		runConditionInRuleAndTestResult(condition);
+	public void testLessThanOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(7.0));
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testLessEqualsOperator() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(VEGETABLES_AMOUNT_QUESTION)), new ExpressionOperatorLogic(AvailableOperator.LESS_EQUALS),
-				new ExpressionValueNumber(5.0));
-		runConditionInRuleAndTestResult(condition);
+	public void testLessEqualsOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionOperatorLogic(AvailableOperator.LESS_EQUALS), new ExpressionValueNumber(5.0));
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testEqualsOperator() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(VEGETABLES_AMOUNT_QUESTION)), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				new ExpressionValueNumber(5.0));
-		runConditionInRuleAndTestResult(condition);
+	public void testEqualsOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(5.0));
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testNotEqualsOperator() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(VEGETABLES_AMOUNT_QUESTION)), new ExpressionOperatorLogic(AvailableOperator.NOT_EQUALS),
-				new ExpressionValueNumber(3.0));
-		runConditionInRuleAndTestResult(condition);
+	public void testNotEqualsOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(VEGETABLES_AMOUNT_QUESTION)),
+					new ExpressionOperatorLogic(AvailableOperator.NOT_EQUALS), new ExpressionValueNumber(3.0));
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testNotEqualsDateOperator() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.DATE), new ExpressionOperatorLogic(
-				AvailableOperator.NOT_EQUALS), new ExpressionValueSystemDate());
-		runConditionInRuleAndTestResult(condition);
+	public void testNotEqualsDateOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.DATE),
+					new ExpressionOperatorLogic(AvailableOperator.NOT_EQUALS), new ExpressionValueSystemDate());
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(groups = { "rules" })
-	public void testNotEqualsDateYearOperator() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-		// Restart the form to avoid test cross references
-		initForm();
-		// Create condition
-		ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME, new ExpressionValueTreeObjectReference(
-				getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionOperatorLogic(
-				AvailableOperator.NOT_EQUALS), new ExpressionValueNumber(2014.));
-		runConditionInRuleAndTestResult(condition);
+	public void testNotEqualsDateYearOperator() {
+		try {
+			// Restart the form to avoid test cross references
+			initForm();
+			// Create condition
+			ExpressionChain condition = new ExpressionChain(TEST_EXPRESSION_NAME,
+					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS),
+					new ExpressionOperatorLogic(AvailableOperator.NOT_EQUALS), new ExpressionValueNumber(2014.));
+			runConditionInRuleAndTestResult(condition);
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
-	private void runConditionInRuleAndTestResult(ExpressionChain condition) throws ExpressionInvalidException,
-			InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
-			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException {
-
-		// Create a a simple action
-		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
-				CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain action = new ExpressionChain(
-				new ExpressionValueCustomVariable(getForm(), customVariableResult), new ExpressionOperatorMath(
-						AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
-		// Create the drools rules and launch the engine
-		DroolsForm droolsForm = launchRule(new Rule("logicComparatorsTest", condition, action));
-		if (droolsForm != null) {
-			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+	private void runConditionInRuleAndTestResult(ExpressionChain condition) {
+		try {
+			// Create a a simple action
+			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+					CustomVariableType.STRING, CustomVariableScope.FORM);
+			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
+					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+			// Create the drools rules and launch the engine
+			DroolsForm droolsForm = launchRule(new Rule("logicComparatorsTest", condition, action));
+			if (droolsForm != null) {
+				// Check result
+				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+						CUSTOM_VARIABLE_RESULT_VALUE);
+			}
+		} catch (Exception e) {
+			Assert.fail("Exception in test");
 		}
 	}
 

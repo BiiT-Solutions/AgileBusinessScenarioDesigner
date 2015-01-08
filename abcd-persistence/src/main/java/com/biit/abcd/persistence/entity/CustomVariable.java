@@ -37,15 +37,26 @@ public class CustomVariable extends StorableObject {
 	private CustomVariableScope scope;
 	@Enumerated(EnumType.STRING)
 	private CustomVariableType type;
+	
+	private String defaultValue;
 
 	public CustomVariable() {
 	}
 
+	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope, String defaultValue) {
+		this.form = form;
+		this.name = name;
+		this.scope = scope;
+		this.type = type;
+		this.defaultValue = defaultValue;
+	}
+	
 	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope) {
 		this.form = form;
 		this.name = name;
 		this.scope = scope;
 		this.type = type;
+		this.defaultValue = null;
 	}
 
 	public String getName() {
@@ -84,6 +95,14 @@ public class CustomVariable extends StorableObject {
 	public String toString() {
 		return getName();
 	}
+	
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 
 	/**
 	 * Returns true if the custom variable compared has the same name and scope
@@ -119,6 +138,7 @@ public class CustomVariable extends StorableObject {
 			name = variable.getName();
 			scope = variable.getScope();
 			type = variable.getType();
+			defaultValue = variable.getDefaultValue();
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of CustomVariable.");
 		}

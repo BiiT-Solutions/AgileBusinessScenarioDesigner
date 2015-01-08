@@ -6,7 +6,7 @@
 				<include name="rules" />
 				<include name="droolsPrattParser" />
 				<include name="gson" />
-				<include name="newVersion" />
+				<exclude name="newVersion" />
 				<include name="droolsEngineRules" />
 				<include name="pluginsTest" />
 			</run>

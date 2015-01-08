@@ -1,22 +1,44 @@
 package com.biit.abcd.core.drools.utils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
 import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.TreeObject;
 
 public class RulesUtils {
+
+	public static String getRuleName(String name) {
+		return getRuleName(name, null);
+	}
 
 	public static String getRuleName(String name, ExpressionChain extraConditions) {
 		if (extraConditions == null) {
@@ -468,5 +490,106 @@ public class RulesUtils {
 
 			}
 		}
+	}
+
+	public static List<ExpressionValueCustomVariable> lookForCustomVariablesInDiagram(Diagram diagram) {
+		List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
+		Set<DiagramObject> diagramNodes = diagram.getDiagramObjects();
+		for (DiagramObject diagramNode : diagramNodes) {
+			if (diagramNode instanceof DiagramSource) {
+				customVariablesList.addAll(lookForCustomVariablesInDiagramNode((DiagramElement) diagramNode));
+			}
+		}
+		return customVariablesList;
+	}
+
+	private static List<ExpressionValueCustomVariable> lookForCustomVariablesInDiagramNode(DiagramElement diagramNode) {
+		List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
+		switch (diagramNode.getType()) {
+		case TABLE:
+			DiagramTable tableNode = (DiagramTable) diagramNode;
+			if (tableNode.getTable() != null) {
+				for (TableRuleRow tableRuleRow : tableNode.getTable().getRules()) {
+					if (tableRuleRow.getConditions() != null) {
+						customVariablesList
+								.addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getConditions()));
+					}
+					if (tableRuleRow.getAction() != null) {
+						customVariablesList.addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getAction()));
+					}
+				}
+			}
+			break;
+		case RULE:
+			DiagramRule ruleNode = (DiagramRule) diagramNode;
+			if (ruleNode.getRule().getConditions() != null) {
+				customVariablesList.addAll(lookForCustomVariableInExpressionChain(ruleNode.getRule().getConditions()));
+			}
+			if (ruleNode.getRule().getActions() != null) {
+				customVariablesList.addAll(lookForCustomVariableInExpressionChain(ruleNode.getRule().getActions()));
+			}
+			break;
+		case CALCULATION:
+		case SINK:
+			DiagramExpression expressionNode = (DiagramExpression) diagramNode;
+			if (expressionNode.getExpression() != null) {
+				customVariablesList.addAll(lookForCustomVariableInExpressionChain(expressionNode.getExpression()));
+			}
+			break;
+		case DIAGRAM_CHILD:
+			DiagramChild childDiagramNode = (DiagramChild) diagramNode;
+			if (childDiagramNode.getDiagram() != null) {
+				customVariablesList.addAll(lookForCustomVariablesInDiagram(childDiagramNode.getDiagram()));
+			}
+			break;
+		case FORK:
+			DiagramFork forkNode = (DiagramFork) diagramNode;
+			if (forkNode.getReference() instanceof ExpressionValueCustomVariable) {
+				customVariablesList.add((ExpressionValueCustomVariable) forkNode.getReference());
+			}
+			for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
+				customVariablesList.addAll(lookForCustomVariableInExpressionChain((ExpressionChain) outLink
+						.getExpressionChain()));
+			}
+			break;
+		default:
+			break;
+		}
+		for (DiagramLink outLink : diagramNode.getOutgoingLinks()) {
+			customVariablesList.addAll(lookForCustomVariablesInDiagramNode(outLink.getTargetElement()));
+		}
+		return customVariablesList;
+	}
+
+	private static List<ExpressionValueCustomVariable> lookForCustomVariableInExpressionChain(
+			ExpressionChain expressionChain) {
+		List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
+		for (Expression expression : expressionChain.getExpressions()) {
+			if (expression instanceof ExpressionChain) {
+				lookForCustomVariableInExpressionChain((ExpressionChain) expression);
+
+			} else if (expression instanceof ExpressionValueCustomVariable) {
+				customVariablesList.add((ExpressionValueCustomVariable) expression);
+
+			} else if (expression instanceof ExpressionValueGenericCustomVariable) {
+				ExpressionValueGenericCustomVariable genericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
+				CustomVariable customVariable = genericCustomVariable.getVariable();
+				Form form = customVariable.getForm();
+				switch (customVariable.getScope()) {
+				case FORM:
+					customVariablesList.add(new ExpressionValueCustomVariable(form, customVariable));
+					break;
+				case CATEGORY:
+				case GROUP:
+				case QUESTION:
+					List<TreeObject> treeObjects = form.getChildren(customVariable.getScope().getScope());
+					for (TreeObject treeObject : treeObjects) {
+						customVariablesList.add(new ExpressionValueCustomVariable(treeObject, customVariable));
+					}
+					break;
+				}
+			}
+		}
+		return customVariablesList;
 	}
 }

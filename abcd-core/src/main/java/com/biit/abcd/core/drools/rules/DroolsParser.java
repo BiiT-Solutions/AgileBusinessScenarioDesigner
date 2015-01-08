@@ -1,7 +1,9 @@
 package com.biit.abcd.core.drools.rules;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -120,11 +122,11 @@ public class DroolsParser {
 					} else if (value instanceof ExpressionValueNumber) {
 						inValuesString += value.getValue() + ", ";
 						functionValues.add(value.getValue().toString());
-						
+
 					} else if (value instanceof ExpressionValuePostalCode) {
 						inValuesString += "'" + value.getValue().toString().toUpperCase() + "', ";
 						functionValues.add("'" + value.getValue().toString().toUpperCase() + "'");
-					
+
 					} else {
 						inValuesString += "'" + value.getValue() + "', ";
 						functionValues.add("'" + value.getValue() + "'");
@@ -704,9 +706,9 @@ public class DroolsParser {
 			if (treePrint != null) {
 				mathematicalExpression = treePrint.getBuilder().toString();
 			}
-			ruleCore += "	$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
+			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', " + mathematicalExpression + ");\n";
-			ruleCore += "	AbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+			ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
 					+ leftExpressionCustomVariable.getReference().getName() + ", "
 					+ leftExpressionCustomVariable.getVariable().getName() + ", " + mathematicalExpression + ")\");\n";
 
@@ -1480,7 +1482,13 @@ public class DroolsParser {
 			droolsValue = getDroolsVariableValueFromExpressionValueTreeObject((ExpressionValueTreeObjectReference) expressionValue);
 
 		} else {
-			droolsValue = expressionValue.getValue().toString();
+			if (expressionValue.getValue() instanceof Date) {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				droolsValue = "'" + sdf.format((Date) expressionValue.getValue()) + "'";
+
+			} else {
+				droolsValue = expressionValue.getValue().toString();
+			}
 		}
 
 		if (expressionValueCustomVariable != null) {
