@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.formvariables;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.configuration.AbcdConfigurationReader;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
@@ -14,6 +15,8 @@ import com.biit.abcd.webpages.components.ComparableComboBox;
 import com.biit.abcd.webpages.components.ComparableTextField;
 import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
+import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.ComboBox;
@@ -24,7 +27,7 @@ public class VariableTable extends Table {
 	private boolean protectedElements = false;
 
 	enum FormVariablesProperties {
-		VARIABLE_NAME, TYPE, SCOPE;
+		VARIABLE_NAME, TYPE, SCOPE, DEFAULT_VALUE;
 	};
 
 	public VariableTable() {
@@ -47,11 +50,15 @@ public class VariableTable extends Table {
 				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_TYPE), null, Align.LEFT);
 
 		addContainerProperty(FormVariablesProperties.SCOPE, ComparableComboBox.class, "",
-				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_SCOPE), null, Align.LEFT);
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_SCOPE), null, Align.LEFT);
+
+		addContainerProperty(FormVariablesProperties.DEFAULT_VALUE, ComparableTextField.class, "",
+				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_DEFAULT_VALUE), null, Align.LEFT);
 
 		setColumnExpandRatio(FormVariablesProperties.VARIABLE_NAME, 1);
 		setColumnExpandRatio(FormVariablesProperties.TYPE, 1);
 		setColumnExpandRatio(FormVariablesProperties.SCOPE, 1);
+		setColumnExpandRatio(FormVariablesProperties.DEFAULT_VALUE, 1);
 
 		setSortContainerPropertyId(FormVariablesProperties.VARIABLE_NAME);
 	}
@@ -62,14 +69,54 @@ public class VariableTable extends Table {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public void addRow(CustomVariable customVariable) {
+	public void addRow(final CustomVariable customVariable) {
 		Item item = addItem(customVariable);
-		ComparableTextField nameTextField = createTextField(customVariable);
+		final ComparableTextField nameTextField = createTextField(customVariable);
+		nameTextField.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 8130288971788878223L;
+
+			@Override
+			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+				customVariable.setName(nameTextField.getValue());
+				updateInfo(customVariable);
+			}
+		});
 		nameTextField.setValue(customVariable.getName());
 		nameTextField.setEnabled(!protectedElements);
 		item.getItemProperty(FormVariablesProperties.VARIABLE_NAME).setValue(nameTextField);
 
-		ComboBox typeComboBox = createTypeComboBox(customVariable);
+		final ComparableTextField defaultValueTextField = createTextField(customVariable);
+		defaultValueTextField.setImmediate(true);
+		addDefaultValueValidators(customVariable, defaultValueTextField);
+		defaultValueTextField.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 8846164295852977149L;
+
+			@Override
+			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+				try {
+					defaultValueTextField.validate();
+					if (defaultValueTextField.getValue() != null) {
+						String oldValue = customVariable.getDefaultValue();
+						customVariable.setDefaultValue(defaultValueTextField.getValue());
+						updateInfo(customVariable);
+						
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress()
+								+ "' has changed the property 'Default Value' of the class '" + customVariable.getClass()
+								+ "' from '" + oldValue + "' to '" + customVariable.getDefaultValue() + "'.");
+					}
+				} catch (InvalidValueException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+					MessageManager.showWarning(LanguageCodes.ERROR_INVALID_VALUE);
+				}
+			}
+		});
+		defaultValueTextField.setValue((customVariable.getDefaultValue() == null ? "" : customVariable
+				.getDefaultValue()));
+		defaultValueTextField.setEnabled(!protectedElements);
+		item.getItemProperty(FormVariablesProperties.DEFAULT_VALUE).setValue(defaultValueTextField);
+
+		ComboBox typeComboBox = createTypeComboBox(customVariable, defaultValueTextField);
 		typeComboBox.setValue(customVariable.getType());
 		typeComboBox.setEnabled(!protectedElements);
 		typeComboBox.setImmediate(true);
@@ -100,19 +147,11 @@ public class VariableTable extends Table {
 				thisTable.select(customVariable);
 			}
 		});
-		nameTextField.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = 8130288971788878223L;
-
-			@Override
-			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				customVariable.setName(nameTextField.getValue());
-				updateInfo(customVariable);
-			}
-		});
 		return nameTextField;
 	}
 
-	public ComboBox createTypeComboBox(final CustomVariable customVariable) {
+	public ComboBox createTypeComboBox(final CustomVariable customVariable,
+			final ComparableTextField defaultValueTextField) {
 		final VariableTable thisTable = this;
 		final ComboBox typeComboBox = new ComboBox();
 		for (CustomVariableType variableType : CustomVariableType.values()) {
@@ -141,6 +180,11 @@ public class VariableTable extends Table {
 						CustomVariableType oldType = customVariable.getType();
 						customVariable.setType((CustomVariableType) typeComboBox.getValue());
 						updateInfo(customVariable);
+
+						if (oldType != customVariable.getType()) {
+							customVariable.setDefaultValue(null);
+							addDefaultValueValidators(customVariable, defaultValueTextField);
+						}
 
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress()
@@ -206,5 +250,26 @@ public class VariableTable extends Table {
 	private void updateInfo(CustomVariable customVariable) {
 		customVariable.setUpdatedBy(UserSessionHandler.getUser().getUserId());
 		customVariable.setUpdateTime();
+	}
+
+	private void addDefaultValueValidators(CustomVariable customVariable, ComparableTextField textField) {
+		textField.removeAllValidators();
+		switch (customVariable.getType()) {
+		case NUMBER:
+			textField.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getNumberMask(),
+					ServerTranslate.translate(LanguageCodes.ERROR_INVALID_VALUE)));
+			textField.setInputPrompt(AbcdConfigurationReader.getInstance().getNumberPromt());
+			break;
+		case DATE:
+			textField.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getDateMask(),
+					ServerTranslate.translate(LanguageCodes.ERROR_INVALID_DATE)));
+			textField.setInputPrompt(AbcdConfigurationReader.getInstance().getDatePromt());
+			break;
+		default:
+			// String value as default, we do not validate
+			// anything
+			textField.setInputPrompt(AbcdConfigurationReader.getInstance().getTextPromt());
+			break;
+		}
 	}
 }

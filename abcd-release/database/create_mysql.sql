@@ -488,6 +488,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
+        defaultValue varchar(255),
         name varchar(190),
         scope varchar(190),
         type varchar(255),
