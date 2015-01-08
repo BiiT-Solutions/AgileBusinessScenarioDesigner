@@ -28,8 +28,6 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.form.TreeObject;
-import com.biit.form.exceptions.NotValidParentException;
 import com.biit.form.persistence.dao.hibernate.BaseFormDao;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.StorableObject;
@@ -46,6 +44,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Transactional
+//	@Cacheable(value = "forms", key = "#entity.label, #entity.organizationId")
 	public Form makePersistent(Form entity) throws UnexpectedDatabaseException {
 
 		// For solving Hibernate bug
@@ -162,7 +161,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-	@Cacheable(value = "forms", key = "#id")
+//	@Cacheable(value = "forms", key = "#form.id")
 	public Form read(Long id) throws UnexpectedDatabaseException {
 		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		Form form = super.read(id);
@@ -171,10 +170,8 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label"),
-			@CacheEvict(value = "forms", key = "#form.id"),
-			@CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
-	public void makeTransient(Form form) throws UnexpectedDatabaseException {	
+//	@Caching(evict = {@CacheEvict(value = "forms", key = "#form.label, #form.organizationId"), @CacheEvict(value = "forms", key = "#form.id")})
+	public void makeTransient(Form form) throws UnexpectedDatabaseException {
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
 			form.remove(customVariable);
@@ -183,19 +180,19 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		}
 
 		super.makeTransient(form);
-		
+
 		purgeCustomVariablesToDelete(form.getCustomVariablesToDelete());
 		form.setCustomVariablesToDelete(new HashSet<CustomVariable>());
 	}
 
 	@Override
-	@Cacheable(value = "forms", key = "#label")
+//	@Cacheable(value = "forms", key = "#form.label, #form.organizationId")
 	public Form getForm(String label, Long organizationId) throws UnexpectedDatabaseException {
 		return super.getForm(label, organizationId);
 	}
 
 	@Override
-	@Cacheable(value = "forms")
+//	@Cacheable(value = "forms")
 	public List<Form> getAll() throws UnexpectedDatabaseException {
 		List<Form> result = super.getAll();
 		return result;
@@ -210,6 +207,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	 * @return
 	 * @throws UnexpectedDatabaseException
 	 */
+//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
 	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo)
 			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
@@ -230,6 +228,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		}
 	}
 
+//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
 	public int updateValidFrom(String label, int version, Long organizationId, Timestamp validFrom)
 			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
@@ -251,6 +250,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
+//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
 	public int updateFormStatus(String label, int version, Long organizationId, FormWorkStatus formStatus)
 			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();

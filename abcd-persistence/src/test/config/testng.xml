@@ -3,7 +3,7 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="ehCache" />
+				<exclude name="ehCache" />
 				<exclude name="expressionEvaluator" />
 				<include name="formDao" />
 				<include name="simpleFormViewDao" />

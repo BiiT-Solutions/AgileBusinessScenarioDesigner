@@ -211,8 +211,7 @@ public class ExpressionViewer extends CssLayout {
 
 							if (expression instanceof ExpressionValueTimestamp) {
 								stringInputWindow.setValue(DateManager.convertDateToString(
-										(Timestamp) expression.getValue(),
-										ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_DATE)));
+										(Timestamp) expression.getValue(), ExpressionValueTimestamp.DATE_FORMAT));
 							} else {
 								stringInputWindow.setValue(((ExpressionValue<?>) expression).getValue().toString());
 							}
@@ -277,6 +276,7 @@ public class ExpressionViewer extends CssLayout {
 											updateExpression();
 											setSelectedExpression(selectExpression);
 										} catch (NotValidExpressionValue e1) {
+											AbcdLogger.errorMessage(this.getClass().getName(), e1);
 											MessageManager.showError(LanguageCodes.ERROR_INVALID_VALUE);
 										}
 									}
@@ -500,8 +500,8 @@ public class ExpressionViewer extends CssLayout {
 	}
 
 	/**
-	 * Adds a new element in the position of the selected element. Depending of
-	 * the element, can be inserted after or before.
+	 * Adds a new element in the position of the selected element. Depending of the element, can be inserted after or
+	 * before.
 	 * 
 	 * @param newElement
 	 */

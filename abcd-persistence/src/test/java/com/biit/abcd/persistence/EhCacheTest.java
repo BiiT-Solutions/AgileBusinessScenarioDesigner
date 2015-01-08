@@ -1,5 +1,8 @@
 package com.biit.abcd.persistence;
 
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Ehcache;
+
 import org.hibernate.stat.EntityStatistics;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,9 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
+import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -26,10 +32,12 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 	private IFormDao formDao;
 
 	@Test
-	public void testSecondLevelCache() throws FieldTooLongException, UnexpectedDatabaseException {
+	public void testSecondLevelCache() throws FieldTooLongException, UnexpectedDatabaseException,
+			NotValidChildException, CharacterNotAllowedException, InvalidAnswerFormatException {
 		formDao.getSessionFactory().getStatistics().clear();
+		formDao.evictAllCache();
 
-		Form form = new Form();
+		Form form = FormUtils.createCompleteForm();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
 		formDao.makePersistent(form);
@@ -55,7 +63,7 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		form = formDao.getForm(DUMMY_FORM, 0l);
 		Assert.assertNotNull(form);
 
-		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
+		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 61);
 		Assert.assertTrue(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount() > 0);
 
 		// Removed forms also are removed from cache.
@@ -63,11 +71,13 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		formDao.makeTransient(form);
 		form = formDao.read(id);
 		Assert.assertNull(form);
+		formDao.evictAllCache();
 	}
 
-	@Test
+	@Test(dependsOnMethods="testSecondLevelCache")
 	public void testSecondLevelCacheClear() throws FieldTooLongException, UnexpectedDatabaseException {
 		formDao.getSessionFactory().getStatistics().clear();
+		formDao.evictAllCache();
 
 		Form form = new Form();
 		form.setOrganizationId(0l);
@@ -114,6 +124,6 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
 		// Cache hits now change.
 		Assert.assertTrue(cacheHits < formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
-
+		formDao.evictAllCache();
 	}
 }

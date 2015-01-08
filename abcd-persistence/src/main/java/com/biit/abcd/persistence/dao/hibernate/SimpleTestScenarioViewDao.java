@@ -63,7 +63,7 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 				.createSQLQuery("SELECT tests.ID, tests.name, tests.formId, formsOfTest.form_version FROM test_scenario AS tests JOIN (SELECT t2.id form_Id, t2.version form_version FROM tree_forms AS t2 JOIN tree_forms AS t1 ON t1.organizationId=t2.organizationId AND t1.label=t2.label WHERE t1.id="
 						+ formId +") AS formsOfTest WHERE tests.formId=formsOfTest.form_Id;");
 
-		List<Object[]> rows = query.list();
+		List<Object[]> rows = query.setCacheable(true).list();
 		session.getTransaction().commit();
 
 		List<SimpleTestScenarioView> testScenarioViews = new ArrayList<>();

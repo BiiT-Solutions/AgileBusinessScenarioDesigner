@@ -13,6 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.biit.abcd.gson.utils.DiagramLinkSerializer;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -28,6 +31,7 @@ import com.liferay.portal.model.User;
 public class DiagramLink extends DiagramObject {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private ExpressionChain expressionChain;
 
 	@Expose

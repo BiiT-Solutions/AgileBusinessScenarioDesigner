@@ -5,6 +5,7 @@ import java.text.ParseException;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -129,24 +130,6 @@ public class TabOperatorLayout extends TabLayout {
 			}
 		});
 
-		// Button moduleButton = createButton("%", new ClickListener() {
-		// private static final long serialVersionUID = -8611397253545833133L;
-		//
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// addMathematicalExpression(AvailableOperator.MODULE);
-		// }
-		// });
-		//
-		// Button powButton = createButton("x\u207F", new ClickListener() {
-		// private static final long serialVersionUID = -8611397253545833133L;
-		//
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// addMathematicalExpression(AvailableOperator.POW);
-		// }
-		// });
-
 		assignButton.setWidth("100%");
 		layout.addComponent(assignButton, 0, 0, GRID_COLUMNS - 1, 0);
 		commaButton.setWidth("100%");
@@ -157,8 +140,6 @@ public class TabOperatorLayout extends TabLayout {
 		layout.addComponent(minusButton);
 		layout.addComponent(multButton);
 		layout.addComponent(divButton);
-		// layout.addComponent(moduleButton);
-		// layout.addComponent(powButton);
 	}
 
 	private void createMathFunctionsOperators(AbstractLayout layout) {
@@ -181,39 +162,6 @@ public class TabOperatorLayout extends TabLayout {
 						addFunctionExpression(AvailableFunction.MIN);
 					}
 				});
-
-		// Button absoluteButton =
-		// createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ABS),
-		// new ClickListener() {
-		// private static final long serialVersionUID = -3339234972234970277L;
-		//
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// addFunctionExpression(AvailableFunction.ABS);
-		// }
-		// });
-		//
-		// Button sqrtButton =
-		// createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_SQRT),
-		// new ClickListener() {
-		// private static final long serialVersionUID = -3339234972234970277L;
-		//
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// addFunctionExpression(AvailableFunction.SQRT);
-		// }
-		// });
-		//
-		// Button roundButton =
-		// createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ROUND),
-		// new ClickListener() {
-		// private static final long serialVersionUID = -3339234972234970277L;
-		//
-		// @Override
-		// public void buttonClick(ClickEvent event) {
-		// addFunctionExpression(AvailableFunction.ROUND);
-		// }
-		// });
 
 		Button averageButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_AVG),
 				new ClickListener() {
@@ -257,9 +205,6 @@ public class TabOperatorLayout extends TabLayout {
 
 		layout.addComponent(maxButton);
 		layout.addComponent(minimumButton);
-		// layout.addComponent(absoluteButton);
-		// layout.addComponent(sqrtButton);
-		// layout.addComponent(roundButton);
 		layout.addComponent(averageButton);
 		layout.addComponent(sumButton);
 		layout.addComponent(ifButton);
@@ -467,10 +412,12 @@ public class TabOperatorLayout extends TabLayout {
 												break;
 											}
 										} catch (NotValidExpressionValue e1) {
+											AbcdLogger.errorMessage(this.getClass().getName(), e1);
 											MessageManager.showError(LanguageCodes.ERROR_INVALID_VALUE);
 										}
 									}
 								} catch (InvalidValueException e) {
+									AbcdLogger.errorMessage(this.getClass().getName(), e);
 									MessageManager.showWarning(LanguageCodes.EXPRESSION_ERROR_INCORRECT_INPUT_VALUE);
 								}
 							}
