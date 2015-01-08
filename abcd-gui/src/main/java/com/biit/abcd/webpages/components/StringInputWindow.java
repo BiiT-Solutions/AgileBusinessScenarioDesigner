@@ -1,5 +1,8 @@
 package com.biit.abcd.webpages.components;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import com.biit.abcd.configuration.AbcdConfigurationReader;
 import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.LanguageCodes;
@@ -7,14 +10,19 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.language.UserLocaleStringToDoubleConverter;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.vaadin.data.Property.ReadOnlyException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -25,7 +33,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private static final String HEIGHT = "250px";
 	private static final String FIELD_WIDTH = "150px";
 
-	private TextField expressionValue;
+	private AbstractField<?> expressionValue;
 	private ComboBox expressionType;
 
 	private FormLayout formLayout;
@@ -47,8 +55,10 @@ public class StringInputWindow extends AcceptCancelWindow {
 				expressionValue.validate();
 				if (getFormat().equals(AnswerFormat.NUMBER) && expressionValue.getConvertedValue() != null) {
 					return expressionValue.getConvertedValue().toString();
+				} else if (getFormat().equals(AnswerFormat.DATE)) {
+					return ExpressionValueTimestamp.DATE_FORMATTER.format((Date) expressionValue.getValue());
 				}
-				return expressionValue.getValue();
+				return expressionValue.getValue().toString();
 			} catch (InvalidValueException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 				// Error shown to the user in the caller class
@@ -110,10 +120,16 @@ public class StringInputWindow extends AcceptCancelWindow {
 			formLayout.removeComponent(expressionValue);
 		}
 
-		expressionValue = new TextField(ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+		if (expressionType.getValue().equals(AnswerFormat.DATE)) {
+			expressionValue = new DateField(ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+		} else {
+			expressionValue = new TextField(ServerTranslate.translate(LanguageCodes.EXPRESSION_INPUT_WINDOW_TEXTFIELD));
+		}
 		expressionValue.setImmediate(true);
 		expressionValue.setWidth(FIELD_WIDTH);
-		expressionValue.setNullRepresentation("");
+		if (expressionValue instanceof TextField) {
+			((TextField) expressionValue).setNullRepresentation("");
+		}
 
 		formLayout.addComponent(expressionValue);
 	}
@@ -128,7 +144,14 @@ public class StringInputWindow extends AcceptCancelWindow {
 					setValue(null);
 				}
 			} else if (getFormat().equals(AnswerFormat.TEXT)) {
-				expressionValue.setValue(value.toString());
+				((TextField) expressionValue).setValue(value.toString());
+			} else if (getFormat().equals(AnswerFormat.DATE)) {
+				try {
+					System.out.println("-->" + value);
+					((DateField) expressionValue).setValue(ExpressionValueTimestamp.DATE_FORMATTER.parse(value));
+				} catch (ReadOnlyException | ConversionException | ParseException e) {
+					setValue(null);
+				}
 			} else {
 				setValue(null);
 			}
@@ -142,24 +165,24 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private void setPromt() {
 		switch (getFormat()) {
 		case DATE:
-			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getDatePromt());
+			// expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getDatePromt());
 			// expressionValue.addValidator(new
 			// RegexpValidator(AbcdConfigurationReader.getInstance().getDateMask(),
 			// ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case NUMBER:
-			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getNumberPromt());
+			((TextField) expressionValue).setInputPrompt(AbcdConfigurationReader.getInstance().getNumberPromt());
 			// expressionValue.addValidator(new
 			// RegexpValidator(AbcdConfigurationReader.getInstance().getNumberMask(),
 			// ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case POSTAL_CODE:
-			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getPostalCodePromt());
+			((TextField) expressionValue).setInputPrompt(AbcdConfigurationReader.getInstance().getPostalCodePromt());
 			expressionValue.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getPostalCodeMask(),
 					ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case TEXT:
-			expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getTextPromt());
+			((TextField) expressionValue).setInputPrompt(AbcdConfigurationReader.getInstance().getTextPromt());
 			break;
 		}
 	}
@@ -167,16 +190,16 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private void setLocale() {
 		switch (getFormat()) {
 		case DATE:
-			expressionValue.setConverter(String.class);
+			//expressionValue.setConverter(String.class);
 			break;
 		case NUMBER:
-			expressionValue.setConverter(new UserLocaleStringToDoubleConverter());
+			((TextField) expressionValue).setConverter(new UserLocaleStringToDoubleConverter());
 			break;
 		case POSTAL_CODE:
-			expressionValue.setConverter(String.class);
+			((TextField) expressionValue).setConverter(String.class);
 			break;
 		case TEXT:
-			expressionValue.setConverter(String.class);
+			((TextField) expressionValue).setConverter(String.class);
 			break;
 		}
 	}

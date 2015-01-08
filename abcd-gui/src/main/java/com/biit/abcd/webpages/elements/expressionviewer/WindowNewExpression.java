@@ -36,7 +36,7 @@ public class WindowNewExpression extends WindowCreateNewObject {
 		((ExpressionEditor) getParentWindow()).sortTableMenu();
 
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-				+ "' has created a " + expression.getClass() + " with 'Name: " + expression.getName() + "'.");
+				+ "' has created a " + expression.getClass() + " with name '" + expression.getName() + "'.");
 
 		close();
 	}
