@@ -7,7 +7,6 @@ import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 public interface IFormDao extends IBaseFormDao<Form> {
 
-	int updateFormStatus(String label, int version, Long organizationId, FormWorkStatus formStatus)
-			throws UnexpectedDatabaseException;
+	int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException;
 
 }

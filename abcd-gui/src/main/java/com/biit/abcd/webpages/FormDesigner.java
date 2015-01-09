@@ -322,7 +322,7 @@ public class FormDesigner extends FormWebPageComponent {
 
 			form.setStatus(value);
 			try {
-				formDao.updateFormStatus(form.getLabel(), form.getVersion(), form.getOrganizationId(), value);
+				formDao.updateFormStatus(form.getId(), value);
 			} catch (UnexpectedDatabaseException e) {
 				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
