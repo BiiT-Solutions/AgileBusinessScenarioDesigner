@@ -35,6 +35,7 @@ import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
@@ -100,7 +101,7 @@ public class DroolsParser {
 
 			ExpressionFunction function = (ExpressionFunction) actions.getExpressions().get(1);
 
-			ruleCore += checkValueAssignedInCustomVariableInDrools(variables);
+			ruleCore += checkValueAssignedInCustomVariableInDrools(leftExpressionCustomVariable, variables);
 			// First part of the action 'setVariable'
 			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', ";
@@ -156,7 +157,7 @@ public class DroolsParser {
 		return true;
 	}
 
-	private static String checkValueAssignedInCustomVariableInDrools(List<Expression> variables) {
+	private static String checkValueAssignedInCustomVariableInDrools(ExpressionValueCustomVariable leftExpressionCustomVariable, List<Expression> variables) {
 		String ruleCore = "";
 		ruleCore += "\tList<Double> variablesList = new ArrayList<Double>();\n";
 		for (Expression variable : variables) {
@@ -164,31 +165,45 @@ public class DroolsParser {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
 				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isVariableDefined('"
 						+ expressionValueCustomVariable.getVariable().getName() + "')){";
-				ruleCore += "\tvariablesList.add((Double)"
+				ruleCore += "variablesList.add("
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable) + ");}\n";
+
+				if (isRepeatableGroup(expressionValueCustomVariable.getReference())) {
+					TreeObject parent = expressionValueCustomVariable.getReference().getParent();
+					if (parent != null) {
+						String parentId = "$" + parent.getUniqueNameReadable();
+						ruleCore += "\tif(" + parentId + ".isVariableDefined('"
+								+ leftExpressionCustomVariable.getVariable().getName() + "')){";
+						ruleCore += "variablesList.add("
+								+ getDroolsVariableValueFromExpressionValueTreeObject(leftExpressionCustomVariable)
+								+ ");}\n";
+					}
+				}
 
 			} else if (variable instanceof ExpressionValueTreeObjectReference) {
 				ExpressionValueTreeObjectReference expressionValueTreeObject = (ExpressionValueTreeObjectReference) variable;
-				ruleCore += "\tvariablesList.add((Double)"
+				ruleCore += "variablesList.add("
 						+ getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
 
 			} else if (variable instanceof ExpressionValueGlobalConstant) {
 				GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) variable).getValue();
 				switch (globalExpression.getFormat()) {
 				case NUMBER:
-					ruleCore += "\tvariablesList.add((Double)" + globalExpression.getName() + ");\n";
+					ruleCore += "variablesList.add((Double)" + globalExpression.getName() + ");\n";
 					break;
 				case POSTAL_CODE:
-					ruleCore += "\tvariablesList.add(((String)" + globalExpression.getName() + ").toUpperCase());\n";
+					ruleCore += "variablesList.add(((String)" + globalExpression.getName() + ").toUpperCase());\n";
 					break;
 				case TEXT:
+					ruleCore += "variablesList.add(" + globalExpression.getName() + ");\n";
+					break;
 				case DATE:
-					ruleCore += "\tvariablesList.add(" + globalExpression.getName() + ");\n";
+					ruleCore += "variablesList.add(" + globalExpression.getName() + ");\n";
 					break;
 				}
 			} else if (variable instanceof ExpressionValue) {
 				if (variable instanceof ExpressionValueNumber) {
-					ruleCore += "\tvariablesList.add((Double)" + ((ExpressionValueNumber) variable).getValue() + ");\n";
+					ruleCore += "variablesList.add(" + ((ExpressionValueNumber) variable).getValue() + "d);\n";
 				}
 			}
 		}
@@ -1372,5 +1387,14 @@ public class DroolsParser {
 			}
 		}
 		return stringFunctionParameters;
+	}
+
+	private static boolean isRepeatableGroup(TreeObject treeObject) {
+		if (treeObject instanceof Group) {
+			if (((Group) treeObject).isRepeatable()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
