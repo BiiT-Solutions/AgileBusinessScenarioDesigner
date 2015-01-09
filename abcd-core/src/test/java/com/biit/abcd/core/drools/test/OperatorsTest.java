@@ -653,8 +653,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules3" })
-	// TODO fix
+	@Test(groups = { "rules" })
 	public void betweenOperatorQuestionDateValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -691,8 +690,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules3" })
-	// TODO fix
+	@Test(groups = { "rules" })
 	public void betweenOperatorQuestionDateYearsValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -701,12 +699,18 @@ public class OperatorsTest extends KidsFormCreator {
 			Rule rule = new Rule();
 			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
 					CustomVariableType.STRING, CustomVariableScope.FORM);
+
+			CustomVariable customVariableDateLower = new CustomVariable(getForm(), "DateLower", CustomVariableType.DATE,
+					CustomVariableScope.FORM, "01/01/2010");
+			CustomVariable customVariableDateHigher = new CustomVariable(getForm(), "DateHigher",
+					CustomVariableType.DATE, CustomVariableScope.FORM, "01/01/1950");
+
 			ExpressionChain condition = new ExpressionChain("betweenDateExpression",
 					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS),
-					new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueTreeObjectReference(
-							getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
-							getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS), new ExpressionSymbol(
+					new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueCustomVariable(getForm(),
+							customVariableDateLower, QuestionDateUnit.YEARS),
+					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
+							customVariableDateHigher, QuestionDateUnit.YEARS), new ExpressionSymbol(
 							AvailableSymbol.RIGHT_BRACKET));
 			rule.setConditions(condition);
 			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
@@ -731,8 +735,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules3" })
-	// TODO fix
+	@Test(groups = { "rules" })
 	public void betweenOperatorQuestionInputsTest() {
 		try {
 			// Restart the form to avoid test cross references

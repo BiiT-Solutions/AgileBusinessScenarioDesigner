@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.List;
 
+import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidatorMessage;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -16,7 +17,7 @@ public class ValidationReportWindow extends AcceptCancelWindow {
 		ELEMENT_NAME
 	}
 
-	public ValidationReportWindow(LanguageCodes caption, List<String> modifications) {
+	public ValidationReportWindow(LanguageCodes caption, List<TestScenarioValidatorMessage> testScenarioModifications) {
 		super();
 		setModal(true);
 		setResizable(false);
@@ -24,19 +25,23 @@ public class ValidationReportWindow extends AcceptCancelWindow {
 		setWidth("700px");
 		setHeight("400px");
 		setCaption(ServerTranslate.translate(caption));
-		setContent(generateContent(modifications));
+		setContent(generateContent(testScenarioModifications));
 	}
 
 	@SuppressWarnings("unchecked")
-	private Component generateContent(List<String> modifications) {
+	private Component generateContent(List<TestScenarioValidatorMessage> testScenarioModifications) {
 		Table modificationsTable = new Table();
 		modificationsTable.setSizeFull();
 		modificationsTable.addContainerProperty(ValidationReportWindowTableProperties.ELEMENT_NAME, String.class, null,
 				ServerTranslate.translate(LanguageCodes.TEST_SCENARIO_VALIDATOR_REPORT_TABLE_HEADER), null, Align.LEFT);
-		for (String modification : modifications) {
+		for (TestScenarioValidatorMessage testScenarioModification : testScenarioModifications) {
 			Object itemId = modificationsTable.addItem();
-			modificationsTable.getItem(itemId).getItemProperty(ValidationReportWindowTableProperties.ELEMENT_NAME)
-					.setValue(modification);
+			modificationsTable
+					.getItem(itemId)
+					.getItemProperty(ValidationReportWindowTableProperties.ELEMENT_NAME)
+					.setValue(
+							ServerTranslate.translate(testScenarioModification.getCode(),
+									testScenarioModification.getParameters().toArray()));
 		}
 
 		return modificationsTable;

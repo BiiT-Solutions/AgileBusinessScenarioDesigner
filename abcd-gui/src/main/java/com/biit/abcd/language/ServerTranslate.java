@@ -57,7 +57,7 @@ public class ServerTranslate {
 		return translate(code.toString(), args);
 	}
 
-	protected static String translate(String code, Object[] args) {
+	public static String translate(String code, Object[] args) {
 		try {
 			return translationException(code, args);
 		} catch (RuntimeException e) {
