@@ -19,8 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -51,7 +49,6 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version" }) })
 @AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH))
-@Cache(region = "forms", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Form extends BaseForm {
 
 	@Column(nullable = false)
@@ -61,13 +58,11 @@ public class Form extends BaseForm {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.JOIN)
-	@Cache(region = "diagrams", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
-	@Cache(region = "tableRules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<TableRule> tableRules;
 
 	@OneToMany(mappedBy = "form")
@@ -75,20 +70,17 @@ public class Form extends BaseForm {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
-	@Cache(region = "customVariables", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@Fetch(FetchMode.SUBSELECT)
-	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<ExpressionChain> expressionChains;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	// Cannot be JOIN
 	@Fetch(FetchMode.SUBSELECT)
-	@Cache(region = "rules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Rule> rules;
 
 	// For avoiding "ObjectDeletedException: deleted object would be re-saved by

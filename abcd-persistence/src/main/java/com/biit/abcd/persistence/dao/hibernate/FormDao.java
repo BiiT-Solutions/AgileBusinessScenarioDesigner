@@ -15,7 +15,6 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -44,16 +43,14 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Transactional
-//	@Cacheable(value = "forms", key = "#entity.label, #entity.organizationId")
-	public Form makePersistent(Form entity) throws UnexpectedDatabaseException {
-
+	public Form makePersistent(Form form) throws UnexpectedDatabaseException {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
 		// with @Orderby or @OrderColumn we use our own order manager.
 
 		// Sort the expressions
-		Set<ExpressionChain> expressionChainList = entity.getExpressionChains();
+		Set<ExpressionChain> expressionChainList = form.getExpressionChains();
 		if (expressionChainList != null && !expressionChainList.isEmpty()) {
 			for (ExpressionChain expressionChain : expressionChainList) {
 				expressionChain.updateChildrenSortSeqs();
@@ -61,7 +58,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		}
 
 		// Sort the rules
-		Set<Rule> rulesList = entity.getRules();
+		Set<Rule> rulesList = form.getRules();
 		if (rulesList != null && !rulesList.isEmpty()) {
 			for (Rule rule : rulesList) {
 				rule.getConditions().updateChildrenSortSeqs();
@@ -69,7 +66,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			}
 		}
 		// Sort the table rule rows
-		Set<TableRule> tableRules = entity.getTableRules();
+		Set<TableRule> tableRules = form.getTableRules();
 		if (tableRules != null && !tableRules.isEmpty()) {
 			for (TableRule tableRule : tableRules) {
 				List<TableRuleRow> tableRuleRows = tableRule.getRules();
@@ -82,7 +79,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			}
 		}
 
-		Set<Diagram> diagrams = entity.getDiagrams();
+		Set<Diagram> diagrams = form.getDiagrams();
 		if (diagrams != null && !diagrams.isEmpty()) {
 			for (Diagram diagram : diagrams) {
 				Set<DiagramObject> nodes = diagram.getDiagramObjects();
@@ -98,12 +95,12 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		}
 
 		// Update previous versions validTo.
-		if (entity.getVersion() > 0) {
+		if (form.getVersion() > 0) {
 			// 84600000 milliseconds in a day
-			Timestamp validTo = new Timestamp(entity.getAvailableFrom().getTime() - 84600000);
-			updateValidTo(entity.getLabel(), entity.getVersion() - 1, entity.getOrganizationId(), validTo);
+			Timestamp validTo = new Timestamp(form.getAvailableFrom().getTime() - 84600000);
+			updateValidTo(getId(form.getLabel(), form.getOrganizationId(), form.getVersion() - 1), validTo);
 		}
-		Form form = super.makePersistent(entity);
+		Form storedForm = super.makePersistent(form);
 
 		// CustomVariables must be removed after expressions are removed.
 
@@ -112,10 +109,10 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		// associations)" launch when removing a customvariable and other is renamed as this
 		// one, we need to disable
 		// orphanRemoval=true of children and implement ourselves.
-		purgeCustomVariablesToDelete(form.getCustomVariablesToDelete());
-		form.setCustomVariablesToDelete(new HashSet<CustomVariable>());
+		purgeCustomVariablesToDelete(storedForm.getCustomVariablesToDelete());
+		storedForm.setCustomVariablesToDelete(new HashSet<CustomVariable>());
 
-		return form;
+		return storedForm;
 	}
 
 	private Set<CustomVariable> purgeCustomVariablesToDelete(Set<CustomVariable> variablesToDelete)
@@ -161,16 +158,16 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-//	@Cacheable(value = "forms", key = "#form.id")
+	@Cacheable(value = "forms", key = "#id")
 	public Form read(Long id) throws UnexpectedDatabaseException {
-		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
+		// AbcdLogger.debug(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		Form form = super.read(id);
-		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
+		// AbcdLogger.debug(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		return form;
 	}
 
 	@Override
-//	@Caching(evict = {@CacheEvict(value = "forms", key = "#form.label, #form.organizationId"), @CacheEvict(value = "forms", key = "#form.id")})
+	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.id") })
 	public void makeTransient(Form form) throws UnexpectedDatabaseException {
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
@@ -186,13 +183,6 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-//	@Cacheable(value = "forms", key = "#form.label, #form.organizationId")
-	public Form getForm(String label, Long organizationId) throws UnexpectedDatabaseException {
-		return super.getForm(label, organizationId);
-	}
-
-	@Override
-//	@Cacheable(value = "forms")
 	public List<Form> getAll() throws UnexpectedDatabaseException {
 		List<Form> result = super.getAll();
 		return result;
@@ -207,39 +197,37 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	 * @return
 	 * @throws UnexpectedDatabaseException
 	 */
-//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
-	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo)
-			throws UnexpectedDatabaseException {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		try {
-			String hql = "update Form set availableTo = CASE WHEN :availableTo > availableFrom THEN :availableTo ELSE availableFrom END where label = :label and version = :version and organizationId = :organizationId";
-			Query query = session.createQuery(hql);
-			query.setString("label", label);
-			query.setLong("version", version);
-			query.setLong("organizationId", organizationId);
-			query.setTimestamp("availableTo", validTo);
-			int rowCount = query.executeUpdate();
-			session.getTransaction().commit();
-			return rowCount;
-		} catch (RuntimeException e) {
-			session.getTransaction().rollback();
-			throw new UnexpectedDatabaseException(e.getMessage(), e);
+	@Caching(evict = { @CacheEvict(value = "forms", key = "#id") })
+	private int updateValidTo(Long id, Timestamp validTo) throws UnexpectedDatabaseException {
+		if (id != null) {
+			Session session = getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			try {
+				String hql = "update Form set availableTo = CASE WHEN :availableTo > availableFrom THEN :availableTo ELSE availableFrom END where ID = :id";
+				Query query = session.createQuery(hql);
+				query.setLong("id", id);
+				query.setTimestamp("availableTo", validTo);
+				int rowCount = query.executeUpdate();
+				session.getTransaction().commit();
+				return rowCount;
+			} catch (RuntimeException e) {
+				session.getTransaction().rollback();
+				throw new UnexpectedDatabaseException(e.getMessage(), e);
+			}
 		}
+		return 0;
 	}
 
-//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
-	public int updateValidFrom(String label, int version, Long organizationId, Timestamp validFrom)
-			throws UnexpectedDatabaseException {
+	@Override
+	@Caching(evict = { @CacheEvict(value = "forms", key = "#id") })
+	public int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		try {
-			String hql = "update Form set availableFrom = :availableFrom where label = :label and version = :version and organizationId = :organizationId";
+			String hql = "update Form set status = :formStatus where ID = :id";
 			Query query = session.createQuery(hql);
-			query.setString("label", label);
-			query.setLong("version", version);
-			query.setLong("organizationId", organizationId);
-			query.setTimestamp("availableFrom", validFrom);
+			query.setLong("id", id);
+			query.setString("formStatus", formStatus.toString());
 			int rowCount = query.executeUpdate();
 			session.getTransaction().commit();
 			return rowCount;
@@ -250,24 +238,8 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
-	public int updateFormStatus(String label, int version, Long organizationId, FormWorkStatus formStatus)
-			throws UnexpectedDatabaseException {
-		Session session = getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		try {
-			String hql = "update Form set status = :formStatus where label = :label and version = :version and organizationId = :organizationId";
-			Query query = session.createQuery(hql);
-			query.setString("label", label);
-			query.setLong("version", version);
-			query.setLong("organizationId", organizationId);
-			query.setString("formStatus", formStatus.toString());
-			int rowCount = query.executeUpdate();
-			session.getTransaction().commit();
-			return rowCount;
-		} catch (RuntimeException e) {
-			session.getTransaction().rollback();
-			throw new UnexpectedDatabaseException(e.getMessage(), e);
-		}
+	@Caching(evict = { @CacheEvict(value = "forms", allEntries = true) })
+	public void evictAllCache() {
+		super.evictAllCache();
 	}
 }

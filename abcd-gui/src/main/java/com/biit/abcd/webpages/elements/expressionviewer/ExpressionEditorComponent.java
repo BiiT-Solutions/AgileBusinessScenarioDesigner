@@ -121,7 +121,7 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 			getSelectedViewer().addElementToSelected((Expression) newElement);
 
 			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-					+ "' has added a " + newElement.getClass() + " with 'Value: " + newElement + "'.");
+					+ "' has added a " + newElement.getClass().getName() + " with value '" + newElement + "'.");
 		}
 	}
 
@@ -143,7 +143,7 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 				Expression expression = getSelectedViewer().getSelectedExpression();
 				if (getSelectedViewer().removeSelectedExpression()) {
 					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has deleted the Expression "
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has deleted the Expression '"
 							+ expression.getRepresentation() + "'.");
 				}
 			}

@@ -21,8 +21,7 @@ public abstract class AbstractLogging {
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
-	 * Method used for logging the name of the target class, parameters and the
-	 * starting time.
+	 * Method used for logging the name of the target class, parameters and the starting time.
 	 * 
 	 * @param millis
 	 *            execution time.
@@ -56,8 +55,7 @@ public abstract class AbstractLogging {
 	}
 
 	/**
-	 * Method used for logging the name of the target class, parameters and the
-	 * execution time.
+	 * Method used for logging the name of the target class, parameters and the execution time.
 	 * 
 	 * @param millis
 	 *            execution time.
@@ -68,17 +66,24 @@ public abstract class AbstractLogging {
 	 */
 	protected void log(long millis, JoinPoint joinPoint, Object... args) {
 		if (logger.isDebugEnabled()) {
-			StringBuilder logMessage = new StringBuilder();
-			logMessage.append("Executed ");
-			logMessage.append(getTargetClassName(joinPoint));
-			logMessage.append(".");
-			logMessage.append(joinPoint.getSignature().getName());
-			logMessage.append("(");
+			String str = "";
 			if (args.length > 0) {
-				String str = Arrays.toString(args);
+				str = Arrays.toString(args);
 				// removing initial and ending chars ([, ])
 				str = str.substring(1, str.length() - 1);
-				logMessage.append(str);
+			}
+			timeLog(millis, getTargetClassName(joinPoint) + "." + joinPoint.getSignature().getName(), str);
+		}
+	}
+
+	public void timeLog(long millis, String method, String args) {
+		if (logger.isDebugEnabled()) {
+			StringBuilder logMessage = new StringBuilder();
+			logMessage.append("Executed ");
+			logMessage.append(method);
+			logMessage.append("(");
+			if (args != null && args.length() > 0) {
+				logMessage.append(args);
 			}
 			logMessage.append(") in ");
 			logMessage.append(millis);
@@ -102,8 +107,8 @@ public abstract class AbstractLogging {
 
 		return clsName;
 	}
-	
-	protected void log(String message){
+
+	protected void log(String message) {
 		logger.debug(message);
 	}
 }

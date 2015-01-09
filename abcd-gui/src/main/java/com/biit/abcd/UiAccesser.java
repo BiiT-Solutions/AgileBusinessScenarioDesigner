@@ -46,7 +46,7 @@ public class UiAccesser {
 		}
 
 		if (!formsInUse.containsValue(form.getId())) {
-			AbcdLogger.info(UiAccesser.class.getName(), "User '" + user.getEmailAddress() + "' has locked '" + form
+			AbcdLogger.info(UiAccesser.class.getName(), "User '" + user.getEmailAddress() + "' has locked '" + form.getLabel()
 					+ "'");
 			formsInUse.put(user, form.getId());
 		}
@@ -55,7 +55,7 @@ public class UiAccesser {
 	public static synchronized void releaseForm(User user) {
 		if (user != null) {
 			if (formsInUse.get(user) != null) {
-				AbcdLogger.info(UiAccesser.class.getName(), "User '" + user.getEmailAddress() + "' has released '"
+				AbcdLogger.info(UiAccesser.class.getName(), "User '" + user.getEmailAddress() + "' has released form with id '"
 						+ formsInUse.get(user) + "'");
 				formsInUse.remove(user);
 			}
