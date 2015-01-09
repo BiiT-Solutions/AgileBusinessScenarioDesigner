@@ -598,15 +598,15 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 			answerExpressionWithQuestion.addExpression(0, questionExpression);
 			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
 
-			final AddNewAnswerExpressionWindow newActionValueWindow = new AddNewConditionExpressionWindow(
+			final AddNewAnswerExpressionWindow newAnswerWindow = new AddNewConditionExpressionWindow(
 					questionExpression, answerExpressionWithQuestion);
 
-			newActionValueWindow.showCentered();
-			newActionValueWindow.addAcceptActionListener(new AcceptActionListener() {
+			newAnswerWindow.showCentered();
+			newAnswerWindow.addAcceptActionListener(new AcceptActionListener() {
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
-					if (newActionValueWindow.getExpressionChain() != null) {
-						answerExpression.setExpressions(newActionValueWindow.getExpressionChain().getExpressions());
+					if (newAnswerWindow.getExpressionChain() != null) {
+						answerExpression.setExpressions(newAnswerWindow.getExpressionChain().getExpressions());
 						ruleTable.update(getSelectedTableRule());
 					} else {
 						removeAnswer(row, (Integer) propertyId);
@@ -618,20 +618,20 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 							+ questionExpression.getReference().getName() + "' in Table rule '"
 							+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
 
-					newActionValueWindow.close();
+					newAnswerWindow.close();
 				}
 			});
-			newActionValueWindow.addCancelActionListener(new CancelActionListener() {
+			newAnswerWindow.addCancelActionListener(new CancelActionListener() {
 				@Override
 				public void cancelAction(AcceptCancelWindow window) {
 					// newActionValueWindow.getExpressionWithoutFirstElement();
 				}
 			});
-			newActionValueWindow.addClearActionListener(new ClearElementsActionListener() {
+			newAnswerWindow.addClearActionListener(new ClearElementsActionListener() {
 
 				@Override
 				public void clearAction(AcceptCancelClearWindow window) {
-					newActionValueWindow.clearSelection();
+					newAnswerWindow.clearSelection();
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed Answer '"
 							+ answerExpression.getName() + "' regarding Question '"

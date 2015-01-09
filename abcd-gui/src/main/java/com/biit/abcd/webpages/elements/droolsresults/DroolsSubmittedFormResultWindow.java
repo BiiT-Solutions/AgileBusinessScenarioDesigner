@@ -1,8 +1,11 @@
 package com.biit.abcd.webpages.elements.droolsresults;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
@@ -81,12 +84,17 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 			if (variables != null) {
 				for (String variable : variables) {
 					if (((ISubmittedFormElement) submittedFormElement).getVariableValue(variable) != null) {
-						submittedFormTreeTable
-								.getItem(submittedFormElement)
-								.getItemProperty(variable)
-								.setValue(
-										((ISubmittedFormElement) submittedFormElement).getVariableValue(variable)
-												.toString());
+						Object variableValue = ((ISubmittedFormElement) submittedFormElement)
+								.getVariableValue(variable);
+						String result = "";
+						if (variableValue instanceof Number) {
+							DecimalFormat myFormatter = new DecimalFormat("###.##", new DecimalFormatSymbols(
+									Locale.ENGLISH));
+							result = myFormatter.format(variableValue);
+						} else {
+							result = variableValue.toString();
+						}
+						submittedFormTreeTable.getItem(submittedFormElement).getItemProperty(variable).setValue(result);
 					}
 				}
 			}
