@@ -185,7 +185,8 @@ public class DroolsRulesGenerator {
 		String ruleName = "";
 		if ((expressionValueCustomVariable != null) && (expressionValueCustomVariable.getReference() != null)
 				&& (expressionValueCustomVariable.getVariable() != null)
-				&& (expressionValueCustomVariable.getVariable().getDefaultValue() != null)) {
+				&& (expressionValueCustomVariable.getVariable().getDefaultValue() != null)
+				&& (expressionValueCustomVariable.getVariable().getDefaultValue() != "")) {
 
 			String customVariableDefaultValue = "";
 			switch (expressionValueCustomVariable.getVariable().getType()) {

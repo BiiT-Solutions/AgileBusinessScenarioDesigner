@@ -205,8 +205,6 @@ public class FormManagerUpperMenu extends UpperMenu {
 									try {
 										// Generate the submitted form based on
 										// the test scenario
-										// We also pass the translator manager to allow translations in the core
-										// TODO
 										TestScenarioAnswerImporter testAnswerImporter = new TestScenarioAnswerImporter();
 										final ISubmittedForm generatedSumbittedForm = testAnswerImporter
 												.createSubmittedForm(UserSessionHandler.getFormController().getForm(),
@@ -294,6 +292,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 		removeForm = new IconButton(LanguageCodes.FORM_MANAGER_REMOVE_FORM, ThemeIcon.FORM_MANAGER_REMOVE_FORM,
 				LanguageCodes.FORM_MANAGER_REMOVE_FORM, IconSize.MEDIUM, new ClickListener() {
+					private static final long serialVersionUID = -3126160822538614928L;
 					@Override
 					public void buttonClick(ClickEvent event) {
 						launchFormRemoveListener();
