@@ -205,17 +205,19 @@ public class FormManagerUpperMenu extends UpperMenu {
 									try {
 										// Generate the submitted form based on
 										// the test scenario
+										// We also pass the translator manager to allow translations in the core
+										// TODO
 										TestScenarioAnswerImporter testAnswerImporter = new TestScenarioAnswerImporter();
 										final ISubmittedForm generatedSumbittedForm = testAnswerImporter
 												.createSubmittedForm(UserSessionHandler.getFormController().getForm(),
 														testScenarioDB);
 
-										if ((testAnswerImporter.getScenarioModifications() != null)
-												&& !testAnswerImporter.getScenarioModifications().isEmpty()) {
+										if ((testAnswerImporter.getTestScenarioModifications() != null)
+												&& !testAnswerImporter.getTestScenarioModifications().isEmpty()) {
 
 											final ValidationReportWindow windowAccept = new ValidationReportWindow(
 													LanguageCodes.WARNING_TEST_SCENARIOS_VALIDATOR_WINDOW_CAPTION,
-													testAnswerImporter.getScenarioModifications());
+													testAnswerImporter.getTestScenarioModifications());
 											windowAccept.addAcceptActionListener(new AcceptActionListener() {
 												@Override
 												public void acceptAction(AcceptCancelWindow window) {
