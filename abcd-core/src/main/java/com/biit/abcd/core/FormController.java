@@ -6,9 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.util.StopWatch;
+
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.core.utils.TableRuleUtils;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.logger.BasicLogging;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
@@ -195,7 +198,15 @@ public class FormController {
 			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		if (form != null && originalForm != null) {
-			new FormComparator().compare(form, originalForm);
+			StopWatch stopWatch = new StopWatch();
+			stopWatch.start();
+			try {
+				new FormComparator().compare(form, originalForm);
+			} finally {
+				stopWatch.stop();
+				AbcdLogger.timeLog(stopWatch.getTotalTimeMillis(), this.getClass().getName()
+						+ ".checkUnsavedChanges()", null);
+			}
 		}
 	}
 

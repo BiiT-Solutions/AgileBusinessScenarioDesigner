@@ -58,8 +58,7 @@ import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 
 /**
- * Compares two forms. Must be equals (but with different IDs and
- * ComparationIds).
+ * Compares two forms. Must be equals (but with different IDs and ComparationIds).
  */
 public class FormComparator {
 	private static Set<StorableObject> alreadyComparedForm1Element = new HashSet<>();
@@ -131,14 +130,13 @@ public class FormComparator {
 	}
 
 	private static void compare(GlobalVariable object1, GlobalVariable object2)
-			throws GlobalVariableNotEqualsException, VariableDataNotEqualsException, StorableObjectNotEqualsException {
+			throws GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
 		}
-		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
-			compare((StorableObject) object1, (StorableObject) object2);
-		}
+		
+		//No compare Ids. Global Variables are not duplicated.
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
@@ -167,14 +165,12 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(VariableData object1, VariableData object2) throws VariableDataNotEqualsException,
-			StorableObjectNotEqualsException {
+	private static void compare(VariableData object1, VariableData object2) throws VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
-		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
-			compare((StorableObject) object1, (StorableObject) object2);
-		}
+		
+		//No compare Ids. Global Variables are not duplicated.
 
 		if ((object1.getValidFrom() != null && object2.getValidFrom() == null)
 				|| (object1.getValidFrom() == null && object2.getValidFrom() != null)
@@ -251,9 +247,6 @@ public class FormComparator {
 
 		if (object1 == null && object2 == null) {
 			return;
-		}
-		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
-			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
 		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
