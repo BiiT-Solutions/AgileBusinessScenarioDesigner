@@ -9,10 +9,12 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -41,7 +43,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Transactional
-//	@Cacheable(value = "forms", key = "#entity.label, #entity.organizationId")
+	@Cacheable(value = "forms", key = "#entity.label, #entity.organizationId")
 	public Form makePersistent(Form entity) throws UnexpectedDatabaseException {
 
 		// For solving Hibernate bug
@@ -158,16 +160,17 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-//	@Cacheable(value = "forms", key = "#form.id")
+	@Cacheable(value = "forms")
 	public Form read(Long id) throws UnexpectedDatabaseException {
-		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
+		// AbcdLogger.debug(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		Form form = super.read(id);
-		AbcdLogger.info(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
+		// AbcdLogger.debug(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		return form;
 	}
 
 	@Override
-//	@Caching(evict = {@CacheEvict(value = "forms", key = "#form.label, #form.organizationId"), @CacheEvict(value = "forms", key = "#form.id")})
+	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId"),
+			@CacheEvict(value = "forms", key = "#form.id") })
 	public void makeTransient(Form form) throws UnexpectedDatabaseException {
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
@@ -183,13 +186,13 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-//	@Cacheable(value = "forms", key = "#form.label, #form.organizationId")
+	@Cacheable(value = "forms", key = "#form.label, #form.organizationId")
 	public Form getForm(String label, Long organizationId) throws UnexpectedDatabaseException {
 		return super.getForm(label, organizationId);
 	}
 
 	@Override
-//	@Cacheable(value = "forms")
+	@Cacheable(value = "forms")
 	public List<Form> getAll() throws UnexpectedDatabaseException {
 		List<Form> result = super.getAll();
 		return result;
@@ -204,7 +207,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	 * @return
 	 * @throws UnexpectedDatabaseException
 	 */
-//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
+	@CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
 	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo)
 			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
@@ -225,7 +228,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		}
 	}
 
-//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
+	@CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
 	public int updateValidFrom(String label, int version, Long organizationId, Timestamp validFrom)
 			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
@@ -247,7 +250,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-//	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.label, #form.organizationId") })
+	@CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
 	public int updateFormStatus(String label, int version, Long organizationId, FormWorkStatus formStatus)
 			throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
@@ -266,5 +269,11 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 			session.getTransaction().rollback();
 			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	@CacheEvict(value = "forms", allEntries = true)
+	public void evictAllCache() {
+		super.evictAllCache();
 	}
 }
