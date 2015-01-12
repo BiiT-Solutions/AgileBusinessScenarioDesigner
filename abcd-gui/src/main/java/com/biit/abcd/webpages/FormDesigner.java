@@ -694,6 +694,12 @@ public class FormDesigner extends FormWebPageComponent {
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
+					
+					// Collapse the table at question level
+					formTreeTable.collapseFrom(Question.class);
+					if(selected instanceof Answer){
+						formTreeTable.uncollapse(selected.getParent());
+					}
 
 					AbcdLogger.info(
 							this.getClass().getName(),
@@ -728,6 +734,12 @@ public class FormDesigner extends FormWebPageComponent {
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
+					
+					// Collapse the table at question level
+					formTreeTable.collapseFrom(Question.class);
+					if(selected instanceof Answer){
+						formTreeTable.uncollapse(selected.getParent());
+					}
 
 					AbcdLogger.info(this.getClass().getName(),
 							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved down a "
