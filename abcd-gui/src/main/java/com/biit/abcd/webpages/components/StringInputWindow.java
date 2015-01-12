@@ -147,7 +147,6 @@ public class StringInputWindow extends AcceptCancelWindow {
 				((TextField) expressionValue).setValue(value.toString());
 			} else if (getFormat().equals(AnswerFormat.DATE)) {
 				try {
-					System.out.println("-->" + value);
 					((DateField) expressionValue).setValue(ExpressionValueTimestamp.DATE_FORMATTER.parse(value));
 				} catch (ReadOnlyException | ConversionException | ParseException e) {
 					setValue(null);
@@ -165,24 +164,17 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private void setPromt() {
 		switch (getFormat()) {
 		case DATE:
-			// expressionValue.setInputPrompt(AbcdConfigurationReader.getInstance().getDatePromt());
-			// expressionValue.addValidator(new
-			// RegexpValidator(AbcdConfigurationReader.getInstance().getDateMask(),
-			// ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case NUMBER:
-			((TextField) expressionValue).setInputPrompt(AbcdConfigurationReader.getInstance().getNumberPromt());
-			// expressionValue.addValidator(new
-			// RegexpValidator(AbcdConfigurationReader.getInstance().getNumberMask(),
-			// ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
+			((TextField) expressionValue).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_FLOAT));
 			break;
 		case POSTAL_CODE:
-			((TextField) expressionValue).setInputPrompt(AbcdConfigurationReader.getInstance().getPostalCodePromt());
+			((TextField) expressionValue).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_POSTAL_CODE));
 			expressionValue.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getPostalCodeMask(),
 					ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
 		case TEXT:
-			((TextField) expressionValue).setInputPrompt(AbcdConfigurationReader.getInstance().getTextPromt());
+			((TextField) expressionValue).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_TEXT));
 			break;
 		}
 	}
@@ -190,7 +182,6 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private void setLocale() {
 		switch (getFormat()) {
 		case DATE:
-			//expressionValue.setConverter(String.class);
 			break;
 		case NUMBER:
 			((TextField) expressionValue).setConverter(new UserLocaleStringToDoubleConverter());
