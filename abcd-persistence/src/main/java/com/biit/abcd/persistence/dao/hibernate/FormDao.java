@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
@@ -43,6 +44,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Transactional
+	@CachePut(value = "forms", key = "#form.getId()")
 	public Form makePersistent(Form form) throws UnexpectedDatabaseException {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
@@ -167,7 +169,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.id") })
+	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.getId()") })
 	public void makeTransient(Form form) throws UnexpectedDatabaseException {
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {

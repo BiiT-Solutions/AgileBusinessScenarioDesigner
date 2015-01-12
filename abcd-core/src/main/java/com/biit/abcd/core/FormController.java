@@ -177,18 +177,31 @@ public class FormController {
 		originalForm = null;
 	}
 
+//	public void setForm(Form form) {
+//		this.form = form;
+//		try {
+//			if (form == null) {
+//				originalForm = null;
+//			} else {
+//				originalForm = (Form) form.generateCopy(true, true);
+//				originalForm.resetIds();
+//			}
+//		} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
+//		}
+//		this.clearWorkVariables();
+//	}
+	
 	public void setForm(Form form) {
-		this.form = form;
+		originalForm = form;
 		try {
 			if (form == null) {
-				originalForm = null;
+				this.form = null;
 			} else {
-				originalForm = (Form) form.generateCopy(true, true);
-				originalForm.resetIds();
+				this.form = (Form) form.generateCopy(true, true);
 			}
 		} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
 		}
-		this.clearWorkVariables();
+		clearWorkVariables();
 	}
 
 	public void checkUnsavedChanges() throws TreeObjectNotEqualsException, StorableObjectNotEqualsException,
@@ -201,7 +214,7 @@ public class FormController {
 			StopWatch stopWatch = new StopWatch();
 			stopWatch.start();
 			try {
-				new FormComparator().compare(form, originalForm);
+				new FormComparator(false).compare(form, originalForm);
 			} finally {
 				stopWatch.stop();
 				AbcdLogger.timeLog(stopWatch.getTotalTimeMillis(), this.getClass().getName()
