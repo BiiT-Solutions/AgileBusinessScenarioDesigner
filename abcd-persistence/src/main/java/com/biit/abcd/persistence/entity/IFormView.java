@@ -2,7 +2,7 @@ package com.biit.abcd.persistence.entity;
 
 import java.util.Set;
 
-import com.biit.form.interfaces.IBaseFormView;
+import com.biit.form.IBaseFormView;
 
 public interface IFormView extends IBaseFormView {
 

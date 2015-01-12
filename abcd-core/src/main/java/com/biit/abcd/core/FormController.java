@@ -176,20 +176,6 @@ public class FormController {
 	public void clearUnsavedChangesChecker() {
 		originalForm = null;
 	}
-
-//	public void setForm(Form form) {
-//		this.form = form;
-//		try {
-//			if (form == null) {
-//				originalForm = null;
-//			} else {
-//				originalForm = (Form) form.generateCopy(true, true);
-//				originalForm.resetIds();
-//			}
-//		} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
-//		}
-//		this.clearWorkVariables();
-//	}
 	
 	public void setForm(Form form) {
 		originalForm = form;
