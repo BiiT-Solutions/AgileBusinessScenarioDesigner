@@ -8,6 +8,10 @@ import com.biit.abcd.persistence.utils.Exceptions.FormNotEqualsException;
  */
 public class FormVersionComparator extends FormComparator {
 
+	public FormVersionComparator(boolean checkIds) {
+		super(checkIds);
+	}
+
 	@Override
 	protected void compareVersions(Form form1, Form form2) throws FormNotEqualsException {
 		if (form1.getVersion() + 1 != (int) form2.getVersion()) {
@@ -17,7 +21,7 @@ public class FormVersionComparator extends FormComparator {
 
 	@Override
 	protected void compareFormDates(Form form1, Form form2) throws FormNotEqualsException {
-		// Previous version ends when the other starts, unless finish the same day. 
+		// Previous version ends when the other starts, unless finish the same day.
 		if ((form1.getAvailableTo() == null && form2.getAvailableFrom() != null)
 				|| (form1.getAvailableTo() != null && form2.getAvailableFrom() == null)
 				|| ((form1.getAvailableTo() != null && form2.getAvailableFrom() != null) && form1.getAvailableTo()

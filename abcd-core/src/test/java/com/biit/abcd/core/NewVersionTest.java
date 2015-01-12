@@ -66,7 +66,7 @@ public class NewVersionTest extends AbstractTransactionalTestNGSpringContextTest
 		Assert.assertNotNull(newVersionForm);
 		Assert.assertEquals((int) form.getVersion() + 1, (int) newVersionForm.getVersion());
 
-		new FormVersionComparator().compare(form, newVersionForm);
+		new FormVersionComparator(true).compare(form, newVersionForm);
 		formDao.makePersistent(newVersionForm);
 
 		formDao.makeTransient(form);

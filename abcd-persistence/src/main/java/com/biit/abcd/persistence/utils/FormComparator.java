@@ -61,31 +61,37 @@ import com.biit.persistence.entity.StorableObject;
  * Compares two forms. Must be equals (but with different IDs and ComparationIds).
  */
 public class FormComparator {
-	private static Set<StorableObject> alreadyComparedForm1Element = new HashSet<>();
+	private Set<StorableObject> alreadyComparedForm1Element = new HashSet<>();
+	private boolean checkIds = true;
 
-	private static void compare(StorableObject object1, StorableObject object2) throws StorableObjectNotEqualsException {
+	public FormComparator(boolean checkIds) {
+		this.checkIds = checkIds;
+	}
+
+	private void compare(StorableObject object1, StorableObject object2) throws StorableObjectNotEqualsException {
 		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
 			throw new StorableObjectNotEqualsException("One of the Storable objects is null: '" + object1 + "' and '"
 					+ object2 + "'.");
 		}
 
-		if (object1.getId() != null && object2.getId() != null && object1.getId().equals(object2.getId())) {
+		if (checkIds && object1.getId() != null && object2.getId() != null && object1.getId().equals(object2.getId())) {
 			throw new StorableObjectNotEqualsException("Storable objects has same id!: '" + object1.getId() + "'");
 		}
-		if (object1.getComparationId().equals(object2.getComparationId())) {
+		
+		if (checkIds && object1.getComparationId().equals(object2.getComparationId())) {
 			throw new StorableObjectNotEqualsException("Storable objects are the same objects: '" + object1 + "' and '"
 					+ object2 + "'.");
 		}
 	}
 
-	private static void compare(Group object1, Group object2) throws GroupNotEqualsException {
+	private void compare(Group object1, Group object2) throws GroupNotEqualsException {
 		if (object1.isRepeatable() != object2.isRepeatable()) {
 			throw new GroupNotEqualsException("Check repeatable options of groups '" + object1 + "' and '" + object2
 					+ "'.");
 		}
 	}
 
-	private static void compare(Question object1, Question object2) throws QuestionNotEqualsException {
+	private void compare(Question object1, Question object2) throws QuestionNotEqualsException {
 		if (object1.getAnswerFormat() != object2.getAnswerFormat()) {
 			throw new QuestionNotEqualsException("Answer formats are different between questions '" + object1
 					+ "' and '" + object2 + "'.");
@@ -96,8 +102,8 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(CustomVariable object1, CustomVariable object2)
-			throws CustomVariableNotEqualsException, StorableObjectNotEqualsException {
+	private void compare(CustomVariable object1, CustomVariable object2) throws CustomVariableNotEqualsException,
+			StorableObjectNotEqualsException {
 
 		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
@@ -129,14 +135,14 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(GlobalVariable object1, GlobalVariable object2)
-			throws GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+	private void compare(GlobalVariable object1, GlobalVariable object2) throws GlobalVariableNotEqualsException,
+			VariableDataNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
 		}
-		
-		//No compare Ids. Global Variables are not duplicated.
+
+		// No compare Ids. Global Variables are not duplicated.
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
@@ -165,12 +171,12 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(VariableData object1, VariableData object2) throws VariableDataNotEqualsException {
+	private void compare(VariableData object1, VariableData object2) throws VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
-		
-		//No compare Ids. Global Variables are not duplicated.
+
+		// No compare Ids. Global Variables are not duplicated.
 
 		if ((object1.getValidFrom() != null && object2.getValidFrom() == null)
 				|| (object1.getValidFrom() == null && object2.getValidFrom() != null)
@@ -198,7 +204,7 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(Expression object1, Expression object2) throws StorableObjectNotEqualsException,
+	private void compare(Expression object1, Expression object2) throws StorableObjectNotEqualsException,
 			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
 			CustomVariableNotEqualsException {
 		if (object1 == null && object2 == null) {
@@ -240,7 +246,7 @@ public class FormComparator {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void compareExpressionValue(Object object1, Object object2) throws TreeObjectNotEqualsException,
+	private void compareExpressionValue(Object object1, Object object2) throws TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, GroupNotEqualsException, QuestionNotEqualsException,
 			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
 			CustomVariableNotEqualsException {
@@ -277,9 +283,9 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(ExpressionChain object1, ExpressionChain object2)
-			throws StorableObjectNotEqualsException, ExpressionNotEqualsException, GlobalVariableNotEqualsException,
-			VariableDataNotEqualsException, CustomVariableNotEqualsException {
+	private void compare(ExpressionChain object1, ExpressionChain object2) throws StorableObjectNotEqualsException,
+			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
+			CustomVariableNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -314,9 +320,9 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(List<Expression> object1, List<Expression> object2)
-			throws ExpressionNotEqualsException, StorableObjectNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+	private void compare(List<Expression> object1, List<Expression> object2) throws ExpressionNotEqualsException,
+			StorableObjectNotEqualsException, CustomVariableNotEqualsException, GlobalVariableNotEqualsException,
+			VariableDataNotEqualsException {
 		// Compare Expressions
 		Iterator<Expression> expressionsIterator1 = object1.iterator();
 		Iterator<Expression> expressionsIterator2 = object2.iterator();
@@ -334,7 +340,7 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(TreeObject object1, TreeObject object2) throws TreeObjectNotEqualsException,
+	private void compare(TreeObject object1, TreeObject object2) throws TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, GroupNotEqualsException, QuestionNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
@@ -391,7 +397,7 @@ public class FormComparator {
 		alreadyComparedForm1Element.add(object1);
 	}
 
-	private static void compare(TableRule object1, TableRule object2) throws StorableObjectNotEqualsException,
+	private void compare(TableRule object1, TableRule object2) throws StorableObjectNotEqualsException,
 			TableRuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
@@ -420,7 +426,7 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(TableRuleRow object1, TableRuleRow object2) throws StorableObjectNotEqualsException,
+	private void compare(TableRuleRow object1, TableRuleRow object2) throws StorableObjectNotEqualsException,
 			TableRuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
@@ -434,9 +440,9 @@ public class FormComparator {
 		compare(object1.getAction(), object2.getAction());
 	}
 
-	private static void compare(Rule object1, Rule object2) throws StorableObjectNotEqualsException,
-			RuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+	private void compare(Rule object1, Rule object2) throws StorableObjectNotEqualsException, RuleNotEqualsException,
+			ExpressionNotEqualsException, CustomVariableNotEqualsException, GlobalVariableNotEqualsException,
+			VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
@@ -456,8 +462,7 @@ public class FormComparator {
 		compare(object1.getActions(), object2.getActions());
 	}
 
-	private static void compare(Size object1, Size object2) throws StorableObjectNotEqualsException,
-			SizeNotEqualsException {
+	private void compare(Size object1, Size object2) throws StorableObjectNotEqualsException, SizeNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
@@ -476,8 +481,8 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(Point object1, Point object2) throws StorableObjectNotEqualsException,
-			SizeNotEqualsException, PointNotEqualsException {
+	private void compare(Point object1, Point object2) throws StorableObjectNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -497,9 +502,8 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(DiagramBiitText object1, DiagramBiitText object2)
-			throws StorableObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
-			BiitTextNotEqualsException {
+	private void compare(DiagramBiitText object1, DiagramBiitText object2) throws StorableObjectNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -549,9 +553,9 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(DiagramElement object1, DiagramElement object2)
-			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, SizeNotEqualsException,
-			PointNotEqualsException, BiitTextNotEqualsException {
+	private void compare(DiagramElement object1, DiagramElement object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException {
 		if ((object1.getTooltip() != null && object2.getTooltip() == null)
 				|| (object1.getTooltip() == null && object2.getTooltip() != null)
 				|| ((object1.getTooltip() != null && object2.getTooltip() != null) && !object1.getTooltip().equals(
@@ -587,7 +591,7 @@ public class FormComparator {
 		compare(object1.getBiitText(), object2.getBiitText());
 	}
 
-	private static void compare(DiagramChild object1, DiagramChild object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramChild object1, DiagramChild object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
 			BiitTextNotEqualsException, DiagramNotEqualsException, ExpressionNotEqualsException,
 			CustomVariableNotEqualsException, NodeNotEqualsException, TableRuleNotEqualsException,
@@ -601,15 +605,15 @@ public class FormComparator {
 		compare(object1.getDiagram(), object2.getDiagram());
 	}
 
-	private static void compare(DiagramExpression object1, DiagramExpression object2)
-			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
-			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
-			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
+	private void compare(DiagramExpression object1, DiagramExpression object2) throws StorableObjectNotEqualsException,
+			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 		compare(object1.getExpression(), object2.getExpression());
 	}
 
-	private static void compare(DiagramFork object1, DiagramFork object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramFork object1, DiagramFork object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
 			PointNotEqualsException, BiitTextNotEqualsException {
@@ -624,8 +628,7 @@ public class FormComparator {
 		compare(object1.getReference(), object2.getReference());
 	}
 
-	private static void compare(Node object1, Node object2) throws StorableObjectNotEqualsException,
-			NodeNotEqualsException {
+	private void compare(Node object1, Node object2) throws StorableObjectNotEqualsException, NodeNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
@@ -658,7 +661,7 @@ public class FormComparator {
 		}
 	}
 
-	private static void compare(DiagramLink object1, DiagramLink object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramLink object1, DiagramLink object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException, NodeNotEqualsException {
 
@@ -702,13 +705,13 @@ public class FormComparator {
 
 	}
 
-	private static void compare(DiagramRepeat object1, DiagramRepeat object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramRepeat object1, DiagramRepeat object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
 			BiitTextNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 	}
 
-	private static void compare(DiagramRule object1, DiagramRule object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramRule object1, DiagramRule object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
 			BiitTextNotEqualsException, RuleNotEqualsException, ExpressionNotEqualsException,
 			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
@@ -721,20 +724,20 @@ public class FormComparator {
 		compare(object1.getRule(), object2.getRule());
 	}
 
-	private static void compare(DiagramSink object1, DiagramSink object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramSink object1, DiagramSink object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
 			PointNotEqualsException, BiitTextNotEqualsException {
 		compare((DiagramExpression) object1, (DiagramExpression) object2);
 	}
 
-	private static void compare(DiagramSource object1, DiagramSource object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramSource object1, DiagramSource object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
 			BiitTextNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 	}
 
-	private static void compare(DiagramTable object1, DiagramTable object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramTable object1, DiagramTable object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
 			BiitTextNotEqualsException, TableRuleNotEqualsException, ExpressionNotEqualsException,
 			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
@@ -747,7 +750,7 @@ public class FormComparator {
 		compare(object1.getTable(), object2.getTable());
 	}
 
-	private static void compare(DiagramObject object1, DiagramObject object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramObject object1, DiagramObject object2) throws StorableObjectNotEqualsException,
 			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException, NodeNotEqualsException,
 			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException, TableRuleNotEqualsException,
@@ -820,7 +823,7 @@ public class FormComparator {
 
 	}
 
-	private static void compare(Diagram object1, Diagram object2) throws StorableObjectNotEqualsException,
+	private void compare(Diagram object1, Diagram object2) throws StorableObjectNotEqualsException,
 			DiagramNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
 			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
 			NodeNotEqualsException, SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException,
