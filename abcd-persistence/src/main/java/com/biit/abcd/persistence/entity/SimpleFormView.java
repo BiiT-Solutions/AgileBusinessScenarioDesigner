@@ -2,7 +2,7 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 
-import com.biit.form.interfaces.IBaseFormView;
+import com.biit.form.IBaseFormView;
 
 /**
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
