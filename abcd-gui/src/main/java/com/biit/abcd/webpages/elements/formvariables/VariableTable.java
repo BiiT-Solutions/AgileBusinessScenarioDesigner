@@ -270,10 +270,6 @@ public class VariableTable extends Table {
 									.format(((DateField) defaultValueField).getValue()));
 							break;
 						case NUMBER:
-							System.out.println("--> EVENT NOT CONVERTED VALUE: "
-									+ event.getProperty().getValue().toString());
-							System.out.println("--> NOT CONVERTED VALUE: " + defaultValueField.getValue());
-							System.out.println("--> CONVERTED VALUE: " + defaultValueField.getConvertedValue());
 							Double a = (Double) defaultValueField.getConvertedValue();
 							customVariable.setDefaultValue(a.toString());
 							break;

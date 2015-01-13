@@ -18,7 +18,9 @@ public class UserLocaleStringToDoubleConverter extends StringToDoubleConverter {
 		NumberFormat format = super.getFormat(locale);
 		// TO override the limitation of three decimal digits for the doubles
 		format.setMaximumFractionDigits(10);
+		//Remove the separator for each three digits (i.e. 1.000.000). 
+		format.setGroupingUsed(false);
 		return format;
 	}
-	
+
 }

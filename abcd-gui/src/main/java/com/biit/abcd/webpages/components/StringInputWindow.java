@@ -60,7 +60,6 @@ public class StringInputWindow extends AcceptCancelWindow {
 				}
 				return expressionValue.getValue().toString();
 			} catch (InvalidValueException e) {
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
 				// Error shown to the user in the caller class
 			}
 		}
