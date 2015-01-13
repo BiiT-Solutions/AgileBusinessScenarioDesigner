@@ -15,6 +15,10 @@ public class UserLocaleStringToDoubleConverter extends StringToDoubleConverter {
 	@Override
 	protected NumberFormat getFormat(Locale locale) {
 		locale = UserSessionHandler.getUser().getLocale();
-		return super.getFormat(locale);
+		NumberFormat format = super.getFormat(locale);
+		// TO override the limitation of three decimal digits for the doubles
+		format.setMaximumFractionDigits(10);
+		return format;
 	}
+	
 }

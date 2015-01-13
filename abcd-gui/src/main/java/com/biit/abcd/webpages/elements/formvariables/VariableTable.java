@@ -19,7 +19,6 @@ import com.biit.abcd.webpages.components.ComparableTextField;
 import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
-import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -93,46 +92,7 @@ public class VariableTable extends Table {
 		item.getItemProperty(FormVariablesProperties.VARIABLE_NAME).setValue(nameTextField);
 
 		final AbstractField<?> defaultValueField = createDefaultValueField(customVariable);
-		setValueDefaultValueField(customVariable, defaultValueField);
-		defaultValueField.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = 7024147984616759115L;
-
-			@Override
-			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				try {
-					defaultValueField.validate();
-					if (defaultValueField.getValue() != null) {
-						String oldValue = customVariable.getDefaultValue();
-						switch (customVariable.getType()) {
-						case DATE:
-							customVariable.setDefaultValue(ExpressionValueTimestamp.DATE_FORMATTER
-									.format(((DateField) defaultValueField).getValue()));
-							break;
-						case NUMBER:
-							Double a = (Double) defaultValueField.getConvertedValue();
-							customVariable.setDefaultValue(a.toString());
-							break;
-						case STRING:
-							customVariable.setDefaultValue(defaultValueField.getValue().toString());
-							break;
-						}
-						updateInfo(customVariable);
-						AbcdLogger.info(
-								this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress()
-										+ "' has changed the property 'Default Value' of the class '"
-										+ customVariable.getClass() + "' from '" + oldValue + "' to '"
-										+ customVariable.getDefaultValue() + "'");
-					}
-				} catch (InvalidValueException e) {
-					AbcdLogger.errorMessage(this.getClass().getName(), e);
-					MessageManager.showWarning(LanguageCodes.ERROR_INVALID_VALUE);
-					customVariable.setDefaultValue(null);
-					defaultValueField.setValue(null);
-				}
-			}
-		});
-		defaultValueField.setEnabled(!protectedElements);
+		addDefaultValueFieldValidatorsAndListeners(customVariable, defaultValueField);
 		item.getItemProperty(FormVariablesProperties.DEFAULT_VALUE).setValue(defaultValueField);
 
 		ComboBox typeComboBox = createTypeComboBox(customVariable, item);
@@ -202,8 +162,9 @@ public class VariableTable extends Table {
 
 						if (oldType != customVariable.getType()) {
 							customVariable.setDefaultValue(null);
-							item.getItemProperty(FormVariablesProperties.DEFAULT_VALUE).setValue(
-									createDefaultValueField(customVariable));
+							final AbstractField<?> defaultValueField = createDefaultValueField(customVariable);
+							addDefaultValueFieldValidatorsAndListeners(customVariable, defaultValueField);
+							item.getItemProperty(FormVariablesProperties.DEFAULT_VALUE).setValue(defaultValueField);
 						}
 
 						AbcdLogger.info(this.getClass().getName(), "User '"
@@ -291,6 +252,54 @@ public class VariableTable extends Table {
 		return defaultValueField;
 	}
 
+	private void addDefaultValueFieldValidatorsAndListeners(final CustomVariable customVariable,
+			final AbstractField<?> defaultValueField) {
+		setValueDefaultValueField(customVariable, defaultValueField);
+		defaultValueField.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 7024147984616759115L;
+
+			@Override
+			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+				try {
+					defaultValueField.validate();
+					if (defaultValueField.getValue() != null) {
+						String oldValue = customVariable.getDefaultValue();
+						switch (customVariable.getType()) {
+						case DATE:
+							customVariable.setDefaultValue(ExpressionValueTimestamp.DATE_FORMATTER
+									.format(((DateField) defaultValueField).getValue()));
+							break;
+						case NUMBER:
+							System.out.println("--> EVENT NOT CONVERTED VALUE: "
+									+ event.getProperty().getValue().toString());
+							System.out.println("--> NOT CONVERTED VALUE: " + defaultValueField.getValue());
+							System.out.println("--> CONVERTED VALUE: " + defaultValueField.getConvertedValue());
+							Double a = (Double) defaultValueField.getConvertedValue();
+							customVariable.setDefaultValue(a.toString());
+							break;
+						case STRING:
+							customVariable.setDefaultValue(defaultValueField.getValue().toString());
+							break;
+						}
+						updateInfo(customVariable);
+						AbcdLogger.info(
+								this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress()
+										+ "' has changed the property 'Default Value' of the class '"
+										+ customVariable.getClass() + "' from '" + oldValue + "' to '"
+										+ customVariable.getDefaultValue() + "'");
+					}
+				} catch (InvalidValueException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+					MessageManager.showWarning(LanguageCodes.ERROR_INVALID_VALUE);
+					customVariable.setDefaultValue(null);
+					defaultValueField.setValue(null);
+				}
+			}
+		});
+		defaultValueField.setEnabled(!protectedElements);
+	}
+
 	private void setPromtAndLocale(CustomVariable customVariable, AbstractField<?> defaultValueField) {
 		switch (customVariable.getType()) {
 		case DATE:
@@ -318,15 +327,6 @@ public class VariableTable extends Table {
 				}
 				break;
 			case NUMBER:
-				try {
-					ObjectProperty<Double> property = new ObjectProperty<Double>(Double.parseDouble(customVariable
-							.getDefaultValue()));
-					defaultValueField.setPropertyDataSource(property);
-				} catch (NumberFormatException nfe) {
-					nfe.printStackTrace();
-					setValue(null);
-				}
-				break;
 			case STRING:
 				((TextField) defaultValueField).setValue(customVariable.getDefaultValue().toString());
 				break;
