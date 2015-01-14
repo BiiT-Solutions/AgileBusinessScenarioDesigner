@@ -66,7 +66,7 @@ public class PrattParser {
 			}
 			
 			// Ignore new line symbols.
-			else if ((expression instanceof ExpressionSymbol)
+			if ((expression instanceof ExpressionSymbol)
 					&& (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW))) {
 				// Do nothing
 			}
