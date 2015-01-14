@@ -275,7 +275,6 @@ public class FormManager extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
-
 	}
 
 	private void formStatusValueChanged(final ComboBox statusComboBox) {

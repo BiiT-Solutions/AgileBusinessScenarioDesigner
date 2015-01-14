@@ -55,8 +55,6 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	 */
 	private static final AbcdActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
-	AbcdActivity.ADMIN_FORMS,
-	
 	AbcdActivity.FORM_STATUS_DOWNGRADE,
 	
 	AbcdActivity.FORM_REMOVE

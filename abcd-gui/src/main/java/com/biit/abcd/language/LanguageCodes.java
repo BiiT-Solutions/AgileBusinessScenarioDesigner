@@ -41,7 +41,7 @@ public enum LanguageCodes {
 	FORM_TREE_PROPERTY_RULES("form.tree.property.rules"),
 
 	INFO_USER_LOG("info.userLog"),
-	INFO_USER_SESSION_EXPIRED("info.userSessionExpired"),
+	INFO_USER_SESSION_EXPIRED("info.usersession.expired"),
 	
 	CAPTION_FORM_WORK_STATUS_DESIGN("caption.form.work.status.design"),
 	CAPTION_FORM_WORK_STATUS_FINAL_DESIGN("caption.form.work.status.final.design"),
