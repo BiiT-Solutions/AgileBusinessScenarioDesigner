@@ -14,7 +14,8 @@ import com.vaadin.testbench.elements.TextFieldElement;
 public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+	    System.setProperty("webdriver.firefox.bin", "/usr/local/bin/firefox");  
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
 		setDriver(new FirefoxDriver(profile));
@@ -30,7 +31,7 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 	}
 	
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		getDriver().quit();
 	}
 }
