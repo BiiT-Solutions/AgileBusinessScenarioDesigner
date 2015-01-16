@@ -2,10 +2,13 @@ package com.biit.abcd.gui.test;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import com.vaadin.testbench.Parameters;
+import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.ButtonElement;
@@ -24,11 +27,22 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 //		} else {
 //			throw new OsNotSupportedException("Your OS is not supported!!");
 //		}
+
+		Parameters.setScreenshotErrorDirectory("screenshots/errors");
+		Parameters.setScreenshotReferenceDirectory("screenshots/reference");
+		Parameters.setMaxScreenshotRetries(2);
+		Parameters.setScreenshotComparisonTolerance(1.0);
+		Parameters.setScreenshotRetryDelay(10);
+		Parameters.setScreenshotComparisonCursorDetection(true);
+
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
 	}
 
+	@Rule
+	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
+	
 	@Test
 	public void testAbcdLogin() {
 		// Get the page and log in
@@ -40,7 +54,7 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 	@After
 	public void tearDown() {
-		getDriver().quit();
+//		getDriver().quit();
 	}
 
 	public static boolean isWindows() {
@@ -51,6 +65,6 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 	public static boolean isUnix() {
 		String os = System.getProperty("os.name").toLowerCase();
-		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 );
+		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0);
 	}
 }
