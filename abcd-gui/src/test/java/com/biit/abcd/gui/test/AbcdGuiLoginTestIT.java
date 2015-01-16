@@ -1,11 +1,8 @@
 package com.biit.abcd.gui.test;
 
-import java.io.File;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
@@ -19,17 +16,17 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 	@Before
 	public void setUp() throws OsNotSupportedException {
-		FirefoxBinary binary = null;
-		if (isWindows()) {
-			binary = new FirefoxBinary(new File("C:/Program Files (x86)/Mozilla Firefox/firefox.exe"));
-		} else if (isUnix()) {
-			binary = new FirefoxBinary(new File("/usr/lib/firefox/firefox"));
-		} else {
-			throw new OsNotSupportedException("Your OS is not supported!!");
-		}
+//		FirefoxBinary binary = null;
+//		if (isWindows()) {
+//			binary = new FirefoxBinary(new File("C:/Program Files (x86)/Mozilla Firefox/firefox.exe"));
+//		} else if (isUnix()) {
+//			binary = new FirefoxBinary(new File("/usr/lib/firefox/firefox"));
+//		} else {
+//			throw new OsNotSupportedException("Your OS is not supported!!");
+//		}
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
-		setDriver(TestBench.createDriver(new FirefoxDriver(binary, profile)));
+		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
 	}
 
 	@Test
