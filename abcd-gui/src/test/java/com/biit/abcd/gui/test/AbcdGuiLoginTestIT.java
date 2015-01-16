@@ -47,9 +47,13 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 	public void testAbcdLogin() {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
-		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-		$(ButtonElement.class).id("loginButton").click();
+		$(TextFieldElement.class).first().setValue("jenkins-abcd@biit-solutions.com");
+		$(PasswordFieldElement.class).first().setValue("jAqDr0r3Agrj");
+		$(ButtonElement.class).first().click();
+		
+//		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
+//		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
+//		$(ButtonElement.class).id("loginButton").click();
 	}
 
 	@After
