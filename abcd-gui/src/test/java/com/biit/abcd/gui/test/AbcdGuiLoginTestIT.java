@@ -23,7 +23,7 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 		if (isWindows()) {
 			binary = new FirefoxBinary(new File("C:/Program Files (x86)/Mozilla Firefox/firefox.exe"));
 		} else if (isUnix()) {
-			binary = new FirefoxBinary(new File("/usr/local/firefox/firefox-bin"));
+			binary = new FirefoxBinary(new File("/usr/lib/firefox/firefox"));
 		} else {
 			throw new OsNotSupportedException("Your OS is not supported!!");
 		}
@@ -36,7 +36,6 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 	public void testAbcdLogin() {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
-		testBench(getDriver()).waitForVaadin();
 		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
 		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
 		$(ButtonElement.class).id("loginButton").click();
@@ -55,7 +54,6 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 	public static boolean isUnix() {
 		String os = System.getProperty("os.name").toLowerCase();
-		// linux or unix
-		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
+		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 );
 	}
 }
