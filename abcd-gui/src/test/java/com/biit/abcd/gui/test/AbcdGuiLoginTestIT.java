@@ -28,8 +28,8 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 //			throw new OsNotSupportedException("Your OS is not supported!!");
 //		}
 
-		Parameters.setScreenshotErrorDirectory("screenshots/errors");
-		Parameters.setScreenshotReferenceDirectory("screenshots/reference");
+		Parameters.setScreenshotErrorDirectory("/var/lib/jenkins/screenshots/errors");
+		Parameters.setScreenshotReferenceDirectory("/var/lib/jenkins/screenshots/reference");
 		Parameters.setMaxScreenshotRetries(2);
 		Parameters.setScreenshotComparisonTolerance(1.0);
 		Parameters.setScreenshotRetryDelay(10);
