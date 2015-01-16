@@ -7,6 +7,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.testbench.elements.PasswordFieldElement;
+import com.vaadin.testbench.elements.TextFieldElement;
 
 public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
@@ -21,9 +23,10 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 	public void testAbcdLogin() {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
-//		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-//		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-//		$(ButtonElement.class).caption("Sign In").first().click();
+		testBench().waitForVaadin();
+		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
+		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
+		$(ButtonElement.class).caption("Sign In").first().click();
 	}
 	
 	@After
