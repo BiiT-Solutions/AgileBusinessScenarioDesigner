@@ -8,7 +8,6 @@ import com.biit.abcd.language.AnswerFormatUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.language.UserLocaleStringToDoubleConverter;
-import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.vaadin.data.Property.ReadOnlyException;
