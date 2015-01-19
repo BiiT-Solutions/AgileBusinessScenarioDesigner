@@ -17,10 +17,14 @@ import com.vaadin.testbench.elements.TextFieldElement;
 
 public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
+	// Activates screenshots on application failure
+	private boolean takeScreeenshots = false;
+
 	@Before
 	public void setUp() throws OsNotSupportedException {
-		setScreenshotsParameters("/var/lib/jenkins/screenshots");
-
+		if (takeScreeenshots) {
+			setScreenshotsParameters("/var/lib/jenkins/screenshots");
+		}
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
@@ -40,7 +44,11 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 	@After
 	public void tearDown() {
-		 getDriver().quit();
+		// Do not call driver.quit if you want to take screenshots when the
+		// application fails
+		if (!takeScreeenshots) {
+			getDriver().quit();
+		}
 	}
 
 	public static void setScreenshotsParameters(String path) {
