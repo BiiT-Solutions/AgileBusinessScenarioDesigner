@@ -37,6 +37,7 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
+		profile.setPreference("focusmanager.testmode", true);
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
 	}
 
@@ -44,11 +45,14 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
 	
 	@Test
-	public void testAbcdLogin() {
+	public void testAbcdLogin() throws InterruptedException {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
+		
 		$(TextFieldElement.class).first().setValue("jenkins-abcd@biit-solutions.com");
+		
 		$(PasswordFieldElement.class).first().setValue("jAqDr0r3Agrj");
+		
 		$(ButtonElement.class).first().click();
 		
 //		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");

@@ -13,6 +13,7 @@
 	<properties>
 		<maven-war-plugin.version>2.3</maven-war-plugin.version>
 		<jetty.port>9081</jetty.port>
+		<jetty-stop.port>8866</jetty-stop.port>
 	</properties>
 	<repositories>
 		<repository>
@@ -151,7 +152,7 @@
 		<plugins>
 			<plugin>
 			 <artifactId>maven-failsafe-plugin</artifactId>
-			 <version>2.18.1</version>
+			 <version>${maven-failsafe-plugin.version}</version>
 			 <executions>
 			   <execution>
 			     <goals>
@@ -164,7 +165,7 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.3.0.M1</version>
+				<version>${jetty-maven-plugin.version}</version>
 				<configuration>
 					<systemProperties>
 						<systemProperty>
@@ -183,7 +184,7 @@
 			           <configuration>
 			               <scanIntervalSeconds>0</scanIntervalSeconds>
 			               <stopKey>STOP</stopKey>
-			               <stopPort>8866</stopPort>
+			               <stopPort>${jetty-stop.port}</stopPort>
 			           </configuration>
 			       </execution>
 			       <execution>
@@ -194,7 +195,7 @@
 			           </goals>
 			           <configuration>
 			               <stopKey>STOP</stopKey>
-			               <stopPort>8866</stopPort>
+			               <stopPort>${jetty-stop.port}</stopPort>
 			           </configuration>
 			       </execution>
 			   </executions>
