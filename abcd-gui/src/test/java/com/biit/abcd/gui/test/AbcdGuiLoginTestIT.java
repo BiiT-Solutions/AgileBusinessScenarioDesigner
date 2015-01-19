@@ -1,5 +1,7 @@
 package com.biit.abcd.gui.test;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,6 +41,8 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 		profile.setPreference("intl.accept_languages", "en_US");
 		profile.setPreference("focusmanager.testmode", true);
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
+		
+		getDriver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
 
 	@Rule
