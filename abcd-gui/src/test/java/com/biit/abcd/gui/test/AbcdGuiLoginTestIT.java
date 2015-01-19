@@ -23,7 +23,6 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
-		profile.setPreference("focusmanager.testmode", true);
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
 	}
 
