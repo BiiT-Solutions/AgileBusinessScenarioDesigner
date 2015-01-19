@@ -6,19 +6,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
-import com.vaadin.testbench.elements.ButtonElement;
-import com.vaadin.testbench.elements.PasswordFieldElement;
-import com.vaadin.testbench.elements.TextFieldElement;
 
 public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 
+	private WebDriverWait wait;
+	
 	@Before
 	public void setUp() throws OsNotSupportedException {
 //		FirefoxBinary binary = null;
@@ -43,26 +44,39 @@ public class AbcdGuiLoginTestIT extends TestBenchTestCase {
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
 		
 		getDriver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		wait = new WebDriverWait(getDriver(), 5);
+		
 	}
 
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
 	
+//	@Test
+//	public void testAbcdLogin() {
+//		// Get the page and log in
+//		getDriver().get("http://localhost:9081");
+//		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("userNameLoginForm")));
+//		$(TextFieldElement.class).first().setValue("jenkins-abcd@biit-solutions.com");
+//		$(PasswordFieldElement.class).first().setValue("jAqDr0r3Agrj");
+//		$(ButtonElement.class).first().click();
+//		
+////		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
+////		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
+////		$(ButtonElement.class).id("loginButton").click();
+//	}
+	
 	@Test
-	public void testAbcdLogin() throws InterruptedException {
+	public void testAbcdLoginSelenium() {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
-		
-		$(TextFieldElement.class).first().setValue("jenkins-abcd@biit-solutions.com");
-		
-		$(PasswordFieldElement.class).first().setValue("jAqDr0r3Agrj");
-		
-		$(ButtonElement.class).first().click();
-		
-//		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-//		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-//		$(ButtonElement.class).id("loginButton").click();
+		getDriver().findElement(By.id("userNameLoginForm")).clear();
+		getDriver().findElement(By.id("userNameLoginForm")).sendKeys("jenkins-abcd@biit-solutions.com");
+		getDriver().findElement(By.id("userPassLoginForm")).clear();
+		getDriver().findElement(By.id("userPassLoginForm")).sendKeys("jAqDr0r3Agrj");
+		getDriver().findElement(By.cssSelector("span.v-button-caption")).click();
 	}
+	
+
 
 	@After
 	public void tearDown() {
