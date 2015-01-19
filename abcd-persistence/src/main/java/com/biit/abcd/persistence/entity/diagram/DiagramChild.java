@@ -59,10 +59,13 @@ public class DiagramChild extends DiagramElement {
 		if (object instanceof DiagramChild) {
 			super.copyData(object);
 			DiagramChild diagramChild = (DiagramChild) object;
-
-			Diagram childDiagram = new Diagram();
-			childDiagram.copyData(diagramChild.getDiagram());
-			setDiagram(childDiagram);
+			if (diagramChild.getDiagram() != null) {
+				Diagram childDiagram = new Diagram();
+				childDiagram.copyData(diagramChild.getDiagram());
+				setDiagram(childDiagram);
+			} else {
+				setDiagram(null);
+			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramChild.");
 		}

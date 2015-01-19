@@ -270,12 +270,14 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramChild) {
 				DiagramChild diagramChild = (DiagramChild) child;
-				if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
-					diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
-				} else {
-					AbcdLogger
-							.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram() + "'.");
-					formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
+				if (diagramChild.getDiagram() != null) {
+					if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
+						diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
+					} else {
+						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram()
+								+ "'.");
+						formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
+					}
 				}
 			}
 		}
@@ -442,7 +444,7 @@ public class Form extends BaseForm {
 			for (DiagramObject diagramObject : diagramParent.getDiagramObjects()) {
 				if (diagramObject instanceof DiagramChild) {
 					DiagramChild diagramChild = (DiagramChild) diagramObject;
-					if (diagramChild.getDiagram().equals(diagram)) {
+					if (diagramChild.getDiagram() != null && diagramChild.getDiagram().equals(diagram)) {
 						diagramChild.setDiagram(null);
 					}
 				}
