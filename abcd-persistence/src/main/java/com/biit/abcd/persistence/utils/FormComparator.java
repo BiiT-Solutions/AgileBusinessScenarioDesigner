@@ -77,7 +77,7 @@ public class FormComparator {
 		if (checkIds && object1.getId() != null && object2.getId() != null && object1.getId().equals(object2.getId())) {
 			throw new StorableObjectNotEqualsException("Storable objects has same id!: '" + object1.getId() + "'");
 		}
-		
+
 		if (checkIds && object1.getComparationId().equals(object2.getComparationId())) {
 			throw new StorableObjectNotEqualsException("Storable objects are the same objects: '" + object1 + "' and '"
 					+ object2 + "'.");
@@ -596,13 +596,18 @@ public class FormComparator {
 			BiitTextNotEqualsException, DiagramNotEqualsException, ExpressionNotEqualsException,
 			CustomVariableNotEqualsException, NodeNotEqualsException, TableRuleNotEqualsException,
 			RuleNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+		if (object1 == null && object2 == null) {
+			return;
+		}
 		compare((DiagramElement) object1, (DiagramElement) object2);
 		if ((object1.getDiagram() != null && object2.getDiagram() == null)
 				|| (object1.getDiagram() == null && object2.getDiagram() != null)) {
 			throw new DiagramObjectNotEqualsException("Diagrams are different between diagram objects '" + object1
 					+ "' and '" + object2 + "'.");
 		}
-		compare(object1.getDiagram(), object2.getDiagram());
+		if (object1.getDiagram() != null && object2.getDiagram() != null) {
+			compare(object1.getDiagram(), object2.getDiagram());
+		}
 	}
 
 	private void compare(DiagramExpression object1, DiagramExpression object2) throws StorableObjectNotEqualsException,

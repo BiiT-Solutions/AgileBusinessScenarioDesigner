@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,6 +27,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expressions_chain")
 public class ExpressionChain extends Expression implements INameAttribute {
+	private static final long serialVersionUID = -4354289639284022632L;
 
 	private String name;
 
@@ -40,6 +40,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
+		super();
 		expressions = new ArrayList<>();
 	}
 
@@ -115,9 +116,9 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	 * @return
 	 */
 	private String filterVariables(Expression expression) {
-		// To avoid problems with text values staring with special characters 
+		// To avoid problems with text values staring with special characters
 		String cleanedExpression = expression.getExpression().replaceAll("[^a-zA-Z0-9_]", "_");
-		if(cleanedExpression.startsWith("_")){
+		if (cleanedExpression.startsWith("_")) {
 			cleanedExpression = "a" + cleanedExpression;
 		}
 		return cleanedExpression;
@@ -145,41 +146,43 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		return result.trim();
 	}
 
-//	public ExpressionEvaluator getExpressionEvaluator() {
-//		ExpressionChecker evaluator = new ExpressionChecker(getExpression());
-//		List<String> definedVariables = new ArrayList<>();
-//		// Define variables.
-//		for (int i = 0; i < expressions.size(); i++) {
-//			// Strings not allowed in functions, mathematical operators (except
-//			// assignation) and logical operations
-//			// (except equals).
-//			if ((i > 0
-//					&& (expressions.get(i) instanceof ExpressionValueString)
-//					&& (!(expressions.get(i - 1) instanceof ExpressionFunction) || ((ExpressionFunction) expressions
-//							.get(i - 1)).getValue().equals(AvailableFunction.IN))
-//					&& (!(expressions.get(i - 1) instanceof ExpressionOperatorMath) || ((ExpressionOperator) expressions
-//							.get(i - 1)).getValue().equals(AvailableOperator.ASSIGNATION)) && (!(expressions.get(i - 1) instanceof ExpressionOperatorLogic)
-//					|| (((ExpressionOperator) expressions.get(i - 1)).getValue().equals(AvailableOperator.EQUALS)) || (((ExpressionOperator) expressions
-//						.get(i - 1)).getValue().equals(AvailableOperator.NOT_EQUALS))))
-//					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-//					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
-//					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)
-//					|| (expressions.get(i) instanceof ExpressionValueGenericCustomVariable)
-//					|| (expressions.get(i) instanceof ExpressionValueGenericVariable)
-//					|| (expressions.get(i) instanceof ExpressionValueSystemDate)) {
-//				// Dots are not allowed.
-//				String varName = filterVariables(expressions.get(i));
-//				// Do not repeat variable declaration.
-//				if (!definedVariables.contains(varName)) {
-//					// Value is not needed for evaluation.
-//					String value = "1";
-//					evaluator.with(varName, value);
-//					definedVariables.add(varName);
-//				}
-//			}
-//		}
-//		return evaluator;
-//	}
+	// public ExpressionEvaluator getExpressionEvaluator() {
+	// ExpressionChecker evaluator = new ExpressionChecker(getExpression());
+	// List<String> definedVariables = new ArrayList<>();
+	// // Define variables.
+	// for (int i = 0; i < expressions.size(); i++) {
+	// // Strings not allowed in functions, mathematical operators (except
+	// // assignation) and logical operations
+	// // (except equals).
+	// if ((i > 0
+	// && (expressions.get(i) instanceof ExpressionValueString)
+	// && (!(expressions.get(i - 1) instanceof ExpressionFunction) || ((ExpressionFunction) expressions
+	// .get(i - 1)).getValue().equals(AvailableFunction.IN))
+	// && (!(expressions.get(i - 1) instanceof ExpressionOperatorMath) || ((ExpressionOperator) expressions
+	// .get(i - 1)).getValue().equals(AvailableOperator.ASSIGNATION)) && (!(expressions.get(i - 1) instanceof
+	// ExpressionOperatorLogic)
+	// || (((ExpressionOperator) expressions.get(i - 1)).getValue().equals(AvailableOperator.EQUALS)) ||
+	// (((ExpressionOperator) expressions
+	// .get(i - 1)).getValue().equals(AvailableOperator.NOT_EQUALS))))
+	// || (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+	// || (expressions.get(i) instanceof ExpressionValueCustomVariable)
+	// || (expressions.get(i) instanceof ExpressionValueGlobalConstant)
+	// || (expressions.get(i) instanceof ExpressionValueGenericCustomVariable)
+	// || (expressions.get(i) instanceof ExpressionValueGenericVariable)
+	// || (expressions.get(i) instanceof ExpressionValueSystemDate)) {
+	// // Dots are not allowed.
+	// String varName = filterVariables(expressions.get(i));
+	// // Do not repeat variable declaration.
+	// if (!definedVariables.contains(varName)) {
+	// // Value is not needed for evaluation.
+	// String value = "1";
+	// evaluator.with(varName, value);
+	// definedVariables.add(varName);
+	// }
+	// }
+	// }
+	// return evaluator;
+	// }
 
 	public List<Expression> getExpressions() {
 		return expressions;

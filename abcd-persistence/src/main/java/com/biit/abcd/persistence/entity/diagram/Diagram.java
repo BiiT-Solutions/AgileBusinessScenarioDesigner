@@ -45,6 +45,7 @@ import com.google.gson.annotations.SerializedName;
 @Table(name = "diagram")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Diagram extends StorableObject implements INameAttribute {
+	private static final long serialVersionUID = 3846733629137367843L;
 
 	private String name;
 

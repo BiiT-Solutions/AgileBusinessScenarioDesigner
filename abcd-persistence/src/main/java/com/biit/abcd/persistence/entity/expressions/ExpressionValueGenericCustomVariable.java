@@ -20,7 +20,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_generic_custom_variable")
 public class ExpressionValueGenericCustomVariable extends ExpressionValueGenericVariable {
-
+	private static final long serialVersionUID = -5189487388656499107L;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private CustomVariable variable;
 

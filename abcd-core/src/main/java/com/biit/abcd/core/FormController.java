@@ -11,7 +11,6 @@ import org.springframework.util.StopWatch;
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.core.utils.TableRuleUtils;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.logger.BasicLogging;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
@@ -170,22 +169,25 @@ public class FormController {
 	}
 
 	public Form getForm() {
-		return this.form;
+		return form;
 	}
 
 	public void clearUnsavedChangesChecker() {
 		originalForm = null;
 	}
-	
+
 	public void setForm(Form form) {
-		originalForm = form;
+		this.form = form;
 		try {
 			if (form == null) {
-				this.form = null;
+				this.originalForm = null;
 			} else {
-				this.form = (Form) form.generateCopy(true, true);
+				this.originalForm = (Form) form.generateCopy(true, true);
 			}
 		} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			this.form = null;
+			originalForm = null;
 		}
 		clearWorkVariables();
 	}
@@ -203,8 +205,8 @@ public class FormController {
 				new FormComparator(false).compare(form, originalForm);
 			} finally {
 				stopWatch.stop();
-				AbcdLogger.timeLog(stopWatch.getTotalTimeMillis(), this.getClass().getName()
-						+ ".checkUnsavedChanges()", null);
+				AbcdLogger.timeLog(stopWatch.getTotalTimeMillis(),
+						this.getClass().getName() + ".checkUnsavedChanges()", null);
 			}
 		}
 	}

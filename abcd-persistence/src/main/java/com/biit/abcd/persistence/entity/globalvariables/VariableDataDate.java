@@ -15,7 +15,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "global_variable_data_date")
 public class VariableDataDate extends VariableData {
-
+	private static final long serialVersionUID = 4865657000916202191L;
 	private Timestamp value;
 
 	public VariableDataDate() {

@@ -12,6 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "expression_value_systemdate")
 public class ExpressionValueSystemDate extends ExpressionValueTimestamp {
+	private static final long serialVersionUID = -8660891361751270777L;
 
 	public ExpressionValueSystemDate() {
 		super();

@@ -16,7 +16,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_boolean")
 public class ExpressionValueBoolean extends ExpressionValue<Boolean> {
-
+	private static final long serialVersionUID = 4438705376703075628L;
 	private Boolean value;
 
 	protected ExpressionValueBoolean() {

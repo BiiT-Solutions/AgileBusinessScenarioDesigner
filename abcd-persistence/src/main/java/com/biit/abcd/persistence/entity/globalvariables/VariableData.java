@@ -16,6 +16,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "global_variable_data")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class VariableData extends StorableObject {
+	private static final long serialVersionUID = 6356292873575007675L;
 
 	private Timestamp validFrom;
 

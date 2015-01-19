@@ -14,7 +14,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "diagram_child")
 public class DiagramChild extends DiagramElement {
-
+	private static final long serialVersionUID = -5504613126614498746L;
 	@OneToOne(fetch = FetchType.EAGER)
 	private Diagram diagram;
 
@@ -59,10 +59,13 @@ public class DiagramChild extends DiagramElement {
 		if (object instanceof DiagramChild) {
 			super.copyData(object);
 			DiagramChild diagramChild = (DiagramChild) object;
-
-			Diagram childDiagram = new Diagram();
-			childDiagram.copyData(diagramChild.getDiagram());
-			setDiagram(childDiagram);
+			if (diagramChild.getDiagram() != null) {
+				Diagram childDiagram = new Diagram();
+				childDiagram.copyData(diagramChild.getDiagram());
+				setDiagram(childDiagram);
+			} else {
+				setDiagram(null);
+			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramChild.");
 		}

@@ -21,7 +21,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_function")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ExpressionFunction extends Expression implements IExpressionType<AvailableFunction> {
-
+	private static final long serialVersionUID = -4646054850756194839L;
 	@Enumerated(EnumType.STRING)
 	private AvailableFunction value;
 

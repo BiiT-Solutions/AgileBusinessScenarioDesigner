@@ -19,7 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "test_answer_multi_checkbox")
 public class TestAnswerMultiCheckBox extends TestAnswer {
-
+	private static final long serialVersionUID = -3255342701991988332L;
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> multiCheckBoxValue;
 

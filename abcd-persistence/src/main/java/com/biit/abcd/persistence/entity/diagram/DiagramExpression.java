@@ -8,9 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -18,7 +15,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "diagram_calculation")
 public class DiagramExpression extends DiagramElement {
-
+	private static final long serialVersionUID = 406552071357685928L;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ExpressionChain expression;
 

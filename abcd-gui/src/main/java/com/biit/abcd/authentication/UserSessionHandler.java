@@ -1,6 +1,8 @@
 package com.biit.abcd.authentication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.core.FormController;
@@ -8,6 +10,7 @@ import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.TestScenarioController;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
@@ -18,8 +21,10 @@ public class UserSessionHandler {
 	private FormController formController;
 	private static GlobalVariablesController globalVariablesController;
 	private static TestScenarioController testScenariosController;
-	// User Id --> UI
-	private static HashMap<Long, UI> usersSession = new HashMap<>();
+	// User Id --> List<UI> (A user can have different browsers opened in the same machine)
+	private static HashMap<Long, List<UI>> usersSession = new HashMap<>();
+	// User Id --> IP (current UI ip connected)
+	private static HashMap<Long, String> usersIp = new HashMap<>();
 
 	/**
 	 * Initializes the {@link UserSessionHandler} for the given {@link Application}
@@ -33,12 +38,25 @@ public class UserSessionHandler {
 		new UserSessionHandler(ui);
 	}
 
-	public static void checkOnlyOneSession(User user, UI ui) {
+	public static void checkOnlyOneSession(User user, UI ui, String ip) {
 		if (usersSession.get(user.getUserId()) != null) {
-			usersSession.get(user.getUserId()).close();
-			MessageManager.showWarning(LanguageCodes.INFO_USER_SESSION_EXPIRED);
+			if (ip == null || !ip.equals(usersIp.get(user.getUserId()))) {
+				for (UI userUI : usersSession.get(user.getUserId())) {
+					try {
+						userUI.close();
+						userUI.getNavigator().navigateTo(WebMap.getLoginPage().toString());
+					} catch (Exception e) {
+						// maybe the session has expired in Vaadin and cannot be closed.
+					}
+				}
+				MessageManager.showWarning(LanguageCodes.INFO_USER_SESSION_EXPIRED);
+			}
 		}
-		usersSession.put(user.getUserId(), ui);
+		if (usersSession.get(user.getUserId()) == null) {
+			usersSession.put(user.getUserId(), new ArrayList<UI>());
+		}
+		usersSession.get(user.getUserId()).add(ui);
+		usersIp.put(user.getUserId(), ip);
 	}
 
 	/**
@@ -115,6 +133,7 @@ public class UserSessionHandler {
 	public static void logout() {
 		if (getUser() != null) {
 			usersSession.remove(getUser().getUserId());
+			usersIp.remove(getUser().getUserId());
 		}
 		setUser(null);
 	}

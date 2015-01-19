@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity
 @Table(name = "diagram_biit_text")
 public class DiagramBiitText extends StorableObject {
-
+	private static final long serialVersionUID = 1533578154303621298L;
 	@Expose
 	private String text;
 	@Expose

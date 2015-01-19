@@ -180,16 +180,19 @@ public class CheckDependencies {
 	 */
 	private static void checkExpressionChainDependenciesInDiagram(Diagram diagram, ExpressionChain expressionChain)
 			throws DependencyExistException {
-		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
-		for (DiagramObject diagramObject : diagramObjectsList) {
-			if (diagramObject instanceof DiagramExpression) {
-				if (((DiagramExpression) diagramObject).getExpression() != null
-						&& ((DiagramExpression) diagramObject).getExpression().equals(expressionChain)) {
-					throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName()
-							+ ", with name: " + expressionChain.getName() + " referenced in the form.");
+		if (diagram != null) {
+			Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+			for (DiagramObject diagramObject : diagramObjectsList) {
+				if (diagramObject instanceof DiagramExpression) {
+					if (((DiagramExpression) diagramObject).getExpression() != null
+							&& ((DiagramExpression) diagramObject).getExpression().equals(expressionChain)) {
+						throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName()
+								+ ", with name: " + expressionChain.getName() + " referenced in the form.");
+					}
+				} else if (diagramObject instanceof DiagramChild) {
+					checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(),
+							expressionChain);
 				}
-			} else if (diagramObject instanceof DiagramChild) {
-				checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), expressionChain);
 			}
 		}
 	}

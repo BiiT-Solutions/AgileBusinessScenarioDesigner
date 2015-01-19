@@ -17,7 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "test_answer_radio_button")
 public class TestAnswerRadioButton extends TestAnswer {
-
+	private static final long serialVersionUID = 6414765646541131563L;
 	private String radioButtonValue = null;
 
 	public TestAnswerRadioButton() {

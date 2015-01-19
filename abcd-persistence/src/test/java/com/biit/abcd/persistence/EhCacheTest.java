@@ -1,8 +1,5 @@
 package com.biit.abcd.persistence;
 
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Ehcache;
-
 import org.hibernate.stat.EntityStatistics;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

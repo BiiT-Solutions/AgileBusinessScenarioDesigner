@@ -46,6 +46,7 @@ public class ExpressionElement extends CssLayout {
 		this.addLayoutClickListener(clickListener);
 	}
 
+	@Override
 	public String toString() {
 		return elementName.getCaption();
 	}

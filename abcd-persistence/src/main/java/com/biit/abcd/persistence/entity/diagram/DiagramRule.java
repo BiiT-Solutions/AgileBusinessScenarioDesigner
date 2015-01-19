@@ -15,7 +15,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "diagram_rule")
 public class DiagramRule extends DiagramElement {
-
+	private static final long serialVersionUID = -1428491567791916924L;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Rule rule;
 

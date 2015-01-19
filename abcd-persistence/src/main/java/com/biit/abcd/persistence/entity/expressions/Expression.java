@@ -19,9 +19,10 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_basic")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Expression extends StorableObject {
+	private static final long serialVersionUID = 4816405922566823101L;
 
 	@Transient
-	private transient boolean editable = true;
+	private boolean editable;
 
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
 	// we cannot use the list of children with
@@ -31,6 +32,7 @@ public abstract class Expression extends StorableObject {
 
 	public Expression() {
 		super();
+		editable = true;
 	}
 
 	public void copyBasicExpressionInfo(Expression expression) {

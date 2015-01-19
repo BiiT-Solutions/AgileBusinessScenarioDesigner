@@ -18,7 +18,6 @@ import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.abcd.security.AbcdActivity;
@@ -423,21 +422,22 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 		statusComboBox.setWidth("100%");
 
-		// Status can change if you are not in DESIGN phase and can advance form
-		// status
+		// Status can change if you are not in DESIGN phase and can advance form status
 		boolean userCanUpgradeStatus = AbcdAuthorizationService.getInstance().isAuthorizedActivity(
 				UserSessionHandler.getUser(), form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE);
 
 		statusComboBox.setEnabled(userCanUpgradeStatus);
 
-		statusComboBox.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = 6270860285995563296L;
+		if (userCanUpgradeStatus) {
+			statusComboBox.addValueChangeListener(new ValueChangeListener() {
+				private static final long serialVersionUID = 6270860285995563296L;
 
-			@Override
-			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				launchFormStatusChangeListeners(statusComboBox);
-			}
-		});
+				@Override
+				public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+					launchFormStatusChangeListeners(statusComboBox);
+				}
+			});
+		}
 
 		return statusComboBox;
 	}

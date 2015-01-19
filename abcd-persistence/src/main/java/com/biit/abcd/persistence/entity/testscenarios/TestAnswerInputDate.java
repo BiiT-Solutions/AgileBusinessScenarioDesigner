@@ -19,7 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "test_answer_input_date")
 public class TestAnswerInputDate extends TestAnswer {
-
+	private static final long serialVersionUID = 4067658245634637534L;
 	private Timestamp dateValue = null;
 
 	public TestAnswerInputDate() {

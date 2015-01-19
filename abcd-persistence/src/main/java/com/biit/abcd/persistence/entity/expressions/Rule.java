@@ -3,7 +3,6 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,6 +25,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "rule")
 public class Rule extends StorableObject implements INameAttribute {
+	private static final long serialVersionUID = -2371234972449375379L;
 
 	private String name;
 

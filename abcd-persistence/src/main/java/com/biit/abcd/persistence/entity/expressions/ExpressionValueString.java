@@ -17,7 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_string")
 public class ExpressionValueString extends ExpressionValue<String> {
-
+	private static final long serialVersionUID = -6973952458832840106L;
 	@Column(columnDefinition = "TEXT")
 	private String text = "";
 

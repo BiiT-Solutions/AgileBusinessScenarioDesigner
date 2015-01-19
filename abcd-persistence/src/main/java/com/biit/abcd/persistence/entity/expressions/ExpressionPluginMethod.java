@@ -12,7 +12,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_plugin_method")
 public class ExpressionPluginMethod extends Expression {
-
+	private static final long serialVersionUID = -1357787104083039897L;
 	private Class<?> pluginInterface = null;
 	private String pluginName = null;
 	private String pluginMethodName = null;

@@ -9,6 +9,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "diagram_sink")
 public class DiagramSink extends DiagramExpression {
+	private static final long serialVersionUID = 1993423029316963730L;
 
 	public DiagramSink() {
 		super();

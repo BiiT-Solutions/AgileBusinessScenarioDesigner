@@ -17,7 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "test_answer_input_text")
 public class TestAnswerInputText extends TestAnswer {
-
+	private static final long serialVersionUID = -7104748620237201894L;
 	private String inputValue = null;
 
 	public TestAnswerInputText() {

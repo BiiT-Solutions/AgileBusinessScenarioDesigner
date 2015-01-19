@@ -14,6 +14,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "tree_groups")
 public class Group extends BaseRepeatableGroup {
+	private static final long serialVersionUID = -7455213859023593111L;
 
 	public Group() {
 		super();

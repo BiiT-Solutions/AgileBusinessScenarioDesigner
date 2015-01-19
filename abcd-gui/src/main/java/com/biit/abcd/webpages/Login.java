@@ -177,7 +177,7 @@ public class Login extends WebPageComponent {
 			// The user's password was correct, so set the user as the
 			// current user (inlogged)
 			UserSessionHandler.setUser(user);
-			UserSessionHandler.checkOnlyOneSession(user, UI.getCurrent());
+			UserSessionHandler.checkOnlyOneSession(user, UI.getCurrent(), browser.getAddress());
 			ApplicationFrame.navigateTo(WebMap.getMainPage());
 		}
 	}

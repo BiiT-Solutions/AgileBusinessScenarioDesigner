@@ -20,6 +20,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_timestamp")
 public class ExpressionValueTimestamp extends ExpressionValue<Timestamp> {
+	private static final long serialVersionUID = -5688942686213064713L;
 	private Timestamp value;
 	public static final String DATE_FORMAT = "dd/MM/yyyy";
 	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT);

@@ -8,8 +8,7 @@ import com.biit.form.BaseForm;
 @Entity
 @Table(name = "test_scenario_form")
 public class TestScenarioForm extends BaseForm {
-	
-
+	private static final long serialVersionUID = 1571808179307329435L;
 	private static final String DEFAULT_FORM_NAME = "TestScenarioForm";
 	
 	public TestScenarioForm() {

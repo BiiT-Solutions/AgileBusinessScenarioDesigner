@@ -14,6 +14,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity
 @Table(name = "diagram_nodes")
 public class Node extends StorableObject {
+	private static final long serialVersionUID = -5481806008119969483L;
 	@Expose
 	@SerializedName("id")
 	private String jointjsId;

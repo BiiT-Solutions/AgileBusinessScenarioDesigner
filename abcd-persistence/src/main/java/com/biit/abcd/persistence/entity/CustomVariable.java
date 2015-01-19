@@ -22,6 +22,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 // customvariables name problem if a new custom variable has the same name that a previously deleted one.
 @Table(name = "form_custom_variables")
 public class CustomVariable extends StorableObject {
+	private static final long serialVersionUID = 4678216833687584848L;
 
 	// Used mainly for unique constraint.
 	@ManyToOne

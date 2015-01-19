@@ -29,6 +29,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "rule_decision_table")
 public class TableRule extends StorableObject implements INameAttribute {
+	private static final long serialVersionUID = 1112900840434494717L;
 
 	private String name;
 

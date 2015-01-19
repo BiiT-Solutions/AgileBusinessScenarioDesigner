@@ -45,6 +45,7 @@ import com.liferay.portal.model.User;
 @Table(name = "diagram_objects")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class DiagramObject extends StorableObject {
+	private static final long serialVersionUID = -6312500925414596116L;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Diagram parent;

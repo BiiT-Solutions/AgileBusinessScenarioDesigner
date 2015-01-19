@@ -50,7 +50,7 @@ import com.liferay.portal.model.User;
 @Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version" }) })
 @AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH))
 public class Form extends BaseForm {
-
+	private static final long serialVersionUID = 185712950929311653L;
 	@Column(nullable = false)
 	private Timestamp availableFrom;
 	private Timestamp availableTo;
@@ -88,10 +88,11 @@ public class Form extends BaseForm {
 	// associations)" launch when removing a customvariable and other is renamed as this
 	// one, we need to disable
 	// orphanRemoval=true of children and implement ourselves.
-	private transient Set<CustomVariable> customVariablesToDelete = new HashSet<>();
+	@Transient
+	private Set<CustomVariable> customVariablesToDelete;
 
 	@Transient
-	private transient boolean isLastVersion = true;
+	private boolean isLastVersion = true;
 
 	@Enumerated(EnumType.STRING)
 	private FormWorkStatus status = FormWorkStatus.DESIGN;
@@ -103,6 +104,7 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
+		customVariablesToDelete = new HashSet<>();
 	}
 
 	public Form(String name) throws FieldTooLongException, CharacterNotAllowedException {
@@ -112,6 +114,7 @@ public class Form extends BaseForm {
 		customVariables = new HashSet<>();
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
+		customVariablesToDelete = new HashSet<>();
 	}
 
 	@Override
@@ -270,12 +273,14 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramChild) {
 				DiagramChild diagramChild = (DiagramChild) child;
-				if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
-					diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
-				} else {
-					AbcdLogger
-							.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram() + "'.");
-					formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
+				if (diagramChild.getDiagram() != null) {
+					if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
+						diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
+					} else {
+						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram()
+								+ "'.");
+						formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
+					}
 				}
 			}
 		}
@@ -442,7 +447,7 @@ public class Form extends BaseForm {
 			for (DiagramObject diagramObject : diagramParent.getDiagramObjects()) {
 				if (diagramObject instanceof DiagramChild) {
 					DiagramChild diagramChild = (DiagramChild) diagramObject;
-					if (diagramChild.getDiagram().equals(diagram)) {
+					if (diagramChild.getDiagram() != null && diagramChild.getDiagram().equals(diagram)) {
 						diagramChild.setDiagram(null);
 					}
 				}
