@@ -58,15 +58,12 @@ public abstract class UpperMenu extends SecuredMenu {
 	// Settings buttons
 	private IconButton globalConstantsButton, clearCacheButton, logoutButton;
 
-	// private HashMap<IconButton, List<IconButton>> subMenuButtons;
-
 	public UpperMenu() {
 		super();
 		defineUpperMenu();
 		this.setContractIcons(true, BUTTON_WIDTH);
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
-		// subMenuButtons = new HashMap<>();
 	}
 
 	@Override
@@ -127,6 +124,7 @@ public abstract class UpperMenu extends SecuredMenu {
 				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, settingsButtonsList);
 		settingsButton.setHeight("100%");
 		settingsButton.setWidth(BUTTON_WIDTH);
+		settingsButton.setId("settingsButton");
 
 		Component currentRootLayout = getCompositionRoot();
 
@@ -336,6 +334,7 @@ public abstract class UpperMenu extends SecuredMenu {
 				}
 			}
 		});
+		logoutButton.setId("logOutButton");
 		logoutButton.setWidth("100%");
 		iconButtonList.add(logoutButton);
 

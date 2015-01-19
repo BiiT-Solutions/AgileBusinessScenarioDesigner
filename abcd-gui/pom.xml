@@ -104,6 +104,12 @@
 			<artifactId>vaadin-themes</artifactId>
 			<version>${vaadin.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${org.testng.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Spring MVC framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -151,16 +157,16 @@
 	<build>
 		<plugins>
 			<plugin>
-			 <artifactId>maven-failsafe-plugin</artifactId>
-			 <version>${maven-failsafe-plugin.version}</version>
-			 <executions>
-			   <execution>
-			     <goals>
-			       <goal>integration-test</goal>
-			       <goal>verify</goal>
-			     </goals>
-			   </execution>
-			 </executions>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${maven-failsafe-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
@@ -175,30 +181,30 @@
 					</systemProperties>
 				</configuration>
 				<executions>
-			       <execution>
-			           <id>start-jetty</id>
-			           <phase>pre-integration-test</phase>
-			           <goals>
-			               <goal>start</goal>
-			           </goals>
-			           <configuration>
-			               <scanIntervalSeconds>0</scanIntervalSeconds>
-			               <stopKey>STOP</stopKey>
-			               <stopPort>${jetty-stop.port}</stopPort>
-			           </configuration>
-			       </execution>
-			       <execution>
-			           <id>stop-jetty</id>
-			           <phase>post-integration-test</phase>
-			           <goals>
-			               <goal>stop</goal>
-			           </goals>
-			           <configuration>
-			               <stopKey>STOP</stopKey>
-			               <stopPort>${jetty-stop.port}</stopPort>
-			           </configuration>
-			       </execution>
-			   </executions>
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<stopKey>STOP</stopKey>
+							<stopPort>${jetty-stop.port}</stopPort>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+						<configuration>
+							<stopKey>STOP</stopKey>
+							<stopPort>${jetty-stop.port}</stopPort>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<!-- As we are doing "inplace" GWT compilation, ensure the widgetset -->
 			<!-- directory is cleaned properly -->
@@ -242,9 +248,9 @@
 					<!-- <runTarget>mobilemail</runTarget> -->
 					<!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This 
 						way compatible with Vaadin eclipse plugin. -->
-					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets
+					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets 
 					</webappDirectory>
-					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets
+					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets 
 					</hostedWebapp>
 					<noServer>true</noServer>
 					<!-- Remove draftCompile when project is ready -->
@@ -288,9 +294,9 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>com.vaadin</groupId>
-										<artifactId> vaadin-maven-plugin
+										<artifactId> vaadin-maven-plugin 
 										</artifactId>
-										<versionRange> [${vaadin.version},)
+										<versionRange> [${vaadin.version},) 
 										</versionRange>
 										<goals>
 											<goal>clean</goal>

@@ -1,62 +1,41 @@
 package com.biit.abcd.gui.test;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-import com.vaadin.testbench.Parameters;
-import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.testbench.TestBench;
-import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.ButtonElement;
+import com.vaadin.testbench.elements.NotificationElement;
 import com.vaadin.testbench.elements.PasswordFieldElement;
 import com.vaadin.testbench.elements.TextFieldElement;
 
-public class AbcdGuiLoginTestIT extends TestBenchTestCase {
+@Test(groups = "login")
+public class AbcdGuiLoginTestIT extends AbcdGuiTestIT {
 
-	// Activates screenshots on application failure
-	private boolean takeScreeenshots = false;
-
-	@Before
-	public void setUp() throws OsNotSupportedException {
-		if (takeScreeenshots) {
-			setScreenshotsParameters("/var/lib/jenkins/screenshots");
-		}
-		FirefoxProfile profile = new FirefoxProfile();
-		profile.setPreference("intl.accept_languages", "en_US");
-		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
-	}
-
-	@Rule
-	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
-
-	@Test
 	public void testAbcdLogin() {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
-		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-		$(ButtonElement.class).id("loginButton").click();
-	}
-
-	@After
-	public void tearDown() {
-		// Do not call driver.quit if you want to take screenshots when the
-		// application fails
-		if (!takeScreeenshots) {
-			getDriver().quit();
+		if (testInJenkins) {
+			$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
+			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
+		} else {
+			$(TextFieldElement.class).id("userNameLoginForm").setValue("test@liferay.com");
+			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("test");
 		}
+		$(ButtonElement.class).id("loginButton").click();
+		logOut();
 	}
 
-	public static void setScreenshotsParameters(String path) {
-		Parameters.setScreenshotErrorDirectory(path + "/errors");
-		Parameters.setScreenshotReferenceDirectory(path + "/reference");
-		Parameters.setMaxScreenshotRetries(2);
-		Parameters.setScreenshotComparisonTolerance(1.0);
-		Parameters.setScreenshotRetryDelay(10);
-		Parameters.setScreenshotComparisonCursorDetection(true);
+	public void testAbcdLoginError() {
+		// Get the page and log in with a fake user
+		getDriver().get("http://localhost:9081");
+		$(TextFieldElement.class).id("userNameLoginForm").setValue("fake-user@biit-solutions.com");
+		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("tacosAreWonderful");
+		$(ButtonElement.class).id("loginButton").click();
+		// Look up for the error notification
+		NotificationElement notification = $(NotificationElement.class).first();
+		Assert.assertEquals("Either username or password was wrong.", notification.getCaption());
+		Assert.assertEquals("Try again.", notification.getDescription());
+		Assert.assertEquals("error", notification.getType());
+		notification.close();
 	}
 }
