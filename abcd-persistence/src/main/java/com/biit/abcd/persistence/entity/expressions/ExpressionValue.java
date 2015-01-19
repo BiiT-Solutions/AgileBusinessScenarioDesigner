@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "expression_value")
 public abstract class ExpressionValue<T> extends Expression {
-	
+	private static final long serialVersionUID = -3969530622756101122L;
 
 	public abstract T getValue();
 

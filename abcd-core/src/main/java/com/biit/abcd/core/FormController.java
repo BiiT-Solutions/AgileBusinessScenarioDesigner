@@ -169,7 +169,7 @@ public class FormController {
 	}
 
 	public Form getForm() {
-		return this.form;
+		return form;
 	}
 
 	public void clearUnsavedChangesChecker() {
@@ -177,13 +177,12 @@ public class FormController {
 	}
 
 	public void setForm(Form form) {
-		originalForm = form;
-		System.out.println(form);
+		this.form = form;
 		try {
 			if (form == null) {
-				this.form = null;
+				this.originalForm = null;
 			} else {
-				this.form = (Form) form.generateCopy(true, true);
+				this.originalForm = (Form) form.generateCopy(true, true);
 			}
 		} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);

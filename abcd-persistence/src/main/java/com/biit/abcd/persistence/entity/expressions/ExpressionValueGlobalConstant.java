@@ -19,7 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_global_variable")
 public class ExpressionValueGlobalConstant extends ExpressionValue<GlobalVariable> {
-
+	private static final long serialVersionUID = 3063006330916018596L;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private GlobalVariable globalVariable;
 

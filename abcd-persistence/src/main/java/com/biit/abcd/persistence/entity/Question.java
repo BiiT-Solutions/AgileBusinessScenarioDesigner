@@ -18,6 +18,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "tree_questions")
 public class Question extends BaseQuestion {
+	private static final long serialVersionUID = 6352523681890504871L;
 	@Enumerated(EnumType.STRING)
 	private AnswerType answerType;
 	@Enumerated(EnumType.STRING)

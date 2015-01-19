@@ -13,7 +13,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "global_variable_data_postalcode")
 public class VariableDataPostalCode extends VariableData {
-
+	private static final long serialVersionUID = 5350677749105057832L;
 	private String postalCode;
 
 	public VariableDataPostalCode() {

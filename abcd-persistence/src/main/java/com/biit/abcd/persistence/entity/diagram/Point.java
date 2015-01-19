@@ -13,7 +13,7 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "diagram_points")
 public class Point extends StorableObject {
-
+	private static final long serialVersionUID = 5426903602493769403L;
 	@Expose
 	private int x;
 	@Expose

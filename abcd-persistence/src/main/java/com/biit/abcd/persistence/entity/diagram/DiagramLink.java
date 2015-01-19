@@ -29,6 +29,7 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "diagram_links")
 public class DiagramLink extends DiagramObject {
+	private static final long serialVersionUID = 5533529349122059755L;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@Cache(region = "expressionChains", usage = CacheConcurrencyStrategy.READ_WRITE)

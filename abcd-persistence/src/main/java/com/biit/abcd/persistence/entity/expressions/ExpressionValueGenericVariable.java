@@ -15,7 +15,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_generic_variable")
 public class ExpressionValueGenericVariable extends ExpressionValue<GenericTreeObjectType> {
-
+	private static final long serialVersionUID = -559535098261955545L;
 	@Enumerated(EnumType.STRING)
 	private GenericTreeObjectType type;
 

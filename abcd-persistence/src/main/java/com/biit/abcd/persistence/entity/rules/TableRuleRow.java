@@ -22,6 +22,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "rule_decision_table_row")
 public class TableRuleRow extends StorableObject implements Comparable<TableRuleRow> {
+	private static final long serialVersionUID = 1887517541278941394L;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private ExpressionChain conditions;

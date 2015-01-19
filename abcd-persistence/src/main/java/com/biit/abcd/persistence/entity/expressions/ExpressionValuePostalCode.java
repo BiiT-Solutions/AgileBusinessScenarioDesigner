@@ -15,6 +15,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_postal_code")
 public class ExpressionValuePostalCode extends ExpressionValueString {
+	private static final long serialVersionUID = -4770567829915607298L;
 
 	public ExpressionValuePostalCode() {
 		super();
@@ -26,7 +27,7 @@ public class ExpressionValuePostalCode extends ExpressionValueString {
 		}
 		setValue(value);
 	}
-	
+
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
 		if (object instanceof ExpressionValuePostalCode) {

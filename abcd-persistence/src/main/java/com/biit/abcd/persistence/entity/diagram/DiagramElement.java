@@ -43,7 +43,7 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "diagram_elements")
 public abstract class DiagramElement extends DiagramObject {
-
+	private static final long serialVersionUID = -2842225781954290086L;
 	@Expose
 	private String tooltip;
 	@Expose

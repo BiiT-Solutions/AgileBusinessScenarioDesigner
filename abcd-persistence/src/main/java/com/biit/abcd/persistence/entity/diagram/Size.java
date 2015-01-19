@@ -13,17 +13,17 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "diagram_sizes")
 public class Size extends StorableObject {
-
+	private static final long serialVersionUID = -6707522501849361356L;
 	@Expose
 	private int width;
 	@Expose
 	private int height;
-	
-	public Size(){
+
+	public Size() {
 		super();
 	}
-	
-	public Size(int width, int heigh){
+
+	public Size(int width, int heigh) {
 		super();
 		setWidth(width);
 		setHeight(heigh);

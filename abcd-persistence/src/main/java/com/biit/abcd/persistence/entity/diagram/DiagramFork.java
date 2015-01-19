@@ -19,7 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "diagram_fork")
 public class DiagramFork extends DiagramElement {
-
+	private static final long serialVersionUID = -998601407465207830L;
 	// Due to bug (https://hibernate.atlassian.net/browse/HHH-5559) orphanRemoval is not working correctly in @OneToOne.
 	// We change a @OneToMany list with only one element.
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

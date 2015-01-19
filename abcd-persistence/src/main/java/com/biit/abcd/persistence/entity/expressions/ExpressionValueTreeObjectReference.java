@@ -17,6 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_value_tree_object_reference")
 public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObject> {
+	private static final long serialVersionUID = 3933694492937877414L;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TreeObject reference;

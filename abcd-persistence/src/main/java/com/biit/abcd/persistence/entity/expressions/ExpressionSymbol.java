@@ -19,7 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_symbol")
 public class ExpressionSymbol extends Expression implements IExpressionType<AvailableSymbol> {
-
+	private static final long serialVersionUID = 3876333374228054372L;
 	@Enumerated(EnumType.STRING)
 	private AvailableSymbol value;
 

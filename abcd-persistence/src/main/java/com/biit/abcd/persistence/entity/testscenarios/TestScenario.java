@@ -38,7 +38,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cache(region = "testScenarios", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class TestScenario extends StorableObject implements INameAttribute {
-
+	private static final long serialVersionUID = 858977816018764108L;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private TestScenarioForm testScenarioForm;

@@ -16,6 +16,7 @@ import com.biit.persistence.entity.StorableObject;
 @Table(name = "test_answer_basic")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class TestAnswer extends StorableObject {
+	private static final long serialVersionUID = 51115793138777641L;
 
 	public abstract Object getValue();
 

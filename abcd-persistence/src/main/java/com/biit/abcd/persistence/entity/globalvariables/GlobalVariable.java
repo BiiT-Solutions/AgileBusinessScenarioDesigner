@@ -23,7 +23,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "global_variables")
 public class GlobalVariable extends StorableObject {
-
+	private static final long serialVersionUID = 3463882037342518214L;
 	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 	private AnswerFormat format;

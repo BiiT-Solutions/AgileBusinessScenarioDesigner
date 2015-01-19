@@ -21,8 +21,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_operator")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator> {
-
+public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator> { 
+	private static final long serialVersionUID = 122060488311950177L;
 	@Enumerated(EnumType.STRING)
 	private AvailableOperator currentValue;
 

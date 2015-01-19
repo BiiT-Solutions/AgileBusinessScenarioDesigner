@@ -19,6 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "tree_answers")
 public class Answer extends BaseAnswer {
+	private static final long serialVersionUID = -7358559199240262641L;
 	private static final List<Class<? extends TreeObject>> ALLOWED_CHILDREN = new ArrayList<Class<? extends TreeObject>>(
 			Arrays.asList(Answer.class));
 
@@ -63,7 +64,7 @@ public class Answer extends BaseAnswer {
 	}
 
 	/**
-	 * Calculates a unique name of an answer or subanswer in the a question. 
+	 * Calculates a unique name of an answer or subanswer in the a question.
 	 */
 	@Override
 	public String getDefaultName(TreeObject parent, int startingIndex) {

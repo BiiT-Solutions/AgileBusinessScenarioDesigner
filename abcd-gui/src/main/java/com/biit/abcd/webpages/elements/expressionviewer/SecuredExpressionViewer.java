@@ -25,6 +25,7 @@ public class SecuredExpressionViewer extends ExpressionViewer {
 	/**
 	 * if disabled, no expression can be selected.
 	 */
+	@Override
 	protected void updateExpressionSelectionStyles() {
 		if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
 				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
