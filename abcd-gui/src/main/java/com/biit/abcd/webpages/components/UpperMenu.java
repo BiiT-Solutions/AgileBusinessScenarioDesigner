@@ -98,6 +98,7 @@ public abstract class UpperMenu extends SecuredMenu {
 								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
 								| PointNotEqualsException | BiitTextNotEqualsException
 								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+							e.printStackTrace();
 							final AlertMessageWindow windowAccept = new AlertMessageWindow(
 									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
 							windowAccept.addAcceptActionListener(new AcceptActionListener() {

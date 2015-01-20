@@ -417,11 +417,18 @@ public class FormManagerUpperMenu extends UpperMenu {
 	}
 
 	public void updateRemoveFormButton(SimpleFormView selected) {
-		//Only some users can remove forms. 
-		removeForm.setVisible(AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(
-				UserSessionHandler.getUser(), selected.getOrganizationId(), AbcdActivity.FORM_REMOVE));
-		//When visible, enabled when can delete an element.
-		removeForm.setEnabled(selected != null && !(selected instanceof RootForm));
+		// Only some users can remove forms.
+		try {
+			removeForm.setVisible(AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
+					UserSessionHandler.getUser(), AbcdActivity.FORM_REMOVE));
+		} catch (IOException | AuthenticationRequired e) {
+			removeForm.setVisible(false);
+		}
+		// When visible, enabled when can delete an element.
+		removeForm.setEnabled(selected != null
+				&& !(selected instanceof RootForm)
+				&& AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+						selected.getOrganizationId(), AbcdActivity.FORM_REMOVE));
 	}
 
 	@Override
