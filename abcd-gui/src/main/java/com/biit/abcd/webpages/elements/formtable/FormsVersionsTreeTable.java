@@ -71,9 +71,6 @@ public class FormsVersionsTreeTable extends TreeTable {
 		addContainerProperty(FormsVersionsTreeTableProperties.VERSION, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_VERSION), null, Align.CENTER);
 
-		addContainerProperty(FormsVersionsTreeTableProperties.GROUP, String.class, "",
-				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_GROUP), null, Align.CENTER);
-
 		addContainerProperty(FormsVersionsTreeTableProperties.ACCESS, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_ACCESS), null, Align.CENTER);
 
@@ -82,6 +79,10 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 		addContainerProperty(FormsVersionsTreeTableProperties.STATUS, ComboBox.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_STATUS), null, Align.CENTER);
+		
+		addContainerProperty(FormsVersionsTreeTableProperties.GROUP, String.class, "",
+				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_GROUP), null, Align.CENTER);
+
 
 		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLEFROM), null, Align.CENTER);

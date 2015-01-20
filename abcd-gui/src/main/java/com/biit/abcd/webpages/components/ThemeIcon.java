@@ -49,8 +49,10 @@ public enum ThemeIcon {
 	RIGHT_MENU_EXPAND("appbar.layout.expand.left.variant.svg"),
 
 	FORM_MANAGER_PAGE("page.form.manager.svg"),
+	
+	FORM_MANAGER_NEW_FORM("form.page.svg"),
 
-	FORM_MANAGER_ADD_FORM("form.create.svg"),
+	FORM_MANAGER_NEW("form.create.svg"),
 	
 	FORM_MANAGER_REMOVE_FORM("element.delete.svg"),
 	
