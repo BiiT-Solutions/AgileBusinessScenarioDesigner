@@ -43,8 +43,8 @@
 		<slf4j-api.version>1.7.7</slf4j-api.version>
 		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
 		<hibernate.version>4.3.6.Final</hibernate.version>
-		<liferay-service-common.version>0.4.2</liferay-service-common.version>
-		<liferay-authentication-client.version>0.5.4</liferay-authentication-client.version>
+		<liferay-service-common.version>0.4.3</liferay-service-common.version>
+		<liferay-authentication-client.version>0.5.5</liferay-authentication-client.version>
 		<jointjs-widget.version>0.1.2-WIDGET</jointjs-widget.version>
 		<jexeval.version>1.0.4</jexeval.version>
 		<!-- Version 6.2 of drools is not accepting special characters like 'ë', do not update -->

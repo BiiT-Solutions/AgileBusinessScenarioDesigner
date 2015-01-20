@@ -68,13 +68,12 @@ public class FormManager extends FormWebPageComponent {
 					try {
 						Form selectedForm = formDao.read(formTable.getValue().getId());
 						selectedForm.setLastVersion(formTable.getValue().isLastVersion());
-						UserSessionHandler.getFormController().setForm(selectedForm);
+						UserSessionHandler.setForm(selectedForm);
 					} catch (UnexpectedDatabaseException e) {
 						AbcdLogger.errorMessage(FormManager.class.getName(), e);
 						MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 								LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 					}
-
 				}
 			}
 		});
@@ -112,7 +111,7 @@ public class FormManager extends FormWebPageComponent {
 					try {
 						Form form = formDao.read(formTable.getValue().getId());
 						form.setLastVersion(formTable.getValue().isLastVersion());
-						UserSessionHandler.getFormController().setForm(form);
+						UserSessionHandler.setForm(form);
 						UiAccesser.lockForm(form, UserSessionHandler.getUser());
 					} catch (UnexpectedDatabaseException e) {
 						AbcdLogger.errorMessage(FormManager.class.getName(), e);
@@ -183,12 +182,11 @@ public class FormManager extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 		}
-
 	}
 
 	public void setFormById(Long formId) {
 		try {
-			UserSessionHandler.getFormController().setForm(formDao.read(formId));
+			UserSessionHandler.setForm(formDao.read(formId));
 		} catch (UnexpectedDatabaseException e) {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
@@ -254,8 +252,8 @@ public class FormManager extends FormWebPageComponent {
 				// If it is the last form, remove all its tests.
 				RootForm rootForm = formTable.getSelectedRootForm();
 				if (rootForm.getChildForms().size() <= 1) {
-					List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm
-							.getLabel(), selectedForm.getOrganizationId());
+					List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm.getLabel(),
+							selectedForm.getOrganizationId());
 					for (TestScenario testScenario : testScenarios) {
 						testScenarioDao.makeTransient(testScenario);
 						AbcdLogger.info(this.getClass().getName(), "User '"
