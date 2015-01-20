@@ -28,6 +28,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstan
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.exceptions.NotValidExpressionValue;
@@ -186,6 +187,8 @@ public class ExpressionViewer extends CssLayout {
 
 								}
 							});
+							// SystemDates cannot be edited.
+						} else if (expression instanceof ExpressionValueSystemDate) {
 							// For Input fields.
 						} else if (expression instanceof ExpressionValueString
 								|| expression instanceof ExpressionValueNumber
