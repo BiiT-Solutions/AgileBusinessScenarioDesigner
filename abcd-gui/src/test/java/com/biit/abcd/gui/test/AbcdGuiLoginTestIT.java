@@ -11,6 +11,7 @@ import com.vaadin.testbench.elements.TextFieldElement;
 @Test(groups = "login")
 public class AbcdGuiLoginTestIT extends AbcdGuiTestIT {
 
+	@Test
 	public void testAbcdLogin() {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
@@ -29,6 +30,7 @@ public class AbcdGuiLoginTestIT extends AbcdGuiTestIT {
 		logOut();
 	}
 
+	@Test
 	public void testAbcdLoginError() {
 		// Get the page and log in with a fake user
 		getDriver().get("http://localhost:9081");

@@ -19,7 +19,7 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 	protected boolean testInJenkins = false;
 	private static String SCREENSHOTS_PATH = "/var/lib/jenkins/screenshots";
 
-	@BeforeClass
+	@BeforeClass(inheritGroups=true,alwaysRun = true)
 	protected void setUp() {
 		if (takeScreeenshots) {
 			setScreenshotsParameters(SCREENSHOTS_PATH);
@@ -27,6 +27,7 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
+		System.out.println("Get driver:" +getDriver());
 	}
 
 	protected void autoLogin() {
@@ -51,7 +52,7 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 		$(ButtonElement.class).id("logoutButton").click();
 	}
 
-	@AfterClass
+	@AfterClass(inheritGroups=true,alwaysRun = true)
 	protected void tearDown() {
 		// Do not call driver.quit if you want to take screenshots when the
 		// application fails
