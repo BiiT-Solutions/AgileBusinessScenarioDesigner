@@ -334,7 +334,7 @@ public abstract class UpperMenu extends SecuredMenu {
 				}
 			}
 		});
-		logoutButton.setId("logOutButton");
+		logoutButton.setId("logoutButton");
 		logoutButton.setWidth("100%");
 		iconButtonList.add(logoutButton);
 
