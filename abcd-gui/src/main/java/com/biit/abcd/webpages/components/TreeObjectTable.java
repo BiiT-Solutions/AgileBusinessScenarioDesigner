@@ -69,6 +69,7 @@ public class TreeObjectTable extends TreeTable {
 			Object treeObjectIcon = createElementWithIcon(element);
 			Item item = addItem((Object) element);
 			if (parent != null) {
+				// This status must be true before setting the relationship.
 				setChildrenAllowed(parent, true);
 				setParent(element, parent);
 				setCollapsed(parent, false);
@@ -79,7 +80,7 @@ public class TreeObjectTable extends TreeTable {
 			}
 			setChildrenAllowed(element, false);
 			// If it is a new element, still has no parent. Uncollapse the
-			// futureS parent.
+			// futures parent.
 			if (element.getParent() == null) {
 				uncollapse(parent);
 				setCollapsed(element, false);
@@ -106,7 +107,7 @@ public class TreeObjectTable extends TreeTable {
 			item.getItemProperty(TreeObjectTableProperties.ELEMENT_NAME).setValue(treeObjectIcon);
 			setChildrenAllowed(element, false);
 			// If it is a new element, still has no parent. Uncollapse the
-			// futureS parent.
+			// futures parent.
 			setValue(element);
 			if (element.getParent() == null) {
 				uncollapse(parent);

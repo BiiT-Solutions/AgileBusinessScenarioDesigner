@@ -140,8 +140,8 @@ public class FormDesigner extends FormWebPageComponent {
 		} else {
 			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
 		}
-		// Collapse the table at question level
-		formTreeTable.collapseFrom(Question.class);
+		// Collapse the table at category level
+		formTreeTable.collapseFrom(Category.class);
 
 		// Set current selected element properties.
 		updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
