@@ -3,7 +3,7 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<exclude name="login" />
+				<include name="login" />
 				<include name="formManager" />
 			</run>
 		</groups>
