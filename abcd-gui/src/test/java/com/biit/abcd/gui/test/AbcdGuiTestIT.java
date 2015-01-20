@@ -44,7 +44,7 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 
 	protected void logOut() {
 		$(ButtonElement.class).id("settingsButton").click();
-		$(ButtonElement.class).id("logOutButton").click();
+		$(ButtonElement.class).id("logoutButton").click();
 	}
 
 	@AfterClass
