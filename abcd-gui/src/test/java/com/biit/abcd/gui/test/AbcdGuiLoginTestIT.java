@@ -14,13 +14,8 @@ public class AbcdGuiLoginTestIT extends AbcdGuiTestIT {
 	public void testAbcdLogin() {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
-		if (testInJenkins) {
-			$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-		} else {
-			$(TextFieldElement.class).id("userNameLoginForm").setValue("test@liferay.com");
-			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("test");
-		}
+		$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
+		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
 		$(ButtonElement.class).id("loginButton").click();
 		logOut();
 	}
