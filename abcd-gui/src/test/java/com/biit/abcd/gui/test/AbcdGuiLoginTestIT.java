@@ -21,6 +21,10 @@ public class AbcdGuiLoginTestIT extends AbcdGuiTestIT {
 			$(TextFieldElement.class).id("userNameLoginForm").setValue("test@liferay.com");
 			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("test");
 		}
+		
+		System.out.println("USER NAME VALUE: " + $(TextFieldElement.class).id("userNameLoginForm").getValue());
+		System.out.println("USER PASS VALUE: " + $(PasswordFieldElement.class).id("userPassLoginForm").getValue());
+		
 		$(ButtonElement.class).id("loginButton").click();
 		logOut();
 	}
