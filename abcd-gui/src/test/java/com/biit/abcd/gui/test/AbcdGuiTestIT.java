@@ -35,12 +35,11 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 		if (testInJenkins) {
 			$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
 			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-			$(ButtonElement.class).id("loginButton").click();
 		} else {
 			$(TextFieldElement.class).id("userNameLoginForm").setValue("test@liferay.com");
 			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("test");
-			$(ButtonElement.class).id("loginButton").click();
 		}
+		$(ButtonElement.class).id("loginButton").click();
 	}
 
 	protected void logOut() {
