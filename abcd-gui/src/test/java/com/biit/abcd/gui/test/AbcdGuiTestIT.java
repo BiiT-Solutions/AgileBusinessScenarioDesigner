@@ -34,8 +34,8 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 		// Get the page and log in
 		getDriver().get("http://localhost:9081");
 		if (testInJenkins) {
-			$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
+			$(TextFieldElement.class).id("userNameLoginForm").setValue("abcd_form_admin@biit1.com");
+			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("asd123");
 		} else {
 			$(TextFieldElement.class).id("userNameLoginForm").setValue("test@liferay.com");
 			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("test");
