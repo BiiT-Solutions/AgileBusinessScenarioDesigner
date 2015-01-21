@@ -684,6 +684,7 @@ public class DroolsParser {
 						return "$" + id + ".getVariableValue('" + variable.getName() + "')";
 					}
 				}
+				break;
 			case STRING:
 				return "'$" + id + ".getVariableValue('" + variable.getName() + "')'";
 			}

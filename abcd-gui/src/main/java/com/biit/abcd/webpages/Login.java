@@ -174,6 +174,7 @@ public class Login extends WebPageComponent {
 					}
 				});
 		loginButton.setWidth(FIELD_SIZE);
+		loginButton.setId("loginButton");
 
 		// Alignment and sizes.
 		FormLayout layout = new FormLayout();

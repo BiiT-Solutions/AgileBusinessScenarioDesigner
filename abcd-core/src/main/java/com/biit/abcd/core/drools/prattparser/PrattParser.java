@@ -26,7 +26,7 @@ public class PrattParser {
 	private final List<ExpressionToken> mRead = new ArrayList<ExpressionToken>();
 	private final Map<ExpressionTokenType, PrefixParselet> mPrefixParselets = new HashMap<ExpressionTokenType, PrefixParselet>();
 	private final Map<ExpressionTokenType, InfixParselet> mInfixParselets = new HashMap<ExpressionTokenType, InfixParselet>();
-	private final HashMap<String, ExpressionTokenType> mPunctuators = new HashMap<String, ExpressionTokenType>();
+	private final Map<String, ExpressionTokenType> mPunctuators = new HashMap<String, ExpressionTokenType>();
 
 	public PrattParser(List<Expression> tokens) {
 		this.mTokens = this.preParsing(tokens);
@@ -51,15 +51,9 @@ public class PrattParser {
 			}
 		}
 
-		// for (Entry<String, ExpressionTokenType> entry :
-		// this.mPunctuators.entrySet()) {
-		// System.out.println("Punctuator KEY: " + entry.getKey() + " TYPE: " +
-		// entry.getValue() + " CLASS: "
-		// + entry.getKey().getClass());
-		// }
-
 		for (int expIndex = 0; expIndex < tokens.size(); expIndex++) {
 			Expression expression = tokens.get(expIndex);
+			
 			if ((expression instanceof ExpressionOperatorMath)
 					&& ((ExpressionOperatorMath) expression).getValue().equals(AvailableOperator.ASSIGNATION)
 					&& ((expIndex + 1) <= tokens.size())) {
@@ -70,47 +64,30 @@ public class PrattParser {
 					continue;
 				}
 			}
+			
 			// Ignore new line symbols.
-			if (expression instanceof ExpressionSymbol) {
-				if (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW)) {
-					continue;
-				}
-			} 
-//			else if ((expression instanceof ExpressionFunction)
-//					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.NOT))) {
-//				expTokenList.add(new ExpressionToken(ExpressionTokenType.NOT, expression));
-//				expTokenList.add(new ExpressionToken(ExpressionTokenType.LEFT_BRACKET, new ExpressionSymbol(
-//						AvailableSymbol.LEFT_BRACKET)));
-//			}
+			if ((expression instanceof ExpressionSymbol)
+					&& (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW))) {
+				// Do nothing
+			}
 			// If it is an operator
-			if (expression instanceof IExpressionType<?>) {
-				// System.out.println("EXPRESSION TYPE : " + expression);
+			else if (expression instanceof IExpressionType<?>) {
 				String expressionType = ((IExpressionType<?>) expression).getValue().toString();
 				if (this.mPunctuators.containsKey(expressionType)) {
 					expTokenList.add(new ExpressionToken(this.mPunctuators.get(expressionType), expression));
 				}
 			} else if (expression instanceof ExpressionPluginMethod) {
-				// System.out.println("PLUGIN METHOD : " + expression);
-
 				if (this.mPunctuators.containsKey("IPlugin")) {
 					expTokenList.add(new ExpressionToken(this.mPunctuators.get("IPlugin"), expression));
 				}
 			} else if (expression instanceof ExpressionChain) {
-				// System.out.println("INTERNAL EXPRESSION CHAIN: " +
-				// ((ExpressionChain) expression).getExpressions());
-
 				preParsing(((ExpressionChain) expression).getExpressions());
 			} else {
 				// All the other posibilities
 				expTokenList.add(new ExpressionToken(ExpressionTokenType.NAME, expression));
 			}
 		}
-		// for (ExpressionToken expToken : expTokenList) {
-		// System.out.println("EXPRESSION: " + expToken + " - TYPE: "
-		// + expToken.getType());
-		// }
 		expTokenList.add(new ExpressionToken(ExpressionTokenType.EOF, new ExpressionValueString("")));
-		// System.out.println(expTokenList);
 		return expTokenList.iterator();
 	}
 
@@ -124,27 +101,14 @@ public class PrattParser {
 
 	public ITreeElement parseExpression(int precedence) throws PrattParserException {
 		ExpressionToken token = this.consume();
-
-		// System.out.println("TOKEN CONSUMED 1: " + token);
-
 		PrefixParselet prefix = this.mPrefixParselets.get(token.getType());
-
-		// System.out.println("TOKEN CONSUMED 2: " + prefix);
-
 		if (prefix == null) {
 			throw new PrattParserException("Could not parse \"" + token.toString() + "\".");
 		}
-
 		ITreeElement left = prefix.parse(this, token);
-
 		while (precedence < this.getPrecedence()) {
 			token = this.consume();
-
-			// System.out.println("TOKEN CONSUMED 3: " + token);
-
 			InfixParselet infix = this.mInfixParselets.get(token.getType());
-
-			// System.out.println("TOKEN CONSUMED 4: " + infix);
 			left = infix.parse(this, left, token);
 		}
 		return left;
@@ -166,7 +130,7 @@ public class PrattParser {
 	public ExpressionToken consume(ExpressionTokenType expected) {
 		ExpressionToken token = this.lookAhead(0);
 		if (token.getType() != expected) {
-			throw new RuntimeException("Expected token " + expected + " and found " + token.getType());
+			throw new InvalidTokenRecievedException("Expected token " + expected + " and found " + token.getType());
 		}
 		return this.consume();
 	}
@@ -181,12 +145,9 @@ public class PrattParser {
 	private ExpressionToken lookAhead(int distance) {
 		// Read in as many as needed.
 		while (distance >= this.mRead.size()) {
-			// System.out.println("BEFORE NEXT");
 			ExpressionToken et = this.mTokens.next();
-			// System.out.println("AFTER NEXT  - ADD TO MREAD " + et);
 			this.mRead.add(et);
 		}
-
 		// Get the queued token.
 		return this.mRead.get(distance);
 	}
@@ -196,7 +157,6 @@ public class PrattParser {
 		if (parser != null) {
 			return parser.getPrecedence();
 		}
-
 		return 0;
 	}
 
