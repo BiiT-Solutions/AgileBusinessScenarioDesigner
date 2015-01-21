@@ -72,6 +72,7 @@ public class ComponentCell extends CustomComponent implements LayoutClickNotifie
 		}
 		Label label = new Label(value, ContentMode.HTML);
 		label.setWidth(null);
+		label.addStyleName("label-in-table");
 		rootLayout.addComponent(label);
 	}
 

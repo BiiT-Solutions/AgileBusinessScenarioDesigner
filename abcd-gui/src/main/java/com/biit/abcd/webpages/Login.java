@@ -6,6 +6,8 @@ import java.util.jar.Manifest;
 
 import javax.servlet.ServletContext;
 
+import org.apache.http.client.ClientProtocolException;
+
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -19,6 +21,8 @@ import com.biit.liferay.access.exceptions.WebServiceAccessError;
 import com.biit.liferay.security.AuthenticationService;
 import com.biit.liferay.security.exceptions.InvalidCredentialsException;
 import com.biit.security.exceptions.PBKDF2EncryptorException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.liferay.portal.model.User;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
@@ -70,8 +74,25 @@ public class Login extends WebPageComponent {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		if (((ApplicationFrame) getUI()).getUser() != null && ((ApplicationFrame) getUI()).getPassword() != null) {
-			checkUserAndPassword(((ApplicationFrame) getUI()).getUser(), ((ApplicationFrame) getUI()).getPassword());
+		if (((ApplicationFrame) getUI()).getUser() != null && ((ApplicationFrame) getUI()).getUser().length() > 0
+				&& ((ApplicationFrame) getUI()).getPassword() != null
+				&& ((ApplicationFrame) getUI()).getPassword().length() > 0) {
+			try {
+				User user = checkUserAndPassword(((ApplicationFrame) getUI()).getUser(),
+						((ApplicationFrame) getUI()).getPassword());
+				if (user != null) {
+					// Try to go to the last page and last form if uses has no logged out.
+					if (UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()) != null) {
+						UserSessionHandler.restoreUserSession();
+						ApplicationFrame.navigateTo(UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()));
+					} else {
+						ApplicationFrame.navigateTo(WebMap.getMainPage());
+					}
+				}
+			} catch (InvalidCredentialsException | NotConnectedToWebServiceException | PBKDF2EncryptorException
+					| IOException | AuthenticationRequired | WebServiceAccessError e) {
+				// User not valid, do nothing.
+			}
 		}
 	}
 
@@ -102,7 +123,22 @@ public class Login extends WebPageComponent {
 				// limit the enters to only from the password field from this
 				// form
 				if (target == passwordField) {
-					checkUserAndPassword(usernameField.getValue(), passwordField.getValue());
+					try {
+						User user = checkUserAndPassword(usernameField.getValue(), passwordField.getValue());
+						if (user != null) {
+							ApplicationFrame.navigateTo(WebMap.getMainPage());
+						}
+					} catch (InvalidCredentialsException | AuthenticationRequired e) {
+						passwordField.setComponentError(new UserError(ServerTranslate.translate(
+								LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
+						MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
+					} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
+						e.printStackTrace();
+						AbcdLogger.errorMessage(this.getClass().getName(), e);
+						MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
+					} catch (PBKDF2EncryptorException e) {
+						MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD, LanguageCodes.ERROR_CONTACT);
+					}
 				}
 				// If write user name and press enter, go to pass field.
 				if (target == usernameField) {
@@ -118,7 +154,23 @@ public class Login extends WebPageComponent {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						checkUserAndPassword(usernameField.getValue(), passwordField.getValue());
+						try {
+							User user = checkUserAndPassword(usernameField.getValue(), passwordField.getValue());
+							if (user != null) {
+								ApplicationFrame.navigateTo(WebMap.getMainPage());
+							}
+						} catch (InvalidCredentialsException | AuthenticationRequired e) {
+							passwordField.setComponentError(new UserError(ServerTranslate.translate(
+									LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
+							MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
+						} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
+							e.printStackTrace();
+							AbcdLogger.errorMessage(this.getClass().getName(), e);
+							MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
+						} catch (PBKDF2EncryptorException e) {
+							MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD,
+									LanguageCodes.ERROR_CONTACT);
+						}
 					}
 				});
 		loginButton.setWidth(FIELD_SIZE);
@@ -141,21 +193,11 @@ public class Login extends WebPageComponent {
 		return label;
 	}
 
-	private void checkUserAndPassword(String userMail, String password) {
-		User user = null;
-		try {
-			user = AuthenticationService.getInstance().authenticate(userMail, password);
-		} catch (InvalidCredentialsException | AuthenticationRequired e) {
-			passwordField.setComponentError(new UserError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_USER,
-					new Object[] { userMail })));
-			MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
-		} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
-			e.printStackTrace();
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
-			MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
-		} catch (PBKDF2EncryptorException e) {
-			MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD, LanguageCodes.ERROR_CONTACT);
-		}
+	private User checkUserAndPassword(String userMail, String password) throws JsonParseException,
+			JsonMappingException, ClientProtocolException, InvalidCredentialsException,
+			NotConnectedToWebServiceException, PBKDF2EncryptorException, IOException, AuthenticationRequired,
+			WebServiceAccessError {
+		User user = AuthenticationService.getInstance().authenticate(userMail, password);
 
 		if (user != null) {
 			WebBrowser browser = UI.getCurrent().getPage().getWebBrowser();
@@ -178,8 +220,8 @@ public class Login extends WebPageComponent {
 			// current user (inlogged)
 			UserSessionHandler.setUser(user);
 			UserSessionHandler.checkOnlyOneSession(user, UI.getCurrent(), browser.getAddress());
-			ApplicationFrame.navigateTo(WebMap.getMainPage());
 		}
+		return user;
 	}
 
 	private String getVersion() {

@@ -10,6 +10,7 @@ import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.TestScenarioController;
 import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
 import com.liferay.portal.model.User;
 import com.vaadin.server.VaadinServlet;
@@ -25,6 +26,10 @@ public class UserSessionHandler {
 	private static HashMap<Long, List<UI>> usersSession = new HashMap<>();
 	// User Id --> IP (current UI ip connected)
 	private static HashMap<Long, String> usersIp = new HashMap<>();
+	// User Id --> Last Page visited
+	private static HashMap<Long, WebMap> userLastPage = new HashMap<>();
+	// User Id --> Last Form edited
+	private static HashMap<Long, Form> userLastForm = new HashMap<>();
 
 	/**
 	 * Initializes the {@link UserSessionHandler} for the given {@link Application}
@@ -119,21 +124,13 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Set the User object for the currently inlogged user for this application instance
-	 * 
-	 * @param user
-	 */
-	public static void login(User user) {
-		setUser(user);
-	}
-
-	/**
 	 * Method for logging out a user
 	 */
 	public static void logout() {
 		if (getUser() != null) {
 			usersSession.remove(getUser().getUserId());
 			usersIp.remove(getUser().getUserId());
+			userLastPage.remove(getUser().getUserId());
 		}
 		setUser(null);
 	}
@@ -152,5 +149,47 @@ public class UserSessionHandler {
 			testScenariosController = new TestScenarioController(helper);
 		}
 		return testScenariosController;
+	}
+
+	public static WebMap getUserLastPage(User user) {
+		return userLastPage.get(user.getUserId());
+	}
+
+	public static void setUserLastPage(WebMap page) {
+		setUserLastPage(getUser(), page);
+	}
+
+	public static void setUserLastPage(User user, WebMap page) {
+		if (user != null) {
+			if (!WebMap.getMainPage().equals(page)) {
+				userLastPage.put(user.getUserId(), page);
+			} else {
+				userLastPage.remove(user.getUserId());
+			}
+		}
+	}
+
+	private static void setLastForm(User user, Form form) {
+		userLastForm.put(user.getUserId(), form);
+	}
+
+	public static void setForm(Form form) {
+		if (getUser() != null) {
+			setLastForm(getUser(), form);
+			getFormController().setForm(form);
+		}
+	}
+
+	private static Form getLastForm(User user) {
+		return userLastForm.get(user.getUserId());
+	}
+
+	/**
+	 * Sets the last form used by an user. This allows liferay to reload the last page visited.
+	 */
+	public static void restoreUserSession() {
+		if (getUser() != null && getLastForm(getUser()) != null) {
+			getFormController().setForm(getLastForm(getUser()));
+		}
 	}
 }

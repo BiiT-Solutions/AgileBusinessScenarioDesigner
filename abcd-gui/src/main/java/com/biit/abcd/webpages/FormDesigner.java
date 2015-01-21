@@ -20,6 +20,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
@@ -43,6 +44,7 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -140,8 +142,8 @@ public class FormDesigner extends FormWebPageComponent {
 		} else {
 			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
 		}
-		// Collapse the table at question level
-		formTreeTable.collapseFrom(Question.class);
+		// Collapse the table at category level
+		formTreeTable.collapseFrom(Category.class);
 
 		// Set current selected element properties.
 		updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
@@ -503,7 +505,12 @@ public class FormDesigner extends FormWebPageComponent {
 	public void addQuestion() {
 		if (getForm() != null) {
 			Question newQuestion = new Question();
-			newQuestion.setAnswerType(AnswerType.RADIO);
+			newQuestion.setAnswerType(AnswerType.INPUT);
+			try {
+				newQuestion.setAnswerFormat(AnswerFormat.TEXT);
+			} catch (InvalidAnswerFormatException e1) {
+				// Nothing.
+			}
 			setCreator(newQuestion);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
@@ -694,10 +701,10 @@ public class FormDesigner extends FormWebPageComponent {
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
-					
+
 					// Collapse the table at question level
 					formTreeTable.collapseFrom(Question.class);
-					if(selected instanceof Answer){
+					if (selected instanceof Answer) {
 						formTreeTable.uncollapse(selected.getParent());
 					}
 
@@ -734,10 +741,10 @@ public class FormDesigner extends FormWebPageComponent {
 					formTreeTable.setRootElement(getForm());
 					// Select the moved element
 					formTreeTable.setValue(selected);
-					
+
 					// Collapse the table at question level
 					formTreeTable.collapseFrom(Question.class);
-					if(selected instanceof Answer){
+					if (selected instanceof Answer) {
 						formTreeTable.uncollapse(selected.getParent());
 					}
 

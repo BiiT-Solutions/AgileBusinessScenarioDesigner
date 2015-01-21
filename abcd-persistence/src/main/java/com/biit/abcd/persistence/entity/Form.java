@@ -2,6 +2,7 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -416,7 +417,14 @@ public class Form extends BaseForm {
 	@Override
 	public void setCreationTime(Timestamp dateCreated) {
 		if (availableFrom == null) {
-			availableFrom = dateCreated;
+			Calendar cal = Calendar.getInstance(); // locale-specific
+			cal.setTime(dateCreated);
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			long time = cal.getTimeInMillis();
+			availableFrom = new Timestamp(time);
 		}
 		super.setCreationTime(dateCreated);
 	}

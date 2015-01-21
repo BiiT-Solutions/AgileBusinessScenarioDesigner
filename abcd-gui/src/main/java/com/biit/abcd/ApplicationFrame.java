@@ -89,6 +89,7 @@ public class ApplicationFrame extends UI {
 
 	public static void navigateTo(WebMap newPage) {
 		UI.getCurrent().getNavigator().navigateTo(newPage.toString());
+		UserSessionHandler.setUserLastPage(newPage);
 	}
 
 	public View getCurrentView() {

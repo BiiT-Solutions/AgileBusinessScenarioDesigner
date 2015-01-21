@@ -104,7 +104,7 @@ public class QuestionProperties extends SecuredFormElementProperties<Question> {
 				}
 			}
 		});
-		answerType.setValue(AnswerTypeUi.values()[0].getAnswerType());
+		answerType.setValue(AnswerTypeUi.INPUT.getAnswerType());
 	}
 
 	@Override

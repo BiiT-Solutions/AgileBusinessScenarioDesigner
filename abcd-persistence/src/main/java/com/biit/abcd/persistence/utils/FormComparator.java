@@ -182,7 +182,7 @@ public class FormComparator {
 				|| (object1.getValidFrom() == null && object2.getValidFrom() != null)
 				|| (object1.getValidFrom() != null && object2.getValidFrom() != null && !object1.getValidFrom().equals(
 						object2.getValidFrom()))) {
-			throw new VariableDataNotEqualsException("ValidFrom information is not equals between '" + object1
+			throw new VariableDataNotEqualsException("'Valid From' information is not equals between '" + object1
 					+ "' and '" + object2 + "'.");
 		}
 
@@ -190,7 +190,7 @@ public class FormComparator {
 				|| (object1.getValidTo() == null && object2.getValidTo() != null)
 				|| (object1.getValidTo() != null && object2.getValidTo() != null && !object1.getValidTo().equals(
 						object2.getValidTo()))) {
-			throw new VariableDataNotEqualsException("getValidTo information is not equals between '" + object1
+			throw new VariableDataNotEqualsException("'Valid To' information is not equals between '" + object1
 					+ "' and '" + object2 + "'.");
 		}
 
@@ -1009,7 +1009,7 @@ public class FormComparator {
 				|| (form1.getAvailableFrom() != null && form2.getAvailableFrom() == null)
 				|| ((form1.getAvailableFrom() != null && form2.getAvailableFrom() != null) && !form1.getAvailableFrom()
 						.equals(form2.getAvailableFrom()))) {
-			throw new FormNotEqualsException("Form's validTo dates are different!");
+			throw new FormNotEqualsException("Form's validFrom dates are different!");
 		}
 	}
 }
