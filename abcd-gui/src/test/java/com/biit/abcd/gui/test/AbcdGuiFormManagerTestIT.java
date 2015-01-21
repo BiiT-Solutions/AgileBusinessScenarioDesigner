@@ -14,7 +14,8 @@ public class AbcdGuiFormManagerTestIT extends AbcdGuiTestIT {
 		// Login into the application
 		autoLogin();
 		// Create form
-		$(ButtonElement.class).caption("New Form").first().click();
+		$(ButtonElement.class).caption("New").first().click();
+		$(ButtonElement.class).caption("Form").first().click();
 		$(TextFieldElement.class).caption("New form name:").first().setValue("testbenchForm");
 		$(ComboBoxElement.class).caption("Group:").first().selectByText("biit");
 		$(ButtonElement.class).caption("Accept").first().click();

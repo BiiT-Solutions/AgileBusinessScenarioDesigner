@@ -14,7 +14,7 @@
 		<maven-war-plugin.version>2.3</maven-war-plugin.version>
 		<jetty.port>8081</jetty.port>
 		<jetty.test.port>9081</jetty.test.port>
-		<jetty-stop.port>8866</jetty-stop.port>
+		<jetty.test.stop.port>8866</jetty.test.stop.port>
 	</properties>
 	<repositories>
 		<repository>
@@ -205,7 +205,7 @@
 								<configuration>
 									<scanIntervalSeconds>0</scanIntervalSeconds>
 									<stopKey>STOP</stopKey>
-									<stopPort>${jetty-stop.port}</stopPort>
+									<stopPort>${jetty.test.stop.port}</stopPort>
 								</configuration>
 							</execution>
 							<execution>
@@ -216,7 +216,7 @@
 								</goals>
 								<configuration>
 									<stopKey>STOP</stopKey>
-									<stopPort>${jetty-stop.port}</stopPort>
+									<stopPort>${jetty.test.stop.port}</stopPort>
 								</configuration>
 							</execution>
 						</executions>

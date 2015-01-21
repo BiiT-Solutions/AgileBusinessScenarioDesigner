@@ -13,27 +13,14 @@ public class AbcdGuiLoginTestIT extends AbcdGuiTestIT {
 
 	@Test
 	public void testAbcdLogin() {
-		// Get the page and log in
-		getDriver().get("http://localhost:9081");
-		if (testInJenkins) {
-			$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-		} else {
-			$(TextFieldElement.class).id("userNameLoginForm").setValue("test@liferay.com");
-			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("test");
-		}
-		
-		System.out.println("USER NAME VALUE: " + $(TextFieldElement.class).id("userNameLoginForm").getValue());
-		System.out.println("USER PASS VALUE: " + $(PasswordFieldElement.class).id("userPassLoginForm").getValue());
-		
-		$(ButtonElement.class).id("loginButton").click();
+		autoLogin();
 		logOut();
 	}
 
 	@Test
 	public void testAbcdLoginError() {
 		// Get the page and log in with a fake user
-		getDriver().get("http://localhost:9081");
+		getDriver().get(DRIVER_URL);
 		$(TextFieldElement.class).id("userNameLoginForm").setValue("fake-user@biit-solutions.com");
 		$(PasswordFieldElement.class).id("userPassLoginForm").setValue("tacosAreWonderful");
 		$(ButtonElement.class).id("loginButton").click();

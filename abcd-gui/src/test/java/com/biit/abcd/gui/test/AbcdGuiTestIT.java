@@ -13,13 +13,16 @@ import com.vaadin.testbench.elements.PasswordFieldElement;
 import com.vaadin.testbench.elements.TextFieldElement;
 
 public class AbcdGuiTestIT extends TestBenchTestCase {
+	protected final static String USER_EDIT_FORM = "abcd_form_admin@biit1.com";
+	protected final static String USER_EDIT_PASSWORD = "asd123";
+	protected final static String DRIVER_URL = "http://localhost:9081";
 
 	// Activates screenshots on application failure
 	private boolean takeScreeenshots = false;
 	protected boolean testInJenkins = false;
-	private static String SCREENSHOTS_PATH = "/var/lib/jenkins/screenshots";
+	private final static String SCREENSHOTS_PATH = System.getProperty("java.io.tmpdir");
 
-	@BeforeClass(inheritGroups=true,alwaysRun = true)
+	@BeforeClass(inheritGroups = true, alwaysRun = true)
 	protected void setUp() {
 		if (takeScreeenshots) {
 			setScreenshotsParameters(SCREENSHOTS_PATH);
@@ -27,23 +30,14 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", "en_US");
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
-		System.out.println("Get driver:" +getDriver());
 	}
 
 	protected void autoLogin() {
 		// Get the page and log in
-		getDriver().get("http://localhost:9081");
-		if (testInJenkins) {
-			$(TextFieldElement.class).id("userNameLoginForm").setValue("jenkins-abcd@biit-solutions.com");
-			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("jAqDr0r3Agrj");
-		} else {
-			$(TextFieldElement.class).id("userNameLoginForm").setValue("test@liferay.com");
-			$(PasswordFieldElement.class).id("userPassLoginForm").setValue("test");
-		}
-		
-		System.out.println("USER NAME VALUE: " + $(TextFieldElement.class).id("userNameLoginForm").getValue());
-		System.out.println("USER PASS VALUE: " + $(PasswordFieldElement.class).id("userPassLoginForm").getValue());
-		
+		getDriver().get(DRIVER_URL);
+		$(TextFieldElement.class).id("userNameLoginForm").setValue(USER_EDIT_FORM);
+		$(PasswordFieldElement.class).id("userPassLoginForm").setValue(USER_EDIT_PASSWORD);
+
 		$(ButtonElement.class).id("loginButton").click();
 	}
 
@@ -52,7 +46,7 @@ public class AbcdGuiTestIT extends TestBenchTestCase {
 		$(ButtonElement.class).id("logoutButton").click();
 	}
 
-	@AfterClass(inheritGroups=true,alwaysRun = true)
+	@AfterClass(inheritGroups = true, alwaysRun = true)
 	protected void tearDown() {
 		// Do not call driver.quit if you want to take screenshots when the
 		// application fails
