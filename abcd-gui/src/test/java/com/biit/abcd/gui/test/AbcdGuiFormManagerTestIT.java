@@ -17,7 +17,7 @@ public class AbcdGuiFormManagerTestIT extends AbcdGuiTestIT {
 		$(ButtonElement.class).caption("New").first().click();
 		$(ButtonElement.class).caption("Form").first().click();
 		$(TextFieldElement.class).caption("New form name:").first().setValue("testbenchForm");
-		$(ComboBoxElement.class).caption("Group:").first().selectByText("biit");
+		$(ComboBoxElement.class).caption("Group:").first().selectByText("Bii1");
 		$(ButtonElement.class).caption("Accept").first().click();
 		// Remove form
 		$(TreeTableElement.class).first().getCell(1, 0).click();
