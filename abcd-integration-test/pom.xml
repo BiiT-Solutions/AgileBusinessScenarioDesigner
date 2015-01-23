@@ -13,8 +13,14 @@
 	</parent>
 
 	<properties>
-		<temporal-folder>tmp</temporal-folder>
-		<war-file.source>../abcd-gui/target/</war-file.source>
+		<!-- Project cloned for testing -->
+		<orinal.gui.project>abcd-gui</orinal.gui.project>
+		<!-- Database server -->
+		<database.server>vagrant-mysql.biit-solutions.com</database.server>
+		<!-- Replace original database for a database for testing -->
+		<original.database>abcd</original.database>
+		<test.database>abcdtest</test.database>
+		<!-- Jetty client configuration -->
 		<jetty.test.port>9081</jetty.test.port>
 		<jetty.test.stop.port>8866</jetty.test.stop.port>
 	</properties>
@@ -242,7 +248,6 @@
 				<version>${maven-antrun-plugin.version}</version>
 				<executions>
 					<execution>
-						<id>webappcreator</id>
 						<phase>process-resources</phase>
 						<configuration>
 							<target>
@@ -250,47 +255,29 @@
 								<delete dir="src/main/webapp" failonerror="false"
 									includeemptydirs="true" />
 								<copy todir="src/main/webapp">
-									<fileset dir="../abcd-gui/src/main/webapp" />
+									<fileset dir="../${orinal.gui.project}/src/main/webapp" />
 								</copy>
 								<copy todir="target/classes">
-									<fileset dir="../abcd-gui/target/classes" />
+									<fileset dir="../${orinal.gui.project}/target/classes" />
 								</copy>
+								<!-- Modify database connection to use test database -->
+								<replace
+									token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?"
+									value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?"
+									dir="target/classes">
+									<include name="**/*.properties" />
+								</replace>
+								<replace
+									token="hibernate.hbm2ddl.auto=validate"
+									value="hibernate.hbm2ddl.auto=create-drop"
+									dir="target/classes">
+									<include name="**/*.properties" />
+								</replace>
 							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>
 						</goals>
-					</execution>
-					<execution>
-						<id>warmodificator</id>
-						<phase>package</phase>
-						<configuration>
-							<target>
-								<!-- erase previous data -->
-								<delete dir="${temporal-folder}" failonerror="false"
-									includeemptydirs="true" />
-
-								<!-- create tmp folder -->
-								<mkdir dir="${temporal-folder}" />
-
-								<copy
-									file="${war-file.source}/${project.parent.artifactId}-${project.version}.war"
-									tofile="target/abcd-integration-test-1.1.2.war" overwrite="true" />
-
-								<!-- unzip original war file -->
-								<!-- <unzip src="${war-file.source}/${project.parent.artifactId}-${project.version}.war" 
-									dest="${temporal-folder}" /> -->
-
-
-								<!-- create the final war file -->
-								<!-- <zip basedir="${temporal-folder}/" destfile="${project.parent.artifactId}-${project.version}-test.war" 
-									/> -->
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-
 					</execution>
 				</executions>
 			</plugin>
