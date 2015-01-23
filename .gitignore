@@ -12,3 +12,4 @@ tmp
 *.zip
 styles.css
 /abcd-core/src/test/resources/generatedRules.drl
+/abcd-integration-test/src/main/webapp

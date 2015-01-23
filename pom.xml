@@ -14,7 +14,7 @@
 		<module>abcd-persistence</module>
 		<module>abcd-core</module>
 		<module>abcd-gui</module>
-		<module>abcd-gui-testbench</module>
+		<module>abcd-integration-test</module>
 		<module>abcd-release</module>
 	</modules>
 

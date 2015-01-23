@@ -15,7 +15,6 @@
 	</parent>
 	
 	<properties>
-		<shap.root>${basedir}/..</shap.root>
 		<destination-file>${project.parent.artifactId}</destination-file>
 		<temporal-folder>tmp</temporal-folder>
 		<war-file.source>../abcd-gui/target/</war-file.source>
@@ -34,7 +33,6 @@
 				</property>
 			</activation>
 			<build>
-				<finalName>Agile Business sCenario Designer Tool</finalName>
 				<plugins>
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -44,7 +42,7 @@
 								<phase>install</phase>
 								<configuration>
 									<target>
-										<!-- delete old tmp folder -->
+										<!-- change configuration of database connection for testing -->
 										<delete dir="${temporal-folder}" failonerror="false"
 											includeemptydirs="true" />
 
