@@ -1,4 +1,4 @@
-package com.biit.abcd.gui.test;
+package com.biit.abcd.gui.test.webpage;
 
 import com.biit.abcd.gui.test.window.NewForm;
 import com.biit.abcd.gui.test.window.Proceed;
@@ -10,10 +10,10 @@ public class FormManager extends VaadinGuiWebpage {
 
 	private final static String SETTINGS_BUTTON = "settingsButton";
 	private final static String LOGOUT_BUTTON = "logoutButton";
-	
+
 	private final NewForm newFormWindow;
 	private final Proceed proceed;
-	
+
 	public FormManager() {
 		super();
 		newFormWindow = new NewForm();
@@ -22,34 +22,41 @@ public class FormManager extends VaadinGuiWebpage {
 		addWindow(proceed);
 	}
 
-	protected void logOut() {
+	public void logOut() {
 		$(ButtonElement.class).id(SETTINGS_BUTTON).click();
 		$(ButtonElement.class).id(LOGOUT_BUTTON).click();
 	}
-	
-	private ButtonElement getNewMenu(){
-		 return $(ButtonElement.class).caption("New").first();
+
+	public ButtonElement getNewMenu() {
+		return $(ButtonElement.class).caption("New").first();
 	}
-	
-	public ButtonElement getNewForm(){
+
+	public ButtonElement getNewForm() {
 		getNewMenu().click();
 		return $(ButtonElement.class).caption("Form").first();
 	}
-	
-	public ButtonElement getRemoveForm(){
-		return $(ButtonElement.class).caption("Remove Form").first();
+
+	/**
+	 * If the element exists return the element otherwise return null.
+	 * @return
+	 */
+	public ButtonElement getRemoveForm() {
+		if ($(ButtonElement.class).caption("Remove Form").exists()) {
+			return $(ButtonElement.class).caption("Remove Form").first();
+		}
+		return null;
 	}
-	
-	private void openNewForm(){
+
+	private void openNewForm() {
 		getNewForm().click();
 	}
-	
-	public void createNewForm(String formName){
+
+	public void createNewForm(String formName) {
 		openNewForm();
 		newFormWindow.createNewForm(formName);
 	}
-	
-	public TreeTableElement getFormTable(){
+
+	public TreeTableElement getFormTable() {
 		return $(TreeTableElement.class).first();
 	}
 
@@ -62,7 +69,7 @@ public class FormManager extends VaadinGuiWebpage {
 	public void deleteForm(int row) {
 		getFormTable().getRow(row).click();
 		getRemoveForm().click();
-		proceed.clickAccept(); 
+		proceed.clickAccept();
 	}
 
 }
