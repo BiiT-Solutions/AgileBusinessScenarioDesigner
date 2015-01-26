@@ -1,5 +1,6 @@
 package com.biit.abcd.gui.test;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @Test(groups = "login")
@@ -31,4 +32,12 @@ public class LoginTests extends AbcdTester {
 		getFormManager().deleteForm(1);
 	}
 
+	@Test
+	public void testLoginWithoutRightsToManageForm(){
+		mainPage();
+		getLoginPage().login(ABCD_READ_BIIT1, USER_PASSWORD);
+		Assert.assertFalse(getFormManager().getNewForm().isEnabled());
+		Assert.assertFalse(getFormManager().getRemoveForm().isEnabled());
+	}
+	
 }

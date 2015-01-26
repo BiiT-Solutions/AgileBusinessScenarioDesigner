@@ -31,12 +31,12 @@ public class FormManager extends VaadinGuiWebpage {
 		 return $(ButtonElement.class).caption("New").first();
 	}
 	
-	private ButtonElement getNewForm(){
+	public ButtonElement getNewForm(){
 		getNewMenu().click();
 		return $(ButtonElement.class).caption("Form").first();
 	}
 	
-	private ButtonElement getRemoveForm(){
+	public ButtonElement getRemoveForm(){
 		return $(ButtonElement.class).caption("Remove Form").first();
 	}
 	
