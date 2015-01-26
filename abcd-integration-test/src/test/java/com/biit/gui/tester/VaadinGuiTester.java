@@ -45,7 +45,7 @@ public class VaadinGuiTester extends TestBenchTestCase{
 	
 	@AfterClass(inheritGroups = true, alwaysRun = true)
 	public void destroyDriver(){
-		// Do not call driver.quit if you want to take screenshots when the
+		// Do not call 'driver.quit' if you want to take screenshots when the
 		// application fails
 		if (!takeScreeenshots) {
 			getDriver().quit();
