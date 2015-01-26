@@ -3,13 +3,11 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="login" />
-				<include name="formManager" />
+				<!-- <include name="login" /> -->
 			</run>
 		</groups>
 		<classes>
-			<class name="com.biit.abcd.gui.test.AbcdGuiLoginTestIT" />
-			<class name="com.biit.abcd.gui.test.AbcdGuiFormManagerTestIT" />
+			<!-- <class name="com.biit.abcd.gui.test.LoginTests" /> -->
 		</classes>
 	</test>
 </suite>
