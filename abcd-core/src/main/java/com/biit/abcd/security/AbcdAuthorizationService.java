@@ -119,7 +119,6 @@ public class AbcdAuthorizationService extends AuthorizationService {
 			activities.addAll(formAdministratorPermissions);
 			activities.addAll(formManagerPermissions);
 			activities.addAll(readOnlyPermissions);
-			activities.addAll(globalConstantsAdministratorPermissions);
 			break;
 		case FORM_EDIT:
 			activities.addAll(formManagerPermissions);
