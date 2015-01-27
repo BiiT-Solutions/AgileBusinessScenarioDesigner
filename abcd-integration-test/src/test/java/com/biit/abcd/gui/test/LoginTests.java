@@ -12,32 +12,41 @@ public class LoginTests extends AbcdTester {
 
 	@Test
 	public void testLoginLogout() {
-		mainPage();
-		getLoginPage().login(ABCD_READ_BIIT1, USER_PASSWORD);
+		loginRead1();
 		getFormManager().logOut();
 	}
 
 	@Test
 	public void testLoginFail() {
-		mainPage();
-		getLoginPage().login(BADUSERNAME, BAPSSWORD);
+		login(BADUSERNAME, BAPSSWORD);
 		checkNotificationIsError(getNotification());
+	}
+
+	@Test
+	public void testLoginWithRightsToManageForm(){
+		loginFormAdmin1();
+		getFormManager().createNewForm(NEW_FORM_NAME);
+		getFormManager().deleteForm(1);
+		getFormManager().logOut();
 	}
 	
 	@Test
-	public void testLoginWithRightsToManageForm(){
-		mainPage();
-		getLoginPage().login(ABCD_FORM_ADMIN_BIIT1, USER_PASSWORD);
-		getFormManager().createNewForm(NEW_FORM_NAME);
-		getFormManager().deleteForm(1);
+	public void testLoginWithRightsToManageButNotDeleteForm(){
+		loginFormEdit1();
+		Assert.assertTrue(getFormManager().getNewForm().isEnabled());
+		//close New menu
+		getFormManager().getNewMenu().click();
+		Assert.assertNull(getFormManager().getRemoveForm());
+		getFormManager().logOut();
 	}
 
 	@Test
 	public void testLoginWithoutRightsToManageForm(){
-		mainPage();
-		getLoginPage().login(ABCD_READ_BIIT1, USER_PASSWORD);
+		loginRead1();
 		Assert.assertFalse(getFormManager().getNewForm().isEnabled());
-		Assert.assertFalse(getFormManager().getRemoveForm().isEnabled());
+		//close New menu
+		getFormManager().getNewMenu().click();
+		Assert.assertNull(getFormManager().getRemoveForm());
+		getFormManager().logOut();
 	}
-	
 }

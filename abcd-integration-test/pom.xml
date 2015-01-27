@@ -14,7 +14,7 @@
 
 	<properties>
 		<!-- Project cloned for testing -->
-		<original.gui.project>abcd-gui</original.gui.project>
+		<source.gui.project>abcd-gui</source.gui.project>
 		<!-- Database server -->
 		<database.server>vagrant-mysql.biit-solutions.com</database.server>
 		<!-- Replace original database for a database for testing -->
@@ -257,10 +257,10 @@
 								<delete dir="src/main/webapp" failonerror="false"
 									includeemptydirs="true" />
 								<copy todir="src/main/webapp">
-									<fileset dir="../${original.gui.project}/src/main/webapp" />
+									<fileset dir="../${source.gui.project}/src/main/webapp" />
 								</copy>
 								<copy todir="target/classes">
-									<fileset dir="../${original.gui.project}/target/classes" />
+									<fileset dir="../${source.gui.project}/target/classes" />
 								</copy>
 								<!-- Modify database connection to use test database -->
 								<replace
