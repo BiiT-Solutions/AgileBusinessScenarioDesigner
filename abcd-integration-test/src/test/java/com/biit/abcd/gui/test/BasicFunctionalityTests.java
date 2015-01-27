@@ -3,7 +3,7 @@ package com.biit.abcd.gui.test;
 import org.testng.annotations.Test;
 
 @Test(groups = "basicFunctionality")
-public class BasicFunctionalityTest extends AbcdTester {
+public class BasicFunctionalityTests extends AbcdTester {
 
 	@Test
 	public void openSettingsInfoScreen() {
