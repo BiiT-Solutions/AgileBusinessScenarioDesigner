@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.os.ProcessUtils.ProcessStillAliveException;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -14,7 +15,7 @@ import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.NotificationElement;
 
-public class VaadinGuiTester extends TestBenchTestCase{
+public class VaadinGuiTester extends TestBenchTestCase {
 
 	// Activates screenshots on application failure
 	private boolean takeScreeenshots = false;
@@ -23,35 +24,40 @@ public class VaadinGuiTester extends TestBenchTestCase{
 	private static final String FIREFOX_LANGUAGE_VALUE = "en_US";
 	private static final String APPLICATION_URL_NEW_UI = "http://localhost:9081/?restartApplication";
 	private static final String NOTIFICATION_TYPE_ERROR = "error";
-	
+	private static final String NOTIFICATION_TYPE_WARNING = "warning";
+
 	private final List<VaadinGuiWebpage> webpages;
-	
+
 	public VaadinGuiTester() {
 		webpages = new ArrayList<VaadinGuiWebpage>();
 	}
-	
+
 	@BeforeClass(inheritGroups = true, alwaysRun = true)
-	public void createDriver(){
+	public void createDriver() {
 		if (takeScreeenshots) {
 			setScreenshotsParameters(SCREENSHOTS_PATH);
 		}
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference(FIREFOX_LANGUAGE_PROPERTY, FIREFOX_LANGUAGE_VALUE);
 		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
-		for(VaadinGuiWebpage webpage:webpages){
+		for (VaadinGuiWebpage webpage : webpages) {
 			webpage.setDriver(getDriver());
 		}
 	}
-	
+
 	@AfterClass(inheritGroups = true, alwaysRun = true)
-	public void destroyDriver(){
+	public void destroyDriver() {
 		// Do not call 'driver.quit' if you want to take screenshots when the
 		// application fails
 		if (!takeScreeenshots) {
-			getDriver().quit();
+			try {
+				getDriver().quit();
+			} catch (ProcessStillAliveException psae) {
+				// Ignore
+			}
 		}
 	}
-	
+
 	private static void setScreenshotsParameters(String path) {
 		Parameters.setScreenshotErrorDirectory(path + "/errors");
 		Parameters.setScreenshotReferenceDirectory(path + "/reference");
@@ -60,20 +66,27 @@ public class VaadinGuiTester extends TestBenchTestCase{
 		Parameters.setScreenshotRetryDelay(10);
 		Parameters.setScreenshotComparisonCursorDetection(true);
 	}
-	
-	public void addWebpage(VaadinGuiWebpage webpage){
+
+	public void addWebpage(VaadinGuiWebpage webpage) {
 		webpages.add(webpage);
 	}
-	
-	public void mainPage(){
+
+	public void mainPage() {
 		getDriver().get(APPLICATION_URL_NEW_UI);
 	}
-	
-	public NotificationElement getNotification(){
-		return $(NotificationElement.class).first();
+
+	public NotificationElement getNotification() {
+		if ($(NotificationElement.class).exists()) {
+			return $(NotificationElement.class).first();
+		}
+		return null;
 	}
-	
-	public static void checkNotificationIsError(NotificationElement notification){
+
+	public static void checkNotificationIsError(NotificationElement notification) {
 		Assert.assertEquals(NOTIFICATION_TYPE_ERROR, notification.getType());
+	}
+
+	public static void checkNotificationIsWarning(NotificationElement notification) {
+		Assert.assertEquals(NOTIFICATION_TYPE_WARNING, notification.getType());
 	}
 }

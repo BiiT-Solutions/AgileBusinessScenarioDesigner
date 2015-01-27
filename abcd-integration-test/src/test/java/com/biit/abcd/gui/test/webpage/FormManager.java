@@ -1,8 +1,10 @@
 package com.biit.abcd.gui.test.webpage;
 
+import com.biit.abcd.gui.test.window.InfoWindow;
 import com.biit.abcd.gui.test.window.NewForm;
 import com.biit.abcd.gui.test.window.Proceed;
 import com.biit.gui.tester.VaadinGuiWebpage;
+import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.TreeTableElement;
 
@@ -13,17 +15,24 @@ public class FormManager extends VaadinGuiWebpage {
 
 	private final NewForm newFormWindow;
 	private final Proceed proceed;
+	private final InfoWindow infoWindow;
 
 	public FormManager() {
 		super();
 		newFormWindow = new NewForm();
 		proceed = new Proceed();
+		infoWindow = new InfoWindow();
 		addWindow(newFormWindow);
 		addWindow(proceed);
+		addWindow(infoWindow);
+	}
+	
+	public void toggleSettings(){
+		$(ButtonElement.class).id(SETTINGS_BUTTON).click();
 	}
 
 	public void logOut() {
-		$(ButtonElement.class).id(SETTINGS_BUTTON).click();
+		toggleSettings();
 		$(ButtonElement.class).id(LOGOUT_BUTTON).click();
 	}
 
@@ -46,6 +55,16 @@ public class FormManager extends VaadinGuiWebpage {
 		}
 		return null;
 	}
+	
+	public void openAndCloseInfoScreen(){
+		getInfoButton().click();
+		infoWindow.clickCloseButton();
+	}
+
+	private ButtonElement getInfoButton() {
+		toggleSettings();
+		return  $(ButtonElement.class).caption("Info").first();
+	}
 
 	private void openNewForm() {
 		getNewForm().click();
@@ -65,10 +84,31 @@ public class FormManager extends VaadinGuiWebpage {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void selectForm(int row) {
+		getFormTable().getCell(row,0).click();
+	}
 
 	public void deleteForm(int row) {
-		getFormTable().getRow(row).click();
+		selectForm(row);
 		getRemoveForm().click();
+		proceed.clickAccept();
+	}
+
+	public void clickFormDesigner() {
+		$(ButtonElement.class).caption("Form Designer").first().click();
+	}
+
+	public boolean checkIfRowExists(int row) {
+		return !getFormTable().findElements(By.vaadin("#row[" + row + "]")).isEmpty();
+	}
+
+	public void goToDesigner(int i) {
+		selectForm(i);
+		clickFormDesigner();
+	}
+	
+	public void clickAcceptProceed(){
 		proceed.clickAccept();
 	}
 
