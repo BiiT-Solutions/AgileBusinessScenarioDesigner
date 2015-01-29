@@ -5,7 +5,7 @@
 			<run>
 				<exclude name="login" />
 				<exclude name="basicFunctionalityTests" />
-				<include name="formDesigner" />
+				<exclude name="formDesigner" />
 			</run>
 		</groups>
 		<classes>

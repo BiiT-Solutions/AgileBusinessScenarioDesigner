@@ -18,7 +18,7 @@ import com.vaadin.testbench.elements.NotificationElement;
 public class VaadinGuiTester extends TestBenchTestCase {
 
 	// Activates screenshots on application failure
-	private boolean takeScreeenshots = false;
+	private boolean takeScreeenshots = true;
 	private final static String SCREENSHOTS_PATH = System.getProperty("java.io.tmpdir");
 	private static final String FIREFOX_LANGUAGE_PROPERTY = "intl.accept_languages";
 	private static final String FIREFOX_LANGUAGE_VALUE = "en_US";

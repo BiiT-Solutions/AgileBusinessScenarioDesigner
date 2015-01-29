@@ -88,11 +88,15 @@ public class FormManager extends VaadinGuiWebpage {
 	public void selectForm(int row) {
 		getFormTable().getCell(row,0).click();
 	}
+	
+	public void deleteForm() {
+		getRemoveForm().click();
+		proceed.clickAccept();
+	}
 
 	public void deleteForm(int row) {
 		selectForm(row);
-		getRemoveForm().click();
-		proceed.clickAccept();
+		deleteForm();
 	}
 
 	public void clickFormDesigner() {

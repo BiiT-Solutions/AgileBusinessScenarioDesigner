@@ -1,54 +1,58 @@
 package com.biit.abcd.gui.test.webpage;
 
+import java.util.List;
+
+import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+
 import com.biit.abcd.gui.test.window.Proceed;
 import com.biit.gui.tester.VaadinGuiWebpage;
+import com.vaadin.testbench.By;
+import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.ComboBoxElement;
+import com.vaadin.testbench.elements.FormLayoutElement;
+import com.vaadin.testbench.elements.TableRowElement;
 import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.testbench.elements.TreeTableElement;
+import com.vaadin.testbench.elements.TreeTableRowElement;
 
 public class FormDesigner extends VaadinGuiWebpage {
-	
-	public enum AnswerType{
-		INPUT_FIELD("Input Field"),
-		RADIO_BUTTON("Radio Button"),
-		MULTI_CHECKBOX("Multi Checkbox");
-		
+
+	public enum AnswerType {
+		INPUT_FIELD("Input Field"), RADIO_BUTTON("Radio Button"), MULTI_CHECKBOX("Multi Checkbox");
+
 		private String value;
-		
-		AnswerType(String caption){
+
+		AnswerType(String caption) {
 			this.value = caption;
 		}
-		
-		public String getValue(){
+
+		public String getValue() {
 			return value;
 		}
 	}
-	
-	public enum AnswerFormat{
-		
-		TEXT("Text"),
-		NUMBER("Number"),
-		DATE("Date"),
-		POSTAL_CODE("Postal Code"),
-		;
-		
+
+	public enum AnswerFormat {
+
+		TEXT("Text"), NUMBER("Number"), DATE("Date"), POSTAL_CODE("Postal Code"), ;
+
 		private String value;
-		
-		AnswerFormat(String caption){
+
+		AnswerFormat(String caption) {
 			this.value = caption;
 		}
-		
-		public String getValue(){
+
+		public String getValue() {
 			return value;
 		}
 	}
 
 	private final Proceed proceed;
-	
+
 	public FormDesigner() {
 		super();
-		proceed= new Proceed();
+		proceed = new Proceed();
 		addWindow(proceed);
 	}
 
@@ -60,138 +64,180 @@ public class FormDesigner extends VaadinGuiWebpage {
 
 	public void finishDesign() {
 		$(ButtonElement.class).caption("Finish Design").first().click();
+		$(ButtonElement.class).caption("Finish Design").first().waitForVaadin();
 		proceed.clickAccept();
 	}
-	
-	public void clickNewCategory(){
+
+	public void clickNewCategory() {
 		$(ButtonElement.class).caption("Category").first().click();
+		$(ButtonElement.class).caption("Category").first().waitForVaadin();
 	}
-	
+
+	private void clickNewGroup() {
+		Assert.assertTrue($(ButtonElement.class).caption("Group").first().isEnabled());
+		$(ButtonElement.class).caption("Group").first().click();
+		$(ButtonElement.class).caption("Group").first().waitForVaadin();
+	}
+
 	public void clickNewQuestion() {
+		Assert.assertTrue($(ButtonElement.class).caption("Question").first().isEnabled());
 		$(ButtonElement.class).caption("Question").first().click();
+		$(ButtonElement.class).caption("Question").first().waitForVaadin();
 	}
-	
-	public void clickNewAnswer(){
+
+	public void clickNewAnswer() {
+		Assert.assertTrue($(ButtonElement.class).caption("Answer").first().isEnabled());
 		$(ButtonElement.class).caption("Answer").first().click();
+		$(ButtonElement.class).caption("Answer").first().waitForVaadin();
 	}
-	
-	public void clickNewSubanswer(){
+
+	public void clickNewSubanswer() {
+		Assert.assertTrue($(ButtonElement.class).caption("Subanswer").first().isEnabled());
 		$(ButtonElement.class).caption("Subanswer").first().click();
+		$(ButtonElement.class).caption("Subanswer").first().waitForVaadin();
 	}
-	
-	public TreeTableElement getDesignTable(){
+
+	public TreeTableElement getDesignTable() {
 		return $(TreeTableElement.class).first();
 	}
-	
-	public void clickInTableRow(int row){
-		getDesignTable().getCell(row, 0);
+
+	private TestBenchElement getTableRow(int row) {
+		while(true){
+			getDesignTable().scroll(0);
+			getDesignTable().scroll(40*(row+1));
+			try{
+				return getDesignTable().getRow(row).getCell(0);
+			}catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
 	}
-	
-	private TextFieldElement getTechnicalName(){
+
+	public void clickInTableRow(int row) {
+		getTableRow(row).focus();
+		getTableRow(row).click();
+		getTableRow(row).waitForVaadin();
+	}
+
+	private TextFieldElement getTechnicalName() {
 		return $(TextFieldElement.class).caption("Technical Name").first();
 	}
-	
-	public void setTechnicalName(String technicalName){
+
+	public void setTechnicalName(String technicalName) {
 		getTechnicalName().setValue(technicalName);
+		getTechnicalName().waitForVaadin();
+		clickOnFormLayout();
+		getTechnicalName().waitForVaadin();
 	}
 
 	public void createCategory(int row, String name) {
 		clickInTableRow(row);
 		clickNewCategory();
 		setTechnicalName(name);
-		clickInTableRow(row+1);
+	}
+
+	public void createGroup(int row, String name) {
+		clickInTableRow(row);
+		clickNewGroup();
+		setTechnicalName(name);
 	}
 
 	private ComboBoxElement getAnswerType() {
 		return $(ComboBoxElement.class).caption("Answer Type").first();
 	}
-	
+
 	private ComboBoxElement getAnswerFormat() {
 		return $(ComboBoxElement.class).caption("Answer Format").first();
 	}
-	
+
 	private void setAnswerType(AnswerType type) {
 		getAnswerType().selectByText(type.getValue());
+		getAnswerType().waitForVaadin();
+		clickOnFormLayout();
+		getAnswerType().waitForVaadin();
 	}
-	
+
+	private void clickOnFormLayout() {
+		$(FormLayoutElement.class).first().click();
+	}
+
 	private void setAnswerFormat(AnswerFormat format) {
 		getAnswerFormat().selectByText(format.getValue());
+		getAnswerFormat().waitForVaadin();
+		clickOnFormLayout();
+		getAnswerFormat().waitForVaadin();
+	}
+
+	public void createMultiCheckbox(int rowToClick, int rowWhereWillAppear, String name, String... answers) {
+		createQuestionWithAnswers(rowToClick,rowWhereWillAppear,name,AnswerType.MULTI_CHECKBOX, answers);
+	}
+
+	public void createRadioButton(int rowToClick, int rowWhereWillAppear, String name, String... answers) {
+		createQuestionWithAnswers(rowToClick,rowWhereWillAppear,name,AnswerType.RADIO_BUTTON, answers);
 	}
 	
-	public void createMultiCheckbox(int row, String name, String...answers){
-		createQuestion(row, name, AnswerType.MULTI_CHECKBOX, null);
-		for(String answer: answers){
-			row++;
-			createAnswer(row, answer);
+	private void createQuestionWithAnswers(int rowToClick, int rowWhereWillAppear, String name,AnswerType answerType, String... answers){
+		createQuestion(rowToClick, name, answerType, null);
+		clickInTableRow(rowWhereWillAppear);
+		for (String answer : answers) {
+			createAnswer(rowWhereWillAppear, answer);
 		}
 	}
-	
-	public void createRadioButton(int row, String name, String...answers){
-		createQuestion(row, name, AnswerType.RADIO_BUTTON, null);
-		for(String answer: answers){
-			row++;
-			createAnswer(row, answer);
-		}		
-	}
-	
-	public void createInputField(int row, String name, AnswerFormat format){
+
+	public void createInputField(int row, String name, AnswerFormat format) {
 		createQuestion(row, name, AnswerType.INPUT_FIELD, format);
 	}
 
-	public void createQuestion(int row, String name,AnswerType type, AnswerFormat format) {
+	public void createQuestion(int row, String name, AnswerType type, AnswerFormat format) {
 		clickInTableRow(row);
 		clickNewQuestion();
 		setTechnicalName(name);
 		setAnswerType(type);
-		if(format!=null){
+		if (format != null) {
 			setAnswerFormat(format);
 		}
-		clickInTableRow(row+1);
 	}
 
-	public void createAnswer(int row, String name){
+	public void createAnswer(int row, String name) {
 		clickInTableRow(row);
 		clickNewAnswer();
 		setTechnicalName(name);
-		clickInTableRow(row+1);
 	}
-	
-	public void createSubanswer(int row, String name){
+
+	public void createSubanswer(int row, String name) {
 		clickInTableRow(row);
 		clickNewSubanswer();
 		setTechnicalName(name);
-		clickInTableRow(row+1);
 	}
 
-	public void createBlockOfAllKindOfQuestions(int row,String name){
-		int i = 0;
-		for(AnswerFormat format:AnswerFormat.values()){
-			System.out.println(row+i);
-			createInputField(row+i,name+"_"+i,format);
-			i++;
+	public void createBlockOfAllKindOfQuestions(int row, String name) {
+		int blockRow = row;
+		for (AnswerFormat format : AnswerFormat.values()) {
+			createInputField(blockRow, name + "_" + row, format);
+			row++;
 		}
-		
-		System.out.println(row+i);
-		createRadioButton(row+i, name+"_"+i,"A","B","C");
-		i+=4;
-		System.out.println(row+i);
-		createMultiCheckbox(row+i, name+"_"+i,"D","E","F");
-		i+=4;
-		System.out.println(row+i);
-		createRadioButton(row+i, name+"_"+i,"G","H","I");
-		System.out.println(row+i+1);
-		createSubanswer(row+i+1, "HA");
-		System.out.println(row+i+2);
-		createSubanswer(row+i+2, "HB");
-		i+=6;
-		createMultiCheckbox(row+i, name+"_"+i,"J","K","L");
-		createSubanswer(row+i+0, "JA");
-		createSubanswer(row+i+1, "JB");
-		i+=6;
+
+		createRadioButton(blockRow, row+1, name + "_" + row, "A", "B", "C");
+		row += 4;
+		createMultiCheckbox(blockRow, row+1, name + "_" + row, "D", "E", "F");
+		row += 4;
+		createRadioButton(blockRow, row+1, name + "_" + row, "G", "H", "I");
+		createSubanswer(row + 3, "HA");
+		createSubanswer(row + 3, "HB");
+		row += 6;
+		//Don't know why but it was impossible to put it in first subanswer O.o
+		createMultiCheckbox(blockRow, row+1, name + "_" + row, "J", "K", "L");
+		createSubanswer(row + 2, "JA");
+		createSubanswer(row + 2, "JB");
+		row += 6;
 	}
 
 	public void save() {
 		$(ButtonElement.class).caption("Save").first().click();
 	}
-	
+
+	public void goToFormManager() {
+		$(ButtonElement.class).caption("Forms").first().click();
+	}
+
 }
