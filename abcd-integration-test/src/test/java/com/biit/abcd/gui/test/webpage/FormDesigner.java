@@ -1,21 +1,15 @@
 package com.biit.abcd.gui.test.webpage;
 
-import java.util.List;
-
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import com.biit.abcd.gui.test.window.Proceed;
 import com.biit.gui.tester.VaadinGuiWebpage;
-import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.ComboBoxElement;
 import com.vaadin.testbench.elements.FormLayoutElement;
-import com.vaadin.testbench.elements.TableRowElement;
 import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.testbench.elements.TreeTableElement;
-import com.vaadin.testbench.elements.TreeTableRowElement;
 
 public class FormDesigner extends VaadinGuiWebpage {
 
@@ -102,13 +96,13 @@ public class FormDesigner extends VaadinGuiWebpage {
 	}
 
 	private TestBenchElement getTableRow(int row) {
-		while(true){
+		while (true) {
 			getDesignTable().scroll(0);
-			getDesignTable().scroll(40*(row+1));
-			try{
+			getDesignTable().scroll(40 * (row + 1));
+			try {
 				return getDesignTable().getRow(row).getCell(0);
-			}catch(Exception e){
-				//e.printStackTrace();
+			} catch (Exception e) {
+				// e.printStackTrace();
 			}
 		}
 	}
@@ -169,14 +163,15 @@ public class FormDesigner extends VaadinGuiWebpage {
 	}
 
 	public void createMultiCheckbox(int rowToClick, int rowWhereWillAppear, String name, String... answers) {
-		createQuestionWithAnswers(rowToClick,rowWhereWillAppear,name,AnswerType.MULTI_CHECKBOX, answers);
+		createQuestionWithAnswers(rowToClick, rowWhereWillAppear, name, AnswerType.MULTI_CHECKBOX, answers);
 	}
 
 	public void createRadioButton(int rowToClick, int rowWhereWillAppear, String name, String... answers) {
-		createQuestionWithAnswers(rowToClick,rowWhereWillAppear,name,AnswerType.RADIO_BUTTON, answers);
+		createQuestionWithAnswers(rowToClick, rowWhereWillAppear, name, AnswerType.RADIO_BUTTON, answers);
 	}
-	
-	private void createQuestionWithAnswers(int rowToClick, int rowWhereWillAppear, String name,AnswerType answerType, String... answers){
+
+	private void createQuestionWithAnswers(int rowToClick, int rowWhereWillAppear, String name, AnswerType answerType,
+			String... answers) {
 		createQuestion(rowToClick, name, answerType, null);
 		clickInTableRow(rowWhereWillAppear);
 		for (String answer : answers) {
@@ -217,16 +212,16 @@ public class FormDesigner extends VaadinGuiWebpage {
 			row++;
 		}
 
-		createRadioButton(blockRow, row+1, name + "_" + row, "A", "B", "C");
+		createRadioButton(blockRow, row + 1, name + "_" + row, "A", "B", "C");
 		row += 4;
-		createMultiCheckbox(blockRow, row+1, name + "_" + row, "D", "E", "F");
+		createMultiCheckbox(blockRow, row + 1, name + "_" + row, "D", "E", "F");
 		row += 4;
-		createRadioButton(blockRow, row+1, name + "_" + row, "G", "H", "I");
+		createRadioButton(blockRow, row + 1, name + "_" + row, "G", "H", "I");
 		createSubanswer(row + 3, "HA");
 		createSubanswer(row + 3, "HB");
 		row += 6;
-		//Don't know why but it was impossible to put it in first subanswer O.o
-		createMultiCheckbox(blockRow, row+1, name + "_" + row, "J", "K", "L");
+		// Don't know why but it was impossible to put it in first subanswer O.o
+		createMultiCheckbox(blockRow, row + 1, name + "_" + row, "J", "K", "L");
 		createSubanswer(row + 2, "JA");
 		createSubanswer(row + 2, "JB");
 		row += 6;

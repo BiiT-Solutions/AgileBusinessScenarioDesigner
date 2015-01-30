@@ -3,9 +3,9 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<exclude name="login" />
-				<exclude name="basicFunctionalityTests" />
-				<exclude name="formDesigner" />
+				<include name="login" />
+				<include name="basicFunctionalityTests" />
+				<include name="formDesigner" />
 			</run>
 		</groups>
 		<classes>

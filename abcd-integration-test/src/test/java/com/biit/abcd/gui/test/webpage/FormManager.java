@@ -1,5 +1,8 @@
 package com.biit.abcd.gui.test.webpage;
 
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
+
 import com.biit.abcd.gui.test.window.InfoWindow;
 import com.biit.abcd.gui.test.window.NewForm;
 import com.biit.abcd.gui.test.window.Proceed;
@@ -26,8 +29,8 @@ public class FormManager extends VaadinGuiWebpage {
 		addWindow(proceed);
 		addWindow(infoWindow);
 	}
-	
-	public void toggleSettings(){
+
+	public void toggleSettings() {
 		$(ButtonElement.class).id(SETTINGS_BUTTON).click();
 	}
 
@@ -42,11 +45,16 @@ public class FormManager extends VaadinGuiWebpage {
 
 	public ButtonElement getNewForm() {
 		getNewMenu().click();
+		return getNewFormButton();
+	}
+	
+	public ButtonElement getNewFormButton() {
 		return $(ButtonElement.class).caption("Form").first();
 	}
 
 	/**
 	 * If the element exists return the element otherwise return null.
+	 * 
 	 * @return
 	 */
 	public ButtonElement getRemoveForm() {
@@ -55,15 +63,15 @@ public class FormManager extends VaadinGuiWebpage {
 		}
 		return null;
 	}
-	
-	public void openAndCloseInfoScreen(){
+
+	public void openAndCloseInfoScreen() {
 		getInfoButton().click();
 		infoWindow.clickCloseButton();
 	}
 
 	private ButtonElement getInfoButton() {
 		toggleSettings();
-		return  $(ButtonElement.class).caption("Info").first();
+		return $(ButtonElement.class).caption("Info").first();
 	}
 
 	private void openNewForm() {
@@ -84,11 +92,11 @@ public class FormManager extends VaadinGuiWebpage {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public void selectForm(int row) {
-		getFormTable().getCell(row,0).click();
+		getFormTable().getCell(row, 0).click();
 	}
-	
+
 	public void deleteForm() {
 		getRemoveForm().click();
 		proceed.clickAccept();
@@ -111,9 +119,21 @@ public class FormManager extends VaadinGuiWebpage {
 		selectForm(i);
 		clickFormDesigner();
 	}
-	
-	public void clickAcceptProceed(){
+
+	public void clickAcceptProceed() {
 		proceed.clickAccept();
+	}
+
+	/**
+	 * Workaround to close the popover.<br>
+	 * When the popover is displayed only the element inside the popover can be
+	 * selected.<br>
+	 * To close it, we have focus it and send the close key defined.
+	 */
+	public void closeNewPopover() {
+		getNewFormButton().focus();
+		Actions builder = new Actions(getDriver());
+		builder.sendKeys(Keys.ESCAPE).perform();
 	}
 
 }

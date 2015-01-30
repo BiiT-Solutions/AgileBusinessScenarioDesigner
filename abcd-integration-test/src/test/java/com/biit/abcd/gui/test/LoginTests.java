@@ -34,8 +34,8 @@ public class LoginTests extends AbcdTester {
 	public void testLoginWithRightsToManageButNotDeleteForm(){
 		loginFormEdit1();
 		Assert.assertTrue(getFormManager().getNewForm().isEnabled());
-		//close New menu
-		getFormManager().getNewMenu().click();
+		// Close New popover menu -- IMPORTANT !!
+		getFormManager().closeNewPopover();
 		Assert.assertNull(getFormManager().getRemoveForm());
 		getFormManager().logOut();
 	}
@@ -44,8 +44,8 @@ public class LoginTests extends AbcdTester {
 	public void testLoginWithoutRightsToManageForm(){
 		loginRead1();
 		Assert.assertFalse(getFormManager().getNewForm().isEnabled());
-		//close New menu
-		getFormManager().getNewMenu().click();
+		// Close New popover menu -- IMPORTANT !!
+		getFormManager().closeNewPopover();
 		Assert.assertNull(getFormManager().getRemoveForm());
 		getFormManager().logOut();
 	}
