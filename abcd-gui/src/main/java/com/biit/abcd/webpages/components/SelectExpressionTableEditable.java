@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.TestingId;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -16,6 +17,7 @@ public class SelectExpressionTableEditable extends TableCellLabelEdit {
 
 	public SelectExpressionTableEditable() {
 		super(LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_NAME, LanguageCodes.FORM_EXPRESSIONS_TABLE_COLUMN_UPDATE);
+		setId(TestingId.EXPRESSION_TABLE.getValue());
 	}
 
 	public void update(Form form) {

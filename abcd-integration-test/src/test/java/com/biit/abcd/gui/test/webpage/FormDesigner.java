@@ -3,7 +3,6 @@ package com.biit.abcd.gui.test.webpage;
 import org.testng.Assert;
 
 import com.biit.abcd.gui.test.window.Proceed;
-import com.biit.gui.tester.VaadinGuiWebpage;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.ComboBoxElement;
@@ -11,7 +10,7 @@ import com.vaadin.testbench.elements.FormLayoutElement;
 import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.testbench.elements.TreeTableElement;
 
-public class FormDesigner extends VaadinGuiWebpage {
+public class FormDesigner extends AbcdCommonWebpage {
 
 	public enum AnswerType {
 		INPUT_FIELD("Input Field"), RADIO_BUTTON("Radio Button"), MULTI_CHECKBOX("Multi Checkbox");

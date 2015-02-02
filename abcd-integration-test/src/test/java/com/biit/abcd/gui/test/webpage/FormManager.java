@@ -1,44 +1,24 @@
 package com.biit.abcd.gui.test.webpage;
 
-import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import com.biit.abcd.gui.test.window.InfoWindow;
 import com.biit.abcd.gui.test.window.NewForm;
-import com.biit.abcd.gui.test.window.Proceed;
-import com.biit.gui.tester.VaadinGuiWebpage;
 import com.vaadin.testbench.By;
-import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.TreeTableElement;
 
-public class FormManager extends VaadinGuiWebpage {
+public class FormManager extends AbcdCommonWebpage {
 
-	private final static String SETTINGS_BUTTON = "settingsButton";
-	private final static String LOGOUT_BUTTON = "logoutButton";
+	private static final String CSS_CLASS = "class";
+	private static final CharSequence SELECTED_ROW = "v-selected";
 
 	private final NewForm newFormWindow;
-	private final Proceed proceed;
-	private final InfoWindow infoWindow;
 
 	public FormManager() {
 		super();
 		newFormWindow = new NewForm();
-		proceed = new Proceed();
-		infoWindow = new InfoWindow();
 		addWindow(newFormWindow);
-		addWindow(proceed);
-		addWindow(infoWindow);
-	}
-
-	public void toggleSettings() {
-		$(ButtonElement.class).id(SETTINGS_BUTTON).click();
-	}
-
-	public void logOut() {
-		toggleSettings();
-		$(ButtonElement.class).id(LOGOUT_BUTTON).click();
 	}
 
 	public ButtonElement getNewMenu() {
@@ -49,7 +29,7 @@ public class FormManager extends VaadinGuiWebpage {
 		getNewMenu().click();
 		return getNewFormButton();
 	}
-	
+
 	public ButtonElement getNewFormButton() {
 		return $(ButtonElement.class).caption("Form").first();
 	}
@@ -64,16 +44,6 @@ public class FormManager extends VaadinGuiWebpage {
 			return $(ButtonElement.class).caption("Remove Form").first();
 		}
 		return null;
-	}
-
-	public void openAndCloseInfoScreen() {
-		getInfoButton().click();
-		infoWindow.clickCloseButton();
-	}
-
-	private ButtonElement getInfoButton() {
-		toggleSettings();
-		return $(ButtonElement.class).caption("Info").first();
 	}
 
 	private void openNewForm() {
@@ -101,16 +71,12 @@ public class FormManager extends VaadinGuiWebpage {
 
 	public void deleteForm() {
 		getRemoveForm().click();
-		proceed.clickAccept();
+		clickAcceptProceed();
 	}
 
 	public void deleteForm(int row) {
 		selectForm(row);
 		deleteForm();
-	}
-
-	public void clickFormDesigner() {
-		$(ButtonElement.class).caption("Form Designer").first().click();
 	}
 
 	public boolean checkIfRowExists(int row) {
@@ -120,10 +86,6 @@ public class FormManager extends VaadinGuiWebpage {
 	public void goToDesigner(int i) {
 		selectForm(i);
 		clickFormDesigner();
-	}
-
-	public void clickAcceptProceed() {
-		proceed.clickAccept();
 	}
 
 	/**
@@ -137,21 +99,9 @@ public class FormManager extends VaadinGuiWebpage {
 		Actions builder = new Actions(getDriver());
 		builder.sendKeys(Keys.ESCAPE).perform();
 	}
-	
-	public ButtonElement getClearCache(){
-		toggleSettings();
-		ElementQuery<ButtonElement> button = $(ButtonElement.class).caption("Clear Cache");
-		if(button.exists()){
-			return button.first();
-		}
-		return null;
-	}
 
-	public void clickClearCache() {
-		ButtonElement button = getClearCache();
-		Assert.assertTrue(button.isEnabled());
-		button.click();
-		proceed.clickAccept(); 
+	public boolean isRowSelected(int formRow) {
+		return getFormTable().getRow(formRow).getAttribute(CSS_CLASS).contains(SELECTED_ROW);
 	}
 
 }

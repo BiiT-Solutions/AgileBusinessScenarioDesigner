@@ -26,7 +26,7 @@ public class VaadinGuiTester extends TestBenchTestCase {
 	private static final String NOTIFICATION_TYPE_WARNING = "warning";
 	// This parameter set to 'true' activates phantomJs driver instead of
 	// firefox driver
-	private boolean headlessTesting = false;
+	private boolean headlessTesting = true;
 
 	// To debug last step on firefox
 	private boolean destroyDriver = true;
