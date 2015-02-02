@@ -1,5 +1,6 @@
 package com.biit.abcd.gui.test.webpage;
 
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
@@ -8,6 +9,7 @@ import com.biit.abcd.gui.test.window.NewForm;
 import com.biit.abcd.gui.test.window.Proceed;
 import com.biit.gui.tester.VaadinGuiWebpage;
 import com.vaadin.testbench.By;
+import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.TreeTableElement;
 
@@ -134,6 +136,22 @@ public class FormManager extends VaadinGuiWebpage {
 		getNewFormButton().focus();
 		Actions builder = new Actions(getDriver());
 		builder.sendKeys(Keys.ESCAPE).perform();
+	}
+	
+	public ButtonElement getClearCache(){
+		toggleSettings();
+		ElementQuery<ButtonElement> button = $(ButtonElement.class).caption("Clear Cache");
+		if(button.exists()){
+			return button.first();
+		}
+		return null;
+	}
+
+	public void clickClearCache() {
+		ButtonElement button = getClearCache();
+		Assert.assertTrue(button.isEnabled());
+		button.click();
+		proceed.clickAccept(); 
 	}
 
 }

@@ -24,8 +24,12 @@ public class VaadinGuiTester extends TestBenchTestCase {
 	private static final String APPLICATION_URL_NEW_UI = "http://localhost:9081/?restartApplication";
 	private static final String NOTIFICATION_TYPE_ERROR = "error";
 	private static final String NOTIFICATION_TYPE_WARNING = "warning";
-	// This parameter set to 'true' activates phantomJs driver instead of firefox driver
-	private boolean headlessTesting = true;
+	// This parameter set to 'true' activates phantomJs driver instead of
+	// firefox driver
+	private boolean headlessTesting = false;
+
+	// To debug last step on firefox
+	private boolean destroyDriver = true;
 
 	private final List<VaadinGuiWebpage> webpages;
 
@@ -45,7 +49,7 @@ public class VaadinGuiTester extends TestBenchTestCase {
 			profile.setPreference(FIREFOX_LANGUAGE_PROPERTY, FIREFOX_LANGUAGE_VALUE);
 			setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
 		}
-		getDriver().manage().window().setSize(new Dimension(1280, 720));
+		getDriver().manage().window().setSize(new Dimension(1920, 1080));
 		for (VaadinGuiWebpage webpage : webpages) {
 			webpage.setDriver(getDriver());
 		}
@@ -53,10 +57,12 @@ public class VaadinGuiTester extends TestBenchTestCase {
 
 	@AfterClass(inheritGroups = true, alwaysRun = true)
 	public void destroyDriver() {
-		try {
-			getDriver().quit();
-		} catch (ProcessStillAliveException psae) {
-			// Ignore
+		if (destroyDriver) {
+			try {
+				getDriver().quit();
+			} catch (ProcessStillAliveException psae) {
+				// Ignore
+			}
 		}
 	}
 

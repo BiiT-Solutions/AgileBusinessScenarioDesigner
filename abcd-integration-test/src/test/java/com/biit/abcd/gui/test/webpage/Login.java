@@ -26,6 +26,9 @@ public class Login extends VaadinGuiWebpage{
 	public void login(String userName, String password){
 		getUserNameLoginForm().setValue(userName);
 		getUserPassLoginForm().setValue(password);
+		getUserPassLoginForm().waitForVaadin();
+		getLoginButton().focus();
+		getLoginButton().waitForVaadin();
 		getLoginButton().click();
 	}
 
