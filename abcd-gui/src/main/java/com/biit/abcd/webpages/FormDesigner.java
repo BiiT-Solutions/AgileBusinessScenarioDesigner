@@ -523,7 +523,8 @@ public class FormDesigner extends FormWebPageComponent {
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Question) {
 						parent = formTreeTable.getTreeObjectSelected().getParent();
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
-						parent = formTreeTable.getTreeObjectSelected().getParent().getParent();
+						// If answer or subanswer selected, must be added in the parent of the question. 
+						parent = formTreeTable.getTreeObjectSelected().getAncestor(Question.class).getParent();
 					}
 					if (parent != null) {
 						try {
