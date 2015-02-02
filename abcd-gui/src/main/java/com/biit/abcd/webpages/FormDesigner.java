@@ -89,6 +89,8 @@ public class FormDesigner extends FormWebPageComponent {
 		treeTableValueChangeListener = new TreeTableValueChangeListener();
 
 		formTreeTable = new FormTreeTable();
+		//Remove lazy loading
+		formTreeTable.setPageLength(0);
 		formTreeTable.setSizeFull();
 		formTreeTable.setSelectable(true);
 		formTreeTable.setImmediate(true);

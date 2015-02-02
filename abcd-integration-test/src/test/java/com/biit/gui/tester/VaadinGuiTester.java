@@ -3,77 +3,83 @@ package com.biit.gui.tester;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.os.ProcessUtils.ProcessStillAliveException;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
-import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.NotificationElement;
 
-public class VaadinGuiTester extends TestBenchTestCase{
+public class VaadinGuiTester extends TestBenchTestCase {
 
-	// Activates screenshots on application failure
-	private boolean takeScreeenshots = false;
-	private final static String SCREENSHOTS_PATH = System.getProperty("java.io.tmpdir");
 	private static final String FIREFOX_LANGUAGE_PROPERTY = "intl.accept_languages";
 	private static final String FIREFOX_LANGUAGE_VALUE = "en_US";
 	private static final String APPLICATION_URL_NEW_UI = "http://localhost:9081/?restartApplication";
 	private static final String NOTIFICATION_TYPE_ERROR = "error";
-	
+	private static final String NOTIFICATION_TYPE_WARNING = "warning";
+	// This parameter set to 'true' activates phantomJs driver instead of firefox driver
+	private boolean headlessTesting = true;
+
 	private final List<VaadinGuiWebpage> webpages;
-	
+
 	public VaadinGuiTester() {
 		webpages = new ArrayList<VaadinGuiWebpage>();
 	}
-	
+
 	@BeforeClass(inheritGroups = true, alwaysRun = true)
-	public void createDriver(){
-		if (takeScreeenshots) {
-			setScreenshotsParameters(SCREENSHOTS_PATH);
+	public void createDriver() {
+		if (headlessTesting) {
+			DesiredCapabilities caps = new DesiredCapabilities();
+			caps.setJavascriptEnabled(true);
+			caps.setCapability("takesScreenshot", true);
+			setDriver(TestBench.createDriver(new PhantomJSDriver(caps)));
+		} else {
+			FirefoxProfile profile = new FirefoxProfile();
+			profile.setPreference(FIREFOX_LANGUAGE_PROPERTY, FIREFOX_LANGUAGE_VALUE);
+			setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
 		}
-		FirefoxProfile profile = new FirefoxProfile();
-		profile.setPreference(FIREFOX_LANGUAGE_PROPERTY, FIREFOX_LANGUAGE_VALUE);
-		setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
-		for(VaadinGuiWebpage webpage:webpages){
+		getDriver().manage().window().setSize(new Dimension(1280, 720));
+		for (VaadinGuiWebpage webpage : webpages) {
 			webpage.setDriver(getDriver());
 		}
 	}
-	
+
 	@AfterClass(inheritGroups = true, alwaysRun = true)
-	public void destroyDriver(){
-		// Do not call 'driver.quit' if you want to take screenshots when the
-		// application fails
-		if (!takeScreeenshots) {
+	public void destroyDriver() {
+		try {
 			getDriver().quit();
+		} catch (ProcessStillAliveException psae) {
+			// Ignore
 		}
 	}
-	
-	private static void setScreenshotsParameters(String path) {
-		Parameters.setScreenshotErrorDirectory(path + "/errors");
-		Parameters.setScreenshotReferenceDirectory(path + "/reference");
-		Parameters.setMaxScreenshotRetries(2);
-		Parameters.setScreenshotComparisonTolerance(1.0);
-		Parameters.setScreenshotRetryDelay(10);
-		Parameters.setScreenshotComparisonCursorDetection(true);
-	}
-	
-	public void addWebpage(VaadinGuiWebpage webpage){
+
+	public void addWebpage(VaadinGuiWebpage webpage) {
 		webpages.add(webpage);
 	}
-	
-	public void mainPage(){
+
+	public void mainPage() {
 		getDriver().get(APPLICATION_URL_NEW_UI);
 	}
-	
-	public NotificationElement getNotification(){
-		return $(NotificationElement.class).first();
+
+	public NotificationElement getNotification() {
+		if ($(NotificationElement.class).exists()) {
+			return $(NotificationElement.class).first();
+		}
+		return null;
 	}
-	
-	public static void checkNotificationIsError(NotificationElement notification){
+
+	public static void checkNotificationIsError(NotificationElement notification) {
 		Assert.assertEquals(NOTIFICATION_TYPE_ERROR, notification.getType());
+	}
+
+	public static void checkNotificationIsWarning(NotificationElement notification) {
+		Assert.assertEquals(NOTIFICATION_TYPE_WARNING, notification.getType());
 	}
 }

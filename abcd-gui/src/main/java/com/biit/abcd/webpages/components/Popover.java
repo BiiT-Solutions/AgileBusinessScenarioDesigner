@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.client.popover.PopoverRpc;
 import com.biit.abcd.client.popover.PopoverState;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.VerticalLayout;
@@ -49,6 +50,9 @@ public class Popover extends Window {
         setContent(new VerticalLayout());
         setModal(true);
         registerRpc(rpc);
+        // Added to be able to close the window without using the mouse
+        // Needed for the headless gui tests
+        setCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
     }
 
     @Override

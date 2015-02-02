@@ -28,13 +28,13 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jetty-maven-plugin.version>9.3.0.M1</jetty-maven-plugin.version>
+		<jetty-maven-plugin.version>9.2.7.v20150116</jetty-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<maven-surefire.version>2.17</maven-surefire.version>
 		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
 		<org.testng.version>6.8.7</org.testng.version>
-		<vaadin.version>7.3.8</vaadin.version>
+		<vaadin.version>7.3.9</vaadin.version>
 		<vaadin-testbench.version>4.0.1</vaadin-testbench.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<vaadin-toolkit.version>LATEST</vaadin-toolkit.version>

@@ -1,4 +1,4 @@
-package com.biit.abcd.gui.test;
+package com.biit.abcd.gui.test.webpage;
 
 import com.biit.gui.tester.VaadinGuiWebpage;
 import com.vaadin.testbench.elements.ButtonElement;
