@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?> 
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">     
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" name="abcdcache">     
 	<diskStore path="java.io.tmpdir"/>
   	<defaultCache eternal="true" maxElementsInMemory="100" overflowToDisk="false" />     	
 	<cache name="org.hibernate.cache.spi.UpdateTimestampsCache" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="50000" eternal="true" overflowToDisk="false" />
