@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.components;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
@@ -57,6 +58,7 @@ public abstract class UpperMenu extends SecuredMenu {
 	private IFormDao formDao;
 	// Settings buttons
 	private IconButton globalConstantsButton, clearCacheButton, logoutButton;
+	private HashMap<IconButton, List<IconButton>> subMenuButtons;
 
 	public UpperMenu() {
 		super();
@@ -95,7 +97,6 @@ public abstract class UpperMenu extends SecuredMenu {
 								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
 								| PointNotEqualsException | BiitTextNotEqualsException
 								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
-							e.printStackTrace();
 							final AlertMessageWindow windowAccept = new AlertMessageWindow(
 									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
 							windowAccept.addAcceptActionListener(new AcceptActionListener() {
@@ -200,7 +201,7 @@ public abstract class UpperMenu extends SecuredMenu {
 				popover.showRelativeTo(subMenu);
 			}
 		});
-		// subMenuButtons.put(subMenu, buttons);
+		subMenuButtons.put(subMenu, buttons);
 		return subMenu;
 	}
 
@@ -340,5 +341,20 @@ public abstract class UpperMenu extends SecuredMenu {
 		iconButtonList.add(logoutButton);
 
 		return iconButtonList;
+	}
+	
+	public void hideLogoutButton(boolean hide) {
+		hideButton(settingsButton, logoutButton, !hide);
+	}
+	
+	public void hideButton(IconButton submenu, IconButton button, boolean visible) {
+		List<IconButton> buttons = subMenuButtons.get(submenu);
+		if (buttons != null) {
+			for (IconButton buttonInSubmenu : buttons) {
+				if (buttonInSubmenu.equals(button)) {
+					buttonInSubmenu.setVisible(visible);
+				}
+			}
+		}
 	}
 }
