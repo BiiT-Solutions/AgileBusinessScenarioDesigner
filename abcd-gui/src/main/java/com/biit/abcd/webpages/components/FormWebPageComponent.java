@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.components;
 
+import com.biit.abcd.ApplicationFrame;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Panel;
@@ -53,6 +54,14 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 			this.getRootLayout().removeComponent(this.upperMenu);
 		}
 		this.upperMenu = upperMenu;
+
+		// Hide logout button.
+		if (upperMenu instanceof UpperMenu) {
+			if (((ApplicationFrame) getUI()).getUser() != null && ((ApplicationFrame) getUI()).getPassword() != null) {
+				((UpperMenu) upperMenu).hideLogoutButton(true);
+			}
+		}
+
 		this.getRootLayout().addComponent(upperMenu, 0);
 		getRootLayout().setComponentAlignment(upperMenu, Alignment.BOTTOM_CENTER);
 	}
