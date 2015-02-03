@@ -128,5 +128,19 @@ public class StatusPreservingTests extends AbcdTester{
 		getFormDesigner().clickRuleTableEditor();
 		getRuleTableEditor().isRowSelected(TABLE_2_ROW);
 		
+		//Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_2_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
 	}
+	
+//	@Test
+//	public void savePromptWhenNewFormElements(){
+//		login(ABCD_FORM_EDIT_BIIT1);
+//		getFormManager().createNewForm(TEST_FORM_1);
+//		getFormManager().clickDiagramDesigner();
+//	}
+//	
+//	@Test
+//	public void 
 }
