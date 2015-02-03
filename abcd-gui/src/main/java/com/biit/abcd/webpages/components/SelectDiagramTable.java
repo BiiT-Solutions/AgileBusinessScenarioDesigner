@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.MessageManager;
+import com.biit.abcd.TestingId;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -31,6 +32,7 @@ public class SelectDiagramTable extends TreeTable {
 	};
 
 	public SelectDiagramTable() {
+		setId(TestingId.DIAGRAM_TABLE.getValue());
 		initContainerProperties();
 	}
 

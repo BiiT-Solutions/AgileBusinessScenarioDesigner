@@ -1,6 +1,6 @@
 package com.biit.abcd.gui.test;
 
-import org.testng.Assert;
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
 import com.vaadin.testbench.elements.ComboBoxElement;
@@ -96,4 +96,16 @@ public class BasicFunctionalityTests extends AbcdTester {
 		getFormManager().logOut();
 	}
 
+	@Test
+	public void attemptToClearCacheWithRights() {
+		login(ABCD_APP_ADMIN_BIIT1);
+		getFormManager().clickClearCache();
+		getFormManager().logOut();
+	}
+
+	@Test()
+	public void attemtToClearCacheWithoutRights() {
+		login(ABCD_READ_BIIT1);
+		Assert.assertNull(getFormManager().getClearCache());
+	}
 }
