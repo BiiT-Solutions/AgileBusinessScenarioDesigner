@@ -12,6 +12,8 @@ import com.vaadin.testbench.elements.TreeTableElement;
 
 public class FormDesigner extends AbcdCommonWebpage {
 
+	private static final String SAVE_BUTTON = "Save";
+	
 	public enum AnswerType {
 		INPUT_FIELD("Input Field"), RADIO_BUTTON("Radio Button"), MULTI_CHECKBOX("Multi Checkbox");
 
@@ -227,11 +229,7 @@ public class FormDesigner extends AbcdCommonWebpage {
 	}
 
 	public void save() {
-		$(ButtonElement.class).caption("Save").first().click();
-	}
-
-	public void goToFormManager() {
-		$(ButtonElement.class).caption("Forms").first().click();
+		$(ButtonElement.class).caption(SAVE_BUTTON).first().click();
 	}
 
 }

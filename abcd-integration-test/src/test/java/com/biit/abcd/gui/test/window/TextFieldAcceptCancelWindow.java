@@ -22,6 +22,7 @@ public abstract class TextFieldAcceptCancelWindow extends AcceptCancelWindow{
 	}
 	
 	public TextFieldElement setName(String name){
+		takeScreenshot("ABCD_TextFieldAcceptCancelWindowGetName");
 		getTextField().setValue(name);
 		getTextField().waitForVaadin();
 		return getTextField();

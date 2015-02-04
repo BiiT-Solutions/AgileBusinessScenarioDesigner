@@ -3,13 +3,38 @@ package com.biit.abcd.gui.test;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerFormat;
+import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerType;
+
 @Test(groups = "statusPreserving")
-public class StatusPreservingTests extends AbcdTester{
+public class StatusPreservingTests extends AbcdTester {
+
+	public enum Scope {
+
+		FORM("Form"),
+
+		CATEGORY("Category"),
+
+		GROUP("Group"),
+
+		QUESTION("Question"), ;
+
+		private String value;
+
+		Scope(String caption) {
+			this.value = caption;
+		}
+
+		public String getValue() {
+			return value;
+		}
+	}
 
 	private static final String TEST_FORM_1 = "test_1";
+	private static final String TEST_FORM_1_CHANGED_NAME = "test_1_changed";
 	private static final String TEST_FORM_2 = "test_2";
-	private static final int FORM_2_ROW = 3;
 	private static final int FORM_1_ROW = 1;
+	private static final int FORM_2_ROW = 3;
 	private static final String DIAGRAM_1 = "diag_1";
 	private static final String DIAGRAM_2 = "diag_2";
 	private static final int DIAGRAM_1_ROW = 0;
@@ -22,13 +47,26 @@ public class StatusPreservingTests extends AbcdTester{
 	private static final String TABLE_2 = "table_2";
 	private static final int TABLE_1_ROW = 0;
 	private static final int TABLE_2_ROW = 1;
+	private static final String CATEGORY_1 = "category1";
+	private static final String CATEGORY_1_MODIFIED = "category1m";
+	private static final String GROUP_1 = "group1";
+	private static final String GROUP_1_MODIFIED = "group1m";
+	private static final String QUESTION_1 = "question1";
+	private static final String QUESTION_1_MODIFIED = "question1m";
+	private static final String ANSWER_1 = "answer1";
+	private static final String ANSWER_1_MODIFIED = "answer1m";
+	private static final String SUBANSWER_1 = "subanswer1";
+	private static final String SUBANSWER_1_MODIFIED = "subanswer1m";
+	private static final String VARIABLE_1 = "variable1";
+	private static final String VARIABLE_1_VALUE = "0.0";
+	private static final int VARIABLE_1_ROW = 0;
 
 	@Test
-	public void formInUseIsSelectedWhenReturning(){
+	public void formInUseIsSelectedWhenReturning() {
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().createNewForm(TEST_FORM_2);
-		
+
 		getFormManager().clickFormDesigner();
 		clickFormManager();
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
@@ -36,48 +74,47 @@ public class StatusPreservingTests extends AbcdTester{
 		getFormManager().clickFormDesigner();
 		clickFormManager();
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_1_ROW));
-		
+
 		getFormManager().selectForm(FORM_2_ROW);
 		getFormManager().clickFormVariables();
 		clickFormManager();
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-		
+
 		getFormManager().clickDiagramDesigner();
 		clickFormManager();
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-		
+
 		getFormManager().clickRuleExpressionEditor();
 		clickFormManager();
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-		
+
 		getFormManager().clickRuleEditor();
 		clickFormManager();
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-		
+
 		getFormManager().clickRuleTableEditor();
 		clickFormManager();
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-		
+
 		getFormManager().logOut();
-	
+
 		deleteForm(FORM_2_ROW, ABCD_FORM_ADMIN_BIIT1);
 		getFormManager().logOut();
 		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
 		getFormManager().logOut();
 	}
-	
 
 	@Test
-	public void elementsSelectedAreMaintainedCorrectly(){
+	public void elementsSelectedAreMaintainedCorrectly() {
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickDiagramDesigner();
-		
-		//Add two diagrams
+
+		// Add two diagrams
 		getDiagramDesigner().newDiagram(DIAGRAM_1);
 		getDiagramDesigner().newDiagram(DIAGRAM_2);
 		getDiagramDesigner().selectRow(DIAGRAM_1_ROW);
-		
+
 		getDiagramDesigner().clickFormDesigner();
 		getFormDesigner().clickDiagramDesigner();
 		getDiagramDesigner().isRowSelected(DIAGRAM_1_ROW);
@@ -86,12 +123,12 @@ public class StatusPreservingTests extends AbcdTester{
 		getFormDesigner().clickDiagramDesigner();
 		getDiagramDesigner().isRowSelected(DIAGRAM_2_ROW);
 
-		//Rule expression
+		// Rule expression
 		getFormDesigner().clickRuleExpressionEditor();
 		getRuleExpression().newRuleExpression(RULE_1);
 		getRuleExpression().newRuleExpression(RULE_2);
 		getRuleExpression().selectRow(RULE_1_ROW);
-		
+
 		getRuleExpression().clickFormDesigner();
 		getFormDesigner().clickRuleExpressionEditor();
 		getRuleExpression().isRowSelected(RULE_1_ROW);
@@ -99,13 +136,13 @@ public class StatusPreservingTests extends AbcdTester{
 		getRuleExpression().clickFormDesigner();
 		getFormDesigner().clickRuleExpressionEditor();
 		getRuleExpression().isRowSelected(RULE_2_ROW);
-				
-		//Rule editor
+
+		// Rule editor
 		getFormDesigner().clickRuleEditor();
 		getRuleEditor().newRule(RULE_1);
 		getRuleEditor().newRule(RULE_2);
 		getRuleEditor().selectRow(RULE_1_ROW);
-		
+
 		getRuleEditor().clickFormDesigner();
 		getFormDesigner().clickRuleEditor();
 		getRuleEditor().isRowSelected(RULE_1_ROW);
@@ -113,13 +150,13 @@ public class StatusPreservingTests extends AbcdTester{
 		getRuleEditor().clickFormDesigner();
 		getFormDesigner().clickRuleEditor();
 		getRuleEditor().isRowSelected(RULE_2_ROW);
-		
-		//Rule Table editor
+
+		// Rule Table editor
 		getFormDesigner().clickRuleTableEditor();
 		getRuleTableEditor().newRuleTable(TABLE_1);
 		getRuleTableEditor().newRuleTable(TABLE_2);
 		getRuleTableEditor().selectRow(TABLE_1_ROW);
-		
+
 		getRuleTableEditor().clickFormDesigner();
 		getFormDesigner().clickRuleTableEditor();
 		getRuleTableEditor().isRowSelected(TABLE_1_ROW);
@@ -127,20 +164,240 @@ public class StatusPreservingTests extends AbcdTester{
 		getRuleTableEditor().clickFormDesigner();
 		getFormDesigner().clickRuleTableEditor();
 		getRuleTableEditor().isRowSelected(TABLE_2_ROW);
-		
-		//Remove form
+
+		// Remove form
 		getRuleTableEditor().logOut();
-		deleteForm(FORM_2_ROW, ABCD_FORM_ADMIN_BIIT1);
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
 		getFormManager().logOut();
 	}
-	
+
+//	// TODO this test now fails because there is a bug in the application
 //	@Test
-//	public void savePromptWhenNewFormElements(){
+//	public void savePromptWhenChangedFormName() {
 //		login(ABCD_FORM_EDIT_BIIT1);
 //		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickDiagramDesigner();
+//		getFormManager().clickFormDesigner();
+//
+//		getFormDesigner().setTechnicalName(TEST_FORM_1_CHANGED_NAME);
+//		getFormDesigner().clickInTableRow(0);
+//
+//		getFormDesigner().goToFormManager();
+//		Assert.assertTrue(getFormDesigner().getWarningUnsavedData().isVisible());
+//		getFormDesigner().getWarningUnsavedData().clickCancel();
+//		getFormDesigner().save();
+//		getFormDesigner().goToFormManager();
+//		Assert.assertFalse(getFormDesigner().getWarningUnsavedData().isVisible());
+//
+//		// Remove form
+//		getRuleTableEditor().logOut();
+//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+//		getFormManager().logOut();
 //	}
-//	
-//	@Test
-//	public void 
+
+	private void formDesignerCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getFormDesigner().goToFormManager();
+		Assert.assertTrue(getFormDesigner().getWarningUnsavedData().isVisible());
+		getFormDesigner().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getFormDesigner().save();
+		getFormDesigner().goToFormManager();
+		Assert.assertFalse(getFormDesigner().getWarningUnsavedData().isVisible());
+		getFormManager().clickFormDesigner();
+	}
+
+	@Test
+	public void savePromptWhenNewFormElementsOrEditing() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormDesigner();
+
+		getFormDesigner().clickInTableRow(0);
+		getFormDesigner().createCategory(0, CATEGORY_1);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().createGroup(1, GROUP_1);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().createQuestion(2, QUESTION_1, AnswerType.MULTI_CHECKBOX, null);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
+		getFormDesigner().createAnswer(3, ANSWER_1);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(3).toggleExpanded();
+		getFormDesigner().createSubanswer(4, SUBANSWER_1);
+
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(1);
+		getFormDesigner().setTechnicalName(CATEGORY_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(2);
+		getFormDesigner().setTechnicalName(GROUP_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(3);
+		getFormDesigner().setTechnicalName(QUESTION_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(4);
+		getFormDesigner().setTechnicalName(ANSWER_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(5);
+		getFormDesigner().setTechnicalName(SUBANSWER_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+
+	}
+
+	private void expandForm() {
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(3).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(4).toggleExpanded();
+	}
+
+	private void formVariablesCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getFormVariables().goToFormManager();
+		Assert.assertTrue(getFormVariables().getWarningUnsavedData().isVisible());
+		getFormVariables().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getFormVariables().save();
+		getFormVariables().goToFormManager();
+		Assert.assertFalse(getFormVariables().getWarningUnsavedData().isVisible());
+		getFormManager().clickFormVariables();
+	}
+
+	@Test
+	public void savePromptWhenNewVariable() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormVariables();
+
+		getFormVariables().clickAddVariable();
+		formVariablesCheckSaveWarning();
+
+		getFormVariables().removeVariable(VARIABLE_1_ROW);
+		formVariablesCheckSaveWarning();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
+
+	@Test
+	public void savePromptWhenVariableModified() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormVariables();
+
+		getFormVariables().clickAddVariable();
+		getFormVariables().save();
+
+		getFormVariables().getTextField(0, 0).setValue(VARIABLE_1);
+		formVariablesCheckSaveWarning();
+
+		getFormVariables().getComboBoxElement(0, 1).selectByText(AnswerFormat.NUMBER.getValue());
+		formVariablesCheckSaveWarning();
+
+		getFormVariables().getComboBoxElement(0, 2).selectByText(Scope.CATEGORY.getValue());
+		formVariablesCheckSaveWarning();
+
+		// TODO current bug
+		// getFormVariables().getTextField(0, 3).setValue(VARIABLE_1_VALUE);
+		// formVariablesCheckSaveWarning();
+
+		// Remove form
+		getFormVariables().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
+
+	private void diagramDesignerCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getDiagramDesigner().goToFormManager();
+		Assert.assertTrue(getDiagramDesigner().getWarningUnsavedData().isVisible());
+		getDiagramDesigner().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getDiagramDesigner().save();
+		getDiagramDesigner().goToFormManager();
+		Assert.assertFalse(getDiagramDesigner().getWarningUnsavedData().isVisible());
+		getFormManager().clickDiagramDesigner();
+	}
+
+	@Test
+	public void savePromptWhenNewAndRemoveDiagram() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickDiagramDesigner();
+
+		getDiagramDesigner().newDiagram(DIAGRAM_1);
+		diagramDesignerCheckSaveWarning();
+
+		// TODO bug
+		// getDiagramDesigner().removeDiagram(DIAGRAM_1_ROW);
+		// diagramDesignerCheckSaveWarning();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
+
+	private void ruleExpressionCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getRuleExpression().goToFormManager();
+		Assert.assertTrue(getRuleExpression().getWarningUnsavedData().isVisible());
+		getRuleExpression().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getRuleExpression().save();
+		getRuleExpression().goToFormManager();
+		Assert.assertFalse(getRuleExpression().getWarningUnsavedData().isVisible());
+		getFormManager().clickRuleExpressionEditor();
+	}
+
+	@Test
+	public void savePromptWhenNewAndRemoveRuleExpression() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickRuleExpressionEditor();
+
+		getRuleExpression().newRuleExpression(RULE_1);
+		ruleExpressionCheckSaveWarning();
+
+		getRuleExpression().removeRule(RULE_1_ROW);
+		diagramDesignerCheckSaveWarning();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
 }

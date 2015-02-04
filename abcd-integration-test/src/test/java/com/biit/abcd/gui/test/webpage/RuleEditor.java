@@ -1,10 +1,12 @@
 package com.biit.abcd.gui.test.webpage;
 
 import com.biit.abcd.gui.test.window.NewRuleWindow;
+import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.TableElement;
 
 public class RuleEditor extends LeftTreeTableWebpage{
 
+	private static final String SAVE_BUTTON = "Save";
 	private static final String ID = "rule-table";
 	
 	private NewRuleWindow newRuleWindow;
@@ -31,4 +33,7 @@ public class RuleEditor extends LeftTreeTableWebpage{
 		newRuleWindow.setNameAndAccept(name);
 	}
 
+	public void save() {
+		$(ButtonElement.class).caption(SAVE_BUTTON).first().click();
+	}
 }

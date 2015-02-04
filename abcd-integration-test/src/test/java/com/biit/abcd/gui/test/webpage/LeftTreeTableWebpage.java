@@ -7,6 +7,7 @@ import com.vaadin.testbench.elements.TableElement;
 public abstract class LeftTreeTableWebpage extends AbcdCommonWebpage {
 
 	private static final String BUTTON_NEW = "New";
+	private static final String BUTTON_REMOVE = "Remove";
 
 	public LeftTreeTableWebpage() {
 		super();
@@ -14,6 +15,15 @@ public abstract class LeftTreeTableWebpage extends AbcdCommonWebpage {
 
 	public ButtonElement getNewButton() {
 		ElementQuery<ButtonElement> button = $(ButtonElement.class).caption(BUTTON_NEW);
+		if (button.exists()) {
+			return button.first();
+		} else {
+			return null;
+		}
+	}
+	
+	public ButtonElement getRemoveButton() {
+		ElementQuery<ButtonElement> button = $(ButtonElement.class).caption(BUTTON_REMOVE);
 		if (button.exists()) {
 			return button.first();
 		} else {

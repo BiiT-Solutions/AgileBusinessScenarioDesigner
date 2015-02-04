@@ -203,6 +203,12 @@
 											<include name="**/*.properties" />
 										</replace>
 										<replace
+											token="hibernate.connection.username=abcd"
+											value="hibernate.connection.username=testuser"
+											dir="target/classes">
+											<include name="**/*.properties" />
+										</replace>
+										<replace
 											token="hibernate.hbm2ddl.auto=validate"
 											value="hibernate.hbm2ddl.auto=create-drop"
 											dir="target/classes">

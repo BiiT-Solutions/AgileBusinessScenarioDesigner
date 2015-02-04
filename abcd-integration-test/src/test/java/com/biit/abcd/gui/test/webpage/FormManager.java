@@ -27,6 +27,7 @@ public class FormManager extends AbcdCommonWebpage {
 
 	public ButtonElement getNewForm() {
 		getNewMenu().click();
+		takeScreenshot("ABCD_getNewForm");
 		return getNewFormButton();
 	}
 

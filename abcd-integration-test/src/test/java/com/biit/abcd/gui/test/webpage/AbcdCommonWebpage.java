@@ -4,6 +4,7 @@ import org.junit.Assert;
 
 import com.biit.abcd.gui.test.window.InfoWindow;
 import com.biit.abcd.gui.test.window.Proceed;
+import com.biit.abcd.gui.test.window.WarningUnsavedData;
 import com.biit.gui.tester.VaadinGuiWebpage;
 import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.elements.ButtonElement;
@@ -17,13 +18,16 @@ public class AbcdCommonWebpage extends VaadinGuiWebpage{
 	
 	private final InfoWindow infoWindow;
 	private final Proceed proceed;
+	private final WarningUnsavedData warningUnsavedData;
 
 	public AbcdCommonWebpage() {
 		super();
 		infoWindow = new InfoWindow();
 		proceed = new Proceed();
+		warningUnsavedData = new WarningUnsavedData();
 		addWindow(infoWindow);
 		addWindow(proceed);
+		addWindow(warningUnsavedData);
 	}
 	
 	@Override
@@ -98,5 +102,12 @@ public class AbcdCommonWebpage extends VaadinGuiWebpage{
 	public void clickRuleTableEditor() {
 		$(ButtonElement.class).caption("Rule Table Editor").first().click();
 	}
+
+	public void goToFormManager() {
+		$(ButtonElement.class).caption("Forms").first().click();
+	}
 	
+	public WarningUnsavedData getWarningUnsavedData() {
+		return warningUnsavedData;
+	}
 }
