@@ -77,6 +77,8 @@ public class Login extends WebPageComponent {
 		if (((ApplicationFrame) getUI()).getUser() != null && ((ApplicationFrame) getUI()).getUser().length() > 0
 				&& ((ApplicationFrame) getUI()).getPassword() != null
 				&& ((ApplicationFrame) getUI()).getPassword().length() > 0) {
+			AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + ((ApplicationFrame) getUI()).getUser()
+					+ "' and password with length of " + ((ApplicationFrame) getUI()).getPassword().length());
 			try {
 				User user = checkUserAndPassword(((ApplicationFrame) getUI()).getUser(),
 						((ApplicationFrame) getUI()).getPassword());
@@ -91,7 +93,15 @@ public class Login extends WebPageComponent {
 				}
 			} catch (InvalidCredentialsException | NotConnectedToWebServiceException | PBKDF2EncryptorException
 					| IOException | AuthenticationRequired | WebServiceAccessError e) {
-				// User not valid, do nothing.
+				AbcdLogger.info(this.getClass().getName(),
+						"Autologin with user '" + ((ApplicationFrame) getUI()).getUser()
+								+ "' failed! Wrong user or password.");
+			}
+		} else {
+			if (((ApplicationFrame) getUI()).getUser() != null && ((ApplicationFrame) getUI()).getUser().length() > 0) {
+				AbcdLogger.info(this.getClass().getName(),
+						"Autologin with user '" + ((ApplicationFrame) getUI()).getUser()
+								+ "' but no password provided!");
 			}
 		}
 	}
