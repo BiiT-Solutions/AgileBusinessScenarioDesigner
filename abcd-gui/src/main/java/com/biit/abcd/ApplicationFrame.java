@@ -1,6 +1,7 @@
 package com.biit.abcd;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
 import com.vaadin.annotations.PreserveOnRefresh;
@@ -8,6 +9,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
@@ -21,6 +23,18 @@ public class ApplicationFrame extends UI {
 	private View currentView;
 	private String user;
 	private String password;
+	
+	private class WebformsErrorHandler extends DefaultErrorHandler{
+		private static final long serialVersionUID = -5570064834518413901L;
+
+		@Override
+		public void error(com.vaadin.server.ErrorEvent event) {
+			//Throw the error to the logger.
+			AbcdLogger.errorMessage(ApplicationFrame.class.getName(), event.getThrowable());
+			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
+		}
+		
+	};
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -30,6 +44,8 @@ public class ApplicationFrame extends UI {
 		//Liferay send this data and automatically are used in the login screen. 
 		this.user = request.getParameter(USER_PARAMETER_TAG);
 		this.password = request.getParameter(PASSWORD_PARAMETER_TAG);
+		
+		setErrorHandler(new WebformsErrorHandler());
 	}
 
 	@Override
