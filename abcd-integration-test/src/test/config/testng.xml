@@ -3,11 +3,11 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<exclude name="login" />
-				<exclude name="basicFunctionalityTests" />
-				<exclude name="formDesigner" />
-				<exclude name="formVariables" />
-				<exclude name="statusPreserving" />
+				<include name="login" />
+				<include name="basicFunctionalityTests" />
+				<include name="formDesigner" />
+				<include name="formVariables" />
+				<include name="statusPreserving" />
 			</run>
 		</groups>
 		<classes>
