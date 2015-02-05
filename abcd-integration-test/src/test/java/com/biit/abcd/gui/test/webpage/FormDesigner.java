@@ -13,6 +13,15 @@ import com.vaadin.testbench.elements.TreeTableElement;
 public class FormDesigner extends AbcdCommonWebpage {
 
 	private static final String SAVE_BUTTON = "Save";
+	private static final String BUTTON_CATEGORY = "Category";
+	private static final String BUTTON_GROUP = "Group";
+	private static final String BUTTON_QUESTION = "Question";
+	private static final String BUTTON_ANSWER = "Answer";
+	private static final String BUTTON_SUBANSWER = "Subanswer";
+	private static final String BUTTON_REMOVE = "Remove";
+	private static final String TECHNICAL_NAME = "Technical Name";
+	private static final String BUTTON_MOVE_UP = "Move Up";
+	private static final String BUTTON_MOVE_DOWN = "Move Down";
 	
 	public enum AnswerType {
 		INPUT_FIELD("Input Field"), RADIO_BUTTON("Radio Button"), MULTI_CHECKBOX("Multi Checkbox");
@@ -56,40 +65,73 @@ public class FormDesigner extends AbcdCommonWebpage {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public ButtonElement getButtonByCaption(String caption){
+		return $(ButtonElement.class).caption(caption).first();
+	}
+	
+	public ButtonElement getCategoryButton(){
+		return getButtonByCaption(BUTTON_CATEGORY);
+	}
+	
+	public ButtonElement getGroupButton(){
+		return getButtonByCaption(BUTTON_GROUP);
+	}
+	
+	public ButtonElement getQuestionButton(){
+		return getButtonByCaption(BUTTON_QUESTION);
+	}
+	
+	public ButtonElement getAnswerButton(){
+		return getButtonByCaption(BUTTON_ANSWER);
+	}
+	
+	public ButtonElement getSubanswerButton(){
+		return getButtonByCaption(BUTTON_SUBANSWER);
+	}
+	
+	public ButtonElement getRemoveButton(){
+		return getButtonByCaption(BUTTON_REMOVE);
+	}
 
 	public void finishDesign() {
 		$(ButtonElement.class).caption("Finish Design").first().click();
 		$(ButtonElement.class).caption("Finish Design").first().waitForVaadin();
 		proceed.clickAccept();
 	}
+	
+	public void clickRemoveButton(){
+		getRemoveButton().click();
+		getRemoveButton().waitForVaadin();	
+	}
 
 	public void clickNewCategory() {
-		$(ButtonElement.class).caption("Category").first().click();
-		$(ButtonElement.class).caption("Category").first().waitForVaadin();
+		getCategoryButton().click();
+		getCategoryButton().waitForVaadin();
 	}
 
 	private void clickNewGroup() {
-		Assert.assertTrue($(ButtonElement.class).caption("Group").first().isEnabled());
-		$(ButtonElement.class).caption("Group").first().click();
-		$(ButtonElement.class).caption("Group").first().waitForVaadin();
+		Assert.assertTrue(getGroupButton().isEnabled());
+		getGroupButton().click();
+		getGroupButton().waitForVaadin();
 	}
 
 	public void clickNewQuestion() {
-		Assert.assertTrue($(ButtonElement.class).caption("Question").first().isEnabled());
-		$(ButtonElement.class).caption("Question").first().click();
-		$(ButtonElement.class).caption("Question").first().waitForVaadin();
+		Assert.assertTrue(getQuestionButton().isEnabled());
+		getQuestionButton().click();
+		getQuestionButton().waitForVaadin();
 	}
 
 	public void clickNewAnswer() {
-		Assert.assertTrue($(ButtonElement.class).caption("Answer").first().isEnabled());
-		$(ButtonElement.class).caption("Answer").first().click();
-		$(ButtonElement.class).caption("Answer").first().waitForVaadin();
+		Assert.assertTrue(getAnswerButton().isEnabled());
+		getAnswerButton().click();
+		getAnswerButton().waitForVaadin();
 	}
 
 	public void clickNewSubanswer() {
-		Assert.assertTrue($(ButtonElement.class).caption("Subanswer").first().isEnabled());
-		$(ButtonElement.class).caption("Subanswer").first().click();
-		$(ButtonElement.class).caption("Subanswer").first().waitForVaadin();
+		Assert.assertTrue(getSubanswerButton().isEnabled());
+		getSubanswerButton().click();
+		getSubanswerButton().waitForVaadin();
 	}
 
 	public TreeTableElement getDesignTable() {
@@ -114,8 +156,8 @@ public class FormDesigner extends AbcdCommonWebpage {
 		getTableRow(row).waitForVaadin();
 	}
 
-	private TextFieldElement getTechnicalName() {
-		return $(TextFieldElement.class).caption("Technical Name").first();
+	public TextFieldElement getTechnicalName() {
+		return $(TextFieldElement.class).caption(TECHNICAL_NAME).first();
 	}
 
 	public void setTechnicalName(String technicalName) {
@@ -230,6 +272,30 @@ public class FormDesigner extends AbcdCommonWebpage {
 
 	public void save() {
 		$(ButtonElement.class).caption(SAVE_BUTTON).first().click();
+	}
+
+	public void remove(int row) {
+		clickInTableRow(row);
+		clickRemoveButton();
+		getProceed().clickAccept();
+	}
+
+	public void clickMoveUp() {
+		getMoveUpButton().click();
+		getMoveUpButton().waitForVaadin();	
+	}
+	
+	private TestBenchElement getMoveUpButton() {
+		return getButtonByCaption(BUTTON_MOVE_UP);
+	}
+	
+	private TestBenchElement getMoveDownButton() {
+		return getButtonByCaption(BUTTON_MOVE_DOWN);
+	}
+
+	public void clickMoveDown() {
+		getMoveDownButton().click();
+		getMoveDownButton().waitForVaadin();	
 	}
 
 }

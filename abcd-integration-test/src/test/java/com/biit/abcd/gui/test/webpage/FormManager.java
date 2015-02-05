@@ -5,7 +5,11 @@ import org.openqa.selenium.interactions.Actions;
 
 import com.biit.abcd.gui.test.window.NewForm;
 import com.vaadin.testbench.By;
+import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elements.ButtonElement;
+import com.vaadin.testbench.elements.ComboBoxElement;
+import com.vaadin.testbench.elements.LabelElement;
+import com.vaadin.testbench.elements.TableElement;
 import com.vaadin.testbench.elements.TreeTableElement;
 
 public class FormManager extends AbcdCommonWebpage {
@@ -103,6 +107,11 @@ public class FormManager extends AbcdCommonWebpage {
 
 	public boolean isRowSelected(int formRow) {
 		return getFormTable().getRow(formRow).getAttribute(CSS_CLASS).contains(SELECTED_ROW);
+	}
+	
+	public String getFormName(int row){
+		TableElement table = getFormTable();
+		return table.getCell(row, 0).getText();
 	}
 
 }
