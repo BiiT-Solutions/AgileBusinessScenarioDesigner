@@ -188,7 +188,10 @@ public class JpaSchemaExporter {
 	private static String createHibernateSequenceTable() {
 		String table = "\n\tCREATE TABLE `hibernate_sequence` (\n";
 		table += "\t\t`next_val` bigint(20) DEFAULT NULL\n";
-		table += "\t);\n";
+		table += "\t);\n\n";
+		table += "\tLOCK TABLES `hibernate_sequence` WRITE;\n";
+		table += "\tINSERT INTO `hibernate_sequence` VALUES (1);\n";
+		table += "\tUNLOCK TABLES;\n";
 		return table;
 	}
 
