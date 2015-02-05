@@ -3,10 +3,11 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="login" />
-				<include name="basicFunctionalityTests" />
-				<include name="formDesigner" />
-				<include name="statusPreserving" />
+				<exclude name="login" />
+				<exclude name="basicFunctionalityTests" />
+				<exclude name="formDesigner" />
+				<exclude name="formVariables" />
+				<exclude name="statusPreserving" />
 			</run>
 		</groups>
 		<classes>
@@ -14,6 +15,7 @@
 			<class name="com.biit.abcd.gui.test.BasicFunctionalityTests" />
 			<class name="com.biit.abcd.gui.test.FormDesignerTests" />
 			<class name="com.biit.abcd.gui.test.StatusPreservingTests" />
+			<class name="com.biit.abcd.gui.test.FormVariablesTests" />
 		</classes>
 	</test>
 </suite>

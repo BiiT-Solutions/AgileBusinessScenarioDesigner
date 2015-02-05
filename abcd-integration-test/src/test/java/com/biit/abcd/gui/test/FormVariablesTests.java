@@ -1,0 +1,100 @@
+package com.biit.abcd.gui.test;
+
+import java.util.Date;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.biit.abcd.gui.test.StatusPreservingTests.Scope;
+import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerFormat;
+
+@Test(groups = "formVariables")
+public class FormVariablesTests extends AbcdTester{
+
+	private static final String NEW_FORM_NAME = "new_form";
+	private static final String VAR_0 = "var_0";
+	private static final String VAR_1 = "var_1";
+	private static final String VAR_2 = "var_2";
+	private static final String VAR_3 = "var_3";
+	private static final String VAR_4 = "var_4";
+	private static final String VAR_5 = "var_5";
+	private static final String VAR_6 = "var_6";
+	private static final String VAR_7 = "var_7";
+	private static final String VAR_8 = "var_8";
+	private static final String VAR_9 = "var_9";
+	private static final String VAR_10 = "var_10";
+	private static final String VAR_11 = "var_11";
+	private static final String DEF_VALUE_TEXT = "ipsum lorem";
+	private static final String DEF_VALUE_NUMBER = "3.1";
+	private static final String DEF_VALUE_DATE = "3/11/15";
+	
+	
+	@Test
+	public void createVariables() {
+		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
+
+		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
+		getFormDesigner().clickFormVariables();
+		
+		getFormVariables().addVariable(0,VAR_0,AnswerFormat.TEXT,Scope.FORM,DEF_VALUE_TEXT);
+		getFormVariables().addVariable(1,VAR_1,AnswerFormat.NUMBER,Scope.FORM,DEF_VALUE_NUMBER);
+		getFormVariables().addVariable(2,VAR_2,AnswerFormat.DATE,Scope.FORM,DEF_VALUE_DATE);
+		
+		getFormVariables().save();
+		
+		getFormVariables().addVariable(3,VAR_3,AnswerFormat.TEXT,Scope.CATEGORY,DEF_VALUE_TEXT);
+		getFormVariables().addVariable(4,VAR_4,AnswerFormat.NUMBER,Scope.CATEGORY,DEF_VALUE_NUMBER);
+		getFormVariables().addVariable(5,VAR_5,AnswerFormat.DATE,Scope.CATEGORY,DEF_VALUE_DATE);
+		
+		getFormVariables().save();
+		
+		getFormVariables().addVariable(6,VAR_6,AnswerFormat.TEXT,Scope.GROUP,DEF_VALUE_TEXT);
+		getFormVariables().addVariable(7,VAR_7,AnswerFormat.NUMBER,Scope.GROUP,DEF_VALUE_NUMBER);
+		getFormVariables().addVariable(8,VAR_8,AnswerFormat.DATE,Scope.GROUP,DEF_VALUE_DATE);
+		
+		getFormVariables().save();
+		
+		getFormVariables().addVariable(9,VAR_9,AnswerFormat.TEXT,Scope.QUESTION,DEF_VALUE_TEXT);
+		getFormVariables().addVariable(10,VAR_10,AnswerFormat.NUMBER,Scope.QUESTION,DEF_VALUE_NUMBER);
+		getFormVariables().addVariable(11,VAR_11,AnswerFormat.DATE,Scope.QUESTION,DEF_VALUE_DATE);
+		
+		getFormVariables().save();
+		getFormVariables().goToFormManager();
+		
+		getFormManager().clickFormVariables();
+		Assert.assertTrue(getFormVariables().getTextField(0, 3).getValue().equals(DEF_VALUE_TEXT));
+		Assert.assertTrue(getFormVariables().getTextField(1, 3).getValue().equals(DEF_VALUE_NUMBER));
+		getFormVariables().takeScreenshot("ABCD_variables_test");
+		Assert.assertTrue(getFormVariables().getTextField(2, 3).getValue().equals(DEF_VALUE_DATE));
+		
+		getFormVariables().goToFormManager();
+		getFormManager().deleteForm();
+		getFormManager().logOut();
+	}
+	
+	@Test
+	public void removeVariables() {
+		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
+
+		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
+		getFormDesigner().clickFormVariables();
+		
+		getFormVariables().addVariable(0,VAR_0,AnswerFormat.TEXT,Scope.FORM,DEF_VALUE_TEXT);
+		getFormVariables().addVariable(1,VAR_1,AnswerFormat.NUMBER,Scope.FORM,DEF_VALUE_NUMBER);
+		getFormVariables().addVariable(2,VAR_2,AnswerFormat.DATE,Scope.FORM,DEF_VALUE_DATE);
+		
+		getFormVariables().save();
+				
+		getFormDesigner().goToFormManager();
+		getFormDesigner().clickFormVariables();
+		
+		getFormVariables().removeVariable(0);
+		Assert.assertFalse(getFormVariables().getTextField(0, 3).getValue().equals(DEF_VALUE_TEXT));
+		getFormVariables().save();
+		
+		getFormDesigner().goToFormManager();
+		getFormManager().deleteForm();
+		getFormManager().logOut();
+	}
+	
+}

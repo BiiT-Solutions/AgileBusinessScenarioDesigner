@@ -47,6 +47,8 @@ public class VariableTable extends Table {
 		setImmediate(true);
 		setMultiSelect(false);
 		setSizeFull();
+		//Avoid paging
+		setPageLength(0);
 
 		setColumnCollapsingAllowed(false);
 		addContainerProperty(FormVariablesProperties.VARIABLE_NAME, ComparableTextField.class, "",

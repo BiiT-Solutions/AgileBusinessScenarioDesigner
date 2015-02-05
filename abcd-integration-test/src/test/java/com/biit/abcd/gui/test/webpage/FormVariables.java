@@ -2,11 +2,14 @@ package com.biit.abcd.gui.test.webpage;
 
 import org.openqa.selenium.By;
 
+import com.biit.abcd.gui.test.StatusPreservingTests.Scope;
+import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerFormat;
 import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.ComboBoxElement;
 import com.vaadin.testbench.elements.TableElement;
+import com.vaadin.testbench.elements.TableRowElement;
 import com.vaadin.testbench.elements.TextFieldElement;
 
 public class FormVariables extends AbcdCommonWebpage{
@@ -23,7 +26,9 @@ public class FormVariables extends AbcdCommonWebpage{
 	
 	public TextFieldElement getTextField(int row, int pos){
 		TableElement table = $(TableElement.class).first();
-		TextFieldElement textField = ((TestBenchElement)table.getCell(row, pos).findElement(By.tagName("input"))).wrap(TextFieldElement.class);
+		TableRowElement rowElement = table.getRow(row);
+		TestBenchElement cellElement = rowElement.getCell(pos);
+		TextFieldElement textField = ((TestBenchElement)cellElement.findElement(By.tagName("input"))).wrap(TextFieldElement.class);
 		return textField;
 	}
 	
@@ -35,6 +40,17 @@ public class FormVariables extends AbcdCommonWebpage{
 	
 	public void addVariable(){
 		clickAddVariable();
+	}
+	
+	public void addVariable(int pos, String name, AnswerFormat format, Scope scope, String value){
+		addVariable();
+		getTextField(pos, 0).setValue(name);
+		getComboBoxElement(pos, 1).selectByText(format.getValue());
+		getComboBoxElement(pos, 2).selectByText(scope.getValue());
+		if(value!=null){
+			getTextField(pos, 3).setValue(value);
+		}
+		
 	}
 	
 	public void save() {
