@@ -521,6 +521,13 @@ public enum LanguageCodes {
 	PERMISSIONS_IN_USE("permissions.in.use"), 
 	CAPTION_ABOUT_US("caption.about.us"),
 	TOOLTIP_ABOUT_US("tooltip.about.us"),
+	
+	ERROR_ELEMENT_CANNOT_BE_REMOVED_TITLE("error.element.cannot.be.removed.title"),
+	
+	ERROR_READ_ONLY_ELEMENT("error.read.only.element"),
+	
+	ERROR_ELEMENT_CANNOT_BE_SAVED("error.element.cannot.be.saved"),
+	ERROR_ELEMENT_CANNOT_BE_SAVED_DESCRIPTION("error.element.cannot.be.saved.description"),
 	;
 
 	private String value;

@@ -10,12 +10,14 @@ import java.util.Set;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TreeTable;
@@ -198,7 +200,12 @@ public class TreeObjectTable extends TreeTable {
 				try {
 					List<Object> children = new ArrayList<Object>(getChildren(element));
 					for (Object child : children) {
-						((TreeObject) child).remove();
+						try {
+							((TreeObject) child).remove();
+						} catch (ElementIsReadOnly e) {
+							// Impossible
+							AbcdLogger.errorMessage(this.getClass().getName(), e);
+						}
 						removeItem(child);
 					}
 					setChildrenAllowed(element, false);

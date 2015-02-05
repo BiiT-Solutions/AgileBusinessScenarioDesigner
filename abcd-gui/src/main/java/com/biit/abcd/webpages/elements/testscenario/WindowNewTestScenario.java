@@ -9,6 +9,7 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.TestScenarioEditor;
 import com.biit.abcd.webpages.components.WindowCreateNewObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -54,6 +55,8 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 		} catch (NotValidStorableObjectException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		} catch (NotValidChildException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		} catch (ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}

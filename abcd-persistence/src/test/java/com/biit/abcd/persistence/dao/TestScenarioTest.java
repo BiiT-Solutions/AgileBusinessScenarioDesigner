@@ -23,10 +23,13 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.exceptions.NotValidFormException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -50,7 +53,8 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	@Test
 	public void storeRemoveTestScenarios() throws NotValidFormException, FieldTooLongException,
 			NotValidStorableObjectException, CharacterNotAllowedException, NotValidChildException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementIsReadOnly,
+			ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setLabel(FORM_LABEL);
 		form.setVersion(FORM_VERSION);
@@ -82,7 +86,8 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	public void storeRemoveTestScenariosMapData() throws NotValidFormException, FieldTooLongException,
 			CharacterNotAllowedException, NotValidAnswerValue, NotValidChildException, ChildrenNotFoundException,
 			InvalidAnswerFormatException, NotValidStorableObjectException, DependencyExistException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementIsReadOnly, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setLabel(FORM_LABEL);
 		form.setVersion(FORM_VERSION);

@@ -45,6 +45,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -53,7 +54,7 @@ public class FormUtils {
 	private static Random random = new Random();
 
 	public static Form createCompleteForm() throws FieldTooLongException, NotValidChildException,
-			CharacterNotAllowedException, InvalidAnswerFormatException {
+			CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly {
 		Map<String, CustomVariable> variableMap;
 		Map<String, TableRule> tablesMap;
 		Map<String, ExpressionChain> expressionsMap;
@@ -104,9 +105,10 @@ public class FormUtils {
 	 * @throws FieldTooLongException
 	 * @throws CharacterNotAllowedException
 	 * @throws InvalidAnswerFormatException
+	 * @throws ElementIsReadOnly 
 	 */
 	public static Map<String, TreeObject> createCategory() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException, InvalidAnswerFormatException {
+			CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly {
 		Map<String, TreeObject> elementsMap = new HashMap<>();
 		Category category = new Category();
 		category.setName("Category1");

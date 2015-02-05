@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 
 public class GlobalVariablesController {
 	private List<GlobalVariable> globalVariables = null;
@@ -40,8 +42,11 @@ public class GlobalVariablesController {
 	 * Remove all old global variables and store all the new ones. This method is synchronized.
 	 * 
 	 * @throws UnexpectedDatabaseException
+	 * @throws ElementCannotBeRemovedException
+	 * @throws ElementCannotBePersistedException
 	 */
-	public void update(List<GlobalVariable> globalVariables) throws UnexpectedDatabaseException {
+	public void update(List<GlobalVariable> globalVariables) throws UnexpectedDatabaseException,
+			ElementCannotBeRemovedException, ElementCannotBePersistedException {
 		synchronized (GlobalVariablesController.class) {
 			// Remove unused variables.
 			for (GlobalVariable globalVariable : this.globalVariables) {

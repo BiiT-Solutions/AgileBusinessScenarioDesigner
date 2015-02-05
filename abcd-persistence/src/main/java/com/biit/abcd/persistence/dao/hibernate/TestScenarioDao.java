@@ -16,9 +16,11 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.NotValidParentException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.dao.hibernate.GenericDao;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 
 @Repository
 public class TestScenarioDao extends GenericDao<TestScenario> implements ITestScenarioDao {
@@ -28,7 +30,8 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 	}
 
 	@Override
-	public TestScenario makePersistent(TestScenario entity) throws UnexpectedDatabaseException {
+	public TestScenario makePersistent(TestScenario entity) throws UnexpectedDatabaseException,
+			ElementCannotBePersistedException {
 		purgeElementsToDelete(entity.getTestScenarioForm());
 		entity.getTestScenarioForm().updateChildrenSortSeqs();
 		return super.makePersistent(entity);
@@ -42,16 +45,16 @@ public class TestScenarioDao extends GenericDao<TestScenario> implements ITestSc
 	private Set<TreeObject> getElementsToDelete(TreeObject entity) {
 		Set<TreeObject> elementsToDelete = new HashSet<>();
 		elementsToDelete.addAll(entity.getElementsToDelete());
-		entity.setElementsToDelete(new HashSet<TreeObject>());
+		entity.setElementsToDelete(new ArrayList<TreeObject>());
 		for (TreeObject child : entity.getChildren()) {
 			elementsToDelete.addAll(getElementsToDelete(child));
-			child.setElementsToDelete(new HashSet<TreeObject>());
+			child.setElementsToDelete(new ArrayList<TreeObject>());
 		}
 		return elementsToDelete;
 	}
 
 	@Override
-	public void makeTransient(TestScenario entity) throws UnexpectedDatabaseException {
+	public void makeTransient(TestScenario entity) throws UnexpectedDatabaseException, ElementCannotBeRemovedException {
 		super.makeTransient(entity);
 		makeTransient(entity.getTestScenarioForm());
 	}

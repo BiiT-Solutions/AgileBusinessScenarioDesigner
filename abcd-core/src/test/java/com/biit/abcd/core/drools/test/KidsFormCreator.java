@@ -54,6 +54,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -300,7 +301,7 @@ public class KidsFormCreator {
 		getForm().getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
-	
+
 	/**
 	 * Creates a custom variable and assigns a value of "test"
 	 */
@@ -388,7 +389,7 @@ public class KidsFormCreator {
 	public CustomVariable getQuestionNumberCustomVariable() {
 		return questionNumberCustomVariable;
 	}
-	
+
 	public CustomVariable getFormTextCustomVariable() {
 		return formTextCustomVariable;
 	}
@@ -396,11 +397,11 @@ public class KidsFormCreator {
 	public ExpressionValueCustomVariable getFormNumberExpressionValueCustomVariable() {
 		return new ExpressionValueCustomVariable(getForm(), getFormNumberCustomVariable());
 	}
-	
+
 	public ExpressionValueCustomVariable getFormTextExpressionValueCustomVariable() {
 		return new ExpressionValueCustomVariable(getForm(), getFormTextCustomVariable());
 	}
-	
+
 	public ExpressionValueCustomVariable getCategoryExpressionValueCustomVariable() {
 		return new ExpressionValueCustomVariable(getCategory(), getCategoryNumberCustomVariable());
 	}
@@ -494,7 +495,7 @@ public class KidsFormCreator {
 	}
 
 	public void initForm() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		form = new Form("KidsScreen");
 
 		category = new Category(CATEGORY_NAME);
@@ -504,7 +505,7 @@ public class KidsFormCreator {
 		name.setAnswerType(AnswerType.INPUT);
 		name.setAnswerFormat(AnswerFormat.TEXT);
 		category.addChild(name);
-		
+
 		Question birthdate = new Question("birthdate");
 		birthdate.setAnswerType(AnswerType.INPUT);
 		birthdate.setAnswerFormat(AnswerFormat.DATE);

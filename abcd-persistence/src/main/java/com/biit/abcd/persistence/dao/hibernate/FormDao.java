@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -29,8 +30,10 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.persistence.dao.hibernate.BaseFormDao;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 
 @Repository
 public class FormDao extends BaseFormDao<Form> implements IFormDao {
@@ -44,8 +47,8 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Transactional
-	@CachePut(value = "forms", key = "#form.getId()", condition="#form.getId() != null")
-	public Form makePersistent(Form form) throws UnexpectedDatabaseException {
+	@CachePut(value = "forms", key = "#form.getId()", condition = "#form.getId() != null")
+	public Form makePersistent(Form form) throws UnexpectedDatabaseException, ElementCannotBePersistedException {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
 		// list of children
@@ -111,14 +114,18 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 		// associations)" launch when removing a customvariable and other is renamed as this
 		// one, we need to disable
 		// orphanRemoval=true of children and implement ourselves.
-		purgeCustomVariablesToDelete(storedForm.getCustomVariablesToDelete());
+		try {
+			purgeCustomVariablesToDelete(storedForm.getCustomVariablesToDelete());
+		} catch (ElementCannotBeRemovedException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 		storedForm.setCustomVariablesToDelete(new HashSet<CustomVariable>());
 
 		return storedForm;
 	}
 
 	private Set<CustomVariable> purgeCustomVariablesToDelete(Set<CustomVariable> variablesToDelete)
-			throws UnexpectedDatabaseException {
+			throws UnexpectedDatabaseException, ElementCannotBeRemovedException {
 		Set<CustomVariable> customVariablesToDelete = new HashSet<>();
 		customVariablesToDelete.addAll(variablesToDelete);
 		for (CustomVariable customVariable : customVariablesToDelete) {
@@ -170,12 +177,16 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.getId()") })
-	public void makeTransient(Form form) throws UnexpectedDatabaseException {
+	public void makeTransient(Form form) throws UnexpectedDatabaseException, ElementCannotBeRemovedException {
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
 			form.remove(customVariable);
 			// Remove form reference in database BUT not remove custom variable. It is still used in expressions.
-			customVariableDao.makePersistent(customVariable);
+			try {
+				customVariableDao.makePersistent(customVariable);
+			} catch (ElementCannotBePersistedException e) {
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			}
 		}
 
 		super.makeTransient(form);

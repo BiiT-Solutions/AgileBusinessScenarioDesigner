@@ -24,7 +24,9 @@ import com.biit.abcd.webpages.elements.globalvariables.GlobalVariablesUpperMenu;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataTable;
 import com.biit.abcd.webpages.elements.globalvariables.VariableDataWindow;
 import com.biit.abcd.webpages.elements.globalvariables.VariableWindow;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
@@ -84,7 +86,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 		}
-		
+
 		globalVariableTable.sort();
 	}
 
@@ -365,7 +367,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		try {
 			UserSessionHandler.getGlobalVariablesController().update(globalVariableTable.getGlobalVariables());
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
-		} catch (UnexpectedDatabaseException e) {
+		} catch (UnexpectedDatabaseException | ElementCannotBeRemovedException | ElementCannotBePersistedException e) {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);

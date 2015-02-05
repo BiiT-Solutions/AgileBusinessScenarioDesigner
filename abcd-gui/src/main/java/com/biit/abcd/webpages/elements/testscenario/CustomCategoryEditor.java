@@ -11,6 +11,7 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.shared.ui.MarginInfo;
@@ -88,16 +89,17 @@ public class CustomCategoryEditor extends CustomComponent {
 							.copyTestScenarioGroup(false);
 
 					Integer childIndex = getTestScenarioCategory().getIndex(customGroupEditor.getTestScenarioGroup());
-					getTestScenarioCategory().addChild(childIndex+1, newTestScenarioGroup);
-					
+					getTestScenarioCategory().addChild(childIndex + 1, newTestScenarioGroup);
+
 					CustomGroupEditor newCustomGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
 							newTestScenarioGroup);
-					addEditor(newCustomGroupEditor, childIndex+1);
+					addEditor(newCustomGroupEditor, childIndex + 1);
 					setGroupButtonsListeners(newCustomGroupEditor);
 					customGroupEditor.setAddGroupButtonEnable(false);
 					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);
 					customGroupEditor.setRemoveGroupButtonEnable(true);
-				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
+				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException
+						| ElementIsReadOnly e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -122,7 +124,7 @@ public class CustomCategoryEditor extends CustomComponent {
 						}
 					}
 
-				} catch (DependencyExistException e) {
+				} catch (DependencyExistException | ElementIsReadOnly e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -132,7 +134,7 @@ public class CustomCategoryEditor extends CustomComponent {
 	public void addEditor(CustomComponent groupEditor) {
 		editorLayout.addComponent(groupEditor);
 	}
-	
+
 	public void addEditor(CustomComponent groupEditor, int index) {
 		editorLayout.addComponent(groupEditor, index);
 	}

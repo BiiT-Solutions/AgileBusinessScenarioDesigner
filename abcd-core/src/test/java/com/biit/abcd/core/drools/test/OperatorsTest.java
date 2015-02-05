@@ -49,6 +49,7 @@ import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.form.ICategory;
@@ -189,7 +190,8 @@ public class OperatorsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			QuestionDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException {
+			QuestionDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException,
+			ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// AVG expression
@@ -225,7 +227,7 @@ public class OperatorsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// PMT expression
@@ -378,8 +380,7 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	/**
-	 * Also tests the variable initialization to a default value (in this case
-	 * 10)
+	 * Also tests the variable initialization to a default value (in this case 10)
 	 */
 	@Test(groups = { "rules" })
 	public void inOperatorCustomVariableFormTest() {
@@ -700,16 +701,16 @@ public class OperatorsTest extends KidsFormCreator {
 			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
 					CustomVariableType.STRING, CustomVariableScope.FORM);
 
-			CustomVariable customVariableDateLower = new CustomVariable(getForm(), "DateLower", CustomVariableType.DATE,
-					CustomVariableScope.FORM, "01/01/2010");
+			CustomVariable customVariableDateLower = new CustomVariable(getForm(), "DateLower",
+					CustomVariableType.DATE, CustomVariableScope.FORM, "01/01/2010");
 			CustomVariable customVariableDateHigher = new CustomVariable(getForm(), "DateHigher",
 					CustomVariableType.DATE, CustomVariableScope.FORM, "01/01/1950");
 
 			ExpressionChain condition = new ExpressionChain("betweenDateExpression",
 					new ExpressionValueTreeObjectReference(getTreeObject(BIRTHDATE_QUESTION), QuestionDateUnit.YEARS),
 					new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueCustomVariable(getForm(),
-							customVariableDateLower, QuestionDateUnit.YEARS),
-					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
+							customVariableDateLower, QuestionDateUnit.YEARS), new ExpressionSymbol(
+							AvailableSymbol.COMMA), new ExpressionValueCustomVariable(getForm(),
 							customVariableDateHigher, QuestionDateUnit.YEARS), new ExpressionSymbol(
 							AvailableSymbol.RIGHT_BRACKET));
 			rule.setConditions(condition);
@@ -778,7 +779,7 @@ public class OperatorsTest extends KidsFormCreator {
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			BetweenFunctionInvalidException {
+			BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Expression one
@@ -825,7 +826,7 @@ public class OperatorsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException {
+			BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 

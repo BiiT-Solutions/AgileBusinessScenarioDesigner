@@ -44,8 +44,10 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -89,7 +91,7 @@ public class FormDesigner extends FormWebPageComponent {
 		treeTableValueChangeListener = new TreeTableValueChangeListener();
 
 		formTreeTable = new FormTreeTable();
-		//Remove lazy loading
+		// Remove lazy loading
 		formTreeTable.setPageLength(0);
 		formTreeTable.setSizeFull();
 		formTreeTable.setSelectable(true);
@@ -372,7 +374,7 @@ public class FormDesigner extends FormWebPageComponent {
 									clearAndUpdateFormTable();
 									formTreeTable.setValue(whatToMove);
 									formTreeTable.collapseFrom(Question.class);
-								} catch (ChildrenNotFoundException | NotValidChildException e) {
+								} catch (ChildrenNotFoundException | NotValidChildException | ElementIsReadOnly e) {
 									MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
 											LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
 								}
@@ -391,7 +393,7 @@ public class FormDesigner extends FormWebPageComponent {
 							clearAndUpdateFormTable();
 							formTreeTable.setValue(whatToMove);
 							formTreeTable.collapseFrom(Question.class);
-						} catch (ChildrenNotFoundException | NotValidChildException e) {
+						} catch (ChildrenNotFoundException | NotValidChildException | ElementIsReadOnly e) {
 							MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
 									LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
 						}
@@ -446,6 +448,9 @@ public class FormDesigner extends FormWebPageComponent {
 						+ "' has created a " + newCategory.getClass() + " with name: '" + newCategory.getName() + "'.");
 			} catch (NotValidChildException e) {
 				// Not possible.
+			} catch (ElementIsReadOnly e) {
+				MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
 	}
@@ -497,6 +502,9 @@ public class FormDesigner extends FormWebPageComponent {
 				}
 			} catch (NotValidChildException e) {
 				// Not possible.
+			} catch (ElementIsReadOnly e) {
+				MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
 	}
@@ -525,7 +533,7 @@ public class FormDesigner extends FormWebPageComponent {
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Question) {
 						parent = formTreeTable.getTreeObjectSelected().getParent();
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
-						// If answer or subanswer selected, must be added in the parent of the question. 
+						// If answer or subanswer selected, must be added in the parent of the question.
 						parent = formTreeTable.getTreeObjectSelected().getAncestor(Question.class).getParent();
 					}
 					if (parent != null) {
@@ -544,6 +552,9 @@ public class FormDesigner extends FormWebPageComponent {
 				}
 			} catch (NotValidChildException e) {
 				// Not possible.
+			} catch (ElementIsReadOnly e) {
+				MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
 	}
@@ -585,6 +596,9 @@ public class FormDesigner extends FormWebPageComponent {
 				}
 			} catch (NotValidChildException e) {
 				// Not possible.
+			} catch (ElementIsReadOnly e) {
+				MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
 	}
@@ -619,8 +633,9 @@ public class FormDesigner extends FormWebPageComponent {
 								+ newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
 					}
 				}
-			} catch (NotValidChildException e) {
+			} catch (NotValidChildException | ElementIsReadOnly e) {
 				// Not possible.
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
 	}
@@ -654,7 +669,7 @@ public class FormDesigner extends FormWebPageComponent {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), cve);
-			} catch (UnexpectedDatabaseException e) {
+			} catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
 				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -779,6 +794,9 @@ public class FormDesigner extends FormWebPageComponent {
 					MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
 							LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE_DESCRIPTION);
 
+				} catch (ElementIsReadOnly e) {
+					MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
 		}

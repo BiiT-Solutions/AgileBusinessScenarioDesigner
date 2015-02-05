@@ -24,6 +24,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.form.ICategory;
@@ -44,7 +45,7 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void yearsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		initFormAndVariables();
 		// Assign a date(years) to a custom variable
 		ExpressionChain expression = new ExpressionChain("YearsAssignation", new ExpressionValueCustomVariable(
@@ -69,7 +70,7 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void monthsDateExpressionTest() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		initFormAndVariables();
 		// Assign a date(months) to a custom variable
 		ExpressionChain expression = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(
@@ -91,7 +92,7 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void daysDateExpressionTest() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		initFormAndVariables();
 		// Assign a date(days) to a custom variable
 		ExpressionChain expression = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(
@@ -113,7 +114,7 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	@Test(groups = { "rules" })
 	public void testDateExpression() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		initFormAndVariables();
 		// Assign a date(date) to a custom variable
 		ExpressionChain expression = new ExpressionChain("DateAssignation", new ExpressionValueCustomVariable(
@@ -134,7 +135,7 @@ public class ExpressionsTest extends KidsFormCreator {
 	}
 
 	private void initFormAndVariables() throws FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create custom variables

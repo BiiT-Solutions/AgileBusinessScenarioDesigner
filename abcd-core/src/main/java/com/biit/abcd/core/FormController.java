@@ -41,7 +41,10 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.liferay.portal.model.User;
@@ -68,7 +71,8 @@ public class FormController {
 		this.user = user;
 	}
 
-	public void save() throws DuplicatedVariableException, UnexpectedDatabaseException {
+	public void save() throws DuplicatedVariableException, UnexpectedDatabaseException,
+			ElementCannotBePersistedException {
 		checkDuplicatedVariables();
 		if (getForm() != null) {
 			getForm().setUpdatedBy(getUser());
@@ -137,13 +141,13 @@ public class FormController {
 		return functionInfo;
 	}
 
-	public void remove() throws UnexpectedDatabaseException {
+	public void remove() throws UnexpectedDatabaseException, ElementCannotBeRemovedException {
 		if (this.getForm() != null) {
 			this.formDao.makeTransient(this.getForm());
 		}
 	}
 
-	public void remove(TreeObject treeObject) throws DependencyExistException {
+	public void remove(TreeObject treeObject) throws DependencyExistException, ElementIsReadOnly {
 		if ((this.getForm() != null) && (treeObject != null) && (treeObject.getParent() != null)) {
 			treeObject.remove();
 		}

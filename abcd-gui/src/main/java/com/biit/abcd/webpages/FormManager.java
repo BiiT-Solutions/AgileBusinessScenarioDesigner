@@ -32,7 +32,9 @@ import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable.IFormStatusChange;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -177,7 +179,7 @@ public class FormManager extends FormWebPageComponent {
 			formTable.addForm(simpleView);
 			formTable.selectForm(simpleView);
 			simpleView.setId(form.getId());
-		} catch (UnexpectedDatabaseException e) {
+		} catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
@@ -218,6 +220,9 @@ public class FormManager extends FormWebPageComponent {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+		} catch (ElementCannotBePersistedException e) {
+			MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 
@@ -272,6 +277,9 @@ public class FormManager extends FormWebPageComponent {
 		} catch (UnexpectedDatabaseException e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		} catch (ElementCannotBeRemovedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
