@@ -11,6 +11,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.testbench.elements.ButtonElement;
 
 
 public abstract class VaadinGuiWebpage extends TestBenchTestCase{
@@ -56,5 +57,8 @@ public abstract class VaadinGuiWebpage extends TestBenchTestCase{
 			e.printStackTrace();
 		}
 	}
-	
+
+	public ButtonElement getButtonByCaption(String caption){
+		return $(ButtonElement.class).caption(caption).first();
+	}
 }

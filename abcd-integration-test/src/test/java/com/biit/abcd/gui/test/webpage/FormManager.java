@@ -16,6 +16,7 @@ public class FormManager extends AbcdCommonWebpage {
 
 	private static final String CSS_CLASS = "class";
 	private static final CharSequence SELECTED_ROW = "v-selected";
+	private static final String GLOBAL_CONSTANTS_BUTTON = "Global Constants";
 
 	private final NewForm newFormWindow;
 
@@ -112,6 +113,11 @@ public class FormManager extends AbcdCommonWebpage {
 	public String getFormName(int row){
 		TableElement table = getFormTable();
 		return table.getCell(row, 0).getText();
+	}
+
+	public void goToGlobalVariables() {
+		toggleSettings();
+		getButtonByCaption(GLOBAL_CONSTANTS_BUTTON).click();
 	}
 
 }

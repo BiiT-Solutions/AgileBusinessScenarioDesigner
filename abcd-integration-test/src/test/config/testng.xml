@@ -8,6 +8,7 @@
 				<include name="formDesigner" />
 				<include name="formVariables" />
 				<include name="statusPreserving" />
+				<include name="globalVariables" />
 			</run>
 		</groups>
 		<classes>
@@ -16,6 +17,7 @@
 			<class name="com.biit.abcd.gui.test.FormDesignerTests" />
 			<class name="com.biit.abcd.gui.test.StatusPreservingTests" />
 			<class name="com.biit.abcd.gui.test.FormVariablesTests" />
+			<class name="com.biit.abcd.gui.test.GlobalVariablesTests" />
 		</classes>
 	</test>
 </suite>

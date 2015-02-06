@@ -35,6 +35,9 @@ public class AcceptCancelWindow extends VaadinGuiWindow {
 
 	public void clickAccept() {
 		getAcceptButton().click();
+		if(getAcceptButton()!=null){
+			getAcceptButton().waitForVaadin();
+		}
 	}
 	
 	public void clickCancel(){
