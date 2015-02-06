@@ -50,6 +50,7 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.InvalidNameException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
@@ -662,17 +663,19 @@ public class FormDesigner extends FormWebPageComponent {
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			} catch (ConstraintViolationException cve) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), cve);
 			} catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
 				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			} catch (InvalidNameException e) {
+				MessageManager.showError(LanguageCodes.ERROR_INVALID_NAME);
 			}
 		}
 	}

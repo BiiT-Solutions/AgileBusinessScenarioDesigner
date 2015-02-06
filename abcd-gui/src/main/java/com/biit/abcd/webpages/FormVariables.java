@@ -23,6 +23,7 @@ import com.biit.abcd.webpages.elements.formvariables.VariableTable;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.InvalidNameException;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -141,8 +142,8 @@ public class FormVariables extends FormWebPageComponent {
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
 			} catch (UnexpectedDatabaseException e) {
@@ -152,6 +153,8 @@ public class FormVariables extends FormWebPageComponent {
 			} catch (ElementCannotBePersistedException e) {
 				MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			} catch (InvalidNameException e) {
+				MessageManager.showError(LanguageCodes.ERROR_INVALID_NAME);
 			}
 		}
 	}
