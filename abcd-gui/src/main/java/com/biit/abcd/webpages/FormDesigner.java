@@ -50,6 +50,7 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.InvalidNameException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
@@ -673,6 +674,8 @@ public class FormDesigner extends FormWebPageComponent {
 				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			} catch (InvalidNameException e) {
+				MessageManager.showError(LanguageCodes.ERROR_INVALID_NAME);
 			}
 		}
 	}

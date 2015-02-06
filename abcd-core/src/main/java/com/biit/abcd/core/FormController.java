@@ -46,6 +46,7 @@ import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.persistence.entity.exceptions.InvalidNameException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.liferay.portal.model.User;
 
@@ -72,8 +73,8 @@ public class FormController {
 	}
 
 	public void save() throws DuplicatedVariableException, UnexpectedDatabaseException,
-			ElementCannotBePersistedException {
-		checkDuplicatedVariables();
+			ElementCannotBePersistedException, InvalidNameException {
+		checkVariables();
 		if (getForm() != null) {
 			getForm().setUpdatedBy(getUser());
 			getForm().setUpdateTime();
@@ -86,10 +87,13 @@ public class FormController {
 		}
 	}
 
-	public void checkDuplicatedVariables() throws DuplicatedVariableException {
+	public void checkVariables() throws DuplicatedVariableException, InvalidNameException {
 		Set<CustomVariable> customVariables = getForm().getCustomVariables();
 		List<CustomVariable> customVariablesList = new ArrayList<>(customVariables);
 		for (int i = 0; i < customVariablesList.size(); i++) {
+			if (customVariablesList.get(i).getName() == null || customVariablesList.get(i).getName().length() == 0) {
+				throw new InvalidNameException("Name value cannot be empty");
+			}
 			for (int j = i + 1; j < customVariablesList.size(); j++) {
 				if (customVariablesList.get(i).hasSameNameAndScope(customVariablesList.get(j))) {
 					throw new DuplicatedVariableException("Duplicated variable in form variables.");

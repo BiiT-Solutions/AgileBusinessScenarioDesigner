@@ -228,6 +228,8 @@ public enum LanguageCodes {
 	ERROR_DROOLS_ENGINE("error.drools.engine"),
 	ERROR_REPEATED_TEST_SCENARIO_NAME("error.testscenario.repeatedName"),
 	ERROR_NOT_AUTHORIZED("error.not.authorized"),
+	
+	ERROR_INVALID_NAME("error.variable.name.invalid"),
 
 	ERROR_DATABASE_DUPLICATED_CATEGORY("error.database.duplicatedcategory"),
 	ERROR_DATABASE_DUPLICATED_CATEGORY_CAPTION("error.database.duplicatedcategorycaption"),

@@ -23,6 +23,7 @@ import com.biit.abcd.webpages.elements.formvariables.VariableTable;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.InvalidNameException;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -152,6 +153,8 @@ public class FormVariables extends FormWebPageComponent {
 			} catch (ElementCannotBePersistedException e) {
 				MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			} catch (InvalidNameException e) {
+				MessageManager.showError(LanguageCodes.ERROR_INVALID_NAME);
 			}
 		}
 	}
