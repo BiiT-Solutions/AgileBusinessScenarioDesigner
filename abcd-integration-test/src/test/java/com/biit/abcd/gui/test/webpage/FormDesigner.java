@@ -66,10 +66,6 @@ public class FormDesigner extends AbcdCommonWebpage {
 		return null;
 	}
 	
-	public ButtonElement getButtonByCaption(String caption){
-		return $(ButtonElement.class).caption(caption).first();
-	}
-	
 	public ButtonElement getCategoryButton(){
 		return getButtonByCaption(BUTTON_CATEGORY);
 	}
