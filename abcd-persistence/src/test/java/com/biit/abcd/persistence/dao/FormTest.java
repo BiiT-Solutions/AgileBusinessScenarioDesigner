@@ -16,9 +16,12 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.persistence.dao.IBaseQuestionDao;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,7 +48,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void storeDummyForm() throws FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -58,7 +61,8 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void storeFormWithCategory() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException {
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementIsReadOnly, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM);
@@ -74,7 +78,8 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException {
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException, ElementIsReadOnly {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(OTHER_FORM);
@@ -91,7 +96,8 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException {
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel("MoveUp");

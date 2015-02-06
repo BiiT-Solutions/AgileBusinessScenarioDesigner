@@ -24,6 +24,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
@@ -60,7 +61,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	}
 
 	public TestScenario(String scenarioName, Form form) throws NotValidStorableObjectException, NotValidChildException,
-			FieldTooLongException, CharacterNotAllowedException {
+			FieldTooLongException, CharacterNotAllowedException, ElementIsReadOnly {
 		super();
 		setName(scenarioName);
 		setFormId(form.getId());
@@ -121,7 +122,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	}
 
 	private void createTestScenarioForm(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent)
-			throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException {
+			throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, ElementIsReadOnly {
 		if (formTreeObject instanceof Form) {
 			testScenarioForm = new TestScenarioForm();
 			testScenarioForm.setOriginalReference(formTreeObject.getOriginalReference());
@@ -154,7 +155,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	}
 
 	private TreeObject addChild(TreeObject formTreeObject, TreeObject testScenarioParent, TreeObject testScenarioChild)
-			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException {
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
 		testScenarioChild.setOriginalReference(formTreeObject.getOriginalReference());
 		testScenarioChild.setName(formTreeObject.getName());
 		testScenarioParent.addChild(testScenarioChild);

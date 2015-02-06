@@ -17,7 +17,9 @@ import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -70,7 +72,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test
-	public void storeDiagramObjects() throws UnexpectedDatabaseException {
+	public void storeDiagramObjects() throws UnexpectedDatabaseException, ElementCannotBePersistedException {
 		diagramDao.makePersistent(diagram);
 		Diagram diagram2 = diagramDao.read(diagram.getId());
 		Assert.assertEquals(diagram2.getDiagramObjects().size(), 5);
@@ -80,7 +82,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void storeFormDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DIAGRAM_FORM);

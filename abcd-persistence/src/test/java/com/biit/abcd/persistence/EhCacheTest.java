@@ -13,9 +13,12 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +33,8 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Test
 	public void testSecondLevelCache() throws FieldTooLongException, UnexpectedDatabaseException,
-			NotValidChildException, CharacterNotAllowedException, InvalidAnswerFormatException {
+			NotValidChildException, CharacterNotAllowedException, InvalidAnswerFormatException,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, ElementIsReadOnly {
 		formDao.getSessionFactory().getStatistics().clear();
 		formDao.evictAllCache();
 
@@ -71,8 +75,9 @@ public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 		formDao.evictAllCache();
 	}
 
-	@Test(dependsOnMethods="testSecondLevelCache")
-	public void testSecondLevelCacheClear() throws FieldTooLongException, UnexpectedDatabaseException {
+	@Test(dependsOnMethods = "testSecondLevelCache")
+	public void testSecondLevelCacheClear() throws FieldTooLongException, UnexpectedDatabaseException,
+			ElementCannotBePersistedException {
 		formDao.getSessionFactory().getStatistics().clear();
 		formDao.evictAllCache();
 

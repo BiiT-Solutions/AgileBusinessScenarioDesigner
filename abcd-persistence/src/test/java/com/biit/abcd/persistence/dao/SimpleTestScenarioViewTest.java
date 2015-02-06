@@ -15,8 +15,11 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleTestScenarioView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
@@ -32,7 +35,7 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 
 	@Autowired
 	private ITestScenarioDao testScenarioDao;
-	
+
 	@Autowired
 	private IFormDao formDao;
 
@@ -41,8 +44,9 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 
 	@Test
 	public void getView() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			NotValidStorableObjectException, UnexpectedDatabaseException {
-		
+			NotValidStorableObjectException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException {
+
 		Form form = new Form();
 		form.setLabel(FORM_LABEL);
 		form.setVersion(FORM_VERSION);
@@ -51,17 +55,17 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 		category.setName(CATEGORY_NAME);
 		form.addChild(category);
 		formDao.makePersistent(form);
-		
+
 		TestScenario testScenario = new TestScenario(DUMMY_TEST_SCENARIO, form);
 		testScenarioDao.makePersistent(testScenario);
-		
+
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
 		Assert.assertEquals(simpleTestScenarioViewDao.getRowCount(), 1);
-		
+
 		List<SimpleTestScenarioView> views = simpleTestScenarioViewDao.getSimpleTestScenariosByFormId(form.getId());
 		Assert.assertEquals(views.size(), 1);
 		Assert.assertEquals(views.get(0).getName(), DUMMY_TEST_SCENARIO);
-		
+
 		formDao.makeTransient(form);
 		testScenarioDao.makeTransient(testScenario);
 	}

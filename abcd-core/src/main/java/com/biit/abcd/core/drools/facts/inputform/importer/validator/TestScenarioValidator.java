@@ -27,6 +27,7 @@ import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
@@ -37,8 +38,7 @@ public class TestScenarioValidator {
 	private List<TestScenarioValidatorMessage> validatorMessages;
 
 	/**
-	 * Compares the test scenario structure against the form structure and
-	 * modifies the objects needed
+	 * Compares the test scenario structure against the form structure and modifies the objects needed
 	 * 
 	 * @param form
 	 * @param testScenario
@@ -98,7 +98,7 @@ public class TestScenarioValidator {
 					}
 				}
 			}
-		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException e) {
+		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException | ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -138,7 +138,7 @@ public class TestScenarioValidator {
 				if (!group.getName().equals(testScenarioGroup.getName())) {
 					String oldName = testScenarioGroup.getName();
 					testScenarioGroup.setName(group.getName());
-					
+
 					addValidatorMessages("group.name.changed", oldName, testScenarioGroup.getName());
 				}
 				List<TreeObject> children = testScenarioGroup.getChildren();
@@ -153,7 +153,7 @@ public class TestScenarioValidator {
 				}
 			}
 		} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException
-				| DependencyExistException | ChildrenNotFoundException e) {
+				| DependencyExistException | ChildrenNotFoundException | ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -173,7 +173,7 @@ public class TestScenarioValidator {
 				}
 				checkAnswerType((Question) question, testScenarioQuestion);
 			}
-		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException e) {
+		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException | ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -199,7 +199,7 @@ public class TestScenarioValidator {
 			}
 			oldValue.setRepeatable(false);
 
-		} catch (DependencyExistException e) {
+		} catch (DependencyExistException | ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -235,7 +235,7 @@ public class TestScenarioValidator {
 				addValidatorMessages("new.question.created", testScenarioQuestion.getName());
 			}
 			// Any other tree object type not taken into account
-		} catch (FieldTooLongException | CharacterNotAllowedException | NotValidChildException e) {
+		} catch (FieldTooLongException | CharacterNotAllowedException | NotValidChildException | ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -333,7 +333,8 @@ public class TestScenarioValidator {
 	}
 
 	private void setTestAnswerReplaceMessage(TestAnswer oldTestAnswer, TestAnswer newTestAnswer) {
-		addValidatorMessages("answer.replaced", oldTestAnswer.getClass().getSimpleName(), newTestAnswer.getClass().getSimpleName());
+		addValidatorMessages("answer.replaced", oldTestAnswer.getClass().getSimpleName(), newTestAnswer.getClass()
+				.getSimpleName());
 	}
 
 	private TestScenarioQuestion replaceTestScenarioQuestion(TestScenarioQuestion testScenarioQuestion) {
@@ -359,7 +360,7 @@ public class TestScenarioValidator {
 			Integer childIndex = parent.getIndex(oldChild);
 			oldChild.remove();
 			parent.addChild(childIndex, newChild);
-		} catch (NotValidChildException | DependencyExistException e) {
+		} catch (NotValidChildException | DependencyExistException | ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}

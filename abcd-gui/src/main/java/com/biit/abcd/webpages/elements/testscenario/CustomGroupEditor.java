@@ -3,7 +3,6 @@ package com.biit.abcd.webpages.elements.testscenario;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
@@ -12,6 +11,7 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.shared.ui.MarginInfo;
@@ -179,7 +179,8 @@ public class CustomGroupEditor extends CustomComponent {
 					customGroupEditor.setAddGroupButtonEnable(false);
 					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);
 					customGroupEditor.setRemoveGroupButtonEnable(true);
-				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException e) {
+				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException
+						| ElementIsReadOnly e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -203,7 +204,7 @@ public class CustomGroupEditor extends CustomComponent {
 							groupEditor.enableDisableAddRemoveButton(groupEditor.getTestScenarioGroup());
 						}
 					}
-				} catch (DependencyExistException e) {
+				} catch (DependencyExistException | ElementIsReadOnly e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -219,7 +220,7 @@ public class CustomGroupEditor extends CustomComponent {
 		TreeObject treeObject = originalReferenceTreeObjectMap.get(testScenarioGroup.getOriginalReference());
 		if ((treeObject instanceof Group) && ((Group) treeObject).isRepeatable()) {
 			TreeObject parent = testScenarioGroup.getParent();
-			Set<TreeObject> elementsToDelete = parent.getElementsToDelete();
+			List<TreeObject> elementsToDelete = parent.getElementsToDelete();
 			List<TreeObject> groups = parent.getChildren(TestScenarioGroup.class);
 			int repeatedGroups = 0;
 			for (TreeObject group : groups) {

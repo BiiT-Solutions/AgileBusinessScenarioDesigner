@@ -21,8 +21,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 /**
@@ -54,7 +57,8 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 	private IExpressionValueTreeObjectReferenceDao expressionValueTreeObjectReferenceDao;
 
 	@Test
-	public void removeBasicRule() throws UnexpectedDatabaseException {
+	public void removeBasicRule() throws UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		int prevRules = ruleDao.getRowCount();
 		int prevExpressions = expressionChainDao.getRowCount();
 		// Rule already has two chains inside.
@@ -69,7 +73,7 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 
 	@Test
 	public void removeRuleOfForm() throws FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementCannotBeRemovedException, ElementCannotBePersistedException {
 		int prevRules = ruleDao.getRowCount();
 		int prevExpressions = expressionChainDao.getRowCount();
 
@@ -91,7 +95,8 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 
 	@Test
 	public void removeDiagram() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementIsReadOnly, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		int prevForm = formDao.getRowCount();
 		int prevDiagram = diagramDao.getRowCount();
 		int prevExpressions = expressionValueTreeObjectReferenceDao.getRowCount();
@@ -167,7 +172,8 @@ public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTe
 
 	@Test
 	public void changeTreeObjectReference() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException {
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBeRemovedException, ElementCannotBePersistedException {
 		int prevForm = formDao.getRowCount();
 		int prevDiagram = diagramDao.getRowCount();
 		int prevExpressions = expressionValueTreeObjectReferenceDao.getRowCount();

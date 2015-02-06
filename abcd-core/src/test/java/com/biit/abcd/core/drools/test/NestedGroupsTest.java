@@ -41,6 +41,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.form.ICategory;
@@ -68,12 +69,11 @@ public class NestedGroupsTest extends KidsFormCreator {
 	@Test(groups = { "rules" })
 	public void testSimpleTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, InvalidRuleException, IOException,
-			RuleNotImplementedException, DocumentException, 
-			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException,
-			ActionNotImplementedException, CharacterNotAllowedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, NotValidTypeInVariableData,
-			BetweenFunctionInvalidException {
+			RuleNotImplementedException, DocumentException, QuestionDoesNotExistException, GroupDoesNotExistException,
+			CategoryDoesNotExistException, ActionNotImplementedException, CharacterNotAllowedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			NotValidTypeInVariableData, BetweenFunctionInvalidException, ElementIsReadOnly {
 
 		// Restart the form to avoid test cross references
 		initForm();
@@ -81,8 +81,9 @@ public class NestedGroupsTest extends KidsFormCreator {
 		createKidsFormSimpleConditionsTable();
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules();
-		
-		Assert.assertEquals(QUESTION_EQUALS_ANSWER,
+
+		Assert.assertEquals(
+				QUESTION_EQUALS_ANSWER,
 				((SubmittedQuestion) droolsForm.getSubmittedForm().getChild(ICategory.class, "Lifestyle")
 						.getChild(IGroup.class, "voeding").getChild(IQuestion.class, "breakfast"))
 						.getVariableValue("qVar"));

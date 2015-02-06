@@ -41,6 +41,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -76,7 +77,7 @@ public class TableRuleTest extends KidsFormCreator {
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException {
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -93,7 +94,8 @@ public class TableRuleTest extends KidsFormCreator {
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException {
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
+			ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -113,7 +115,7 @@ public class TableRuleTest extends KidsFormCreator {
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, CategoryDoesNotExistException,
-			BetweenFunctionInvalidException {
+			BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram
@@ -132,7 +134,7 @@ public class TableRuleTest extends KidsFormCreator {
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			BetweenFunctionInvalidException {
+			BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
 		initForm();
 		// Create the table and diagram

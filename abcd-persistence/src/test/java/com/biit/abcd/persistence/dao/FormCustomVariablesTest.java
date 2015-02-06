@@ -16,7 +16,9 @@ import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidFormException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,7 +35,8 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test
 	public void storeDummyVariables() throws NotValidFormException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException {
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -49,7 +52,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test
 	public void storeIntegerVariables() throws FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v2");
@@ -76,7 +79,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test
 	public void storeStringVariables() throws FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v3");
@@ -104,7 +107,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 	@Test
 	public void storeDateVariables() throws FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException {
+			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v4");
@@ -132,12 +135,16 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 	}
 
 	/**
-	 * Removes a variable and other changes the name to the same that the previous one. 
+	 * Removes a variable and other changes the name to the same that the previous one.
+	 * 
 	 * @throws FieldTooLongException
 	 * @throws UnexpectedDatabaseException
+	 * @throws ElementCannotBePersistedException
+	 * @throws ElementCannotBeRemovedException
 	 */
 	@Test
-	public void variableReplaced() throws FieldTooLongException, UnexpectedDatabaseException {
+	public void variableReplaced() throws FieldTooLongException, UnexpectedDatabaseException,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM + "_v5");

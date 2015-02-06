@@ -7,7 +7,9 @@ import java.util.Set;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 
 public class TestScenarioController {
 	private List<TestScenario> testScenarios = null;
@@ -55,8 +57,11 @@ public class TestScenarioController {
 	 * Remove all old test scenarios and store all the new ones. This method is synchronized.
 	 * 
 	 * @throws UnexpectedDatabaseException
+	 * @throws ElementCannotBeRemovedException
+	 * @throws ElementCannotBePersistedException
 	 */
-	public void update(List<TestScenario> testScenariosFromTable, Form form) throws UnexpectedDatabaseException {
+	public void update(List<TestScenario> testScenariosFromTable, Form form) throws UnexpectedDatabaseException,
+			ElementCannotBeRemovedException, ElementCannotBePersistedException {
 		synchronized (TestScenarioController.class) {
 			// Remove unused variables.
 			if (testScenarios != null) {
@@ -69,11 +74,11 @@ public class TestScenarioController {
 					}
 				}
 				// Remove it from memory
-				for(TestScenario testScenarioToRemove : testScenariosToRemove){
+				for (TestScenario testScenarioToRemove : testScenariosToRemove) {
 					testScenarios.remove(testScenarioToRemove);
 				}
 			}
-			
+
 			for (TestScenario testScenario : testScenariosFromTable) {
 				testScenarioDao.makePersistent(testScenario);
 			}

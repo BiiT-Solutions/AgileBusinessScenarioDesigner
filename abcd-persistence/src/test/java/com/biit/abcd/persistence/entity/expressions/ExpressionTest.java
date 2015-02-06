@@ -19,9 +19,12 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,7 +38,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 
 	@Test
 	public void checkExpressionStorageAndOrder() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException {
+			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		form.setOrganizationId(0l);
@@ -73,7 +77,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	@Test(expectedExceptions = { DependencyExistException.class })
 	public void checkExpressionDependencies() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			DependencyExistException {
+			DependencyExistException, ElementIsReadOnly, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		form.setOrganizationId(0l);
@@ -113,7 +118,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	@Test
 	public void checkExpressionDependenciesAcomplished() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			DependencyExistException {
+			DependencyExistException, ElementIsReadOnly, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		form.setOrganizationId(0l);
@@ -147,7 +153,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		birthdate.remove();
 		form.remove(customVarCategory);
 
-		//No errors in database.
+		// No errors in database.
 		formDao.makePersistent(form);
 		formDao.makeTransient(form);
 	}

@@ -16,7 +16,9 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.NotValidFormException;
+import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,7 +49,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 	private IVariableDataDao variableDataDao;
 
 	@Test
-	public void storeBasicVariables() throws NotValidFormException, FieldTooLongException, UnexpectedDatabaseException {
+	public void storeBasicVariables() throws NotValidFormException, FieldTooLongException, UnexpectedDatabaseException,
+			ElementCannotBeRemovedException, ElementCannotBePersistedException {
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_NAME);
 
@@ -64,7 +67,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 
 	@Test
 	public void storeBasicVariablesWithTextData() throws NotValidFormException, NotValidTypeInVariableData,
-			FieldTooLongException, UnexpectedDatabaseException {
+			FieldTooLongException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
@@ -94,7 +98,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 
 	@Test
 	public void storeBasicVariablesWithNumberData() throws NotValidFormException, NotValidTypeInVariableData,
-			FieldTooLongException, UnexpectedDatabaseException {
+			FieldTooLongException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.NUMBER);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
@@ -124,7 +129,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 
 	@Test
 	public void storeBasicVariablesWithDateData() throws NotValidFormException, NotValidTypeInVariableData,
-			FieldTooLongException, UnexpectedDatabaseException {
+			FieldTooLongException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.DATE);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
@@ -154,7 +160,8 @@ public class GlobalVariablesTest extends AbstractTransactionalTestNGSpringContex
 
 	@Test
 	public void storeBasicVariablesWithPostalCodeData() throws NotValidFormException, NotValidTypeInVariableData,
-			FieldTooLongException, UnexpectedDatabaseException {
+			FieldTooLongException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		Assert.assertEquals(globalVariablesDao.getRowCount(), 0);
 		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.POSTAL_CODE);
 		globalVariable.setName(BASIC_GLOBAL_VARIABLE_WITH_DATA_NAME);
