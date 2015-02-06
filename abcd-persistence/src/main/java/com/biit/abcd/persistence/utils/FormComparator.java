@@ -904,6 +904,12 @@ public class FormComparator {
 		if (!form1.getName().equals(form2.getName())) {
 			throw new FormNotEqualsException("Form has different name!");
 		}
+		if (!form1.getLabel().equals(form2.getLabel())) {
+			throw new FormNotEqualsException("Form has different label!");
+		}
+		if(!form1.getStatus().equals(form2.getStatus())){
+			throw new FormNotEqualsException("Form has different status!");
+		}
 
 		compareVersions(form1, form2);
 
