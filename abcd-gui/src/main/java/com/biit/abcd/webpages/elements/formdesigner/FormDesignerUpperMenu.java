@@ -110,8 +110,8 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			newCategoryButton.setEnabled(true);
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
-			newAnswerButton.setEnabled(false);
 			removeButton.setEnabled(true);
+			newAnswerButton.setEnabled(false);
 			newSubanswerButton.setEnabled(false);
 		} else if (selectedObject instanceof Group) {
 			newCategoryButton.setEnabled(true);
@@ -136,8 +136,9 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			newGroupButton.setEnabled(true);
 			newQuestionButton.setEnabled(true);
 			removeButton.setEnabled(true);
+			newAnswerButton.setEnabled(true);
 			newSubanswerButton.setEnabled(true);
-		}
+		} 
 
 		// Disable buttons that user has no permissions to use.
 		disableNotAllowedButtons();
