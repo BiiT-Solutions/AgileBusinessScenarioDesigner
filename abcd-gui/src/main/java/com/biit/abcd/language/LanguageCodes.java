@@ -234,8 +234,10 @@ public enum LanguageCodes {
 	
 	ERROR_DATABASE_UNEXPECTED_EXCEPTION("error.database.unexpected.exception"),
 
-	ERROR_DATABASE_DUPLICATED_VARIABLE("error.database.duplicatedvariable"),
-	ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION("error.database.duplicatedvariablecatpion"),
+	ERROR_DATABASE_DUPLICATED_FORM_VARIABLE("error.database.duplicated.form.variable"),
+	ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION("error.database.duplicated.form.variable.description"),
+	ERROR_DATABASE_DUPLICATED_GLOBAL_VARIABLE("error.database.duplicated.global.variable"),
+	ERROR_DATABASE_DUPLICATED_GLOBAL_VARIABLE_CAPTION("error.database.duplicated.global.variable.description"),
 
 	ERROR_OPERATION_NOT_ALLOWED("error.operation.not.allowed"),
 	ERROR_SAME_DIAGRAM("error.same.diagram"),

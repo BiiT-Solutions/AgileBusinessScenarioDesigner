@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
@@ -32,8 +33,6 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Window.CloseEvent;
-import com.vaadin.ui.Window.CloseListener;
 
 public class GlobalVariablesCreator extends FormWebPageComponent {
 	private static final long serialVersionUID = 6042328256995069412L;
@@ -196,19 +195,13 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 				if (value != null) {
 					globalVariableTable.addItem(value);
 					globalVariableTable.setValue(value);
-				}
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has created a " + value.getClass() + " with 'Name: " + value.getName() + " - Type: "
-						+ value.getFormat() + "'.");
-				window.close();
-			}
-		});
-		window.addCloseListener(new CloseListener() {
-			private static final long serialVersionUID = -1957065660286348445L;
 
-			@Override
-			public void windowClose(CloseEvent e) {
-				createValueDataWindow();
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has created a " + value.getClass()
+							+ " with 'Name: " + value.getName() + " - Type: " + value.getFormat() + "'.");
+					createValueDataWindow();
+					window.close();
+				}
 			}
 		});
 
@@ -371,6 +364,9 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+		} catch (DuplicatedVariableException e) {
+			MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_GLOBAL_VARIABLE,
+					LanguageCodes.ERROR_DATABASE_DUPLICATED_GLOBAL_VARIABLE_CAPTION);
 		}
 	}
 }

@@ -1,7 +1,9 @@
 package com.biit.abcd.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
@@ -44,10 +46,12 @@ public class GlobalVariablesController {
 	 * @throws UnexpectedDatabaseException
 	 * @throws ElementCannotBeRemovedException
 	 * @throws ElementCannotBePersistedException
+	 * @throws DuplicatedVariableException
 	 */
 	public void update(List<GlobalVariable> globalVariables) throws UnexpectedDatabaseException,
-			ElementCannotBeRemovedException, ElementCannotBePersistedException {
+			ElementCannotBeRemovedException, ElementCannotBePersistedException, DuplicatedVariableException {
 		synchronized (GlobalVariablesController.class) {
+			checkDuplicatedVariables(globalVariables);
 			// Remove unused variables.
 			for (GlobalVariable globalVariable : this.globalVariables) {
 				if (!globalVariables.contains(globalVariable)) {
@@ -59,6 +63,17 @@ public class GlobalVariablesController {
 				globalVariablesDao.makePersistent(globalVariable);
 			}
 			setGlobalVariables(globalVariables);
+		}
+	}
+
+	public void checkDuplicatedVariables(List<GlobalVariable> globalVariables) throws DuplicatedVariableException {
+		List<GlobalVariable> customVariablesList = new ArrayList<>(globalVariables);
+		for (int i = 0; i < customVariablesList.size(); i++) {
+			for (int j = i + 1; j < customVariablesList.size(); j++) {
+				if (customVariablesList.get(i).getName().equals(customVariablesList.get(j).getName())) {
+					throw new DuplicatedVariableException("Duplicated global variable.");
+				}
+			}
 		}
 	}
 

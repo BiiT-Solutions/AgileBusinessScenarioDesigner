@@ -141,8 +141,8 @@ public class FormVariables extends FormWebPageComponent {
 				UserSessionHandler.getFormController().save();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
-				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE,
-						LanguageCodes.ERROR_DATABASE_DUPLICATED_VARIABLE_CAPTION);
+				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,
+						LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
 			} catch (ConstraintViolationException cve) {
 				MessageManager.showError(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
 			} catch (UnexpectedDatabaseException e) {
