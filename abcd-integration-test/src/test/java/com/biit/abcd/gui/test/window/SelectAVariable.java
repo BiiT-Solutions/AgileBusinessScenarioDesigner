@@ -41,4 +41,8 @@ public class SelectAVariable extends AcceptCancelWindow {
 		return $$(WindowElement.class).caption(WINDOW_CAPTION).$(TreeTableElement.class).caption(ELEMENT_TABLE).first();
 	}
 
+	public void toggleElement(int row) {
+		getTable().getRow(row).toggleExpanded();
+	}
+
 }

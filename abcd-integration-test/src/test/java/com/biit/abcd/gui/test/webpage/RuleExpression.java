@@ -3,6 +3,7 @@ package com.biit.abcd.gui.test.webpage;
 import com.biit.abcd.gui.test.window.NewRuleExpressionWindow;
 import com.biit.abcd.gui.test.window.SelectAVariable;
 import com.biit.abcd.gui.test.window.SelectAnElement;
+import com.biit.abcd.gui.test.window.SelectGenericVariable;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.CssLayoutElement;
 import com.vaadin.testbench.elements.HorizontalLayoutElement;
@@ -12,29 +13,34 @@ import com.vaadin.testbench.elements.TabSheetElement;
 import com.vaadin.testbench.elements.TableElement;
 import com.vaadin.testbench.elements.TreeTableElement;
 
-public class RuleExpression extends LeftTreeTableWebpage{
-	
+public class RuleExpression extends LeftTreeTableWebpage {
+
 	private static final String EXPRESSION_TABLE_CAPTION = "expression-table";
 	private static final String ADD_ELEMENT_BUTTON = "Add Element";
 	private static final String ADD_VARIABLE_BUTTON = "Add Variable";
 	private static final String VARIABLES_TABLE = "Select a Variable:";
 	private static final String GENERIC_ELEMENT_TABLE = "Select a Generic Element:";
 	private static final String ADD_GENERIC_ELEMENT_BUTTON = "Add Generic Element";
+	private static final String GENERIC_VARIABLE_TABLE = "Select a Generic Variable:";
+	private static final String ADD_GENERIC_VARIABLE_BUTTON = "Add Generic Variable";
 	private final NewRuleExpressionWindow newRuleExpressionWindow;
 	private final SelectAnElement selectAnElement;
 	private final SelectAVariable selectAVariable;
+	private final SelectGenericVariable selectGenericVariable;
 
 	public RuleExpression() {
 		super();
 		newRuleExpressionWindow = new NewRuleExpressionWindow();
 		selectAnElement = new SelectAnElement();
 		selectAVariable = new SelectAVariable();
+		selectGenericVariable = new SelectGenericVariable();
 		addWindow(newRuleExpressionWindow);
 		addWindow(selectAnElement);
 		addWindow(selectAVariable);
+		addWindow(selectGenericVariable);
 	}
 
-	public void newRuleExpression(String name){
+	public void newRuleExpression(String name) {
 		getNewButton().click();
 		newRuleExpressionWindow.setNameAndAccept(name);
 	}
@@ -55,16 +61,16 @@ public class RuleExpression extends LeftTreeTableWebpage{
 		getRemoveButton().click();
 		getProceed().clickAccept();
 	}
-	
+
 	public NewRuleExpressionWindow getNewRuleExpressionWindow() {
 		return newRuleExpressionWindow;
 	}
 
 	public TreeTableElement getSelectElementTable() {
-		 return $(TreeTableElement.class).caption("Select an Element:").first();
+		return $(TreeTableElement.class).caption("Select an Element:").first();
 	}
-	
-	public void selectElement(int row){
+
+	public void selectElement(int row) {
 		getSelectElementTable().getCell(row, 0).click();
 		getSelectElementTable().waitForVaadin();
 	}
@@ -72,12 +78,12 @@ public class RuleExpression extends LeftTreeTableWebpage{
 	public void toggleSelectElementRow(int row) {
 		getSelectElementTable().getRow(row).toggleExpanded();
 	}
-	
-	public ButtonElement getAddElementButton(){
+
+	public ButtonElement getAddElementButton() {
 		return getButtonByCaption(ADD_ELEMENT_BUTTON);
 	}
-	
-	public void clickAddElementButton(){
+
+	public void clickAddElementButton() {
 		getAddElementButton().click();
 		getAddElementButton().waitForVaadin();
 	}
@@ -86,11 +92,11 @@ public class RuleExpression extends LeftTreeTableWebpage{
 		selectElement(row);
 		clickAddElementButton();
 	}
-	
-	public void doubleClickOnToken(int token){
+
+	public void doubleClickOnToken(int token) {
 		$(PanelElement.class).$(HorizontalLayoutElement.class).$$(CssLayoutElement.class).get(token).doubleClick();
 	}
-	
+
 	public SelectAnElement getSelectAnElement() {
 		return selectAnElement;
 	}
@@ -109,12 +115,12 @@ public class RuleExpression extends LeftTreeTableWebpage{
 	}
 
 	private void clickAddVariableButton() {
-		getAddVariableButton();
+		getAddVariableButton().click();
+		getAddVariableButton().waitForVaadin();
 	}
 
-	private void getAddVariableButton() {
-		getButtonByCaption(ADD_VARIABLE_BUTTON).click();
-		getButtonByCaption(ADD_VARIABLE_BUTTON).waitForVaadin();
+	private ButtonElement getAddVariableButton() {
+		return getButtonByCaption(ADD_VARIABLE_BUTTON);
 	}
 
 	public SelectAVariable getSelectAVariable() {
@@ -146,5 +152,35 @@ public class RuleExpression extends LeftTreeTableWebpage{
 	private ButtonElement getAddGenericElementButton() {
 		return getButtonByCaption(ADD_GENERIC_ELEMENT_BUTTON);
 	}
+
+	public void addGenericElementVariable(int row, String variable) {
+		selectGenericElement(row);
+		addGenericVariable(variable);
+	}
+
+	private void addGenericVariable(String variable) {
+		selectGenericVariable(variable);
+		clickAddGenericVariableButton();
+	}
+
+	private void selectGenericVariable(String name) {
+		getGenericVariablesTable().selectByText(name);
+	}
+
+	private ListSelectElement getGenericVariablesTable() {
+		return $(ListSelectElement.class).caption(GENERIC_VARIABLE_TABLE).first();
+	}
+
+	private void clickAddGenericVariableButton() {
+		getAddGenericVariableButton().click();
+		getAddGenericVariableButton().waitForVaadin();
+	}
+
+	private ButtonElement getAddGenericVariableButton() {
+		return getButtonByCaption(ADD_GENERIC_VARIABLE_BUTTON);
+	}
 	
+	public SelectGenericVariable getSelectGenericVariable() {
+		return selectGenericVariable;
+	}
 }
