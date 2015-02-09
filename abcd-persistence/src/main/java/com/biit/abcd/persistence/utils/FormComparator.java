@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -133,7 +134,7 @@ public class FormComparator {
 			throw new CustomVariableNotEqualsException("Types are different between custom variables '" + object1
 					+ "' and '" + object2 + "'.");
 		}
-		if (!object1.getDefaultValue().equals(object2.getDefaultValue())) {
+		if (!Objects.equals(object1.getDefaultValue(),object2.getDefaultValue())) {
 			throw new CustomVariableNotEqualsException("Default value are different between custom variables '" + object1
 					+ "' and '" + object2 + "'.");
 		}
