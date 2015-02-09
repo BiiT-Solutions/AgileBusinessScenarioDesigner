@@ -134,9 +134,9 @@ public class FormComparator {
 			throw new CustomVariableNotEqualsException("Types are different between custom variables '" + object1
 					+ "' and '" + object2 + "'.");
 		}
-		if (!Objects.equals(object1.getDefaultValue(), object2.getDefaultValue())) {
-			throw new CustomVariableNotEqualsException("Default value are different between custom variables '"
-					+ object1 + "' and '" + object2 + "'.");
+		if (!Objects.equals(object1.getDefaultValue(),object2.getDefaultValue())) {
+			throw new CustomVariableNotEqualsException("Default value are different between custom variables '" + object1
+					+ "' and '" + object2 + "'.");
 		}
 	}
 

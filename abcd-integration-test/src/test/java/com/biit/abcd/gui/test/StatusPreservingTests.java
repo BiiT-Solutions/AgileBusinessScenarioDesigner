@@ -61,6 +61,52 @@ public class StatusPreservingTests extends AbcdTester {
 	private static final String VARIABLE_1_VALUE = "0.0";
 	private static final int VARIABLE_1_ROW = 0;
 
+	private void formDesignerCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getFormDesigner().goToFormManager();
+		Assert.assertTrue(getFormDesigner().getWarningUnsavedData().isVisible());
+		getFormDesigner().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getFormDesigner().save();
+		getFormDesigner().goToFormManager();
+		Assert.assertFalse(getFormDesigner().getWarningUnsavedData().isVisible());
+		getFormManager().clickFormDesigner();
+	}
+
+	private void expandForm() {
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(3).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(4).toggleExpanded();
+	}
+
+	private void formVariablesCheckSaveWarningAndSave() {
+		// Go to Form Designer without saving check warning is visible
+		getFormVariables().goToFormManager();
+		Assert.assertTrue(getFormVariables().getWarningUnsavedData().isVisible());
+		getFormVariables().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getFormVariables().save();
+		getFormVariables().goToFormManager();
+		Assert.assertFalse(getFormVariables().getWarningUnsavedData().isVisible());
+		getFormManager().clickFormVariables();
+	}
+
+	private void diagramDesignerCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getDiagramDesigner().goToFormManager();
+		Assert.assertTrue(getDiagramDesigner().getWarningUnsavedData().isVisible());
+		getDiagramDesigner().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getDiagramDesigner().save();
+		getDiagramDesigner().goToFormManager();
+		Assert.assertFalse(getDiagramDesigner().getWarningUnsavedData().isVisible());
+		getFormManager().clickDiagramDesigner();
+	}
+
 	@Test
 	public void formInUseIsSelectedWhenReturning() {
 		login(ABCD_FORM_EDIT_BIIT1);
@@ -171,40 +217,28 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormManager().logOut();
 	}
 
-//	// TODO this test now fails because there is a bug in the application
-//	@Test
-//	public void savePromptWhenChangedFormName() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickFormDesigner();
-//
-//		getFormDesigner().setTechnicalName(TEST_FORM_1_CHANGED_NAME);
-//		getFormDesigner().clickInTableRow(0);
-//
-//		getFormDesigner().goToFormManager();
-//		Assert.assertTrue(getFormDesigner().getWarningUnsavedData().isVisible());
-//		getFormDesigner().getWarningUnsavedData().clickCancel();
-//		getFormDesigner().save();
-//		getFormDesigner().goToFormManager();
-//		Assert.assertFalse(getFormDesigner().getWarningUnsavedData().isVisible());
-//
-//		// Remove form
-//		getRuleTableEditor().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//	}
+	@Test
+	public void savePromptWhenChangedFormName() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormDesigner();
 
-	private void formDesignerCheckSaveWarning() {
-		// Go to Form Designer without saving check warning is visible
+		getFormDesigner().setTechnicalName(TEST_FORM_1_CHANGED_NAME);
+		getFormDesigner().clickInTableRow(0);
+
 		getFormDesigner().goToFormManager();
+
 		Assert.assertTrue(getFormDesigner().getWarningUnsavedData().isVisible());
 		getFormDesigner().getWarningUnsavedData().clickCancel();
-
-		// Go to Form Designer after saving check warning is not visible
 		getFormDesigner().save();
 		getFormDesigner().goToFormManager();
+
 		Assert.assertFalse(getFormDesigner().getWarningUnsavedData().isVisible());
-		getFormManager().clickFormDesigner();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
 	}
 
 	@Test
@@ -272,26 +306,6 @@ public class StatusPreservingTests extends AbcdTester {
 
 	}
 
-	private void expandForm() {
-		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
-		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
-		getFormDesigner().getDesignTable().getRow(3).toggleExpanded();
-		getFormDesigner().getDesignTable().getRow(4).toggleExpanded();
-	}
-
-	private void formVariablesCheckSaveWarning() {
-		// Go to Form Designer without saving check warning is visible
-		getFormVariables().goToFormManager();
-		Assert.assertTrue(getFormVariables().getWarningUnsavedData().isVisible());
-		getFormVariables().getWarningUnsavedData().clickCancel();
-
-		// Go to Form Designer after saving check warning is not visible
-		getFormVariables().save();
-		getFormVariables().goToFormManager();
-		Assert.assertFalse(getFormVariables().getWarningUnsavedData().isVisible());
-		getFormManager().clickFormVariables();
-	}
-
 	@Test
 	public void savePromptWhenNewVariable() {
 		login(ABCD_FORM_EDIT_BIIT1);
@@ -299,10 +313,11 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormManager().clickFormVariables();
 
 		getFormVariables().clickAddVariable();
-		formVariablesCheckSaveWarning();
+		getFormVariables().getTextField(0, 0).setValue(VARIABLE_1);
+		formVariablesCheckSaveWarningAndSave();
 
 		getFormVariables().removeVariable(VARIABLE_1_ROW);
-		formVariablesCheckSaveWarning();
+		formVariablesCheckSaveWarningAndSave();
 
 		// Remove form
 		getRuleTableEditor().logOut();
@@ -317,38 +332,22 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormManager().clickFormVariables();
 
 		getFormVariables().clickAddVariable();
-		getFormVariables().save();
-
 		getFormVariables().getTextField(0, 0).setValue(VARIABLE_1);
-		formVariablesCheckSaveWarning();
+		formVariablesCheckSaveWarningAndSave();
 
 		getFormVariables().getComboBoxElement(0, 1).selectByText(AnswerFormat.NUMBER.getValue());
-		formVariablesCheckSaveWarning();
+		formVariablesCheckSaveWarningAndSave();
 
 		getFormVariables().getComboBoxElement(0, 2).selectByText(Scope.CATEGORY.getValue());
-		formVariablesCheckSaveWarning();
+		formVariablesCheckSaveWarningAndSave();
 
-		// TODO current bug
-		// getFormVariables().getTextField(0, 3).setValue(VARIABLE_1_VALUE);
-		// formVariablesCheckSaveWarning();
+		getFormVariables().getTextField(0, 3).setValue(VARIABLE_1_VALUE);
+		formVariablesCheckSaveWarningAndSave();
 
 		// Remove form
 		getFormVariables().logOut();
 		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
 		getFormManager().logOut();
-	}
-
-	private void diagramDesignerCheckSaveWarning() {
-		// Go to Form Designer without saving check warning is visible
-		getDiagramDesigner().goToFormManager();
-		Assert.assertTrue(getDiagramDesigner().getWarningUnsavedData().isVisible());
-		getDiagramDesigner().getWarningUnsavedData().clickCancel();
-
-		// Go to Form Designer after saving check warning is not visible
-		getDiagramDesigner().save();
-		getDiagramDesigner().goToFormManager();
-		Assert.assertFalse(getDiagramDesigner().getWarningUnsavedData().isVisible());
-		getFormManager().clickDiagramDesigner();
 	}
 
 	@Test
