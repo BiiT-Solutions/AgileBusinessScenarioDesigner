@@ -44,9 +44,6 @@ public class UserSessionHandler {
 	}
 
 	public static void checkOnlyOneSession(User user, UI ui, String ip) {
-		System.out.println(user + " , " + ui + " , " + ip);
-		System.out.println("usersSession: " + usersSession.get(user.getUserId()));
-		System.out.println("usersIp: " + usersIp.get(user.getUserId()));
 		if (usersSession.get(user.getUserId()) != null) {
 			if (ip == null || !ip.equals(usersIp.get(user.getUserId()))) {
 				closeSession(user);
