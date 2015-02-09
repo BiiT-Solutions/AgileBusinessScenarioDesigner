@@ -44,16 +44,12 @@ public class UserSessionHandler {
 	}
 
 	public static void checkOnlyOneSession(User user, UI ui, String ip) {
+		System.out.println(user + " , " + ui + " , " + ip);
+		System.out.println("usersSession: " + usersSession.get(user.getUserId()));
+		System.out.println("usersIp: " + usersIp.get(user.getUserId()));
 		if (usersSession.get(user.getUserId()) != null) {
 			if (ip == null || !ip.equals(usersIp.get(user.getUserId()))) {
-				for (UI userUI : usersSession.get(user.getUserId())) {
-					try {
-						userUI.close();
-						userUI.getNavigator().navigateTo(WebMap.getLoginPage().toString());
-					} catch (Exception e) {
-						// maybe the session has expired in Vaadin and cannot be closed.
-					}
-				}
+				closeSession(user);
 				MessageManager.showWarning(LanguageCodes.INFO_USER_SESSION_EXPIRED);
 			}
 		}
@@ -62,6 +58,24 @@ public class UserSessionHandler {
 		}
 		usersSession.get(user.getUserId()).add(ui);
 		usersIp.put(user.getUserId(), ip);
+	}
+
+	/**
+	 * Close all data related to a user.
+	 * 
+	 * @param user
+	 */
+	public static void closeSession(User user) {
+		List<UI> uis = new ArrayList<>(usersSession.get(user.getUserId()));
+		for (UI userUI : uis) {
+			try {
+				userUI.getNavigator().navigateTo(WebMap.getLoginPage().toString());
+				userUI.close();
+				usersSession.get(user.getUserId()).remove(userUI);
+			} catch (Exception e) {
+				// maybe the session has expired in Vaadin and cannot be closed.
+			}
+		}
 	}
 
 	/**
@@ -128,11 +142,15 @@ public class UserSessionHandler {
 	 */
 	public static void logout() {
 		if (getUser() != null) {
-			usersSession.remove(getUser().getUserId());
-			usersIp.remove(getUser().getUserId());
-			userLastPage.remove(getUser().getUserId());
+			logout(getUser());
 		}
 		setUser(null);
+	}
+
+	public static void logout(User user) {
+		usersSession.remove(user.getUserId());
+		usersIp.remove(user.getUserId());
+		userLastPage.remove(user.getUserId());
 	}
 
 	public static GlobalVariablesController getGlobalVariablesController() {

@@ -285,7 +285,10 @@ public abstract class UpperMenu extends SecuredMenu {
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
+								//Reset ehCache.
 								formDao.evictAllCache();
+								//Reset Liferay Users pool.
+								AbcdFormAuthorizationService.getInstance().reset();
 								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 								AbcdLogger.info(this.getClass().getName(), "User '"
 										+ UserSessionHandler.getUser().getEmailAddress()

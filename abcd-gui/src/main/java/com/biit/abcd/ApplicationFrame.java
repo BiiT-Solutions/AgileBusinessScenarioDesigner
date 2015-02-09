@@ -4,6 +4,7 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
+import com.liferay.portal.model.User;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
@@ -23,17 +24,17 @@ public class ApplicationFrame extends UI {
 	private View currentView;
 	private String user;
 	private String password;
-	
-	private class WebformsErrorHandler extends DefaultErrorHandler{
+
+	private class WebformsErrorHandler extends DefaultErrorHandler {
 		private static final long serialVersionUID = -5570064834518413901L;
 
 		@Override
 		public void error(com.vaadin.server.ErrorEvent event) {
-			//Throw the error to the logger.
+			// Throw the error to the logger.
 			AbcdLogger.errorMessage(ApplicationFrame.class.getName(), event.getThrowable());
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 		}
-		
+
 	};
 
 	@Override
@@ -41,10 +42,10 @@ public class ApplicationFrame extends UI {
 		getPage().setTitle("");
 		defineWebPages();
 
-		//Liferay send this data and automatically are used in the login screen. 
+		// Liferay send this data and automatically are used in the login screen.
 		this.user = request.getParameter(USER_PARAMETER_TAG);
 		this.password = request.getParameter(PASSWORD_PARAMETER_TAG);
-		
+
 		setErrorHandler(new WebformsErrorHandler());
 	}
 
@@ -56,10 +57,11 @@ public class ApplicationFrame extends UI {
 
 	private void releaseResources() {
 		if (UserSessionHandler.getUser() != null) {
+			User user = UserSessionHandler.getUser();
 			// Log user UI expired.
-			AbcdLogger.info(this.getClass().getName(), UserSessionHandler.getUser().getEmailAddress()
-					+ " UI has expired.");
-			UiAccesser.releaseForm(UserSessionHandler.getUser());
+			AbcdLogger.info(this.getClass().getName(), user.getEmailAddress() + " UI has expired.");
+			UiAccesser.releaseForm(user);
+			//UserSessionHandler.logout(user);		
 		}
 	}
 

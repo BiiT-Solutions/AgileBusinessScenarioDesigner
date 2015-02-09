@@ -228,7 +228,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added new conditions to '"
-								+ tableRule.getName() + "''.");
+								+ tableRule.getName() + "'.");
 					}
 				}
 			}
@@ -250,7 +250,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 						tableRule.setUpdateTime();
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed conditions from '"
-								+ tableRule.getName() + "''.");
+								+ tableRule.getName() + "'.");
 					}
 				}
 			}
@@ -273,7 +273,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added a new row to '"
-								+ tableRule.getName() + "''.");
+								+ tableRule.getName() + "'.");
 					}
 				}
 			}
@@ -296,7 +296,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a row from '"
-								+ tableRule.getName() + "''.");
+								+ tableRule.getName() + "'.");
 					}
 				}
 			}
@@ -315,7 +315,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 					copy();
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has copied rows from '"
-							+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+							+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 				}
 			}
 		});
@@ -334,7 +334,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 					if (rowsToCopy > 0) {
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has pasted " + rowsToCopy
-								+ " rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+								+ " rows from '" + tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 					}
 				}
 			}
@@ -511,7 +511,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 									AbcdLogger.info(this.getClass().getName(), "User '"
 											+ UserSessionHandler.getUser().getEmailAddress() + "' has added Question '"
 											+ selectedQuestion.getName() + "' to Table rule '"
-											+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+											+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 									window.close();
 								}
 							});
@@ -521,7 +521,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 							AbcdLogger.info(this.getClass().getName(), "User '"
 									+ UserSessionHandler.getUser().getEmailAddress() + "' has added Question '"
 									+ selectedQuestion.getName() + "' to Table rule '"
-									+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+									+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 							setTreeObjectExpression(row, (Integer) propertyId, selectedQuestion);
 						}
 						newQuestionConditionWindow.close();
@@ -532,7 +532,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the custom variable '"
 								+ customVariable.getRepresentation() + "' to Table rule '"
-								+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+								+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 						setCustomVariableExpression(row, (Integer) propertyId, treeObject, customVariable.getVariable());
 						newQuestionConditionWindow.close();
 
@@ -616,7 +616,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has added Answer '"
 							+ answerExpression.getName() + "' regarding Question '"
 							+ questionExpression.getReference().getName() + "' in Table rule '"
-							+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+							+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 
 					newAnswerWindow.close();
 				}
@@ -636,7 +636,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed Answer '"
 							+ answerExpression.getName() + "' regarding Question '"
 							+ questionExpression.getReference().getName() + "' in Table rule '"
-							+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+							+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 				}
 
 			});
@@ -658,7 +658,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 		if (auxTo != null) {
 			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 					+ "' has removed Question '" + auxTo.getName() + "' from Table rule '"
-					+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+					+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 		}
 	}
 
@@ -673,7 +673,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 					+ "' has removed Answer '" + answerExpression.getName() + "' regarding Question '"
 					+ questionExpression.getReference().getName() + "' in Table rule '"
-					+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+					+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 		}
 	}
 
@@ -693,7 +693,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Action '"
 								+ row.getAction().getRepresentation() + "' to row '" + row.getId()
-								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 					} else {
 						removeAction(row);
 					}
@@ -710,7 +710,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 					AbcdLogger.info(this.getClass().getName(),
 							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed Action of row '"
 									+ row.getId() + "' in Table rule '"
-									+ tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+									+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 				}
 			});
 		}
@@ -721,7 +721,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 		ExpressionChain action = row.getAction();
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 				+ "' has removed Action '" + action.getRepresentation() + "' from row '" + row.getId()
-				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "''.");
+				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 		row.getAction().removeAllExpressions();
 		ruleTable.update(getSelectedTableRule());
 	}

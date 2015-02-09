@@ -173,7 +173,6 @@ public class Login extends WebPageComponent {
 									LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
 							MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
 						} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
-							e.printStackTrace();
 							AbcdLogger.errorMessage(this.getClass().getName(), e);
 							MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
 						} catch (PBKDF2EncryptorException e) {

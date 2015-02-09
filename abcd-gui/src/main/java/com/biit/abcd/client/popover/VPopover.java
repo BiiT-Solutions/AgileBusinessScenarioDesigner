@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 'fullscreen' (actionsheet) windows.
  * 
  */
+@SuppressWarnings("deprecation")
 public class VPopover extends com.vaadin.client.ui.VWindow {
 
 	private static final int SMALL_SCREEN_WIDTH_THRESHOLD = 500;
