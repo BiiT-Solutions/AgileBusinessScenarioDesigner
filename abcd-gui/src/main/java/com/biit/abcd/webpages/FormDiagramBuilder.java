@@ -218,9 +218,9 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 				if (element instanceof DiagramChild) {
 					DiagramChild diagramChild = (DiagramChild) element;
 					diagramBuilder.updateChangesToDiagram(diagramChild);
-
 					initializeDiagramsTable();
-					diagramBuilderTable.setValue(diagramChild.getParent());
+					// BUG FIX to extrange null pointer exception
+					// diagramBuilderTable.setValue(diagramChild.getParent());
 					return;
 				}
 				// Anyone else

@@ -9,4 +9,10 @@ public class NewRuleTableWindow extends TextFieldAcceptCancelWindow{
 		return RULE_TABLE_NAME;
 	}
 
+	@Override
+	protected String getWindowId() {
+		// This window doesn't use id for now.
+		return null;
+	}
+
 }

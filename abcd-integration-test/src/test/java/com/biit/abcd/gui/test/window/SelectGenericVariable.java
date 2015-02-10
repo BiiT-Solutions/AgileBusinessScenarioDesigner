@@ -2,27 +2,14 @@ package com.biit.abcd.gui.test.window;
 
 import com.vaadin.testbench.elements.ListSelectElement;
 import com.vaadin.testbench.elements.TreeTableElement;
-import com.vaadin.testbench.elements.WindowElement;
 
-public class SelectGenericVariable extends AcceptCancelWindow{
+public class SelectGenericVariable extends AcceptCancelWindow {
 
-	private static final String WINDOW_CAPTION = "Select Form Variables";
 	private static final String GENERIC_ELEMENT_TABLE = "Select a Generic Element:";
 	private static final String SELECT_GENERIC_VARIABLE = "Select a Generic Variable:";
+	private static final String WINDOW_ID = "com.biit.abcd.webpages.elements.expressionviewer.SelectFormGenericVariablesWindow";
 
-	public void waitWindowOpen() {
-		while (true) {
-			try {
-				if ($(WindowElement.class).caption(WINDOW_CAPTION).exists()) {
-					return;
-				}
-			} catch (Exception e) {
-
-			}
-		}
-	}
-	
-	public void selectAndAccept(int row, String variable){	
+	public void selectAndAccept(int row, String variable) {
 		selectGenericElement(row);
 		selectGenericVariable(variable);
 		clickAccept();
@@ -34,7 +21,7 @@ public class SelectGenericVariable extends AcceptCancelWindow{
 	}
 
 	private ListSelectElement getGenericVariableTable() {
-		return $(ListSelectElement.class).caption(SELECT_GENERIC_VARIABLE).first();
+		return getWindow().$(ListSelectElement.class).caption(SELECT_GENERIC_VARIABLE).first();
 	}
 
 	private void selectGenericElement(int row) {
@@ -43,7 +30,12 @@ public class SelectGenericVariable extends AcceptCancelWindow{
 	}
 
 	private TreeTableElement getGenericElementTable() {
-		return $(TreeTableElement.class).caption(GENERIC_ELEMENT_TABLE).first();
+		return getWindow().$(TreeTableElement.class).caption(GENERIC_ELEMENT_TABLE).first();
 	}
-	
+
+	@Override
+	protected String getWindowId() {
+		return WINDOW_ID;
+	}
+
 }

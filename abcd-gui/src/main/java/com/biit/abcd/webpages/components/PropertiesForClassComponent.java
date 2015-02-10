@@ -50,6 +50,14 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 			}
 		});
 	}
+	
+	@Override
+	public void detach(){
+		if(!isConnectorEnabled()){
+			return;
+		}
+		super.detach();
+	}
 
 	public void addTab(Component component, String caption, boolean toggle) {
 		rootAccordion.addTab(component, caption, toggle);

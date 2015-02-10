@@ -113,7 +113,11 @@ public class BottomMenu extends HorizontalButtonGroup {
 	}
 
 	private void changeView(WebMap newView) {
-		ApplicationFrame.navigateTo(newView);
+		try {
+			ApplicationFrame.navigateTo(newView);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void updateButtons(boolean enableFormButtons) {

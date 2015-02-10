@@ -8,6 +8,7 @@ public class NewVariableWindow extends AcceptCancelWindow{
 
 	private static final String NAME_CAPTION = "Name";
 	private static final String NAME_TYPE = "Type";
+	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.globalvariables.VariableWindow";
 
 	public void setName(String name){
 		$(TextFieldElement.class).caption(NAME_CAPTION).first().setValue(name);
@@ -21,6 +22,11 @@ public class NewVariableWindow extends AcceptCancelWindow{
 	
 	public boolean isEnabledType(){
 		return $(ComboBoxElement.class).caption(NAME_TYPE).first().isEnabled();
+	}
+
+	@Override
+	protected String getWindowId() {
+		return CLASS_NAME;
 	}
 	
 }

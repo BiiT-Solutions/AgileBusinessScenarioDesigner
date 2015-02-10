@@ -138,7 +138,7 @@ public class VariableTable extends Table {
 		final ComboBox typeComboBox = new ComboBox();
 		for (CustomVariableTypeUi variableType : CustomVariableTypeUi.values()) {
 			typeComboBox.addItem(variableType.getCustomvariable());
-			typeComboBox.setItemCaption(variableType, ServerTranslate.translate(variableType.getLanguageCode()));
+			typeComboBox.setItemCaption(variableType.getCustomvariable(), ServerTranslate.translate(variableType.getLanguageCode()));
 		}
 		typeComboBox.setNullSelectionAllowed(false);
 		typeComboBox.addFocusListener(new FocusListener() {
@@ -191,8 +191,7 @@ public class VariableTable extends Table {
 		final ComboBox scopeComboBox = new ComparableComboBox();
 		for (CustomVariableScopeUi variablesScope : CustomVariableScopeUi.values()) {
 			scopeComboBox.addItem(variablesScope.getVariableScope());
-			scopeComboBox
-					.setItemCaption(variablesScope, ServerTranslate.translate(variablesScope.getLanguageCode()));
+			scopeComboBox.setItemCaption(variablesScope.getVariableScope(), ServerTranslate.translate(variablesScope.getLanguageCode()));
 		}
 		scopeComboBox.setNullSelectionAllowed(false);
 		scopeComboBox.addFocusListener(new FocusListener() {
