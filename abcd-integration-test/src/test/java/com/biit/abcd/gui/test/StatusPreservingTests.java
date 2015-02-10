@@ -107,248 +107,248 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormManager().clickDiagramDesigner();
 	}
 
-//	@Test
-//	public void formInUseIsSelectedWhenReturning() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().createNewForm(TEST_FORM_2);
-//
-//		getFormManager().clickFormDesigner();
-//		clickFormManager();
-//		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-//		getFormManager().selectForm(FORM_1_ROW);
-//		getFormManager().clickFormDesigner();
-//		clickFormManager();
-//		Assert.assertTrue(getFormManager().isRowSelected(FORM_1_ROW));
-//
-//		getFormManager().selectForm(FORM_2_ROW);
-//		getFormManager().clickFormVariables();
-//		clickFormManager();
-//		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-//
-//		getFormManager().clickDiagramDesigner();
-//		clickFormManager();
-//		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-//
-//		getFormManager().clickRuleExpressionEditor();
-//		clickFormManager();
-//		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-//
-//		getFormManager().clickRuleEditor();
-//		clickFormManager();
-//		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-//
-//		getFormManager().clickRuleTableEditor();
-//		clickFormManager();
-//		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
-//
-//		getFormManager().logOut();
-//
-//		deleteForm(FORM_2_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//	}
-//
-//	@Test
-//	public void elementsSelectedAreMaintainedCorrectly() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickDiagramDesigner();
-//
-//		// Add two diagrams
-//		getDiagramDesigner().newDiagram(DIAGRAM_1);
-//		getDiagramDesigner().newDiagram(DIAGRAM_2);
-//		getDiagramDesigner().selectRow(DIAGRAM_1_ROW);
-//
-//		getDiagramDesigner().clickFormDesigner();
-//		getFormDesigner().clickDiagramDesigner();
-//		getDiagramDesigner().isRowSelected(DIAGRAM_1_ROW);
-//		getDiagramDesigner().selectRow(DIAGRAM_2_ROW);
-//		getDiagramDesigner().clickFormDesigner();
-//		getFormDesigner().clickDiagramDesigner();
-//		getDiagramDesigner().isRowSelected(DIAGRAM_2_ROW);
-//
-//		// Rule expression
-//		getFormDesigner().clickRuleExpressionEditor();
-//		getRuleExpression().newRuleExpression(RULE_1);
-//		getRuleExpression().newRuleExpression(RULE_2);
-//		getRuleExpression().selectRow(RULE_1_ROW);
-//
-//		getRuleExpression().clickFormDesigner();
-//		getFormDesigner().clickRuleExpressionEditor();
-//		getRuleExpression().isRowSelected(RULE_1_ROW);
-//		getRuleExpression().selectRow(RULE_2_ROW);
-//		getRuleExpression().clickFormDesigner();
-//		getFormDesigner().clickRuleExpressionEditor();
-//		getRuleExpression().isRowSelected(RULE_2_ROW);
-//
-//		// Rule editor
-//		getFormDesigner().clickRuleEditor();
-//		getRuleEditor().newRule(RULE_1);
-//		getRuleEditor().newRule(RULE_2);
-//		getRuleEditor().selectRow(RULE_1_ROW);
-//
-//		getRuleEditor().clickFormDesigner();
-//		getFormDesigner().clickRuleEditor();
-//		getRuleEditor().isRowSelected(RULE_1_ROW);
-//		getRuleEditor().selectRow(RULE_2_ROW);
-//		getRuleEditor().clickFormDesigner();
-//		getFormDesigner().clickRuleEditor();
-//		getRuleEditor().isRowSelected(RULE_2_ROW);
-//
-//		// Rule Table editor
-//		getFormDesigner().clickRuleTableEditor();
-//		getRuleTableEditor().newRuleTable(TABLE_1);
-//		getRuleTableEditor().newRuleTable(TABLE_2);
-//		getRuleTableEditor().selectRow(TABLE_1_ROW);
-//
-//		getRuleTableEditor().clickFormDesigner();
-//		getFormDesigner().clickRuleTableEditor();
-//		getRuleTableEditor().isRowSelected(TABLE_1_ROW);
-//		getRuleTableEditor().selectRow(TABLE_2_ROW);
-//		getRuleTableEditor().clickFormDesigner();
-//		getFormDesigner().clickRuleTableEditor();
-//		getRuleTableEditor().isRowSelected(TABLE_2_ROW);
-//
-//		// Remove form
-//		getRuleTableEditor().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//	}
-//
-//	@Test
-//	public void savePromptWhenChangedFormName() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickFormDesigner();
-//
-//		getFormDesigner().setTechnicalName(TEST_FORM_1_CHANGED_NAME);
-//		getFormDesigner().clickInTableRow(0);
-//
-//		getFormDesigner().goToFormManager();
-//
-//		Assert.assertTrue(getFormDesigner().getWarningUnsavedData().isVisible());
-//		getFormDesigner().getWarningUnsavedData().clickCancel();
-//		getFormDesigner().save();
-//		getFormDesigner().goToFormManager();
-//
-//		Assert.assertFalse(getFormDesigner().getWarningUnsavedData().isVisible());
-//
-//		// Remove form
-//		getRuleTableEditor().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//	}
-//
-//	@Test
-//	public void savePromptWhenNewFormElementsOrEditing() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickFormDesigner();
-//
-//		getFormDesigner().clickInTableRow(0);
-//		getFormDesigner().createCategory(0, CATEGORY_1);
-//
-//		formDesignerCheckSaveWarning();
-//
-//		getFormDesigner().createGroup(1, GROUP_1);
-//
-//		formDesignerCheckSaveWarning();
-//
-//		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
-//		getFormDesigner().createQuestion(2, QUESTION_1, AnswerType.MULTI_CHECKBOX, null);
-//
-//		formDesignerCheckSaveWarning();
-//
-//		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
-//		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
-//		getFormDesigner().createAnswer(3, ANSWER_1);
-//
-//		formDesignerCheckSaveWarning();
-//
-//		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
-//		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
-//		getFormDesigner().getDesignTable().getRow(3).toggleExpanded();
-//		getFormDesigner().createSubanswer(4, SUBANSWER_1);
-//
-//		formDesignerCheckSaveWarning();
-//
-//		expandForm();
-//		getFormDesigner().clickInTableRow(1);
-//		getFormDesigner().setTechnicalName(CATEGORY_1_MODIFIED);
-//		formDesignerCheckSaveWarning();
-//
-//		expandForm();
-//		getFormDesigner().clickInTableRow(2);
-//		getFormDesigner().setTechnicalName(GROUP_1_MODIFIED);
-//		formDesignerCheckSaveWarning();
-//
-//		expandForm();
-//		getFormDesigner().clickInTableRow(3);
-//		getFormDesigner().setTechnicalName(QUESTION_1_MODIFIED);
-//		formDesignerCheckSaveWarning();
-//
-//		expandForm();
-//		getFormDesigner().clickInTableRow(4);
-//		getFormDesigner().setTechnicalName(ANSWER_1_MODIFIED);
-//		formDesignerCheckSaveWarning();
-//
-//		expandForm();
-//		getFormDesigner().clickInTableRow(5);
-//		getFormDesigner().setTechnicalName(SUBANSWER_1_MODIFIED);
-//		formDesignerCheckSaveWarning();
-//
-//		// Remove form
-//		getRuleTableEditor().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//
-//	}
-//
-//	@Test
-//	public void savePromptWhenNewVariable() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickFormVariables();
-//
-//		getFormVariables().clickAddVariable();
-//		getFormVariables().getTextField(0, 0).setValue(VARIABLE_1);
-//		formVariablesCheckSaveWarningAndSave();
-//
-//		getFormVariables().removeVariable(VARIABLE_1_ROW);
-//		formVariablesCheckSaveWarningAndSave();
-//
-//		// Remove form
-//		getRuleTableEditor().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//	}
-//
-//	@Test
-//	public void savePromptWhenVariableModified() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickFormVariables();
-//
-//		getFormVariables().clickAddVariable();
-//		getFormVariables().getTextField(0, 0).setValue(VARIABLE_1);
-//		formVariablesCheckSaveWarningAndSave();
-//
-//		getFormVariables().getComboBoxElement(0, 1).selectByText(AnswerFormat.NUMBER.getValue());
-//		formVariablesCheckSaveWarningAndSave();
-//
-//		getFormVariables().getComboBoxElement(0, 2).selectByText(Scope.CATEGORY.getValue());
-//		formVariablesCheckSaveWarningAndSave();
-//
-//		getFormVariables().getTextField(0, 3).setValue(VARIABLE_1_VALUE);
-//		formVariablesCheckSaveWarningAndSave();
-//
-//		// Remove form
-//		getFormVariables().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//	}
+	@Test
+	public void formInUseIsSelectedWhenReturning() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().createNewForm(TEST_FORM_2);
+
+		getFormManager().clickFormDesigner();
+		clickFormManager();
+		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
+		getFormManager().selectForm(FORM_1_ROW);
+		getFormManager().clickFormDesigner();
+		clickFormManager();
+		Assert.assertTrue(getFormManager().isRowSelected(FORM_1_ROW));
+
+		getFormManager().selectForm(FORM_2_ROW);
+		getFormManager().clickFormVariables();
+		clickFormManager();
+		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
+
+		getFormManager().clickDiagramDesigner();
+		clickFormManager();
+		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
+
+		getFormManager().clickRuleExpressionEditor();
+		clickFormManager();
+		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
+
+		getFormManager().clickRuleEditor();
+		clickFormManager();
+		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
+
+		getFormManager().clickRuleTableEditor();
+		clickFormManager();
+		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
+
+		getFormManager().logOut();
+
+		deleteForm(FORM_2_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
+
+	@Test
+	public void elementsSelectedAreMaintainedCorrectly() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickDiagramDesigner();
+
+		// Add two diagrams
+		getDiagramDesigner().newDiagram(DIAGRAM_1);
+		getDiagramDesigner().newDiagram(DIAGRAM_2);
+		getDiagramDesigner().selectRow(DIAGRAM_1_ROW);
+
+		getDiagramDesigner().clickFormDesigner();
+		getFormDesigner().clickDiagramDesigner();
+		getDiagramDesigner().isRowSelected(DIAGRAM_1_ROW);
+		getDiagramDesigner().selectRow(DIAGRAM_2_ROW);
+		getDiagramDesigner().clickFormDesigner();
+		getFormDesigner().clickDiagramDesigner();
+		getDiagramDesigner().isRowSelected(DIAGRAM_2_ROW);
+
+		// Rule expression
+		getFormDesigner().clickRuleExpressionEditor();
+		getRuleExpression().newRuleExpression(RULE_1);
+		getRuleExpression().newRuleExpression(RULE_2);
+		getRuleExpression().selectRow(RULE_1_ROW);
+
+		getRuleExpression().clickFormDesigner();
+		getFormDesigner().clickRuleExpressionEditor();
+		getRuleExpression().isRowSelected(RULE_1_ROW);
+		getRuleExpression().selectRow(RULE_2_ROW);
+		getRuleExpression().clickFormDesigner();
+		getFormDesigner().clickRuleExpressionEditor();
+		getRuleExpression().isRowSelected(RULE_2_ROW);
+
+		// Rule editor
+		getFormDesigner().clickRuleEditor();
+		getRuleEditor().newRule(RULE_1);
+		getRuleEditor().newRule(RULE_2);
+		getRuleEditor().selectRow(RULE_1_ROW);
+
+		getRuleEditor().clickFormDesigner();
+		getFormDesigner().clickRuleEditor();
+		getRuleEditor().isRowSelected(RULE_1_ROW);
+		getRuleEditor().selectRow(RULE_2_ROW);
+		getRuleEditor().clickFormDesigner();
+		getFormDesigner().clickRuleEditor();
+		getRuleEditor().isRowSelected(RULE_2_ROW);
+
+		// Rule Table editor
+		getFormDesigner().clickRuleTableEditor();
+		getRuleTableEditor().newRuleTable(TABLE_1);
+		getRuleTableEditor().newRuleTable(TABLE_2);
+		getRuleTableEditor().selectRow(TABLE_1_ROW);
+
+		getRuleTableEditor().clickFormDesigner();
+		getFormDesigner().clickRuleTableEditor();
+		getRuleTableEditor().isRowSelected(TABLE_1_ROW);
+		getRuleTableEditor().selectRow(TABLE_2_ROW);
+		getRuleTableEditor().clickFormDesigner();
+		getFormDesigner().clickRuleTableEditor();
+		getRuleTableEditor().isRowSelected(TABLE_2_ROW);
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
+
+	@Test
+	public void savePromptWhenChangedFormName() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormDesigner();
+
+		getFormDesigner().setTechnicalName(TEST_FORM_1_CHANGED_NAME);
+		getFormDesigner().clickInTableRow(0);
+
+		getFormDesigner().goToFormManager();
+
+		Assert.assertTrue(getFormDesigner().getWarningUnsavedData().isVisible());
+		getFormDesigner().getWarningUnsavedData().clickCancel();
+		getFormDesigner().save();
+		getFormDesigner().goToFormManager();
+
+		Assert.assertFalse(getFormDesigner().getWarningUnsavedData().isVisible());
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
+
+	@Test
+	public void savePromptWhenNewFormElementsOrEditing() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormDesigner();
+
+		getFormDesigner().clickInTableRow(0);
+		getFormDesigner().createCategory(0, CATEGORY_1);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().createGroup(1, GROUP_1);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().createQuestion(2, QUESTION_1, AnswerType.MULTI_CHECKBOX, null);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
+		getFormDesigner().createAnswer(3, ANSWER_1);
+
+		formDesignerCheckSaveWarning();
+
+		getFormDesigner().getDesignTable().getRow(1).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(2).toggleExpanded();
+		getFormDesigner().getDesignTable().getRow(3).toggleExpanded();
+		getFormDesigner().createSubanswer(4, SUBANSWER_1);
+
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(1);
+		getFormDesigner().setTechnicalName(CATEGORY_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(2);
+		getFormDesigner().setTechnicalName(GROUP_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(3);
+		getFormDesigner().setTechnicalName(QUESTION_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(4);
+		getFormDesigner().setTechnicalName(ANSWER_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		expandForm();
+		getFormDesigner().clickInTableRow(5);
+		getFormDesigner().setTechnicalName(SUBANSWER_1_MODIFIED);
+		formDesignerCheckSaveWarning();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+
+	}
+
+	@Test
+	public void savePromptWhenNewVariable() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormVariables();
+
+		getFormVariables().clickAddVariable();
+		getFormVariables().getTextField(0, 0).setValue(VARIABLE_1);
+		formVariablesCheckSaveWarningAndSave();
+
+		getFormVariables().removeVariable(VARIABLE_1_ROW);
+		formVariablesCheckSaveWarningAndSave();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
+
+	@Test
+	public void savePromptWhenVariableModified() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickFormVariables();
+
+		getFormVariables().clickAddVariable();
+		getFormVariables().getTextField(0, 0).setValue(VARIABLE_1);
+		formVariablesCheckSaveWarningAndSave();
+
+		getFormVariables().getComboBoxElement(0, 1).selectByText(AnswerFormat.NUMBER.getValue());
+		formVariablesCheckSaveWarningAndSave();
+
+		getFormVariables().getComboBoxElement(0, 2).selectByText(Scope.CATEGORY.getValue());
+		formVariablesCheckSaveWarningAndSave();
+
+		getFormVariables().getTextField(0, 3).setValue(VARIABLE_1_VALUE);
+		formVariablesCheckSaveWarningAndSave();
+
+		// Remove form
+		getFormVariables().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
 
 	@Test
 	public void savePromptWhenNewAndRemoveDiagram() {
@@ -359,6 +359,8 @@ public class StatusPreservingTests extends AbcdTester {
 		getDiagramDesigner().newDiagram(DIAGRAM_1);
 		diagramDesignerCheckSaveWarning();
 
+		//It's being deselected
+		getDiagramDesigner().selectRow(DIAGRAM_1_ROW);
 		getDiagramDesigner().removeDiagram(DIAGRAM_1_ROW);
 		diagramDesignerCheckSaveWarning();
 
@@ -368,34 +370,34 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormManager().logOut();
 	}
 
-//	private void ruleExpressionCheckSaveWarning() {
-//		// Go to Form Designer without saving check warning is visible
-//		getRuleExpression().goToFormManager();
-//		Assert.assertTrue(getRuleExpression().getWarningUnsavedData().isVisible());
-//		getRuleExpression().getWarningUnsavedData().clickCancel();
-//
-//		// Go to Form Designer after saving check warning is not visible
-//		getRuleExpression().save();
-//		getRuleExpression().goToFormManager();
-//		Assert.assertFalse(getRuleExpression().getWarningUnsavedData().isVisible());
-//		getFormManager().clickRuleExpressionEditor();
-//	}
-//
-//	@Test
-//	public void savePromptWhenNewAndRemoveRuleExpression() {
-//		login(ABCD_FORM_EDIT_BIIT1);
-//		getFormManager().createNewForm(TEST_FORM_1);
-//		getFormManager().clickRuleExpressionEditor();
-//
-//		getRuleExpression().newRuleExpression(RULE_1);
-//		ruleExpressionCheckSaveWarning();
-//
-//		getRuleExpression().removeRule(RULE_1_ROW);
-//		diagramDesignerCheckSaveWarning();
-//
-//		// Remove form
-//		getRuleTableEditor().logOut();
-//		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().logOut();
-//	}
+	private void ruleExpressionCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getRuleExpression().goToFormManager();
+		Assert.assertTrue(getRuleExpression().getWarningUnsavedData().isVisible());
+		getRuleExpression().getWarningUnsavedData().clickCancel();
+
+		// Go to Form Designer after saving check warning is not visible
+		getRuleExpression().save();
+		getRuleExpression().goToFormManager();
+		Assert.assertFalse(getRuleExpression().getWarningUnsavedData().isVisible());
+		getFormManager().clickRuleExpressionEditor();
+	}
+
+	@Test
+	public void savePromptWhenNewAndRemoveRuleExpression() {
+		login(ABCD_FORM_EDIT_BIIT1);
+		getFormManager().createNewForm(TEST_FORM_1);
+		getFormManager().clickRuleExpressionEditor();
+
+		getRuleExpression().newRuleExpression(RULE_1);
+		ruleExpressionCheckSaveWarning();
+
+		getRuleExpression().removeRule(RULE_1_ROW);
+		diagramDesignerCheckSaveWarning();
+
+		// Remove form
+		getRuleTableEditor().logOut();
+		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().logOut();
+	}
 }
