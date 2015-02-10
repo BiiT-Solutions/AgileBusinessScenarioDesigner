@@ -1,6 +1,15 @@
 package com.biit.abcd.language;
 
 public enum LanguageCodes {
+	
+	STRING("class.String"),
+	NUMBER("class.Number"),
+	DATE("class.Date"),
+	
+	FORM("class.Form"),
+	CATEGORY("class.Category"),
+	GROUP("class.Group"),
+	QUESTION("class.Question"),
 
 	ACCEPT_BUTTON_CAPTION("accept.button.caption"),
 	ACCEPT_BUTTON_TOOLTIP("accept.button.tooltip"),

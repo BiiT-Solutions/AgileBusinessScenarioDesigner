@@ -129,10 +129,8 @@ public class QuestionProperties extends SecuredFormElementProperties<Question> {
 									+ instanceName + "' property 'Name' to '" + instance.getName()
 									+ "' (Name too long).");
 						} catch (CharacterNotAllowedException e1) {
-							MessageManager.showWarning(ServerTranslate
-									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
-									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-											instance.getName(), instance.getSimpleAsciiName() }));
+							MessageManager.showWarning(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS,LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, 
+											instance.getName(), instance.getSimpleAsciiName() );
 							try {
 								instance.setName(instance.getSimpleAsciiName());
 							} catch (CharacterNotAllowedException e2) {
@@ -144,9 +142,9 @@ public class QuestionProperties extends SecuredFormElementProperties<Question> {
 					}
 				} catch (CharacterNotAllowedException e) {
 					MessageManager.showWarning(
-							ServerTranslate.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS), ServerTranslate
-									.translate(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, new Object[] {
-											instance.getName(), instance.getSimpleAsciiName() }));
+							LanguageCodes.WARNING_NAME_INVALID_CHARACTERS, 
+									LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, 
+											instance.getName(), instance.getSimpleAsciiName() );
 					try {
 						instance.setName(instance.getSimpleAsciiName());
 					} catch (FieldTooLongException | CharacterNotAllowedException e1) {

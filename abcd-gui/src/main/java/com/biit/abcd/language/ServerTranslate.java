@@ -21,9 +21,14 @@ public class ServerTranslate {
 		}
 	}
 
-	private static String translationException(String code, Object[] args) {
+	private static String translationException(String code, Locale locale, Object... args) {
 		initialize();
-		String translation = helper.getContext().getMessage(code, args, getLocale());
+		String translation;
+		if (locale == null) {
+			translation = helper.getContext().getMessage(code, args, getLocale());
+		} else {
+			translation = helper.getContext().getMessage(code, args, locale);
+		}
 		return translation;
 	}
 
@@ -38,32 +43,30 @@ public class ServerTranslate {
 			}
 		}
 	}
+	
+	public static String translate(String code, Object... args){
+		return translate(code, null, args);
+	}
+	
+	
+	public static String translate(LanguageCodes code, Object... args){
+		return translate(code, null, args);
+	}
 
-	public static String translate(LanguageCodes code) {
+	public static String translate(LanguageCodes code, Locale locale, Object... args) {
 		if (code == null) {
 			return null;
 		}
-		return translate(code.toString(), null);
+		return translate(code.toString(), locale, args);
 	}
 
-	public static String translate(String code) {
-		if (code == null) {
-			return null;
-		}
-		return translate(code, null);
-	}
-
-	public static String translate(LanguageCodes code, Object[] args) {
-		return translate(code.toString(), args);
-	}
-
-	public static String translate(String code, Object[] args) {
+	public static String translate(String code, Locale locale, Object... args) {
 		try {
-			return translationException(code, args);
+			return translationException(code, locale, args);
 		} catch (RuntimeException e) {
 			AbcdLogger.errorMessage(ServerTranslate.class.getName(), e);
 			try {
-				MessageManager.showError(ServerTranslate.translationException("error.fatal", null));
+				MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			} catch (RuntimeException e2) {
 				MessageManager.showError("Fatal error in the translations.");
 			}

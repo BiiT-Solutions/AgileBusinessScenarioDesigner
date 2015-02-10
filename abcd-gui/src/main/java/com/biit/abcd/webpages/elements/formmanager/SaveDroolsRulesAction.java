@@ -61,9 +61,9 @@ public class SaveDroolsRulesAction implements SaveAction {
 			// We show the user the invalid rule name
 			if (e.getGeneratedException() instanceof InvalidRuleException) {
 				AbcdLogger.errorMessage(SettingsWindow.class.getName(), e.getGeneratedException());
-				MessageManager.showError(LanguageCodes.ERROR_TITLE, ServerTranslate.translate(
+				MessageManager.showError(LanguageCodes.ERROR_TITLE, 
 						LanguageCodes.DROOLS_RULE_INVALID,
-						new Object[] { ((InvalidRuleException) e.getGeneratedException()).getRuleName() }));
+						((InvalidRuleException) e.getGeneratedException()).getRuleName() );
 			} else {
 				// This is a generic exception for everything related with the
 				// rules generation

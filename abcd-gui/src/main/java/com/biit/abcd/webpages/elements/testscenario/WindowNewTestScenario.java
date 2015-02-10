@@ -3,7 +3,6 @@ package com.biit.abcd.webpages.elements.testscenario;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.TestScenarioEditor;
@@ -46,12 +45,10 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 
 		} catch (FieldTooLongException e) {
 			AbcdLogger.warning(this.getClass().getName(), e.toString());
-			MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_TITLE),
-					ServerTranslate.translate(LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG));
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG);
 		} catch (CharacterNotAllowedException e) {
 			AbcdLogger.warning(this.getClass().getName(), e.toString());
-			MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_TITLE),
-					ServerTranslate.translate(LanguageCodes.TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED));
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED);
 		} catch (NotValidStorableObjectException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		} catch (NotValidChildException e) {
