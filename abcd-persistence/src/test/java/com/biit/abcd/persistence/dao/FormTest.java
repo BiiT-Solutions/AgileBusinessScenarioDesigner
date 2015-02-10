@@ -13,9 +13,20 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.diagram.Point;
+import com.biit.abcd.persistence.entity.diagram.Size;
+import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.persistence.dao.IBaseQuestionDao;
@@ -166,6 +177,72 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		// Compare order is the same.
 		Assert.assertTrue(compare(form, storedForm));
 		formDao.makeTransient(form);
+	}
+	
+	@Test
+	public void checkDependencyDiagramLinkNull() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException,
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, DependencyExistException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+
+		Category category = new Category();
+		category.setName("Category1");
+		form.addChild(category);
+
+		Question question1 = new Question();
+		question1.setName("Question1");
+		category.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setName("Question2");
+		category.addChild(question2);
+
+		//Create a diagram
+		Diagram diagram = new Diagram("diagram1");
+
+		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1, 1));
+		Node nodeSource = new Node(startNode.getJointjsId());
+		diagram.addDiagramObject(startNode);
+		
+		DiagramChild diagramChild = new DiagramChild();
+		diagramChild.setDiagram(null);
+		diagramChild.setJointjsId(IdGenerator.createId());
+		diagramChild.setSize(new Size(2, 2));
+		diagramChild.setPosition(new Point(1, 1));
+		diagramChild.setType(DiagramObjectType.DIAGRAM_CHILD);
+		
+		Node nodeChild = new Node(diagramChild.getJointjsId());
+		diagram.addDiagramObject(diagramChild);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeChild);
+		diagram.addDiagramObject(startLink);
+		
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		diagramEndNode.setSize(new Size(3, 3));
+		diagramEndNode.setPosition(new Point(1, 1));
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode);
+		
+		DiagramLink endLink = new DiagramLink();
+		endLink.setSource(nodeChild);
+		endLink.setJointjsId(IdGenerator.createId());
+		endLink.setType(DiagramObjectType.LINK);
+		endLink.setTarget(nodeSink);
+		
+		form.addDiagram(diagram);
+		
+		question1.remove();
 	}
 
 	private boolean compare(TreeObject object1, TreeObject object2) {

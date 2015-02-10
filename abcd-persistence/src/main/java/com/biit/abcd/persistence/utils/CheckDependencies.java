@@ -83,7 +83,8 @@ public class CheckDependencies {
 
 	/**
 	 * Look for tree object dependencies inside the diagram<br>
-	 * Only three node types can create new dependencies that hasn't been checked yet:<br>
+	 * Only three node types can create new dependencies that hasn't been
+	 * checked yet:<br>
 	 * - DiagramLink<br>
 	 * - DiagramFork<br>
 	 * - DiagramChild: to check internal dependencies<br>
@@ -93,18 +94,20 @@ public class CheckDependencies {
 	 */
 	private static void checkTreeObjectDependenciesInDiagram(Diagram diagram, TreeObject treeObject)
 			throws DependencyExistException {
-		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
-		for (DiagramObject diagramObject : diagramObjectsList) {
-			if (diagramObject instanceof DiagramLink) {
-				checkTreeObjectDependeciesInExpressionChain(((DiagramLink) diagramObject).getExpressionChain(),
-						treeObject);
-			} else if (diagramObject instanceof DiagramFork) {
-				if (((DiagramFork) diagramObject).getReference().equals(treeObject)) {
-					throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName()
-							+ ", referenced in the form.");
+		if (diagram != null) {
+			Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+			for (DiagramObject diagramObject : diagramObjectsList) {
+				if (diagramObject instanceof DiagramLink) {
+					checkTreeObjectDependeciesInExpressionChain(((DiagramLink) diagramObject).getExpressionChain(),
+							treeObject);
+				} else if (diagramObject instanceof DiagramFork) {
+					if (((DiagramFork) diagramObject).getReference().equals(treeObject)) {
+						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName()
+								+ ", referenced in the form.");
+					}
+				} else if (diagramObject instanceof DiagramChild) {
+					checkTreeObjectDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), treeObject);
 				}
-			} else if (diagramObject instanceof DiagramChild) {
-				checkTreeObjectDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), treeObject);
 			}
 		}
 	}
