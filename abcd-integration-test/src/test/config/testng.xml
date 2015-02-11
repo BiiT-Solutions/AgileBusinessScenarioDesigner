@@ -4,12 +4,12 @@
 		<groups>
 			<run>
 				<include name="login" />
-				<include name="basicFunctionalityTests" />
-				<include name="formDesigner" />
-				<include name="formVariables" />
-				<include name="statusPreserving" />
-				<include name="globalVariables" />
-				<include name="ruleExpression" />
+				<exclude name="basicFunctionalityTests" />
+				<exclude name="formDesigner" />
+				<exclude name="formVariables" />
+				<exclude name="statusPreserving" />
+				<exclude name="globalVariables" />
+				<exclude name="ruleExpression" />
 			</run>
 		</groups>
 		<classes>
