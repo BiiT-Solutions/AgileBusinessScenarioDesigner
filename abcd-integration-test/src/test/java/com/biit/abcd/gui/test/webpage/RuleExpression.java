@@ -1,12 +1,19 @@
 package com.biit.abcd.gui.test.webpage;
 
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
+
+import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerFormat;
 import com.biit.abcd.gui.test.window.NewRuleExpressionWindow;
 import com.biit.abcd.gui.test.window.SelectAVariable;
 import com.biit.abcd.gui.test.window.SelectAnElement;
 import com.biit.abcd.gui.test.window.SelectGenericVariable;
+import com.biit.abcd.gui.test.window.SelectGlobalConstantWindow;
+import com.biit.abcd.gui.test.window.StringInputWindow;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.CssLayoutElement;
 import com.vaadin.testbench.elements.HorizontalLayoutElement;
+import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.testbench.elements.ListSelectElement;
 import com.vaadin.testbench.elements.PanelElement;
 import com.vaadin.testbench.elements.TabSheetElement;
@@ -23,10 +30,14 @@ public class RuleExpression extends LeftTreeTableWebpage {
 	private static final String ADD_GENERIC_ELEMENT_BUTTON = "Add Generic Element";
 	private static final String GENERIC_VARIABLE_TABLE = "Select a Generic Variable:";
 	private static final String ADD_GENERIC_VARIABLE_BUTTON = "Add Generic Variable";
+	private static final String INPUT_VALUE_BUTTON = "Input Value";
+	private static final Object VALID_CAPTION = "Valid";
 	private final NewRuleExpressionWindow newRuleExpressionWindow;
 	private final SelectAnElement selectAnElement;
 	private final SelectAVariable selectAVariable;
 	private final SelectGenericVariable selectGenericVariable;
+	private final StringInputWindow stringInputWindow;
+	private final SelectGlobalConstantWindow selectGlobalConstantWindow;
 
 	public RuleExpression() {
 		super();
@@ -34,10 +45,14 @@ public class RuleExpression extends LeftTreeTableWebpage {
 		selectAnElement = new SelectAnElement();
 		selectAVariable = new SelectAVariable();
 		selectGenericVariable = new SelectGenericVariable();
+		stringInputWindow = new StringInputWindow();
+		selectGlobalConstantWindow = new SelectGlobalConstantWindow();
 		addWindow(newRuleExpressionWindow);
 		addWindow(selectAnElement);
 		addWindow(selectAVariable);
 		addWindow(selectGenericVariable);
+		addWindow(stringInputWindow);
+		addWindow(selectGlobalConstantWindow);
 	}
 
 	public void newRuleExpression(String name) {
@@ -70,9 +85,9 @@ public class RuleExpression extends LeftTreeTableWebpage {
 		return $(TreeTableElement.class).caption("Select an Element:").first();
 	}
 
-	public void selectElement(int row) {
+	public void selectElement(int row) {	
 		getSelectElementTable().getCell(row, 0).click();
-		getSelectElementTable().waitForVaadin();
+		getSelectElementTable().getCell(row, 0).waitForVaadin();
 	}
 
 	public void toggleSelectElementRow(int row) {
@@ -95,6 +110,10 @@ public class RuleExpression extends LeftTreeTableWebpage {
 
 	public void doubleClickOnToken(int token) {
 		$(PanelElement.class).$(HorizontalLayoutElement.class).$$(CssLayoutElement.class).get(token).doubleClick();
+	}
+	
+	public CssLayoutElement getToken(int token){
+		return $(PanelElement.class).$(HorizontalLayoutElement.class).$$(CssLayoutElement.class).get(token);
 	}
 
 	public SelectAnElement getSelectAnElement() {
@@ -179,8 +198,45 @@ public class RuleExpression extends LeftTreeTableWebpage {
 	private ButtonElement getAddGenericVariableButton() {
 		return getButtonByCaption(ADD_GENERIC_VARIABLE_BUTTON);
 	}
-	
+
 	public SelectGenericVariable getSelectGenericVariable() {
 		return selectGenericVariable;
+	}
+
+	public void addInputValue(AnswerFormat answerFormat,String value) {
+		getInputValue().click();
+		getStringInputWindow().setType(answerFormat);
+		getStringInputWindow().setValue(value);
+		getStringInputWindow().clickAccept();
+	}
+
+	private ButtonElement getInputValue() {
+		return getButtonByCaption(INPUT_VALUE_BUTTON);
+	}
+	
+	public StringInputWindow getStringInputWindow() {
+		return stringInputWindow;
+	}
+
+	public void editInputValue(int token, AnswerFormat answerFormat, String value) {
+		doubleClickOnToken(token);
+		getStringInputWindow().setType(answerFormat);
+		getStringInputWindow().setValue(value);
+		getStringInputWindow().clickAccept();
+	}
+
+	public void clickButton(String caption) {
+		getButtonByCaption(caption).click();
+	}
+
+	public boolean isValid() {
+		if($(HorizontalLayoutElement.class).$(LabelElement.class).first().getText().equals(VALID_CAPTION)){
+			return true;
+		}
+		return false;
+	}
+
+	public SelectGlobalConstantWindow getSelectGlobalConstantWindow() {
+		return selectGlobalConstantWindow;
 	}
 }
