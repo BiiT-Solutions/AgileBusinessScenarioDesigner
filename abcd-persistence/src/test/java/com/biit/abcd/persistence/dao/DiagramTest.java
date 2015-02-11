@@ -10,12 +10,29 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSink;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.diagram.Point;
+import com.biit.abcd.persistence.entity.diagram.Size;
+import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.DependencyExistException;
+import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
@@ -98,6 +115,350 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 		Iterator<Diagram> iterator = retrievedForm.getDiagrams().iterator();
 		Assert.assertTrue(iterator.hasNext());
 		Assert.assertEquals(iterator.next().getName(), DUMMY_DIAGRAM);
+
+		formDao.makeTransient(form);
+	}
+
+	@Test
+	public void diagramChildLinkNull() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException,
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, DependencyExistException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+
+		Category category = new Category();
+		category.setName("Category1");
+		form.addChild(category);
+
+		Question question1 = new Question();
+		question1.setName("Question1");
+		category.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setName("Question2");
+		category.addChild(question2);
+
+		// Create a diagram
+		Diagram diagram = new Diagram("diagram1");
+
+		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1, 1));
+		Node nodeSource = new Node(startNode.getJointjsId());
+		diagram.addDiagramObject(startNode);
+
+		DiagramChild diagramChild = new DiagramChild();
+		diagramChild.setDiagram(null);
+		diagramChild.setJointjsId(IdGenerator.createId());
+		diagramChild.setSize(new Size(2, 2));
+		diagramChild.setPosition(new Point(1, 1));
+		diagramChild.setType(DiagramObjectType.DIAGRAM_CHILD);
+
+		Node nodeChild = new Node(diagramChild.getJointjsId());
+		diagram.addDiagramObject(diagramChild);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeChild);
+		diagram.addDiagramObject(startLink);
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		diagramEndNode.setSize(new Size(3, 3));
+		diagramEndNode.setPosition(new Point(1, 1));
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode);
+
+		DiagramLink endLink = new DiagramLink();
+		endLink.setSource(nodeChild);
+		endLink.setJointjsId(IdGenerator.createId());
+		endLink.setType(DiagramObjectType.LINK);
+		endLink.setTarget(nodeSink);
+
+		form.addDiagram(diagram);
+
+		formDao.makePersistent(form);
+
+		question1.remove();
+
+		formDao.makePersistent(form);
+
+		formDao.makeTransient(form);
+	}
+
+	@Test
+	public void diagramForkNullExpression() throws NotValidChildException, ChildrenNotFoundException,
+			FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, DependencyExistException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+
+		Category category = new Category();
+		category.setName("Category1");
+		form.addChild(category);
+
+		Question question1 = new Question();
+		question1.setName("Question1");
+		category.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setName("Question2");
+		category.addChild(question2);
+
+		// Create a diagram
+		Diagram diagram = new Diagram("diagram1");
+
+		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1, 1));
+		Node nodeSource = new Node(startNode.getJointjsId());
+		diagram.addDiagramObject(startNode);
+
+		DiagramFork diagramFork = new DiagramFork();
+		diagramFork.setReference(null);
+		diagramFork.setJointjsId(IdGenerator.createId());
+		diagramFork.setSize(new Size(2, 2));
+		diagramFork.setPosition(new Point(1, 1));
+		diagramFork.setType(DiagramObjectType.FORK);
+
+		Node nodeChild = new Node(diagramFork.getJointjsId());
+		diagram.addDiagramObject(diagramFork);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeChild);
+		diagram.addDiagramObject(startLink);
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		diagramEndNode.setSize(new Size(3, 3));
+		diagramEndNode.setPosition(new Point(1, 1));
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode);
+
+		DiagramLink endLink = new DiagramLink();
+		endLink.setSource(nodeChild);
+		endLink.setJointjsId(IdGenerator.createId());
+		endLink.setType(DiagramObjectType.LINK);
+		endLink.setTarget(nodeSink);
+
+		form.addDiagram(diagram);
+
+		formDao.makePersistent(form);
+
+		formDao.makeTransient(form);
+	}
+
+	@Test
+	public void diagramExpressionNullExpression() throws NotValidChildException, ChildrenNotFoundException,
+			FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, DependencyExistException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+
+		Category category = new Category();
+		category.setName("Category1");
+		form.addChild(category);
+
+		Question question1 = new Question();
+		question1.setName("Question1");
+		category.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setName("Question2");
+		category.addChild(question2);
+
+		// Create a diagram
+		Diagram diagram = new Diagram("diagram1");
+
+		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1, 1));
+		Node nodeSource = new Node(startNode.getJointjsId());
+		diagram.addDiagramObject(startNode);
+
+		DiagramExpression diagramExpression = new DiagramExpression();
+		diagramExpression.setExpression(null);
+		diagramExpression.setJointjsId(IdGenerator.createId());
+		diagramExpression.setSize(new Size(2, 2));
+		diagramExpression.setPosition(new Point(1, 1));
+		diagramExpression.setType(DiagramObjectType.FORK);
+
+		Node nodeChild = new Node(diagramExpression.getJointjsId());
+		diagram.addDiagramObject(diagramExpression);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeChild);
+		diagram.addDiagramObject(startLink);
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		diagramEndNode.setSize(new Size(3, 3));
+		diagramEndNode.setPosition(new Point(1, 1));
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode);
+
+		DiagramLink endLink = new DiagramLink();
+		endLink.setSource(nodeChild);
+		endLink.setJointjsId(IdGenerator.createId());
+		endLink.setType(DiagramObjectType.LINK);
+		endLink.setTarget(nodeSink);
+
+		form.addDiagram(diagram);
+
+		formDao.makePersistent(form);
+
+		formDao.makeTransient(form);
+	}
+
+	@Test
+	public void diagramRuleNullExpression() throws NotValidChildException, ChildrenNotFoundException,
+			FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, DependencyExistException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+
+		Category category = new Category();
+		category.setName("Category1");
+		form.addChild(category);
+
+		Question question1 = new Question();
+		question1.setName("Question1");
+		category.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setName("Question2");
+		category.addChild(question2);
+
+		// Create a diagram
+		Diagram diagram = new Diagram("diagram1");
+
+		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1, 1));
+		Node nodeSource = new Node(startNode.getJointjsId());
+		diagram.addDiagramObject(startNode);
+
+		DiagramRule diagramRule = new DiagramRule();
+		diagramRule.setRule(null);
+		diagramRule.setJointjsId(IdGenerator.createId());
+		diagramRule.setSize(new Size(2, 2));
+		diagramRule.setPosition(new Point(1, 1));
+		diagramRule.setType(DiagramObjectType.FORK);
+
+		Node nodeChild = new Node(diagramRule.getJointjsId());
+		diagram.addDiagramObject(diagramRule);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeChild);
+		diagram.addDiagramObject(startLink);
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		diagramEndNode.setSize(new Size(3, 3));
+		diagramEndNode.setPosition(new Point(1, 1));
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode);
+
+		DiagramLink endLink = new DiagramLink();
+		endLink.setSource(nodeChild);
+		endLink.setJointjsId(IdGenerator.createId());
+		endLink.setType(DiagramObjectType.LINK);
+		endLink.setTarget(nodeSink);
+
+		form.addDiagram(diagram);
+
+		formDao.makePersistent(form);
+
+		formDao.makeTransient(form);
+	}
+
+	@Test
+	public void diagramTableNullExpression() throws NotValidChildException, ChildrenNotFoundException,
+			FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, DependencyExistException {
+		Form form = new Form();
+		form.setOrganizationId(0l);
+
+		Category category = new Category();
+		category.setName("Category1");
+		form.addChild(category);
+
+		Question question1 = new Question();
+		question1.setName("Question1");
+		category.addChild(question1);
+
+		Question question2 = new Question();
+		question2.setName("Question2");
+		category.addChild(question2);
+
+		// Create a diagram
+		Diagram diagram = new Diagram("diagram1");
+
+		DiagramSource startNode = new DiagramSource();
+		startNode.setJointjsId(IdGenerator.createId());
+		startNode.setType(DiagramObjectType.SOURCE);
+		startNode.setSize(new Size(1, 1));
+		startNode.setPosition(new Point(1, 1));
+		Node nodeSource = new Node(startNode.getJointjsId());
+		diagram.addDiagramObject(startNode);
+
+		DiagramTable diagramTable = new DiagramTable();
+		diagramTable.setTable(null);
+		diagramTable.setJointjsId(IdGenerator.createId());
+		diagramTable.setSize(new Size(2, 2));
+		diagramTable.setPosition(new Point(1, 1));
+		diagramTable.setType(DiagramObjectType.FORK);
+
+		Node nodeChild = new Node(diagramTable.getJointjsId());
+		diagram.addDiagramObject(diagramTable);
+
+		DiagramLink startLink = new DiagramLink();
+		startLink.setSource(nodeSource);
+		startLink.setJointjsId(IdGenerator.createId());
+		startLink.setType(DiagramObjectType.LINK);
+		startLink.setTarget(nodeChild);
+		diagram.addDiagramObject(startLink);
+
+		DiagramSink diagramEndNode = new DiagramSink();
+		diagramEndNode.setJointjsId(IdGenerator.createId());
+		diagramEndNode.setType(DiagramObjectType.SINK);
+		diagramEndNode.setSize(new Size(3, 3));
+		diagramEndNode.setPosition(new Point(1, 1));
+		Node nodeSink = new Node(diagramEndNode.getJointjsId());
+		diagram.addDiagramObject(diagramEndNode);
+
+		DiagramLink endLink = new DiagramLink();
+		endLink.setSource(nodeChild);
+		endLink.setJointjsId(IdGenerator.createId());
+		endLink.setType(DiagramObjectType.LINK);
+		endLink.setTarget(nodeSink);
+
+		form.addDiagram(diagram);
+
+		formDao.makePersistent(form);
 
 		formDao.makeTransient(form);
 	}
