@@ -121,31 +121,31 @@ public class RuleExpressionTests extends AbcdTester{
 		getFormManager().logOut();
 	}
 	
-//	@Test
-//	public void addTreeElementVariableAndChangeIt(){
-//		login(ABCD_FORM_ADMIN_BIIT1);
-//		getFormManager().createNewForm(FORM_1);
-//
-//		createFormVariables();
-//		
-//		getFormVariables().clickRuleExpressionEditor();
-//		
-//		getRuleExpression().toggleSelectElementRow(0);
-//		getRuleExpression().newRuleExpression(RULE_1);
-//		getRuleExpression().addVariable(VAR_1);
-//		
-//		getRuleExpression().save();
-//		
-//		getRuleExpression().doubleClickOnToken(0);
-//		getRuleExpression().getSelectAVariable().selectVariableAndAcceptElement(VAR_1);
-//		
-//		getRuleExpression().save();
-//		
-//		//Cleanup
-//		getRuleExpression().goToFormManager();
-//		getFormManager().deleteForm();
-//		getFormManager().logOut();
-//	}
+	@Test
+	public void addTreeElementVariableAndChangeIt(){
+		login(ABCD_FORM_ADMIN_BIIT1);
+		getFormManager().createNewForm(FORM_1);
+
+		createFormVariables();
+		
+		getFormVariables().clickRuleExpressionEditor();
+		
+		getRuleExpression().toggleSelectElementRow(0);
+		getRuleExpression().newRuleExpression(RULE_1);
+		getRuleExpression().addVariable(VAR_1);
+		
+		getRuleExpression().save();
+		
+		getRuleExpression().doubleClickOnToken(0);
+		getRuleExpression().getSelectAVariable().selectVariableAndAcceptElement(VAR_1);
+		
+		getRuleExpression().save();
+		
+		//Cleanup
+		getRuleExpression().goToFormManager();
+		getFormManager().deleteForm();
+		getFormManager().logOut();
+	}
 	
 	@Test
 	public void addTreeElementVariableAndTryToUseElement(){
