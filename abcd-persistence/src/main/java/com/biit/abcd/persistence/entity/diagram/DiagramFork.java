@@ -82,8 +82,10 @@ public class DiagramFork extends DiagramElement {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		if (references != null) {
 			for (ExpressionValueTreeObjectReference child : references) {
-				innerStorableObjects.add(child);
-				innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+				if (child != null) {
+					innerStorableObjects.add(child);
+					innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+				}
 			}
 		}
 		return innerStorableObjects;

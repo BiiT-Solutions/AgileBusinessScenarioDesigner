@@ -536,6 +536,7 @@ public enum LanguageCodes {
 	TOOLTIP_ABOUT_US("tooltip.about.us"),
 	
 	ERROR_ELEMENT_CANNOT_BE_REMOVED_TITLE("error.element.cannot.be.removed.title"),
+	ERROR_ELEMENT_CANNOT_BE_REMOVED_DESCRIPTION("error.element.cannot.be.removed.description.global.variables"),
 	
 	ERROR_READ_ONLY_ELEMENT("error.read.only.element"),
 	

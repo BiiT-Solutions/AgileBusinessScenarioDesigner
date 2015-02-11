@@ -123,11 +123,22 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				Object selectedVariable = globalVariableTable.getValue();
-				if (selectedVariable != null) {
-					globalVariableTable.removeItem(selectedVariable);
-				} else {
-					MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-							LanguageCodes.WARNING_SELECT_VARIABLE_TO_DELETE);
+				try {
+					UserSessionHandler.getGlobalVariablesController().checkFormUsingVariable(
+							(GlobalVariable) selectedVariable);
+					if (selectedVariable != null) {
+						globalVariableTable.removeItem(selectedVariable);
+					} else {
+						MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+								LanguageCodes.WARNING_SELECT_VARIABLE_TO_DELETE);
+					}
+				} catch (ElementCannotBeRemovedException e) {
+					MessageManager.showError(LanguageCodes.ERROR_ELEMENT_CANNOT_BE_REMOVED_TITLE,
+							LanguageCodes.ERROR_ELEMENT_CANNOT_BE_REMOVED_DESCRIPTION);
+				} catch (UnexpectedDatabaseException e) {
+					AbcdLogger.errorMessage(FormManager.class.getName(), e);
+					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+							LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				}
 			}
 		});
@@ -360,7 +371,11 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		try {
 			UserSessionHandler.getGlobalVariablesController().update(globalVariableTable.getGlobalVariables());
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
-		} catch (UnexpectedDatabaseException | ElementCannotBeRemovedException | ElementCannotBePersistedException e) {
+		} catch (ElementCannotBeRemovedException e) {
+			MessageManager.showError(LanguageCodes.ERROR_ELEMENT_CANNOT_BE_REMOVED_TITLE,
+					LanguageCodes.ERROR_ELEMENT_CANNOT_BE_REMOVED_DESCRIPTION);
+			AbcdLogger.errorMessage(FormManager.class.getName(), e);
+		} catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);

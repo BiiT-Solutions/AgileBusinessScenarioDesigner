@@ -1,7 +1,9 @@
 package com.biit.abcd.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
@@ -52,11 +54,17 @@ public class GlobalVariablesController {
 			ElementCannotBeRemovedException, ElementCannotBePersistedException, DuplicatedVariableException {
 		synchronized (GlobalVariablesController.class) {
 			checkDuplicatedVariables(globalVariables);
+			// All old variables.
+			Set<GlobalVariable> intersectionOfVariables = new HashSet<GlobalVariable>(this.globalVariables);
+			// Intersection with new variables.
+			intersectionOfVariables.retainAll(globalVariables);
+			// Remove intersection from old variables give all variables to delete.
+			Set<GlobalVariable> variablesToRemove = new HashSet<GlobalVariable>(this.globalVariables);
+			variablesToRemove.removeAll(intersectionOfVariables);
+			checkFormUsingVariable(variablesToRemove);
 			// Remove unused variables.
-			for (GlobalVariable globalVariable : this.globalVariables) {
-				if (!globalVariables.contains(globalVariable)) {
-					globalVariablesDao.makeTransient(globalVariable);
-				}
+			for (GlobalVariable globalVariable : variablesToRemove) {
+				globalVariablesDao.makeTransient(globalVariable);
 			}
 
 			for (GlobalVariable globalVariable : globalVariables) {
@@ -74,6 +82,22 @@ public class GlobalVariablesController {
 					throw new DuplicatedVariableException("Duplicated global variable.");
 				}
 			}
+		}
+	}
+
+	public void checkFormUsingVariable(GlobalVariable globalVariable) throws UnexpectedDatabaseException,
+			ElementCannotBeRemovedException {
+		Set<GlobalVariable> globalVariables = new HashSet<>();
+		globalVariables.add(globalVariable);
+		checkFormUsingVariable(globalVariables);
+	}
+
+	public void checkFormUsingVariable(Set<GlobalVariable> globalVariables) throws UnexpectedDatabaseException,
+			ElementCannotBeRemovedException {
+		int formsUsingVariable = globalVariablesDao.getFormNumberUsing(globalVariables);
+		if (formsUsingVariable > 0) {
+			throw new ElementCannotBeRemovedException("Global Variables is in use in '" + formsUsingVariable
+					+ "' forms.");
 		}
 	}
 
