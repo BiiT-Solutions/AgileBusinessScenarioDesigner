@@ -2,13 +2,13 @@ package com.biit.abcd.gui.test.window;
 
 import com.vaadin.testbench.elements.DateFieldElement;
 import com.vaadin.testbench.elements.TextFieldElement;
-import com.vaadin.testbench.elements.WindowElement;
 
 public class AddNewValueWindow extends AcceptCancelWindow {
 
 	private static final String VALUE_CAPTION = "Value";
 	private static final String VALID_FROM = "Valid from";
 	private static final String VALID_TO = "Valid to";
+	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.globalvariables.VariableDataWindow";
 
 	public void setValue(String value) {
 		try {
@@ -28,15 +28,9 @@ public class AddNewValueWindow extends AcceptCancelWindow {
 		$(DateFieldElement.class).caption(VALID_TO).first().setValue(value);
 	}
 
-	public void waitToShow() {
-		while (true) {
-			try {
-				$$(WindowElement.class).caption("Add a new value").first().waitForVaadin();
-				return;
-			} catch (Exception e) {
-				// ignore
-			}
-		}
+	@Override
+	protected String getWindowId() {
+		return CLASS_NAME;
 	}
 
 }

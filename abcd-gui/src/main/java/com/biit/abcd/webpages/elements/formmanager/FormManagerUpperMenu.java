@@ -17,7 +17,6 @@ import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleExecutionException;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
@@ -200,10 +199,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 										if (e.getGeneratedException() instanceof InvalidRuleException) {
 											AbcdLogger.errorMessage(SettingsWindow.class.getName(),
 													e.getGeneratedException());
-											MessageManager.showError(LanguageCodes.ERROR_TITLE, ServerTranslate
-													.translate(LanguageCodes.DROOLS_RULE_INVALID,
-															new Object[] { ((InvalidRuleException) e
-																	.getGeneratedException()).getRuleName() }));
+											MessageManager.showError(LanguageCodes.ERROR_TITLE,
+													LanguageCodes.DROOLS_RULE_INVALID,
+													((InvalidRuleException) e.getGeneratedException()).getRuleName());
 										} else {
 											// This is a generic exception for
 											// everything related with the rules
@@ -353,9 +351,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 			// We show the user the invalid rule name
 			if (e.getGeneratedException() instanceof InvalidRuleException) {
 				AbcdLogger.errorMessage(SettingsWindow.class.getName(), e.getGeneratedException());
-				MessageManager.showError(LanguageCodes.ERROR_TITLE, ServerTranslate.translate(
-						LanguageCodes.DROOLS_RULE_INVALID,
-						new Object[] { ((InvalidRuleException) e.getGeneratedException()).getRuleName() }));
+				MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID,((InvalidRuleException) e.getGeneratedException()).getRuleName() );
 			} else {
 				// This is a generic exception for everything related with the
 				// rules generation

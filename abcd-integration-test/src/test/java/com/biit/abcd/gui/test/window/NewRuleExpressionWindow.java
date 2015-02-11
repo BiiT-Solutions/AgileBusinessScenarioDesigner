@@ -9,4 +9,10 @@ public class NewRuleExpressionWindow extends TextFieldAcceptCancelWindow{
 		return EXPRESSION_NAME;
 	}
 
+	@Override
+	protected String getWindowId() {
+		// This window doesn't use id for now.
+		return null;
+	}
+
 }

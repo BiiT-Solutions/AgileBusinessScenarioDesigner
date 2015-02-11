@@ -359,9 +359,10 @@ public class StatusPreservingTests extends AbcdTester {
 		getDiagramDesigner().newDiagram(DIAGRAM_1);
 		diagramDesignerCheckSaveWarning();
 
-		// TODO bug
-		// getDiagramDesigner().removeDiagram(DIAGRAM_1_ROW);
-		// diagramDesignerCheckSaveWarning();
+		//It's being deselected
+		getDiagramDesigner().selectRow(DIAGRAM_1_ROW);
+		getDiagramDesigner().removeDiagram(DIAGRAM_1_ROW);
+		diagramDesignerCheckSaveWarning();
 
 		// Remove form
 		getRuleTableEditor().logOut();

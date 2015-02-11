@@ -73,8 +73,8 @@ public class SelectTestScenarioTableEditable extends TableCellLabelEdit {
 						updateItemTableRuleInGui(testScenario);
 						newTableCellEditWindow.close();
 					} catch (FieldTooLongException e) {
-						MessageManager.showWarning(ServerTranslate.translate(LanguageCodes.WARNING_TITLE),
-								ServerTranslate.translate(LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG));
+						MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+								LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG);
 					}
 				}
 			});

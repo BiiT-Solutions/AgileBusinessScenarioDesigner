@@ -1,70 +1,22 @@
 package com.biit.abcd;
 
+import java.util.Locale;
+
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 
 public class MessageManager {
 	private final static Integer MESSAGE_DURATION_MILISECONDS = 4000;
 
-	public static void showWarning(String caption, String description) {
-		showMessage(caption, description, Notification.Type.WARNING_MESSAGE);
-	}
-
-	public static void showWarning(LanguageCodes caption, LanguageCodes description) {
-		showWarning(ServerTranslate.translate(caption), ServerTranslate.translate(description));
-	}
-
-	public static void showWarning(LanguageCodes caption) {
-		showWarning(ServerTranslate.translate(caption), "");
-	}
-
-	private static void showError(String caption, String description) {
-		showMessage(caption, description, Notification.Type.ERROR_MESSAGE, Position.TOP_CENTER);
-	}
-
-	public static void showError(LanguageCodes caption, LanguageCodes description) {
-		showError(ServerTranslate.translate(caption), ServerTranslate.translate(description));
-	}
-
-	public static void showError(LanguageCodes caption, String description) {
-		showError(ServerTranslate.translate(caption), description);
-	}
-
-	public static void showError(String caption) {
-		showMessage(caption, "", Notification.Type.ERROR_MESSAGE, Position.TOP_CENTER);
-	}
-
-	public static void showError(LanguageCodes caption) {
-		showError(ServerTranslate.translate(caption));
-	}
-
-	private static void showInfo(String caption, String description) {
-		showMessage(caption, description, Notification.Type.HUMANIZED_MESSAGE);
-	}
-
-	public static void showInfo(LanguageCodes caption, LanguageCodes description) {
-		showInfo(ServerTranslate.translate(caption), ServerTranslate.translate(description));
-	}
-
-	private static void showInfo(String caption) {
-		showMessage(caption, "", Notification.Type.HUMANIZED_MESSAGE);
-	}
-
-	public static void showInfo(LanguageCodes caption) {
-		showInfo(ServerTranslate.translate(caption));
-	}
-
-	private static void showMessage(String caption, String description, Notification.Type type) {
-		showMessage(caption, description, type, Position.TOP_CENTER);
-	}
-
-	private static void showMessage(String caption, String description, Notification.Type type, Position position) {
-		// Log it.
+	private static void showMessage(LanguageCodes caption, LanguageCodes description, Notification.Type type,
+			Position position, Object... args) {
+		// Log the message.
 		try {
 			String user;
 			if (UserSessionHandler.getUser() != null) {
@@ -72,14 +24,24 @@ public class MessageManager {
 			} else {
 				user = "none";
 			}
-			AbcdLogger.info(MessageManager.class.getName(), "Message '" + caption + " " + description + "' (" + type
-					+ ") displayed to user '" + user + "'.");
+
+			String logTranslatedCaption = ServerTranslate.translate(caption, Locale.ENGLISH);
+			String logTranslatedDescription = new String();
+			if (description != null) {
+				logTranslatedDescription = ServerTranslate.translate(description, Locale.ENGLISH, args);
+			}
+
+			AbcdLogger.info(MessageManager.class.getName(), "Message '" + logTranslatedCaption + " "
+					+ logTranslatedDescription + "' (" + type + ") displayed to user '" + user + "'.");
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(MessageManager.class.getName(), e);
 		}
 
 		if (UI.getCurrent() != null) {
-			Notification notif = new Notification(caption, description, type);
+			String notificationTranslatedCaption = ServerTranslate.translate(caption);
+			String notificationTranslatedDescription = ServerTranslate.translate(description, args);
+			Notification notif = new Notification(notificationTranslatedCaption, notificationTranslatedDescription,
+					type);
 
 			// Set the position.
 			notif.setPosition(position);
@@ -95,4 +57,65 @@ public class MessageManager {
 			notif.show(ApplicationFrame.getCurrent().getPage());
 		}
 	}
+
+	private static void showMessage(LanguageCodes caption, LanguageCodes description, Notification.Type type,
+			Object... args) {
+		showMessage(caption, description, type, Position.TOP_CENTER, args);
+	}
+
+	public static void showWarning(LanguageCodes caption, LanguageCodes description, Object... args) {
+		showMessage(caption, description, Notification.Type.WARNING_MESSAGE, args);
+	}
+
+	public static void showWarning(LanguageCodes caption, Object... args) {
+		showWarning(caption, null, args);
+	}
+
+	public static void showError(LanguageCodes caption, LanguageCodes description, Object... args) {
+		showMessage(caption, description, Notification.Type.ERROR_MESSAGE, args);
+	}
+
+	public static void showError(LanguageCodes caption) {
+		showError(caption, null);
+	}
+
+	private static void showInfo(LanguageCodes caption, LanguageCodes description) {
+		showMessage(caption, description, Notification.Type.HUMANIZED_MESSAGE);
+	}
+
+	public static void showInfo(LanguageCodes caption) {
+		showInfo(caption, null);
+	}
+
+	/**
+	 * Last resort to show an error in the UI
+	 * 
+	 * @param string
+	 */
+	public static void showError(String error) {
+		try {
+			String user;
+			if (UserSessionHandler.getUser() != null) {
+				user = UserSessionHandler.getUser().getEmailAddress();
+			} else {
+				user = "none";
+			}
+
+			AbcdLogger.severe(MessageManager.class.getName(), "Message '" + error + "' displayed to user '" + user
+					+ "'.");
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(MessageManager.class.getName(), e);
+		}
+		if (UI.getCurrent() != null) {
+			Notification notif = new Notification(error, "", Type.ERROR_MESSAGE);
+
+			// Set the position.
+			notif.setPosition(Position.TOP_CENTER);
+			notif.setDelayMsec(-1);
+
+			// Show it in the main window.
+			notif.show(ApplicationFrame.getCurrent().getPage());
+		}
+	}
+
 }

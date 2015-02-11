@@ -21,8 +21,8 @@ public enum WebMap {
 	GLOBAL_VARIABLES(GlobalVariablesCreator.class),
 
 	TEST_SCENARIOS(TestScenarioEditor.class),
-
-	AUTO_LOGIN(AutoLogin.class);
+	
+	;
 
 	private static WebMap loginPage = WebMap.LOGIN_PAGE;
 

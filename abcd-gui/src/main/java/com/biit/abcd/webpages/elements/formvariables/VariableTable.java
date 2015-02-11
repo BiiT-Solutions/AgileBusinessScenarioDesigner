@@ -4,6 +4,8 @@ import java.text.ParseException;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.CustomVariableScopeUi;
+import com.biit.abcd.language.CustomVariableTypeUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.language.UserLocaleStringToDoubleConverter;
@@ -134,9 +136,9 @@ public class VariableTable extends Table {
 	public ComboBox createTypeComboBox(final CustomVariable customVariable, final Item item) {
 		final VariableTable thisTable = this;
 		final ComboBox typeComboBox = new ComboBox();
-		for (CustomVariableType variableType : CustomVariableType.values()) {
-			typeComboBox.addItem(variableType);
-			typeComboBox.setItemCaption(variableType, ServerTranslate.translate(variableType.getTranslationCode()));
+		for (CustomVariableTypeUi variableType : CustomVariableTypeUi.values()) {
+			typeComboBox.addItem(variableType.getCustomvariable());
+			typeComboBox.setItemCaption(variableType.getCustomvariable(), ServerTranslate.translate(variableType.getLanguageCode()));
 		}
 		typeComboBox.setNullSelectionAllowed(false);
 		typeComboBox.addFocusListener(new FocusListener() {
@@ -187,10 +189,9 @@ public class VariableTable extends Table {
 	public ComboBox createScopeComboBox(final CustomVariable customVariable) {
 		final VariableTable thisTable = this;
 		final ComboBox scopeComboBox = new ComparableComboBox();
-		for (CustomVariableScope variablesScope : CustomVariableScope.values()) {
-			scopeComboBox.addItem(variablesScope);
-			scopeComboBox
-					.setItemCaption(variablesScope, ServerTranslate.translate(variablesScope.getTranslationCode()));
+		for (CustomVariableScopeUi variablesScope : CustomVariableScopeUi.values()) {
+			scopeComboBox.addItem(variablesScope.getVariableScope());
+			scopeComboBox.setItemCaption(variablesScope.getVariableScope(), ServerTranslate.translate(variablesScope.getLanguageCode()));
 		}
 		scopeComboBox.setNullSelectionAllowed(false);
 		scopeComboBox.addFocusListener(new FocusListener() {

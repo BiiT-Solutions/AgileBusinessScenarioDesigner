@@ -1,26 +1,13 @@
 package com.biit.abcd.gui.test.window;
 
 import com.vaadin.testbench.elements.TreeTableElement;
-import com.vaadin.testbench.elements.WindowElement;
 
 public class SelectAnElement extends AcceptCancelWindow {
 
-	private static final String WINDOW_CAPTION = "Select an Element.";
-
-	public void waitWindowOpen() {
-		while (true) {
-			try {
-				if ($(WindowElement.class).caption(WINDOW_CAPTION).exists()) {
-					return;
-				}
-			} catch (Exception e) {
-
-			}
-		}
-	}
+	private static final String CLASS_NAME = "com.biit.abcd.webpages.components.SelectTreeObjectWindow";
 
 	public TreeTableElement getTable() {
-		return $(WindowElement.class).caption(WINDOW_CAPTION).$(TreeTableElement.class).first();
+		return getWindow().$(TreeTableElement.class).first();
 	}
 
 	public void selectElement(int row) {
@@ -28,9 +15,14 @@ public class SelectAnElement extends AcceptCancelWindow {
 	}
 
 	public void selectAndAcceptElement(int row) {
-		waitWindowOpen();
+		waitToShow();
 		selectElement(row);
 		clickAccept();
+	}
+
+	@Override
+	protected String getWindowId() {
+		return CLASS_NAME;
 	}
 
 }

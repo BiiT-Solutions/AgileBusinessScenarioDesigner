@@ -9,21 +9,10 @@ public class SelectAVariable extends AcceptCancelWindow {
 	private static final String WINDOW_CAPTION = "Select Form Variables";
 	private static final String SELECTION_CAPTION = "Select a Variable:";
 	private static final String ELEMENT_TABLE = "Select an Element:";
-
-	public void waitWindowOpen() {
-		while (true) {
-			try {
-				if ($(WindowElement.class).caption(WINDOW_CAPTION).exists()) {
-					return;
-				}
-			} catch (Exception e) {
-
-			}
-		}
-	}
+	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.expressionviewer.SelectFormGenericVariablesWindow";
 
 	public void selectVariableAndAcceptElement(String name) {
-		waitWindowOpen();
+		waitToShow();
 		getSelectionList().selectByText(name);
 		clickAccept();
 	}
@@ -43,6 +32,11 @@ public class SelectAVariable extends AcceptCancelWindow {
 
 	public void toggleElement(int row) {
 		getTable().getRow(row).toggleExpanded();
+	}
+
+	@Override
+	protected String getWindowId() {
+		return CLASS_NAME;
 	}
 
 }

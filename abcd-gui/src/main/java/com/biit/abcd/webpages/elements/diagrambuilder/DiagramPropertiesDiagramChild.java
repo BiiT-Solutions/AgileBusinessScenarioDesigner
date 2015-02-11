@@ -106,8 +106,7 @@ public class DiagramPropertiesDiagramChild extends SecuredDiagramElementProperti
 
 	@Override
 	public void updateElement() {
-
-		firePropertyUpdateListener(instance);
+//		firePropertyUpdateListener(instance);
 	}
 
 	@Override
