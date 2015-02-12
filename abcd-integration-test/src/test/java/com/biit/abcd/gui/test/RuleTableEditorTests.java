@@ -49,22 +49,27 @@ public class RuleTableEditorTests extends AbcdTester {
 //		getFormManager().deleteForm();
 //		getFormManager().logOut();
 //	}
-	
+//	
 //	@Test
 //	public void createATableAddRowWithQuestionAnswerAndAction(){
 //		login(ABCD_FORM_ADMIN_BIIT1);
 //		getFormManager().createNewForm(FORM_1);
 //		
-//		createSampleForm();
-//		createFormVariables();
+////		createSampleForm();
+////		createFormVariables();
 //		
 //		getFormManager().clickRuleTableEditor();
 //
 //		getRuleTableEditor().newRuleTable(TABLE_1);
 //
 //		getRuleTableEditor().addRow();
+//		getRuleTableEditor().addCol();
 //		
-//		getRuleTableEditor().save();		
+//		getRuleTableEditor().getQuestionAnswerTable().getCell(0,0).click();
+//		
+//		//getRuleTableEditor().save();
+//		
+////		getRuleTableEditor().doubleClickCondition(0,0);	
 //
 ////		getRuleTableEditor().goToFormManager();
 ////		getFormManager().deleteForm();

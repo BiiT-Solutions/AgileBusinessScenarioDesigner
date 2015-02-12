@@ -84,11 +84,21 @@ public class RuleTableEditor extends LeftTreeTableWebpage {
 		return $(ButtonElement.class).caption(ADD_COL_CAPTION).first();
 	}
 	
-	private TableElement getQuestionAnswerTable(){
+	public TableElement getQuestionAnswerTable(){
 		return $(TableElement.class).id(QUESTION_ANSWER_TABLE_ID);
 	}
 	
-	private TableElement getActionTable(){
+	public TableElement getActionTable(){
 		return $(TableElement.class).id(ACTION_TABLE_ID);
+	}
+
+	public void doubleClickCondition(int row, int column) {
+		getQuestionAnswerTable().getCell(row, column).click();
+		getQuestionAnswerTable().getCell(row, column).doubleClick();
+	}
+	
+	public void doubleClickAction(int row){
+		getActionTable().getCell(row, 0).click();
+		getActionTable().getCell(row, 0).doubleClick();
 	}
 }
