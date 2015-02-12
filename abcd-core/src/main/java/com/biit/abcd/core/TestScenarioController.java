@@ -7,6 +7,7 @@ import java.util.Set;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
+import com.biit.abcd.persistence.utils.Exceptions.TestScenarioNotEqualsException;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
@@ -15,9 +16,11 @@ public class TestScenarioController {
 	private List<TestScenario> testScenarios = null;
 	private ITestScenarioDao testScenarioDao;
 	private TestScenario lastAccessTestScenario;
+	private boolean unsavedChanges;
 
 	public TestScenarioController(SpringContextHelper helper) {
 		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
+		unsavedChanges = false;
 	}
 
 	/**
@@ -32,6 +35,11 @@ public class TestScenarioController {
 			}
 		}
 		return testScenarios;
+	}
+
+	public void addTestScenario(Form form, TestScenario testScenario) {
+		getTestScenarios(form).add(testScenario);
+		unsavedChanges = true;
 	}
 
 	/**
@@ -82,6 +90,8 @@ public class TestScenarioController {
 			for (TestScenario testScenario : testScenariosFromTable) {
 				testScenarioDao.makePersistent(testScenario);
 			}
+
+			unsavedChanges = false;
 		}
 	}
 
@@ -96,5 +106,19 @@ public class TestScenarioController {
 	public void clearWorkVariables() {
 		this.testScenarios = null;
 		this.lastAccessTestScenario = null;
+	}
+
+	public boolean isUnsavedChanges() {
+		return unsavedChanges;
+	}
+
+	public void setUnsavedChanges(boolean unsavedChanges) {
+		this.unsavedChanges = unsavedChanges;
+	}
+
+	public void checkUnsavedChanges() throws TestScenarioNotEqualsException {
+		if (unsavedChanges) {
+			throw new TestScenarioNotEqualsException("Exists unsaved changes in Test Scenarios.");
+		}
 	}
 }
