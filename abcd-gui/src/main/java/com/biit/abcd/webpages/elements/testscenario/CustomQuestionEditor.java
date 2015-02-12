@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,10 +47,12 @@ public class CustomQuestionEditor extends CustomComponent {
 	private static final String NUMBER_FIELD_VALIDATOR_REGEX = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
 	private static String DATE_FORMAT = "dd/MM/yyyy";
+	private Set<FieldValueChangedListener> fieldValueChangeListeners;
 
 	public CustomQuestionEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap,
 			List<TreeObject> testScenarioObjects) {
 		this.originalReferenceTreeObjectMap = originalReferenceTreeObjectMap;
+		fieldValueChangeListeners = new HashSet<>();
 		setCompositionRoot(generateContent());
 		setQuestionLayoutFields(testScenarioObjects);
 	}
@@ -75,8 +78,7 @@ public class CustomQuestionEditor extends CustomComponent {
 	}
 
 	/**
-	 * Creates the field based on the type of the question and retrieves the
-	 * answer information if there is any.
+	 * Creates the field based on the type of the question and retrieves the answer information if there is any.
 	 * 
 	 * @param testQuestion
 	 * @return
@@ -280,8 +282,15 @@ public class CustomQuestionEditor extends CustomComponent {
 			} else {
 				questionAnswer.getTestAnswer().setValue(field.getValue());
 			}
+			for (FieldValueChangedListener listener : fieldValueChangeListeners) {
+				listener.valueChanged(field);
+			}
 		} catch (NotValidAnswerValue | NullPointerException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected void addFieldValueChangeListener(FieldValueChangedListener listener) {
+		fieldValueChangeListeners.add(listener);
 	}
 }

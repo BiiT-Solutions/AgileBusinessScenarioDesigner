@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.HashMap;
 
+import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidator;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
@@ -13,6 +14,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.Runo;
@@ -77,8 +79,15 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 			public void valueChange(ValueChangeEvent event) {
 				Object valueSelected = event.getProperty().getValue();
 				if (valueSelected instanceof TestScenarioCategory) {
-					editorBackground.setContent(new CustomCategoryEditor(originalReferenceTreeObjectMap,
-							(TreeObject) valueSelected));
+					CustomCategoryEditor customCategory = new CustomCategoryEditor(originalReferenceTreeObjectMap,
+							(TreeObject) valueSelected);
+					customCategory.addFieldValueChangeListener(new FieldValueChangedListener() {
+						@Override
+						public void valueChanged(Field<?> field) {
+							UserSessionHandler.getTestScenariosController().setUnsavedChanges(true);
+						}
+					});
+					editorBackground.setContent(customCategory);
 				} else {
 					editorBackground.setContent(null);
 				}

@@ -1,8 +1,10 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
@@ -21,6 +23,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -35,9 +38,11 @@ public class CustomGroupEditor extends CustomComponent {
 	private Button copyRepeatableGroup, removeRepeatableGroup;
 	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
 	private TestScenarioGroup testScenarioGroup;
+	private Set<FieldValueChangedListener> fieldValueChangeListeners;
 
 	public CustomGroupEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap, TreeObject testScenarioObject) {
 		this.originalReferenceTreeObjectMap = originalReferenceTreeObjectMap;
+		fieldValueChangeListeners = new HashSet<>();
 		testScenarioGroup = (TestScenarioGroup) testScenarioObject;
 		setCompositionRoot(generateContent());
 		setStyleName(CLASSNAME);
@@ -71,7 +76,16 @@ public class CustomGroupEditor extends CustomComponent {
 		List<TreeObject> questions = testScenarioObject.getChildren(TestScenarioQuestion.class);
 		if ((questions != null) && !questions.isEmpty()) {
 			// Add the questions of the group
-			addEditor(new CustomQuestionEditor(originalReferenceTreeObjectMap, questions));
+			CustomQuestionEditor customQuestion = new CustomQuestionEditor(originalReferenceTreeObjectMap, questions);
+			customQuestion.addFieldValueChangeListener(new FieldValueChangedListener() {
+				@Override
+				public void valueChanged(Field<?> field) {
+					for (FieldValueChangedListener listener : fieldValueChangeListeners) {
+						listener.valueChanged(field);
+					}
+				}
+			});
+			addEditor(customQuestion);
 		}
 		// Add the groups of the group (if any)
 		List<TreeObject> testScenarioGroups = testScenarioObject.getChildren(TestScenarioGroup.class);
@@ -79,6 +93,14 @@ public class CustomGroupEditor extends CustomComponent {
 			for (TreeObject testScenarioGroup : testScenarioGroups) {
 				CustomGroupEditor customGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
 						testScenarioGroup);
+				customGroupEditor.addFieldValueChangeListener(new FieldValueChangedListener() {
+					@Override
+					public void valueChanged(Field<?> field) {
+						for (FieldValueChangedListener listener : fieldValueChangeListeners) {
+							listener.valueChanged(field);
+						}
+					}
+				});
 				addEditor(customGroupEditor);
 				setGroupButtonsListeners(customGroupEditor);
 			}
@@ -238,5 +260,9 @@ public class CustomGroupEditor extends CustomComponent {
 				setRemoveGroupButtonEnable(true);
 			}
 		}
+	}
+
+	protected void addFieldValueChangeListener(FieldValueChangedListener listener) {
+		fieldValueChangeListeners.add(listener);
 	}
 }

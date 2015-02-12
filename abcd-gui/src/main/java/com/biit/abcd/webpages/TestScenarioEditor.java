@@ -204,6 +204,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	private void removeSelectedTestScenario() throws FieldTooLongException, CharacterNotAllowedException {
 		tableSelectTestScenario.removeSelectedRow();
 		refreshTestScenario();
+		UserSessionHandler.getTestScenariosController().setUnsavedChanges(true);
 	}
 
 	public void addTestScenarioToMenu(TestScenario testScenario) throws FieldTooLongException,

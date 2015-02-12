@@ -29,6 +29,7 @@ import com.biit.abcd.persistence.utils.Exceptions.RuleNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.SizeNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
+import com.biit.abcd.persistence.utils.Exceptions.TestScenarioNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
 import com.biit.abcd.security.AbcdActivity;
@@ -90,6 +91,7 @@ public abstract class UpperMenu extends SecuredMenu {
 					public void buttonClick(ClickEvent event) {
 						try {
 							UserSessionHandler.getFormController().checkUnsavedChanges();
+							UserSessionHandler.getTestScenariosController().checkUnsavedChanges();
 							UiAccesser.releaseForm(UserSessionHandler.getUser());
 							ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
@@ -98,7 +100,8 @@ public abstract class UpperMenu extends SecuredMenu {
 								| TableRuleNotEqualsException | RuleNotEqualsException | DiagramNotEqualsException
 								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
 								| PointNotEqualsException | BiitTextNotEqualsException
-								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+								| GlobalVariableNotEqualsException | VariableDataNotEqualsException
+								| TestScenarioNotEqualsException e) {
 							final AlertMessageWindow windowAccept = new AlertMessageWindow(
 									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
 							windowAccept.addAcceptActionListener(new AcceptActionListener() {
@@ -285,9 +288,9 @@ public abstract class UpperMenu extends SecuredMenu {
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								//Reset ehCache.
+								// Reset ehCache.
 								formDao.evictAllCache();
-								//Reset Liferay Users pool.
+								// Reset Liferay Users pool.
 								AbcdFormAuthorizationService.getInstance().reset();
 								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 								AbcdLogger.info(this.getClass().getName(), "User '"

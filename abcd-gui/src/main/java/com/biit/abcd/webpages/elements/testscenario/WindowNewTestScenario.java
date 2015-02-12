@@ -37,8 +37,8 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 		try {
 			TestScenario testScenario = new TestScenario(inputTextField.getValue(), UserSessionHandler
 					.getFormController().getForm());
-			UserSessionHandler.getTestScenariosController()
-					.getTestScenarios(UserSessionHandler.getFormController().getForm()).add(testScenario);
+			UserSessionHandler.getTestScenariosController().addTestScenario(
+					UserSessionHandler.getFormController().getForm(), testScenario);
 			((TestScenarioEditor) getParentWindow()).addTestScenarioToMenu(testScenario);
 			((TestScenarioEditor) getParentWindow()).sortTableMenu();
 
