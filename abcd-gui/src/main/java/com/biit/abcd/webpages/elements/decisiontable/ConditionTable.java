@@ -13,6 +13,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.shared.MouseEventDetails;
@@ -47,6 +48,17 @@ public class ConditionTable extends Table {
 		addActionHandler(cellRowSelector);
 
 		setSelectable(false);
+
+		addItemClickListener(new ItemClickListener() {
+			private static final long serialVersionUID = 1565269852866133004L;
+
+			@Override
+			public void itemClick(ItemClickEvent event) {
+				if(event.isDoubleClick()){
+					fireEditExpressionListeners((TableRuleRow) event.getItemId(), event.getPropertyId());
+				}				
+			}
+		});
 	}
 
 	/**

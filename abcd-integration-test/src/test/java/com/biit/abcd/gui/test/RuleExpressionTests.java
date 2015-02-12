@@ -3,9 +3,7 @@ package com.biit.abcd.gui.test;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.gui.test.StatusPreservingTests.Scope;
 import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerFormat;
-import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerType;
 import com.vaadin.testbench.elements.NotificationElement;
 
 @Test(groups = "ruleExpression")
@@ -13,12 +11,7 @@ public class RuleExpressionTests extends AbcdTester {
 
 	private static final String FORM_1 = "form_1";
 	private static final String RULE_1 = "rule_1";
-	private static final String CATEGORY_1 = "category_1";
-	private static final String QUESTION_1 = "question_1";
-	private static final String QUESTION_2 = "question_2";
-	private static final String VAR_1 = "var1";
-	private static final String VAR_2 = "var2";
-	private static final String VAR_3 = "var3";
+	
 	private static final int TREE_ELEMENT_TAB = 0;
 	private static final int MATHEMATICAL_OPERATIONS_TAB = 1;
 	private static final int GENERIC_ELEMENT_TAB = 2;
@@ -36,56 +29,6 @@ public class RuleExpressionTests extends AbcdTester {
 	private static final String TEST_STRING_TOKEN_4 = ",";
 	private static final String TEST_STRING_TOKEN_5 = "question_2";
 	private static final String TEST_STRING_TOKEN_6 = ")";
-	private static final String TEXT_VAR_VALUE = "ASD";
-	private static final String DATE_VAR_VALUE = "5/11/11";
-	private static final String VALID_FROM = "4/10/14";
-	private static final String VALID_TO = "4/10/16";	
-
-	private void createSampleForm() {
-		getFormManager().clickFormDesigner();
-
-		getFormDesigner().clickInTableRow(0);
-		getFormDesigner().createCategory(0, CATEGORY_1);
-		getFormDesigner().clickInTableRow(0);
-		getFormDesigner().createQuestion(1, QUESTION_1, AnswerType.INPUT_FIELD, AnswerFormat.NUMBER);
-		getFormDesigner().createQuestion(1, QUESTION_2, AnswerType.INPUT_FIELD, AnswerFormat.NUMBER);
-		getFormDesigner().save();
-	}
-
-	private void createFormVariables() {
-		getFormManager().clickFormVariables();
-
-		getFormVariables().addVariable(0, VAR_1, AnswerFormat.NUMBER, Scope.FORM, "0.1");
-		getFormVariables().addVariable(1, VAR_2, AnswerFormat.NUMBER, Scope.CATEGORY, "0.2");
-		getFormVariables().addVariable(2, VAR_3, AnswerFormat.NUMBER, Scope.CATEGORY, "0.3");
-		getFormDesigner().save();
-	}
-
-	private void createGlobalVariables() {
-		login(ABCD_GLOBAL_CONST_BIIT1);
-		
-		getFormManager().goToGlobalVariables();
-		getGlobalVariables().createGlobalVariable(VAR_1, AnswerFormat.TEXT, TEXT_VAR_VALUE, VALID_FROM, VALID_TO);
-		getGlobalVariables().createGlobalVariable(VAR_2, AnswerFormat.DATE, DATE_VAR_VALUE, VALID_FROM, VALID_TO);
-
-		getGlobalVariables().save();
-		
-		getGlobalVariables().logOut();
-	}
-
-	private void removeGlobalVariables() {
-		login(ABCD_GLOBAL_CONST_BIIT1);
-		
-		getFormManager().goToGlobalVariables();
-		getGlobalVariables().clickRow(0);
-		getGlobalVariables().removeVariable();
-		getGlobalVariables().clickRow(0);
-		getGlobalVariables().removeVariable();
-
-		getGlobalVariables().save();
-		
-		getGlobalVariables().logOut();
-	}
 
 	@Test
 	public void createEmptyRuleExpression() {
