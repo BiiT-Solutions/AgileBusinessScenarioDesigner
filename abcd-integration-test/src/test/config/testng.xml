@@ -3,13 +3,14 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="login" />
-				<include name="basicFunctionalityTests" />
-				<include name="formDesigner" />
-				<include name="formVariables" />
-				<include name="statusPreserving" />
-				<include name="globalVariables" />
-				<include name="ruleExpression" />
+				<exclude name="login" />
+				<exclude name="basicFunctionalityTests" />
+				<exclude name="formDesigner" />
+				<exclude name="formVariables" />
+				<exclude name="statusPreserving" />
+				<exclude name="globalVariables" />
+				<exclude name="ruleExpression" />
+				<include name="ruleTableEditor" />
 			</run>
 		</groups>
 		<classes>
@@ -20,6 +21,7 @@
 			<class name="com.biit.abcd.gui.test.FormVariablesTests" />
 			<class name="com.biit.abcd.gui.test.GlobalVariablesTests" />
 			<class name="com.biit.abcd.gui.test.RuleExpressionTests" />
+			<class name="com.biit.abcd.gui.test.RuleTableEditorTests" />
 		</classes>
 	</test>
 </suite>
