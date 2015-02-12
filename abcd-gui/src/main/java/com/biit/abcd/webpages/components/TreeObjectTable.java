@@ -36,6 +36,7 @@ public class TreeObjectTable extends TreeTable {
 	public TreeObjectTable() {
 		initContainerProperties();
 		setImmediate(true);
+		setPageLength(0);
 	}
 
 	private static final long serialVersionUID = -6949123334668973540L;;

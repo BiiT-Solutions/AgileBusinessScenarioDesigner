@@ -10,6 +10,7 @@
 				<include name="statusPreserving" />
 				<include name="globalVariables" />
 				<include name="ruleExpression" />
+				<include name="ruleTableEditor" />
 			</run>
 		</groups>
 		<classes>
@@ -20,6 +21,7 @@
 			<class name="com.biit.abcd.gui.test.FormVariablesTests" />
 			<class name="com.biit.abcd.gui.test.GlobalVariablesTests" />
 			<class name="com.biit.abcd.gui.test.RuleExpressionTests" />
+			<class name="com.biit.abcd.gui.test.RuleTableEditorTests" />
 		</classes>
 	</test>
 </suite>
