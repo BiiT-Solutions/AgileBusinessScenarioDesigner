@@ -32,7 +32,8 @@ import com.vaadin.ui.UI;
 
 public class TestScenarioEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -6743796589244668454L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private TestScenarioMainLayout testScenarioForm;
 	private SelectTestScenarioTableEditable tableSelectTestScenario;
 	private TestScenarioEditorUpperMenu testScenarioUpperMenu;
@@ -143,7 +144,8 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			public void buttonClick(ClickEvent event) {
 				UI.getCurrent().addWindow(
 						new WindowNewTestScenario(thisPage, LanguageCodes.TEST_SCENARIOS_EDITOR_NEW_WINDOW_CAPTION,
-								LanguageCodes.TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION));
+								LanguageCodes.TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION, tableSelectTestScenario
+										.getTestScenarios()));
 			}
 
 		});
@@ -153,25 +155,27 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final AlertMessageWindow windowAccept = new AlertMessageWindow(
-						LanguageCodes.WARNING_TEST_SCENARIO_DELETION);
-				windowAccept.addAcceptActionListener(new AcceptActionListener() {
-					@Override
-					public void acceptAction(AcceptCancelWindow window) {
-						try {
-							TestScenario testScenario = getSelectedTestScenario();
-							removeSelectedTestScenario();
-							AbcdLogger.info(this.getClass().getName(), "User '"
-									+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-									+ testScenario.getClass() + " with 'Name: " + testScenario.getName() + "'.");
-							windowAccept.close();
-						} catch (FieldTooLongException | CharacterNotAllowedException e) {
-							AbcdLogger.errorMessage(this.getClass().getName(), e);
-						}
+				if (getSelectedTestScenario() != null) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_TEST_SCENARIO_DELETION);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							try {
+								TestScenario testScenario = getSelectedTestScenario();
+								removeSelectedTestScenario();
+								AbcdLogger.info(this.getClass().getName(), "User '"
+										+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+										+ testScenario.getClass() + " with 'Name: " + testScenario.getName() + "'.");
+								windowAccept.close();
+							} catch (FieldTooLongException | CharacterNotAllowedException e) {
+								AbcdLogger.errorMessage(this.getClass().getName(), e);
+							}
 
-					}
-				});
-				windowAccept.showCentered();
+						}
+					});
+					windowAccept.showCentered();
+				}
 			}
 		});
 		setUpperMenu(testScenarioUpperMenu);
