@@ -81,6 +81,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		diagramBuilderTable.setSizeFull();
 		diagramBuilderTable.setImmediate(true);
 		diagramBuilderTable.setSelectable(true);
+		diagramBuilderTable.setNullSelectionAllowed(false);
 		diagramTableValueChange = new DiagramTableValueChange();
 
 		diagramBuilder = new AbcdDiagramBuilder();
