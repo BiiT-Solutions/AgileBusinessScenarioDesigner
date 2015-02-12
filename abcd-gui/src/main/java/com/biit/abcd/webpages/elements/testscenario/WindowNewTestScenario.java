@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+import java.util.List;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -16,17 +18,18 @@ import com.vaadin.ui.TextField;
 
 public class WindowNewTestScenario extends WindowCreateNewObject {
 	private static final long serialVersionUID = -7289531658379874556L;
+	private List<TestScenario> testsScenarios;
 
 	public WindowNewTestScenario(TestScenarioEditor parentWindow, LanguageCodes windowCaption,
-			LanguageCodes inputFieldCaption) {
+			LanguageCodes inputFieldCaption, List<TestScenario> testsScenarios) {
 		super(parentWindow, windowCaption, inputFieldCaption);
+		this.testsScenarios = testsScenarios;
 	}
 
 	@Override
 	public void acceptAction(TextField inputTextField) {
-		for (TestScenario existingScenarios : UserSessionHandler.getTestScenariosController().getTestScenarios(
-				UserSessionHandler.getFormController().getForm())) {
-			if (existingScenarios.getName().equals(inputTextField.getValue())) {
+		for (TestScenario existingScenario : testsScenarios) {
+			if (existingScenario.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_TEST_SCENARIO_NAME);
 				return;
 			}
@@ -45,10 +48,11 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 
 		} catch (FieldTooLongException e) {
 			AbcdLogger.warning(this.getClass().getName(), e.toString());
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG);
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG);
 		} catch (CharacterNotAllowedException e) {
 			AbcdLogger.warning(this.getClass().getName(), e.toString());
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,LanguageCodes.TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED);
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+					LanguageCodes.TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED);
 		} catch (NotValidStorableObjectException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		} catch (NotValidChildException e) {
