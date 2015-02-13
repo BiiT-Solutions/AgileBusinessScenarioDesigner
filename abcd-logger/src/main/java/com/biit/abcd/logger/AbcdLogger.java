@@ -46,4 +46,33 @@ public class AbcdLogger extends BiitLogger {
 	public static void severe(String className, String message) {
 		severe(className + ": " + message);
 	}
+
+	/**
+	 * To log java exceptions and log also the stack trace. If enabled, also can send an email to the administrator to
+	 * alert of the error.
+	 * 
+	 * @param className
+	 * @param throwable
+	 */
+	public static void errorMessage(String className, Throwable throwable) {
+		String error = getStackTrace(throwable);
+		errorMessage(className, error);
+	}
+
+	public static void timeLog(long millis, String method, String args) {
+		if (isDebugEnabled()) {
+			StringBuilder logMessage = new StringBuilder();
+			logMessage.append("Executed ");
+			logMessage.append(method);
+			logMessage.append("(");
+			if (args != null && args.length() > 0) {
+				logMessage.append(args);
+			}
+			logMessage.append(") in ");
+			logMessage.append(millis);
+			logMessage.append(" ms");
+
+			getLogger().debug(logMessage.toString());
+		}
+	}
 }
