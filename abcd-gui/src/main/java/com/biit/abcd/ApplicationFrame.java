@@ -1,9 +1,16 @@
 package com.biit.abcd;
 
+import java.io.IOException;
+
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
+import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
+import com.biit.liferay.access.exceptions.WebServiceAccessError;
+import com.biit.liferay.security.exceptions.InvalidCredentialsException;
+import com.biit.security.exceptions.PBKDF2EncryptorException;
 import com.liferay.portal.model.User;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
@@ -22,10 +29,10 @@ public class ApplicationFrame extends UI {
 	private static final long serialVersionUID = -704009283476930001L;
 	private Navigator navigator;
 	private View currentView;
-	private String user;
+	private String userEmail;
 	private String password;
 
-	private class WebformsErrorHandler extends DefaultErrorHandler {
+	private class AbcdErrorHandler extends DefaultErrorHandler {
 		private static final long serialVersionUID = -5570064834518413901L;
 
 		@Override
@@ -34,7 +41,6 @@ public class ApplicationFrame extends UI {
 			AbcdLogger.errorMessage(ApplicationFrame.class.getName(), event.getThrowable());
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 		}
-
 	};
 
 	@Override
@@ -43,10 +49,41 @@ public class ApplicationFrame extends UI {
 		defineWebPages();
 
 		// Liferay send this data and automatically are used in the login screen.
-		this.user = request.getParameter(USER_PARAMETER_TAG);
+		this.userEmail = request.getParameter(USER_PARAMETER_TAG);
 		this.password = request.getParameter(PASSWORD_PARAMETER_TAG);
 
-		setErrorHandler(new WebformsErrorHandler());
+		setErrorHandler(new AbcdErrorHandler());
+
+		autologin(userEmail, password);
+	}
+
+	private void autologin(String userEmail, String password) {
+		// When accessing from Liferay, user and password are already set.
+		if (userEmail != null && userEmail.length() > 0 && password != null && password.length() > 0) {
+			AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
+					+ "' and password with length of " + password.length());
+			try {
+				User user = UserSessionHandler.getUser(userEmail, password);
+				if (user != null) {
+					// Try to go to the last page and last form if user has no logged out.
+					if (UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()) != null) {
+						UserSessionHandler.restoreUserSession();
+						navigateTo(UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()));
+					} else {
+						navigateTo(WebMap.getMainPage());
+					}
+				}
+			} catch (InvalidCredentialsException | NotConnectedToWebServiceException | PBKDF2EncryptorException
+					| IOException | AuthenticationRequired | WebServiceAccessError e) {
+				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
+						+ "' failed! Wrong user or password.");
+			}
+		} else {
+			if (userEmail != null && userEmail.length() > 0) {
+				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
+						+ "' but no password provided!");
+			}
+		}
 	}
 
 	@Override
@@ -61,7 +98,7 @@ public class ApplicationFrame extends UI {
 			// Log user UI expired.
 			AbcdLogger.info(this.getClass().getName(), user.getEmailAddress() + " UI has expired.");
 			UiAccesser.releaseForm(user);
-			//UserSessionHandler.logout(user);		
+			// UserSessionHandler.logout(user);
 		}
 	}
 
@@ -118,8 +155,8 @@ public class ApplicationFrame extends UI {
 		this.currentView = currentView;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
 	public String getPassword() {

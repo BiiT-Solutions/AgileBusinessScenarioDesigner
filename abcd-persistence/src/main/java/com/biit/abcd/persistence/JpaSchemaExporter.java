@@ -112,7 +112,7 @@ public class JpaSchemaExporter {
 		cfg.setProperty("hibernate.show_sql", "false");
 		SchemaExport export = new SchemaExport(cfg);
 		export.setDelimiter(";");
-		export.setOutputFile(directory + File.separator + "create_" + dialect.name().toLowerCase() + ".sql");
+		export.setOutputFile(directory + File.separator + DATABASE_FILE);
 		export.setFormat(true);
 		export.execute(true, false, false, onlyCreation);
 		updateTables(directory);
