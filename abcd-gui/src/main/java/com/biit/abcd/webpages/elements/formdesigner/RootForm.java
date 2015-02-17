@@ -91,10 +91,9 @@ public class RootForm extends SimpleFormView {
 				return false;
 		} else if (!getLabel().equals(other.getLabel()))
 			return false;
-		if (getOrganizationId() != other.getOrganizationId())
+		if (!getOrganizationId().equals(other.getOrganizationId()))
 			return false;
 		return true;
 	}
-	
-	
+
 }

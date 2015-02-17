@@ -23,7 +23,6 @@ public class ExpressionValueTimestamp extends ExpressionValue<Timestamp> {
 	private static final long serialVersionUID = -5688942686213064713L;
 	private Timestamp value;
 	public static final String DATE_FORMAT = "dd/MM/yyyy";
-	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT);
 
 	protected ExpressionValueTimestamp() {
 		super();
@@ -31,7 +30,7 @@ public class ExpressionValueTimestamp extends ExpressionValue<Timestamp> {
 
 	public ExpressionValueTimestamp(String value) throws ParseException {
 		super();
-		Date date = DATE_FORMATTER.parse(value);
+		Date date = getFormatter().parse(value);
 		setValue(new Timestamp(date.getTime()));
 	}
 
@@ -84,5 +83,9 @@ public class ExpressionValueTimestamp extends ExpressionValue<Timestamp> {
 			throw new NotValidStorableObjectException("Object '" + object
 					+ "' is not an instance of ExpressionValueTimestamp.");
 		}
+	}
+
+	public static SimpleDateFormat getFormatter() {
+		return new SimpleDateFormat(DATE_FORMAT);
 	}
 }

@@ -40,40 +40,6 @@ public class AuthorizationByFormPool {
 		}
 	}
 
-	/**
-	 * Returns true or false if the activity is authorized and null if is not catched.
-	 * 
-	 * @param form
-	 * @param user
-	 * @param activity
-	 * @return
-	 */
-	public Boolean isAuthorizedActivity(Form form, User user, AbcdActivity activity) {
-		long now = System.currentTimeMillis();
-		User userForm = null;
-
-		if (form == null || usersActivities.get(form) == null) {
-			return null;
-		}
-
-		if (userTime.get(form).size() > 0) {
-			Enumeration<User> e = userTime.get(form).keys();
-			while (e.hasMoreElements()) {
-				userForm = e.nextElement();
-				if ((now - userTime.get(form).get(userForm)) > EXPIRATION_TIME) {
-					// object has expired
-					removeUser(form, userForm);
-					userForm = null;
-				} else if (user.equals(userForm)) {
-					if (usersActivities.get(form).get(user) != null) {
-						return usersActivities.get(form).get(user).get(activity);
-					}
-				}
-			}
-		}
-		return null;
-	}
-
 	public void addUser(Form form, User user, AbcdActivity activity, boolean allowed) {
 		if (form != null && user != null && activity != null) {
 			if (userTime.get(form) == null) {

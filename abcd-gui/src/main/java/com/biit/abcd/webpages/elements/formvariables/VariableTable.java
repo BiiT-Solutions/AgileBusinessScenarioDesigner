@@ -49,7 +49,7 @@ public class VariableTable extends Table {
 		setImmediate(true);
 		setMultiSelect(false);
 		setSizeFull();
-		//Avoid paging
+		// Avoid paging
 		setPageLength(0);
 
 		setColumnCollapsingAllowed(false);
@@ -138,7 +138,8 @@ public class VariableTable extends Table {
 		final ComboBox typeComboBox = new ComboBox();
 		for (CustomVariableTypeUi variableType : CustomVariableTypeUi.values()) {
 			typeComboBox.addItem(variableType.getCustomvariable());
-			typeComboBox.setItemCaption(variableType.getCustomvariable(), ServerTranslate.translate(variableType.getLanguageCode()));
+			typeComboBox.setItemCaption(variableType.getCustomvariable(),
+					ServerTranslate.translate(variableType.getLanguageCode()));
 		}
 		typeComboBox.setNullSelectionAllowed(false);
 		typeComboBox.addFocusListener(new FocusListener() {
@@ -191,7 +192,8 @@ public class VariableTable extends Table {
 		final ComboBox scopeComboBox = new ComparableComboBox();
 		for (CustomVariableScopeUi variablesScope : CustomVariableScopeUi.values()) {
 			scopeComboBox.addItem(variablesScope.getVariableScope());
-			scopeComboBox.setItemCaption(variablesScope.getVariableScope(), ServerTranslate.translate(variablesScope.getLanguageCode()));
+			scopeComboBox.setItemCaption(variablesScope.getVariableScope(),
+					ServerTranslate.translate(variablesScope.getLanguageCode()));
 		}
 		scopeComboBox.setNullSelectionAllowed(false);
 		scopeComboBox.addFocusListener(new FocusListener() {
@@ -247,11 +249,13 @@ public class VariableTable extends Table {
 			defaultValueField = new TextField();
 			break;
 		}
-		defaultValueField.setImmediate(true);
-		if (defaultValueField instanceof TextField) {
-			((TextField) defaultValueField).setNullRepresentation("");
+		if (defaultValueField != null) {
+			defaultValueField.setImmediate(true);
+			if (defaultValueField instanceof TextField) {
+				((TextField) defaultValueField).setNullRepresentation("");
+			}
+			setPromtAndLocale(customVariable, defaultValueField);
 		}
-		setPromtAndLocale(customVariable, defaultValueField);
 		return defaultValueField;
 	}
 
@@ -269,8 +273,8 @@ public class VariableTable extends Table {
 						String oldValue = customVariable.getDefaultValue();
 						switch (customVariable.getType()) {
 						case DATE:
-							customVariable.setDefaultValue(ExpressionValueTimestamp.DATE_FORMATTER
-									.format(((DateField) defaultValueField).getValue()));
+							customVariable.setDefaultValue(ExpressionValueTimestamp.getFormatter().format(
+									((DateField) defaultValueField).getValue()));
 							break;
 						case NUMBER:
 							Double a = (Double) defaultValueField.getConvertedValue();
@@ -319,8 +323,8 @@ public class VariableTable extends Table {
 			switch (customVariable.getType()) {
 			case DATE:
 				try {
-					((DateField) defaultValueField).setValue(ExpressionValueTimestamp.DATE_FORMATTER
-							.parse(customVariable.getDefaultValue()));
+					((DateField) defaultValueField).setValue(ExpressionValueTimestamp.getFormatter().parse(
+							customVariable.getDefaultValue()));
 				} catch (ReadOnlyException | ConversionException | ParseException e) {
 					setValue(null);
 				}

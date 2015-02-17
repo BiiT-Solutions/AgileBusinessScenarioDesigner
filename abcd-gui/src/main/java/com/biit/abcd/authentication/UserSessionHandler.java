@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.GlobalVariablesController;
@@ -22,7 +24,8 @@ public class UserSessionHandler {
 	private FormController formController;
 	private static GlobalVariablesController globalVariablesController;
 	private static TestScenarioController testScenariosController;
-	// User Id --> List<UI> (A user can have different browsers opened in the same machine)
+	// User Id --> List<UI> (A user can have different browsers opened in the
+	// same machine)
 	private static HashMap<Long, List<UI>> usersSession = new HashMap<>();
 	// User Id --> IP (current UI ip connected)
 	private static HashMap<Long, String> usersIp = new HashMap<>();
@@ -32,7 +35,8 @@ public class UserSessionHandler {
 	private static HashMap<Long, Form> userLastForm = new HashMap<>();
 
 	/**
-	 * Initializes the {@link UserSessionHandler} for the given {@link Application}
+	 * Initializes the {@link UserSessionHandler} for the given
+	 * {@link Application}
 	 * 
 	 * @param ui
 	 */
@@ -99,7 +103,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Set the User object for the currently inlogged user for this application instance
+	 * Set the User object for the currently inlogged user for this application
+	 * instance
 	 * 
 	 * @param user
 	 */
@@ -115,7 +120,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Get the User object of the currently inlogged user for this application instance.
+	 * Get the User object of the currently inlogged user for this application
+	 * instance.
 	 * 
 	 * @return The currently inlogged user
 	 */
@@ -125,7 +131,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Get the FormController object of the currently inlogged user for this application instance.
+	 * Get the FormController object of the currently inlogged user for this
+	 * application instance.
 	 * 
 	 * @return The currently inlogged user
 	 */
@@ -150,18 +157,28 @@ public class UserSessionHandler {
 		userLastPage.remove(user.getUserId());
 	}
 
+	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
 	public static GlobalVariablesController getGlobalVariablesController() {
 		if (globalVariablesController == null) {
-			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-			globalVariablesController = new GlobalVariablesController(helper);
+			synchronized (UserSessionHandler.class) {
+				if (globalVariablesController == null) {
+					SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+					globalVariablesController = new GlobalVariablesController(helper);
+				}
+			}
 		}
 		return globalVariablesController;
 	}
 
+	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
 	public static TestScenarioController getTestScenariosController() {
 		if (testScenariosController == null) {
-			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-			testScenariosController = new TestScenarioController(helper);
+			synchronized (UserSessionHandler.class) {
+				if (testScenariosController == null) {
+					SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+					testScenariosController = new TestScenarioController(helper);
+				}
+			}
 		}
 		return testScenariosController;
 	}
@@ -200,7 +217,8 @@ public class UserSessionHandler {
 	}
 
 	/**
-	 * Sets the last form used by an user. This allows liferay to reload the last page visited.
+	 * Sets the last form used by an user. This allows liferay to reload the
+	 * last page visited.
 	 */
 	public static void restoreUserSession() {
 		if (getUser() != null && getLastForm(getUser()) != null) {

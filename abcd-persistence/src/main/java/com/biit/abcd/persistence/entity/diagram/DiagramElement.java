@@ -168,16 +168,24 @@ public abstract class DiagramElement extends DiagramObject {
 			position.setY(element.getPosition().getY());
 			angle = element.getAngle();
 
-			if ((biitText == null) && (element.biitText != null)) {
-				biitText = element.biitText;
+			if ((biitText == null) && (element.getBiitText() != null)) {
+				biitText = element.getBiitText();
 			} else {
 				if (element.getBiitText().getText() != null) {
 					biitText.setText(element.getBiitText().getText());
 				}
-				biitText.setFill(element.getBiitText().getFill());
-				biitText.setFontSize(element.getBiitText().getFontSize());
-				biitText.setStroke(element.getBiitText().getStroke());
-				biitText.setStrokeWidth(element.getBiitText().getStrokeWidth());
+				if (element.getBiitText().getFill() != null) {
+					biitText.setFill(element.getBiitText().getFill());
+				}
+				if (element.getBiitText().getFontSize() != null) {
+					biitText.setFontSize(element.getBiitText().getFontSize());
+				}
+				if (element.getBiitText().getStroke() != null) {
+					biitText.setStroke(element.getBiitText().getStroke());
+				}
+				if (element.getBiitText().getStrokeWidth() != null) {
+					biitText.setStrokeWidth(element.getBiitText().getStrokeWidth());
+				}
 			}
 		}
 	}
