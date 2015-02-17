@@ -20,7 +20,7 @@ public class WindowNewDiagram extends WindowCreateNewObject {
 	}
 
 	@Override
-	public void acceptAction(TextField inputTextField) {
+	public void concreteAcceptAction(TextField inputTextField) {
 		if ((inputTextField.getValue() != null) && !inputTextField.getValue().isEmpty()) {
 			Set<Diagram> diagrams = UserSessionHandler.getFormController().getForm().getDiagrams();
 			for (Diagram diagram : diagrams) {

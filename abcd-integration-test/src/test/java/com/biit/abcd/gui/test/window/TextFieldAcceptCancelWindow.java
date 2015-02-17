@@ -5,16 +5,10 @@ import com.vaadin.testbench.elements.TextFieldElement;
 
 public abstract class TextFieldAcceptCancelWindow extends AcceptCancelWindow{
 	
-	private static final String CREATE_BUTTON_CAPTION = "Create";
-	
 	public abstract String getTextFieldCaption();
 	
-	public String getAcceptCaption(){
-		return CREATE_BUTTON_CAPTION;
-	}
-
 	public TextFieldElement getTextField(){
-		ElementQuery<TextFieldElement> textField = $(TextFieldElement.class).caption(getTextFieldCaption());
+		ElementQuery<TextFieldElement> textField = getWindow().$(TextFieldElement.class).caption(getTextFieldCaption());
 		if(	textField.exists()){
 			return textField.first();
 		}
@@ -30,7 +24,6 @@ public abstract class TextFieldAcceptCancelWindow extends AcceptCancelWindow{
 	
 	public void setNameAndAccept(String name){
 		setName(name);
-		getAcceptButton().focus();
 		clickAccept();
 	}
 }

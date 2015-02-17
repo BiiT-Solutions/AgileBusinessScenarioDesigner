@@ -21,17 +21,21 @@ public abstract class AcceptCancelWindow extends VaadinGuiWindow {
 	}
 
 	public ButtonElement getCancelButton() {
-		ElementQuery<ButtonElement> cancel = $(ButtonElement.class).caption(getCancelCaption());
-		if (cancel.exists()) {
-			return cancel.first();
+		if (getWindow() != null) {
+			ElementQuery<ButtonElement> cancel = getWindow().$(ButtonElement.class).caption(getCancelCaption());
+			if (cancel.exists()) {
+				return cancel.first();
+			}
 		}
 		return null;
 	}
 
 	public ButtonElement getAcceptButton() {
-		ElementQuery<ButtonElement> accept = $(ButtonElement.class).caption(getAcceptCaption());
-		if (accept.exists()) {
-			return accept.first();
+		if (getWindow() != null) {
+			ElementQuery<ButtonElement> accept = getWindow().$(ButtonElement.class).caption(getAcceptCaption());
+			if (accept.exists()) {
+				return accept.first();
+			}
 		}
 		return null;
 	}

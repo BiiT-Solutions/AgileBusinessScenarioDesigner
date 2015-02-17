@@ -3,6 +3,7 @@ package com.biit.abcd.gui.test.window;
 public class NewRuleExpressionWindow extends TextFieldAcceptCancelWindow{
 
 	private static final String EXPRESSION_NAME = "Expression Name";
+	private static final String CLASSNAME = "com.biit.abcd.webpages.elements.expressionviewer.WindowNewExpression";
 
 	@Override
 	public String getTextFieldCaption() {
@@ -11,8 +12,7 @@ public class NewRuleExpressionWindow extends TextFieldAcceptCancelWindow{
 
 	@Override
 	protected String getWindowId() {
-		// This window doesn't use id for now.
-		return null;
+		return CLASSNAME;
 	}
 
 }

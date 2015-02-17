@@ -27,7 +27,7 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 	}
 
 	@Override
-	public void acceptAction(TextField inputTextField) {
+	public void concreteAcceptAction(TextField inputTextField) {
 		for (TestScenario existingScenario : testsScenarios) {
 			if (existingScenario.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_TEST_SCENARIO_NAME);

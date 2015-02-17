@@ -17,7 +17,7 @@ public class WindowNewRule extends WindowCreateNewObject {
 	}
 
 	@Override
-	public void acceptAction(TextField inputTextField) {
+	public void concreteAcceptAction(TextField inputTextField) {
 		for (Rule rule : UserSessionHandler.getFormController().getForm().getRules()) {
 			if (rule.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_EXPRESSION_NAME);

@@ -17,7 +17,7 @@ public class WindoNewTable extends WindowCreateNewObject {
 	}
 
 	@Override
-	public void acceptAction(TextField inputTextField) {
+	public void concreteAcceptAction(TextField inputTextField) {
 		for (TableRule existingTableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
 			if (existingTableRule.getName().equals(inputTextField.getValue())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_TABLE_RULE_NAME);
