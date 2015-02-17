@@ -48,6 +48,7 @@ public class ConditionTable extends Table {
 		addActionHandler(cellRowSelector);
 
 		setSelectable(false);
+		setPageLength(0);
 
 		addItemClickListener(new ItemClickListener() {
 			private static final long serialVersionUID = 1565269852866133004L;

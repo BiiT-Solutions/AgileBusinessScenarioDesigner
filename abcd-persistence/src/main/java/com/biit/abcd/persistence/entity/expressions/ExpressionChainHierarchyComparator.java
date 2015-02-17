@@ -11,38 +11,52 @@ public class ExpressionChainHierarchyComparator implements Comparator<Expression
 
 	@Override
 	public int compare(ExpressionChain expressionChain1, ExpressionChain expressionChain2) {
-		if (expressionChain1 != null && expressionChain2.getExpression() != null) {
-			List<Expression> expressions1 = expressionChain1.getExpressions();
-			List<Expression> expressions2 = expressionChain2.getExpressions();
-
-			if (expressions1 != null && expressions2 != null) {
-				// Compare expressions one by one.
-				for (int i = 0; i < Math.min(expressions1.size(), expressions2.size()); i++) {
-					int comparation = 0;
-					if (expressions1.get(i) instanceof ExpressionValueTreeObjectReference
-							&& expressions2.get(i) instanceof ExpressionValueTreeObjectReference) {
-						if (((ExpressionValueTreeObjectReference) expressions1.get(i)).getReference() != null
-								&& ((ExpressionValueTreeObjectReference) expressions2.get(i)).getReference() != null) {
-							comparation = ((ExpressionValueTreeObjectReference) expressions1.get(i)).getReference()
-									.compareTo(
-											((ExpressionValueTreeObjectReference) expressions2.get(i)).getReference());
-						}
-					} else if (expressions1.get(i) instanceof ExpressionChain
-							&& expressions2.get(i) instanceof ExpressionChain) {
-						comparation = new ExpressionChainHierarchyComparator().compare(
-								(ExpressionChain) expressions1.get(i), (ExpressionChain) expressions2.get(i));
-					}
-					if (comparation != 0) {
-						return comparation;
-					}
-				}
-			}
-			// No differences among TreeObjects. Use representation as comparation
-			return expressionChain1.getRepresentation().compareTo(expressionChain2.getRepresentation());
-		}
-		if (expressionChain1 != null) {
+		//This two condition can't happen. still we guard it.
+		if(expressionChain1==null){
 			return -1;
 		}
-		return 1;
+		if(expressionChain2==null){
+			return 1;
+		}
+		
+		List<Expression> expressions1 = expressionChain1.getExpressions();
+		List<Expression> expressions2 = expressionChain2.getExpressions();
+		
+		for (int i = 0; i < Math.min(expressions1.size(), expressions2.size()); i++) {
+			int comparation = 0;
+			
+			if (expressions1.get(i) instanceof ExpressionValueTreeObjectReference && expressions2.get(i) instanceof ExpressionValueTreeObjectReference) {
+				ExpressionValueTreeObjectReference reference1 = (ExpressionValueTreeObjectReference) expressions1.get(i);
+				ExpressionValueTreeObjectReference reference2 = (ExpressionValueTreeObjectReference) expressions2.get(i);
+				
+				//If both are null do nothing (comparation = 0)
+				if(reference1.getReference()==null && reference2.getReference()==null){
+					comparation = 0;
+				}else if(reference1.getReference()==null && reference2.getReference()!=null){
+					return -1;
+				}else if(reference1.getReference()!=null && reference2.getReference()==null){
+					return 1;
+				}else {
+					comparation = reference1.getReference().compareTo(reference2.getReference());
+				}
+			} else if (expressions1.get(i) instanceof ExpressionChain && expressions2.get(i) instanceof ExpressionChain) {
+				ExpressionChain chain1 = (ExpressionChain) expressions1.get(i);
+				ExpressionChain chain2 = (ExpressionChain) expressions2.get(i);
+								
+				if(chain1.getExpressions().isEmpty()){
+					return -1;
+				}else if(chain2.getExpressions().isEmpty()){
+					return 1;
+				}
+				
+				// No differences among TreeObjects. Use representation as comparation
+				comparation = chain1.getRepresentation().compareTo(chain2.getRepresentation());
+			}
+			if (comparation != 0) {
+				return comparation;
+			}
+		}
+				
+		return 0;
 	}
 }

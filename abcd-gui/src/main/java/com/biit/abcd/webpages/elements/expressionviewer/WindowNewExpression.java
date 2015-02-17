@@ -18,7 +18,7 @@ public class WindowNewExpression extends WindowCreateNewObject {
 	}
 
 	@Override
-	public void acceptAction(TextField inputTextField) {
+	public void concreteAcceptAction(TextField inputTextField) {
 		for (ExpressionChain existingExpressions : UserSessionHandler.getFormController().getForm()
 				.getExpressionChains()) {
 			if (existingExpressions.getName().equals(inputTextField.getValue())) {

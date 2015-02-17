@@ -49,6 +49,7 @@ public class ActionTable extends Table {
 		setSelectable(false);
 		setSortEnabled(false);
 		setSortContainerPropertyId(Columns.ACTION);
+		setPageLength(0);
 		
 		addItemClickListener(new ItemClickListener() {
 			private static final long serialVersionUID = 1565269852866133004L;
