@@ -104,11 +104,11 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		if (treeObject != null) {
 			List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
 					.getCustomVariables(treeObject);
-			for (CustomVariable customvariable : customVariables) {
-				variableSelection.addItem(customvariable);
-				variableSelection.setItemCaption(customvariable, customvariable.getName());
-			}
 			if (customVariables != null && !customVariables.isEmpty()) {
+				for (CustomVariable customvariable : customVariables) {
+					variableSelection.addItem(customvariable);
+					variableSelection.setItemCaption(customvariable, customvariable.getName());
+				}
 				variableSelection.setValue(customVariables.get(0));
 			}
 		}
@@ -128,7 +128,8 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 	}
 
 	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
+	 * Collapse the tree in a specific hierarchy level to inner levels. The
+	 * level is specified by a class.
 	 * 
 	 * @param collapseFrom
 	 */

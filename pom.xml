@@ -50,7 +50,8 @@
 		<liferay-authentication-client.version>0.5.6</liferay-authentication-client.version>
 		<jointjs-widget.version>0.1.2-WIDGET</jointjs-widget.version>
 		<jexeval.version>1.0.4</jexeval.version>
-		<!-- Version 6.2 of drools is not accepting special characters like 'ë', do not update -->
+		<!-- Version 6.2 of drools is not accepting special characters like 'ë', 
+			do not update -->
 		<drools.version>6.1.0.CR2</drools.version>
 		<biit-common-utils.version>0.1.0</biit-common-utils.version>
 		<form-structure.version>0.2.1</form-structure.version>
@@ -65,6 +66,8 @@
 		<DES-encryption.version>1.0.0</DES-encryption.version>
 		<maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
 		<biit-logger.version>0.1.0</biit-logger.version>
+		<maven-site-plugin.version>3.4</maven-site-plugin.version>
+		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -79,6 +82,26 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site-plugin.version}</version>
+				<configuration>
+					<reportPlugins>
+						<plugin>
+							<plugin>
+								<groupId>org.codehaus.mojo</groupId>
+								<artifactId>findbugs-maven-plugin</artifactId>
+								<version>${findbugs-maven-plugin.version}</version>
+								<configuration>
+									<effort>Max</effort>
+									<xmlOutput>true</xmlOutput>
+								</configuration>
+							</plugin>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -55,7 +55,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 				if (getFormat().equals(AnswerFormat.NUMBER) && expressionValue.getConvertedValue() != null) {
 					return expressionValue.getConvertedValue().toString();
 				} else if (getFormat().equals(AnswerFormat.DATE)) {
-					return ExpressionValueTimestamp.DATE_FORMATTER.format((Date) expressionValue.getValue());
+					return ExpressionValueTimestamp.getFormatter().format((Date) expressionValue.getValue());
 				}
 				return expressionValue.getValue().toString();
 			} catch (InvalidValueException e) {
@@ -145,7 +145,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 				((TextField) expressionValue).setValue(value.toString());
 			} else if (getFormat().equals(AnswerFormat.DATE)) {
 				try {
-					((DateField) expressionValue).setValue(ExpressionValueTimestamp.DATE_FORMATTER.parse(value));
+					((DateField) expressionValue).setValue(ExpressionValueTimestamp.getFormatter().parse(value));
 				} catch (ReadOnlyException | ConversionException | ParseException e) {
 					setValue(null);
 				}

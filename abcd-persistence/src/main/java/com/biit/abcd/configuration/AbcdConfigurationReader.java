@@ -3,6 +3,8 @@ package com.biit.abcd.configuration;
 import java.io.IOException;
 import java.util.Properties;
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings;
+
 import com.biit.utils.file.PropertiesFile;
 
 public class AbcdConfigurationReader {
@@ -38,6 +40,7 @@ public class AbcdConfigurationReader {
 		readConfig();
 	}
 
+	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
 	public static AbcdConfigurationReader getInstance() {
 		if (instance == null) {
 			synchronized (AbcdConfigurationReader.class) {

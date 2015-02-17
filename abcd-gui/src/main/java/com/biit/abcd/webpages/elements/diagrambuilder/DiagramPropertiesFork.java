@@ -221,11 +221,11 @@ public class DiagramPropertiesFork extends SecuredDiagramElementProperties<Diagr
 			if (treeObjectTable.getValue() != null) {
 				List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
 						.getCustomVariables((TreeObject) treeObjectTable.getValue());
-				for (CustomVariable customvariable : customVariables) {
-					variableSelection.addItem(customvariable);
-					variableSelection.setItemCaption(customvariable, customvariable.getName());
-				}
 				if ((customVariables != null) && !customVariables.isEmpty()) {
+					for (CustomVariable customvariable : customVariables) {
+						variableSelection.addItem(customvariable);
+						variableSelection.setItemCaption(customvariable, customvariable.getName());
+					}
 					variableSelection.setValue(customVariables.get(0));
 				}
 			}
