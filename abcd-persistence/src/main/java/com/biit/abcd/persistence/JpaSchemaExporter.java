@@ -1,7 +1,9 @@
 package com.biit.abcd.persistence;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +28,8 @@ public class JpaSchemaExporter {
 	private static final String DEFAULT_DATABASE_PASSWORD = "asd123";
 	private static final String PACKETS_TO_SCAN[] = { "com.biit.abcd.persistence.entity" };
 	private static final String DEFAULT_OUTPUT_DIRECTORY = "../abcd-release/database/";
+	private static final String[] TABLES_TO_MODIFY = new String[] { "tree_forms" };
+	private static final String DATABASE_FILE = "create_" + HibernateDialect.MYSQL.name().toLowerCase() + ".sql";
 	private Configuration cfg;
 
 	public JpaSchemaExporter(String[] packagesName) {
@@ -111,6 +115,67 @@ public class JpaSchemaExporter {
 		export.setOutputFile(directory + File.separator + "create_" + dialect.name().toLowerCase() + ".sql");
 		export.setFormat(true);
 		export.execute(true, false, false, onlyCreation);
+		updateTables(directory);
+
+	}
+
+	/**
+	 * Changes some Hibernate wrong definitions.
+	 */
+	private void updateTables(String directory) {
+		for (String tableName : TABLES_TO_MODIFY) {
+			replaceFormLabel(tableName, directory);
+		}
+	}
+
+	private void replaceFormLabel(String tableName, String directory) {
+		String oldFileName = directory + File.separator + DATABASE_FILE;
+		String tmpFileName = System.getProperty("java.io.tmpdir") + File.separator + DATABASE_FILE;
+
+		BufferedReader br = null;
+		BufferedWriter bw = null;
+		try {
+			br = new BufferedReader(new FileReader(oldFileName));
+			bw = new BufferedWriter(new FileWriter(tmpFileName));
+			String line;
+			boolean correctTable = false;
+			while ((line = br.readLine()) != null) {
+				if (line.contains("create table ")) {
+					// Starting of a table.
+					correctTable = false;
+					if (line.contains("create table " + tableName + " (")) {
+						// Starting of the correct table.
+						correctTable = true;
+					}
+				}
+				if (correctTable && line.contains("label varchar(1000)")) {
+					line = line.replace("label varchar(1000)", "label varchar(190)");
+				}
+				bw.write(line + "\n");
+			}
+		} catch (Exception e) {
+			return;
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			}
+			try {
+				if (bw != null)
+					bw.close();
+			} catch (IOException e) {
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			}
+		}
+		// Once everything is complete, delete old file..
+		File oldFile = new File(oldFileName);
+		oldFile.delete();
+
+		// And rename tmp file's name to old file name
+		File newFile = new File(tmpFileName);
+		newFile.renameTo(oldFile);
 	}
 
 	public void updateDatabaseScript(HibernateDialect dialect, String outputDirectory, String host, String port,
@@ -175,8 +240,7 @@ public class JpaSchemaExporter {
 		gen.createDatabaseScript(HibernateDialect.MYSQL, directory, true);
 		gen.updateDatabaseScript(HibernateDialect.MYSQL, directory, host, port, user, password);
 
-		addTextToFile(createHibernateSequenceTable(), directory + File.separator + "create_"
-				+ HibernateDialect.MYSQL.name().toLowerCase() + ".sql");
+		addTextToFile(createHibernateSequenceTable(), directory + File.separator + DATABASE_FILE);
 	}
 
 	private static String getDate() {
