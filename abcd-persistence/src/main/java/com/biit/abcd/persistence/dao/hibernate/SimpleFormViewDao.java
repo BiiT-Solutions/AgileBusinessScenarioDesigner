@@ -95,7 +95,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setAvailableFrom((Timestamp) row[9]);
 			formView.setAvailableTo((Timestamp) row[10]);
 			formView.setOrganizationId(((Double) row[11]).longValue());
-			formView.setLastVersion((Integer) row[12] == (Integer) row[3]);
+			formView.setLastVersion(((Integer) row[12]).equals((Integer) row[3]));
 			if (row[13] != null) {
 				formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
 			}
@@ -144,7 +144,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setAvailableFrom((Timestamp) row[9]);
 			formView.setAvailableTo((Timestamp) row[10]);
 			formView.setOrganizationId(((Double) row[11]).longValue());
-			formView.setLastVersion((Integer) row[12] == (Integer) row[3]);
+			formView.setLastVersion(((Integer) row[12]).equals((Integer) row[3]));
 			if (row[13] != null) {
 				formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
 			}

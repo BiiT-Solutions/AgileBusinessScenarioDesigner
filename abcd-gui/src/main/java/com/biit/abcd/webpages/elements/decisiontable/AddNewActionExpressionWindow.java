@@ -2,10 +2,8 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
-import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
 import com.vaadin.ui.Component;
@@ -13,7 +11,6 @@ import com.vaadin.ui.VerticalLayout;
 
 public class AddNewActionExpressionWindow extends AcceptCancelClearWindow {
 	private static final long serialVersionUID = 8131952730660382409L;
-	private SelectFormAnswerTable formAnswerTable;
 	private ExpressionEditorComponent expressionEditorComponent;
 	private ExpressionChain expressionChain;
 
@@ -42,10 +39,6 @@ public class AddNewActionExpressionWindow extends AcceptCancelClearWindow {
 		layout.setSizeFull();
 		layout.setMargin(true);
 		return layout;
-	}
-
-	public Answer getSelectedTableValue() {
-		return formAnswerTable.getValue();
 	}
 
 	public ExpressionChain getExpressionChain() {

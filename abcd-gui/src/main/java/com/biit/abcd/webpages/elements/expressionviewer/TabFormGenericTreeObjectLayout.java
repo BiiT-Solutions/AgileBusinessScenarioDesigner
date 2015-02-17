@@ -131,11 +131,11 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 			if (variableTable.getValue() != null) {
 				List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
 						.getCustomVariables(((GenericTreeObjectType) variableTable.getValue()).getScope());
-				for (CustomVariable customvariable : customVariables) {
-					variableSelection.addItem(customvariable);
-					variableSelection.setItemCaption(customvariable, customvariable.getName());
-				}
 				if ((customVariables != null) && !customVariables.isEmpty()) {
+					for (CustomVariable customvariable : customVariables) {
+						variableSelection.addItem(customvariable);
+						variableSelection.setItemCaption(customvariable, customvariable.getName());
+					}
 					variableSelection.setValue(customVariables.get(0));
 				}
 			}

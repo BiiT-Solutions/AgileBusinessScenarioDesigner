@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings;
+
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -26,6 +28,7 @@ public class GlobalVariablesController {
 	 * @return
 	 * @throws UnexpectedDatabaseException
 	 */
+	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
 	public List<GlobalVariable> getGlobalVariables() throws UnexpectedDatabaseException {
 		if (globalVariables == null) {
 			synchronized (GlobalVariablesController.class) {
@@ -43,7 +46,8 @@ public class GlobalVariablesController {
 	}
 
 	/**
-	 * Remove all old global variables and store all the new ones. This method is synchronized.
+	 * Remove all old global variables and store all the new ones. This method
+	 * is synchronized.
 	 * 
 	 * @throws UnexpectedDatabaseException
 	 * @throws ElementCannotBeRemovedException
@@ -58,7 +62,8 @@ public class GlobalVariablesController {
 			Set<GlobalVariable> intersectionOfVariables = new HashSet<GlobalVariable>(this.globalVariables);
 			// Intersection with new variables.
 			intersectionOfVariables.retainAll(globalVariables);
-			// Remove intersection from old variables give all variables to delete.
+			// Remove intersection from old variables give all variables to
+			// delete.
 			Set<GlobalVariable> variablesToRemove = new HashSet<GlobalVariable>(this.globalVariables);
 			variablesToRemove.removeAll(intersectionOfVariables);
 			checkFormUsingVariable(variablesToRemove);

@@ -117,7 +117,8 @@ public class OperatorsTest extends KidsFormCreator {
 					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "weight")).getAnswer());
 			Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
 			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
-		} catch (Exception e) {
+		} catch (NumberFormatException | FieldTooLongException | CharacterNotAllowedException | NotValidChildException
+				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
 			Assert.fail("Exception in test");
 		}
 	}
@@ -380,7 +381,8 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	/**
-	 * Also tests the variable initialization to a default value (in this case 10)
+	 * Also tests the variable initialization to a default value (in this case
+	 * 10)
 	 */
 	@Test(groups = { "rules" })
 	public void inOperatorCustomVariableFormTest() {
@@ -946,7 +948,8 @@ public class OperatorsTest extends KidsFormCreator {
 				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
-		} catch (Exception e) {
+		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
+				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
 			Assert.fail("Exception in test");
 		}
 	}
@@ -1003,7 +1006,8 @@ public class OperatorsTest extends KidsFormCreator {
 				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
-		} catch (Exception e) {
+		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
+				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
 			Assert.fail("Exception in test");
 		}
 	}
@@ -1060,7 +1064,8 @@ public class OperatorsTest extends KidsFormCreator {
 				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
-		} catch (Exception e) {
+		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
+				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
 			Assert.fail("Exception in test");
 		}
 	}

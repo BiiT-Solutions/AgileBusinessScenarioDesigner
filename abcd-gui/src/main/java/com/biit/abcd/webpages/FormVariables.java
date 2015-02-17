@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings;
+
 import org.hibernate.exception.ConstraintViolationException;
 
 import com.biit.abcd.ApplicationFrame;
@@ -39,6 +41,7 @@ public class FormVariables extends FormWebPageComponent {
 	}
 
 	@Override
+	@FindBugsSuppressWarnings("NP_NULL_ON_SOME_PATH")
 	protected void initContent() {
 		upperMenu = initUpperMenu();
 		setUpperMenu(upperMenu);
