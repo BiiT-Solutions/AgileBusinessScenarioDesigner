@@ -42,7 +42,7 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 		}
 
 		// Special condition for the between
-		if ((call.getFunction().equals(ExpressionTokenType.BETWEEN) && (call.getArgs().size() != 2))) {
+		if ((call.getFunction().getType().equals(ExpressionTokenType.BETWEEN) && (call.getArgs().size() != 2))) {
 			throw new NotCompatibleTypeException("Invalid number of arguments in the between function", null);
 		}
 		// Rest of calls
