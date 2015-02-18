@@ -84,11 +84,10 @@ public class Form extends BaseForm {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<Rule> rules;
 
-	// For avoiding "ObjectDeletedException: deleted object would be re-saved by
-	// cascade (remove deleted object from
-	// associations)" launch when removing a customvariable and other is renamed as this
-	// one, we need to disable
-	// orphanRemoval=true of children and implement ourselves.
+	// For avoiding
+	// "ObjectDeletedException: deleted object would be re-saved by cascade (remove deleted object from associations)"
+	// launch when removing a customvariable and other is renamed as this one, we need to disable orphanRemoval=true of
+	// children and implement ourselves.
 	@Transient
 	private Set<CustomVariable> customVariablesToDelete;
 
