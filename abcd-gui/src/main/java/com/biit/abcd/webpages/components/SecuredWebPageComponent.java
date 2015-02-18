@@ -39,6 +39,7 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 		try {
 			User user = UserSessionHandler.getUser();
 			if (user == null) {
+				AbcdLogger.info(this.getClass().getName(), "Unknown user has tried to enter a secured webpage. Navigated to Login page.");
 				ApplicationFrame.navigateTo(WebMap.getLoginPage());
 			} else {
 				try {
@@ -63,7 +64,7 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 		} catch (NullPointerException npe) {
 			AbcdLogger.errorMessage(this.getClass().getName(), npe);
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-			ApplicationFrame.navigateTo(WebMap.getLoginPage());
+			ApplicationFrame.navigateTo(WebMap.getErrorPage());
 		}
 	}
 

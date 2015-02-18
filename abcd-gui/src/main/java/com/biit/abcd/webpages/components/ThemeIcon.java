@@ -204,7 +204,11 @@ public enum ThemeIcon {
 	
 	LOG_OUT("user.logout.svg"), 
 	
-	ABOUT_US("about.window.svg");
+	ABOUT_US("about.window.svg"), 
+	
+	PAGE_ERROR("page.error.svg"), 
+	
+	PAGE_NOT_FOUND("page.not.found.svg");
 	
 
 	private String value;

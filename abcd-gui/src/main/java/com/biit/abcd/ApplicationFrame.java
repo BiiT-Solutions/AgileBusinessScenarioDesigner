@@ -53,11 +53,13 @@ public class ApplicationFrame extends UI {
 		this.password = request.getParameter(PASSWORD_PARAMETER_TAG);
 
 		setErrorHandler(new AbcdErrorHandler());
-
-		autologin(userEmail, password);
+	}
+	
+	public static void autologin(){
+		((ApplicationFrame)ApplicationFrame.getCurrent()).autologinImplementation();
 	}
 
-	private void autologin(String userEmail, String password) {
+	private void autologinImplementation() {
 		// When accessing from Liferay, user and password are already set.
 		if (userEmail != null && userEmail.length() > 0 && password != null && password.length() > 0) {
 			AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
@@ -129,7 +131,7 @@ public class ApplicationFrame extends UI {
 		navigator = new Navigator(this, this);
 		// Define login page as first one.
 		navigator.addView("", WebMap.getLoginPage().getWebPageJavaClass());
-		navigator.setErrorView(WebMap.getLoginPage().getWebPageJavaClass());
+		navigator.setErrorView(WebMap.getNotFoundPage().getWebPageJavaClass());
 		// Create and register the other web pages.
 		for (WebMap page : WebMap.values()) {
 			addView(page);
