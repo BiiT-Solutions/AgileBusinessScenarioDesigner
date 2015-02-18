@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,7 +60,8 @@ import com.biit.form.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 
 /**
- * Compares two forms. Must be equals (but with different IDs and ComparationIds).
+ * Compares two forms. Must be equals (but with different IDs and
+ * ComparationIds).
  */
 public class FormComparator {
 	private Set<StorableObject> alreadyComparedForm1Element = new HashSet<>();
@@ -134,9 +136,9 @@ public class FormComparator {
 			throw new CustomVariableNotEqualsException("Types are different between custom variables '" + object1
 					+ "' and '" + object2 + "'.");
 		}
-		if (!Objects.equals(object1.getDefaultValue(),object2.getDefaultValue())) {
-			throw new CustomVariableNotEqualsException("Default value are different between custom variables '" + object1
-					+ "' and '" + object2 + "'.");
+		if (!Objects.equals(object1.getDefaultValue(), object2.getDefaultValue())) {
+			throw new CustomVariableNotEqualsException("Default value are different between custom variables '"
+					+ object1 + "' and '" + object2 + "'.");
 		}
 	}
 
@@ -918,7 +920,7 @@ public class FormComparator {
 
 		compareVersions(form1, form2);
 
-		if (form1.getOrganizationId() != form2.getOrganizationId()) {
+		if (!Objects.equals(form1.getOrganizationId(), form2.getOrganizationId())) {
 			throw new FormNotEqualsException("Form's organizations are different!");
 		}
 
@@ -1025,42 +1027,54 @@ public class FormComparator {
 	}
 }
 
-class ExpressionSorter implements Comparator<ExpressionChain> {
+class ExpressionSorter implements Comparator<ExpressionChain>, Serializable {
+	private static final long serialVersionUID = 653352633255236891L;
+
 	@Override
 	public int compare(ExpressionChain arg0, ExpressionChain arg1) {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 }
 
-class CustomVariableSorter implements Comparator<CustomVariable> {
+class CustomVariableSorter implements Comparator<CustomVariable>, Serializable {
+	private static final long serialVersionUID = -992461663716218261L;
+
 	@Override
 	public int compare(CustomVariable arg0, CustomVariable arg1) {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 }
 
-class TableRulesSorter implements Comparator<TableRule> {
+class TableRulesSorter implements Comparator<TableRule>, Serializable {
+	private static final long serialVersionUID = -4817850521307190863L;
+
 	@Override
 	public int compare(TableRule arg0, TableRule arg1) {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 }
 
-class RulesSorter implements Comparator<Rule> {
+class RulesSorter implements Comparator<Rule>, Serializable {
+	private static final long serialVersionUID = 2310666384054474895L;
+
 	@Override
 	public int compare(Rule arg0, Rule arg1) {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 }
 
-class DiagramSorter implements Comparator<Diagram> {
+class DiagramSorter implements Comparator<Diagram>, Serializable {
+	private static final long serialVersionUID = -8256559433128997978L;
+
 	@Override
 	public int compare(Diagram arg0, Diagram arg1) {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 }
 
-class DiagramObjectsSorter implements Comparator<DiagramObject> {
+class DiagramObjectsSorter implements Comparator<DiagramObject>, Serializable {
+	private static final long serialVersionUID = -5659218882895088689L;
+
 	@Override
 	public int compare(DiagramObject arg0, DiagramObject arg1) {
 		return arg0.getJointjsId().compareTo(arg1.getJointjsId());
