@@ -122,15 +122,6 @@ public class Diagram extends StorableObject implements INameAttribute {
 		return Collections.unmodifiableSet(diagramObjects);
 	}
 
-	/**
-	 * Only for using with hibernate.
-	 * 
-	 * @return
-	 */
-	public Set<DiagramObject> getDiagramObjectForInitializeSet() {
-		return diagramObjects;
-	}
-
 	public void removeDiagramObject(DiagramObject object) {
 		diagramObjects.remove(object);
 		// Some orphan removal are not working correctly. Force it!

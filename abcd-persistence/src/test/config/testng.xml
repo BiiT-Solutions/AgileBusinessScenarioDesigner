@@ -15,9 +15,11 @@
 				<include name="genericTreeObjectVariablesDao" />
 				<include name="testScenarioDao" />
 				<include name="simpleTestScenarioViewDao" />
+				<include name="removeForm" />
 			</run>
 		</groups>
 		<classes>
+			<class name="com.biit.abcd.persistence.dao.RemoveForm" />
 			<class name="com.biit.abcd.persistence.dao.FormTest" />
 			<class name="com.biit.abcd.persistence.dao.SimpleFormViewTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
