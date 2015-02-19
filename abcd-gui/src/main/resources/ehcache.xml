@@ -4,5 +4,5 @@
   	<defaultCache eternal="true" maxElementsInMemory="100" overflowToDisk="false" />     	
 	<cache name="org.hibernate.cache.spi.UpdateTimestampsCache" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="50000" eternal="true" overflowToDisk="false" />
 	<cache name="org.hibernate.cache.internal.StandardQueryCache" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="5000" eternal="false" timeToLiveSeconds="1200" overflowToDisk="false" />
-	<cache name="forms" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="abcdforms" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
 </ehcache>

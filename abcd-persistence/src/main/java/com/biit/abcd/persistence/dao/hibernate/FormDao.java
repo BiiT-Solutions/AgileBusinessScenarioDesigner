@@ -47,7 +47,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 
 	@Override
 	@Transactional
-	@CachePut(value = "forms", key = "#form.getId()", condition = "#form.getId() != null")
+	@CachePut(value = "abcdforms", key = "#form.getId()", condition = "#form.getId() != null")
 	public Form makePersistent(Form form) throws UnexpectedDatabaseException, ElementCannotBePersistedException {
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
@@ -167,7 +167,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-	@Cacheable(value = "forms", key = "#id")
+	@Cacheable(value = "abcdforms", key = "#id")
 	public Form read(Long id) throws UnexpectedDatabaseException {
 		// AbcdLogger.debug(FormDao.class.getName(), getSessionFactory().getStatistics().toString());
 		Form form = super.read(id);
@@ -176,7 +176,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-	@Caching(evict = { @CacheEvict(value = "forms", key = "#form.getId()") })
+	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
 	public void makeTransient(Form form) throws UnexpectedDatabaseException, ElementCannotBeRemovedException {
 		// Set all current custom variables to delete.
 		for (CustomVariable customVariable : new HashSet<>(form.getCustomVariables())) {
@@ -210,7 +210,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	 * @return
 	 * @throws UnexpectedDatabaseException
 	 */
-	@Caching(evict = { @CacheEvict(value = "forms", key = "#id") })
+	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#id") })
 	private int updateValidTo(Long id, Timestamp validTo) throws UnexpectedDatabaseException {
 		if (id != null) {
 			Session session = getSessionFactory().getCurrentSession();
@@ -232,7 +232,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-	@Caching(evict = { @CacheEvict(value = "forms", key = "#id") })
+	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#id") })
 	public int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException {
 		Session session = getSessionFactory().getCurrentSession();
 		session.beginTransaction();
@@ -251,7 +251,7 @@ public class FormDao extends BaseFormDao<Form> implements IFormDao {
 	}
 
 	@Override
-	@Caching(evict = { @CacheEvict(value = "forms", allEntries = true) })
+	@Caching(evict = { @CacheEvict(value = "abcdforms", allEntries = true) })
 	public void evictAllCache() {
 		super.evictAllCache();
 	}
