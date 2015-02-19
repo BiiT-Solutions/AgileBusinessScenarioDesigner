@@ -166,6 +166,18 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<!-- 'mvn install -Prelease' test all application with jenkins -->
 	<profiles>
 		<profile>
@@ -177,8 +189,8 @@
 			</activation>
 			<build>
 				<plugins>
-				    <!-- create a war with configuration to a test database -->
-				    <plugin>
+					<!-- create a war with configuration to a test database -->
+					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
 						<version>${maven-antrun-plugin.version}</version>
 						<executions>
@@ -202,16 +214,12 @@
 											dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace
-											token="hibernate.connection.username=abcd"
-											value="hibernate.connection.username=testuser"
-											dir="target/classes">
+										<replace token="hibernate.connection.username=abcd"
+											value="hibernate.connection.username=testuser" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace
-											token="hibernate.hbm2ddl.auto=validate"
-											value="hibernate.hbm2ddl.auto=create-drop"
-											dir="target/classes">
+										<replace token="hibernate.hbm2ddl.auto=validate"
+											value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
 									</target>
@@ -256,8 +264,8 @@
 								<id>start-jetty</id>
 								<phase>pre-integration-test</phase>
 								<goals>
-								    <!-- stop any previous instance to free up the port -->
-              						<goal>stop</goal>
+									<!-- stop any previous instance to free up the port -->
+									<goal>stop</goal>
 									<goal>start</goal>
 								</goals>
 								<configuration>
@@ -294,8 +302,8 @@
 			</activation>
 			<build>
 				<plugins>
-				    <!-- create a war with configuration to a test database -->
-				    <plugin>
+					<!-- create a war with configuration to a test database -->
+					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
 						<version>${maven-antrun-plugin.version}</version>
 						<executions>
@@ -319,16 +327,12 @@
 											dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace
-											token="hibernate.connection.username=abcd"
-											value="hibernate.connection.username=testuser"
-											dir="target/classes">
+										<replace token="hibernate.connection.username=abcd"
+											value="hibernate.connection.username=testuser" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace
-											token="hibernate.hbm2ddl.auto=validate"
-											value="hibernate.hbm2ddl.auto=create-drop"
-											dir="target/classes">
+										<replace token="hibernate.hbm2ddl.auto=validate"
+											value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
 									</target>
@@ -356,8 +360,8 @@
 								<id>start-jetty</id>
 								<phase>pre-integration-test</phase>
 								<goals>
-								    <!-- stop any previous instance to free up the port -->
-              						<goal>stop</goal>
+									<!-- stop any previous instance to free up the port -->
+									<goal>stop</goal>
 									<goal>start</goal>
 								</goals>
 								<configuration>
