@@ -65,7 +65,7 @@
 		<plugin-manager.version>0.0.2</plugin-manager.version>
 		<DES-encryption.version>1.0.0</DES-encryption.version>
 		<maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
-		<biit-logger.version>0.1.0</biit-logger.version>
+		<biit-logger.version>0.2.0</biit-logger.version>
 		<maven-site-plugin.version>3.4</maven-site-plugin.version>
 		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
 	</properties>
