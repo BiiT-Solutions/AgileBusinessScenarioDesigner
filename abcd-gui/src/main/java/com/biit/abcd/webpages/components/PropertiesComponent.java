@@ -10,6 +10,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class PropertiesComponent extends CustomComponent implements Component.Focusable {
@@ -101,7 +102,7 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	}
 
 	protected void firePropertyUpdateListener(Object element) {
-		if (fireListeners) {
+		if (fireListeners && UI.getCurrent() != null) {
 			for (PropertieUpdateListener listener : propertyUpdateListeners) {
 				listener.propertyUpdate(element);
 			}
