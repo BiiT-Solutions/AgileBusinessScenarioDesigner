@@ -43,6 +43,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public abstract class UpperMenu extends SecuredMenu {
@@ -320,9 +321,7 @@ public abstract class UpperMenu extends SecuredMenu {
 			public void buttonClick(ClickEvent event) {
 				try {
 					UserSessionHandler.getFormController().checkUnsavedChanges();
-					UiAccesser.releaseForm(UserSessionHandler.getUser());
-					ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
-					UserSessionHandler.logout();
+					logout();
 				} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException | FormNotEqualsException
 						| GroupNotEqualsException | QuestionNotEqualsException | CustomVariableNotEqualsException
 						| ExpressionNotEqualsException | TableRuleNotEqualsException | RuleNotEqualsException
@@ -334,9 +333,7 @@ public abstract class UpperMenu extends SecuredMenu {
 					windowAccept.addAcceptActionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {
-							ApplicationFrame.navigateTo(WebMap.LOGIN_PAGE);
-							UiAccesser.releaseForm(UserSessionHandler.getUser());
-							UserSessionHandler.logout();
+							logout();
 							windowAccept.close();
 						}
 					});
@@ -349,6 +346,17 @@ public abstract class UpperMenu extends SecuredMenu {
 		iconButtonList.add(logoutButton);
 
 		return iconButtonList;
+	}
+
+	private void logout() {
+		UiAccesser.releaseForm(UserSessionHandler.getUser());
+		UI.getCurrent().getPage().setLocation("./VAADIN/logout.html");
+		try {
+			UI.getCurrent().close();
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(UpperMenu.class.getName(), e);
+		}
+		UserSessionHandler.logout();
 	}
 
 	public void hideLogoutButton(boolean hide) {
