@@ -1,43 +1,49 @@
 package com.biit.abcd.configuration;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import net.sf.ehcache.util.FindBugsSuppressWarnings;
 
-import com.biit.utils.file.PropertiesFile;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.utils.configuration.ConfigurationReader;
+import com.biit.utils.configuration.PropertiesSourceFile;
+import com.biit.utils.configuration.SystemVariablePropertiesSourceFile;
+import com.biit.utils.configuration.exception.PropertyNotFoundException;
 
-public class AbcdConfigurationReader {
-	private final String DATABASE_CONFIG_FILE = "settings.conf";
+public class AbcdConfigurationReader extends ConfigurationReader {
+
+	private static final String DATABASE_CONFIG_FILE = "settings.conf";
+	private static final String ABCD_SYSTEM_VARIABLE_CONFIG = "ABCD_CONFIG";
+
 	// Regex Tags
-	private final String NUMBER_REGEX_TAG = "numberRegEx";
-	private final String DATE_REGEX_TAG = "dateRegEx";
-	private final String POSTALCODE_REGEX_TAG = "postalCodeRegEx";
+	private static final String ID_NUMBER_REGEX = "numberRegEx";
+	private static final String ID_DATE_REGEX = "dateRegEx";
+	private static final String ID_POSTAL_REGEX = "postalCodeRegEx";
 	// Prompts Tags
-	private static final String ISSUE_MANAGER_URL = "issueManagerUrl";
+	private static final String ID_ISSUE_MANAGER_URL = "issueManagerUrl";
+	// Plugins path
+	private static final String ID_PLUGINS_PATH = "pluginsPath";
 
 	// Defaults
-	private final String DEFAULT_NUMBER_CODE_REGEX = "[-]?[0-9]*\\.?,?[0-9]+";
-	private final String DEFAULT_DATE_CODE_REGEX = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)";
-	private final String DEFAULT_POSTAL_CODE_REGEX = "[0-9]{4}[a-zA-Z]{2}";
-
-	private final String PLUGINS_PATH_TAG = "pluginsPath";
-	private final String DEFAULT_PLUGINS_PATH = "plugins/";
-
+	private static final String DEFAULT_NUMBER_REGEX = "[-]?[0-9]*\\.?,?[0-9]+";
+	private static final String DEFAULT_DATE_REGEX = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)";
+	private static final String DEFAULT_POSTAL_REGEX = "[0-9]{4}[a-zA-Z]{2}";
 	private static final String DEFAULT_ISSUE_MANAGER_URL = null;
-
-	private String numberMask;
-	private String dateMask;
-	private String postalCodeMask;
-
-	private String pluginsPath;
-
-	private String issueManagerUrl;
+	private static final String DEFAULT_PLUGINS_PATH = "plugins/";
 
 	private static AbcdConfigurationReader instance;
 
 	private AbcdConfigurationReader() {
-		readConfig();
+		super();
+
+		addProperty(ID_NUMBER_REGEX, DEFAULT_NUMBER_REGEX);
+		addProperty(ID_DATE_REGEX, DEFAULT_DATE_REGEX);
+		addProperty(ID_POSTAL_REGEX, DEFAULT_POSTAL_REGEX);
+		addProperty(ID_ISSUE_MANAGER_URL, DEFAULT_ISSUE_MANAGER_URL);
+		addProperty(ID_PLUGINS_PATH, DEFAULT_PLUGINS_PATH);
+
+		addPropertiesSource(new PropertiesSourceFile(DATABASE_CONFIG_FILE));
+		addPropertiesSource(new SystemVariablePropertiesSourceFile(ABCD_SYSTEM_VARIABLE_CONFIG, DATABASE_CONFIG_FILE));
+
+		readConfigurations();
 	}
 
 	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
@@ -52,62 +58,32 @@ public class AbcdConfigurationReader {
 		return instance;
 	}
 
-	/**
-	 * Read database config from resource and update default connection parameters.
-	 */
-	private void readConfig() {
-		Properties prop = new Properties();
+	private String getPropertyLogException(String propertyId) {
 		try {
-			prop = PropertiesFile.load(DATABASE_CONFIG_FILE);
-			// Set masks
-			numberMask = prop.getProperty(NUMBER_REGEX_TAG);
-			dateMask = prop.getProperty(DATE_REGEX_TAG);
-			postalCodeMask = prop.getProperty(POSTALCODE_REGEX_TAG);
-			// Get plugins path
-			pluginsPath = prop.getProperty(PLUGINS_PATH_TAG);
-			issueManagerUrl = prop.getProperty(ISSUE_MANAGER_URL);
-		} catch (IOException e) {
-			// Do nothing.
-		}
-		checkForNullValues();
-	}
-
-	private void checkForNullValues() {
-		if (numberMask == null) {
-			numberMask = DEFAULT_NUMBER_CODE_REGEX;
-		}
-		if (dateMask == null) {
-			dateMask = DEFAULT_DATE_CODE_REGEX;
-		}
-		if (postalCodeMask == null) {
-			postalCodeMask = DEFAULT_POSTAL_CODE_REGEX;
-		}
-		if (pluginsPath == null) {
-			pluginsPath = DEFAULT_PLUGINS_PATH;
-		}
-
-		if (issueManagerUrl == null) {
-			issueManagerUrl = DEFAULT_ISSUE_MANAGER_URL;
+			return getProperty(propertyId);
+		} catch (PropertyNotFoundException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			return null;
 		}
 	}
 
 	public String getNumberMask() {
-		return numberMask;
+		return getPropertyLogException(ID_NUMBER_REGEX);
 	}
 
 	public String getDateMask() {
-		return dateMask;
+		return getPropertyLogException(ID_DATE_REGEX);
 	}
 
 	public String getPostalCodeMask() {
-		return postalCodeMask;
+		return getPropertyLogException(ID_POSTAL_REGEX);
 	}
 
 	public String getPluginsPath() {
-		return pluginsPath;
+		return getPropertyLogException(ID_PLUGINS_PATH);
 	}
 
 	public String getIssueManagerUrl() {
-		return issueManagerUrl;
+		return getPropertyLogException(ID_ISSUE_MANAGER_URL);
 	}
 }
