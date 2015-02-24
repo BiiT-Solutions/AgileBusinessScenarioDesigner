@@ -33,7 +33,7 @@
 
 	<scm>
 		<connection>scm:git:dev.biit-solutions.com:AgileBusinessScenarioDesigner.git</connection>
-		<developerConnection>scm:git:dev.biit-solutions.com:com:AgileBusinessScenarioDesigner.git</developerConnection>
+		<developerConnection>scm:git:dev.biit-solutions.com:AgileBusinessScenarioDesigner.git</developerConnection>
 		<tag>abcd-tool</tag>
 	</scm>
 
