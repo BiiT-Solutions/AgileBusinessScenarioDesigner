@@ -152,6 +152,7 @@
 					<checkModificationExcludes>
 						<checkModificationExclude>pom.xml</checkModificationExclude>
 					</checkModificationExcludes>
+					<preparationGoals>clean install</preparationGoals>
 				</configuration>
 			</plugin>
 		</plugins>
