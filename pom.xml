@@ -152,7 +152,11 @@
 					<checkModificationExcludes>
 						<checkModificationExclude>pom.xml</checkModificationExclude>
 					</checkModificationExcludes>
-					<preparationGoals>clean install</preparationGoals>
+					<!-- This action is used by release:perform -->
+					<!-- During release:perform, enable the "release" profile -->
+					<releaseProfiles>release</releaseProfiles>
+					<!-- This goal is used by release:perform -->
+					<goals>deploy</goals>
 				</configuration>
 			</plugin>
 		</plugins>
