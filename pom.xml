@@ -65,7 +65,7 @@
 			do not update -->
 		<drools.version>6.1.0.CR2</drools.version>
 		<biit-common-utils.version>0.2.0</biit-common-utils.version>
-		<form-structure.version>0.2.1</form-structure.version>
+		<form-structure.version>[0.2,0.3)</form-structure.version>
 		<form-structure-orbeon.version>0.1.1</form-structure-orbeon.version>
 		<apache-poi.version>3.10.1</apache-poi.version>
 		<root.directory>${project.basedir}</root.directory>
