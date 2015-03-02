@@ -9,7 +9,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
 public class DroolsRuleGroupEndRule extends DroolsRuleGroup {
-
+	private static final long serialVersionUID = 5322960385494913547L;
 	private String groupCondition = "";
 	private String groupAction = "";
 	private Map<String, String> rulesIdentifierMap;

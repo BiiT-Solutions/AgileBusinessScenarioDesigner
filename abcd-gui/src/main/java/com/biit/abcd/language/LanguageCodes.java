@@ -47,6 +47,7 @@ public enum LanguageCodes {
 	COLLAPSABLE_PANEL_EXPAND_TOOLTIP("collapsable.panel.expand.tooltip"),
 
 	FORM_TREE_PROPERTY_NAME("form.tree.property.name"),
+	FORM_TREE_PROPERTY_USES("form.tree.property.uses"),
 	FORM_TREE_PROPERTY_RULES("form.tree.property.rules"),
 
 	INFO_USER_LOG("info.userLog"),

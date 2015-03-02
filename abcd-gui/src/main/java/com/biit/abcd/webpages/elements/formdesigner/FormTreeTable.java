@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.utils.UsesOfElement;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.webpages.components.ComponentCellRule;
@@ -16,14 +18,21 @@ import com.vaadin.ui.Component;
 
 public class FormTreeTable extends TreeObjectTable {
 	private static final long serialVersionUID = 6016194810449244086L;
+	private UsesOfElement usesOfElement;
 
 	public enum FormTreeTableProperties {
-		ELEMENT_NAME, RULES
+		USES, RULES
 	};
 
 	public FormTreeTable() {
+		addContainerProperty(FormTreeTableProperties.USES, Integer.class, 0,
+				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_USES), null, Align.CENTER);
 		addContainerProperty(FormTreeTableProperties.RULES, Component.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_RULES), null, Align.LEFT);
+
+		setColumnExpandRatio(TreeObjectTableProperties.ELEMENT_NAME, 0.45f);
+		setColumnExpandRatio(FormTreeTableProperties.USES, 0.1f);
+		setColumnExpandRatio(FormTreeTableProperties.RULES, 0.45f);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -38,6 +47,7 @@ public class FormTreeTable extends TreeObjectTable {
 			ComponentCellRule rulesComponent = getRulesComponent(element, assignedRules, expressionChains);
 			Item item = getItem(element);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
+			item.getItemProperty(FormTreeTableProperties.USES).setValue(getElementUses(element));
 			setValue(element);
 		}
 	}
@@ -54,6 +64,7 @@ public class FormTreeTable extends TreeObjectTable {
 
 			ComponentCellRule rulesComponent = getRulesComponent(element, assignedRules, expressionChains);
 			item.getItemProperty(FormTreeTableProperties.RULES).setValue(rulesComponent);
+			item.getItemProperty(FormTreeTableProperties.USES).setValue(getElementUses(element));
 		}
 	}
 
@@ -71,5 +82,12 @@ public class FormTreeTable extends TreeObjectTable {
 			ruleText += rule.getName();
 		}
 		return ruleText;
+	}
+
+	private int getElementUses(TreeObject element) {
+		if (usesOfElement == null) {
+			usesOfElement = new UsesOfElement((Form) element.getAncestor(Form.class));
+		}
+		return usesOfElement.getUsesOfElement(element);
 	}
 }
