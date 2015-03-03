@@ -106,11 +106,13 @@ public class Login extends WebPageComponent {
 					} catch (InvalidCredentialsException | AuthenticationRequired e) {
 						passwordField.setComponentError(new UserError(ServerTranslate.translate(
 								LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
+						AbcdLogger.errorMessage(this.getClass().getName(), e);
 						MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
 					} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
 						AbcdLogger.errorMessage(this.getClass().getName(), e);
 						MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
 					} catch (PBKDF2EncryptorException e) {
+						AbcdLogger.errorMessage(this.getClass().getName(), e);
 						MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD, LanguageCodes.ERROR_CONTACT);
 					}
 				}
@@ -136,11 +138,13 @@ public class Login extends WebPageComponent {
 						} catch (InvalidCredentialsException | AuthenticationRequired e) {
 							passwordField.setComponentError(new UserError(ServerTranslate.translate(
 									LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
+							AbcdLogger.errorMessage(this.getClass().getName(), e);
 							MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
 						} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
 							AbcdLogger.errorMessage(this.getClass().getName(), e);
 							MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
 						} catch (PBKDF2EncryptorException e) {
+							AbcdLogger.errorMessage(this.getClass().getName(), e);
 							MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD,
 									LanguageCodes.ERROR_CONTACT);
 						}

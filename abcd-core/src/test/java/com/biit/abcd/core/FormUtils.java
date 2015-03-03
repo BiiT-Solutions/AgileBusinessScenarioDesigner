@@ -425,7 +425,7 @@ public class FormUtils {
 
 	/*-
 	 *                             |-- (Answer1) -->   Table1    --> End1
-	 * Start --> Fork (question2) -|
+	 * Start --> Fork (ChooseOne) -|
 	 *                             |-- (Others)  --> Expression1 --> Diagram2 --> End2
 	 * 
 	 * @param form
