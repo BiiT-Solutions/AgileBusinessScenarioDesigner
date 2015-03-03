@@ -9,6 +9,7 @@
 				<include name="newVersion" />
 				<include name="droolsEngineRules" />
 				<include name="pluginsTest" />
+				<include name="usesOfElement" />
 			</run>
 		</groups>
 		<classes>
@@ -25,6 +26,7 @@
 			<class name="com.biit.abcd.core.drools.test.OperatorsTest" />
 			<class name="com.biit.abcd.core.drools.test.DroolsEngineRulesTest" />
 			<class name="com.biit.abcd.core.drools.test.PluginsTest" />
+			<class name="com.biit.abcd.core.UsesOfElementTester" />
 		</classes>
 	</test>
 </suite>

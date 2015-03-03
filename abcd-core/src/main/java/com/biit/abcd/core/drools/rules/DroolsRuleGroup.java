@@ -3,7 +3,7 @@ package com.biit.abcd.core.drools.rules;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
 public class DroolsRuleGroup extends DroolsRule {
-
+	private static final long serialVersionUID = -1248781299336582512L;
 	private String groupCondition =  "";
 	private String groupAction = "";
 	private String conditionExpressionChainId = "";
