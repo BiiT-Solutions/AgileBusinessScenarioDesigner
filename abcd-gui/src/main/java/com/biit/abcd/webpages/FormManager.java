@@ -278,8 +278,7 @@ public class FormManager extends FormWebPageComponent {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		} catch (ElementCannotBeRemovedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 

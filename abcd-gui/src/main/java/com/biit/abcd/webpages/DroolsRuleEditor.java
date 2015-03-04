@@ -143,7 +143,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 								removeSelectedRule();
 								AbcdLogger.info(this.getClass().getName(),
 										"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
-												+ rule.getClass() + " with 'Name: " + rule.getName() + "'.");
+												+ rule.getClass() + " with name '" + rule.getName() + "'.");
 								windowAccept.close();
 							} catch (DependencyExistException e) {
 								// Forbid the remove action if exist dependency.
