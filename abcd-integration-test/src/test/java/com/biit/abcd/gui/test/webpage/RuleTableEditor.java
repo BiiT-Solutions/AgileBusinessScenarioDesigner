@@ -13,7 +13,6 @@ import com.vaadin.testbench.elements.TableElement;
 
 public class RuleTableEditor extends LeftTreeTableWebpage {
 
-	private static final String SAVE_BUTTON = "Save";
 	private static final String RULE_TABLE_EDITOR_ID = "rule-tables-table";
 	private static final String REMOVE_TABLE_CAPTION = "Remove";
 	private static final String REMOVE_CAPTION = "Remove";

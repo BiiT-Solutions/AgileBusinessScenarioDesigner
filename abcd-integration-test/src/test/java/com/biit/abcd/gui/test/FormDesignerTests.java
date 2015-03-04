@@ -2,8 +2,6 @@ package com.biit.abcd.gui.test;
 
 import java.util.Date;
 
-import javax.validation.constraints.AssertTrue;
-
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;

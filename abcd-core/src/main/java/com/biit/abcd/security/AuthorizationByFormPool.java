@@ -59,17 +59,6 @@ public class AuthorizationByFormPool {
 		}
 	}
 
-	private void removeUser(Form form, User user) {
-		if (form != null && user != null) {
-			if (userTime.get(form) != null) {
-				userTime.get(form).remove(user);
-			}
-			if (usersActivities.get(form) != null) {
-				usersActivities.get(form).remove(user);
-			}
-		}
-	}
-
 	private void removeFormLists(Form form) {
 		if (form != null) {
 			userTime.remove(form);

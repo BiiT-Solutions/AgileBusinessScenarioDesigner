@@ -3,7 +3,6 @@ package com.biit.abcd.persistence.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -23,9 +22,6 @@ public class DiagramDao extends GenericDao<Diagram> implements IDiagramDao {
 
 	@Override
 	protected void initializeSets(List<Diagram> elements) {
-		for (Diagram diagram : elements) {
-			// Initializes the sets for lazy-loading (within the same session)
-		}
 	}
 
 	@Override

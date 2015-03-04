@@ -11,7 +11,6 @@ import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.language.LanguageCodes;
-import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.utils.ZipUtils;
 import com.biit.abcd.webpages.components.SaveAction;

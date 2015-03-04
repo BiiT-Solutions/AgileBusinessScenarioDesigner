@@ -1,8 +1,5 @@
 package com.biit.abcd.gui.test.webpage;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
-
 import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerFormat;
 import com.biit.abcd.gui.test.window.NewRuleExpressionWindow;
 import com.biit.abcd.gui.test.window.SelectAVariable;
