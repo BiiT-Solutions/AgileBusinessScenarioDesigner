@@ -57,31 +57,29 @@ public class Form extends BaseForm {
 	private Timestamp availableTo;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@Fetch(FetchMode.JOIN)
+	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
+	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@Fetch(FetchMode.SUBSELECT)
+	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
+	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<TableRule> tableRules;
 
 	@OneToMany(mappedBy = "form")
 	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	// Cannot be JOIN
-	@Fetch(FetchMode.SUBSELECT)
+	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
+	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@Fetch(FetchMode.SUBSELECT)
+	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
+	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<ExpressionChain> expressionChains;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	// Cannot be JOIN
-	@Fetch(FetchMode.SUBSELECT)
+	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
+	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<Rule> rules;
 
 	// For avoiding
