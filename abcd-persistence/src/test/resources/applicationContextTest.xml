@@ -103,8 +103,7 @@
 
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />
+	
 	<!-- Aspect -->
 	<bean id="basicLogging" class="com.biit.abcd.logger.BasicLogging" />
-
-
 </beans>

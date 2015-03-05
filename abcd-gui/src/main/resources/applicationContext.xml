@@ -54,11 +54,13 @@
 		<property name="loginTimeout" value="${c3p0.timeout}" />
 		<property name="acquireIncrement" value="${c3p0.acquire_increment}" />
 	</bean>
+	
 	<!-- Transaction Manager -->
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
 	<!-- Hibernate session factory -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -105,16 +107,20 @@
 			</list>
 		</property>
 	</bean>
+	
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />
+	
 	<!-- Aspect -->
 	<bean id="basicLogging" class="com.biit.abcd.logger.BasicLogging" />
+	
 	<!-- Internationalization -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="languages/localization"></property>
 		<property name="fallbackToSystemLocale" value="false"></property>
 	</bean>
+	
 	<!-- DAOS -->
 	<bean name="formDao" class="com.biit.abcd.persistence.dao.hibernate.FormDao">
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -129,8 +135,10 @@
 	<bean name="testScenarioDao" class="com.biit.abcd.persistence.dao.hibernate.TestScenarioDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
 	<!-- Liferay Services -->
 	<bean id="userService" class="com.biit.liferay.access.UserService" />
+	
 	<!-- EhCache -->
 	<cache:annotation-driven/>
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
