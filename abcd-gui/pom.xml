@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.2.8</version>
+		<version>1.2.9-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<maven-war-plugin.version>2.3</maven-war-plugin.version>
