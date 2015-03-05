@@ -21,6 +21,7 @@ import com.biit.abcd.logger.AbcdLogger;
 
 @SuppressWarnings("rawtypes")
 public class JpaSchemaExporter {
+	
 	private static final String DATABASE_NAME = "abcd";
 	private static final String DEFAULT_DATABASE_HOST_NAME = "localhost";
 	private static final String DEFAULT_DATABASE_PORT = "3306";
@@ -265,5 +266,4 @@ public class JpaSchemaExporter {
 		} catch (IOException e) {
 		}
 	}
-
 }
