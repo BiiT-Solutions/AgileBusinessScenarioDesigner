@@ -10,7 +10,6 @@ import java.util.List;
 import org.dom4j.DocumentException;
 import org.junit.Assert;
 
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleExecutionException;
@@ -19,6 +18,7 @@ import com.biit.abcd.core.drools.rules.exceptions.OrbeonReaderException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.drools.form.DroolsForm;
 import com.biit.form.submitted.ISubmittedCategory;
 import com.biit.form.submitted.ISubmittedForm;
 import com.biit.form.submitted.implementation.SubmittedForm;

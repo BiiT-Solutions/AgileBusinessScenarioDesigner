@@ -12,9 +12,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.KieManager;
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.form.submitted.ISubmittedForm;
 
