@@ -40,14 +40,15 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.form.ISubmittedForm;
-import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+import com.biit.form.submitted.ISubmittedForm;
+import com.biit.form.submitted.exceptions.CategoryDoesNotExistException;
+import com.biit.form.submitted.exceptions.GroupDoesNotExistException;
+import com.biit.form.submitted.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 /**
@@ -85,7 +86,8 @@ public class TableRuleTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
-		Assert.assertEquals(GENDER_MALE, ((DroolsForm) droolsForm).getSubmittedForm().getVariableValue(GENDER_VARIABLE));
+		Assert.assertEquals(GENDER_MALE,
+				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getSubmittedForm()).getVariableValue(GENDER_VARIABLE));
 	}
 
 	@Test(groups = { "rules" })
@@ -104,8 +106,8 @@ public class TableRuleTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
-		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsForm) droolsForm).getSubmittedForm()
-				.getVariableValue(CUSTOM_VARIABLE_RESULT));
+		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
+				.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
 	@Test(groups = { "rules" })
@@ -124,8 +126,8 @@ public class TableRuleTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
-		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsForm) droolsForm).getSubmittedForm()
-				.getVariableValue(CUSTOM_VARIABLE_RESULT));
+		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
+				.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
 	@Test(groups = { "rules" })
@@ -143,8 +145,8 @@ public class TableRuleTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
-		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsForm) droolsForm).getSubmittedForm()
-				.getVariableValue(CUSTOM_VARIABLE_RESULT));
+		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
+				.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
 	private void createQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,

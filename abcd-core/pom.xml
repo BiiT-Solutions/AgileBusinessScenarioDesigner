@@ -41,6 +41,11 @@
 			<artifactId>form-structure-orbeon</artifactId>
 			<version>${form-structure-orbeon.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.biit</groupId>
+			<artifactId>form-structure-drools</artifactId>
+			<version>${form-structure-drools.version}</version>
+		</dependency>
 		<!-- File access -->
 		<dependency>
 			<groupId>commons-io</groupId>

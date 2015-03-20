@@ -2,34 +2,31 @@ package com.biit.abcd.core.drools.facts.inputform;
 
 import java.util.List;
 
-import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.ISubmittedForm;
-import com.biit.orbeon.form.ISubmittedObject;
-import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedForm;
+import com.biit.form.submitted.ISubmittedObject;
+import com.biit.form.submitted.ISubmittedQuestion;
+import com.biit.form.submitted.implementation.SubmittedForm;
 
 /**
  * Needed to allow drools to manage variables in memory.<br>
  * It is used as the parent class of the submitted form, to allow this form to manage variable.<br>
- * 
  */
 public class DroolsForm implements ISubmittedForm {
 
-	private SubmittedForm submittedform;
+	private ISubmittedForm submittedform;
 
-	public DroolsForm(SubmittedForm submittedForm) {
+	public DroolsForm(ISubmittedForm submittedForm) {
 		this.submittedform = submittedForm;
 	}
 
-	public SubmittedForm getSubmittedForm() {
+	public ISubmittedForm getSubmittedForm() {
 		return submittedform;
 	}
 
-	public IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
-			CategoryDoesNotExistException {
-		return (IQuestion) submittedform.getChild(ICategory.class, categoryName)
-				.getChild(IQuestion.class, questionName);
+	public ISubmittedQuestion getQuestion(String categoryName, String questionName) {
+		return (ISubmittedQuestion) submittedform.getChild(ISubmittedCategory.class, categoryName)
+				.getChild(ISubmittedQuestion.class, questionName);
 	}
 
 	@Override

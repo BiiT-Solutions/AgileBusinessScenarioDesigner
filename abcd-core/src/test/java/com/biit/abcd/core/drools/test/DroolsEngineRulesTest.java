@@ -13,14 +13,14 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.KieManager;
 import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.drools.form.DroolsSubmittedForm;
+import com.biit.form.submitted.ISubmittedForm;
 
 /**
- *	Tests the rule loading from a static file<br>
- *	Needs the files kidScreen.xml and droolsRulesFileTest.drl in test/resources
+ * Tests the rule loading from a static file<br>
+ * Needs the files kidScreen.xml and droolsRulesFileTest.drl in test/resources
  */
 public class DroolsEngineRulesTest {
 
@@ -31,7 +31,7 @@ public class DroolsEngineRulesTest {
 
 	private void createSubmittedForm() {
 		try {
-			setSubmittedForm(new SubmittedForm(APP, FORM));
+			setSubmittedForm(new DroolsSubmittedForm(APP, FORM));
 			String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
 			getOrbeonImporter().readXml(xmlFile, getSubmittedForm());
 		} catch (Exception e) {
@@ -52,7 +52,7 @@ public class DroolsEngineRulesTest {
 			km.buildSessionRules(drlFile);
 			// Creation of the global constants
 			km.setGlobalVariables(null);
-			DroolsForm droolsForm = new DroolsForm((SubmittedForm) getSubmittedForm());
+			DroolsForm droolsForm = new DroolsForm(getSubmittedForm());
 			km.setFacts(Arrays.asList((ISubmittedForm) droolsForm));
 			km.execute();
 			return droolsForm;
@@ -87,7 +87,9 @@ public class DroolsEngineRulesTest {
 			DroolsForm droolsForm = runDroolsRules(drlFile);
 			if (submittedForm != null) {
 				// Check result
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue("customVariableResult"), 11.);
+				Assert.assertEquals(
+						((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue("customVariableResult"),
+						11.);
 			}
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);

@@ -42,8 +42,8 @@ import com.biit.abcd.webpages.elements.droolsresults.DroolsSubmittedFormResultWi
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.testscenario.ValidationReportWindow;
 import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
+import com.biit.form.submitted.ISubmittedForm;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
