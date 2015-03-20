@@ -2,11 +2,11 @@ package com.biit.abcd.webpages.elements.droolsresults;
 
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.form.submitted.SubmittedQuestion;
-import com.biit.orbeon.form.ISubmittedObject;
+import com.biit.drools.form.SubmittedForm;
+import com.biit.form.submitted.ISubmittedObject;
+import com.biit.form.submitted.implementation.SubmittedQuestion;
 import com.vaadin.data.Item;
 import com.vaadin.ui.TreeTable;
 

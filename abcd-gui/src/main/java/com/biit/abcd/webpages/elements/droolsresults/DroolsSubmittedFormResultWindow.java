@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -16,7 +14,12 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.orbeon.form.ISubmittedObject;
+import com.biit.drools.form.ISubmittedFormElement;
+import com.biit.drools.form.SubmittedCategory;
+import com.biit.drools.form.SubmittedForm;
+import com.biit.drools.form.SubmittedGroup;
+import com.biit.drools.form.SubmittedQuestion;
+import com.biit.form.submitted.ISubmittedObject;
 
 public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 
@@ -79,8 +82,8 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	@SuppressWarnings("unchecked")
 	private void setVariables(ISubmittedObject submittedFormElement) {
 		if (customVariablesScopeMap != null) {
-			List<String> variables = customVariablesScopeMap.get(((ISubmittedFormElement) submittedFormElement)
-					.getVariableScope());
+			List<String> variables = customVariablesScopeMap
+					.get(getVariableScope(((ISubmittedFormElement) submittedFormElement)));
 			if (variables != null) {
 				for (String variable : variables) {
 					if (((ISubmittedFormElement) submittedFormElement).getVariableValue(variable) != null) {
@@ -105,5 +108,18 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				setVariables(child);
 			}
 		}
+	}
+
+	private CustomVariableScope getVariableScope(ISubmittedFormElement submittedFormElement) {
+		if (submittedFormElement instanceof SubmittedForm) {
+			return CustomVariableScope.FORM;
+		} else if (submittedFormElement instanceof SubmittedCategory) {
+			return CustomVariableScope.CATEGORY;
+		} else if (submittedFormElement instanceof SubmittedGroup) {
+			return CustomVariableScope.GROUP;
+		} else if (submittedFormElement instanceof SubmittedQuestion) {
+			return CustomVariableScope.QUESTION;
+		}
+		return null;
 	}
 }

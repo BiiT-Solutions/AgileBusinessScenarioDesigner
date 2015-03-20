@@ -7,10 +7,6 @@ import java.util.Date;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.utils.DateUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -23,13 +19,18 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedCategory;
+import com.biit.drools.form.DroolsSubmittedForm;
+import com.biit.drools.form.DroolsSubmittedGroup;
+import com.biit.drools.form.DroolsSubmittedQuestion;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
+import com.biit.form.submitted.ISubmiitedGroup;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedQuestion;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class ExpressionsTest extends KidsFormCreator {
@@ -60,7 +61,7 @@ public class ExpressionsTest extends KidsFormCreator {
 				// Kid's birthdate in the parsed form
 				Date birthdate = sdf.parse("2007-09-01");
 				// Check years
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(YEARS),
+				Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(YEARS),
 						DateUtils.returnYearsDistanceFromDate(birthdate));
 			} catch (Exception e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -84,9 +85,9 @@ public class ExpressionsTest extends KidsFormCreator {
 			// Kid's birthdate in the parsed form
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check months
-			Assert.assertEquals(((SubmittedCategory) droolsForm.getSubmittedForm()
-					.getChild(ICategory.class, "Algemeen")).getVariableValue(MONTHS), DateUtils
-					.returnMonthsDistanceFromDate(birthdate));
+			Assert.assertEquals(
+					((DroolsSubmittedCategory) droolsForm.getSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen"))
+							.getVariableValue(MONTHS), DateUtils.returnMonthsDistanceFromDate(birthdate));
 		}
 	}
 
@@ -106,8 +107,9 @@ public class ExpressionsTest extends KidsFormCreator {
 			// Kid's birthdate in the parsed form
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check days
-			Assert.assertEquals(((SubmittedGroup) droolsForm.getSubmittedForm().getChild(ICategory.class, "Lifestyle")
-					.getChild(IGroup.class, "voeding")).getVariableValue(DAYS),
+			Assert.assertEquals(
+					((DroolsSubmittedGroup) droolsForm.getSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
+							.getChild(ISubmiitedGroup.class, "voeding")).getVariableValue(DAYS),
 					DateUtils.returnDaysDistanceFromDate(birthdate));
 		}
 	}
@@ -128,8 +130,8 @@ public class ExpressionsTest extends KidsFormCreator {
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check date
 			Assert.assertEquals(
-					((SubmittedQuestion) droolsForm.getSubmittedForm().getChild(ICategory.class, "Lifestyle")
-							.getChild(IGroup.class, "voeding").getChild(IQuestion.class, "fruit"))
+					((DroolsSubmittedQuestion) droolsForm.getSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
+							.getChild(ISubmiitedGroup.class, "voeding").getChild(ISubmittedQuestion.class, "fruit"))
 							.getVariableValue(DATE), birthdate);
 		}
 	}

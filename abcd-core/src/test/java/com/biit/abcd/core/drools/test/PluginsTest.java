@@ -6,7 +6,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.PluginController;
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -18,11 +17,12 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.plugins.interfaces.IPlugin;
 
 /**
- * For executing this test correctly the plugins must be placed in the specified
- * path by the settings.conf file
+ * For executing this test correctly the plugins must be placed in the specified path by the settings.conf file
  * 
  */
 public class PluginsTest extends KidsFormCreator {
@@ -53,8 +53,8 @@ public class PluginsTest extends KidsFormCreator {
 		try {
 			// Calling the hello world plugin with only one call
 			Assert.assertEquals(
-					PluginController.getInstance().executePluginMethod(PLUGIN_INTERFACE,
-							HELLO_WORLD_PLUGIN_NAME, HELLO_WORLD_PLUGIN_METHOD), HELLO_WORLD_PLUGIN_RETURN);
+					PluginController.getInstance().executePluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME,
+							HELLO_WORLD_PLUGIN_METHOD), HELLO_WORLD_PLUGIN_RETURN);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -69,14 +69,16 @@ public class PluginsTest extends KidsFormCreator {
 					CustomVariableType.STRING, CustomVariableScope.FORM);
 			ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(
 					getForm(), customvariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionPluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME,
-							HELLO_WORLD_PLUGIN_METHOD), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+					new ExpressionPluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME, HELLO_WORLD_PLUGIN_METHOD),
+					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 			getForm().getExpressionChains().add(expression);
 			getForm().addDiagram(createExpressionsDiagram());
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT), "Hello World");
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
+					"Hello World");
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -99,7 +101,8 @@ public class PluginsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT), 8.);
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), 8.);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}

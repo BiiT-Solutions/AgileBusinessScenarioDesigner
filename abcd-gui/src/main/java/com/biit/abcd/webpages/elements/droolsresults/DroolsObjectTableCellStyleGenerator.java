@@ -1,10 +1,10 @@
 package com.biit.abcd.webpages.elements.droolsresults;
 
-import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.webpages.elements.droolsresults.DroolsTreeObjectTable.DroolsTreeObjectTableProperties;
+import com.biit.drools.form.SubmittedCategory;
+import com.biit.drools.form.SubmittedForm;
+import com.biit.drools.form.SubmittedGroup;
+import com.biit.drools.form.SubmittedQuestion;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.CellStyleGenerator;
 

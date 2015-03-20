@@ -15,8 +15,6 @@ import org.junit.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.FormToDroolsExporter;
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.persistence.entity.Answer;
@@ -52,12 +50,14 @@ import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.form.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.form.submitted.ISubmittedForm;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class KidsFormCreator {
@@ -645,7 +645,7 @@ public class KidsFormCreator {
 
 	@Test(groups = { "orbeon" })
 	public void readStaticSubmittedForm() throws DocumentException, IOException {
-		submittedForm = new SubmittedForm(APP, FORM);
+		submittedForm = new DroolsSubmittedForm(APP, FORM);
 		String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
 		orbeonImporter.readXml(xmlFile, submittedForm);
 		Assert.assertNotNull(submittedForm);

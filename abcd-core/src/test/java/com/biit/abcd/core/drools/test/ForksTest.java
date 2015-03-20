@@ -3,8 +3,6 @@ package com.biit.abcd.core.drools.test;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -28,6 +26,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedForm;
 
 public class ForksTest extends KidsFormCreator {
 
@@ -46,7 +46,7 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -62,7 +62,7 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -79,7 +79,7 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -95,7 +95,7 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 4.75);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 4.75);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
