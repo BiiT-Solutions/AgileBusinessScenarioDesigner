@@ -20,8 +20,6 @@ public interface ISubmittedFormElement {
 
 	public void setVariableValue(Object submmitedFormObject, String varName, Object value);
 
-	public CustomVariableScope getVariableScope();
-
 	public String generateXML(String tabs);
 
 	/**

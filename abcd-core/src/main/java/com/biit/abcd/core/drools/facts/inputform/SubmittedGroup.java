@@ -3,7 +3,6 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ISubmittedObject;
 
 public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup implements ISubmittedFormElement {
@@ -84,11 +83,6 @@ public class SubmittedGroup extends com.biit.form.submitted.SubmittedGroup imple
 	@Override
 	public String getOriginalValue() {
 		return "";
-	}
-
-	@Override
-	public CustomVariableScope getVariableScope() {
-		return CustomVariableScope.GROUP;
 	}
 
 	@Override

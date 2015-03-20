@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ISubmittedObject;
 
 public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion implements ISubmittedFormElement {
@@ -151,11 +150,6 @@ public class SubmittedQuestion extends com.biit.form.submitted.SubmittedQuestion
 	@Override
 	public String getOriginalValue() {
 		return getAnswer();
-	}
-
-	@Override
-	public CustomVariableScope getVariableScope() {
-		return CustomVariableScope.QUESTION;
 	}
 
 	@Override

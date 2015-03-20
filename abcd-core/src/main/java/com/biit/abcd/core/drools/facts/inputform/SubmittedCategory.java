@@ -3,7 +3,6 @@ package com.biit.abcd.core.drools.facts.inputform;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ISubmittedObject;
 
 public class SubmittedCategory extends com.biit.form.submitted.SubmittedCategory implements ISubmittedFormElement {
@@ -86,11 +85,6 @@ public class SubmittedCategory extends com.biit.form.submitted.SubmittedCategory
 	@Override
 	public String getOriginalValue() {
 		return "";
-	}
-
-	@Override
-	public CustomVariableScope getVariableScope() {
-		return CustomVariableScope.CATEGORY;
 	}
 
 	@Override

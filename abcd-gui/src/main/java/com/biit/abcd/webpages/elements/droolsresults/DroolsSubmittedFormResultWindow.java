@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
 import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
+import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -79,8 +82,8 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	@SuppressWarnings("unchecked")
 	private void setVariables(ISubmittedObject submittedFormElement) {
 		if (customVariablesScopeMap != null) {
-			List<String> variables = customVariablesScopeMap.get(((ISubmittedFormElement) submittedFormElement)
-					.getVariableScope());
+			List<String> variables = customVariablesScopeMap
+					.get(getVariableScope(((ISubmittedFormElement) submittedFormElement)));
 			if (variables != null) {
 				for (String variable : variables) {
 					if (((ISubmittedFormElement) submittedFormElement).getVariableValue(variable) != null) {
@@ -105,5 +108,18 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 				setVariables(child);
 			}
 		}
+	}
+
+	private CustomVariableScope getVariableScope(ISubmittedFormElement submittedFormElement) {
+		if (submittedFormElement instanceof SubmittedForm) {
+			return CustomVariableScope.FORM;
+		} else if (submittedFormElement instanceof SubmittedCategory) {
+			return CustomVariableScope.CATEGORY;
+		} else if (submittedFormElement instanceof SubmittedGroup) {
+			return CustomVariableScope.GROUP;
+		} else if (submittedFormElement instanceof SubmittedQuestion) {
+			return CustomVariableScope.QUESTION;
+		}
+		return null;
 	}
 }

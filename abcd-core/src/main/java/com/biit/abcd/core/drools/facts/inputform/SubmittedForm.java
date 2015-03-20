@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.biit.abcd.core.drools.facts.inputform.interfaces.ISubmittedFormElement;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
@@ -132,11 +131,6 @@ public class SubmittedForm extends com.biit.form.submitted.SubmittedForm impleme
 	@Override
 	public String getOriginalValue() {
 		return "";
-	}
-
-	@Override
-	public CustomVariableScope getVariableScope() {
-		return CustomVariableScope.FORM;
 	}
 
 	@Override
