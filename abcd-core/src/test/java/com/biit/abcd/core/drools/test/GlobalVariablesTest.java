@@ -53,7 +53,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class GlobalVariablesTest extends KidsFormCreator {
 	private final static String GLOBAL_VALUE = "globalValue";
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGlobalVariables" })
 	public void testGlobVarsInDroolsEngine() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, ActionNotImplementedException, DocumentException,
@@ -68,7 +68,7 @@ public class GlobalVariablesTest extends KidsFormCreator {
 		DroolsForm submittedForm = createAndRunDroolsRules();
 
 		// Check if the operation was correct
-		Assert.assertEquals(((DroolsSubmittedForm) submittedForm.getSubmittedForm()).getVariableValue(GLOBAL_VALUE),
+		Assert.assertEquals(((DroolsSubmittedForm) submittedForm.getDroolsSubmittedForm()).getVariableValue(GLOBAL_VALUE),
 				55.4 / (21.0 / 100.0));
 	}
 

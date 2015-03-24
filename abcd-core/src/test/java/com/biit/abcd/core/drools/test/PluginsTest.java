@@ -77,7 +77,7 @@ public class PluginsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					"Hello World");
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
@@ -102,7 +102,7 @@ public class PluginsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), 8.);
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), 8.);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}

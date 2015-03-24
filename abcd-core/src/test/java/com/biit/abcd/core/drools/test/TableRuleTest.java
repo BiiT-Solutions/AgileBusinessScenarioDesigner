@@ -71,7 +71,7 @@ public class TableRuleTest extends KidsFormCreator {
 		super();
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsTableRule" })
 	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
@@ -87,10 +87,10 @@ public class TableRuleTest extends KidsFormCreator {
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
 		Assert.assertEquals(GENDER_MALE,
-				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getSubmittedForm()).getVariableValue(GENDER_VARIABLE));
+				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm()).getVariableValue(GENDER_VARIABLE));
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsTableRule" })
 	private void testFormCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
 			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
@@ -107,10 +107,10 @@ public class TableRuleTest extends KidsFormCreator {
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
 		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
-				.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
+				.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsTableRule" })
 	private void testCategoryCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
 			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
@@ -127,10 +127,10 @@ public class TableRuleTest extends KidsFormCreator {
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
 		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
-				.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
+				.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsTableRule" })
 	private void testMultipleColumnsTableRule() throws ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -146,7 +146,7 @@ public class TableRuleTest extends KidsFormCreator {
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
 		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
-				.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
+				.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
 	private void createQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,

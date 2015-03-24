@@ -29,7 +29,7 @@ public class GenericsTest extends KidsFormCreator {
 	private CustomVariable groupCustomVariable = null;
 	private CustomVariable questionCustomVariable = null;
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGeneric" })
 	private void genericCategoryQuestionsTest() {
 		try {
 			// Generate the form
@@ -49,7 +49,7 @@ public class GenericsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGeneric" })
 	private void genericGroupQuestionsTest() {
 		try {
 			// Generate the form
@@ -68,7 +68,7 @@ public class GenericsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGeneric" })
 	private void genericCategoryGroupsTest() {
 		try {
 			// Generate the form
@@ -87,7 +87,7 @@ public class GenericsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGeneric" })
 	private void formGenericCategoriesTest() {
 		try {
 			// Generate the form
@@ -105,7 +105,7 @@ public class GenericsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGeneric" })
 	private void genericCategoryGroupsQuestionsTest() {
 		try {
 			// Generate the form
@@ -127,7 +127,7 @@ public class GenericsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGeneric" })
 	private void genericCategoryQuestionsGroupsTest() {
 		try {
 			// Generate the form
@@ -149,7 +149,7 @@ public class GenericsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsGeneric" })
 	private void genericGroupQuestionsGroupsTest() {
 		try {
 			// Generate the form

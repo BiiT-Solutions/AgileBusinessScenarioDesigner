@@ -36,7 +36,7 @@ public class ForksTest extends KidsFormCreator {
 	private final static String FORM_CUSTOM_VAR = "formCustomVar";
 	private final static String CATEGORY_CUSTOM_VAR = "categoryCustomVar";
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsFork" })
 	public void simpleForkTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -46,13 +46,13 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsFork" })
 	public void nestedForksTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -62,14 +62,14 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
 	// Test created to check if the or/and combination is generated correctly
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsFork" })
 	public void nestedForksWithOrConditionsTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -79,13 +79,13 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsFork" })
 	public void forkWithMultipleConditionsTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -95,7 +95,7 @@ public class ForksTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(END2), 4.75);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 4.75);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
