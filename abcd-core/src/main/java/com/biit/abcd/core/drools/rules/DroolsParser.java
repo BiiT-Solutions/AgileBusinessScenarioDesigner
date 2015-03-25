@@ -381,7 +381,7 @@ public class DroolsParser {
 									.getUniqueNameReadable());
 							// First common part of the condition
 							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
-									+ " : SubmittedForm(isVariableDefined('" + variableName + "'), getVariableValue('"
+									+ " : DroolsSubmittedForm(isVariableDefined('" + variableName + "'), getVariableValue('"
 									+ variableName + "')";
 							switch (functionParsed) {
 							case BETWEEN:
@@ -407,7 +407,7 @@ public class DroolsParser {
 										+ "'found.", conditions);
 							}
 							// End common part of the condition
-							droolsConditions += "from $droolsForm.getSubmittedForm() \n";
+							droolsConditions += "from $droolsForm.getDroolsSubmittedForm() \n";
 							break;
 						case CATEGORY:
 						case GROUP:
@@ -416,7 +416,7 @@ public class DroolsParser {
 							String className = leftVariable.getReference().getClass().getSimpleName();
 							// First common part of the condition
 							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
-									+ " : Submitted" + className + "( "
+									+ " : DroolsSubmitted" + className + "( "
 									+ RulesUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference())
 									+ "', isVariableDefined('" + variableName + "'), getVariableValue('" + variableName
 									+ "')";
@@ -447,7 +447,7 @@ public class DroolsParser {
 							}
 							// End common part of the condition
 							droolsConditions += "from $" + leftReferenceParent.getUniqueNameReadable()
-									+ ".getChildren(I" + className + ".class)\n";
+									+ ".getChildren(ISubmitted" + className + ".class)\n";
 							break;
 						}
 					} else if (leftExpressionValueTreeObject.getReference() instanceof Question) {
@@ -458,7 +458,7 @@ public class DroolsParser {
 						droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
 						Question leftQuestion = (Question) leftReference;
 						// First common part of the condition
-						droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable() + " : SubmittedQuestion("
+						droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
 								+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "', "
 								+ getTreeObjectAnswer(leftExpressionValueTreeObject);
 						// Comparison part of the condition
@@ -487,7 +487,7 @@ public class DroolsParser {
 						}
 						// End common part of the condition
 						droolsConditions += "from $" + leftReferenceParent.getUniqueNameReadable()
-								+ ".getChildren(IQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(leftQuestion)
+								+ ".getChildren(ISubmittedQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(leftQuestion)
 								+ "\n";
 					}
 				} else {
@@ -539,11 +539,11 @@ public class DroolsParser {
 		droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(questionParent);
 
 		putTreeObjectName(question, question.getUniqueNameReadable());
-		droolsConditions += "	$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+		droolsConditions += "	$" + question.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
 				+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
 				+ getTreeObjectAnswerType(question) + "')" + availableOperator.getValue().toString() + "'"
 				+ answer.getName() + "') from $" + questionParent.getUniqueNameReadable()
-				+ ".getChildren(IQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
+				+ ".getChildren(ISubmittedQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 		return droolsConditions;
 	}
 
@@ -587,26 +587,26 @@ public class DroolsParser {
 					putTreeObjectName(treeObjectCustomVariable, treeObjectCustomVariable.getUniqueNameReadable());
 					if (treeObjectCustomVariable instanceof Form) {
 						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable()
-								+ " : SubmittedForm( isVariableDefined('" + customVariable.getName()
+								+ " : DroolsSubmittedForm( isVariableDefined('" + customVariable.getName()
 								+ "'), getVariableValue('" + customVariable.getName() + "') "
 								+ operator.getValue().toString()
 								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
 								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ")
-								+ ") from $droolsForm.getSubmittedForm() \n";
+								+ ") from $droolsForm.getDroolsSubmittedForm() \n";
 
 					} else {
 						String treeObjectClassName = treeObjectCustomVariable.getClass().getSimpleName();
 						TreeObject parent = treeObjectCustomVariable.getParent();
 						// Check conditions for the parent
 						ruleCore += SimpleConditionsGenerator.getTreeObjectConditions(parent);
-						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : Submitted"
+						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : DroolsSubmitted"
 								+ treeObjectClassName + "( "
 								+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable)
 								+ "', isVariableDefined('" + customVariable.getName() + "'), getVariableValue('"
 								+ customVariable.getName() + "') " + operator.getValue().toString()
 								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
 								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ") + ") from $"
-								+ parent.getUniqueNameReadable() + ".getChildren(I" + treeObjectClassName + ".class) "
+								+ parent.getUniqueNameReadable() + ".getChildren(ISubmitted" + treeObjectClassName + ".class) "
 								+ RulesUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable) + "\n";
 					}
 
@@ -1168,25 +1168,25 @@ public class DroolsParser {
 					break;
 				case INPUT:
 					// Common part of NUMBER, POSTALCODE, TEXT condition
-					questionCondition += "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+					questionCondition += "\t$" + question.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
 							+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
 							+ getTreeObjectAnswerType(question) + "') " + operator.getValue();
 					switch (question.getAnswerFormat()) {
 					case NUMBER:
 						questionCondition += " " + value + " ) from $" + question.getParent().getUniqueNameReadable()
-								+ ".getChildren(IQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(question)
+								+ ".getChildren(ISubmittedQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(question)
 								+ "\n";
 						break;
 					case POSTAL_CODE:
 						// Postal code comparisons should be in ALWAYS in upper
 						// case
 						questionCondition += " '" + value.toString().toUpperCase() + "' ) from $"
-								+ question.getParent().getUniqueNameReadable() + ".getChildren(IQuestion.class)"
+								+ question.getParent().getUniqueNameReadable() + ".getChildren(ISubmittedQuestion.class)"
 								+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case TEXT:
 						questionCondition += " '" + value.toString() + "' ) from $"
-								+ question.getParent().getUniqueNameReadable() + ".getChildren(IQuestion.class)"
+								+ question.getParent().getUniqueNameReadable() + ".getChildren(ISubmittedQuestion.class)"
 								+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case DATE:
@@ -1194,7 +1194,7 @@ public class DroolsParser {
 						questionCondition = "";
 						if (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit() != null) {
 							// Beginning common part of the DATE condition
-							questionCondition += "\t$" + question.getUniqueNameReadable() + " : SubmittedQuestion("
+							questionCondition += "\t$" + question.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
 									+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', ";
 
 							switch (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit()) {
@@ -1228,7 +1228,7 @@ public class DroolsParser {
 							}
 							// Ending common part of the DATE condition
 							questionCondition += "from $" + question.getParent().getUniqueNameReadable()
-									+ ".getChildren(IQuestion.class)\n";
+									+ ".getChildren(ISubmittedQuestion.class)\n";
 						}
 						break;
 					}

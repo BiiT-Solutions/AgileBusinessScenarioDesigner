@@ -3,7 +3,13 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="rules" />
+				<include name="droolsExpressions" />
+				<include name="droolsFork" />
+				<include name="droolsGeneric" />
+				<include name="droolsGlobalVariables" />
+				<include name="droolsNestedGroups" />
+				<include name="droolsOperators" />
+				<include name="droolsTableRule" />
 				<include name="droolsPrattParser" />
 				<include name="gson" />
 				<include name="newVersion" />

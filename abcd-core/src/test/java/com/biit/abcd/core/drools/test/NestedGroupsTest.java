@@ -6,16 +6,14 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -40,16 +38,18 @@ import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeI
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedQuestion;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedGroup;
+import com.biit.form.submitted.ISubmittedQuestion;
+import com.biit.form.submitted.exceptions.CategoryDoesNotExistException;
+import com.biit.form.submitted.exceptions.GroupDoesNotExistException;
+import com.biit.form.submitted.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 /**
@@ -66,7 +66,7 @@ public class NestedGroupsTest extends KidsFormCreator {
 	}
 
 	// Simple table question answer
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsNestedGroups" })
 	public void testSimpleTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, QuestionDoesNotExistException, GroupDoesNotExistException,
@@ -84,8 +84,8 @@ public class NestedGroupsTest extends KidsFormCreator {
 
 		Assert.assertEquals(
 				QUESTION_EQUALS_ANSWER,
-				((SubmittedQuestion) droolsForm.getSubmittedForm().getChild(ICategory.class, "Lifestyle")
-						.getChild(IGroup.class, "voeding").getChild(IQuestion.class, "breakfast"))
+				((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
+						.getChild(ISubmittedGroup.class, "voeding").getChild(ISubmittedQuestion.class, "breakfast"))
 						.getVariableValue("qVar"));
 	}
 

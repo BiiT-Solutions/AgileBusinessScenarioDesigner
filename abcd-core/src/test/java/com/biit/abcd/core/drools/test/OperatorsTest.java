@@ -8,11 +8,6 @@ import org.dom4j.DocumentException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
@@ -48,15 +43,21 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedCategory;
+import com.biit.drools.form.DroolsSubmittedForm;
+import com.biit.drools.form.DroolsSubmittedGroup;
+import com.biit.drools.form.DroolsSubmittedQuestion;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedGroup;
+import com.biit.form.submitted.ISubmittedQuestion;
+import com.biit.form.submitted.exceptions.CategoryDoesNotExistException;
+import com.biit.form.submitted.exceptions.QuestionDoesNotExistException;
+import com.biit.form.submitted.implementation.SubmittedQuestion;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class OperatorsTest extends KidsFormCreator {
@@ -80,7 +81,7 @@ public class OperatorsTest extends KidsFormCreator {
 	private static final Double OR_RESULT_VALUE = 11.;
 	private static final String BETWEEN_CUSTOM_VARIABLE = "betweenCustomVariable";
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void mathematicalOperatorsTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -111,19 +112,21 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check bmi
-			Double height = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
-					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "height")).getAnswer());
-			Double weight = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
-					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "weight")).getAnswer());
+			Double height = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "height"))
+					.getAnswer());
+			Double weight = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "weight"))
+					.getAnswer());
 			Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(BMI), bmi);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(BMI), bmi);
 		} catch (NumberFormatException | FieldTooLongException | CharacterNotAllowedException | NotValidChildException
 				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void minOperatorTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -144,17 +147,18 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
-					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "heightFather")).getAnswer());
+			Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
+					.getAnswer());
 			Double thirdVal = 1000.0;
 			Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MIN), minVal);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MIN), minVal);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void maxOperatorTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -175,17 +179,18 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
-					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "heightFather")).getAnswer());
+			Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
+					.getAnswer());
 			Double thirdVal = 1000.0;
 			Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(MAX), maxVal);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MAX), maxVal);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void avgOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
@@ -212,17 +217,18 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = (Double.parseDouble(((SubmittedQuestion) droolsForm.getSubmittedForm()
-					.getChild(ICategory.class, "Algemeen").getChild(IQuestion.class, "heightFather")).getAnswer()));
+			Double secondVal = (Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
+					.getAnswer()));
 			Double thirdVal = 1000.0;
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(AVG),
-					(firstVal + secondVal + thirdVal) / 3.0);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG), (firstVal
+					+ secondVal + thirdVal) / 3.0);
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void pmtOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
@@ -247,13 +253,13 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(PMT), 21000.0);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(PMT), 21000.0);
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void ifOperatorWithoutGenericsTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -273,13 +279,13 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(IF_RESULT), 1.7);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(IF_RESULT), 1.7);
 		} catch (Exception e) {
 			Assert.fail();
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void ifOperatorWithGenericsTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -304,7 +310,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorQuestionAnswerTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -335,7 +341,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -343,7 +350,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorQuestionInputNumberTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -372,7 +379,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -381,10 +389,9 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	/**
-	 * Also tests the variable initialization to a default value (in this case
-	 * 10)
+	 * Also tests the variable initialization to a default value (in this case 10)
 	 */
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableFormTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -400,8 +407,10 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Assert.assertEquals(
-					((SubmittedForm) droolsForm.getSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE),
+					10.);
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -409,7 +418,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableCategoryTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -424,9 +433,10 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Assert.assertEquals(
-					((SubmittedCategory) droolsForm.getSubmittedForm().getChild(ICategory.class,
+					((DroolsSubmittedCategory) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class,
 							getCategory().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -434,7 +444,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableGroupTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -449,9 +459,11 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Assert.assertEquals(
-					((SubmittedGroup) droolsForm.getChild(ICategory.class, CATEGORY_LIFESTYLE).getChild(IGroup.class,
-							getGroup().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+					((DroolsSubmittedGroup) droolsForm.getChild(ISubmittedCategory.class, CATEGORY_LIFESTYLE).getChild(
+							ISubmittedGroup.class, getGroup().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE),
+					10.);
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -459,7 +471,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableQuestionTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -474,11 +486,12 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
 			Assert.assertEquals(
-					((SubmittedQuestion) droolsForm.getChild(ICategory.class, CATEGORY_LIFESTYLE)
-							.getChild(IGroup.class, getGroup().getName())
-							.getChild(IQuestion.class, getQuestion().getName()))
+					((DroolsSubmittedQuestion) droolsForm.getChild(ISubmittedCategory.class, CATEGORY_LIFESTYLE)
+							.getChild(ISubmittedGroup.class, getGroup().getName())
+							.getChild(ISubmittedQuestion.class, getQuestion().getName()))
 							.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -506,7 +519,7 @@ public class OperatorsTest extends KidsFormCreator {
 		createRuleNode(rule);
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionNumberValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -535,7 +548,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -543,7 +557,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorCustomVariableNumberValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -573,7 +587,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -581,7 +596,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorCustomVariableStringValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -611,7 +626,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -619,7 +635,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionStringValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -648,7 +664,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -656,7 +673,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionDateValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -685,7 +702,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -693,7 +711,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionDateYearsValuesTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -730,7 +748,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -738,7 +757,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionInputsTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -767,7 +786,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -775,7 +795,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testAndOperator() throws ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
@@ -817,12 +837,13 @@ public class OperatorsTest extends KidsFormCreator {
 		DroolsForm droolsForm = launchRule(new Rule("andTest", conditions, action));
 		if (droolsForm != null) {
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 					CUSTOM_VARIABLE_RESULT_VALUE);
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testOrOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
 			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
@@ -865,11 +886,13 @@ public class OperatorsTest extends KidsFormCreator {
 		DroolsForm droolsForm = launchRule(new Rule("orTest", conditions, action));
 		if (droolsForm != null) {
 			// Check result
-			Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT), OR_RESULT_VALUE);
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
+					OR_RESULT_VALUE);
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -895,7 +918,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("notTest", condition, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+				Assert.assertEquals(
+						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (Exception e) {
@@ -903,7 +927,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotAndCombinationOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -945,7 +969,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("notAndTest", conditions, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+				Assert.assertEquals(
+						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
@@ -954,7 +979,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void andOrCombinationTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1003,7 +1028,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("andOrTest", conditions, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+				Assert.assertEquals(
+						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
@@ -1012,7 +1038,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void andOrBracketsCombinationTest() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1061,7 +1087,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("andOrTest", conditions, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+				Assert.assertEquals(
+						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
@@ -1070,7 +1097,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testGreaterThanOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1085,7 +1112,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testGreaterEqualsOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1100,7 +1127,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testLessThanOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1115,7 +1142,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testLessEqualsOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1130,7 +1157,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testEqualsOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1145,7 +1172,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotEqualsOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1160,7 +1187,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotEqualsDateOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1175,7 +1202,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotEqualsDateYearOperator() {
 		try {
 			// Restart the form to avoid test cross references
@@ -1202,7 +1229,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("logicComparatorsTest", condition, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(CUSTOM_VARIABLE_RESULT),
+				Assert.assertEquals(
+						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 						CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (Exception e) {

@@ -11,7 +11,7 @@ import org.kie.api.builder.Message.Level;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
-import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.form.submitted.ISubmittedForm;
 
 public class KieManager {
 

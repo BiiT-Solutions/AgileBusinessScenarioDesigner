@@ -9,8 +9,6 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
-import com.biit.abcd.core.drools.facts.inputform.SubmittedForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
 import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidator;
 import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidatorMessage;
 import com.biit.abcd.logger.AbcdLogger;
@@ -23,12 +21,16 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
+import com.biit.drools.form.DroolsSubmittedCategory;
+import com.biit.drools.form.DroolsSubmittedForm;
+import com.biit.drools.form.DroolsSubmittedGroup;
+import com.biit.drools.form.DroolsSubmittedQuestion;
 import com.biit.form.TreeObject;
-import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.ISubmittedForm;
-import com.biit.orbeon.form.ISubmittedObject;
+import com.biit.form.submitted.ISubmittedGroup;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedForm;
+import com.biit.form.submitted.ISubmittedObject;
+import com.biit.form.submitted.ISubmittedQuestion;
 
 public class TestScenarioAnswerImporter {
 
@@ -44,7 +46,7 @@ public class TestScenarioAnswerImporter {
 			TestScenarioForm testForm = testScenario.getTestScenarioForm();
 			// The name of the form is not longer used and has a static value,
 			// so we have to use the label
-			submittedForm = new SubmittedForm(testForm.getLabel());
+			submittedForm = new DroolsSubmittedForm(testForm.getLabel());
 			// Get the categories
 			List<TreeObject> categories = testForm.getChildren();
 			if (categories != null) {
@@ -59,7 +61,7 @@ public class TestScenarioAnswerImporter {
 
 	private void createCategory(TestScenarioCategory testCategory, ISubmittedForm submittedForm) {
 		// Add the category to the submittedForm
-		ICategory category = new com.biit.abcd.core.drools.facts.inputform.SubmittedCategory(testCategory.getName());
+		ISubmittedCategory category = new DroolsSubmittedCategory(testCategory.getName());
 		submittedForm.addChild(category);
 		category.setParent(submittedForm);
 		// Put category children variables
@@ -78,7 +80,7 @@ public class TestScenarioAnswerImporter {
 	}
 
 	private void createGroupVariables(TestScenarioGroup testScenarioGroup, ISubmittedObject parent) {
-		IGroup group = new SubmittedGroup(testScenarioGroup.getName());
+		ISubmittedGroup group = new DroolsSubmittedGroup(testScenarioGroup.getName());
 		parent.addChild(group);
 		group.setParent(parent);
 		List<TreeObject> groupChildren = testScenarioGroup.getChildren();
@@ -97,14 +99,13 @@ public class TestScenarioAnswerImporter {
 	}
 
 	private void createQuestionVariables(TestScenarioQuestion testScenarioQuestion, ISubmittedObject parent) {
-		IQuestion question = new com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion(
-				testScenarioQuestion.getName());
+		ISubmittedQuestion question = new DroolsSubmittedQuestion(testScenarioQuestion.getName());
 		setQuestionAnswer(testScenarioQuestion, question);
 		parent.addChild(question);
 		question.setParent(parent);
 	}
 
-	private void setQuestionAnswer(TestScenarioQuestion testScenarioQuestion, IQuestion iQuestion) {
+	private void setQuestionAnswer(TestScenarioQuestion testScenarioQuestion, ISubmittedQuestion iQuestion) {
 		TestAnswer testAnswer = testScenarioQuestion.getTestAnswer();
 		if ((testAnswer != null) && (testAnswer.getValue() != null)) {
 			// We have to separate the set of values to copy the behavior of the
@@ -137,7 +138,7 @@ public class TestScenarioAnswerImporter {
 	private void createSubmittedFormFile(ISubmittedForm submittedForm) {
 		if (submittedForm != null) {
 			try {
-				String submmitedFormXml = ((SubmittedForm) submittedForm).generateXML();
+				String submmitedFormXml = ((DroolsSubmittedForm) submittedForm).generateXML();
 				Files.write(
 						Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedSubmittedForm.xml"),
 						submmitedFormXml.getBytes("UTF-8"));
@@ -146,8 +147,8 @@ public class TestScenarioAnswerImporter {
 			}
 		}
 	}
-	
-	public List<TestScenarioValidatorMessage> getTestScenarioModifications(){
+
+	public List<TestScenarioValidatorMessage> getTestScenarioModifications() {
 		return testValidator.getValidatorMessages();
 	}
 }

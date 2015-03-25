@@ -7,10 +7,6 @@ import java.util.Date;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.facts.inputform.DroolsForm;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedCategory;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedGroup;
-import com.biit.abcd.core.drools.facts.inputform.SubmittedQuestion;
 import com.biit.abcd.core.drools.utils.DateUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -23,13 +19,18 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedCategory;
+import com.biit.drools.form.DroolsSubmittedForm;
+import com.biit.drools.form.DroolsSubmittedGroup;
+import com.biit.drools.form.DroolsSubmittedQuestion;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedGroup;
+import com.biit.form.submitted.ISubmittedQuestion;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 public class ExpressionsTest extends KidsFormCreator {
@@ -43,7 +44,7 @@ public class ExpressionsTest extends KidsFormCreator {
 	private CustomVariable daysCustomVariable = null;
 	private CustomVariable dateCustomVariable = null;
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsExpressions" })
 	public void yearsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		initFormAndVariables();
@@ -60,7 +61,7 @@ public class ExpressionsTest extends KidsFormCreator {
 				// Kid's birthdate in the parsed form
 				Date birthdate = sdf.parse("2007-09-01");
 				// Check years
-				Assert.assertEquals(droolsForm.getSubmittedForm().getVariableValue(YEARS),
+				Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(YEARS),
 						DateUtils.returnYearsDistanceFromDate(birthdate));
 			} catch (Exception e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -68,9 +69,10 @@ public class ExpressionsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "rules" })
-	public void monthsDateExpressionTest() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+	@Test(groups = { "droolsExpressions" })
+	public void monthsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException,
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly,
+			ParseException  {
 		initFormAndVariables();
 		// Assign a date(months) to a custom variable
 		ExpressionChain expression = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(
@@ -84,13 +86,13 @@ public class ExpressionsTest extends KidsFormCreator {
 			// Kid's birthdate in the parsed form
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check months
-			Assert.assertEquals(((SubmittedCategory) droolsForm.getSubmittedForm()
-					.getChild(ICategory.class, "Algemeen")).getVariableValue(MONTHS), DateUtils
-					.returnMonthsDistanceFromDate(birthdate));
+			Assert.assertEquals(
+					((DroolsSubmittedCategory) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen"))
+							.getVariableValue(MONTHS), DateUtils.returnMonthsDistanceFromDate(birthdate));
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsExpressions" })
 	public void daysDateExpressionTest() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		initFormAndVariables();
@@ -106,13 +108,14 @@ public class ExpressionsTest extends KidsFormCreator {
 			// Kid's birthdate in the parsed form
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check days
-			Assert.assertEquals(((SubmittedGroup) droolsForm.getSubmittedForm().getChild(ICategory.class, "Lifestyle")
-					.getChild(IGroup.class, "voeding")).getVariableValue(DAYS),
+			Assert.assertEquals(
+					((DroolsSubmittedGroup) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
+							.getChild(ISubmittedGroup.class, "voeding")).getVariableValue(DAYS),
 					DateUtils.returnDaysDistanceFromDate(birthdate));
 		}
 	}
 
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsExpressions" })
 	public void testDateExpression() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		initFormAndVariables();
@@ -128,8 +131,8 @@ public class ExpressionsTest extends KidsFormCreator {
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check date
 			Assert.assertEquals(
-					((SubmittedQuestion) droolsForm.getSubmittedForm().getChild(ICategory.class, "Lifestyle")
-							.getChild(IGroup.class, "voeding").getChild(IQuestion.class, "fruit"))
+					((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
+							.getChild(ISubmittedGroup.class, "voeding").getChild(ISubmittedQuestion.class, "fruit"))
 							.getVariableValue(DATE), birthdate);
 		}
 	}
