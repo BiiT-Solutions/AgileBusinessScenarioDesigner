@@ -44,8 +44,8 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.form.submitted.ISubmiitedGroup;
 import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedQuestion;
 import com.biit.form.submitted.exceptions.CategoryDoesNotExistException;
 import com.biit.form.submitted.exceptions.GroupDoesNotExistException;
@@ -66,7 +66,7 @@ public class NestedGroupsTest extends KidsFormCreator {
 	}
 
 	// Simple table question answer
-	@Test(groups = { "rules" })
+	@Test(groups = { "droolsNestedGroups" })
 	public void testSimpleTableRule() throws FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, ExpressionInvalidException, InvalidRuleException, IOException,
 			RuleNotImplementedException, DocumentException, QuestionDoesNotExistException, GroupDoesNotExistException,
@@ -84,8 +84,8 @@ public class NestedGroupsTest extends KidsFormCreator {
 
 		Assert.assertEquals(
 				QUESTION_EQUALS_ANSWER,
-				((DroolsSubmittedQuestion) droolsForm.getSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
-						.getChild(ISubmiitedGroup.class, "voeding").getChild(ISubmittedQuestion.class, "breakfast"))
+				((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
+						.getChild(ISubmittedGroup.class, "voeding").getChild(ISubmittedQuestion.class, "breakfast"))
 						.getVariableValue("qVar"));
 	}
 

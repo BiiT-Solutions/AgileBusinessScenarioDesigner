@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.drools.form.SubmittedForm;
+import com.biit.form.submitted.ISubmittedForm;
 import com.biit.form.submitted.ISubmittedObject;
 import com.biit.form.submitted.implementation.SubmittedQuestion;
 import com.vaadin.data.Item;
@@ -68,7 +68,7 @@ public class DroolsTreeObjectTable extends TreeTable {
 		}
 	}
 
-	public void setRootElement(SubmittedForm root) {
+	public void setRootElement(ISubmittedForm root) {
 		this.removeAllItems();
 		select(null);
 		if (root != null) {

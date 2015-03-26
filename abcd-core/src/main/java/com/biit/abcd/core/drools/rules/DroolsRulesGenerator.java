@@ -96,7 +96,8 @@ public class DroolsRulesGenerator {
 	 */
 	private void importsDeclaration() {
 		getRulesBuilder().append("package com.biit.drools \n\n");
-		getRulesBuilder().append("import com.biit.abcd.core.drools.facts.inputform.* \n");
+		getRulesBuilder().append("import com.biit.drools.form.* \n");
+		getRulesBuilder().append("import com.biit.form.submitted.* \n");
 		getRulesBuilder().append("import com.biit.abcd.core.drools.utils.* \n");
 		getRulesBuilder().append("import java.lang.Math \n");
 		getRulesBuilder().append("import java.util.Date \n");

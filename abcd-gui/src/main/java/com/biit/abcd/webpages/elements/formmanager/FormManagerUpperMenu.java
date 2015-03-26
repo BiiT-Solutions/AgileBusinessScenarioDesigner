@@ -174,7 +174,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 											if (submittedForm instanceof DroolsForm) {
 												final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-														((DroolsForm) submittedForm).getSubmittedForm(),
+														((DroolsForm) submittedForm).getDroolsSubmittedForm(),
 														UserSessionHandler.getFormController().getForm());
 												droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
 													@Override
@@ -332,7 +332,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 			if (submittedForm instanceof DroolsForm) {
 				final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-						((DroolsForm) submittedForm).getSubmittedForm(), UserSessionHandler.getFormController()
+						((DroolsForm) submittedForm).getDroolsSubmittedForm(), UserSessionHandler.getFormController()
 								.getForm());
 				droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override

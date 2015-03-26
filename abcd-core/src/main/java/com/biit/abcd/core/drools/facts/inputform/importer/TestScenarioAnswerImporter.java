@@ -26,7 +26,7 @@ import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.form.DroolsSubmittedGroup;
 import com.biit.drools.form.DroolsSubmittedQuestion;
 import com.biit.form.TreeObject;
-import com.biit.form.submitted.ISubmiitedGroup;
+import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedCategory;
 import com.biit.form.submitted.ISubmittedForm;
 import com.biit.form.submitted.ISubmittedObject;
@@ -80,7 +80,7 @@ public class TestScenarioAnswerImporter {
 	}
 
 	private void createGroupVariables(TestScenarioGroup testScenarioGroup, ISubmittedObject parent) {
-		ISubmiitedGroup group = new DroolsSubmittedGroup(testScenarioGroup.getName());
+		ISubmittedGroup group = new DroolsSubmittedGroup(testScenarioGroup.getName());
 		parent.addChild(group);
 		group.setParent(parent);
 		List<TreeObject> groupChildren = testScenarioGroup.getChildren();

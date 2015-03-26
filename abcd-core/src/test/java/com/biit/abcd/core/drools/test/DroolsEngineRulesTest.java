@@ -88,7 +88,7 @@ public class DroolsEngineRulesTest {
 			if (submittedForm != null) {
 				// Check result
 				Assert.assertEquals(
-						((DroolsSubmittedForm) droolsForm.getSubmittedForm()).getVariableValue("customVariableResult"),
+						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue("customVariableResult"),
 						11.);
 			}
 		} catch (Exception e) {
