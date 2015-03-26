@@ -31,6 +31,10 @@
 			<param-name>widgetset</param-name>
 			<param-value>com.biit.abcd.AppWidgetSet</param-value>
 		</init-param>
+		<init-param>
+			<param-name>closeIdleSessions</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Vaadin Application Servlet</servlet-name>
@@ -55,8 +59,10 @@
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 
-
-
+	<!-- Apache Tomcat session expire -->
+	<session-config>
+		<session-timeout>31</session-timeout>
+	</session-config>
 
 	<!-- Uncomment following filter if you want fast deployment in jetty -->
 	<!-- <filter> <filter-name>GzipFilter</filter-name> <filter-class>org.eclipse.jetty.servlets.GzipFilter</filter-class> 
