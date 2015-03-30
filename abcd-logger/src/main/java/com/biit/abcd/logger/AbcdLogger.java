@@ -48,6 +48,16 @@ public class AbcdLogger extends BiitLogger {
 	}
 
 	/**
+	 * To log any not expected error that can cause application malfuncionality.
+	 * 
+	 * @param message
+	 */
+	public static void severe(String className, Throwable throwable) {
+		String error = getStackTrace(throwable);
+		severe(className + ": " + error);
+	}
+
+	/**
 	 * To log java exceptions and log also the stack trace. If enabled, also can send an email to the administrator to
 	 * alert of the error.
 	 * 
@@ -56,7 +66,7 @@ public class AbcdLogger extends BiitLogger {
 	 */
 	public static void errorMessage(String className, Throwable throwable) {
 		String error = getStackTrace(throwable);
-		errorMessage(className, error);
+		errorMessageNotification(className, error);
 	}
 
 	public static void timeLog(long millis, String method, String args) {
