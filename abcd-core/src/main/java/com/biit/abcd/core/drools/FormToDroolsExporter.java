@@ -19,6 +19,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.form.DroolsForm;
+import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.form.submitted.ISubmittedCategory;
 import com.biit.form.submitted.ISubmittedForm;
 import com.biit.form.submitted.implementation.SubmittedForm;
@@ -87,7 +88,7 @@ public class FormToDroolsExporter {
 
 	private ISubmittedForm readXml(String orbeonApplicationName, String orbeonFormName, String orbeonDocumentId)
 			throws DocumentException, IOException {
-		ISubmittedForm submittedForm = new SubmittedForm(orbeonApplicationName, orbeonFormName);
+		ISubmittedForm submittedForm = new DroolsSubmittedForm(orbeonApplicationName, orbeonFormName);
 
 		OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 		orbeonImporter.readXml(OrbeonImporter.getXml(orbeonApplicationName, orbeonFormName, orbeonDocumentId),
