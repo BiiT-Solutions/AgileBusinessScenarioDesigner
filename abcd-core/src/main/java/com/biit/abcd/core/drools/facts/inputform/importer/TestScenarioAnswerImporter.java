@@ -26,9 +26,9 @@ import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.form.DroolsSubmittedGroup;
 import com.biit.drools.form.DroolsSubmittedQuestion;
 import com.biit.form.TreeObject;
-import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedCategory;
 import com.biit.form.submitted.ISubmittedForm;
+import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedObject;
 import com.biit.form.submitted.ISubmittedQuestion;
 
@@ -46,7 +46,7 @@ public class TestScenarioAnswerImporter {
 			TestScenarioForm testForm = testScenario.getTestScenarioForm();
 			// The name of the form is not longer used and has a static value,
 			// so we have to use the label
-			submittedForm = new DroolsSubmittedForm(testForm.getLabel());
+			submittedForm = new DroolsSubmittedForm(form.getLabel(), form.getVersion().toString());
 			// Get the categories
 			List<TreeObject> categories = testForm.getChildren();
 			if (categories != null) {

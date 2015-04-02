@@ -5,11 +5,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.biit.abcd.core.drools.DroolsHelper;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
@@ -28,6 +27,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
+import com.biit.drools.DroolsHelper;
 import com.biit.form.TreeObject;
 
 /**
@@ -110,7 +110,7 @@ public class ExpressionToDroolsRule {
 		}
 		int expressionRuleIndex = 0;
 		for (DroolsRule dRule : droolsRules) {
-			dRule.setName(RulesUtils.createRuleName(droolsRule, "_" + expressionRuleIndex));
+			dRule.setName(RuleGenerationUtils.createRuleName(droolsRule, "_" + expressionRuleIndex));
 			expressionRuleIndex++;
 		}
 		return droolsRules;
@@ -118,7 +118,7 @@ public class ExpressionToDroolsRule {
 
 	private static DroolsRule createExpressionDroolsRule(DroolsRule droolsRule) {
 		DroolsRule newDroolsRule = generateDroolsRule(droolsRule);
-		newDroolsRule.setName(RulesUtils.createRuleName(droolsRule));
+		newDroolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule));
 		newDroolsRule.setConditions(droolsRule.getConditions());
 		// If the expression chain contains generic variables, we have to unwrap
 		// them
@@ -139,7 +139,7 @@ public class ExpressionToDroolsRule {
 	private static DroolsRule createExpressionDroolsRule(DroolsRule droolsRule, ExpressionChain actions) {
 		DroolsRule newDroolsRule = generateDroolsRule(droolsRule);
 		// newDroolsRule.setName(droolsRule.getName());
-		newDroolsRule.setName(RulesUtils.createRuleName(droolsRule));
+		newDroolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule));
 		newDroolsRule.setConditions(droolsRule.getConditions());
 		// If the expression chain contains generic variables, we have to unwrap
 		// them
@@ -213,13 +213,13 @@ public class ExpressionToDroolsRule {
 		}
 		// Creation of the rules that represent the if
 		DroolsRule ifThenRule = new DroolsRule();
-		ifThenRule.setName(RulesUtils.createRuleName(droolsRule, "_1stConditon"));
+		ifThenRule.setName(RuleGenerationUtils.createRuleName(droolsRule, "_1stConditon"));
 		ifThenRule.setConditions(ifCondition);
 		ifThenRule.setActions(ifActionThen);
 		droolsRules.add(ifThenRule);
 
 		DroolsRule ifElseRule = new DroolsRule();
-		ifElseRule.setName(RulesUtils.createRuleName(droolsRule, "_2ndConditon"));
+		ifElseRule.setName(RuleGenerationUtils.createRuleName(droolsRule, "_2ndConditon"));
 		ExpressionChain negatedCondition = new ExpressionChain();
 		// For the ELSE part we negate the Condition part
 		negatedCondition.addExpression(new ExpressionFunction(AvailableFunction.NOT));
@@ -415,7 +415,7 @@ public class ExpressionToDroolsRule {
 	}
 
 	private static boolean hasIfCondition(DroolsRule droolsRule) {
-		return RulesUtils.searchClassInExpressionChain(droolsRule.getActions(), ExpressionFunction.class,
+		return RuleGenerationUtils.searchClassInExpressionChain(droolsRule.getActions(), ExpressionFunction.class,
 				AvailableFunction.IF);
 	}
 }

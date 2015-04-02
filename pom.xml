@@ -62,10 +62,10 @@
 		<!-- Version 6.2 of drools is not accepting special characters like 'ë', 
 			do not update -->
 		<drools.version>6.1.0.CR2</drools.version>
-		<biit-common-utils.version>[0.2,0.3)</biit-common-utils.version>
-		<form-structure.version>[0.2,0.3)</form-structure.version>
-		<form-structure-orbeon.version>[0.1,0.2)</form-structure-orbeon.version>
-		<form-structure-drools.version>[0.0,0.1)</form-structure-drools.version>
+		<biit-common-utils.version>0.2.19-SNAPSHOT</biit-common-utils.version>
+		<form-structure.version>0.2.14-SNAPSHOT</form-structure.version>
+		<form-structure-orbeon.version>0.1.4-SNAPSHOT</form-structure-orbeon.version>
+		<form-structure-drools.version>0.0.6-SNAPSHOT</form-structure-drools.version>
 		<liferay-service-common.version>[0.4,0.5)</liferay-service-common.version>
 		<liferay-authentication-client.version>0.5.8</liferay-authentication-client.version>
 		<apache-poi.version>3.10.1</apache-poi.version>

@@ -1,9 +1,5 @@
 package com.biit.abcd.core.drools.rules;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,21 +10,18 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.PluginController;
-import com.biit.abcd.core.drools.DroolsGlobalVariable;
-import com.biit.abcd.core.drools.DroolsHelper;
-import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
-import com.biit.abcd.core.drools.utils.DroolsUtils;
-import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
+import com.biit.drools.DroolsHelper;
 
 public class DroolsRulesGenerator {
 
@@ -38,12 +31,10 @@ public class DroolsRulesGenerator {
 	private Form form;
 	private StringBuilder builder;
 	private List<GlobalVariable> globalVariables;
-	private List<DroolsGlobalVariable> droolsGlobalVariables;
 
 	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException {
 		this.form = form;
 		this.globalVariables = globalVariables;
-		this.droolsGlobalVariables = new ArrayList<DroolsGlobalVariable>();
 		droolsHelper = new DroolsHelper(form);
 		initParser();
 	}
@@ -96,21 +87,24 @@ public class DroolsRulesGenerator {
 	 */
 	private void importsDeclaration() {
 		getRulesBuilder().append("package com.biit.drools \n\n");
-		getRulesBuilder().append("import com.biit.drools.form.* \n");
-		getRulesBuilder().append("import com.biit.form.submitted.* \n");
-		getRulesBuilder().append("import com.biit.abcd.core.drools.utils.* \n");
+
 		getRulesBuilder().append("import java.lang.Math \n");
 		getRulesBuilder().append("import java.util.Date \n");
 		getRulesBuilder().append("import java.util.List \n");
 		getRulesBuilder().append("import java.util.ArrayList \n");
+
+		getRulesBuilder().append("import com.biit.form.submitted.* \n");
+		getRulesBuilder().append("import com.biit.drools.form.* \n");
 		getRulesBuilder().append("import com.biit.orbeon.form.* \n");
+		getRulesBuilder().append("import com.biit.drools.utils.* \n");
+
 		if (PluginController.getInstance().existsPlugins()) {
 			getRulesBuilder().append("import com.biit.abcd.core.PluginController \n");
 			getRulesBuilder().append("import net.xeoh.plugins.base.Plugin \n");
 			getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
 			getRulesBuilder().append("import java.lang.reflect.Method \n");
 		}
-		getRulesBuilder().append("import com.biit.abcd.logger.AbcdLogger \n\n");
+		getRulesBuilder().append("import com.biit.drools.logger.DroolsEngineLogger \n\n");
 	}
 
 	/**
@@ -154,7 +148,7 @@ public class DroolsRulesGenerator {
 			// Look for the custom variables
 			List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
 			for (Diagram diagram : rootDiagrams) {
-				customVariablesList.addAll(RulesUtils.lookForCustomVariablesInDiagram(diagram));
+				customVariablesList.addAll(RuleGenerationUtils.lookForCustomVariablesInDiagram(diagram));
 			}
 			// Create the drools rules based on the expression value custom
 			// variable found
@@ -196,7 +190,7 @@ public class DroolsRulesGenerator {
 						+ "\'";
 				break;
 			case NUMBER:
-				customVariableDefaultValue = expressionValueCustomVariable.getVariable().getDefaultValue()+"d";
+				customVariableDefaultValue = expressionValueCustomVariable.getVariable().getDefaultValue() + "d";
 				break;
 			case DATE:
 				try {
@@ -211,7 +205,8 @@ public class DroolsRulesGenerator {
 			}
 
 			// Rule name
-			ruleName = RulesUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
+			ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName()
+					+ "_default_value");
 			// Conditions
 			defaultCustomVariableValue.append("when\n");
 			defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
@@ -224,7 +219,7 @@ public class DroolsRulesGenerator {
 					+ TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()) + ".setVariableValue('"
 					+ expressionValueCustomVariable.getVariable().getName() + "', " + customVariableDefaultValue
 					+ ");\n");
-			defaultCustomVariableValue.append("\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+			defaultCustomVariableValue.append("\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
 					+ expressionValueCustomVariable.getReference().getName() + ", "
 					+ expressionValueCustomVariable.getVariable().getName() + ", " + customVariableDefaultValue
 					+ ")\");\n");
@@ -252,8 +247,6 @@ public class DroolsRulesGenerator {
 		// In the GUI are called global variables, but regarding the forms are
 		// constants
 		if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
-			// Create the Json file with the exported information
-			exportGlobalVariables(this.globalVariables);
 
 			for (GlobalVariable globalVariable : this.globalVariables) {
 				// First check if the data inside the variable has a valid date
@@ -269,8 +262,6 @@ public class DroolsRulesGenerator {
 						if ((currentTime.after(initTime) && (endTime == null))
 								|| (currentTime.after(initTime) && currentTime.before(endTime))) {
 							globalConstants += this.globalVariableString(globalVariable);
-							this.droolsGlobalVariables.add(new DroolsGlobalVariable(globalVariable.getName(),
-									globalVariable.getFormat(), variableData.getValue()));
 							break;
 						}
 					}
@@ -278,35 +269,6 @@ public class DroolsRulesGenerator {
 			}
 		}
 		return globalConstants;
-	}
-
-	/**
-	 * Sets the global variable array that is going to be used in the drools
-	 * engine<br>
-	 * It does not create the drools rules
-	 * 
-	 * @param globalVariables
-	 */
-	public void setGlobalVariables(List<GlobalVariable> globalVariables) {
-		// In the GUI are called global variables, but regarding the forms are
-		// constants
-		droolsGlobalVariables = DroolsUtils.calculateDroolsGlobalVariables(globalVariables);
-	}
-
-	/**
-	 * Export the global variables of the abcd to a json file
-	 * 
-	 * @param globalVariablesList
-	 */
-	public static void exportGlobalVariables(List<GlobalVariable> globalVariablesList) {
-		// Create the global variables export file
-		String globalVariablesJson = JSonConverter.convertGlobalVariableListToJson(globalVariablesList);
-		try {
-			Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "globalVariables.json"),
-					globalVariablesJson.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private String globalVariableString(GlobalVariable globalVariable) {
@@ -321,10 +283,6 @@ public class DroolsRulesGenerator {
 			return "global java.lang.Number " + globalVariable.getName() + "\n";
 		}
 		return "";
-	}
-
-	public List<DroolsGlobalVariable> getGlobalVariables() {
-		return this.droolsGlobalVariables;
 	}
 
 	public String getRules() {

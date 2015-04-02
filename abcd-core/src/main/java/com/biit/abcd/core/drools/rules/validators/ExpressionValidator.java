@@ -10,7 +10,7 @@ import com.biit.abcd.core.drools.prattparser.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementExpressionValidatorVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
@@ -57,10 +57,10 @@ public class ExpressionValidator {
 	public static void validateConditions(ExpressionChain expressionChain) throws PrattParserException,
 			InvalidExpressionException, NotCompatibleTypeException {
 		if (expressionChain != null && expressionChain.getExpressions().size() > 1) {
-			ExpressionChain cleanedExpression = removeNewLineSymbols(RulesUtils.flattenExpressionChain(expressionChain));
+			ExpressionChain cleanedExpression = removeNewLineSymbols(RuleGenerationUtils.flattenExpressionChain(expressionChain));
 			// If there is a NOT expression, we have to add the remaining
 			// parenthesis
-			RulesUtils.fixNotConditions(cleanedExpression);
+			RuleGenerationUtils.fixNotConditions(cleanedExpression);
 			ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
 			rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
 			ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
@@ -85,10 +85,10 @@ public class ExpressionValidator {
 			InvalidExpressionException, NotCompatibleTypeException {
 		if (expressionChain != null) {
 			ValueType leftVariableFormat = null;
-			ExpressionChain cleanedExpression = removeNewLineSymbols(RulesUtils.flattenExpressionChain(expressionChain));
+			ExpressionChain cleanedExpression = removeNewLineSymbols(RuleGenerationUtils.flattenExpressionChain(expressionChain));
 			// If there is a NOT expression, we have to add the remaining
 			// parenthesis
-			RulesUtils.fixNotConditions(cleanedExpression);
+			RuleGenerationUtils.fixNotConditions(cleanedExpression);
 			ITreeElement rootTreeElement = calculatePrattParserResult(cleanedExpression);
 			rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
 			ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();

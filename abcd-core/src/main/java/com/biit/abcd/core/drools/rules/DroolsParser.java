@@ -27,7 +27,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
-import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -55,10 +55,21 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.drools.DroolsHelper;
 import com.biit.form.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
 
 public class DroolsParser {
+
+	private static DroolsHelper droolsHelper;
+
+	public static DroolsHelper getDroolsHelper() {
+		return droolsHelper;
+	}
+
+	public static void setDroolsHelper(DroolsHelper droolsHelper) {
+		DroolsParser.droolsHelper = droolsHelper;
+	}
 
 	/**
 	 * Expression parser. An expression is a rule without the condition part in
@@ -97,7 +108,7 @@ public class DroolsParser {
 			for (Expression expression : variables) {
 				ruleCore += checkVariableAssignationWithoutScore(expression);
 			}
-			ruleCore += RulesUtils.getThenRuleString();
+			ruleCore += RuleGenerationUtils.getThenRuleString();
 
 			ExpressionFunction function = (ExpressionFunction) actions.getExpressions().get(1);
 
@@ -127,7 +138,7 @@ public class DroolsParser {
 						+ "' not found.", actions);
 			}
 			// Set the value calculated
-			ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+			ruleCore += "\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
 					+ leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
 					+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
@@ -235,30 +246,47 @@ public class DroolsParser {
 	 * @param forkConditions
 	 *            conditions defined as a fork in a digram.
 	 * @return
+	 * @throws PrattParserException
+	 * @throws DroolsRuleCreationException
+	 * @throws PluginInvocationException
+	 * @throws DateComparisonNotPossibleException
+	 * @throws BetweenFunctionInvalidException
+	 * @throws NullExpressionValueException
+	 * @throws NullCustomVariableException
+	 * @throws TreeObjectParentNotValidException
+	 * @throws TreeObjectInstanceNotRecognizedException
+	 * @throws NullTreeObjectException
+	 * @throws ExpressionInvalidException
+	 * @throws NotCompatibleTypeException
+	 * @throws RuleNotImplementedException
 	 */
-	public static String createDroolsRule(List<Rule> rules) throws RuleNotImplementedException,
-			NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
-			PluginInvocationException, DroolsRuleCreationException, PrattParserException {
+	public static String createDroolsRule(List<Rule> rules, DroolsHelper droolsHelper)
+			throws RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
+			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException,
+			PrattParserException {
+		setDroolsHelper(droolsHelper);
 		StringBuilder parsedText = new StringBuilder();
 		for (Rule rule : rules) {
 			if (rule != null) {
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
 					parsedText.append(rule.getName());
-					parsedText.append(RulesUtils.getWhenRuleString());
+					parsedText.append(RuleGenerationUtils.getWhenRuleString());
+
 					if (rule instanceof DroolsRuleGroupEndRule) {
-						parsedText.append(RulesUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule));
+						parsedText.append(RuleGenerationUtils
+								.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule));
 					}
 					parsedText.append(parsedRule);
 					if (rule instanceof DroolsRuleGroup) {
 						if (!(rule instanceof DroolsRuleGroupEndRule)) {
-							parsedText.append(RulesUtils.getThenRuleString());
+							parsedText.append(RuleGenerationUtils.getThenRuleString());
 						}
-						parsedText.append(RulesUtils.getGroupRuleActions((DroolsRuleGroup) rule));
+						parsedText.append(RuleGenerationUtils.getGroupRuleActions((DroolsRuleGroup) rule));
 					}
-					parsedText.append(RulesUtils.getEndRuleString());
+					parsedText.append(RuleGenerationUtils.getEndRuleString());
 				}
 			}
 		}
@@ -290,7 +318,10 @@ public class DroolsParser {
 		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
 		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
-		String result = "\t$droolsForm: DroolsForm()\n";
+		String formLabel = getDroolsHelper().getForm().getLabel();
+		String formVersion = getDroolsHelper().getForm().getVersion().toString();
+		String result = "\t$droolsForm: DroolsForm(getLabel() == '" + formLabel + "', getVersion() == '" + formVersion
+				+ "')\n";
 		// Obtain conditions if exists.
 		if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null)
 				&& (!rule.getConditions().getExpressions().isEmpty())) {
@@ -309,7 +340,7 @@ public class DroolsParser {
 			String actionString = parseActions(rule.getActions());
 			if (actionString != null) {
 				if (rule instanceof DroolsRuleGroupEndRule) {
-					result += RulesUtils.addAndToMultipleConditionsAction(actionString);
+					result += RuleGenerationUtils.addAndToMultipleConditionsAction(actionString);
 				} else {
 					result += actionString;
 				}
@@ -317,8 +348,8 @@ public class DroolsParser {
 				return null;
 			}
 		}
-		result = RulesUtils.removeDuplicateLines(result);
-		result = RulesUtils.checkForDuplicatedVariables(result);
+		result = RuleGenerationUtils.removeDuplicateLines(result);
+		result = RuleGenerationUtils.checkForDuplicatedVariables(result);
 		return result;
 	}
 
@@ -381,8 +412,8 @@ public class DroolsParser {
 									.getUniqueNameReadable());
 							// First common part of the condition
 							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
-									+ " : DroolsSubmittedForm(isVariableDefined('" + variableName + "'), getVariableValue('"
-									+ variableName + "')";
+									+ " : DroolsSubmittedForm(isVariableDefined('" + variableName
+									+ "'), getVariableValue('" + variableName + "')";
 							switch (functionParsed) {
 							case BETWEEN:
 								if (functionValues.size() == 2) {
@@ -415,11 +446,14 @@ public class DroolsParser {
 							droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
 							String className = leftVariable.getReference().getClass().getSimpleName();
 							// First common part of the condition
-							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable()
-									+ " : DroolsSubmitted" + className + "( "
-									+ RulesUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference())
-									+ "', isVariableDefined('" + variableName + "'), getVariableValue('" + variableName
-									+ "')";
+							droolsConditions += "\t$"
+									+ leftVariable.getReference().getUniqueNameReadable()
+									+ " : DroolsSubmitted"
+									+ className
+									+ "( "
+									+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(leftVariable
+											.getReference()) + "', isVariableDefined('" + variableName
+									+ "'), getVariableValue('" + variableName + "')";
 
 							switch (functionParsed) {
 							case BETWEEN:
@@ -458,8 +492,9 @@ public class DroolsParser {
 						droolsConditions += SimpleConditionsGenerator.getTreeObjectConditions(leftReferenceParent);
 						Question leftQuestion = (Question) leftReference;
 						// First common part of the condition
-						droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
-								+ RulesUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "', "
+						droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable()
+								+ " : DroolsSubmittedQuestion("
+								+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "', "
 								+ getTreeObjectAnswer(leftExpressionValueTreeObject);
 						// Comparison part of the condition
 						switch (functionParsed) {
@@ -487,8 +522,8 @@ public class DroolsParser {
 						}
 						// End common part of the condition
 						droolsConditions += "from $" + leftReferenceParent.getUniqueNameReadable()
-								+ ".getChildren(ISubmittedQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(leftQuestion)
-								+ "\n";
+								+ ".getChildren(ISubmittedQuestion.class)"
+								+ RuleGenerationUtils.addFinalCommentsIfNeeded(leftQuestion) + "\n";
 					}
 				} else {
 					throw new DroolsRuleCreationException("No valid values found inside the function '"
@@ -540,10 +575,11 @@ public class DroolsParser {
 
 		putTreeObjectName(question, question.getUniqueNameReadable());
 		droolsConditions += "	$" + question.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
+				+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
 				+ getTreeObjectAnswerType(question) + "')" + availableOperator.getValue().toString() + "'"
 				+ answer.getName() + "') from $" + questionParent.getUniqueNameReadable()
-				+ ".getChildren(ISubmittedQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
+				+ ".getChildren(ISubmittedQuestion.class)" + RuleGenerationUtils.addFinalCommentsIfNeeded(question)
+				+ "\n";
 		return droolsConditions;
 	}
 
@@ -601,13 +637,14 @@ public class DroolsParser {
 						ruleCore += SimpleConditionsGenerator.getTreeObjectConditions(parent);
 						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : DroolsSubmitted"
 								+ treeObjectClassName + "( "
-								+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable)
+								+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable)
 								+ "', isVariableDefined('" + customVariable.getName() + "'), getVariableValue('"
 								+ customVariable.getName() + "') " + operator.getValue().toString()
 								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
 								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ") + ") from $"
-								+ parent.getUniqueNameReadable() + ".getChildren(ISubmitted" + treeObjectClassName + ".class) "
-								+ RulesUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable) + "\n";
+								+ parent.getUniqueNameReadable() + ".getChildren(ISubmitted" + treeObjectClassName
+								+ ".class) " + RuleGenerationUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable)
+								+ "\n";
 					}
 
 				} else {
@@ -678,8 +715,8 @@ public class DroolsParser {
 					case YEARS:
 					case MONTHS:
 					case DAYS:
-						return "DateUtils.return" + expressionValue.getUnit().getUnitName() + "DistanceFromDate( $"
-								+ id + ".getVariableValue('" + variable.getName() + "'))";
+						return "DroolsDateUtils.return" + expressionValue.getUnit().getUnitName()
+								+ "DistanceFromDate( $" + id + ".getVariableValue('" + variable.getName() + "'))";
 					case DATE:
 						return "$" + id + ".getVariableValue('" + variable.getName() + "')";
 					}
@@ -700,8 +737,9 @@ public class DroolsParser {
 						case YEARS:
 						case MONTHS:
 						case DAYS:
-							return "DateUtils.return" + expressionValue.getUnit().getUnitName() + "DistanceFromDate( $"
-									+ id + ".getAnswer('" + AnswerFormat.DATE.toString() + "'))";
+							return "DroolsDateUtils.return" + expressionValue.getUnit().getUnitName()
+									+ "DistanceFromDate( $" + id + ".getAnswer('" + AnswerFormat.DATE.toString()
+									+ "'))";
 						case DATE:
 							return "$" + id + ".getAnswer('" + AnswerFormat.DATE.toString() + "')";
 						}
@@ -832,7 +870,7 @@ public class DroolsParser {
 						case YEARS:
 						case MONTHS:
 						case DAYS:
-							return "DateUtils.return" + expressionValueTreeObject.getUnit().getUnitName()
+							return "DroolsDateUtils.return" + expressionValueTreeObject.getUnit().getUnitName()
 									+ "DistanceFromDate(getAnswer('" + AnswerFormat.DATE.toString() + "'))";
 						case DATE:
 							return "getAnswer('" + AnswerFormat.DATE.toString() + "')";
@@ -961,7 +999,7 @@ public class DroolsParser {
 					ruleCore += checkVariableAssignation(expression);
 				}
 			}
-			ruleCore += RulesUtils.getThenRuleString();
+			ruleCore += RuleGenerationUtils.getThenRuleString();
 			String mathematicalExpression = "";
 			TreeElementMathExpressionVisitor treePrint = new TreeElementMathExpressionVisitor();
 			prattParserResult.accept(treePrint);
@@ -970,7 +1008,7 @@ public class DroolsParser {
 			}
 			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', " + mathematicalExpression + ");\n";
-			ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+			ruleCore += "\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
 					+ leftExpressionCustomVariable.getReference().getName() + ", "
 					+ leftExpressionCustomVariable.getVariable().getName() + ", " + mathematicalExpression + ")\");\n";
 
@@ -988,8 +1026,8 @@ public class DroolsParser {
 		if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionChain) {
 			String auxRule = processResultConditionsFromPrattParser((ExpressionChain) prattParserResultExpressionChain
 					.getExpressions().get(1));
-			String newLastLine = "\tnot(\n" + RulesUtils.getLastLine(auxRule) + "\t)";
-			ruleCore = RulesUtils.replaceLastLine(auxRule, newLastLine);
+			String newLastLine = "\tnot(\n" + RuleGenerationUtils.getLastLine(auxRule) + "\t)";
+			ruleCore = RuleGenerationUtils.replaceLastLine(auxRule, newLastLine);
 		}
 		return ruleCore;
 	}
@@ -1169,33 +1207,36 @@ public class DroolsParser {
 				case INPUT:
 					// Common part of NUMBER, POSTALCODE, TEXT condition
 					questionCondition += "\t$" + question.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
-							+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
+							+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(question) + "', getAnswer('"
 							+ getTreeObjectAnswerType(question) + "') " + operator.getValue();
 					switch (question.getAnswerFormat()) {
 					case NUMBER:
 						questionCondition += " " + value + " ) from $" + question.getParent().getUniqueNameReadable()
-								+ ".getChildren(ISubmittedQuestion.class)" + RulesUtils.addFinalCommentsIfNeeded(question)
-								+ "\n";
+								+ ".getChildren(ISubmittedQuestion.class)"
+								+ RuleGenerationUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case POSTAL_CODE:
 						// Postal code comparisons should be in ALWAYS in upper
 						// case
 						questionCondition += " '" + value.toString().toUpperCase() + "' ) from $"
-								+ question.getParent().getUniqueNameReadable() + ".getChildren(ISubmittedQuestion.class)"
-								+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
+								+ question.getParent().getUniqueNameReadable()
+								+ ".getChildren(ISubmittedQuestion.class)"
+								+ RuleGenerationUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case TEXT:
 						questionCondition += " '" + value.toString() + "' ) from $"
-								+ question.getParent().getUniqueNameReadable() + ".getChildren(ISubmittedQuestion.class)"
-								+ RulesUtils.addFinalCommentsIfNeeded(question) + "\n";
+								+ question.getParent().getUniqueNameReadable()
+								+ ".getChildren(ISubmittedQuestion.class)"
+								+ RuleGenerationUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case DATE:
 						// Clean the previous common value
 						questionCondition = "";
 						if (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit() != null) {
 							// Beginning common part of the DATE condition
-							questionCondition += "\t$" + question.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
-									+ RulesUtils.returnSimpleTreeObjectNameFunction(question) + "', ";
+							questionCondition += "\t$" + question.getUniqueNameReadable()
+									+ " : DroolsSubmittedQuestion("
+									+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(question) + "', ";
 
 							switch (((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit()) {
 							case YEARS:
@@ -1207,9 +1248,9 @@ public class DroolsParser {
 									throw new DateComparisonNotPossibleException(unitName
 											+ " and Date types incompatible", new ExpressionChain(expressions));
 								} else {
-									questionCondition += "DateUtils.return" + unitName + "DistanceFromDate(getAnswer('"
-											+ getTreeObjectAnswerType(question) + "')) "
-											+ ((ExpressionOperatorLogic) operator).getValue() + " "
+									questionCondition += "DroolsDateUtils.return" + unitName
+											+ "DistanceFromDate(getAnswer('" + getTreeObjectAnswerType(question)
+											+ "')) " + ((ExpressionOperatorLogic) operator).getValue() + " "
 											+ ((ExpressionValueNumber) operatorRight.get(0)).getValue().intValue()
 											+ ") ";
 								}
@@ -1279,13 +1320,13 @@ public class DroolsParser {
 					ruleCore += checkVariableAssignation(expression);
 				}
 			}
-			ruleCore += RulesUtils.getThenRuleString();
+			ruleCore += RuleGenerationUtils.getThenRuleString();
 			String pluginCall = createPluginMethodCall(actions);
 
 			ruleCore += "\tObject callResult = " + pluginCall + ";\n";
 			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', callResult);\n";
-			ruleCore += "\tAbcdLogger.debug(\"DroolsRule\", \"Variable set ("
+			ruleCore += "\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
 					+ leftExpressionCustomVariable.getReference().getName() + ", "
 					+ leftExpressionCustomVariable.getVariable().getName() + ", callResult)\");\n";
 

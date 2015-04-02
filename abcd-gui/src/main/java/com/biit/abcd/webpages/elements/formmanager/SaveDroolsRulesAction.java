@@ -7,7 +7,7 @@ import java.util.List;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
-import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
+import com.biit.abcd.core.drools.json.globalvariables.AbcdGlobalVariablesToJson;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.language.LanguageCodes;
@@ -40,8 +40,8 @@ public class SaveDroolsRulesAction implements SaveAction {
 			filesToZip.add(rules);
 			Integer formVersion = UserSessionHandler.getFormController().getForm().getVersion();
 			namesOfFiles.add("droolsRules_v" + formVersion + ".drl");
-			String variables = JSonConverter.convertGlobalVariableListToJson(UserSessionHandler
-					.getGlobalVariablesController().getGlobalVariables());
+			String variables = AbcdGlobalVariablesToJson.toJson(UserSessionHandler.getGlobalVariablesController()
+					.getGlobalVariables());
 			filesToZip.add(variables);
 			namesOfFiles.add("globalVariables_v" + formVersion + ".json");
 
@@ -60,9 +60,8 @@ public class SaveDroolsRulesAction implements SaveAction {
 			// We show the user the invalid rule name
 			if (e.getGeneratedException() instanceof InvalidRuleException) {
 				AbcdLogger.errorMessage(SettingsWindow.class.getName(), e.getGeneratedException());
-				MessageManager.showError(LanguageCodes.ERROR_TITLE, 
-						LanguageCodes.DROOLS_RULE_INVALID,
-						((InvalidRuleException) e.getGeneratedException()).getRuleName() );
+				MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID,
+						((InvalidRuleException) e.getGeneratedException()).getRuleName());
 			} else {
 				// This is a generic exception for everything related with the
 				// rules generation

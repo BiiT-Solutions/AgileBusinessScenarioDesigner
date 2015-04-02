@@ -5,7 +5,7 @@ import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
-import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -63,17 +63,17 @@ public class SimpleConditionsGenerator {
 	private static String getGroupQuestionCondition(TreeObject parent, TreeObject treeObject) {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : DroolsSubmitted" + treeObjectClass + "( "
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "') from $"
+				+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObject) + "') from $"
 				+ parent.getUniqueNameReadable() + ".getChildren(ISubmitted" + treeObjectClass + ".class)"
-				+ RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
+				+ RuleGenerationUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
 	private static String getCategoryCondition(TreeObject parent, TreeObject treeObject) {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : DroolsSubmitted" + treeObjectClass + "( "
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "') from $"
+				+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObject) + "') from $"
 				+ parent.getUniqueNameReadable() + ".getChildren(ISubmittedCategory.class) "
-				+ RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
+				+ RuleGenerationUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
 	private static String simpleFormCondition(TreeObject treeObject) throws NullTreeObjectException {
@@ -173,18 +173,18 @@ public class SimpleConditionsGenerator {
 			TreeObject treeObject) throws TreeObjectInstanceNotRecognizedException {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : DroolsSubmitted" + treeObjectClass + "( "
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isVariableDefined('"
+				+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isVariableDefined('"
 				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable()
-				+ ".getChildren(ISubmittedCategory.class) " + RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
+				+ ".getChildren(ISubmittedCategory.class) " + RuleGenerationUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
 	private static String getGroupQuestionCustomVariableCondition(CustomVariable customVariable, TreeObject parent,
 			TreeObject treeObject) throws TreeObjectInstanceNotRecognizedException {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : DroolsSubmitted" + treeObjectClass + "( "
-				+ RulesUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isVariableDefined('"
+				+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isVariableDefined('"
 				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable() + ".getChildren(ISubmitted"
-				+ treeObjectClass + ".class)" + RulesUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
+				+ treeObjectClass + ".class)" + RuleGenerationUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
 	}
 
 	private static String simpleFormCustomVariableConditions(TreeObject treeObject, CustomVariable customVariable)

@@ -22,7 +22,7 @@
 			<class name="com.biit.abcd.core.NewVersionTest" />
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
 			<class name="com.biit.abcd.core.drools.test.PrattParserTest" />
-			<class name="com.biit.abcd.core.drools.test.JsonConverterTest" />
+			<class name="com.biit.abcd.core.drools.test.JsonExporterTest" />
 			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />
 			<class name="com.biit.abcd.core.drools.test.TableRuleTest" />
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />

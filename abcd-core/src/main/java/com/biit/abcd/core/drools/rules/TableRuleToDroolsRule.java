@@ -8,7 +8,7 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.validators.RuleChecker;
-import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -47,9 +47,9 @@ public class TableRuleToDroolsRule {
 					DroolsRule newRule = new DroolsRule();
 					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
 
-					newRule.setName(RulesUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
+					newRule.setName(RuleGenerationUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
 
-					newRule.setConditions(RulesUtils.flattenExpressionChain(rowConditionExpression));
+					newRule.setConditions(RuleGenerationUtils.flattenExpressionChain(rowConditionExpression));
 					newRule.addExtraConditions(extraConditions);
 					newRule.setActions(row.getAction());
 					newRules.add(newRule);

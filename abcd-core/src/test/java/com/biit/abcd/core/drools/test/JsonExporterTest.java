@@ -1,5 +1,7 @@
 package com.biit.abcd.core.drools.test;
 
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,27 +10,24 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.json.globalvariables.JSonConverter;
+import com.biit.abcd.core.drools.json.globalvariables.AbcdGlobalVariablesToJson;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.utils.file.FileReader;
 
-public class JsonConverterTest {
+public class JsonExporterTest {
 
 	private List<GlobalVariable> globalVarList = null;
+	private static final String JSON_FILE_PATH = "serializedJson.json";
 
-	// Simple table question answer
 	@Test(groups = { "gson" })
-	public void testJsonConverter() throws NotValidTypeInVariableData, FieldTooLongException {
+	public void testJsonConverter() throws NotValidTypeInVariableData, FieldTooLongException, FileNotFoundException {
 		createGlobalVariables();
-		String globalVariablesJson = JSonConverter.convertGlobalVariableListToJson(globalVarList);
-		List<GlobalVariable> jsonGlobalVariablesList = JSonConverter
-				.convertJsonToGlobalVariableList(globalVariablesJson);
-
-		Assert.assertEquals(jsonGlobalVariablesList.size(), 4);
-		Assert.assertEquals(jsonGlobalVariablesList.get(2).getName(), "TestPC");
-		Assert.assertEquals(jsonGlobalVariablesList.get(0).getVariableData().get(1).getValue(), 21.0);
+		String actual = AbcdGlobalVariablesToJson.toJson(globalVarList);
+		String expected = FileReader.getResource(JSON_FILE_PATH, StandardCharsets.UTF_8);
+		Assert.assertEquals(actual.trim(), expected.trim());
 	}
 
 	private void createGlobalVariables() throws NotValidTypeInVariableData, FieldTooLongException {
@@ -54,7 +53,7 @@ public class JsonConverterTest {
 		// Should enter a valid date as constant
 		GlobalVariable globalVariableDate = new GlobalVariable(AnswerFormat.DATE);
 		globalVariableDate.setName("TestDate");
-		globalVariableDate.addVariableData(new Date(), validFrom, validToFuture);
+		globalVariableDate.addVariableData(new Date(123456789), validFrom, validToFuture);
 
 		globalVarList.add(globalVariableNumber);
 		globalVarList.add(globalVariableText);
