@@ -9,16 +9,14 @@ import com.biit.logger.BiitLogger;
  * ensure the JVM to load this class and not optimize with BiitLogger directly.
  */
 public class AbcdLogger extends BiitLogger {
-	static {
-		setLogger(Logger.getLogger(new Object() {
-		}.getClass().getEnclosingClass()));
-	}
 
+	private static Logger logger = Logger.getLogger(AbcdLogger.class);
+	
 	/**
 	 * Events that have business meaning (i.e. creating category, deleting form, ...). To follow user actions.
 	 */
 	public static void info(String className, String message) {
-		info(className + ": " + message);
+		info(logger, className, message);
 	}
 
 	/**
@@ -27,7 +25,7 @@ public class AbcdLogger extends BiitLogger {
 	 * @param message
 	 */
 	public static void warning(String className, String message) {
-		warning(className + ": " + message);
+		warning(logger, className, message);
 	}
 
 	/**
@@ -35,7 +33,7 @@ public class AbcdLogger extends BiitLogger {
 	 * connection, etc.
 	 */
 	public static void debug(String className, String message) {
-		debug(className + ": " + message);
+		debug(logger, className, message);
 	}
 
 	/**
@@ -44,7 +42,7 @@ public class AbcdLogger extends BiitLogger {
 	 * @param message
 	 */
 	public static void severe(String className, String message) {
-		severe(className + ": " + message);
+		severe(logger, className, message);
 	}
 
 	/**
@@ -54,7 +52,7 @@ public class AbcdLogger extends BiitLogger {
 	 */
 	public static void severe(String className, Throwable throwable) {
 		String error = getStackTrace(throwable);
-		severe(className + ": " + error);
+		severe(logger, className, error);
 	}
 
 	/**
@@ -66,11 +64,11 @@ public class AbcdLogger extends BiitLogger {
 	 */
 	public static void errorMessage(String className, Throwable throwable) {
 		String error = getStackTrace(throwable);
-		errorMessageNotification(className, error);
+		errorMessageNotification(logger, className, error);
 	}
 
 	public static void timeLog(long millis, String method, String args) {
-		if (isDebugEnabled()) {
+		if (logger.isDebugEnabled()) {
 			StringBuilder logMessage = new StringBuilder();
 			logMessage.append("Executed ");
 			logMessage.append(method);
@@ -82,7 +80,7 @@ public class AbcdLogger extends BiitLogger {
 			logMessage.append(millis);
 			logMessage.append(" ms");
 
-			getLogger().debug(logMessage.toString());
+			logger.debug(logMessage.toString());
 		}
 	}
 }
