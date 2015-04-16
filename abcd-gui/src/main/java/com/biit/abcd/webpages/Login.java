@@ -106,7 +106,6 @@ public class Login extends WebPageComponent {
 					} catch (InvalidCredentialsException | AuthenticationRequired e) {
 						passwordField.setComponentError(new UserError(ServerTranslate.translate(
 								LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
-						AbcdLogger.errorMessage(this.getClass().getName(), e);
 						MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
 					} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
 						AbcdLogger.errorMessage(this.getClass().getName(), e);

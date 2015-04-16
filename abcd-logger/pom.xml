@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.2.25-SNAPSHOT</version>
+		<version>1.2.34-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -22,8 +22,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.biit</groupId>
-			<artifactId>biit-logger</artifactId>
-			<version>${biit-logger.version}</version>
+			<artifactId>common-utils</artifactId>
+			<version>${biit-common-utils.version}</version>
 		</dependency>
 		<!-- Spring framework -->
 		<!-- Various Application Context utilities, including EhCache, JavaMail, 

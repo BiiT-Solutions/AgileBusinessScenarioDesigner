@@ -4,6 +4,7 @@ import com.biit.abcd.ApplicationFrame;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -57,7 +58,7 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 
 		// Hide logout button.
 		if (upperMenu instanceof UpperMenu) {
-			if (((ApplicationFrame) getUI()).getUserEmail() != null && ((ApplicationFrame) getUI()).getPassword() != null) {
+			if (((ApplicationFrame) UI.getCurrent()).getUserEmail() != null && ((ApplicationFrame) UI.getCurrent()).getPassword() != null) {
 				((UpperMenu) upperMenu).hideLogoutButton(true);
 			}
 		}
