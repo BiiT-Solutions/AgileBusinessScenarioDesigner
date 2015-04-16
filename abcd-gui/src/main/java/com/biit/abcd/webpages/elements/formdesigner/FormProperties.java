@@ -68,7 +68,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 
 	@Override
 	protected void updateConcreteFormElement() {
-		if (formLabel.isValid()) {
+		if (formLabel.isValid() && UserSessionHandler.getFormController() !=null) {
 			// To avoid setting repeated values
 			if (!formLabel.getValue().equals(instance.getName())) {
 				try {
