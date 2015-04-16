@@ -66,7 +66,8 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 				ValueType argumentType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) arg)
 						.getExpressionChain());
 				if (leftType != argumentType) {
-					throw new NotCompatibleTypeException("Argument types of the call not compatible", null);
+					throw new NotCompatibleTypeException("Argument types of the call not compatible (" + leftType
+							+ " - " + argumentType + ")", null);
 				}
 			}
 		}
