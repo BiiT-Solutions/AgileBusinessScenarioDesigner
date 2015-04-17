@@ -75,7 +75,7 @@
 		<h2.version>1.4.182</h2.version>
 		<ehcache.version>2.6.10</ehcache.version>
 		<c3p0.version>0.9.2.1</c3p0.version>
-		<plugin-manager.version>0.0.2</plugin-manager.version>
+		<plugin-manager.version>[0.0,0.1)</plugin-manager.version>
 		<DES-encryption.version>1.0.0</DES-encryption.version>
 		<maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>3.4</maven-site-plugin.version>

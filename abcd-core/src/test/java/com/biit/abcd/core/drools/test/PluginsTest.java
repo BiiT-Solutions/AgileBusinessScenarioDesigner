@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
@@ -43,6 +44,8 @@ public class PluginsTest extends KidsFormCreator {
 	private final static String LIFERAY_PLUGIN_NAME = "LiferayKnowledgeBasePlugin";
 	private final static String LIFERAY_PLUGIN_METHOD = "methodGetLatestArticleContent";
 	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 26383d;
+	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
+	private final static String LIFERAY_ARTICLE_PROPERTY = "Article1";
 
 	@Test(groups = { "pluginsTest" })
 	public void helloWorldPluginSelectionTest1() {
@@ -126,6 +129,28 @@ public class PluginsTest extends KidsFormCreator {
 				new ExpressionPluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME, LIFERAY_PLUGIN_METHOD),
 				new ExpressionValueNumber(LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check result
+		Assert.assertEquals(
+				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
+				"Article1 - Basic Examination\nWhy to read this article...only if you want to know everything about the Basic Examination...");
+	}
+
+	@Test(groups = { "pluginsTest" })
+	public void liferayKnowledgeBasePluginBySettings() throws FieldTooLongException, CharacterNotAllowedException,
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+		// Restart the form to avoid test cross references
+		initForm();
+		CustomVariable customVariableToAssign = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+				CustomVariableType.STRING, CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("liferayExpression", new ExpressionValueCustomVariable(
+				getForm(), customVariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionPluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME, LIFERAY_PLUGIN_METHOD_BY_PROPERTY),
+				new ExpressionValueString(LIFERAY_ARTICLE_PROPERTY),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		getForm().getExpressionChains().add(expression);
 		getForm().addDiagram(createExpressionsDiagram());
 		// Create the rules and launch the engine
