@@ -490,7 +490,7 @@ public class ExpressionValidator {
 
 	/**
 	 * Checks that the parameters used in the expression chain matches the ones
-	 * neede by the plugin method
+	 * needed by the plugin method
 	 * 
 	 * @param expressionChain
 	 * @return
@@ -515,7 +515,8 @@ public class ExpressionValidator {
 		IPlugin pluginInterface = PluginController.getInstance().getPlugin(pluginMethod.getPluginInterface(),
 				pluginMethod.getPluginName());
 		if (pluginInterface == null) {
-			throw new InvalidExpressionException();
+			throw new InvalidExpressionException("Plugin interface: '" + pluginMethod.getPluginInterface()
+					+ "' not found for plugin: '" + pluginMethod.getPluginName() + "'");
 		}
 		try {
 			pluginInterface.getPluginMethod(pluginMethod.getPluginMethodName(), listToArray(parameters));

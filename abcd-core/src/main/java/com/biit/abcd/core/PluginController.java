@@ -47,9 +47,11 @@ public class PluginController {
 	public void scanForPlugins() {
 		String folderToScan = AbcdConfigurationReader.getInstance().getPluginsPath();
 		// If too short, plugin library launch
-		// Caused by: java.lang.StringIndexOutOfBoundsException: String index out of range: 4
+		// Caused by: java.lang.StringIndexOutOfBoundsException: String index
+		// out of range: 4
 		// at java.lang.String.substring(String.java:1907)
-		// at net.xeoh.plugins.base.impl.classpath.loader.FileLoader.loadFrom(FileLoader.java:83)
+		// at
+		// net.xeoh.plugins.base.impl.classpath.loader.FileLoader.loadFrom(FileLoader.java:83)
 		if (folderToScan != null && folderToScan.length() > 4) {
 			pluginManager.addPluginsFrom(new File(AbcdConfigurationReader.getInstance().getPluginsPath()).toURI());
 		}
@@ -101,8 +103,10 @@ public class PluginController {
 	}
 
 	/**
-	 * Returns the plugin specified by the class passed (the class can be an interface).<br>
-	 * If several plugins implement the same class, one of them is selected randomly.
+	 * Returns the plugin specified by the class passed (the class can be an
+	 * interface).<br>
+	 * If several plugins implement the same class, one of them is selected
+	 * randomly.
 	 * 
 	 * @param pluginInterface
 	 * @return
@@ -112,8 +116,10 @@ public class PluginController {
 	}
 
 	/**
-	 * Returns the plugin specified by the class name passed (the class can be an interface).<br>
-	 * If several plugins implement the same class name, one of them is selected randomly.
+	 * Returns the plugin specified by the class name passed (the class can be
+	 * an interface).<br>
+	 * If several plugins implement the same class name, one of them is selected
+	 * randomly.
 	 * 
 	 * @param interfaceName
 	 * @return
@@ -131,6 +137,11 @@ public class PluginController {
 	 */
 	public IPlugin getPlugin(Class interfaceName, String pluginName) {
 		Collection<IPlugin> plugins = getAllPlugins(interfaceName);
+
+		for (IPlugin plugin : plugins) {
+			System.out.println(plugin.getPluginName());
+		}
+
 		for (IPlugin plugin : plugins) {
 			if (plugin.getPluginName().equals(pluginName)) {
 				return plugin;
@@ -140,7 +151,8 @@ public class PluginController {
 	}
 
 	/**
-	 * Returns the plugin that matches the interface name and the plugin name passed as strings
+	 * Returns the plugin that matches the interface name and the plugin name
+	 * passed as strings
 	 * 
 	 * @param interfaceName
 	 * @param pluginName
@@ -152,7 +164,8 @@ public class PluginController {
 
 	/**
 	 * Executes the method of the plugin specified.<br>
-	 * It takes any number of parameters and passes them to the method invocation.
+	 * It takes any number of parameters and passes them to the method
+	 * invocation.
 	 * 
 	 * @param interfaceName
 	 * @param pluginName
@@ -174,7 +187,8 @@ public class PluginController {
 
 	/**
 	 * Executes the method of the plugin specified.<br>
-	 * It takes any number of parameters and passes them to the method invocation.
+	 * It takes any number of parameters and passes them to the method
+	 * invocation.
 	 * 
 	 * @param interfaceName
 	 * @param pluginName
@@ -186,5 +200,4 @@ public class PluginController {
 		return executePluginMethod(getInterfaceClass(interfaceName), pluginName, methodName, parameters);
 	}
 
-	
 }
