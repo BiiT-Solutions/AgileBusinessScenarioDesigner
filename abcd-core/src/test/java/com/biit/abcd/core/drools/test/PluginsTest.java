@@ -29,7 +29,8 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.plugins.interfaces.IPlugin;
 
 /**
- * For executing this test correctly the plugins must be placed in the specified path by the settings.conf file
+ * For executing this test correctly the plugins must be placed in the specified
+ * path by the settings.conf file
  * 
  */
 public class PluginsTest extends KidsFormCreator {
@@ -46,6 +47,7 @@ public class PluginsTest extends KidsFormCreator {
 	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 26383d;
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
 	private final static String LIFERAY_ARTICLE_PROPERTY = "Article1";
+	private final static String LIFERAY_RESULT = "Basis Sportmedisch Onderzoek\nBasis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...";
 
 	@Test(groups = { "pluginsTest" })
 	public void helloWorldPluginSelectionTest1() {
@@ -136,7 +138,7 @@ public class PluginsTest extends KidsFormCreator {
 		// Check result
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-				"Article1 - Basic Examination\nWhy to read this article...only if you want to know everything about the Basic Examination...");
+				LIFERAY_RESULT);
 	}
 
 	@Test(groups = { "pluginsTest" })
@@ -158,6 +160,6 @@ public class PluginsTest extends KidsFormCreator {
 		// Check result
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-				"Basis Sportmedisch Onderzoek\nBasis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...");
+				LIFERAY_RESULT);
 	}
 }
