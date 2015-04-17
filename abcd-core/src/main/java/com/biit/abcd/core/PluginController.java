@@ -46,6 +46,9 @@ public class PluginController {
 	 */
 	public void scanForPlugins() {
 		String folderToScan = AbcdConfigurationReader.getInstance().getPluginsPath();
+		
+		System.out.println("SCANNING : " + folderToScan);
+		
 		// If too short, plugin library launch
 		// Caused by: java.lang.StringIndexOutOfBoundsException: String index
 		// out of range: 4
@@ -58,7 +61,8 @@ public class PluginController {
 	}
 
 	public boolean existsPlugins() {
-		if ((getAllPlugins() != null) && (!getAllPlugins().isEmpty())) {
+		Collection<IPlugin> plugins = getAllPlugins();
+		if ((plugins != null) && (!plugins.isEmpty())) {
 			return true;
 		}
 		return false;
@@ -137,11 +141,6 @@ public class PluginController {
 	 */
 	public IPlugin getPlugin(Class interfaceName, String pluginName) {
 		Collection<IPlugin> plugins = getAllPlugins(interfaceName);
-
-		for (IPlugin plugin : plugins) {
-			System.out.println(plugin.getPluginName());
-		}
-
 		for (IPlugin plugin : plugins) {
 			if (plugin.getPluginName().equals(pluginName)) {
 				return plugin;
