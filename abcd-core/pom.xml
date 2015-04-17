@@ -36,12 +36,6 @@
 			<type>jar</type>
 		</dependency>
 		<!-- Liferay Plugin -->
-		<dependency>
-			<groupId>com.biit.drools.plugins</groupId>
-			<artifactId>liferay-knowledge-base</artifactId>
-			<version>${liferay-knowledge-base.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- Liferay Authentication -->
 		<dependency>
 			<groupId>com.biit.liferay</groupId>

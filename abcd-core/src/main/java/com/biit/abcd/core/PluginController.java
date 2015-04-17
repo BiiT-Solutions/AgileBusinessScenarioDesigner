@@ -46,9 +46,6 @@ public class PluginController {
 	 */
 	public void scanForPlugins() {
 		String folderToScan = AbcdConfigurationReader.getInstance().getPluginsPath();
-		
-		System.out.println("SCANNING : " + folderToScan);
-		
 		// If too short, plugin library launch
 		// Caused by: java.lang.StringIndexOutOfBoundsException: String index
 		// out of range: 4
