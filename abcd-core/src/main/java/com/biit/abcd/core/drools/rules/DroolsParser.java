@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import net.xeoh.plugins.base.Plugin;
 
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
@@ -56,6 +55,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.DroolsHelper;
+import com.biit.drools.plugins.PluginController;
 import com.biit.form.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
 
@@ -318,10 +318,14 @@ public class DroolsParser {
 		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
 		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
-		String formLabel = getDroolsHelper().getForm().getLabel();
-		String formVersion = getDroolsHelper().getForm().getVersion().toString();
-		String result = "\t$droolsForm: DroolsForm(getLabel() == '" + formLabel + "', getVersion() == '" + formVersion
-				+ "')\n";
+		// Just in case we want the label and version of the drools files
+		/**
+		 * String formLabel = getDroolsHelper().getForm().getLabel(); String
+		 * formVersion = getDroolsHelper().getForm().getVersion().toString();
+		 * String result = "\t$droolsForm: DroolsForm(getLabel() == '" +
+		 * formLabel + "', getVersion() == '" + formVersion + "')\n";
+		 */
+		String result = "\t$droolsForm: DroolsForm()\n";
 		// Obtain conditions if exists.
 		if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null)
 				&& (!rule.getConditions().getExpressions().isEmpty())) {

@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
@@ -22,6 +21,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.drools.DroolsHelper;
+import com.biit.drools.plugins.PluginController;
 
 public class DroolsRulesGenerator {
 
@@ -99,7 +99,7 @@ public class DroolsRulesGenerator {
 		getRulesBuilder().append("import com.biit.drools.utils.* \n");
 
 		if (PluginController.getInstance().existsPlugins()) {
-			getRulesBuilder().append("import com.biit.abcd.core.PluginController \n");
+			getRulesBuilder().append("import com.biit.drools.plugins.PluginController \n");
 			getRulesBuilder().append("import net.xeoh.plugins.base.Plugin \n");
 			getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
 			getRulesBuilder().append("import java.lang.reflect.Method \n");

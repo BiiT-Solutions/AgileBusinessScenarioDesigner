@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -19,6 +18,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
+import com.biit.drools.plugins.PluginController;
 import com.biit.plugins.interfaces.IPlugin;
 
 /**
@@ -76,9 +76,8 @@ public class PluginsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					"Hello World");
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), "Hello World");
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
