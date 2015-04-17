@@ -117,7 +117,7 @@ public class PluginsTest extends KidsFormCreator {
 				8.);
 	}
 
-	@Test(groups = { "pluginsTest" }, enabled = false)
+	@Test(groups = { "pluginsTest" })
 	public void liferayKnowledgeBasePlugin() throws FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
@@ -158,6 +158,6 @@ public class PluginsTest extends KidsFormCreator {
 		// Check result
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-				"Article1 - Basic Examination\nWhy to read this article...only if you want to know everything about the Basic Examination...");
+				"Basis Sportmedisch Onderzoek\nBasis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...");
 	}
 }
