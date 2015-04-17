@@ -39,11 +39,12 @@ public class SaveDroolsRulesAction implements SaveAction {
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
 			filesToZip.add(rules);
 			Integer formVersion = UserSessionHandler.getFormController().getForm().getVersion();
-			namesOfFiles.add("droolsRules_v" + formVersion + ".drl");
+			String formName = UserSessionHandler.getFormController().getForm().getLabel();
+			namesOfFiles.add(formName + "_v" + formVersion + ".drl");
 			String variables = AbcdGlobalVariablesToJson.toJson(UserSessionHandler.getGlobalVariablesController()
 					.getGlobalVariables());
 			filesToZip.add(variables);
-			namesOfFiles.add("globalVariables_v" + formVersion + ".json");
+			namesOfFiles.add(formName + "_globalVariables_v" + formVersion + ".json");
 
 			try {
 				return ZipUtils.createZipFile(filesToZip, namesOfFiles);
