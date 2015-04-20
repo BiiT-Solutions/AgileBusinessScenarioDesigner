@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.2.29-SNAPSHOT</version>
+		<version>1.3.0-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -22,17 +22,6 @@
 			<groupId>com.biit.liferay</groupId>
 			<artifactId>liferay-authentication-client</artifactId>
 			<version>${liferay-authentication-client.version}</version>
-		</dependency>
-		<!-- Orbeon importer -->
-		<dependency>
-			<groupId>com.biit</groupId>
-			<artifactId>form-structure-orbeon</artifactId>
-			<version>${form-structure-orbeon.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.biit</groupId>
-			<artifactId>form-structure-drools</artifactId>
-			<version>${form-structure-drools.version}</version>
 		</dependency>
 		<!-- File access -->
 		<dependency>
@@ -97,11 +86,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>${gson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.biit</groupId>
-			<artifactId>plugin-manager</artifactId>
-			<version>${plugin-manager.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

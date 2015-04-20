@@ -14,7 +14,6 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.persistence.dao.IStorableObjectEntityDao;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
@@ -58,8 +57,9 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 	@Autowired
 	IVariableDataDao variableDataDao;
 
-	@Autowired
-	IStorableObjectEntityDao storableObjectEntityDao;
+	// Commented code due to IStorableObjectEntityDao removal in storable object
+	// @Autowired
+	// IStorableObjectEntityDao storableObjectEntityDao;
 
 	@Test
 	public void removeDiagramElements() throws FieldTooLongException, NotValidChildException,
@@ -78,7 +78,7 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 		int previousTableRuleRowDao = tableRuleRowDao.getRowCount();
 		int previousTestScenarioDao = testScenarioDao.getRowCount();
 		int previousVariableDataDao = variableDataDao.getRowCount();
-		int previousStorableObjects = storableObjectEntityDao.getRowCount();
+		// int previousStorableObjects = storableObjectEntityDao.getRowCount();
 
 		formDao.makePersistent(form);
 
@@ -89,7 +89,8 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertTrue(expressionChainDao.getRowCount() > previousChains);
 		Assert.assertTrue(ruleDao.getRowCount() > previousRuleDao);
 		Assert.assertTrue(tableRuleDao.getRowCount() > previousTableRuleDao);
-		Assert.assertTrue(storableObjectEntityDao.getRowCount() > previousStorableObjects);
+		// Assert.assertTrue(storableObjectEntityDao.getRowCount() >
+		// previousStorableObjects);
 
 		formDao.makeTransient(form);
 		Assert.assertEquals(diagramObjectDao.getRowCount(), previousDiagramObjects);
@@ -103,6 +104,7 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(tableRuleRowDao.getRowCount(), previousTableRuleRowDao);
 		Assert.assertEquals(testScenarioDao.getRowCount(), previousTestScenarioDao);
 		Assert.assertEquals(variableDataDao.getRowCount(), previousVariableDataDao);
-		Assert.assertEquals(storableObjectEntityDao.getRowCount(), previousStorableObjects);
+		// Assert.assertEquals(storableObjectEntityDao.getRowCount(),
+		// previousStorableObjects);
 	}
 }
