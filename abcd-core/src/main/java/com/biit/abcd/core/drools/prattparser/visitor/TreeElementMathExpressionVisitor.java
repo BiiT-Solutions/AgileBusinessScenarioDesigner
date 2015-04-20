@@ -77,15 +77,15 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 					if (expVal.getUnit() != null) {
 						switch (expVal.getUnit()) {
 						case YEARS:
-							this.builder.append("DateUtils.returnYearsDistanceFromDate( $" + id + ".getAnswer('"
+							this.builder.append("DroolsDateUtils.returnYearsDistanceFromDate( $" + id + ".getAnswer('"
 									+ AnswerFormat.DATE.toString() + "'))");
 							break;
 						case MONTHS:
-							this.builder.append("DateUtils.returnMonthsDistanceFromDate( $" + id + ".getAnswer('"
+							this.builder.append("DroolsDateUtils.returnMonthsDistanceFromDate( $" + id + ".getAnswer('"
 									+ AnswerFormat.DATE.toString() + "'))");
 							break;
 						case DAYS:
-							this.builder.append("DateUtils.returnDaysDistanceFromDate( $" + id + ".getAnswer('"
+							this.builder.append("DroolsDateUtils.returnDaysDistanceFromDate( $" + id + ".getAnswer('"
 									+ AnswerFormat.DATE.toString() + "'))");
 							break;
 						case DATE:

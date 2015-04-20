@@ -34,7 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.TreeObject;
 
-public class RulesUtils {
+public class RuleGenerationUtils {
 
 	public static String getRuleName(String name) {
 		return getRuleName(name, null);
@@ -81,12 +81,12 @@ public class RulesUtils {
 	public static String getGroupRuleActions(DroolsRuleGroup rule) {
 		String groupAction = "";
 		if (rule.getName().startsWith("rule \"")) {
-			groupAction = "\tAbcdLogger.debug(\"RuleFired\", \"Rule "
+			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule "
 					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
 			groupAction += "\tinsert ( new FiredRule(\""
 					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
 		} else {
-			groupAction = "\tAbcdLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
+			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
 			groupAction += "\tinsert ( new FiredRule(\"" + rule.getName() + "\"));\n";
 		}
 
@@ -337,28 +337,12 @@ public class RulesUtils {
 		return cleanedResults;
 	}
 
-	// public static boolean hasSpecialCharacters(String text){
-	// if (Pattern.matches("[^a-zA-Z0-9]", text)){
-	// return true;
-	// }
-	// return false;
-	// }
-
 	public static String returnSimpleTreeObjectNameFunction(TreeObject treeObject) {
-		// if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
-		// return "getText() == '" +
-		// treeObject.getName().replaceAll("[^\\w\\s]","");
-		// } else {
 		return "getText() == '" + treeObject.getName();
-		// }
 	}
 
 	public static String addFinalCommentsIfNeeded(TreeObject treeObject) {
-		// if (RulesUtils.hasSpecialCharacters(treeObject.getName())) {
-		// return " // " + treeObject.getName();
-		// } else {
 		return "";
-		// }
 	}
 
 	public static String createRuleName(String ruleName, ExpressionChain extraConditions, String valueToAppend) {

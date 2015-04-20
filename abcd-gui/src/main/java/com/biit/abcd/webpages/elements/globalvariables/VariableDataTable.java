@@ -10,6 +10,7 @@ import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataDate;
 import com.biit.abcd.persistence.utils.DateManager;
+import com.biit.drools.global.variables.interfaces.IVariableData;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 
@@ -53,7 +54,7 @@ public class VariableDataTable extends Table {
 
 	public void setVariable(GlobalVariable variable) {
 		if (variable != null) {
-			for (VariableData data : variable.getVariableData()) {
+			for (IVariableData data : variable.getVariableData()) {
 				addRow(data);
 			}
 		} else {
@@ -61,7 +62,7 @@ public class VariableDataTable extends Table {
 		}
 	}
 
-	public Item addRow(VariableData variableData) {
+	public Item addRow(IVariableData variableData) {
 		Item item = addItem(variableData);
 		refreshItem(variableData, item);
 		setValue(variableData);
@@ -81,7 +82,7 @@ public class VariableDataTable extends Table {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void refreshItem(VariableData variableData, Item item) {
+	private void refreshItem(IVariableData variableData, Item item) {
 		if (item != null) {
 			if (variableData instanceof VariableDataDate) {
 				item.getItemProperty(Properties.VARIABLE_VALUE)

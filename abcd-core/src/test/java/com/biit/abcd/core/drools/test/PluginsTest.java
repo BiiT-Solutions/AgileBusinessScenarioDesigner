@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -26,6 +25,7 @@ import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.drools.plugins.PluginController;
 import com.biit.plugins.interfaces.IPlugin;
 
 /**

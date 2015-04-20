@@ -1,7 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
@@ -10,6 +9,7 @@ import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
 import com.biit.abcd.webpages.components.ExpressionEditorTabComponent;
 import com.biit.abcd.webpages.components.ThemeIcon;
+import com.biit.drools.plugins.PluginController;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.VerticalLayout;

@@ -8,14 +8,15 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.global.variables.interfaces.IVariableData;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "global_variable_data")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class VariableData extends StorableObject {
+public abstract class VariableData extends StorableObject implements IVariableData{
 	private static final long serialVersionUID = 6356292873575007675L;
 
 	private Timestamp validFrom;
@@ -26,24 +27,30 @@ public abstract class VariableData extends StorableObject {
 	@Transient
 	private final String type = this.getClass().getName();
 
+	@Override
 	public abstract Object getValue();
 
+	@Override
 	public abstract void setValue(Object value) throws NotValidTypeInVariableData;
 
 	public abstract boolean checkType(Object value);
 
+	@Override
 	public Timestamp getValidFrom() {
 		return validFrom;
 	}
 
+	@Override
 	public void setValidFrom(Timestamp validFrom) {
 		this.validFrom = validFrom;
 	}
 
+	@Override
 	public Timestamp getValidTo() {
 		return validTo;
 	}
 
+	@Override
 	public void setValidTo(Timestamp validTo) {
 		this.validTo = validTo;
 	}

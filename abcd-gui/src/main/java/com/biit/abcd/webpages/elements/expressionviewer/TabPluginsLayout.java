@@ -3,10 +3,10 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import com.biit.abcd.core.PluginController;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
+import com.biit.drools.plugins.PluginController;
 import com.biit.plugins.interfaces.IPlugin;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
