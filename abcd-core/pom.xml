@@ -12,11 +12,6 @@
 	</parent>
 	<dependencies>
 		<dependency>
-			<groupId>com.biit.plugins</groupId>
-			<artifactId>plugin-manager</artifactId>
-			<version>${plugin-manager.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>abcd-persistence</artifactId>
 			<version>${project.version}</version>

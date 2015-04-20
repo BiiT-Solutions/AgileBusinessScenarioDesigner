@@ -11,8 +11,6 @@ import com.biit.logger.BiitLogger;
  */
 public class AbcdLogger extends BiitLogger {
 	private static Logger logger = Logger.getLogger(AbcdLogger.class);
-
-	private static Logger logger = Logger.getLogger(AbcdLogger.class);
 	
 	/**
 	 * Events that have business meaning (i.e. creating category, deleting form,
