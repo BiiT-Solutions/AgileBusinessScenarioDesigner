@@ -3,8 +3,8 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.form.BaseRepeatableGroup;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.BaseRepeatableGroup;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;

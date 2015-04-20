@@ -13,7 +13,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 public class SimpleConditionsGenerator {
 

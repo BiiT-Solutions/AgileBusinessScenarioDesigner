@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.NotValidParentException;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;

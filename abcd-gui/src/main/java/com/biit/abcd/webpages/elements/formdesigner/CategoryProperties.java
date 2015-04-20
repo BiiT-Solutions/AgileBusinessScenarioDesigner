@@ -13,7 +13,7 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.vaadin.data.validator.RegexpValidator;

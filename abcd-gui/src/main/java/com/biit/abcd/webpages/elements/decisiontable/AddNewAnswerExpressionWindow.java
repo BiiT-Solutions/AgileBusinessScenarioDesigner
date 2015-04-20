@@ -11,7 +11,7 @@ import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
 import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;

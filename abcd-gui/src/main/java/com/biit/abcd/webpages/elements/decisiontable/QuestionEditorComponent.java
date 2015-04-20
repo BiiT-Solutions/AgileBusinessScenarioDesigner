@@ -5,7 +5,7 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.webpages.components.ExpressionEditorTabComponent;
 import com.biit.abcd.webpages.components.ThemeIcon;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 public class QuestionEditorComponent extends ExpressionEditorTabComponent {
 

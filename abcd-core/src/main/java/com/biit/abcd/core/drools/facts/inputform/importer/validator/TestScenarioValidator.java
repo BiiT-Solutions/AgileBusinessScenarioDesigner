@@ -23,7 +23,7 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.DependencyExistException;

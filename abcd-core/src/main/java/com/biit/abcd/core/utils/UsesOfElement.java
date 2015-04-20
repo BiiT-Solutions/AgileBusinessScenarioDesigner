@@ -12,7 +12,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 public class UsesOfElement {
 	private Form form;

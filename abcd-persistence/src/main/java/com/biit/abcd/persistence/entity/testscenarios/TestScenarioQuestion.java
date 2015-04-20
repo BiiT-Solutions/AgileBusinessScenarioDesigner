@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.biit.form.BaseQuestion;
+import com.biit.form.entity.BaseQuestion;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;

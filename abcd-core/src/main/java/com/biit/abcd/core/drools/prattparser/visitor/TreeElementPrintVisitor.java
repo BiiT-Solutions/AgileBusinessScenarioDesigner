@@ -11,7 +11,7 @@ import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 
 public class TreeElementPrintVisitor implements ITreeElementVisitor{

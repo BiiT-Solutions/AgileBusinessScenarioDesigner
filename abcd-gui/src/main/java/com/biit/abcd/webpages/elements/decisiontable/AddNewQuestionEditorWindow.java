@@ -5,7 +5,7 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 

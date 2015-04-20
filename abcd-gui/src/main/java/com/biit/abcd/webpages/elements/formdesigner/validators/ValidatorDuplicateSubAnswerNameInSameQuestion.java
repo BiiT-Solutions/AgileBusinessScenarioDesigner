@@ -5,7 +5,7 @@ import java.util.HashSet;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Answer;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Validator;
 
 /**

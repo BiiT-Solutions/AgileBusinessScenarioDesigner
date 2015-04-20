@@ -1,6 +1,6 @@
 package com.biit.abcd.webpages.components;
 
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Item;
 
 /**

@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.formdesigner.validators;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Validator;
 
 public class ValidatorTreeObjectNameLength implements Validator {

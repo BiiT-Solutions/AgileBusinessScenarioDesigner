@@ -4,8 +4,8 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.form.BaseForm;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.BaseForm;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 

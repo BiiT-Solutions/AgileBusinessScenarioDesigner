@@ -41,7 +41,7 @@ import com.biit.abcd.webpages.components.SelectGlobalConstantsWindow;
 import com.biit.abcd.webpages.components.SelectTreeObjectWindow;
 import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.components.WindowSelectDateUnit;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.Alignment;

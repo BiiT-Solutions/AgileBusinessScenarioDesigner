@@ -6,7 +6,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChainHierarchyComp
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.EditCellComponent;
 import com.biit.abcd.webpages.components.SecuredEditCellComponent;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 public class EditCellSortableByExpression extends SecuredEditCellComponent {
 	private static final long serialVersionUID = -3538277564149518358L;

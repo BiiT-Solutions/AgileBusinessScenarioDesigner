@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.utils.CheckDependencies;
-import com.biit.form.BaseRepeatableGroup;
+import com.biit.form.entity.BaseRepeatableGroup;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.persistence.entity.StorableObject;

@@ -17,7 +17,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 

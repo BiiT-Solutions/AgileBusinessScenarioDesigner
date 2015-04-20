@@ -22,7 +22,7 @@ import com.biit.abcd.persistence.entity.testscenarios.TestAnswerMultiCheckBox;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerRadioButton;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
 import com.biit.abcd.persistence.entity.testscenarios.exceptions.NotValidAnswerValue;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;

@@ -46,7 +46,7 @@ import com.biit.abcd.webpages.elements.decisiontable.EditActionListener;
 import com.biit.abcd.webpages.elements.decisiontable.EditExpressionListener;
 import com.biit.abcd.webpages.elements.decisiontable.RuleTable;
 import com.biit.abcd.webpages.elements.decisiontable.WindoNewTable;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;

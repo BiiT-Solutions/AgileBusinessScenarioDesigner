@@ -3,7 +3,7 @@ package com.biit.abcd.core.drools.rules;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 public class TreeObjectDroolsIdMap {
 	

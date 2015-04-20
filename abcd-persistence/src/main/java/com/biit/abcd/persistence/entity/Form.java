@@ -37,8 +37,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
-import com.biit.form.BaseForm;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.BaseForm;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;

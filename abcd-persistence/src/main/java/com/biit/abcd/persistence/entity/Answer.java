@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.utils.CheckDependencies;
-import com.biit.form.BaseAnswer;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.BaseAnswer;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.persistence.entity.StorableObject;

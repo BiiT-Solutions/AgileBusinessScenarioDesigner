@@ -1,6 +1,6 @@
 package com.biit.abcd.core.drools.rules.exceptions;
 
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 public class TreeObjectInstanceNotRecognizedException extends Exception {
 	private static final long serialVersionUID = -7864776882863456211L;

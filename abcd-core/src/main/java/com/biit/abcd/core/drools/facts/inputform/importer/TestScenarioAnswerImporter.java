@@ -25,7 +25,7 @@ import com.biit.drools.form.DroolsSubmittedCategory;
 import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.form.DroolsSubmittedGroup;
 import com.biit.drools.form.DroolsSubmittedQuestion;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedCategory;
 import com.biit.form.submitted.ISubmittedForm;

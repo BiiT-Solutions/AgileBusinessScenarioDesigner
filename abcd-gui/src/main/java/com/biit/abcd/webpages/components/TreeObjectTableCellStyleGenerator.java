@@ -1,11 +1,11 @@
 package com.biit.abcd.webpages.components;
 
 import com.biit.abcd.webpages.components.TreeObjectTable.TreeObjectTableProperties;
-import com.biit.form.BaseAnswer;
-import com.biit.form.BaseCategory;
-import com.biit.form.BaseForm;
-import com.biit.form.BaseQuestion;
-import com.biit.form.BaseRepeatableGroup;
+import com.biit.form.entity.BaseAnswer;
+import com.biit.form.entity.BaseCategory;
+import com.biit.form.entity.BaseForm;
+import com.biit.form.entity.BaseQuestion;
+import com.biit.form.entity.BaseRepeatableGroup;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.CellStyleGenerator;
 

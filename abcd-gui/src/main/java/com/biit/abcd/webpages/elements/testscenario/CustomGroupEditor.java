@@ -10,7 +10,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.ElementIsReadOnly;

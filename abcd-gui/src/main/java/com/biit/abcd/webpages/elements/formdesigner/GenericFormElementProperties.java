@@ -8,7 +8,7 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;

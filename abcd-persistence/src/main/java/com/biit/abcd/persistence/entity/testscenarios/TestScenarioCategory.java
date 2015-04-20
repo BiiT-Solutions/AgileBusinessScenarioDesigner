@@ -3,7 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.form.BaseCategory;
+import com.biit.form.entity.BaseCategory;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 

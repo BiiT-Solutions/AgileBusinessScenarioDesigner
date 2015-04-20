@@ -2,9 +2,9 @@ package com.biit.abcd.webpages.elements.testscenario;
 
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.webpages.components.TreeObjectTable;
-import com.biit.form.BaseQuestion;
-import com.biit.form.BaseRepeatableGroup;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.BaseQuestion;
+import com.biit.form.entity.BaseRepeatableGroup;
+import com.biit.form.entity.TreeObject;
 
 /**
  * TreeObjectTable component

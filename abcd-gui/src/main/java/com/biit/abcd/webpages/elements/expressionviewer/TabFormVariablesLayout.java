@@ -11,7 +11,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.webpages.components.TreeObjectTable;
 import com.biit.abcd.webpages.components.TreeObjectTableMultiSelect;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.ui.ListSelect;
 
 public abstract class TabFormVariablesLayout extends TabLayout {

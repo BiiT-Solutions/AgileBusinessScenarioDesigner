@@ -17,7 +17,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.vaadin.data.Property.ReadOnlyException;
 import com.vaadin.server.VaadinServlet;

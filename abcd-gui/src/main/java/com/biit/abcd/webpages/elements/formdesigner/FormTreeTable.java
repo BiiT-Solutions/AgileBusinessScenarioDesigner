@@ -12,7 +12,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.webpages.components.ComponentCellRule;
 import com.biit.abcd.webpages.components.TreeObjectTable;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Component;
 

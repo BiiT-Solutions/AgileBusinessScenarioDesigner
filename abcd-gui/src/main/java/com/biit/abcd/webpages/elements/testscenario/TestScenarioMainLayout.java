@@ -7,7 +7,7 @@ import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenario
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;

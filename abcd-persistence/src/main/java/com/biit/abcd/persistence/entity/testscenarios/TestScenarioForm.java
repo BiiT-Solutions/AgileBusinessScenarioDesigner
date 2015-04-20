@@ -3,7 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.biit.form.BaseForm;
+import com.biit.form.entity.BaseForm;
 
 @Entity
 @Table(name = "test_scenario_form")

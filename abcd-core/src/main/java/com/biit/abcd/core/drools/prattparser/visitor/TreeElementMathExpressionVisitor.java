@@ -18,7 +18,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstan
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 

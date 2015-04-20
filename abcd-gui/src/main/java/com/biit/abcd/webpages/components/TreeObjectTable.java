@@ -15,7 +15,7 @@ import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.vaadin.data.Item;

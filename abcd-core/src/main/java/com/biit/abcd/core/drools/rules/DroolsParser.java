@@ -55,7 +55,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
 
 public class DroolsParser {

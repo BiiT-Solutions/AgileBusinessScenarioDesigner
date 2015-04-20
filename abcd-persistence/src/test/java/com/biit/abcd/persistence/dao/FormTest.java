@@ -13,12 +13,11 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.form.persistence.dao.IBaseQuestionDao;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
@@ -42,9 +41,6 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Autowired
 	private ITableRuleRowDao tableRuleDao;
-
-	@Autowired
-	private IBaseQuestionDao<Question> questionDao;
 
 	@Test
 	public void storeDummyForm() throws FieldTooLongException, CharacterNotAllowedException,

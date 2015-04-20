@@ -34,7 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
-import com.biit.form.TreeObject;
+import com.biit.form.entity.TreeObject;
 
 /**
  * Transforms a Rule to a Drools rule. Internally is the same. This class is
