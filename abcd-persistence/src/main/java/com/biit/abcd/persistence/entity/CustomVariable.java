@@ -25,7 +25,7 @@ public class CustomVariable extends StorableObject {
 	private static final long serialVersionUID = 4678216833687584848L;
 
 	// Used mainly for unique constraint.
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "form")
 	private Form form;
 

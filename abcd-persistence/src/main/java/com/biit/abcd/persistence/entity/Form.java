@@ -20,10 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -55,29 +51,18 @@ public class Form extends BaseForm {
 	private Timestamp availableTo;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
-	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
-	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<TableRule> tableRules;
 
-	@OneToMany(mappedBy = "form")
-	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
-	@LazyCollection(LazyCollectionOption.TRUE)
+	@OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
-	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<ExpressionChain> expressionChains;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// If we made the flow lazy and we load all rules using initializeSets in the DAO, we increase performance.
-	@LazyCollection(LazyCollectionOption.TRUE)
 	private Set<Rule> rules;
 
 	// For avoiding
@@ -627,5 +612,10 @@ public class Form extends BaseForm {
 
 	public void setStatus(FormWorkStatus status) {
 		this.status = status;
+	}
+
+	public void add(CustomVariable formCustomVariables) {
+		customVariables.add(formCustomVariables);
+		formCustomVariables.setForm(this);
 	}
 }

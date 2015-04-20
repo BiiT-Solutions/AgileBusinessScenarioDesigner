@@ -67,7 +67,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		// Check the order
 		form.getExpressionChains().add(expressionChain);
 		formDao.makePersistent(form);
-		Form retrievedForm = formDao.read(form.getId());
+		Form retrievedForm = formDao.get(form.getId());
 		formDao.makeTransient(form);
 		for (ExpressionChain expressionChainAux : retrievedForm.getExpressionChains()) {
 			Assert.assertEquals(expressionChainAux.getExpression(), "Category1_cScore = birthdate");

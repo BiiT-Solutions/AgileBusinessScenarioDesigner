@@ -52,19 +52,19 @@
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<vaadin-toolkit.version>LATEST</vaadin-toolkit.version>
 		<mysql-odbc.version>5.1.27</mysql-odbc.version>
-		<org.springframework.version>3.2.5.RELEASE</org.springframework.version>
-		<aspectj.version>1.8.0</aspectj.version>
+		<org.springframework.version>4.1.5.RELEASE</org.springframework.version>
+		<aspectj.version>1.8.2</aspectj.version>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j-api.version>1.7.7</slf4j-api.version>
 		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
-		<hibernate.version>4.3.6.Final</hibernate.version>
+		<hibernate.version>4.3.8.Final</hibernate.version>
 		<jointjs-widget.version>0.1.2-WIDGET</jointjs-widget.version>
 		<jexeval.version>1.0.4</jexeval.version>
 		<!-- Version 6.2 of drools is not accepting special characters like 'ë', 
 			do not update -->
 		<drools.version>6.1.0.CR2</drools.version>
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
-		<form-structure.version>[0.2,0.3)</form-structure.version>
+		<form-structure.version>[0.3,0.4)</form-structure.version>
 		<form-structure-orbeon.version>[0.1,0.2)</form-structure-orbeon.version>
 		<form-structure-drools.version>[0.0,0.1)</form-structure-drools.version>
 		<liferay-service-common.version>[0.6,0.7)</liferay-service-common.version>
@@ -73,7 +73,7 @@
 		<root.directory>${project.basedir}</root.directory>
 		<gson.version>2.3</gson.version>
 		<h2.version>1.4.182</h2.version>
-		<ehcache.version>2.6.10</ehcache.version>
+		<ehcache.version>2.6.9</ehcache.version>
 		<c3p0.version>0.9.2.1</c3p0.version>
 		<plugin-manager.version>0.0.2</plugin-manager.version>
 		<DES-encryption.version>1.0.0</DES-encryption.version>

@@ -1,8 +1,8 @@
 package com.biit.abcd.persistence.dao;
 
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
-import com.biit.persistence.dao.IGenericDao;
+import com.biit.persistence.dao.IJpaGenericDao;
 
-public interface IVariableDataDao extends IGenericDao<VariableData> {
+public interface IVariableDataDao extends IJpaGenericDao<VariableData,Long> {
 
 }

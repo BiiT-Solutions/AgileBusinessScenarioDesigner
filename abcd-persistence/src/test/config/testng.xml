@@ -3,13 +3,13 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<exclude name="ehCache" />
+<!-- 				<exclude name="ehCache" />-->
+<!-- Orphan doesn't work? <include name="formCustomVariablesDao" /> -->
 				<exclude name="expressionEvaluator" />
-				<include name="formDao" />
+ 				<include name="formDao" />
 				<include name="simpleFormViewDao" />
 				<include name="diagramDao" />
-				<include name="formCustomVariablesDao" />
-				<include name="globalVariablesDao" />
+ 				<include name="globalVariablesDao" />
 				<include name="tableRulesDao" />
 				<include name="orphan" />
 				<include name="genericTreeObjectVariablesDao" />
@@ -19,9 +19,9 @@
 			</run>
 		</groups>
 		<classes>
-			<class name="com.biit.abcd.persistence.dao.RemoveForm" />
+ 			<class name="com.biit.abcd.persistence.dao.RemoveForm" />
 			<class name="com.biit.abcd.persistence.dao.FormTest" />
-			<class name="com.biit.abcd.persistence.dao.SimpleFormViewTest" />
+ 			<class name="com.biit.abcd.persistence.dao.SimpleFormViewTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
 			<class name="com.biit.abcd.persistence.dao.FormCustomVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.GlobalVariablesTest" />

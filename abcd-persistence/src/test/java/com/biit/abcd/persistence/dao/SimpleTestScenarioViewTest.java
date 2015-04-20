@@ -60,7 +60,6 @@ public class SimpleTestScenarioViewTest extends AbstractTransactionalTestNGSprin
 		testScenarioDao.makePersistent(testScenario);
 
 		Assert.assertEquals(testScenarioDao.getRowCount(), 1);
-		Assert.assertEquals(simpleTestScenarioViewDao.getRowCount(), 1);
 
 		List<SimpleTestScenarioView> views = simpleTestScenarioViewDao.getSimpleTestScenariosByFormId(form.getId());
 		Assert.assertEquals(views.size(), 1);

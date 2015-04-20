@@ -15,8 +15,4 @@ public interface ISimpleFormViewDao {
 
 	List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId);
 
-	void setSessionFactory(SessionFactory sessionFactory);
-
-	SessionFactory getSessionFactory();
-
 }

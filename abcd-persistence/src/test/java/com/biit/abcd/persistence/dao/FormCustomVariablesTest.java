@@ -42,7 +42,7 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 		form.setLabel(DUMMY_FORM);
 
 		CustomVariable formCustomVariables = new CustomVariable();
-		form.getCustomVariables().add(formCustomVariables);
+		form.add(formCustomVariables);
 		formDao.makePersistent(form);
 
 		Assert.assertEquals(customVariablesDao.getRowCount(), 1);
@@ -59,11 +59,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "Score", CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-		form.getCustomVariables().add(formCustomVariables);
+		form.add(formCustomVariables);
 
 		formDao.makePersistent(form);
 
-		Form inForm = formDao.getForm(DUMMY_FORM + "_v2", 0l);
+		Form inForm = formDao.get(form.getId());
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
@@ -86,11 +86,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "Name", CustomVariableType.STRING,
 				CustomVariableScope.QUESTION);
-		form.getCustomVariables().add(formCustomVariables);
+		form.add(formCustomVariables);
 
 		formDao.makePersistent(form);
 
-		Form inForm = formDao.getForm(DUMMY_FORM + "_v3", 0l);
+		Form inForm = formDao.get(form.getId());
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
@@ -115,11 +115,12 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "CreationDate", CustomVariableType.DATE,
 				CustomVariableScope.FORM);
-		form.getCustomVariables().add(formCustomVariables);
+		
+		form.add(formCustomVariables);
 
 		formDao.makePersistent(form);
 
-		Form inForm = formDao.getForm(DUMMY_FORM + "_v4", 0l);
+		Form inForm = formDao.get(form.getId());
 		inForm.getCustomVariables();
 		Assert.assertNotNull(inForm.getCustomVariables());
 		Assert.assertFalse(inForm.getCustomVariables().isEmpty());
@@ -154,11 +155,11 @@ public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringCo
 
 		CustomVariable formCustomVariables = new CustomVariable(form, "var1", CustomVariableType.DATE,
 				CustomVariableScope.FORM);
-		form.getCustomVariables().add(formCustomVariables);
+		form.add(formCustomVariables);
 
 		CustomVariable formCustomVariables2 = new CustomVariable(form, "var2", CustomVariableType.DATE,
 				CustomVariableScope.FORM);
-		form.getCustomVariables().add(formCustomVariables2);
+		form.add(formCustomVariables2);
 
 		formDao.makePersistent(form);
 

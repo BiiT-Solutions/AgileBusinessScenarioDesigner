@@ -91,9 +91,11 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Test
 	public void storeDiagramObjects() throws UnexpectedDatabaseException, ElementCannotBePersistedException {
 		diagramDao.makePersistent(diagram);
-		Diagram diagram2 = diagramDao.read(diagram.getId());
+		Diagram diagram2 = diagramDao.get(diagram.getId());
 		Assert.assertEquals(diagram2.getDiagramObjects().size(), 5);
-		diagramDao.removeAll();
+		for(Diagram diagram : diagramDao.getAll()){
+			diagramDao.makeTransient(diagram);
+		}
 		Assert.assertEquals(diagramDao.getRowCount(), 0);
 	}
 
@@ -108,7 +110,7 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 		form.getDiagrams().add(diagram);
 
 		formDao.makePersistent(form);
-		Form retrievedForm = formDao.read(form.getId());
+		Form retrievedForm = formDao.get(form.getId());
 
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(diagramDao.getRowCount(), 1);

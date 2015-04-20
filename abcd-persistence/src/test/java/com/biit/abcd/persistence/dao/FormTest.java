@@ -50,9 +50,9 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		form.setLabel(DUMMY_FORM);
 		formDao.makePersistent(form);
 		Assert.assertEquals(formDao.getRowCount(), 1);
-		Assert.assertEquals(formDao.getForm(DUMMY_FORM, 0l).getLabel(), DUMMY_FORM);
+		Assert.assertEquals(formDao.get(form.getId()).getLabel(), DUMMY_FORM);
 		formDao.makeTransient(form);
-		Assert.assertNull(formDao.getForm(DUMMY_FORM, 0l));
+		Assert.assertNull(formDao.get(form.getId()));
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		category.setName(CATEGORY_LABEL);
 		form.addChild(category);
 		formDao.makePersistent(form);
-		Form retrievedForm = formDao.read(form.getId());
+		Form retrievedForm = formDao.get(form.getId());
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
 		formDao.makeTransient(form);
@@ -83,7 +83,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		category.setName(CATEGORY_LABEL);
 		form.addChild(category);
 		formDao.makePersistent(form);
-		Form retrievedForm = formDao.read(form.getId());
+		Form retrievedForm = formDao.get(form.getId());
 
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getChildren().size(), 1);
@@ -157,7 +157,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 
 		// Update form with this changes
 		formDao.makePersistent(form);
-		Form storedForm = formDao.read(form.getId());
+		Form storedForm = formDao.get(form.getId());
 
 		// Compare order is the same.
 		Assert.assertTrue(compare(form, storedForm));

@@ -7,8 +7,6 @@ import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 public interface ISimpleTestScenarioViewDao {
 
-	int getRowCount() throws UnexpectedDatabaseException;
-
 	/**
 	 * Returns a list of all the test scenarios related to the forms that have form organization and form label equals
 	 * to the passed form

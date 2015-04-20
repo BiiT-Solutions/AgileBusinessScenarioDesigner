@@ -150,7 +150,7 @@ public class TableRuleTest extends AbstractTransactionalTestNGSpringContextTests
 		form.getTableRules().add(tableRule);
 
 		formDao.makePersistent(form);
-		Form retrievedForm = (Form) formDao.read(form.getId());
+		Form retrievedForm = (Form) formDao.get(form.getId());
 
 		Assert.assertEquals(retrievedForm.getId(), form.getId());
 		Assert.assertEquals(retrievedForm.getTableRules().size(), 1);
