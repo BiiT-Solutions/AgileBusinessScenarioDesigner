@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
 
 
 

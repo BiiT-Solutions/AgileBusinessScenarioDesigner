@@ -20,7 +20,6 @@ import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
-import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
 

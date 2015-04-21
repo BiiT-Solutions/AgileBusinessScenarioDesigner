@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IDiagramDao;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
 
 
 @Repository

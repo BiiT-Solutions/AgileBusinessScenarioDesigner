@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
 
 @Repository
 public class TestScenarioDao extends AnnotatedGenericDao<TestScenario,Long> implements ITestScenarioDao {

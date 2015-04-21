@@ -3,25 +3,25 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="formCustomVariablesDao" />
- 				<exclude name="expressionEvaluator" />
- 				<include name="formDao" />
+				<exclude name="ehCache" />
+				<exclude name="expressionEvaluator" />
+				<include name="formDao" />
 				<include name="simpleFormViewDao" />
 				<include name="diagramDao" />
- 				<include name="globalVariablesDao" />
-				<include name="tableRulesDao" /> -->
+				<include name="formCustomVariablesDao" />
+				<include name="globalVariablesDao" />
+				<include name="tableRulesDao" />
 				<include name="orphan" />
 				<include name="genericTreeObjectVariablesDao" />
 				<include name="testScenarioDao" />
 				<include name="simpleTestScenarioViewDao" />
 				<include name="removeForm" />
-				<!-- <exclude name="ehCache" />-->
 			</run>
 		</groups>
 		<classes>
- 			<class name="com.biit.abcd.persistence.dao.RemoveForm" />
+			<class name="com.biit.abcd.persistence.dao.RemoveForm" />
 			<class name="com.biit.abcd.persistence.dao.FormTest" />
- 			<class name="com.biit.abcd.persistence.dao.SimpleFormViewTest" />
+			<class name="com.biit.abcd.persistence.dao.SimpleFormViewTest" />
 			<class name="com.biit.abcd.persistence.dao.DiagramTest" />
 			<class name="com.biit.abcd.persistence.dao.FormCustomVariablesTest" />
 			<class name="com.biit.abcd.persistence.dao.GlobalVariablesTest" />

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.biit.persistence.dao.IJpaGenericDao;
 import com.biit.persistence.dao.jpa.GenericDao;
 
+
 public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends Serializable> extends GenericDao<EntityClass, PrimaryKeyClass> implements IJpaGenericDao<EntityClass, PrimaryKeyClass>{
 	
 	@PersistenceContext(unitName = "defaultPersistenceUnit")

@@ -50,15 +50,6 @@ public class NewVersionTest extends AbstractTransactionalTestNGSpringContextTest
 	private Form newVersionForm;
 
 	@Test
-	public void createForm() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException,
-			InvalidAnswerFormatException, UnexpectedDatabaseException, ElementIsReadOnly,
-			ElementCannotBePersistedException {
-		form = FormUtils.createCompleteForm();
-		Assert.assertNotNull(form);
-		formDao.makePersistent(form);
-	}
-
-	@Test(dependsOnMethods = { "createForm" })
 	public void newVersion() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException,
 			InvalidAnswerFormatException, NotValidStorableObjectException, TreeObjectNotEqualsException,
 			StorableObjectNotEqualsException, FormNotEqualsException, GroupNotEqualsException,
@@ -66,7 +57,11 @@ public class NewVersionTest extends AbstractTransactionalTestNGSpringContextTest
 			GlobalVariableNotEqualsException, VariableDataNotEqualsException, TableRuleNotEqualsException,
 			RuleNotEqualsException, DiagramNotEqualsException, DiagramObjectNotEqualsException, NodeNotEqualsException,
 			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException, UnexpectedDatabaseException,
-			ElementCannotBePersistedException, ElementCannotBeRemovedException {
+			ElementCannotBePersistedException, ElementCannotBeRemovedException, ElementIsReadOnly {
+		form = FormUtils.createCompleteForm();
+		Assert.assertNotNull(form);
+		formDao.makePersistent(form);
+
 		newVersionForm = form.createNewVersion(null);
 		Assert.assertNotNull(newVersionForm);
 		Assert.assertEquals((int) form.getVersion() + 1, (int) newVersionForm.getVersion());
