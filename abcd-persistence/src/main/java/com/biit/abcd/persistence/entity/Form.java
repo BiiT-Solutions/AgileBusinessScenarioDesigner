@@ -614,9 +614,9 @@ public class Form extends BaseForm {
 		this.status = status;
 	}
 
-	public void add(CustomVariable formCustomVariables) {
-		customVariables.add(formCustomVariables);
-		formCustomVariables.setForm(this);
+	public void add(CustomVariable formCustomVariable) {
+		customVariables.add(formCustomVariable);
+		formCustomVariable.setForm(this);
 	}
 
 	public void remove(Rule rule) {

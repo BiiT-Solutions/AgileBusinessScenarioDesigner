@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -26,8 +27,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class CustomVariable extends StorableObject {
 	private static final long serialVersionUID = 4678216833687584848L;
 
-	// Used mainly for unique constraint.
-	@ManyToOne(optional=false)
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "form")
 	private Form form;
 
 	// MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~190.
@@ -39,21 +40,25 @@ public class CustomVariable extends StorableObject {
 	private CustomVariableScope scope;
 	@Enumerated(EnumType.STRING)
 	private CustomVariableType type;
-	
+
 	private String defaultValue;
 
 	public CustomVariable() {
+		super();
 	}
 
-	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope, String defaultValue) {
+	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope,
+			String defaultValue) {
+		super();
 		this.form = form;
 		this.name = name;
 		this.scope = scope;
 		this.type = type;
 		this.defaultValue = defaultValue;
 	}
-	
+
 	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope) {
+		super();
 		this.form = form;
 		this.name = name;
 		this.scope = scope;
@@ -97,7 +102,7 @@ public class CustomVariable extends StorableObject {
 	public String toString() {
 		return getName();
 	}
-	
+
 	public String getDefaultValue() {
 		return defaultValue;
 	}

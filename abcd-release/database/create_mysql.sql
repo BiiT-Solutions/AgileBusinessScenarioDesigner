@@ -492,7 +492,7 @@
         name varchar(190),
         scope varchar(190),
         type varchar(255),
-        form bigint,
+        form bigint not null,
         primary key (ID)
     );
 
