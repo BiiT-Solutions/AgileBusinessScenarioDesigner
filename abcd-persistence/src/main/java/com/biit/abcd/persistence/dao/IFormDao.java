@@ -9,4 +9,10 @@ public interface IFormDao extends IJpaGenericDao<Form,Long> {
 
 	int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException;
 
+	Form getForm(String label, Integer version, Long organizationId);
+
+	boolean exists(String value, Integer version, Long organizationId, Long id);
+
+	boolean exists(String value, long organizationId);
+
 }

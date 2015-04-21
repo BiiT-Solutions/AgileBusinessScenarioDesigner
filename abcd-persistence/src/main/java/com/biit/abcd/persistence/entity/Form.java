@@ -601,9 +601,9 @@ public class Form extends BaseForm {
 	}
 
 	public void remove(CustomVariable customVariableToDelete) {
-		customVariableToDelete.setForm(null);
 		customVariables.remove(customVariableToDelete);
 		customVariablesToDelete.add(customVariableToDelete);
+		customVariableToDelete.setForm(null);
 	}
 
 	public FormWorkStatus getStatus() {
@@ -617,5 +617,9 @@ public class Form extends BaseForm {
 	public void add(CustomVariable formCustomVariables) {
 		customVariables.add(formCustomVariables);
 		formCustomVariables.setForm(this);
+	}
+
+	public void remove(Rule rule) {
+		rules.remove(rule);
 	}
 }

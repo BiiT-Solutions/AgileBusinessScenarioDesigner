@@ -7,7 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -21,12 +22,12 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 // uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name", "scope" }) } removed due to an updating
 // customvariables name problem if a new custom variable has the same name that a previously deleted one.
 @Table(name = "form_custom_variables")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class CustomVariable extends StorableObject {
 	private static final long serialVersionUID = 4678216833687584848L;
 
 	// Used mainly for unique constraint.
-	@ManyToOne()
-	@JoinColumn(name = "form")
+	@ManyToOne(optional=false)
 	private Form form;
 
 	// MySQL unique keys are limited to 767 bytes that in utf8mb4 are ~190.

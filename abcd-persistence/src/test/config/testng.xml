@@ -4,13 +4,13 @@
 		<groups>
 			<run>
 <!-- 				<exclude name="ehCache" />-->
-<!-- Orphan doesn't work? <include name="formCustomVariablesDao" /> -->
-				<exclude name="expressionEvaluator" />
+				<include name="formCustomVariablesDao" />
+ 				<exclude name="expressionEvaluator" />
  				<include name="formDao" />
 				<include name="simpleFormViewDao" />
 				<include name="diagramDao" />
  				<include name="globalVariablesDao" />
-				<include name="tableRulesDao" />
+				<include name="tableRulesDao" /> -->
 				<include name="orphan" />
 				<include name="genericTreeObjectVariablesDao" />
 				<include name="testScenarioDao" />

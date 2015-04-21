@@ -32,9 +32,7 @@ import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable.IFormStatusChange;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
-import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
-import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -67,15 +65,9 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-					try {
-						Form selectedForm = formDao.read(formTable.getValue().getId());
-						selectedForm.setLastVersion(formTable.getValue().isLastVersion());
-						UserSessionHandler.setForm(selectedForm);
-					} catch (UnexpectedDatabaseException e) {
-						AbcdLogger.errorMessage(FormManager.class.getName(), e);
-						MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-								LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
-					}
+					Form selectedForm = formDao.get(formTable.getValue().getId());
+					selectedForm.setLastVersion(formTable.getValue().isLastVersion());
+					UserSessionHandler.setForm(selectedForm);
 				}
 			}
 		});
@@ -110,17 +102,10 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void formSelected() {
 				if (formTable.getValue() != null) {
-					try {
-						Form form = formDao.read(formTable.getValue().getId());
-						form.setLastVersion(formTable.getValue().isLastVersion());
-						UserSessionHandler.setForm(form);
-						UiAccesser.lockForm(form, UserSessionHandler.getUser());
-					} catch (UnexpectedDatabaseException e) {
-						AbcdLogger.errorMessage(FormManager.class.getName(), e);
-						MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-								LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
-					}
-
+					Form form = formDao.get(formTable.getValue().getId());
+					form.setLastVersion(formTable.getValue().isLastVersion());
+					UserSessionHandler.setForm(form);
+					UiAccesser.lockForm(form, UserSessionHandler.getUser());
 				}
 			}
 		});
@@ -174,26 +159,14 @@ public class FormManager extends FormWebPageComponent {
 
 	public void addNewForm(Form form) {
 		SimpleFormView simpleView = new SimpleFormView(form);
-		try {
-			formDao.makePersistent(form);
-			formTable.addForm(simpleView);
-			formTable.selectForm(simpleView);
-			simpleView.setId(form.getId());
-		} catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
-			AbcdLogger.errorMessage(FormManager.class.getName(), e);
-			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
-		}
+		formDao.makePersistent(form);
+		formTable.addForm(simpleView);
+		formTable.selectForm(simpleView);
+		simpleView.setId(form.getId());
 	}
 
 	public void setFormById(Long formId) {
-		try {
-			UserSessionHandler.setForm(formDao.read(formId));
-		} catch (UnexpectedDatabaseException e) {
-			AbcdLogger.errorMessage(FormManager.class.getName(), e);
-			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
-		}
+		UserSessionHandler.setForm(formDao.get(formId));
 	}
 
 	public void newFormVersion() {
@@ -220,9 +193,6 @@ public class FormManager extends FormWebPageComponent {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
-		} catch (ElementCannotBePersistedException e) {
-			MessageManager.showError(LanguageCodes.ERROR_READ_ONLY_ELEMENT);
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 
@@ -239,9 +209,6 @@ public class FormManager extends FormWebPageComponent {
 			AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
 					+ " createForm " + ex.getMessage());
 			throw ex;
-		} catch (UnexpectedDatabaseException e) {
-			AbcdLogger.errorMessage(FormManager.class.getName(), e);
-			throw e;
 		}
 
 		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
@@ -251,34 +218,27 @@ public class FormManager extends FormWebPageComponent {
 
 	private void removeSelectedForm() {
 		Form selectedForm;
-		try {
-			selectedForm = formDao.read(formTable.getValue().getId());
-			if (selectedForm != null) {
-				// If it is the last form, remove all its tests.
-				RootForm rootForm = formTable.getSelectedRootForm();
-				if (rootForm.getChildForms().size() <= 1) {
-					List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm.getLabel(),
-							selectedForm.getOrganizationId());
-					for (TestScenario testScenario : testScenarios) {
-						testScenarioDao.makeTransient(testScenario);
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed test scenario '"
-								+ testScenario.getName() + "' for form '" + selectedForm.getLabel() + "' (version "
-								+ selectedForm.getVersion() + ").");
-					}
+		selectedForm = formDao.get(formTable.getValue().getId());
+		if (selectedForm != null) {
+			// If it is the last form, remove all its tests.
+			RootForm rootForm = formTable.getSelectedRootForm();
+			if (rootForm.getChildForms().size() <= 1) {
+				List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm.getLabel(),
+						selectedForm.getOrganizationId());
+				for (TestScenario testScenario : testScenarios) {
+					testScenarioDao.makeTransient(testScenario);
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed test scenario '"
+							+ testScenario.getName() + "' for form '" + selectedForm.getLabel() + "' (version "
+							+ selectedForm.getVersion() + ").");
 				}
-				// Remove the form.
-				formDao.makeTransient(selectedForm);
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has removed form '" + selectedForm.getLabel() + "' (version " + selectedForm.getVersion()
-						+ ").");
-				formTable.refreshFormTable();
 			}
-		} catch (UnexpectedDatabaseException e) {
-			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
-		} catch (ElementCannotBeRemovedException e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			// Remove the form.
+			formDao.makeTransient(selectedForm);
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+					+ "' has removed form '" + selectedForm.getLabel() + "' (version " + selectedForm.getVersion()
+					+ ").");
+			formTable.refreshFormTable();
 		}
 	}
 

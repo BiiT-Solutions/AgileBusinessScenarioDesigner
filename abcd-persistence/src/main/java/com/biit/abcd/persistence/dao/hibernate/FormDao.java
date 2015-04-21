@@ -1,6 +1,11 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -264,6 +269,35 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	@Caching(evict = { @CacheEvict(value = "abcdforms", allEntries = true) })
 	public void evictAllCache() {
 		super.evictAllCache();
+	}
+
+	@Override
+	public Form getForm(String label, Integer version, Long organizationId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean exists(String label, Integer version, Long organizationId, Long id) {
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Form> cq = cb.createQuery(Form.class);
+		//Metamodel of the entity table
+		Metamodel m = getEntityManager().getMetamodel();
+		EntityType<Form> formMetamodel = m.entity(Form.class);
+		Root<Form> form = cq.from(Form.class);
+		cq.where(cb.and
+				(cb.equal(form.get(formMetamodel.getSingularAttribute("label", String.class)),label),
+				cb.equal(form.get(formMetamodel.getSingularAttribute("version", Integer.class)),version),
+				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)),version)
+				));
+		
+		return false;
+	}
+
+	@Override
+	public boolean exists(String value, long organizationId) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

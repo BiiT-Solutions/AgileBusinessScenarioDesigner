@@ -18,7 +18,6 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
 import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
 import com.biit.form.entity.TreeObject;
-import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.vaadin.data.Property.ReadOnlyException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractComponent;
@@ -83,7 +82,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 								LanguageCodes.COMMON_ERROR_NAME_IS_IN_USE_DESCRIPTION);
 						UserSessionHandler.getFormController().updateForm(instance, instance.getLabel());
 					}
-				} catch (ReadOnlyException | UnexpectedDatabaseException e) {
+				} catch (ReadOnlyException e) {
 					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE);
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}

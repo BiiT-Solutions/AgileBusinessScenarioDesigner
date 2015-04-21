@@ -28,6 +28,25 @@ public class TestScenarioDao extends AnnotatedGenericDao<TestScenario,Long> impl
 		super(TestScenario.class);
 	}
 
+	@Override
+	public TestScenario getTestScenarioById(Long scenarioId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TestScenario> getTestScenarioByForm(Long formId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TestScenario> getTestScenarioByForm(String formLabel,
+			Long formOrganizationId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //	@Override
 //	public TestScenario makePersistent(TestScenario entity) throws UnexpectedDatabaseException,
 //			ElementCannotBePersistedException {
