@@ -1,25 +1,12 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
-import com.biit.form.entity.TreeObject;
-import com.biit.form.exceptions.NotValidParentException;
-import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
-import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
+import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
 
 @Repository
 public class TestScenarioDao extends AnnotatedGenericDao<TestScenario,Long> implements ITestScenarioDao {

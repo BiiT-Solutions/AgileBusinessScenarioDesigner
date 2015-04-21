@@ -53,7 +53,9 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 		}
 
 		// Check the types of the arguments
-		if (call.getLeftElement() instanceof NameExpression) {
+		// If the expression is a IPlugin, the return of the call can be
+		// different than the parameters passed to the call
+		if (!(call.getFunction().toString().equals("IPLUGIN")) && (call.getLeftElement() instanceof NameExpression)) {
 			ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) call
 					.getLeftElement()).getExpressionChain());
 			checkCallArgumentsTypes(leftType, call.getArgs());
@@ -66,7 +68,8 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 				ValueType argumentType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) arg)
 						.getExpressionChain());
 				if (leftType != argumentType) {
-					throw new NotCompatibleTypeException("Argument types of the call not compatible", null);
+					throw new NotCompatibleTypeException("Argument types of the call not compatible (" + leftType
+							+ " - " + argumentType + ")", null);
 				}
 			}
 		}

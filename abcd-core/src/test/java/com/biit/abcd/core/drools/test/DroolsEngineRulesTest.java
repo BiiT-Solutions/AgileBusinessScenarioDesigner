@@ -11,11 +11,11 @@ import java.util.Arrays;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.KieManager;
-import com.biit.abcd.core.drools.facts.inputform.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.drools.KieManager;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
+import com.biit.drools.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.form.submitted.ISubmittedForm;
 
 /**
@@ -24,14 +24,15 @@ import com.biit.form.submitted.ISubmittedForm;
  */
 public class DroolsEngineRulesTest {
 
-	private final static String FORM = "Form1";
 	private final static String APP = "Application1";
+	private final static String FORM_NAME = "Form1";
+	private final static String FORM_VERSION = "1";
 	private ISubmittedForm submittedForm;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
 	private void createSubmittedForm() {
 		try {
-			setSubmittedForm(new DroolsSubmittedForm(APP, FORM));
+			setSubmittedForm(new DroolsSubmittedForm(APP, FORM_NAME, FORM_VERSION));
 			String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
 			getOrbeonImporter().readXml(xmlFile, getSubmittedForm());
 		} catch (Exception e) {

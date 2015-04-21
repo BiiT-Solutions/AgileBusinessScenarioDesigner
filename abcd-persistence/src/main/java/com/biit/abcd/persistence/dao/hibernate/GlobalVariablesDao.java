@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+
 
 @Repository
 public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable,Long> implements IGlobalVariablesDao {

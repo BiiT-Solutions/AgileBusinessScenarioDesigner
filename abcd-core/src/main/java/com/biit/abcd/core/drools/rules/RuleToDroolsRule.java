@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.biit.abcd.core.drools.DroolsHelper;
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParserException;
@@ -15,7 +14,7 @@ import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTyp
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.utils.RulesUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -34,8 +33,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
-import com.biit.form.entity.TreeObject;
-
+import com.biit.drools.DroolsHelper;import com.biit.form.entity.TreeObject;
 /**
  * Transforms a Rule to a Drools rule. Internally is the same. This class is
  * used for standardization purposes.
@@ -79,14 +77,14 @@ public class RuleToDroolsRule {
 				// Set the name for the rules
 				int ruleNumber = 0;
 				for (DroolsRule droolsRule : droolsRuleList) {
-					droolsRule.setName(RulesUtils.createRuleName(droolsRule, extraConditions, "_" + ruleNumber));
+					droolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule, extraConditions, "_" + ruleNumber));
 					// Add identifiers to the drools rule end group
 					if (droolsRule instanceof DroolsRuleGroupEndRule) {
 						for (DroolsRule generatedDroolsRule : droolsRuleList) {
 							if ((generatedDroolsRule instanceof DroolsRuleGroup)
 									&& !(generatedDroolsRule instanceof DroolsRuleGroupEndRule)) {
 
-								String droolsRuleName = RulesUtils.getCleanRuleName(generatedDroolsRule.getName());
+								String droolsRuleName = RuleGenerationUtils.getCleanRuleName(generatedDroolsRule.getName());
 								((DroolsRuleGroupEndRule) droolsRule).putExpresionRuleIdentifiers(
 										((DroolsRuleGroup) generatedDroolsRule).getConditionExpressionChainId(),
 										droolsRuleName);
@@ -100,7 +98,7 @@ public class RuleToDroolsRule {
 				DroolsRule droolsRule = new DroolsRule(ruleCopy);
 				// TODO Uncomment when changed the validator to the parser
 				// RuleChecker.checkRuleValid(droolsRule);
-				droolsRule.setName(RulesUtils.createRuleName(droolsRule, extraConditions));
+				droolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule, extraConditions));
 				conditionsRules = Arrays.asList(droolsRule);
 			}
 		}
@@ -173,7 +171,7 @@ public class RuleToDroolsRule {
 
 		// Copy the name and the actions of the rule
 		for (DroolsRule droolsRule : unwrappedRules) {
-			droolsRule.setName(RulesUtils.createRuleName(rule));
+			droolsRule.setName(RuleGenerationUtils.createRuleName(rule));
 			droolsRule.setActions(rule.getActions());
 		}
 		return unwrappedRules;
@@ -272,7 +270,7 @@ public class RuleToDroolsRule {
 				if (!treeVisitor.getConditions().isEmpty()) {
 					for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
 						DroolsRuleGroup droolsRuleGroup = new DroolsRuleGroup();
-						droolsRuleGroup.setName(RulesUtils.createRuleName(droolsRule));
+						droolsRuleGroup.setName(RuleGenerationUtils.createRuleName(droolsRule));
 						droolsRuleGroup.setConditionExpressionChainId(visitorRules.getName());
 						droolsRuleGroup.setConditions(visitorRules);
 						newConditions.add(droolsRuleGroup);
@@ -293,7 +291,7 @@ public class RuleToDroolsRule {
 		try {
 			result.accept(treeVisitor);
 			droolsEngGroupRule = new DroolsRuleGroupEndRule();
-			droolsEngGroupRule.setName(RulesUtils.createRuleName(droolsRule));
+			droolsEngGroupRule.setName(RuleGenerationUtils.createRuleName(droolsRule));
 			droolsEngGroupRule.setConditions(treeVisitor.getCompleteExpression());
 			// Set the special conditions/actions for the group rules
 			droolsEngGroupRule.setParserResult(result);

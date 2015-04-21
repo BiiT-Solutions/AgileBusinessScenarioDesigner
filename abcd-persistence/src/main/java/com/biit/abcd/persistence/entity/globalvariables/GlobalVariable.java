@@ -2,6 +2,7 @@ package com.biit.abcd.persistence.entity.globalvariables;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,14 +16,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.biit.abcd.persistence.entity.AnswerFormat;
-import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.global.variables.interfaces.IGlobalVariable;
+import com.biit.drools.global.variables.interfaces.IVariableData;
+import com.biit.drools.global.variables.type.DroolsGlobalVariableFormat;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "global_variables")
-public class GlobalVariable extends StorableObject {
+public class GlobalVariable extends StorableObject implements IGlobalVariable {
 	private static final long serialVersionUID = 3463882037342518214L;
 	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
@@ -45,12 +49,13 @@ public class GlobalVariable extends StorableObject {
 	public void resetIds() {
 		super.resetIds();
 		if (variableData != null) {
-			for (VariableData data : variableData) {
-				data.resetIds();
+			for (IVariableData data : variableData) {
+				((VariableData) data).resetIds();
 			}
 		}
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -118,9 +123,9 @@ public class GlobalVariable extends StorableObject {
 	@Override
 	public Set<StorableObject> getAllInnerStorableObjects() {
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		for (VariableData child : variableData) {
-			innerStorableObjects.add(child);
-			innerStorableObjects.addAll(child.getAllInnerStorableObjects());
+		for (IVariableData child : variableData) {
+			innerStorableObjects.add((VariableData) child);
+			innerStorableObjects.addAll(((VariableData) child).getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
@@ -134,11 +139,11 @@ public class GlobalVariable extends StorableObject {
 			format = globalVariable.getFormat();
 
 			variableData.clear();
-			for (VariableData child : getVariableData()) {
+			for (IVariableData child : getVariableData()) {
 				VariableData data;
 				try {
-					data = child.getClass().newInstance();
-					data.copyData(child);
+					data = ((VariableData) child).getClass().newInstance();
+					data.copyData((VariableData) child);
 					variableData.add(data);
 				} catch (InstantiationException | IllegalAccessException e) {
 					throw new NotValidStorableObjectException("Object '" + object
@@ -153,5 +158,51 @@ public class GlobalVariable extends StorableObject {
 	@Override
 	public String toString() {
 		return name + " (" + format + ") " + variableData;
+	}
+
+	@Override
+	public DroolsGlobalVariableFormat getDroolsVariableFormat() {
+		return answerFormatToDroolsFormat(getFormat());
+	}
+
+	@Override
+	public Object getValue() {
+		// First check if the data inside the variable has a valid date
+		List<VariableData> varDataList = getVariableData();
+		if ((varDataList != null) && !varDataList.isEmpty()) {
+			for (IVariableData variableData : varDataList) {
+				Timestamp currentTime = new Timestamp(new Date().getTime());
+				Timestamp initTime = variableData.getValidFrom();
+				Timestamp endTime = variableData.getValidTo();
+				// Sometimes endtime can be null, meaning that the
+				// variable data has no ending time
+				if ((currentTime.after(initTime) && (endTime == null))
+						|| (currentTime.after(initTime) && currentTime.before(endTime))) {
+					return variableData.getValue();
+				}
+			}
+		}
+		return null;
+	}
+
+	public static DroolsGlobalVariableFormat answerFormatToDroolsFormat(AnswerFormat answerFormat) {
+		switch (answerFormat) {
+		case DATE:
+			return DroolsGlobalVariableFormat.DATE;
+		case NUMBER:
+			return DroolsGlobalVariableFormat.NUMBER;
+		case POSTAL_CODE:
+			return DroolsGlobalVariableFormat.POSTAL_CODE;
+		case TEXT:
+			return DroolsGlobalVariableFormat.TEXT;
+		}
+		return null;
+	}
+
+	@Override
+	public List<IVariableData> getGenericVariableData() {
+		List<IVariableData> genericVariableDataList = new ArrayList<IVariableData>();
+		genericVariableDataList.addAll(variableData);
+		return genericVariableDataList;
 	}
 }

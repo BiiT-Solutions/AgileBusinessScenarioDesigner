@@ -3,7 +3,6 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-<!-- 				<exclude name="ehCache" />-->
 				<include name="formCustomVariablesDao" />
  				<exclude name="expressionEvaluator" />
  				<include name="formDao" />
@@ -16,6 +15,7 @@
 				<include name="testScenarioDao" />
 				<include name="simpleTestScenarioViewDao" />
 				<include name="removeForm" />
+				<!-- <exclude name="ehCache" />-->
 			</run>
 		</groups>
 		<classes>

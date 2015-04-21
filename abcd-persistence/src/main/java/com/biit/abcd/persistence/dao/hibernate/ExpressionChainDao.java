@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IExpressionChainDao;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
+
 
 @Repository
 public class ExpressionChainDao extends AnnotatedGenericDao<ExpressionChain,Long> implements IExpressionChainDao {

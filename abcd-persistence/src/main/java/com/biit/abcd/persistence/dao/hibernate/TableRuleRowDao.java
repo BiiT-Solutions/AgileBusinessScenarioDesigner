@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.ITableRuleRowDao;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.form.persistence.dao.jpa.AnnotatedGenericDao;
+
 
 @Repository
 public class TableRuleRowDao extends AnnotatedGenericDao<TableRuleRow,Long> implements ITableRuleRowDao {

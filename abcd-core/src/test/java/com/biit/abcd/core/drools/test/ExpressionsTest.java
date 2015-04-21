@@ -7,7 +7,6 @@ import java.util.Date;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.biit.abcd.core.drools.utils.DateUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -18,12 +17,13 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
-import com.biit.abcd.persistence.entity.globalvariables.exceptions.NotValidTypeInVariableData;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedCategory;
 import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.form.DroolsSubmittedGroup;
 import com.biit.drools.form.DroolsSubmittedQuestion;
+import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.utils.DroolsDateUtils;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
@@ -62,7 +62,7 @@ public class ExpressionsTest extends KidsFormCreator {
 				Date birthdate = sdf.parse("2007-09-01");
 				// Check years
 				Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(YEARS),
-						DateUtils.returnYearsDistanceFromDate(birthdate));
+						DroolsDateUtils.returnYearsDistanceFromDate(birthdate));
 			} catch (Exception e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
@@ -88,7 +88,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			// Check months
 			Assert.assertEquals(
 					((DroolsSubmittedCategory) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen"))
-							.getVariableValue(MONTHS), DateUtils.returnMonthsDistanceFromDate(birthdate));
+							.getVariableValue(MONTHS), DroolsDateUtils.returnMonthsDistanceFromDate(birthdate));
 		}
 	}
 
@@ -111,7 +111,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			Assert.assertEquals(
 					((DroolsSubmittedGroup) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
 							.getChild(ISubmittedGroup.class, "voeding")).getVariableValue(DAYS),
-					DateUtils.returnDaysDistanceFromDate(birthdate));
+					DroolsDateUtils.returnDaysDistanceFromDate(birthdate));
 		}
 	}
 
