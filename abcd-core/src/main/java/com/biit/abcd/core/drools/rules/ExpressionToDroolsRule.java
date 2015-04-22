@@ -31,9 +31,8 @@ import com.biit.drools.DroolsHelper;
 import com.biit.form.entity.TreeObject;
 
 /**
- * Transforms an Expression into a Drools rule. It also unwraps the generic
- * variables that can be used in the expressions and creates a set of rules if
- * necessary.
+ * Transforms an Expression into a Drools rule. It also unwraps the generic variables that can be used in the
+ * expressions and creates a set of rules if necessary.
  * 
  */
 public class ExpressionToDroolsRule {
@@ -234,8 +233,7 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 * Checks if there are generic variables at the right side of the
-	 * assignation expression
+	 * Checks if there are generic variables at the right side of the assignation expression
 	 * 
 	 * @return
 	 */
@@ -250,8 +248,7 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 * We have to substitute the generic for the list of tree objects that
-	 * represent
+	 * We have to substitute the generic for the list of tree objects that represent
 	 * 
 	 * @param expressionChain
 	 * @return
@@ -286,7 +283,8 @@ public class ExpressionToDroolsRule {
 					generatedExpressionChain.removeLastExpression();
 				} else {
 					// Remove the extra comma if there is no value
-					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
+					if (originalExpressionIndex < expressionChainCopy.getExpressions().size() - 1
+							&& (expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
 							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
 									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
 						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
@@ -308,7 +306,8 @@ public class ExpressionToDroolsRule {
 					generatedExpressionChain.removeLastExpression();
 				} else {
 					// Remove the extra comma if there is no value
-					if ((expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
+					if (originalExpressionIndex < expressionChainCopy.getExpressions().size() - 1
+							&& (expressionChainCopy.getExpressions().get(originalExpressionIndex + 1) instanceof ExpressionSymbol)
 							&& (((ExpressionSymbol) expressionChainCopy.getExpressions().get(
 									originalExpressionIndex + 1)).getValue().equals(AvailableSymbol.COMMA))) {
 						expressionChainCopy.getExpressions().remove(originalExpressionIndex + 1);
@@ -322,17 +321,21 @@ public class ExpressionToDroolsRule {
 
 		// Remove the last comma if there is one
 		// Condition to avoid errors in the parser
-		if (((generatedExpressionChain.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2) instanceof ExpressionSymbol) && (((ExpressionSymbol) generatedExpressionChain
-				.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2)).getValue()
-				.equals(AvailableSymbol.COMMA)))) {
+		if (generatedExpressionChain.getExpressions().size() > 1
+				&& ((generatedExpressionChain.getExpressions()
+						.get(generatedExpressionChain.getExpressions().size() - 2) instanceof ExpressionSymbol) && (((ExpressionSymbol) generatedExpressionChain
+						.getExpressions().get(generatedExpressionChain.getExpressions().size() - 2)).getValue()
+						.equals(AvailableSymbol.COMMA)))) {
 			generatedExpressionChain.removeExpression(generatedExpressionChain.getExpressions().size() - 2);
 		}
 
 		// Check that the generated expression has parameters
-		Expression expression = generatedExpressionChain.getExpressions().get(
-				generatedExpressionChain.getExpressions().size() - 2);
-		if (expression instanceof IExpressionType<?>) {
-			return null;
+		if (generatedExpressionChain.getExpressions().size() > 1) {
+			Expression expression = generatedExpressionChain.getExpressions().get(
+					generatedExpressionChain.getExpressions().size() - 2);
+			if (expression instanceof IExpressionType<?>) {
+				return null;
+			}
 		}
 
 		return generatedExpressionChain;
