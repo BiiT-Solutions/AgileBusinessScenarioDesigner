@@ -46,6 +46,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.drools.DroolsHelper;
 import com.biit.form.entity.TreeObject;
+
 public class DiagramParser {
 
 	private DroolsHelper droolsHelper;
@@ -115,13 +116,9 @@ public class DiagramParser {
 		case TABLE:
 			DiagramTable tableNode = (DiagramTable) node;
 			if (tableNode.getTable() != null) {
-				if (extraConditions != null) {
-					List<DroolsRule> rulesList = TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions);
-					for (DroolsRule droolsRule : rulesList) {
-						newRules.addAll(RuleToDroolsRule.parse(droolsRule, getDroolsHelper()));
-					}
-				} else {
-					newRules.addAll(TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions));
+				List<DroolsRule> rulesList = TableRuleToDroolsRule.parse(tableNode.getTable(), extraConditions);
+				for (DroolsRule droolsRule : rulesList) {
+					newRules.addAll(RuleToDroolsRule.parse(droolsRule, getDroolsHelper()));
 				}
 			}
 			break;
