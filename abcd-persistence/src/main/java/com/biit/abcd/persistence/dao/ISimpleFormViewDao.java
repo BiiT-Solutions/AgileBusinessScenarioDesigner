@@ -2,8 +2,6 @@ package com.biit.abcd.persistence.dao;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 

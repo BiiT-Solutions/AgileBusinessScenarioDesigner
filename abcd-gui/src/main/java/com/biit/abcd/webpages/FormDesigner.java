@@ -408,7 +408,7 @@ public class FormDesigner extends FormWebPageComponent {
 		// Clear and update form
 		TreeObject currentSelection = formTreeTable.getTreeObjectSelected();
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
-		formTreeTable.select(currentSelection);
+		formTreeTable.select(UserSessionHandler.getFormController().getForm().getChild(currentSelection.getPath()));
 	}
 
 	private Form getForm() {
@@ -661,6 +661,7 @@ public class FormDesigner extends FormWebPageComponent {
 		if (getForm() != null) {
 			try {
 				UserSessionHandler.getFormController().save();
+				clearAndUpdateFormTable();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,

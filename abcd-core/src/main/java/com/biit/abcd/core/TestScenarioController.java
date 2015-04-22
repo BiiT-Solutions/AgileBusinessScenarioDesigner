@@ -50,7 +50,7 @@ public class TestScenarioController {
 	public TestScenario getTestScenarioById(Long scenarioId) {
 		TestScenario testScenario = null;
 		synchronized (TestScenarioController.class) {
-			testScenario = testScenarioDao.getTestScenarioById(scenarioId);
+			testScenario = testScenarioDao.get(scenarioId);
 		}
 		return testScenario;
 	}

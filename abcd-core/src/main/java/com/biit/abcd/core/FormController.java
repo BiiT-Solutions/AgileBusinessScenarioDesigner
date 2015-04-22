@@ -78,7 +78,13 @@ public class FormController {
 		if (getForm() != null) {
 			getForm().setUpdatedBy(getUser());
 			getForm().setUpdateTime();
+
+			if(getForm().getId()!=null){
+				//If the form has not been persisted yet, we need to merge form to persistence context.
+				this.form = formDao.merge(getForm());
+			}
 			formDao.makePersistent(getForm());
+				
 			try {
 				originalForm = (Form) getForm().generateCopy(true, true);
 				originalForm.resetIds();

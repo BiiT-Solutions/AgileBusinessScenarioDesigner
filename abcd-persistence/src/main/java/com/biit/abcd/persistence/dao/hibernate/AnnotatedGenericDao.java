@@ -16,7 +16,7 @@ import com.biit.persistence.dao.jpa.GenericDao;
 
 
 public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends Serializable> extends GenericDao<EntityClass, PrimaryKeyClass> implements IJpaGenericDao<EntityClass, PrimaryKeyClass>{
-	
+
 	@PersistenceContext(unitName = "defaultPersistenceUnit")
 	@Qualifier(value = "abcdManagerFactory")
 	private EntityManager entityManager;
@@ -34,6 +34,12 @@ public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends S
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public void makePersistent(EntityClass entity) {
 		super.makePersistent(entity);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	public EntityClass merge(EntityClass entity) {
+		return super.merge(entity);
 	}
 
 	@Override

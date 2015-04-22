@@ -24,6 +24,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
@@ -33,6 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustom
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.entity.BaseForm;
 import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -621,5 +623,59 @@ public class Form extends BaseForm {
 
 	public void remove(Rule rule) {
 		rules.remove(rule);
+	}
+	
+	@Override
+	public void updateChildrenSortSeqs(){
+		super.updateChildrenSortSeqs();
+		// For solving Hibernate bug
+		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
+		// list of children
+		// with @Orderby or @OrderColumn we use our own order manager.
+
+		// Sort the expressions
+		Set<ExpressionChain> expressionChainList = getExpressionChains();
+		if (expressionChainList != null && !expressionChainList.isEmpty()) {
+			for (ExpressionChain expressionChain : expressionChainList) {
+				expressionChain.updateChildrenSortSeqs();
+			}
+		}
+
+		// Sort the rules
+		Set<Rule> rulesList = getRules();
+		if (rulesList != null && !rulesList.isEmpty()) {
+			for (Rule rule : rulesList) {
+				rule.getConditions().updateChildrenSortSeqs();
+				rule.getActions().updateChildrenSortSeqs();
+			}
+		}
+		// Sort the table rule rows
+		Set<TableRule> tableRules = getTableRules();
+		if (tableRules != null && !tableRules.isEmpty()) {
+			for (TableRule tableRule : tableRules) {
+				List<TableRuleRow> tableRuleRows = tableRule.getRules();
+				if (tableRuleRows != null && !tableRuleRows.isEmpty()) {
+					for (TableRuleRow tableRuleRow : tableRuleRows) {
+						tableRuleRow.getConditions().updateChildrenSortSeqs();
+						tableRuleRow.getAction().updateChildrenSortSeqs();
+					}
+				}
+			}
+		}
+
+		Set<Diagram> diagrams = getDiagrams();
+		if (diagrams != null && !diagrams.isEmpty()) {
+			for (Diagram diagram : diagrams) {
+				Set<DiagramObject> nodes = diagram.getDiagramObjects();
+				if (nodes != null && !nodes.isEmpty()) {
+					for (DiagramObject node : nodes) {
+						if (node instanceof DiagramLink) {
+							DiagramLink nodeLink = (DiagramLink) node;
+							nodeLink.getExpressionChain().updateChildrenSortSeqs();
+						}
+					}
+				}
+			}
+		}
 	}
 }

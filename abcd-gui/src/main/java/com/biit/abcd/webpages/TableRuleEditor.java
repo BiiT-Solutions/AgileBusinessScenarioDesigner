@@ -348,11 +348,25 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	private void save() {
 		try {
 			UserSessionHandler.getFormController().save();
+			refreshLeftTable();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(TableRuleEditor.class.getName(), e);
 		}
+	}
+
+	private void refreshLeftTable() {
+		TableRule selectedTableRule = getSelectedTableRule();
+		tableSelectionMenu.setSelectedTableRule(null);
+		tableSelectionMenu.update(UserSessionHandler.getFormController().getForm());
+		//We need to get the new instance that has been merged to the current jpa context.
+		for(TableRule tableRule: UserSessionHandler.getFormController().getForm().getTableRules()){
+			if(selectedTableRule!=null && tableRule.getComparationId().equals(selectedTableRule.getComparationId())){
+				tableSelectionMenu.setSelectedTableRule(tableRule);
+			}
+		}
+		
 	}
 
 	/**

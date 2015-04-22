@@ -172,10 +172,23 @@ public class DroolsRuleEditor extends FormWebPageComponent {
 	private void save() {
 		try {
 			UserSessionHandler.getFormController().save();
+			refreshLeftTable();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			AbcdLogger.errorMessage(TableRuleEditor.class.getName(), e);
+		}
+	}
+
+	private void refreshLeftTable() {
+		Rule selectedRule = getSelectedRule();
+		tableSelectRule.setSelectedExpression(null);
+		tableSelectRule.update(UserSessionHandler.getFormController().getForm());
+		//We need to get the new instance that has been merged to the current jpa context.
+		for(Rule rule: UserSessionHandler.getFormController().getForm().getRules()){
+			if(selectedRule!=null && rule.getComparationId().equals(selectedRule.getComparationId())){
+				tableSelectRule.setSelectedExpression(rule);
+			}
 		}
 	}
 

@@ -189,6 +189,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		try {
 			UserSessionHandler.getTestScenariosController().update(tableSelectTestScenario.getTestScenarios(),
 					UserSessionHandler.getFormController().getForm());
+			refreshTestScenario();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);

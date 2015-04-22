@@ -111,6 +111,7 @@
 			value="${hibernate.cache.provider_configuration_file_resource_path}" />
 		<entry key="hibernate.cache.provider_class" value="${hibernate.cache.provider_class}" />
 		<entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}" />
+		<entry key="hibernate.check_nullability" value="${hibernate.check_nullability}" />
 	</util:map>
 	
 	<bean id="hibernateVendor"

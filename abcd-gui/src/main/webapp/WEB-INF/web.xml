@@ -58,6 +58,21 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
+	
+	<!-- binds a JPA EntityManager to the thread for the entire processing of the request -->
+	<filter>
+		<filter-name>OpenEntityManagerInViewFilterAbcd</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+		<init-param>
+			<param-name>entityManagerFactoryBeanName</param-name>
+			<param-value>abcdManagerFactory</param-value>
+		</init-param>
+	</filter>
+	<!-- Map the EntityManager Filter to all Request -->
+	<filter-mapping>
+		<filter-name>OpenEntityManagerInViewFilterAbcd</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- Apache Tomcat session expire -->
 	<session-config>

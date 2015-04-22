@@ -98,6 +98,18 @@ public class ExpressionEditor extends FormWebPageComponent {
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
 	}
+	
+	private void refreshLeftTable(){
+		ExpressionChain selectedChain = getSelectedExpression();
+		tableSelectExpression.setSelectedExpression(null);
+		tableSelectExpression.update(UserSessionHandler.getFormController().getForm());
+		//We need to get the new instance that has been merged to the current jpa context.
+		for(ExpressionChain chain: UserSessionHandler.getFormController().getForm().getExpressionChains()){
+			if(selectedChain!=null && chain.getComparationId().equals(selectedChain.getComparationId())){
+				tableSelectExpression.setSelectedExpression(chain);
+			}
+		}
+	}
 
 	private void initUpperMenu() {
 		final ExpressionEditor thisPage = this;
@@ -173,6 +185,7 @@ public class ExpressionEditor extends FormWebPageComponent {
 	private void save() {
 		try {
 			UserSessionHandler.getFormController().save();
+			refreshLeftTable();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
@@ -205,4 +218,5 @@ public class ExpressionEditor extends FormWebPageComponent {
 		tableSelectExpression.setSelectedExpression(element);
 	}
 
+	
 }

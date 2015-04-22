@@ -13,47 +13,4 @@ public class ExpressionChainDao extends AnnotatedGenericDao<ExpressionChain,Long
 		super(ExpressionChain.class);
 	}
 
-//	@Override
-//	public ExpressionChain makePersistent(ExpressionChain entity) throws UnexpectedDatabaseException, ElementCannotBePersistedException {
-//		// For solving Hibernate bug
-//		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
-//		// list of children
-//		// with @Orderby or @OrderColumn we use our own order manager.
-//		entity.updateChildrenSortSeqs();
-//		return super.makePersistent(entity);
-//	}
-//
-//	@Override
-//	public List<ExpressionChain> getAll() throws UnexpectedDatabaseException {
-//		List<ExpressionChain> result = super.getAll();
-//		// For solving Hibernate bug
-//		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
-//		// list of children
-//		// with @Orderby or @OrderColumn we use our own order manager.
-//		sortChildren(result);
-//		return result;
-//	}
-//
-//	private void sortChildren(List<ExpressionChain> expressionChains) {
-//		for (ExpressionChain expressionChain : expressionChains) {
-//			sortChildren(expressionChain);
-//		}
-//	}
-//
-//	private void sortChildren(ExpressionChain expressionChain) {
-//		Collections.sort(expressionChain.getExpressions(), new ExpressionSort());
-//		for (Expression child : expressionChain.getExpressions()) {
-//			sortChildren(child);
-//		}
-//	}
-//
-//	private void sortChildren(Expression expression) {
-//		if (expression instanceof ExpressionChain) {
-//			ExpressionChain expressionChain = (ExpressionChain) expression;
-//			Collections.sort(expressionChain.getExpressions(), new ExpressionSort());
-//			for (Expression child : expressionChain.getExpressions()) {
-//				sortChildren(child);
-//			}
-//		}
-//	}
 }
