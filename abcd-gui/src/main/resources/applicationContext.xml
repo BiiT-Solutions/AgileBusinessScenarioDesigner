@@ -140,6 +140,7 @@
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="languages/localization"></property>
+		<property name="defaultEncoding" value="UTF-8" />
 		<property name="fallbackToSystemLocale" value="false"></property>
 	</bean>
 <!-- 	
@@ -157,16 +158,4 @@
 	<bean name="testScenarioDao" class="com.biit.abcd.persistence.dao.hibernate.TestScenarioDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean> -->
-<!-- 	
-	Liferay Services
-	<bean id="userService" class="com.biit.liferay.access.UserService" /> -->
-<!-- 	
-	EhCache
-	<cache:annotation-driven/>
-	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-	  <property name="cacheManager" ref="ehcache" />
-	</bean>
-	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-	   <property name="configLocation" value="classpath:ehcache.xml" /> 
-	</bean>-->
 </beans>
