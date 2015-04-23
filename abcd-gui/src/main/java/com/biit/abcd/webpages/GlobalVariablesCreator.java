@@ -75,18 +75,29 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 			}
 		});
 
-		// Add already existing GlobalVariables.
-		try {
-			for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
-				globalVariableTable.addItem(globalVariable);
-			}
-		} catch (UnexpectedDatabaseException e) {
-			AbcdLogger.errorMessage(FormManager.class.getName(), e);
-			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
-		}
+		refreshGlobalVariables();
+		
+	}
 
+	private void refreshGlobalVariables() {
+		
+		GlobalVariable selectedGlobalVariable = (GlobalVariable) globalVariableTable.getValue();
+		
+		globalVariableTable.setValue(null);
+		globalVariableTable.removeAllItems();
+		// Add already existing GlobalVariables.
+		for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
+			globalVariableTable.addItem(globalVariable);
+		}
 		globalVariableTable.sort();
+		
+		if(selectedGlobalVariable !=null){
+			for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
+				if(globalVariable.getComparationId().equals(selectedGlobalVariable)){
+					globalVariableTable.setValue(selectedGlobalVariable);
+				}
+			}
+		}
 	}
 
 	private void createVariableDataTable(GlobalVariable globalVariable) {

@@ -2,16 +2,12 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 
 import java.util.List;
 
-import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.abcd.webpages.FormManager;
-import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -21,13 +17,7 @@ public class TabGlobalConstantsLayout extends TabLayout {
 	private static final long serialVersionUID = 3488733953726761594L;
 
 	public TabGlobalConstantsLayout() {
-		try {
-			createGlobalConstantsElements(UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
-		} catch (UnexpectedDatabaseException e) {
-			AbcdLogger.errorMessage(FormManager.class.getName(), e);
-			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
-		}
+		createGlobalConstantsElements(UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
 	}
 
 	private void createGlobalConstantsElements(List<GlobalVariable> globalVariables) {

@@ -29,7 +29,7 @@ public class GlobalVariablesController {
 	 * @throws UnexpectedDatabaseException
 	 */
 	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
-	public List<GlobalVariable> getGlobalVariables() throws UnexpectedDatabaseException {
+	public List<GlobalVariable> getGlobalVariables() {
 		if (globalVariables == null) {
 			synchronized (GlobalVariablesController.class) {
 				if (globalVariables == null) {
@@ -73,9 +73,13 @@ public class GlobalVariablesController {
 			}
 
 			for (GlobalVariable globalVariable : globalVariables) {
-				globalVariablesDao.makePersistent(globalVariable);
+				if(globalVariable.getId()!=null){
+					globalVariablesDao.makePersistent(globalVariablesDao.merge(globalVariable));
+				}else{
+					globalVariablesDao.makePersistent(globalVariable);
+				}
 			}
-			setGlobalVariables(globalVariables);
+			setGlobalVariables(globalVariablesDao.getAll());
 		}
 	}
 

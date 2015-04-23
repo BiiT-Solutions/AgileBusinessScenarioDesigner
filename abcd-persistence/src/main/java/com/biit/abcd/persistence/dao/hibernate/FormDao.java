@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -166,6 +167,21 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 		query.setParameter("availableTo", validTo);
 		
 		return query.executeUpdate();
+	}
+
+	@Override
+	public List<Form> getAll(Long organizationId) {
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Form> cq = cb.createQuery(Form.class);
+		//Metamodel of the entity table
+		Metamodel m = getEntityManager().getMetamodel();
+		EntityType<Form> formMetamodel = m.entity(Form.class);
+		Root<Form> form = cq.from(Form.class);
+		
+		cq.where(cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)),organizationId)
+				);
+		
+		return getEntityManager().createQuery(cq).getResultList();
 	}
 	
 }

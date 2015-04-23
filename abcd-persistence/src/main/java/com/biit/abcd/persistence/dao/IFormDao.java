@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.dao;
 
+import java.util.List;
+
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.persistence.dao.IJpaGenericDao;
@@ -14,5 +16,7 @@ public interface IFormDao extends IJpaGenericDao<Form,Long> {
 	boolean exists(String value, Integer version, Long organizationId, Long id);
 
 	boolean exists(String value, long organizationId);
+	
+	List<Form> getAll(Long organizationId);
 
 }
