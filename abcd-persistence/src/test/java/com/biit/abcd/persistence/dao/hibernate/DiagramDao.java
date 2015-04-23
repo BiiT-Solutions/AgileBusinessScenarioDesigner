@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.dao.hibernate;
 import org.springframework.stereotype.Repository;
 
 import com.biit.abcd.persistence.dao.IDiagramDao;
+import com.biit.abcd.persistence.dao.hibernate.AnnotatedGenericDao;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 
 
