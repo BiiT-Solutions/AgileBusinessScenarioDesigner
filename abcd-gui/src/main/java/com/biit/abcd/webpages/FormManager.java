@@ -33,6 +33,7 @@ import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable.IFormSta
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -226,15 +227,25 @@ public class FormManager extends FormWebPageComponent {
 				List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm.getLabel(),
 						selectedForm.getOrganizationId());
 				for (TestScenario testScenario : testScenarios) {
-					testScenarioDao.makeTransient(testScenario);
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed test scenario '"
-							+ testScenario.getName() + "' for form '" + selectedForm.getLabel() + "' (version "
-							+ selectedForm.getVersion() + ").");
+					try {
+						testScenarioDao.makeTransient(testScenario);
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed test scenario '"
+								+ testScenario.getName() + "' for form '" + selectedForm.getLabel() + "' (version "
+								+ selectedForm.getVersion() + ").");
+					} catch (ElementCannotBeRemovedException e) {
+						// Impossible.
+						AbcdLogger.errorMessage(this.getClass().getName(), e);
+					}
 				}
 			}
 			// Remove the form.
-			formDao.makeTransient(selectedForm);
+			try {
+				formDao.makeTransient(selectedForm);
+			} catch (ElementCannotBeRemovedException e) {
+				// Impossible.
+				AbcdLogger.errorMessage(this.getClass().getName(), e);
+			}
 			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 					+ "' has removed form '" + selectedForm.getLabel() + "' (version " + selectedForm.getVersion()
 					+ ").");

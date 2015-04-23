@@ -24,6 +24,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 
 
 @Repository
@@ -55,7 +56,7 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
-	public void makeTransient(Form entity) {
+	public void makeTransient(Form entity) throws ElementCannotBeRemovedException {
 		super.makeTransient(entity);
 	}
 	

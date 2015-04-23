@@ -47,6 +47,7 @@
 		<maven-war-plugin.version>2.3</maven-war-plugin.version>
 		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
 		<org.testng.version>6.8.7</org.testng.version>
+		<commons-io.version>2.4</commons-io.version>
 		<vaadin.version>7.3.9</vaadin.version>
 		<vaadin-testbench.version>4.0.1</vaadin-testbench.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>

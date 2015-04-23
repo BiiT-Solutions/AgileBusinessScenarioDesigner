@@ -89,11 +89,12 @@ public class DiagramTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test
-	public void storeDiagramObjects() throws UnexpectedDatabaseException, ElementCannotBePersistedException {
+	public void storeDiagramObjects() throws UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException {
 		diagramDao.makePersistent(diagram);
 		Diagram diagram2 = diagramDao.get(diagram.getId());
 		Assert.assertEquals(diagram2.getDiagramObjects().size(), 5);
-		for(Diagram diagram : diagramDao.getAll()){
+		for (Diagram diagram : diagramDao.getAll()) {
 			diagramDao.makeTransient(diagram);
 		}
 		Assert.assertEquals(diagramDao.getRowCount(), 0);
