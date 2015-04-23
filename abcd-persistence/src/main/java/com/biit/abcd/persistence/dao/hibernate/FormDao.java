@@ -73,6 +73,7 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#id") })
 	public int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException {
 		
@@ -91,31 +92,59 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 
 	@Override
 	public Form getForm(String label, Integer version, Long organizationId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean exists(String label, Integer version, Long organizationId, Long id) {
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Form> cq = cb.createQuery(Form.class);
 		//Metamodel of the entity table
 		Metamodel m = getEntityManager().getMetamodel();
 		EntityType<Form> formMetamodel = m.entity(Form.class);
 		Root<Form> form = cq.from(Form.class);
+		
 		cq.where(cb.and
 				(cb.equal(form.get(formMetamodel.getSingularAttribute("label", String.class)),label),
 				cb.equal(form.get(formMetamodel.getSingularAttribute("version", Integer.class)),version),
-				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)),version)
+				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)),organizationId)
 				));
 		
-		return false;
+		return getEntityManager().createQuery(cq).getSingleResult();
 	}
 
 	@Override
-	public boolean exists(String value, long organizationId) {
-		// TODO Auto-generated method stub
-		return false;
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	public boolean exists(String label, Integer version, Long organizationId, Long id) {
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		//Metamodel of the entity table
+		Metamodel m = getEntityManager().getMetamodel();
+		EntityType<Form> formMetamodel = m.entity(Form.class);
+		Root<Form> form = cq.from(Form.class);
+		
+		cq.select(cb.count(form));
+		cq.where(cb.and
+				(cb.equal(form.get(formMetamodel.getSingularAttribute("label", String.class)),label),
+				cb.equal(form.get(formMetamodel.getSingularAttribute("version", Integer.class)),version),
+				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)),organizationId),
+				cb.notEqual(form.get(formMetamodel.getSingularAttribute("id", Long.class)),id)
+				));
+		
+		return getEntityManager().createQuery(cq).getSingleResult()>0;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	public boolean exists(String label, long organizationId) {
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		//Metamodel of the entity table
+		Metamodel m = getEntityManager().getMetamodel();
+		EntityType<Form> formMetamodel = m.entity(Form.class);
+		Root<Form> form = cq.from(Form.class);
+		
+		cq.select(cb.count(form));
+		cq.where(cb.and
+				(cb.equal(form.get(formMetamodel.getSingularAttribute("label", String.class)),label),
+				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)),organizationId)
+				));
+		return getEntityManager().createQuery(cq).getSingleResult()>0;
 	}
 	
 	/**
@@ -128,6 +157,7 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	 * @throws UnexpectedDatabaseException
 	 */
 	@CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo) {
 		Query query = getEntityManager().createQuery("UPDATE Form SET availableTo = CASE WHEN :availableTo > availableFrom THEN :availableTo ELSE availableFrom END where label = :label and version = :version and organizationId = :organizationId");
 		query.setParameter("label", label);
