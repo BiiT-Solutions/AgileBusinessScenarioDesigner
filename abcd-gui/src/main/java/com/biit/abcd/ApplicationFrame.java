@@ -59,9 +59,9 @@ public class ApplicationFrame extends UI {
 
 		setErrorHandler(new AbcdErrorHandler());
 	}
-	
-	public static void autologin(){
-		((ApplicationFrame)ApplicationFrame.getCurrent()).autologinImplementation();
+
+	public static void autologin() {
+		((ApplicationFrame) ApplicationFrame.getCurrent()).autologinImplementation();
 	}
 
 	private void autologinImplementation() {
