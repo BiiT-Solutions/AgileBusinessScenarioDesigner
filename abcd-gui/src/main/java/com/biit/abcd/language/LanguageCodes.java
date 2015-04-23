@@ -226,7 +226,7 @@ public enum LanguageCodes {
 	ERROR_NOT_IMPLEMENTED("error.notimplemented"),
 	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
 	ERROR_DATA_NOT_STORED("error.data.notstored"),
-	ERROR_NAME_NOT_VALID("error.nameNotValid"),
+	ERROR_NAME_NOT_VALID("error.name.not.valid"),
 	ERROR_DIAGRAM_REPEATED_NAME("error.diagram.repeatedName"),
 	ERROR_SELECT_QUESTION("error.select.question"),
 	ERROR_SELECT_QUESTION_OR_CUSTOM_VARIABLE("error.select.question.or.custom.variable"),

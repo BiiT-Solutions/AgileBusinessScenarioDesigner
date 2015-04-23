@@ -312,6 +312,7 @@ public class FormDesigner extends FormWebPageComponent {
 				} catch (Exception e) {
 					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
 							LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
 		});
@@ -408,7 +409,9 @@ public class FormDesigner extends FormWebPageComponent {
 		// Clear and update form
 		TreeObject currentSelection = formTreeTable.getTreeObjectSelected();
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
-		formTreeTable.select(UserSessionHandler.getFormController().getForm().getChild(currentSelection.getPath()));
+		if(currentSelection != null){
+			formTreeTable.select(UserSessionHandler.getFormController().getForm().getChild(currentSelection.getPath()));
+		}
 	}
 
 	private Form getForm() {
