@@ -53,21 +53,10 @@ public class FormVariables extends FormWebPageComponent {
 
 		getWorkingAreaLayout().addComponent(variableTable);
 
-		if (UserSessionHandler.getFormController().getForm() == null) {
-			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
-			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-		} else {
-			if (variableTable != null) {
-				for (CustomVariable customVariable : UserSessionHandler.getFormController().getForm()
-						.getCustomVariables()) {
-					variableTable.addRow(customVariable);
-				}
-			}
-		}
-
-		// Sort the values
-		variableTable.defaultSort();
+		refreshTable();
 	}
+	
+	
 
 	private FormVariablesUpperMenu initUpperMenu() {
 		FormVariablesUpperMenu upperMenu = new FormVariablesUpperMenu();
@@ -143,6 +132,7 @@ public class FormVariables extends FormWebPageComponent {
 		if (UserSessionHandler.getFormController() != null) {
 			try {
 				UserSessionHandler.getFormController().save();
+				refreshTable();
 				MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
 			} catch (DuplicatedVariableException e) {
 				MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,
@@ -160,6 +150,25 @@ public class FormVariables extends FormWebPageComponent {
 				MessageManager.showError(LanguageCodes.ERROR_INVALID_NAME);
 			}
 		}
+	}
+
+	private void refreshTable() {
+		variableTable.setValue(null);
+		variableTable.removeAllItems();
+		if (UserSessionHandler.getFormController().getForm() == null) {
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
+			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
+		} else {
+			if (variableTable != null) {
+				for (CustomVariable customVariable : UserSessionHandler.getFormController().getForm()
+						.getCustomVariables()) {
+					variableTable.addRow(customVariable);
+				}
+			}
+		}
+
+		// Sort the values
+		variableTable.defaultSort();
 	}
 
 	@Override

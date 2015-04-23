@@ -285,6 +285,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 	
 	private void resetDiagramsTable(){
 		Diagram selectedDiagram = (Diagram) diagramBuilderTable.getValue();
+		diagramBuilderTable.setValue(null);
 		initializeDiagramsTable();
 		//We need to get the new instance that has been merged to the current jpa context.
 		for(Diagram diagram: UserSessionHandler.getFormController().getForm().getDiagrams()){
