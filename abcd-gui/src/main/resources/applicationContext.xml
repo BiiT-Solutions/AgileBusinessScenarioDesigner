@@ -54,7 +54,7 @@
 			</list>
 		</property>
 		<property name="jpaVendorAdapter" ref="hibernateVendor" />
-		<property name="jpaProperties" ref="usmoJpaProperties" />
+		<property name="jpaProperties" ref="abcdJpaProperties" />
 	</bean>
 	
 	<bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
@@ -83,7 +83,7 @@
 	</bean>
 	
 	<!-- Specific properties for ABCD -->
-	<bean id="usmoJpaProperties" parent="commonJpaProperties">
+	<bean id="abcdJpaProperties" parent="commonJpaProperties">
 		<property name="sourceMap">
 			<map merge="true">
 				<entry key="hibernate.hbm2ddl.import_files" value="${hibernate.hbm2ddl.import_files}" />
