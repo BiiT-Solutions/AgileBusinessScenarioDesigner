@@ -556,7 +556,9 @@ public class RuleGenerationUtils {
 				customVariablesList.add((ExpressionValueCustomVariable) expression);
 
 			} else if (expression instanceof ExpressionValueGenericCustomVariable) {
+				
 				ExpressionValueGenericCustomVariable genericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
+				
 				CustomVariable customVariable = genericCustomVariable.getVariable();
 				Form form = customVariable.getForm();
 				switch (customVariable.getScope()) {
@@ -566,7 +568,7 @@ public class RuleGenerationUtils {
 				case CATEGORY:
 				case GROUP:
 				case QUESTION:
-					List<TreeObject> treeObjects = form.getChildren(customVariable.getScope().getScope());
+					List<TreeObject> treeObjects = form.getAll(customVariable.getScope().getScope());
 					for (TreeObject treeObject : treeObjects) {
 						customVariablesList.add(new ExpressionValueCustomVariable(treeObject, customVariable));
 					}
