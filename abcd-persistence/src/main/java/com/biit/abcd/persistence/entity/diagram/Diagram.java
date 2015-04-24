@@ -18,8 +18,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import com.biit.abcd.gson.utils.DiagramCalculationSerializer;
 import com.biit.abcd.gson.utils.DiagramChildSerializer;
@@ -50,9 +48,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 	private String name;
 
 	@SerializedName("cells")
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "elements_of_diagram")
-	@Fetch(value = FetchMode.SUBSELECT)
 	@BatchSize(size = 20)
 	@Cache(region = "diagramObjects", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<DiagramObject> diagramObjects;

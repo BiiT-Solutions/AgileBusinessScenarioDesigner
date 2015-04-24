@@ -48,19 +48,25 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 
 			@Override
 			public void removeElement(String jsonString) {
-				removeObjectOfDiagram(jsonString);
+				if(diagram!=null){
+					removeObjectOfDiagram(jsonString);
+				}
 			}
 
 			@Override
 			public void addElement(String jsonString) {
-				DiagramObject elementAdded = addObjectToDiagram(jsonString);
-				fireDiagramObjectAddedListener(elementAdded);
+				if(diagram!=null){
+					DiagramObject elementAdded = addObjectToDiagram(jsonString);
+					fireDiagramObjectAddedListener(elementAdded);
+				}
 			}
 
 			@Override
 			public void updateElement(String jsonString) {
-				DiagramObject elementUpdated = updateObjectOfDiagram(jsonString);
-				fireDiagramObjectUpdatedListener(elementUpdated);
+				if(diagram!=null){
+					DiagramObject elementUpdated = updateObjectOfDiagram(jsonString);
+					fireDiagramObjectUpdatedListener(elementUpdated);
+				}
 			}
 		});
 
@@ -208,7 +214,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			diagram.setUpdatedBy(UserSessionHandler.getUser());
 			diagram.setUpdateTime();
 			diagramElements.remove(element.getJointjsId());
-
+			
 			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
 					+ "' Diagram element: " + element.getClass() + " removed'.");
 		}
@@ -238,6 +244,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	}
 
 	public void setDiagram(Diagram diagram) {
+		clearSilently();
 		this.diagram = diagram;
 		if (diagram != null) {
 			// Initialize the map of diagramElements.
@@ -248,7 +255,6 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			diagramElements = createMapOfDiagramObjects(diagram);
 			fromJson(diagram.toJson());
 		} else {
-			clear();
 			setEnabled(false);
 		}
 	}
