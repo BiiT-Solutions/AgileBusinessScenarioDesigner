@@ -86,8 +86,8 @@ public class TableRuleTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		ISubmittedForm droolsForm = createAndRunDroolsRules();
 		// Check result
-		Assert.assertEquals(GENDER_MALE,
-				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm()).getVariableValue(GENDER_VARIABLE));
+		Assert.assertEquals(GENDER_MALE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm())
+				.getVariableValue(GENDER_VARIABLE));
 	}
 
 	@Test(groups = { "droolsTableRule" })
@@ -147,6 +147,10 @@ public class TableRuleTest extends KidsFormCreator {
 		// Check result
 		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
 				.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
+
+		// If it contains this string, means that the multiple columns are being
+		// parsed by the engine
+		Assert.assertTrue(getDroolsRules().contains("not( FiredRule( getRuleName()"));
 	}
 
 	private void createQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,

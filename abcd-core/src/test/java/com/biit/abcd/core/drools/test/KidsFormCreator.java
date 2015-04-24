@@ -52,7 +52,10 @@ import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.drools.DroolsRulesEngine;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
-import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;import com.biit.form.entity.TreeObject;import com.biit.drools.importer.OrbeonSubmittedAnswerImporter;import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.importer.OrbeonSubmittedAnswerImporter;
+import com.biit.form.entity.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
@@ -88,6 +91,8 @@ public class KidsFormCreator {
 
 	private ISubmittedForm submittedForm;
 
+	private String droolsRulesString = null;
+
 	public DroolsForm createAndRunDroolsRules() {
 		// Generate the drools rules.
 		try {
@@ -96,12 +101,18 @@ public class KidsFormCreator {
 			readStaticSubmittedForm();
 			// Test the rules with the submitted form and returns a DroolsForm
 			DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
-			return droolsEngine.applyDrools(getSubmittedForm(), rulesGenerator.getRules(),
+			droolsRulesString = rulesGenerator.getRules();
+
+			return droolsEngine.applyDrools(getSubmittedForm(), droolsRulesString,
 					AbcdDroolsUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public String getDroolsRules() {
+		return droolsRulesString;
 	}
 
 	/**
