@@ -56,7 +56,7 @@ public class PrattParser {
 			
 			if ((expression instanceof ExpressionOperatorMath)
 					&& ((ExpressionOperatorMath) expression).getValue().equals(AvailableOperator.ASSIGNATION)
-					&& ((expIndex + 1) <= tokens.size())) {
+					&& ((expIndex + 1) < tokens.size())) {
 				Expression auxExp = tokens.get(expIndex + 1);
 				if ((auxExp instanceof ExpressionFunction) || (auxExp instanceof ExpressionPluginMethod)) {
 					// We skip the assignation, because the function needs to be
