@@ -3,7 +3,9 @@ package com.biit.abcd.core.drools.rules;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
@@ -26,16 +28,17 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
 import com.biit.drools.DroolsHelper;
 import com.biit.form.entity.TreeObject;
 
 /**
- * Transforms an Expression into a Drools rule. It also unwraps the generic variables that can be used in the
- * expressions and creates a set of rules if necessary.
+ * Transforms an Expression into a Drools rule. It also unwraps the generic
+ * variables that can be used in the expressions and creates a set of rules if
+ * necessary.
  * 
  */
 public class ExpressionToDroolsRule {
+
 	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper)
 			throws ExpressionInvalidException, RuleNotImplementedException, InvalidRuleException {
 		List<DroolsRule> droolsRules = null;
@@ -64,6 +67,7 @@ public class ExpressionToDroolsRule {
 	}
 
 	private static List<DroolsRule> createExpressionDroolsRuleSet(DroolsRule droolsRule) {
+
 		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
 		ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) droolsRule
 				.getActions().getExpressions().get(0);
@@ -82,16 +86,30 @@ public class ExpressionToDroolsRule {
 			}
 			break;
 		case QUESTION_GROUP:
+			for (TreeObject category : expressionValueGenericCustomVariable.getVariable().getForm().getChildren()) {
+				List<TreeObject> groups = category.getAll(Group.class);
+				// We need to reverse the groups to correctly generate the rules
+				// for nested groups
+				Collections.reverse(groups);
+				List<TreeObject> groupQuestions = new ArrayList<TreeObject>();
+				for (TreeObject group : groups) {
+					groupQuestions.addAll(group.getChildren(Question.class));
+				}
+				treeObjects.addAll(groupQuestions);
+			}
+			break;
 		case QUESTION_CATEGORY:
-			// We only support Categories and groups on the left part of the
-			// generic assignation
+			for (TreeObject category : expressionValueGenericCustomVariable.getVariable().getForm().getChildren()) {
+				treeObjects.addAll(category.getChildren(Question.class));
+			}
 			break;
 		}
-		// For each category, we generate the expression to create a new rule
+		// For each treeObject found, we generate the expression to create a new
+		// rule
 		if (treeObjects != null && !treeObjects.isEmpty()) {
-			for (TreeObject category : treeObjects) {
+			for (TreeObject treeObject : treeObjects) {
 				ExpressionChain expressionChainCopy = (ExpressionChain) droolsRule.getActions().generateCopy();
-				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(category,
+				ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(treeObject,
 						expressionValueGenericCustomVariable.getVariable());
 				// Remove the generic
 				expressionChainCopy.removeExpression(0);
@@ -228,12 +246,12 @@ public class ExpressionToDroolsRule {
 		ifElseRule.setConditions(negatedCondition);
 		ifElseRule.setActions(ifActionElse);
 		droolsRules.add(ifElseRule);
-
 		return droolsRules;
 	}
 
 	/**
-	 * Checks if there are generic variables at the right side of the assignation expression
+	 * Checks if there are generic variables at the right side of the
+	 * assignation expression
 	 * 
 	 * @return
 	 */
@@ -248,7 +266,8 @@ public class ExpressionToDroolsRule {
 	}
 
 	/**
-	 * We have to substitute the generic for the list of tree objects that represent
+	 * We have to substitute the generic for the list of tree objects that
+	 * represents
 	 * 
 	 * @param expressionChain
 	 * @return
@@ -258,8 +277,10 @@ public class ExpressionToDroolsRule {
 		ExpressionChain expressionChainCopy = (ExpressionChain) expressionChain.generateCopy();
 		ExpressionValueCustomVariable expressionValueLeftTreeObject = (ExpressionValueCustomVariable) expressionChainCopy
 				.getExpressions().get(0);
+
 		// The rule is different if the variable to assign is a Form, a Category
 		// a Group or a Question
+		// This treeObject will limit the scope of the expression
 		TreeObject leftTreeObject = expressionValueLeftTreeObject.getReference();
 		ExpressionChain generatedExpressionChain = new ExpressionChain();
 		for (int originalExpressionIndex = 0; originalExpressionIndex < expressionChainCopy.getExpressions().size(); originalExpressionIndex++) {
@@ -268,7 +289,7 @@ public class ExpressionToDroolsRule {
 				// Unwrap the generic variables being analyzed
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
 				CustomVariable customVariableOfGeneric = expressionValueGenericCustomVariable.getVariable();
-				List<TreeObject> treeObjects = getUnwrappedTreeObjects(expressionValueGenericCustomVariable,
+				List<TreeObject> treeObjects = getUnwrappedTreeObjectsNew(expressionValueGenericCustomVariable,
 						leftTreeObject);
 
 				// We have to create a CustomVariable for each treeObject found
@@ -292,7 +313,7 @@ public class ExpressionToDroolsRule {
 				}
 			} else if (expression instanceof ExpressionValueGenericVariable) {
 				// Unwrap the generic variables being analyzed
-				List<TreeObject> treeObjects = getUnwrappedTreeObjects((ExpressionValueGenericVariable) expression,
+				List<TreeObject> treeObjects = getUnwrappedTreeObjectsNew((ExpressionValueGenericVariable) expression,
 						leftTreeObject);
 				// We have to create a TreeObjecReference for each treeObject
 				// found
@@ -328,19 +349,104 @@ public class ExpressionToDroolsRule {
 						.equals(AvailableSymbol.COMMA)))) {
 			generatedExpressionChain.removeExpression(generatedExpressionChain.getExpressions().size() - 2);
 		}
-
-		// Check that the generated expression has parameters
-		if (generatedExpressionChain.getExpressions().size() > 1) {
-			Expression expression = generatedExpressionChain.getExpressions().get(
-					generatedExpressionChain.getExpressions().size() - 2);
-			if (expression instanceof IExpressionType<?>) {
-				return null;
-			}
-		}
-
+//		// Check that the generated expression has parameters
+//		if (generatedExpressionChain.getExpressions().size() > 1) {
+//			Expression expression = generatedExpressionChain.getExpressions().get(
+//					generatedExpressionChain.getExpressions().size() - 2);
+//			if (expression instanceof IExpressionType<?>) {
+//				return null;
+//			}
+//		}
 		return generatedExpressionChain;
 	}
 
+	/**
+	 * Return the TreeObject related to the generic variable and limited to the
+	 * scope of the left TreeObject
+	 * 
+	 * @param expressionValueGenericVariable
+	 * @param leftTreeObject
+	 * @return
+	 */
+	private static List<TreeObject> getUnwrappedTreeObjectsNew(
+			ExpressionValueGenericVariable expressionValueGenericVariable, TreeObject leftTreeObject) {
+
+		Map<TreeObjectType, TreeObject> lefTreeObjectLimit = new HashMap<TreeObjectType, TreeObject>();
+		setLeftVariableMap(lefTreeObjectLimit, leftTreeObject);
+		List<TreeObject> treeObjects = null;
+		switch (expressionValueGenericVariable.getType()) {
+		case CATEGORY:
+			if (leftTreeObject instanceof Form) {
+				treeObjects = leftTreeObject.getAll(Category.class);
+
+			} else if (leftTreeObject instanceof Category) {
+				// It is the same item (we don't want the brothers)
+				treeObjects = Arrays.asList(leftTreeObject);
+
+			} else if (leftTreeObject instanceof Question) {
+				TreeObject category = lefTreeObjectLimit.get(TreeObjectType.CATEGORY);
+				// We want the category that is the parent of the left object
+				if (category != null)
+					treeObjects = Arrays.asList(category);
+			}
+			break;
+		case GROUP:
+			if (leftTreeObject instanceof Form) {
+				treeObjects = leftTreeObject.getAll(Group.class);
+
+			} else if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
+				treeObjects = leftTreeObject.getChildren(Group.class);
+
+			} else if (leftTreeObject instanceof Question) {
+				TreeObject group = lefTreeObjectLimit.get(TreeObjectType.GROUP);
+				if (group != null)
+					treeObjects = Arrays.asList(group);
+			}
+			break;
+		case QUESTION_CATEGORY:
+			if (leftTreeObject instanceof Form) {
+				List<TreeObject> categories = leftTreeObject.getAll(Category.class);
+				if (categories != null && !categories.isEmpty()) {
+					treeObjects = new ArrayList<TreeObject>();
+					for (TreeObject category : categories) {
+						treeObjects.addAll(category.getChildren(Question.class));
+					}
+				}
+			} else if (leftTreeObject instanceof Category) {
+				treeObjects = leftTreeObject.getChildren(Question.class);
+
+			} else if (leftTreeObject instanceof Question) {
+				treeObjects = Arrays.asList(leftTreeObject);
+			}
+			break;
+		case QUESTION_GROUP:
+			if ((leftTreeObject instanceof Form) || (leftTreeObject instanceof Category)) {
+				List<TreeObject> groups = leftTreeObject.getAll(Group.class);
+				if (groups != null && !groups.isEmpty()) {
+					treeObjects = new ArrayList<TreeObject>();
+					for (TreeObject group : groups) {
+						treeObjects.addAll(group.getChildren(Question.class));
+					}
+				}
+			} else if (leftTreeObject instanceof Group) {
+				treeObjects = leftTreeObject.getChildren(Question.class);
+			
+			} else if (leftTreeObject instanceof Question) {
+				treeObjects = Arrays.asList(leftTreeObject);
+			}
+			break;
+		}
+		return treeObjects;
+	}
+
+	/**
+	 * Return the TreeObject related to the generic variable and limited to the
+	 * scope of the left TreeObject
+	 * 
+	 * @param expressionValueGenericVariable
+	 * @param leftTreeObject
+	 * @return
+	 */
 	private static List<TreeObject> getUnwrappedTreeObjects(
 			ExpressionValueGenericVariable expressionValueGenericVariable, TreeObject leftTreeObject) {
 		List<TreeObject> treeObjects = null;
@@ -350,7 +456,7 @@ public class ExpressionToDroolsRule {
 				treeObjects = leftTreeObject.getAll(Category.class);
 
 			} else if (leftTreeObject instanceof Category) {
-				// Is the same item (we don't want the brothers)
+				// It is the same item (we don't want the brothers)
 				treeObjects = Arrays.asList(leftTreeObject);
 			}
 			break;
@@ -420,5 +526,32 @@ public class ExpressionToDroolsRule {
 	private static boolean hasIfCondition(DroolsRule droolsRule) {
 		return RuleGenerationUtils.searchClassInExpressionChain(droolsRule.getActions(), ExpressionFunction.class,
 				AvailableFunction.IF);
+	}
+
+	private static void setLeftVariableMap(Map<TreeObjectType, TreeObject> lefTreeObjectLimit, TreeObject treeObject) {
+		if (treeObject instanceof Category) {
+			lefTreeObjectLimit.put(TreeObjectType.FORM, treeObject.getParent());
+			lefTreeObjectLimit.put(TreeObjectType.CATEGORY, treeObject);
+		} else if (treeObject instanceof Group) {
+			// Not working for nested groups !!!!!!!!!!
+			lefTreeObjectLimit.put(TreeObjectType.FORM, treeObject.getParent().getParent());
+			lefTreeObjectLimit.put(TreeObjectType.CATEGORY, treeObject.getParent());
+			lefTreeObjectLimit.put(TreeObjectType.GROUP, treeObject);
+		} else if (treeObject instanceof Question) {
+			if (treeObject.getParent() instanceof Category) {
+				lefTreeObjectLimit.put(TreeObjectType.FORM, treeObject.getParent().getParent());
+				lefTreeObjectLimit.put(TreeObjectType.CATEGORY, treeObject.getParent());
+				lefTreeObjectLimit.put(TreeObjectType.QUESTION_CATEGORY, treeObject);
+			} else {
+				lefTreeObjectLimit.put(TreeObjectType.FORM, treeObject.getParent().getParent().getParent());
+				lefTreeObjectLimit.put(TreeObjectType.CATEGORY, treeObject.getParent().getParent());
+				lefTreeObjectLimit.put(TreeObjectType.GROUP, treeObject.getParent());
+				lefTreeObjectLimit.put(TreeObjectType.QUESTION_GROUP, treeObject);
+			}
+		}
+	}
+
+	private enum TreeObjectType {
+		FORM, CATEGORY, GROUP, QUESTION_CATEGORY, QUESTION_GROUP
 	}
 }
