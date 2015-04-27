@@ -19,7 +19,7 @@ public class NameExpression implements ITreeElement {
 	private final String treeElementId;
 
 	public NameExpression(ExpressionToken variable) {
-		this.name = variable.toString();
+		this.name = variable.getExpression().toString();
 		this.expression = variable.getExpression();
 		this.treeElementId = UUID.randomUUID().toString().replace("-", "").replace(" ", "");
 	}
