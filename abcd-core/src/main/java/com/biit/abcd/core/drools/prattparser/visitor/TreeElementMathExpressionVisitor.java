@@ -11,7 +11,6 @@ import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
-import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
@@ -61,7 +60,47 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 
 	@Override
 	public void visit(NameExpression name) throws NotCompatibleTypeException {
-		if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
+		if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
+
+			ExpressionValueCustomVariable expVal = (ExpressionValueCustomVariable) name.getExpressionChain()
+					.getExpressions().get(0);
+			String customVariableName = expVal.getVariable().getName();
+			TreeObject treeObject = expVal.getReference();
+			String id = treeObject.getUniqueNameReadable();
+
+			switch (expVal.getVariable().getType()) {
+			case NUMBER:
+				this.builder.append("(Double)$" + id + ".getVariableValue('" + customVariableName + "')");
+				break;
+			case DATE:
+				if (expVal.getUnit() != null) {
+					switch (expVal.getUnit()) {
+					case YEARS:
+						this.builder.append("DroolsDateUtils.returnYearsDistanceFromDate( $" + id
+								+ ".getVariableValue('" + customVariableName + "'))");
+						break;
+					case MONTHS:
+						this.builder.append("DroolsDateUtils.returnMonthsDistanceFromDate( $" + id
+								+ ".getVariableValue('" + customVariableName + "'))");
+						break;
+					case DAYS:
+						this.builder.append("DroolsDateUtils.returnDaysDistanceFromDate( $" + id
+								+ ".getVariableValue('" + customVariableName + "'))");
+						break;
+					case DATE:
+						this.builder.append("$" + id + ".getVariableValue('" + customVariableName + "')");
+						break;
+					}
+				} else {
+					this.builder.append("$" + id + ".getVariableValue('" + customVariableName + "')");
+					break;
+				}
+				break;
+			case STRING:
+				throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation", expVal);
+			}
+
+		} else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
 
 			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain()
 					.getExpressions().get(0);
@@ -108,35 +147,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 					// break;
 				}
 			}
-			// If it is not a question input type
-			else {
-				// If it is a custom variable
-				if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
-					CustomVariable variable = ((ExpressionValueCustomVariable) name.getExpressionChain()
-							.getExpressions().get(0)).getVariable();
-					switch (variable.getType()) {
-					case NUMBER:
-						this.builder.append("(Double)$" + id + ".getVariableValue('" + variable.getName() + "')");
-						break;
-					case DATE:
-						this.builder.append("(Date)$" + id + ".getVariableValue('" + variable.getName() + "')");
-						break;
-					case STRING:
-						throw new NotCompatibleTypeException("Using the text variable: " + variable.getName()
-								+ " inside a mathematical operation", expVal);
-						// this.builder.append("(String)$" + id +
-						// ".getVariableValue('" + variable.getName() + "')");
-						// break;
-					}
-				}
-				// For every other possible value, we assume text value
-				else {
-					throw new NotCompatibleTypeException("Using the text variable: " + treeObject.getName()
-							+ " inside a mathematical operation", expVal);
-					// this.builder.append("$" + id + ".getAnswer('" +
-					// AnswerFormat.TEXT.toString() + "')");
-				}
-			}
+
 		}
 		// In case is a ExpressionValueNumber
 		else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueNumber) {

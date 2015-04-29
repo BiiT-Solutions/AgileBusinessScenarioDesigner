@@ -50,8 +50,8 @@ public class TabPluginsLayout extends TabLayout {
 					if (getPluginsTable().getValue() instanceof Method) {
 						Method methodSelected = (Method) getPluginsTable().getValue();
 						IPlugin pluginSelected = (IPlugin) getPluginsTable().getParent(methodSelected);
-						// We store only the first interface implemented
-						Class<?> pluginInterface = pluginSelected.getClass().getInterfaces()[0];
+						// The interface implemented is always IPLUGIN
+						Class<?> pluginInterface = IPlugin.class;
 						addExpression(new ExpressionPluginMethod(pluginInterface, pluginSelected.getPluginName(),
 								methodSelected.getName()));
 					}

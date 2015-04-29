@@ -315,8 +315,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
-		// System.out.println("RULE ACTIONS: " + rule.getActions());
+//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
+//		System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		// Just in case we want the label and version of the drools files
 		/**
@@ -1061,6 +1061,7 @@ public class DroolsParser {
 
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		if (prattParserResult != null) {
+
 			ExpressionChain prattParserResultExpressionChain = prattParserResult.getExpressionChain();
 
 			if ((prattParserResultExpressionChain.getExpressions().get(0) instanceof ExpressionChain)
@@ -1173,9 +1174,15 @@ public class DroolsParser {
 		List<Expression> operatorLeft = ((ExpressionChain) expressions.get(0)).getExpressions();
 		Expression operator = expressions.get(1);
 		List<Expression> operatorRight = ((ExpressionChain) expressions.get(2)).getExpressions();
-
+		// TreeObject.score (Logic operator) ExpressionValue
+		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
+				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValue)) {
+			droolsConditions.append(createTreeObjectScoreLogicOperatorValueExpression(
+					(ExpressionValueCustomVariable) operatorLeft.get(0), (ExpressionOperatorLogic) expressions.get(1),
+					(ExpressionValue<?>) operatorRight.get(0)));
+		}
 		// Question (Logic operator) Answer
-		if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
+		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
 				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValueTreeObjectReference)) {
 			TreeObject treeObject1 = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
 			TreeObject treeObject2 = ((ExpressionValueTreeObjectReference) operatorRight.get(0)).getReference();
@@ -1183,13 +1190,6 @@ public class DroolsParser {
 				droolsConditions.append(createTreeObjectLogicOperatorCondition((Question) treeObject1,
 						(Answer) treeObject2, availableOperator));
 			}
-		}
-		// TreeObject.score (Logic operator) ExpressionValue
-		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueCustomVariable)
-				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValue)) {
-			droolsConditions.append(createTreeObjectScoreLogicOperatorValueExpression(
-					(ExpressionValueCustomVariable) operatorLeft.get(0), (ExpressionOperatorLogic) expressions.get(1),
-					(ExpressionValue<?>) operatorRight.get(0)));
 		}
 		// Question (Logic operator) ExpressionValue
 		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)

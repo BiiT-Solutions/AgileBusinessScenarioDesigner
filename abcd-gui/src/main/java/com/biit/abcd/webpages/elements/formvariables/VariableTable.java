@@ -292,6 +292,24 @@ public class VariableTable extends Table {
 										+ customVariable.getClass() + "' from '" + oldValue + "' to '"
 										+ customVariable.getDefaultValue() + "'");
 					}
+					// The value can be set to null again
+					else {
+						String oldValue = customVariable.getDefaultValue();
+						switch (customVariable.getType()) {
+						case DATE:
+						case NUMBER:
+						case STRING:
+							customVariable.setDefaultValue(null);
+							break;
+						}
+						updateInfo(customVariable);
+						AbcdLogger.info(
+								this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress()
+										+ "' has changed the property 'Default Value' of the class '"
+										+ customVariable.getClass() + "' from '" + oldValue + "' to '"
+										+ customVariable.getDefaultValue() + "'");
+					}
 				} catch (InvalidValueException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 					MessageManager.showWarning(LanguageCodes.ERROR_INVALID_VALUE);

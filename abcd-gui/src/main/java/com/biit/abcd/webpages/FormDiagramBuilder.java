@@ -287,12 +287,14 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 		Diagram selectedDiagram = (Diagram) diagramBuilderTable.getValue();
 		diagramBuilderTable.setValue(null);
 		initializeDiagramsTable();
+		
 		//We need to get the new instance that has been merged to the current jpa context.
 		for(Diagram diagram: UserSessionHandler.getFormController().getForm().getDiagrams()){
 			if(selectedDiagram!=null && diagram.getComparationId().equals(selectedDiagram.getComparationId())){
 				diagramBuilderTable.setValue(diagram);
+				break;
 			}
-		}		
+		}
 	}
 
 	private void initUpperMenu() {
@@ -428,6 +430,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 	private void save() {
 		try {
+			diagramBuilder.setDiagram(null);			
 			UserSessionHandler.getFormController().save();
 			resetDiagramsTable();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);

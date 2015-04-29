@@ -80,7 +80,7 @@ public class FormController {
 			getForm().setUpdateTime();
 
 			if(getForm().getId()!=null){
-				//If the form has not been persisted yet, we need to merge form to persistence context.
+				//If the form has been persisted, we need to merge form to persistence context.
 				this.form = formDao.merge(getForm());
 			}
 			formDao.makePersistent(getForm());
@@ -89,6 +89,46 @@ public class FormController {
 				originalForm = (Form) getForm().generateCopy(true, true);
 				originalForm.resetIds();
 			} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
+			}
+			
+			updateLastAccessedReferences();
+		}
+	}
+
+	private void updateLastAccessedReferences() {
+		if(lastAccessTreeObject!=null){
+			lastAccessTreeObject = getForm().getChild(lastAccessTreeObject.getPath());
+		}
+		if(lastAccessDiagram!=null){
+			for(Diagram diagram: getForm().getDiagrams()){
+				if(diagram.getComparationId().equals(lastAccessDiagram.getComparationId())){
+					lastAccessDiagram = diagram;
+					break;
+				}
+			}
+		}
+		if(lastAccessExpression!=null){
+			for(ExpressionChain expression: getForm().getExpressionChains()){
+				if(expression.getComparationId().equals(lastAccessExpression.getComparationId())){
+					lastAccessExpression = expression;
+					break;
+				}
+			}
+		}
+		if(lastAccessTable!=null){
+			for(TableRule table: getForm().getTableRules()){
+				if(table.getComparationId().equals(lastAccessTable.getComparationId())){
+					lastAccessTable = table;
+					break;
+				}
+			}
+		}
+		if(lastAccessRule!=null){
+			for(Rule rule: getForm().getRules()){
+				if(rule.getComparationId().equals(lastAccessRule.getComparationId())){
+					lastAccessRule = rule;
+					break;
+				}
 			}
 		}
 	}
