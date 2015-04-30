@@ -1,6 +1,7 @@
 package com.biit.abcd.core.drools.test;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -27,10 +28,10 @@ import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.plugins.interfaces.IPlugin;
+import com.biit.utils.configuration.IPropertiesSource;
 
 /**
- * For executing this test correctly the plugins must be placed in the specified
- * path by the settings.conf file
+ * For executing this test correctly the plugins must be placed in the specified path by the settings.conf file
  * 
  */
 public class PluginsTest extends KidsFormCreator {
@@ -46,8 +47,10 @@ public class PluginsTest extends KidsFormCreator {
 	private final static String LIFERAY_PLUGIN_METHOD = "methodGetLatestArticleContent";
 	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 26383d;
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
+	private final static String LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES = "methodGetPropertiesSources";
 	private final static String LIFERAY_ARTICLE_PROPERTY = "Article1";
 	private final static String LIFERAY_RESULT = "Basis Sportmedisch Onderzoek\nBasis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...";
+	private final static String LIFERAY_CONFIG_FILE = "abcd-core/src/test/resources/plugins/liferay-knowledge-base-0.1.0-jar-with-dependencies.conf";
 
 	@Test(groups = { "pluginsTest" })
 	public void helloWorldPluginSelectionTest1() {
@@ -161,5 +164,25 @@ public class PluginsTest extends KidsFormCreator {
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
 				LIFERAY_RESULT);
+	}
+
+	@Test(groups = { "pluginsTest" })
+	@SuppressWarnings("unchecked")
+	public void liferayKnowledgeBasePluginConfigurationFoundInJarFolder() throws FieldTooLongException,
+			CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
+			NotValidTypeInVariableData, ElementIsReadOnly {
+		List<IPropertiesSource> propertiesFiles = (List<IPropertiesSource>) PluginController.getInstance()
+				.executePluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME,
+						LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES);
+		boolean existConfigFile = false;
+		for (IPropertiesSource propertyFile : propertiesFiles) {
+			// The config file must have the version in the name. If plugin version is changed, the config file must be
+			// changed.
+			if (propertyFile.toString().contains(LIFERAY_CONFIG_FILE)) {
+				existConfigFile = true;
+			}
+		}
+
+		Assert.assertTrue(existConfigFile);
 	}
 }
