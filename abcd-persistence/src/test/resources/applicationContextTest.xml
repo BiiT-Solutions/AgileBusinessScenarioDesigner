@@ -26,7 +26,7 @@
 	<context:property-placeholder location="classpath*:*.properties" />
 	
 	<!-- Transaction Manager -->
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<bean id="abcdTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="abcdManagerFactory" />
 		<property name="jpaDialect" ref="jpaDialect" />
 	</bean>
@@ -36,7 +36,7 @@
 	<bean id="abcdManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="persistenceUnitName" value="defaultPersistenceUnit" />
+		<property name="persistenceUnitName" value="abcdPersistenceUnit" />
 		<property name="packagesToScan">
 			<list>
 				<value>com.biit.abcd.persistence.**.*</value>
@@ -118,7 +118,7 @@
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 	</bean>
 	
-	<tx:annotation-driven />
+	<tx:annotation-driven transaction-manager="abcdTransactionManager" />
 
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />

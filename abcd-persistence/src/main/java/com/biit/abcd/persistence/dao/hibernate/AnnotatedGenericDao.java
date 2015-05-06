@@ -18,7 +18,7 @@ import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends Serializable> extends
 		GenericDao<EntityClass, PrimaryKeyClass> implements IJpaGenericDao<EntityClass, PrimaryKeyClass> {
 
-	@PersistenceContext(unitName = "defaultPersistenceUnit")
+	@PersistenceContext(unitName = "abcdPersistenceUnit")
 	@Qualifier(value = "abcdManagerFactory")
 	private EntityManager entityManager;
 
@@ -32,37 +32,37 @@ public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends S
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public void makePersistent(EntityClass entity) {
 		super.makePersistent(entity);
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public EntityClass merge(EntityClass entity) {
 		return super.merge(entity);
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public void makeTransient(EntityClass entity) throws ElementCannotBeRemovedException {
 		super.makeTransient(entity);
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public EntityClass get(PrimaryKeyClass id) {
 		return super.get(id);
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public int getRowCount() {
 		return super.getRowCount();
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public List<EntityClass> getAll() {
 		return super.getAll();
 	}

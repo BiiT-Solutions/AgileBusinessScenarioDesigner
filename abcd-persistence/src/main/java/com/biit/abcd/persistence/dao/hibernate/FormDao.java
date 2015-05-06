@@ -38,7 +38,7 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@CachePut(value = "abcdforms", key = "#form.getId()", condition = "#form.getId() != null")
 	public void makePersistent(Form entity) {
 		entity.updateChildrenSortSeqs();
@@ -54,28 +54,28 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
 	public void makeTransient(Form entity) throws ElementCannotBeRemovedException {
 		super.makeTransient(entity);
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
 	public Form merge(Form entity) {
 		return super.merge(entity);
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@CachePut(value = "abcdforms", key = "#id")
 	public Form get(Long id) {
 		return super.get(id);
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#id") })
 	public int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException {
 		
@@ -111,7 +111,7 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public boolean exists(String label, Integer version, Long organizationId, Long id) {
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -132,7 +132,7 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public boolean exists(String label, long organizationId) {
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -159,7 +159,7 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	 * @throws UnexpectedDatabaseException
 	 */
 	@CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo) {
 		Query query = getEntityManager().createQuery("UPDATE Form SET availableTo = CASE WHEN :availableTo > availableFrom THEN :availableTo ELSE availableFrom END where label = :label and version = :version and organizationId = :organizationId");
 		query.setParameter("label", label);

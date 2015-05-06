@@ -19,7 +19,7 @@ public class SimpleTestScenarioViewDao implements ISimpleTestScenarioViewDao {
 
 	private Class<SimpleTestScenarioView> type;
 
-	@PersistenceContext(unitName = "defaultPersistenceUnit")
+	@PersistenceContext(unitName = "abcdPersistenceUnit")
 	@Qualifier(value = "abcdManagerFactory")
 	private EntityManager entityManager;
 
