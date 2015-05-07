@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.facts.inputform.importer;
+package com.biit.abcd.core.exceptions;
 
 
 public class IncompatibleFormStructureException extends Exception {

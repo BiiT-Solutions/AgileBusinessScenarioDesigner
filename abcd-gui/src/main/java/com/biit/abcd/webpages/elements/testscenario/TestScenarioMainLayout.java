@@ -3,7 +3,7 @@ package com.biit.abcd.webpages.elements.testscenario;
 import java.util.HashMap;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidator;
+import com.biit.abcd.core.testscenarios.validator.TestScenarioValidator;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
