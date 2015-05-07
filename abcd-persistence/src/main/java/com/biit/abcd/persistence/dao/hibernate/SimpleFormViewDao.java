@@ -26,7 +26,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 
 	private Class<SimpleFormView> type;
 
-	@PersistenceContext(unitName = "defaultPersistenceUnit")
+	@PersistenceContext(unitName = "abcdPersistenceUnit")
 	@Qualifier(value = "abcdManagerFactory")
 	private EntityManager entityManager;
 
