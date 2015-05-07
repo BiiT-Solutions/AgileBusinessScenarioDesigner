@@ -66,5 +66,12 @@ public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends S
 	public List<EntityClass> getAll() {
 		return super.getAll();
 	}
+	
+	@Override
+	public void evictAllCache() {
+		//Clear first level cache.
+		getEntityManager().clear();
+		super.evictAllCache();
+	}
 
 }

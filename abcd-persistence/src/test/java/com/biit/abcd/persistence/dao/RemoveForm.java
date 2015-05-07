@@ -57,10 +57,6 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 	@Autowired
 	IVariableDataDao variableDataDao;
 
-	// Commented code due to IStorableObjectEntityDao removal in storable object
-	// @Autowired
-	// IStorableObjectEntityDao storableObjectEntityDao;
-
 	@Test
 	public void removeDiagramElements() throws FieldTooLongException, NotValidChildException,
 			CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly, UnexpectedDatabaseException,
@@ -78,7 +74,6 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 		int previousTableRuleRowDao = tableRuleRowDao.getRowCount();
 		int previousTestScenarioDao = testScenarioDao.getRowCount();
 		int previousVariableDataDao = variableDataDao.getRowCount();
-		// int previousStorableObjects = storableObjectEntityDao.getRowCount();
 
 		formDao.makePersistent(form);
 
@@ -89,10 +84,9 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertTrue(expressionChainDao.getRowCount() > previousChains);
 		Assert.assertTrue(ruleDao.getRowCount() > previousRuleDao);
 		Assert.assertTrue(tableRuleDao.getRowCount() > previousTableRuleDao);
-		// Assert.assertTrue(storableObjectEntityDao.getRowCount() >
-		// previousStorableObjects);
 
 		formDao.makeTransient(form);
+		
 		Assert.assertEquals(diagramObjectDao.getRowCount(), previousDiagramObjects);
 		Assert.assertEquals(formDao.getRowCount(), previousFormbjects);
 		Assert.assertEquals(customVariableDao.getRowCount(), previousCustomVariables);
@@ -104,7 +98,5 @@ public class RemoveForm extends AbstractTransactionalTestNGSpringContextTests {
 		Assert.assertEquals(tableRuleRowDao.getRowCount(), previousTableRuleRowDao);
 		Assert.assertEquals(testScenarioDao.getRowCount(), previousTestScenarioDao);
 		Assert.assertEquals(variableDataDao.getRowCount(), previousVariableDataDao);
-		// Assert.assertEquals(storableObjectEntityDao.getRowCount(),
-		// previousStorableObjects);
 	}
 }

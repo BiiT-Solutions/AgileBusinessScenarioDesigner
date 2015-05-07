@@ -40,31 +40,31 @@ public class FormDao extends AnnotatedGenericDao<Form,Long> implements IFormDao 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@CachePut(value = "abcdforms", key = "#form.getId()", condition = "#form.getId() != null")
-	public void makePersistent(Form entity) {
-		entity.updateChildrenSortSeqs();
+	public void makePersistent(Form form) {
+		form.updateChildrenSortSeqs();
 		
 		// Update previous versions validTo.
-		if (entity.getVersion() > 0) {
+		if (form.getVersion() > 0) {
 			// 84600000 milliseconds in a day
-			Timestamp validTo = new Timestamp(entity.getAvailableFrom().getTime() - 84600000);
-			updateValidTo(entity.getLabel(), entity.getVersion() - 1, entity.getOrganizationId(), validTo);
+			Timestamp validTo = new Timestamp(form.getAvailableFrom().getTime() - 84600000);
+			updateValidTo(form.getLabel(), form.getVersion() - 1, form.getOrganizationId(), validTo);
 		}
 		
-		super.makePersistent(entity);
+		super.makePersistent(form);
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
-	public void makeTransient(Form entity) throws ElementCannotBeRemovedException {
-		super.makeTransient(entity);
+	public void makeTransient(Form form) throws ElementCannotBeRemovedException {
+		super.makeTransient(form);
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
-	public Form merge(Form entity) {
-		return super.merge(entity);
+	public Form merge(Form form) {
+		return super.merge(form);
 	}
 
 	@Override

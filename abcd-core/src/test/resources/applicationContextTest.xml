@@ -6,14 +6,13 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:sws="http://www.springframework.org/schema/web-services"
 	xmlns:task="http://www.springframework.org/schema/task"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd      
-                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd 
-                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd 
-                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd 
-                        http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-2.0.xsd
-                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
-			http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd      
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd 
+                        http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-4.1.xsd
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd"
 	default-autowire="byName">
 
 	<!-- Scans the classpath for annotated components that will be auto-registered 
@@ -111,7 +110,7 @@
 			value="${hibernate.cache.provider_configuration_file_resource_path}" />
 		<entry key="hibernate.cache.provider_class" value="${hibernate.cache.provider_class}" />
 		<entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}" />
-		<entry key="hibernate.check_nullability" value="${hibernate.check_nullability}" />
+		<entry key="hibernate.check_nullability" value="${hibernate.check_nullability}" />		
 	</util:map>
 	
 	<bean id="hibernateVendor"
