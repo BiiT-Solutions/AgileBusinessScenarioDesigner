@@ -13,7 +13,7 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
-import com.biit.abcd.core.testscenarios.TestScenarioAnswerImporter;
+import com.biit.abcd.core.testscenarios.TestScenarioDroolsSubmittedForm;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
@@ -144,7 +144,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 									try {
 										// Generate the submitted form based on
 										// the test scenario
-										TestScenarioAnswerImporter testAnswerImporter = new TestScenarioAnswerImporter();
+										TestScenarioDroolsSubmittedForm testAnswerImporter = new TestScenarioDroolsSubmittedForm();
 										final ISubmittedForm generatedSumbittedForm = testAnswerImporter
 												.createSubmittedForm(UserSessionHandler.getFormController().getForm(),
 														testScenarioDB);

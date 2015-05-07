@@ -33,7 +33,7 @@ import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedObject;
 import com.biit.form.submitted.ISubmittedQuestion;
 
-public class TestScenarioAnswerImporter {
+public class TestScenarioDroolsSubmittedForm {
 
 	private TestScenarioValidator testValidator = null;
 	private ISubmittedForm submittedForm;
@@ -59,7 +59,7 @@ public class TestScenarioAnswerImporter {
 						Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedSubmittedForm.xml"),
 						submmitedFormXml.getBytes("UTF-8"));
 			} catch (IOException e) {
-				AbcdLogger.errorMessage(TestScenarioAnswerImporter.class.getName(), e);
+				AbcdLogger.errorMessage(TestScenarioDroolsSubmittedForm.class.getName(), e);
 			}
 		}
 	}
@@ -82,8 +82,29 @@ public class TestScenarioAnswerImporter {
 				ISubmittedObject droolsGroup = createGroup(parent, child.getName());
 				createSubmittedFromStructure(child, droolsGroup);
 			} else if (child instanceof TestScenarioQuestion) {
-				ISubmittedQuestion question = (ISubmittedQuestion) createQuestion(parent, child.getName());
-				setQuestionAnswer(((TestScenarioQuestion) child), question);
+
+				TestAnswer testAnswer = ((TestScenarioQuestion) child).getTestAnswer();
+				if ((testAnswer != null) && (testAnswer.getValue() != null)) {
+					if (testAnswer instanceof TestAnswerMultiCheckBox) {
+						Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
+						if ((values != null) && !values.isEmpty()) {
+							for (String value : values) {
+								ISubmittedQuestion question = (ISubmittedQuestion) createQuestion(parent,
+										child.getName());
+								question.setAnswer(value);
+							}
+						}
+					} else {
+						ISubmittedQuestion question = (ISubmittedQuestion) createQuestion(parent, child.getName());
+						if (testAnswer instanceof TestAnswerInputDate) {
+							Timestamp timeStamp = ((TestAnswerInputDate) testAnswer).getValue();
+							Date date = new Date(timeStamp.getTime());
+							question.setAnswer(date.toString());
+						} else {
+							question.setAnswer(testAnswer.getValue().toString());
+						}
+					}
+				}
 			}
 		}
 	}
@@ -104,36 +125,6 @@ public class TestScenarioAnswerImporter {
 		ISubmittedQuestion question = new DroolsSubmittedQuestion(tag);
 		parent.addChild(question);
 		return question;
-	}
-
-	private void setQuestionAnswer(TestScenarioQuestion testScenarioQuestion, ISubmittedQuestion iQuestion) {
-		TestAnswer testAnswer = testScenarioQuestion.getTestAnswer();
-		if ((testAnswer != null) && (testAnswer.getValue() != null)) {
-			// We have to separate the set of values to copy the behavior of the
-			// orbeon importer
-			if (testAnswer instanceof TestAnswerMultiCheckBox) {
-				Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
-				if (!values.isEmpty()) {
-					String valueSet = "";
-					for (String value : values) {
-						valueSet += value + " ";
-					}
-					// Remove the last space
-					valueSet = valueSet.substring(0, valueSet.length() - 1);
-					iQuestion.setAnswer(valueSet);
-				}
-			}
-			// Transform the timestamp to a date
-			else if (testAnswer instanceof TestAnswerInputDate) {
-				Timestamp timeStamp = ((TestAnswerInputDate) testAnswer).getValue();
-				Date date = new Date(timeStamp.getTime());
-				iQuestion.setAnswer(date.toString());
-			} else {
-				iQuestion.setAnswer(testAnswer.getValue().toString());
-			}
-		} else {
-			iQuestion.setAnswer("");
-		}
 	}
 
 	public ISubmittedForm getSubmitedForm() {
