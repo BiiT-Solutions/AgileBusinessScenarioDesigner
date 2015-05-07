@@ -2,7 +2,7 @@ package com.biit.abcd.webpages.elements.testscenario;
 
 import java.util.List;
 
-import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidatorMessage;
+import com.biit.abcd.core.testscenarios.validator.TestScenarioValidatorMessage;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;

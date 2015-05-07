@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.facts.inputform.importer;
+package com.biit.abcd.core.testscenarios;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
-import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidator;
-import com.biit.abcd.core.drools.facts.inputform.importer.validator.TestScenarioValidatorMessage;
+import com.biit.abcd.core.testscenarios.validator.TestScenarioValidator;
+import com.biit.abcd.core.testscenarios.validator.TestScenarioValidatorMessage;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
@@ -119,7 +119,7 @@ public class TestScenarioAnswerImporter {
 						valueSet += value + " ";
 					}
 					// Remove the last space
-					valueSet = valueSet.substring(0, valueSet.length() - 2);
+					valueSet = valueSet.substring(0, valueSet.length() - 1);
 					iQuestion.setAnswer(valueSet);
 				}
 			}
