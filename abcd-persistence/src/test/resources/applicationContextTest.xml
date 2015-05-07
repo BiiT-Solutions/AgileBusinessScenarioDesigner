@@ -25,10 +25,13 @@
 	<!-- Read any *.properties file -->
 	<context:property-placeholder location="classpath*:*.properties" />
 	
+	<tx:annotation-driven/>
+	
 	<!-- Transaction Manager -->
-	<bean id="abcdTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<bean id="transactionManagerAbcd" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="abcdManagerFactory" />
 		<property name="jpaDialect" ref="jpaDialect" />
+		<qualifier value="abcdTransactionManager"/>
 	</bean>
 	
 	<!-- Default Entity Manager defined in @Qualifier(value = "abcdManagerFactory") 
@@ -117,8 +120,6 @@
 	<bean id="hibernateVendor"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 	</bean>
-	
-	<tx:annotation-driven transaction-manager="abcdTransactionManager" />
 
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />
