@@ -16,7 +16,7 @@ end
 
 rule "test1"
 when
-	$droolsForm: DroolsForm(getLabel() == 'Form1', getVersion() == '1')
+	$droolsForm: DroolsForm()
 	$formform : DroolsSubmittedForm() from $droolsForm.getDroolsSubmittedForm()
 then
 	$formform.setVariableValue('customVariableResult', 10.);
@@ -25,7 +25,7 @@ end
 
 rule "andOrTest_1_46dcac7c6a7845d09ac81a6283d9593c"
 when
-	$droolsForm: DroolsForm(getLabel() == 'Form1', getVersion() == '1')
+	$droolsForm: DroolsForm()
 	$formform : DroolsSubmittedForm() from $droolsForm.getDroolsSubmittedForm()
 	$formform_Category2Lifestyle : DroolsSubmittedCategory( getText() == 'Lifestyle') from $formform.getChildren(ISubmittedCategory.class)
 	$formform_Category2Lifestyle_group0voeding : DroolsSubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getChildren(ISubmittedGroup.class)
@@ -37,7 +37,7 @@ end
 
 rule "andOrTest_2_46dcac7c6a7845d09ac81a6283d9593carew"
 when
-	$droolsForm: DroolsForm(getLabel() == 'Form1', getVersion() == '1')
+	$droolsForm: DroolsForm()
 	$formform : DroolsSubmittedForm() from $droolsForm.getDroolsSubmittedForm()
 	$formform_Category2Lifestyle : DroolsSubmittedCategory( getText() == 'Lifestyle') from $formform.getChildren(ISubmittedCategory.class)
 	$formform_Category2Lifestyle_group0voeding : DroolsSubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getChildren(ISubmittedGroup.class)
@@ -49,7 +49,7 @@ end
 
 rule "andOrTest_3_d4f9f86c51da405eaf568c709b3ddb80"
 when
-	$droolsForm: DroolsForm(getLabel() == 'Form1', getVersion() == '1')
+	$droolsForm: DroolsForm()
 	$formform : DroolsSubmittedForm() from $droolsForm.getDroolsSubmittedForm() 
 	$formform_Category2Lifestyle : DroolsSubmittedCategory( getText() == 'Lifestyle') from $formform.getChildren(ISubmittedCategory.class) 
 	$formform_Category2Lifestyle_group0voeding : DroolsSubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getChildren(ISubmittedGroup.class) 
@@ -61,7 +61,7 @@ end
 
 rule "andOrTest_4_4fe4a25e1f564031968f15db34404399"
 when
-	$droolsForm: DroolsForm(getLabel() == 'Form1', getVersion() == '1')
+	$droolsForm: DroolsForm()
 	$formform : DroolsSubmittedForm() from $droolsForm.getDroolsSubmittedForm()
 	$formform_Category2Lifestyle : DroolsSubmittedCategory( getText() == 'Lifestyle') from $formform.getChildren(ISubmittedCategory.class)
 	$formform_Category2Lifestyle_group0voeding : DroolsSubmittedGroup( getText() == 'voeding') from $formform_Category2Lifestyle.getChildren(ISubmittedGroup.class)
@@ -74,7 +74,7 @@ end
 rule "andOrTest_5_4fe4a25e1f564031968asdff15db34404399"
 when
 	not( FiredRule( getRuleName() == 'andOrTest_5_4fe4a25e1f564031968asdff15db34404399') ) and
-	$droolsForm: DroolsForm(getLabel() == 'Form1', getVersion() == '1') and
+	$droolsForm: DroolsForm() and
 	(	
 		( 
 			FiredRule( getRuleName() == 'andOrTest_1_46dcac7c6a7845d09ac81a6283d9593c')

@@ -16,6 +16,7 @@
 				<include name="droolsEngineRules" />
 				<include name="pluginsTest" />
 				<include name="usesOfElement" />
+				<include name="multiSelectAnswer" />
 			</run>
 		</groups>
 		<classes>
@@ -33,6 +34,7 @@
 			<class name="com.biit.abcd.core.drools.test.DroolsEngineRulesTest" />
 			<class name="com.biit.abcd.core.drools.test.PluginsTest" />
 			<class name="com.biit.abcd.core.UsesOfElementTester" />
+			<class name="com.biit.abcd.core.drools.test.MultiSelectAnswerTest" />
 		</classes>
 	</test>
 </suite>
