@@ -4,13 +4,19 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
+import net.sf.ehcache.CacheManager;
+
+import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.persistence.dao.IJpaGenericDao;
 import com.biit.persistence.dao.jpa.GenericDao;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
@@ -32,39 +38,66 @@ public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends S
 	}
 
 	@Override
-	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public void makePersistent(EntityClass entity) {
 		super.makePersistent(entity);
 	}
 
 	@Override
-	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public EntityClass merge(EntityClass entity) {
 		return super.merge(entity);
 	}
 
 	@Override
-	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public void makeTransient(EntityClass entity) throws ElementCannotBeRemovedException {
 		super.makeTransient(entity);
 	}
 
 	@Override
-	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public EntityClass get(PrimaryKeyClass id) {
 		return super.get(id);
 	}
 
 	@Override
-	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public int getRowCount() {
 		return super.getRowCount();
 	}
 
 	@Override
-	@Transactional(value="abcdTransactionManager",propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public List<EntityClass> getAll() {
 		return super.getAll();
+	}
+
+	@Override
+	public void evictAllCache() {
+		// Clear first level cache.
+		getEntityManager().clear();
+		super.evictAllCache();
+	}
+
+	public void printCacheStatistics() {
+		AbcdLogger.debug(this.getClass().getName(),
+				"############################################################################");
+		EntityManagerFactoryInfo emfi = (EntityManagerFactoryInfo) getEntityManager().getEntityManagerFactory();
+		EntityManagerFactory emf = emfi.getNativeEntityManagerFactory();
+		EntityManagerFactoryImpl empImpl = (EntityManagerFactoryImpl) emf;
+		AbcdLogger.debug(this.getClass().getName(), empImpl.getSessionFactory().getStatistics().toString());
+		AbcdLogger.debug(this.getClass().getName(),
+				"----------------------------------------------------------------------------");
+		CacheManager cacheManager = CacheManager.getInstance();
+		String[] cacheNames = cacheManager.getCacheNames();
+		for (int i = 0; i < cacheNames.length; i++) {
+			String cacheName = cacheNames[i];
+			AbcdLogger.debug(this.getClass().getName(), cacheName + ": "
+					+ cacheManager.getCache(cacheName).getStatistics().toString());
+		}
+		AbcdLogger.debug(this.getClass().getName(),
+				"############################################################################");
 	}
 
 }

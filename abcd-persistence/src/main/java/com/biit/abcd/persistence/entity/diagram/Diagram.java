@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,8 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.gson.utils.DiagramCalculationSerializer;
 import com.biit.abcd.gson.utils.DiagramChildSerializer;
@@ -42,6 +41,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity
 @Table(name = "diagram")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Cacheable(true)
 public class Diagram extends StorableObject implements INameAttribute {
 	private static final long serialVersionUID = 3846733629137367843L;
 
@@ -51,7 +51,6 @@ public class Diagram extends StorableObject implements INameAttribute {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "elements_of_diagram")
 	@BatchSize(size = 20)
-	@Cache(region = "diagramObjects", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<DiagramObject> diagramObjects;
 
 	public Diagram() {

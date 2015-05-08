@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.diagram;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -44,6 +45,7 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "diagram_objects")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Cacheable(true)
 public abstract class DiagramObject extends StorableObject {
 	private static final long serialVersionUID = -6312500925414596116L;
 

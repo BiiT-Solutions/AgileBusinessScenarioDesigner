@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -24,6 +25,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 // customvariables name problem if a new custom variable has the same name that a previously deleted one.
 @Table(name = "form_custom_variables")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Cacheable(true)
 public class CustomVariable extends StorableObject {
 	private static final long serialVersionUID = 4678216833687584848L;
 

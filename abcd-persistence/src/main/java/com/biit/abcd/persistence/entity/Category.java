@@ -1,7 +1,11 @@
 package com.biit.abcd.persistence.entity;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.entity.BaseCategory;
@@ -13,6 +17,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "tree_categories")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Category extends BaseCategory {
 	private static final long serialVersionUID = -244939595326795141L;
 

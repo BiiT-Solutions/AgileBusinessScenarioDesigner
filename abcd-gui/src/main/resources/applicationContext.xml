@@ -4,46 +4,48 @@
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:sws="http://www.springframework.org/schema/web-services"
-	xmlns:task="http://www.springframework.org/schema/task" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd      
                         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
                         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd 
                         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd 
                         http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-4.1.xsd
-                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd
-			http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd"
 	default-autowire="byName">
-	
+
 	<!-- Scans the classpath for annotated components that will be auto-registered 
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 
 		to set the correct base-package -->
-	<context:component-scan
-		base-package="com.biit.abcd.persistence" />
-	
-	<!-- Read any *.properties file in project and override some of them with files outside of the project -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" id="corePlaceHolder">
-	    <property name="ignoreUnresolvablePlaceholders" value="true"/>
-	    <property name="ignoreResourceNotFound" value="true"/>
-	    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
-	    <property name="searchSystemEnvironment" value="true"/>
-	    <property name="locations">
-		<list>
-		    <value>classpath*:*.properties</value>
-		    <value>file:#{systemEnvironment['ABCD_CONFIG']}/database.properties</value>
-		</list>
-	    </property>
+	<context:component-scan base-package="com.biit.abcd.persistence" />
+
+	<!-- Read any *.properties file in project and override some of them with 
+		files outside of the project -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+		id="corePlaceHolder">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath*:*.properties</value>
+				<value>file:#{systemEnvironment['ABCD_CONFIG']}/database.properties
+				</value>
+			</list>
+		</property>
 	</bean>
-	
+
 	<tx:annotation-driven />
-	
+
 	<!-- Transaction Manager -->
 	<bean id="transactionManagerAbcd" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="abcdManagerFactory" />
-		<property name="jpaDialect" ref="jpaDialect" />
-		<qualifier value="abcdTransactionManager"/>
+		<property name="jpaDialect" ref="hibernateJpaDialect" />
+		<qualifier value="abcdTransactionManager" />
 	</bean>
-	
+
 	<!-- Default Entity Manager defined in @Qualifier(value = "abcdManagerFactory") 
 		of GenericDao -->
 	<bean id="abcdManagerFactory"
@@ -58,9 +60,9 @@
 		<property name="jpaVendorAdapter" ref="hibernateVendor" />
 		<property name="jpaProperties" ref="abcdJpaProperties" />
 	</bean>
-	
-	<bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
-	
+
+	<bean id="hibernateJpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+
 	<!-- Data Source -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
@@ -76,14 +78,14 @@
 		<property name="loginTimeout" value="${c3p0.timeout}" />
 		<property name="acquireIncrement" value="${c3p0.acquire_increment}" />
 	</bean>
-	
-	<!-- Common JPA properties for ABCD  -->
+
+	<!-- Common JPA properties for ABCD -->
 	<bean id="commonJpaProperties" parent="hibernateJpaProperties">
 		<property name="sourceMap">
 			<map merge="true" />
 		</property>
 	</bean>
-	
+
 	<!-- Specific properties for ABCD -->
 	<bean id="abcdJpaProperties" parent="commonJpaProperties">
 		<property name="sourceMap">
@@ -92,7 +94,7 @@
 			</map>
 		</property>
 	</bean>
-	
+
 	<util:map id="hibernateJpaProperties">
 		<entry key="hibernate.dialect" value="${hibernate.dialect}" />
 		<entry key="hibernate.show_sql" value="${hibernate.show_sql}" />
@@ -125,18 +127,19 @@
 		<entry key="hibernate.cache.provider_class" value="${hibernate.cache.provider_class}" />
 		<entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}" />
 		<entry key="hibernate.check_nullability" value="${hibernate.check_nullability}" />
+		<entry key="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE" />
 	</util:map>
-	
+
 	<bean id="hibernateVendor"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 	</bean>
 
 	<!-- Enables Interceptors -->
 	<aop:aspectj-autoproxy />
-	
+
 	<!-- Aspect -->
 	<bean id="basicLogging" class="com.biit.abcd.logger.BasicLogging" />
-	
+
 	<!-- Internationalization -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">

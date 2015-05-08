@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -18,6 +19,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_basic")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Cacheable(true)
 public abstract class Expression extends StorableObject {
 	private static final long serialVersionUID = 4816405922566823101L;
 

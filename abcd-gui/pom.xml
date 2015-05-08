@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.4.6-SNAPSHOT</version>
+		<version>1.4.8-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<jetty.port>8081</jetty.port>
@@ -158,6 +158,17 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${org.springframework.version}</version>
+		</dependency>
+		<!-- EhCache Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

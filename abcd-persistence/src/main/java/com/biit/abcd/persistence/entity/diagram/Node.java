@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.diagram;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,6 +14,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity
 @Table(name = "diagram_nodes")
+@Cacheable(true)
 public class Node extends StorableObject {
 	private static final long serialVersionUID = -5481806008119969483L;
 	@Expose
