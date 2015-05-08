@@ -289,7 +289,7 @@ public class ExpressionToDroolsRule {
 				// Unwrap the generic variables being analyzed
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
 				CustomVariable customVariableOfGeneric = expressionValueGenericCustomVariable.getVariable();
-				List<TreeObject> treeObjects = getUnwrappedTreeObjectsNew(expressionValueGenericCustomVariable,
+				List<TreeObject> treeObjects = getUnwrappedTreeObjects(expressionValueGenericCustomVariable,
 						leftTreeObject);
 
 				// We have to create a CustomVariable for each treeObject found
@@ -313,7 +313,7 @@ public class ExpressionToDroolsRule {
 				}
 			} else if (expression instanceof ExpressionValueGenericVariable) {
 				// Unwrap the generic variables being analyzed
-				List<TreeObject> treeObjects = getUnwrappedTreeObjectsNew((ExpressionValueGenericVariable) expression,
+				List<TreeObject> treeObjects = getUnwrappedTreeObjects((ExpressionValueGenericVariable) expression,
 						leftTreeObject);
 				// We have to create a TreeObjecReference for each treeObject
 				// found
@@ -368,7 +368,7 @@ public class ExpressionToDroolsRule {
 	 * @param leftTreeObject
 	 * @return
 	 */
-	private static List<TreeObject> getUnwrappedTreeObjectsNew(
+	private static List<TreeObject> getUnwrappedTreeObjects(
 			ExpressionValueGenericVariable expressionValueGenericVariable, TreeObject leftTreeObject) {
 
 		Map<TreeObjectType, TreeObject> lefTreeObjectLimit = new HashMap<TreeObjectType, TreeObject>();
@@ -433,69 +433,6 @@ public class ExpressionToDroolsRule {
 			
 			} else if (leftTreeObject instanceof Question) {
 				treeObjects = Arrays.asList(leftTreeObject);
-			}
-			break;
-		}
-		return treeObjects;
-	}
-
-	/**
-	 * Return the TreeObject related to the generic variable and limited to the
-	 * scope of the left TreeObject
-	 * 
-	 * @param expressionValueGenericVariable
-	 * @param leftTreeObject
-	 * @return
-	 */
-	private static List<TreeObject> getUnwrappedTreeObjects(
-			ExpressionValueGenericVariable expressionValueGenericVariable, TreeObject leftTreeObject) {
-		List<TreeObject> treeObjects = null;
-		switch (expressionValueGenericVariable.getType()) {
-		case CATEGORY:
-			if (leftTreeObject instanceof Form) {
-				treeObjects = leftTreeObject.getAll(Category.class);
-
-			} else if (leftTreeObject instanceof Category) {
-				// It is the same item (we don't want the brothers)
-				treeObjects = Arrays.asList(leftTreeObject);
-			}
-			break;
-		case GROUP:
-			if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
-				if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-					treeObjects = new ArrayList<TreeObject>();
-					for (TreeObject child : leftTreeObject.getChildren()) {
-						if (child instanceof Group) {
-							treeObjects.add(child);
-						}
-					}
-				}
-			}
-			break;
-		case QUESTION_CATEGORY:
-			if (leftTreeObject instanceof Category) {
-				// We only want the questions for the category
-				if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-					treeObjects = new ArrayList<TreeObject>();
-					for (TreeObject child : leftTreeObject.getChildren()) {
-						if (child instanceof Question) {
-							treeObjects.add(child);
-						}
-					}
-				}
-			}
-			break;
-		case QUESTION_GROUP:
-			if (leftTreeObject instanceof Group) {
-				// We only want the questions for the group
-				if (leftTreeObject.getChildren() != null && !leftTreeObject.getChildren().isEmpty()) {
-					treeObjects = new ArrayList<TreeObject>();
-					for (TreeObject child : leftTreeObject.getChildren()) {
-						if (child instanceof Question) {
-							treeObjects.add(child);
-						}
-					}
-				}
 			}
 			break;
 		}

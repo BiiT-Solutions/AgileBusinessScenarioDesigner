@@ -1,25 +1,14 @@
 package com.biit.abcd.persistence;
 
-import org.hibernate.stat.EntityStatistics;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.dao.IFormDao;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.form.exceptions.CharacterNotAllowedException;
-import com.biit.form.exceptions.ElementIsReadOnly;
-import com.biit.form.exceptions.InvalidAnswerFormatException;
-import com.biit.form.exceptions.NotValidChildException;
-import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
-import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
-import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
-import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })

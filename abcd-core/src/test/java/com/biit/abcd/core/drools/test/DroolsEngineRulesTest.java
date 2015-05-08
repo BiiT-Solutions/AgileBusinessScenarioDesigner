@@ -26,13 +26,12 @@ public class DroolsEngineRulesTest {
 
 	private final static String APP = "Application1";
 	private final static String FORM_NAME = "Form1";
-	private final static String FORM_VERSION = "1";
 	private ISubmittedForm submittedForm;
 	private OrbeonSubmittedAnswerImporter orbeonImporter = new OrbeonSubmittedAnswerImporter();
 
 	private void createSubmittedForm() {
 		try {
-			setSubmittedForm(new DroolsSubmittedForm(APP, FORM_NAME, FORM_VERSION));
+			setSubmittedForm(new DroolsSubmittedForm(APP, FORM_NAME));
 			String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
 			getOrbeonImporter().readXml(xmlFile, getSubmittedForm());
 		} catch (Exception e) {

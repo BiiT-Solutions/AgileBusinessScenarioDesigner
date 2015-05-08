@@ -658,7 +658,7 @@ public class KidsFormCreator {
 
 	@Test(groups = { "orbeon" })
 	public void readStaticSubmittedForm() throws DocumentException, IOException {
-		submittedForm = new DroolsSubmittedForm(APP, FORM_NAME, FORM_VERSION);
+		submittedForm = new DroolsSubmittedForm(APP, FORM_NAME);
 		String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
 		orbeonImporter.readXml(xmlFile, submittedForm);
 		Assert.assertNotNull(submittedForm);
