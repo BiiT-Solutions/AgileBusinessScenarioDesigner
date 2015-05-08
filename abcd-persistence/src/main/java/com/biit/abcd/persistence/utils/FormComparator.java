@@ -304,7 +304,7 @@ public class FormComparator {
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| (object1.getName() != null && object1.getName() != null && !object1.getName().equals(
+				|| (object1.getName() != null && object2.getName() != null && !object1.getName().equals(
 						object2.getName()))) {
 			throw new ExpressionNotEqualsException("Names are different between expressions '" + object1 + "' and '"
 					+ object2 + "'.");
