@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.testscenarios;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -9,6 +10,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "test_scenario_category")
+@Cacheable(true)
 public class TestScenarioCategory extends BaseCategory {
 	private static final long serialVersionUID = 1339828980031764729L;
 	private static final String DEFAULT_CATEGORY_NAME = "TestScenarioCategory";

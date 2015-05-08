@@ -13,8 +13,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.entity.TreeObject;
@@ -36,7 +34,6 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
 	// @SortComparator(value = ExpressionSort.class)
-	@Cache(region = "expressions", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<Expression> expressions;
 
 	public ExpressionChain() {

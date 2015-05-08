@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.testscenarios;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -16,6 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "test_scenario_question")
+@Cacheable(true)
 public class TestScenarioQuestion extends BaseQuestion {
 	private static final long serialVersionUID = -3285383319148456954L;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

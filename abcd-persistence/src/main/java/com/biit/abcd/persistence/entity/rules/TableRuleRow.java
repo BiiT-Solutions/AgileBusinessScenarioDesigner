@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.rules;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,6 +22,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "rule_decision_table_row")
+@Cacheable(true)
 public class TableRuleRow extends StorableObject implements Comparable<TableRuleRow> {
 	private static final long serialVersionUID = 1887517541278941394L;
 

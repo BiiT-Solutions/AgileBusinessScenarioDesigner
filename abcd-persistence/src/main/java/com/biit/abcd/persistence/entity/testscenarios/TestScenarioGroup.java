@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.testscenarios;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,6 +13,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @Entity
 @Table(name = "test_scenario_group")
+@Cacheable(true)
 public class TestScenarioGroup extends BaseRepeatableGroup {
 	private static final long serialVersionUID = -1684961388128862471L;
 	private static final String DEFAULT_GROUP_NAME = "TestScenarioGroup";

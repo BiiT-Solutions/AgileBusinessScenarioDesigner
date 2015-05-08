@@ -5,14 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -28,6 +27,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "rule_decision_table")
+@Cacheable(true)
 public class TableRule extends StorableObject implements INameAttribute {
 	private static final long serialVersionUID = 1112900840434494717L;
 
@@ -39,7 +39,6 @@ public class TableRule extends StorableObject implements INameAttribute {
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@BatchSize(size = 20)
-	@Cache(region = "tableRuleRows", usage = CacheConcurrencyStrategy.READ_WRITE)
 	//@OrderBy(clause = "creationTime ASC")
 	private List<TableRuleRow> rules;
 

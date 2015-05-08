@@ -2,11 +2,14 @@ package com.biit.abcd.persistence.entity;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Cacheable;
+
 import com.biit.form.entity.IBaseFormView;
 
 /**
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
  */
+@Cacheable(true)
 public class SimpleFormView implements IBaseFormView {
 	private String name;
 	private String label;

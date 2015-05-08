@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
@@ -46,6 +50,8 @@ import com.liferay.portal.model.User;
 @Entity
 @Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version" }) })
 @AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH))
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region="com.biit.abcd.persistence.entity.Form")
 public class Form extends BaseForm {
 	private static final long serialVersionUID = 185712950929311653L;
 	@Column(nullable = false)

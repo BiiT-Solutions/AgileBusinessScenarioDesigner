@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,6 +18,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "tree_questions")
+@Cacheable(true)
 public class Question extends BaseQuestion {
 	private static final long serialVersionUID = 6352523681890504871L;
 	@Enumerated(EnumType.STRING)

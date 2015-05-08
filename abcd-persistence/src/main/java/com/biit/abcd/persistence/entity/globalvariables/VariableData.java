@@ -2,6 +2,7 @@ package com.biit.abcd.persistence.entity.globalvariables;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -16,6 +17,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "global_variable_data")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Cacheable(true)
 public abstract class VariableData extends StorableObject implements IVariableData{
 	private static final long serialVersionUID = 6356292873575007675L;
 

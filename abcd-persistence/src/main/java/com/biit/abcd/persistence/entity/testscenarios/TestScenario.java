@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +13,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -37,7 +36,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "test_scenario", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "formId" }) })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Cache(region = "testScenarios", usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cacheable(true)
 public class TestScenario extends StorableObject implements INameAttribute {
 	private static final long serialVersionUID = 858977816018764108L;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

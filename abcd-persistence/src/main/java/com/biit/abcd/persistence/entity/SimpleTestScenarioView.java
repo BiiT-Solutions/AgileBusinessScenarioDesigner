@@ -1,10 +1,13 @@
 package com.biit.abcd.persistence.entity;
 
+import javax.persistence.Cacheable;
+
 
 /**
  * As Lazy is not correctly configured, we use this class to show basic form
  * information in the Launch Test scenario window.
  */
+@Cacheable(true)
 public class SimpleTestScenarioView {
 
 	private Long id;

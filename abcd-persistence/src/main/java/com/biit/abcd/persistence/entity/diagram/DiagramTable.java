@@ -8,9 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -20,7 +17,6 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class DiagramTable extends DiagramElement {
 	private static final long serialVersionUID = 8876603849399308548L;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Cache(region = "tableRules", usage = CacheConcurrencyStrategy.READ_WRITE)
 	private TableRule table;
 
 	public DiagramTable() {

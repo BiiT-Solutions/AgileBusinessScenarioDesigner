@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,6 +14,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "tree_groups")
+@Cacheable(true)
 public class Group extends BaseRepeatableGroup {
 	private static final long serialVersionUID = -7455213859023593111L;
 

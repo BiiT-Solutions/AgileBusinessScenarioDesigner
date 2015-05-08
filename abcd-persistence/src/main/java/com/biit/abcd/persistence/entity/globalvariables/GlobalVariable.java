@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "global_variables")
+@Cacheable(true)
 public class GlobalVariable extends StorableObject implements IGlobalVariable {
 	private static final long serialVersionUID = 3463882037342518214L;
 	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
