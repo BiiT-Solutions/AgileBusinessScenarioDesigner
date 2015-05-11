@@ -1,17 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ehcache name="abcdcache">
-	<diskStore path="java.io.tmpdir" />
-	<defaultCache eternal="true" maxElementsInMemory="100"
-		overflowToDisk="false" statistics="true" />
-	<cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
-		copyOnRead="true" copyOnWrite="true" maxElementsInMemory="50000"
-		eternal="true" overflowToDisk="false" statistics="true" />
-	<cache name="org.hibernate.cache.internal.StandardQueryCache"
-		copyOnRead="true" copyOnWrite="true" maxElementsInMemory="5000"
-		eternal="false" timeToLiveSeconds="1200" overflowToDisk="false"
-		statistics="true" />
-	<cache name="com.biit.abcd.persistence.entity.Form" copyOnRead="true" copyOnWrite="true"
-		maxElementsInMemory="100" eternal="false" timeToIdleSeconds="0"
-		timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false"
-		memoryStoreEvictionPolicy="LFU" statistics="true" />
+<?xml version="1.0" encoding="UTF-8"?> 
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"  name="abcdcache">     
+	<diskStore path="java.io.tmpdir"/>
+  	<defaultCache eternal="true" maxElementsInMemory="1000" overflowToDisk="false" />     	
+	<cache name="org.hibernate.cache.spi.UpdateTimestampsCache" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="50000" eternal="true" overflowToDisk="false" />
+	<cache name="org.hibernate.cache.internal.StandardQueryCache" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="5000" eternal="false" timeToLiveSeconds="1200" overflowToDisk="false" />
+	<cache name="com.biit.abcd.persistence.entity.Form" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="10" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.Category" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="200" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.Group" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.Question" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="20000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.Answer" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="40000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.diagram.Diagram" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.diagram.DiagramObject" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="20000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.rules.TableRule" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.rules.TableRuleRow" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.CustomVariable" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.expressions.ExpressionChain" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.expressions.Expression" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="1000000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  
+	<cache name="com.biit.abcd.persistence.entity.expressions.Rule" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  	
+	
+	<cache name="springFormCache" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  	
 </ehcache>

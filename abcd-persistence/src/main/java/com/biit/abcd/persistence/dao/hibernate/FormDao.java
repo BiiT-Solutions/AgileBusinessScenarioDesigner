@@ -10,7 +10,12 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,6 +25,7 @@ import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
+import com.biit.form.entity.TreeObject;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 
@@ -33,9 +39,34 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 		super(Form.class);
 	}
 
+	private void initializeChildsSets(List<TreeObject> elements) {
+		for (TreeObject entity : elements) {
+			if (entity != null) {
+				Hibernate.initialize(entity.getChildren());
+				initializeChildsSets(entity.getChildren());
+			}
+		}
+	}
+
+	/**
+	 * Disable lazy behavior of Form element. Needed to use spring cache. 
+	 * @param form
+	 */
+	private void initializeSets(Form form) {
+		Hibernate.initialize(form.getChildren());
+		initializeChildsSets(form.getChildren());
+		// Initializes the sets for lazy-loading (within the same session)
+		Hibernate.initialize(form.getChildren());
+		Hibernate.initialize(form.getDiagrams());
+		Hibernate.initialize(form.getTableRules());
+		Hibernate.initialize(form.getCustomVariables());
+		Hibernate.initialize(form.getExpressionChains());
+		Hibernate.initialize(form.getRules());
+	}
+
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	// @CachePut(value = "abcdforms", key = "#form.getId()", condition = "#form.getId() != null")
+	@CachePut(value = "springFormCache", key = "#form.getId()", condition = "#form.getId() != null")
 	public void makePersistent(Form form) {
 		form.updateChildrenSortSeqs();
 
@@ -51,29 +82,31 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	// @Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
+	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#form.getId()") })
 	public void makeTransient(Form form) throws ElementCannotBeRemovedException {
 		super.makeTransient(form);
 	}
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	// @Caching(evict = { @CacheEvict(value = "abcdforms", key = "#form.getId()") })
+	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#form.getId()") })
 	public Form merge(Form form) {
 		return super.merge(form);
 	}
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	// @Cacheable(value = "abcdforms", key = "#id")
+	@Cacheable(value = "springFormCache", key = "#id")
 	public Form get(Long id) {
-		printCacheStatistics();
-		return super.get(id);
+		Form form = super.get(id);
+		// If we want to use spring cache, we need to load all elements before exiting this method.
+		initializeSets(form);
+		return form;
 	}
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	// @Caching(evict = { @CacheEvict(value = "abcdforms", key = "#id") })
+	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#id") })
 	public int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException {
 
 		Query query = getEntityManager().createQuery("UPDATE Form set status = :formStatus WHERE ID = :id");
@@ -84,7 +117,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	}
 
 	@Override
-	// @Caching(evict = { @CacheEvict(value = "abcdforms", allEntries = true) })
+	@Caching(evict = { @CacheEvict(value = "springFormCache", allEntries = true) })
 	public void evictAllCache() {
 		super.evictAllCache();
 	}
@@ -149,7 +182,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	 * @return
 	 * @throws UnexpectedDatabaseException
 	 */
-	// @CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
+	@CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo) {
 		Query query = getEntityManager()

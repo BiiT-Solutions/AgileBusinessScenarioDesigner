@@ -1,120 +1,57 @@
 package com.biit.abcd.persistence;
 
+import javax.persistence.Cache;
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.Assert;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ElementIsReadOnly;
+import com.biit.form.exceptions.InvalidAnswerFormatException;
+import com.biit.form.exceptions.NotValidChildException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 @Test(groups = { "ehCache" })
-@DirtiesContext
 public class EhCacheTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form with cache";
 
 	@Autowired
 	private IFormDao formDao;
 
-//	@Test
-//	public void testSecondLevelCache() throws FieldTooLongException, UnexpectedDatabaseException,
-//			NotValidChildException, CharacterNotAllowedException, InvalidAnswerFormatException,
-//			ElementCannotBePersistedException, ElementCannotBeRemovedException, ElementIsReadOnly {
-//		formDao.getSessionFactory().getStatistics().clear();
-//		formDao.evictAllCache();
-//
-//		Form form = FormUtils.createCompleteForm();
-//		form.setOrganizationId(0l);
-//		form.setLabel(DUMMY_FORM);
-//		formDao.makePersistent(form);
-//
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount(), 0);
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
-//
-//		// fetch the form entity from database first time
-//		form = formDao.getForm(DUMMY_FORM, 0l);
-//		Assert.assertNotNull(form);
-//
-//		EntityStatistics entityStats = formDao.getSessionFactory().getStatistics()
-//				.getEntityStatistics(Form.class.getName());
-//		Assert.assertEquals(entityStats.getLoadCount(), 1);
-//		Assert.assertEquals(entityStats.getFetchCount(), 0);
-//
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
-//		Assert.assertTrue(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount() > 0);
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
-//
-//		// Here entity is already in second level cache (session has been closed) so no database query will be hit
-//		form = formDao.getForm(DUMMY_FORM, 0l);
-//		Assert.assertNotNull(form);
-//
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 61);
-//		Assert.assertTrue(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount() > 0);
-//
-//		// Removed forms also are removed from cache.
-//		long id = form.getId();
-//		formDao.makeTransient(form);
-//		form = formDao.read(id);
-//		Assert.assertNull(form);
-//		formDao.evictAllCache();
-//	}
-//
-//	@Test(dependsOnMethods = "testSecondLevelCache")
-//	public void testSecondLevelCacheClear() throws FieldTooLongException, UnexpectedDatabaseException,
-//			ElementCannotBePersistedException {
-//		formDao.getSessionFactory().getStatistics().clear();
-//		formDao.evictAllCache();
-//
-//		Form form = new Form();
-//		form.setOrganizationId(0l);
-//		form.setLabel(DUMMY_FORM);
-//		formDao.makePersistent(form);
-//
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount(), 0);
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
-//
-//		// fetch the form entity from database first time
-//		form = formDao.getForm(DUMMY_FORM, 0l);
-//		Assert.assertNotNull(form);
-//
-//		EntityStatistics entityStats = formDao.getSessionFactory().getStatistics()
-//				.getEntityStatistics(Form.class.getName());
-//		Assert.assertEquals(entityStats.getLoadCount(), 1);
-//		Assert.assertEquals(entityStats.getFetchCount(), 0);
-//
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
-//		Assert.assertTrue(formDao.getSessionFactory().getStatistics().getSecondLevelCacheMissCount() > 0);
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), 0);
-//
-//		// Here entity is already in second level cache (session has been closed) so no database query will be hit
-//		form = formDao.getForm(DUMMY_FORM, 0l);
-//		Assert.assertNotNull(form);
-//
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
-//		long cacheHits = formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount();
-//		Assert.assertTrue(cacheHits > 0);
-//
-//		// Clear the cache and retrieve again the form. No new cache hits.
-//		formDao.evictAllCache();
-//		form = formDao.getForm(DUMMY_FORM, 0l);
-//		Assert.assertNotNull(form);
-//
-//		// Cache hits does not change.
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount(), cacheHits);
-//
-//		// But new access increases hits counter.
-//		form = formDao.getForm(DUMMY_FORM, 0l);
-//		Assert.assertNotNull(form);
-//
-//		Assert.assertEquals(formDao.getSessionFactory().getStatistics().getEntityFetchCount(), 0);
-//		// Cache hits now change.
-//		Assert.assertTrue(cacheHits < formDao.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
-//		formDao.evictAllCache();
-//	}
+	private Long formId;
+
+	@BeforeGroups(value = { "ehCache" })
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	private void createForm() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException,
+			InvalidAnswerFormatException, ElementIsReadOnly {
+		Form form = FormUtils.createCompleteForm();
+		form.setOrganizationId(0l);
+		form.setLabel(DUMMY_FORM);
+		formDao.makePersistent(form);
+		formId = form.getId();
+	}
+
+	@Test
+	public void formIsInCache() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException,
+			InvalidAnswerFormatException, ElementIsReadOnly {
+		formDao.get(formId);
+		Cache cache = formDao.getEntityManager().getEntityManagerFactory().getCache();
+		Assert.assertFalse(cache.contains(Form.class, formId));
+		formDao.get(formId);
+		Assert.assertTrue(cache.contains(Form.class, formId));
+	}
 }

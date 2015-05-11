@@ -66,25 +66,34 @@ public abstract class AbstractLogging {
 	 */
 	protected void log(long millis, JoinPoint joinPoint, Object... args) {
 		if (logger.isDebugEnabled()) {
-			String str = "";
-			if (args.length > 0) {
-				str = Arrays.toString(args);
-				// removing initial and ending chars ([, ])
-				str = str.substring(1, str.length() - 1);
-			}
-			timeLog(millis, getTargetClassName(joinPoint) + "." + joinPoint.getSignature().getName(), str);
-		}
-	}
-
-	public void timeLog(long millis, String method, String args) {
-		if (logger.isDebugEnabled()) {
 			StringBuilder logMessage = new StringBuilder();
 			logMessage.append("Executed ");
-			logMessage.append(method);
+
+			// Method name.
+			logMessage.append(getTargetClassName(joinPoint));
+			logMessage.append(".");
+			logMessage.append(joinPoint.getSignature().getName());
 			logMessage.append("(");
-			if (args != null && args.length() > 0) {
-				logMessage.append(args);
+
+			// Add params
+			Object[] paramValues = joinPoint.getArgs();
+			if (paramValues != null) {
+				for (int i = 0; i < paramValues.length; i++) {
+					if (paramValues[i] != null) {
+						if (paramValues[i] instanceof String) {
+							logMessage.append("'").append(paramValues[i].toString()).append("'");
+						} else {
+							logMessage.append(paramValues[i].toString());
+						}
+					} else {
+						logMessage.append(paramValues[i]);
+					}
+					if (i < paramValues.length - 1) {
+						logMessage.append(", ");
+					}
+				}
 			}
+
 			logMessage.append(") in ");
 			logMessage.append(millis);
 			logMessage.append(" ms");
@@ -93,7 +102,7 @@ public abstract class AbstractLogging {
 		}
 	}
 
-	private String getTargetClassName(JoinPoint joinPoint) {
+	protected String getTargetClassName(JoinPoint joinPoint) {
 		// Get the fully-qualified name of the class
 		String clsName = joinPoint.getTarget().getClass().getName();
 

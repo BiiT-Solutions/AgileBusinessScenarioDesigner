@@ -21,9 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
@@ -51,7 +48,6 @@ import com.liferay.portal.model.User;
 @Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version" }) })
 @AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH))
 @Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region="com.biit.abcd.persistence.entity.Form")
 public class Form extends BaseForm {
 	private static final long serialVersionUID = 185712950929311653L;
 	@Column(nullable = false)

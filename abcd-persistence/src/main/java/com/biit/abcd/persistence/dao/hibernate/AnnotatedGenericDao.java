@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 import net.sf.ehcache.CacheManager;
 
-import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +23,8 @@ import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends Serializable> extends
 		GenericDao<EntityClass, PrimaryKeyClass> implements IJpaGenericDao<EntityClass, PrimaryKeyClass> {
 
+	// PersistenceContextType.EXTENDED needed for using Lazy Loading in Vaadin.
+	// http://stackoverflow.com/questions/7977547/vaadin-jpa-lazy-loading
 	@PersistenceContext(unitName = "abcdPersistenceUnit")
 	@Qualifier(value = "abcdManagerFactory")
 	private EntityManager entityManager;
@@ -81,14 +82,9 @@ public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends S
 	}
 
 	public void printCacheStatistics() {
-		AbcdLogger.debug(this.getClass().getName(),
-				"############################################################################");
-		EntityManagerFactoryInfo emfi = (EntityManagerFactoryInfo) getEntityManager().getEntityManagerFactory();
-		EntityManagerFactory emf = emfi.getNativeEntityManagerFactory();
-		EntityManagerFactoryImpl empImpl = (EntityManagerFactoryImpl) emf;
-		AbcdLogger.debug(this.getClass().getName(), empImpl.getSessionFactory().getStatistics().toString());
-		AbcdLogger.debug(this.getClass().getName(),
-				"----------------------------------------------------------------------------");
+		SessionFactory sessionFactory = getEntityManager().unwrap(Session.class).getSessionFactory();
+		AbcdLogger.debug(this.getClass().getName(), sessionFactory.getStatistics().toString());
+		// Spring cache.
 		CacheManager cacheManager = CacheManager.getInstance();
 		String[] cacheNames = cacheManager.getCacheNames();
 		for (int i = 0; i < cacheNames.length; i++) {
@@ -96,8 +92,5 @@ public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends S
 			AbcdLogger.debug(this.getClass().getName(), cacheName + ": "
 					+ cacheManager.getCache(cacheName).getStatistics().toString());
 		}
-		AbcdLogger.debug(this.getClass().getName(),
-				"############################################################################");
 	}
-
 }
