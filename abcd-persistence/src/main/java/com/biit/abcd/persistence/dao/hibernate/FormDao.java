@@ -49,19 +49,22 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	}
 
 	/**
-	 * Disable lazy behavior of Form element. Needed to use spring cache. 
+	 * Disable lazy behavior of Form element. Needed to use spring cache.
+	 * 
 	 * @param form
 	 */
 	private void initializeSets(Form form) {
-		Hibernate.initialize(form.getChildren());
-		initializeChildsSets(form.getChildren());
-		// Initializes the sets for lazy-loading (within the same session)
-		Hibernate.initialize(form.getChildren());
-		Hibernate.initialize(form.getDiagrams());
-		Hibernate.initialize(form.getTableRules());
-		Hibernate.initialize(form.getCustomVariables());
-		Hibernate.initialize(form.getExpressionChains());
-		Hibernate.initialize(form.getRules());
+		if (form != null) {
+			Hibernate.initialize(form.getChildren());
+			initializeChildsSets(form.getChildren());
+			// Initializes the sets for lazy-loading (within the same session)
+			Hibernate.initialize(form.getChildren());
+			Hibernate.initialize(form.getDiagrams());
+			Hibernate.initialize(form.getTableRules());
+			Hibernate.initialize(form.getCustomVariables());
+			Hibernate.initialize(form.getExpressionChains());
+			Hibernate.initialize(form.getRules());
+		}
 	}
 
 	@Override

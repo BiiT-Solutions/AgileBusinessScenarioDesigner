@@ -5,15 +5,14 @@
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:sws="http://www.springframework.org/schema/web-services"
-	xmlns:task="http://www.springframework.org/schema/task" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd      
                         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
                         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd 
                         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd 
                         http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-4.1.xsd
-                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd
-			http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd"
 	default-autowire="byName">
 
 	<!-- Scans the classpath for annotated components that will be auto-registered 
@@ -126,9 +125,4 @@
 
 	<!-- Aspect -->
 	<bean id="basicLogging" class="com.biit.abcd.logger.BasicLogging" />
-	
-	<!--  Cache Configuration  -->
-	<cache:annotation-driven />
-	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="ehcache" />
-	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="classpath:ehcache.xml" p:shared="true" />
 </beans>

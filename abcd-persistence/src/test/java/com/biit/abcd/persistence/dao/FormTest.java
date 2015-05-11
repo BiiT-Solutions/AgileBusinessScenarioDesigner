@@ -2,6 +2,7 @@ package com.biit.abcd.persistence.dao;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -158,6 +159,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		// Update form with this changes
 		formDao.makePersistent(form);
 		Form storedForm = formDao.get(form.getId());
+		Assert.assertNotNull(storedForm);
 
 		// Compare order is the same.
 		Assert.assertTrue(compare(form, storedForm));
