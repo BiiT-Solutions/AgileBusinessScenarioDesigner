@@ -70,7 +70,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@CachePut(value = "springFormCache", key = "#form.getId()", condition = "#form.getId() != null")
-	public void makePersistent(Form form) {
+	public Form makePersistent(Form form) {
 		form.updateChildrenSortSeqs();
 
 		// Update previous versions validTo.
@@ -80,7 +80,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 			updateValidTo(form.getLabel(), form.getVersion() - 1, form.getOrganizationId(), validTo);
 		}
 
-		super.makePersistent(form);
+		return super.makePersistent(form);
 	}
 
 	@Override

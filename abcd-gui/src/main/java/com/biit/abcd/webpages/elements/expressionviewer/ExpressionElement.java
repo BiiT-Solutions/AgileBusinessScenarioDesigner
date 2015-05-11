@@ -9,7 +9,7 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
-import com.biit.abcd.persistence.utils.DateManager;
+import com.biit.utils.date.DateManager;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.CssLayout;

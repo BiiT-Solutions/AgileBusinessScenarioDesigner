@@ -9,8 +9,8 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataDate;
-import com.biit.abcd.persistence.utils.DateManager;
 import com.biit.drools.global.variables.interfaces.IVariableData;
+import com.biit.utils.date.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 

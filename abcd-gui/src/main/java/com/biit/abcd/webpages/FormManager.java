@@ -159,8 +159,8 @@ public class FormManager extends FormWebPageComponent {
 	}
 
 	public void addNewForm(Form form) {
-		SimpleFormView simpleView = new SimpleFormView(form);
 		formDao.makePersistent(form);
+		SimpleFormView simpleView = new SimpleFormView(form);
 		formTable.addForm(simpleView);
 		formTable.selectForm(simpleView);
 		simpleView.setId(form.getId());
