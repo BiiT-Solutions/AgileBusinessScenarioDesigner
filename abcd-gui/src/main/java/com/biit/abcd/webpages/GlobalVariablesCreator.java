@@ -93,7 +93,7 @@ public class GlobalVariablesCreator extends FormWebPageComponent {
 		
 		if(selectedGlobalVariable !=null){
 			for (GlobalVariable globalVariable : UserSessionHandler.getGlobalVariablesController().getGlobalVariables()) {
-				if(globalVariable.getComparationId().equals(selectedGlobalVariable)){
+				if(globalVariable.getComparationId().equals(selectedGlobalVariable.getComparationId())){
 					globalVariableTable.setValue(selectedGlobalVariable);
 				}
 			}

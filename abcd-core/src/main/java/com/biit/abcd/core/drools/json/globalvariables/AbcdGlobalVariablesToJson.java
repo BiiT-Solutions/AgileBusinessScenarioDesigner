@@ -17,14 +17,18 @@ import com.google.gson.GsonBuilder;
 public class AbcdGlobalVariablesToJson {
 
 	public static String toJson(List<GlobalVariable> globalVariables) {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setPrettyPrinting();
-		gsonBuilder.registerTypeAdapter(GlobalVariable.class, new AbcdGlobalVariableSerializer());
-		gsonBuilder.registerTypeAdapter(VariableDataText.class, new AbcdVariableDataTextSerializer());
-		gsonBuilder.registerTypeAdapter(VariableDataPostalCode.class, new AbcdVariableDataPostalCodeSerializer());
-		gsonBuilder.registerTypeAdapter(VariableDataNumber.class, new AbcdVariableDataNumberSerializer());
-		gsonBuilder.registerTypeAdapter(VariableDataDate.class, new AbcdVariableDataDateSerializer());
-		Gson gson = gsonBuilder.create();
-		return gson.toJson(globalVariables);
+		if (globalVariables == null) {
+			return "[]";
+		} else {
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.setPrettyPrinting();
+			gsonBuilder.registerTypeAdapter(GlobalVariable.class, new AbcdGlobalVariableSerializer());
+			gsonBuilder.registerTypeAdapter(VariableDataText.class, new AbcdVariableDataTextSerializer());
+			gsonBuilder.registerTypeAdapter(VariableDataPostalCode.class, new AbcdVariableDataPostalCodeSerializer());
+			gsonBuilder.registerTypeAdapter(VariableDataNumber.class, new AbcdVariableDataNumberSerializer());
+			gsonBuilder.registerTypeAdapter(VariableDataDate.class, new AbcdVariableDataDateSerializer());
+			Gson gson = gsonBuilder.create();
+			return gson.toJson(globalVariables);
+		}
 	}
 }

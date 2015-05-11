@@ -429,6 +429,10 @@ public class KidsFormCreator {
 	public Form getForm() {
 		return form;
 	}
+	
+	protected void setForm(Form form) {
+		this.form = form;
+	}
 
 	public Group getGroup() {
 		return group;
@@ -659,8 +663,10 @@ public class KidsFormCreator {
 	@Test(groups = { "orbeon" })
 	public void readStaticSubmittedForm() throws DocumentException, IOException {
 		submittedForm = new DroolsSubmittedForm(APP, FORM_NAME);
-		String xmlFile = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
-		orbeonImporter.readXml(xmlFile, submittedForm);
+		String submittedOrbeonForm = readFile("./src/test/resources/kidScreen.xml", StandardCharsets.UTF_8);
+		String structureOrbeonForm = readFile("./src/test/resources/kidScreen.xhtml", StandardCharsets.UTF_8);
+		orbeonImporter.setOrbeonStructure(structureOrbeonForm);
+		orbeonImporter.readXml(submittedOrbeonForm, submittedForm);
 		Assert.assertNotNull(submittedForm);
 		Assert.assertFalse(submittedForm.getChildren().isEmpty());
 	}
