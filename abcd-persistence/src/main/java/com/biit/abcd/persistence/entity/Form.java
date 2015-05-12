@@ -626,9 +626,9 @@ public class Form extends BaseForm {
 	public void remove(Rule rule) {
 		rules.remove(rule);
 	}
-	
+
 	@Override
-	public void updateChildrenSortSeqs(){
+	public void updateChildrenSortSeqs() {
 		super.updateChildrenSortSeqs();
 		// For solving Hibernate bug
 		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
@@ -679,5 +679,26 @@ public class Form extends BaseForm {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Disable lazy behavior of Form element. Needed for using spring cache.
+	 * 
+	 * @param form
+	 */
+	@Override
+	public void initializeSets() {
+		super.initializeSets();
+		// Initializes the sets for lazy-loading (within the same session)
+		getDiagrams().size();
+		getTableRules().size();
+		getCustomVariables().size();
+		getExpressionChains().size();
+		getRules().size();
+	}
+
+	@Override
+	public String toString() {
+		return getLabel();
 	}
 }

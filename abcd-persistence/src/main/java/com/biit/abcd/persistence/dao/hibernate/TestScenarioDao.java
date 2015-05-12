@@ -9,12 +9,15 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 
 @Repository
-public class TestScenarioDao extends AnnotatedGenericDao<TestScenario,Long> implements ITestScenarioDao {
+public class TestScenarioDao extends AnnotatedGenericDao<TestScenario, Long> implements ITestScenarioDao {
 
 	public TestScenarioDao() {
 		super(TestScenario.class);
@@ -27,22 +30,38 @@ public class TestScenarioDao extends AnnotatedGenericDao<TestScenario,Long> impl
 		Metamodel m = getEntityManager().getMetamodel();
 		EntityType<TestScenario> testScenarioType = m.entity(TestScenario.class);
 		Root<TestScenario> root = cq.from(TestScenario.class);
-		cq.where(cb.equal(root.get(testScenarioType.getSingularAttribute("formId",Long.class)),formId));
-		return getEntityManager().createQuery(cq).getResultList();
+		cq.where(cb.equal(root.get(testScenarioType.getSingularAttribute("formId", Long.class)), formId));
+		List<TestScenario> testScenarios = getEntityManager().createQuery(cq).getResultList();
+		for (TestScenario testScenario : testScenarios) {
+			testScenario.initializeSets();
+		}
+		return testScenarios;
 	}
 
 	@Override
-	public List<TestScenario> getTestScenarioByForm(String formLabel,
-			Long formOrganizationId) {
+	public List<TestScenario> getTestScenarioByForm(String formLabel, Long formOrganizationId) {
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<TestScenario> cq = cb.createQuery(TestScenario.class);
 		Metamodel m = getEntityManager().getMetamodel();
 		EntityType<TestScenario> testScenarioType = m.entity(TestScenario.class);
 		Root<TestScenario> root = cq.from(TestScenario.class);
 		cq.where(cb.and(
-				cb.equal(root.get(testScenarioType.getSingularAttribute("formLabel",String.class)),formLabel),
-				cb.equal(root.get(testScenarioType.getSingularAttribute("formOrganization",Long.class)),formOrganizationId)
-				));
-		return getEntityManager().createQuery(cq).getResultList();
+				cb.equal(root.get(testScenarioType.getSingularAttribute("formLabel", String.class)), formLabel), cb
+						.equal(root.get(testScenarioType.getSingularAttribute("formOrganization", Long.class)),
+								formOrganizationId)));
+
+		List<TestScenario> testScenarios = getEntityManager().createQuery(cq).getResultList();
+		for (TestScenario testScenario : testScenarios) {
+			testScenario.initializeSets();
+		}
+		return testScenarios;
+	}
+
+	@Override
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	public TestScenario get(Long id) {
+		TestScenario testScenario = super.get(id);
+		testScenario.initializeSets();
+		return testScenario;
 	}
 }

@@ -24,6 +24,13 @@ public class BasicLogging extends AbstractLogging {
 	@Pointcut("execution(* com.biit..*(..))")
 	private void selectAll() {
 	}
+	
+	/**
+	 * Using an existing annotation.
+	 */
+	@Pointcut("@annotation(org.springframework.transaction.annotation.Transactional)")
+	public void isAnnotated() {
+	}
 
 	/**
 	 * This is the method which I would like to execute before a selected method execution.
@@ -53,13 +60,13 @@ public class BasicLogging extends AbstractLogging {
 	/**
 	 * This is the method which I would like to execute when any method returns.
 	 */
-	@AfterReturning(pointcut = "selectAll()", returning = "retVal")
+	@AfterReturning(pointcut = "selectAll() || isAnnotated()", returning = "retVal")
 	public void afterReturningAdvice(Object retVal) {
-//		if (retVal != null) {
-//			log("Returning:" + retVal.toString());
-//		} else {
-//			log("Returning:" + retVal);
-//		}
+		if (retVal != null) {
+			log("Returning: " + retVal.toString());
+		} else {
+			log("Returning: void.");
+		}
 	}
 
 	/**
@@ -67,7 +74,7 @@ public class BasicLogging extends AbstractLogging {
 	 */
 	@AfterThrowing(pointcut = "selectAll()", throwing = "ex")
 	public void AfterThrowingAdvice(IllegalArgumentException ex) {
-//		log("There has been an exception: " + ex.getMessage());
+		log("There has been an exception: " + ex.getMessage());
 	}
 
 }

@@ -45,8 +45,8 @@ public class SelectTestScenarioTableEditable extends TableCellLabelEdit {
 		private static final long serialVersionUID = 2470467428282560338L;
 		private TestScenario testScenario;
 
-		public CellEditButtonClickListener(TestScenario formExpression) {
-			this.testScenario = formExpression;
+		public CellEditButtonClickListener(TestScenario testScenario) {
+			this.testScenario = testScenario;
 		}
 
 		@Override
