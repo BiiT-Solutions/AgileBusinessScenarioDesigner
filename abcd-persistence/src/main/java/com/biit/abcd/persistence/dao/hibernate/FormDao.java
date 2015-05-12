@@ -109,7 +109,11 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 				cb.equal(form.get(formMetamodel.getSingularAttribute("version", Integer.class)), version),
 				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId)));
 
-		return getEntityManager().createQuery(cq).getSingleResult();
+		Form formResult = getEntityManager().createQuery(cq).getSingleResult();
+		if (formResult != null) {
+			formResult.initializeSets();
+		}
+		return formResult;
 	}
 
 	@Override
@@ -181,7 +185,12 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 
 		cq.where(cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId));
 
-		return getEntityManager().createQuery(cq).getResultList();
+		List<Form> formResults = getEntityManager().createQuery(cq).getResultList();
+		if (formResults != null) {
+			for (Form formResult : formResults) {
+				formResult.initializeSets();
+			}
+		}
+		return formResults;
 	}
-
 }
