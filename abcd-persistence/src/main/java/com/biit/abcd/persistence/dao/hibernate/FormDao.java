@@ -37,8 +37,6 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 		super(Form.class);
 	}
 
-
-
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@CachePut(value = "springFormCache", key = "#form.getId()", condition = "#form.getId() != null")
@@ -75,7 +73,9 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	public Form get(Long id) {
 		Form form = super.get(id);
 		// If we want to use spring cache, we need to load all elements before exiting this method.
-		form.initializeSets();
+		if (form != null) {
+			form.initializeSets();
+		}
 		return form;
 	}
 

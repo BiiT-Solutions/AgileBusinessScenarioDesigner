@@ -32,8 +32,10 @@ public class TestScenarioDao extends AnnotatedGenericDao<TestScenario, Long> imp
 		Root<TestScenario> root = cq.from(TestScenario.class);
 		cq.where(cb.equal(root.get(testScenarioType.getSingularAttribute("formId", Long.class)), formId));
 		List<TestScenario> testScenarios = getEntityManager().createQuery(cq).getResultList();
-		for (TestScenario testScenario : testScenarios) {
-			testScenario.initializeSets();
+		if (testScenarios != null) {
+			for (TestScenario testScenario : testScenarios) {
+				testScenario.initializeSets();
+			}
 		}
 		return testScenarios;
 	}
@@ -51,8 +53,10 @@ public class TestScenarioDao extends AnnotatedGenericDao<TestScenario, Long> imp
 								formOrganizationId)));
 
 		List<TestScenario> testScenarios = getEntityManager().createQuery(cq).getResultList();
-		for (TestScenario testScenario : testScenarios) {
-			testScenario.initializeSets();
+		if (testScenarios != null) {
+			for (TestScenario testScenario : testScenarios) {
+				testScenario.initializeSets();
+			}
 		}
 		return testScenarios;
 	}
@@ -61,7 +65,9 @@ public class TestScenarioDao extends AnnotatedGenericDao<TestScenario, Long> imp
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public TestScenario get(Long id) {
 		TestScenario testScenario = super.get(id);
-		testScenario.initializeSets();
+		if (testScenario != null) {
+			testScenario.initializeSets();
+		}
 		return testScenario;
 	}
 }
