@@ -98,6 +98,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	}
 
 	@Override
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public Form getForm(String label, Integer version, Long organizationId) {
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Form> cq = cb.createQuery(Form.class);
