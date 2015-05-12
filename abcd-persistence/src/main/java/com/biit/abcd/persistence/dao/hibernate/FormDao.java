@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.dao.hibernate;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -109,11 +110,15 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 				cb.equal(form.get(formMetamodel.getSingularAttribute("version", Integer.class)), version),
 				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId)));
 
-		Form formResult = getEntityManager().createQuery(cq).getSingleResult();
-		if (formResult != null) {
-			formResult.initializeSets();
+		try {
+			Form formResult = getEntityManager().createQuery(cq).getSingleResult();
+			if (formResult != null) {
+				formResult.initializeSets();
+			}
+			return formResult;
+		} catch (NoResultException nre) {
+			return null;
 		}
-		return formResult;
 	}
 
 	@Override

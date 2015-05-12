@@ -12,9 +12,8 @@ import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 
-
 @Repository
-public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable,Long> implements IGlobalVariablesDao {
+public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable, Long> implements IGlobalVariablesDao {
 
 	public GlobalVariablesDao() {
 		super(GlobalVariable.class);
@@ -25,13 +24,14 @@ public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable,Long>
 		if (globalVariable == null || globalVariable.getId() == null) {
 			return 0;
 		}
-		
-		try{
-			Query query = getEntityManager().createQuery("SELECT count(*) FROM ExpressionValueGlobalConstant WHERE globalVariable_ID=:globalVariableId");
+
+		try {
+			Query query = getEntityManager().createQuery(
+					"SELECT count(*) FROM ExpressionValueGlobalConstant WHERE globalVariable_ID=:globalVariableId");
 			query.setParameter("globalVariableId", globalVariable.getId());
 			Long count = (Long) query.getSingleResult();
 			return count.intValue();
-		}catch(RuntimeException e){
+		} catch (RuntimeException e) {
 			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
 	}
@@ -48,13 +48,15 @@ public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable,Long>
 				ids.add(globalVariable.getId());
 			}
 		}
-		
-		try{
-			Query query = getEntityManager().createQuery("SELECT count(*) FROM ExpressionValueGlobalConstant WHERE globalVariable_ID IN (:globalVariablesId)");
+
+		try {
+			Query query = getEntityManager()
+					.createQuery(
+							"SELECT count(*) FROM ExpressionValueGlobalConstant WHERE globalVariable_ID IN (:globalVariablesId)");
 			query.setParameter("globalVariablesId", ids);
 			Long count = (Long) query.getSingleResult();
 			return count.intValue();
-		}catch(RuntimeException e){
+		} catch (RuntimeException e) {
 			throw new UnexpectedDatabaseException(e.getMessage(), e);
 		}
 	}
