@@ -137,7 +137,7 @@ public class SimpleFormView implements IBaseFormView {
 
 	@Override
 	public String toString() {
-		return getName();
+		return getLabel();
 	}
 
 	public Long getOrganizationId() {

@@ -19,4 +19,6 @@
 	<cache name="com.biit.abcd.persistence.entity.expressions.Rule" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  	
 	
 	<cache name="springFormCache" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  	
+	<cache name="springTestScenarios" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  	
+	<cache name="springTestScenariosByForm" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="100" eternal="false" timeToIdleSeconds="0" timeToLiveSeconds="1200" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LFU" />  	
 </ehcache>

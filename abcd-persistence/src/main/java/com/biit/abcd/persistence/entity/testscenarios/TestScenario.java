@@ -202,8 +202,13 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	public void setFormOrganization(Long formOrganization) {
 		this.formOrganization = formOrganization;
 	}
-	
+
 	public void initializeSets() {
 		getTestScenarioForm().initializeSets();
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 }
