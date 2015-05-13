@@ -20,9 +20,11 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Cacheable(true)
 public class TestScenarioQuestion extends BaseQuestion {
 	private static final long serialVersionUID = -3285383319148456954L;
+	
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private TestAnswer testAnswer;
+	
 	private static final String DEFAULT_QUESTION_NAME = "TestScenarioQuestion";
 
 	public TestScenarioQuestion() {

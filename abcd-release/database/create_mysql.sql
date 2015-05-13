@@ -613,11 +613,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
-        name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
         dateValue datetime,
         primary key (ID)
     );
@@ -629,11 +624,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
-        name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
         inputValue double precision,
         primary key (ID)
     );
@@ -645,11 +635,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
-        name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
         inputValue varchar(255),
         primary key (ID)
     );
@@ -661,11 +646,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
-        name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
         inputValue varchar(255),
         primary key (ID)
     );
@@ -677,11 +657,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
-        name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
         primary key (ID)
     );
 
@@ -692,11 +667,6 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
-        name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
         radioButtonValue varchar(255),
         primary key (ID)
     );
