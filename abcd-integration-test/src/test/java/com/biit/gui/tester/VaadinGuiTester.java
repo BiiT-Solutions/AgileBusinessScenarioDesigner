@@ -1,8 +1,20 @@
 package com.biit.gui.tester;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -13,6 +25,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.NotificationElement;
@@ -26,7 +39,7 @@ public class VaadinGuiTester extends TestBenchTestCase {
 	private static final String NOTIFICATION_TYPE_WARNING = "warning";
 	// This parameter set to 'true' activates phantomJs driver instead of
 	// firefox driver
-	private boolean headlessTesting = true;
+	private boolean headlessTesting = false;
 
 	// To debug last step on firefox
 	private boolean destroyDriver = true;
@@ -87,5 +100,30 @@ public class VaadinGuiTester extends TestBenchTestCase {
 
 	public static void checkNotificationIsWarning(NotificationElement notification) {
 		Assert.assertEquals(NOTIFICATION_TYPE_WARNING, notification.getType());
+	}
+
+	protected void executeSqlDump(String dbUrl, String dbUser, String dbPass, String sqlFilePath,
+			String outputFilePath, String errorFilePath) {
+		try {
+			// Create MySql Connection
+			Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+			// Initialize object for ScripRunner
+			ScriptRunner sr = new ScriptRunner(con);
+			// Give the input file to Reader
+			Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sqlFilePath),
+					StandardCharsets.UTF_8));
+
+			// new FileReader(sqlFilePath));
+			// Execute script
+			sr.setLogWriter(new PrintWriter(new File(outputFilePath)));
+			sr.setErrorLogWriter(new PrintWriter(new File(errorFilePath)));
+			sr.runScript(reader);
+			sr.closeConnection();
+
+		} catch (FileNotFoundException | SQLException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(),
+					"Failed to execute the file: " + sqlFilePath + "\n " + e.getMessage());
+			Assert.fail();
+		}
 	}
 }

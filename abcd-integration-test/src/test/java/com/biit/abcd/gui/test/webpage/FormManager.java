@@ -15,6 +15,8 @@ public class FormManager extends AbcdCommonWebpage {
 	private static final CharSequence SELECTED_ROW = "v-selected";
 	private static final String GLOBAL_CONSTANTS_BUTTON = "Global Constants";
 
+	private final static String TEST_SCENARIO_CREATOR_CAPTION = "Create Tests";
+
 	private final NewForm newFormWindow;
 
 	public FormManager() {
@@ -106,15 +108,24 @@ public class FormManager extends AbcdCommonWebpage {
 	public boolean isRowSelected(int formRow) {
 		return getFormTable().getRow(formRow).getAttribute(CSS_CLASS).contains(SELECTED_ROW);
 	}
-	
-	public String getFormName(int row){
+
+	public String getFormName(int row) {
 		TableElement table = getFormTable();
 		return table.getCell(row, 0).getText();
+	}
+
+	public void clickInFormTable(int row) {
+		TableElement table = getFormTable();
+		table.getCell(row, 0).click();
 	}
 
 	public void goToGlobalVariables() {
 		toggleSettings();
 		getButtonByCaption(GLOBAL_CONSTANTS_BUTTON).click();
+	}
+
+	public void goToTestScenarioCreator() {
+		$(ButtonElement.class).caption(TEST_SCENARIO_CREATOR_CAPTION).first().click();
 	}
 
 }
