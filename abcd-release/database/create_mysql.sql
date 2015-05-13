@@ -788,7 +788,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
+        label varchar(190),
         name varchar(190),
         originalReference varchar(190) not null,
         sortSeq bigint not null,
