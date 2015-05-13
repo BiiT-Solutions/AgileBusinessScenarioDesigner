@@ -44,6 +44,8 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 	private static final String TEST_SCENARIO_NAME = "test1";
 	private static final String CATEGORY_NAME = "Category";
 	private static final String QUESTION_NAME = "Question";
+	private static final String NOT_EXISTENT_FORM = "not exists";
+	private static final Long NOT_EXISTENT_ORGANIZATION = -1L;
 
 	@Autowired
 	private ITestScenarioDao testScenarioDao;
@@ -82,6 +84,11 @@ public class TestScenarioTest extends AbstractTransactionalTestNGSpringContextTe
 //		testScenarioDao.makeTransient(testScenario);
 //		Assert.assertEquals(testScenarioDao.getRowCount(), 0);
 //	}
+	
+	@Test
+	public void testGetTestScenarioByForm(){
+		Assert.assertTrue(testScenarioDao.getTestScenarioByForm(NOT_EXISTENT_FORM,NOT_EXISTENT_ORGANIZATION).isEmpty());
+	}
 
 	@Test
 	public void storeRemoveTestScenariosMapData() throws NotValidFormException, FieldTooLongException,
