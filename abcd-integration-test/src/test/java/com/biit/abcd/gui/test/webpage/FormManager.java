@@ -3,7 +3,7 @@ package com.biit.abcd.gui.test.webpage;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import com.biit.abcd.gui.test.window.NewForm;
+import com.biit.abcd.gui.test.window.NewFormWindow;
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.TableElement;
@@ -17,11 +17,11 @@ public class FormManager extends AbcdCommonWebpage {
 
 	private final static String TEST_SCENARIO_CREATOR_CAPTION = "Create Tests";
 
-	private final NewForm newFormWindow;
+	private final NewFormWindow newFormWindow;
 
 	public FormManager() {
 		super();
-		newFormWindow = new NewForm();
+		newFormWindow = new NewFormWindow();
 		addWindow(newFormWindow);
 	}
 

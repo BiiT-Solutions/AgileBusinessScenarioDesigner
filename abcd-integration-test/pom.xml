@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>abcd-integration-test</artifactId>
 	<packaging>war</packaging>
@@ -148,6 +149,12 @@
 			<artifactId>vaadin-testbench</artifactId>
 			<version>${vaadin-testbench.version}</version>
 		</dependency>
+		<!-- ScriptRunner -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -162,12 +169,12 @@
 			</plugin>
 			<!-- Do not deploy this module in artifact -->
 			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-deploy-plugin</artifactId>
-			    <version>${maven-deploy-plugin.version}</version>
-			    <configuration>
-				<skip>true</skip>
-			    </configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${maven-deploy-plugin.version}</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -193,7 +200,8 @@
 								<configuration>
 									<target>
 										<!-- Replicate webapp folder, needed for jetty to run -->
-										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
+										<delete dir="src/main/webapp" failonerror="false"
+											includeemptydirs="true" />
 										<copy todir="src/main/webapp">
 											<fileset dir="../${source.gui.project}/src/main/webapp" />
 										</copy>
@@ -201,13 +209,18 @@
 											<fileset dir="../${source.gui.project}/target/classes" />
 										</copy>
 										<!-- Modify database connection to use test database -->
-										<replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?" value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
+										<replace
+											token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?"
+											value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?"
+											dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
+										<replace token="hibernate.connection.username=abcd"
+											value="hibernate.connection.username=testuser" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
+										<replace token="hibernate.hbm2ddl.auto=validate"
+											value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
 									</target>
@@ -300,7 +313,8 @@
 								<configuration>
 									<target>
 										<!-- Replicate webapp folder, needed for jetty to run -->
-										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
+										<delete dir="src/main/webapp" failonerror="false"
+											includeemptydirs="true" />
 										<copy todir="src/main/webapp">
 											<fileset dir="../${source.gui.project}/src/main/webapp" />
 										</copy>
@@ -308,13 +322,18 @@
 											<fileset dir="../${source.gui.project}/target/classes" />
 										</copy>
 										<!-- Modify database connection to use test database -->
-										<replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?" value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
+										<replace
+											token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?"
+											value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?"
+											dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
+										<replace token="hibernate.connection.username=abcd"
+											value="hibernate.connection.username=testuser" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
+										<replace token="hibernate.hbm2ddl.auto=validate"
+											value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
 									</target>
