@@ -127,15 +127,17 @@ public class CheckDependencies {
 	 */
 	private static void checkTableRuleDependenciesInDiagram(Diagram diagram, TableRule tableRule)
 			throws DependencyExistException {
-		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
-		for (DiagramObject diagramObject : diagramObjectsList) {
-			if (diagramObject instanceof DiagramTable) {
-				if (((DiagramTable) diagramObject).getTable().equals(tableRule)) {
-					throw new DependencyExistException("Cannot delete " + tableRule.getClass().getName()
-							+ ", with name: " + tableRule.getName() + " referenced in the form.");
+		if (diagram != null) {
+			Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+			for (DiagramObject diagramObject : diagramObjectsList) {
+				if (diagramObject instanceof DiagramTable) {
+					if (((DiagramTable) diagramObject).getTable().equals(tableRule)) {
+						throw new DependencyExistException("Cannot delete " + tableRule.getClass().getName()
+								+ ", with name: " + tableRule.getName() + " referenced in the form.");
+					}
+				} else if (diagramObject instanceof DiagramChild) {
+					checkTableRuleDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), tableRule);
 				}
-			} else if (diagramObject instanceof DiagramChild) {
-				checkTableRuleDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), tableRule);
 			}
 		}
 	}
@@ -154,15 +156,17 @@ public class CheckDependencies {
 	 * @throws DependencyExistException
 	 */
 	private static void checkRuleDependenciesInDiagram(Diagram diagram, Rule rule) throws DependencyExistException {
-		Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
-		for (DiagramObject diagramObject : diagramObjectsList) {
-			if (diagramObject instanceof DiagramRule) {
-				if (((DiagramRule) diagramObject).getRule().equals(rule)) {
-					throw new DependencyExistException("Cannot delete " + rule.getClass().getName() + ", with name: "
-							+ rule.getName() + " referenced in the form.");
+		if (diagram != null) {
+			Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
+			for (DiagramObject diagramObject : diagramObjectsList) {
+				if (diagramObject instanceof DiagramRule) {
+					if (((DiagramRule) diagramObject).getRule().equals(rule)) {
+						throw new DependencyExistException("Cannot delete " + rule.getClass().getName()
+								+ ", with name: " + rule.getName() + " referenced in the form.");
+					}
+				} else if (diagramObject instanceof DiagramChild) {
+					checkRuleDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), rule);
 				}
-			} else if (diagramObject instanceof DiagramChild) {
-				checkRuleDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), rule);
 			}
 		}
 	}
