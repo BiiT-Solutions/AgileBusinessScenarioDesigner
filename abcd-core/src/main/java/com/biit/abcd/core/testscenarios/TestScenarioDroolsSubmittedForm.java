@@ -104,6 +104,9 @@ public class TestScenarioDroolsSubmittedForm {
 							question.setAnswer(testAnswer.getValue().toString());
 						}
 					}
+				} else {
+					// Create empty question
+					createQuestion(parent, child.getName());
 				}
 			}
 		}
