@@ -69,7 +69,7 @@ public class TestScenarioDroolsSubmittedForm {
 	}
 
 	private void createDroolsSubmittedForm(BaseForm form) {
-		setSubmittedForm(new DroolsSubmittedForm(form.getLabel(), form.getVersion().toString()));
+		setSubmittedForm(new DroolsSubmittedForm("", form.getLabel()));
 		createSubmittedFromStructure(form, getSubmitedForm());
 	}
 
@@ -104,6 +104,9 @@ public class TestScenarioDroolsSubmittedForm {
 							question.setAnswer(testAnswer.getValue().toString());
 						}
 					}
+				} else {
+					// Create empty question
+					createQuestion(parent, child.getName());
 				}
 			}
 		}

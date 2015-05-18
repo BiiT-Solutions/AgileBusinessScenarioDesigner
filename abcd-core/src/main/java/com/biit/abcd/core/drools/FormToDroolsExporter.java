@@ -38,7 +38,6 @@ public class FormToDroolsExporter {
 
 			// Creation of the rules
 			formRules = new DroolsRulesGenerator(form, globalVariables);
-			AbcdLogger.debug(this.getClass().getName(), formRules.getRules());
 			try {
 				Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"),
 						formRules.getRules().getBytes("UTF-8"));

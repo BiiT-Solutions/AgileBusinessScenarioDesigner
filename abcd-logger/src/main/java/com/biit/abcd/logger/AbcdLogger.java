@@ -68,6 +68,11 @@ public class AbcdLogger extends BiitLogger {
 		String error = getStackTrace(throwable);
 		errorMessageNotification(logger, className, error);
 	}
+	
+	public static void errorMessage(String className, String error) {
+		errorMessageNotification(logger, className, error);
+	}
+
 
 	public static void timeLog(long millis, String method, String args) {
 		if (logger.isDebugEnabled()) {

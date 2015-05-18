@@ -61,4 +61,8 @@ public abstract class VaadinGuiWebpage extends TestBenchTestCase{
 	public ButtonElement getButtonByCaption(String caption){
 		return $(ButtonElement.class).caption(caption).first();
 	}
+	
+	public ButtonElement getButtonById(String id) {
+		return $(ButtonElement.class).id(id);
+	}
 }

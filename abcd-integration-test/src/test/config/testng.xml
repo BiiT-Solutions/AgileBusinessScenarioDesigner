@@ -11,6 +11,7 @@
 				<include name="globalVariables" />
 				<include name="ruleExpression" />
 				<include name="ruleTableEditor" />
+				<include name="scenarioEditor" />
 			</run>
 		</groups>
 		<classes>
@@ -22,6 +23,7 @@
 			<class name="com.biit.abcd.gui.test.GlobalVariablesTests" />
 			<class name="com.biit.abcd.gui.test.RuleExpressionTests" />
 			<class name="com.biit.abcd.gui.test.RuleTableEditorTests" />
+			<class name="com.biit.abcd.gui.test.ScenarioTests" />
 		</classes>
 	</test>
 </suite>

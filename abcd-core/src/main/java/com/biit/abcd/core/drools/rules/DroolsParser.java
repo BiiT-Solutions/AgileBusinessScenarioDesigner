@@ -421,7 +421,7 @@ public class DroolsParser {
 							switch (functionParsed) {
 							case BETWEEN:
 								if (functionValues.size() == 2) {
-									droolsConditions += " >= " + functionValues.get(0) + " && < "
+									droolsConditions += " >= " + functionValues.get(0) + " && <= "
 											+ functionValues.get(1) + ") ";
 								} else {
 									throw new DroolsRuleCreationException(
@@ -462,7 +462,7 @@ public class DroolsParser {
 							switch (functionParsed) {
 							case BETWEEN:
 								if (functionValues.size() == 2) {
-									droolsConditions += " >= " + functionValues.get(0) + " && < "
+									droolsConditions += " >= " + functionValues.get(0) + " && <= "
 											+ functionValues.get(1) + ") ";
 
 								} else {
@@ -504,7 +504,7 @@ public class DroolsParser {
 						switch (functionParsed) {
 						case BETWEEN:
 							if (functionValues.size() == 2) {
-								droolsConditions += " >= " + functionValues.get(0) + " && < " + functionValues.get(1)
+								droolsConditions += " >= " + functionValues.get(0) + " && <= " + functionValues.get(1)
 										+ ") ";
 							} else {
 								throw new DroolsRuleCreationException(

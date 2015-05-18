@@ -5,7 +5,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>1.4.18-SNAPSHOT</version>
+	<version>1.4.23-SNAPSHOT</version>
 	<name>Agile Business sCenario Designer Tool</name>
 	<description>Rules Designer</description>
 
@@ -78,6 +78,7 @@
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 		<graph-maven-plugin.version>1.2.3</graph-maven-plugin.version>
 		<slf4j.version>1.7.12</slf4j.version>
+		<mybatis.version>3.2.8</mybatis.version>
 		<!-- BiiT dependencies -->
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
 		<liferay-service-common.version>[0.6,0.7)</liferay-service-common.version>
