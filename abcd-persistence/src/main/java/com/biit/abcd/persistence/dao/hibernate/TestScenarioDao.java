@@ -49,7 +49,7 @@ public class TestScenarioDao extends AnnotatedGenericDao<TestScenario, Long> imp
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	@Cacheable(value = "springTestScenariosByForm", key = "#formLabel.concat(#formOrganizationId.toString())")
+	@Cacheable(value = "springTestScenariosByForm", key = "{#formLabel, #formOrganizationId}")
 	public List<TestScenario> getTestScenarioByForm(String formLabel, Long formOrganizationId) {
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<TestScenario> cq = cb.createQuery(TestScenario.class);

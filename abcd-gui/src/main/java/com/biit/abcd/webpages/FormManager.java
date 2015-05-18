@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -217,6 +219,7 @@ public class FormManager extends FormWebPageComponent {
 		return newFormVersion;
 	}
 
+	@Transactional
 	private void removeSelectedForm() {
 		Form selectedForm;
 		selectedForm = formDao.get(formTable.getValue().getId());
