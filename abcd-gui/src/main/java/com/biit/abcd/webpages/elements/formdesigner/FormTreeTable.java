@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -89,5 +90,28 @@ public class FormTreeTable extends TreeObjectTable {
 			usesOfElement = new UsesOfElement((Form) element.getAncestor(Form.class));
 		}
 		return usesOfElement.getUsesOfElement(element);
+	}
+
+	public Set<Object> getCollapsedStatus(TreeObject treeObject) {
+		Set<Object> collapsedItems = new HashSet<>();
+		getCollapsedStatus(treeObject,collapsedItems);
+		return collapsedItems;
+	}
+	
+	private void getCollapsedStatus(TreeObject treeObject, Set<Object> collapsedItems){
+		if(isCollapsed(treeObject)){
+			collapsedItems.add(treeObject);
+		}
+		for(TreeObject child: treeObject.getChildren()){
+			getCollapsedStatus(child, collapsedItems);
+		}
+	}
+
+	public void setCollapsedStatus(TreeObject treeObject, Set<Object> collapsedStatus) {
+		setCollapsed(treeObject, false);
+		for(TreeObject child: treeObject.getChildren()){
+			setCollapsedStatus(child, collapsedStatus);
+		}
+		setCollapsed(treeObject, collapsedStatus.contains(treeObject));
 	}
 }

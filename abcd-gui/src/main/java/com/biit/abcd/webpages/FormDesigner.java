@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -57,11 +58,14 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Tree.CollapseEvent;
+import com.vaadin.ui.Tree.CollapseListener;
+import com.vaadin.ui.Tree.ExpandEvent;
+import com.vaadin.ui.Tree.ExpandListener;
 
 public class FormDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
-			Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private FormTreeTable formTreeTable;
 	private FormDesignerPropertiesComponent propertiesComponent;
 	private FormDesignerUpperMenu upperMenu;
@@ -70,10 +74,38 @@ public class FormDesigner extends FormWebPageComponent {
 
 	private IFormDao formDao;
 
+	private CollapseListener collapseListener;
+	private ExpandListener expandListener;
+
 	public FormDesigner() {
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
 		updateButtons(true);
+
+		collapseListener = new CollapseListener() {
+			private static final long serialVersionUID = -4969316575917593209L;
+
+			@Override
+			public void nodeCollapse(CollapseEvent event) {
+				if (UserSessionHandler.getFormController().getCollapsedStatus() == null) {
+					UserSessionHandler.getFormController().setCollapsedStatus(new HashSet<>());
+				}
+				System.out.println("-----------------------------------------------------------------");
+				UserSessionHandler.getFormController().getCollapsedStatus().add(event.getItemId());
+			}
+		};
+		expandListener = new ExpandListener() {
+			private static final long serialVersionUID = -7235454850117978231L;
+
+			@Override
+			public void nodeExpand(ExpandEvent event) {
+				if (UserSessionHandler.getFormController().getCollapsedStatus() == null) {
+					UserSessionHandler.getFormController().setCollapsedStatus(new HashSet<>());
+				}
+				System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				UserSessionHandler.getFormController().getCollapsedStatus().remove(event.getItemId());
+			}
+		};
 	}
 
 	@Override
@@ -142,13 +174,16 @@ public class FormDesigner extends FormWebPageComponent {
 			}
 		});
 
+		// Collapse the table at category level
+		formTreeTable.collapseFrom(Category.class);
+		// Retrieve old collapsed state if existed.
+		retrieveCollapsedTableState();
 		if (UserSessionHandler.getFormController().getLastAccessTreeObject() != null) {
 			selectComponent(UserSessionHandler.getFormController().getLastAccessTreeObject());
 		} else {
 			formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
 		}
-		// Collapse the table at category level
-		formTreeTable.collapseFrom(Category.class);
+		saveCollapsedTableState();
 
 		// Set current selected element properties.
 		updatePropertiesComponent(formTreeTable.getTreeObjectSelected());
@@ -248,8 +283,7 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if (existTestScenariosLinked()) {
-					final AlertMessageWindow windowAccept = new AlertMessageWindow(
-							LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
 					windowAccept.addAcceptActionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {
@@ -263,8 +297,7 @@ public class FormDesigner extends FormWebPageComponent {
 					// No remove the form.
 					TreeObject selected = formTreeTable.getTreeObjectSelected();
 					if ((selected != null) && (selected.getParent() != null)) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(
-								LanguageCodes.WARNING_REMOVE_ELEMENT);
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_REMOVE_ELEMENT);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -310,8 +343,7 @@ public class FormDesigner extends FormWebPageComponent {
 					ApplicationFrame.navigateTo(WebMap.getMainPage());
 					window.close();
 				} catch (Exception e) {
-					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-							LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -321,10 +353,9 @@ public class FormDesigner extends FormWebPageComponent {
 
 	private void changeStatus(Form form, FormWorkStatus value) throws NotEnoughRightsToChangeStatusException {
 		try {
-			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					form.getOrganizationId(), AbcdActivity.FORM_STATUS_UPGRADE)) {
-				throw new NotEnoughRightsToChangeStatusException("User '"
-						+ UserSessionHandler.getUser().getEmailAddress()
+			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(), form.getOrganizationId(),
+					AbcdActivity.FORM_STATUS_UPGRADE)) {
+				throw new NotEnoughRightsToChangeStatusException("User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
 			}
 
@@ -332,8 +363,7 @@ public class FormDesigner extends FormWebPageComponent {
 			try {
 				formDao.updateFormStatus(form.getId(), value);
 			} catch (UnexpectedDatabaseException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 			}
 
 		} catch (NotEnoughRightsToChangeStatusException e) {
@@ -353,8 +383,8 @@ public class FormDesigner extends FormWebPageComponent {
 			i++;
 		}
 
-		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(UserSessionHandler.getFormController()
-				.getForm(), false, classesShown);
+		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(UserSessionHandler.getFormController().getForm(), false,
+				classesShown);
 		moveWindow.showCentered();
 		moveWindow.select(formTreeTable.getTreeObjectSelected());
 		moveWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -363,19 +393,19 @@ public class FormDesigner extends FormWebPageComponent {
 			public void acceptAction(AcceptCancelWindow window) {
 				if (formTreeTable.getTreeObjectSelected() != null && moveWindow.getSelectedTreeObject() != null) {
 					if (existTestScenariosLinked()) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(
-								LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
 								try {
 									TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
 									TreeObject whereToMove = moveWindow.getSelectedTreeObject();
-									TreeObject.move(whatToMove, whereToMove);
+									TreeObject whatToMoveNewInstance = Form.move(whatToMove, whereToMove);
+									
 									window.close();
 									clearAndUpdateFormTable();
-									formTreeTable.setValue(whatToMove);
-									formTreeTable.collapseFrom(Question.class);
+									formTreeTable.uncollapse(whatToMove);
+									formTreeTable.setValue(whatToMoveNewInstance);
 								} catch (ChildrenNotFoundException | NotValidChildException | ElementIsReadOnly e) {
 									MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
 											LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
@@ -390,11 +420,12 @@ public class FormDesigner extends FormWebPageComponent {
 						try {
 							TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
 							TreeObject whereToMove = moveWindow.getSelectedTreeObject();
-							TreeObject.move(whatToMove, whereToMove);
+							TreeObject whatToMoveNewInstance = Form.move(whatToMove, whereToMove);							
+							
 							window.close();
 							clearAndUpdateFormTable();
-							formTreeTable.setValue(whatToMove);
-							formTreeTable.collapseFrom(Question.class);
+							formTreeTable.uncollapse(whatToMove);
+							formTreeTable.setValue(whatToMoveNewInstance);
 						} catch (ChildrenNotFoundException | NotValidChildException | ElementIsReadOnly e) {
 							MessageManager.showError(LanguageCodes.WARNING_MOVEMENT_NOT_VALID,
 									LanguageCodes.WARNING_MOVEMENT_DESCRIPTION_NOT_VALID);
@@ -407,10 +438,19 @@ public class FormDesigner extends FormWebPageComponent {
 
 	private void clearAndUpdateFormTable() {
 		// Clear and update form
+		removeCollapseStateListeners();
 		TreeObject currentSelection = formTreeTable.getTreeObjectSelected();
+		// Required do not remove. If a table detects that you are setting it's
+		// value to anything that complies with equals doesn't update the value.
+		formTreeTable.setValue(null);
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
-		if(currentSelection != null){
-			formTreeTable.select(UserSessionHandler.getFormController().getForm().getChild(currentSelection.getPath()));
+		retrieveCollapsedTableState();
+		if (currentSelection != null) {
+			if(currentSelection instanceof Form){
+				formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
+			}else{
+				formTreeTable.setValue(UserSessionHandler.getFormController().getForm().getChild(currentSelection.getPath()));
+			}
 		}
 	}
 
@@ -427,8 +467,7 @@ public class FormDesigner extends FormWebPageComponent {
 			setCreator(newCategory);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
-					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(
-							Category.class);
+					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(Category.class);
 					if (selectedCategory == null) {
 						getForm().addChild(newCategory);
 					} else {
@@ -448,8 +487,8 @@ public class FormDesigner extends FormWebPageComponent {
 					// Default name is never so long.
 				}
 				addCategoryToUI(newCategory);
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' has created a " + newCategory.getClass() + " with name: '" + newCategory.getName() + "'.");
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+						+ newCategory.getClass() + " with name: '" + newCategory.getName() + "'.");
 			} catch (NotValidChildException e) {
 				// Not possible.
 			} catch (ElementIsReadOnly e) {
@@ -499,9 +538,8 @@ public class FormDesigner extends FormWebPageComponent {
 						}
 						addElementToUI(newGroup, container);
 						container.addChild(newGroup);
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-										+ newGroup.getClass() + " with name '" + newGroup.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has created a " + newGroup.getClass() + " with name '" + newGroup.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -537,7 +575,8 @@ public class FormDesigner extends FormWebPageComponent {
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Question) {
 						parent = formTreeTable.getTreeObjectSelected().getParent();
 					} else if (formTreeTable.getTreeObjectSelected() instanceof Answer) {
-						// If answer or subanswer selected, must be added in the parent of the question.
+						// If answer or subanswer selected, must be added in the
+						// parent of the question.
 						parent = formTreeTable.getTreeObjectSelected().getAncestor(Question.class).getParent();
 					}
 					if (parent != null) {
@@ -548,10 +587,9 @@ public class FormDesigner extends FormWebPageComponent {
 						}
 						addElementToUI(newQuestion, parent);
 						parent.addChild(newQuestion);
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-										+ newQuestion.getClass() + " with name '" + newQuestion.getName() + " - Type: "
-										+ newQuestion.getAnswerType() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has created a " + newQuestion.getClass() + " with name '" + newQuestion.getName() + " - Type: "
+								+ newQuestion.getAnswerType() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -593,9 +631,8 @@ public class FormDesigner extends FormWebPageComponent {
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
-						AbcdLogger.info(this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-										+ newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has created a " + newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -632,9 +669,8 @@ public class FormDesigner extends FormWebPageComponent {
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has created a subanswer "
-								+ newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has created a subanswer " + newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException | ElementIsReadOnly e) {
@@ -675,8 +711,7 @@ public class FormDesigner extends FormWebPageComponent {
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), cve);
 			} catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			} catch (InvalidNameException e) {
 				MessageManager.showError(LanguageCodes.ERROR_INVALID_NAME);
@@ -717,26 +752,20 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveUp() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if ((selected != null) && (selected.getParent() != null)
-					&& (selected.getParent().getChildren().indexOf(selected) > 0)) {
+			if ((selected != null) && (selected.getParent() != null) && (selected.getParent().getChildren().indexOf(selected) > 0)) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
 					// Refresh the GUI.
+					removeCollapseStateListeners();
 					formTreeTable.setRootElement(getForm());
+					retrieveCollapsedTableState();
+
 					// Select the moved element
 					formTreeTable.setValue(selected);
 
-					// Collapse the table at question level
-					formTreeTable.collapseFrom(Question.class);
-					if (selected instanceof Answer) {
-						formTreeTable.uncollapse(selected.getParent());
-					}
-
-					AbcdLogger.info(
-							this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved up a "
-									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+							+ "' has moved up a " + selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
 
 					return true;
 				} catch (ChildrenNotFoundException e) {
@@ -755,27 +784,20 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveDown() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if ((selected != null)
-					&& (selected.getParent() != null)
-					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren()
-							.size() - 1))) {
+			if ((selected != null) && (selected.getParent() != null)
+					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren().size() - 1))) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
+					removeCollapseStateListeners();
 					// Refresh the GUI.
 					formTreeTable.setRootElement(getForm());
+					retrieveCollapsedTableState();
 					// Select the moved element
 					formTreeTable.setValue(selected);
 
-					// Collapse the table at question level
-					formTreeTable.collapseFrom(Question.class);
-					if (selected instanceof Answer) {
-						formTreeTable.uncollapse(selected.getParent());
-					}
-
-					AbcdLogger.info(this.getClass().getName(),
-							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved down a "
-									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+							+ "' has moved down a " + selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
 
 					return true;
 				} catch (ChildrenNotFoundException e) {
@@ -793,9 +815,8 @@ public class FormDesigner extends FormWebPageComponent {
 				try {
 					selected.remove();
 					removeElementFromUI(selected);
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + selected.getClass()
-							+ " from the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+							+ "' has removed a " + selected.getClass() + " from the Form, with 'Name: " + selected.getName() + "'.");
 				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
 					MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
@@ -836,8 +857,7 @@ public class FormDesigner extends FormWebPageComponent {
 		if (formTreeTable.getItem(element) != null) {
 			formTreeTable.setValue(element);
 		} else {
-			MessageManager.showError(LanguageCodes.WARNING_ELEMENT_NOT_FOUND,
-					LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
+			MessageManager.showError(LanguageCodes.WARNING_ELEMENT_NOT_FOUND, LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
 		}
 	}
 
@@ -845,5 +865,29 @@ public class FormDesigner extends FormWebPageComponent {
 		List<TestScenario> testScenarios = UserSessionHandler.getTestScenariosController().getTestScenarios(
 				UserSessionHandler.getFormController().getForm());
 		return !testScenarios.isEmpty();
+	}
+
+	private void removeCollapseStateListeners() {
+		formTreeTable.removeCollapseListener(collapseListener);
+		formTreeTable.removeExpandListener(expandListener);
+	}
+
+	private void addCollapseStateListeners() {
+		formTreeTable.addCollapseListener(collapseListener);
+		formTreeTable.addExpandListener(expandListener);
+	}
+
+	protected void saveCollapsedTableState() {
+		UserSessionHandler.getFormController().setCollapsedStatus(
+				formTreeTable.getCollapsedStatus(UserSessionHandler.getFormController().getForm()));
+	}
+
+	private void retrieveCollapsedTableState() {
+		removeCollapseStateListeners();
+		if (UserSessionHandler.getFormController().getCollapsedStatus() != null) {
+			formTreeTable.setCollapsedStatus(UserSessionHandler.getFormController().getForm(), UserSessionHandler.getFormController()
+					.getCollapsedStatus());
+		}
+		addCollapseStateListeners();
 	}
 }

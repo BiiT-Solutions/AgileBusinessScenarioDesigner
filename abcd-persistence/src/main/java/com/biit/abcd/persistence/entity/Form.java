@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -39,6 +40,9 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.entity.BaseForm;
 import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.form.exceptions.ChildrenNotFoundException;
+import com.biit.form.exceptions.ElementIsReadOnly;
+import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -71,7 +75,8 @@ public class Form extends BaseForm {
 
 	// For avoiding
 	// "ObjectDeletedException: deleted object would be re-saved by cascade (remove deleted object from associations)"
-	// launch when removing a customvariable and other is renamed as this one, we need to disable orphanRemoval=true of
+	// launch when removing a customvariable and other is renamed as this one,
+	// we need to disable orphanRemoval=true of
 	// children and implement ourselves.
 	@Transient
 	private Set<CustomVariable> customVariablesToDelete;
@@ -150,7 +155,7 @@ public class Form extends BaseForm {
 		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
 		formElementsChildren.add(this);
 		for (TreeObject children : formElementsChildren) {
-			formElements.put(children.getComparationId(), children);
+			formElements.put(children.getOriginalReference(), children);
 		}
 
 		// Copy CustomVariables
@@ -248,6 +253,33 @@ public class Form extends BaseForm {
 		}
 	}
 
+	private void updateTreeObjectReferences() {
+
+		// ComparatorId -> New StorableObject.
+		Map<String, TreeObject> formElements = new HashMap<>();
+		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
+		formElementsChildren.add(this);
+		for (TreeObject children : formElementsChildren) {
+			formElements.put(children.getOriginalReference(), children);
+		}
+
+		for(ExpressionChain expressionChain : getExpressionChains()){
+			updateTreeObjectReferences(expressionChain.getAllInnerStorableObjects(), formElements);
+		}
+		
+		for (TableRule tableRule : getTableRules()) {
+			updateTreeObjectReferences(tableRule.getAllInnerStorableObjects(), formElements);
+		}
+
+		for (Rule rule : getRules()) {
+			updateTreeObjectReferences(rule.getAllInnerStorableObjects(), formElements);
+		}
+
+		for (Diagram diagram : getDiagrams()) {
+			updateTreeObjectReferences(diagram.getAllInnerStorableObjects(), formElements);
+		}
+	}
+
 	/**
 	 * Replace all references to existing objects in the hashmaps.
 	 * 
@@ -262,8 +294,7 @@ public class Form extends BaseForm {
 					if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
 						diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram()
-								+ "'.");
+						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram() + "'.");
 						formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
 					}
 				}
@@ -277,20 +308,16 @@ public class Form extends BaseForm {
 	 * @param storableObjects
 	 * @param formTableRules
 	 */
-	private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects,
-			Map<String, ExpressionChain> formExpressionChains) {
+	private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects, Map<String, ExpressionChain> formExpressionChains) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramExpression) {
 				DiagramExpression diagramExpression = (DiagramExpression) child;
 				if (diagramExpression.getExpression() != null) {
 					if (formExpressionChains.get(diagramExpression.getExpression().getComparationId()) != null) {
-						diagramExpression.setExpression(formExpressionChains.get(diagramExpression.getExpression()
-								.getComparationId()));
+						diagramExpression.setExpression(formExpressionChains.get(diagramExpression.getExpression().getComparationId()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(),
-								"Adding expression '" + diagramExpression.getExpression() + "'.");
-						formExpressionChains.put(diagramExpression.getExpression().getComparationId(),
-								diagramExpression.getExpression());
+						AbcdLogger.warning(this.getClass().getName(), "Adding expression '" + diagramExpression.getExpression() + "'.");
+						formExpressionChains.put(diagramExpression.getExpression().getComparationId(), diagramExpression.getExpression());
 					}
 				}
 			}
@@ -323,8 +350,7 @@ public class Form extends BaseForm {
 	 * @param storableObjects
 	 * @param formTableRules
 	 */
-	private void updateDiagramTableRuleReferences(Set<StorableObject> storableObjects,
-			Map<String, TableRule> formTableRules) {
+	private void updateDiagramTableRuleReferences(Set<StorableObject> storableObjects, Map<String, TableRule> formTableRules) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramTable) {
 				DiagramTable diagramTable = (DiagramTable) child;
@@ -350,13 +376,13 @@ public class Form extends BaseForm {
 			if (child instanceof ExpressionValueTreeObjectReference) {
 				ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) child;
 				if (expressionValueTreeObjectReference.getReference() != null) {
-					if (formElements.get(expressionValueTreeObjectReference.getReference().getComparationId()) != null) {
-						expressionValueTreeObjectReference.setReference(formElements
-								.get(expressionValueTreeObjectReference.getReference().getComparationId()));
+					if (formElements.get(expressionValueTreeObjectReference.getReference().getOriginalReference()) != null) {
+						expressionValueTreeObjectReference.setReference(formElements.get(expressionValueTreeObjectReference.getReference()
+								.getOriginalReference()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding reference '"
-								+ expressionValueTreeObjectReference.getReference() + "'.");
-						formElements.put(expressionValueTreeObjectReference.getReference().getComparationId(),
+						AbcdLogger.warning(this.getClass().getName(),
+								"Adding reference '" + expressionValueTreeObjectReference.getReference() + "'.");
+						formElements.put(expressionValueTreeObjectReference.getReference().getOriginalReference(),
 								expressionValueTreeObjectReference.getReference());
 					}
 				}
@@ -371,15 +397,14 @@ public class Form extends BaseForm {
 	 * @param formElements
 	 * @param formVariables
 	 */
-	private void updateVariablesReferences(Set<StorableObject> storableObjects,
-			Map<String, CustomVariable> formVariables) {
+	private void updateVariablesReferences(Set<StorableObject> storableObjects, Map<String, CustomVariable> formVariables) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) child;
 				if (expressionValueCustomVariable.getVariable() != null) {
 					if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
-						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
-								.getVariable().getComparationId()));
+						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable.getVariable()
+								.getComparationId()));
 					} else {
 						formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
 								expressionValueCustomVariable.getVariable());
@@ -388,8 +413,8 @@ public class Form extends BaseForm {
 			} else if (child instanceof ExpressionValueGenericCustomVariable) {
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) child;
 				if (formVariables.get(expressionValueGenericCustomVariable.getVariable().getComparationId()) != null) {
-					expressionValueGenericCustomVariable.setVariable(formVariables
-							.get(expressionValueGenericCustomVariable.getVariable().getComparationId()));
+					expressionValueGenericCustomVariable.setVariable(formVariables.get(expressionValueGenericCustomVariable.getVariable()
+							.getComparationId()));
 				} else {
 					formVariables.put(expressionValueGenericCustomVariable.getVariable().getComparationId(),
 							expressionValueGenericCustomVariable.getVariable());
@@ -539,7 +564,8 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root
+	 * diagram.
 	 * 
 	 * @param diagram
 	 */
@@ -700,5 +726,18 @@ public class Form extends BaseForm {
 	@Override
 	public String toString() {
 		return getLabel();
+	}
+
+	public synchronized static TreeObject move(TreeObject objectToMove, TreeObject toParent) throws ChildrenNotFoundException,
+			NotValidChildException, ElementIsReadOnly {
+		if (!Objects.equals(objectToMove.getAncestor(Form.class), toParent.getAncestor(Form.class))) {
+			throw new NotValidChildException("Root form for each element is different");
+		}
+		TreeObject newInstanceOfObjectToMove = TreeObject.move(objectToMove, toParent);
+
+		Form form = (Form) objectToMove.getAncestor(Form.class);
+		form.updateTreeObjectReferences();
+
+		return newInstanceOfObjectToMove;
 	}
 }

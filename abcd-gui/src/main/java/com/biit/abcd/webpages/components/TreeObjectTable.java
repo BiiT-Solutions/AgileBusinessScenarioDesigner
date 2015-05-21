@@ -82,12 +82,7 @@ public class TreeObjectTable extends TreeTable {
 				setValue(element);
 			}
 			setChildrenAllowed(element, false);
-			// If it is a new element, still has no parent. Uncollapse the
-			// futures parent.
-			if (element.getParent() == null) {
-				uncollapse(parent);
-				setCollapsed(element, false);
-			}
+			uncollapse(element);
 		}
 	}
 
@@ -112,10 +107,7 @@ public class TreeObjectTable extends TreeTable {
 			// If it is a new element, still has no parent. Uncollapse the
 			// futures parent.
 			setValue(element);
-			if (element.getParent() == null) {
-				uncollapse(parent);
-				setCollapsed(element, false);
-			}
+			uncollapse(element);
 		}
 	}
 
@@ -275,7 +267,6 @@ public class TreeObjectTable extends TreeTable {
 			for (TreeObject ancestor : ancestors) {
 				setCollapsed(ancestor, false);
 			}
-			setCollapsed(element, false);
 		}
 	}
 

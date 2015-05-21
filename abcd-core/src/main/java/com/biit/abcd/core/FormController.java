@@ -62,6 +62,7 @@ public class FormController {
 	private Form originalForm;
 
 	private IFormDao formDao;
+	private Set<Object> collapsedStatus;
 
 	public FormController(User user, SpringContextHelper helper) {
 		this.setUser(user);
@@ -97,7 +98,7 @@ public class FormController {
 
 	private void updateLastAccessedReferences() {
 		if(lastAccessTreeObject!=null){
-			lastAccessTreeObject = getForm().getChild(lastAccessTreeObject.getPath());
+			lastAccessTreeObject = getForm().findByComparationId(lastAccessTreeObject.getComparationId());
 		}
 		if(lastAccessDiagram!=null){
 			for(Diagram diagram: getForm().getDiagrams()){
@@ -232,6 +233,7 @@ public class FormController {
 
 	public void setForm(Form form) {
 		this.form = form;
+		this.collapsedStatus = null;
 		try {
 			if (form == null) {
 				this.originalForm = null;
@@ -367,5 +369,14 @@ public class FormController {
 		this.lastAccessTable = null;
 		this.lastAccessRule = null;
 		this.copiedRows = null;
+		this.collapsedStatus = null;
+	}
+
+	public Set<Object> getCollapsedStatus() {
+		return collapsedStatus;
+	}
+
+	public void setCollapsedStatus(Set<Object> collapsedStatus) {
+		this.collapsedStatus = collapsedStatus;
 	}
 }
