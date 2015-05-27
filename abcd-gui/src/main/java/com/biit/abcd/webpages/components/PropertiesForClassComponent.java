@@ -177,7 +177,6 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 					}
 				} else {
 					updateElement();
-
 				}
 			}
 		}
