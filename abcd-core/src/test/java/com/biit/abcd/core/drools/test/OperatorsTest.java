@@ -127,67 +127,61 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "droolsOperators" })
-	public void minOperatorTest() {
-		try {
-			// Restart the form to avoid test cross references
-			initForm();
-			// MIN expression
-			CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), MIN, CustomVariableType.NUMBER,
-					CustomVariableScope.FORM);
-			ExpressionChain expression = new ExpressionChain("minExpression", new ExpressionValueCustomVariable(
-					getForm(), pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGlobalConstant(
-							getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
-					new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET));
-			getForm().getExpressionChains().add(expression);
-			getForm().addDiagram(createExpressionsDiagram());
-			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
-			// Check result
-			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
-					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
-					.getAnswer());
-			Double thirdVal = 1000.0;
-			Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MIN), minVal);
-		} catch (Exception e) {
-			Assert.fail("Exception in test");
-		}
+	public void minOperatorTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+		// Restart the form to avoid test cross references
+		initForm();
+		// MIN expression
+		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), MIN, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("minExpression", new ExpressionValueCustomVariable(getForm(),
+				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGlobalConstant(
+						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check result
+		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+		Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+				.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
+				.getAnswer());
+		Double thirdVal = 1000.0;
+		Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
+		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MIN), minVal);
 	}
 
 	@Test(groups = { "droolsOperators" })
-	public void maxOperatorTest() {
-		try {
-			// Restart the form to avoid test cross references
-			initForm();
-			// MAX expression
-			CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), MAX, CustomVariableType.NUMBER,
-					CustomVariableScope.FORM);
-			ExpressionChain expression = new ExpressionChain("maxExpression", new ExpressionValueCustomVariable(
-					getForm(), pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionFunction(AvailableFunction.MAX), new ExpressionValueGlobalConstant(
-							getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
-					new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
-							AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET));
-			getForm().getExpressionChains().add(expression);
-			getForm().addDiagram(createExpressionsDiagram());
-			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
-			// Check result
-			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
-					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
-					.getAnswer());
-			Double thirdVal = 1000.0;
-			Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MAX), maxVal);
-		} catch (Exception e) {
-			Assert.fail("Exception in test");
-		}
+	public void maxOperatorTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+		// Restart the form to avoid test cross references
+		initForm();
+		// MAX expression
+		CustomVariable pmtResultCustomVariable = new CustomVariable(getForm(), MAX, CustomVariableType.NUMBER,
+				CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("maxExpression", new ExpressionValueCustomVariable(getForm(),
+				pmtResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionFunction(AvailableFunction.MAX), new ExpressionValueGlobalConstant(
+						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueTreeObjectReference(getTreeObject("heightFather")), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		getForm().getExpressionChains().add(expression);
+		getForm().addDiagram(createExpressionsDiagram());
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules();
+		// Check result
+		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+		Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+				.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
+				.getAnswer());
+		Double thirdVal = 1000.0;
+		Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
+		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MAX), maxVal);
 	}
 
 	@Test(groups = { "droolsOperators" })
@@ -221,8 +215,8 @@ public class OperatorsTest extends KidsFormCreator {
 					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
 					.getAnswer()));
 			Double thirdVal = 1000.0;
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG), (firstVal
-					+ secondVal + thirdVal) / 3.0);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG),
+					(firstVal + secondVal + thirdVal) / 3.0);
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
@@ -253,7 +247,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(PMT), 21000.0);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(PMT),
+					21000.0);
 		} catch (Exception e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
@@ -279,7 +274,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(IF_RESULT), 1.7);
+			Assert.assertEquals(
+					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(IF_RESULT), 1.7);
 		} catch (Exception e) {
 			Assert.fail();
 		}
@@ -341,9 +337,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -379,9 +374,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -406,12 +400,10 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE),
-					10.);
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -435,9 +427,8 @@ public class OperatorsTest extends KidsFormCreator {
 			Assert.assertEquals(
 					((DroolsSubmittedCategory) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class,
 							getCategory().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -462,9 +453,8 @@ public class OperatorsTest extends KidsFormCreator {
 					((DroolsSubmittedGroup) droolsForm.getChild(ISubmittedCategory.class, CATEGORY_LIFESTYLE).getChild(
 							ISubmittedGroup.class, getGroup().getName())).getVariableValue(CUSTOM_VARIABLE_TO_COMPARE),
 					10.);
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -490,9 +480,8 @@ public class OperatorsTest extends KidsFormCreator {
 							.getChild(ISubmittedGroup.class, getGroup().getName())
 							.getChild(ISubmittedQuestion.class, getQuestion().getName()))
 							.getVariableValue(CUSTOM_VARIABLE_TO_COMPARE), 10.);
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -548,9 +537,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -587,9 +575,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -626,9 +613,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -664,9 +650,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -702,9 +687,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -748,9 +732,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -786,9 +769,8 @@ public class OperatorsTest extends KidsFormCreator {
 			// Create the drools rules and launch the engine
 			DroolsForm droolsForm = createAndRunDroolsRules();
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -837,9 +819,8 @@ public class OperatorsTest extends KidsFormCreator {
 		DroolsForm droolsForm = launchRule(new Rule("andTest", conditions, action));
 		if (droolsForm != null) {
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					CUSTOM_VARIABLE_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		}
 	}
 
@@ -886,44 +867,39 @@ public class OperatorsTest extends KidsFormCreator {
 		DroolsForm droolsForm = launchRule(new Rule("orTest", conditions, action));
 		if (droolsForm != null) {
 			// Check result
-			Assert.assertEquals(
-					((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-					OR_RESULT_VALUE);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), OR_RESULT_VALUE);
 		}
 	}
 
 	@Test(groups = { "droolsOperators" })
-	public void testNotOperator() {
-		try {
-			// Restart the form to avoid test cross references
-			initForm();
-			// Expression one (false)
-			ExpressionChain condition = new ExpressionChain("expressionOne", new ExpressionFunction(
-					AvailableFunction.NOT), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-					new ExpressionValueTreeObjectReference(getTreeObject(BREAKFAST_QUESTION)), new ExpressionFunction(
-							AvailableFunction.IN), new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION,
-							"a")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
-							getAnswer(BREAKFAST_QUESTION, "c")), new ExpressionSymbol(AvailableSymbol.COMMA),
-					new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION, "d")), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+	public void testNotOperator() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+		// Restart the form to avoid test cross references
+		initForm();
+		// Expression one (false)
+		ExpressionChain condition = new ExpressionChain("expressionOne", new ExpressionFunction(AvailableFunction.NOT),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(
+						getTreeObject(BREAKFAST_QUESTION)), new ExpressionFunction(AvailableFunction.IN),
+				new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION, "a")), new ExpressionSymbol(
+						AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getAnswer(BREAKFAST_QUESTION,
+						"c")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(
+						getAnswer(BREAKFAST_QUESTION, "d")), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 
-			// Create a a simple action
-			CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
-					CustomVariableType.STRING, CustomVariableScope.FORM);
-			ExpressionChain action = new ExpressionChain(new ExpressionValueCustomVariable(getForm(),
-					customVariableResult), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
+		// Create a a simple action
+		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+				CustomVariableType.STRING, CustomVariableScope.FORM);
+		ExpressionChain action = new ExpressionChain(
+				new ExpressionValueCustomVariable(getForm(), customVariableResult), new ExpressionOperatorMath(
+						AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
 
-			// Create the drools rules and launch the engine
-			DroolsForm droolsForm = launchRule(new Rule("notTest", condition, action));
-			if (droolsForm != null) {
-				// Check result
-				Assert.assertEquals(
-						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-						CUSTOM_VARIABLE_RESULT_VALUE);
-			}
-		} catch (Exception e) {
-			Assert.fail();
+		// Create the drools rules and launch the engine
+		DroolsForm droolsForm = launchRule(new Rule("notTest", condition, action));
+		if (droolsForm != null) {
+			// Check result
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+					.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 		}
 	}
 
@@ -969,9 +945,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("notAndTest", conditions, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(
-						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-						CUSTOM_VARIABLE_RESULT_VALUE);
+				Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+						.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
 				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
@@ -1028,9 +1003,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("andOrTest", conditions, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(
-						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-						CUSTOM_VARIABLE_RESULT_VALUE);
+				Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+						.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
 				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
@@ -1087,9 +1061,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("andOrTest", conditions, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(
-						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-						CUSTOM_VARIABLE_RESULT_VALUE);
+				Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+						.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (CharacterNotAllowedException | FieldTooLongException | NotValidChildException
 				| InvalidAnswerFormatException | NotValidTypeInVariableData | ElementIsReadOnly e) {
@@ -1229,9 +1202,8 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsForm droolsForm = launchRule(new Rule("logicComparatorsTest", condition, action));
 			if (droolsForm != null) {
 				// Check result
-				Assert.assertEquals(
-						((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
-						CUSTOM_VARIABLE_RESULT_VALUE);
+				Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm())
+						.getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 			}
 		} catch (Exception e) {
 			Assert.fail("Exception in test");

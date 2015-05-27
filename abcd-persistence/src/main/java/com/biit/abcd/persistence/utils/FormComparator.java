@@ -60,8 +60,7 @@ import com.biit.form.entity.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 
 /**
- * Compares two forms. Must be equals (but with different IDs and
- * ComparationIds).
+ * Compares two forms. Must be equals (but with different IDs and ComparationIds).
  */
 public class FormComparator {
 	private Set<StorableObject> alreadyComparedForm1Element = new HashSet<>();
@@ -149,6 +148,10 @@ public class FormComparator {
 			return;
 		}
 
+		if (object1 == null || object2 == null) {
+			throw new GlobalVariableNotEqualsException("Cannot compare '" + object1 + "' with '" + object2 + "'.");
+		}
+
 		// No compare Ids. Global Variables are not duplicated.
 
 		if ((object1.getName() != null && object2.getName() == null)
@@ -183,8 +186,11 @@ public class FormComparator {
 			return;
 		}
 
-		// No compare Ids. Global Variables are not duplicated.
+		if (object1 == null || object2 == null) {
+			throw new VariableDataNotEqualsException("Cannot compare '" + object1 + "' with '" + object2 + "'.");
+		}
 
+		// No compare Ids. Variables are not duplicated.
 		if ((object1.getValidFrom() != null && object2.getValidFrom() == null)
 				|| (object1.getValidFrom() == null && object2.getValidFrom() != null)
 				|| (object1.getValidFrom() != null && object2.getValidFrom() != null && !object1.getValidFrom().equals(
@@ -260,6 +266,10 @@ public class FormComparator {
 
 		if (object1 == null && object2 == null) {
 			return;
+		}
+
+		if (object1 == null || object2 == null) {
+			throw new ExpressionNotEqualsException("Cannot compare '" + object1 + "' with '" + object2 + "'.");
 		}
 
 		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
@@ -606,6 +616,11 @@ public class FormComparator {
 		if (object1 == null && object2 == null) {
 			return;
 		}
+		
+		if (object1 == null || object2 == null) {
+			throw new DiagramObjectNotEqualsException("Cannot compare '" + object1 + "' with '" + object2 + "'.");
+		}
+		
 		compare((DiagramElement) object1, (DiagramElement) object2);
 		if ((object1.getDiagram() != null && object2.getDiagram() == null)
 				|| (object1.getDiagram() == null && object2.getDiagram() != null)) {
@@ -905,6 +920,11 @@ public class FormComparator {
 		if ((form1 == null || form2 == null) && (form1 != null || form2 != null)) {
 			throw new FormNotEqualsException("Obtained form is null");
 		}
+		
+		if (form1 == null || form2 == null) {
+			throw new FormNotEqualsException("Cannot compare '" + form1 + "' with '" + form2 + "'.");
+		}
+		
 		if (form1.getChildren().size() != form2.getChildren().size()) {
 			throw new FormNotEqualsException("Form has different children size!");
 		}
