@@ -52,7 +52,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ExpressionViewer extends CssLayout {
 	private static final long serialVersionUID = -3032370197806581430L;
-	public static String CLASSNAME = "v-expression-viewer";
+	private static final String CLASSNAME = "v-expression-viewer";
 	private static final String LINE_HEIGHT = "32px";
 	private ExpressionChain expressions;
 	private Expression selectedExpression = null;
@@ -62,7 +62,7 @@ public class ExpressionViewer extends CssLayout {
 	private Label evaluatorOutput;
 	// If this editor has the focus.
 	private boolean focused;
-	private List<LayoutClickedListener> clickedListeners;
+	private transient List<LayoutClickedListener> clickedListeners;
 	private List<HorizontalLayout> lines;
 	private HorizontalLayout selectedLine = null;
 
