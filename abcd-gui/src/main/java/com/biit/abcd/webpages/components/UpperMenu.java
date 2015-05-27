@@ -14,6 +14,7 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.DiagramNotEqualsException;
@@ -59,6 +60,7 @@ public abstract class UpperMenu extends SecuredMenu {
 	private HorizontalLayout oldRootLayoutContainer;
 	private IconButton formManagerButton, settingsButton;
 	private IFormDao formDao;
+	private ITestScenarioDao testScenarioDao;
 	// Settings buttons
 	private IconButton globalConstantsButton, clearCacheButton, logoutButton;
 	private Map<IconButton, List<IconButton>> subMenuButtons;
@@ -69,6 +71,7 @@ public abstract class UpperMenu extends SecuredMenu {
 		this.setContractIcons(true, BUTTON_WIDTH);
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
+		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
 	}
 
 	@Override
@@ -291,6 +294,7 @@ public abstract class UpperMenu extends SecuredMenu {
 							public void acceptAction(AcceptCancelWindow window) {
 								// Reset ehCache.
 								formDao.evictAllCache();
+								testScenarioDao.evictAllCache();
 								// Reset Liferay Users pool.
 								AbcdFormAuthorizationService.getInstance().reset();
 								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
