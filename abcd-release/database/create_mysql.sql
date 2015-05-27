@@ -1,9 +1,4 @@
 
-    create table TestAnswerMultiCheckBox_multiCheckBoxValue (
-        TestAnswerMultiCheckBox_ID bigint not null,
-        multiCheckBoxValue varchar(255)
-    );
-
     create table diagram (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -660,6 +655,11 @@
         primary key (ID)
     );
 
+    create table test_answer_multi_checkbox_values (
+        TestAnswerMultiCheckBox_ID bigint not null,
+        multiCheckBoxValue varchar(255)
+    );
+
     create table test_answer_radio_button (
         ID bigint not null,
         comparationId varchar(190) not null,
@@ -1230,11 +1230,6 @@
     alter table tree_questions 
         add constraint UK_nu1epukynjltak450rhyp6eu0  unique (comparationId);
 
-    alter table TestAnswerMultiCheckBox_multiCheckBoxValue 
-        add constraint FK_9hig9ck1w4ry8gscespat7k7i 
-        foreign key (TestAnswerMultiCheckBox_ID) 
-        references test_answer_multi_checkbox (ID);
-
     alter table diagram_calculation 
         add constraint FK_psofb7hd6w4ofxlvoas1fae45 
         foreign key (expression_ID) 
@@ -1509,6 +1504,11 @@
         add constraint FK_dk0yu4ajw581l5dpebmouwuce 
         foreign key (rule_decision_table_ID) 
         references rule_decision_table (ID);
+
+    alter table test_answer_multi_checkbox_values 
+        add constraint FK_dqlmq4p4xn8qhy5g41f5kuvxb 
+        foreign key (TestAnswerMultiCheckBox_ID) 
+        references test_answer_multi_checkbox (ID);
 
     alter table test_scenario 
         add constraint FK_thnxvj85s3nk6u7k6f91dfbr6 

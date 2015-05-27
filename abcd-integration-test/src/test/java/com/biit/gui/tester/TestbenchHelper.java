@@ -11,15 +11,15 @@ public class TestbenchHelper {
 	private static final String NOTIFICATION_TYPE_ERROR = "error";
 
 	public static void checkNotificationIsError(NotificationElement notification) {
-		Assert.assertEquals(NOTIFICATION_TYPE_ERROR, notification.getType());
+		Assert.assertEquals(notification.getType(), NOTIFICATION_TYPE_ERROR);
 	}
 
 	public static void checkNotificationIsWarning(NotificationElement notification) {
-		Assert.assertEquals(NOTIFICATION_TYPE_WARNING, notification.getType());
+		Assert.assertEquals(notification.getType(), NOTIFICATION_TYPE_WARNING);
 	}
 	
 	public static void checkNotificationIsHumanized(NotificationElement notification) {
-		Assert.assertEquals(NOTIFICATION_TYPE_HUMANIZED, notification.getType());
+		Assert.assertEquals(notification.getType(), NOTIFICATION_TYPE_HUMANIZED);
 	}
 	
 }
