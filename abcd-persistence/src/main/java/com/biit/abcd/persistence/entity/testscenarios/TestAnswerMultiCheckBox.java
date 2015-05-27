@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,6 +22,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class TestAnswerMultiCheckBox extends TestAnswer {
 	private static final long serialVersionUID = -3255342701991988332L;
 	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "test_answer_multi_checkbox_values")
 	private Set<String> multiCheckBoxValue;
 
 	public TestAnswerMultiCheckBox() {

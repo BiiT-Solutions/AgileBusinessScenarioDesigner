@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
--- Host: vagrant-mysql.biit-solutions.com    Database: abcd
+-- Host: vagrant-mysql.biit-solutions.com    Database: abcdtest
 -- ------------------------------------------------------
 -- Server version	5.6.22
 
@@ -14,30 +14,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `TestAnswerMultiCheckBox_multiCheckBoxValue`
---
-
-DROP TABLE IF EXISTS `TestAnswerMultiCheckBox_multiCheckBoxValue`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TestAnswerMultiCheckBox_multiCheckBoxValue` (
-  `TestAnswerMultiCheckBox_ID` bigint(20) NOT NULL,
-  `multiCheckBoxValue` varchar(255) DEFAULT NULL,
-  KEY `FK_9hig9ck1w4ry8gscespat7k7i` (`TestAnswerMultiCheckBox_ID`),
-  CONSTRAINT `FK_9hig9ck1w4ry8gscespat7k7i` FOREIGN KEY (`TestAnswerMultiCheckBox_ID`) REFERENCES `test_answer_multi_checkbox` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TestAnswerMultiCheckBox_multiCheckBoxValue`
---
-
-LOCK TABLES `TestAnswerMultiCheckBox_multiCheckBoxValue` WRITE;
-/*!40000 ALTER TABLE `TestAnswerMultiCheckBox_multiCheckBoxValue` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TestAnswerMultiCheckBox_multiCheckBoxValue` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `diagram`
@@ -1859,6 +1835,30 @@ LOCK TABLES `test_answer_multi_checkbox` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `test_answer_multi_checkbox_values`
+--
+
+DROP TABLE IF EXISTS `test_answer_multi_checkbox_values`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_answer_multi_checkbox_values` (
+  `TestAnswerMultiCheckBox_ID` bigint(20) NOT NULL,
+  `multiCheckBoxValue` varchar(255) DEFAULT NULL,
+  KEY `FK_dqlmq4p4xn8qhy5g41f5kuvxb` (`TestAnswerMultiCheckBox_ID`),
+  CONSTRAINT `FK_dqlmq4p4xn8qhy5g41f5kuvxb` FOREIGN KEY (`TestAnswerMultiCheckBox_ID`) REFERENCES `test_answer_multi_checkbox` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_answer_multi_checkbox_values`
+--
+
+LOCK TABLES `test_answer_multi_checkbox_values` WRITE;
+/*!40000 ALTER TABLE `test_answer_multi_checkbox_values` DISABLE KEYS */;
+/*!40000 ALTER TABLE `test_answer_multi_checkbox_values` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `test_answer_radio_button`
 --
 
@@ -2470,4 +2470,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-25 12:58:21
+-- Dump completed on 2015-05-27 10:09:22
