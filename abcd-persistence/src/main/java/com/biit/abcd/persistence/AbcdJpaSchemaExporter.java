@@ -16,7 +16,7 @@ import com.biit.persistence.JpaSchemaExporter;
  * Extends JpaSchemaExporter for updating the form label from 1000 chars to 190.
  */
 public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporter {
-	private static final String[] TABLES_TO_MODIFY = new String[] { "tree_forms" };
+	private static final String[] TABLES_TO_MODIFY = new String[] { "tree_forms", "test_scenario" };
 
 	public AbcdJpaSchemaExporter(String[] packagesName, String[] classesToIgnore) {
 		super(packagesName, classesToIgnore);
@@ -65,6 +65,9 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 				}
 				if (correctTable && line.contains("label varchar(1000)")) {
 					line = line.replace("label varchar(1000)", "label varchar(190)");
+				}
+				if (correctTable && line.contains("formLabel varchar(1000)")) {
+					line = line.replace("formLabel varchar(1000)", "formLabel varchar(190)");
 				}
 				bw.write(line + "\n");
 			}
