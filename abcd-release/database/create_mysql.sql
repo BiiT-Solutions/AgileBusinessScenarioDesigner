@@ -679,7 +679,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         formId bigint not null,
-        formLabel varchar(1000) not null,
+        formLabel varchar(190) not null,
         formOrganization DOUBLE not null,
         name varchar(190),
         testScenarioForm_ID bigint,
