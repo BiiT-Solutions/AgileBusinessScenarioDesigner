@@ -36,6 +36,9 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String OTHER_FORM = "Other Form";
 	private final static String CATEGORY_LABEL = "Category1";
 	// private final static String ACTION_EXPRESSION = "Score=3";
+	private Category formCategoryUp;
+	private Category formCategoryDown;
+	private Question formQuestion;
 
 	@Autowired
 	private IFormDao formDao;
@@ -47,8 +50,8 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	private ITableRuleRowDao tableRuleDao;
 
 	@Test
-	public void storeDummyForm() throws FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			ElementCannotBePersistedException, ElementCannotBeRemovedException {
+	public void storeDummyForm() throws FieldTooLongException, CharacterNotAllowedException,
+			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);
@@ -60,8 +63,9 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test
-	public void storeFormWithCategory() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException {
+	public void storeFormWithCategory() throws NotValidChildException, FieldTooLongException,
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementIsReadOnly, ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(FULL_FORM);
@@ -76,8 +80,9 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test
-	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementCannotBeRemovedException, ElementIsReadOnly {
+	public void storeOtherFormWithSameLabelCategory() throws NotValidChildException, FieldTooLongException,
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException, ElementIsReadOnly {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(OTHER_FORM);
@@ -92,19 +97,16 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		formDao.makeTransient(form);
 	}
 
-	@Test
-	@Rollback(value=false)
-	@Transactional(value=TxType.NEVER)
-	public void moveElementsUp() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly, ElementCannotBePersistedException,
-			ElementCannotBeRemovedException {
+	private Form createCompleteForm() throws FieldTooLongException, CharacterNotAllowedException,
+			NotValidChildException, ElementIsReadOnly {
 		Form form = new Form();
 		form.setOrganizationId(0l);
-		form.setLabel("MoveUp");
+		form.setLabel(FULL_FORM);
 
 		Category category = new Category();
 		category.setName("Category1");
 		form.addChild(category);
+		setFormCategoryUp(category);
 
 		Category category2 = new Category();
 		category2.setName("Category2");
@@ -113,6 +115,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Category category3 = new Category();
 		category3.setName("Category3");
 		form.addChild(category3);
+		setFormCategoryDown(category3);
 
 		Group group1 = new Group();
 		group1.setName("Group1");
@@ -137,6 +140,7 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		Question question3 = new Question();
 		question3.setName("Question3");
 		group2.addChild(question3);
+		setFormQuestion(question3);
 
 		Answer answer1 = new Answer();
 		answer1.setName("Answer1");
@@ -150,10 +154,46 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 		answer3.setName("Answer3");
 		question2.addChild(answer3);
 
+		return form;
+	}
+
+	private void setFormQuestion(Question formQuestion) {
+		this.formQuestion = formQuestion;
+	}
+
+	private void setFormCategoryUp(Category formCategoryUp) {
+		this.formCategoryUp = formCategoryUp;
+	}
+	
+	private void setFormCategoryDown(Category formCategoryDown) {
+		this.formCategoryDown = formCategoryDown;
+	}
+
+	private Question getFormQuestion() {
+		return formQuestion;
+	}
+
+	private Category getFormCategoryUp() {
+		return formCategoryUp;
+	}
+	
+	private Category getFormCategoryDown() {
+		return formCategoryDown;
+	}
+
+	@Test
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	public void moveElementsInHierarchyDown() throws NotValidChildException, ChildrenNotFoundException,
+			FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException {
+
+		Form form = createCompleteForm();
+
 		// Update form with new elements
 		formDao.makePersistent(form);
 
-		Form.move(question3, category);
+		Form.move(getFormQuestion(), getFormCategoryDown());
 
 		// Update form with this changes
 		formDao.merge(form);
@@ -167,146 +207,21 @@ public class FormTest extends AbstractTransactionalTestNGSpringContextTests {
 	}
 
 	@Test
-	@Rollback(value=false)
-	@Transactional(value=TxType.NEVER)
-	public void moveElementsInHierarchyDown() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly, ElementCannotBePersistedException,
-			ElementCannotBeRemovedException {
-		
-		Form form = new Form();
-		form.setOrganizationId(0l);
-		form.setLabel("MoveUp");
-
-		Category category = new Category();
-		category.setName("Category1");
-		form.addChild(category);
-
-		Category category2 = new Category();
-		category2.setName("Category2");
-		form.addChild(category2);
-
-		Category category3 = new Category();
-		category3.setName("Category3");
-		form.addChild(category3);
-
-		Group group1 = new Group();
-		group1.setName("Group1");
-		category2.addChild(group1);
-
-		Group group2 = new Group();
-		group2.setName("Group2");
-		category2.addChild(group2);
-
-		Group group3 = new Group();
-		group3.setName("Group3");
-		category2.addChild(group3);
-
-		Question question1 = new Question();
-		question1.setName("Question1");
-		group2.addChild(question1);
-
-		Question question2 = new Question();
-		question2.setName("Question2");
-		group2.addChild(question2);
-
-		Question question3 = new Question();
-		question3.setName("Question3");
-		group2.addChild(question3);
-
-		Answer answer1 = new Answer();
-		answer1.setName("Answer1");
-		question2.addChild(answer1);
-
-		Answer answer2 = new Answer();
-		answer2.setName("Answer2");
-		question2.addChild(answer2);
-
-		Answer answer3 = new Answer();
-		answer3.setName("Answer3");
-		question2.addChild(answer3);
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	public void moveElementsInHierarchyUp() throws NotValidChildException, ChildrenNotFoundException,
+			FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
+			ElementCannotBePersistedException, ElementCannotBeRemovedException {
+		Form form = createCompleteForm();
 
 		// Update form with new elements
 		formDao.makePersistent(form);
 
-		Form.move(question3, category);
+		Form.move(getFormQuestion(), getFormCategoryUp());
 
 		// Update form with this changes
 		formDao.merge(form);
 
-		Form storedForm = formDao.get(form.getId());
-		Assert.assertNotNull(storedForm);
-
-		// Compare order is the same.
-		Assert.assertTrue(compare(form, storedForm));
-		formDao.makeTransient(storedForm);
-	}
-
-	@Test
-	@Rollback(value=false)
-	@Transactional(value=TxType.NEVER)
-	public void moveElementsInHierarchyUp() throws NotValidChildException, ChildrenNotFoundException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly, ElementCannotBePersistedException,
-			ElementCannotBeRemovedException {
-		Form form = new Form();
-		form.setOrganizationId(0l);
-		form.setLabel("MoveUp");
-
-		Category category = new Category();
-		category.setName("Category1");
-		form.addChild(category);
-
-		Category category2 = new Category();
-		category2.setName("Category2");
-		form.addChild(category2);
-
-		Category category3 = new Category();
-		category3.setName("Category3");
-		form.addChild(category3);
-
-		Group group1 = new Group();
-		group1.setName("Group1");
-		category2.addChild(group1);
-
-		Group group2 = new Group();
-		group2.setName("Group2");
-		category2.addChild(group2);
-
-		Group group3 = new Group();
-		group3.setName("Group3");
-		category2.addChild(group3);
-
-		Question question1 = new Question();
-		question1.setName("Question1");
-		group2.addChild(question1);
-
-		Question question2 = new Question();
-		question2.setName("Question2");
-		group2.addChild(question2);
-
-		Question question3 = new Question();
-		question3.setName("Question3");
-		group2.addChild(question3);
-
-		Answer answer1 = new Answer();
-		answer1.setName("Answer1");
-		question2.addChild(answer1);
-
-		Answer answer2 = new Answer();
-		answer2.setName("Answer2");
-		question2.addChild(answer2);
-
-		Answer answer3 = new Answer();
-		answer3.setName("Answer3");
-		question2.addChild(answer3);
-
-		// Update form with new elements
-		formDao.makePersistent(form);
-		
-		Form.move(question3, category);	
-		
-		// Update form with this changes
-		formDao.merge(form);
-				
 		Form storedForm = formDao.get(form.getId());
 		Assert.assertNotNull(storedForm);
 

@@ -37,6 +37,11 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.persistence.entity.serialization.AnswerSerializer;
+import com.biit.abcd.persistence.entity.serialization.BaseRepeatableGroupSerializer;
+import com.biit.abcd.persistence.entity.serialization.FormSerializer;
+import com.biit.abcd.persistence.entity.serialization.QuestionSerializer;
+import com.biit.abcd.persistence.entity.serialization.TreeObjectSerializer;
 import com.biit.form.entity.BaseForm;
 import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -46,6 +51,8 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.liferay.portal.model.User;
 
 @Entity
@@ -54,8 +61,21 @@ import com.liferay.portal.model.User;
 @Cacheable(true)
 public class Form extends BaseForm {
 	private static final long serialVersionUID = 185712950929311653L;
+	public synchronized static TreeObject move(TreeObject objectToMove, TreeObject toParent) throws ChildrenNotFoundException,
+			NotValidChildException, ElementIsReadOnly {
+		if (!Objects.equals(objectToMove.getAncestor(Form.class), toParent.getAncestor(Form.class))) {
+			throw new NotValidChildException("Root form for each element is different");
+		}
+		TreeObject newInstanceOfObjectToMove = TreeObject.move(objectToMove, toParent);
+
+		Form form = (Form) objectToMove.getAncestor(Form.class);
+		form.updateTreeObjectReferences();
+
+		return newInstanceOfObjectToMove;
+	}
 	@Column(nullable = false)
 	private Timestamp availableFrom;
+
 	private Timestamp availableTo;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -107,39 +127,13 @@ public class Form extends BaseForm {
 		customVariablesToDelete = new HashSet<>();
 	}
 
-	@Override
-	public void resetIds() {
-		super.resetIds();
-		for (Diagram diagram : getDiagrams()) {
-			diagram.resetIds();
-		}
-		for (TableRule tableRule : getTableRules()) {
-			tableRule.resetIds();
-		}
-		for (CustomVariable customVariable : this.getCustomVariables()) {
-			customVariable.resetIds();
-		}
-		for (ExpressionChain expression : getExpressionChains()) {
-			expression.resetIds();
-		}
-		for (Rule rule : getRules()) {
-			rule.resetIds();
-		}
+	public void add(CustomVariable formCustomVariable) {
+		customVariables.add(formCustomVariable);
+		formCustomVariable.setForm(this);
 	}
 
-	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
-		Form newVersion = (Form) generateCopy(false, true);
-		newVersion.setVersion(getVersion() + 1);
-		newVersion.resetIds();
-		newVersion.setCreatedBy(user);
-		newVersion.setUpdatedBy(user);
-		newVersion.setCreationTime();
-		newVersion.setUpdateTime();
-		// Update ValidTo of current version: 84600000 milliseconds in a day
-		long newValidTo = newVersion.getAvailableFrom().getTime() - 84600000;
-		Timestamp validTo = newValidTo > getAvailableFrom().getTime() ? new Timestamp(newValidTo) : getAvailableFrom();
-		setAvailableTo(validTo);
-		return newVersion;
+	public void addDiagram(Diagram diagram) {
+		diagrams.add(diagram);
 	}
 
 	@Override
@@ -253,30 +247,348 @@ public class Form extends BaseForm {
 		}
 	}
 
-	private void updateTreeObjectReferences() {
+	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
+		Form newVersion = (Form) generateCopy(false, true);
+		newVersion.setVersion(getVersion() + 1);
+		newVersion.resetIds();
+		newVersion.setCreatedBy(user);
+		newVersion.setUpdatedBy(user);
+		newVersion.setCreationTime();
+		newVersion.setUpdateTime();
+		// Update ValidTo of current version: 84600000 milliseconds in a day
+		long newValidTo = newVersion.getAvailableFrom().getTime() - 84600000;
+		Timestamp validTo = newValidTo > getAvailableFrom().getTime() ? new Timestamp(newValidTo) : getAvailableFrom();
+		setAvailableTo(validTo);
+		return newVersion;
+	}
 
-		// ComparatorId -> New StorableObject.
-		Map<String, TreeObject> formElements = new HashMap<>();
-		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
-		formElementsChildren.add(this);
-		for (TreeObject children : formElementsChildren) {
-			formElements.put(children.getOriginalReference(), children);
+	@Override
+	public Set<StorableObject> getAllInnerStorableObjects() {
+		Set<StorableObject> innerStorableObjects = new HashSet<>();
+		innerStorableObjects.addAll(super.getAllInnerStorableObjects());
+
+		for (Diagram diagram : getDiagrams()) {
+			innerStorableObjects.add(diagram);
+			innerStorableObjects.addAll(diagram.getAllInnerStorableObjects());
 		}
 
-		for(ExpressionChain expressionChain : getExpressionChains()){
-			updateTreeObjectReferences(expressionChain.getAllInnerStorableObjects(), formElements);
-		}
-		
 		for (TableRule tableRule : getTableRules()) {
-			updateTreeObjectReferences(tableRule.getAllInnerStorableObjects(), formElements);
+			innerStorableObjects.add(tableRule);
+			innerStorableObjects.addAll(tableRule.getAllInnerStorableObjects());
+		}
+
+		for (CustomVariable customVariable : getCustomVariables()) {
+			innerStorableObjects.add(customVariable);
+			innerStorableObjects.addAll(customVariable.getAllInnerStorableObjects());
+		}
+
+		for (ExpressionChain expressionChain : getExpressionChains()) {
+			innerStorableObjects.add(expressionChain);
+			innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
 		}
 
 		for (Rule rule : getRules()) {
-			updateTreeObjectReferences(rule.getAllInnerStorableObjects(), formElements);
+			innerStorableObjects.add(rule);
+			innerStorableObjects.addAll(rule.getAllInnerStorableObjects());
 		}
 
+		return innerStorableObjects;
+	}
+
+	public Timestamp getAvailableFrom() {
+		return availableFrom;
+	}
+
+	public Timestamp getAvailableTo() {
+		return availableTo;
+	}
+
+	/**
+	 * Looks for the custom variable with the specified scope and name.
+	 * 
+	 * @return the custom variable or null if not found
+	 */
+	public CustomVariable getCustomVariable(String name, String scope) {
+		for (CustomVariable customVariable : getCustomVariables()) {
+			if (customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
+				return customVariable;
+			}
+		}
+		return null;
+	}
+
+	public Set<CustomVariable> getCustomVariables() {
+		return customVariables;
+	}
+
+	/**
+	 * Get Custom variables for a generic tree Object.
+	 * 
+	 * @param treeObject
+	 * @return
+	 */
+	public List<CustomVariable> getCustomVariables(Class<?> treeObjectClass) {
+		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
+		for (CustomVariable customVariable : customVariables) {
+			if (customVariable.getScope().getScope().equals(treeObjectClass)) {
+				customVariablesInThisElement.add(customVariable);
+			}
+		}
+		return customVariablesInThisElement;
+	}
+
+	/**
+	 * Get Custom variables for a specific tree Object.
+	 * 
+	 * @param treeObject
+	 * @return
+	 */
+	public List<CustomVariable> getCustomVariables(TreeObject treeObject) {
+		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
+		for (CustomVariable customVariable : customVariables) {
+			if (customVariable.getScope().getScope().equals(treeObject.getClass())) {
+				customVariablesInThisElement.add(customVariable);
+			}
+		}
+		return customVariablesInThisElement;
+	}
+
+	public Set<CustomVariable> getCustomVariablesToDelete() {
+		return customVariablesToDelete;
+	}
+
+	/**
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root
+	 * diagram.
+	 * 
+	 * @param diagram
+	 */
+	public Diagram getDiagramParent(Diagram diagram) {
+		for (Diagram parentDiagram : getDiagrams()) {
+			List<Diagram> childDiagrams = parentDiagram.getChildDiagrams();
+			for (Diagram childDiagram : childDiagrams) {
+				if (childDiagram.equals(diagram)) {
+					return parentDiagram;
+				}
+			}
+		}
+		return null;
+	}
+
+	public Set<Diagram> getDiagrams() {
+		return diagrams;
+	}
+
+	public Set<ExpressionChain> getExpressionChains() {
+		return expressionChains;
+	}
+
+	public Set<Rule> getRules() {
+		return rules;
+	}
+
+	public FormWorkStatus getStatus() {
+		return status;
+	}
+
+	public Set<TableRule> getTableRules() {
+		return tableRules;
+	}
+
+	/**
+	 * Disable lazy behavior of Form element. Needed for using spring cache.
+	 * 
+	 * @param form
+	 */
+	@Override
+	public void initializeSets() {
+		super.initializeSets();
+		// Initializes the sets for lazy-loading (within the same session)
+		getDiagrams().size();
+		getTableRules().size();
+		getCustomVariables().size();
+		getExpressionChains().size();
+		getRules().size();
+	}
+
+	public boolean isLastVersion() {
+		return isLastVersion;
+	}
+
+	public void remove(CustomVariable customVariableToDelete) {
+		customVariables.remove(customVariableToDelete);
+		customVariablesToDelete.add(customVariableToDelete);
+		customVariableToDelete.setForm(null);
+	}
+
+	public void remove(Rule rule) {
+		rules.remove(rule);
+	}
+
+	public void removeDiagram(Diagram diagram) {
+		// Remove relationship between diagrams.
+		for (Diagram diagramParent : getDiagrams()) {
+			for (DiagramObject diagramObject : diagramParent.getDiagramObjects()) {
+				if (diagramObject instanceof DiagramChild) {
+					DiagramChild diagramChild = (DiagramChild) diagramObject;
+					if (diagramChild.getDiagram() != null && diagramChild.getDiagram().equals(diagram)) {
+						diagramChild.setDiagram(null);
+					}
+				}
+			}
+		}
+		// Remove diagram.
+		diagrams.remove(diagram);
+	}
+
+	@Override
+	public void resetIds() {
+		super.resetIds();
 		for (Diagram diagram : getDiagrams()) {
-			updateTreeObjectReferences(diagram.getAllInnerStorableObjects(), formElements);
+			diagram.resetIds();
+		}
+		for (TableRule tableRule : getTableRules()) {
+			tableRule.resetIds();
+		}
+		for (CustomVariable customVariable : this.getCustomVariables()) {
+			customVariable.resetIds();
+		}
+		for (ExpressionChain expression : getExpressionChains()) {
+			expression.resetIds();
+		}
+		for (Rule rule : getRules()) {
+			rule.resetIds();
+		}
+	}
+
+	public void setAvailableFrom(Timestamp availableFrom) {
+		this.availableFrom = availableFrom;
+	}
+
+	public void setAvailableTo(Timestamp availableTo) {
+		this.availableTo = availableTo;
+	}
+
+	@Override
+	public void setCreationTime(Timestamp dateCreated) {
+		if (availableFrom == null) {
+			Calendar cal = Calendar.getInstance(); // locale-specific
+			cal.setTime(dateCreated);
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			long time = cal.getTimeInMillis();
+			availableFrom = new Timestamp(time);
+		}
+		super.setCreationTime(dateCreated);
+	}
+
+	public void setCustomVariables(Set<CustomVariable> customVariables) {
+		this.customVariables.clear();
+		this.customVariables.addAll(customVariables);
+	}
+
+	public void setCustomVariablesToDelete(Set<CustomVariable> customVariablesToDelete) {
+		this.customVariablesToDelete = customVariablesToDelete;
+	}
+
+	public void setDiagrams(Set<Diagram> diagrams) {
+		this.diagrams.clear();
+		this.diagrams.addAll(diagrams);
+	}
+
+	public void setExpressionChains(Set<ExpressionChain> expressions) {
+		expressionChains = expressions;
+	}
+
+	public void setLastVersion(boolean isLastVersion) {
+		this.isLastVersion = isLastVersion;
+	}
+
+	public void setRules(Set<Rule> rules) {
+		this.rules = rules;
+	}
+
+	public void setStatus(FormWorkStatus status) {
+		this.status = status;
+	}
+
+	public void setTableRules(List<TableRule> tableRules) {
+		this.tableRules.clear();
+		this.tableRules.addAll(tableRules);
+	}
+
+	public String toJsonOnlyFormStructure() {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.setPrettyPrinting();
+		gsonBuilder.registerTypeAdapter(Form.class, new FormSerializer());
+		gsonBuilder.registerTypeAdapter(SimpleFormView.class, new FormSerializer());
+		gsonBuilder.registerTypeAdapter(Category.class, new TreeObjectSerializer<Category>());
+		gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupSerializer<Group>());
+		gsonBuilder.registerTypeAdapter(Question.class, new QuestionSerializer());
+		gsonBuilder.registerTypeAdapter(Answer.class, new AnswerSerializer());
+		Gson gson = gsonBuilder.create();
+
+		return gson.toJson(this);
+	}
+	
+	@Override
+	public String toString() {
+		return getLabel();
+	}
+
+	@Override
+	public void updateChildrenSortSeqs() {
+		super.updateChildrenSortSeqs();
+		// For solving Hibernate bug
+		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
+		// list of children
+		// with @Orderby or @OrderColumn we use our own order manager.
+
+		// Sort the expressions
+		Set<ExpressionChain> expressionChainList = getExpressionChains();
+		if (expressionChainList != null && !expressionChainList.isEmpty()) {
+			for (ExpressionChain expressionChain : expressionChainList) {
+				expressionChain.updateChildrenSortSeqs();
+			}
+		}
+
+		// Sort the rules
+		Set<Rule> rulesList = getRules();
+		if (rulesList != null && !rulesList.isEmpty()) {
+			for (Rule rule : rulesList) {
+				rule.getConditions().updateChildrenSortSeqs();
+				rule.getActions().updateChildrenSortSeqs();
+			}
+		}
+		// Sort the table rule rows
+		Set<TableRule> tableRules = getTableRules();
+		if (tableRules != null && !tableRules.isEmpty()) {
+			for (TableRule tableRule : tableRules) {
+				List<TableRuleRow> tableRuleRows = tableRule.getRules();
+				if (tableRuleRows != null && !tableRuleRows.isEmpty()) {
+					for (TableRuleRow tableRuleRow : tableRuleRows) {
+						tableRuleRow.getConditions().updateChildrenSortSeqs();
+						tableRuleRow.getAction().updateChildrenSortSeqs();
+					}
+				}
+			}
+		}
+
+		Set<Diagram> diagrams = getDiagrams();
+		if (diagrams != null && !diagrams.isEmpty()) {
+			for (Diagram diagram : diagrams) {
+				Set<DiagramObject> nodes = diagram.getDiagramObjects();
+				if (nodes != null && !nodes.isEmpty()) {
+					for (DiagramObject node : nodes) {
+						if (node instanceof DiagramLink) {
+							DiagramLink nodeLink = (DiagramLink) node;
+							nodeLink.getExpressionChain().updateChildrenSortSeqs();
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -364,6 +676,33 @@ public class Form extends BaseForm {
 		}
 	}
 
+	private void updateTreeObjectReferences() {
+
+		// ComparatorId -> New StorableObject.
+		Map<String, TreeObject> formElements = new HashMap<>();
+		Set<TreeObject> formElementsChildren = getAllChildrenInHierarchy(TreeObject.class);
+		formElementsChildren.add(this);
+		for (TreeObject children : formElementsChildren) {
+			formElements.put(children.getOriginalReference(), children);
+		}
+
+		for(ExpressionChain expressionChain : getExpressionChains()){
+			updateTreeObjectReferences(expressionChain.getAllInnerStorableObjects(), formElements);
+		}
+		
+		for (TableRule tableRule : getTableRules()) {
+			updateTreeObjectReferences(tableRule.getAllInnerStorableObjects(), formElements);
+		}
+
+		for (Rule rule : getRules()) {
+			updateTreeObjectReferences(rule.getAllInnerStorableObjects(), formElements);
+		}
+
+		for (Diagram diagram : getDiagrams()) {
+			updateTreeObjectReferences(diagram.getAllInnerStorableObjects(), formElements);
+		}
+	}
+
 	/**
 	 * Replace all references to existing objects in the hashmaps.
 	 * 
@@ -421,323 +760,5 @@ public class Form extends BaseForm {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void setCreationTime(Timestamp dateCreated) {
-		if (availableFrom == null) {
-			Calendar cal = Calendar.getInstance(); // locale-specific
-			cal.setTime(dateCreated);
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			long time = cal.getTimeInMillis();
-			availableFrom = new Timestamp(time);
-		}
-		super.setCreationTime(dateCreated);
-	}
-
-	public Timestamp getAvailableFrom() {
-		return availableFrom;
-	}
-
-	public void setAvailableFrom(Timestamp availableFrom) {
-		this.availableFrom = availableFrom;
-	}
-
-	public Timestamp getAvailableTo() {
-		return availableTo;
-	}
-
-	public void setAvailableTo(Timestamp availableTo) {
-		this.availableTo = availableTo;
-	}
-
-	public void addDiagram(Diagram diagram) {
-		diagrams.add(diagram);
-	}
-
-	public void removeDiagram(Diagram diagram) {
-		// Remove relationship between diagrams.
-		for (Diagram diagramParent : getDiagrams()) {
-			for (DiagramObject diagramObject : diagramParent.getDiagramObjects()) {
-				if (diagramObject instanceof DiagramChild) {
-					DiagramChild diagramChild = (DiagramChild) diagramObject;
-					if (diagramChild.getDiagram() != null && diagramChild.getDiagram().equals(diagram)) {
-						diagramChild.setDiagram(null);
-					}
-				}
-			}
-		}
-		// Remove diagram.
-		diagrams.remove(diagram);
-	}
-
-	public Set<Diagram> getDiagrams() {
-		return diagrams;
-	}
-
-	public void setDiagrams(Set<Diagram> diagrams) {
-		this.diagrams.clear();
-		this.diagrams.addAll(diagrams);
-	}
-
-	public Set<TableRule> getTableRules() {
-		return tableRules;
-	}
-
-	public void setTableRules(List<TableRule> tableRules) {
-		this.tableRules.clear();
-		this.tableRules.addAll(tableRules);
-	}
-
-	public Set<CustomVariable> getCustomVariables() {
-		return customVariables;
-	}
-
-	/**
-	 * Get Custom variables for a specific tree Object.
-	 * 
-	 * @param treeObject
-	 * @return
-	 */
-	public List<CustomVariable> getCustomVariables(TreeObject treeObject) {
-		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
-		for (CustomVariable customVariable : customVariables) {
-			if (customVariable.getScope().getScope().equals(treeObject.getClass())) {
-				customVariablesInThisElement.add(customVariable);
-			}
-		}
-		return customVariablesInThisElement;
-	}
-
-	/**
-	 * Get Custom variables for a generic tree Object.
-	 * 
-	 * @param treeObject
-	 * @return
-	 */
-	public List<CustomVariable> getCustomVariables(Class<?> treeObjectClass) {
-		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
-		for (CustomVariable customVariable : customVariables) {
-			if (customVariable.getScope().getScope().equals(treeObjectClass)) {
-				customVariablesInThisElement.add(customVariable);
-			}
-		}
-		return customVariablesInThisElement;
-	}
-
-	/**
-	 * Looks for the custom variable with the specified scope and name.
-	 * 
-	 * @return the custom variable or null if not found
-	 */
-	public CustomVariable getCustomVariable(String name, String scope) {
-		for (CustomVariable customVariable : getCustomVariables()) {
-			if (customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
-				return customVariable;
-			}
-		}
-		return null;
-	}
-
-	public void setCustomVariables(Set<CustomVariable> customVariables) {
-		this.customVariables.clear();
-		this.customVariables.addAll(customVariables);
-	}
-
-	public Set<ExpressionChain> getExpressionChains() {
-		return expressionChains;
-	}
-
-	public void setExpressionChains(Set<ExpressionChain> expressions) {
-		expressionChains = expressions;
-	}
-
-	public Set<Rule> getRules() {
-		return rules;
-	}
-
-	public void setRules(Set<Rule> rules) {
-		this.rules = rules;
-	}
-
-	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root
-	 * diagram.
-	 * 
-	 * @param diagram
-	 */
-	public Diagram getDiagramParent(Diagram diagram) {
-		for (Diagram parentDiagram : getDiagrams()) {
-			List<Diagram> childDiagrams = parentDiagram.getChildDiagrams();
-			for (Diagram childDiagram : childDiagrams) {
-				if (childDiagram.equals(diagram)) {
-					return parentDiagram;
-				}
-			}
-		}
-		return null;
-	}
-
-	public boolean isLastVersion() {
-		return isLastVersion;
-	}
-
-	public void setLastVersion(boolean isLastVersion) {
-		this.isLastVersion = isLastVersion;
-	}
-
-	@Override
-	public Set<StorableObject> getAllInnerStorableObjects() {
-		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		innerStorableObjects.addAll(super.getAllInnerStorableObjects());
-
-		for (Diagram diagram : getDiagrams()) {
-			innerStorableObjects.add(diagram);
-			innerStorableObjects.addAll(diagram.getAllInnerStorableObjects());
-		}
-
-		for (TableRule tableRule : getTableRules()) {
-			innerStorableObjects.add(tableRule);
-			innerStorableObjects.addAll(tableRule.getAllInnerStorableObjects());
-		}
-
-		for (CustomVariable customVariable : getCustomVariables()) {
-			innerStorableObjects.add(customVariable);
-			innerStorableObjects.addAll(customVariable.getAllInnerStorableObjects());
-		}
-
-		for (ExpressionChain expressionChain : getExpressionChains()) {
-			innerStorableObjects.add(expressionChain);
-			innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
-		}
-
-		for (Rule rule : getRules()) {
-			innerStorableObjects.add(rule);
-			innerStorableObjects.addAll(rule.getAllInnerStorableObjects());
-		}
-
-		return innerStorableObjects;
-	}
-
-	public Set<CustomVariable> getCustomVariablesToDelete() {
-		return customVariablesToDelete;
-	}
-
-	public void setCustomVariablesToDelete(Set<CustomVariable> customVariablesToDelete) {
-		this.customVariablesToDelete = customVariablesToDelete;
-	}
-
-	public void remove(CustomVariable customVariableToDelete) {
-		customVariables.remove(customVariableToDelete);
-		customVariablesToDelete.add(customVariableToDelete);
-		customVariableToDelete.setForm(null);
-	}
-
-	public FormWorkStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(FormWorkStatus status) {
-		this.status = status;
-	}
-
-	public void add(CustomVariable formCustomVariable) {
-		customVariables.add(formCustomVariable);
-		formCustomVariable.setForm(this);
-	}
-
-	public void remove(Rule rule) {
-		rules.remove(rule);
-	}
-
-	@Override
-	public void updateChildrenSortSeqs() {
-		super.updateChildrenSortSeqs();
-		// For solving Hibernate bug
-		// https://hibernate.atlassian.net/browse/HHH-1268 we cannot use the
-		// list of children
-		// with @Orderby or @OrderColumn we use our own order manager.
-
-		// Sort the expressions
-		Set<ExpressionChain> expressionChainList = getExpressionChains();
-		if (expressionChainList != null && !expressionChainList.isEmpty()) {
-			for (ExpressionChain expressionChain : expressionChainList) {
-				expressionChain.updateChildrenSortSeqs();
-			}
-		}
-
-		// Sort the rules
-		Set<Rule> rulesList = getRules();
-		if (rulesList != null && !rulesList.isEmpty()) {
-			for (Rule rule : rulesList) {
-				rule.getConditions().updateChildrenSortSeqs();
-				rule.getActions().updateChildrenSortSeqs();
-			}
-		}
-		// Sort the table rule rows
-		Set<TableRule> tableRules = getTableRules();
-		if (tableRules != null && !tableRules.isEmpty()) {
-			for (TableRule tableRule : tableRules) {
-				List<TableRuleRow> tableRuleRows = tableRule.getRules();
-				if (tableRuleRows != null && !tableRuleRows.isEmpty()) {
-					for (TableRuleRow tableRuleRow : tableRuleRows) {
-						tableRuleRow.getConditions().updateChildrenSortSeqs();
-						tableRuleRow.getAction().updateChildrenSortSeqs();
-					}
-				}
-			}
-		}
-
-		Set<Diagram> diagrams = getDiagrams();
-		if (diagrams != null && !diagrams.isEmpty()) {
-			for (Diagram diagram : diagrams) {
-				Set<DiagramObject> nodes = diagram.getDiagramObjects();
-				if (nodes != null && !nodes.isEmpty()) {
-					for (DiagramObject node : nodes) {
-						if (node instanceof DiagramLink) {
-							DiagramLink nodeLink = (DiagramLink) node;
-							nodeLink.getExpressionChain().updateChildrenSortSeqs();
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Disable lazy behavior of Form element. Needed for using spring cache.
-	 * 
-	 * @param form
-	 */
-	@Override
-	public void initializeSets() {
-		super.initializeSets();
-		// Initializes the sets for lazy-loading (within the same session)
-		getDiagrams().size();
-		getTableRules().size();
-		getCustomVariables().size();
-		getExpressionChains().size();
-		getRules().size();
-	}
-
-	@Override
-	public String toString() {
-		return getLabel();
-	}
-
-	public synchronized static TreeObject move(TreeObject objectToMove, TreeObject toParent) throws ChildrenNotFoundException,
-			NotValidChildException, ElementIsReadOnly {
-		if (!Objects.equals(objectToMove.getAncestor(Form.class), toParent.getAncestor(Form.class))) {
-			throw new NotValidChildException("Root form for each element is different");
-		}
-		TreeObject newInstanceOfObjectToMove = TreeObject.move(objectToMove, toParent);
-
-		Form form = (Form) objectToMove.getAncestor(Form.class);
-		form.updateTreeObjectReferences();
-
-		return newInstanceOfObjectToMove;
 	}
 }
