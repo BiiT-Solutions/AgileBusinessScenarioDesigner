@@ -263,10 +263,10 @@ public class Form extends BaseForm {
 			formElements.put(children.getOriginalReference(), children);
 		}
 
-		for(ExpressionChain expressionChain : getExpressionChains()){
+		for (ExpressionChain expressionChain : getExpressionChains()) {
 			updateTreeObjectReferences(expressionChain.getAllInnerStorableObjects(), formElements);
 		}
-		
+
 		for (TableRule tableRule : getTableRules()) {
 			updateTreeObjectReferences(tableRule.getAllInnerStorableObjects(), formElements);
 		}
@@ -294,7 +294,8 @@ public class Form extends BaseForm {
 					if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
 						diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram() + "'.");
+						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram()
+								+ "'.");
 						formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
 					}
 				}
@@ -308,16 +309,20 @@ public class Form extends BaseForm {
 	 * @param storableObjects
 	 * @param formTableRules
 	 */
-	private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects, Map<String, ExpressionChain> formExpressionChains) {
+	private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects,
+			Map<String, ExpressionChain> formExpressionChains) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramExpression) {
 				DiagramExpression diagramExpression = (DiagramExpression) child;
 				if (diagramExpression.getExpression() != null) {
 					if (formExpressionChains.get(diagramExpression.getExpression().getComparationId()) != null) {
-						diagramExpression.setExpression(formExpressionChains.get(diagramExpression.getExpression().getComparationId()));
+						diagramExpression.setExpression(formExpressionChains.get(diagramExpression.getExpression()
+								.getComparationId()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding expression '" + diagramExpression.getExpression() + "'.");
-						formExpressionChains.put(diagramExpression.getExpression().getComparationId(), diagramExpression.getExpression());
+						AbcdLogger.warning(this.getClass().getName(),
+								"Adding expression '" + diagramExpression.getExpression() + "'.");
+						formExpressionChains.put(diagramExpression.getExpression().getComparationId(),
+								diagramExpression.getExpression());
 					}
 				}
 			}
@@ -334,11 +339,13 @@ public class Form extends BaseForm {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramRule) {
 				DiagramRule diagramRule = (DiagramRule) child;
-				if (formRules.get(diagramRule.getRule().getComparationId()) != null) {
-					diagramRule.setRule(formRules.get(diagramRule.getRule().getComparationId()));
-				} else {
-					AbcdLogger.warning(this.getClass().getName(), "Adding rule '" + diagramRule.getRule() + "'.");
-					formRules.put(diagramRule.getRule().getComparationId(), diagramRule.getRule());
+				if (diagramRule != null && diagramRule.getRule() != null) {
+					if (formRules.get(diagramRule.getRule().getComparationId()) != null) {
+						diagramRule.setRule(formRules.get(diagramRule.getRule().getComparationId()));
+					} else {
+						AbcdLogger.warning(this.getClass().getName(), "Adding rule '" + diagramRule.getRule() + "'.");
+						formRules.put(diagramRule.getRule().getComparationId(), diagramRule.getRule());
+					}
 				}
 			}
 		}
@@ -350,15 +357,19 @@ public class Form extends BaseForm {
 	 * @param storableObjects
 	 * @param formTableRules
 	 */
-	private void updateDiagramTableRuleReferences(Set<StorableObject> storableObjects, Map<String, TableRule> formTableRules) {
+	private void updateDiagramTableRuleReferences(Set<StorableObject> storableObjects,
+			Map<String, TableRule> formTableRules) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramTable) {
 				DiagramTable diagramTable = (DiagramTable) child;
-				if (formTableRules.get(diagramTable.getTable().getComparationId()) != null) {
-					diagramTable.setTable(formTableRules.get(diagramTable.getTable().getComparationId()));
-				} else {
-					AbcdLogger.warning(this.getClass().getName(), "Adding table '" + diagramTable.getTable() + "'.");
-					formTableRules.put(diagramTable.getTable().getComparationId(), diagramTable.getTable());
+				if (diagramTable != null && diagramTable.getTable() != null) {
+					if (formTableRules.get(diagramTable.getTable().getComparationId()) != null) {
+						diagramTable.setTable(formTableRules.get(diagramTable.getTable().getComparationId()));
+					} else {
+						AbcdLogger
+								.warning(this.getClass().getName(), "Adding table '" + diagramTable.getTable() + "'.");
+						formTableRules.put(diagramTable.getTable().getComparationId(), diagramTable.getTable());
+					}
 				}
 			}
 		}
@@ -377,11 +388,11 @@ public class Form extends BaseForm {
 				ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) child;
 				if (expressionValueTreeObjectReference.getReference() != null) {
 					if (formElements.get(expressionValueTreeObjectReference.getReference().getOriginalReference()) != null) {
-						expressionValueTreeObjectReference.setReference(formElements.get(expressionValueTreeObjectReference.getReference()
-								.getOriginalReference()));
+						expressionValueTreeObjectReference.setReference(formElements
+								.get(expressionValueTreeObjectReference.getReference().getOriginalReference()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(),
-								"Adding reference '" + expressionValueTreeObjectReference.getReference() + "'.");
+						AbcdLogger.warning(this.getClass().getName(), "Adding reference '"
+								+ expressionValueTreeObjectReference.getReference() + "'.");
 						formElements.put(expressionValueTreeObjectReference.getReference().getOriginalReference(),
 								expressionValueTreeObjectReference.getReference());
 					}
@@ -397,14 +408,15 @@ public class Form extends BaseForm {
 	 * @param formElements
 	 * @param formVariables
 	 */
-	private void updateVariablesReferences(Set<StorableObject> storableObjects, Map<String, CustomVariable> formVariables) {
+	private void updateVariablesReferences(Set<StorableObject> storableObjects,
+			Map<String, CustomVariable> formVariables) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) child;
 				if (expressionValueCustomVariable.getVariable() != null) {
 					if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
-						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable.getVariable()
-								.getComparationId()));
+						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
+								.getVariable().getComparationId()));
 					} else {
 						formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
 								expressionValueCustomVariable.getVariable());
@@ -413,8 +425,8 @@ public class Form extends BaseForm {
 			} else if (child instanceof ExpressionValueGenericCustomVariable) {
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) child;
 				if (formVariables.get(expressionValueGenericCustomVariable.getVariable().getComparationId()) != null) {
-					expressionValueGenericCustomVariable.setVariable(formVariables.get(expressionValueGenericCustomVariable.getVariable()
-							.getComparationId()));
+					expressionValueGenericCustomVariable.setVariable(formVariables
+							.get(expressionValueGenericCustomVariable.getVariable().getComparationId()));
 				} else {
 					formVariables.put(expressionValueGenericCustomVariable.getVariable().getComparationId(),
 							expressionValueGenericCustomVariable.getVariable());
@@ -564,8 +576,7 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root
-	 * diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
 	 * 
 	 * @param diagram
 	 */
@@ -728,8 +739,8 @@ public class Form extends BaseForm {
 		return getLabel();
 	}
 
-	public synchronized static TreeObject move(TreeObject objectToMove, TreeObject toParent) throws ChildrenNotFoundException,
-			NotValidChildException, ElementIsReadOnly {
+	public synchronized static TreeObject move(TreeObject objectToMove, TreeObject toParent)
+			throws ChildrenNotFoundException, NotValidChildException, ElementIsReadOnly {
 		if (!Objects.equals(objectToMove.getAncestor(Form.class), toParent.getAncestor(Form.class))) {
 			throw new NotValidChildException("Root form for each element is different");
 		}

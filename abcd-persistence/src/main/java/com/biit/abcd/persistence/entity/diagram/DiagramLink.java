@@ -367,17 +367,23 @@ public class DiagramLink extends DiagramObject {
 			super.copyData(object);
 			DiagramLink diagramLink = (DiagramLink) object;
 
-			ExpressionChain expressionChain = new ExpressionChain();
-			expressionChain.copyData(diagramLink.getExpressionChain());
-			setExpressionChain(expressionChain);
+			if (diagramLink.getExpressionChain() != null) {
+				ExpressionChain expressionChain = new ExpressionChain();
+				expressionChain.copyData(diagramLink.getExpressionChain());
+				setExpressionChain(expressionChain);
+			}
 
-			Node source = new Node();
-			source.copyData(diagramLink.getSource());
-			setSource(source);
+			if (diagramLink.getSource() != null) {
+				Node source = new Node();
+				source.copyData(diagramLink.getSource());
+				setSource(source);
+			}
 
-			Node target = new Node();
-			target.copyData(diagramLink.getTarget());
-			setTarget(target);
+			if (diagramLink.getTarget() != null) {
+				Node target = new Node();
+				target.copyData(diagramLink.getTarget());
+				setTarget(target);
+			}
 
 			text = diagramLink.getText();
 			manhattan = diagramLink.isManhattan();

@@ -58,9 +58,11 @@ public class DiagramRule extends DiagramElement {
 			super.copyData(object);
 			DiagramRule diagramRule = (DiagramRule) object;
 
-			Rule rule = new Rule();
-			rule.copyData(diagramRule.getRule());
-			setRule(rule);
+			if (diagramRule.getRule() != null) {
+				Rule rule = new Rule();
+				rule.copyData(diagramRule.getRule());
+				setRule(rule);
+			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramRule.");
 		}
