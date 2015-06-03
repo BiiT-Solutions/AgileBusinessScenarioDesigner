@@ -5,17 +5,17 @@
 			<run>
 				<exclude name="ehCache" />
 				<exclude name="expressionEvaluator" />
-				<exclude name="formDao" />
-				<exclude name="simpleFormViewDao" />
-				<exclude name="diagramDao" />
-				<exclude name="formCustomVariablesDao" />
-				<exclude name="globalVariablesDao" />
-				<exclude name="tableRulesDao" />
-				<exclude name="orphan" />
-				<exclude name="genericTreeObjectVariablesDao" />
-				<exclude name="testScenarioDao" />
-				<exclude name="simpleTestScenarioViewDao" />
-				<exclude name="removeForm" />
+				<include name="formDao" />
+				<include name="simpleFormViewDao" />
+				<include name="diagramDao" />
+				<include name="formCustomVariablesDao" />
+				<include name="globalVariablesDao" />
+				<include name="tableRulesDao" />
+				<include name="orphan" />
+				<include name="genericTreeObjectVariablesDao" />
+				<include name="testScenarioDao" />
+				<include name="simpleTestScenarioViewDao" />
+				<include name="removeForm" />
 				<include name="abcdToJson" />
 			</run>
 		</groups>
