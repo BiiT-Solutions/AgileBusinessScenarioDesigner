@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>abcd-core</artifactId>
 	<packaging>jar</packaging>
@@ -16,13 +17,7 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
-		<!-- Liferay Plugin -->
-		<!-- Liferay Authentication -->
-		<dependency>
-			<groupId>com.biit.liferay</groupId>
-			<artifactId>liferay-authentication-client</artifactId>
-			<version>${liferay-authentication-client.version}</version>
-		</dependency>
+
 		<!-- File access -->
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -92,6 +87,48 @@
 			<groupId>com.biit</groupId>
 			<artifactId>drools-engine-core</artifactId>
 			<version>${drools-engine.version}</version>
+		</dependency>
+		<!-- Jersey Client, Jersey Container, Jersey + Spring -->
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core" -->
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-spring3</artifactId>
+			<version>${jersey.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${javax.servlet.version}</version>
+		</dependency>
+		<!-- Liferay Authentication -->
+		<dependency>
+			<groupId>com.biit.liferay</groupId>
+			<artifactId>liferay-authentication-client</artifactId>
+			<version>${liferay-authentication-client.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

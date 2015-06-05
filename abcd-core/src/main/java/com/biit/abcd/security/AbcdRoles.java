@@ -16,7 +16,9 @@ public enum AbcdRoles {
 
 	APPLICATION_ADMIN("abcd_application-administration"),
 
-	GLOBAL_CONSTANTS("abcd_manage-global-constants");
+	GLOBAL_CONSTANTS("abcd_manage-global-constants"),
+	
+	WEB_SERVICE_USER("abcd_web-service-user");
 
 	private String stringTag;
 

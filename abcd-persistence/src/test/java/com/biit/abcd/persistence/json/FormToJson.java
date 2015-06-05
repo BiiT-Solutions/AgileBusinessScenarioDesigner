@@ -46,7 +46,7 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
 	public void createJsonForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
 			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementIsReadOnly,
 			ElementCannotBeRemovedException, InvalidAnswerFormatException {
-		String jsonForm = createForm(FULL_FORM).toJsonOnlyFormStructure();
+		String jsonForm = createForm(FULL_FORM).toJson();
 		Assert.assertEquals(jsonForm.contains(JSON_FORM_NAME), true);
 	}
 
