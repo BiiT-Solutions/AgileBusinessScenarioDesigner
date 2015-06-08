@@ -16,7 +16,7 @@ public class ValidatorTreeObjectName implements Validator {
 	@Override
 	public void validate(Object value) throws InvalidValueException {
 		if (!pattern.matcher((String) value).matches()) {
-			throw new InvalidValueException("'" + value + "' doesn't comply XML tag restrictions");
+			throw new InvalidValueException("Text '" + value + "' is not valid.");
 		}
 	}
 

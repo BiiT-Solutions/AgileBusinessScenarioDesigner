@@ -12,9 +12,14 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
+import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
+import com.biit.form.entity.BaseForm;
 import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.security.IActivity;
 import com.liferay.portal.model.Organization;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -44,10 +49,6 @@ public class WindowNewForm extends AcceptCancelWindow {
 		setHeight(height);
 	}
 
-	public void setDefaultValue(String nullValue) {
-		textField.setValue(nullValue);
-	}
-
 	public String getValue() {
 		return textField.getValue();
 	}
@@ -60,6 +61,17 @@ public class WindowNewForm extends AcceptCancelWindow {
 		textField = new TextField(ServerTranslate.translate(inputFieldCaption));
 		textField.focus();
 		textField.setWidth("100%");
+		textField.addValidator(new ValidatorTreeObjectName(BaseForm.NAME_ALLOWED));
+		textField.addValidator(new ValidatorTreeObjectNameLength());
+
+		textField.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 4953347262492851075L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				textField.isValid();
+			}
+		});
 
 		organizationField = new ComboBox(ServerTranslate.translate(groupCaption));
 		organizationField.setNullSelectionAllowed(false);
@@ -107,5 +119,9 @@ public class WindowNewForm extends AcceptCancelWindow {
 
 	public void setValue(String value) {
 		textField.setValue(value);
+	}
+
+	public boolean isValid() {
+		return textField.isValid();
 	}
 }
