@@ -10,7 +10,6 @@ import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerFormat;
 import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerType;
 import com.vaadin.testbench.By;
 
-@Test(groups = "formDesigner")
 public class FormDesignerTests extends AbcdTester {
 
 	private static final String NEW_FORM_NAME = "new_form";
@@ -25,7 +24,7 @@ public class FormDesignerTests extends AbcdTester {
 	private static final int GROUP_ROW = 2;
 	private static final int CATEGORY_ROW = 1;
 	private static final String BAD_TECHNICAL_NAME = ".asd";
-	private static final CharSequence NOT_VALID_NAME = "'.asd' doesn't comply XML tag restrictions";
+	private static final CharSequence NOT_VALID_NAME = "Text '.asd' is not valid.";
 	private static final CharSequence DUPLICATED_NAME = "An element with the same name already exist on the same level of the form.";
 	private static final String ANSWER_NAME_1 = "answer1";
 	private static final String ANSWER_NAME_2 = "answer2";
@@ -35,7 +34,7 @@ public class FormDesignerTests extends AbcdTester {
 	private static final String QUESTION_NAME_3 = "question3";
 	private static final CharSequence MOD = "_mod";
 
-	@Test
+	@Test(groups = "formDesigner")
 	public void generateCompleteFormWithDesigner() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 
@@ -47,7 +46,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToCreateGroupQuestionAnswerSubanswerAtCategoryLevel() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -63,7 +62,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToCreateAnswerSubanswerAtCategoryLevel() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -79,7 +78,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToCreateAnswerSubanswerAtGroupLevel() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -97,7 +96,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToCreateAnswerSubanswerAtInputText() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -116,7 +115,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void finishDesign() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -132,7 +131,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void deleteElements() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -167,7 +166,7 @@ public class FormDesignerTests extends AbcdTester {
 	}
 	
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void notValidName() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -186,7 +185,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void twoQuestionWithSameName() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -208,7 +207,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void twoSubanswerWithSameNameInSameAnswer() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -232,7 +231,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void twoSubanswerWithSameNameInDiferentAnswer() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -256,7 +255,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToMoveAQuestionWhenFirstElementOfGroup() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -293,7 +292,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToMoveAQuestionWhenLastElementOfGroup() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -329,7 +328,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToMoveAQuestionWhenMiddleElementOfGroup() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -364,7 +363,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToMoveAQuestionWhenFirstElementOfCategory() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -399,7 +398,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToMoveAQuestionWhenLastElementOfCategory() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -433,7 +432,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void tryToMoveAQuestionWhenMiddleElementOfCategory() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
@@ -466,7 +465,7 @@ public class FormDesignerTests extends AbcdTester {
 		getFormManager().deleteForm();
 	}
 	
-	@Test
+	@Test(groups = "formDesigner")
 	public void changeFormName() {
 		String formName = NEW_FORM_NAME + "_" + (new Date()).getTime();
 		createForm(formName, ABCD_FORM_ADMIN_BIIT1);
