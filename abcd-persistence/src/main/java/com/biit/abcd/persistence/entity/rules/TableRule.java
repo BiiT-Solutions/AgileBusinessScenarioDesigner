@@ -160,7 +160,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 				rules.add(newRow);
 			}
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRuleRow.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TableRule.");
 		}
 	}
 }

@@ -57,9 +57,11 @@ public class DiagramTable extends DiagramElement {
 		if (object instanceof DiagramTable) {
 			super.copyData(object);
 			DiagramTable diagramTable = (DiagramTable) object;
-			TableRule tableRule = new TableRule();
-			tableRule.copyData(diagramTable.getTable());
-			this.setTable(tableRule);
+			if (diagramTable.getTable() != null) {
+				TableRule tableRule = new TableRule();
+				tableRule.copyData(diagramTable.getTable());
+				this.setTable(tableRule);
+			}
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramTable.");
 		}
