@@ -787,18 +787,14 @@ public class Form extends BaseForm {
 	}
 
 	public static Form fromJson(String jsonString) {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(TreeObject.class, new StorableObjectDeserializer<TreeObject>());
-		gsonBuilder.registerTypeAdapter(Form.class, new FormDeserializer());
-		gsonBuilder.registerTypeAdapter(Category.class, new TreeObjectDeserializer<Category>(Category.class));
-		gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupDeserializer<Group>(Group.class));
-		gsonBuilder.registerTypeAdapter(Question.class, new QuestionDeserializer());
-		gsonBuilder.registerTypeAdapter(Answer.class, new AnswerDeserializer());
-		Gson gson = gsonBuilder.create();
-		return (Form) gson.fromJson(jsonString, Form.class);
+		return getFormDeserializer().fromJson(jsonString, Form.class);
 	}
 
 	public static Form[] fromJsonList(String jsonString) {
+		return getFormDeserializer().fromJson(jsonString, Form[].class);
+	}
+	
+	private static Gson getFormDeserializer(){
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(TreeObject.class, new StorableObjectDeserializer<TreeObject>());
 		gsonBuilder.registerTypeAdapter(Form.class, new FormDeserializer());
@@ -806,7 +802,6 @@ public class Form extends BaseForm {
 		gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupDeserializer<Group>(Group.class));
 		gsonBuilder.registerTypeAdapter(Question.class, new QuestionDeserializer());
 		gsonBuilder.registerTypeAdapter(Answer.class, new AnswerDeserializer());
-		Gson gson = gsonBuilder.create();
-		return gson.fromJson(jsonString, Form[].class);
+		return gsonBuilder.create();
 	}
 }
