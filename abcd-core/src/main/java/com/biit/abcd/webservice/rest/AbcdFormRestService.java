@@ -207,12 +207,14 @@ public class AbcdFormRestService {
 	}
 
 	private String parseFormList(List<Form> forms) {
-		StringBuilder builder = new StringBuilder("{");
-		for (Form form : forms) {
-			builder.append(form + ",");
+		StringBuilder builder = new StringBuilder("[");
+		if ((forms != null) && !forms.isEmpty()) {
+			for (Form form : forms) {
+				builder.append(form.toJson() + ",");
+			}
+			builder.deleteCharAt(builder.length()-1);
 		}
-		builder.deleteCharAt(builder.length());
-		builder.append("}");
+		builder.append("]");
 		return builder.toString();
 	}
 
