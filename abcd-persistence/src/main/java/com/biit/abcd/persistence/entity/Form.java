@@ -37,6 +37,17 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.abcd.persistence.entity.serialization.AnswerDeserializer;
+import com.biit.abcd.persistence.entity.serialization.AnswerSerializer;
+import com.biit.abcd.persistence.entity.serialization.BaseRepeatableGroupDeserializer;
+import com.biit.abcd.persistence.entity.serialization.BaseRepeatableGroupSerializer;
+import com.biit.abcd.persistence.entity.serialization.FormDeserializer;
+import com.biit.abcd.persistence.entity.serialization.FormSerializer;
+import com.biit.abcd.persistence.entity.serialization.QuestionDeserializer;
+import com.biit.abcd.persistence.entity.serialization.QuestionSerializer;
+import com.biit.abcd.persistence.entity.serialization.StorableObjectDeserializer;
+import com.biit.abcd.persistence.entity.serialization.TreeObjectDeserializer;
+import com.biit.abcd.persistence.entity.serialization.TreeObjectSerializer;
 import com.biit.form.entity.BaseForm;
 import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -46,6 +57,8 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.liferay.portal.model.User;
 
 @Entity
@@ -576,7 +589,8 @@ public class Form extends BaseForm {
 	}
 
 	/**
-	 * Returns the parent diagram of a Diagram if it has or null if it is a root diagram.
+	 * Returns the parent diagram of a Diagram if it has or null if it is a root
+	 * diagram.
 	 * 
 	 * @param diagram
 	 */
@@ -750,5 +764,49 @@ public class Form extends BaseForm {
 		form.updateTreeObjectReferences();
 
 		return newInstanceOfObjectToMove;
+	}
+
+	/**
+	 * Transforms the form classes in Json strings.<br>
+	 * Only transforms the form structure, it doesn't add rules, expressions,
+	 * variables ...
+	 * 
+	 * @return
+	 */
+	public String toJson() {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.setPrettyPrinting();
+		gsonBuilder.registerTypeAdapter(Form.class, new FormSerializer());
+		gsonBuilder.registerTypeAdapter(SimpleFormView.class, new FormSerializer());
+		gsonBuilder.registerTypeAdapter(Category.class, new TreeObjectSerializer<Category>());
+		gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupSerializer<Group>());
+		gsonBuilder.registerTypeAdapter(Question.class, new QuestionSerializer());
+		gsonBuilder.registerTypeAdapter(Answer.class, new AnswerSerializer());
+		Gson gson = gsonBuilder.create();
+		return gson.toJson(this);
+	}
+
+	public static Form fromJson(String jsonString) {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(TreeObject.class, new StorableObjectDeserializer<TreeObject>());
+		gsonBuilder.registerTypeAdapter(Form.class, new FormDeserializer());
+		gsonBuilder.registerTypeAdapter(Category.class, new TreeObjectDeserializer<Category>(Category.class));
+		gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupDeserializer<Group>(Group.class));
+		gsonBuilder.registerTypeAdapter(Question.class, new QuestionDeserializer());
+		gsonBuilder.registerTypeAdapter(Answer.class, new AnswerDeserializer());
+		Gson gson = gsonBuilder.create();
+		return (Form) gson.fromJson(jsonString, Form.class);
+	}
+
+	public static Form[] fromJsonList(String jsonString) {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(TreeObject.class, new StorableObjectDeserializer<TreeObject>());
+		gsonBuilder.registerTypeAdapter(Form.class, new FormDeserializer());
+		gsonBuilder.registerTypeAdapter(Category.class, new TreeObjectDeserializer<Category>(Category.class));
+		gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupDeserializer<Group>(Group.class));
+		gsonBuilder.registerTypeAdapter(Question.class, new QuestionDeserializer());
+		gsonBuilder.registerTypeAdapter(Answer.class, new AnswerDeserializer());
+		Gson gson = gsonBuilder.create();
+		return gson.fromJson(jsonString, Form[].class);
 	}
 }
