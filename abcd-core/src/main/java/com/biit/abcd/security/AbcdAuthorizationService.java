@@ -34,7 +34,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	AbcdActivity.FORM_CHANGE_GROUP,
 
 	AbcdActivity.FORM_VERSION,
-	
+
 	AbcdActivity.FORM_STATUS_UPGRADE
 
 	};
@@ -51,12 +51,13 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	};
 
 	/**
-	 * Can do administration task for forms. Also has by default all ABCD manager permissions.
+	 * Can do administration task for forms. Also has by default all ABCD
+	 * manager permissions.
 	 */
 	private static final AbcdActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
 	AbcdActivity.FORM_STATUS_DOWNGRADE,
-	
+
 	AbcdActivity.FORM_REMOVE
 
 	};
@@ -76,11 +77,18 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	};
 
+	private static final AbcdActivity[] WEB_SERVICES_PERMISSIONS = {
+
+	AbcdActivity.USE_WEB_SERVICE
+
+	};
+
 	private static List<IActivity> formManagerPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> readOnlyPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> formAdministratorPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> globalConstantsAdministratorPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> applicationAdministratorPermissions = new ArrayList<IActivity>();
+	private static List<IActivity> webServiceUserPermissions = new ArrayList<IActivity>();
 
 	private static AbcdAuthorizationService instance = new AbcdAuthorizationService();
 
@@ -100,6 +108,10 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		for (AbcdActivity activity : APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS) {
 			applicationAdministratorPermissions.add(activity);
 		}
+		for (AbcdActivity activity : WEB_SERVICES_PERMISSIONS) {
+			webServiceUserPermissions.add(activity);
+		}
+
 	}
 
 	protected AbcdAuthorizationService() {
@@ -137,6 +149,9 @@ public class AbcdAuthorizationService extends AuthorizationService {
 			activities.addAll(readOnlyPermissions);
 			activities.addAll(applicationAdministratorPermissions);
 			break;
+		case WEB_SERVICE_USER:
+			activities.addAll(webServiceUserPermissions);
+			break;
 		}
 		return activities;
 	}
@@ -164,11 +179,11 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	public boolean isUserAuthorizedInAnyOrganization(User user, IActivity activity) throws IOException,
 			AuthenticationRequired {
+		
 		// Check isUserAuthorizedActivity (own permissions)
 		if (isAuthorizedActivity(user, activity)) {
 			return true;
 		}
-
 		// Get all organizations of user
 		Set<Organization> organizations = getUserOrganizations(user);
 		for (Organization organization : organizations) {

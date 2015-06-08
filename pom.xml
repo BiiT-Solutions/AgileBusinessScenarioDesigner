@@ -79,6 +79,8 @@
 		<graph-maven-plugin.version>1.2.3</graph-maven-plugin.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<mybatis.version>3.2.8</mybatis.version>
+		<jersey.version>2.17</jersey.version>
+		<javax.servlet.version>2.5</javax.servlet.version>
 		<!-- BiiT dependencies -->
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
 		<liferay-service-common.version>[0.6,0.7)</liferay-service-common.version>

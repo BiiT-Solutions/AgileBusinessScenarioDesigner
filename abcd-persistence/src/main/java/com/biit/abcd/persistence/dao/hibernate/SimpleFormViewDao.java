@@ -129,7 +129,47 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			}
 			formViews.add(formView);
 		}
-
+		return formViews;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SimpleFormView> getSimpleFormViewByOrganization(Long organizationId) {
+		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion, tf.status "
+				+ "FROM tree_forms tf INNER JOIN "
+				+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
+				+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
+				+ "WHERE tf.organizationId='"
+				+ organizationId
+				+ "' ORDER BY label, tf.version DESC");
+		
+		
+		List<Object[]> queries = query.getResultList();
+		List<SimpleFormView> formViews = new ArrayList<>();
+		for (Object[] row : queries) {
+			SimpleFormView formView = new SimpleFormView();
+			formView.setId(((BigInteger) row[0]).longValue());
+			formView.setName((String) row[1]);
+			formView.setLabel((String) row[2]);
+			formView.setVersion((Integer) row[3]);
+			formView.setCreationTime((Timestamp) row[4]);
+			if (row[4] != null) {
+				formView.setCreatedBy(((Double) row[5]).longValue());
+			}
+			formView.setUpdateTime((Timestamp) row[6]);
+			if (row[6] != null) {
+				formView.setUpdatedBy(((Double) row[7]).longValue());
+			}
+			formView.setComparationId((String) row[8]);
+			formView.setAvailableFrom((Timestamp) row[9]);
+			formView.setAvailableTo((Timestamp) row[10]);
+			formView.setOrganizationId(((Double) row[11]).longValue());
+			formView.setLastVersion(((Integer) row[12]).equals((Integer) row[3]));
+			if (row[13] != null) {
+				formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
+			}
+			formViews.add(formView);
+		}
 		return formViews;
 	}
 

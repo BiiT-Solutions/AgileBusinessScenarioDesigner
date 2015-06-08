@@ -58,8 +58,9 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-	
-	<!-- binds a JPA EntityManager to the thread for the entire processing of the request -->
+
+	<!-- binds a JPA EntityManager to the thread for the entire processing of 
+		the request -->
 	<filter>
 		<filter-name>OpenEntityManagerInViewFilterAbcd</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
@@ -85,4 +86,26 @@
 		</init-param> </filter> <filter-mapping> <filter-name>GzipFilter</filter-name> 
 		<url-pattern>/*</url-pattern> </filter-mapping> -->
 
+	<servlet>
+		<servlet-name>Abcd REST Service</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>com.biit.abcd.webservice.rest</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Abcd REST Service</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<filter>
+		<filter-name>AuthenticationFilter</filter-name>
+		<filter-class>com.biit.abcd.webservice.rest.RestAuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
 </web-app>
+

@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import javax.persistence.Cacheable;
 
 import com.biit.form.entity.IBaseFormView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
@@ -47,123 +49,6 @@ public class SimpleFormView implements IBaseFormView {
 		setStatus(form.getStatus());
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Timestamp getCreationTime() {
-		return creationTime;
-	}
-
-	public void setCreationTime(Timestamp creationTime) {
-		this.creationTime = creationTime;
-	}
-
-	public Long getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Long createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Timestamp getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public Long getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(Long updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public String getComparationId() {
-		return comparationId;
-	}
-
-	public void setComparationId(String comparationId) {
-		this.comparationId = comparationId;
-	}
-
-	public Timestamp getAvailableFrom() {
-		return availableFrom;
-	}
-
-	public void setAvailableFrom(Timestamp availableFrom) {
-		this.availableFrom = availableFrom;
-	}
-
-	public Timestamp getAvailableTo() {
-		return availableTo;
-	}
-
-	public void setAvailableTo(Timestamp availableTo) {
-		this.availableTo = availableTo;
-	}
-
-	@Override
-	public String toString() {
-		return getLabel();
-	}
-
-	public Long getOrganizationId() {
-		return organizationId;
-	}
-
-	public void setOrganizationId(Long organizationId) {
-		this.organizationId = organizationId;
-	}
-
-	public boolean isLastVersion() {
-		return isLastVersion;
-	}
-
-	public void setLastVersion(boolean isLastVersion) {
-		this.isLastVersion = isLastVersion;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (prime * result) + ((comparationId == null) ? 0 : comparationId.hashCode());
-		return result;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -186,12 +71,136 @@ public class SimpleFormView implements IBaseFormView {
 		return true;
 	}
 
+	public Timestamp getAvailableFrom() {
+		return availableFrom;
+	}
+
+	public Timestamp getAvailableTo() {
+		return availableTo;
+	}
+
+	public String getComparationId() {
+		return comparationId;
+	}
+
+	public Long getCreatedBy() {
+		return createdBy;
+	}
+
+	public Timestamp getCreationTime() {
+		return creationTime;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+
 	public FormWorkStatus getStatus() {
 		return status;
 	}
 
+	public Long getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public Timestamp getUpdateTime() {
+		return updateTime;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((comparationId == null) ? 0 : comparationId.hashCode());
+		return result;
+	}
+
+	public boolean isLastVersion() {
+		return isLastVersion;
+	}
+
+	public void setAvailableFrom(Timestamp availableFrom) {
+		this.availableFrom = availableFrom;
+	}
+
+	public void setAvailableTo(Timestamp availableTo) {
+		this.availableTo = availableTo;
+	}
+
+	public void setComparationId(String comparationId) {
+		this.comparationId = comparationId;
+	}
+
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public void setCreationTime(Timestamp creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public void setLastVersion(boolean isLastVersion) {
+		this.isLastVersion = isLastVersion;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
+	}
+
 	public void setStatus(FormWorkStatus status) {
 		this.status = status;
+	}
+
+	public void setUpdatedBy(Long updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	@Override
+	public String toString() {
+		return getLabel();
+	}
+	
+	public String toJson() {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.setPrettyPrinting();
+		Gson gson = gsonBuilder.create();
+		return gson.toJson(this);
 	}
 
 }

@@ -16,6 +16,7 @@
 				<include name="testScenarioDao" />
 				<include name="simpleTestScenarioViewDao" />
 				<include name="removeForm" />
+				<include name="abcdToJson" />
 			</run>
 		</groups>
 		<classes>
@@ -31,6 +32,7 @@
 			<class name="com.biit.abcd.persistence.EhCacheTest" />
 			<class name="com.biit.abcd.persistence.dao.TestScenarioTest" />
 			<class name="com.biit.abcd.persistence.dao.SimpleTestScenarioViewTest" />
+			<class name="com.biit.abcd.persistence.json.FormToJson" />
 		</classes>
 	</test>
 </suite>
