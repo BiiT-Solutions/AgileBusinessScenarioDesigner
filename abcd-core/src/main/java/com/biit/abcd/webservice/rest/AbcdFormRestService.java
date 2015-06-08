@@ -177,9 +177,17 @@ public class AbcdFormRestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getFormsByOrganization")
 	public Response getFormsByOrganization(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
-		if ((parameters != null) && (parameters.size() == 1)) {
-			List<Form> formList = formDao.getAll(Long.parseLong(parameters.get(0)));
-			return Response.ok(parseFormList(formList), MediaType.APPLICATION_JSON).build();
+		if ((parameters != null) && (parameters.size() == 2)) {
+			Set<Organization> userOrganizations = getUserOrganizations(parameters.get(0));
+			Long organization = Long.parseLong(parameters.get(1));
+			for (Organization userOrganization : userOrganizations) {
+				if (userOrganization.getOrganizationId() == organization) {
+					List<Form> formList = formDao.getAll(organization);
+					return Response.ok(parseFormList(formList), MediaType.APPLICATION_JSON).build();
+				}
+			}
+			AbcdLogger.errorMessage(this.getClass().getName(), "User not allowed to access form");
+			return Response.serverError().entity("{\"error\":\"User not allowed to access form\"}").build();
 		} else {
 			AbcdLogger.errorMessage(this.getClass().getName(), "Invalid input parameters");
 			return Response.serverError().entity("{\"error\":\"Invalid input parameters\"}").build();
