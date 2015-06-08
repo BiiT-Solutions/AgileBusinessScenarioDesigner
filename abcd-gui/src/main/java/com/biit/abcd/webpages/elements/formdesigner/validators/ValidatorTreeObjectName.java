@@ -16,7 +16,7 @@ public class ValidatorTreeObjectName implements Validator {
 	@Override
 	public void validate(Object value) throws InvalidValueException {
 		if (!pattern.matcher((String) value).matches()) {
-			throw new InvalidValueException("Text '" + value + "' is not a valid text.");
+			throw new InvalidValueException("Text '" + value + "' is not valid.");
 		}
 	}
 
