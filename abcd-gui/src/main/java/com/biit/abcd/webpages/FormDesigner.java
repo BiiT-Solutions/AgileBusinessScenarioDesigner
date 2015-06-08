@@ -90,7 +90,6 @@ public class FormDesigner extends FormWebPageComponent {
 				if (UserSessionHandler.getFormController().getCollapsedStatus() == null) {
 					UserSessionHandler.getFormController().setCollapsedStatus(new HashSet<>());
 				}
-				System.out.println("-----------------------------------------------------------------");
 				UserSessionHandler.getFormController().getCollapsedStatus().add(event.getItemId());
 			}
 		};
@@ -102,7 +101,6 @@ public class FormDesigner extends FormWebPageComponent {
 				if (UserSessionHandler.getFormController().getCollapsedStatus() == null) {
 					UserSessionHandler.getFormController().setCollapsedStatus(new HashSet<>());
 				}
-				System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 				UserSessionHandler.getFormController().getCollapsedStatus().remove(event.getItemId());
 			}
 		};

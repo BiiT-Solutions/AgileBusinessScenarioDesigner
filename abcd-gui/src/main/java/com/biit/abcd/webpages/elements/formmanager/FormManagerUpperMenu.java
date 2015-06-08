@@ -246,7 +246,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty()) {
+								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty() || !newFormWindow.isValid()) {
 									return;
 								}
 								if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization()
