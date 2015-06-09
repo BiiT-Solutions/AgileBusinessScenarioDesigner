@@ -15,9 +15,6 @@ import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectName;
-import com.biit.abcd.webpages.elements.formdesigner.validators.ValidatorTreeObjectNameLength;
-import com.biit.form.entity.BaseForm;
 import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Property.ReadOnlyException;
 import com.vaadin.server.VaadinServlet;
@@ -46,8 +43,8 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 		instance = element;
 
 		formLabel = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_NAME));
-		formLabel.addValidator(new ValidatorTreeObjectName(BaseForm.NAME_ALLOWED));
-		formLabel.addValidator(new ValidatorTreeObjectNameLength());
+		//formLabel.addValidator(new ValidatorTreeObjectName(BaseForm.NAME_ALLOWED));
+		//formLabel.addValidator(new ValidatorTreeObjectNameLength());
 		formLabel.setValue(instance.getLabel());
 
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));

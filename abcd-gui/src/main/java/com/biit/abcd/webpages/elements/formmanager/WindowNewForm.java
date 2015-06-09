@@ -61,8 +61,8 @@ public class WindowNewForm extends AcceptCancelWindow {
 		textField = new TextField(ServerTranslate.translate(inputFieldCaption));
 		textField.focus();
 		textField.setWidth("100%");
-		textField.addValidator(new ValidatorTreeObjectName(BaseForm.NAME_ALLOWED));
-		textField.addValidator(new ValidatorTreeObjectNameLength());
+		//textField.addValidator(new ValidatorTreeObjectName(BaseForm.NAME_ALLOWED));
+		//textField.addValidator(new ValidatorTreeObjectNameLength());
 
 		textField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 4953347262492851075L;
