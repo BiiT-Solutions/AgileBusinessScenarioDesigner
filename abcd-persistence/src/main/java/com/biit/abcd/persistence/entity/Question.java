@@ -6,8 +6,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.CheckDependencies;
 import com.biit.form.entity.BaseQuestion;
+import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
@@ -37,8 +39,31 @@ public class Question extends BaseQuestion {
 		return answerType;
 	}
 
+	/**
+	 * This setter sets AnswerType and sets the answer format to the default answer format for a type.
+	 * 
+	 * @param answerType
+	 */
 	public void setAnswerType(AnswerType answerType) {
+		AnswerType prevValue = this.answerType;
 		this.answerType = answerType;
+		try {
+			// If you change to input field, select the default value.
+			if (answerType != prevValue) {
+				setAnswerFormat(answerType.getDefaultAnswerFormat());
+				if (!answerType.isChildrenAllowed()) {
+					getChildren().clear();
+				}
+				// Dropdown list does not allow subanswers.
+				if (!answerType.isSubChildrenAllowed()) {
+					for (TreeObject child : getChildren()) {
+						child.getChildren().clear();
+					}
+				}
+			}
+		} catch (InvalidAnswerFormatException e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	public AnswerFormat getAnswerFormat() {
