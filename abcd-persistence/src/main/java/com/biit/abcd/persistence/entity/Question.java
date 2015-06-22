@@ -67,6 +67,9 @@ public class Question extends BaseQuestion {
 	}
 
 	public AnswerFormat getAnswerFormat() {
+		if (answerType != null && !answerType.isAnswerFormatEnabled()) {
+			return null;
+		}
 		return answerFormat;
 	}
 
