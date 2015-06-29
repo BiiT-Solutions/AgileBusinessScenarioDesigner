@@ -88,6 +88,7 @@
 		<drools-engine.version>[0.1,0.2)</drools-engine.version>
 		<form-structure.version>[0.3,0.4)</form-structure.version>
 		<jpa-schema-exporter.version>[0.3,0.4)</jpa-schema-exporter.version>
+		<rest-services-security.version>[0.0,0.1)</rest-services-security.version>
 	</properties>
 
 	<dependencies>
