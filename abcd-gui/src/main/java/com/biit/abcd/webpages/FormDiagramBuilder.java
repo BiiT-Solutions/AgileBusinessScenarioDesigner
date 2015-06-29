@@ -91,12 +91,17 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
 			@Override
 			public void diagramObjectPicked(DiagramObject object) {
+				//Object can be null (no-selection)
+				propertiesContainer.focus();
+				propertiesContainer.updatePropertiesComponent(object);
+				
 				if (object != null) {
-					propertiesContainer.focus();
-					propertiesContainer.updatePropertiesComponent(object);
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' Element " + object
 							+ " picked in Diagram: '" + diagramBuilder.getDiagram().getName() + "'.");
+				}else{
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' Cleared it's selection.");
 				}
 			}
 		});
