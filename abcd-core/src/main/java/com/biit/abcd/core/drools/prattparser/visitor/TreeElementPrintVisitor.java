@@ -13,8 +13,10 @@ import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.entity.TreeObject;
 
-
-public class TreeElementPrintVisitor implements ITreeElementVisitor{
+/**
+ * Visitor used only for debugging purposes 
+ */
+public class TreeElementPrintVisitor implements ITreeElementVisitor {
 
 	private StringBuilder builder;
 
@@ -61,7 +63,7 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 					.getExpressions().get(0);
 			TreeObject treeObject = expVal.getReference();
 			if (treeObject instanceof Answer) {
-				this.builder.append(((Answer)treeObject).getLabel());
+				this.builder.append(((Answer) treeObject).getLabel());
 			}
 		}
 		// For everything else, get the technical name
@@ -90,7 +92,7 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor{
 		prefix.getRightElement().accept(this);
 		this.builder.append(")");
 	}
-	
+
 	@Override
 	public void visit(GroupExpression group) throws NotCompatibleTypeException {
 		this.builder.append("(");

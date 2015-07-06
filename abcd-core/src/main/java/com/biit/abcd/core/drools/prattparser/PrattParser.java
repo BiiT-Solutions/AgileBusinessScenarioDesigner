@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.biit.abcd.core.drools.prattparser.exceptions.InvalidTokenReceivedException;
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.parselets.InfixParselet;
 import com.biit.abcd.core.drools.prattparser.parselets.PrefixParselet;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
@@ -19,6 +21,13 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.interfaces.IExpressionType;
+
+/**
+ * Main class of the parser.<br>
+ * To see the theory behind this code and the basic functionality see:<br>
+ * http://journal
+ * .stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/
+ */
 
 public class PrattParser {
 
@@ -53,7 +62,7 @@ public class PrattParser {
 
 		for (int expIndex = 0; expIndex < tokens.size(); expIndex++) {
 			Expression expression = tokens.get(expIndex);
-			
+
 			if ((expression instanceof ExpressionOperatorMath)
 					&& ((ExpressionOperatorMath) expression).getValue().equals(AvailableOperator.ASSIGNATION)
 					&& ((expIndex + 1) < tokens.size())) {
@@ -64,7 +73,7 @@ public class PrattParser {
 					continue;
 				}
 			}
-			
+
 			// Ignore new line symbols.
 			if ((expression instanceof ExpressionSymbol)
 					&& (((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.PILCROW))) {
@@ -130,7 +139,7 @@ public class PrattParser {
 	public ExpressionToken consume(ExpressionTokenType expected) {
 		ExpressionToken token = this.lookAhead(0);
 		if (token.getType() != expected) {
-			throw new InvalidTokenRecievedException("Expected token " + expected + " and found " + token.getType());
+			throw new InvalidTokenReceivedException("Expected token " + expected + " and found " + token.getType());
 		}
 		return this.consume();
 	}
@@ -138,7 +147,6 @@ public class PrattParser {
 	public ExpressionToken consume() {
 		// Make sure we've read the token.
 		this.lookAhead(0);
-
 		return this.mRead.remove(0);
 	}
 

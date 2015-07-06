@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
-import com.biit.abcd.core.drools.prattparser.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupConditionFinderVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementPrintVisitor;

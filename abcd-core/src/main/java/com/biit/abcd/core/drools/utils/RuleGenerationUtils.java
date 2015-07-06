@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.biit.abcd.core.drools.json.globalvariables.AbcdGlobalVariablesToJson;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -31,9 +32,16 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
+import com.biit.drools.global.variables.DroolsGlobalVariable;
+import com.biit.drools.global.variables.json.DroolsGlobalVariablesFromJson;
 import com.biit.form.entity.TreeObject;
 
+/**
+ * This class gathers method that ease the drools rule definition and simplifies
+ * the 'DroolsParser' class code.
+ */
 public class RuleGenerationUtils {
 
 	public static String getRuleName(String name) {
@@ -556,9 +564,9 @@ public class RuleGenerationUtils {
 				customVariablesList.add((ExpressionValueCustomVariable) expression);
 
 			} else if (expression instanceof ExpressionValueGenericCustomVariable) {
-				
+
 				ExpressionValueGenericCustomVariable genericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
-				
+
 				CustomVariable customVariable = genericCustomVariable.getVariable();
 				Form form = customVariable.getForm();
 				switch (customVariable.getScope()) {
@@ -577,5 +585,11 @@ public class RuleGenerationUtils {
 			}
 		}
 		return customVariablesList;
+	}
+
+	public static List<DroolsGlobalVariable> convertGlobalVariablesToDroolsGlobalVariables(
+			List<GlobalVariable> globalVariables) {
+		// We use the json serializer/deserializer to transform the variables
+		return DroolsGlobalVariablesFromJson.fromJson(AbcdGlobalVariablesToJson.toJson(globalVariables));
 	}
 }

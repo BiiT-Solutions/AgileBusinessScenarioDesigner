@@ -19,6 +19,12 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 
+/**
+ * This visitor is in charge of adding the special operators that compose a complex rule(i.e. OR, AND and NOT).<br>
+ * Is used in combination with the visitors
+ * 'TreeElementGroupConditionFinderVisitor' and
+ * 'TreeElementGroupEndRuleConditionCreatorVisitor'
+ */
 public class TreeElementGroupEndConditionFinderVisitor implements ITreeElementVisitor {
 
 	private ExpressionChain completeExpression;

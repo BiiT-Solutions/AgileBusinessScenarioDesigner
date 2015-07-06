@@ -32,10 +32,9 @@ import com.biit.drools.DroolsHelper;
 import com.biit.form.entity.TreeObject;
 
 /**
- * Transforms an Expression into a Drools rule. It also unwraps the generic
- * variables that can be used in the expressions and creates a set of rules if
- * necessary.
- * 
+ * Transforms an Expression into a Drools rule.<br>
+ * It also unwraps the generic variables that can be used in the expressions and
+ * creates a set of rules if necessary.
  */
 public class ExpressionToDroolsRule {
 
@@ -349,14 +348,6 @@ public class ExpressionToDroolsRule {
 						.equals(AvailableSymbol.COMMA)))) {
 			generatedExpressionChain.removeExpression(generatedExpressionChain.getExpressions().size() - 2);
 		}
-//		// Check that the generated expression has parameters
-//		if (generatedExpressionChain.getExpressions().size() > 1) {
-//			Expression expression = generatedExpressionChain.getExpressions().get(
-//					generatedExpressionChain.getExpressions().size() - 2);
-//			if (expression instanceof IExpressionType<?>) {
-//				return null;
-//			}
-//		}
 		return generatedExpressionChain;
 	}
 
@@ -430,7 +421,7 @@ public class ExpressionToDroolsRule {
 				}
 			} else if (leftTreeObject instanceof Group) {
 				treeObjects = leftTreeObject.getChildren(Question.class);
-			
+
 			} else if (leftTreeObject instanceof Question) {
 				treeObjects = Arrays.asList(leftTreeObject);
 			}

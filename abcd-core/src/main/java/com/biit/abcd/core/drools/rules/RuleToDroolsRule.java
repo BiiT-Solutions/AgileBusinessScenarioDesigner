@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
-import com.biit.abcd.core.drools.prattparser.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupConditionFinderVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupEndConditionFinderVisitor;
@@ -37,9 +37,9 @@ import com.biit.drools.DroolsHelper;
 import com.biit.form.entity.TreeObject;
 
 /**
- * Transforms a Rule to a Drools rule. Internally is the same. This class is
- * used for standardization purposes.
- * 
+ * Transforms a Rule into a Drools rule.<br>
+ * It also unwraps the generic variables that can be used in the rules and
+ * creates a new set of rules if necessary.
  */
 public class RuleToDroolsRule {
 

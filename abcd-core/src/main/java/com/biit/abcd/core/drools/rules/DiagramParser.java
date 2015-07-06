@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.biit.abcd.core.drools.prattparser.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
@@ -160,6 +160,9 @@ public class DiagramParser {
 			break;
 		}
 		int linkNumber = 0;
+
+		// When checking the diagram links we have to manage the possible forks,
+		// because they will add extra conditions to the following rules
 		for (DiagramLink outLink : node.getOutgoingLinks()) {
 			if (node.getType().equals(DiagramObjectType.FORK) && (forkConditions.size() > linkNumber)) {
 				parseDiagramElement(outLink.getTargetElement(), forkConditions.get(linkNumber), newRules);
@@ -209,7 +212,6 @@ public class DiagramParser {
 						} else {
 							expressionOfLinkCopy.removeAllExpressions();
 						}
-
 						break;
 					case MULTI_CHECKBOX:
 						// Fork with multicheckbox can cause problems. User can

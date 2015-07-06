@@ -1,5 +1,8 @@
 package com.biit.abcd.core.drools.prattparser;
 
+/**
+ * Enum class that defines the token identifiers for our parser.
+ */
 public enum ExpressionTokenType {
 
 	// Available functions
@@ -12,7 +15,6 @@ public enum ExpressionTokenType {
 	EOF, NAME,
 	// Special type for the plugin methods
 	IPLUGIN;
-	
 
 	/**
 	 * If the TokenType represents a punctuator (i.e. a token that can split an

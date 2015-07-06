@@ -13,7 +13,7 @@ import com.biit.webservice.rest.RestAuthenticationFilter;
 public class AbcdRestAuthenticationFilter extends RestAuthenticationFilter {
 
 	/**
-	 * The parent extended needs to know what authorization service must call,
+	 * The extended parent needs to know what authorization service must call,
 	 * so this method passes the specific authorization class needed by the
 	 * parent to filter the request.
 	 */

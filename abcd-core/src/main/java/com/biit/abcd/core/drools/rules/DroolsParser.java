@@ -10,7 +10,7 @@ import net.xeoh.plugins.base.Plugin;
 
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
-import com.biit.abcd.core.drools.prattparser.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupEndRuleConditionCreatorVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementMathExpressionVisitor;
@@ -72,23 +72,15 @@ public class DroolsParser {
 	}
 
 	/**
-	 * Expression parser. An expression is a rule without the condition part in
-	 * the definition, but not in the drools engine.<br>
-	 * Parse actions like => Cat.score = min(q1.score, q2.score, ...) <br>
-	 * Create drools rule like => <br>
-	 * &nbsp&nbsp&nbsp $var : List() from collect( some conditions )<br>
-	 * &nbsp&nbsp&nbsp accumulate((Question($score : getScore()) from $var);
-	 * $sol : min($value) )
-	 * 
+	 * This method manages the expression functions defined by the user.<br>
+	 * The expression supported are: MAX, MIN, AVG, SUM y PMT
 	 * @param actions
-	 *            the expression being parsed
-	 * @param forkConditions
-	 * @return the rule
-	 * @throws TreeObjectParentNotValidException
-	 * @throws TreeObjectInstanceNotRecognizedException
+	 * @return The drools rule as a string
 	 * @throws NullTreeObjectException
-	 * @throws NullExpressionValueException
+	 * @throws TreeObjectInstanceNotRecognizedException
+	 * @throws TreeObjectParentNotValidException
 	 * @throws NullCustomVariableException
+	 * @throws NullExpressionValueException
 	 * @throws DroolsRuleCreationException
 	 */
 	private static String assignationFunctionAction(ExpressionChain actions) throws NullTreeObjectException,
@@ -245,7 +237,7 @@ public class DroolsParser {
 	 *            actions of a rule.
 	 * @param forkConditions
 	 *            conditions defined as a fork in a digram.
-	 * @return
+	 * @return String with the drools rule
 	 * @throws PrattParserException
 	 * @throws DroolsRuleCreationException
 	 * @throws PluginInvocationException
@@ -270,11 +262,13 @@ public class DroolsParser {
 		StringBuilder parsedText = new StringBuilder();
 		for (Rule rule : rules) {
 			if (rule != null) {
+				// Parse the rules individually
 				String parsedRule = createDroolsRule(rule);
 				if (parsedRule != null) {
 					parsedText.append(rule.getName());
 					parsedText.append(RuleGenerationUtils.getWhenRuleString());
-
+					
+					// The rule
 					if (rule instanceof DroolsRuleGroupEndRule) {
 						parsedText.append(RuleGenerationUtils
 								.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule));
@@ -315,8 +309,8 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
-//		System.out.println("RULE CONDITIONS: " + rule.getConditions());
-//		System.out.println("RULE ACTIONS: " + rule.getActions());
+		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		// System.out.println("RULE ACTIONS: " + rule.getActions());
 
 		// Just in case we want the label and version of the drools files
 		/**

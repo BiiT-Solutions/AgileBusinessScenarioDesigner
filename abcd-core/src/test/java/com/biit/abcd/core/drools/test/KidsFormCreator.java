@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
-import com.biit.abcd.core.drools.utils.AbcdDroolsUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -104,7 +104,7 @@ public class KidsFormCreator {
 			droolsRulesString = rulesGenerator.getRules();
 
 			return droolsEngine.applyDrools(getSubmittedForm(), droolsRulesString,
-					AbcdDroolsUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables()));
+					RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
