@@ -268,11 +268,17 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				try {
+					FormWorkStatus previousStatus = getForm().getStatus();
+
 					getForm().setStatus((FormWorkStatus) statusComboBox.getValue());
 					changeStatusOnDatabase(getForm(), statusComboBox, (FormWorkStatus) statusComboBox.getValue());
 					formTable.refreshRow(getForm());
 					windowAccept.close();
 					updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
+					// In case we are changing the status of a form to design
+					// and there are newer versions
+					showEditableWarningIfNeeded(previousStatus, (FormWorkStatus) statusComboBox.getValue());
+
 				} catch (NotEnoughRightsToChangeStatusException nercs) {
 					// Nothing.
 				}
@@ -288,6 +294,14 @@ public class FormManager extends FormWebPageComponent {
 		});
 
 		windowAccept.showCentered();
+	}
+
+	private void showEditableWarningIfNeeded(FormWorkStatus previousStatus, FormWorkStatus comboBoxStatus) {
+		if (!getForm().isLastVersion() && comboBoxStatus.equals(FormWorkStatus.DESIGN)
+				&& previousStatus.equals(FormWorkStatus.FINAL_DESIGN)) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+					LanguageCodes.WARNING_ONLY_RULES_AND_EXPRESSIONS_EDITABLE);
+		}
 	}
 
 	private void changeStatusOnDatabase(SimpleFormView form, ComboBox statusComboBox, FormWorkStatus value)

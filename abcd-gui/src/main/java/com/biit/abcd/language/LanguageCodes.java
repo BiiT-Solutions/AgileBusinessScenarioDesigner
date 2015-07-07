@@ -546,6 +546,8 @@ public enum LanguageCodes {
 	
 	PAGE_ERROR("page.error"),
 	PAGE_NOT_FOUND("page.not.found"),
+	
+	WARNING_ONLY_RULES_AND_EXPRESSIONS_EDITABLE("warning.only.expressions.and.rules.editable"),
 	;
 
 	private String value;

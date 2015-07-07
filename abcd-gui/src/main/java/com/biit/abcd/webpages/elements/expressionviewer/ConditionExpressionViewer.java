@@ -25,5 +25,4 @@ public class ConditionExpressionViewer extends ExpressionViewer {
 			getEvaluatorOutput().setValue(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHECKER_INVALID));
 		}
 	}
-
 }
