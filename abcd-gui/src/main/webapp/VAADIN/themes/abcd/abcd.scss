@@ -442,6 +442,11 @@ $open-sans-pathPrefix: "./fonts/";
 		line-height: normal;
 	}
 	
+	///abcd issue with combobox size inside table.
+	.v-table-cell-content input {
+	  width: 100%;
+	}
+	
 	//Scrollable hack
 	#main-table .v-scrollable {
 		overflow-y: hidden !important;

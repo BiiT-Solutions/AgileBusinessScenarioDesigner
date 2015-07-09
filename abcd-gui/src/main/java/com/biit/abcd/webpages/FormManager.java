@@ -41,7 +41,6 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
@@ -94,10 +93,7 @@ public class FormManager extends FormWebPageComponent {
 		setUpperMenu(upperMenu);
 
 		formTable = createTreeTable();
-		VerticalLayout rootLayout = new VerticalLayout(formTable);
-		rootLayout.setSizeFull();
-		rootLayout.setMargin(true);
-		getWorkingAreaLayout().addComponent(rootLayout);
+		getWorkingAreaLayout().addComponent(formTable);
 		formTable.selectLastUsedForm();
 		updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 
