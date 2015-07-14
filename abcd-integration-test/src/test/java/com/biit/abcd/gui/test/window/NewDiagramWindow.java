@@ -11,7 +11,7 @@ public class NewDiagramWindow extends TextFieldAcceptCancelWindow {
 
 	@Override
 	protected String getWindowId() {
-		// This window doesn't use accep/cancel id for now.
+		// This window doesn't use accept/cancel id for now.
 		return null;
 	}
 }
