@@ -92,6 +92,7 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormVariables().goToFormManager();
 		Assert.assertFalse(getFormVariables().getWarningUnsavedData().isVisible());
 		getFormManager().clickFormVariables();
+		sleep(500);
 	}
 
 	private void diagramDesignerCheckSaveWarning() {
@@ -105,6 +106,7 @@ public class StatusPreservingTests extends AbcdTester {
 		getDiagramDesigner().goToFormManager();
 		Assert.assertFalse(getDiagramDesigner().getWarningUnsavedData().isVisible());
 		getFormManager().clickDiagramDesigner();
+
 	}
 
 	@Test
@@ -359,7 +361,7 @@ public class StatusPreservingTests extends AbcdTester {
 		getDiagramDesigner().newDiagram(DIAGRAM_1);
 		diagramDesignerCheckSaveWarning();
 
-		//It's being deselected
+		// It's being deselected
 		getDiagramDesigner().selectRow(DIAGRAM_1_ROW);
 		getDiagramDesigner().removeDiagram(DIAGRAM_1_ROW);
 		diagramDesignerCheckSaveWarning();
