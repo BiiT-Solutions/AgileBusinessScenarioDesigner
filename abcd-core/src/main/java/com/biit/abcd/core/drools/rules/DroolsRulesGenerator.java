@@ -23,6 +23,11 @@ import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.drools.DroolsHelper;
 import com.biit.drools.plugins.PluginController;
 
+/**
+ * Main class in charge of calling all the methods that generate the drools
+ * rules string.<br>
+ * It also appends all the necessary libraries to the drools file.<br>
+ */
 public class DroolsRulesGenerator {
 
 	// Provides some extra functionalities to the drools parser
@@ -133,6 +138,15 @@ public class DroolsRulesGenerator {
 		}
 	}
 
+	/**
+	 * Sets the default value introduces by the user to the custom variables of
+	 * the form.<br>
+	 * It only sets the value if the variable is actively used in the diagram.<br>
+	 * 
+	 * @throws NullTreeObjectException
+	 * @throws TreeObjectInstanceNotRecognizedException
+	 * @throws TreeObjectParentNotValidException
+	 */
 	private void setCustomVariablesDefaultValues() throws NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		// Look for the custom variables in the diagrams
@@ -271,6 +285,12 @@ public class DroolsRulesGenerator {
 		return globalConstants;
 	}
 
+	/**
+	 * This method returns the basic global data types needed by drools.<br>
+	 * 
+	 * @param globalVariable
+	 * @return
+	 */
 	private String globalVariableString(GlobalVariable globalVariable) {
 		switch (globalVariable.getFormat()) {
 		case DATE:

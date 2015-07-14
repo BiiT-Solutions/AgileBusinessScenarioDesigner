@@ -76,6 +76,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 			public void nodePickedListener(String jsonString) {
 				if (jsonString == null) {
 					fireDiagramObjectPickedListeners(null);
+					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+							+ "' Cleared its selection.");
 					return;
 				}
 				DiagramObject element = getObjectOfDiagram(jsonString);
@@ -332,10 +334,12 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	}
 
 	public void updateChangesToDiagram(DiagramObject element) {
-		if (element instanceof DiagramElement) {
-			updateCellJson(element.toJson());
-		} else {
-			updateLinkJson(element.toJson());
+		if(diagram.getDiagramObjects().contains(element)){
+			if (element instanceof DiagramElement) {
+				updateCellJson(element.toJson());
+			} else {
+				updateLinkJson(element.toJson());
+			}
 		}
 	}
 

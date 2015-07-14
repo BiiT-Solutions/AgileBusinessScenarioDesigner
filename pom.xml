@@ -5,7 +5,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>1.4.39-SNAPSHOT</version>
+	<version>1.4.49-SNAPSHOT</version>
 	<name>Agile Business sCenario Designer Tool</name>
 	<description>Rules Designer</description>
 
@@ -48,7 +48,7 @@
 		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
 		<org.testng.version>6.8.7</org.testng.version>
 		<commons-io.version>2.4</commons-io.version>
-		<vaadin.version>7.3.9</vaadin.version>
+		<vaadin.version>7.3.10</vaadin.version>
 		<vaadin-testbench.version>4.0.1</vaadin-testbench.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<vaadin-toolkit.version>LATEST</vaadin-toolkit.version>
@@ -88,6 +88,7 @@
 		<drools-engine.version>[0.1,0.2)</drools-engine.version>
 		<form-structure.version>[0.3,0.4)</form-structure.version>
 		<jpa-schema-exporter.version>[0.3,0.4)</jpa-schema-exporter.version>
+		<rest-services-security.version>[0.0,0.1)</rest-services-security.version>
 	</properties>
 
 	<dependencies>

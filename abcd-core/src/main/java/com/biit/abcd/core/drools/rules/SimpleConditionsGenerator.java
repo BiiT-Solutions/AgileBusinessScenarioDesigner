@@ -15,6 +15,13 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.form.entity.TreeObject;
 
+/**
+ * This class is used to generate the same generic code needed by almost all the
+ * drools rules.<br>
+ * To access drools variables or create specific binds the drools code is always
+ * the same, so this class gathers all this methods and simplifies the
+ * complexity of the drools parser.
+ */
 public class SimpleConditionsGenerator {
 
 	private static void putTreeObjectInTreeObjectDroolsIdMap(TreeObject treeObject) {
@@ -24,7 +31,8 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the simple conditions that look for a treeObject in the drools memory and assign it to a variable
+	 * Returns the simple conditions that look for a treeObject in the drools
+	 * memory and assign it to a variable
 	 * 
 	 * @param treeObject
 	 * @return
@@ -44,7 +52,7 @@ public class SimpleConditionsGenerator {
 			} else if (treeObject instanceof Answer) {
 				// Answers not parsed, checked here to avoid null pointers
 				return "";
-			}else {
+			} else {
 				throw new TreeObjectInstanceNotRecognizedException(treeObject);
 			}
 		} else {
@@ -52,14 +60,6 @@ public class SimpleConditionsGenerator {
 		}
 	}
 
-	/**
-	 * Returns the Drools condition in String form.
-	 * 
-	 * @param parent
-	 * @param treeObject
-	 * @return
-	 * @throws TreeObjectInstanceNotRecognizedException
-	 */
 	private static String getGroupQuestionCondition(TreeObject parent, TreeObject treeObject) {
 		String treeObjectClass = treeObject.getClass().getSimpleName();
 		return "\t$" + treeObject.getUniqueNameReadable() + " : DroolsSubmitted" + treeObjectClass + "( "
@@ -119,7 +119,8 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the conditions that look for a treeObject in the drools memory and assign it to a variable.<br>
+	 * Returns the conditions that look for a treeObject in the drools memory
+	 * and assign it to a variable.<br>
 	 * Also checks if the treeObject has a custom variable with value set.
 	 * 
 	 * @param expressionValueCustomVariable
@@ -175,7 +176,8 @@ public class SimpleConditionsGenerator {
 		return "\t$" + treeObject.getUniqueNameReadable() + " : DroolsSubmitted" + treeObjectClass + "( "
 				+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObject) + "', isVariableDefined('"
 				+ customVariable.getName() + "')) from $" + parent.getUniqueNameReadable()
-				+ ".getChildren(ISubmittedCategory.class) " + RuleGenerationUtils.addFinalCommentsIfNeeded(treeObject) + "\n";
+				+ ".getChildren(ISubmittedCategory.class) " + RuleGenerationUtils.addFinalCommentsIfNeeded(treeObject)
+				+ "\n";
 	}
 
 	private static String getGroupQuestionCustomVariableCondition(CustomVariable customVariable, TreeObject parent,
@@ -231,9 +233,10 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the conditions that look for a treeObject in the drools memory and assign it to a variable.<br>
-	 * This method receives a custom variable but does not make the search for the custom variable value set in the tree
-	 * object.
+	 * Returns the conditions that look for a treeObject in the drools memory
+	 * and assign it to a variable.<br>
+	 * This method receives a custom variable but does not make the search for
+	 * the custom variable value set in the tree object.
 	 * 
 	 * @param expressionValueCustomVariable
 	 * @return

@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
-import com.biit.abcd.core.drools.utils.AbcdDroolsUtils;
+import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -22,8 +22,6 @@ public class FormToDroolsExporter {
 	 * Parses the abcd form and loads the rules generated in the drools engine. <br>
 	 * If this method doesn't fails it means that the drools rules are correctly
 	 * defined. <br>
-	 * This method creates the global constants defined in the globalVariables
-	 * array
 	 * 
 	 * @param form
 	 *            form to be parsed
@@ -77,7 +75,7 @@ public class FormToDroolsExporter {
 		if ((rulesGenerator != null) && (iSubmittedForm != null)) {
 			DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
 			return droolsEngine.applyDrools(iSubmittedForm, rulesGenerator.getRules(),
-					AbcdDroolsUtils.convertGlobalVariablesToDroolsGlobalVariables(globalVariables));
+					RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(globalVariables));
 		} else
 			return null;
 	}

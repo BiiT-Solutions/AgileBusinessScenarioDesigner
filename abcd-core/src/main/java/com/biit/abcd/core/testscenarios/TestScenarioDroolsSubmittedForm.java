@@ -33,6 +33,11 @@ import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedObject;
 import com.biit.form.submitted.ISubmittedQuestion;
 
+/**
+ * This class transforms a Form in a TestScenario.<br>
+ * Test scenarios can be executed by the drools engine and a result can be
+ * presented to the user.
+ */
 public class TestScenarioDroolsSubmittedForm {
 
 	private TestScenarioValidator testValidator = null;

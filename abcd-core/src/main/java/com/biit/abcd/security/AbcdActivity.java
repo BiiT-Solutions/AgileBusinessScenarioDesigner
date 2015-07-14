@@ -29,9 +29,7 @@ public enum AbcdActivity implements IActivity {
 	
 	FORM_STATUS_DOWNGRADE("FormStatusDowngrade"), 
 
-	GLOBAL_VARIABLE_EDITOR("GlobalVariables"),
-	
-	USE_WEB_SERVICE("WebServices");
+	GLOBAL_VARIABLE_EDITOR("GlobalVariables");
 
 	private String tag;
 

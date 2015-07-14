@@ -10,6 +10,7 @@ public final class ExpressionToken {
 
 	private final ExpressionTokenType type;
 	private final Expression expression;
+	// Identifier used to recognize the external plugin calls
 	private final String PLUGIN_INTERFACE_IDENTIFIER = "IPLUGIN";
 
 	public ExpressionToken(ExpressionTokenType type, Expression expression) {

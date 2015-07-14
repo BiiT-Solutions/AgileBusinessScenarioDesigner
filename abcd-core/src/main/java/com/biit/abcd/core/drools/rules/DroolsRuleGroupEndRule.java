@@ -8,6 +8,14 @@ import java.util.Set;
 import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
+/**
+ * All the complex rules like 'A and (B or C)' are divided in sets of simple
+ * rules like: 'BC = B or C', 'A and BC'.<br>
+ * To allow this we create groups of rules so we can know when a rule is part of
+ * a more complex one.<br>
+ * This class defines the rule that combines all the simple rules generated.<br>
+ * It has especial conditions to avoid the launch of the rule several times.
+ */
 public class DroolsRuleGroupEndRule extends DroolsRuleGroup {
 	private static final long serialVersionUID = 5322960385494913547L;
 	private String groupCondition = "";

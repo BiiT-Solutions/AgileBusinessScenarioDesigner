@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.4.39-SNAPSHOT</version>
+		<version>1.4.49-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -118,16 +118,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Rest Authentication -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>${javax.servlet.version}</version>
-		</dependency>
-		<!-- Liferay Authentication -->
-		<dependency>
-			<groupId>com.biit.liferay</groupId>
-			<artifactId>liferay-authentication-client</artifactId>
-			<version>${liferay-authentication-client.version}</version>
+			<groupId>com.biit</groupId>
+			<artifactId>rest-services-security</artifactId>
+			<version>${rest-services-security.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

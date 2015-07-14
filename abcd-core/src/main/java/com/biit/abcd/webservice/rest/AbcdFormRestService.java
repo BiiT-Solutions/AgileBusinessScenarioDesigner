@@ -31,9 +31,7 @@ import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
 
 /**
- * Get appointment examinations This method receives a Json string asking for a
- * concrete appointment information and returns an array of examinations.
- *
+ * Rest services used to communicate ABCD with WebForms
  */
 @Component
 @Path("/")
@@ -48,8 +46,9 @@ public class AbcdFormRestService {
 	private ISimpleFormViewDao simpleFormViewDao;
 
 	/**
-	 * This method receives 1 parameters:<br>
-	 * 1st parameter: user email<br>
+	 * This method receives 1 parameter:<br>
+	 * &emsp; 1st parameter: user email<br>
+	 * Returns a list of SimpleFormView
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -70,9 +69,10 @@ public class AbcdFormRestService {
 
 	/**
 	 * This method receives 3 parameters:<br>
-	 * 1st parameter: user email<br>
-	 * 2nd parameter: form label<br>
-	 * 3rd parameter: organization id of the form
+	 * &emsp; 1st parameter: user email<br>
+	 * &emsp; 2nd parameter: form label<br>
+	 * &emsp; 3rd parameter: organization id of the form<br>
+	 * Returns a list of SimpleFormView
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -105,8 +105,9 @@ public class AbcdFormRestService {
 
 	/**
 	 * This method receives 2 parameters:<br>
-	 * 1st parameter: user email<br>
-	 * 2nd parameter: form ID<br>
+	 * &emsp; 1st parameter: user email<br>
+	 * &emsp; 2nd parameter: form ID<br>
+	 * Returns a complete Form
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -136,10 +137,11 @@ public class AbcdFormRestService {
 
 	/**
 	 * This method receives 4 parameters:<br>
-	 * 1st parameter: user email<br>
-	 * 2nd parameter: form label<br>
-	 * 3rd parameter: organization id of the form<br>
-	 * 4th parameter: version of the form
+	 * &emsp; 1st parameter: user email<br>
+	 * &emsp; 2nd parameter: form label<br>
+	 * &emsp; 3rd parameter: organization id of the form<br>
+	 * &emsp; 4th parameter: version of the form<br>
+	 * Returns a complete Form
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -171,7 +173,8 @@ public class AbcdFormRestService {
 
 	/**
 	 * This method receives 1 parameter:<br>
-	 * 1st parameter: organization id of the forms<br>
+	 * &emsp; 1st parameter: organization id of the forms<br>
+	 * Returns a list of Forms
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

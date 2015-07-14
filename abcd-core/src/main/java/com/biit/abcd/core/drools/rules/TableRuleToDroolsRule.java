@@ -19,7 +19,6 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 /**
  * Transforms a Table rule to a list of drools rules.
- * 
  */
 public class TableRuleToDroolsRule {
 

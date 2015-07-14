@@ -41,7 +41,6 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.VerticalLayout;
 
 public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
@@ -94,10 +93,7 @@ public class FormManager extends FormWebPageComponent {
 		setUpperMenu(upperMenu);
 
 		formTable = createTreeTable();
-		VerticalLayout rootLayout = new VerticalLayout(formTable);
-		rootLayout.setSizeFull();
-		rootLayout.setMargin(true);
-		getWorkingAreaLayout().addComponent(rootLayout);
+		getWorkingAreaLayout().addComponent(formTable);
 		formTable.selectLastUsedForm();
 		updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 
@@ -268,11 +264,17 @@ public class FormManager extends FormWebPageComponent {
 			@Override
 			public void acceptAction(AcceptCancelWindow window) {
 				try {
+					FormWorkStatus previousStatus = getForm().getStatus();
+
 					getForm().setStatus((FormWorkStatus) statusComboBox.getValue());
 					changeStatusOnDatabase(getForm(), statusComboBox, (FormWorkStatus) statusComboBox.getValue());
 					formTable.refreshRow(getForm());
 					windowAccept.close();
 					updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
+					// In case we are changing the status of a form to design
+					// and there are newer versions
+					showEditableWarningIfNeeded(previousStatus, (FormWorkStatus) statusComboBox.getValue());
+
 				} catch (NotEnoughRightsToChangeStatusException nercs) {
 					// Nothing.
 				}
@@ -288,6 +290,14 @@ public class FormManager extends FormWebPageComponent {
 		});
 
 		windowAccept.showCentered();
+	}
+
+	private void showEditableWarningIfNeeded(FormWorkStatus previousStatus, FormWorkStatus comboBoxStatus) {
+		if (!getForm().isLastVersion() && comboBoxStatus.equals(FormWorkStatus.DESIGN)
+				&& previousStatus.equals(FormWorkStatus.FINAL_DESIGN)) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+					LanguageCodes.WARNING_ONLY_RULES_AND_EXPRESSIONS_EDITABLE);
+		}
 	}
 
 	private void changeStatusOnDatabase(SimpleFormView form, ComboBox statusComboBox, FormWorkStatus value)

@@ -15,6 +15,11 @@ import com.biit.abcd.core.drools.prattparser.expressions.PrefixExpression;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 
+/**
+ * This visitor checks if the rule is a complex rule (i.e. has AND, OR or NOT
+ * expressions).<br>
+ * If it is a complex rule the visitor separates the rule conditions.
+ */
 public class TreeElementGroupConditionFinderVisitor implements ITreeElementVisitor {
 
 	private List<ExpressionChain> conditions;

@@ -15,6 +15,14 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 
+/**
+ * This visitor is in charge of creating the special group rule that is a
+ * composition of the simple rules generated before.<br>
+ * It also adds conditions to avoid that the rule is fired several times.<br>
+ * Is used in combination with the visitors
+ * 'TreeElementGroupConditionFinderVisitor' and
+ * 'TreeElementGroupEndConditionFinderVisitor'.
+ */
 public class TreeElementGroupEndRuleConditionCreatorVisitor implements ITreeElementVisitor {
 
 	private ExpressionChain completeExpression;
@@ -64,10 +72,10 @@ public class TreeElementGroupEndRuleConditionCreatorVisitor implements ITreeElem
 		}
 
 		operator.getLeftElement().accept(this);
-		
+
 		if (operator.getOperator().equals(ExpressionTokenType.OR)) {
 			getCompleteExpression().addExpression(new ExpressionValueString("or"));
-			
+
 		} else if (operator.getOperator().equals(ExpressionTokenType.AND)) {
 			getCompleteExpression().addExpression(new ExpressionValueString("and"));
 
@@ -76,7 +84,7 @@ public class TreeElementGroupEndRuleConditionCreatorVisitor implements ITreeElem
 					+ operator.getExpressionChain().getName().toString() + "')\n";
 			getCompleteExpression().addExpression(new ExpressionValueString(droolsCondition));
 		}
-		
+
 		operator.getRightElement().accept(this);
 
 		if (operator.getOperator().equals(ExpressionTokenType.AND)

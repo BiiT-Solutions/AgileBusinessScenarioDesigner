@@ -19,6 +19,10 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.entity.TreeObject;
 
+/**
+ * Visitor used to validate and create valid drools mathematical expressions.
+ */
+
 public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 
 	private StringBuilder builder;
@@ -29,9 +33,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 
 	@Override
 	public void visit(AssignExpression assign) throws NotCompatibleTypeException {
-		// this.builder.append("(").append(assign.getName()).append(" = ");
 		assign.getRightElement().accept(this);
-		// this.builder.append(")");
 	}
 
 	@Override
@@ -137,14 +139,6 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 				case POSTAL_CODE:
 					throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation",
 							expVal);
-					// case TEXT:
-					// this.builder.append("$" + id + ".getAnswer('" +
-					// AnswerFormat.TEXT.toString() + "')");
-					// break;
-					// case POSTAL_CODE:
-					// this.builder.append("$" + id + ".getAnswer('" +
-					// AnswerFormat.POSTAL_CODE.toString() + "')");
-					// break;
 				}
 			}
 
@@ -166,8 +160,6 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 				throw new NotCompatibleTypeException("Using the text constant: " + name.getName()
 						+ " inside a mathematical operation", (ExpressionValueGlobalConstant) name.getExpressionChain()
 						.getExpressions().get(0));
-				// this.builder.append(name.getName());
-				// break;
 			case DATE:
 				this.builder.append("(Date)" + name.getName());
 				break;

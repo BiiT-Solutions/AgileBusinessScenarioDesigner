@@ -15,6 +15,7 @@ import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
 import com.biit.liferay.security.AuthenticationService;
 import com.biit.liferay.security.AuthorizationService;
 import com.biit.liferay.security.IActivity;
+import com.biit.webservice.rest.RestServiceActivity;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
@@ -77,9 +78,9 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	};
 
-	private static final AbcdActivity[] WEB_SERVICES_PERMISSIONS = {
+	private static final RestServiceActivity[] WEB_SERVICES_PERMISSIONS = {
 
-	AbcdActivity.USE_WEB_SERVICE
+		RestServiceActivity.USE_WEB_SERVICE
 
 	};
 
@@ -108,7 +109,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		for (AbcdActivity activity : APPLICATION_ADMINISTRATOR_EXTRA_PERMISSIONS) {
 			applicationAdministratorPermissions.add(activity);
 		}
-		for (AbcdActivity activity : WEB_SERVICES_PERMISSIONS) {
+		for (RestServiceActivity activity : WEB_SERVICES_PERMISSIONS) {
 			webServiceUserPermissions.add(activity);
 		}
 

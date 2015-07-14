@@ -1,4 +1,4 @@
-package com.biit.abcd.core.drools.prattparser;
+package com.biit.abcd.core.drools.prattparser.exceptions;
 
 public class PrattParserException extends Exception {
 	private static final long serialVersionUID = -3048123597064347435L;
