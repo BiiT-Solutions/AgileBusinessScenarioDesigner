@@ -83,8 +83,11 @@ public class StatusPreservingTests extends AbcdTester {
 
 	private void formVariablesCheckSaveWarningAndSave() {
 		// Go to Form Designer without saving check warning is visible
+		sleep(500);
 		getFormVariables().goToFormManager();
+		sleep(500);
 		Assert.assertTrue(getFormVariables().getWarningUnsavedData().isVisible());
+		sleep(500);
 		getFormVariables().getWarningUnsavedData().clickCancel();
 
 		// Go to Form Designer after saving check warning is not visible
@@ -109,6 +112,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 	@Test
 	public void formInUseIsSelectedWhenReturning() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().createNewForm(TEST_FORM_2);
@@ -152,6 +156,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 	@Test
 	public void elementsSelectedAreMaintainedCorrectly() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickDiagramDesigner();
@@ -219,6 +224,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 	@Test
 	public void savePromptWhenChangedFormName() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickFormDesigner();
@@ -243,6 +249,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 	@Test
 	public void savePromptWhenNewFormElementsOrEditing() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickFormDesigner();
@@ -308,6 +315,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 	@Test
 	public void savePromptWhenNewVariable() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickFormVariables();
@@ -327,6 +335,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 	@Test
 	public void savePromptWhenVariableModified() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickFormVariables();
@@ -352,6 +361,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 	@Test
 	public void savePromptWhenNewAndRemoveDiagram() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickDiagramDesigner();
@@ -373,18 +383,24 @@ public class StatusPreservingTests extends AbcdTester {
 	private void ruleExpressionCheckSaveWarning() {
 		// Go to Form Designer without saving check warning is visible
 		getRuleExpression().goToFormManager();
+		sleep(500);
 		Assert.assertTrue(getRuleExpression().getWarningUnsavedData().isVisible());
+		sleep(500);
 		getRuleExpression().getWarningUnsavedData().clickCancel();
-
+		sleep(500);
 		// Go to Form Designer after saving check warning is not visible
 		getRuleExpression().save();
+		sleep(500);
 		getRuleExpression().goToFormManager();
+		sleep(500);
 		Assert.assertFalse(getRuleExpression().getWarningUnsavedData().isVisible());
+		sleep(500);
 		getFormManager().clickRuleExpressionEditor();
 	}
 
 	@Test
 	public void savePromptWhenNewAndRemoveRuleExpression() {
+		deleteAllForms();
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickRuleExpressionEditor();

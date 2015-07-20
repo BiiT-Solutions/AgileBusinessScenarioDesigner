@@ -1,6 +1,7 @@
 package com.biit.abcd.gui.test.webpage;
 
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 
 import com.biit.abcd.gui.test.window.NewFormWindow;
@@ -14,6 +15,7 @@ public class FormManager extends AbcdCommonWebpage {
 	private static final String CSS_CLASS = "class";
 	private static final CharSequence SELECTED_ROW = "v-selected";
 	private static final String GLOBAL_CONSTANTS_BUTTON = "Global Constants";
+	private static final Integer FORM_ROW = 1;
 
 	private final static String TEST_SCENARIO_CREATOR_CAPTION = "Create Tests";
 
@@ -82,6 +84,17 @@ public class FormManager extends AbcdCommonWebpage {
 	public void deleteForm(int row) {
 		selectForm(row);
 		deleteForm();
+	}
+	
+	public void deleteAllCreatedForms() {
+		try {
+			while (true) {
+				getFormTable().getCell(FORM_ROW, 0);
+				deleteForm(FORM_ROW);
+			}
+		} catch (NoSuchElementException e) {
+			return;
+		}
 	}
 
 	public boolean checkIfRowExists(int row) {
