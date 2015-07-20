@@ -123,7 +123,6 @@ public class AbcdCommonWebpage extends VaadinGuiWebpage {
 			ElementQuery<NotificationElement> notification = $(NotificationElement.class);
 			if (notification.exists()) {
 				TestbenchHelper.checkNotificationIsHumanized(notification.first());
-				notification.first().close();
 				return;
 			}
 		}

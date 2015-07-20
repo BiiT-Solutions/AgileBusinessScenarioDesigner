@@ -49,7 +49,7 @@
 		<org.testng.version>6.8.7</org.testng.version>
 		<commons-io.version>2.4</commons-io.version>
 		<vaadin.version>7.3.10</vaadin.version>
-		<vaadin-testbench.version>4.0.1</vaadin-testbench.version>
+		<vaadin-testbench.version>4.0.3</vaadin-testbench.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<vaadin-toolkit.version>LATEST</vaadin-toolkit.version>
 		<mysql-odbc.version>5.1.27</mysql-odbc.version>

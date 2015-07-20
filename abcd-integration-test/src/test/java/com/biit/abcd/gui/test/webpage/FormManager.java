@@ -73,7 +73,7 @@ public class FormManager extends AbcdCommonWebpage {
 	}
 
 	public void selectForm(int row) {
-		getFormTable().getCell(row, 0).click();
+		getFormTable().getRow(row).click();
 	}
 
 	public void deleteForm() {

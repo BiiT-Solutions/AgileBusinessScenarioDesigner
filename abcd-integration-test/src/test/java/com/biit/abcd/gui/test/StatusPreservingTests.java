@@ -83,11 +83,8 @@ public class StatusPreservingTests extends AbcdTester {
 
 	private void formVariablesCheckSaveWarningAndSave() {
 		// Go to Form Designer without saving check warning is visible
-		sleep(500);
 		getFormVariables().goToFormManager();
-		sleep(500);
 		Assert.assertTrue(getFormVariables().getWarningUnsavedData().isVisible());
-		sleep(500);
 		getFormVariables().getWarningUnsavedData().clickCancel();
 
 		// Go to Form Designer after saving check warning is not visible
@@ -95,7 +92,18 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormVariables().goToFormManager();
 		Assert.assertFalse(getFormVariables().getWarningUnsavedData().isVisible());
 		getFormManager().clickFormVariables();
-		sleep(500);
+	}
+
+	private void ruleExpressionCheckSaveWarning() {
+		// Go to Form Designer without saving check warning is visible
+		getRuleExpression().goToFormManager();
+		Assert.assertTrue(getRuleExpression().getWarningUnsavedData().isVisible());
+		getRuleExpression().getWarningUnsavedData().clickCancel();
+		// Go to Form Designer after saving check warning is not visible
+		getRuleExpression().save();
+		getRuleExpression().goToFormManager();
+		Assert.assertFalse(getRuleExpression().getWarningUnsavedData().isVisible());
+		getFormManager().clickRuleExpressionEditor();
 	}
 
 	private void diagramDesignerCheckSaveWarning() {
@@ -380,24 +388,6 @@ public class StatusPreservingTests extends AbcdTester {
 		getRuleTableEditor().logOut();
 		deleteForm(FORM_1_ROW, ABCD_FORM_ADMIN_BIIT1);
 		getFormManager().logOut();
-	}
-
-	private void ruleExpressionCheckSaveWarning() {
-		// Go to Form Designer without saving check warning is visible
-		getRuleExpression().goToFormManager();
-		sleep(500);
-		Assert.assertTrue(getRuleExpression().getWarningUnsavedData().isVisible());
-		sleep(500);
-		getRuleExpression().getWarningUnsavedData().clickCancel();
-		sleep(500);
-		// Go to Form Designer after saving check warning is not visible
-		getRuleExpression().save();
-		sleep(500);
-		getRuleExpression().goToFormManager();
-		sleep(500);
-		Assert.assertFalse(getRuleExpression().getWarningUnsavedData().isVisible());
-		sleep(500);
-		getFormManager().clickRuleExpressionEditor();
 	}
 
 	@Test

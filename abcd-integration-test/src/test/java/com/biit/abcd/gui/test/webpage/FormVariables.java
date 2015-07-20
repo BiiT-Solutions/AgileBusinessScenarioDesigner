@@ -58,9 +58,11 @@ public class FormVariables extends AbcdCommonWebpage{
 	}
 
 	public void removeVariable(int row) {
-		$(TableElement.class).first().getCell(row, 0).click();
+		$(TableElement.class).first().getRow(row).click();
+//		$(TableElement.class).first().getCell(row, 0).click();
 		$(TableElement.class).first().waitForVaadin();
 		getRemoveButton().click();
+		getRemoveButton().waitForVaadin();
 	}
 	
 	public ButtonElement getRemoveButton() {
