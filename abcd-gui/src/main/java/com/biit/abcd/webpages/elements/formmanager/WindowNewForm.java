@@ -5,11 +5,12 @@ import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.security.IActivity;
@@ -17,6 +18,7 @@ import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.liferay.portal.model.Organization;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -31,10 +33,14 @@ public class WindowNewForm extends AcceptCancelWindow {
 	private TextField textField;
 	private ComboBox organizationField;
 	private IActivity[] exclusivePermissionFilter;
+	
+	private IAbcdFormAuthorizationService securityService;
 
 	public WindowNewForm(LanguageCodes windowsCaption, LanguageCodes inputFieldCaption, LanguageCodes groupCaption,
 			AbcdActivity[] exclusivePermissionFilter) {
 		super();
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 		this.exclusivePermissionFilter = exclusivePermissionFilter;
 		setContent(generateContent(inputFieldCaption, groupCaption));
 		setCaption(ServerTranslate.translate(windowsCaption));
@@ -74,14 +80,14 @@ public class WindowNewForm extends AcceptCancelWindow {
 		organizationField.setNullSelectionAllowed(false);
 		organizationField.setWidth("100%");
 		try {
-			Set<IGroup<Long>> organizations = AbcdFormAuthorizationService.getInstance().getUserOrganizations(
+			Set<IGroup<Long>> organizations = securityService.getUserOrganizations(
 					UserSessionHandler.getUser());
 			Iterator<IGroup<Long>> itr = organizations.iterator();
 			while (itr.hasNext()) {
 				IGroup<Long> organization = itr.next();
 				for (IActivity activity : exclusivePermissionFilter) {
 					// If the user doesn't comply to all activities in the filter in the group, then exit
-					if (!AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+					if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(),
 							organization, activity)) {
 						itr.remove();
 						break;

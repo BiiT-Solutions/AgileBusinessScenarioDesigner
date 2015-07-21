@@ -1,23 +1,18 @@
 package com.biit.abcd.security;
 
 import com.biit.abcd.UiAccesser;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.IAuthenticationService;
+import com.biit.usermanager.security.IAuthorizationService;
+import com.vaadin.server.VaadinServlet;
 
-public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
+public class AbcdFormAuthorizationService extends SecurityService implements IAbcdFormAuthorizationService {
 
-	private static AbcdFormAuthorizationService instance = new AbcdFormAuthorizationService();
-
-	protected AbcdFormAuthorizationService() {
-		super();
-	}
-
-	public static AbcdFormAuthorizationService getInstance() {
-		return instance;
-	}
-
+	@Override
 	public boolean isFormReadOnly(Form form, IUser<Long> user) {
 		if (form == null || user == null) {
 			return true;
@@ -26,6 +21,7 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 				|| !form.getStatus().equals(FormWorkStatus.DESIGN);
 	}
 
+	@Override
 	public boolean isFormReadOnly(SimpleFormView form, IUser<Long> user) {
 		if (form == null || user == null) {
 			return true;
@@ -34,9 +30,41 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 				|| !form.isLastVersion() || !form.getStatus().equals(FormWorkStatus.DESIGN);
 	}
 
+	@Override
 	public boolean isFormAlreadyInUse(Long formId, IUser<Long> user) {
 		IUser<Long> userUsingForm = UiAccesser.getUserUsingForm(formId);
 		return (userUsingForm != null) && !userUsingForm.getId().equals(user.getId());
+	}
+
+	/**
+	 * Autowired not working correctly with this configuration of Vaadin. Use the helper if needed.
+	 * 
+	 * @return
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public IAuthenticationService<Long, Long> getAuthenticationService() {
+		if (super.getAuthenticationService() == null) {
+			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+			super.setAuthenticationService((IAuthenticationService<Long, Long>) helper.getBean("authenticationService"));
+		}
+		return super.getAuthenticationService();
+	}
+
+	/**
+	 * Autowired not working correctly with this configuration of Vaadin. Use the helper if needed.
+	 * 
+	 * @return
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public IAuthorizationService<Long, Long, Long> getAuthorizationService() {
+		if (super.getAuthorizationService() == null) {
+			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+			super.setAuthorizationService((IAuthorizationService<Long, Long, Long>) helper
+					.getBean("authenticationService"));
+		}
+		return super.getAuthorizationService();
 	}
 
 }

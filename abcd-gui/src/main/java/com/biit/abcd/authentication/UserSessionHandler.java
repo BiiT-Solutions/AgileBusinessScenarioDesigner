@@ -15,8 +15,8 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.liferay.security.AuthenticationService;
 import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.IAuthenticationService;
 import com.biit.usermanager.security.exceptions.AuthenticationRequired;
 import com.biit.usermanager.security.exceptions.InvalidCredentialsException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
@@ -39,6 +39,8 @@ public class UserSessionHandler {
 	private static HashMap<Long, WebMap> userLastPage = new HashMap<>();
 	// User Id --> Last Form edited
 	private static HashMap<Long, Form> userLastForm = new HashMap<>();
+
+	private static IAuthenticationService<Long, Long> authenticationService;
 
 	/**
 	 * Initializes the {@link UserSessionHandler} for the given application
@@ -230,7 +232,7 @@ public class UserSessionHandler {
 	public static IUser<Long> getUser(String userMail, String password) throws UserManagementException,
 			InvalidCredentialsException, AuthenticationRequired {
 		// Try to log in the user when the button is clicked
-		IUser<Long> user = AuthenticationService.getInstance().authenticate(userMail, password);
+		IUser<Long> user = getAuthenticationService().authenticate(userMail, password);
 
 		if (user != null) {
 			WebBrowser browser = (WebBrowser) UI.getCurrent().getPage().getWebBrowser();
@@ -255,5 +257,19 @@ public class UserSessionHandler {
 			UserSessionHandler.checkOnlyOneSession(user, UI.getCurrent(), browser.getAddress());
 		}
 		return user;
+	}
+
+	/**
+	 * Autowired not working correctly in this version of Vaadin. Use the helper if needed in a static method.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private static IAuthenticationService<Long, Long> getAuthenticationService() {
+		if (authenticationService == null) {
+			SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+			authenticationService = (IAuthenticationService<Long, Long>) helper.getBean("authenticationService");
+		}
+		return authenticationService;
 	}
 }

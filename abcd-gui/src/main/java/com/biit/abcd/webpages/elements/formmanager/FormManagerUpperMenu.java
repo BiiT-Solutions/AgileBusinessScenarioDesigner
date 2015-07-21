@@ -21,7 +21,6 @@ import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
@@ -354,7 +353,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	public void setEnabledButtons() {
 		try {
-			newFormButton.setEnabled(AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
+			newFormButton.setEnabled(getSecurityService().isUserAuthorizedInAnyOrganization(
 					UserSessionHandler.getUser(), AbcdActivity.FORM_CREATE));
 		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -388,10 +387,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 		if (selected != null && !(selected instanceof RootForm)) {
 			newVersion.setEnabled(selected.isLastVersion()
 					&& selected.getStatus().equals(FormWorkStatus.FINAL_DESIGN)
-					&& AbcdFormAuthorizationService.getInstance().isAuthorizedToForm(selected.getOrganizationId(),
+					&& getSecurityService().isAuthorizedToForm(selected.getOrganizationId(),
 							UserSessionHandler.getUser())
-					&& !AbcdFormAuthorizationService.getInstance().isFormAlreadyInUse(selected.getId(),
-							UserSessionHandler.getUser()));
+					&& !getSecurityService().isFormAlreadyInUse(selected.getId(), UserSessionHandler.getUser()));
 		} else {
 			newVersion.setEnabled(false);
 		}
@@ -400,15 +398,15 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void updateRemoveFormButton(SimpleFormView selected) {
 		// Only some users can remove forms.
 		try {
-			removeForm.setVisible(AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
-					UserSessionHandler.getUser(), AbcdActivity.FORM_REMOVE));
+			removeForm.setVisible(getSecurityService().isUserAuthorizedInAnyOrganization(UserSessionHandler.getUser(),
+					AbcdActivity.FORM_REMOVE));
 		} catch (UserManagementException e) {
 			removeForm.setVisible(false);
 		}
 		// When visible, enabled when can delete an element.
 		removeForm.setEnabled(selected != null
 				&& !(selected instanceof RootForm)
-				&& AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+				&& getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(),
 						selected.getOrganizationId(), AbcdActivity.FORM_REMOVE));
 	}
 

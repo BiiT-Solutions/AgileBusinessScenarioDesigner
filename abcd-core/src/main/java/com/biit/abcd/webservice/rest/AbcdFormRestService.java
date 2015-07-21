@@ -19,8 +19,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
-import com.biit.abcd.security.AbcdAuthorizationService;
-import com.biit.liferay.security.AuthenticationService;
+import com.biit.abcd.security.ISecurityService;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.exceptions.UserManagementException;
@@ -40,6 +39,9 @@ public class AbcdFormRestService {
 
 	@Autowired
 	private ISimpleFormViewDao simpleFormViewDao;
+
+	@Autowired
+	private ISecurityService securityService;
 
 	/**
 	 * This method receives 1 parameter:<br>
@@ -220,14 +222,14 @@ public class AbcdFormRestService {
 	private Set<IGroup<Long>> getUserOrganizations(String userEmail) {
 		IUser<Long> user = null;
 		try {
-			user = AuthenticationService.getInstance().getUserByEmail(userEmail);
+			user = securityService.getUserByEmail(userEmail);
 		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 			return null;
 		}
 		if (user != null) {
 			try {
-				return AbcdAuthorizationService.getInstance().getUserOrganizations(user);
+				return securityService.getUserOrganizations(user);
 			} catch (UserManagementException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), "User organization not found");
 				return null;

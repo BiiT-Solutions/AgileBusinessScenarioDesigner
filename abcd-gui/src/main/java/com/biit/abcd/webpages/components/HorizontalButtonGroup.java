@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
@@ -18,8 +21,12 @@ public class HorizontalButtonGroup extends CustomComponent {
 	private boolean contractIcons;
 	private Set<Button> buttons;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public HorizontalButtonGroup() {
 		super();
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 		buttons = new HashSet<>();
 		initHorizontalButtonGroup();
 		setIconSizeWithAttachListener();
@@ -87,6 +94,10 @@ public class HorizontalButtonGroup extends CustomComponent {
 
 	public Set<Button> getButtons() {
 		return buttons;
+	}
+
+	protected IAbcdFormAuthorizationService getSecurityService() {
+		return securityService;
 	}
 
 }

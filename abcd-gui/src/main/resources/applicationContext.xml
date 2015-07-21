@@ -18,7 +18,7 @@
 	<!-- Scans the classpath for annotated components that will be auto-registered 
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 
 		to set the correct base-package -->
-	<context:component-scan base-package="com.biit.abcd.persistence" />
+	<context:component-scan base-package="com.biit.abcd.persistence, com.biit.liferay.security, com.biit.abcd.security" />
 
 	<!-- Read any *.properties file in project and override some of them with 
 		files outside of the project -->
@@ -153,4 +153,20 @@
 	<cache:annotation-driven />
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="ehcache" />
 	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="classpath:ehcache.xml" p:shared="true" />
+	
+	<!-- User Managment -->	
+	<bean id="authenticationService" class="com.biit.liferay.security.AuthenticationService" />	
+	<bean id="authorizationService" class="com.biit.liferay.security.AuthorizationService">
+		<property name="roleActivities">
+			<bean id="roleActivities" class="com.biit.abcd.security.RoleActivities" />
+		</property>
+	</bean>
+	<bean id="securityService" class = "com.biit.abcd.security.SecurityService" >
+		<property name="authenticationService" ref="authenticationService" />
+		<property name="authorizationService" ref="authorizationService" />
+	</bean>
+	<bean id="abcdSecurityService" class = "com.biit.abcd.security.AbcdFormAuthorizationService" >
+		<property name="authenticationService" ref="authenticationService" />
+		<property name="authorizationService" ref="authorizationService" />
+	</bean>
 </beans>

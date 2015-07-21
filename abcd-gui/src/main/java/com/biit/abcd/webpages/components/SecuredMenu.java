@@ -12,7 +12,6 @@ import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.usermanager.entity.IUser;
 import com.vaadin.ui.Button;
@@ -27,6 +26,10 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 			Arrays.asList(AbcdActivity.FORM_EDITING));
 	private Set<Button> disabledButtons = null;
 
+	protected SecuredMenu() {
+		super();
+	}
+
 	private Set<Button> calculateDisabledButtons() {
 		Set<Button> disabledButtons = new HashSet<>();
 		IUser<Long> user = UserSessionHandler.getUser();
@@ -39,12 +42,11 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 			ApplicationFrame.navigateTo(WebMap.getLoginPage());
 		} else {
 			// Form is not in use.
-			if (!AbcdFormAuthorizationService.getInstance().isFormAlreadyInUse(
-					UserSessionHandler.getFormController().getForm().getId(), user)) {
+			if (!getSecurityService()
+					.isFormAlreadyInUse(UserSessionHandler.getFormController().getForm().getId(), user)) {
 				inUse = false;
 				// user has permissions to edit this form.
-				if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
-						UserSessionHandler.getFormController().getForm(), user)) {
+				if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(), user)) {
 					editionEnabled = true;
 				}
 			}

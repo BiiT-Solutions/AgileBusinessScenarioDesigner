@@ -30,7 +30,8 @@ import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
+import com.biit.abcd.security.ISecurityService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
@@ -65,12 +66,15 @@ import com.vaadin.ui.Tree.ExpandListener;
 
 public class FormDesigner extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+			Arrays.asList(AbcdActivity.READ));
 	private FormTreeTable formTreeTable;
 	private FormDesignerPropertiesComponent propertiesComponent;
 	private FormDesignerUpperMenu upperMenu;
 	private TreeTableValueChangeListener treeTableValueChangeListener;
 	private boolean tableIsGoingToDetach;
+
+	private IAbcdFormAuthorizationService securityService;
 
 	private IFormDao formDao;
 
@@ -80,6 +84,7 @@ public class FormDesigner extends FormWebPageComponent {
 	public FormDesigner() {
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 		updateButtons(true);
 
 		collapseListener = new CollapseListener() {
@@ -281,7 +286,8 @@ public class FormDesigner extends FormWebPageComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if (existTestScenariosLinked()) {
-					final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
 					windowAccept.addAcceptActionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {
@@ -295,7 +301,8 @@ public class FormDesigner extends FormWebPageComponent {
 					// No remove the form.
 					TreeObject selected = formTreeTable.getTreeObjectSelected();
 					if ((selected != null) && (selected.getParent() != null)) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_REMOVE_ELEMENT);
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_REMOVE_ELEMENT);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -341,7 +348,8 @@ public class FormDesigner extends FormWebPageComponent {
 					ApplicationFrame.navigateTo(WebMap.getMainPage());
 					window.close();
 				} catch (Exception e) {
-					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+					MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+							LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -351,9 +359,10 @@ public class FormDesigner extends FormWebPageComponent {
 
 	private void changeStatus(Form form, FormWorkStatus value) throws NotEnoughRightsToChangeStatusException {
 		try {
-			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(), form.getOrganizationId(),
+			if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(), form.getOrganizationId(),
 					AbcdActivity.FORM_STATUS_UPGRADE)) {
-				throw new NotEnoughRightsToChangeStatusException("User '" + UserSessionHandler.getUser().getEmailAddress()
+				throw new NotEnoughRightsToChangeStatusException("User '"
+						+ UserSessionHandler.getUser().getEmailAddress()
 						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
 			}
 
@@ -361,7 +370,8 @@ public class FormDesigner extends FormWebPageComponent {
 			try {
 				formDao.updateFormStatus(form.getId(), value);
 			} catch (UnexpectedDatabaseException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 			}
 
 		} catch (NotEnoughRightsToChangeStatusException e) {
@@ -381,8 +391,8 @@ public class FormDesigner extends FormWebPageComponent {
 			i++;
 		}
 
-		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(UserSessionHandler.getFormController().getForm(), false,
-				classesShown);
+		final SelectTreeObjectWindow moveWindow = new SelectTreeObjectWindow(UserSessionHandler.getFormController()
+				.getForm(), false, classesShown);
 		moveWindow.showCentered();
 		moveWindow.select(formTreeTable.getTreeObjectSelected());
 		moveWindow.addAcceptActionListener(new AcceptActionListener() {
@@ -391,7 +401,8 @@ public class FormDesigner extends FormWebPageComponent {
 			public void acceptAction(AcceptCancelWindow window) {
 				if (formTreeTable.getTreeObjectSelected() != null && moveWindow.getSelectedTreeObject() != null) {
 					if (existTestScenariosLinked()) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_TEST_SCENARIOS_LINKED);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -399,7 +410,7 @@ public class FormDesigner extends FormWebPageComponent {
 									TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
 									TreeObject whereToMove = moveWindow.getSelectedTreeObject();
 									TreeObject whatToMoveNewInstance = Form.move(whatToMove, whereToMove);
-									
+
 									window.close();
 									clearAndUpdateFormTable();
 									formTreeTable.uncollapse(whatToMove);
@@ -418,8 +429,8 @@ public class FormDesigner extends FormWebPageComponent {
 						try {
 							TreeObject whatToMove = formTreeTable.getTreeObjectSelected();
 							TreeObject whereToMove = moveWindow.getSelectedTreeObject();
-							TreeObject whatToMoveNewInstance = Form.move(whatToMove, whereToMove);							
-							
+							TreeObject whatToMoveNewInstance = Form.move(whatToMove, whereToMove);
+
 							window.close();
 							clearAndUpdateFormTable();
 							formTreeTable.uncollapse(whatToMove);
@@ -444,10 +455,11 @@ public class FormDesigner extends FormWebPageComponent {
 		formTreeTable.setRootElement(UserSessionHandler.getFormController().getForm());
 		retrieveCollapsedTableState();
 		if (currentSelection != null) {
-			if(currentSelection instanceof Form){
+			if (currentSelection instanceof Form) {
 				formTreeTable.setValue(UserSessionHandler.getFormController().getForm());
-			}else{
-				formTreeTable.setValue(UserSessionHandler.getFormController().getForm().getChild(currentSelection.getPath()));
+			} else {
+				formTreeTable.setValue(UserSessionHandler.getFormController().getForm()
+						.getChild(currentSelection.getPath()));
 			}
 		}
 	}
@@ -465,7 +477,8 @@ public class FormDesigner extends FormWebPageComponent {
 			setCreator(newCategory);
 			try {
 				if (formTreeTable.getTreeObjectSelected() != null) {
-					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(Category.class);
+					Category selectedCategory = (Category) formTreeTable.getTreeObjectSelected().getAncestor(
+							Category.class);
 					if (selectedCategory == null) {
 						getForm().addChild(newCategory);
 					} else {
@@ -485,8 +498,8 @@ public class FormDesigner extends FormWebPageComponent {
 					// Default name is never so long.
 				}
 				addCategoryToUI(newCategory);
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
-						+ newCategory.getClass() + " with name: '" + newCategory.getName() + "'.");
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' has created a " + newCategory.getClass() + " with name: '" + newCategory.getName() + "'.");
 			} catch (NotValidChildException e) {
 				// Not possible.
 			} catch (ElementIsReadOnly e) {
@@ -536,8 +549,9 @@ public class FormDesigner extends FormWebPageComponent {
 						}
 						addElementToUI(newGroup, container);
 						container.addChild(newGroup);
-						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has created a " + newGroup.getClass() + " with name '" + newGroup.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+										+ newGroup.getClass() + " with name '" + newGroup.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -585,9 +599,10 @@ public class FormDesigner extends FormWebPageComponent {
 						}
 						addElementToUI(newQuestion, parent);
 						parent.addChild(newQuestion);
-						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has created a " + newQuestion.getClass() + " with name '" + newQuestion.getName() + " - Type: "
-								+ newQuestion.getAnswerType() + "'.");
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+										+ newQuestion.getClass() + " with name '" + newQuestion.getName() + " - Type: "
+										+ newQuestion.getAnswerType() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -629,8 +644,9 @@ public class FormDesigner extends FormWebPageComponent {
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
-						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has created a " + newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(),
+								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+										+ newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException e) {
@@ -667,8 +683,9 @@ public class FormDesigner extends FormWebPageComponent {
 						// First add to UI and then add parent.
 						addElementToUI(newAnswer, parent);
 						parent.addChild(newAnswer);
-						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has created a subanswer " + newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '"
+								+ UserSessionHandler.getUser().getEmailAddress() + "' has created a subanswer "
+								+ newAnswer.getClass() + " with name '" + newAnswer.getName() + "'.");
 					}
 				}
 			} catch (NotValidChildException | ElementIsReadOnly e) {
@@ -709,7 +726,8 @@ public class FormDesigner extends FormWebPageComponent {
 						LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), cve);
 			} catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
+						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			} catch (InvalidNameException e) {
 				MessageManager.showError(LanguageCodes.ERROR_INVALID_NAME);
@@ -750,7 +768,8 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveUp() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if ((selected != null) && (selected.getParent() != null) && (selected.getParent().getChildren().indexOf(selected) > 0)) {
+			if ((selected != null) && (selected.getParent() != null)
+					&& (selected.getParent().getChildren().indexOf(selected) > 0)) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) - 1, UserSessionHandler.getUser());
@@ -762,8 +781,10 @@ public class FormDesigner extends FormWebPageComponent {
 					// Select the moved element
 					formTreeTable.setValue(selected);
 
-					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-							+ "' has moved up a " + selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(
+							this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved up a "
+									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
 
 					return true;
 				} catch (ChildrenNotFoundException e) {
@@ -782,8 +803,10 @@ public class FormDesigner extends FormWebPageComponent {
 	public boolean moveDown() {
 		if (formTreeTable != null) {
 			TreeObject selected = formTreeTable.getTreeObjectSelected();
-			if ((selected != null) && (selected.getParent() != null)
-					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren().size() - 1))) {
+			if ((selected != null)
+					&& (selected.getParent() != null)
+					&& (selected.getParent().getChildren().indexOf(selected) < (selected.getParent().getChildren()
+							.size() - 1))) {
 				try {
 					selected.getParent().switchChildren(selected.getParent().getChildren().indexOf(selected),
 							selected.getParent().getChildren().indexOf(selected) + 1, UserSessionHandler.getUser());
@@ -794,8 +817,9 @@ public class FormDesigner extends FormWebPageComponent {
 					// Select the moved element
 					formTreeTable.setValue(selected);
 
-					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-							+ "' has moved down a " + selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(this.getClass().getName(),
+							"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has moved down a "
+									+ selected.getClass() + "in the Form, with 'Name: " + selected.getName() + "'.");
 
 					return true;
 				} catch (ChildrenNotFoundException e) {
@@ -813,8 +837,9 @@ public class FormDesigner extends FormWebPageComponent {
 				try {
 					selected.remove();
 					removeElementFromUI(selected);
-					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-							+ "' has removed a " + selected.getClass() + " from the Form, with 'Name: " + selected.getName() + "'.");
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has removed a " + selected.getClass()
+							+ " from the Form, with 'Name: " + selected.getName() + "'.");
 				} catch (DependencyExistException e) {
 					// Forbid the remove action if exist dependency.
 					MessageManager.showError(LanguageCodes.TREE_DESIGNER_WARNING_NO_UPDATE,
@@ -855,7 +880,8 @@ public class FormDesigner extends FormWebPageComponent {
 		if (formTreeTable.getItem(element) != null) {
 			formTreeTable.setValue(element);
 		} else {
-			MessageManager.showError(LanguageCodes.WARNING_ELEMENT_NOT_FOUND, LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
+			MessageManager.showError(LanguageCodes.WARNING_ELEMENT_NOT_FOUND,
+					LanguageCodes.WARNING_ELEMENT_NOT_FOUND_DESCRIPTION);
 		}
 	}
 
@@ -883,8 +909,8 @@ public class FormDesigner extends FormWebPageComponent {
 	private void retrieveCollapsedTableState() {
 		removeCollapseStateListeners();
 		if (UserSessionHandler.getFormController().getCollapsedStatus() != null) {
-			formTreeTable.setCollapsedStatus(UserSessionHandler.getFormController().getForm(), UserSessionHandler.getFormController()
-					.getCollapsedStatus());
+			formTreeTable.setCollapsedStatus(UserSessionHandler.getFormController().getForm(), UserSessionHandler
+					.getFormController().getCollapsedStatus());
 		}
 		addCollapseStateListeners();
 	}

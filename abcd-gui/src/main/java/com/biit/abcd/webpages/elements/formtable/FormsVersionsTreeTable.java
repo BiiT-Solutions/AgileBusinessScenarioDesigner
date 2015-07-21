@@ -19,8 +19,7 @@ import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdAuthorizationService;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
@@ -40,6 +39,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 	private HashMap<String, List<SimpleFormView>> formMap;
 	private List<IFormStatusChange> formStatusChangeListeners = new ArrayList<>();
 
+	private IAbcdFormAuthorizationService securityService;
+
 	enum FormsVersionsTreeTableProperties {
 		FORM_LABEL, VERSION, ACCESS, GROUP, STATUS, AVAILABLE_FROM, AVAILABLE_TO, USED_BY, CREATED_BY, CREATION_DATE, MODIFIED_BY, MODIFICATION_DATE;
 	};
@@ -52,6 +53,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		// Add Vaadin context to Spring, and get beans for DAOs.
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		simpleFormViewDao = (ISimpleFormViewDao) helper.getBean("simpleFormViewDao");
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 
 		initContainerProperties();
 		initializeFormTable();
@@ -163,7 +165,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 			IGroup<Long> organization;
 			try {
-				organization = AbcdFormAuthorizationService.getInstance().getOrganization(form.getOrganizationId());
+				organization = securityService.getOrganization(form.getOrganizationId());
 				if (organization != null) {
 					item.getItemProperty(FormsVersionsTreeTableProperties.GROUP).setValue(organization.getUniqueName());
 				}
@@ -268,8 +270,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 		formMap = initializeFormData();
 		removeAllItems();
 
-		Set<IGroup<Long>> userOrganizations = AbcdFormAuthorizationService.getInstance()
-				.getUserOrganizationsWhereIsAuthorized(UserSessionHandler.getUser(), AbcdActivity.READ);
+		Set<IGroup<Long>> userOrganizations = securityService.getUserOrganizationsWhereIsAuthorized(
+				UserSessionHandler.getUser(), AbcdActivity.READ);
 
 		// Add form if has enough permissions.
 		for (List<SimpleFormView> forms : formMap.values()) {
@@ -384,12 +386,11 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * @return
 	 */
 	private String getFormPermissionsTag(SimpleFormView form) {
-		if (AbcdFormAuthorizationService.getInstance().isFormAlreadyInUse(form.getId(), UserSessionHandler.getUser())) {
+		if (securityService.isFormAlreadyInUse(form.getId(), UserSessionHandler.getUser())) {
 			return ServerTranslate.translate(LanguageCodes.PERMISSIONS_IN_USE);
 		}
 		// Final Design does not need to show "Read Only" tag.
-		if (!AbcdFormAuthorizationService.getInstance().isAuthorizedToForm(form.getOrganizationId(),
-				UserSessionHandler.getUser())) {
+		if (securityService.isAuthorizedToForm(form.getOrganizationId(), UserSessionHandler.getUser())) {
 			return ServerTranslate.translate(LanguageCodes.PERMISSIONS_READ_ONLY);
 		}
 		return "";
@@ -422,8 +423,8 @@ public class FormsVersionsTreeTable extends TreeTable {
 		statusComboBox.setWidth("100%");
 
 		// Status can change if you are not in DESIGN phase and can advance form status
-		boolean userCanUpgradeStatus = AbcdAuthorizationService.getInstance().isAuthorizedActivity(
-				UserSessionHandler.getUser(), form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE);
+		boolean userCanUpgradeStatus = securityService.isAuthorizedActivity(UserSessionHandler.getUser(),
+				form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE);
 
 		statusComboBox.setEnabled(userCanUpgradeStatus);
 
