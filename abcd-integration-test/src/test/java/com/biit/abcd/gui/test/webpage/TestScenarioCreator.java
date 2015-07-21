@@ -42,11 +42,11 @@ public class TestScenarioCreator extends AbcdCommonWebpage {
 	}
 
 	public void selectTestScenario(int row) {
-		$(TableElement.class).first().getCell(row, 0).click();
+		$(TableElement.class).first().getRow(row).click();
 	}
 
 	public void selectCategory(int row) {
-		$(TreeTableElement.class).first().getCell(row, 0).click();
+		$(TreeTableElement.class).first().getRow(row).click();
 	}
 
 	public void goToFormManager() {

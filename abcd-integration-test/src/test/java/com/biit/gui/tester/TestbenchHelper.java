@@ -12,14 +12,17 @@ public class TestbenchHelper {
 
 	public static void checkNotificationIsError(NotificationElement notification) {
 		Assert.assertEquals(notification.getType(), NOTIFICATION_TYPE_ERROR);
+		notification.close();
 	}
 
 	public static void checkNotificationIsWarning(NotificationElement notification) {
 		Assert.assertEquals(notification.getType(), NOTIFICATION_TYPE_WARNING);
+		notification.close();
 	}
 	
 	public static void checkNotificationIsHumanized(NotificationElement notification) {
 		Assert.assertEquals(notification.getType(), NOTIFICATION_TYPE_HUMANIZED);
+		notification.close();
 	}
 	
 }
