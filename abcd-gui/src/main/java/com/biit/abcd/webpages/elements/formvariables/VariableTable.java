@@ -234,7 +234,7 @@ public class VariableTable extends Table {
 	}
 
 	private void updateInfo(CustomVariable customVariable) {
-		customVariable.setUpdatedBy(UserSessionHandler.getUser().getUserId());
+		customVariable.setUpdatedBy(UserSessionHandler.getUser().getId());
 		customVariable.setUpdateTime();
 	}
 

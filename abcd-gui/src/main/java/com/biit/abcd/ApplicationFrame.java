@@ -1,17 +1,13 @@
 package com.biit.abcd;
 
-import java.io.IOException;
-
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
-import com.biit.liferay.access.exceptions.WebServiceAccessError;
-import com.biit.liferay.security.exceptions.InvalidCredentialsException;
-import com.biit.security.exceptions.PBKDF2EncryptorException;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.AuthenticationRequired;
+import com.biit.usermanager.security.exceptions.InvalidCredentialsException;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
@@ -70,7 +66,7 @@ public class ApplicationFrame extends UI {
 			AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
 					+ "' and password with length of " + password.length());
 			try {
-				User user = UserSessionHandler.getUser(userEmail, password);
+				IUser<Long> user = UserSessionHandler.getUser(userEmail, password);
 				if (user != null) {
 					// Try to go to the last page and last form if user has no logged out.
 					if (UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()) != null
@@ -81,8 +77,7 @@ public class ApplicationFrame extends UI {
 						navigateTo(WebMap.getMainPage());
 					}
 				}
-			} catch (InvalidCredentialsException | NotConnectedToWebServiceException | PBKDF2EncryptorException
-					| IOException | AuthenticationRequired | WebServiceAccessError e) {
+			} catch (InvalidCredentialsException | AuthenticationRequired | UserManagementException e) {
 				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
 						+ "' failed! Wrong user or password.");
 			}
@@ -104,7 +99,7 @@ public class ApplicationFrame extends UI {
 
 	private void releaseResources() {
 		if (UserSessionHandler.getUser() != null) {
-			User user = UserSessionHandler.getUser();
+			IUser<Long> user = UserSessionHandler.getUser();
 			// Log user UI expired.
 			AbcdLogger.info(this.getClass().getName(), user.getEmailAddress() + " UI has expired.");
 			UiAccesser.releaseForm(user);

@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
@@ -11,8 +10,8 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 /**
@@ -37,9 +36,10 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 	public final void enter(ViewChangeEvent event) {
 		// Check if the user is logged in. If not, redirect to main page.
 		try {
-			User user = UserSessionHandler.getUser();
+			IUser<Long> user = UserSessionHandler.getUser();
 			if (user == null) {
-				AbcdLogger.info(this.getClass().getName(), "Unknown user has tried to enter a secured webpage. Navigated to Login page.");
+				AbcdLogger.info(this.getClass().getName(),
+						"Unknown user has tried to enter a secured webpage. Navigated to Login page.");
 				ApplicationFrame.navigateTo(WebMap.getLoginPage());
 			} else {
 				try {
@@ -56,7 +56,7 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 						}
 					}
 					securedEnter(event);
-				} catch (AuthenticationRequired | IOException e) {
+				} catch (UserManagementException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 					MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE);
 				}

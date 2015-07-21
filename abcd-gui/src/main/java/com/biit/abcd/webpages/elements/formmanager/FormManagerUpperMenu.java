@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.elements.formmanager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,9 +42,9 @@ import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
 import com.biit.drools.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.form.submitted.ISubmittedForm;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -246,7 +245,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty() || !newFormWindow.isValid()) {
+								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty()
+										|| !newFormWindow.isValid()) {
 									return;
 								}
 								if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization()
@@ -335,7 +335,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 			// We show the user the invalid rule name
 			if (e.getGeneratedException() instanceof InvalidRuleException) {
 				AbcdLogger.errorMessage(SettingsWindow.class.getName(), e.getGeneratedException());
-				MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID,((InvalidRuleException) e.getGeneratedException()).getRuleName() );
+				MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID,
+						((InvalidRuleException) e.getGeneratedException()).getRuleName());
 			} else {
 				// This is a generic exception for everything related with the
 				// rules generation
@@ -355,7 +356,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		try {
 			newFormButton.setEnabled(AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
 					UserSessionHandler.getUser(), AbcdActivity.FORM_CREATE));
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
@@ -401,7 +402,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		try {
 			removeForm.setVisible(AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(
 					UserSessionHandler.getUser(), AbcdActivity.FORM_REMOVE));
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			removeForm.setVisible(false);
 		}
 		// When visible, enabled when can delete an element.

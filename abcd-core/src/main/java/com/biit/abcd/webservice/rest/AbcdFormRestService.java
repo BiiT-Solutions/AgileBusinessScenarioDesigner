@@ -1,6 +1,5 @@
 package com.biit.abcd.webservice.rest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,14 +20,11 @@ import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.security.AbcdAuthorizationService;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
-import com.biit.liferay.access.exceptions.UserDoesNotExistException;
-import com.biit.liferay.access.exceptions.WebServiceAccessError;
 import com.biit.liferay.security.AuthenticationService;
+import com.biit.usermanager.entity.IGroup;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.google.gson.Gson;
-import com.liferay.portal.model.Organization;
-import com.liferay.portal.model.User;
 
 /**
  * Rest services used to communicate ABCD with WebForms
@@ -55,10 +51,10 @@ public class AbcdFormRestService {
 	@Path("/getAllSimpleFormViewsByUserEmail")
 	public Response getAllSimpleFormViewsByUserEmail(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
 		if ((parameters != null) && (parameters.size() == 1)) {
-			Set<Organization> organizations = getUserOrganizations(parameters.get(0));
+			Set<IGroup<Long>> organizations = getUserOrganizations(parameters.get(0));
 			List<SimpleFormView> simpleForms = new ArrayList<>();
-			for (Organization organization : organizations) {
-				simpleForms.addAll(simpleFormViewDao.getSimpleFormViewByOrganization(organization.getOrganizationId()));
+			for (IGroup<Long> organization : organizations) {
+				simpleForms.addAll(simpleFormViewDao.getSimpleFormViewByOrganization(organization.getId()));
 			}
 			return Response.ok(parseSimpleFormViewList(simpleForms), MediaType.APPLICATION_JSON).build();
 		} else {
@@ -84,10 +80,10 @@ public class AbcdFormRestService {
 
 			// First check if the user and the form belong to the same
 			// organization
-			Set<Organization> userOrganizations = getUserOrganizations(parameters.get(0));
+			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			if (userOrganizations != null) {
-				for (Organization organization : userOrganizations) {
-					if (organization.getOrganizationId() == formOrganization) {
+				for (IGroup<Long> organization : userOrganizations) {
+					if (organization.getId() == formOrganization) {
 						// Get the simple form information
 						List<SimpleFormView> simpleForms = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(
 								parameters.get(1), formOrganization);
@@ -117,11 +113,11 @@ public class AbcdFormRestService {
 
 			// First check if the user and the form belong to the same
 			// organization
-			Set<Organization> userOrganizations = getUserOrganizations(parameters.get(0));
+			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			Form formById = formDao.get(Long.parseLong(parameters.get(1)));
 			if (userOrganizations != null) {
-				for (Organization organization : userOrganizations) {
-					if (organization.getOrganizationId() == formById.getOrganizationId()) {
+				for (IGroup<Long> organization : userOrganizations) {
+					if (organization.getId() == formById.getOrganizationId()) {
 						// Get the form information
 						return Response.ok(formById.toJson(), MediaType.APPLICATION_JSON).build();
 					}
@@ -152,10 +148,10 @@ public class AbcdFormRestService {
 			Long formOrganization = Long.parseLong(parameters.get(2));
 			// First check if the user and the form belong to the same
 			// organization
-			Set<Organization> userOrganizations = getUserOrganizations(parameters.get(0));
+			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			if (userOrganizations != null) {
-				for (Organization organization : userOrganizations) {
-					if (organization.getOrganizationId() == formOrganization) {
+				for (IGroup<Long> organization : userOrganizations) {
+					if (organization.getId() == formOrganization) {
 						// Get the form information
 						Form form = formDao.getForm(parameters.get(1), Integer.parseInt(parameters.get(3)),
 								Long.parseLong(parameters.get(2)));
@@ -181,10 +177,10 @@ public class AbcdFormRestService {
 	@Path("/getFormsByOrganization")
 	public Response getFormsByOrganization(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
 		if ((parameters != null) && (parameters.size() == 2)) {
-			Set<Organization> userOrganizations = getUserOrganizations(parameters.get(0));
+			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			Long organization = Long.parseLong(parameters.get(1));
-			for (Organization userOrganization : userOrganizations) {
-				if (userOrganization.getOrganizationId() == organization) {
+			for (IGroup<Long> userOrganization : userOrganizations) {
+				if (userOrganization.getId() == organization) {
 					List<Form> formList = formDao.getAll(organization);
 					return Response.ok(parseFormList(formList), MediaType.APPLICATION_JSON).build();
 				}
@@ -215,25 +211,24 @@ public class AbcdFormRestService {
 			for (Form form : forms) {
 				builder.append(form.toJson() + ",");
 			}
-			builder.deleteCharAt(builder.length()-1);
+			builder.deleteCharAt(builder.length() - 1);
 		}
 		builder.append("]");
 		return builder.toString();
 	}
 
-	private Set<Organization> getUserOrganizations(String userEmail) {
-		User user = null;
+	private Set<IGroup<Long>> getUserOrganizations(String userEmail) {
+		IUser<Long> user = null;
 		try {
 			user = AuthenticationService.getInstance().getUserByEmail(userEmail);
-		} catch (NotConnectedToWebServiceException | UserDoesNotExistException | IOException | AuthenticationRequired
-				| WebServiceAccessError e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 			return null;
 		}
 		if (user != null) {
 			try {
 				return AbcdAuthorizationService.getInstance().getUserOrganizations(user);
-			} catch (IOException | AuthenticationRequired e) {
+			} catch (UserManagementException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), "User organization not found");
 				return null;
 			}

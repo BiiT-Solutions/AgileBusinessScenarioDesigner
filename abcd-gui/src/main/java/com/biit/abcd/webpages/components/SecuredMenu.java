@@ -14,7 +14,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
 import com.vaadin.ui.Button;
 
 /**
@@ -29,7 +29,7 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 
 	private Set<Button> calculateDisabledButtons() {
 		Set<Button> disabledButtons = new HashSet<>();
-		User user = UserSessionHandler.getUser();
+		IUser<Long> user = UserSessionHandler.getUser();
 		// Check permissions.
 		boolean editionEnabled = false;
 		boolean inUse = true;

@@ -57,9 +57,9 @@ import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.biit.usermanager.entity.IUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version" }) })
@@ -140,7 +140,7 @@ public class Form extends BaseForm {
 		}
 	}
 
-	public Form createNewVersion(User user) throws CharacterNotAllowedException, NotValidStorableObjectException {
+	public Form createNewVersion(IUser<Long> user) throws CharacterNotAllowedException, NotValidStorableObjectException {
 		Form newVersion = (Form) generateCopy(false, true);
 		newVersion.setVersion(getVersion() + 1);
 		newVersion.resetIds();

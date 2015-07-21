@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.elements.formtable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,11 +23,11 @@ import com.biit.abcd.security.AbcdAuthorizationService;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
+import com.biit.usermanager.entity.IGroup;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.biit.utils.date.DateManager;
-import com.liferay.portal.model.Organization;
-import com.liferay.portal.model.User;
 import com.vaadin.data.Item;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.ComboBox;
@@ -79,10 +78,9 @@ public class FormsVersionsTreeTable extends TreeTable {
 
 		addContainerProperty(FormsVersionsTreeTableProperties.STATUS, ComboBox.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_STATUS), null, Align.CENTER);
-		
+
 		addContainerProperty(FormsVersionsTreeTableProperties.GROUP, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_GROUP), null, Align.CENTER);
-
 
 		addContainerProperty(FormsVersionsTreeTableProperties.AVAILABLE_FROM, String.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_TABLE_COLUMN_AVAILABLEFROM), null, Align.CENTER);
@@ -163,13 +161,13 @@ public class FormsVersionsTreeTable extends TreeTable {
 			// Status
 			item.getItemProperty(FormsVersionsTreeTableProperties.STATUS).setValue(generateStatusComboBox(form));
 
-			Organization organization;
+			IGroup<Long> organization;
 			try {
 				organization = AbcdFormAuthorizationService.getInstance().getOrganization(form.getOrganizationId());
 				if (organization != null) {
-					item.getItemProperty(FormsVersionsTreeTableProperties.GROUP).setValue(organization.getName());
+					item.getItemProperty(FormsVersionsTreeTableProperties.GROUP).setValue(organization.getUniqueName());
 				}
-			} catch (IOException | AuthenticationRequired e1) {
+			} catch (UserManagementException e1) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e1);
 			}
 
@@ -181,7 +179,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			} else {
 				item.getItemProperty(FormsVersionsTreeTableProperties.AVAILABLE_TO).setValue("");
 			}
-			User userAccessingForm = UiAccesser.getUserUsingForm(form.getId());
+			IUser<Long> userAccessingForm = UiAccesser.getUserUsingForm(form.getId());
 			if (userAccessingForm != null) {
 				item.getItemProperty(FormsVersionsTreeTableProperties.USED_BY).setValue(
 						userAccessingForm.getEmailAddress());
@@ -270,14 +268,14 @@ public class FormsVersionsTreeTable extends TreeTable {
 		formMap = initializeFormData();
 		removeAllItems();
 
-		Set<Organization> userOrganizations = AbcdFormAuthorizationService.getInstance()
+		Set<IGroup<Long>> userOrganizations = AbcdFormAuthorizationService.getInstance()
 				.getUserOrganizationsWhereIsAuthorized(UserSessionHandler.getUser(), AbcdActivity.READ);
 
 		// Add form if has enough permissions.
 		for (List<SimpleFormView> forms : formMap.values()) {
 			for (SimpleFormView form : forms) {
-				for (Organization organization : userOrganizations) {
-					if (form.getOrganizationId().equals(organization.getOrganizationId())) {
+				for (IGroup<Long> organization : userOrganizations) {
+					if (form.getOrganizationId().equals(organization.getId())) {
 						addForm(form);
 					}
 				}

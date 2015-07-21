@@ -4,7 +4,7 @@ import com.biit.abcd.UiAccesser;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
 
 public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 
@@ -18,7 +18,7 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 		return instance;
 	}
 
-	public boolean isFormReadOnly(Form form, User user) {
+	public boolean isFormReadOnly(Form form, IUser<Long> user) {
 		if (form == null || user == null) {
 			return true;
 		}
@@ -26,7 +26,7 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 				|| !form.getStatus().equals(FormWorkStatus.DESIGN);
 	}
 
-	public boolean isFormReadOnly(SimpleFormView form, User user) {
+	public boolean isFormReadOnly(SimpleFormView form, IUser<Long> user) {
 		if (form == null || user == null) {
 			return true;
 		}
@@ -34,9 +34,9 @@ public class AbcdFormAuthorizationService extends AbcdAuthorizationService {
 				|| !form.isLastVersion() || !form.getStatus().equals(FormWorkStatus.DESIGN);
 	}
 
-	public boolean isFormAlreadyInUse(Long formId, User user) {
-		User userUsingForm = UiAccesser.getUserUsingForm(formId);
-		return (userUsingForm != null) && userUsingForm.getUserId() != user.getUserId();
+	public boolean isFormAlreadyInUse(Long formId, IUser<Long> user) {
+		IUser<Long> userUsingForm = UiAccesser.getUserUsingForm(formId);
+		return (userUsingForm != null) && !userUsingForm.getId().equals(user.getId());
 	}
 
 }

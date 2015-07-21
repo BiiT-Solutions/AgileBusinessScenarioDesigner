@@ -1,7 +1,5 @@
 package com.biit.abcd.security;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,16 +8,15 @@ import java.util.Set;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
 import com.biit.liferay.security.AuthenticationService;
 import com.biit.liferay.security.AuthorizationService;
-import com.biit.liferay.security.IActivity;
+import com.biit.usermanager.entity.IGroup;
+import com.biit.usermanager.entity.IRole;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.IActivity;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.biit.webservice.rest.RestServiceActivity;
-import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
-import com.liferay.portal.model.User;
-import com.liferay.portal.model.UserGroup;
 
 public class AbcdAuthorizationService extends AuthorizationService {
 
@@ -52,8 +49,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	};
 
 	/**
-	 * Can do administration task for forms. Also has by default all ABCD
-	 * manager permissions.
+	 * Can do administration task for forms. Also has by default all ABCD manager permissions.
 	 */
 	private static final AbcdActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
@@ -80,7 +76,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 
 	private static final RestServiceActivity[] WEB_SERVICES_PERMISSIONS = {
 
-		RestServiceActivity.USE_WEB_SERVICE
+	RestServiceActivity.USE_WEB_SERVICE
 
 	};
 
@@ -91,7 +87,7 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	private static List<IActivity> applicationAdministratorPermissions = new ArrayList<IActivity>();
 	private static List<IActivity> webServiceUserPermissions = new ArrayList<IActivity>();
 
-	private static AbcdAuthorizationService instance = new AbcdAuthorizationService();
+	private static AbcdAuthorizationService authorizationService = new AbcdAuthorizationService();
 
 	static {
 		for (AbcdActivity activity : FORM_ADMINISTRATOR_EXTRA_PERMISSIONS) {
@@ -120,13 +116,13 @@ public class AbcdAuthorizationService extends AuthorizationService {
 	}
 
 	public static AbcdAuthorizationService getInstance() {
-		return instance;
+		return authorizationService;
 	}
 
 	@Override
-	public Set<IActivity> getRoleActivities(Role role) {
+	public Set<IActivity> getRoleActivities(IRole<Long> role) {
 		Set<IActivity> activities = new HashSet<IActivity>();
-		AbcdRoles webFormRole = AbcdRoles.parseTag(role.getName());
+		AbcdRoles webFormRole = AbcdRoles.parseTag(role.getUniqueName());
 		switch (webFormRole) {
 		case FORM_ADMIN:
 			activities.addAll(formAdministratorPermissions);
@@ -157,14 +153,10 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return activities;
 	}
 
-	public UserGroup getDefaultGroup(User user) {
+	public IGroup<Long> getDefaultGroup(IUser<Long> user) {
 		try {
 			return AuthenticationService.getInstance().getDefaultGroup(user);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotConnectedToWebServiceException e) {
-			e.printStackTrace();
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 		return null;
@@ -178,16 +170,16 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return activities;
 	}
 
-	public boolean isUserAuthorizedInAnyOrganization(User user, IActivity activity) throws IOException,
-			AuthenticationRequired {
-		
+	public boolean isUserAuthorizedInAnyOrganization(IUser<Long> user, IActivity activity)
+			throws UserManagementException {
+
 		// Check isUserAuthorizedActivity (own permissions)
 		if (isAuthorizedActivity(user, activity)) {
 			return true;
 		}
 		// Get all organizations of user
-		Set<Organization> organizations = getUserOrganizations(user);
-		for (Organization organization : organizations) {
+		Set<IGroup<Long>> organizations = getUserOrganizations(user);
+		for (IGroup<Long> organization : organizations) {
 			if (isAuthorizedActivity(user, organization, activity)) {
 				return true;
 			}
@@ -195,67 +187,67 @@ public class AbcdAuthorizationService extends AuthorizationService {
 		return false;
 	}
 
-	public boolean isAuthorizedActivity(User user, Form form, IActivity activity) {
+	public boolean isAuthorizedActivity(IUser<Long> user, Form form, IActivity activity) {
 		if (form == null || form.getOrganizationId() == null) {
 			return false;
 		}
 		return isAuthorizedActivity(user, form.getOrganizationId(), activity);
 	}
 
-	public boolean isAuthorizedActivity(User user, Long organizationId, IActivity activity) {
+	public boolean isAuthorizedActivity(IUser<Long> user, Long organizationId, IActivity activity) {
 		if (organizationId == null) {
 			return false;
 		}
-		Organization organization = getOrganization(user, organizationId);
+		IGroup<Long> organization = getOrganization(user, organizationId);
 		if (organization == null) {
 			return false;
 		}
 		try {
 			return isAuthorizedActivity(user, organization, activity);
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 			// For security
 			return false;
 		}
 	}
 
-	private Organization getOrganization(User user, Long organizationId) {
+	private IGroup<Long> getOrganization(IUser<Long> user, Long organizationId) {
 		try {
-			Set<Organization> organizations = getUserOrganizations(user);
-			for (Organization organization : organizations) {
-				if (organization.getOrganizationId() == organizationId) {
+			Set<IGroup<Long>> organizations = getUserOrganizations(user);
+			for (IGroup<Long> organization : organizations) {
+				if (organization.getId().equals(organizationId)) {
 					return organization;
 				}
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
 		return null;
 	}
 
-	public Set<Organization> getUserOrganizationsWhereIsAuthorized(User user, IActivity activity) {
-		Set<Organization> organizations = new HashSet<>();
+	public Set<IGroup<Long>> getUserOrganizationsWhereIsAuthorized(IUser<Long> user, IActivity activity) {
+		Set<IGroup<Long>> organizations = new HashSet<>();
 		try {
 			organizations = getUserOrganizations(user);
-			Iterator<Organization> itr = organizations.iterator();
+			Iterator<IGroup<Long>> itr = organizations.iterator();
 			while (itr.hasNext()) {
-				Organization organization = itr.next();
+				IGroup<Long> organization = itr.next();
 				if (!isAuthorizedActivity(user, organization, activity)) {
 					itr.remove();
 				}
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 		return organizations;
 	}
 
-	protected boolean isAuthorizedToForm(Form form, User user) {
+	protected boolean isAuthorizedToForm(Form form, IUser<Long> user) {
 		return isAuthorizedActivity(user, form, AbcdActivity.FORM_EDITING);
 	}
 
-	public boolean isAuthorizedToForm(Long formOrganizationId, User user) {
+	public boolean isAuthorizedToForm(Long formOrganizationId, IUser<Long> user) {
 		return isAuthorizedActivity(user, formOrganizationId, AbcdActivity.FORM_EDITING);
 	}
 

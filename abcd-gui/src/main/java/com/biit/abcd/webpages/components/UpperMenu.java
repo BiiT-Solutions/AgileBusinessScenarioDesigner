@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,7 @@ import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -272,7 +271,7 @@ public abstract class UpperMenu extends SecuredMenu {
 				globalConstantsButton.setWidth("100%");
 				iconButtonList.add(globalConstantsButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
@@ -311,7 +310,7 @@ public abstract class UpperMenu extends SecuredMenu {
 				clearCacheButton.setWidth("100%");
 				iconButtonList.add(clearCacheButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 

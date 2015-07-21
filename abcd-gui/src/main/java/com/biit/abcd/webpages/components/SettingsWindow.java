@@ -1,7 +1,5 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
-
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
@@ -32,7 +30,7 @@ import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -107,7 +105,7 @@ public class SettingsWindow extends PopupWindow {
 				globalConstantsButton.setWidth("100%");
 				rootLayout.addComponent(globalConstantsButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
@@ -142,7 +140,7 @@ public class SettingsWindow extends PopupWindow {
 				clearCacheButton.setWidth("100%");
 				rootLayout.addComponent(clearCacheButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
