@@ -15,7 +15,6 @@ import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.security.IActivity;
 import com.biit.usermanager.security.exceptions.UserManagementException;
-import com.liferay.portal.model.Organization;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
@@ -33,7 +32,7 @@ public class WindowNewForm extends AcceptCancelWindow {
 	private TextField textField;
 	private ComboBox organizationField;
 	private IActivity[] exclusivePermissionFilter;
-	
+
 	private IAbcdFormAuthorizationService securityService;
 
 	public WindowNewForm(LanguageCodes windowsCaption, LanguageCodes inputFieldCaption, LanguageCodes groupCaption,
@@ -56,8 +55,9 @@ public class WindowNewForm extends AcceptCancelWindow {
 		return textField.getValue();
 	}
 
-	public Organization getOrganization() {
-		return (Organization) organizationField.getValue();
+	@SuppressWarnings("unchecked")
+	public IGroup<Long> getOrganization() {
+		return (IGroup<Long>) organizationField.getValue();
 	}
 
 	private Component generateContent(LanguageCodes inputFieldCaption, LanguageCodes groupCaption) {
@@ -80,15 +80,13 @@ public class WindowNewForm extends AcceptCancelWindow {
 		organizationField.setNullSelectionAllowed(false);
 		organizationField.setWidth("100%");
 		try {
-			Set<IGroup<Long>> organizations = securityService.getUserOrganizations(
-					UserSessionHandler.getUser());
+			Set<IGroup<Long>> organizations = securityService.getUserOrganizations(UserSessionHandler.getUser());
 			Iterator<IGroup<Long>> itr = organizations.iterator();
 			while (itr.hasNext()) {
 				IGroup<Long> organization = itr.next();
 				for (IActivity activity : exclusivePermissionFilter) {
 					// If the user doesn't comply to all activities in the filter in the group, then exit
-					if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(),
-							organization, activity)) {
+					if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(), organization, activity)) {
 						itr.remove();
 						break;
 					}

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.usermanager.entity.IGroup;
+import com.biit.usermanager.entity.IRole;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.IActivity;
 import com.biit.usermanager.security.IAuthenticationService;
 import com.biit.usermanager.security.IAuthorizationService;
 import com.biit.usermanager.security.exceptions.UserManagementException;
-import com.liferay.portal.model.Role;
 
 @Component
 public class SecurityService implements ISecurityService {
@@ -40,9 +40,9 @@ public class SecurityService implements ISecurityService {
 		return null;
 	}
 
-	public Set<IActivity> getActivitiesOfRoles(List<Role> roles) {
+	public Set<IActivity> getActivitiesOfRoles(List<IRole<Long>> roles) {
 		Set<IActivity> activities = new HashSet<>();
-		for (Role role : roles) {
+		for (IRole<Long> role : roles) {
 			activities.addAll(getAuthorizationService().getRoleActivities(role));
 		}
 		return activities;
