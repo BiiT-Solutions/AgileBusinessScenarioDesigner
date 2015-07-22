@@ -1,10 +1,12 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
 import com.biit.abcd.webpages.components.ExpressionEditorTabComponent;
@@ -12,15 +14,17 @@ import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.drools.plugins.PluginController;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Component for editing an expression. Is composed by a viewer and a properties
- * menu in tabs.
+ * Component for editing an expression. Is composed by a viewer and a properties menu in tabs.
  */
 public abstract class ExpressionEditorComponent extends ExpressionEditorTabComponent {
 	private static final long serialVersionUID = 3094049792744722628L;
 	private TabOperatorLayout operatorLayout;
+
+	private IAbcdFormAuthorizationService securityService;
 
 	public abstract VerticalLayout createViewersLayout();
 
@@ -31,6 +35,8 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 
 	public ExpressionEditorComponent() {
 		super();
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 		initTabs();
 
 		VerticalLayout viewLayout = createViewersLayout();
@@ -126,8 +132,8 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 	}
 
 	/**
-	 * A Expression editor can have more than one viewer. When user click into a
-	 * viewer, this one gains the focus and is selected.
+	 * A Expression editor can have more than one viewer. When user click into a viewer, this one gains the focus and is
+	 * selected.
 	 */
 	public abstract ExpressionViewer getSelectedViewer();
 
@@ -175,5 +181,9 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 				getSelectedViewer().addElementToSelected(new ExpressionSymbol(AvailableSymbol.PILCROW));
 			}
 		});
+	}
+
+	public IAbcdFormAuthorizationService getSecurityService() {
+		return securityService;
 	}
 }

@@ -1,25 +1,19 @@
 package com.biit.abcd.webpages.elements.droolsrule;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.SpringContextHelper;
-import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.elements.expressionviewer.ExpressionViewer;
 import com.biit.abcd.webpages.elements.expressionviewer.SecuredExpressionViewer;
-import com.vaadin.server.VaadinServlet;
 
 public class SecuredConditionActionEditorComponent extends ConditionActionEditorComponent {
 	private static final long serialVersionUID = -1507268124647978722L;
 
-	private IAbcdFormAuthorizationService securityService;
-
 	public SecuredConditionActionEditorComponent() {
-		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
+		super();
 	}
 
 	@Override
 	protected void addKeyController() {
-		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			super.addKeyController();
 		}
@@ -27,7 +21,7 @@ public class SecuredConditionActionEditorComponent extends ConditionActionEditor
 
 	@Override
 	protected void addElementToView(Object newElement) {
-		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			super.addElementToView(newElement);
 		}
@@ -43,7 +37,7 @@ public class SecuredConditionActionEditorComponent extends ConditionActionEditor
 
 	@Override
 	public void updateSelectionStyles() {
-		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			super.updateSelectionStyles();
 		} else {
@@ -54,7 +48,7 @@ public class SecuredConditionActionEditorComponent extends ConditionActionEditor
 
 	@Override
 	protected void enableAssignOperator() {
-		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			super.enableAssignOperator();
 		} else {

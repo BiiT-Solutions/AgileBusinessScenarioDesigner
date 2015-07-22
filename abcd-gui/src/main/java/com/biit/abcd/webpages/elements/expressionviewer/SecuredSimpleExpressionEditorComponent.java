@@ -1,24 +1,17 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.core.SpringContextHelper;
-import com.biit.abcd.security.IAbcdFormAuthorizationService;
-import com.vaadin.server.VaadinServlet;
 
 public class SecuredSimpleExpressionEditorComponent extends SimpleExpressionEditorComponent {
 	private static final long serialVersionUID = 8674578404864292066L;
 
-	private IAbcdFormAuthorizationService securityService;
-
 	public SecuredSimpleExpressionEditorComponent() {
 		super();
-		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 	}
 
 	@Override
 	protected void addKeyController() {
-		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			super.addKeyController();
 		}
@@ -26,7 +19,7 @@ public class SecuredSimpleExpressionEditorComponent extends SimpleExpressionEdit
 
 	@Override
 	protected void addElementToView(Object newElement) {
-		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			super.addElementToView(newElement);
 		}
@@ -34,7 +27,7 @@ public class SecuredSimpleExpressionEditorComponent extends SimpleExpressionEdit
 
 	@Override
 	public void updateSelectionStyles() {
-		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (!getSecurityService().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			super.updateSelectionStyles();
 		} else {
