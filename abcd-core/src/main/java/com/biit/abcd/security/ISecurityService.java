@@ -5,6 +5,8 @@ import java.util.Set;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.IActivity;
+import com.biit.usermanager.security.IAuthenticationService;
+import com.biit.usermanager.security.IAuthorizationService;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 
 public interface ISecurityService {
@@ -29,5 +31,9 @@ public interface ISecurityService {
 	boolean isAuthorizedActivity(IUser<Long> user, Long organizationId, IActivity formStatusDowngrade);
 
 	Set<IGroup<Long>> getUserOrganizationsWhereIsAuthorized(IUser<Long> user, IActivity activity);
+
+	IAuthorizationService<Long, Long, Long> getAuthorizationService();
+
+	IAuthenticationService<Long, Long> getAuthenticationService();
 
 }

@@ -164,6 +164,7 @@ public class SecurityService implements ISecurityService {
 		return getAuthenticationService().getUserByEmail(userEmail);
 	}
 
+	@Override
 	public IAuthorizationService<Long, Long, Long> getAuthorizationService() {
 		return authorizationService;
 	}
@@ -172,6 +173,7 @@ public class SecurityService implements ISecurityService {
 		this.authenticationService = authenticationService;
 	}
 
+	@Override
 	public IAuthenticationService<Long, Long> getAuthenticationService() {
 		return authenticationService;
 	}
