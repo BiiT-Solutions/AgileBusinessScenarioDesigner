@@ -248,8 +248,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 										|| !newFormWindow.isValid()) {
 									return;
 								}
-								if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization()
-										.getOrganizationId())) {
+								if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization().getId())) {
 									form = new Form();
 									try {
 										form.setLabel(newFormWindow.getValue());
@@ -266,7 +265,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 									form.setLastVersion(true);
 									form.setCreatedBy(UserSessionHandler.getUser());
 									form.setUpdatedBy(UserSessionHandler.getUser());
-									form.setOrganizationId(newFormWindow.getOrganization().getOrganizationId());
+									form.setOrganizationId(newFormWindow.getOrganization().getId());
 									((FormManager) parent).addNewForm(form);
 									AbcdLogger.info(this.getClass().getName(), "User '"
 											+ UserSessionHandler.getUser().getEmailAddress() + "' has created a "
