@@ -1,6 +1,5 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,10 +33,9 @@ import com.biit.abcd.persistence.utils.Exceptions.TestScenarioNotEqualsException
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -65,7 +63,7 @@ public abstract class UpperMenu extends SecuredMenu {
 	private IconButton globalConstantsButton, clearCacheButton, logoutButton;
 	private Map<IconButton, List<IconButton>> subMenuButtons;
 
-	public UpperMenu() {
+	protected UpperMenu() {
 		super();
 		defineUpperMenu();
 		this.setContractIcons(true, BUTTON_WIDTH);
@@ -236,7 +234,7 @@ public abstract class UpperMenu extends SecuredMenu {
 		// Global Constant Button can be only used by users with an specific
 		// role.
 		try {
-			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
+			if (getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(),
 					AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
 				globalConstantsButton = new IconButton(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS,
 						ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS, LanguageCodes.SETTINGS_GLOBAL_CONSTANTS,
@@ -272,14 +270,13 @@ public abstract class UpperMenu extends SecuredMenu {
 				globalConstantsButton.setWidth("100%");
 				iconButtonList.add(globalConstantsButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
 		// Clear cache for admin users.
 		try {
-			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					AbcdActivity.EVICT_CACHE)) {
+			if (getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(), AbcdActivity.EVICT_CACHE)) {
 				clearCacheButton = new IconButton(LanguageCodes.SETTINGS_CLEAR_CACHE, ThemeIcon.CLEAR_CACHE,
 						LanguageCodes.SETTINGS_CLEAR_CACHE, IconSize.MEDIUM);
 				clearCacheButton.addClickListener(new ClickListener() {
@@ -296,7 +293,7 @@ public abstract class UpperMenu extends SecuredMenu {
 								formDao.evictAllCache();
 								testScenarioDao.evictAllCache();
 								// Reset Liferay Users pool.
-								AbcdFormAuthorizationService.getInstance().reset();
+								getSecurityService().reset();
 								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 								AbcdLogger.info(this.getClass().getName(), "User '"
 										+ UserSessionHandler.getUser().getEmailAddress()
@@ -311,7 +308,7 @@ public abstract class UpperMenu extends SecuredMenu {
 				clearCacheButton.setWidth("100%");
 				iconButtonList.add(clearCacheButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 

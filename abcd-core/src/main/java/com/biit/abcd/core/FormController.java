@@ -48,10 +48,10 @@ import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.InvalidNameException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
 
 public class FormController {
-	private User user;
+	private IUser<Long> user;
 	private Form form;
 	private TreeObject lastAccessTreeObject;
 	private Diagram lastAccessDiagram;
@@ -64,12 +64,12 @@ public class FormController {
 	private IFormDao formDao;
 	private Set<Object> collapsedStatus;
 
-	public FormController(User user, SpringContextHelper helper) {
+	public FormController(IUser<Long> user, SpringContextHelper helper) {
 		this.setUser(user);
 		this.formDao = (IFormDao) helper.getBean("formDao");
 	}
 
-	public void setUser(User user) {
+	public void setUser(IUser<Long> user) {
 		this.user = user;
 	}
 
@@ -168,7 +168,7 @@ public class FormController {
 	}
 
 	protected String getUserInfo() {
-		String userInfo = new String("User: ");
+		String userInfo = new String("IUser<Long>: ");
 		if (getUser() == null) {
 			return userInfo + "NO USER";
 		} else {
@@ -267,7 +267,7 @@ public class FormController {
 		}
 	}
 
-	public User getUser() {
+	public IUser<Long> getUser() {
 		return this.user;
 	}
 

@@ -20,7 +20,7 @@ import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.CancelActionListener;
@@ -52,11 +52,14 @@ public class FormManager extends FormWebPageComponent {
 	private IFormDao formDao;
 	private ITestScenarioDao testScenarioDao;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public FormManager() {
 		super();
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
 		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 	}
 
 	@Override
@@ -303,8 +306,8 @@ public class FormManager extends FormWebPageComponent {
 	private void changeStatusOnDatabase(SimpleFormView form, ComboBox statusComboBox, FormWorkStatus value)
 			throws NotEnoughRightsToChangeStatusException {
 		try {
-			if (!AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE)) {
+			if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(), form.getOrganizationId(),
+					AbcdActivity.FORM_STATUS_DOWNGRADE)) {
 				throw new NotEnoughRightsToChangeStatusException("User '"
 						+ UserSessionHandler.getUser().getEmailAddress()
 						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
