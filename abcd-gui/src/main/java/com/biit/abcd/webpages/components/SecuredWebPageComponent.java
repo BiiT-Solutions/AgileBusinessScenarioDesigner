@@ -1,25 +1,33 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinServlet;
 
 /**
  * Before entering to the web page, the system checks user permissions to allow the access or redirect to another page.
  */
 public abstract class SecuredWebPageComponent extends WebPageComponent {
 	private static final long serialVersionUID = 1948083638306683637L;
+
+	private IAbcdFormAuthorizationService securityService;
+
+	protected SecuredWebPageComponent() {
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
+	}
 
 	public void securedEnter(ViewChangeEvent event) {
 		initContent();
@@ -37,16 +45,16 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 	public final void enter(ViewChangeEvent event) {
 		// Check if the user is logged in. If not, redirect to main page.
 		try {
-			User user = UserSessionHandler.getUser();
+			IUser<Long> user = UserSessionHandler.getUser();
 			if (user == null) {
-				AbcdLogger.info(this.getClass().getName(), "Unknown user has tried to enter a secured webpage. Navigated to Login page.");
+				AbcdLogger.info(this.getClass().getName(),
+						"Unknown user has tried to enter a secured webpage. Navigated to Login page.");
 				ApplicationFrame.navigateTo(WebMap.getLoginPage());
 			} else {
 				try {
 					if (accessAuthorizationsRequired() != null && !accessAuthorizationsRequired().isEmpty()) {
 						for (AbcdActivity activity : accessAuthorizationsRequired()) {
-							if (!AbcdFormAuthorizationService.getInstance().isUserAuthorizedInAnyOrganization(user,
-									activity)) {
+							if (!securityService.isUserAuthorizedInAnyOrganization(user, activity)) {
 								MessageManager.showError(LanguageCodes.ERROR_NOT_AUTHORIZED);
 								AbcdLogger.warning(this.getClass().getName(), "Activity '" + activity
 										+ "' not authorized for user '" + user.getEmailAddress()
@@ -56,7 +64,7 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 						}
 					}
 					securedEnter(event);
-				} catch (AuthenticationRequired | IOException e) {
+				} catch (UserManagementException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 					MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE);
 				}

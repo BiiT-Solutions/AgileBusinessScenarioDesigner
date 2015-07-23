@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.CustomVariableScopeUi;
 import com.biit.abcd.language.CustomVariableTypeUi;
 import com.biit.abcd.language.LanguageCodes;
@@ -15,7 +16,7 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.utils.CheckDependencies;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.ComparableComboBox;
 import com.biit.abcd.webpages.components.ComparableTextField;
 import com.biit.form.exceptions.DependencyExistException;
@@ -24,6 +25,7 @@ import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -34,14 +36,18 @@ public class VariableTable extends Table {
 	private static final long serialVersionUID = 3067131269771569684L;
 	private boolean protectedElements = false;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	enum FormVariablesProperties {
 		VARIABLE_NAME, TYPE, SCOPE, DEFAULT_VALUE;
 	};
 
 	public VariableTable() {
 		initContainerProperties();
-		protectedElements = AbcdFormAuthorizationService.getInstance().isFormReadOnly(
-				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser());
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
+		protectedElements = securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+				UserSessionHandler.getUser());
 	}
 
 	private void initContainerProperties() {
@@ -234,7 +240,7 @@ public class VariableTable extends Table {
 	}
 
 	private void updateInfo(CustomVariable customVariable) {
-		customVariable.setUpdatedBy(UserSessionHandler.getUser().getUserId());
+		customVariable.setUpdatedBy(UserSessionHandler.getUser().getId());
 		customVariable.setUpdateTime();
 	}
 

@@ -18,10 +18,10 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.biit.usermanager.entity.IUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "diagram_links")
@@ -234,7 +234,7 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	@Override
-	public void setCreatedBy(User user) {
+	public void setCreatedBy(IUser<Long> user) {
 		super.setCreatedBy(user);
 		if (source != null) {
 			source.setCreatedBy(user);
@@ -245,7 +245,7 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	@Override
-	public void setUpdatedBy(User user) {
+	public void setUpdatedBy(IUser<Long> user) {
 		super.setUpdatedBy(user);
 		if (source != null) {
 			source.setUpdatedBy(user);
@@ -267,7 +267,7 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	@Override
-	public void update(DiagramObject object, User user) {
+	public void update(DiagramObject object, IUser<Long> user) {
 		super.update(object, user);
 		if (object instanceof DiagramLink) {
 			DiagramLink link = (DiagramLink) object;

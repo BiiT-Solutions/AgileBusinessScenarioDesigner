@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.liferay.access.UserService;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
 import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
 import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.biit.liferay.access.exceptions.WebServiceAccessError;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.AuthenticationRequired;
 
 public class LiferayServiceAccess {
 	private static LiferayServiceAccess instance = new LiferayServiceAccess();
@@ -27,7 +27,7 @@ public class LiferayServiceAccess {
 		return userService;
 	}
 
-	public User getUserById(Long userId) throws UserDoesNotExistException {
+	public IUser<Long> getUserById(Long userId) throws UserDoesNotExistException {
 		try {
 			return getUserService().getUserById(userId);
 		} catch (NotConnectedToWebServiceException | IOException | AuthenticationRequired | WebServiceAccessError e) {

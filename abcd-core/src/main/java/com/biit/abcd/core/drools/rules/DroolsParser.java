@@ -73,7 +73,7 @@ public class DroolsParser {
 
 	/**
 	 * This method manages the expression functions defined by the user.<br>
-	 * The expression supported are: MAX, MIN, AVG, SUM y PMT
+	 * The expression supported are: MAX, MIN, AVG, SUM, PMT and LOG
 	 * @param actions
 	 * @return The drools rule as a string
 	 * @throws NullTreeObjectException
@@ -124,6 +124,9 @@ public class DroolsParser {
 				break;
 			case PMT:
 				ruleCore += "RulesOperators.calculatePmtValueFunction(variablesList));\n";
+				break;
+			case LOG:
+				ruleCore += "RulesOperators.calculateLogarithmFunction(variablesList));\n";
 				break;
 			default:
 				throw new DroolsRuleCreationException("Error parsing an Action. Function '" + function.getValue()
@@ -1081,6 +1084,7 @@ public class DroolsParser {
 					case AVG:
 					case SUM:
 					case PMT:
+					case LOG:
 						return assignationFunctionAction(prattParserResultExpressionChain);
 					default:
 						break;
