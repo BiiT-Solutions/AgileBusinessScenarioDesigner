@@ -27,6 +27,8 @@ public enum AvailableFunction {
 	IF("IF("),
 
 	PMT("PMT("),
+	
+	LOG("LOG("),
 
 	SUM("SUM(");
 

@@ -202,6 +202,16 @@ public class TabOperatorLayout extends TabLayout {
 						addFunctionExpression(AvailableFunction.SUM);
 					}
 				});
+		
+		Button logButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_LOG),
+				new ClickListener() {
+					private static final long serialVersionUID = 3549151891823532732L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.LOG);
+					}
+				});
 
 		layout.addComponent(maxButton);
 		layout.addComponent(minimumButton);
@@ -209,6 +219,7 @@ public class TabOperatorLayout extends TabLayout {
 		layout.addComponent(sumButton);
 		layout.addComponent(ifButton);
 		layout.addComponent(pmtButton);
+		layout.addComponent(logButton);
 	}
 
 	private void createLogicalFunctionsOperators(AbstractLayout layout) {

@@ -45,6 +45,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 		this.register(ExpressionTokenType.SUM, new CallParselet());
 		this.register(ExpressionTokenType.PMT, new CallParselet());
 		this.register(ExpressionTokenType.IF, new CallParselet());
+		this.register(ExpressionTokenType.LOG, new CallParselet());
 		// Special token for parsing plugin calls
 		this.register(ExpressionTokenType.IPLUGIN, new CallParselet());
 
