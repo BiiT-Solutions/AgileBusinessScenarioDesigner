@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
@@ -19,11 +20,12 @@ import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.jointjs.diagram.builder.server.DiagramBuilder;
 import com.biit.jointjs.diagram.builder.server.listeners.DoubleClickListener;
 import com.biit.jointjs.diagram.builder.server.listeners.ElementActionListener;
 import com.biit.jointjs.diagram.builder.server.listeners.ElementPickedListener;
+import com.vaadin.server.VaadinServlet;
 
 public class AbcdDiagramBuilder extends DiagramBuilder {
 
@@ -35,6 +37,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	private List<JumpToListener> jumpToListeners;
 	private List<DiagramObjectAddedListener> objectAddedListeners;
 	private List<DiagramObjectUpdatedListener> objectUpdatedListeners;
+	
+	private IAbcdFormAuthorizationService securityService;
 
 	public AbcdDiagramBuilder() {
 		super();
@@ -43,6 +47,9 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		jumpToListeners = new ArrayList<JumpToListener>();
 		objectAddedListeners = new ArrayList<>();
 		objectUpdatedListeners = new ArrayList<>();
+		
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 
 		addElementActionListener(new ElementActionListener() {
 
@@ -250,7 +257,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 		this.diagram = diagram;
 		if (diagram != null) {
 			// Initialize the map of diagramElements.
-			if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
+			if (!securityService.isFormReadOnly(
 					UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
 				setEnabled(true);
 			}

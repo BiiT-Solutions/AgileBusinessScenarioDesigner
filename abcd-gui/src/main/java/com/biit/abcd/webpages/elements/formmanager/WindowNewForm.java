@@ -1,22 +1,23 @@
 package com.biit.abcd.webpages.elements.formmanager;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.biit.liferay.security.IActivity;
-import com.liferay.portal.model.Organization;
+import com.biit.usermanager.entity.IGroup;
+import com.biit.usermanager.security.IActivity;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -32,9 +33,13 @@ public class WindowNewForm extends AcceptCancelWindow {
 	private ComboBox organizationField;
 	private IActivity[] exclusivePermissionFilter;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public WindowNewForm(LanguageCodes windowsCaption, LanguageCodes inputFieldCaption, LanguageCodes groupCaption,
 			AbcdActivity[] exclusivePermissionFilter) {
 		super();
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 		this.exclusivePermissionFilter = exclusivePermissionFilter;
 		setContent(generateContent(inputFieldCaption, groupCaption));
 		setCaption(ServerTranslate.translate(windowsCaption));
@@ -50,16 +55,17 @@ public class WindowNewForm extends AcceptCancelWindow {
 		return textField.getValue();
 	}
 
-	public Organization getOrganization() {
-		return (Organization) organizationField.getValue();
+	@SuppressWarnings("unchecked")
+	public IGroup<Long> getOrganization() {
+		return (IGroup<Long>) organizationField.getValue();
 	}
 
 	private Component generateContent(LanguageCodes inputFieldCaption, LanguageCodes groupCaption) {
 		textField = new TextField(ServerTranslate.translate(inputFieldCaption));
 		textField.focus();
 		textField.setWidth("100%");
-		//textField.addValidator(new ValidatorTreeObjectName(BaseForm.NAME_ALLOWED));
-		//textField.addValidator(new ValidatorTreeObjectNameLength());
+		// textField.addValidator(new ValidatorTreeObjectName(BaseForm.NAME_ALLOWED));
+		// textField.addValidator(new ValidatorTreeObjectNameLength());
 
 		textField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 4953347262492851075L;
@@ -74,29 +80,27 @@ public class WindowNewForm extends AcceptCancelWindow {
 		organizationField.setNullSelectionAllowed(false);
 		organizationField.setWidth("100%");
 		try {
-			Set<Organization> organizations = AbcdFormAuthorizationService.getInstance().getUserOrganizations(
-					UserSessionHandler.getUser());
-			Iterator<Organization> itr = organizations.iterator();
+			Set<IGroup<Long>> organizations = securityService.getUserOrganizations(UserSessionHandler.getUser());
+			Iterator<IGroup<Long>> itr = organizations.iterator();
 			while (itr.hasNext()) {
-				Organization organization = itr.next();
+				IGroup<Long> organization = itr.next();
 				for (IActivity activity : exclusivePermissionFilter) {
 					// If the user doesn't comply to all activities in the filter in the group, then exit
-					if (!AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-							organization, activity)) {
+					if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(), organization, activity)) {
 						itr.remove();
 						break;
 					}
 				}
 			}
-			for (Organization organization : organizations) {
+			for (IGroup<Long> organization : organizations) {
 				organizationField.addItem(organization);
-				organizationField.setItemCaption(organization, organization.getName());
+				organizationField.setItemCaption(organization, organization.getUniqueName());
 			}
 			if (!organizations.isEmpty()) {
-				Iterator<Organization> organizationIterator = organizations.iterator();
+				Iterator<IGroup<Long>> organizationIterator = organizations.iterator();
 				organizationField.setValue(organizationIterator.next());
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 		}

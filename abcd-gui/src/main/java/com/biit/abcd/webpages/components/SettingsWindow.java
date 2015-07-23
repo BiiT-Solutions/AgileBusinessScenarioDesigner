@@ -1,7 +1,5 @@
 package com.biit.abcd.webpages.components;
 
-import java.io.IOException;
-
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
@@ -29,10 +27,10 @@ import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -48,6 +46,8 @@ public class SettingsWindow extends PopupWindow {
 
 	private IFormDao formDao;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public SettingsWindow() {
 		setClosable(true);
 		setResizable(false);
@@ -61,6 +61,7 @@ public class SettingsWindow extends PopupWindow {
 
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 	}
 
 	private Component generateContent() {
@@ -70,8 +71,7 @@ public class SettingsWindow extends PopupWindow {
 
 		// Global Constant Button can be only used by users with an specific role.
 		try {
-			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
+			if (securityService.isAuthorizedActivity(UserSessionHandler.getUser(), AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
 				Button globalConstantsButton = new Button(
 						ServerTranslate.translate(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS), new ClickListener() {
 							private static final long serialVersionUID = 5662848461729745562L;
@@ -107,14 +107,13 @@ public class SettingsWindow extends PopupWindow {
 				globalConstantsButton.setWidth("100%");
 				rootLayout.addComponent(globalConstantsButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 
 		// Clear cache for admin users.
 		try {
-			if (AbcdFormAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-					AbcdActivity.EVICT_CACHE)) {
+			if (securityService.isAuthorizedActivity(UserSessionHandler.getUser(), AbcdActivity.EVICT_CACHE)) {
 				Button clearCacheButton = new Button(ServerTranslate.translate(LanguageCodes.SETTINGS_CLEAR_CACHE),
 						new ClickListener() {
 							private static final long serialVersionUID = -1121572145945309858L;
@@ -142,7 +141,7 @@ public class SettingsWindow extends PopupWindow {
 				clearCacheButton.setWidth("100%");
 				rootLayout.addComponent(clearCacheButton);
 			}
-		} catch (IOException | AuthenticationRequired e) {
+		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
 

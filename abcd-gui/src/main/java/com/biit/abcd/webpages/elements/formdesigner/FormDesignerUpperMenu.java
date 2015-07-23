@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
@@ -13,12 +14,13 @@ import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.security.AbcdActivity;
-import com.biit.abcd.security.AbcdAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.form.entity.TreeObject;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -27,8 +29,12 @@ public class FormDesignerUpperMenu extends UpperMenu {
 	private IconButton saveButton, newCategoryButton, newQuestionButton, newGroupButton, newAnswerButton,
 			newSubanswerButton, moveUpButton, moveDownButton, removeButton, moveButton, finish;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public FormDesignerUpperMenu() {
 		super();
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 		defineMenu();
 		disableNotAllowedButtons();
 	}
@@ -84,9 +90,8 @@ public class FormDesignerUpperMenu extends UpperMenu {
 		finish = new IconButton(LanguageCodes.COMMON_CAPTION_FINISH, ThemeIcon.FORM_FINISH,
 				LanguageCodes.COMMON_TOOLTIP_FINISH, IconSize.BIG);
 		finish.setEnabled(UserSessionHandler.getFormController().getForm().getStatus().equals(FormWorkStatus.DESIGN)
-				&& AbcdAuthorizationService.getInstance().isAuthorizedActivity(UserSessionHandler.getUser(),
-						UserSessionHandler.getFormController().getForm().getOrganizationId(),
-						AbcdActivity.FORM_STATUS_UPGRADE));
+				&& securityService.isAuthorizedActivity(UserSessionHandler.getUser(), UserSessionHandler
+						.getFormController().getForm().getOrganizationId(), AbcdActivity.FORM_STATUS_UPGRADE));
 
 		addIconButton(finish);
 	}
@@ -138,7 +143,7 @@ public class FormDesignerUpperMenu extends UpperMenu {
 			removeButton.setEnabled(true);
 			newAnswerButton.setEnabled(true);
 			newSubanswerButton.setEnabled(true);
-		} 
+		}
 
 		// Disable buttons that user has no permissions to use.
 		disableNotAllowedButtons();

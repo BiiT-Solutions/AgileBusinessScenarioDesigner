@@ -3,7 +3,9 @@ package com.biit.abcd.webpages.elements.formdesigner;
 import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractComponent;
 
 /**
@@ -12,8 +14,12 @@ import com.vaadin.ui.AbstractComponent;
 public abstract class SecuredFormElementProperties<T> extends GenericFormElementProperties<T> {
 	private static final long serialVersionUID = 8823149378553743547L;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public SecuredFormElementProperties(Class<? extends T> type) {
 		super(type);
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 	}
 
 	@Override
@@ -23,7 +29,7 @@ public abstract class SecuredFormElementProperties<T> extends GenericFormElement
 	}
 
 	protected void disableProtectedElements() {
-		if (AbcdFormAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			for (AbstractComponent component : getProtectedElements()) {
 				if (component != null) {

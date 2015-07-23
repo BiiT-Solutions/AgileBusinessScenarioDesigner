@@ -1,6 +1,6 @@
 package com.biit.abcd.security;
 
-import com.biit.liferay.security.IActivity;
+import com.biit.usermanager.security.IActivity;
 
 /**
  * Activities are used for authorization system to define what a user can do and cannot do. The string for each activity

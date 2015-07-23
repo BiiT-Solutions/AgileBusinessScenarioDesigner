@@ -37,10 +37,10 @@ import com.biit.abcd.gson.utils.DiagramTableDeserializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.biit.usermanager.entity.IUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "diagram_objects")
@@ -94,7 +94,7 @@ public abstract class DiagramObject extends StorableObject {
 		this.embeds = embeds;
 	}
 
-	public void update(DiagramObject object, User user) {
+	public void update(DiagramObject object, IUser<Long> user) {
 		embeds = object.embeds;
 		z = object.z;
 		setUpdatedBy(user);

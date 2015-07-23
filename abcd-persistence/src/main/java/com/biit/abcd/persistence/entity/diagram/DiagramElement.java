@@ -35,10 +35,10 @@ import com.biit.abcd.gson.utils.DiagramTableDeserializer;
 import com.biit.abcd.gson.utils.DiagramTableSerializer;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.biit.usermanager.entity.IUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import com.liferay.portal.model.User;
 
 @Entity
 @Table(name = "diagram_elements")
@@ -156,7 +156,7 @@ public abstract class DiagramElement extends DiagramObject {
 	}
 
 	@Override
-	public void update(DiagramObject object, User user) {
+	public void update(DiagramObject object, IUser<Long> user) {
 		super.update(object, user);
 		if (object instanceof DiagramElement) {
 			DiagramElement element = (DiagramElement) object;
@@ -199,13 +199,13 @@ public abstract class DiagramElement extends DiagramObject {
 	}
 
 	@Override
-	public void setCreatedBy(User user) {
+	public void setCreatedBy(IUser<Long> user) {
 		super.setCreatedBy(user);
 		biitText.setCreatedBy(user);
 	}
 
 	@Override
-	public void setUpdatedBy(User user) {
+	public void setUpdatedBy(IUser<Long> user) {
 		super.setUpdatedBy(user);
 		biitText.setUpdatedBy(user);
 	}

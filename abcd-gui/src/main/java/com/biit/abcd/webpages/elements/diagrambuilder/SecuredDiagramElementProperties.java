@@ -3,15 +3,21 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 import java.util.Set;
 
 import com.biit.abcd.authentication.UserSessionHandler;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractComponent;
 
 public abstract class SecuredDiagramElementProperties<T> extends PropertiesForClassComponent<T> {
 	private static final long serialVersionUID = 3707582105881695713L;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public SecuredDiagramElementProperties(Class<? extends T> type) {
 		super(type);
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 	}
 
 	@Override
@@ -21,7 +27,7 @@ public abstract class SecuredDiagramElementProperties<T> extends PropertiesForCl
 	}
 
 	protected void disableProtectedElements() {
-		if (AbcdFormAuthorizationService.getInstance().isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+		if (securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
 				UserSessionHandler.getUser())) {
 			for (AbstractComponent component : getProtectedElements()) {
 				if (component != null) {

@@ -1,8 +1,10 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.security.AbcdFormAuthorizationService;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.HorizontalLayout;
 
 /**
@@ -12,14 +14,21 @@ import com.vaadin.ui.HorizontalLayout;
 public class SecuredExpressionViewer extends ExpressionViewer {
 	private static final long serialVersionUID = 6372099281146635159L;
 
+	private IAbcdFormAuthorizationService securityService;
+
+	public SecuredExpressionViewer() {
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
+	}
+
 	/**
 	 * An expression is editable if it is and user has permissions.
 	 */
 	@Override
 	protected boolean isExpressionEditable(Expression expression) {
 		return expression.isEditable()
-				&& !AbcdFormAuthorizationService.getInstance().isFormReadOnly(
-						UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser());
+				&& !securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+						UserSessionHandler.getUser());
 	}
 
 	/**
@@ -27,8 +36,8 @@ public class SecuredExpressionViewer extends ExpressionViewer {
 	 */
 	@Override
 	protected void updateExpressionSelectionStyles() {
-		if (!AbcdFormAuthorizationService.getInstance().isFormReadOnly(
-				UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser())) {
+		if (!securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
+				UserSessionHandler.getUser())) {
 			super.updateExpressionSelectionStyles();
 		} else {
 			for (int i = 0; i < getRootLayout().getComponentCount(); i++) {

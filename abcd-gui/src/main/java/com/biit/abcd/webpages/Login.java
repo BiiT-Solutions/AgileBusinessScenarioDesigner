@@ -13,12 +13,10 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.webpages.components.WebPageComponent;
-import com.biit.liferay.access.exceptions.AuthenticationRequired;
-import com.biit.liferay.access.exceptions.NotConnectedToWebServiceException;
-import com.biit.liferay.access.exceptions.WebServiceAccessError;
-import com.biit.liferay.security.exceptions.InvalidCredentialsException;
-import com.biit.security.exceptions.PBKDF2EncryptorException;
-import com.liferay.portal.model.User;
+import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.AuthenticationRequired;
+import com.biit.usermanager.security.exceptions.InvalidCredentialsException;
+import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -99,20 +97,18 @@ public class Login extends WebPageComponent {
 				// form
 				if (target == passwordField) {
 					try {
-						User user = UserSessionHandler.getUser(usernameField.getValue(), passwordField.getValue());
+						IUser<Long> user = UserSessionHandler.getUser(usernameField.getValue(),
+								passwordField.getValue());
 						if (user != null) {
 							ApplicationFrame.navigateTo(WebMap.getMainPage());
 						}
-					} catch (InvalidCredentialsException | AuthenticationRequired e) {
+					} catch (InvalidCredentialsException e) {
 						passwordField.setComponentError(new UserError(ServerTranslate.translate(
 								LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
 						MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
-					} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
+					} catch (UserManagementException | AuthenticationRequired e) {
 						AbcdLogger.errorMessage(this.getClass().getName(), e);
 						MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
-					} catch (PBKDF2EncryptorException e) {
-						AbcdLogger.errorMessage(this.getClass().getName(), e);
-						MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD, LanguageCodes.ERROR_CONTACT);
 					}
 				}
 				// If write user name and press enter, go to pass field.
@@ -130,21 +126,18 @@ public class Login extends WebPageComponent {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						try {
-							User user = UserSessionHandler.getUser(usernameField.getValue(), passwordField.getValue());
+							IUser<Long> user = UserSessionHandler.getUser(usernameField.getValue(),
+									passwordField.getValue());
 							if (user != null) {
 								ApplicationFrame.navigateTo(WebMap.getMainPage());
 							}
-						} catch (InvalidCredentialsException | AuthenticationRequired e) {
+						} catch (InvalidCredentialsException e) {
 							passwordField.setComponentError(new UserError(ServerTranslate.translate(
 									LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
 							MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
-						} catch (IOException | WebServiceAccessError | NotConnectedToWebServiceException e) {
+						} catch (UserManagementException | AuthenticationRequired e) {
 							AbcdLogger.errorMessage(this.getClass().getName(), e);
 							MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
-						} catch (PBKDF2EncryptorException e) {
-							AbcdLogger.errorMessage(this.getClass().getName(), e);
-							MessageManager.showError(LanguageCodes.ERROR_ENCRYPTINGPASSWORD,
-									LanguageCodes.ERROR_CONTACT);
 						}
 					}
 				});
