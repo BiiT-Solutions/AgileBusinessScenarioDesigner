@@ -390,7 +390,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 			return ServerTranslate.translate(LanguageCodes.PERMISSIONS_IN_USE);
 		}
 		// Final Design does not need to show "Read Only" tag.
-		if (securityService.isAuthorizedToForm(form.getOrganizationId(), UserSessionHandler.getUser())) {
+		if (!securityService.isAuthorizedToForm(form.getOrganizationId(), UserSessionHandler.getUser())) {
 			return ServerTranslate.translate(LanguageCodes.PERMISSIONS_READ_ONLY);
 		}
 		return "";
