@@ -10,19 +10,17 @@ import java.util.Set;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.core.security.AbcdActivity;
 import com.biit.abcd.language.FormWorkStatusUi;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.liferay.LiferayServiceAccess;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
-import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.TreeObjectTableCellStyleGenerator;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
-import com.biit.liferay.access.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.exceptions.UserManagementException;
@@ -190,16 +188,16 @@ public class FormsVersionsTreeTable extends TreeTable {
 			}
 			try {
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue(
-						LiferayServiceAccess.getInstance().getUserById(form.getCreatedBy()).getEmailAddress());
-			} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
+						securityService.getUserById(form.getCreatedBy()).getEmailAddress());
+			} catch (com.vaadin.data.Property.ReadOnlyException | NullPointerException | UserManagementException e) {
 				item.getItemProperty(FormsVersionsTreeTableProperties.CREATED_BY).setValue("");
 			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.CREATION_DATE).setValue(
 					(DateManager.convertDateToStringWithHours(form.getCreationTime())));
 			try {
 				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue(
-						LiferayServiceAccess.getInstance().getUserById(form.getUpdatedBy()).getEmailAddress());
-			} catch (com.vaadin.data.Property.ReadOnlyException | UserDoesNotExistException | NullPointerException e) {
+						securityService.getUserById(form.getUpdatedBy()).getEmailAddress());
+			} catch (com.vaadin.data.Property.ReadOnlyException | NullPointerException | UserManagementException e) {
 				item.getItemProperty(FormsVersionsTreeTableProperties.MODIFIED_BY).setValue("");
 			}
 			item.getItemProperty(FormsVersionsTreeTableProperties.MODIFICATION_DATE).setValue(

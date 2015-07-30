@@ -1,15 +1,17 @@
 package com.biit.abcd.webpages.elements.formdesigner;
 
 import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.liferay.LiferayServiceAccess;
+import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.biit.form.entity.TreeObject;
-import com.biit.liferay.access.exceptions.UserDoesNotExistException;
+import com.biit.usermanager.security.exceptions.UserManagementException;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -19,8 +21,12 @@ import com.vaadin.ui.TextField;
 public abstract class GenericFormElementProperties<T> extends PropertiesForClassComponent<T> {
 	private static final long serialVersionUID = -8230738772806878748L;
 
+	private IAbcdFormAuthorizationService securityService;
+
 	public GenericFormElementProperties(Class<? extends T> type) {
 		super(type);
+		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 	}
 
 	@Override
@@ -62,16 +68,16 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		String valueCreatedBy = "";
 		String valueUpdatedBy = "";
 		try {
-			valueCreatedBy = element.getCreatedBy() == null ? "" : LiferayServiceAccess.getInstance()
-					.getUserById(element.getCreatedBy()).getEmailAddress();
-		} catch (UserDoesNotExistException udne) {
+			valueCreatedBy = element.getCreatedBy() == null ? "" : securityService.getUserById(element.getCreatedBy())
+					.getEmailAddress();
+		} catch (UserManagementException udne) {
 			valueCreatedBy = element.getCreatedBy() + "";
 		}
 
 		try {
-			valueUpdatedBy = element.getUpdatedBy() == null ? "" : LiferayServiceAccess.getInstance()
-					.getUserById(element.getUpdatedBy()).getEmailAddress();
-		} catch (UserDoesNotExistException udne) {
+			valueUpdatedBy = element.getUpdatedBy() == null ? "" : securityService.getUserById(element.getUpdatedBy())
+					.getEmailAddress();
+		} catch (UserManagementException udne) {
 			valueUpdatedBy = element.getUpdatedBy() + "";
 		}
 

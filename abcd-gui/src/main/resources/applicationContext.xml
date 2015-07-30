@@ -18,7 +18,7 @@
 	<!-- Scans the classpath for annotated components that will be auto-registered 
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 
 		to set the correct base-package -->
-	<context:component-scan base-package="com.biit.abcd.persistence, com.biit.liferay.security, com.biit.abcd.security" />
+	<context:component-scan base-package="com.biit.abcd.persistence, com.biit.liferay.security, com.biit.abcd.security, com.biit.abcd.core.security.rest" />
 
 	<!-- Read any *.properties file in project and override some of them with 
 		files outside of the project -->
@@ -158,10 +158,10 @@
 	<bean id="authenticationService" class="com.biit.liferay.security.AuthenticationService" />	
 	<bean id="authorizationService" class="com.biit.liferay.security.AuthorizationService">
 		<property name="roleActivities">
-			<bean id="roleActivities" class="com.biit.abcd.security.RoleActivities" />
+			<bean id="roleActivities" class="com.biit.abcd.core.security.RoleActivities" />
 		</property>
 	</bean>
-	<bean id="securityService" class = "com.biit.abcd.security.SecurityService" >
+	<bean id="securityService" class = "com.biit.abcd.core.security.SecurityService" >
 		<property name="authenticationService" ref="authenticationService" />
 		<property name="authorizationService" ref="authorizationService" />
 	</bean>

@@ -1,4 +1,4 @@
-package com.biit.abcd.security;
+package com.biit.abcd.core.security;
 
 import java.util.ArrayList;
 import java.util.HashSet;

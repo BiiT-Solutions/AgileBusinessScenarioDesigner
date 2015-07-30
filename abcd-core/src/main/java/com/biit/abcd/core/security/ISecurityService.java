@@ -1,4 +1,4 @@
-package com.biit.abcd.security;
+package com.biit.abcd.core.security;
 
 import java.util.Set;
 
@@ -25,6 +25,8 @@ public interface ISecurityService {
 	boolean isAuthorizedToForm(Long formOrganizationId, IUser<Long> user);
 
 	IUser<Long> getUserByEmail(String userEmail) throws UserManagementException;
+
+	IUser<Long> getUserById(Long userId) throws UserManagementException;
 
 	boolean isUserAuthorizedInAnyOrganization(IUser<Long> user, IActivity useWebService) throws UserManagementException;
 

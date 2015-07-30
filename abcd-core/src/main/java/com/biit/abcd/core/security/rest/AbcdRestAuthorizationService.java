@@ -1,14 +1,16 @@
-package com.biit.abcd.webservice.rest;
+package com.biit.abcd.core.security.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import com.biit.abcd.security.ISecurityService;
+import com.biit.abcd.core.security.ISecurityService;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.IAuthenticationService;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.biit.webservice.rest.RestAuthorizationService;
 import com.biit.webservice.rest.RestServiceActivity;
 
+@Component
 public class AbcdRestAuthorizationService extends RestAuthorizationService {
 
 	@Autowired

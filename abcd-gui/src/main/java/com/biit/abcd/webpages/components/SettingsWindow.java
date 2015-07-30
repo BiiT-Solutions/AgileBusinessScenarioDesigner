@@ -5,6 +5,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.core.security.AbcdActivity;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
@@ -26,7 +27,6 @@ import com.biit.abcd.persistence.utils.Exceptions.StorableObjectNotEqualsExcepti
 import com.biit.abcd.persistence.utils.Exceptions.TableRuleNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.TreeObjectNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.VariableDataNotEqualsException;
-import com.biit.abcd.security.AbcdActivity;
 import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.WebMap;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;

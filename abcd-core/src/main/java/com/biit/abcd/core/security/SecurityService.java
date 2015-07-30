@@ -1,4 +1,4 @@
-package com.biit.abcd.security;
+package com.biit.abcd.core.security;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -180,5 +180,13 @@ public class SecurityService implements ISecurityService {
 
 	public void setAuthorizationService(IAuthorizationService<Long, Long, Long> authorizationService) {
 		this.authorizationService = authorizationService;
+	}
+
+	@Override
+	public IUser<Long> getUserById(Long userId) throws UserManagementException {
+		if (userId == null) {
+			return null;
+		}
+		return authenticationService.getUserById(userId);
 	}
 }

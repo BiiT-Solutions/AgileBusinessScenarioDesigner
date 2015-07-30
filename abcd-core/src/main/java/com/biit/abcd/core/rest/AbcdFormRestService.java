@@ -1,4 +1,4 @@
-package com.biit.abcd.webservice.rest;
+package com.biit.abcd.core.rest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,12 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.biit.abcd.core.security.ISecurityService;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
-import com.biit.abcd.security.ISecurityService;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.exceptions.UserManagementException;
@@ -193,13 +193,6 @@ public class AbcdFormRestService {
 			AbcdLogger.errorMessage(this.getClass().getName(), "Invalid input parameters");
 			return Response.serverError().entity("{\"error\":\"Invalid input parameters\"}").build();
 		}
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	@Path("/checkHealth")
-	public Response checkHealth() {
-		return Response.ok().build();
 	}
 
 	private String parseSimpleFormViewList(List<SimpleFormView> simpleForms) {

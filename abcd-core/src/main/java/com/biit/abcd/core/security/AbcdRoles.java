@@ -1,4 +1,4 @@
-package com.biit.abcd.security;
+package com.biit.abcd.core.security;
 
 /**
  * This roles must be inserted in Liferay.
