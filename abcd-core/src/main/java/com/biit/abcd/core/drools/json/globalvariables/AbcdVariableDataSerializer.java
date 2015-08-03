@@ -22,7 +22,7 @@ public class AbcdVariableDataSerializer<T extends VariableData> implements JsonS
 	public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
 		final JsonObject jsonObject = new JsonObject();
 
-		jsonObject.add("class", context.serialize(equivalentDroolsClass(src)));
+		jsonObject.add("type", context.serialize(equivalentDroolsClass(src)));
 		jsonObject.add("value", context.serialize(src.getValue()));
 		jsonObject.add("validFrom", context.serialize(src.getValidFrom()));
 		jsonObject.add("validTo", context.serialize(src.getValidTo()));

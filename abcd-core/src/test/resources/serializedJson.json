@@ -4,13 +4,13 @@
     "format": "NUMBER",
     "variableData": [
       {
-        "class": "com.biit.drools.global.variables.DroolsVariableDataNumber",
+        "type": "com.biit.drools.global.variables.DroolsVariableDataNumber",
         "value": 19.0,
         "validFrom": "Sep 23, 2007 12:00:00 AM",
         "validTo": "Sep 23, 2008 12:00:00 AM"
       },
       {
-        "class": "com.biit.drools.global.variables.DroolsVariableDataNumber",
+        "type": "com.biit.drools.global.variables.DroolsVariableDataNumber",
         "value": 21.0,
         "validFrom": "Sep 23, 2008 12:00:00 AM"
       }
@@ -21,7 +21,7 @@
     "format": "TEXT",
     "variableData": [
       {
-        "class": "com.biit.drools.global.variables.DroolsVariableDataText",
+        "type": "com.biit.drools.global.variables.DroolsVariableDataText",
         "value": "Hello",
         "validFrom": "Sep 23, 2016 12:00:00 AM",
         "validTo": "Sep 23, 2018 12:00:00 AM"
@@ -33,7 +33,7 @@
     "format": "POSTAL_CODE",
     "variableData": [
       {
-        "class": "com.biit.drools.global.variables.DroolsVariableDataPostalCode",
+        "type": "com.biit.drools.global.variables.DroolsVariableDataPostalCode",
         "value": "Postal",
         "validFrom": "Sep 23, 2007 12:00:00 AM",
         "validTo": "Sep 23, 2018 12:00:00 AM"
@@ -45,7 +45,7 @@
     "format": "DATE",
     "variableData": [
       {
-        "class": "com.biit.drools.global.variables.DroolsVariableDataDate",
+        "type": "com.biit.drools.global.variables.DroolsVariableDataDate",
         "value": "Jan 2, 1970 11:17:36 AM",
         "validFrom": "Sep 23, 2007 12:00:00 AM",
         "validTo": "Sep 23, 2018 12:00:00 AM"
