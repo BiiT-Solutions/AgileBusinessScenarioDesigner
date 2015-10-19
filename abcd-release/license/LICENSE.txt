@@ -1,0 +1,15 @@
+The Program contains open source and other free download components as identified below. A list of the components used is provided below.
+
+- Icons obtained from Modern Icons (Attribution-NoDerivs 3.0 Unported): http://modernuiicons.com/
+
+- Vaadin user interface components for web apps (Apache License): https://vaadin.com/ 
+
+- Hibernate (LGPL 2.1 or the ASL 2.0): http://hibernate.org/
+
+- Spring (Apache License 2.0): https://spring.io/
+
+- Jersey (CDDL 1.1 and GNU GPL v2): https://jersey.java.net
+
+- Drools (Apache License 2.0): http://www.drools.org
+
+Third party license  terms and other third party-required notices are in different files.  
