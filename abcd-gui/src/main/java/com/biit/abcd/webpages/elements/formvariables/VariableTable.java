@@ -23,6 +23,7 @@ import com.biit.form.exceptions.DependencyExistException;
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.converter.Converter.ConversionException;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.server.VaadinServlet;
@@ -34,6 +35,7 @@ import com.vaadin.ui.TextField;
 
 public class VariableTable extends Table {
 	private static final long serialVersionUID = 3067131269771569684L;
+	private static final String VARIABLE_REGEX = "([a-zA-Z])([a-zA-Z0-9]){3,}";
 	private boolean protectedElements = false;
 
 	private IAbcdFormAuthorizationService securityService;
@@ -46,8 +48,7 @@ public class VariableTable extends Table {
 		initContainerProperties();
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
-		protectedElements = securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(),
-				UserSessionHandler.getUser());
+		protectedElements = securityService.isFormReadOnly(UserSessionHandler.getFormController().getForm(), UserSessionHandler.getUser());
 	}
 
 	private void initContainerProperties() {
@@ -80,21 +81,23 @@ public class VariableTable extends Table {
 	}
 
 	public void defaultSort() {
-		sort(new Object[] { FormVariablesProperties.SCOPE, FormVariablesProperties.VARIABLE_NAME }, new boolean[] {
-				true, true });
+		sort(new Object[] { FormVariablesProperties.SCOPE, FormVariablesProperties.VARIABLE_NAME }, new boolean[] { true, true });
 	}
 
 	@SuppressWarnings({ "unchecked" })
 	public void addRow(final CustomVariable customVariable) {
 		Item item = addItem(customVariable);
 		final ComparableTextField nameTextField = createTextField(customVariable);
+		nameTextField.addValidator(new RegexpValidator(VARIABLE_REGEX, LanguageCodes.FORM_VARIABLE_REGEX_ERROR.translate()));
 		nameTextField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 8130288971788878223L;
 
 			@Override
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-				customVariable.setName(nameTextField.getValue());
-				updateInfo(customVariable);
+				if (nameTextField.isValid()) {
+					customVariable.setName(nameTextField.getValue());
+					updateInfo(customVariable);
+				}
 			}
 		});
 		nameTextField.setValue(customVariable.getName());
@@ -144,8 +147,7 @@ public class VariableTable extends Table {
 		final ComboBox typeComboBox = new ComboBox();
 		for (CustomVariableTypeUi variableType : CustomVariableTypeUi.values()) {
 			typeComboBox.addItem(variableType.getCustomvariable());
-			typeComboBox.setItemCaption(variableType.getCustomvariable(),
-					ServerTranslate.translate(variableType.getLanguageCode()));
+			typeComboBox.setItemCaption(variableType.getCustomvariable(), ServerTranslate.translate(variableType.getLanguageCode()));
 		}
 		typeComboBox.setNullSelectionAllowed(false);
 		typeComboBox.addFocusListener(new FocusListener() {
@@ -165,8 +167,7 @@ public class VariableTable extends Table {
 				if (customVariable.getType() != null && typeComboBox.getValue() != null
 						&& !customVariable.getType().equals((CustomVariableType) typeComboBox.getValue())) {
 					try {
-						CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController()
-								.getForm(), customVariable);
+						CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController().getForm(), customVariable);
 						CustomVariableType oldType = customVariable.getType();
 						customVariable.setType((CustomVariableType) typeComboBox.getValue());
 						updateInfo(customVariable);
@@ -178,10 +179,9 @@ public class VariableTable extends Table {
 							item.getItemProperty(FormVariablesProperties.DEFAULT_VALUE).setValue(defaultValueField);
 						}
 
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress()
-								+ "' has changed the property Type of the class '" + customVariable.getClass()
-								+ "' from '" + oldType + "' to '" + customVariable.getType() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has changed the property Type of the class '" + customVariable.getClass() + "' from '" + oldType
+								+ "' to '" + customVariable.getType() + "'.");
 					} catch (DependencyExistException e) {
 						// Forbid the edit action if exist dependency.
 						MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
@@ -198,8 +198,7 @@ public class VariableTable extends Table {
 		final ComboBox scopeComboBox = new ComparableComboBox();
 		for (CustomVariableScopeUi variablesScope : CustomVariableScopeUi.values()) {
 			scopeComboBox.addItem(variablesScope.getVariableScope());
-			scopeComboBox.setItemCaption(variablesScope.getVariableScope(),
-					ServerTranslate.translate(variablesScope.getLanguageCode()));
+			scopeComboBox.setItemCaption(variablesScope.getVariableScope(), ServerTranslate.translate(variablesScope.getLanguageCode()));
 		}
 		scopeComboBox.setNullSelectionAllowed(false);
 		scopeComboBox.addFocusListener(new FocusListener() {
@@ -218,16 +217,14 @@ public class VariableTable extends Table {
 				if (customVariable.getScope() != null && scopeComboBox.getValue() != null
 						&& !customVariable.getScope().equals((CustomVariableScope) scopeComboBox.getValue())) {
 					try {
-						CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController()
-								.getForm(), customVariable);
+						CheckDependencies.checkCustomVariableDependencies(UserSessionHandler.getFormController().getForm(), customVariable);
 						CustomVariableScope oldScope = customVariable.getScope();
 						customVariable.setScope((CustomVariableScope) scopeComboBox.getValue());
 						updateInfo(customVariable);
 
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress()
-								+ "' has changed the property Scope of the class '" + customVariable.getClass()
-								+ "' from '" + oldScope + "' to '" + customVariable.getScope() + "'.");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has changed the property Scope of the class '" + customVariable.getClass() + "' from '" + oldScope
+								+ "' to '" + customVariable.getScope() + "'.");
 					} catch (DependencyExistException e) {
 						// Forbid the edit action if exist dependency.
 						MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
@@ -265,8 +262,7 @@ public class VariableTable extends Table {
 		return defaultValueField;
 	}
 
-	private void addDefaultValueFieldValidatorsAndListeners(final CustomVariable customVariable,
-			final AbstractField<?> defaultValueField) {
+	private void addDefaultValueFieldValidatorsAndListeners(final CustomVariable customVariable, final AbstractField<?> defaultValueField) {
 		setValueDefaultValueField(customVariable, defaultValueField);
 		defaultValueField.addValueChangeListener(new ValueChangeListener() {
 			private static final long serialVersionUID = 7024147984616759115L;
@@ -291,12 +287,9 @@ public class VariableTable extends Table {
 							break;
 						}
 						updateInfo(customVariable);
-						AbcdLogger.info(
-								this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress()
-										+ "' has changed the property 'Default Value' of the class '"
-										+ customVariable.getClass() + "' from '" + oldValue + "' to '"
-										+ customVariable.getDefaultValue() + "'");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has changed the property 'Default Value' of the class '" + customVariable.getClass() + "' from '"
+								+ oldValue + "' to '" + customVariable.getDefaultValue() + "'");
 					}
 					// The value can be set to null again
 					else {
@@ -309,12 +302,9 @@ public class VariableTable extends Table {
 							break;
 						}
 						updateInfo(customVariable);
-						AbcdLogger.info(
-								this.getClass().getName(),
-								"User '" + UserSessionHandler.getUser().getEmailAddress()
-										+ "' has changed the property 'Default Value' of the class '"
-										+ customVariable.getClass() + "' from '" + oldValue + "' to '"
-										+ customVariable.getDefaultValue() + "'");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								+ "' has changed the property 'Default Value' of the class '" + customVariable.getClass() + "' from '"
+								+ oldValue + "' to '" + customVariable.getDefaultValue() + "'");
 					}
 				} catch (InvalidValueException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -347,8 +337,8 @@ public class VariableTable extends Table {
 			switch (customVariable.getType()) {
 			case DATE:
 				try {
-					((DateField) defaultValueField).setValue(ExpressionValueTimestamp.getFormatter().parse(
-							customVariable.getDefaultValue()));
+					((DateField) defaultValueField).setValue(ExpressionValueTimestamp.getFormatter()
+							.parse(customVariable.getDefaultValue()));
 				} catch (ReadOnlyException | ConversionException | ParseException e) {
 					setValue(null);
 				}

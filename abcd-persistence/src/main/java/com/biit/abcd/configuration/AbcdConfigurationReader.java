@@ -19,15 +19,12 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 	private static final String ID_POSTAL_REGEX = "postalCodeRegEx";
 	// Prompts Tags
 	private static final String ID_ISSUE_MANAGER_URL = "issueManagerUrl";
-	// Plugins path
-	private static final String ID_PLUGINS_PATH = "pluginsPath";
 
 	// Defaults
 	private static final String DEFAULT_NUMBER_REGEX = "[-]?[0-9]*\\.?,?[0-9]+";
 	private static final String DEFAULT_DATE_REGEX = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)";
 	private static final String DEFAULT_POSTAL_REGEX = "[0-9]{4}[a-zA-Z]{2}";
 	private static final String DEFAULT_ISSUE_MANAGER_URL = null;
-	private static final String DEFAULT_PLUGINS_PATH = "plugins/";
 
 	private static AbcdConfigurationReader instance;
 
@@ -38,7 +35,6 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 		addProperty(ID_DATE_REGEX, DEFAULT_DATE_REGEX);
 		addProperty(ID_POSTAL_REGEX, DEFAULT_POSTAL_REGEX);
 		addProperty(ID_ISSUE_MANAGER_URL, DEFAULT_ISSUE_MANAGER_URL);
-		addProperty(ID_PLUGINS_PATH, DEFAULT_PLUGINS_PATH);
 
 		addPropertiesSource(new PropertiesSourceFile(DATABASE_CONFIG_FILE));
 		addPropertiesSource(new SystemVariablePropertiesSourceFile(ABCD_SYSTEM_VARIABLE_CONFIG, DATABASE_CONFIG_FILE));
@@ -77,10 +73,6 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 
 	public String getPostalCodeMask() {
 		return getPropertyLogException(ID_POSTAL_REGEX);
-	}
-
-	public String getPluginsPath() {
-		return getPropertyLogException(ID_PLUGINS_PATH);
 	}
 
 	public String getIssueManagerUrl() {
