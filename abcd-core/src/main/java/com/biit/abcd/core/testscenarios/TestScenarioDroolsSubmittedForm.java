@@ -60,9 +60,7 @@ public class TestScenarioDroolsSubmittedForm {
 		if (submittedForm != null) {
 			try {
 				String submmitedFormXml = ((DroolsSubmittedForm) submittedForm).generateXML();
-				Files.write(
-						Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedSubmittedForm.xml"),
-						submmitedFormXml.getBytes("UTF-8"));
+				Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedSubmittedForm.xml"), submmitedFormXml.getBytes("UTF-8"));
 			} catch (IOException e) {
 				AbcdLogger.errorMessage(TestScenarioDroolsSubmittedForm.class.getName(), e);
 			}
@@ -87,16 +85,14 @@ public class TestScenarioDroolsSubmittedForm {
 				ISubmittedObject droolsGroup = createGroup(parent, child.getName());
 				createSubmittedFromStructure(child, droolsGroup);
 			} else if (child instanceof TestScenarioQuestion) {
-
 				TestAnswer testAnswer = ((TestScenarioQuestion) child).getTestAnswer();
 				if ((testAnswer != null) && (testAnswer.getValue() != null)) {
 					if (testAnswer instanceof TestAnswerMultiCheckBox) {
 						Set<String> values = ((TestAnswerMultiCheckBox) testAnswer).getValue();
 						if ((values != null) && !values.isEmpty()) {
+							ISubmittedQuestion question = (ISubmittedQuestion) createQuestion(parent, child.getName());
 							for (String value : values) {
-								ISubmittedQuestion question = (ISubmittedQuestion) createQuestion(parent,
-										child.getName());
-								question.setAnswer(value);
+								question.addAnswer(value);
 							}
 						}
 					} else {
@@ -104,9 +100,9 @@ public class TestScenarioDroolsSubmittedForm {
 						if (testAnswer instanceof TestAnswerInputDate) {
 							Timestamp timeStamp = ((TestAnswerInputDate) testAnswer).getValue();
 							Date date = new Date(timeStamp.getTime());
-							question.setAnswer(date.toString());
+							question.addAnswer(date.toString());
 						} else {
-							question.setAnswer(testAnswer.getValue().toString());
+							question.addAnswer(testAnswer.getValue().toString());
 						}
 					}
 				} else {

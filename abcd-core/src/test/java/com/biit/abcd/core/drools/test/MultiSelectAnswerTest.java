@@ -1,9 +1,6 @@
 package com.biit.abcd.core.drools.test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.dom4j.DocumentException;
 import org.junit.Assert;
@@ -73,13 +70,13 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 	private static final String ANSWER2_NAME = "answer2";
 	private static final String ANSWER3_NAME = "answer3";
 	private static final String CATEGORY_VARIABLE_NAME = "score";
+	private final static Double MULTI_SELECT_ANSWER = 3.0;
 	protected Form testForm = null;
 	private Category category = null;
 	private Question question = null;
 	private Answer answer1 = null;
 	private Answer answer2 = null;
 	private Answer answer3 = null;
-	private final static Double MULTI_SELECT_ANSWER = 3.0;
 
 	@Override
 	public Question getQuestion() {
@@ -124,8 +121,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		this.answer3 = answer3;
 	}
 
-	private void createForm() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			ElementIsReadOnly {
+	private void createForm() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
 		setForm(new Form(FORM_NAME));
 		getForm().setVersion(FORM_VERSION);
 
@@ -151,13 +147,11 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "multiSelectAnswer" })
-	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
+	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Create a simple form
 		createForm();
 		// Create the table and diagram
@@ -166,28 +160,23 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		ISubmittedForm submittedForm = createAndRunDroolsRules();
 		// Check result
 		if (submittedForm != null) {
-			Assert.assertEquals(MULTI_SELECT_ANSWER,
-					((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm)
-							.getDroolsSubmittedForm()).getChild(ISubmittedCategory.class, "Category1"))
-							.getVariableValue(CATEGORY_VARIABLE_NAME));
+			Assert.assertEquals(MULTI_SELECT_ANSWER, ((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
+					.getChild(ISubmittedCategory.class, "Category1")).getVariableValue(CATEGORY_VARIABLE_NAME));
 		} else {
 			Assert.fail();
 		}
 	}
 
-	private void createQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException {
+	private void createQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
-		CustomVariable categoryVariable = new CustomVariable(getForm(), CATEGORY_VARIABLE_NAME,
-				CustomVariableType.NUMBER, CustomVariableScope.CATEGORY, "0.0");
+		CustomVariable categoryVariable = new CustomVariable(getForm(), CATEGORY_VARIABLE_NAME, CustomVariableType.NUMBER, CustomVariableScope.CATEGORY, "0.0");
 
-		ExpressionChain commonAction = new ExpressionChain(new ExpressionValueCustomVariable(getCategory(),
-				categoryVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueCustomVariable(getCategory(), categoryVariable), new ExpressionOperatorMath(
-						AvailableOperator.PLUS), new ExpressionValueNumber(1.0));
+		ExpressionChain commonAction = new ExpressionChain(new ExpressionValueCustomVariable(getCategory(), categoryVariable), new ExpressionOperatorMath(
+				AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(getCategory(), categoryVariable), new ExpressionOperatorMath(
+				AvailableOperator.PLUS), new ExpressionValueNumber(1.0));
 
 		// Create the tableRule
-		// Only with one conditions colum
+		// Only with one conditions column
 		TableRule tableRule = new TableRule("TestTable");
 		// Question == Answer
 		TableRuleRow ruleRow = new TableRuleRow();
@@ -248,10 +237,5 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		mainDiagram.addDiagramObject(tableEnd);
 
 		return mainDiagram;
-	}
-
-	private static String readFile(String path, Charset encoding) throws IOException {
-		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return new String(encoded, encoding);
 	}
 }
