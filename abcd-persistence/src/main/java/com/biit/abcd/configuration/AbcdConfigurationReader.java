@@ -6,7 +6,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.utils.configuration.ConfigurationReader;
 import com.biit.utils.configuration.PropertiesSourceFile;
 import com.biit.utils.configuration.SystemVariablePropertiesSourceFile;
-import com.biit.utils.configuration.exception.PropertyNotFoundException;
+import com.biit.utils.configuration.exceptions.PropertyNotFoundException;
 
 public class AbcdConfigurationReader extends ConfigurationReader {
 
