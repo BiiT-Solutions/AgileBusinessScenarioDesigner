@@ -114,10 +114,10 @@ public class OperatorsTest extends KidsFormCreator {
 			// Check bmi
 			Double height = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm()
 					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "height"))
-					.getAnswer());
+					.getAnswers().iterator().next());
 			Double weight = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm()
 					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "weight"))
-					.getAnswer());
+					.getAnswers().iterator().next());
 			Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
 			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(BMI), bmi);
 		} catch (NumberFormatException | FieldTooLongException | CharacterNotAllowedException | NotValidChildException
@@ -149,7 +149,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
 		Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
 				.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
-				.getAnswer());
+				.getAnswers().iterator().next());
 		Double thirdVal = 1000.0;
 		Double minVal = Math.min(Math.min(firstVal, secondVal), thirdVal);
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MIN), minVal);
@@ -178,7 +178,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
 		Double secondVal = Double.parseDouble(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
 				.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
-				.getAnswer());
+				.getAnswers().iterator().next());
 		Double thirdVal = 1000.0;
 		Double maxVal = Math.max(Math.max(firstVal, secondVal), thirdVal);
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MAX), maxVal);
@@ -213,7 +213,7 @@ public class OperatorsTest extends KidsFormCreator {
 			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
 			Double secondVal = (Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm()
 					.getChild(ISubmittedCategory.class, "Algemeen").getChild(ISubmittedQuestion.class, "heightFather"))
-					.getAnswer()));
+					.getAnswers().iterator().next()));
 			Double thirdVal = 1000.0;
 			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG),
 					(firstVal + secondVal + thirdVal) / 3.0);

@@ -49,7 +49,7 @@ public class DroolsTreeObjectTable extends TreeTable {
 			item.getItemProperty(DroolsTreeObjectTableProperties.ELEMENT_NAME).setValue(element.getTag());
 			if (element instanceof SubmittedQuestion) {
 				item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue(
-						((SubmittedQuestion) element).getAnswer());
+						((SubmittedQuestion) element).getAnswers());
 			} else {
 				item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue("");
 			}
