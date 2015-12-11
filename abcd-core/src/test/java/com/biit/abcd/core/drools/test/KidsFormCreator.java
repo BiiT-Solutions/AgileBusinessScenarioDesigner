@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -50,6 +51,7 @@ import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.drools.DroolsRulesEngine;
+import com.biit.drools.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
@@ -89,28 +91,24 @@ public class KidsFormCreator {
 
 	private ISubmittedForm submittedForm;
 
-	private String droolsRulesString = null;
-
-	public DroolsForm createAndRunDroolsRules(Form form) {
-		// Generate the drools rules.
-		try {
-			FormToDroolsExporter formDrools = new FormToDroolsExporter();
-			DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(form, getGlobalVariables());
-			readStaticSubmittedForm();
-			// Test the rules with the submitted form and returns a DroolsForm
-			DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
-			droolsRulesString = rulesGenerator.getRules();
-
-			return droolsEngine.applyDrools(getSubmittedForm(), droolsRulesString,
-					RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables()));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	public String createDroolsRules(Form form) throws DocumentException, IOException, DroolsRuleGenerationException {
+		FormToDroolsExporter formDrools = new FormToDroolsExporter();
+		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(form, getGlobalVariables());
+		readStaticSubmittedForm();
+		return rulesGenerator.getRules();
 	}
 
-	public String getDroolsRules() {
-		return droolsRulesString;
+	public DroolsForm runDroolsRules(String droolsRules) throws DroolsRuleExecutionException {
+		// Test the rules with the submitted form and returns a DroolsForm
+		DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
+		return droolsEngine.applyDrools(getSubmittedForm(), droolsRules,
+				RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables()));
+	}
+
+	public DroolsForm createAndRunDroolsRules(Form form)
+			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
+		String droolsRules = createDroolsRules(form);
+		return runDroolsRules(droolsRules);
 	}
 
 	/**
@@ -461,30 +459,19 @@ public class KidsFormCreator {
 	 * Returns the tree object with the name specified. <br>
 	 * In our test scenario the names are unique
 	 * 
-	 * @param name
+	 * @param childName
 	 * @return
 	 */
-	public TreeObject getTreeObject(Form form, String name) {
+	public TreeObject getTreeObject(TreeObject element, String childName) {
 		// Look for the name in the categories
-		for (TreeObject category : form.getChildren()) {
-			if (category.getName().equals(name)) {
-				return category;
+		for (TreeObject child : element.getChildren()) {
+			if (child.getName().equals(childName)) {
+				return child;
 			}
-			// Look for the name in the category children
-			if (category instanceof Category) {
-				for (TreeObject categoryChild : ((Category) category).getChildren()) {
-					if (categoryChild.getName().equals(name)) {
-						return categoryChild;
-					}
-					// Look for the name in the group children
-					if (categoryChild instanceof Group) {
-						for (TreeObject groupChild : ((Group) categoryChild).getChildren()) {
-							if (groupChild.getName().equals(name)) {
-								return groupChild;
-							}
-						}
-					}
-				}
+
+			TreeObject treeObject = getTreeObject(child, childName);
+			if (treeObject != null) {
+				return treeObject;
 			}
 		}
 		return null;

@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
@@ -46,6 +47,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.drools.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedCategory;
 import com.biit.drools.form.DroolsSubmittedForm;
@@ -86,7 +88,8 @@ public class OperatorsTest extends KidsFormCreator {
 	private static final String BETWEEN_CUSTOM_VARIABLE = "betweenCustomVariable";
 
 	@Test(groups = { "droolsOperators" })
-	public void mathematicalOperatorsTest() {
+	public void mathematicalOperatorsTest()
+			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		try {
 			// Create a new form
 			Form form = createForm();
@@ -137,7 +140,8 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "droolsOperators" })
 	public void minOperatorTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException,
+			DocumentException, IOException, DroolsRuleExecutionException {
 		// Create a new form
 		Form form = createForm();
 		// MIN expression
@@ -168,7 +172,8 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "droolsOperators" })
 	public void maxOperatorTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException,
+			DocumentException, IOException, DroolsRuleExecutionException {
 		// Create a new form
 		Form form = createForm();
 		// MAX expression
@@ -818,12 +823,13 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "droolsOperators" })
-	public void testAndOperator() throws ExpressionInvalidException, InvalidRuleException, IOException,
-			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			BetweenFunctionInvalidException, ElementIsReadOnly {
+	public void testAndOperator()
+			throws ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, BetweenFunctionInvalidException,
+			ElementIsReadOnly, DroolsRuleGenerationException, DroolsRuleExecutionException {
 		// Create a new form
 		Form form = createForm();
 		// Expression one
@@ -874,7 +880,8 @@ public class OperatorsTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, ElementIsReadOnly {
+			BetweenFunctionInvalidException, ElementIsReadOnly, DroolsRuleGenerationException,
+			DroolsRuleExecutionException {
 		// Create a new form
 		Form form = createForm();
 
@@ -923,7 +930,8 @@ public class OperatorsTest extends KidsFormCreator {
 
 	@Test(groups = { "droolsOperators" })
 	public void testNotOperator() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException,
+			DocumentException, IOException, DroolsRuleExecutionException {
 		// Create a new form
 		Form form = createForm();
 		// Expression one (false)
@@ -956,7 +964,8 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "droolsOperators" })
-	public void testNotAndCombinationOperator() {
+	public void testNotAndCombinationOperator()
+			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		try {
 			// Create a new form
 			Form form = createForm();
@@ -1009,7 +1018,8 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "droolsOperators" })
-	public void andOrCombinationTest() {
+	public void andOrCombinationTest()
+			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		try {
 			// Create a new form
 			Form form = createForm();
@@ -1070,7 +1080,8 @@ public class OperatorsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "droolsOperators" })
-	public void andOrBracketsCombinationTest() {
+	public void andOrBracketsCombinationTest()
+			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		try {
 			// Create a new form
 			Form form = createForm();
@@ -1272,7 +1283,8 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	private DroolsForm launchRule(Form form, Rule rule) {
+	private DroolsForm launchRule(Form form, Rule rule)
+			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		// add the rule to the form
 		form.getRules().add(rule);
 		// Create the node rule

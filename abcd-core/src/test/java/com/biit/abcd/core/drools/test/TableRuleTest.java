@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
@@ -40,6 +41,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
+import com.biit.drools.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
@@ -80,7 +82,8 @@ public class TableRuleTest extends KidsFormCreator {
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
+			DroolsRuleGenerationException, DroolsRuleExecutionException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		// Create the table and diagram
@@ -98,7 +101,8 @@ public class TableRuleTest extends KidsFormCreator {
 			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
 			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, ElementIsReadOnly {
+			NullExpressionValueException, BetweenFunctionInvalidException, ElementIsReadOnly,
+			DroolsRuleGenerationException, DroolsRuleExecutionException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		// Create the table and diagram
@@ -119,7 +123,8 @@ public class TableRuleTest extends KidsFormCreator {
 			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
 			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
+			DroolsRuleGenerationException, DroolsRuleExecutionException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		// Create the table and diagram
@@ -134,19 +139,21 @@ public class TableRuleTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "droolsTableRule" })
-	private void testMultipleColumnsTableRule() throws ExpressionInvalidException, InvalidRuleException, IOException,
-			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			BetweenFunctionInvalidException, ElementIsReadOnly {
+	private void testMultipleColumnsTableRule()
+			throws ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, BetweenFunctionInvalidException,
+			ElementIsReadOnly, DroolsRuleGenerationException, DroolsRuleExecutionException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		// Create the table and diagram
 		createCategoryCustomVariableMultiColumnTableRule(form, (Category) form.getChild("/" + CATEGORY_NAME));
 		createDiagram(form);
 		// Create the rules and launch the engine
-		ISubmittedForm droolsForm = createAndRunDroolsRules(form);
+		String droolsRules = createDroolsRules(form);
+		ISubmittedForm droolsForm = runDroolsRules(droolsRules);
 		// Check result
 		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE,
 				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm())
@@ -154,7 +161,7 @@ public class TableRuleTest extends KidsFormCreator {
 
 		// If it contains this string, means that the multiple columns are being
 		// parsed by the engine
-		Assert.assertTrue(getDroolsRules().contains("not( FiredRule( getRuleName()"));
+		Assert.assertTrue(droolsRules.contains("not( FiredRule( getRuleName()"));
 	}
 
 	private void createQuestionAnswerTableRule(Form form)

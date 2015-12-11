@@ -1,12 +1,15 @@
 package com.biit.abcd.core.drools.test;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.dom4j.DocumentException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -18,6 +21,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
+import com.biit.drools.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedCategory;
 import com.biit.drools.form.DroolsSubmittedForm;
@@ -47,7 +51,8 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	@Test(groups = { "droolsExpressions" })
 	public void yearsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly,
+			DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		Form form = initFormAndVariables();
 		// Assign a date(years) to a custom variable
 		ExpressionChain expression = new ExpressionChain("YearsAssignation",
@@ -74,7 +79,8 @@ public class ExpressionsTest extends KidsFormCreator {
 	@Test(groups = { "droolsExpressions" })
 	public void monthsDateExpressionTest()
 			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, ParseException {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, ParseException,
+			DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		Form form = initFormAndVariables();
 		// Assign a date(months) to a custom variable
 		ExpressionChain expression = new ExpressionChain("MonthsAssignation",
@@ -97,7 +103,8 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	@Test(groups = { "droolsExpressions" })
 	public void daysDateExpressionTest() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly,
+			DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		Form form = initFormAndVariables();
 		// Assign a date(days) to a custom variable
 		ExpressionChain expression = new ExpressionChain("DaysAssignation",
@@ -120,7 +127,8 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	@Test(groups = { "droolsExpressions" })
 	public void testDateExpression() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly,
+			DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		Form form = initFormAndVariables();
 		// Assign a date(date) to a custom variable
 		ExpressionChain expression = new ExpressionChain("DateAssignation",
@@ -153,7 +161,8 @@ public class ExpressionsTest extends KidsFormCreator {
 		return form;
 	}
 
-	private DroolsForm launchEngineWithExpression(Form form, ExpressionChain expression) {
+	private DroolsForm launchEngineWithExpression(Form form, ExpressionChain expression)
+			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		// Add the expression to the form
 		form.getExpressionChains().add(expression);
 		// Create the node rule

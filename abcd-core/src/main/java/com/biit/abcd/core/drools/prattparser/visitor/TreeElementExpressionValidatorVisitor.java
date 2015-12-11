@@ -26,10 +26,10 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 	public void visit(AssignExpression assign) throws NotCompatibleTypeException {
 		assign.getRightElement().accept(this);
 
-		ValueType leftType = ExpressionValidator.getValueInsideExpressionChain((ExpressionChain) assign
-				.getLeftExpressionChain());
-		ValueType rightType = ExpressionValidator.getFirstValueInsideExpressionChain(assign.getRightElement()
-				.getExpressionChain());
+		ValueType leftType = ExpressionValidator
+				.getValueInsideExpressionChain((ExpressionChain) assign.getLeftExpressionChain());
+		ValueType rightType = ExpressionValidator
+				.getFirstValueInsideExpressionChain(assign.getRightElement().getExpressionChain());
 		if (leftType != rightType) {
 			throw new NotCompatibleTypeException("Assignation types not compatible", null);
 		}
@@ -57,20 +57,22 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 		// If the expression is a IPlugin, the return of the call can be
 		// different than the parameters passed to the call
 		if (!(call.getFunction().toString().equals("IPLUGIN")) && (call.getLeftElement() instanceof NameExpression)) {
-			ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) call
-					.getLeftElement()).getExpressionChain());
+			ValueType leftType = ExpressionValidator
+					.getValueInsideExpressionChain(((NameExpression) call.getLeftElement()).getExpressionChain());
 			checkCallArgumentsTypes(leftType, call.getArgs());
 		}
 	}
 
-	private void checkCallArgumentsTypes(ValueType leftType, List<ITreeElement> args) throws NotCompatibleTypeException {
+	private void checkCallArgumentsTypes(ValueType leftType, List<ITreeElement> args)
+			throws NotCompatibleTypeException {
 		for (ITreeElement arg : args) {
 			if (arg instanceof NameExpression) {
-				ValueType argumentType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) arg)
-						.getExpressionChain());
+				ValueType argumentType = ExpressionValidator
+						.getValueInsideExpressionChain(((NameExpression) arg).getExpressionChain());
 				if (leftType != argumentType) {
-					throw new NotCompatibleTypeException("Argument types of the call not compatible (" + leftType
-							+ " - " + argumentType + ")", null);
+					throw new NotCompatibleTypeException(
+							"Argument types of the call not compatible (" + leftType + " - " + argumentType + ")",
+							null);
 				}
 			}
 		}
@@ -95,10 +97,10 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 				&& !operator.getOperator().equals(ExpressionTokenType.AND)) {
 			if ((operator.getLeftElement() instanceof NameExpression)
 					&& (operator.getRightElement() instanceof NameExpression)) {
-				ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator
-						.getLeftElement()).getExpressionChain());
-				ValueType rightType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator
-						.getRightElement()).getExpressionChain());
+				ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(
+						((NameExpression) operator.getLeftElement()).getExpressionChain());
+				ValueType rightType = ExpressionValidator.getValueInsideExpressionChain(
+						((NameExpression) operator.getRightElement()).getExpressionChain());
 				if (leftType == rightType) {
 					if (operator.getOperator().equals(ExpressionTokenType.PLUS)
 							|| operator.getOperator().equals(ExpressionTokenType.MINUS)
@@ -107,11 +109,13 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 						// Cannot apply the operators '+', '-', '*','/' to
 						// anything but numbers
 						if (!leftType.equals(ValueType.NUMBER)) {
-							throw new NotCompatibleTypeException("Operator types not compatible", null);
+							throw new NotCompatibleTypeException("Operator types not compatible '"
+									+ operator.getOperator() + "' with '" + leftType + "'.", null);
 						}
 					}
 				} else {
-					throw new NotCompatibleTypeException("Operator types not compatible", null);
+					throw new NotCompatibleTypeException(
+							"Operator types not compatible '" + operator.getOperator() + "'.", null);
 				}
 			}
 		} else {
