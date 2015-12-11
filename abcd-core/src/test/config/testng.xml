@@ -3,19 +3,19 @@
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="droolsExpressions" />
-				<include name="droolsFork" />
-				<include name="droolsGeneric" />
-				<include name="droolsGlobalVariables" />
-				<include name="droolsNestedGroups" />
-				<include name="droolsOperators" />
-				<include name="droolsTableRule" />
-				<include name="droolsPrattParser" />
-				<include name="gson" />
-				<include name="newVersion" />
-				<include name="droolsEngineRules" />
-				<include name="pluginsTest" />
-				<include name="usesOfElement" />
+				<exclude name="droolsExpressions" />
+				<exclude name="droolsFork" />
+				<exclude name="droolsGeneric" />
+				<exclude name="droolsGlobalVariables" />
+				<exclude name="droolsNestedGroups" />
+				<exclude name="droolsOperators" />
+				<exclude name="droolsTableRule" />
+				<exclude name="droolsPrattParser" />
+				<exclude name="gson" />
+				<exclude name="newVersion" />
+				<exclude name="droolsEngineRules" />
+				<exclude name="pluginsTest" />
+				<exclude name="usesOfElement" />
 				<include name="multiSelectAnswer" />
 			</run>
 		</groups>

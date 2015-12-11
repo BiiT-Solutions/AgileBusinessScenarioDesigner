@@ -20,6 +20,7 @@ import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidExcept
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
@@ -61,37 +62,40 @@ public class GlobalVariablesTest extends KidsFormCreator {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
 			NullExpressionValueException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Create the form and the variables
-		initForm();
-		createExpressions();
+		Form form = createForm();
+		createExpressions(form);
 		// Create the rules and launch the engine
-		DroolsForm submittedForm = createAndRunDroolsRules();
+		DroolsForm submittedForm = createAndRunDroolsRules(form);
 
 		// Check if the operation was correct
-		Assert.assertEquals(((DroolsSubmittedForm) submittedForm.getDroolsSubmittedForm()).getVariableValue(GLOBAL_VALUE),
+		Assert.assertEquals(
+				((DroolsSubmittedForm) submittedForm.getDroolsSubmittedForm()).getVariableValue(GLOBAL_VALUE),
 				55.4 / (21.0 / 100.0));
 	}
 
-	private void createExpressions() {
-		CustomVariable auxCustomVariable = new CustomVariable(getForm(), GLOBAL_VALUE, CustomVariableType.NUMBER,
+	private void createExpressions(Form form) {
+		CustomVariable auxCustomVariable = new CustomVariable(form, GLOBAL_VALUE, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 
 		// Mathematical expression
-		ExpressionChain expression = new ExpressionChain("testCalculation", new ExpressionValueCustomVariable(
-				getForm(), auxCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("weight")), new ExpressionOperatorMath(
-						AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-				new ExpressionValueGlobalConstant(getGlobalVariableNumber()), new ExpressionOperatorMath(
-						AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression);
+		ExpressionChain expression = new ExpressionChain("testCalculation",
+				new ExpressionValueCustomVariable(form, auxCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "weight")),
+				new ExpressionOperatorMath(AvailableOperator.DIVISION),
+				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
+				new ExpressionValueGlobalConstant(getGlobalVariableNumber()),
+				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		form.getExpressionChains().add(expression);
 
 		// Creation of a simple diagram to load the table rule
-		getForm().addDiagram(createExpressionsSubdiagram());
+		form.addDiagram(createExpressionsSubdiagram(form));
 	}
 
-	private Diagram createExpressionsSubdiagram() {
+	private Diagram createExpressionsSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("expressionDiagram");
-		for (ExpressionChain expressionChain : getForm().getExpressionChains()) {
+		for (ExpressionChain expressionChain : form.getExpressionChains()) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());

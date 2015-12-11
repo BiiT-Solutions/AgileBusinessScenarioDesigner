@@ -17,9 +17,11 @@ import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
@@ -80,54 +82,55 @@ public class TableRuleTest extends KidsFormCreator {
 			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
 			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
+		Form form = createForm();
 		// Create the table and diagram
-		createQuestionAnswerTableRule();
+		createQuestionAnswerTableRule(form);
 		// Create the rules and launch the engine
-		ISubmittedForm droolsForm = createAndRunDroolsRules();
+		ISubmittedForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
 		Assert.assertEquals(GENDER_MALE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm())
 				.getVariableValue(GENDER_VARIABLE));
 	}
 
 	@Test(groups = { "droolsTableRule" })
-	private void testFormCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
-			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
-			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
-			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			ElementIsReadOnly {
+	private void testFormCustomVariableExpressionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
+		Form form = createForm();
 		// Create the table and diagram
-		createFormCustomVariableAnswerTableRule();
-		createDiagram();
+		createFormCustomVariableAnswerTableRule(form);
+		createDiagram(form);
 		// Create the rules and launch the engine
-		ISubmittedForm droolsForm = createAndRunDroolsRules();
+		ISubmittedForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
-		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
-				.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
+		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE,
+				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm())
+						.getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
 	@Test(groups = { "droolsTableRule" })
-	private void testCategoryCustomVariableExpressionAnswerTableRule() throws FieldTooLongException,
-			NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
-			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
-			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, CategoryDoesNotExistException,
-			BetweenFunctionInvalidException, ElementIsReadOnly {
+	private void testCategoryCustomVariableExpressionAnswerTableRule()
+			throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException,
+			IOException, RuleNotImplementedException, DocumentException, ActionNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
+		Form form = createForm();
 		// Create the table and diagram
-		createCategoryCustomVariableAnswerTableRule();
-		createDiagram();
+		createCategoryCustomVariableAnswerTableRule(form, (Category) form.getChild("/" + CATEGORY_NAME));
+		createDiagram(form);
 		// Create the rules and launch the engine
-		ISubmittedForm droolsForm = createAndRunDroolsRules();
+		ISubmittedForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
-		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
-				.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
+		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE,
+				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm())
+						.getVariableValue(CUSTOM_VARIABLE_RESULT));
 	}
 
 	@Test(groups = { "droolsTableRule" })
@@ -138,25 +141,26 @@ public class TableRuleTest extends KidsFormCreator {
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
 			BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
+		Form form = createForm();
 		// Create the table and diagram
-		createCategoryCustomVariableMultiColumnTableRule();
-		createDiagram();
+		createCategoryCustomVariableMultiColumnTableRule(form, (Category) form.getChild("/" + CATEGORY_NAME));
+		createDiagram(form);
 		// Create the rules and launch the engine
-		ISubmittedForm droolsForm = createAndRunDroolsRules();
+		ISubmittedForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
-		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE, ((DroolsSubmittedForm) ((DroolsForm) droolsForm)
-				.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT));
+		Assert.assertEquals(CUSTOM_VARIABLE_RESULT_VALUE_ONE,
+				((DroolsSubmittedForm) ((DroolsForm) droolsForm).getDroolsSubmittedForm())
+						.getVariableValue(CUSTOM_VARIABLE_RESULT));
 
 		// If it contains this string, means that the multiple columns are being
 		// parsed by the engine
 		Assert.assertTrue(getDroolsRules().contains("not( FiredRule( getRuleName()"));
 	}
 
-	private void createQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException {
+	private void createQuestionAnswerTableRule(Form form)
+			throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
-		CustomVariable genderVariable = new CustomVariable(getForm(), GENDER_VARIABLE, CustomVariableType.STRING,
+		CustomVariable genderVariable = new CustomVariable(form, GENDER_VARIABLE, CustomVariableType.STRING,
 				CustomVariableScope.FORM);
 
 		// Create the tableRule
@@ -164,95 +168,97 @@ public class TableRuleTest extends KidsFormCreator {
 		TableRule tableRule = new TableRule("TestTable");
 		// Question == Answer
 		TableRuleRow ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("gender")));
-		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer("gender", "M"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), genderVariable),
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "gender")));
+		ruleRow.addCondition(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer(form, "gender", "M"))));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, genderVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(GENDER_MALE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("gender")));
-		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer("gender", "F"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), genderVariable),
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "gender")));
+		ruleRow.addCondition(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer(form, "gender", "F"))));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, genderVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(GENDER_FEMALE)));
 		tableRule.getRules().add(ruleRow);
 
 		// Add the table rule
-		getForm().getTableRules().add(tableRule);
+		form.getTableRules().add(tableRule);
 		// Creation of a simple diagram to load the table rule
-		getForm().addDiagram(createSimpleTableDiagram(tableRule));
+		form.addDiagram(createSimpleTableDiagram(tableRule));
 	}
 
-	private void createFormCustomVariableAnswerTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException {
+	private void createFormCustomVariableAnswerTableRule(Form form)
+			throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
 		// Create a simple form custom variable
-		createFormNumberCustomVariableExpression(CUSTOM_VARIABLE);
-		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+		createFormNumberCustomVariableExpression(form, CUSTOM_VARIABLE);
+		CustomVariable customVariableResult = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.STRING, CustomVariableScope.FORM);
 		// Create the tableRule
 		// Only with one conditions colum
 		TableRule tableRule = new TableRule("TestTable");
 		// Question == Answer
 		TableRuleRow ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueCustomVariable(getForm(), getFormNumberCustomVariable()));
+		ruleRow.addCondition(new ExpressionValueCustomVariable(form, getFormNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueNumber(CUSTOM_VARIABLE_NUMBER_VALUE_ONE)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), customVariableResult),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-						CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueCustomVariable(getForm(), getFormNumberCustomVariable()));
+		ruleRow.addCondition(new ExpressionValueCustomVariable(form, getFormNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueNumber(CUSTOM_VARIABLE_NUMBER_VALUE_TWO)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), customVariableResult),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-						CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
 		tableRule.getRules().add(ruleRow);
 		// Add the table rule to the form
-		getForm().getTableRules().add(tableRule);
+		form.getTableRules().add(tableRule);
 		// Create the node with the table rule
 		createTableRuleNode(tableRule);
 	}
 
-	private void createCategoryCustomVariableAnswerTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException {
+	private void createCategoryCustomVariableAnswerTableRule(Form form, Category category)
+			throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
 		// Create a simple form custom variable
-		createCategoryNumberCustomVariableExpression(CUSTOM_VARIABLE);
-		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+		createCategoryNumberCustomVariableExpression(form, category, CUSTOM_VARIABLE);
+		CustomVariable customVariableResult = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.STRING, CustomVariableScope.FORM);
 		// Create the tableRule
 		// Only with one conditions colum
 		TableRule tableRule = new TableRule("TestTable");
 		// Question == Answer
 		TableRuleRow ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueCustomVariable(getCategory(), getCategoryNumberCustomVariable()));
+		ruleRow.addCondition(new ExpressionValueCustomVariable(category, getCategoryNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueNumber(CUSTOM_VARIABLE_NUMBER_VALUE_ONE)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), customVariableResult),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-						CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueCustomVariable(getCategory(), getCategoryNumberCustomVariable()));
+		ruleRow.addCondition(new ExpressionValueCustomVariable(category, getCategoryNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueNumber(CUSTOM_VARIABLE_NUMBER_VALUE_TWO)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), customVariableResult),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-						CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
 		tableRule.getRules().add(ruleRow);
 		// Add the table rule to the form
-		getForm().getTableRules().add(tableRule);
+		form.getTableRules().add(tableRule);
 		// Create the node with the table rule
 		createTableRuleNode(tableRule);
 	}
 
-	private void createCategoryCustomVariableMultiColumnTableRule() {
+	private void createCategoryCustomVariableMultiColumnTableRule(Form form, Category category) {
 		// Create custom variables
-		createFormNumberCustomVariableExpression(CUSTOM_VARIABLE);
-		createCategoryNumberCustomVariableExpression(CUSTOM_VARIABLE);
-		CustomVariable customVariableResult = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+		createFormNumberCustomVariableExpression(form, CUSTOM_VARIABLE);
+		createCategoryNumberCustomVariableExpression(form, category, CUSTOM_VARIABLE);
+		CustomVariable customVariableResult = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.STRING, CustomVariableScope.FORM);
 		// Create the tableRule
 		// We test the combination of multiple columns
@@ -260,25 +266,27 @@ public class TableRuleTest extends KidsFormCreator {
 		TableRule tableRule = new TableRule("TestTable");
 		TableRuleRow ruleRow = new TableRuleRow();
 		// Four columns test
-		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("gender")));
-		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer("gender", "M"))));
-		ruleRow.addCondition(new ExpressionValueCustomVariable(getCategory(), getCategoryNumberCustomVariable()));
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "gender")));
+		ruleRow.addCondition(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer(form, "gender", "M"))));
+		ruleRow.addCondition(new ExpressionValueCustomVariable(category, getCategoryNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS),
 				new ExpressionValueNumber(CUSTOM_VARIABLE_NUMBER_VALUE_ONE)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), customVariableResult),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-						CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		// Two columns test
-		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject("gender")));
-		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer("gender", "F"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getForm(), customVariableResult),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(
-						CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "gender")));
+		ruleRow.addCondition(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer(form, "gender", "F"))));
+		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
 		tableRule.getRules().add(ruleRow);
 		// Add the table rule to the form
-		getForm().getTableRules().add(tableRule);
+		form.getTableRules().add(tableRule);
 		// Create the node with the table rule
 		createTableRuleNode(tableRule);
 	}

@@ -11,6 +11,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
@@ -47,14 +48,15 @@ public class ExpressionsTest extends KidsFormCreator {
 	@Test(groups = { "droolsExpressions" })
 	public void yearsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-		initFormAndVariables();
+		Form form = initFormAndVariables();
 		// Assign a date(years) to a custom variable
-		ExpressionChain expression = new ExpressionChain("YearsAssignation", new ExpressionValueCustomVariable(
-				getForm(), yearsCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.YEARS));
+		ExpressionChain expression = new ExpressionChain("YearsAssignation",
+				new ExpressionValueCustomVariable(form, yearsCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "birthdate"), QuestionDateUnit.YEARS));
 
 		// Launch the expression
-		DroolsForm droolsForm = launchEngineWithExpression(expression);
+		DroolsForm droolsForm = launchEngineWithExpression(form, expression);
 		if (droolsForm != null) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
@@ -70,47 +72,48 @@ public class ExpressionsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "droolsExpressions" })
-	public void monthsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly,
-			ParseException  {
-		initFormAndVariables();
+	public void monthsDateExpressionTest()
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, ParseException {
+		Form form = initFormAndVariables();
 		// Assign a date(months) to a custom variable
-		ExpressionChain expression = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(
-				getTreeObject("Algemeen"), monthsCustomVariable), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(getTreeObject("birthdate"),
-				QuestionDateUnit.MONTHS));
+		ExpressionChain expression = new ExpressionChain("MonthsAssignation",
+				new ExpressionValueCustomVariable(getTreeObject(form, "Algemeen"), monthsCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "birthdate"), QuestionDateUnit.MONTHS));
 		// Launch the expression
-		DroolsForm droolsForm = launchEngineWithExpression(expression);
+		DroolsForm droolsForm = launchEngineWithExpression(form, expression);
 		if (droolsForm != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			// Kid's birthdate in the parsed form
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check months
 			Assert.assertEquals(
-					((DroolsSubmittedCategory) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen"))
-							.getVariableValue(MONTHS), DroolsDateUtils.returnMonthsDistanceFromDate(birthdate));
+					((DroolsSubmittedCategory) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class,
+							"Algemeen")).getVariableValue(MONTHS),
+					DroolsDateUtils.returnMonthsDistanceFromDate(birthdate));
 		}
 	}
 
 	@Test(groups = { "droolsExpressions" })
 	public void daysDateExpressionTest() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-		initFormAndVariables();
+		Form form = initFormAndVariables();
 		// Assign a date(days) to a custom variable
-		ExpressionChain expression = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(
-				getTreeObject("voeding"), daysCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueTreeObjectReference(
-						getTreeObject("birthdate"), QuestionDateUnit.DAYS));
+		ExpressionChain expression = new ExpressionChain("DaysAssignation",
+				new ExpressionValueCustomVariable(getTreeObject(form, "voeding"), daysCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "birthdate"), QuestionDateUnit.DAYS));
 		// Launch the expression
-		DroolsForm droolsForm = launchEngineWithExpression(expression);
+		DroolsForm droolsForm = launchEngineWithExpression(form, expression);
 		if (droolsForm != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			// Kid's birthdate in the parsed form
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check days
-			Assert.assertEquals(
-					((DroolsSubmittedGroup) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
-							.getChild(ISubmittedGroup.class, "voeding")).getVariableValue(DAYS),
+			Assert.assertEquals(((DroolsSubmittedGroup) droolsForm.getDroolsSubmittedForm()
+					.getChild(ISubmittedCategory.class, "Lifestyle").getChild(ISubmittedGroup.class, "voeding"))
+							.getVariableValue(DAYS),
 					DroolsDateUtils.returnDaysDistanceFromDate(birthdate));
 		}
 	}
@@ -118,46 +121,47 @@ public class ExpressionsTest extends KidsFormCreator {
 	@Test(groups = { "droolsExpressions" })
 	public void testDateExpression() throws ParseException, FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-		initFormAndVariables();
+		Form form = initFormAndVariables();
 		// Assign a date(date) to a custom variable
-		ExpressionChain expression = new ExpressionChain("DateAssignation", new ExpressionValueCustomVariable(
-				getTreeObject("fruit"), dateCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueTreeObjectReference(getTreeObject("birthdate"), QuestionDateUnit.DATE));
+		ExpressionChain expression = new ExpressionChain("DateAssignation",
+				new ExpressionValueCustomVariable(getTreeObject(form, "fruit"), dateCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "birthdate"), QuestionDateUnit.DATE));
 		// Launch the expression
-		DroolsForm droolsForm = launchEngineWithExpression(expression);
+		DroolsForm droolsForm = launchEngineWithExpression(form, expression);
 		if (droolsForm != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			// Kid's birthdate in the parsed form
 			Date birthdate = sdf.parse("2007-09-01");
 			// Check date
-			Assert.assertEquals(
-					((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Lifestyle")
-							.getChild(ISubmittedGroup.class, "voeding").getChild(ISubmittedQuestion.class, "fruit"))
-							.getVariableValue(DATE), birthdate);
+			Assert.assertEquals(((DroolsSubmittedQuestion) droolsForm.getDroolsSubmittedForm()
+					.getChild(ISubmittedCategory.class, "Lifestyle").getChild(ISubmittedGroup.class, "voeding")
+					.getChild(ISubmittedQuestion.class, "fruit")).getVariableValue(DATE), birthdate);
 		}
 	}
 
-	private void initFormAndVariables() throws FieldTooLongException, CharacterNotAllowedException,
+	private Form initFormAndVariables() throws FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
+		Form form = createForm();
 		// Create custom variables
-		setYearsCustomVariable(new CustomVariable(getForm(), YEARS, CustomVariableType.NUMBER, CustomVariableScope.FORM));
-		setMonthsCustomVariable(new CustomVariable(getForm(), MONTHS, CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY));
-		setDaysCustomVariable(new CustomVariable(getForm(), DAYS, CustomVariableType.NUMBER, CustomVariableScope.GROUP));
-		setDateCustomVariable(new CustomVariable(getForm(), DATE, CustomVariableType.DATE, CustomVariableScope.QUESTION));
+		setYearsCustomVariable(new CustomVariable(form, YEARS, CustomVariableType.NUMBER, CustomVariableScope.FORM));
+		setMonthsCustomVariable(
+				new CustomVariable(form, MONTHS, CustomVariableType.NUMBER, CustomVariableScope.CATEGORY));
+		setDaysCustomVariable(new CustomVariable(form, DAYS, CustomVariableType.NUMBER, CustomVariableScope.GROUP));
+		setDateCustomVariable(new CustomVariable(form, DATE, CustomVariableType.DATE, CustomVariableScope.QUESTION));
+		return form;
 	}
 
-	private DroolsForm launchEngineWithExpression(ExpressionChain expression) {
+	private DroolsForm launchEngineWithExpression(Form form, ExpressionChain expression) {
 		// Add the expression to the form
-		getForm().getExpressionChains().add(expression);
+		form.getExpressionChains().add(expression);
 		// Create the node rule
 		createExpressionNode(expression);
 		// Create the diagram
-		createDiagram();
+		createDiagram(form);
 		// Create the rules and launch the engine
-		return createAndRunDroolsRules();
+		return createAndRunDroolsRules(form);
 	}
 
 	public CustomVariable getYearsCustomVariable() {

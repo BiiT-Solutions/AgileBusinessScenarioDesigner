@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -31,7 +32,8 @@ import com.biit.plugins.interfaces.IPlugin;
 import com.biit.utils.configuration.IPropertiesSource;
 
 /**
- * For executing this test correctly the plugins must be placed in the specified path by the settings.conf file
+ * For executing this test correctly the plugins must be placed in the specified
+ * path by the settings.conf file
  * 
  */
 public class PluginsTest extends KidsFormCreator {
@@ -69,30 +71,30 @@ public class PluginsTest extends KidsFormCreator {
 	public void helloWorldPluginOneCallTest() {
 		try {
 			// Calling the hello world plugin with only one call
-			Assert.assertEquals(
-					PluginController.getInstance().executePluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME,
-							HELLO_WORLD_PLUGIN_METHOD), HELLO_WORLD_PLUGIN_RETURN);
+			Assert.assertEquals(PluginController.getInstance().executePluginMethod(PLUGIN_INTERFACE,
+					HELLO_WORLD_PLUGIN_NAME, HELLO_WORLD_PLUGIN_METHOD), HELLO_WORLD_PLUGIN_RETURN);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
 	@Test(groups = { "pluginsTest" })
-	public void helloWorldPluginDroolsCallWithoutParametersTest() throws FieldTooLongException,
-			CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
-			NotValidTypeInVariableData, ElementIsReadOnly {
+	public void helloWorldPluginDroolsCallWithoutParametersTest()
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
-		CustomVariable customvariableToAssign = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+		Form form = createForm();
+		CustomVariable customvariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(
-				getForm(), customvariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+		ExpressionChain expression = new ExpressionChain("helloWorldExpression",
+				new ExpressionValueCustomVariable(form, customvariableToAssign),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionPluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME, HELLO_WORLD_PLUGIN_METHOD),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression);
-		getForm().addDiagram(createExpressionsDiagram());
+		form.getExpressionChains().add(expression);
+		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
@@ -100,22 +102,23 @@ public class PluginsTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "pluginsTest" })
-	public void helloWorldPluginDroolsCallWithParametersTest() throws FieldTooLongException,
-			CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
-			NotValidTypeInVariableData, ElementIsReadOnly {
+	public void helloWorldPluginDroolsCallWithParametersTest()
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
-		CustomVariable customVariableToAssign = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+		Form form = createForm();
+		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.NUMBER, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(
-				getForm(), customVariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+		ExpressionChain expression = new ExpressionChain("helloWorldExpression",
+				new ExpressionValueCustomVariable(form, customVariableToAssign),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionPluginMethod(PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD),
-				new ExpressionValueNumber(4.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
-						4.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression);
-		getForm().addDiagram(createExpressionsDiagram());
+				new ExpressionValueNumber(4.), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueNumber(4.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		form.getExpressionChains().add(expression);
+		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
@@ -126,18 +129,19 @@ public class PluginsTest extends KidsFormCreator {
 	public void liferayKnowledgeBasePlugin() throws FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
-		CustomVariable customVariableToAssign = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+		Form form = createForm();
+		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("liferayExpression", new ExpressionValueCustomVariable(
-				getForm(), customVariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+		ExpressionChain expression = new ExpressionChain("liferayExpression",
+				new ExpressionValueCustomVariable(form, customVariableToAssign),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionPluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME, LIFERAY_PLUGIN_METHOD),
-				new ExpressionValueNumber(LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression);
-		getForm().addDiagram(createExpressionsDiagram());
+				new ExpressionValueNumber(LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		form.getExpressionChains().add(expression);
+		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
@@ -148,18 +152,19 @@ public class PluginsTest extends KidsFormCreator {
 	public void liferayKnowledgeBasePluginBySettings() throws FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		// Restart the form to avoid test cross references
-		initForm();
-		CustomVariable customVariableToAssign = new CustomVariable(getForm(), CUSTOM_VARIABLE_RESULT,
+		Form form = createForm();
+		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
 				CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("liferayExpression", new ExpressionValueCustomVariable(
-				getForm(), customVariableToAssign), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+		ExpressionChain expression = new ExpressionChain("liferayExpression",
+				new ExpressionValueCustomVariable(form, customVariableToAssign),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionPluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME, LIFERAY_PLUGIN_METHOD_BY_PROPERTY),
 				new ExpressionValueString(LIFERAY_ARTICLE_PROPERTY),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		getForm().getExpressionChains().add(expression);
-		getForm().addDiagram(createExpressionsDiagram());
+		form.getExpressionChains().add(expression);
+		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules();
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
 		Assert.assertEquals(
 				((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT),
@@ -168,15 +173,16 @@ public class PluginsTest extends KidsFormCreator {
 
 	@Test(groups = { "pluginsTest" })
 	@SuppressWarnings("unchecked")
-	public void liferayKnowledgeBasePluginConfigurationFoundInJarFolder() throws FieldTooLongException,
-			CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
-			NotValidTypeInVariableData, ElementIsReadOnly {
+	public void liferayKnowledgeBasePluginConfigurationFoundInJarFolder()
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
 		List<IPropertiesSource> propertiesFiles = (List<IPropertiesSource>) PluginController.getInstance()
 				.executePluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME,
 						LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES);
 		boolean existConfigFile = false;
 		for (IPropertiesSource propertyFile : propertiesFiles) {
-			// The config file must have the version in the name. If plugin version is changed, the config file must be
+			// The config file must have the version in the name. If plugin
+			// version is changed, the config file must be
 			// changed.
 			if (propertyFile.toString().contains(LIFERAY_CONFIG_FILE)) {
 				existConfigFile = true;

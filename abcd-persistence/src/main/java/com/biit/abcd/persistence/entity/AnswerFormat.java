@@ -6,6 +6,8 @@ package com.biit.abcd.persistence.entity;
 public enum AnswerFormat {
 
 	TEXT,
+	
+	MULTI_TEXT,
 
 	NUMBER,
 

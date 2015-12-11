@@ -65,19 +65,17 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class KidsFormCreator {
 
 	private static final String APP = "Application1";
-	private static final String CATEGORY_NAME = "Algemeen";
-	private static final String FORM_NAME = "KidsScreen";
+	public static final String CATEGORY_NAME = "Algemeen";
+	public static final String FORM_NAME = "KidsScreen";
 	private static final String FORM_VERSION = "1";
+
+	public static final String GROUP_NAME = "voeding";
 
 	private CustomVariable formNumberCustomVariable = null;
 	private CustomVariable formTextCustomVariable = null;
 	private CustomVariable categoryNumberCustomVariable = null;
 	private CustomVariable groupNumberCustomVariable = null;
 	private CustomVariable questionNumberCustomVariable = null;
-	private Form form = null;
-	private Category category = null;
-	private Group group = null;
-	private Question question = null;
 
 	private static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -93,11 +91,11 @@ public class KidsFormCreator {
 
 	private String droolsRulesString = null;
 
-	public DroolsForm createAndRunDroolsRules() {
+	public DroolsForm createAndRunDroolsRules(Form form) {
 		// Generate the drools rules.
 		try {
 			FormToDroolsExporter formDrools = new FormToDroolsExporter();
-			DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(getForm(), getGlobalVariables());
+			DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(form, getGlobalVariables());
 			readStaticSubmittedForm();
 			// Test the rules with the submitted form and returns a DroolsForm
 			DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
@@ -120,13 +118,14 @@ public class KidsFormCreator {
 	 * 
 	 * @param customVariableName
 	 */
-	protected void createCategoryNumberCustomVariableExpression(String customVariableName) {
-		categoryNumberCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.NUMBER,
+	protected void createCategoryNumberCustomVariableExpression(Form form, Category category,
+			String customVariableName) {
+		categoryNumberCustomVariable = new CustomVariable(form, customVariableName, CustomVariableType.NUMBER,
 				CustomVariableScope.CATEGORY);
-		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
-				getCategory(), categoryNumberCustomVariable),
+		ExpressionChain expression = new ExpressionChain(customVariableName,
+				new ExpressionValueCustomVariable(category, categoryNumberCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.));
-		getForm().getExpressionChains().add(expression);
+		form.getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
 
@@ -135,13 +134,13 @@ public class KidsFormCreator {
 	 * 
 	 * @param customVariableName
 	 */
-	protected void createGroupNumberCustomVariableExpression(String customVariableName) {
-		groupNumberCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.NUMBER,
+	protected void createGroupNumberCustomVariableExpression(Form form, Group group, String customVariableName) {
+		groupNumberCustomVariable = new CustomVariable(form, customVariableName, CustomVariableType.NUMBER,
 				CustomVariableScope.GROUP);
-		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
-				getGroup(), groupNumberCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(10.));
-		getForm().getExpressionChains().add(expression);
+		ExpressionChain expression = new ExpressionChain(customVariableName,
+				new ExpressionValueCustomVariable(group, groupNumberCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.));
+		form.getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
 
@@ -150,13 +149,14 @@ public class KidsFormCreator {
 	 * 
 	 * @param customVariableName
 	 */
-	protected void createQuestionNumberCustomVariableExpression(String customVariableName) {
-		questionNumberCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.NUMBER,
+	protected void createQuestionNumberCustomVariableExpression(Form form, Question question,
+			String customVariableName) {
+		questionNumberCustomVariable = new CustomVariable(form, customVariableName, CustomVariableType.NUMBER,
 				CustomVariableScope.QUESTION);
-		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
-				getQuestion(), questionNumberCustomVariable),
+		ExpressionChain expression = new ExpressionChain(customVariableName,
+				new ExpressionValueCustomVariable(question, questionNumberCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.));
-		getForm().getExpressionChains().add(expression);
+		form.getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
 
@@ -164,7 +164,7 @@ public class KidsFormCreator {
 	 * Creates a diagram based in the elements of the arra diagramElements
 	 * 
 	 */
-	protected void createDiagram() {
+	protected void createDiagram(Form form) {
 		Diagram mainDiagram = new Diagram("main");
 
 		// Create the nodes of the diagram
@@ -206,7 +206,7 @@ public class KidsFormCreator {
 			mainDiagram.addDiagramObject(lastNode_End);
 		}
 
-		getForm().addDiagram(mainDiagram);
+		form.addDiagram(mainDiagram);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class KidsFormCreator {
 		diagramElements.add(diagramRule);
 	}
 
-	protected Diagram createExpressionsDiagram() {
+	protected Diagram createExpressionsDiagram(Form form) {
 		Diagram mainDiagram = new Diagram("main");
 
 		DiagramSource diagramStartNode = new DiagramSource();
@@ -239,7 +239,7 @@ public class KidsFormCreator {
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
 		DiagramChild subDiagramExpressionNode = new DiagramChild();
-		subDiagramExpressionNode.setDiagram(createExpressionsSubdiagram());
+		subDiagramExpressionNode.setDiagram(createExpressionsSubdiagram(form));
 		subDiagramExpressionNode.setJointjsId(IdGenerator.createId());
 		subDiagramExpressionNode.setType(DiagramObjectType.DIAGRAM_CHILD);
 		Node nodeTable = new Node(subDiagramExpressionNode.getJointjsId());
@@ -265,9 +265,9 @@ public class KidsFormCreator {
 		return mainDiagram;
 	}
 
-	private Diagram createExpressionsSubdiagram() {
+	private Diagram createExpressionsSubdiagram(Form form) {
 		Diagram subDiagram = new Diagram("expressionDiagram");
-		for (ExpressionChain expressionChain : getForm().getExpressionChains()) {
+		for (ExpressionChain expressionChain : form.getExpressionChains()) {
 
 			DiagramSource diagramSource = new DiagramSource();
 			diagramSource.setJointjsId(IdGenerator.createId());
@@ -304,26 +304,26 @@ public class KidsFormCreator {
 	/**
 	 * Creates a custom variable and assigns a value of 10 to it
 	 */
-	protected void createFormNumberCustomVariableExpression(String customVariableName) {
-		formNumberCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.NUMBER,
+	protected void createFormNumberCustomVariableExpression(Form form, String customVariableName) {
+		formNumberCustomVariable = new CustomVariable(form, customVariableName, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
-				getForm(), formNumberCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(10.));
-		getForm().getExpressionChains().add(expression);
+		ExpressionChain expression = new ExpressionChain(customVariableName,
+				new ExpressionValueCustomVariable(form, formNumberCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(10.));
+		form.getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
 
 	/**
 	 * Creates a custom variable and assigns a value of "test"
 	 */
-	protected void createFormTextCustomVariableExpression(String customVariableName) {
-		formTextCustomVariable = new CustomVariable(getForm(), customVariableName, CustomVariableType.STRING,
+	protected void createFormTextCustomVariableExpression(Form form, String customVariableName) {
+		formTextCustomVariable = new CustomVariable(form, customVariableName, CustomVariableType.STRING,
 				CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain(customVariableName, new ExpressionValueCustomVariable(
-				getForm(), formTextCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueString("test"));
-		getForm().getExpressionChains().add(expression);
+		ExpressionChain expression = new ExpressionChain(customVariableName,
+				new ExpressionValueCustomVariable(form, formTextCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString("test"));
+		form.getExpressionChains().add(expression);
 		createExpressionNode(expression);
 	}
 
@@ -373,8 +373,8 @@ public class KidsFormCreator {
 		diagramElements.add(diagramTable);
 	}
 
-	public TreeObject getAnswer(String QuestionName, String answerName) {
-		TreeObject question = getTreeObject(QuestionName);
+	public TreeObject getAnswer(Form form, String questionName, String answerName) {
+		TreeObject question = getTreeObject(form, questionName);
 		// Look for the name in the question children
 		if (question instanceof Question) {
 			for (TreeObject questionChild : ((Question) question).getChildren()) {
@@ -384,10 +384,6 @@ public class KidsFormCreator {
 			}
 		}
 		return null;
-	}
-
-	public Category getCategory() {
-		return category;
 	}
 
 	public CustomVariable getCategoryNumberCustomVariable() {
@@ -406,40 +402,24 @@ public class KidsFormCreator {
 		return formTextCustomVariable;
 	}
 
-	public ExpressionValueCustomVariable getFormNumberExpressionValueCustomVariable() {
-		return new ExpressionValueCustomVariable(getForm(), getFormNumberCustomVariable());
+	public ExpressionValueCustomVariable getFormNumberExpressionValueCustomVariable(Form form) {
+		return new ExpressionValueCustomVariable(form, getFormNumberCustomVariable());
 	}
 
-	public ExpressionValueCustomVariable getFormTextExpressionValueCustomVariable() {
-		return new ExpressionValueCustomVariable(getForm(), getFormTextCustomVariable());
+	public ExpressionValueCustomVariable getFormTextExpressionValueCustomVariable(Form form) {
+		return new ExpressionValueCustomVariable(form, getFormTextCustomVariable());
 	}
 
-	public ExpressionValueCustomVariable getCategoryExpressionValueCustomVariable() {
-		return new ExpressionValueCustomVariable(getCategory(), getCategoryNumberCustomVariable());
+	public ExpressionValueCustomVariable getCategoryExpressionValueCustomVariable(Form form) {
+		return new ExpressionValueCustomVariable(form.getChild("/" + CATEGORY_NAME), getCategoryNumberCustomVariable());
 	}
 
-	public ExpressionValueCustomVariable getGroupExpressionValueCustomVariable() {
-		return new ExpressionValueCustomVariable(getGroup(), getGroupNumberCustomVariable());
+	public ExpressionValueCustomVariable getGroupExpressionValueCustomVariable(Group group) {
+		return new ExpressionValueCustomVariable(group, getGroupNumberCustomVariable());
 	}
 
-	public ExpressionValueCustomVariable getQuestionExpressionValueCustomVariable() {
-		return new ExpressionValueCustomVariable(getQuestion(), getQuestionNumberCustomVariable());
-	}
-
-	public Form getForm() {
-		return form;
-	}
-	
-	protected void setForm(Form form) {
-		this.form = form;
-	}
-
-	public Group getGroup() {
-		return group;
-	}
-
-	public Question getQuestion() {
-		return question;
+	public ExpressionValueCustomVariable getQuestionExpressionValueCustomVariable(Question question) {
+		return new ExpressionValueCustomVariable(question, getQuestionNumberCustomVariable());
 	}
 
 	public CustomVariable getFormNumberCustomVariable() {
@@ -484,9 +464,9 @@ public class KidsFormCreator {
 	 * @param name
 	 * @return
 	 */
-	public TreeObject getTreeObject(String name) {
+	public TreeObject getTreeObject(Form form, String name) {
 		// Look for the name in the categories
-		for (TreeObject category : getForm().getChildren()) {
+		for (TreeObject category : form.getChildren()) {
 			if (category.getName().equals(name)) {
 				return category;
 			}
@@ -510,12 +490,12 @@ public class KidsFormCreator {
 		return null;
 	}
 
-	public void initForm() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+	public Form createForm() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-		form = new Form(FORM_NAME);
+		Form form = new Form(FORM_NAME);
 		form.setVersion(Integer.parseInt(FORM_VERSION));
 
-		category = new Category(CATEGORY_NAME);
+		Category category = new Category(CATEGORY_NAME);
 		form.addChild(category);
 
 		Question name = new Question("name");
@@ -570,7 +550,7 @@ public class KidsFormCreator {
 		Category lifestyle = new Category("Lifestyle");
 		form.addChild(lifestyle);
 
-		group = new Group("voeding");
+		Group group = new Group(GROUP_NAME);
 		lifestyle.addChild(group);
 
 		Question breakfast = new Question("breakfast");
@@ -587,7 +567,7 @@ public class KidsFormCreator {
 		breakfast.addChild(breakfastE);
 		group.addChild(breakfast);
 
-		question = new Question("fruit");
+		Question question = new Question("fruit");
 		Answer fruitA = new Answer("a");
 		Answer fruitB = new Answer("b");
 		Answer fruitC = new Answer("c");
@@ -658,6 +638,8 @@ public class KidsFormCreator {
 
 		// Init the array of elements to create the diagram
 		diagramElements = new ArrayList<>();
+
+		return form;
 	}
 
 	@Test(groups = { "orbeon" })
@@ -669,10 +651,6 @@ public class KidsFormCreator {
 		orbeonImporter.readXml(submittedOrbeonForm, submittedForm);
 		Assert.assertNotNull(submittedForm);
 		Assert.assertFalse(submittedForm.getChildren().isEmpty());
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
 	}
 
 	public void setCategoryNumberCustomVariable(CustomVariable categoryNumberCustomVariable) {

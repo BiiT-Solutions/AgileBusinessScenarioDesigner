@@ -64,7 +64,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 
 	private static final String FORM_NAME = "MultiSelectAnswer";
 	private static final Integer FORM_VERSION = 1;
-	private static final String CATEGORY_NAME = "Category1";
+	private static final String CATEGORY_NAME = "category1";
 	private static final String QUESTION_NAME = "question1";
 	private static final String ANSWER1_NAME = "answer1";
 	private static final String ANSWER2_NAME = "answer2";
@@ -72,62 +72,14 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 	private static final String CATEGORY_VARIABLE_NAME = "score";
 	private final static Double MULTI_SELECT_ANSWER = 3.0;
 	protected Form testForm = null;
-	private Category category = null;
-	private Question question = null;
-	private Answer answer1 = null;
-	private Answer answer2 = null;
-	private Answer answer3 = null;
 
 	@Override
-	public Question getQuestion() {
-		return question;
-	}
-
-	@Override
-	public Category getCategory() {
-		return category;
-	}
-
-	@Override
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	private void setQuestion(Question question) {
-		this.question = question;
-	}
-
-	private Answer getAnswer1() {
-		return answer1;
-	}
-
-	private void setAnswer1(Answer answer1) {
-		this.answer1 = answer1;
-	}
-
-	private Answer getAnswer2() {
-		return answer2;
-	}
-
-	private void setAnswer2(Answer answer2) {
-		this.answer2 = answer2;
-	}
-
-	private Answer getAnswer3() {
-		return answer3;
-	}
-
-	private void setAnswer3(Answer answer3) {
-		this.answer3 = answer3;
-	}
-
-	private void createForm() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
-		setForm(new Form(FORM_NAME));
-		getForm().setVersion(FORM_VERSION);
-
+	public Form createForm()
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
+		Form form = new Form(FORM_NAME);
+		form.setVersion(FORM_VERSION);
 		Category category = new Category(CATEGORY_NAME);
-		getForm().addChild(category);
-		setCategory(category);
+		form.addChild(category);
 
 		Question question = new Question(QUESTION_NAME);
 		question.setAnswerType(AnswerType.MULTI_CHECKBOX);
@@ -140,40 +92,79 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		question.addChild(answer2);
 		question.addChild(answer3);
 
-		setQuestion(question);
-		setAnswer1(answer1);
-		setAnswer2(answer2);
-		setAnswer3(answer3);
+		return form;
+	}
+
+	private Form createFormOnlyOneAnswer()
+			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
+		Form form = new Form(FORM_NAME);
+		form.setVersion(FORM_VERSION);
+		Category category = new Category(CATEGORY_NAME);
+		form.addChild(category);
+
+		Question question = new Question(QUESTION_NAME);
+		question.setAnswerType(AnswerType.MULTI_CHECKBOX);
+		category.addChild(question);
+
+		Answer answer1 = new Answer(ANSWER1_NAME);
+		question.addChild(answer1);
+
+		return form;
 	}
 
 	@Test(groups = { "multiSelectAnswer" })
-	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
-			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
-			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
+	private void testQuestionOneAnswerTableRule() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Create a simple form
-		createForm();
+		Form form = createFormOnlyOneAnswer();
 		// Create the table and diagram
-		createQuestionAnswerTableRule();
+		createQuestionAnswerTableRule(form);
 		// Create the rules and launch the engine
-		ISubmittedForm submittedForm = createAndRunDroolsRules();
+		ISubmittedForm submittedForm = createAndRunDroolsRules(form);
 		// Check result
-		if (submittedForm != null) {
-			Assert.assertEquals(MULTI_SELECT_ANSWER, ((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
-					.getChild(ISubmittedCategory.class, "Category1")).getVariableValue(CATEGORY_VARIABLE_NAME));
-		} else {
-			Assert.fail();
-		}
+		Assert.assertNotNull(submittedForm);
+		Assert.assertEquals(1,
+				((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
+						.getChild(ISubmittedCategory.class, "Category1")).getVariableValue(CATEGORY_VARIABLE_NAME));
 	}
 
-	private void createQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
+	@Test(groups = { "multiSelectAnswer" })
+	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
+		// Create a simple form
+		Form form = createForm();
+		// Create the table and diagram
+		createQuestionAnswerTableRule(form);
+		// Create the rules and launch the engine
+		ISubmittedForm submittedForm = createAndRunDroolsRules(form);
+		// Check result
+		Assert.assertNotNull(submittedForm);
+		Assert.assertEquals(MULTI_SELECT_ANSWER,
+				((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
+						.getChild(ISubmittedCategory.class, "Category1")).getVariableValue(CATEGORY_VARIABLE_NAME));
+	}
 
-		CustomVariable categoryVariable = new CustomVariable(getForm(), CATEGORY_VARIABLE_NAME, CustomVariableType.NUMBER, CustomVariableScope.CATEGORY, "0.0");
+	private void createQuestionAnswerTableRule(Form form)
+			throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
-		ExpressionChain commonAction = new ExpressionChain(new ExpressionValueCustomVariable(getCategory(), categoryVariable), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(getCategory(), categoryVariable), new ExpressionOperatorMath(
-				AvailableOperator.PLUS), new ExpressionValueNumber(1.0));
+		CustomVariable categoryVariable = new CustomVariable(form, CATEGORY_VARIABLE_NAME, CustomVariableType.NUMBER,
+				CustomVariableScope.CATEGORY, "0.0");
+
+		ExpressionChain commonAction = new ExpressionChain(
+				new ExpressionValueCustomVariable((Category) getTreeObject(form, CATEGORY_NAME), categoryVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionValueCustomVariable((Category) getTreeObject(form, CATEGORY_NAME), categoryVariable),
+				new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionValueNumber(1.0));
 
 		// Create the tableRule
 		// Only with one conditions column
@@ -181,27 +172,30 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		// Question == Answer
 		TableRuleRow ruleRow = new TableRuleRow();
 
-		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getQuestion()));
-		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer1())));
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
+		ruleRow.addCondition(new ExpressionChain(
+				new ExpressionValueTreeObjectReference((Category) getTreeObject(form, ANSWER1_NAME))));
 		ruleRow.setAction(commonAction);
 		tableRule.getRules().add(ruleRow);
 
 		ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getQuestion()));
-		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer2())));
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
+		ruleRow.addCondition(new ExpressionChain(
+				new ExpressionValueTreeObjectReference((Category) getTreeObject(form, ANSWER2_NAME))));
 		ruleRow.setAction(commonAction);
 		tableRule.getRules().add(ruleRow);
 
 		ruleRow = new TableRuleRow();
-		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getQuestion()));
-		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer3())));
+		ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
+		ruleRow.addCondition(new ExpressionChain(
+				new ExpressionValueTreeObjectReference((Category) getTreeObject(form, ANSWER3_NAME))));
 		ruleRow.setAction(commonAction);
 		tableRule.getRules().add(ruleRow);
 
 		// Add the table rule
-		getForm().getTableRules().add(tableRule);
+		form.getTableRules().add(tableRule);
 		// Creation of a simple diagram to load the table rule
-		getForm().addDiagram(createSimpleTableDiagram(tableRule));
+		form.addDiagram(createSimpleTableDiagram(tableRule));
 	}
 
 	private Diagram createSimpleTableDiagram(TableRule tableRule) {

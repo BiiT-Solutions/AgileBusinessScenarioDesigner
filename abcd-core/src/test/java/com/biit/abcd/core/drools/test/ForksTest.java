@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
@@ -40,13 +41,14 @@ public class ForksTest extends KidsFormCreator {
 	public void simpleForkTest() {
 		try {
 			// Restart the form to avoid test cross references
-			initForm();
+			Form form = createForm();
 			// Create the table and form diagram
-			getForm().addDiagram(createForkWithThreeOutputsDiagram());
+			form.addDiagram(createForkWithThreeOutputsDiagram(form));
 			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
+			DroolsForm droolsForm = createAndRunDroolsRules(form);
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2),
+					3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -56,13 +58,14 @@ public class ForksTest extends KidsFormCreator {
 	public void nestedForksTest() {
 		try {
 			// Restart the form to avoid test cross references
-			initForm();
+			Form form = createForm();
 			// Create the table and form diagram
-			getForm().addDiagram(createNestedForksDiagram());
+			form.addDiagram(createNestedForksDiagram(form));
 			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
+			DroolsForm droolsForm = createAndRunDroolsRules(form);
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2),
+					3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -73,13 +76,14 @@ public class ForksTest extends KidsFormCreator {
 	public void nestedForksWithOrConditionsTest() {
 		try {
 			// Restart the form to avoid test cross references
-			initForm();
+			Form form = createForm();
 			// Create the table and form diagram
-			getForm().addDiagram(createNestedForksWithOrConditionsDiagram());
+			form.addDiagram(createNestedForksWithOrConditionsDiagram(form));
 			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
+			DroolsForm droolsForm = createAndRunDroolsRules(form);
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 3.78);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2),
+					3.78);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
@@ -89,20 +93,21 @@ public class ForksTest extends KidsFormCreator {
 	public void forkWithMultipleConditionsTest() {
 		try {
 			// Restart the form to avoid test cross references
-			initForm();
+			Form form = createForm();
 			// Create the table and form diagram
-			getForm().addDiagram(createMultipleConditionsFork());
+			form.addDiagram(createMultipleConditionsFork(form));
 			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules();
+			DroolsForm droolsForm = createAndRunDroolsRules(form);
 			// Check Fork assignation
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2), 4.75);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(END2),
+					4.75);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
 		}
 	}
 
-	private Diagram createForkWithThreeOutputsDiagram() {
-		CustomVariable end2CustomVariable = new CustomVariable(getForm(), END2, CustomVariableType.NUMBER,
+	private Diagram createForkWithThreeOutputsDiagram(Form form) {
+		CustomVariable end2CustomVariable = new CustomVariable(form, END2, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 
 		Diagram mainDiagram = new Diagram("main");
@@ -115,31 +120,31 @@ public class ForksTest extends KidsFormCreator {
 		DiagramFork diagramForkNode = new DiagramFork();
 		diagramForkNode.setJointjsId(IdGenerator.createId());
 		diagramForkNode.setType(DiagramObjectType.FORK);
-		diagramForkNode.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetables")));
+		diagramForkNode.setReference(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")));
 		Node nodeSecondFork = new Node(diagramForkNode.getJointjsId());
 
 		DiagramSink firstEndNode = new DiagramSink();
 		firstEndNode.setJointjsId(IdGenerator.createId());
 		firstEndNode.setType(DiagramObjectType.SINK);
-		firstEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(7.5)));
+		firstEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.5)));
 		Node secondNodeSink = new Node(firstEndNode.getJointjsId());
 
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
-		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(3.78)));
+		secondEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(3.78)));
 		Node thirdNodeSink = new Node(secondEndNode.getJointjsId());
 
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
-		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(4.75)));
+		thirdEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(4.75)));
 		Node fourthNodeSink = new Node(thirdEndNode.getJointjsId());
 
 		DiagramLink startFork = new DiagramLink(nodeSource, nodeSecondFork);
@@ -149,20 +154,22 @@ public class ForksTest extends KidsFormCreator {
 		DiagramLink forkFirstEnd = new DiagramLink(nodeSecondFork, secondNodeSink);
 		forkFirstEnd.setJointjsId(IdGenerator.createId());
 		forkFirstEnd.setType(DiagramObjectType.LINK);
-		forkFirstEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables")), new ExpressionValueTreeObjectReference(getAnswer("vegetables", "b"))));
+		forkFirstEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")),
+						new ExpressionValueTreeObjectReference(getAnswer(form, "vegetables", "b"))));
 
 		DiagramLink forkSecondEnd = new DiagramLink(nodeSecondFork, thirdNodeSink);
 		forkSecondEnd.setJointjsId(IdGenerator.createId());
 		forkSecondEnd.setType(DiagramObjectType.LINK);
-		forkSecondEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables"))));
+		forkSecondEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables"))));
 
 		DiagramLink forkThirdEnd = new DiagramLink(nodeSecondFork, fourthNodeSink);
 		forkThirdEnd.setJointjsId(IdGenerator.createId());
 		forkThirdEnd.setType(DiagramObjectType.LINK);
-		forkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables")), new ExpressionValueTreeObjectReference(getAnswer("vegetables", "a"))));
+		forkThirdEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")),
+						new ExpressionValueTreeObjectReference(getAnswer(form, "vegetables", "a"))));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramForkNode);
@@ -177,12 +184,12 @@ public class ForksTest extends KidsFormCreator {
 		return mainDiagram;
 	}
 
-	private Diagram createMultipleConditionsFork() {
-		CustomVariable end2CustomVariable = new CustomVariable(getForm(), END2, CustomVariableType.NUMBER,
+	private Diagram createMultipleConditionsFork(Form form) {
+		CustomVariable end2CustomVariable = new CustomVariable(form, END2, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
-		CustomVariable formCustomVariableInCondition = new CustomVariable(getForm(), FORM_CUSTOM_VAR,
+		CustomVariable formCustomVariableInCondition = new CustomVariable(form, FORM_CUSTOM_VAR,
 				CustomVariableType.NUMBER, CustomVariableScope.FORM);
-		CustomVariable categoryCustomVariableInCondition = new CustomVariable(getForm(), CATEGORY_CUSTOM_VAR,
+		CustomVariable categoryCustomVariableInCondition = new CustomVariable(form, CATEGORY_CUSTOM_VAR,
 				CustomVariableType.NUMBER, CustomVariableScope.CATEGORY);
 
 		Diagram mainDiagram = new Diagram("main");
@@ -193,17 +200,17 @@ public class ForksTest extends KidsFormCreator {
 		Node nodeSource = new Node(diagramStartNode.getJointjsId());
 
 		DiagramExpression diagramExpression = new DiagramExpression();
-		diagramExpression.setExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
-				getForm(), formCustomVariableInCondition), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(6.5)));
+		diagramExpression.setExpression(new ExpressionChain("setCustomValue",
+				new ExpressionValueCustomVariable(form, formCustomVariableInCondition),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(6.5)));
 		diagramExpression.setJointjsId(IdGenerator.createId());
 		diagramExpression.setType(DiagramObjectType.CALCULATION);
 		Node nodeExpression = new Node(diagramExpression.getJointjsId());
 
 		DiagramExpression diagramExpression2 = new DiagramExpression();
-		diagramExpression2.setExpression(new ExpressionChain("setCustomValue", new ExpressionValueCustomVariable(
-				getTreeObject("Lifestyle"), categoryCustomVariableInCondition), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionValueNumber(2.5)));
+		diagramExpression2.setExpression(new ExpressionChain("setCustomValue",
+				new ExpressionValueCustomVariable(getTreeObject(form, "Lifestyle"), categoryCustomVariableInCondition),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(2.5)));
 		diagramExpression2.setJointjsId(IdGenerator.createId());
 		diagramExpression2.setType(DiagramObjectType.CALCULATION);
 		Node nodeExpression2 = new Node(diagramExpression2.getJointjsId());
@@ -211,31 +218,31 @@ public class ForksTest extends KidsFormCreator {
 		DiagramFork diagramFork = new DiagramFork();
 		diagramFork.setJointjsId(IdGenerator.createId());
 		diagramFork.setType(DiagramObjectType.FORK);
-		diagramFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetablesAmount")));
+		diagramFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")));
 		Node nodeFork = new Node(diagramFork.getJointjsId());
 
 		DiagramSink firstEndNode = new DiagramSink();
 		firstEndNode.setJointjsId(IdGenerator.createId());
 		firstEndNode.setType(DiagramObjectType.SINK);
-		firstEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(
-				getTreeObject("Lifestyle"), categoryCustomVariableInCondition), new ExpressionOperatorMath(
-				AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.5)));
+		firstEndNode.setExpression(new ExpressionChain(END2,
+				new ExpressionValueCustomVariable(getTreeObject(form, "Lifestyle"), categoryCustomVariableInCondition),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.5)));
 		Node secondNodeSink = new Node(firstEndNode.getJointjsId());
 
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
-		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(3.78)));
+		secondEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(3.78)));
 		Node thirdNodeSink = new Node(secondEndNode.getJointjsId());
 
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
-		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(4.75)));
+		thirdEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(4.75)));
 		Node fourthNodeSink = new Node(thirdEndNode.getJointjsId());
 
 		DiagramLink startExpression = new DiagramLink(nodeSource, nodeExpression);
@@ -253,33 +260,33 @@ public class ForksTest extends KidsFormCreator {
 		DiagramLink forkFirstEnd = new DiagramLink(nodeFork, secondNodeSink);
 		forkFirstEnd.setJointjsId(IdGenerator.createId());
 		forkFirstEnd.setType(DiagramObjectType.LINK);
-		forkFirstEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount")), new ExpressionFunction(AvailableFunction.BETWEEN),
-				new ExpressionValueNumber(1.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
-						2.5), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(
-						AvailableOperator.OR),
-				new ExpressionValueTreeObjectReference(getTreeObject("vegetablesAmount")), new ExpressionFunction(
-						AvailableFunction.BETWEEN), new ExpressionValueNumber(3.), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueNumber(3.5), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.OR),
-				new ExpressionValueTreeObjectReference(getTreeObject("vegetablesAmount")), new ExpressionFunction(
-						AvailableFunction.BETWEEN), new ExpressionValueNumber(3.6), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueNumber(3.8), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET)));
+		forkFirstEnd.setExpressionChain(new ExpressionChain(
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(1.),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(2.5),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.OR),
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(3.),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(3.5),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorLogic(AvailableOperator.OR),
+				new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")),
+				new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(3.6),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(3.8),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
 
 		DiagramLink forkSecondEnd = new DiagramLink(nodeFork, thirdNodeSink);
 		forkSecondEnd.setJointjsId(IdGenerator.createId());
 		forkSecondEnd.setType(DiagramObjectType.LINK);
-		forkSecondEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount"))));
+		forkSecondEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount"))));
 
 		DiagramLink forkThirdEnd = new DiagramLink(nodeFork, fourthNodeSink);
 		forkThirdEnd.setJointjsId(IdGenerator.createId());
 		forkThirdEnd.setType(DiagramObjectType.LINK);
-		forkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueCustomVariable(
-				getTreeObject("Lifestyle"), categoryCustomVariableInCondition), new ExpressionOperatorLogic(
-				AvailableOperator.LESS_THAN), new ExpressionValueCustomVariable(getForm(),
-				formCustomVariableInCondition)));
+		forkThirdEnd.setExpressionChain(new ExpressionChain(
+				new ExpressionValueCustomVariable(getTreeObject(form, "Lifestyle"), categoryCustomVariableInCondition),
+				new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
+				new ExpressionValueCustomVariable(form, formCustomVariableInCondition)));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramExpression);
@@ -298,10 +305,10 @@ public class ForksTest extends KidsFormCreator {
 		return mainDiagram;
 	}
 
-	private Diagram createNestedForksDiagram() {
-		CustomVariable end2CustomVariable = new CustomVariable(getForm(), END2, CustomVariableType.NUMBER,
+	private Diagram createNestedForksDiagram(Form form) {
+		CustomVariable end2CustomVariable = new CustomVariable(form, END2, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
-		CustomVariable end3CustomVariable = new CustomVariable(getForm(), END3, CustomVariableType.NUMBER,
+		CustomVariable end3CustomVariable = new CustomVariable(form, END3, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 
 		Diagram mainDiagram = new Diagram("main");
@@ -314,45 +321,45 @@ public class ForksTest extends KidsFormCreator {
 		DiagramFork diagramFirstFork = new DiagramFork();
 		diagramFirstFork.setJointjsId(IdGenerator.createId());
 		diagramFirstFork.setType(DiagramObjectType.FORK);
-		diagramFirstFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetablesAmount")));
+		diagramFirstFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")));
 		Node nodeFirstFork = new Node(diagramFirstFork.getJointjsId());
 
 		DiagramSink firstEndNode = new DiagramSink();
 		firstEndNode.setJointjsId(IdGenerator.createId());
 		firstEndNode.setType(DiagramObjectType.SINK);
-		firstEndNode.setExpression(new ExpressionChain(END3, new ExpressionValueCustomVariable(getForm(),
-				end3CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(2.1)));
+		firstEndNode
+				.setExpression(new ExpressionChain(END3, new ExpressionValueCustomVariable(form, end3CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(2.1)));
 		Node firstNodeSink = new Node(firstEndNode.getJointjsId());
 
 		DiagramFork diagramSecondFork = new DiagramFork();
 		diagramSecondFork.setJointjsId(IdGenerator.createId());
 		diagramSecondFork.setType(DiagramObjectType.FORK);
-		diagramSecondFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetables")));
+		diagramSecondFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")));
 		Node nodeSecondFork = new Node(diagramSecondFork.getJointjsId());
 
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
-		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(7.5)));
+		secondEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.5)));
 		Node secondNodeSink = new Node(secondEndNode.getJointjsId());
 
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
-		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(3.78)));
+		thirdEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(3.78)));
 		Node thirdNodeSink = new Node(thirdEndNode.getJointjsId());
 
 		DiagramSink fourthEndNode = new DiagramSink();
 		fourthEndNode.setJointjsId(IdGenerator.createId());
 		fourthEndNode.setType(DiagramObjectType.SINK);
-		fourthEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(4.75)));
+		fourthEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(4.75)));
 		Node fourthNodeSink = new Node(fourthEndNode.getJointjsId());
 
 		DiagramLink startFirstFork = new DiagramLink(nodeSource, nodeFirstFork);
@@ -363,34 +370,36 @@ public class ForksTest extends KidsFormCreator {
 		DiagramLink firstForkFirstEnd = new DiagramLink(nodeFirstFork, firstNodeSink);
 		firstForkFirstEnd.setJointjsId(IdGenerator.createId());
 		firstForkFirstEnd.setType(DiagramObjectType.LINK);
-		firstForkFirstEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount")), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN),
-				new ExpressionValueNumber(4.0)));
+		firstForkFirstEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")),
+						new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(4.0)));
 
 		DiagramLink firstForkSecondFork = new DiagramLink(nodeFirstFork, nodeSecondFork);
 		firstForkSecondFork.setJointjsId(IdGenerator.createId());
 		firstForkSecondFork.setType(DiagramObjectType.LINK);
-		firstForkSecondFork.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount"))));
+		firstForkSecondFork.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount"))));
 
 		DiagramLink secondForkSecondEnd = new DiagramLink(nodeSecondFork, secondNodeSink);
 		secondForkSecondEnd.setJointjsId(IdGenerator.createId());
 		secondForkSecondEnd.setType(DiagramObjectType.LINK);
-		secondForkSecondEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables")), new ExpressionValueTreeObjectReference(getAnswer("vegetables", "b"))));
+		secondForkSecondEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")),
+						new ExpressionValueTreeObjectReference(getAnswer(form, "vegetables", "b"))));
 
 		// Others for Second fork
 		DiagramLink secondForkThirdEnd = new DiagramLink(nodeSecondFork, thirdNodeSink);
 		secondForkThirdEnd.setJointjsId(IdGenerator.createId());
 		secondForkThirdEnd.setType(DiagramObjectType.LINK);
-		secondForkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables"))));
+		secondForkThirdEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables"))));
 
 		DiagramLink secondForkFourthEnd = new DiagramLink(nodeSecondFork, fourthNodeSink);
 		secondForkFourthEnd.setJointjsId(IdGenerator.createId());
 		secondForkFourthEnd.setType(DiagramObjectType.LINK);
-		secondForkFourthEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables")), new ExpressionValueTreeObjectReference(getAnswer("vegetables", "a"))));
+		secondForkFourthEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")),
+						new ExpressionValueTreeObjectReference(getAnswer(form, "vegetables", "a"))));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramFirstFork);
@@ -409,10 +418,10 @@ public class ForksTest extends KidsFormCreator {
 		return mainDiagram;
 	}
 
-	private Diagram createNestedForksWithOrConditionsDiagram() {
-		CustomVariable end2CustomVariable = new CustomVariable(getForm(), END2, CustomVariableType.NUMBER,
+	private Diagram createNestedForksWithOrConditionsDiagram(Form form) {
+		CustomVariable end2CustomVariable = new CustomVariable(form, END2, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
-		CustomVariable end3CustomVariable = new CustomVariable(getForm(), END3, CustomVariableType.NUMBER,
+		CustomVariable end3CustomVariable = new CustomVariable(form, END3, CustomVariableType.NUMBER,
 				CustomVariableScope.FORM);
 
 		Diagram mainDiagram = new Diagram("main");
@@ -425,37 +434,37 @@ public class ForksTest extends KidsFormCreator {
 		DiagramFork diagramFirstFork = new DiagramFork();
 		diagramFirstFork.setJointjsId(IdGenerator.createId());
 		diagramFirstFork.setType(DiagramObjectType.FORK);
-		diagramFirstFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetablesAmount")));
+		diagramFirstFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")));
 		Node nodeFirstFork = new Node(diagramFirstFork.getJointjsId());
 
 		DiagramSink firstEndNode = new DiagramSink();
 		firstEndNode.setJointjsId(IdGenerator.createId());
 		firstEndNode.setType(DiagramObjectType.SINK);
-		firstEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end3CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(2.1)));
+		firstEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end3CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(2.1)));
 		Node firstNodeSink = new Node(firstEndNode.getJointjsId());
 
 		DiagramFork diagramSecondFork = new DiagramFork();
 		diagramSecondFork.setJointjsId(IdGenerator.createId());
 		diagramSecondFork.setType(DiagramObjectType.FORK);
-		diagramSecondFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject("vegetables")));
+		diagramSecondFork.setReference(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")));
 		Node nodeSecondFork = new Node(diagramSecondFork.getJointjsId());
 
 		DiagramSink secondEndNode = new DiagramSink();
 		secondEndNode.setJointjsId(IdGenerator.createId());
 		secondEndNode.setType(DiagramObjectType.SINK);
-		secondEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(7.5)));
+		secondEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(7.5)));
 		Node secondNodeSink = new Node(secondEndNode.getJointjsId());
 
 		DiagramSink thirdEndNode = new DiagramSink();
 		thirdEndNode.setJointjsId(IdGenerator.createId());
 		thirdEndNode.setType(DiagramObjectType.SINK);
-		thirdEndNode.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(getForm(),
-				end2CustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueNumber(3.78)));
+		thirdEndNode
+				.setExpression(new ExpressionChain(END2, new ExpressionValueCustomVariable(form, end2CustomVariable),
+						new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueNumber(3.78)));
 		Node thirdNodeSink = new Node(thirdEndNode.getJointjsId());
 
 		DiagramLink startFirstFork = new DiagramLink(nodeSource, nodeFirstFork);
@@ -467,38 +476,40 @@ public class ForksTest extends KidsFormCreator {
 		firstForkFirstEnd.setJointjsId(IdGenerator.createId());
 		firstForkFirstEnd.setType(DiagramObjectType.LINK);
 		// Others condition
-		firstForkFirstEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount"))));
+		firstForkFirstEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount"))));
 
 		DiagramLink firstForkSecondFork = new DiagramLink(nodeFirstFork, nodeSecondFork);
 		firstForkSecondFork.setJointjsId(IdGenerator.createId());
 		firstForkSecondFork.setType(DiagramObjectType.LINK);
 		// Fork conditions: vegetablesAmount == 1 OR vegetablesAmount == 2 OR
 		// vegetablesAmount BETWEEN(4, 6)
-		firstForkSecondFork.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetablesAmount")), new ExpressionOperatorLogic(AvailableOperator.EQUALS),
-				new ExpressionValueNumber(1.0), new ExpressionOperatorLogic(AvailableOperator.OR),
-				new ExpressionValueTreeObjectReference(getTreeObject("vegetablesAmount")), new ExpressionOperatorLogic(
-						AvailableOperator.EQUALS), new ExpressionValueNumber(2.0), new ExpressionOperatorLogic(
-						AvailableOperator.OR),
-				new ExpressionValueTreeObjectReference(getTreeObject("vegetablesAmount")), new ExpressionFunction(
-						AvailableFunction.BETWEEN), new ExpressionValueNumber(4.0), new ExpressionSymbol(
-						AvailableSymbol.COMMA), new ExpressionValueNumber(6.0), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET)));
+		firstForkSecondFork.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")),
+						new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(1.0),
+						new ExpressionOperatorLogic(AvailableOperator.OR),
+						new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")),
+						new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(2.0),
+						new ExpressionOperatorLogic(AvailableOperator.OR),
+						new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetablesAmount")),
+						new ExpressionFunction(AvailableFunction.BETWEEN), new ExpressionValueNumber(4.0),
+						new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(6.0),
+						new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET)));
 
 		DiagramLink secondForkSecondEnd = new DiagramLink(nodeSecondFork, secondNodeSink);
 		secondForkSecondEnd.setJointjsId(IdGenerator.createId());
 		secondForkSecondEnd.setType(DiagramObjectType.LINK);
 		// Others condition
-		secondForkSecondEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables"))));
+		secondForkSecondEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables"))));
 
 		// Others for Second fork
 		DiagramLink secondForkThirdEnd = new DiagramLink(nodeSecondFork, thirdNodeSink);
 		secondForkThirdEnd.setJointjsId(IdGenerator.createId());
 		secondForkThirdEnd.setType(DiagramObjectType.LINK);
-		secondForkThirdEnd.setExpressionChain(new ExpressionChain(new ExpressionValueTreeObjectReference(
-				getTreeObject("vegetables")), new ExpressionValueTreeObjectReference(getAnswer("vegetables", "d"))));
+		secondForkThirdEnd.setExpressionChain(
+				new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, "vegetables")),
+						new ExpressionValueTreeObjectReference(getAnswer(form, "vegetables", "d"))));
 
 		mainDiagram.addDiagramObject(diagramStartNode);
 		mainDiagram.addDiagramObject(diagramFirstFork);
