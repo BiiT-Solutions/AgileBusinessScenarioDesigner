@@ -8,7 +8,7 @@
 				<exclude name="droolsGeneric" />
 				<exclude name="droolsGlobalVariables" />
 				<exclude name="droolsNestedGroups" />
-				<exclude name="droolsOperators" />
+				<include name="droolsOperators" />
 				<exclude name="droolsTableRule" />
 				<exclude name="droolsPrattParser" />
 				<exclude name="gson" />
@@ -16,7 +16,7 @@
 				<exclude name="droolsEngineRules" />
 				<exclude name="pluginsTest" />
 				<exclude name="usesOfElement" />
-				<include name="multiSelectAnswer" />
+				<exclude name="multiSelectAnswer" />
 			</run>
 		</groups>
 		<classes>

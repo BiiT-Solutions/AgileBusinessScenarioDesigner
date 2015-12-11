@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.xeoh.plugins.base.Plugin;
-
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
@@ -59,6 +57,8 @@ import com.biit.drools.form.DroolsQuestionFormat;
 import com.biit.drools.plugins.PluginController;
 import com.biit.form.entity.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
+
+import net.xeoh.plugins.base.Plugin;
 
 public class DroolsParser {
 
@@ -430,12 +430,22 @@ public class DroolsParser {
 								}
 								break;
 							case IN:
-								String inValues = "";
-								for (int i = 0; i < functionValues.size() - 1; i++) {
-									inValues += functionValues.get(i) + ", ";
+								if (getTreeObjectAnswerType(leftVariable.getReference())
+										.equals(DroolsQuestionFormat.MULTI_TEXT)) {
+									String inValues = "";
+									for (int i = 0; i < functionValues.size() - 1; i++) {
+										inValues += " contains " + functionValues.get(i) + " || ";
+									}
+									inValues += " contains " + functionValues.get(functionValues.size() - 1);
+									droolsConditions += " ( " + inValues + " )) ";
+								} else {
+									String inValues = "";
+									for (int i = 0; i < functionValues.size() - 1; i++) {
+										inValues += functionValues.get(i) + ", ";
+									}
+									inValues += functionValues.get(functionValues.size() - 1);
+									droolsConditions += " in ( " + inValues + " )) ";
 								}
-								inValues += functionValues.get(functionValues.size() - 1);
-								droolsConditions += " in ( " + inValues + " )) ";
 								break;
 							default:
 								// Never gets here
@@ -470,12 +480,22 @@ public class DroolsParser {
 								}
 								break;
 							case IN:
-								String inValues = "";
-								for (int i = 0; i < functionValues.size() - 1; i++) {
-									inValues += functionValues.get(i) + ", ";
+								if (getTreeObjectAnswerType(leftVariable.getReference())
+										.equals(DroolsQuestionFormat.MULTI_TEXT)) {
+									String inValues = "";
+									for (int i = 0; i < functionValues.size() - 1; i++) {
+										inValues += " contains " + functionValues.get(i) + " || ";
+									}
+									inValues += " contains " + functionValues.get(functionValues.size() - 1);
+									droolsConditions += " ( " + inValues + " )) ";
+								} else {
+									String inValues = "";
+									for (int i = 0; i < functionValues.size() - 1; i++) {
+										inValues += functionValues.get(i) + ", ";
+									}
+									inValues += functionValues.get(functionValues.size() - 1);
+									droolsConditions += " in ( " + inValues + " )) ";
 								}
-								inValues += functionValues.get(functionValues.size() - 1);
-								droolsConditions += " in ( " + inValues + " )) ";
 								break;
 							default:
 								// Never gets here
@@ -510,12 +530,21 @@ public class DroolsParser {
 							}
 							break;
 						case IN:
-							String inValues = "";
-							for (int i = 0; i < functionValues.size() - 1; i++) {
-								inValues += functionValues.get(i) + ", ";
+							if (getTreeObjectAnswerType(leftQuestion).equals(DroolsQuestionFormat.MULTI_TEXT)) {
+								String inValues = "";
+								for (int i = 0; i < functionValues.size() - 1; i++) {
+									inValues += " contains " + functionValues.get(i) + " || ";
+								}
+								inValues += " contains " + functionValues.get(functionValues.size() - 1);
+								droolsConditions += " ( " + inValues + " )) ";
+							} else {
+								String inValues = "";
+								for (int i = 0; i < functionValues.size() - 1; i++) {
+									inValues += functionValues.get(i) + ", ";
+								}
+								inValues += functionValues.get(functionValues.size() - 1);
+								droolsConditions += " in ( " + inValues + " )) ";
 							}
-							inValues += functionValues.get(functionValues.size() - 1);
-							droolsConditions += " in ( " + inValues + " )) ";
 							break;
 						default:
 							// Never gets here
@@ -533,12 +562,15 @@ public class DroolsParser {
 							conditions);
 				}
 			}
-		} else {
+		} else
+
+		{
 			throw new DroolsRuleCreationException(
 					"No valid left reference found parsing the '" + functionParsed.toString() + "' function",
 					conditions);
 		}
 		return droolsConditions;
+
 	}
 
 	private static String createPluginMethodCall(ExpressionChain actions) {
@@ -585,13 +617,13 @@ public class DroolsParser {
 		droolsConditions.append("getAnswer('" + getTreeObjectAnswerType(question) + "') ");
 		// Text DroolsSubmittedQuestion returns a Set, then is not equals, is a
 		// "contains".
-		if (getTreeObjectAnswerType(question).equals(DroolsQuestionFormat.MULTI_TEXT)
-				&& (availableOperator.equals(AvailableOperator.EQUALS)
-						|| availableOperator.equals(AvailableOperator.NOT_EQUALS))) {
+		if (getTreeObjectAnswerType(question).equals(DroolsQuestionFormat.MULTI_TEXT)) {
 			if (availableOperator.equals(AvailableOperator.EQUALS)) {
 				droolsConditions.append(" contains ");
-			} else {
+			} else if (availableOperator.equals(AvailableOperator.NOT_EQUALS)) {
 				droolsConditions.append(" not contains ");
+			} else {
+				droolsConditions.append(availableOperator.getValue().toString());
 			}
 		} else {
 			droolsConditions.append(availableOperator.getValue().toString());
