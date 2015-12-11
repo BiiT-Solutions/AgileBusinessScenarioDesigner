@@ -72,7 +72,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 	private static final String ANSWER2_NAME = "answer2";
 	private static final String ANSWER3_NAME = "answer3";
 	private static final String CATEGORY_VARIABLE_NAME = "score";
-	private final static Double MULTI_SELECT_ANSWER = 3.0;
+	private final static Double MULTI_SELECT_VALUE = 3.0;
 	protected Form testForm = null;
 
 	@Override
@@ -114,35 +114,27 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		return form;
 	}
 
-	// @Test(groups = { "multiSelectAnswer" })
-	// private void testQuestionOneAnswerTableRule() throws
-	// FieldTooLongException, NotValidChildException,
-	// InvalidAnswerFormatException, CharacterNotAllowedException,
-	// NotValidTypeInVariableData,
-	// ExpressionInvalidException, InvalidRuleException, IOException,
-	// RuleNotImplementedException,
-	// DocumentException, ActionNotImplementedException,
-	// NotCompatibleTypeException, NullTreeObjectException,
-	// TreeObjectInstanceNotRecognizedException,
-	// TreeObjectParentNotValidException, NullCustomVariableException,
-	// NullExpressionValueException, QuestionDoesNotExistException,
-	// GroupDoesNotExistException,
-	// CategoryDoesNotExistException, BetweenFunctionInvalidException,
-	// ElementIsReadOnly {
-	// // Create a simple form
-	// Form form = createFormOnlyOneAnswer();
-	// // Create the table and diagram
-	// createQuestionAnswerTableRule(form);
-	// // Create the rules and launch the engine
-	// ISubmittedForm submittedForm = createAndRunDroolsRules(form);
-	// // Check result
-	// Assert.assertNotNull(submittedForm);
-	// Assert.assertEquals(1,
-	// ((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm)
-	// submittedForm).getDroolsSubmittedForm())
-	// .getChild(ISubmittedCategory.class,
-	// "Category1")).getVariableValue(CATEGORY_VARIABLE_NAME));
-	// }
+	@Test(groups = { "multiSelectAnswer" })
+	private void testQuestionOneAnswerTableRule() throws FieldTooLongException, NotValidChildException,
+			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
+			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
+			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
+			DroolsRuleGenerationException, DroolsRuleExecutionException {
+		// Create a simple form
+		Form form = createFormOnlyOneAnswer();
+		// Create the table and diagram
+		createQuestionAnswerTableRule(form);
+		// Create the rules and launch the engine
+		ISubmittedForm submittedForm = createAndRunDroolsRules(form);
+		// Check result
+		Assert.assertNotNull(submittedForm);
+		Assert.assertEquals(1.0,
+				((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
+						.getChild(ISubmittedCategory.class, CATEGORY_NAME)).getVariableValue(CATEGORY_VARIABLE_NAME));
+	}
 
 	@Test(groups = { "multiSelectAnswer" })
 	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
@@ -161,9 +153,10 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		ISubmittedForm submittedForm = createAndRunDroolsRules(form);
 		// Check result
 		Assert.assertNotNull(submittedForm);
-		Assert.assertEquals(MULTI_SELECT_ANSWER,
+
+		Assert.assertEquals(MULTI_SELECT_VALUE,
 				((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
-						.getChild(ISubmittedCategory.class, "Category1")).getVariableValue(CATEGORY_VARIABLE_NAME));
+						.getChild(ISubmittedCategory.class, CATEGORY_NAME)).getVariableValue(CATEGORY_VARIABLE_NAME));
 	}
 
 	private void createQuestionAnswerTableRule(Form form)

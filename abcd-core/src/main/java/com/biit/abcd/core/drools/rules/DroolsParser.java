@@ -55,6 +55,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.DroolsHelper;
+import com.biit.drools.form.DroolsQuestionFormat;
 import com.biit.drools.plugins.PluginController;
 import com.biit.form.entity.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
@@ -584,8 +585,9 @@ public class DroolsParser {
 		droolsConditions.append("getAnswer('" + getTreeObjectAnswerType(question) + "') ");
 		// Text DroolsSubmittedQuestion returns a Set, then is not equals, is a
 		// "contains".
-		if (getTreeObjectAnswerType(question).equals("MULTI_TEXT") && (availableOperator.equals(AvailableOperator.EQUALS)
-				|| availableOperator.equals(AvailableOperator.NOT_EQUALS))) {
+		if (getTreeObjectAnswerType(question).equals(DroolsQuestionFormat.MULTI_TEXT)
+				&& (availableOperator.equals(AvailableOperator.EQUALS)
+						|| availableOperator.equals(AvailableOperator.NOT_EQUALS))) {
 			if (availableOperator.equals(AvailableOperator.EQUALS)) {
 				droolsConditions.append(" contains ");
 			} else {
@@ -750,7 +752,7 @@ public class DroolsParser {
 			if ((treeObject instanceof Question) && ((Question) treeObject).getAnswerType().equals(AnswerType.INPUT)) {
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case NUMBER:
-					return "(Double)$" + id + ".getAnswer('" + AnswerFormat.NUMBER.toString() + "')";
+					return "(Double)$" + id + ".getAnswer('" + AnswerFormat.NUMBER.getDroolsFormat() + "')";
 				case DATE:
 					if (expressionValue.getUnit() != null) {
 						switch (expressionValue.getUnit()) {
@@ -758,19 +760,19 @@ public class DroolsParser {
 						case MONTHS:
 						case DAYS:
 							return "DroolsDateUtils.return" + expressionValue.getUnit().getUnitName()
-									+ "DistanceFromDate( $" + id + ".getAnswer('" + AnswerFormat.DATE.toString()
+									+ "DistanceFromDate( $" + id + ".getAnswer('" + AnswerFormat.DATE.getDroolsFormat()
 									+ "'))";
 						case DATE:
-							return "$" + id + ".getAnswer('" + AnswerFormat.DATE.toString() + "')";
+							return "$" + id + ".getAnswer('" + AnswerFormat.DATE.getDroolsFormat() + "')";
 						}
 					}
 					break;
 				case TEXT:
-					return "'$" + id + ".getAnswer('" + AnswerFormat.TEXT.toString() + "')'";
+					return "'$" + id + ".getAnswer('" + AnswerFormat.TEXT.getDroolsFormat() + "')'";
 				case POSTAL_CODE:
-					return "'$" + id + ".getAnswer('" + AnswerFormat.POSTAL_CODE.toString() + "')'";
+					return "'$" + id + ".getAnswer('" + AnswerFormat.POSTAL_CODE.getDroolsFormat() + "')'";
 				case MULTI_TEXT:
-					return "'$" + id + ".getAnswer('" + AnswerFormat.MULTI_TEXT.toString() + "')'";
+					return "'$" + id + ".getAnswer('" + AnswerFormat.MULTI_TEXT.getDroolsFormat() + "')'";
 				default:
 					break;
 				}
@@ -885,12 +887,12 @@ public class DroolsParser {
 			switch (question.getAnswerType()) {
 			case RADIO:
 			case MULTI_CHECKBOX:
-				return "getAnswer('" + AnswerFormat.MULTI_TEXT.toString() + "')";
+				return "getAnswer('" + AnswerFormat.MULTI_TEXT.getDroolsFormat() + "')";
 			case INPUT:
 				// Get the answer based on the type
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case NUMBER:
-					return "getAnswer('" + AnswerFormat.NUMBER.toString() + "')";
+					return "getAnswer('" + AnswerFormat.NUMBER.getDroolsFormat() + "')";
 				case DATE:
 					if (expressionValueTreeObject.getUnit() != null) {
 						switch (expressionValueTreeObject.getUnit()) {
@@ -898,19 +900,19 @@ public class DroolsParser {
 						case MONTHS:
 						case DAYS:
 							return "DroolsDateUtils.return" + expressionValueTreeObject.getUnit().getUnitName()
-									+ "DistanceFromDate(getAnswer('" + AnswerFormat.DATE.toString() + "'))";
+									+ "DistanceFromDate(getAnswer('" + AnswerFormat.DATE.getDroolsFormat() + "'))";
 						case DATE:
-							return "getAnswer('" + AnswerFormat.DATE.toString() + "')";
+							return "getAnswer('" + AnswerFormat.DATE.getDroolsFormat() + "')";
 						}
 					} else {
-						return "getAnswer('" + AnswerFormat.DATE.toString() + "')";
+						return "getAnswer('" + AnswerFormat.DATE.getDroolsFormat() + "')";
 					}
 				case TEXT:
-					return "getAnswer('" + AnswerFormat.TEXT.toString() + "')";
+					return "getAnswer('" + AnswerFormat.TEXT.getDroolsFormat() + "')";
 				case POSTAL_CODE:
-					return "getAnswer('" + AnswerFormat.POSTAL_CODE.toString() + "')";
+					return "getAnswer('" + AnswerFormat.POSTAL_CODE.getDroolsFormat() + "')";
 				case MULTI_TEXT:
-					return "getAnswer('" + AnswerFormat.MULTI_TEXT.toString() + "')";
+					return "getAnswer('" + AnswerFormat.MULTI_TEXT.getDroolsFormat() + "')";
 				}
 
 			}
@@ -924,19 +926,18 @@ public class DroolsParser {
 	 * 
 	 * @return
 	 */
-	private static String getTreeObjectAnswerType(TreeObject treeObject) {
+	private static DroolsQuestionFormat getTreeObjectAnswerType(TreeObject treeObject) {
 		if (treeObject instanceof Question) {
 			Question question = (Question) treeObject;
 			switch (question.getAnswerType()) {
 			case RADIO:
 			case MULTI_CHECKBOX:
-				return AnswerFormat.MULTI_TEXT.toString();
+				return AnswerFormat.MULTI_TEXT.getDroolsFormat();
 			case INPUT:
-				return question.getAnswerFormat().toString();
+				return question.getAnswerFormat().getDroolsFormat();
 			}
-			return "";
 		}
-		return "";
+		return DroolsQuestionFormat.NULL;
 	}
 
 	private static String getTreeObjectName(TreeObject treeObject) {

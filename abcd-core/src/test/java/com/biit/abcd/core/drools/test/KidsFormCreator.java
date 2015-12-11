@@ -108,6 +108,7 @@ public class KidsFormCreator {
 	public DroolsForm createAndRunDroolsRules(Form form)
 			throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
 		String droolsRules = createDroolsRules(form);
+		System.out.println(droolsRules);
 		return runDroolsRules(droolsRules);
 	}
 

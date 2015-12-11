@@ -1,17 +1,29 @@
 package com.biit.abcd.persistence.entity;
 
+import com.biit.drools.form.DroolsQuestionFormat;
+
 /**
  * Used only for text inputs.
  */
 public enum AnswerFormat {
 
-	TEXT,
-	
-	MULTI_TEXT,
+	TEXT(DroolsQuestionFormat.TEXT),
 
-	NUMBER,
+	MULTI_TEXT(DroolsQuestionFormat.MULTI_TEXT),
 
-	DATE,
+	NUMBER(DroolsQuestionFormat.NUMBER),
 
-	POSTAL_CODE;
+	DATE(DroolsQuestionFormat.DATE),
+
+	POSTAL_CODE(DroolsQuestionFormat.POSTAL_CODE);
+
+	private DroolsQuestionFormat droolsFormat;
+
+	private AnswerFormat(DroolsQuestionFormat droolsFormat) {
+		this.droolsFormat = droolsFormat;
+	}
+
+	public DroolsQuestionFormat getDroolsFormat() {
+		return droolsFormat;
+	}
 }

@@ -158,4 +158,9 @@ public class Rule extends StorableObject implements INameAttribute {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Rule.");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "IF " + conditions.toString() + " DO " + actions.toString();
+	}
 }

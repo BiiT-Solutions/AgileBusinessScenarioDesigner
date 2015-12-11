@@ -1,703 +1,879 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xh:html xmlns:xh="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:exf="http://www.exforms.org/exf/1-0" xmlns:fb="http://orbeon.org/oxf/xml/form-builder" xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:odt="http://orbeon.org/oxf/xml/datatypes" xmlns:oxf="http://www.orbeon.com/oxf/processors" xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:saxon="http://saxon.sf.net/" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sql="http://orbeon.org/oxf/xml/sql" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xpl="java:org.orbeon.oxf.pipeline.api.FunctionLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xxf="http://orbeon.org/oxf/xml/xforms" xmlns:xxi="http://orbeon.org/oxf/xml/xinclude">
-  <xh:head>
-    <xh:title>KidsScreen</xh:title>
-    <xf:model id="fr-form-model" xxf:expose-xpath-types="true">
-      <xf:instance id="fr-form-metadata" xxf:readonly="true">
-        <metadata>
-          <application-name>WebForms</application-name>
-          <form-name>KidsScreen_v2</form-name>
-          <title xml:lang="en">KidsScreen</title>
-          <description xml:lang="en">Version: 2 - Modification date: 2014-09-09 11:44:07 - Publication date: 2014-09-09 11:44:28.</description>
-        </metadata>
-      </xf:instance>
-      <xf:instance id="fr-form-instance">
-        <form>
-          <liferay_email_address/>
-          <category-1>
-            <subcategory-1-1/>
-            <name/>
-            <school/>
-            <group/>
-            <birthdate/>
-            <gender/>
-            <height/>
-            <heightFather/>
-            <originFather/>
-            <heightMother/>
-            <originMother/>
-            <weight/>
-          </category-1>
-          <category-2>
-            <subcategory-2-1/>
-            <health/>
-            <healthExtra/>
-          </category-2>
-          <category-3>
-            <subcategory-3-1/>
-            <group-voeding>
-              <breakfast/>
-              <fruit/>
-              <fruitAmount/>
-              <vegetables/>
-              <vegetablesAmount/>
-              <drinks/>
-            </group-voeding>
-            <subcategory-3-2/>
-            <group-mentaal>
-              <life/>
-              <family/>
-              <smile/>
-              <comfortable/>
-              <sleep/>
-              <angry/>
-              <sport/>
-              <happy/>
-              <sad/>
-              <friends/>
-              <tired/>
-              <energy/>
-            </group-mentaal>
-          </category-3>
-          <category-4>
-            <subcategory-4-1/>
-            <infotext-4-1-1/>
-            <group-bewegen>
-              <nngbDays/>
-              <activityDuration/>
-              <activityIntensity/>
-            </group-bewegen>
-          </category-4>
-        </form>
-      </xf:instance>
-      <xf:bind xmlns:dataModel="java:org.orbeon.oxf.fb.DataModel" id="fr-form-binds" ref="instance('fr-form-instance')">
-        <xf:bind id="liferay_email_address-bind" name="liferay_email_address" ref="liferay_email_address" relevant="false" type="xf:email" xxf:default="xxf:get-request-parameter('liferay_email_address')"/>
-        <xf:bind id="category-1-bind" name="category-1" ref="category-1">
-          <xf:bind id="subcategory-1-1-bind" name="subcategory-1-1" ref="subcategory-1-1"/>
-          <xf:bind answerFormat="text" id="name-bind" name="name" ref="name" required="true()"/>
-          <xf:bind answerFormat="text" id="school-bind" name="school" ref="school" required="true()"/>
-          <xf:bind id="group-bind" name="group" ref="group" required="true()"/>
-          <xf:bind answerFormat="birthdate" constraint=". &lt;= current-date() and (year-from-date(current-date()) - year-from-date(.) &lt;= 120)" id="birthdate-bind" name="birthdate" ref="birthdate" required="true()" type="xf:date"/>
-          <xf:bind id="gender-bind" name="gender" ref="gender" required="true()"/>
-          <xf:bind answerFormat="number" id="height-bind" name="height" ref="height" required="true()" type="xf:decimal"/>
-          <xf:bind answerFormat="number" id="heightFather-bind" name="heightFather" ref="heightFather" type="xf:decimal"/>
-          <xf:bind id="originFather-bind" name="originFather" ref="originFather" required="true()"/>
-          <xf:bind answerFormat="number" id="heightMother-bind" name="heightMother" ref="heightMother" type="xf:decimal"/>
-          <xf:bind id="originMother-bind" name="originMother" ref="originMother" required="true()"/>
-          <xf:bind answerFormat="float" id="weight-bind" name="weight" ref="weight" required="true()" type="xf:float"/>
-        </xf:bind>
-        <xf:bind id="category-2-bind" name="category-2" ref="category-2">
-          <xf:bind id="subcategory-2-1-bind" name="subcategory-2-1" ref="subcategory-2-1"/>
-          <xf:bind id="health-bind" name="health" ref="health" required="true()"/>
-          <xf:bind flowrule="health='N'" id="healthExtra-bind" name="healthExtra" ref="healthExtra" relevant="($health='N')" required="true()"/>
-        </xf:bind>
-        <xf:bind flowrule="health='Y' OR healthExtra" id="category-3-bind" name="category-3" ref="category-3" relevant="($health='Y') or ($health='N')">
-          <xf:bind flowrule="" id="subcategory-3-1-bind" name="subcategory-3-1" ref="subcategory-3-1" relevant="(($health='Y') or ($health='N'))"/>
-          <xf:bind id="group-voeding-bind" name="group-voeding" ref="group-voeding" relevant="($health='Y') or ($health='N')">
-            <xf:bind flowrule="health='Y' OR healthExtra" id="voeding.breakfast-bind" name="voeding.breakfast" ref="breakfast" relevant="($health='Y') or ($health='N')" required="true()"/>
-            <xf:bind flowrule="health='Y' OR healthExtra" id="voeding.fruit-bind" name="voeding.fruit" ref="fruit" relevant="($health='Y') or ($health='N')" required="true()"/>
-            <xf:bind answerFormat="number" flowrule="voeding.fruit=[Others]" id="voeding.fruitAmount-bind" name="voeding.fruitAmount" ref="fruitAmount" relevant="((not($voeding.fruit='a')) and (string-length(string($voeding.fruit)) &gt; 0))" required="true()" type="xf:decimal"/>
-            <xf:bind flowrule="voeding.fruit='a' OR voeding.fruitAmount" id="voeding.vegetables-bind" name="voeding.vegetables" ref="vegetables" relevant="($voeding.fruit='a') or ((not($voeding.fruit='a')) and (string-length(string($voeding.fruit)) &gt; 0))" required="true()"/>
-            <xf:bind answerFormat="number" flowrule="voeding.vegetables=[Others]" id="voeding.vegetablesAmount-bind" name="voeding.vegetablesAmount" ref="vegetablesAmount" relevant="((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()" type="xf:decimal"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="voeding.drinks-bind" name="voeding.drinks" ref="drinks" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-          </xf:bind>
-          <xf:bind flowrule="" id="subcategory-3-2-bind" name="subcategory-3-2" ref="subcategory-3-2" relevant="(($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0)))"/>
-          <xf:bind id="group-mentaal-bind" name="group-mentaal" ref="group-mentaal" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))">
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.life-bind" name="mentaal.life" ref="life" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.family-bind" name="mentaal.family" ref="family" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.smile-bind" name="mentaal.smile" ref="smile" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.comfortable-bind" name="mentaal.comfortable" ref="comfortable" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.sleep-bind" name="mentaal.sleep" ref="sleep" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.angry-bind" name="mentaal.angry" ref="angry" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.sport-bind" name="mentaal.sport" ref="sport" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.happy-bind" name="mentaal.happy" ref="happy" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.sad-bind" name="mentaal.sad" ref="sad" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.friends-bind" name="mentaal.friends" ref="friends" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.tired-bind" name="mentaal.tired" ref="tired" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-            <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="mentaal.energy-bind" name="mentaal.energy" ref="energy" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()"/>
-          </xf:bind>
-        </xf:bind>
-        <xf:bind flowrule="" id="category-4-bind" name="category-4" ref="category-4" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))">
-          <xf:bind flowrule="" id="subcategory-4-1-bind" name="subcategory-4-1" ref="subcategory-4-1" relevant="(($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0)))"/>
-          <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="infotext-4-1-1-bind" name="infotext-4-1-1" ref="infotext-4-1-1" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"/>
-          <xf:bind id="group-bewegen-bind" name="group-bewegen" ref="group-bewegen" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))">
-            <xf:bind answerFormat="number" flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="bewegen.nngbDays-bind" name="bewegen.nngbDays" ref="nngbDays" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()" type="xf:decimal"/>
-            <xf:bind answerFormat="number" flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="bewegen.activityDuration-bind" name="bewegen.activityDuration" ref="activityDuration" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()" type="xf:decimal"/>
-            <xf:bind answerFormat="number" flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount" id="bewegen.activityIntensity-bind" name="bewegen.activityIntensity" ref="activityIntensity" relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))" required="true()" type="xf:decimal"/>
-          </xf:bind>
-        </xf:bind> </xf:bind>
-      <xf:instance id="fr-form-attachments">
-        <attachments>
-          <css filename="" mediatype="text/css" size=""/>
-          <pdf filename="" mediatype="application/pdf" size=""/>
-        </attachments>
-      </xf:instance>
-      <xf:instance id="fr-form-resources" xxf:readonly="false">
-        <resources>
-          <resource xml:lang="en">
-            <liferay_email_address>
-              <label>eMail</label>
-              <hint/>
-              <alert/>
-            </liferay_email_address>
-            <category-1>
-              <label><![CDATA[Algemeen]]></label>
-              <hint/>
-              <alert/>
-            </category-1>
-            <subcategory-1-1>
-              <label><![CDATA[<b>Algemeen</b><hr>]]></label>
-              <hint/>
-              <alert/>
-            </subcategory-1-1>
-            <name>
-              <label><![CDATA[Mijn naam is]]></label>
-              <hint/>
-              <alert/>
-            </name>
-            <school>
-              <label><![CDATA[Ik zit op de ... school]]></label>
-              <hint/>
-              <alert/>
-            </school>
-            <group>
-              <label><![CDATA[Ik zit in groep]]></label>
-              <hint/>
-              <alert/>
-              <item>
-                <label><![CDATA[groep 6]]></label>
-                <value><![CDATA[6]]></value>
-              </item>
-              <item>
-                <label><![CDATA[groep7]]></label>
-                <value><![CDATA[7]]></value>
-              </item>
-              <item>
-                <label><![CDATA[groep 8]]></label>
-                <value><![CDATA[8]]></value>
-              </item>
-            </group>
-            <birthdate>
-              <label><![CDATA[Mijn geboortedatum is]]></label>
-              <hint/>
-              <alert>Inserted date is missing or invalid!</alert>
-            </birthdate>
-            <gender>
-              <label><![CDATA[Ik ben een]]></label>
-              <hint/>
-              <alert/>
-              <item>
-                <label><![CDATA[Jongen]]></label>
-                <value><![CDATA[M]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Meisje]]></label>
-                <value><![CDATA[F]]></value>
-              </item>
-            </gender>
-            <height>
-              <label><![CDATA[Mijn lengte (in centimeters, bv. 162) is]]></label>
-              <hint/>
-              <alert/>
-            </height>
-            <heightFather>
-              <label><![CDATA[De lengte van mijn vader (in centimeters, bv. 184) is]]></label>
-              <hint/>
-              <alert/>
-            </heightFather>
-            <originFather>
-              <label><![CDATA[Mijn vader is geboren in]]></label>
-              <hint/>
-              <alert/>
-              <item>
-                <label><![CDATA[Nederland]]></label>
-                <value><![CDATA[1]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Zuid-europa]]></label>
-                <value><![CDATA[2]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Noord-, Oost- of West-europa]]></label>
-                <value><![CDATA[3]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Noord-afrika]]></label>
-                <value><![CDATA[4]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Afrika]]></label>
-                <value><![CDATA[5]]></value>
-              </item>
-              <item>
-                <label><![CDATA[(Midden-)Oosten]]></label>
-                <value><![CDATA[6]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Noord-amerika]]></label>
-                <value><![CDATA[7]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Midden- of Zuid-amerika]]></label>
-                <value><![CDATA[8]]></value>
-              </item>
-              <item>
-                <label><![CDATA[ergens anders]]></label>
-                <value><![CDATA[9]]></value>
-              </item>
-            </originFather>
-            <heightMother>
-              <label><![CDATA[De lengte van mijn moeder (in centimeters, bv. 170) is]]></label>
-              <hint/>
-              <alert/>
-            </heightMother>
-            <originMother>
-              <label><![CDATA[Mijn moeder is geboren in]]></label>
-              <hint/>
-              <alert/>
-              <item>
-                <label><![CDATA[Nederland]]></label>
-                <value><![CDATA[1]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Zuid-europa]]></label>
-                <value><![CDATA[2]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Noord-, Oost- of West-europa]]></label>
-                <value><![CDATA[3]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Noord-afrika]]></label>
-                <value><![CDATA[4]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Afrika]]></label>
-                <value><![CDATA[5]]></value>
-              </item>
-              <item>
-                <label><![CDATA[(Midden-)Oosten]]></label>
-                <value><![CDATA[6]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Noord-amerika]]></label>
-                <value><![CDATA[7]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Midden- of Zuid-amerika]]></label>
-                <value><![CDATA[8]]></value>
-              </item>
-              <item>
-                <label><![CDATA[ergens anders]]></label>
-                <value><![CDATA[9]]></value>
-              </item>
-            </originMother>
-            <weight>
-              <label><![CDATA[Mijn gewicht (in kg, bv. 55.4) is]]></label>
-              <hint/>
-              <alert/>
-            </weight>
-            <category-2>
-              <label><![CDATA[Gezondheid]]></label>
-              <hint/>
-              <alert/>
-            </category-2>
-            <subcategory-2-1>
-              <label><![CDATA[<b>Gezondheid</b><hr>]]></label>
-              <hint/>
-              <alert/>
-            </subcategory-2-1>
-            <health>
-              <label><![CDATA[Voel je je over het algemeen gezond?]]></label>
-              <hint/>
-              <alert/>
-              <item>
-                <label><![CDATA[Ja]]></label>
-                <value><![CDATA[Y]]></value>
-              </item>
-              <item>
-                <label><![CDATA[Nee]]></label>
-                <value><![CDATA[N]]></value>
-              </item>
-            </health>
-            <healthExtra>
-              <label><![CDATA[Wat is er aan de hand:]]></label>
-              <hint/>
-              <alert/>
-            </healthExtra>
-            <category-3>
-              <label><![CDATA[Lifestyle]]></label>
-              <hint/>
-              <alert/>
-            </category-3>
-            <subcategory-3-1>
-              <label><![CDATA[<b>Voeding</b><hr>]]></label>
-              <hint/>
-              <alert/>
-            </subcategory-3-1>
-            <group-voeding>
-              <breakfast>
-                <label><![CDATA[Hoeveel dagen per week ontbijt je?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Nooit]]></label>
-                  <value><![CDATA[a]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[1-2 dagen]]></label>
-                  <value><![CDATA[b]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[3-4 dagen]]></label>
-                  <value><![CDATA[c]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[5-6 dagen]]></label>
-                  <value><![CDATA[d]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Alle dagen]]></label>
-                  <value><![CDATA[e]]></value>
-                </item>
-              </breakfast>
-              <fruit>
-                <label><![CDATA[Hoeveel dagen per week eet je fruit?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Nooit]]></label>
-                  <value><![CDATA[a]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[1-2 dagen]]></label>
-                  <value><![CDATA[b]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[3-4 dagen]]></label>
-                  <value><![CDATA[c]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[5-6 dagen]]></label>
-                  <value><![CDATA[d]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Alle dagen]]></label>
-                  <value><![CDATA[e]]></value>
-                </item>
-              </fruit>
-              <fruitAmount>
-                <label><![CDATA[Op de dagen dat je fruit eet, hoeveel stuks fruit eet je dan gewoonlijk]]></label>
-                <hint/>
-                <alert/>
-              </fruitAmount>
-              <vegetables>
-                <label><![CDATA[Hoeveel dagen per week eet je groenten?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Nooit]]></label>
-                  <value><![CDATA[a]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[1-2 dagen]]></label>
-                  <value><![CDATA[b]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[3-4 dagen]]></label>
-                  <value><![CDATA[c]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[5-6 dagen]]></label>
-                  <value><![CDATA[d]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Alle dagen]]></label>
-                  <value><![CDATA[e]]></value>
-                </item>
-              </vegetables>
-              <vegetablesAmount>
-                <label><![CDATA[Op de dagen dat je groenten, sla of rauwkost eet, hoeveel opscheplepels (1 opscheplepel = 4 eetlepels) eet je dan gewoonlijk?]]></label>
-                <hint/>
-                <alert/>
-              </vegetablesAmount>
-              <drinks>
-                <label><![CDATA[Hoeveel drink je per dag]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[minder dan 1 liter]]></label>
-                  <value><![CDATA[a]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[tussen 1 en 1,5 liter]]></label>
-                  <value><![CDATA[b]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[tussen 1,5 en 2 liter]]></label>
-                  <value><![CDATA[c]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[meer dan 2 liter]]></label>
-                  <value><![CDATA[d]]></value>
-                </item>
-              </drinks>
-            </group-voeding>
-            <subcategory-3-2>
-              <label><![CDATA[<b>Mentaal</b><hr>]]></label>
-              <hint/>
-              <alert/>
-            </subcategory-3-2>
-            <group-mentaal>
-              <life>
-                <label><![CDATA[Heb je plezier in je leven?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </life>
-              <family>
-                <label><![CDATA[Doe je veel dingen met je familie/vrienden?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </family>
-              <smile>
-                <label><![CDATA[Lach je iedere dag weleens?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </smile>
-              <comfortable>
-                <label><![CDATA[Voel je je prettig op school en thuis?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Beide]]></label>
-                  <value><![CDATA[a]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[School]]></label>
-                  <value><![CDATA[b]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Thuis]]></label>
-                  <value><![CDATA[c]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Geen van beide]]></label>
-                  <value><![CDATA[d]]></value>
-                </item>
-              </comfortable>
-              <sleep>
-                <label><![CDATA[Slaap je goed?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </sleep>
-              <angry>
-                <label><![CDATA[Ben je meer dan 2 dagen per week boos op iemand of iets?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </angry>
-              <sport>
-                <label><![CDATA[Vind je het leuk om te sporten?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </sport>
-              <happy>
-                <label><![CDATA[Hoe gelukkig ben je?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Helemaal niet]]></label>
-                  <value><![CDATA[a]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Een beetje]]></label>
-                  <value><![CDATA[b]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Gewoon]]></label>
-                  <value><![CDATA[c]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Best wel gelukkig]]></label>
-                  <value><![CDATA[d]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Super gelukkig]]></label>
-                  <value><![CDATA[e]]></value>
-                </item>
-              </happy>
-              <sad>
-                <label><![CDATA[Ben je meer dan 1x per week somber?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </sad>
-              <friends>
-                <label><![CDATA[Hoeveel echte vriendjes/vriendinnetjes heb je?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Geen]]></label>
-                  <value><![CDATA[a]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[1-2]]></label>
-                  <value><![CDATA[b]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[3-5]]></label>
-                  <value><![CDATA[c]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Meer dan 5]]></label>
-                  <value><![CDATA[d]]></value>
-                </item>
-              </friends>
-              <tired>
-                <label><![CDATA[Ben je vaak moe?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </tired>
-              <energy>
-                <label><![CDATA[Heb je altijd veel energie?]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[Ja]]></label>
-                  <value><![CDATA[Y]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[Nee]]></label>
-                  <value><![CDATA[N]]></value>
-                </item>
-              </energy>
-            </group-mentaal>
-            <category-4>
-              <label><![CDATA[Sport & bewegen]]></label>
-              <hint/>
-              <alert/>
-            </category-4>
-            <subcategory-4-1>
-              <label><![CDATA[<b>Sport & bewegen</b><hr>]]></label>
-              <hint/>
-              <alert/>
-            </subcategory-4-1>
-            <infotext-4-1-1>
-              <label><![CDATA[De volgende vragen gaan over lichaamsbeweging op school, vereniging of thuis.]]></label>
-              <hint/>
-              <alert/>
-            </infotext-4-1-1>
-            <group-bewegen>
-              <nngbDays>
-                <label><![CDATA[Hoeveel dagen per week heb je ten minste 30 minuten per dag (matig intensieve) lichaamsbeweging?]]></label>
-                <hint/>
-                <alert/>
-                <help><![CDATA[Het gaat om het gemiddeld aantal dagen van een gewone week. Is het minder dan 1 dag per week, dan vul je 0 in.]]></help>
-              </nngbDays>
-              <activityDuration>
-                <label><![CDATA[Hoelang (in minuten) duren deze activiteiten gemiddeld?]]></label>
-                <hint/>
-                <alert/>
-              </activityDuration>
-              <activityIntensity>
-                <label><![CDATA[Hoe intensief (tussen 0 - 10) schat je deze activiteiten (bewegen/sporten) in?]]></label>
-                <hint/>
-                <alert/>
-              </activityIntensity>
-            </group-bewegen>
-            <Category1>
-              <label><![CDATA[Category1]]></label>
-              <hint/>
-              <alert/>
-              <question1>
-                <label><![CDATA[question1]]></label>
-                <hint/>
-                <alert/>
-                <item>
-                  <label><![CDATA[answer1]]></label>
-                  <hint/>
-                  <value><![CDATA[answer1]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[answer2]]></label>
-                  <hint/>
-                  <value><![CDATA[answer2]]></value>
-                </item>
-                <item>
-                  <label><![CDATA[answer3]]></label>
-                  <hint/>
-                  <value><![CDATA[answer3]]></value>
-                </item>
-              </question1>
-            </Category1>
-          </resource>
-        </resources>
-      </xf:instance>
-      <xf:instance id="fr-service-request-instance" xxf:exclude-result-prefixes="#all">
-        <response/>
-      </xf:instance>	<xxf:script ev:event="xforms-ready">
+<xh:html xmlns:xh="http://www.w3.org/1999/xhtml"
+         xmlns:ev="http://www.w3.org/2001/xml-events"
+         xmlns:exf="http://www.exforms.org/exf/1-0"
+         xmlns:fb="http://orbeon.org/oxf/xml/form-builder"
+         xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
+         xmlns:odt="http://orbeon.org/oxf/xml/datatypes"
+         xmlns:oxf="http://www.orbeon.com/oxf/processors"
+         xmlns:p="http://www.orbeon.com/oxf/pipeline"
+         xmlns:saxon="http://saxon.sf.net/"
+         xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+         xmlns:sql="http://orbeon.org/oxf/xml/sql"
+         xmlns:xf="http://www.w3.org/2002/xforms"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:xpl="java:org.orbeon.oxf.pipeline.api.FunctionLibrary"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xxf="http://orbeon.org/oxf/xml/xforms"
+         xmlns:xxi="http://orbeon.org/oxf/xml/xinclude">
+    <xh:head>
+        <xh:title>KidsScreen</xh:title>
+        <xf:model id="fr-form-model" xxf:expose-xpath-types="true">
+            <xf:instance xxf:readonly="true" id="fr-form-metadata">
+                <metadata>
+                    <application-name>WebForms</application-name>
+                    <form-name>KidsScreen_v2</form-name>
+                    <title xml:lang="en">KidsScreen</title>
+                    <description xml:lang="en">Version: 2 - Modification date: 2014-09-09 11:44:07 - Publication date: 2014-09-09 11:44:28.</description>
+                    <singleton>false</singleton>
+                </metadata>
+            </xf:instance>
+            <xf:instance id="fr-form-instance">
+                <form>
+                    <liferay_email_address/>
+                    <category-1>
+                        <subcategory-1-1/>
+                        <name/>
+                        <school/>
+                        <group/>
+                        <birthdate/>
+                        <gender/>
+                        <height/>
+                        <heightFather/>
+                        <originFather/>
+                        <heightMother/>
+                        <originMother/>
+                        <weight/>
+                    </category-1>
+                    <category-2>
+                        <subcategory-2-1/>
+                        <health/>
+                        <healthExtra/>
+                    </category-2>
+                    <category-3>
+                        <subcategory-3-1/>
+                        <group-voeding>
+                            <breakfast/>
+                            <fruit/>
+                            <fruitAmount/>
+                            <vegetables/>
+                            <vegetablesAmount/>
+                            <drinks/>
+                        </group-voeding>
+                        <subcategory-3-2/>
+                        <group-mentaal>
+                            <life/>
+                            <family/>
+                            <smile/>
+                            <comfortable/>
+                            <sleep/>
+                            <angry/>
+                            <sport/>
+                            <happy/>
+                            <sad/>
+                            <friends/>
+                            <tired/>
+                            <energy/>
+                        </group-mentaal>
+                    </category-3>
+                    <category-4>
+                        <subcategory-4-1/>
+                        <infotext-4-1-1/>
+                        <group-bewegen>
+                            <nngbDays/>
+                            <activityDuration/>
+                            <activityIntensity/>
+                        </group-bewegen>
+                    </category-4>
+                    <category1>
+                        <question1/>
+                    </category1>
+		                  <category1>
+                            <question1/>
+                        </category1>
+                </form>
+            </xf:instance>
+            <xf:bind xmlns:dataModel="java:org.orbeon.oxf.fb.DataModel" id="fr-form-binds"
+                     ref="instance('fr-form-instance')">
+                <xf:bind id="liferay_email_address-bind" name="liferay_email_address"
+                         ref="liferay_email_address"
+                         relevant="false"
+                         type="xf:email"
+                         xxf:default="xxf:get-request-parameter('liferay_email_address')"/>
+                <xf:bind id="category-1-bind" name="category-1" ref="category-1">
+                    <xf:bind id="subcategory-1-1-bind" name="subcategory-1-1" ref="subcategory-1-1"/>
+                    <xf:bind answerFormat="text" id="name-bind" name="name" ref="name" required="true()"/>
+                    <xf:bind answerFormat="text" id="school-bind" name="school" ref="school"
+                             required="true()"/>
+                    <xf:bind id="group-bind" name="group" ref="group" required="true()"/>
+                    <xf:bind answerFormat="birthdate"
+                             constraint=". &lt;= current-date() and (year-from-date(current-date()) - year-from-date(.) &lt;= 120)"
+                             id="birthdate-bind"
+                             name="birthdate"
+                             ref="birthdate"
+                             required="true()"
+                             type="xf:date"/>
+                    <xf:bind id="gender-bind" name="gender" ref="gender" required="true()"/>
+                    <xf:bind answerFormat="number" id="height-bind" name="height" ref="height"
+                             required="true()"
+                             type="xf:decimal"/>
+                    <xf:bind answerFormat="number" id="heightFather-bind" name="heightFather"
+                             ref="heightFather"
+                             type="xf:decimal"/>
+                    <xf:bind id="originFather-bind" name="originFather" ref="originFather" required="true()"/>
+                    <xf:bind answerFormat="number" id="heightMother-bind" name="heightMother"
+                             ref="heightMother"
+                             type="xf:decimal"/>
+                    <xf:bind id="originMother-bind" name="originMother" ref="originMother" required="true()"/>
+                    <xf:bind answerFormat="float" id="weight-bind" name="weight" ref="weight"
+                             required="true()"
+                             type="xf:float"/>
+                </xf:bind>
+                <xf:bind id="category-2-bind" name="category-2" ref="category-2">
+                    <xf:bind id="subcategory-2-1-bind" name="subcategory-2-1" ref="subcategory-2-1"/>
+                    <xf:bind id="health-bind" name="health" ref="health" required="true()"/>
+                    <xf:bind flowrule="health='N'" id="healthExtra-bind" name="healthExtra"
+                             ref="healthExtra"
+                             relevant="($health='N')"
+                             required="true()"/>
+                </xf:bind>
+                <xf:bind flowrule="health='Y' OR healthExtra" id="category-3-bind" name="category-3"
+                         ref="category-3"
+                         relevant="($health='Y') or ($health='N')">
+                    <xf:bind flowrule="" id="subcategory-3-1-bind" name="subcategory-3-1"
+                             ref="subcategory-3-1"
+                             relevant="(($health='Y') or ($health='N'))"/>
+                    <xf:bind id="group-voeding-bind" name="group-voeding" ref="group-voeding"
+                             relevant="($health='Y') or ($health='N')">
+                        <xf:bind flowrule="health='Y' OR healthExtra" id="voeding.breakfast-bind"
+                                 name="voeding.breakfast"
+                                 ref="breakfast"
+                                 relevant="($health='Y') or ($health='N')"
+                                 required="true()"/>
+                        <xf:bind flowrule="health='Y' OR healthExtra" id="voeding.fruit-bind"
+                                 name="voeding.fruit"
+                                 ref="fruit"
+                                 relevant="($health='Y') or ($health='N')"
+                                 required="true()"/>
+                        <xf:bind answerFormat="number" flowrule="voeding.fruit=[Others]"
+                                 id="voeding.fruitAmount-bind"
+                                 name="voeding.fruitAmount"
+                                 ref="fruitAmount"
+                                 relevant="((not($voeding.fruit='a')) and (string-length(string($voeding.fruit)) &gt; 0))"
+                                 required="true()"
+                                 type="xf:decimal"/>
+                        <xf:bind flowrule="voeding.fruit='a' OR voeding.fruitAmount"
+                                 id="voeding.vegetables-bind"
+                                 name="voeding.vegetables"
+                                 ref="vegetables"
+                                 relevant="($voeding.fruit='a') or ((not($voeding.fruit='a')) and (string-length(string($voeding.fruit)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind answerFormat="number" flowrule="voeding.vegetables=[Others]"
+                                 id="voeding.vegetablesAmount-bind"
+                                 name="voeding.vegetablesAmount"
+                                 ref="vegetablesAmount"
+                                 relevant="((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"
+                                 type="xf:decimal"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="voeding.drinks-bind"
+                                 name="voeding.drinks"
+                                 ref="drinks"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                    </xf:bind>
+                    <xf:bind flowrule="" id="subcategory-3-2-bind" name="subcategory-3-2"
+                             ref="subcategory-3-2"
+                             relevant="(($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0)))"/>
+                    <xf:bind id="group-mentaal-bind" name="group-mentaal" ref="group-mentaal"
+                             relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))">
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.life-bind"
+                                 name="mentaal.life"
+                                 ref="life"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.family-bind"
+                                 name="mentaal.family"
+                                 ref="family"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.smile-bind"
+                                 name="mentaal.smile"
+                                 ref="smile"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.comfortable-bind"
+                                 name="mentaal.comfortable"
+                                 ref="comfortable"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.sleep-bind"
+                                 name="mentaal.sleep"
+                                 ref="sleep"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.angry-bind"
+                                 name="mentaal.angry"
+                                 ref="angry"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.sport-bind"
+                                 name="mentaal.sport"
+                                 ref="sport"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.happy-bind"
+                                 name="mentaal.happy"
+                                 ref="happy"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.sad-bind"
+                                 name="mentaal.sad"
+                                 ref="sad"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.friends-bind"
+                                 name="mentaal.friends"
+                                 ref="friends"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.tired-bind"
+                                 name="mentaal.tired"
+                                 ref="tired"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                        <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="mentaal.energy-bind"
+                                 name="mentaal.energy"
+                                 ref="energy"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"/>
+                    </xf:bind>
+                </xf:bind>
+                <xf:bind flowrule="" id="category-4-bind" name="category-4" ref="category-4"
+                         relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))">
+                    <xf:bind flowrule="" id="subcategory-4-1-bind" name="subcategory-4-1"
+                             ref="subcategory-4-1"
+                             relevant="(($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0)))"/>
+                    <xf:bind flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                             id="infotext-4-1-1-bind"
+                             name="infotext-4-1-1"
+                             ref="infotext-4-1-1"
+                             relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"/>
+                    <xf:bind id="group-bewegen-bind" name="group-bewegen" ref="group-bewegen"
+                             relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))">
+                        <xf:bind answerFormat="number"
+                                 flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="bewegen.nngbDays-bind"
+                                 name="bewegen.nngbDays"
+                                 ref="nngbDays"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"
+                                 type="xf:decimal"/>
+                        <xf:bind answerFormat="number"
+                                 flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="bewegen.activityDuration-bind"
+                                 name="bewegen.activityDuration"
+                                 ref="activityDuration"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"
+                                 type="xf:decimal"/>
+                        <xf:bind answerFormat="number"
+                                 flowrule="voeding.vegetables='a' OR voeding.vegetablesAmount"
+                                 id="bewegen.activityIntensity-bind"
+                                 name="bewegen.activityIntensity"
+                                 ref="activityIntensity"
+                                 relevant="($voeding.vegetables='a') or ((not($voeding.vegetables='a')) and (string-length(string($voeding.vegetables)) &gt; 0))"
+                                 required="true()"
+                                 type="xf:decimal"/>
+                    </xf:bind>
+                </xf:bind>
+                <xf:bind id="category1-bind" ref="category1" name="category1">
+                    <xf:bind id="question1-bind" ref="question1" name="question1"/>
+                </xf:bind> 
+            </xf:bind>
+            <xf:instance id="fr-form-attachments">
+                <attachments>
+                    <css filename="" mediatype="text/css" size=""/>
+                    <pdf filename="" mediatype="application/pdf" size=""/>
+                </attachments>
+            </xf:instance>
+            <xf:instance id="fr-form-resources" xxf:readonly="false">
+                <resources>
+                    <resource xml:lang="en">
+                        <question1>
+                            <label>question1</label>
+                            <hint/>
+                            <item>
+                                <label>Answer1</label>
+                                <hint/>
+                                <value>answer1</value>
+                            </item>
+                            <item>
+                                <label>Answer2</label>
+                                <hint/>
+                                <value>answer2</value>
+                            </item>
+                            <item>
+                                <label>Answer3</label>
+                                <hint/>
+                                <value>answer3</value>
+                            </item>
+                        </question1>
+                        <liferay_email_address>
+                            <label>eMail</label>
+                            <hint/>
+                            <alert/>
+                        </liferay_email_address>
+                        <category-1>
+                            <label>Algemeen</label>
+                            <hint/>
+                            <alert/>
+                        </category-1>
+                        <subcategory-1-1>
+                            <label>&lt;b&gt;Algemeen&lt;/b&gt;&lt;hr&gt;</label>
+                            <hint/>
+                            <alert/>
+                        </subcategory-1-1>
+                        <name>
+                            <label>Mijn naam is</label>
+                            <hint/>
+                            <alert/>
+                        </name>
+                        <school>
+                            <label>Ik zit op de ... school</label>
+                            <hint/>
+                            <alert/>
+                        </school>
+                        <group>
+                            <label>Ik zit in groep</label>
+                            <hint/>
+                            <alert/>
+                            <item>
+                                <label>groep 6</label>
+                                <value>6</value>
+                            </item>
+                            <item>
+                                <label>groep7</label>
+                                <value>7</value>
+                            </item>
+                            <item>
+                                <label>groep 8</label>
+                                <value>8</value>
+                            </item>
+                        </group>
+                        <birthdate>
+                            <label>Mijn geboortedatum is</label>
+                            <hint/>
+                            <alert>Inserted date is missing or invalid!</alert>
+                        </birthdate>
+                        <gender>
+                            <label>Ik ben een</label>
+                            <hint/>
+                            <alert/>
+                            <item>
+                                <label>Jongen</label>
+                                <value>M</value>
+                            </item>
+                            <item>
+                                <label>Meisje</label>
+                                <value>F</value>
+                            </item>
+                        </gender>
+                        <height>
+                            <label>Mijn lengte (in centimeters, bv. 162) is</label>
+                            <hint/>
+                            <alert/>
+                        </height>
+                        <heightFather>
+                            <label>De lengte van mijn vader (in centimeters, bv. 184) is</label>
+                            <hint/>
+                            <alert/>
+                        </heightFather>
+                        <originFather>
+                            <label>Mijn vader is geboren in</label>
+                            <hint/>
+                            <alert/>
+                            <item>
+                                <label>Nederland</label>
+                                <value>1</value>
+                            </item>
+                            <item>
+                                <label>Zuid-europa</label>
+                                <value>2</value>
+                            </item>
+                            <item>
+                                <label>Noord-, Oost- of West-europa</label>
+                                <value>3</value>
+                            </item>
+                            <item>
+                                <label>Noord-afrika</label>
+                                <value>4</value>
+                            </item>
+                            <item>
+                                <label>Afrika</label>
+                                <value>5</value>
+                            </item>
+                            <item>
+                                <label>(Midden-)Oosten</label>
+                                <value>6</value>
+                            </item>
+                            <item>
+                                <label>Noord-amerika</label>
+                                <value>7</value>
+                            </item>
+                            <item>
+                                <label>Midden- of Zuid-amerika</label>
+                                <value>8</value>
+                            </item>
+                            <item>
+                                <label>ergens anders</label>
+                                <value>9</value>
+                            </item>
+                        </originFather>
+                        <heightMother>
+                            <label>De lengte van mijn moeder (in centimeters, bv. 170) is</label>
+                            <hint/>
+                            <alert/>
+                        </heightMother>
+                        <originMother>
+                            <label>Mijn moeder is geboren in</label>
+                            <hint/>
+                            <alert/>
+                            <item>
+                                <label>Nederland</label>
+                                <value>1</value>
+                            </item>
+                            <item>
+                                <label>Zuid-europa</label>
+                                <value>2</value>
+                            </item>
+                            <item>
+                                <label>Noord-, Oost- of West-europa</label>
+                                <value>3</value>
+                            </item>
+                            <item>
+                                <label>Noord-afrika</label>
+                                <value>4</value>
+                            </item>
+                            <item>
+                                <label>Afrika</label>
+                                <value>5</value>
+                            </item>
+                            <item>
+                                <label>(Midden-)Oosten</label>
+                                <value>6</value>
+                            </item>
+                            <item>
+                                <label>Noord-amerika</label>
+                                <value>7</value>
+                            </item>
+                            <item>
+                                <label>Midden- of Zuid-amerika</label>
+                                <value>8</value>
+                            </item>
+                            <item>
+                                <label>ergens anders</label>
+                                <value>9</value>
+                            </item>
+                        </originMother>
+                        <weight>
+                            <label>Mijn gewicht (in kg, bv. 55.4) is</label>
+                            <hint/>
+                            <alert/>
+                        </weight>
+                        <category-2>
+                            <label>Gezondheid</label>
+                            <hint/>
+                            <alert/>
+                        </category-2>
+                        <subcategory-2-1>
+                            <label>&lt;b&gt;Gezondheid&lt;/b&gt;&lt;hr&gt;</label>
+                            <hint/>
+                            <alert/>
+                        </subcategory-2-1>
+                        <health>
+                            <label>Voel je je over het algemeen gezond?</label>
+                            <hint/>
+                            <alert/>
+                            <item>
+                                <label>Ja</label>
+                                <value>Y</value>
+                            </item>
+                            <item>
+                                <label>Nee</label>
+                                <value>N</value>
+                            </item>
+                        </health>
+                        <healthExtra>
+                            <label>Wat is er aan de hand:</label>
+                            <hint/>
+                            <alert/>
+                        </healthExtra>
+                        <category1>
+                            <label>category1</label>
+                            <help/>
+                        </category1>
+                        <category-3>
+                            <label>Lifestyle</label>
+                            <hint/>
+                            <alert/>
+                        </category-3>
+                        <subcategory-3-1>
+                            <label>&lt;b&gt;Voeding&lt;/b&gt;&lt;hr&gt;</label>
+                            <hint/>
+                            <alert/>
+                        </subcategory-3-1>
+                        <group-voeding>
+                            <breakfast>
+                                <label>Hoeveel dagen per week ontbijt je?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Nooit</label>
+                                    <value>a</value>
+                                </item>
+                                <item>
+                                    <label>1-2 dagen</label>
+                                    <value>b</value>
+                                </item>
+                                <item>
+                                    <label>3-4 dagen</label>
+                                    <value>c</value>
+                                </item>
+                                <item>
+                                    <label>5-6 dagen</label>
+                                    <value>d</value>
+                                </item>
+                                <item>
+                                    <label>Alle dagen</label>
+                                    <value>e</value>
+                                </item>
+                            </breakfast>
+                            <fruit>
+                                <label>Hoeveel dagen per week eet je fruit?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Nooit</label>
+                                    <value>a</value>
+                                </item>
+                                <item>
+                                    <label>1-2 dagen</label>
+                                    <value>b</value>
+                                </item>
+                                <item>
+                                    <label>3-4 dagen</label>
+                                    <value>c</value>
+                                </item>
+                                <item>
+                                    <label>5-6 dagen</label>
+                                    <value>d</value>
+                                </item>
+                                <item>
+                                    <label>Alle dagen</label>
+                                    <value>e</value>
+                                </item>
+                            </fruit>
+                            <fruitAmount>
+                                <label>Op de dagen dat je fruit eet, hoeveel stuks fruit eet je dan gewoonlijk</label>
+                                <hint/>
+                                <alert/>
+                            </fruitAmount>
+                            <vegetables>
+                                <label>Hoeveel dagen per week eet je groenten?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Nooit</label>
+                                    <value>a</value>
+                                </item>
+                                <item>
+                                    <label>1-2 dagen</label>
+                                    <value>b</value>
+                                </item>
+                                <item>
+                                    <label>3-4 dagen</label>
+                                    <value>c</value>
+                                </item>
+                                <item>
+                                    <label>5-6 dagen</label>
+                                    <value>d</value>
+                                </item>
+                                <item>
+                                    <label>Alle dagen</label>
+                                    <value>e</value>
+                                </item>
+                            </vegetables>
+                            <vegetablesAmount>
+                                <label>Op de dagen dat je groenten, sla of rauwkost eet, hoeveel opscheplepels (1 opscheplepel = 4 eetlepels) eet je dan gewoonlijk?</label>
+                                <hint/>
+                                <alert/>
+                            </vegetablesAmount>
+                            <drinks>
+                                <label>Hoeveel drink je per dag</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>minder dan 1 liter</label>
+                                    <value>a</value>
+                                </item>
+                                <item>
+                                    <label>tussen 1 en 1,5 liter</label>
+                                    <value>b</value>
+                                </item>
+                                <item>
+                                    <label>tussen 1,5 en 2 liter</label>
+                                    <value>c</value>
+                                </item>
+                                <item>
+                                    <label>meer dan 2 liter</label>
+                                    <value>d</value>
+                                </item>
+                            </drinks>
+                        </group-voeding>
+                        <subcategory-3-2>
+                            <label>&lt;b&gt;Mentaal&lt;/b&gt;&lt;hr&gt;</label>
+                            <hint/>
+                            <alert/>
+                        </subcategory-3-2>
+                        <group-mentaal>
+                            <life>
+                                <label>Heb je plezier in je leven?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </life>
+                            <family>
+                                <label>Doe je veel dingen met je familie/vrienden?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </family>
+                            <smile>
+                                <label>Lach je iedere dag weleens?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </smile>
+                            <comfortable>
+                                <label>Voel je je prettig op school en thuis?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Beide</label>
+                                    <value>a</value>
+                                </item>
+                                <item>
+                                    <label>School</label>
+                                    <value>b</value>
+                                </item>
+                                <item>
+                                    <label>Thuis</label>
+                                    <value>c</value>
+                                </item>
+                                <item>
+                                    <label>Geen van beide</label>
+                                    <value>d</value>
+                                </item>
+                            </comfortable>
+                            <sleep>
+                                <label>Slaap je goed?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </sleep>
+                            <angry>
+                                <label>Ben je meer dan 2 dagen per week boos op iemand of iets?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </angry>
+                            <sport>
+                                <label>Vind je het leuk om te sporten?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </sport>
+                            <happy>
+                                <label>Hoe gelukkig ben je?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Helemaal niet</label>
+                                    <value>a</value>
+                                </item>
+                                <item>
+                                    <label>Een beetje</label>
+                                    <value>b</value>
+                                </item>
+                                <item>
+                                    <label>Gewoon</label>
+                                    <value>c</value>
+                                </item>
+                                <item>
+                                    <label>Best wel gelukkig</label>
+                                    <value>d</value>
+                                </item>
+                                <item>
+                                    <label>Super gelukkig</label>
+                                    <value>e</value>
+                                </item>
+                            </happy>
+                            <sad>
+                                <label>Ben je meer dan 1x per week somber?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </sad>
+                            <friends>
+                                <label>Hoeveel echte vriendjes/vriendinnetjes heb je?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Geen</label>
+                                    <value>a</value>
+                                </item>
+                                <item>
+                                    <label>1-2</label>
+                                    <value>b</value>
+                                </item>
+                                <item>
+                                    <label>3-5</label>
+                                    <value>c</value>
+                                </item>
+                                <item>
+                                    <label>Meer dan 5</label>
+                                    <value>d</value>
+                                </item>
+                            </friends>
+                            <tired>
+                                <label>Ben je vaak moe?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </tired>
+                            <energy>
+                                <label>Heb je altijd veel energie?</label>
+                                <hint/>
+                                <alert/>
+                                <item>
+                                    <label>Ja</label>
+                                    <value>Y</value>
+                                </item>
+                                <item>
+                                    <label>Nee</label>
+                                    <value>N</value>
+                                </item>
+                            </energy>
+                        </group-mentaal>
+                        <category-4>
+                            <label>Sport &amp; bewegen</label>
+                            <hint/>
+                            <alert/>
+                        </category-4>
+                        <subcategory-4-1>
+                            <label>&lt;b&gt;Sport &amp; bewegen&lt;/b&gt;&lt;hr&gt;</label>
+                            <hint/>
+                            <alert/>
+                        </subcategory-4-1>
+                        <infotext-4-1-1>
+                            <label>De volgende vragen gaan over lichaamsbeweging op school, vereniging of thuis.</label>
+                            <hint/>
+                            <alert/>
+                        </infotext-4-1-1>
+                        <group-bewegen>
+                            <nngbDays>
+                                <label>Hoeveel dagen per week heb je ten minste 30 minuten per dag (matig intensieve) lichaamsbeweging?</label>
+                                <hint/>
+                                <alert/>
+                                <help>Het gaat om het gemiddeld aantal dagen van een gewone week. Is het minder dan 1 dag per week, dan vul je 0 in.</help>
+                            </nngbDays>
+                            <activityDuration>
+                                <label>Hoelang (in minuten) duren deze activiteiten gemiddeld?</label>
+                                <hint/>
+                                <alert/>
+                            </activityDuration>
+                            <activityIntensity>
+                                <label>Hoe intensief (tussen 0 - 10) schat je deze activiteiten (bewegen/sporten) in?</label>
+                                <hint/>
+                                <alert/>
+                            </activityIntensity>
+                        </group-bewegen>
+                    </resource>
+                </resources>
+            </xf:instance>
+            <xf:instance id="fr-service-request-instance" xxf:exclude-result-prefixes="#all">
+                <response/>
+            </xf:instance>	
+            <xxf:script ev:event="xforms-ready">
 		//Hide empty lines in form.
 		$('div.fr-section-content div.xbl-fr-grid table.fr-norepeat tbody tr').each(function(){
 		if($(this).find('td').children('div.fr-grid-content').children('span').text().trim().length == 0){
@@ -708,7 +884,8 @@
 		}
 		});
 		</xxf:script>
-</xf:model>	<xxf:script ev:event="xforms-value-changed">
+        </xf:model>	
+        <xxf:script ev:event="xforms-value-changed">
 		//Hide empty lines in form.
 		$('div.fr-section-content div.xbl-fr-grid table.fr-norepeat tbody tr').each(function(){
 		if($(this).find('td').children('div.fr-grid-content').children('span').text().trim().length == 0){
@@ -719,545 +896,541 @@
 		}
 		});
 		</xxf:script>
-</xh:head>
-  <xh:body>
-    <fr:view>
-      <fr:body xmlns:dataModel="java:org.orbeon.oxf.fb.DataModel" xmlns:xbl="http://www.w3.org/ns/xbl">
-        <xf:input bind="liferay_email_address-bind" id="liferay_email_address-control">
-          <xf:label mediatype="text/html" ref="$form-resources/liferay_email_address/label"/>
-          <xf:hint ref="$form-resources/liferay_email_address/hint"/>
-          <xf:alert ref="$form-resources/liferay_email_address/alert"/>
-        </xf:input>
-        <fr:section bind="category-1-bind" id="category-1-control">
-          <xf:label mediatype="text/html" ref="$form-resources/category-1/label"/>
-          <xf:hint ref="$form-resources/category-1/hint"/>
-          <xf:alert ref="$form-resources/category-1/alert"/>
-          <xh:tr>
-            <xh:td>
-              <xf:output bind="subcategory-1-1-bind" id="subcategory-1-1-control">
-                <xf:label mediatype="text/html" ref="$form-resources/subcategory-1-1/label"/>
-                <xf:hint ref="$form-resources/subcategory-1-1/hint"/>
-                <xf:alert ref="$form-resources/subcategory-1-1/alert"/>
-              </xf:output>
-            </xh:td>
-          </xh:tr>
-          <fr:grid>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="name-bind" id="name-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/name/label"/>
-                  <xf:hint ref="$form-resources/name/hint"/>
-                  <xf:alert ref="$form-resources/name/alert"/>
+    </xh:head>
+    <xh:body>
+        <fr:view>
+            <fr:body xmlns:xbl="http://www.w3.org/ns/xbl"
+                     xmlns:dataModel="java:org.orbeon.oxf.fb.DataModel">
+                <xf:input bind="liferay_email_address-bind" id="liferay_email_address-control">
+                    <xf:label mediatype="text/html" ref="$form-resources/liferay_email_address/label"/>
+                    <xf:hint ref="$form-resources/liferay_email_address/hint"/>
+                    <xf:alert ref="$form-resources/liferay_email_address/alert"/>
                 </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="school-bind" id="school-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/school/label"/>
-                  <xf:hint ref="$form-resources/school/hint"/>
-                  <xf:alert ref="$form-resources/school/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="minimal" bind="group-bind" id="group-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group/label"/>
-                  <xf:hint ref="$form-resources/group/hint"/>
-                  <xf:alert ref="$form-resources/group/alert"/>
-                  <xf:item>
-                    <xf:label>[Select...]</xf:label>
-                    <xf:value/>
-                  </xf:item>
-                  <xf:itemset ref="$form-resources/group/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="birthdate-bind" id="birthdate-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/birthdate/label"/>
-                  <xf:hint ref="$form-resources/birthdate/hint"/>
-                  <xf:alert ref="$form-resources/birthdate/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="minimal" bind="gender-bind" id="gender-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/gender/label"/>
-                  <xf:hint ref="$form-resources/gender/hint"/>
-                  <xf:alert ref="$form-resources/gender/alert"/>
-                  <xf:item>
-                    <xf:label>[Select...]</xf:label>
-                    <xf:value/>
-                  </xf:item>
-                  <xf:itemset ref="$form-resources/gender/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="height-bind" id="height-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/height/label"/>
-                  <xf:hint ref="$form-resources/height/hint"/>
-                  <xf:alert ref="$form-resources/height/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="heightFather-bind" id="heightFather-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/heightFather/label"/>
-                  <xf:hint ref="$form-resources/heightFather/hint"/>
-                  <xf:alert ref="$form-resources/heightFather/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="minimal" bind="originFather-bind" id="originFather-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/originFather/label"/>
-                  <xf:hint ref="$form-resources/originFather/hint"/>
-                  <xf:alert ref="$form-resources/originFather/alert"/>
-                  <xf:item>
-                    <xf:label>[Select...]</xf:label>
-                    <xf:value/>
-                  </xf:item>
-                  <xf:itemset ref="$form-resources/originFather/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="heightMother-bind" id="heightMother-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/heightMother/label"/>
-                  <xf:hint ref="$form-resources/heightMother/hint"/>
-                  <xf:alert ref="$form-resources/heightMother/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="minimal" bind="originMother-bind" id="originMother-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/originMother/label"/>
-                  <xf:hint ref="$form-resources/originMother/hint"/>
-                  <xf:alert ref="$form-resources/originMother/alert"/>
-                  <xf:item>
-                    <xf:label>[Select...]</xf:label>
-                    <xf:value/>
-                  </xf:item>
-                  <xf:itemset ref="$form-resources/originMother/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="weight-bind" id="weight-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/weight/label"/>
-                  <xf:hint ref="$form-resources/weight/hint"/>
-                  <xf:alert ref="$form-resources/weight/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-          </fr:grid>
-        </fr:section>
-        <fr:section bind="category-2-bind" id="category-2-control">
-          <xf:label mediatype="text/html" ref="$form-resources/category-2/label"/>
-          <xf:hint ref="$form-resources/category-2/hint"/>
-          <xf:alert ref="$form-resources/category-2/alert"/>
-          <xh:tr>
-            <xh:td>
-              <xf:output bind="subcategory-2-1-bind" id="subcategory-2-1-control">
-                <xf:label mediatype="text/html" ref="$form-resources/subcategory-2-1/label"/>
-                <xf:hint ref="$form-resources/subcategory-2-1/hint"/>
-                <xf:alert ref="$form-resources/subcategory-2-1/alert"/>
-              </xf:output>
-            </xh:td>
-          </xh:tr>
-          <fr:grid>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="health-bind" id="health-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/health/label"/>
-                  <xf:hint ref="$form-resources/health/hint"/>
-                  <xf:alert ref="$form-resources/health/alert"/>
-                  <xf:itemset ref="$form-resources/health/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:textarea bind="healthExtra-bind" id="healthExtra-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/healthExtra/label"/>
-                  <xf:hint ref="$form-resources/healthExtra/hint"/>
-                  <xf:alert ref="$form-resources/healthExtra/alert"/>
-                </xf:textarea>
-              </xh:td>
-            </xh:tr>
-          </fr:grid>
-        </fr:section>
-        <fr:section bind="category-3-bind" id="category-3-control">
-          <xf:label mediatype="text/html" ref="$form-resources/category-3/label"/>
-          <xf:hint ref="$form-resources/category-3/hint"/>
-          <xf:alert ref="$form-resources/category-3/alert"/>
-          <xh:tr>
-            <xh:td>
-              <xf:output bind="subcategory-3-1-bind" id="subcategory-3-1-control">
-                <xf:label mediatype="text/html" ref="$form-resources/subcategory-3-1/label"/>
-                <xf:hint ref="$form-resources/subcategory-3-1/hint"/>
-                <xf:alert ref="$form-resources/subcategory-3-1/alert"/>
-              </xf:output>
-            </xh:td>
-          </xh:tr>
-          <fr:grid>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="voeding.breakfast-bind" id="voeding.breakfast-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-voeding/breakfast/label"/>
-                  <xf:hint ref="$form-resources/group-voeding/breakfast/hint"/>
-                  <xf:alert ref="$form-resources/group-voeding/breakfast/alert"/>
-                  <xf:itemset ref="$form-resources/group-voeding/breakfast/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="voeding.fruit-bind" id="voeding.fruit-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-voeding/fruit/label"/>
-                  <xf:hint ref="$form-resources/group-voeding/fruit/hint"/>
-                  <xf:alert ref="$form-resources/group-voeding/fruit/alert"/>
-                  <xf:itemset ref="$form-resources/group-voeding/fruit/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="voeding.fruitAmount-bind" id="voeding.fruitAmount-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-voeding/fruitAmount/label"/>
-                  <xf:hint ref="$form-resources/group-voeding/fruitAmount/hint"/>
-                  <xf:alert ref="$form-resources/group-voeding/fruitAmount/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="voeding.vegetables-bind" id="voeding.vegetables-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-voeding/vegetables/label"/>
-                  <xf:hint ref="$form-resources/group-voeding/vegetables/hint"/>
-                  <xf:alert ref="$form-resources/group-voeding/vegetables/alert"/>
-                  <xf:itemset ref="$form-resources/group-voeding/vegetables/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="voeding.vegetablesAmount-bind" id="voeding.vegetablesAmount-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-voeding/vegetablesAmount/label"/>
-                  <xf:hint ref="$form-resources/group-voeding/vegetablesAmount/hint"/>
-                  <xf:alert ref="$form-resources/group-voeding/vegetablesAmount/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="voeding.drinks-bind" id="voeding.drinks-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-voeding/drinks/label"/>
-                  <xf:hint ref="$form-resources/group-voeding/drinks/hint"/>
-                  <xf:alert ref="$form-resources/group-voeding/drinks/alert"/>
-                  <xf:itemset ref="$form-resources/group-voeding/drinks/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:output bind="subcategory-3-2-bind" id="subcategory-3-2-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/subcategory-3-2/label"/>
-                  <xf:hint ref="$form-resources/subcategory-3-2/hint"/>
-                  <xf:alert ref="$form-resources/subcategory-3-2/alert"/>
-                </xf:output>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.life-bind" id="mentaal.life-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/life/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/life/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/life/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/life/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.family-bind" id="mentaal.family-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/family/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/family/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/family/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/family/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.smile-bind" id="mentaal.smile-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/smile/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/smile/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/smile/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/smile/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.comfortable-bind" id="mentaal.comfortable-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/comfortable/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/comfortable/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/comfortable/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/comfortable/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.sleep-bind" id="mentaal.sleep-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/sleep/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/sleep/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/sleep/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/sleep/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.angry-bind" id="mentaal.angry-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/angry/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/angry/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/angry/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/angry/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.sport-bind" id="mentaal.sport-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/sport/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/sport/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/sport/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/sport/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.happy-bind" id="mentaal.happy-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/happy/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/happy/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/happy/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/happy/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.sad-bind" id="mentaal.sad-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/sad/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/sad/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/sad/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/sad/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.friends-bind" id="mentaal.friends-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/friends/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/friends/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/friends/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/friends/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.tired-bind" id="mentaal.tired-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/tired/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/tired/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/tired/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/tired/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:select1 appearance="full" bind="mentaal.energy-bind" id="mentaal.energy-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/energy/label"/>
-                  <xf:hint ref="$form-resources/group-mentaal/energy/hint"/>
-                  <xf:alert ref="$form-resources/group-mentaal/energy/alert"/>
-                  <xf:itemset ref="$form-resources/group-mentaal/energy/item">
-                    <xf:label ref="label"/>
-                    <xf:value ref="value"/>
-                    <xf:hint ref="hint"/>
-                  </xf:itemset>
-                </xf:select1>
-              </xh:td>
-            </xh:tr>
-          </fr:grid>
-        </fr:section>
-        <fr:section bind="category-4-bind" id="category-4-control">
-          <xf:label mediatype="text/html" ref="$form-resources/category-4/label"/>
-          <xf:hint ref="$form-resources/category-4/hint"/>
-          <xf:alert ref="$form-resources/category-4/alert"/>
-          <xh:tr>
-            <xh:td>
-              <xf:output bind="subcategory-4-1-bind" id="subcategory-4-1-control">
-                <xf:label mediatype="text/html" ref="$form-resources/subcategory-4-1/label"/>
-                <xf:hint ref="$form-resources/subcategory-4-1/hint"/>
-                <xf:alert ref="$form-resources/subcategory-4-1/alert"/>
-              </xf:output>
-            </xh:td>
-          </xh:tr>
-          <fr:grid>
-            <xh:tr>
-              <xh:td>
-                <xf:output bind="infotext-4-1-1-bind" id="infotext-4-1-1-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/infotext-4-1-1/label"/>
-                  <xf:hint ref="$form-resources/infotext-4-1-1/hint"/>
-                  <xf:alert ref="$form-resources/infotext-4-1-1/alert"/>
-                </xf:output>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="bewegen.nngbDays-bind" id="bewegen.nngbDays-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-bewegen/nngbDays/label"/>
-                  <xf:hint ref="$form-resources/group-bewegen/nngbDays/hint"/>
-                  <xf:alert ref="$form-resources/group-bewegen/nngbDays/alert"/>
-                  <xf:help mediatype="text/html" ref="$form-resources/group-bewegen/nngbDays/help"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="bewegen.activityDuration-bind" id="bewegen.activityDuration-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-bewegen/activityDuration/label"/>
-                  <xf:hint ref="$form-resources/group-bewegen/activityDuration/hint"/>
-                  <xf:alert ref="$form-resources/group-bewegen/activityDuration/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-            <xh:tr>
-              <xh:td>
-                <xf:input bind="bewegen.activityIntensity-bind" id="bewegen.activityIntensity-control">
-                  <xf:label mediatype="text/html" ref="$form-resources/group-bewegen/activityIntensity/label"/>
-                  <xf:hint ref="$form-resources/group-bewegen/activityIntensity/hint"/>
-                  <xf:alert ref="$form-resources/group-bewegen/activityIntensity/alert"/>
-                </xf:input>
-              </xh:td>
-            </xh:tr>
-          </fr:grid>
-        </fr:section>
-        <fr:section bind="Category1-bind" id="Category1-control">
-          <xf:label mediatype="text/html" ref="$form-resources/Category1/label"/>
-          <xf:hint ref="$form-resources/Category1/hint"/>
-          <xf:alert ref="$form-resources/Category1/alert"/>
-          <xh:tr>
-            <xh:td>
-              <xf:select appearance="full" bind="question1-bind" id="question1-control">
-                <xf:label mediatype="text/html" ref="$form-resources/Category1/question1/label"/>
-                <xf:hint ref="$form-resources/Category1/question1/hint"/>
-                <xf:alert ref="$form-resources/Category1/question1/alert"/>
-                <xf:itemset ref="$form-resources/Category1/question1/item">
-                  <xf:label mediatype="text/html" ref="label"/>
-                  <xf:value ref="value"/>
-                  <xf:hint ref="hint"/>
-                </xf:itemset>
-              </xf:select>
-            </xh:td>
-          </xh:tr>
-        </fr:section>
-      </fr:body>
-    </fr:view>
-  </xh:body>
+                <fr:section bind="category-1-bind" id="category-1-control">
+                    <xf:label mediatype="text/html" ref="$form-resources/category-1/label"/>
+                    <xf:hint ref="$form-resources/category-1/hint"/>
+                    <xf:alert ref="$form-resources/category-1/alert"/>
+                    <xh:tr>
+                        <xh:td>
+                            <xf:output bind="subcategory-1-1-bind" id="subcategory-1-1-control">
+                                <xf:label mediatype="text/html" ref="$form-resources/subcategory-1-1/label"/>
+                                <xf:hint ref="$form-resources/subcategory-1-1/hint"/>
+                                <xf:alert ref="$form-resources/subcategory-1-1/alert"/>
+                            </xf:output>
+                        </xh:td>
+                    </xh:tr>
+                    <fr:grid>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="name-bind" id="name-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/name/label"/>
+                                    <xf:hint ref="$form-resources/name/hint"/>
+                                    <xf:alert ref="$form-resources/name/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="school-bind" id="school-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/school/label"/>
+                                    <xf:hint ref="$form-resources/school/hint"/>
+                                    <xf:alert ref="$form-resources/school/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <fr:dropdown-select1 bind="group-bind" id="group-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group/label"/>
+                                    <xf:hint ref="$form-resources/group/hint"/>
+                                    <xf:alert ref="$form-resources/group/alert"/>
+                  
+                                    <xf:itemset ref="$form-resources/group/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </fr:dropdown-select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="birthdate-bind" id="birthdate-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/birthdate/label"/>
+                                    <xf:hint ref="$form-resources/birthdate/hint"/>
+                                    <xf:alert ref="$form-resources/birthdate/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <fr:dropdown-select1 bind="gender-bind" id="gender-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/gender/label"/>
+                                    <xf:hint ref="$form-resources/gender/hint"/>
+                                    <xf:alert ref="$form-resources/gender/alert"/>
+                  
+                                    <xf:itemset ref="$form-resources/gender/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </fr:dropdown-select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="height-bind" id="height-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/height/label"/>
+                                    <xf:hint ref="$form-resources/height/hint"/>
+                                    <xf:alert ref="$form-resources/height/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="heightFather-bind" id="heightFather-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/heightFather/label"/>
+                                    <xf:hint ref="$form-resources/heightFather/hint"/>
+                                    <xf:alert ref="$form-resources/heightFather/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <fr:dropdown-select1 bind="originFather-bind" id="originFather-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/originFather/label"/>
+                                    <xf:hint ref="$form-resources/originFather/hint"/>
+                                    <xf:alert ref="$form-resources/originFather/alert"/>
+                  
+                                    <xf:itemset ref="$form-resources/originFather/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </fr:dropdown-select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="heightMother-bind" id="heightMother-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/heightMother/label"/>
+                                    <xf:hint ref="$form-resources/heightMother/hint"/>
+                                    <xf:alert ref="$form-resources/heightMother/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <fr:dropdown-select1 bind="originMother-bind" id="originMother-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/originMother/label"/>
+                                    <xf:hint ref="$form-resources/originMother/hint"/>
+                                    <xf:alert ref="$form-resources/originMother/alert"/>
+                  
+                                    <xf:itemset ref="$form-resources/originMother/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </fr:dropdown-select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="weight-bind" id="weight-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/weight/label"/>
+                                    <xf:hint ref="$form-resources/weight/hint"/>
+                                    <xf:alert ref="$form-resources/weight/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                    </fr:grid>
+                </fr:section>
+                <fr:section bind="category-2-bind" id="category-2-control">
+                    <xf:label mediatype="text/html" ref="$form-resources/category-2/label"/>
+                    <xf:hint ref="$form-resources/category-2/hint"/>
+                    <xf:alert ref="$form-resources/category-2/alert"/>
+                    <xh:tr>
+                        <xh:td>
+                            <xf:output bind="subcategory-2-1-bind" id="subcategory-2-1-control">
+                                <xf:label mediatype="text/html" ref="$form-resources/subcategory-2-1/label"/>
+                                <xf:hint ref="$form-resources/subcategory-2-1/hint"/>
+                                <xf:alert ref="$form-resources/subcategory-2-1/alert"/>
+                            </xf:output>
+                        </xh:td>
+                    </xh:tr>
+                    <fr:grid>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="health-bind" id="health-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/health/label"/>
+                                    <xf:hint ref="$form-resources/health/hint"/>
+                                    <xf:alert ref="$form-resources/health/alert"/>
+                                    <xf:itemset ref="$form-resources/health/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:textarea bind="healthExtra-bind" id="healthExtra-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/healthExtra/label"/>
+                                    <xf:hint ref="$form-resources/healthExtra/hint"/>
+                                    <xf:alert ref="$form-resources/healthExtra/alert"/>
+                                </xf:textarea>
+                            </xh:td>
+                        </xh:tr>
+                    </fr:grid>
+                </fr:section>
+                <fr:section bind="category-3-bind" id="category-3-control">
+                    <xf:label mediatype="text/html" ref="$form-resources/category-3/label"/>
+                    <xf:hint ref="$form-resources/category-3/hint"/>
+                    <xf:alert ref="$form-resources/category-3/alert"/>
+                    <xh:tr>
+                        <xh:td>
+                            <xf:output bind="subcategory-3-1-bind" id="subcategory-3-1-control">
+                                <xf:label mediatype="text/html" ref="$form-resources/subcategory-3-1/label"/>
+                                <xf:hint ref="$form-resources/subcategory-3-1/hint"/>
+                                <xf:alert ref="$form-resources/subcategory-3-1/alert"/>
+                            </xf:output>
+                        </xh:td>
+                    </xh:tr>
+                    <fr:grid>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="voeding.breakfast-bind" id="voeding.breakfast-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-voeding/breakfast/label"/>
+                                    <xf:hint ref="$form-resources/group-voeding/breakfast/hint"/>
+                                    <xf:alert ref="$form-resources/group-voeding/breakfast/alert"/>
+                                    <xf:itemset ref="$form-resources/group-voeding/breakfast/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="voeding.fruit-bind" id="voeding.fruit-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-voeding/fruit/label"/>
+                                    <xf:hint ref="$form-resources/group-voeding/fruit/hint"/>
+                                    <xf:alert ref="$form-resources/group-voeding/fruit/alert"/>
+                                    <xf:itemset ref="$form-resources/group-voeding/fruit/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="voeding.fruitAmount-bind" id="voeding.fruitAmount-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-voeding/fruitAmount/label"/>
+                                    <xf:hint ref="$form-resources/group-voeding/fruitAmount/hint"/>
+                                    <xf:alert ref="$form-resources/group-voeding/fruitAmount/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="voeding.vegetables-bind"
+                                            id="voeding.vegetables-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-voeding/vegetables/label"/>
+                                    <xf:hint ref="$form-resources/group-voeding/vegetables/hint"/>
+                                    <xf:alert ref="$form-resources/group-voeding/vegetables/alert"/>
+                                    <xf:itemset ref="$form-resources/group-voeding/vegetables/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="voeding.vegetablesAmount-bind" id="voeding.vegetablesAmount-control">
+                                    <xf:label mediatype="text/html"
+                                              ref="$form-resources/group-voeding/vegetablesAmount/label"/>
+                                    <xf:hint ref="$form-resources/group-voeding/vegetablesAmount/hint"/>
+                                    <xf:alert ref="$form-resources/group-voeding/vegetablesAmount/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="voeding.drinks-bind" id="voeding.drinks-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-voeding/drinks/label"/>
+                                    <xf:hint ref="$form-resources/group-voeding/drinks/hint"/>
+                                    <xf:alert ref="$form-resources/group-voeding/drinks/alert"/>
+                                    <xf:itemset ref="$form-resources/group-voeding/drinks/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:output bind="subcategory-3-2-bind" id="subcategory-3-2-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/subcategory-3-2/label"/>
+                                    <xf:hint ref="$form-resources/subcategory-3-2/hint"/>
+                                    <xf:alert ref="$form-resources/subcategory-3-2/alert"/>
+                                </xf:output>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.life-bind" id="mentaal.life-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/life/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/life/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/life/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/life/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.family-bind" id="mentaal.family-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/family/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/family/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/family/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/family/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.smile-bind" id="mentaal.smile-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/smile/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/smile/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/smile/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/smile/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.comfortable-bind"
+                                            id="mentaal.comfortable-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/comfortable/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/comfortable/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/comfortable/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/comfortable/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.sleep-bind" id="mentaal.sleep-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/sleep/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/sleep/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/sleep/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/sleep/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.angry-bind" id="mentaal.angry-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/angry/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/angry/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/angry/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/angry/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.sport-bind" id="mentaal.sport-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/sport/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/sport/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/sport/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/sport/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.happy-bind" id="mentaal.happy-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/happy/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/happy/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/happy/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/happy/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.sad-bind" id="mentaal.sad-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/sad/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/sad/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/sad/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/sad/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.friends-bind" id="mentaal.friends-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/friends/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/friends/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/friends/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/friends/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.tired-bind" id="mentaal.tired-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/tired/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/tired/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/tired/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/tired/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select1 appearance="full" bind="mentaal.energy-bind" id="mentaal.energy-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-mentaal/energy/label"/>
+                                    <xf:hint ref="$form-resources/group-mentaal/energy/hint"/>
+                                    <xf:alert ref="$form-resources/group-mentaal/energy/alert"/>
+                                    <xf:itemset ref="$form-resources/group-mentaal/energy/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xh:td>
+                        </xh:tr>
+                    </fr:grid>
+                </fr:section>
+                <fr:section bind="category-4-bind" id="category-4-control">
+                    <xf:label mediatype="text/html" ref="$form-resources/category-4/label"/>
+                    <xf:hint ref="$form-resources/category-4/hint"/>
+                    <xf:alert ref="$form-resources/category-4/alert"/>
+                    <xh:tr>
+                        <xh:td>
+                            <xf:output bind="subcategory-4-1-bind" id="subcategory-4-1-control">
+                                <xf:label mediatype="text/html" ref="$form-resources/subcategory-4-1/label"/>
+                                <xf:hint ref="$form-resources/subcategory-4-1/hint"/>
+                                <xf:alert ref="$form-resources/subcategory-4-1/alert"/>
+                            </xf:output>
+                        </xh:td>
+                    </xh:tr>
+                    <fr:grid>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:output bind="infotext-4-1-1-bind" id="infotext-4-1-1-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/infotext-4-1-1/label"/>
+                                    <xf:hint ref="$form-resources/infotext-4-1-1/hint"/>
+                                    <xf:alert ref="$form-resources/infotext-4-1-1/alert"/>
+                                </xf:output>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="bewegen.nngbDays-bind" id="bewegen.nngbDays-control">
+                                    <xf:label mediatype="text/html" ref="$form-resources/group-bewegen/nngbDays/label"/>
+                                    <xf:hint ref="$form-resources/group-bewegen/nngbDays/hint"/>
+                                    <xf:alert ref="$form-resources/group-bewegen/nngbDays/alert"/>
+                                    <xf:help mediatype="text/html" ref="$form-resources/group-bewegen/nngbDays/help"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="bewegen.activityDuration-bind" id="bewegen.activityDuration-control">
+                                    <xf:label mediatype="text/html"
+                                              ref="$form-resources/group-bewegen/activityDuration/label"/>
+                                    <xf:hint ref="$form-resources/group-bewegen/activityDuration/hint"/>
+                                    <xf:alert ref="$form-resources/group-bewegen/activityDuration/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:input bind="bewegen.activityIntensity-bind" id="bewegen.activityIntensity-control">
+                                    <xf:label mediatype="text/html"
+                                              ref="$form-resources/group-bewegen/activityIntensity/label"/>
+                                    <xf:hint ref="$form-resources/group-bewegen/activityIntensity/hint"/>
+                                    <xf:alert ref="$form-resources/group-bewegen/activityIntensity/alert"/>
+                                </xf:input>
+                            </xh:td>
+                        </xh:tr>
+                    </fr:grid>
+                </fr:section>
+                <fr:section id="category1-control" bind="category1-bind">
+                    <xf:label ref="$form-resources/category1/label"/>
+                    <fr:grid>
+                        <xh:tr>
+                            <xh:td>
+                                <xf:select id="question1-control" appearance="full" bind="question1-bind">
+                                    <xf:label ref="$form-resources/question1/label"/>
+                                    <xf:hint ref="$form-resources/question1/hint"/>
+                                    <xf:alert ref="$fr-resources/detail/labels/alert"/>
+                        
+                        
+                                    <xf:itemset ref="$form-resources/question1/item">
+                                        <xf:label ref="label"/>
+                                        <xf:value ref="value"/>
+                                        <xf:hint ref="hint"/>
+                                    </xf:itemset>
+                                </xf:select>
+                            </xh:td>
+                        </xh:tr>
+                    </fr:grid>
+                </fr:section>
+            </fr:body>
+        </fr:view>
+    </xh:body>
 </xh:html>

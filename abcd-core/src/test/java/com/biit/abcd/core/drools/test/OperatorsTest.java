@@ -451,6 +451,9 @@ public class OperatorsTest extends KidsFormCreator {
 					CUSTOM_VARIABLE_TO_COMPARE);
 			// IN rule
 			createInRule(form, getCategoryExpressionValueCustomVariable(form));
+			
+			System.out.println("#####################################");
+			System.out.println(form.getRules());
 			// Create the diagram
 			createDiagram(form);
 			// Create the drools rules and launch the engine
@@ -678,10 +681,6 @@ public class OperatorsTest extends KidsFormCreator {
 					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 					new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE));
 			rule.setActions(action);
-
-			System.out.println("#####################################");
-			System.out.println(condition);
-			System.out.println(action);
 
 			// Add the rule to the form
 			form.getRules().add(rule);
