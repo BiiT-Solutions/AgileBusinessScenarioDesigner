@@ -55,8 +55,8 @@ public class PluginsTest extends KidsFormCreator {
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
 	private final static String LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES = "methodGetPropertiesSources";
 	private final static String LIFERAY_ARTICLE_PROPERTY = "Article1";
-	private final static String LIFERAY_RESULT = "Basis Sportmedisch Onderzoek\nBasis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...";
-	private final static String LIFERAY_CONFIG_FILE = "abcd-core/src/test/resources/plugins/liferay-knowledge-base-0.1.0-jar-with-dependencies.conf";
+	private final static String LIFERAY_RESULT = "Basis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...";
+	private final static String LIFERAY_CONFIG_FILE = "abcd-core/src/test/resources/plugins/liferay-knowledge-base-0.1.6-jar-with-dependencies.conf";
 
 	@Test(groups = { "pluginsTest" })
 	public void helloWorldPluginSelectionTest1() {
