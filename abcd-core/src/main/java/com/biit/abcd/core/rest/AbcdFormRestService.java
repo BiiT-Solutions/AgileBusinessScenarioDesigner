@@ -54,6 +54,9 @@ public class AbcdFormRestService {
 	public Response getAllSimpleFormViewsByUserEmail(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
 		if ((parameters != null) && (parameters.size() == 1)) {
 			Set<IGroup<Long>> organizations = getUserOrganizations(parameters.get(0));
+			if (organizations == null) {
+				return Response.serverError().entity("{\"error\":\"User not allowed to access form\"}").build();
+			}
 			List<SimpleFormView> simpleForms = new ArrayList<>();
 			for (IGroup<Long> organization : organizations) {
 				simpleForms.addAll(simpleFormViewDao.getSimpleFormViewByOrganization(organization.getId()));
@@ -75,8 +78,7 @@ public class AbcdFormRestService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAllSimpleFormViewByLabelAndOrganization")
-	public Response getAllSimpleFormViewByLabelAndOrganization(
-			@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
+	public Response getAllSimpleFormViewByLabelAndOrganization(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
 		if ((parameters != null) && (parameters.size() == 3)) {
 			Long formOrganization = Long.parseLong(parameters.get(2));
 
@@ -87,8 +89,7 @@ public class AbcdFormRestService {
 				for (IGroup<Long> organization : userOrganizations) {
 					if (organization.getId() == formOrganization) {
 						// Get the simple form information
-						List<SimpleFormView> simpleForms = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(
-								parameters.get(1), formOrganization);
+						List<SimpleFormView> simpleForms = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(parameters.get(1), formOrganization);
 						return Response.ok(parseSimpleFormViewList(simpleForms), MediaType.APPLICATION_JSON).build();
 					}
 				}
@@ -119,7 +120,7 @@ public class AbcdFormRestService {
 			Form formById = formDao.get(Long.parseLong(parameters.get(1)));
 			if (userOrganizations != null) {
 				for (IGroup<Long> organization : userOrganizations) {
-					if (organization.getId() == formById.getOrganizationId()) {
+					if (organization.getId().equals(formById.getOrganizationId())) {
 						// Get the form information
 						return Response.ok(formById.toJson(), MediaType.APPLICATION_JSON).build();
 					}
@@ -144,8 +145,7 @@ public class AbcdFormRestService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getFormByLabelOrganizationAndVersion")
-	public Response getFormByLabelOrganizationAndVersion(
-			@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
+	public Response getFormByLabelOrganizationAndVersion(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
 		if ((parameters != null) && (parameters.size() == 4)) {
 			Long formOrganization = Long.parseLong(parameters.get(2));
 			// First check if the user and the form belong to the same
@@ -153,10 +153,9 @@ public class AbcdFormRestService {
 			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			if (userOrganizations != null) {
 				for (IGroup<Long> organization : userOrganizations) {
-					if (organization.getId() == formOrganization) {
+					if (organization.getId().equals(formOrganization)) {
 						// Get the form information
-						Form form = formDao.getForm(parameters.get(1), Integer.parseInt(parameters.get(3)),
-								Long.parseLong(parameters.get(2)));
+						Form form = formDao.getForm(parameters.get(1), Integer.parseInt(parameters.get(3)), Long.parseLong(parameters.get(2)));
 						return Response.ok(form.toJson(), MediaType.APPLICATION_JSON).build();
 					}
 				}
@@ -180,10 +179,10 @@ public class AbcdFormRestService {
 	public Response getFormsByOrganization(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
 		if ((parameters != null) && (parameters.size() == 2)) {
 			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
-			Long organization = Long.parseLong(parameters.get(1));
+			Long organizationId = Long.parseLong(parameters.get(1));
 			for (IGroup<Long> userOrganization : userOrganizations) {
-				if (userOrganization.getId() == organization) {
-					List<Form> formList = formDao.getAll(organization);
+				if (userOrganization.getId().equals(organizationId)) {
+					List<Form> formList = formDao.getAll(organizationId);
 					return Response.ok(parseFormList(formList), MediaType.APPLICATION_JSON).build();
 				}
 			}
