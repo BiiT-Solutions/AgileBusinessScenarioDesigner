@@ -80,16 +80,16 @@ public class AbcdFormRestService {
 	@Path("/getAllSimpleFormViewByLabelAndOrganization")
 	public Response getAllSimpleFormViewByLabelAndOrganization(@QueryParam(value = PARAMETER_NAME) final List<String> parameters) {
 		if ((parameters != null) && (parameters.size() == 3)) {
-			Long formOrganization = Long.parseLong(parameters.get(2));
+			Long formOrganizationId = Long.parseLong(parameters.get(2));
 
 			// First check if the user and the form belong to the same
 			// organization
 			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			if (userOrganizations != null) {
 				for (IGroup<Long> organization : userOrganizations) {
-					if (organization.getId() == formOrganization) {
+					if (organization.getId().equals(formOrganizationId)) {
 						// Get the simple form information
-						List<SimpleFormView> simpleForms = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(parameters.get(1), formOrganization);
+						List<SimpleFormView> simpleForms = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(parameters.get(1), formOrganizationId);
 						return Response.ok(parseSimpleFormViewList(simpleForms), MediaType.APPLICATION_JSON).build();
 					}
 				}
