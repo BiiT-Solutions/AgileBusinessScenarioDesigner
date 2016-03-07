@@ -76,7 +76,6 @@ public class Login extends WebPageComponent {
 		// Create input fields for user name and password
 		usernameField = new TextField(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_EMAIL));
 		usernameField.setRequired(true);
-		usernameField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_EMAIL));
 		usernameField.setWidth(FIELD_SIZE);
 		usernameField.focus();
 		usernameField.setId("userNameLoginForm");
@@ -84,7 +83,6 @@ public class Login extends WebPageComponent {
 		passwordField = new PasswordField(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_PASSWORD));
 		passwordField.setRequired(true);
 		passwordField.setWidth(FIELD_SIZE);
-		passwordField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_PASSWORD));
 		passwordField.setId("userPassLoginForm");
 
 		// If you press enter. Login operation.
@@ -125,6 +123,8 @@ public class Login extends WebPageComponent {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
+						usernameField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_EMAIL));
+						passwordField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_PASSWORD));
 						try {
 							IUser<Long> user = UserSessionHandler.getUser(usernameField.getValue(),
 									passwordField.getValue());
