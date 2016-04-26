@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.5.217</version>
+		<version>1.5.218-SNAPSHOT</version>
 	</parent>
 	
 	<properties>
