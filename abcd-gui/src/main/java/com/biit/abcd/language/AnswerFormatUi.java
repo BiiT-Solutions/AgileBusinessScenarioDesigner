@@ -5,6 +5,8 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 public enum AnswerFormatUi {
 
 	TEXT(AnswerFormat.TEXT, LanguageCodes.ANSWER_FORMAT_TEXT),
+	
+	MULTI_TEXT(AnswerFormat.MULTI_TEXT, LanguageCodes.ANSWER_FORMAT_MULTITEXT),
 
 	NUMBER(AnswerFormat.NUMBER, LanguageCodes.ANSWER_FORMAT_NUMBER),
 

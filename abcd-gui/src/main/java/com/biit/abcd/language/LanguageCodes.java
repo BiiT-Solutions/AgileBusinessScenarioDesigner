@@ -287,6 +287,7 @@ public enum LanguageCodes {
 
 	ANSWER_FORMAT_POSTAL_CODE("answer.format.postal.code"),
 	ANSWER_FORMAT_TEXT("answer.format.text"),
+	ANSWER_FORMAT_MULTITEXT("answer.format.multitext"),
 	ANSWER_FORMAT_DATE("answer.format.date"),
 	ANSWER_FORMAT_NUMBER("answer.format.number"),
 
