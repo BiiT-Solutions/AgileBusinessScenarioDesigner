@@ -25,7 +25,7 @@ public class GlobalVariablesTable extends Table {
 				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_NAME), null, Align.CENTER);
 		addContainerProperty(Properties.VARIABLE_TYPE, String.class, "",
 				ServerTranslate.translate(LanguageCodes.GLOBAL_VARIABLE_TYPE), null, Align.CENTER);
-		
+
 		setSortContainerPropertyId(Properties.VARIABLE_NAME);
 	}
 
@@ -33,8 +33,12 @@ public class GlobalVariablesTable extends Table {
 	public Item addItem(GlobalVariable globalVariable) {
 		Item item = super.addItem(globalVariable);
 		item.getItemProperty(Properties.VARIABLE_NAME).setValue(globalVariable.getName());
-		item.getItemProperty(Properties.VARIABLE_TYPE).setValue(
-				ServerTranslate.translate(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
+		try {
+			item.getItemProperty(Properties.VARIABLE_TYPE).setValue(ServerTranslate
+					.translate(AnswerFormatUi.getFromAnswerFormat(globalVariable.getFormat()).getLanguageCode()));
+		} catch (NullPointerException npe) {
+
+		}
 		setValue(globalVariable);
 		return item;
 	}
@@ -61,14 +65,14 @@ public class GlobalVariablesTable extends Table {
 		}
 		return globalVariables;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public void updateItem(GlobalVariable itemEdited){
+	public void updateItem(GlobalVariable itemEdited) {
 		Item item = getItem(itemEdited);
-		if(item != null){
+		if (item != null) {
 			item.getItemProperty(Properties.VARIABLE_NAME).setValue(itemEdited.getName());
-			item.getItemProperty(Properties.VARIABLE_TYPE).setValue(
-					ServerTranslate.translate(AnswerFormatUi.getFromAnswerFormat(itemEdited.getFormat()).getLanguageCode()));
+			item.getItemProperty(Properties.VARIABLE_TYPE).setValue(ServerTranslate
+					.translate(AnswerFormatUi.getFromAnswerFormat(itemEdited.getFormat()).getLanguageCode()));
 		}
 	}
 }
