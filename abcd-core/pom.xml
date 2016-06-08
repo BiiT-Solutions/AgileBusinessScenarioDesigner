@@ -16,7 +16,12 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
-
+		<!-- PDF generation -->
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>${itext.version}</version>
+		</dependency>
 		<!-- File access -->
 		<dependency>
 			<groupId>commons-io</groupId>

@@ -38,6 +38,7 @@
 	</scm>
 
 	<properties>
+		<itext.version>2.1.7</itext.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jetty-maven-plugin.version>9.2.7.v20150116</jetty-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>

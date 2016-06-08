@@ -52,7 +52,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
 	private IconButton newButton, newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario,
-			removeForm;
+			removeForm, createPdf;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
@@ -221,6 +221,15 @@ public class FormManagerUpperMenu extends UpperMenu {
 					}
 				});
 
+		createPdf = new SaveAsButton(LanguageCodes.CAPTION_CREATE_PDF, ThemeIcon.CREATE_PDF, LanguageCodes.TOOLTIP_CREATE_PDF, IconSize.MEDIUM, new SaveAsPdfAction());
+		((SaveAsButton) createPdf).addSaveActionListener(new SaveActionListener() {
+			@Override
+			public void saveAction() {
+				launchListeners();
+			}
+		});
+		addIconButton(createPdf);
+		
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
 		addIconButton(launchTestScenario);
