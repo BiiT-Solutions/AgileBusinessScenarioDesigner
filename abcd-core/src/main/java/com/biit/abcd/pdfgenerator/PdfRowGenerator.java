@@ -9,9 +9,12 @@ import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.entity.BaseAnswer;
+import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseField;
 import com.lowagie.text.pdf.PdfBorderDictionary;
+import com.lowagie.text.pdf.PdfCell;
 import com.lowagie.text.pdf.PdfFormField;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfWriter;
@@ -46,8 +49,8 @@ public class PdfRowGenerator {
 		return answerRow;
 	}
 
-	public static PdfRow generateAnnexQuestion(Question question) {
-		PdfRow row = new PdfRow(PdfBlockGenerator.ANNEX_QUESTION_ROWS, PdfBlockGenerator.ANNEX_COLS);
+	public static PdfRow generateQuestion(Question question) {
+		PdfRow row = new PdfRow(PdfBlockGenerator.QUESTION_ROW, PdfBlockGenerator.STRUCTURE_COLS);
 
 		PdfPCell cellLabel = PdfPCellGenerator.generateLabelCell(question);
 		PdfPCell cellName = PdfPCellGenerator.generateNameCell(question);
@@ -55,12 +58,15 @@ public class PdfRowGenerator {
 		try {
 			row.addCell(cellLabel);
 			row.addCell(cellName);
-			cellName.setColspan(2);
 			PdfPCell cellAnswerFormat = PdfPCellGenerator.generateAnswerFormatParagraph(question);
 			row.addCell(cellAnswerFormat);
 			PdfPCell cellAnswerSubformat = PdfPCellGenerator.generateAnswerSubformatParagraph(question);
 			row.addCell(cellAnswerSubformat);
 
+			System.out.println(cellLabel.getColspan());
+			System.out.println(cellName.getColspan());
+			System.out.println(cellAnswerFormat.getColspan());
+			System.out.println(cellAnswerSubformat.getColspan());
 		} catch (BadBlockException e) {
 			AbcdLogger.errorMessage(PdfRowGenerator.class.getName(), e);
 		}
@@ -101,8 +107,8 @@ public class PdfRowGenerator {
 		return rows;
 	}
 
-	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question,
-			BaseAnswer baseAnswer) throws BadBlockException {
+	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question, BaseAnswer baseAnswer)
+			throws BadBlockException {
 		List<PdfRow> rows = new ArrayList<PdfRow>();
 
 		PdfRow row = new PdfRow(RADIO_FIELD_ROW, RADIO_FIELD_COL);
@@ -114,12 +120,10 @@ public class PdfRowGenerator {
 		// are subanswers.
 		if (!(baseAnswer.getParent() instanceof Answer)) {
 			field.setPaddingLeft(PADDING);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
-					radioGroup, 0));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, 0));
 		} else {
 			field.setPaddingLeft(PADDING * 2);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
-					radioGroup, PADDING));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, PADDING));
 		}
 		field.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
 		row.addCell(field);
@@ -139,10 +143,48 @@ public class PdfRowGenerator {
 		return row;
 	}
 
-	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol)
-			throws BadBlockException {
+	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol) throws BadBlockException {
 		PdfRow row = new PdfRow(textBlockRow, textBlockCol);
 		row.addCell(PdfPCellGenerator.generateText(description, textBlockCol));
 		return row;
 	}
+
+	public static PdfRow generateStructureGroupRoot(BaseGroup group) throws BadBlockException {
+		PdfRow row = new PdfRow(PdfBlockGenerator.GROUP_ROWS, PdfBlockGenerator.STRUCTURE_COLS);
+
+		PdfPCell cellName = PdfPCellGenerator.generateNameCell(group);
+		PdfPCell cellGroupPath = PdfPCellGenerator.generateGroupPathCell(group);
+
+		row.addCell(cellName);
+		row.addCell(cellGroupPath);
+		return row;
+	}
+
+	public static PdfRow generateStructureGroup(BaseGroup group) throws BadBlockException {
+		PdfRow row = new PdfRow(PdfBlockGenerator.GROUP_ROWS, PdfBlockGenerator.STRUCTURE_COLS);
+
+		PdfPCell whiteCell = PdfPCellGenerator.generateEmptyCell(1);
+		PdfPCell cellName = PdfPCellGenerator.generateNameCell(group);
+		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateTextParagraph("GROUP"));
+		cell.setColspan(2);
+
+		row.addCell(whiteCell);
+		row.addCell(cellName);
+		row.addCell(cell);
+		return row;
+	}
+
+	public static PdfRow generateEmptyRow(int rows, int cols) throws BadBlockException {
+		PdfRow row = new PdfRow(rows, cols);
+		PdfPCell cell = PdfPCellGenerator.generateEmptyCell(cols);
+		cell.disableBorderSide(Rectangle.LEFT);
+		cell.disableBorderSide(Rectangle.RIGHT);
+		cell.disableBorderSide(Rectangle.TOP);
+		cell.disableBorderSide(Rectangle.BOTTOM);
+		cell.setFixedHeight(10f);
+		row.addCell(cell);
+		return row;
+	}
+	
+	
 }

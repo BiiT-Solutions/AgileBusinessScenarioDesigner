@@ -14,7 +14,7 @@ public class AnnexGenerator {
 
 	public static void generateAndAdd(Document document, TreeObject treeObject) throws DocumentException {
 
-		ParagraphGenerator.generateAndAddTitle(document, "Appendix", PdfAlign.ALIGN_CENTER);
+		ParagraphGenerator.generateAndAddTitle(document, "Form Structure", PdfAlign.ALIGN_CENTER);
 		ParagraphGenerator.generateAndAddAnnexTitle(document, "Element List", PdfAlign.ALIGN_CENTER);
 
 		// Generate table

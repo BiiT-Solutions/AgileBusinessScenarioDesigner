@@ -2,6 +2,7 @@ package com.biit.abcd.pdfgenerator;
 
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
@@ -16,6 +17,12 @@ public class PdfPCellGenerator {
 
 	private final static int BORDER = Rectangle.NO_BORDER;
 
+	public static PdfPCell generateEmptyCell(int colspan) {
+		PdfPCell cell = new PdfPCell();
+		cell.setColspan(colspan);
+		return cell;
+	}
+	
 	public static PdfPCell generateLabelCell(TreeObject object) {
 		return new PdfPCell(ParagraphGenerator.generateLabelParagraph(object));
 	}
@@ -62,6 +69,12 @@ public class PdfPCellGenerator {
 		cell.setColspan(span);
 		cell.setBorder(BORDER);
 		cell.setVerticalAlignment(com.lowagie.text.Element.ALIGN_TOP);
+		return cell;
+	}
+
+	public static PdfPCell generateGroupPathCell(BaseGroup group) {
+		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateTextParagraph(group.getPathName()));
+		cell.setColspan(PdfBlockGenerator.STRUCTURE_COLS-1);
 		return cell;
 	}
 

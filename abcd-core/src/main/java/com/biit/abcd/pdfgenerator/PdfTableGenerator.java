@@ -16,17 +16,16 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class PdfTableGenerator {
 
-	private final static float[] annexFormColumnRatios = { 0.34f, 0.18f, 0.16f, 0.16f, 0.16f };
+	private final static float[] annexFormColumnRatios = { 0.34f, 0.34f, 0.16f, 0.16f };
 
-	public static PdfPTable generateTable(float relativeWidths[], List<PdfTableBlock> tableBlocks)
-			throws BadBlockException {
+	public static PdfPTable generateTable(float relativeWidths[], List<PdfTableBlock> tableBlocks) throws BadBlockException {
 		PdfPTable table = new PdfPTable(relativeWidths);
 		table.setSplitRows(false);
 
 		// Check uniformity on table.
-		if (!checkUniformity(relativeWidths.length, tableBlocks)) {
-			throw new BadBlockException();
-		}
+		// if (!checkUniformity(relativeWidths.length, tableBlocks)) {
+		// throw new BadBlockException();
+		// }
 
 		for (PdfTableBlock block : tableBlocks) {
 			List<PdfPCell> cells = block.getCells();
@@ -38,8 +37,7 @@ public class PdfTableGenerator {
 		return table;
 	}
 
-	public static void generate(Document document, float relativeWidths[], List<PdfTableBlock> tableBlocks)
-			throws DocumentException {
+	public static void generate(Document document, float relativeWidths[], List<PdfTableBlock> tableBlocks) throws DocumentException {
 		PdfPTable elementTable = new PdfPTable(relativeWidths);
 		elementTable.setSplitRows(false);
 
