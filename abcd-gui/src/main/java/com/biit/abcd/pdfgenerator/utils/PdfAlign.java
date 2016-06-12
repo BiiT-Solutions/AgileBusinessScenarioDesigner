@@ -1,4 +1,4 @@
-package com.biit.abcd.pdfgenerator;
+package com.biit.abcd.pdfgenerator.utils;
 
 /**
  * Repurposed alignment codes to be used as enumerator elements.

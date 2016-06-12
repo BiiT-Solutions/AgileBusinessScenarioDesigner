@@ -1,5 +1,6 @@
 package com.biit.abcd.pdfgenerator;
 
+import com.biit.abcd.pdfgenerator.utils.PdfAlign;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.form.entity.TreeObject;
 import com.lowagie.text.Document;
@@ -10,7 +11,7 @@ import com.lowagie.text.pdf.PdfPTable;
  * Utility method to generate the form annex pdf.
  *
  */
-public class AnnexGenerator {
+public class FormStructureGenerator {
 
 	public static void generateAndAdd(Document document, TreeObject treeObject) throws DocumentException {
 

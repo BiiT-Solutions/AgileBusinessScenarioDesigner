@@ -1,6 +1,7 @@
 package com.biit.abcd.pdfgenerator;
 
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
+import com.biit.abcd.pdfgenerator.utils.PdfCol;
 import com.biit.abcd.persistence.entity.Question;
 import com.lowagie.text.pdf.PdfPCell;
 

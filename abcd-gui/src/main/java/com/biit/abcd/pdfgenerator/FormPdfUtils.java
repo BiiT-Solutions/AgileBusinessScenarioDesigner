@@ -12,7 +12,7 @@ import com.lowagie.text.DocumentException;
  * Class with utility methods
  *
  */
-public class FormGeneratorPdf {
+public class FormPdfUtils {
 
 	public static InputStream generatePdf(DocumentGenerator generator) throws IOException, DocumentException {
 		if (generator != null) {

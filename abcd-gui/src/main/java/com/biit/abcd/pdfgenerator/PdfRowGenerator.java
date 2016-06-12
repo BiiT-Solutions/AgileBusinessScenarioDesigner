@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
+import com.biit.abcd.pdfgenerator.utils.PdfRow;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.entity.BaseAnswer;
@@ -14,7 +15,6 @@ import com.biit.form.entity.TreeObject;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseField;
 import com.lowagie.text.pdf.PdfBorderDictionary;
-import com.lowagie.text.pdf.PdfCell;
 import com.lowagie.text.pdf.PdfFormField;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfWriter;
@@ -34,12 +34,12 @@ public class PdfRowGenerator {
 
 	public static PdfRow generateAnnexAnswer(BaseAnswer answer) {
 		PdfPCell labelCell = PdfPCellGenerator.generateLabelCell(answer);
-		labelCell.setColspan(2);
+		labelCell.setColspan(1);
 		PdfPCell nameCell = PdfPCellGenerator.generateNameCell(answer);
 		nameCell.setColspan(2);
 
 		// Annex answer have one column less than the questions.
-		PdfRow answerRow = new PdfRow(PdfBlockGenerator.ANNEX_QUESTION_ROWS, PdfBlockGenerator.ANNEX_COLS - 1);
+		PdfRow answerRow = new PdfRow(PdfBlockGenerator.MIN_ANSWER_ROWS, PdfBlockGenerator.STRUCTURE_COLS - 1);
 		try {
 			answerRow.addCell(labelCell);
 			answerRow.addCell(nameCell);
@@ -107,8 +107,8 @@ public class PdfRowGenerator {
 		return rows;
 	}
 
-	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question, BaseAnswer baseAnswer)
-			throws BadBlockException {
+	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question,
+			BaseAnswer baseAnswer) throws BadBlockException {
 		List<PdfRow> rows = new ArrayList<PdfRow>();
 
 		PdfRow row = new PdfRow(RADIO_FIELD_ROW, RADIO_FIELD_COL);
@@ -120,10 +120,12 @@ public class PdfRowGenerator {
 		// are subanswers.
 		if (!(baseAnswer.getParent() instanceof Answer)) {
 			field.setPaddingLeft(PADDING);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, 0));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
+					radioGroup, 0));
 		} else {
 			field.setPaddingLeft(PADDING * 2);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, PADDING));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
+					radioGroup, PADDING));
 		}
 		field.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
 		row.addCell(field);
@@ -143,7 +145,8 @@ public class PdfRowGenerator {
 		return row;
 	}
 
-	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol) throws BadBlockException {
+	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol)
+			throws BadBlockException {
 		PdfRow row = new PdfRow(textBlockRow, textBlockCol);
 		row.addCell(PdfPCellGenerator.generateText(description, textBlockCol));
 		return row;
@@ -185,6 +188,5 @@ public class PdfRowGenerator {
 		row.addCell(cell);
 		return row;
 	}
-	
-	
+
 }

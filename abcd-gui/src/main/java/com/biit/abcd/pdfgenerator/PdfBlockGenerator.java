@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
+import com.biit.abcd.pdfgenerator.utils.PdfCol;
+import com.biit.abcd.pdfgenerator.utils.PdfRow;
+import com.biit.abcd.pdfgenerator.utils.PdfTableBlock;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.entity.BaseAnswer;
@@ -18,13 +21,14 @@ import com.biit.form.entity.TreeObject;
  */
 public class PdfBlockGenerator {
 
-	public static final int ANNEX_COLS = 5;
-	public static final int ANNEX_QUESTION_ROWS = 1;
 	public static final int STRUCTURE_COLS = 4;
 	public static final int GROUP_ROWS = 1;
 	public static final int QUESTION_ROW = 1;
-	private static final int EMPTY_BLOCK_ROWS = 1;
-	
+	public static final int EMPTY_BLOCK_ROWS = 1;
+	public static final int MIN_GROUP_ROWS = 1;
+	public static final int MIN_QUESTION_ROWS = 1;
+	public static final int MIN_ANSWER_ROWS = 1;
+
 	private static PdfTableBlock generateEmptyBlock() {
 		PdfTableBlock block = null;
 		try {
@@ -40,7 +44,8 @@ public class PdfBlockGenerator {
 		PdfTableBlock block = null;
 		System.out.println("Group " + group);
 		try {
-			block = new PdfTableBlock(ANNEX_QUESTION_ROWS + group.getAllChildrenInHierarchy(TreeObject.class).size(), STRUCTURE_COLS);
+			block = new PdfTableBlock(MIN_GROUP_ROWS + group.getAllChildrenInHierarchy(TreeObject.class).size(),
+					STRUCTURE_COLS);
 
 			block.insertRow(PdfRowGenerator.generateStructureGroupRoot(group));
 
@@ -67,43 +72,38 @@ public class PdfBlockGenerator {
 	private static void generateAndAddQuestion(PdfTableBlock block, Question question) throws BadBlockException {
 		System.out.println("block size: " + block.getNumberCols() + " " + block.getNumberRows());
 		PdfRow row = PdfRowGenerator.generateQuestion(question);
-		System.out.println("block size: " + row.getCurrentCols() + " " + row.getNumberCols() + " " + row.getNumberRows());
+		System.out
+				.println("block size: " + row.getCurrentCols() + " " + row.getNumberCols() + " " + row.getNumberRows());
 		block.insertRow(row);
 
-		// if (!question.getChildren().isEmpty()) {
-		// block.insertCol(PdfCol.generateWhiteCol(question.getAllChildrenInHierarchy(BaseAnswer.class).size(),
-		// 1));
-		// for (TreeObject child : question.getChildren()) {
-		// // They are all answers
-		// block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer)
-		// child));
-		// for (TreeObject subChild : child.getChildren()) {
-		// block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer)
-		// subChild));
-		// }
-		// }
-		// }
-	}
-
-	public static PdfTableBlock generateAnnexQuestionTableBlock(Question question) {
-		PdfTableBlock block = null;
-		try {
-			block = new PdfTableBlock(ANNEX_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(), ANNEX_COLS);
-
-			block.insertRow(PdfRowGenerator.generateQuestion(question));
-
-			if (!question.getChildren().isEmpty()) {
-				block.insertCol(PdfCol.generateWhiteCol(question.getAllChildrenInHierarchy(BaseAnswer.class).size(), 1));
-				for (TreeObject child : question.getChildren()) {
-					// They are all answers
-					block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) child));
-					for (TreeObject subChild : child.getChildren()) {
-						block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) subChild));
-					}
+		if (!question.getChildren().isEmpty()) {
+			block.insertCol(PdfCol.generateWhiteCol(question.getAllChildrenInHierarchy(BaseAnswer.class).size(), 1));
+			for (TreeObject child : question.getChildren()) {
+				// They are all answers
+				block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) child));
+				for (TreeObject subChild : child.getChildren()) {
+					block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) subChild));
 				}
 			}
-		} catch (BadBlockException e) {
-			AbcdLogger.errorMessage(PdfRowGenerator.class.getName(), e);
+		}
+	}
+
+	public static PdfTableBlock generateAnnexQuestionTableBlock(Question question) throws BadBlockException {
+		PdfTableBlock block = null;
+		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(),
+				STRUCTURE_COLS);
+
+		block.insertRow(PdfRowGenerator.generateQuestion(question));
+
+		if (!question.getChildren().isEmpty()) {
+			block.insertCol(PdfCol.generateWhiteCol(question.getAllChildrenInHierarchy(BaseAnswer.class).size(), 1));
+			for (TreeObject child : question.getChildren()) {
+				// They are all answers
+				block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) child));
+				for (TreeObject subChild : child.getChildren()) {
+					block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) subChild));
+				}
+			}
 		}
 		return block;
 	}

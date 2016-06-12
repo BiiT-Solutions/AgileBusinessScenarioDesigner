@@ -1,5 +1,6 @@
 package com.biit.abcd.pdfgenerator;
 
+import com.biit.abcd.pdfgenerator.utils.PdfAlign;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.utils.date.DateManager;
 import com.lowagie.text.Document;
@@ -35,7 +36,7 @@ public class FormPdfGenerator extends DocumentGenerator {
 		document.newPage();
 
 		// Annex page generation
-		AnnexGenerator.generateAndAdd(document, form);
+		FormStructureGenerator.generateAndAdd(document, form);
 
 	}
 

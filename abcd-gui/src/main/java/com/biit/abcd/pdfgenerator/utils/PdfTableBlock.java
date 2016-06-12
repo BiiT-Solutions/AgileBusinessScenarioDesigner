@@ -1,4 +1,4 @@
-package com.biit.abcd.pdfgenerator;
+package com.biit.abcd.pdfgenerator.utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
+import com.biit.abcd.pdfgenerator.utils.PdfTableBlock;
 import com.biit.abcd.persistence.entity.Form;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;

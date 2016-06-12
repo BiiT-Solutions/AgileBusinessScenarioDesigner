@@ -3,6 +3,8 @@ package com.biit.abcd.pdfgenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.pdfgenerator.utils.PdfAlign;
+import com.biit.abcd.pdfgenerator.utils.PdfFont;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
