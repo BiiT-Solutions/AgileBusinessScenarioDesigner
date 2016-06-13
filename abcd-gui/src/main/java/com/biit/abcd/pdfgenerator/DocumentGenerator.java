@@ -14,10 +14,10 @@ import com.lowagie.text.pdf.PdfWriter;
  *
  */
 public abstract class DocumentGenerator {
-	private final static float MARGIN_LEFT = 50;
-	private final static float MARGIN_RIGHT = 50;
-	private final static float MARGIN_TOP = 75;
-	private final static float MARGIN_BOTTON = 50;
+	private final static float MARGIN_LEFT = 0;
+	private final static float MARGIN_RIGHT = 0;
+	private final static float MARGIN_TOP = 40;
+	private final static float MARGIN_BOTTON = 20;
 
 	private final static String DEFAULT_DOCUMENT_NAME = "Form document PDF";
 	private final static String DEFAULT_DOCUMENT_SUBJECT = "Form document PDF";

@@ -12,6 +12,7 @@ import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.entity.BaseAnswer;
 import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
+import com.lowagie.text.Element;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseField;
 import com.lowagie.text.pdf.PdfBorderDictionary;
@@ -33,14 +34,16 @@ public class PdfRowGenerator {
 	private final static float PADDING = 20;
 
 	public static PdfRow generateAnnexAnswer(BaseAnswer answer) {
+		PdfPCell whiteCell = PdfPCellGenerator.generateEmptyCell(1);
 		PdfPCell labelCell = PdfPCellGenerator.generateLabelCell(answer);
 		labelCell.setColspan(1);
 		PdfPCell nameCell = PdfPCellGenerator.generateNameCell(answer);
 		nameCell.setColspan(2);
 
 		// Annex answer have one column less than the questions.
-		PdfRow answerRow = new PdfRow(PdfBlockGenerator.MIN_ANSWER_ROWS, PdfBlockGenerator.STRUCTURE_COLS - 1);
+		PdfRow answerRow = new PdfRow(PdfBlockGenerator.MIN_ANSWER_ROWS, PdfBlockGenerator.STRUCTURE_COLS);
 		try {
+			answerRow.addCell(whiteCell);
 			answerRow.addCell(labelCell);
 			answerRow.addCell(nameCell);
 		} catch (BadBlockException e) {
@@ -168,7 +171,8 @@ public class PdfRowGenerator {
 
 		PdfPCell whiteCell = PdfPCellGenerator.generateEmptyCell(1);
 		PdfPCell cellName = PdfPCellGenerator.generateNameCell(group);
-		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateTextParagraph("GROUP"));
+		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateSmallFontParagraph("(GROUP)"));
+		cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
 		cell.setColspan(2);
 
 		row.addCell(whiteCell);

@@ -62,9 +62,9 @@ public class ParagraphGenerator {
 
 	public static Paragraph generateNameParagraph(TreeObject object) {
 		if (object instanceof Answer && object.getParent() != null && object.getParent() instanceof Answer) {
-			return new Paragraph(" - <" + object.getName() + ">", PdfFont.SMALL_FONT.getFont());
+			return new Paragraph(" - " + object.getName() , PdfFont.NORMAL_FONT.getFont());
 		}
-		return new Paragraph("<" + object.getName() + ">", PdfFont.SMALL_FONT.getFont());
+		return new Paragraph(object.getName(), PdfFont.NORMAL_FONT.getFont());
 	}
 
 	public static Paragraph generateAnswerFormatParagraph(Question question) {
@@ -81,6 +81,12 @@ public class ParagraphGenerator {
 
 	public static Phrase generateAnswerSubformatParagraph(Question question) {
 		return new Paragraph("-", PdfFont.SMALL_FONT.getFont());
+	}
+	
+	public static Paragraph generateSmallFontParagraph(String textParagraph) {
+		Paragraph paragraph = new Paragraph(textParagraph, PdfFont.SMALL_FONT.getFont());
+		paragraph.setAlignment(PdfAlign.ALIGN_JUSTIFIED.getAlignment());
+		return paragraph;
 	}
 
 	public static Paragraph generateTextParagraph(String textParagraph) {

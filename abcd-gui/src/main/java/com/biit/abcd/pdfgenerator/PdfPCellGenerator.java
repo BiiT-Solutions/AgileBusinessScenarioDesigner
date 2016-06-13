@@ -1,9 +1,12 @@
 package com.biit.abcd.pdfgenerator;
 
+import java.util.List;
+
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
+import com.lowagie.text.Element;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
@@ -32,11 +35,15 @@ public class PdfPCellGenerator {
 	}
 
 	public static PdfPCell generateAnswerFormatParagraph(Question question) {
-		return new PdfPCell(ParagraphGenerator.generateAnswerFormatParagraph(question));
+		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateAnswerFormatParagraph(question));
+		cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+		return cell;
 	}
 
 	public static PdfPCell generateAnswerSubformatParagraph(Question question) {
-		return new PdfPCell(ParagraphGenerator.generateAnswerSubformatParagraph(question));
+		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateAnswerSubformatParagraph(question));
+		cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+		return cell;
 	}
 
 	public static PdfPCell generateInputFieldCell(PdfWriter writer, Question question) {
@@ -73,7 +80,12 @@ public class PdfPCellGenerator {
 	}
 
 	public static PdfPCell generateGroupPathCell(BaseGroup group) {
-		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateTextParagraph(group.getPathName()));
+		List<String> pathElements = group.getPath();
+		String path = "/";
+		for(int i = 0; i< pathElements.size()-1; i++){
+			path+= pathElements.get(i);
+		}		
+		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateTextParagraph(path));
 		cell.setColspan(PdfBlockGenerator.STRUCTURE_COLS-1);
 		return cell;
 	}

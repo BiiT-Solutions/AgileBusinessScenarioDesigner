@@ -32,6 +32,8 @@ public class PdfTableBlock implements IPdfTableBlock {
 	}
 
 	public void insertCol(PdfCol col) throws BadBlockException {
+		System.out.println(!col.isWellFormatted() + " " + col.getNumberRows() + " " + getRemainingRows() + " " + col.getNumberCols() + " "
+				+ getRemainingCols());
 		if (!col.isWellFormatted() || (col.getNumberRows() != getRemainingRows()) || (col.getNumberCols() > getRemainingCols())) {
 			throw new BadBlockException();
 		}

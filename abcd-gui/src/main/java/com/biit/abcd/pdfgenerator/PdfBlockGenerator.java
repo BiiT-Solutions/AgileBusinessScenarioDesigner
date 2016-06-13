@@ -73,11 +73,10 @@ public class PdfBlockGenerator {
 		System.out.println("block size: " + block.getNumberCols() + " " + block.getNumberRows());
 		PdfRow row = PdfRowGenerator.generateQuestion(question);
 		System.out
-				.println("block size: " + row.getCurrentCols() + " " + row.getNumberCols() + " " + row.getNumberRows());
+				.println("row size: " + row.getCurrentCols() + " " + row.getNumberCols() + " " + row.getNumberRows());
 		block.insertRow(row);
 
 		if (!question.getChildren().isEmpty()) {
-			block.insertCol(PdfCol.generateWhiteCol(question.getAllChildrenInHierarchy(BaseAnswer.class).size(), 1));
 			for (TreeObject child : question.getChildren()) {
 				// They are all answers
 				block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) child));
