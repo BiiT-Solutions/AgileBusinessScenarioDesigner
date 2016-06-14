@@ -19,13 +19,14 @@ import com.lowagie.text.pdf.PdfWriter;
 public class PdfPCellGenerator {
 
 	private final static int BORDER = Rectangle.NO_BORDER;
+	private static final int TITLE_SPAN = 0;
 
 	public static PdfPCell generateEmptyCell(int colspan) {
 		PdfPCell cell = new PdfPCell();
 		cell.setColspan(colspan);
 		return cell;
 	}
-	
+
 	public static PdfPCell generateLabelCell(TreeObject object) {
 		return new PdfPCell(ParagraphGenerator.generateLabelParagraph(object));
 	}
@@ -65,7 +66,7 @@ public class PdfPCellGenerator {
 		return nameCell;
 	}
 
-	public static PdfPCell generateText(String text, int span) {
+	public static PdfPCell generateText(String text) {
 		PdfPCell labelCell = new PdfPCell(new Phrase(text));
 		labelCell.setBorder(BORDER);
 		return labelCell;
@@ -82,12 +83,16 @@ public class PdfPCellGenerator {
 	public static PdfPCell generateGroupPathCell(BaseGroup group) {
 		List<String> pathElements = group.getPath();
 		String path = "/";
-		for(int i = 0; i< pathElements.size()-1; i++){
-			path+= pathElements.get(i);
-		}		
+		for (int i = 0; i < pathElements.size() - 1; i++) {
+			path += pathElements.get(i);
+		}
 		PdfPCell cell = new PdfPCell(ParagraphGenerator.generateTextParagraph(path));
-		cell.setColspan(PdfBlockGenerator.STRUCTURE_COLS-1);
+		cell.setColspan(PdfBlockGenerator.STRUCTURE_COLS - 1);
 		return cell;
+	}
+
+	public static PdfPCell generateTitle(String title) {
+		return generateText(title);
 	}
 
 }

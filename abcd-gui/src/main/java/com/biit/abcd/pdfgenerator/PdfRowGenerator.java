@@ -8,6 +8,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
 import com.biit.abcd.pdfgenerator.utils.PdfRow;
 import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.entity.BaseAnswer;
 import com.biit.form.entity.BaseGroup;
@@ -32,6 +33,7 @@ public class PdfRowGenerator {
 	private static int TEXT_FIELD_ROW = 1;
 	private static int TEXT_FIELD_COL = 2;
 	private final static float PADDING = 20;
+	private static final int MIN_TITLE_ROW = 1;
 
 	public static PdfRow generateAnnexAnswer(BaseAnswer answer) {
 		PdfPCell whiteCell = PdfPCellGenerator.generateEmptyCell(1);
@@ -110,25 +112,23 @@ public class PdfRowGenerator {
 		return rows;
 	}
 
-	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question,
-			BaseAnswer baseAnswer) throws BadBlockException {
+	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question, BaseAnswer baseAnswer)
+			throws BadBlockException {
 		List<PdfRow> rows = new ArrayList<PdfRow>();
 
 		PdfRow row = new PdfRow(RADIO_FIELD_ROW, RADIO_FIELD_COL);
 
 		String answerText = baseAnswer.getLabel();
 
-		PdfPCell field = PdfPCellGenerator.generateText(answerText, RADIO_FIELD_COL);
+		PdfPCell field = PdfPCellGenerator.generateText(answerText);
 		// Its parent it's not an answer then they are first level. If not they
 		// are subanswers.
 		if (!(baseAnswer.getParent() instanceof Answer)) {
 			field.setPaddingLeft(PADDING);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
-					radioGroup, 0));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, 0));
 		} else {
 			field.setPaddingLeft(PADDING * 2);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
-					radioGroup, PADDING));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, PADDING));
 		}
 		field.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
 		row.addCell(field);
@@ -148,10 +148,9 @@ public class PdfRowGenerator {
 		return row;
 	}
 
-	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol)
-			throws BadBlockException {
+	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol) throws BadBlockException {
 		PdfRow row = new PdfRow(textBlockRow, textBlockCol);
-		row.addCell(PdfPCellGenerator.generateText(description, textBlockCol));
+		row.addCell(PdfPCellGenerator.generateText(description));
 		return row;
 	}
 
@@ -191,6 +190,19 @@ public class PdfRowGenerator {
 		cell.setFixedHeight(10f);
 		row.addCell(cell);
 		return row;
+	}
+
+	public static PdfRow generateTitleRow(String... titles) throws BadBlockException {
+		PdfRow row = new PdfRow(MIN_TITLE_ROW, titles.length);
+		for (String title : titles) {
+			row.addCell(PdfPCellGenerator.generateTitle(title));
+		}
+		return row;
+	}
+
+	public static PdfRow generateVariableRow(CustomVariable variable) throws BadBlockException {
+		return generateTitleRow(variable.getName(), variable.getType().toString(), variable.getScope().toString(),
+				variable.getDefaultValue());
 	}
 
 }

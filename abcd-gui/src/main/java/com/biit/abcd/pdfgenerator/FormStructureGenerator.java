@@ -15,12 +15,20 @@ public class FormStructureGenerator {
 	public static void generateAndAdd(Document document, TreeObject treeObject) throws DocumentException {
 
 		ParagraphGenerator.generateAndAddTitle(document, "Form Structure", PdfAlign.ALIGN_CENTER);
-		document.newPage();
 		ParagraphGenerator.generateAndAddAnnexTitle(document, "Element List", PdfAlign.ALIGN_CENTER);
-		document.add(PdfTableGenerator.generateAnnexFormTable((Form) treeObject));
+		document.add(PdfTableGenerator.generateStructureFormTable((Form) treeObject));
 		document.newPage();
-		document.add(PdfTableGenerator.generateAnnexFormTable((Form) treeObject));
-
+		ParagraphGenerator.generateAndAddTitle(document, "Form Variables", PdfAlign.ALIGN_CENTER);
+		document.add(PdfTableGenerator.generateFormVariablesTable((Form) treeObject));
+		document.newPage();
+		ParagraphGenerator.generateAndAddTitle(document, "Expressions", PdfAlign.ALIGN_CENTER);
+		document.add(PdfTableGenerator.generateExpressionsTable((Form) treeObject));
+		document.newPage();
+		ParagraphGenerator.generateAndAddTitle(document, "Rules", PdfAlign.ALIGN_CENTER);
+		document.add(PdfTableGenerator.generateRulesTable((Form) treeObject));
+//		document.newPage();
+//		ParagraphGenerator.generateAndAddTitle(document, "Table Rules", PdfAlign.ALIGN_CENTER);
+//		
 	}
 
 }

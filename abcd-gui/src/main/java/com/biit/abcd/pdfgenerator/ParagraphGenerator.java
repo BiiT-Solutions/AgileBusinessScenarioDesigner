@@ -20,7 +20,7 @@ import com.lowagie.text.Phrase;
  */
 public class ParagraphGenerator {
 
-	private final static float PADDING = 20;
+	private final static float PADDING = 10;
 
 	public static Paragraph generate(String content, PdfFont font, PdfAlign align, float spacing)
 			throws DocumentException {

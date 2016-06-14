@@ -8,8 +8,11 @@ import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
 import com.biit.abcd.pdfgenerator.utils.PdfCol;
 import com.biit.abcd.pdfgenerator.utils.PdfRow;
 import com.biit.abcd.pdfgenerator.utils.PdfTableBlock;
+import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.entity.BaseAnswer;
 import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
@@ -28,6 +31,14 @@ public class PdfBlockGenerator {
 	public static final int MIN_GROUP_ROWS = 1;
 	public static final int MIN_QUESTION_ROWS = 1;
 	public static final int MIN_ANSWER_ROWS = 1;
+	private static final int MIN_VARIABLE_ROWS = 1;
+	private static final int VARIABLE_COLS = 4;
+	private static final int MIN_EXPRESSION_ROWS = 4;
+	private static final int MIN_EXPRESSION_COLS = 1;
+	private static final int MIN_EMPTY_ROW = 2;
+	private static final int MIN_RULE_CONDITION_ROWS = 3;
+	private static final int MIN_RULE_ACTION_ROWS = 4;
+	private static final int MIN_RULE_COLS = 1;
 
 	private static PdfTableBlock generateEmptyBlock() {
 		PdfTableBlock block = null;
@@ -44,8 +55,7 @@ public class PdfBlockGenerator {
 		PdfTableBlock block = null;
 		System.out.println("Group " + group);
 		try {
-			block = new PdfTableBlock(MIN_GROUP_ROWS + group.getAllChildrenInHierarchy(TreeObject.class).size(),
-					STRUCTURE_COLS);
+			block = new PdfTableBlock(MIN_GROUP_ROWS + group.getAllChildrenInHierarchy(TreeObject.class).size(), STRUCTURE_COLS);
 
 			block.insertRow(PdfRowGenerator.generateStructureGroupRoot(group));
 
@@ -72,8 +82,7 @@ public class PdfBlockGenerator {
 	private static void generateAndAddQuestion(PdfTableBlock block, Question question) throws BadBlockException {
 		System.out.println("block size: " + block.getNumberCols() + " " + block.getNumberRows());
 		PdfRow row = PdfRowGenerator.generateQuestion(question);
-		System.out
-				.println("row size: " + row.getCurrentCols() + " " + row.getNumberCols() + " " + row.getNumberRows());
+		System.out.println("row size: " + row.getCurrentCols() + " " + row.getNumberCols() + " " + row.getNumberRows());
 		block.insertRow(row);
 
 		if (!question.getChildren().isEmpty()) {
@@ -87,10 +96,9 @@ public class PdfBlockGenerator {
 		}
 	}
 
-	public static PdfTableBlock generateAnnexQuestionTableBlock(Question question) throws BadBlockException {
+	private static PdfTableBlock generateAnnexQuestionTableBlock(Question question) throws BadBlockException {
 		PdfTableBlock block = null;
-		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(),
-				STRUCTURE_COLS);
+		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(), STRUCTURE_COLS);
 
 		block.insertRow(PdfRowGenerator.generateQuestion(question));
 
@@ -119,6 +127,48 @@ public class PdfBlockGenerator {
 			}
 		}
 
+		return blocks;
+	}
+
+	public static List<PdfTableBlock> generateFormVariableTableBlocks(Form form) throws BadBlockException {
+		List<PdfTableBlock> blocks = new ArrayList<PdfTableBlock>();
+		PdfTableBlock block = new PdfTableBlock(MIN_VARIABLE_ROWS + form.getCustomVariables().size(), VARIABLE_COLS);
+		block.insertRow(PdfRowGenerator.generateTitleRow("Name", "Type", "Scope", "Default value"));
+		for (CustomVariable variable : form.getCustomVariables()) {
+			block.insertRow(PdfRowGenerator.generateVariableRow(variable));
+		}
+		blocks.add(block);
+		return blocks;
+	}
+
+	public static List<PdfTableBlock> generateExpressionTableBlocks(Form form) throws BadBlockException {
+		List<PdfTableBlock> blocks = new ArrayList<PdfTableBlock>();
+
+		for (ExpressionChain expression : form.getExpressionChains()) {
+			PdfTableBlock block = new PdfTableBlock(MIN_EXPRESSION_ROWS, MIN_EXPRESSION_COLS);
+			block.insertRow(PdfRowGenerator.generateTitleRow("Expression name: " + expression.getName()));
+			block.insertRow(PdfRowGenerator.generateTitleRow(expression.getRepresentation()));
+			block.insertRow(PdfRowGenerator.generateEmptyRow(MIN_EMPTY_ROW, MIN_EXPRESSION_COLS));
+			blocks.add(block);
+		}
+		return blocks;
+	}
+
+	public static List<PdfTableBlock> generateRuleTableBlocks(Form form) throws BadBlockException {
+		List<PdfTableBlock> blocks = new ArrayList<PdfTableBlock>();
+
+		for (Rule rule : form.getRules()) {
+			PdfTableBlock blockCondition = new PdfTableBlock(MIN_RULE_CONDITION_ROWS, MIN_RULE_COLS);
+			blockCondition.insertRow(PdfRowGenerator.generateTitleRow("Rule name: " + rule.getName()));
+			blockCondition.insertRow(PdfRowGenerator.generateTitleRow("Conditions"));
+			blockCondition.insertRow(PdfRowGenerator.generateTitleRow(rule.getConditions().getRepresentation()));
+			blocks.add(blockCondition);
+			PdfTableBlock blockAction = new PdfTableBlock(MIN_RULE_ACTION_ROWS, MIN_RULE_COLS);
+			blockAction.insertRow(PdfRowGenerator.generateTitleRow("Actions"));
+			blockAction.insertRow(PdfRowGenerator.generateTitleRow(rule.getActions().getRepresentation()));
+			blockAction.insertRow(PdfRowGenerator.generateEmptyRow(MIN_EMPTY_ROW, MIN_EXPRESSION_COLS));
+			blocks.add(blockAction);
+		}
 		return blocks;
 	}
 }
