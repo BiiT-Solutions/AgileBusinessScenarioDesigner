@@ -2,6 +2,7 @@ package com.biit.abcd.pdfgenerator;
 
 import com.biit.abcd.pdfgenerator.utils.PdfAlign;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.form.entity.TreeObject;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -26,9 +27,11 @@ public class FormStructureGenerator {
 		document.newPage();
 		ParagraphGenerator.generateAndAddTitle(document, "Rules", PdfAlign.ALIGN_CENTER);
 		document.add(PdfTableGenerator.generateRulesTable((Form) treeObject));
-//		document.newPage();
-//		ParagraphGenerator.generateAndAddTitle(document, "Table Rules", PdfAlign.ALIGN_CENTER);
-//		
+		document.newPage();
+		ParagraphGenerator.generateAndAddTitle(document, "Table Rules", PdfAlign.ALIGN_CENTER);
+		for (TableRule table : ((Form) treeObject).getTableRules()) {
+			document.add(PdfTableGenerator.generateRuleTableTable(table));
+		}
 	}
 
 }

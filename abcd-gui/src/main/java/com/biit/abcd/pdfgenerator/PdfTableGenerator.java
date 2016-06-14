@@ -6,6 +6,7 @@ import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
 import com.biit.abcd.pdfgenerator.utils.PdfTableBlock;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -107,5 +108,19 @@ public class PdfTableGenerator {
 			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
 		}
 		return table;
+	}
+
+	public static Element generateRuleTableTable(TableRule table) {
+		PdfPTable tableRule = null;
+		try {
+			float ratios[] = new float[table.getConditionNumber()];
+			for (int i = 0; i < ratios.length; i++) {
+				ratios[i] = 1.0f / ((float) table.getConditionNumber());
+			}
+			tableRule = generateTable(ratios, PdfBlockGenerator.generateTableBlocks(table));
+		} catch (BadBlockException e) {
+			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
+		}
+		return tableRule;
 	}
 }

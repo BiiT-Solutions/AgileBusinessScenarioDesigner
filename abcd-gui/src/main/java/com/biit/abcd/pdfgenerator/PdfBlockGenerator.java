@@ -13,6 +13,8 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.entity.BaseAnswer;
 import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
@@ -169,6 +171,16 @@ public class PdfBlockGenerator {
 			blockAction.insertRow(PdfRowGenerator.generateEmptyRow(MIN_EMPTY_ROW, MIN_EXPRESSION_COLS));
 			blocks.add(blockAction);
 		}
+		return blocks;
+	}
+
+	public static List<PdfTableBlock> generateTableBlocks(TableRule table) throws BadBlockException {
+		List<PdfTableBlock> blocks = new ArrayList<PdfTableBlock>();
+		PdfTableBlock tableBlock = new PdfTableBlock(table.getRules().size(), 2);
+		for (TableRuleRow ruleRow : table.getRules()) {
+			tableBlock.insertRow(PdfRowGenerator.generateRuleRow(ruleRow));
+		}
+		blocks.add(tableBlock);
 		return blocks;
 	}
 }

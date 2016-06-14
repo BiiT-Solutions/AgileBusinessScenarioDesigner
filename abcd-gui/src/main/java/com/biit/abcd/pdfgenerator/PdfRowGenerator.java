@@ -10,6 +10,7 @@ import com.biit.abcd.pdfgenerator.utils.PdfRow;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.entity.BaseAnswer;
 import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
@@ -203,6 +204,13 @@ public class PdfRowGenerator {
 	public static PdfRow generateVariableRow(CustomVariable variable) throws BadBlockException {
 		return generateTitleRow(variable.getName(), variable.getType().toString(), variable.getScope().toString(),
 				variable.getDefaultValue());
+	}
+
+	public static PdfRow generateRuleRow(TableRuleRow rule) throws BadBlockException {
+		PdfRow row = new PdfRow(1, 2);
+		row.addCell(PdfPCellGenerator.generateText(rule.getConditions().getRepresentation()));
+		row.addCell(PdfPCellGenerator.generateText(rule.getAction().getRepresentation()));
+		return row;
 	}
 
 }
