@@ -208,7 +208,7 @@ public class PdfRowGenerator {
 
 	public static PdfRow generateRuleRow(TableRuleRow rule) throws BadBlockException {
 		PdfRow row = new PdfRow(1, 2);
-		row.addCell(PdfPCellGenerator.generateText(rule.getConditions().getRepresentation()));
+		row.addCell(PdfPCellGenerator.generateText(rule.getConditionsForDrools().getRepresentation()));
 		row.addCell(PdfPCellGenerator.generateText(rule.getAction().getRepresentation()));
 		return row;
 	}

@@ -11,8 +11,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -153,8 +155,8 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 			Expression expression2 = otherRow.getConditions().getExpressions().get(0);
 			if (expression1 instanceof ExpressionValueTreeObjectReference) {
 				if (expression2 instanceof ExpressionValueTreeObjectReference) {
-					return ((ExpressionValueTreeObjectReference) expression1).getReference().compareTo(
-							((ExpressionValueTreeObjectReference) expression2).getReference());
+					return ((ExpressionValueTreeObjectReference) expression1).getReference()
+							.compareTo(((ExpressionValueTreeObjectReference) expression2).getReference());
 				}
 				// First null values.
 				return 1;
@@ -169,5 +171,37 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 			// First empty expressions.
 			return this.getConditions().getExpressions().size() - otherRow.getConditions().getExpressions().size();
 		}
+	}
+
+	public ExpressionChain getConditionsForDrools() {
+		ExpressionChain preParsedConditions = new ExpressionChain();
+
+		// For each pair of conditions adds an AND, and between each pair adds
+		// an EQUALS
+		for (int index = 0; index < conditions.getExpressions().size() - 1; index += 2) {
+			Expression questionExpression = conditions.getExpressions().get(index);
+			Expression answerExpression = conditions.getExpressions().get(index + 1);
+
+			// Question not empty
+			if ((questionExpression instanceof ExpressionValueTreeObjectReference)
+					&& (((ExpressionValueTreeObjectReference) questionExpression).getReference() != null) &&
+					// Answer not empty
+					(answerExpression instanceof ExpressionChain)
+					&& (((ExpressionChain) answerExpression).getExpressions() != null)
+					&& (!((ExpressionChain) answerExpression).getExpressions().isEmpty())) {
+
+				if (index > 0) {
+					preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+				}
+				preParsedConditions.addExpression(questionExpression);
+
+				if (((ExpressionChain) answerExpression).getExpressions()
+						.get(0) instanceof ExpressionValueTreeObjectReference) {
+					preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+				}
+				preParsedConditions.addExpression(answerExpression);
+			}
+		}
+		return preParsedConditions;
 	}
 }
