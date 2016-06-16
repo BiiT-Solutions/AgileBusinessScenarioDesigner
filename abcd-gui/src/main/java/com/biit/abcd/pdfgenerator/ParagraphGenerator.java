@@ -21,6 +21,10 @@ import com.lowagie.text.Phrase;
 public class ParagraphGenerator {
 
 	private final static float PADDING = 10;
+	
+	public static Paragraph generateWhiteLine(float spacing) throws DocumentException{
+		return generate("",PdfFont.NORMAL_FONT,PdfAlign.ALIGN_CENTER,spacing);
+	}
 
 	public static Paragraph generate(String content, PdfFont font, PdfAlign align, float spacing)
 			throws DocumentException {

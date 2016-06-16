@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.entity.BaseAnswer;
 import com.biit.form.entity.BaseGroup;
+import com.biit.form.entity.BaseQuestion;
 import com.biit.form.entity.TreeObject;
 
 /**
@@ -57,7 +58,7 @@ public class PdfBlockGenerator {
 		PdfTableBlock block = null;
 		System.out.println("Group " + group);
 		try {
-			block = new PdfTableBlock(MIN_GROUP_ROWS + group.getAllChildrenInHierarchy(TreeObject.class).size(), STRUCTURE_COLS);
+			block = new PdfTableBlock(MIN_GROUP_ROWS + getNumberOfChildsAndAnswers(group), STRUCTURE_COLS);
 
 			block.insertRow(PdfRowGenerator.generateStructureGroupRoot(group));
 
@@ -75,6 +76,14 @@ public class PdfBlockGenerator {
 			AbcdLogger.errorMessage(PdfRowGenerator.class.getName(), e);
 		}
 		return block;
+	}
+
+	private static int getNumberOfChildsAndAnswers(BaseGroup group) {
+		int total = group.getChildren().size();
+		for (TreeObject question : group.getChildren(BaseQuestion.class)) {
+			total += question.getAllChildrenInHierarchy(BaseAnswer.class).size();
+		}
+		return total;
 	}
 
 	private static void generateAndAddGroup(PdfTableBlock block, BaseGroup child) throws BadBlockException {
@@ -100,7 +109,8 @@ public class PdfBlockGenerator {
 
 	private static PdfTableBlock generateAnnexQuestionTableBlock(Question question) throws BadBlockException {
 		PdfTableBlock block = null;
-		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(), STRUCTURE_COLS);
+		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(),
+				STRUCTURE_COLS);
 
 		block.insertRow(PdfRowGenerator.generateQuestion(question));
 
@@ -117,13 +127,20 @@ public class PdfBlockGenerator {
 		return block;
 	}
 
-	public static List<PdfTableBlock> generateAnnexFormTableBlocks(Form form) {
+	public static List<PdfTableBlock> generateAnnexFormTableBlocks(Form form) throws BadBlockException {
 		List<PdfTableBlock> blocks = new ArrayList<PdfTableBlock>();
 
 		List<TreeObject> treeObjects = new ArrayList<>(form.getAll(BaseGroup.class));
 
 		for (TreeObject object : treeObjects) {
 			if (!object.isHiddenElement()) {
+				System.out.println(object);
+				if (!generateAnnexGroupTableBlock((BaseGroup) object).isWellFormatted())
+					throw new BadBlockException();
+				if (!generateEmptyBlock().isWellFormatted()) {
+					throw new BadBlockException();
+				}
+
 				blocks.add(generateAnnexGroupTableBlock((BaseGroup) object));
 				blocks.add(generateEmptyBlock());
 			}
@@ -148,7 +165,7 @@ public class PdfBlockGenerator {
 
 		for (ExpressionChain expression : form.getExpressionChains()) {
 			PdfTableBlock block = new PdfTableBlock(MIN_EXPRESSION_ROWS, MIN_EXPRESSION_COLS);
-			block.insertRow(PdfRowGenerator.generateTitleRow("Expression name: " + expression.getName()));
+			block.insertRow(PdfRowGenerator.generateBorderlessTitleRow("Expression name: " + expression.getName()));
 			block.insertRow(PdfRowGenerator.generateTitleRow(expression.getRepresentation()));
 			block.insertRow(PdfRowGenerator.generateEmptyRow(MIN_EMPTY_ROW, MIN_EXPRESSION_COLS));
 			blocks.add(block);
@@ -161,7 +178,7 @@ public class PdfBlockGenerator {
 
 		for (Rule rule : form.getRules()) {
 			PdfTableBlock blockCondition = new PdfTableBlock(MIN_RULE_CONDITION_ROWS, MIN_RULE_COLS);
-			blockCondition.insertRow(PdfRowGenerator.generateTitleRow("Rule name: " + rule.getName()));
+			blockCondition.insertRow(PdfRowGenerator.generateBorderlessTitleRow("Rule name: " + rule.getName()));
 			blockCondition.insertRow(PdfRowGenerator.generateTitleRow("Conditions"));
 			blockCondition.insertRow(PdfRowGenerator.generateTitleRow(rule.getConditions().getRepresentation()));
 			blocks.add(blockCondition);

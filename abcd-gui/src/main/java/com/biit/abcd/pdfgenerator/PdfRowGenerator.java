@@ -113,8 +113,8 @@ public class PdfRowGenerator {
 		return rows;
 	}
 
-	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question, BaseAnswer baseAnswer)
-			throws BadBlockException {
+	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question,
+			BaseAnswer baseAnswer) throws BadBlockException {
 		List<PdfRow> rows = new ArrayList<PdfRow>();
 
 		PdfRow row = new PdfRow(RADIO_FIELD_ROW, RADIO_FIELD_COL);
@@ -126,10 +126,12 @@ public class PdfRowGenerator {
 		// are subanswers.
 		if (!(baseAnswer.getParent() instanceof Answer)) {
 			field.setPaddingLeft(PADDING);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, 0));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
+					radioGroup, 0));
 		} else {
 			field.setPaddingLeft(PADDING * 2);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, PADDING));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
+					radioGroup, PADDING));
 		}
 		field.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
 		row.addCell(field);
@@ -149,7 +151,8 @@ public class PdfRowGenerator {
 		return row;
 	}
 
-	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol) throws BadBlockException {
+	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol)
+			throws BadBlockException {
 		PdfRow row = new PdfRow(textBlockRow, textBlockCol);
 		row.addCell(PdfPCellGenerator.generateText(description));
 		return row;
@@ -201,6 +204,17 @@ public class PdfRowGenerator {
 		return row;
 	}
 
+	public static PdfRow generateBorderlessTitleRow(String... titles) throws BadBlockException {
+		PdfRow row = generateTitleRow(titles);
+		for (PdfPCell cell : row.getCells()) {
+			cell.disableBorderSide(Rectangle.LEFT);
+			cell.disableBorderSide(Rectangle.RIGHT);
+			cell.disableBorderSide(Rectangle.TOP);
+			cell.disableBorderSide(Rectangle.BOTTOM);
+		}
+		return row;
+	}
+
 	public static PdfRow generateVariableRow(CustomVariable variable) throws BadBlockException {
 		return generateTitleRow(variable.getName(), variable.getType().toString(), variable.getScope().toString(),
 				variable.getDefaultValue());
@@ -208,8 +222,8 @@ public class PdfRowGenerator {
 
 	public static PdfRow generateRuleRow(TableRuleRow rule) throws BadBlockException {
 		PdfRow row = new PdfRow(1, 2);
-		row.addCell(PdfPCellGenerator.generateText(rule.getConditionsForDrools().getRepresentation()));
-		row.addCell(PdfPCellGenerator.generateText(rule.getAction().getRepresentation()));
+		row.addCell(PdfPCellGenerator.generateDefaultCell(rule.getConditionsForDrools().getRepresentation()));
+		row.addCell(PdfPCellGenerator.generateDefaultCell(rule.getAction().getRepresentation()));
 		return row;
 	}
 

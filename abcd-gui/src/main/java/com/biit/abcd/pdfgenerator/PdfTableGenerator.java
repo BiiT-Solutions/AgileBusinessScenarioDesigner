@@ -24,8 +24,10 @@ public class PdfTableGenerator {
 	private static final float[] FORM_VARIABLE_COLUMN_RATIOS = { 0.25f, 0.25f, 0.25f, 0.25f };
 	private static final float[] EXPRESSIONS_TABLE_RATIOS = { 1.0f };
 	private static final float[] RULE_TABLE_RATIOS = { 1.0f };
+	private static final float[] RULE_TABLE_TABLE_RATIOS = { 1.0f, 1.0f };
 
-	public static PdfPTable generateTable(float relativeWidths[], List<PdfTableBlock> tableBlocks) throws BadBlockException {
+	public static PdfPTable generateTable(float relativeWidths[], List<PdfTableBlock> tableBlocks)
+			throws BadBlockException {
 		PdfPTable table = new PdfPTable(relativeWidths);
 		table.setSplitRows(false);
 		table.getDefaultCell().enableBorderSide(Rectangle.TOP);
@@ -34,9 +36,9 @@ public class PdfTableGenerator {
 		table.getDefaultCell().enableBorderSide(Rectangle.RIGHT);
 
 		// Check uniformity on table.
-		// if (!checkUniformity(relativeWidths.length, tableBlocks)) {
-		// throw new BadBlockException();
-		// }
+		if (!checkUniformity(relativeWidths.length, tableBlocks)) {
+			throw new BadBlockException();
+		}
 
 		for (PdfTableBlock block : tableBlocks) {
 			List<PdfPCell> cells = block.getCells();
@@ -48,14 +50,17 @@ public class PdfTableGenerator {
 		return table;
 	}
 
-	public static void generate(Document document, float relativeWidths[], List<PdfTableBlock> tableBlocks) throws DocumentException {
+	public static void generate(Document document, float relativeWidths[], List<PdfTableBlock> tableBlocks)
+			throws DocumentException {
 		PdfPTable elementTable = new PdfPTable(relativeWidths);
 		elementTable.setSplitRows(false);
 
 	}
 
 	private static boolean checkUniformity(int number, List<PdfTableBlock> tableBlocks) {
+		System.out.println("Check uniformity " + number);
 		for (PdfTableBlock block : tableBlocks) {
+			System.out.println(number+" block: "+block+" "+block.isWellFormatted()+" "+block.getNumberCols());
 			if (!block.isWellFormatted() || (number != block.getNumberCols())) {
 				return false;
 			}
@@ -78,10 +83,6 @@ public class PdfTableGenerator {
 		PdfPTable table = null;
 		try {
 			table = generateTable(FORM_VARIABLE_COLUMN_RATIOS, PdfBlockGenerator.generateFormVariableTableBlocks(form));
-			PdfPCell kiwi = new PdfPCell(ParagraphGenerator.generateTextParagraph("KIWIIIIIIIII"));
-			kiwi.setColspan(4);
-			table.addCell(kiwi);
-			System.out.println("jodeeeeer");
 		} catch (BadBlockException e) {
 			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
 		}
@@ -113,11 +114,7 @@ public class PdfTableGenerator {
 	public static Element generateRuleTableTable(TableRule table) {
 		PdfPTable tableRule = null;
 		try {
-			float ratios[] = new float[table.getConditionNumber()];
-			for (int i = 0; i < ratios.length; i++) {
-				ratios[i] = 1.0f / ((float) table.getConditionNumber());
-			}
-			tableRule = generateTable(ratios, PdfBlockGenerator.generateTableBlocks(table));
+			tableRule = generateTable(RULE_TABLE_TABLE_RATIOS, PdfBlockGenerator.generateTableBlocks(table));
 		} catch (BadBlockException e) {
 			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
 		}

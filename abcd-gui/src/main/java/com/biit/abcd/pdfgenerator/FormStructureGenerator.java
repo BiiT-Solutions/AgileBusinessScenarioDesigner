@@ -13,6 +13,8 @@ import com.lowagie.text.DocumentException;
  */
 public class FormStructureGenerator {
 
+	private static final float WHITE_LINE_SPACING = 10.0f;
+
 	public static void generateAndAdd(Document document, TreeObject treeObject) throws DocumentException {
 
 		ParagraphGenerator.generateAndAddTitle(document, "Form Structure", PdfAlign.ALIGN_CENTER);
@@ -20,15 +22,19 @@ public class FormStructureGenerator {
 		document.add(PdfTableGenerator.generateStructureFormTable((Form) treeObject));
 		document.newPage();
 		ParagraphGenerator.generateAndAddTitle(document, "Form Variables", PdfAlign.ALIGN_CENTER);
+		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		document.add(PdfTableGenerator.generateFormVariablesTable((Form) treeObject));
 		document.newPage();
 		ParagraphGenerator.generateAndAddTitle(document, "Expressions", PdfAlign.ALIGN_CENTER);
+		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		document.add(PdfTableGenerator.generateExpressionsTable((Form) treeObject));
 		document.newPage();
 		ParagraphGenerator.generateAndAddTitle(document, "Rules", PdfAlign.ALIGN_CENTER);
+		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		document.add(PdfTableGenerator.generateRulesTable((Form) treeObject));
 		document.newPage();
 		ParagraphGenerator.generateAndAddTitle(document, "Table Rules", PdfAlign.ALIGN_CENTER);
+		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		for (TableRule table : ((Form) treeObject).getTableRules()) {
 			document.add(PdfTableGenerator.generateRuleTableTable(table));
 		}

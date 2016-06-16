@@ -70,6 +70,7 @@ public class PdfTableBlock implements IPdfTableBlock {
 
 	@Override
 	public boolean isWellFormatted() {
+		System.out.println("remaining cols: "+getRemainingCols()+" remainingRows: "+getRemainingRows() );
 		return (getRemainingCols() == 0) || (getRemainingRows() == 0);
 	}
 

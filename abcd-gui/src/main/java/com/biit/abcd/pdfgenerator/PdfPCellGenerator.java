@@ -92,7 +92,12 @@ public class PdfPCellGenerator {
 	}
 
 	public static PdfPCell generateTitle(String title) {
-		return generateText(title);
+		return generateDefaultCell(title);
+	}
+
+	public static PdfPCell generateDefaultCell(String text) {
+		PdfPCell labelCell = new PdfPCell(new Phrase(text));
+		return labelCell;
 	}
 
 }
