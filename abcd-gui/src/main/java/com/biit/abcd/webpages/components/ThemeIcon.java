@@ -210,7 +210,7 @@ public enum ThemeIcon {
 	
 	PAGE_NOT_FOUND("page.not.found.svg"), 
 	
-	CREATE_PDF("alert.svg");
+	CREATE_PDF("pdf.svg");
 	
 
 	private String value;
