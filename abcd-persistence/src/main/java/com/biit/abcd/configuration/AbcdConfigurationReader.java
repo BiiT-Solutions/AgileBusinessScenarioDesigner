@@ -13,6 +13,8 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 	private static final String DATABASE_CONFIG_FILE = "settings.conf";
 	private static final String ABCD_SYSTEM_VARIABLE_CONFIG = "ABCD_CONFIG";
 
+	private static final String PDF_CREATOR_FEATURE = "feature.pdf.enabled";
+
 	// Regex Tags
 	private static final String ID_NUMBER_REGEX = "numberRegEx";
 	private static final String ID_DATE_REGEX = "dateRegEx";
@@ -25,6 +27,7 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 	private static final String DEFAULT_DATE_REGEX = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)";
 	private static final String DEFAULT_POSTAL_REGEX = "[0-9]{4}[a-zA-Z]{2}";
 	private static final String DEFAULT_ISSUE_MANAGER_URL = null;
+	private static final String DEFAULT_PDF_CREATOR_FEATURE = "false";
 
 	private static AbcdConfigurationReader instance;
 
@@ -35,6 +38,7 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 		addProperty(ID_DATE_REGEX, DEFAULT_DATE_REGEX);
 		addProperty(ID_POSTAL_REGEX, DEFAULT_POSTAL_REGEX);
 		addProperty(ID_ISSUE_MANAGER_URL, DEFAULT_ISSUE_MANAGER_URL);
+		addProperty(PDF_CREATOR_FEATURE, DEFAULT_PDF_CREATOR_FEATURE);
 
 		addPropertiesSource(new PropertiesSourceFile(DATABASE_CONFIG_FILE));
 		addPropertiesSource(new SystemVariablePropertiesSourceFile(ABCD_SYSTEM_VARIABLE_CONFIG, DATABASE_CONFIG_FILE));
@@ -77,5 +81,13 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 
 	public String getIssueManagerUrl() {
 		return getPropertyLogException(ID_ISSUE_MANAGER_URL);
+	}
+
+	public boolean isPdfEnabled() {
+		try {
+			return Boolean.parseBoolean(getPropertyLogException(PDF_CREATOR_FEATURE));
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
