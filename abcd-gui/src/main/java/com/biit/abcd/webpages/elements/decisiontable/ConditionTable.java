@@ -228,7 +228,7 @@ public class ConditionTable extends Table {
 			if (decisionRule.getConditions().getExpressions().size() > 0) {
 				Expression expression = decisionRule.getConditions().getExpressions().get((Integer) propertyId);
 				((ExpressionEditCell) item.getItemProperty(propertyId).getValue()).setLabel(expression
-						.getRepresentation());
+						.getRepresentation(true));
 			}
 		}
 		sort();

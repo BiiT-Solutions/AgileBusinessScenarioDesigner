@@ -57,7 +57,7 @@ public class DiagramPropertiesSink extends SecuredDiagramElementProperties<Diagr
 							firePropertyUpdateListener(instance);
 							AbcdLogger.info(this.getClass().getName(), "User '"
 									+ UserSessionHandler.getUser().getEmailAddress() + "' added expression "
-									+ instance.getExpression().getRepresentation() + " to Sink node with ID:"
+									+ instance.getExpression().getRepresentation(true) + " to Sink node with ID:"
 									+ instance.getId() + "'.");
 							window.close();
 						} else {

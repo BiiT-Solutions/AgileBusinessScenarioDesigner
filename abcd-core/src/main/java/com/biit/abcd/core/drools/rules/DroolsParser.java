@@ -1211,7 +1211,7 @@ public class DroolsParser {
 			TreeElementGroupEndRuleConditionCreatorVisitor treeVisitor = new TreeElementGroupEndRuleConditionCreatorVisitor();
 			try {
 				prattResult.accept(treeVisitor);
-				result += treeVisitor.getCompleteExpression().getRepresentation();
+				result += treeVisitor.getCompleteExpression().getRepresentation(true);
 				// Replace rule identifiers from the old parsed string
 				// (Needed because the rule has been parsed again and the ids
 				// have changed)

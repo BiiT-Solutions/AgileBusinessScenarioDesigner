@@ -166,7 +166,7 @@ public class PdfBlockGenerator {
 		for (ExpressionChain expression : form.getExpressionChains()) {
 			PdfTableBlock block = new PdfTableBlock(MIN_EXPRESSION_ROWS, MIN_EXPRESSION_COLS);
 			block.insertRow(PdfRowGenerator.generateBorderlessTitleRow("Expression name: " + expression.getName()));
-			block.insertRow(PdfRowGenerator.generateTitleRow(expression.getRepresentation()));
+			block.insertRow(PdfRowGenerator.generateExpressionsRow(expression));
 			block.insertRow(PdfRowGenerator.generateEmptyRow(MIN_EMPTY_ROW, MIN_EXPRESSION_COLS));
 			blocks.add(block);
 		}
@@ -180,11 +180,11 @@ public class PdfBlockGenerator {
 			PdfTableBlock blockCondition = new PdfTableBlock(MIN_RULE_CONDITION_ROWS, MIN_RULE_COLS);
 			blockCondition.insertRow(PdfRowGenerator.generateBorderlessTitleRow("Rule name: " + rule.getName()));
 			blockCondition.insertRow(PdfRowGenerator.generateTitleRow("Conditions"));
-			blockCondition.insertRow(PdfRowGenerator.generateTitleRow(rule.getConditions().getRepresentation()));
+			blockCondition.insertRow(PdfRowGenerator.generateExpressionsRow(rule.getConditions()));
 			blocks.add(blockCondition);
 			PdfTableBlock blockAction = new PdfTableBlock(MIN_RULE_ACTION_ROWS, MIN_RULE_COLS);
 			blockAction.insertRow(PdfRowGenerator.generateTitleRow("Actions"));
-			blockAction.insertRow(PdfRowGenerator.generateTitleRow(rule.getActions().getRepresentation()));
+			blockAction.insertRow(PdfRowGenerator.generateExpressionsRow(rule.getActions()));
 			blockAction.insertRow(PdfRowGenerator.generateEmptyRow(MIN_EMPTY_ROW, MIN_EXPRESSION_COLS));
 			blocks.add(blockAction);
 		}

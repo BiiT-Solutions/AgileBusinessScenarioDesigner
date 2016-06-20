@@ -251,14 +251,14 @@ public class CheckDependencies {
 		if (expression instanceof ExpressionValueCustomVariable) {
 			if (((ExpressionValueCustomVariable) expression).getVariable().equals(customVariable)) {
 				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName()
-						+ "'. Used in expression '" + expression.getRepresentation() + "'");
+						+ "'. Used in expression '" + expression.getRepresentation(true) + "'");
 			}
 		}
 
 		if (expression instanceof ExpressionValueGenericCustomVariable) {
 			if (((ExpressionValueGenericCustomVariable) expression).getVariable().equals(customVariable)) {
 				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName()
-						+ "'. Used in expression '" + expression.getRepresentation() + "'");
+						+ "'. Used in expression '" + expression.getRepresentation(true) + "'");
 			}
 		}
 	}

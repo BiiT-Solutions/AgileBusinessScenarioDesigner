@@ -180,14 +180,14 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		if (expressions.isEmpty()) {
 			return "null";
 		}
 
 		String result = "";
 		for (Expression expression : expressions) {
-			result += expression.getRepresentation() + " ";
+			result += expression.getRepresentation(showWhiteCharacter) + " ";
 		}
 		return result.trim();
 	}

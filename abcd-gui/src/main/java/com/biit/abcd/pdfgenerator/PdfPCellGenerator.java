@@ -2,11 +2,13 @@ package com.biit.abcd.pdfgenerator;
 
 import java.util.List;
 
+import com.biit.abcd.pdfgenerator.utils.PdfFont;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.form.entity.BaseGroup;
 import com.biit.form.entity.TreeObject;
 import com.lowagie.text.Element;
+import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
@@ -91,8 +93,9 @@ public class PdfPCellGenerator {
 		return cell;
 	}
 
-	public static PdfPCell generateTitle(String title) {
-		return generateDefaultCell(title);
+	public static PdfPCell generateTableTitle(String title) {
+		// return generateDefaultCell(title);
+		return new PdfPCell(new Paragraph(title, PdfFont.TABLE_TITLE_FONT.getFont()));
 	}
 
 	public static PdfPCell generateDefaultCell(String text) {

@@ -545,7 +545,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 						answerExpression.removeAllExpressions();
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added the custom variable '"
-								+ customVariable.getRepresentation() + "' to Table rule '"
+								+ customVariable.getRepresentation(true) + "' to Table rule '"
 								+ tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 						setCustomVariableExpression(row, (Integer) propertyId, treeObject, customVariable.getVariable());
 						newQuestionConditionWindow.close();
@@ -706,7 +706,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 						row.getAction().setExpressions(expChain.getExpressions());
 						AbcdLogger.info(this.getClass().getName(), "User '"
 								+ UserSessionHandler.getUser().getEmailAddress() + "' has added Action '"
-								+ row.getAction().getRepresentation() + "' to row '" + row.getId()
+								+ row.getAction().getRepresentation(true) + "' to row '" + row.getId()
 								+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 					} else {
 						removeAction(row);
@@ -734,7 +734,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 	public void removeAction(TableRuleRow row) {
 		ExpressionChain action = row.getAction();
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-				+ "' has removed Action '" + action.getRepresentation() + "' from row '" + row.getId()
+				+ "' has removed Action '" + action.getRepresentation(true) + "' from row '" + row.getId()
 				+ "' in Table rule '" + tableSelectionMenu.getSelectedTableRule().getName() + "'.");
 		row.getAction().removeAllExpressions();
 		ruleTable.update(getSelectedTableRule());

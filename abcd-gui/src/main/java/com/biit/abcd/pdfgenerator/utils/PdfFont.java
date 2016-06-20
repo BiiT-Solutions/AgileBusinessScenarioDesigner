@@ -17,6 +17,8 @@ public enum PdfFont {
 	TITLE_FONT(new Font(Font.TIMES_ROMAN, 22, Font.BOLD | Font.UNDERLINE)),
 
 	SUBTITLE_FONT(new Font(Font.TIMES_ROMAN, 14, Font.BOLD)),
+	
+	TABLE_TITLE_FONT(new Font(Font.TIMES_ROMAN, 12, Font.BOLD)),
 
 	NORMAL_FONT(new Font(Font.TIMES_ROMAN, 12)),
 

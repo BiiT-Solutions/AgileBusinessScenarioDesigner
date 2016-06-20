@@ -50,7 +50,7 @@ public class ExpressionChainHierarchyComparator implements Comparator<Expression
 				}
 				
 				// No differences among TreeObjects. Use representation as comparation
-				comparation = chain1.getRepresentation().compareTo(chain2.getRepresentation());
+				comparation = chain1.getRepresentation(true).compareTo(chain2.getRepresentation(true));
 			}
 			if (comparation != 0) {
 				return comparation;

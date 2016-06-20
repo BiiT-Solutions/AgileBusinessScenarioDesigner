@@ -29,7 +29,7 @@ public class ExpressionValueGenericVariable extends ExpressionValue<GenericTreeO
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		String expressionString = new String();
 		if ((getType() != null)) {
 			expressionString += getType().getExpressionName();

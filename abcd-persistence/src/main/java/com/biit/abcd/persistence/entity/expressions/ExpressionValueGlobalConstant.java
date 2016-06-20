@@ -33,7 +33,7 @@ public class ExpressionValueGlobalConstant extends ExpressionValue<GlobalVariabl
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		String expressionString = "";
 		if (globalVariable != null) {
 			expressionString += globalVariable.getName();
@@ -47,7 +47,7 @@ public class ExpressionValueGlobalConstant extends ExpressionValue<GlobalVariabl
 
 	@Override
 	protected String getExpression() {
-		return getRepresentation();
+		return getRepresentation(false);
 	}
 
 	@Override

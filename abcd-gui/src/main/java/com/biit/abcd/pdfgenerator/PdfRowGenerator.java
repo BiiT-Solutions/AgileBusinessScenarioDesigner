@@ -10,6 +10,7 @@ import com.biit.abcd.pdfgenerator.utils.PdfRow;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.form.entity.BaseAnswer;
 import com.biit.form.entity.BaseGroup;
@@ -113,8 +114,8 @@ public class PdfRowGenerator {
 		return rows;
 	}
 
-	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question,
-			BaseAnswer baseAnswer) throws BadBlockException {
+	public static List<PdfRow> generateRadioFieldRows(PdfWriter writer, PdfFormField radioGroup, Question question, BaseAnswer baseAnswer)
+			throws BadBlockException {
 		List<PdfRow> rows = new ArrayList<PdfRow>();
 
 		PdfRow row = new PdfRow(RADIO_FIELD_ROW, RADIO_FIELD_COL);
@@ -126,12 +127,10 @@ public class PdfRowGenerator {
 		// are subanswers.
 		if (!(baseAnswer.getParent() instanceof Answer)) {
 			field.setPaddingLeft(PADDING);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
-					radioGroup, 0));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, 0));
 		} else {
 			field.setPaddingLeft(PADDING * 2);
-			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(),
-					radioGroup, PADDING));
+			field.setCellEvent(new FormRadioField(writer, question.getComparationId(), baseAnswer.getComparationId(), radioGroup, PADDING));
 		}
 		field.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
 		row.addCell(field);
@@ -151,8 +150,7 @@ public class PdfRowGenerator {
 		return row;
 	}
 
-	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol)
-			throws BadBlockException {
+	public static PdfRow createTextRow(String description, int textBlockRow, int textBlockCol) throws BadBlockException {
 		PdfRow row = new PdfRow(textBlockRow, textBlockCol);
 		row.addCell(PdfPCellGenerator.generateText(description));
 		return row;
@@ -199,7 +197,15 @@ public class PdfRowGenerator {
 	public static PdfRow generateTitleRow(String... titles) throws BadBlockException {
 		PdfRow row = new PdfRow(MIN_TITLE_ROW, titles.length);
 		for (String title : titles) {
-			row.addCell(PdfPCellGenerator.generateTitle(title));
+			row.addCell(PdfPCellGenerator.generateTableTitle(title));
+		}
+		return row;
+	}
+
+	public static PdfRow generateDefaultRow(String... titles) throws BadBlockException {
+		PdfRow row = new PdfRow(MIN_TITLE_ROW, titles.length);
+		for (String title : titles) {
+			row.addCell(PdfPCellGenerator.generateDefaultCell(title));
 		}
 		return row;
 	}
@@ -216,14 +222,19 @@ public class PdfRowGenerator {
 	}
 
 	public static PdfRow generateVariableRow(CustomVariable variable) throws BadBlockException {
-		return generateTitleRow(variable.getName(), variable.getType().toString(), variable.getScope().toString(),
-				variable.getDefaultValue());
+		return generateDefaultRow(variable.getName(), variable.getType().toString(), variable.getScope().toString(), variable.getDefaultValue());
+	}
+
+	public static PdfRow generateExpressionsRow(ExpressionChain expression) throws BadBlockException {
+		PdfRow row = new PdfRow(1, 1);
+		row.addCell(PdfPCellGenerator.generateDefaultCell(expression.getRepresentation(false)));
+		return row;
 	}
 
 	public static PdfRow generateRuleRow(TableRuleRow rule) throws BadBlockException {
 		PdfRow row = new PdfRow(1, 2);
-		row.addCell(PdfPCellGenerator.generateDefaultCell(rule.getConditionsForDrools().getRepresentation()));
-		row.addCell(PdfPCellGenerator.generateDefaultCell(rule.getAction().getRepresentation()));
+		row.addCell(PdfPCellGenerator.generateDefaultCell(rule.getConditionsForDrools().getRepresentation(false)));
+		row.addCell(PdfPCellGenerator.generateDefaultCell(rule.getAction().getRepresentation(false)));
 		return row;
 	}
 

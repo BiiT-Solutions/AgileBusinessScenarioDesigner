@@ -40,7 +40,7 @@ public class ExpressionValueTimestamp extends ExpressionValue<Timestamp> {
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		if (value != null) {
 			return DateManager.convertDateToString(value);
 		} else {

@@ -336,7 +336,7 @@ public class DiagramLink extends DiagramObject {
 			}
 			String result = "";
 			for (Expression expression : expressions) {
-				result += expression.getRepresentation() + " ";
+				result += expression.getRepresentation(true) + " ";
 			}
 			return result.trim();
 		}

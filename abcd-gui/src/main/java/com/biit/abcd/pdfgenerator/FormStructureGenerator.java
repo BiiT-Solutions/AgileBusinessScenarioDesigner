@@ -13,7 +13,7 @@ import com.lowagie.text.DocumentException;
  */
 public class FormStructureGenerator {
 
-	private static final float WHITE_LINE_SPACING = 10.0f;
+	private static final float WHITE_LINE_SPACING = 20.0f;
 
 	public static void generateAndAdd(Document document, TreeObject treeObject) throws DocumentException {
 

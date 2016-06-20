@@ -31,7 +31,7 @@ public final class ExpressionToken {
 		if (expression instanceof ExpressionPluginMethod) {
 			return PLUGIN_INTERFACE_IDENTIFIER;
 		} else {
-			return expression.getRepresentation().trim();
+			return expression.getRepresentation(true).trim();
 		}
 	}
 

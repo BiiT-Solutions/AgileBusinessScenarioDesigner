@@ -30,7 +30,7 @@ public class ExpressionValueNumber extends ExpressionValue<Double> {
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		return getValueWithoutTrailingZeroes();
 	}
 
