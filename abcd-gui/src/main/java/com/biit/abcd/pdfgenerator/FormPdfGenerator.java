@@ -30,7 +30,7 @@ public class FormPdfGenerator extends DocumentGenerator {
 
 		ParagraphGenerator.generateAndAddFormTitle(document, form.getLabel(), PdfAlign.ALIGN_CENTER);
 		String updateDate = DateManager.convertDateToString(form.getUpdateTime());
-		ParagraphGenerator.generateAndAddSubtitle(document, "Version: " + form.getVersion() + " (" + updateDate+")",
+		ParagraphGenerator.generateAndAddSubtitle(document, "Version " + form.getVersion() + " (" + updateDate+")",
 				PdfAlign.ALIGN_CENTER);
 
 		document.newPage();

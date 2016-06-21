@@ -21,7 +21,8 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * A concatenation of expressions: values, operators, ... that defines a more complex expression.
+ * A concatenation of expressions: values, operators, ... that defines a more
+ * complex expression.
  */
 @Entity
 @Table(name = "expressions_chain")
@@ -32,7 +33,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	private String name;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	// Orderby not works correctly but help the 2nd level cache to not unsort elements.
+	// Orderby not works correctly but help the 2nd level cache to not unsort
+	// elements.
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
 	// @SortComparator(value = ExpressionSort.class)
@@ -124,7 +126,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a Expression Evaluator.
+	 * Returns the expression in string format that can be evaluated by a
+	 * Expression Evaluator.
 	 * 
 	 * @return
 	 */
@@ -133,10 +136,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		String result = "";
 		for (int i = 0; i < expressions.size(); i++) {
 			// Dots are not allowed in the Evaluator Expression.
-			if ((expressions.get(i) instanceof ExpressionValueString)
-					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
-					|| (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
+			if ((expressions.get(i) instanceof ExpressionValueString) || (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+					|| (expressions.get(i) instanceof ExpressionValueCustomVariable) || (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
 				result += filterVariables(expressions.get(i)) + " ";
 			} else {
 				result += expressions.get(i).getExpression() + " ";
@@ -189,7 +190,11 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		for (Expression expression : expressions) {
 			result += expression.getRepresentation(showWhiteCharacter) + " ";
 		}
-		return result.trim();
+		if(showWhiteCharacter){
+			return result.trim();
+		}else{
+			return result.trim().replace(" ,", ",").replace("( ", "(").replace(" )",")");
+		}
 	}
 
 	public boolean isAssignedTo(TreeObject treeObject) {
@@ -262,8 +267,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 					expressionCopied.copyData(expression);
 					addExpression(expressionCopied);
 				} catch (InstantiationException | IllegalAccessException e) {
-					throw new NotValidStorableObjectException("Object '" + object
-							+ "' is not an instance of ExpressionChain.");
+					throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionChain.");
 				}
 			}
 		} else {
