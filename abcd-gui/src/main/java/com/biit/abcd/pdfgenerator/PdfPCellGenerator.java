@@ -21,7 +21,6 @@ import com.lowagie.text.pdf.PdfWriter;
 public class PdfPCellGenerator {
 
 	private final static int BORDER = Rectangle.NO_BORDER;
-	private static final int TITLE_SPAN = 0;
 
 	public static PdfPCell generateEmptyCell(int colspan) {
 		PdfPCell cell = new PdfPCell();
@@ -101,6 +100,12 @@ public class PdfPCellGenerator {
 	public static PdfPCell generateDefaultCell(String text) {
 		PdfPCell labelCell = new PdfPCell(new Phrase(text));
 		return labelCell;
+	}
+
+	public static PdfPCell generateHeaderTitle(String title) {
+		PdfPCell cell = new PdfPCell(new Paragraph(title, PdfFont.HEADER_FONT.getFont()));
+		cell.setBorder(BORDER);
+		return cell;
 	}
 
 }

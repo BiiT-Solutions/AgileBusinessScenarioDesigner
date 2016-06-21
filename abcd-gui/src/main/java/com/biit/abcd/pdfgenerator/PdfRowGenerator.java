@@ -70,10 +70,10 @@ public class PdfRowGenerator {
 			PdfPCell cellAnswerSubformat = PdfPCellGenerator.generateAnswerSubformatParagraph(question);
 			row.addCell(cellAnswerSubformat);
 
-			System.out.println(cellLabel.getColspan());
-			System.out.println(cellName.getColspan());
-			System.out.println(cellAnswerFormat.getColspan());
-			System.out.println(cellAnswerSubformat.getColspan());
+//			System.out.println(cellLabel.getColspan());
+//			System.out.println(cellName.getColspan());
+//			System.out.println(cellAnswerFormat.getColspan());
+//			System.out.println(cellAnswerSubformat.getColspan());
 		} catch (BadBlockException e) {
 			AbcdLogger.errorMessage(PdfRowGenerator.class.getName(), e);
 		}

@@ -1,5 +1,6 @@
 package com.biit.abcd.pdfgenerator;
 
+import com.biit.abcd.pdfgenerator.utils.PdfFont;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -20,8 +21,9 @@ import com.lowagie.text.pdf.PdfWriter;
  *
  */
 public class FormPageEvent extends PdfPageEventHelper {
-	String header;
-	PdfTemplate total;
+	private static final int HEADER_HEIGHT = 10;
+	private String header;
+	private PdfTemplate total;
 
 	public void setHeader(String header) {
 		this.header = header;
@@ -29,7 +31,7 @@ public class FormPageEvent extends PdfPageEventHelper {
 
 	@Override
 	public void onOpenDocument(PdfWriter writer, Document document) {
-		total = writer.getDirectContent().createTemplate(30, 16);
+		total = writer.getDirectContent().createTemplate(30, HEADER_HEIGHT);
 	}
 
 	@Override
@@ -45,11 +47,21 @@ public class FormPageEvent extends PdfPageEventHelper {
 				table.setLockedWidth(true);
 				table.getDefaultCell().setFixedHeight(20);
 				table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-				table.addCell(header);
-				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
-				table.addCell(String.format("Page %d of", writer.getPageNumber()));
+				PdfPCell headerCell = PdfPCellGenerator.generateHeaderTitle(header);
+				headerCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				headerCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+				headerCell.setFixedHeight(HEADER_HEIGHT);
+				headerCell.setBorder(Rectangle.BOTTOM);
+				table.addCell(headerCell);
+				headerCell = PdfPCellGenerator.generateHeaderTitle(String.format("Page %d of", writer.getPageNumber()));
+				headerCell.setFixedHeight(HEADER_HEIGHT);
+				headerCell.setBorder(Rectangle.BOTTOM);
+				headerCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				headerCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+				table.addCell(headerCell);
 				PdfPCell cell = new PdfPCell(Image.getInstance(total));
 				cell.setBorder(Rectangle.BOTTOM);
+				cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
 				table.addCell(cell);
 				table.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());
 			} catch (DocumentException de) {
@@ -60,7 +72,7 @@ public class FormPageEvent extends PdfPageEventHelper {
 
 	@Override
 	public void onCloseDocument(PdfWriter writer, Document document) {
-		ColumnText.showTextAligned(total, Element.ALIGN_LEFT, new Phrase(String.valueOf(writer.getPageNumber() - 1)), 2, 2, 0);
+		ColumnText.showTextAligned(total, Element.ALIGN_LEFT, new Phrase(String.valueOf(writer.getPageNumber() - 1), PdfFont.HEADER_FONT.getFont()), 2, 2, 0);
 	}
 
 }
