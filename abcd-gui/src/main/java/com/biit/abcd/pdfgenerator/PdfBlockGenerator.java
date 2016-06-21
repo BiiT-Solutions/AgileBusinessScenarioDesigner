@@ -56,7 +56,6 @@ public class PdfBlockGenerator {
 
 	private static PdfTableBlock generateAnnexGroupTableBlock(BaseGroup group) {
 		PdfTableBlock block = null;
-		System.out.println("Group " + group);
 		try {
 			block = new PdfTableBlock(MIN_GROUP_ROWS + getNumberOfChildsAndAnswers(group), STRUCTURE_COLS);
 
@@ -91,9 +90,7 @@ public class PdfBlockGenerator {
 	}
 
 	private static void generateAndAddQuestion(PdfTableBlock block, Question question) throws BadBlockException {
-		System.out.println("block size: " + block.getNumberCols() + " " + block.getNumberRows());
 		PdfRow row = PdfRowGenerator.generateQuestion(question);
-		System.out.println("row size: " + row.getCurrentCols() + " " + row.getNumberCols() + " " + row.getNumberRows());
 		block.insertRow(row);
 
 		if (!question.getChildren().isEmpty()) {
@@ -134,7 +131,6 @@ public class PdfBlockGenerator {
 
 		for (TreeObject object : treeObjects) {
 			if (!object.isHiddenElement()) {
-				System.out.println(object);
 				if (!generateAnnexGroupTableBlock((BaseGroup) object).isWellFormatted())
 					throw new BadBlockException();
 				if (!generateEmptyBlock().isWellFormatted()) {

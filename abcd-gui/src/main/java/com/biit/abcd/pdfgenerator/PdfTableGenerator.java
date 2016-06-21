@@ -20,8 +20,8 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class PdfTableGenerator {
 
-	private final static float[] annexFormColumnRatios = { 0.34f, 0.34f, 0.16f, 0.16f };
-	private static final float[] FORM_VARIABLE_COLUMN_RATIOS = { 0.25f, 0.25f, 0.25f, 0.25f };
+	private final static float[] annexFormColumnRatios = { 0.28f, 0.28f, 0.22f, 0.22f };
+	private static final float[] FORM_VARIABLE_COLUMN_RATIOS = { 0.35f, 0.15f, 0.15f, 0.15f };
 	private static final float[] EXPRESSIONS_TABLE_RATIOS = { 1.0f };
 	private static final float[] RULE_TABLE_RATIOS = { 1.0f };
 	private static final float[] RULE_TABLE_TABLE_RATIOS = { 1.0f, 1.0f };
@@ -58,9 +58,7 @@ public class PdfTableGenerator {
 	}
 
 	private static boolean checkUniformity(int number, List<PdfTableBlock> tableBlocks) {
-		System.out.println("Check uniformity " + number);
 		for (PdfTableBlock block : tableBlocks) {
-			System.out.println(number+" block: "+block+" "+block.isWellFormatted()+" "+block.getNumberCols());
 			if (!block.isWellFormatted() || (number != block.getNumberCols())) {
 				return false;
 			}
