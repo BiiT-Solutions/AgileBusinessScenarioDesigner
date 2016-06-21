@@ -18,7 +18,8 @@ public class FormStructureGenerator {
 	public static void generateAndAdd(Document document, TreeObject treeObject) throws DocumentException {
 
 		ParagraphGenerator.generateAndAddTitle(document, "Form Structure", PdfAlign.ALIGN_CENTER);
-		ParagraphGenerator.generateAndAddAnnexTitle(document, "Element List", PdfAlign.ALIGN_CENTER);
+		//ParagraphGenerator.generateAndAddAnnexTitle(document, "Element List", PdfAlign.ALIGN_CENTER);
+		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		document.add(PdfTableGenerator.generateStructureFormTable((Form) treeObject));
 		document.newPage();
 		ParagraphGenerator.generateAndAddTitle(document, "Form Variables", PdfAlign.ALIGN_CENTER);
@@ -34,8 +35,9 @@ public class FormStructureGenerator {
 		document.add(PdfTableGenerator.generateRulesTable((Form) treeObject));
 		document.newPage();
 		ParagraphGenerator.generateAndAddTitle(document, "Table Rules", PdfAlign.ALIGN_CENTER);
-		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		for (TableRule table : ((Form) treeObject).getTableRules()) {
+			document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
+			ParagraphGenerator.generateAndAddAnnexTitle(document, table.getName(), PdfAlign.ALIGN_CENTER);
 			document.add(PdfTableGenerator.generateRuleTableTable(table));
 		}
 	}

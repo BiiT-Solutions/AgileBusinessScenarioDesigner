@@ -63,7 +63,6 @@ public class PdfBlockGenerator {
 
 			if (!group.getChildren().isEmpty()) {
 				for (TreeObject child : group.getChildren()) {
-					System.out.println(child);
 					if (child instanceof Question) {
 						generateAndAddQuestion(block, (Question) child);
 					} else {
@@ -161,7 +160,7 @@ public class PdfBlockGenerator {
 
 		for (ExpressionChain expression : form.getExpressionChains()) {
 			PdfTableBlock block = new PdfTableBlock(MIN_EXPRESSION_ROWS, MIN_EXPRESSION_COLS);
-			block.insertRow(PdfRowGenerator.generateBorderlessTitleRow("Expression name: " + expression.getName()));
+			block.insertRow(PdfRowGenerator.generateBorderlessTitleRow(expression.getName()));
 			block.insertRow(PdfRowGenerator.generateExpressionsRow(expression));
 			block.insertRow(PdfRowGenerator.generateEmptyRow(MIN_EMPTY_ROW, MIN_EXPRESSION_COLS));
 			blocks.add(block);
@@ -174,7 +173,7 @@ public class PdfBlockGenerator {
 
 		for (Rule rule : form.getRules()) {
 			PdfTableBlock blockCondition = new PdfTableBlock(MIN_RULE_CONDITION_ROWS, MIN_RULE_COLS);
-			blockCondition.insertRow(PdfRowGenerator.generateBorderlessTitleRow("Rule name: " + rule.getName()));
+			blockCondition.insertRow(PdfRowGenerator.generateBorderlessTitleRow(rule.getName()));
 			blockCondition.insertRow(PdfRowGenerator.generateTitleRow("Conditions"));
 			blockCondition.insertRow(PdfRowGenerator.generateExpressionsRow(rule.getConditions()));
 			blocks.add(blockCondition);
