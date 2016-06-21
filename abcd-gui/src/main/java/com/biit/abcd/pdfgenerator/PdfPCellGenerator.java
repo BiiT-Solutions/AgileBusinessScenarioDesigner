@@ -98,7 +98,7 @@ public class PdfPCellGenerator {
 	}
 
 	public static PdfPCell generateDefaultCell(String text) {
-		PdfPCell labelCell = new PdfPCell(new Phrase(text));
+		PdfPCell labelCell = new PdfPCell(new Paragraph(text, PdfFont.NORMAL_FONT.getFont()));
 		return labelCell;
 	}
 

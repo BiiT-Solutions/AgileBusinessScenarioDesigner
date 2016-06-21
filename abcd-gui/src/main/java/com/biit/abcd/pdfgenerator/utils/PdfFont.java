@@ -22,7 +22,7 @@ public enum PdfFont {
 	
 	HEADER_FONT(new Font(Font.TIMES_ROMAN, 8)),
 
-	NORMAL_FONT(new Font(Font.TIMES_ROMAN, 12)),
+	NORMAL_FONT(new Font(Font.TIMES_ROMAN, 10)),
 
 	DESCRIPTION_FONT(new Font(Font.TIMES_ROMAN, 10, Font.ITALIC, Color.GRAY)),
 
