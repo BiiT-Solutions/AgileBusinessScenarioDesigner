@@ -10,9 +10,6 @@ public abstract class ExporterDot<T> {
 	private final static String GREY = "#808080";
 	private final static String LIGHT_GRAY = "#d3d3d3";
 	private final static String BLACK = "#000000";
-	private final static String RED3 = "#cd0000";
-	private final static String ROYALBLUE4 = "#27408b";
-	private final static String FORESTGREEN = "#228b22";
 
 	private final static String READ_ONLY_ALPHA = "44";
 
@@ -20,7 +17,7 @@ public abstract class ExporterDot<T> {
 	protected static final String DEFAULT_FONT_COLOR = BLACK;
 	protected static final String DEFAULT_SHAPE_COLOR = GREY;
 	protected static final String DEFAULT_LINK_COLOR = BLACK;
-	
+
 	protected String fillColor = DEFAULT_FILL_COLOR;
 	protected String shapeColor = DEFAULT_SHAPE_COLOR;
 	protected String fontColor = DEFAULT_FONT_COLOR;
@@ -31,9 +28,6 @@ public abstract class ExporterDot<T> {
 	protected String smallFontSize = "8";
 	protected String mediumFontSize = "16";
 	protected String bigFontSize = "26";
-	
-	protected String imageFolder = "/home/jhortelano/Escritorio/";
-	
 
 	/**
 	 * Return the string version of the dot graph code for a T structure.
@@ -45,6 +39,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Generates the list of nodes for a T structure.
+	 * 
 	 * @param structure
 	 * @return
 	 */
@@ -52,6 +47,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Generates the flow between nodes.
+	 * 
 	 * @param structure
 	 * @return
 	 */
@@ -59,6 +55,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Generate the nodes enclosed in a element.
+	 * 
 	 * @param structure
 	 * @return
 	 */
@@ -66,6 +63,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Limit sizes of the drawing
+	 * 
 	 * @return
 	 */
 	public String getSizeLimit() {
@@ -74,6 +72,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Set the limits of the drawing
+	 * 
 	 * @param sizeLimit
 	 */
 	public void setSizeLimit(String sizeLimit) {
