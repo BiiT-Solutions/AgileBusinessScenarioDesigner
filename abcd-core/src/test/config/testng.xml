@@ -17,6 +17,7 @@
 				<include name="pluginsTest" />
 				<include name="usesOfElement" />
 				<include name="multiSelectAnswer" />
+				<include name="graphviz" />
 			</run>
 		</groups>
 		<classes>
@@ -35,6 +36,7 @@
 			<class name="com.biit.abcd.core.drools.test.PluginsTest" />
 			<class name="com.biit.abcd.core.UsesOfElementTester" />
 			<class name="com.biit.abcd.core.drools.test.MultiSelectAnswerTest" />
+			<class name="com.biit.abcd.core.GraphvizTests" />
 		</classes>
 	</test>
 </suite>
