@@ -29,6 +29,11 @@ public abstract class ExporterDot<T> {
 
 	protected String sizeLimit = "23.30,33.10";
 	protected String smallFontSize = "8";
+	protected String mediumFontSize = "16";
+	protected String bigFontSize = "26";
+	
+	protected String imageFolder = "/home/jhortelano/Escritorio/";
+	
 
 	/**
 	 * Return the string version of the dot graph code for a T structure.
@@ -141,6 +146,14 @@ public abstract class ExporterDot<T> {
 
 	public void setPenWidth(String penWidth) {
 		this.penWidth = penWidth;
+	}
+
+	public String getMediumFontSize() {
+		return mediumFontSize;
+	}
+
+	public String getBigFontSize() {
+		return bigFontSize;
 	}
 
 }

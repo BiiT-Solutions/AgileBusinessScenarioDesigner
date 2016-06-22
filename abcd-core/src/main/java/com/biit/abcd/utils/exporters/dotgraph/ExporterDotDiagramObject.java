@@ -19,7 +19,7 @@ public class ExporterDotDiagramObject extends ExporterDot<DiagramObject> {
 	public String generateDotNodeList(DiagramObject diagramObject) {
 		if (diagramObject instanceof DiagramElement) {
 			String dotElement = new String();
-			dotElement = "\t\t" + getDotName((DiagramElement) diagramObject) + ";\n";
+			dotElement = "\t" + getDotName((DiagramElement) diagramObject) + ";\n";
 			return dotElement;
 		}
 		return "";
@@ -44,34 +44,40 @@ public class ExporterDotDiagramObject extends ExporterDot<DiagramObject> {
 	 */
 	private String getDotName(DiagramElement diagramElement) {
 		if (diagramElement.getType().equals(DiagramObjectType.SOURCE)) {
-			return getDotId(diagramElement) + " [label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\", color="
-					+ getFontColor(false) + ", penwidth=" + getPenWidth() + ", fontcolor=" + getFontColor(false) + "]";
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
+					+ filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; " + getDotId(diagramElement) + " [image=\""
+					+ imageFolder + "diagram.png\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.SINK)) {
-			return getDotId(diagramElement) + " [label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\", color="
-					+ getFontColor(false) + ", penwidth=" + getPenWidth() + ", fontcolor=" + getFontColor(false) + "]";
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
+					+ filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; " + getDotId(diagramElement) + " [image=\""
+					+ imageFolder + "diagram.png\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.FORK)) {
-			return getDotId(diagramElement) + " [label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\", color="
-					+ getFontColor(false) + ", penwidth=" + getPenWidth() + ", fontcolor=" + getFontColor(false) + "]";
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
+					+ filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; " + getDotId(diagramElement) + " [image=\""
+					+ imageFolder + "diagram.png\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.DIAGRAM_CHILD)) {
 			if (((DiagramChild) diagramElement).getDiagram() != null) {
-				return getDotId(diagramElement) + " [label=\"" + filterDotLanguage(((DiagramChild) diagramElement).getDiagram().getName())
-						+ "\", color=" + getFontColor(false) + ", penwidth=" + getPenWidth() + ", fontcolor=" + getFontColor(false) + "]";
+				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
+						+ filterDotLanguage(((DiagramChild) diagramElement).getDiagram().getName()) + "\"; " + getDotId(diagramElement)
+						+ " [image=\"" + imageFolder + "diagram.png\"];}";
 			}
 		} else if (diagramElement.getType().equals(DiagramObjectType.RULE)) {
 			if (((DiagramRule) diagramElement).getRule() != null) {
-				return getDotId(diagramElement) + " [label=\"" + filterDotLanguage(((DiagramRule) diagramElement).getRule().getName())
-						+ "\", color=" + getFontColor(false) + ", penwidth=" + getPenWidth() + ", fontcolor=" + getFontColor(false) + "]";
+				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
+						+ filterDotLanguage(((DiagramRule) diagramElement).getRule().getName()) + "\"; " + getDotId(diagramElement)
+						+ " [image=\"" + imageFolder + "diagram.png\"];}";
 			}
 		} else if (diagramElement.getType().equals(DiagramObjectType.TABLE)) {
 			if (((DiagramTable) diagramElement).getTable() != null) {
-				return getDotId(diagramElement) + " [label=\"" + filterDotLanguage(((DiagramTable) diagramElement).getTable().getName())
-						+ "\", color=" + getFontColor(false) + ", penwidth=" + getPenWidth() + ", fontcolor=" + getFontColor(false) + "]";
+				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
+						+ filterDotLanguage(((DiagramTable) diagramElement).getTable().getName()) + "\"; " + getDotId(diagramElement)
+						+ " [image=\"" + imageFolder + "diagram.png\"];}";
 			}
 		} else if (diagramElement.getType().equals(DiagramObjectType.CALCULATION)) {
 			if (((DiagramExpression) diagramElement).getExpression() != null) {
-				return getDotId(diagramElement) + " [label=\""
-						+ filterDotLanguage(((DiagramExpression) diagramElement).getExpression().getName()) + "\", color="
-						+ getFontColor(false) + ", penwidth=" + getPenWidth() + ", fontcolor=" + getFontColor(false) + "]";
+				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
+						+ filterDotLanguage(((DiagramExpression) diagramElement).getExpression().getName()) + "\"; "
+						+ getDotId(diagramElement) + " [image=\"" + imageFolder + "diagram.png\"];}";
 			}
 		}
 		return new String();

@@ -10,11 +10,12 @@ public class ExporterDotForm extends ExporterDotFormBasic<Diagram> {
 	public String export(Diagram diagram) {
 		String dotCode = new String();
 		dotCode += "digraph G {\n";
-		dotCode += "size=\"" + getSizeLimit() + "\";\n";
-		dotCode += "\tgraph [ resolution=60, fontsize=" + getSmallFontSize() + ",bgcolor=transparent ];\n";
-		dotCode += "\tnode [ fontsize=" + getSmallFontSize() + "];\n";
-		dotCode += "\tedge [ fontsize=" + getSmallFontSize() + "];\n";
-		dotCode += "\tpagedir=\"TL\";\n";
+		dotCode += "\tsize=\"" + getSizeLimit() + "\";\n";
+		dotCode += "\tranksep=1.25;\n";
+		dotCode += "\tgraph [ resolution=60, fontsize=" + getMediumFontSize() + ",bgcolor=transparent, penwidth=0, labelloc=\"b\" ];\n";
+		dotCode += "\tnode [shape=plaintext, fontsize=" + getMediumFontSize() + ", label=\"\"];\n";
+		dotCode += "\tedge [arrowsize=1, fontsize=" + getMediumFontSize() + "];\n";
+		dotCode += "\tpagedir=\"LT\";\n";
 		dotCode += createLegend(diagram);
 		dotCode += generateDotNodeList(diagram);
 		dotCode += generateDotNodeFlow(diagram);
@@ -30,7 +31,7 @@ public class ExporterDotForm extends ExporterDotFormBasic<Diagram> {
 
 	@Override
 	public String generateDotNodeFlow(Diagram diagram) {
-		String dotFlow = new String();
+		String dotFlow = new String("\n\t/* Relationships */\n");
 		for (DiagramObject diagramObject : diagram.getDiagramObjects()) {
 			if (diagramObject instanceof DiagramLink) {
 				dotFlow += generateDotRule((DiagramLink) diagramObject);
@@ -42,7 +43,7 @@ public class ExporterDotForm extends ExporterDotFormBasic<Diagram> {
 
 	@Override
 	public String generateDotNodeChilds(Diagram diagram) {
-		String dotNodes = new String();
+		String dotNodes = new String("\n\t/* Nodes */\n");
 		for (DiagramObject diagramObject : diagram.getDiagramObjects()) {
 			dotNodes += (new ExporterDotDiagramObject()).generateDotNodeList(diagramObject);
 		}

@@ -28,7 +28,7 @@ public abstract class ExporterDotFormBasic<T> extends ExporterDot<T> {
 
 	protected String createLegend(Diagram diagram) {
 		return "\tsubgraph cluster_0{rank = sink; Legend [shape=none, margin=0, label=<<table border=\"0\"><tr><td>" + diagram.getName()
-				+ "</td></tr></table>> ]}\n";
+				+ "</td></tr></table>> fontsize=" + getBigFontSize() + "]}\n";
 	}
 
 	protected String getTimestampFormattedString(Timestamp timestamp) {
