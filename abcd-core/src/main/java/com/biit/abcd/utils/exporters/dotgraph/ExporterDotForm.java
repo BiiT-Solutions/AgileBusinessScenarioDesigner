@@ -1,31 +1,23 @@
 package com.biit.abcd.utils.exporters.dotgraph;
 
-import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 
 public class ExporterDotForm extends ExporterDotFormBasic<Diagram> {
-	private Form form;
-
-	public ExporterDotForm(Form form) {
-		this.form = form;
-	}
 
 	@Override
 	public String export(Diagram diagram) {
 		String dotCode = new String();
 		dotCode += "digraph G {\n";
 		dotCode += "size=\"" + getSizeLimit() + "\";\n";
-		dotCode += "\tgraph [ resolution=60, fontsize=" + getSmallFontSize() + " ];\n";
+		dotCode += "\tgraph [ resolution=60, fontsize=" + getSmallFontSize() + ",bgcolor=transparent ];\n";
 		dotCode += "\tnode [ fontsize=" + getSmallFontSize() + "];\n";
 		dotCode += "\tedge [ fontsize=" + getSmallFontSize() + "];\n";
 		dotCode += "\tpagedir=\"TL\";\n";
-		dotCode += createLegend(form);
+		dotCode += createLegend(diagram);
 		dotCode += generateDotNodeList(diagram);
 		dotCode += generateDotNodeFlow(diagram);
-		dotCode += "\tstart [shape=Mdiamond];\n";
-		dotCode += "\tend [shape=Msquare];\n";
 		dotCode += "}\n";
 
 		return dotCode;

@@ -24,7 +24,6 @@ public class GraphvizApp {
 
 	public enum ImgType {
 		GIF("gif"), DOT("dot"), FIG("fig"), PDF("pdf"), PS("ps"), SVG("svg"), PNG("png"), ;
-
 		private String type;
 
 		private ImgType(String imgType) {
@@ -45,13 +44,10 @@ public class GraphvizApp {
 	 */
 	private static synchronized void findApplication() throws ExecutableCanNotBeExecuted, PathToExecutableNotFound {
 		if (applicationPath == null) {
-
 			applicationPath = AbcdConfigurationReader.getInstance().getGraphvizBinPath();
-
 			if (applicationPath != null) {
 				return;
 			}
-
 			applicationPath = OsUtils.findExecutableEnvironmentVariable(GRAPHVIZ_SYSVAR);
 		}
 	}
@@ -79,7 +75,7 @@ public class GraphvizApp {
 			File dotTemp = OsUtils.writeInTempFile("dotCode_", ".dot.tmp", dotCode);
 			// Generates a temp file for the image
 			File imgTemp = File.createTempFile("dotImage_", "." + imgType.getType());
-
+			
 			// Execution of Graphviz
 			String[] args = { applicationPath, "-T" + imgType.getType(), dotTemp.getAbsolutePath(), "-o", imgTemp.getAbsolutePath() };
 			OsUtils.execSynchronic(args);
@@ -92,12 +88,12 @@ public class GraphvizApp {
 			}
 
 			// Delete both files.
-			if (dotTemp.delete() == false) {
-				AbcdLogger.warning(GraphvizApp.class.getName(), dotTemp.getAbsolutePath() + " could not be deleted.");
-			}
-			if (imgTemp.delete() == false) {
-				AbcdLogger.warning(GraphvizApp.class.getName(), imgTemp.getAbsolutePath() + " could not be deleted.");
-			}
+//			if (dotTemp.delete() == false) {
+//				AbcdLogger.warning(GraphvizApp.class.getName(), dotTemp.getAbsolutePath() + " could not be deleted.");
+//			}
+//			if (imgTemp.delete() == false) {
+//				AbcdLogger.warning(GraphvizApp.class.getName(), imgTemp.getAbsolutePath() + " could not be deleted.");
+//			}
 		} catch (ExecutableCanNotBeExecuted e) {
 			AbcdLogger.severe(GraphvizApp.class.getName(), "Executable can't be executed.");
 		} catch (PathToExecutableNotFound e) {
@@ -123,7 +119,7 @@ public class GraphvizApp {
 	public static byte[] generateImage(Form form, Diagram diagram, ImgType imgType) throws IOException, InterruptedException {
 		// Generate DotCode
 		String dotCode = null;
-		ExporterDotForm exporter = new ExporterDotForm(form);
+		ExporterDotForm exporter = new ExporterDotForm();
 		dotCode = exporter.export(diagram);
 
 		// Call Graphviz to make a render from dot code.

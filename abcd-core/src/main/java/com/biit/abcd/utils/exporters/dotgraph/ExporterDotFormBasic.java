@@ -3,7 +3,7 @@ package com.biit.abcd.utils.exporters.dotgraph;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.Node;
 
@@ -26,10 +26,9 @@ public abstract class ExporterDotFormBasic<T> extends ExporterDot<T> {
 		return dotRule;
 	}
 
-	protected String createLegend(Form form) {
-		return "\tsubgraph cluster_0{rank = sink; Legend [shape=none, margin=0, label=<<table border=\"0\"><tr><td>" + form.getLabel()
-				+ "</td></tr><tr><td>version " + form.getVersion() + " (" + getTimestampFormattedString(form.getUpdateTime())
-				+ ")</td></tr></table>> ]}\n";
+	protected String createLegend(Diagram diagram) {
+		return "\tsubgraph cluster_0{rank = sink; Legend [shape=none, margin=0, label=<<table border=\"0\"><tr><td>" + diagram.getName()
+				+ "</td></tr></table>> ]}\n";
 	}
 
 	protected String getTimestampFormattedString(Timestamp timestamp) {
