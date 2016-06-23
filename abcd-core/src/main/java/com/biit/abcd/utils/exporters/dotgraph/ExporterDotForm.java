@@ -12,10 +12,10 @@ public class ExporterDotForm extends ExporterDotFormBasic<Diagram> {
 		dotCode += "digraph G {\n";
 		dotCode += "\tsize=\"" + getSizeLimit() + "\";\n";
 		dotCode += "\tranksep=1.25;\n";
-		dotCode += "\tgraph [ resolution=60, fontsize=" + getMediumFontSize() + ",bgcolor=transparent, penwidth=0, labelloc=\"b\" ];\n";
+		dotCode += "\tgraph [  resolution=60, fontsize=" + getMediumFontSize() + ",bgcolor=transparent, penwidth=0, labelloc=\"b\" ];\n";
 		dotCode += "\tnode [shape=plaintext, fontsize=" + getMediumFontSize() + ", label=\"\"];\n";
 		dotCode += "\tedge [arrowsize=1, fontsize=" + getMediumFontSize() + "];\n";
-		dotCode += "\tpagedir=\"LT\";\n";
+		dotCode += "\tpagedir=\"LR\";\n";
 		dotCode += createLegend(diagram);
 		dotCode += generateDotNodeList(diagram);
 		dotCode += generateDotNodeFlow(diagram);

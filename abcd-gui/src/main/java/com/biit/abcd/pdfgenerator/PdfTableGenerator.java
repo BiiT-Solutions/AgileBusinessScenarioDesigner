@@ -1,15 +1,24 @@
 package com.biit.abcd.pdfgenerator;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.apache.batik.transcoder.TranscoderException;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
 import com.biit.abcd.pdfgenerator.utils.PdfTableBlock;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.utils.GraphvizApp;
+import com.biit.abcd.utils.GraphvizApp.ImgType;
+import com.biit.abcd.utils.ImageManipulator;
+import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
+import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -25,9 +34,9 @@ public class PdfTableGenerator {
 	private static final float[] EXPRESSIONS_TABLE_RATIOS = { 1.0f };
 	private static final float[] RULE_TABLE_RATIOS = { 1.0f };
 	private static final float[] RULE_TABLE_TABLE_RATIOS = { 1.0f, 1.0f };
+	private static final float[] RULE_TABLE_DIAGRAM = { 1.0f };
 
-	public static PdfPTable generateTable(float relativeWidths[], List<PdfTableBlock> tableBlocks)
-			throws BadBlockException {
+	public static PdfPTable generateTable(float relativeWidths[], List<PdfTableBlock> tableBlocks) throws BadBlockException {
 		PdfPTable table = new PdfPTable(relativeWidths);
 		table.setSplitRows(false);
 		table.getDefaultCell().enableBorderSide(Rectangle.TOP);
@@ -50,11 +59,9 @@ public class PdfTableGenerator {
 		return table;
 	}
 
-	public static void generate(Document document, float relativeWidths[], List<PdfTableBlock> tableBlocks)
-			throws DocumentException {
+	public static void generate(Document document, float relativeWidths[], List<PdfTableBlock> tableBlocks) throws DocumentException {
 		PdfPTable elementTable = new PdfPTable(relativeWidths);
 		elementTable.setSplitRows(false);
-
 	}
 
 	private static boolean checkUniformity(int number, List<PdfTableBlock> tableBlocks) {
@@ -82,6 +89,42 @@ public class PdfTableGenerator {
 		try {
 			table = generateTable(FORM_VARIABLE_COLUMN_RATIOS, PdfBlockGenerator.generateFormVariableTableBlocks(form));
 		} catch (BadBlockException e) {
+			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
+		}
+		return table;
+	}
+
+	public static Element generateDiagrams(Document document, Form form, Diagram diagram) {
+		PdfPTable table = new PdfPTable(RULE_TABLE_DIAGRAM);
+		try {
+			
+			byte[] imageSVG = GraphvizApp.generateImage(form, diagram, ImgType.SVG);
+			// Convert to PNG.
+			byte[] imagePNG = ImageManipulator.svgToPng(imageSVG);
+			
+			Image diagramImage = Image.getInstance(imagePNG);
+//			int dstHeight, dstWidth;
+//			if (((double) diagramImage.getHeight()) / (PageSize.A4.getHeight()) < ((double) diagramImage.getWidth()) / PageSize.A4.getWidth()) {
+//				dstWidth = (int) PageSize.A4.getWidth();
+//				dstHeight = (int) (diagramImage.getHeight() * PageSize.A4.getWidth() / (double) diagramImage.getWidth());
+//			} else {
+//				dstWidth = (int) (diagramImage.getWidth() * (PageSize.A4.getHeight()) / (double) diagramImage.getHeight());
+//				dstHeight = (int) (PageSize.A4.getHeight());
+//			}
+			
+//			System.out.println(dstWidth + " x " + dstHeight);
+			
+			float documentWidth = document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin();
+			float documentHeight = (document.getPageSize().getHeight() - document.topMargin() - document.bottomMargin())/2;
+			diagramImage.scaleToFit(documentWidth, documentHeight);
+
+
+//			diagramImage.scaleAbsolute(dstWidth, dstHeight);
+
+			PdfPCell cell = new PdfPCell(diagramImage);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cell);
+		} catch (BadElementException | IOException | InterruptedException | TranscoderException e) {
 			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
 		}
 		return table;

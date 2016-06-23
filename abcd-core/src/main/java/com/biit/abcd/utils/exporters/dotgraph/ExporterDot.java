@@ -24,7 +24,7 @@ public abstract class ExporterDot<T> {
 	protected String linkColor = DEFAULT_LINK_COLOR;
 	protected String penWidth = "1.0";
 
-	protected String sizeLimit = "23.30,33.10";
+	protected String sizeLimit = "4,5.5!";
 	protected String smallFontSize = "8";
 	protected String mediumFontSize = "16";
 	protected String bigFontSize = "26";

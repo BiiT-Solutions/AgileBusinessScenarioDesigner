@@ -105,8 +105,7 @@ public class PdfBlockGenerator {
 
 	private static PdfTableBlock generateAnnexQuestionTableBlock(Question question) throws BadBlockException {
 		PdfTableBlock block = null;
-		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(),
-				STRUCTURE_COLS);
+		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(), STRUCTURE_COLS);
 
 		block.insertRow(PdfRowGenerator.generateQuestion(question));
 
@@ -195,4 +194,5 @@ public class PdfBlockGenerator {
 		blocks.add(tableBlock);
 		return blocks;
 	}
+
 }

@@ -82,6 +82,8 @@
 		<mybatis.version>3.2.8</mybatis.version>
 		<jersey.version>2.17</jersey.version>
 		<javax.servlet.version>2.5</javax.servlet.version>
+		<batik.version>1.8</batik.version>
+		<xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
 		<!-- BiiT dependencies -->
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
 		<liferay-service-common.version>[0.7,0.8)</liferay-service-common.version>
