@@ -75,25 +75,26 @@ public class GraphvizApp {
 			File dotTemp = OsUtils.writeInTempFile("dotCode_", ".dot.tmp", dotCode);
 			// Generates a temp file for the image
 			File imgTemp = File.createTempFile("dotImage_", "." + imgType.getType());
-			
+
 			// Execution of Graphviz
 			String[] args = { applicationPath, "-T" + imgType.getType(), dotTemp.getAbsolutePath(), "-o", imgTemp.getAbsolutePath() };
 			OsUtils.execSynchronic(args);
 
 			// Pass data to byte[]
-
 			try (FileInputStream in = new FileInputStream(imgTemp.getAbsolutePath())) {
 				img_stream = new byte[in.available()];
 				in.read(img_stream);
 			}
 
 			// Delete both files.
-			if (dotTemp.delete() == false) {
-				AbcdLogger.warning(GraphvizApp.class.getName(), dotTemp.getAbsolutePath() + " could not be deleted.");
-			}
-			if (imgTemp.delete() == false) {
-				AbcdLogger.warning(GraphvizApp.class.getName(), imgTemp.getAbsolutePath() + " could not be deleted.");
-			}
+			// if (dotTemp.delete() == false) {
+			// AbcdLogger.warning(GraphvizApp.class.getName(),
+			// dotTemp.getAbsolutePath() + " could not be deleted.");
+			// }
+			// if (imgTemp.delete() == false) {
+			// AbcdLogger.warning(GraphvizApp.class.getName(),
+			// imgTemp.getAbsolutePath() + " could not be deleted.");
+			// }
 		} catch (ExecutableCanNotBeExecuted e) {
 			AbcdLogger.severe(GraphvizApp.class.getName(), "Executable can't be executed.");
 		} catch (PathToExecutableNotFound e) {

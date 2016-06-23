@@ -2,13 +2,13 @@ package com.biit.abcd.persistence.entity.diagram;
 
 public enum DiagramObjectType {
 
-	SOURCE("biit.SourceNode", "source.png"),
-	SINK("biit.SinkNode", "sink.png"),	
-	FORK("biit.ForkNode", "fork.png"),
-	DIAGRAM_CHILD("biit.Diagram", "diagram.png"),
-	RULE("biit.RuleNode", "rule.png"),
-	TABLE("biit.TableNode", "table.png"),
-	CALCULATION("biit.CalculationNode", "expression.png"),
+	SOURCE("biit.SourceNode", "source.svg"),
+	SINK("biit.SinkNode", "sink.svg"),	
+	FORK("biit.ForkNode", "fork.svg"),
+	DIAGRAM_CHILD("biit.Diagram", "diagram.svg"),
+	RULE("biit.RuleNode", "rule.svg"),
+	TABLE("biit.TableNode", "table.svg"),
+	CALCULATION("biit.CalculationNode", "expression.svg"),
 	REPEAT("biit.BaseRepeatNode", ""),
 	LINK("link", "");
 	

@@ -11,7 +11,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 
 public class ExporterDotDiagramObject extends ExporterDot<DiagramObject> {
-	private final String ICON_FOLDER = "/home/jhortelano/Escritorio";
 
 	@Override
 	public String export(DiagramObject diagramObject) {
@@ -47,41 +46,37 @@ public class ExporterDotDiagramObject extends ExporterDot<DiagramObject> {
 	 */
 	private String getDotName(DiagramElement diagramElement) {
 		if (diagramElement.getType().equals(DiagramObjectType.SOURCE)) {
-			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
-					+ filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; " + getDotId(diagramElement) + " [image=\""
-					+ getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; "
+					+ getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.SINK)) {
-			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
-					+ filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; " + getDotId(diagramElement) + " [image=\""
-					+ getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; "
+					+ getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.FORK)) {
-			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
-					+ filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; " + getDotId(diagramElement) + " [image=\""
-					+ getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; "
+					+ getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.DIAGRAM_CHILD)) {
 			if (((DiagramChild) diagramElement).getDiagram() != null) {
 				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
-						+ filterDotLanguage(((DiagramChild) diagramElement).getDiagram().getName()) + "\"; " + getDotId(diagramElement)
-						+ " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
+						+ filterDotLanguage(((DiagramChild) diagramElement).getDiagram().getName()) + "\"; " + getDotId(diagramElement) + " [image=\""
+						+ getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 			}
 		} else if (diagramElement.getType().equals(DiagramObjectType.RULE)) {
 			if (((DiagramRule) diagramElement).getRule() != null) {
-				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
-						+ filterDotLanguage(((DiagramRule) diagramElement).getRule().getName()) + "\"; " + getDotId(diagramElement)
-						+ " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
+				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(((DiagramRule) diagramElement).getRule().getName())
+						+ "\"; " + getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon()
+						+ "\"];}";
 			}
 		} else if (diagramElement.getType().equals(DiagramObjectType.TABLE)) {
 			if (((DiagramTable) diagramElement).getTable() != null) {
-				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
-						+ filterDotLanguage(((DiagramTable) diagramElement).getTable().getName()) + "\"; " + getDotId(diagramElement)
-						+ " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
+				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(((DiagramTable) diagramElement).getTable().getName())
+						+ "\"; " + getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon()
+						+ "\"];}";
 			}
 		} else if (diagramElement.getType().equals(DiagramObjectType.CALCULATION)) {
 			if (((DiagramExpression) diagramElement).getExpression() != null) {
 				return "subgraph cluster_" + getDotId(diagramElement) + " {label=\""
-						+ filterDotLanguage(((DiagramExpression) diagramElement).getExpression().getName()) + "\"; "
-						+ getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator
-						+ diagramElement.getType().getGraphvizIcon() + "\"];}";
+						+ filterDotLanguage(((DiagramExpression) diagramElement).getExpression().getName()) + "\"; " + getDotId(diagramElement) + " [image=\""
+						+ getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 			}
 		}
 		return new String();
@@ -92,6 +87,6 @@ public class ExporterDotDiagramObject extends ExporterDot<DiagramObject> {
 	}
 
 	private String getIconsFolder() {
-		return ICON_FOLDER;
+		return DotImageCreator.ICON_TEMP_FOLDER.toString();
 	}
 }

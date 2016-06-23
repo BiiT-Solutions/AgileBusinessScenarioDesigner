@@ -24,7 +24,7 @@ public class GraphvizTests {
 			InvalidAnswerFormatException, ElementIsReadOnly, IOException, InterruptedException {
 		form = FormUtils.createCompleteForm();
 		Assert.assertNotNull(form);
-
+		
 		for (Diagram diagram : form.getDiagrams()) {
 			Assert.assertNotNull(GraphvizApp.generateImage(form, diagram, ImgType.SVG));
 		}
