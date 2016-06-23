@@ -19,6 +19,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -97,29 +98,13 @@ public class PdfTableGenerator {
 	public static Element generateDiagrams(Document document, Form form, Diagram diagram) {
 		PdfPTable table = new PdfPTable(RULE_TABLE_DIAGRAM);
 		try {
-			
+			//Only SVG reads icons correctly. Then create in SVG format.
 			byte[] imageSVG = GraphvizApp.generateImage(form, diagram, ImgType.SVG);
 			// Convert to PNG.
-			byte[] imagePNG = ImageManipulator.svgToPng(imageSVG);
-			
+			byte[] imagePNG = ImageManipulator.svgToPng(imageSVG, PageSize.A4.getWidth() - document.leftMargin() - document.rightMargin(),
+					PageSize.A4.getHeight() - document.topMargin() - document.bottomMargin());
+
 			Image diagramImage = Image.getInstance(imagePNG);
-//			int dstHeight, dstWidth;
-//			if (((double) diagramImage.getHeight()) / (PageSize.A4.getHeight()) < ((double) diagramImage.getWidth()) / PageSize.A4.getWidth()) {
-//				dstWidth = (int) PageSize.A4.getWidth();
-//				dstHeight = (int) (diagramImage.getHeight() * PageSize.A4.getWidth() / (double) diagramImage.getWidth());
-//			} else {
-//				dstWidth = (int) (diagramImage.getWidth() * (PageSize.A4.getHeight()) / (double) diagramImage.getHeight());
-//				dstHeight = (int) (PageSize.A4.getHeight());
-//			}
-			
-//			System.out.println(dstWidth + " x " + dstHeight);
-			
-			float documentWidth = document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin();
-			float documentHeight = (document.getPageSize().getHeight() - document.topMargin() - document.bottomMargin())/2;
-			diagramImage.scaleToFit(documentWidth, documentHeight);
-
-
-//			diagramImage.scaleAbsolute(dstWidth, dstHeight);
 
 			PdfPCell cell = new PdfPCell(diagramImage);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);

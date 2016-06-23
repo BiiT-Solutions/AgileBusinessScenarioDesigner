@@ -25,7 +25,7 @@ public class ImageManipulator {
 		return ostream.toByteArray();
 	}
 
-	public static byte[] svgToPng(byte[] streamBytes, float height, float width) throws TranscoderException, IOException {
+	public static byte[] svgToPng(byte[] streamBytes, float width, float height) throws TranscoderException, IOException {
 		PNGTranscoder t = new PNGTranscoder();
 		TranscoderInput input = new TranscoderInput(new ByteArrayInputStream(streamBytes));
 		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
