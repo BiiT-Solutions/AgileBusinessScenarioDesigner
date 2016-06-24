@@ -3,7 +3,9 @@ package com.biit.abcd.utils;
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -38,6 +40,12 @@ public class ImageManipulator {
 		t.transcode(input, output);
 
 		ostream.flush();
+
+		//Store image for testing.
+		try (OutputStream outputStream = new FileOutputStream("/tmp/cosa" + Math.random() + ".png")) {
+			ostream.writeTo(outputStream);
+		}
+
 		// ostream.close();
 		return ostream.toByteArray();
 	}

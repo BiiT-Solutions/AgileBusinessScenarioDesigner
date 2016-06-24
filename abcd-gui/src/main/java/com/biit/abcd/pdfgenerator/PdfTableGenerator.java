@@ -98,15 +98,15 @@ public class PdfTableGenerator {
 	public static Element generateDiagrams(Document document, Form form, Diagram diagram) {
 		PdfPTable table = new PdfPTable(RULE_TABLE_DIAGRAM);
 		try {
-			//Only SVG reads icons correctly. Then create in SVG format.
+			// Only SVG reads icons correctly. Then create in SVG format.
 			byte[] imageSVG = GraphvizApp.generateImage(form, diagram, ImgType.SVG);
 			// Convert to PNG.
-			byte[] imagePNG = ImageManipulator.svgToPng(imageSVG, PageSize.A4.getWidth() - document.leftMargin() - document.rightMargin(),
-					PageSize.A4.getHeight() - document.topMargin() - document.bottomMargin());
+			byte[] imagePNG = ImageManipulator.svgToPng(imageSVG, 5* PageSize.A4.getWidth() / 1.5f,
+					5*((PageSize.A4.getHeight() - document.topMargin()) - document.bottomMargin()) / 2);
 
 			Image diagramImage = Image.getInstance(imagePNG);
 
-			PdfPCell cell = new PdfPCell(diagramImage);
+			PdfPCell cell = new PdfPCell(diagramImage, true);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(cell);
 		} catch (BadElementException | IOException | InterruptedException | TranscoderException e) {

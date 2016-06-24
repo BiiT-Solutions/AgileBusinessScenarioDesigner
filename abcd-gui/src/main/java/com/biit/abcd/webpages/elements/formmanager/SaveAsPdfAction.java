@@ -46,12 +46,12 @@ public class SaveAsPdfAction implements SaveAction {
 
 	@Override
 	public String getMimeType() {
-		return "application/zip";
+		return "application/pdf";
 	}
 
 	@Override
 	public String getFileName() {
-		return "rules." + getExtension();
+		return UserSessionHandler.getFormController().getForm().getName() + "." + getExtension();
 	}
 
 }

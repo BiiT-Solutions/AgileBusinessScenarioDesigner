@@ -22,7 +22,6 @@ public class FormPdfGenerator extends DocumentGenerator {
 		formPageEvent.setHeader(form.getLabel());
 
 		setPageEvent(formPageEvent);
-
 	}
 
 	@Override
@@ -30,8 +29,7 @@ public class FormPdfGenerator extends DocumentGenerator {
 
 		ParagraphGenerator.generateAndAddFormTitle(document, form.getLabel(), PdfAlign.ALIGN_CENTER);
 		String updateDate = DateManager.convertDateToString(form.getUpdateTime());
-		ParagraphGenerator.generateAndAddSubtitle(document, "Version " + form.getVersion() + " (" + updateDate+")",
-				PdfAlign.ALIGN_CENTER);
+		ParagraphGenerator.generateAndAddSubtitle(document, "Version " + form.getVersion() + " (" + updateDate + ")", PdfAlign.ALIGN_CENTER);
 
 		document.newPage();
 
