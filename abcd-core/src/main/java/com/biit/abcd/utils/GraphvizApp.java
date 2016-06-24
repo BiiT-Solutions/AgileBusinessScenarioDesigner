@@ -87,12 +87,12 @@ public class GraphvizApp {
 			}
 
 			// Delete both files.
-//			if (dotTemp.delete() == false) {
-//				AbcdLogger.warning(GraphvizApp.class.getName(), dotTemp.getAbsolutePath() + " could not be deleted.");
-//			}
-//			if (imgTemp.delete() == false) {
-//				AbcdLogger.warning(GraphvizApp.class.getName(), imgTemp.getAbsolutePath() + " could not be deleted.");
-//			}
+			if (dotTemp.delete() == false) {
+				AbcdLogger.warning(GraphvizApp.class.getName(), dotTemp.getAbsolutePath() + " could not be deleted.");
+			}
+			if (imgTemp.delete() == false) {
+				AbcdLogger.warning(GraphvizApp.class.getName(), imgTemp.getAbsolutePath() + " could not be deleted.");
+			}
 		} catch (ExecutableCanNotBeExecuted e) {
 			AbcdLogger.severe(GraphvizApp.class.getName(), "Executable can't be executed.");
 		} catch (PathToExecutableNotFound e) {
