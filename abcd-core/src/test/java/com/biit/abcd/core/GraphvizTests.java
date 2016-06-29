@@ -33,14 +33,10 @@ public class GraphvizTests {
 			byte[] imagePNG = ImageManipulator.svgToPng(imageSVG, 2500, 2600);
 			Assert.assertNotNull(imagePNG);
 
-//			try {
-//				// convert array of bytes into file
-//				FileOutputStream fileOuputStream = new FileOutputStream("/tmp/testSvgToPng.png");
-//				fileOuputStream.write(imagePNG);
-//				fileOuputStream.close();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			// convert array of bytes into file
+			FileOutputStream fileOuputStream = new FileOutputStream("/tmp/testSvgToPng.png");
+			fileOuputStream.write(imagePNG);
+			fileOuputStream.close();
 		}
 	}
 }

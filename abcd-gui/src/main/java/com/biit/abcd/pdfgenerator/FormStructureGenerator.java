@@ -32,10 +32,13 @@ public class FormStructureGenerator {
 		ParagraphGenerator.generateAndAddTitle(document, "Diagrams", PdfAlign.ALIGN_CENTER);
 		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		for (Diagram diagram : ((Form) treeObject).getDiagrams()) {
+			document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
+			//ParagraphGenerator.generateAndAddAnnexTitle(document, diagram.getName(), PdfAlign.ALIGN_CENTER);
 			document.add(PdfTableGenerator.generateDiagrams(document, (Form) treeObject, diagram));
-			document.newPage();
+			//document.newPage();
 		}
-
+		document.newPage();
+		
 		ParagraphGenerator.generateAndAddTitle(document, "Expressions", PdfAlign.ALIGN_CENTER);
 		document.add(ParagraphGenerator.generateWhiteLine(WHITE_LINE_SPACING));
 		document.add(PdfTableGenerator.generateExpressionsTable((Form) treeObject));

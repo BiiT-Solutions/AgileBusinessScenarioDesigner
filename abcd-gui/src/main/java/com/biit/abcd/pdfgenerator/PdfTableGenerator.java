@@ -10,6 +10,9 @@ import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
 import com.biit.abcd.pdfgenerator.utils.PdfTableBlock;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.utils.GraphvizApp;
 import com.biit.abcd.utils.GraphvizApp.ImgType;
@@ -29,13 +32,15 @@ import com.lowagie.text.pdf.PdfPTable;
  *
  */
 public class PdfTableGenerator {
+	private final static int BIG_GRAPH_NODE_RATIO = 12;
+	private final static int MEDIUM_GRAPH_NODE_RATIO = 6;
 
-	private final static float[] annexFormColumnRatios = { 0.28f, 0.28f, 0.22f, 0.22f };
+	private final static float[] ANNEX_FORM_COLUMN_RATIOS = { 0.28f, 0.28f, 0.22f, 0.22f };
 	private static final float[] FORM_VARIABLE_COLUMN_RATIOS = { 0.35f, 0.15f, 0.15f, 0.15f };
 	private static final float[] EXPRESSIONS_TABLE_RATIOS = { 1.0f };
 	private static final float[] RULE_TABLE_RATIOS = { 1.0f };
 	private static final float[] RULE_TABLE_TABLE_RATIOS = { 1.0f, 1.0f };
-	private static final float[] RULE_TABLE_DIAGRAM = { 1.0f };
+	private static final float[] DIAGRAM_TABLE = { 1.0f };
 
 	public static PdfPTable generateTable(float relativeWidths[], List<PdfTableBlock> tableBlocks) throws BadBlockException {
 		PdfPTable table = new PdfPTable(relativeWidths);
@@ -77,7 +82,7 @@ public class PdfTableGenerator {
 	public static PdfPTable generateStructureFormTable(Form form) {
 		PdfPTable table = null;
 		try {
-			table = generateTable(annexFormColumnRatios, PdfBlockGenerator.generateAnnexFormTableBlocks(form));
+			table = generateTable(ANNEX_FORM_COLUMN_RATIOS, PdfBlockGenerator.generateAnnexFormTableBlocks(form));
 			table.getDefaultCell().setBorder(Rectangle.TOP | Rectangle.BOTTOM | Rectangle.LEFT | Rectangle.RIGHT);
 		} catch (BadBlockException e) {
 			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
@@ -96,13 +101,24 @@ public class PdfTableGenerator {
 	}
 
 	public static Element generateDiagrams(Document document, Form form, Diagram diagram) {
-		PdfPTable table = new PdfPTable(RULE_TABLE_DIAGRAM);
+		PdfPTable table = new PdfPTable(DIAGRAM_TABLE);
 		try {
 			// Only SVG reads icons correctly. Then create in SVG format.
 			byte[] imageSVG = GraphvizApp.generateImage(form, diagram, ImgType.SVG);
 			// Convert to PNG.
-			byte[] imagePNG = ImageManipulator.svgToPng(imageSVG, 5* PageSize.A4.getWidth() / 1.5f,
-					5*((PageSize.A4.getHeight() - document.topMargin()) - document.bottomMargin()) / 2);
+			byte[] imagePNG;
+			// Create different image resolutions depending on the size of the
+			// diagram.
+			if (isDeepDiagram(diagram, BIG_GRAPH_NODE_RATIO)) {
+				imagePNG = ImageManipulator.svgToPng(imageSVG, 5 * PageSize.A4.getWidth() / 1.5f,
+						5 * ((PageSize.A4.getHeight() - document.topMargin()) - document.bottomMargin()) / 1.4f);
+			} else if (isDeepDiagram(diagram, MEDIUM_GRAPH_NODE_RATIO)) {
+				imagePNG = ImageManipulator.svgToPng(imageSVG, 5 * PageSize.A4.getWidth() / 1.5f,
+						5 * ((PageSize.A4.getHeight() - document.topMargin()) - document.bottomMargin()) / 2);
+			} else {
+				imagePNG = ImageManipulator.svgToPng(imageSVG, 5 * PageSize.A4.getWidth() / 1.5f,
+						5 * ((PageSize.A4.getHeight() - document.topMargin()) - document.bottomMargin()) / 4);
+			}
 
 			Image diagramImage = Image.getInstance(imagePNG);
 
@@ -113,6 +129,32 @@ public class PdfTableGenerator {
 			AbcdLogger.errorMessage(PdfTableGenerator.class.getName(), e);
 		}
 		return table;
+	}
+
+	/**
+	 * Simple estimation if a graph needs a high resolution for its
+	 * representation.
+	 * 
+	 * @param diagram
+	 * @return
+	 */
+	private static boolean isDeepDiagram(Diagram diagram, int maxDeep) {
+		int startingNodes = 0;
+		int elements = 0;
+		for (DiagramObject object : diagram.getDiagramObjects()) {
+			if (object instanceof DiagramSource) {
+				startingNodes++;
+			}
+			if (!(object instanceof DiagramLink)) {
+				elements++;
+			}
+		}
+
+		if ((elements / startingNodes) > maxDeep) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public static Element generateExpressionsTable(Form form) {
