@@ -102,7 +102,7 @@ public class DiagramPropertiesFork extends SecuredDiagramElementProperties<Diagr
 								setNewDateReference(reference, unit);
 								AbcdLogger.info(this.getClass().getName(), "User '"
 										+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getReference().getRepresentation(true) + " in Fork with ID:"
 										+ diagramFork.getId() + "'.");
 								window.close();
 							}
@@ -112,7 +112,7 @@ public class DiagramPropertiesFork extends SecuredDiagramElementProperties<Diagr
 						setNewReference(reference);
 						AbcdLogger.info(this.getClass().getName(),
 								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getReference().getRepresentation(true) + " in Fork with ID:"
 										+ diagramFork.getId() + "'.");
 					}
 				} else {
@@ -144,7 +144,7 @@ public class DiagramPropertiesFork extends SecuredDiagramElementProperties<Diagr
 								setNewDateReferenceCustomVariable(reference, variable, unit);
 								AbcdLogger.info(this.getClass().getName(), "User '"
 										+ UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getReference().getRepresentation(true) + " in Fork with ID:"
 										+ diagramFork.getId() + "'.");
 								window.close();
 							}
@@ -154,7 +154,7 @@ public class DiagramPropertiesFork extends SecuredDiagramElementProperties<Diagr
 						setNewReferenceCustomVariable(reference, variable);
 						AbcdLogger.info(this.getClass().getName(),
 								"User '" + UserSessionHandler.getUser().getEmailAddress() + "' set reference "
-										+ diagramFork.getReference().getRepresentation() + " in Fork with ID:"
+										+ diagramFork.getReference().getRepresentation(true) + " in Fork with ID:"
 										+ diagramFork.getId() + "'.");
 					}
 				} else {

@@ -16,7 +16,28 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
-
+		<!-- Convert SVG to PNG -->
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-transcoder</artifactId>
+			<version>${batik.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-codec</artifactId>
+			<version>${batik.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>xmlgraphics-commons</artifactId>
+			<version>${xmlgraphics-commons.version}</version>
+		</dependency>
+		<!-- PDF generation -->
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>${itext.version}</version>
+		</dependency>
 		<!-- File access -->
 		<dependency>
 			<groupId>commons-io</groupId>

@@ -62,7 +62,7 @@ public class ExpressionPluginMethod extends Expression {
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		if (getPluginName() != null && getPluginMethodName() != null) {
 			return getPluginName() + "." + getPluginMethodName().substring(6) + "(";
 		} else {

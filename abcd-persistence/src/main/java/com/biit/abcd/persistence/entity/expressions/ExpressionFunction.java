@@ -33,7 +33,7 @@ public class ExpressionFunction extends Expression implements IExpressionType<Av
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		if (value == null) {
 			return "";
 		} else {

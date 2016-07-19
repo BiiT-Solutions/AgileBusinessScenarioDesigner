@@ -150,7 +150,7 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 				if (getSelectedViewer().removeSelectedExpression()) {
 					AbcdLogger.info(this.getClass().getName(), "User '"
 							+ UserSessionHandler.getUser().getEmailAddress() + "' has deleted the Expression '"
-							+ expression.getRepresentation() + "'.");
+							+ expression.getRepresentation(true) + "'.");
 				}
 			}
 		});

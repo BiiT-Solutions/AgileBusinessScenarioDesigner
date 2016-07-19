@@ -19,7 +19,7 @@ public class ExpressionValueSystemDate extends ExpressionValueTimestamp {
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		return "SystemDate";
 	}
 

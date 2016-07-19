@@ -35,7 +35,7 @@ public class ExpressionValueString extends ExpressionValue<String> {
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		return getValue();
 	}
 

@@ -551,7 +551,10 @@ public enum LanguageCodes {
 	
 	WARNING_ONLY_RULES_AND_EXPRESSIONS_EDITABLE("warning.only.expressions.and.rules.editable"), 
 	
-	FORM_VARIABLE_REGEX_ERROR("form.variable.regex.error"),
+	FORM_VARIABLE_REGEX_ERROR("form.variable.regex.error"), 
+	
+	CAPTION_CREATE_PDF("caption.create.pdf"), 
+	TOOLTIP_CREATE_PDF("tooltip.create.pdf"),
 	;
 
 	private String value;

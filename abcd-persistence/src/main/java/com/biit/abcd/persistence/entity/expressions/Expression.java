@@ -68,7 +68,7 @@ public abstract class Expression extends StorableObject {
 	 * 
 	 * @return
 	 */
-	public abstract String getRepresentation();
+	public abstract String getRepresentation(boolean showWhiteCharacter);
 
 	public long getSortSeq() {
 		return sortSeq;

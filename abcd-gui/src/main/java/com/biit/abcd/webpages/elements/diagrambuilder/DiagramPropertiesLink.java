@@ -48,7 +48,7 @@ public class DiagramPropertiesLink extends SecuredDiagramElementProperties<Diagr
 				fieldWithSearchButton = createFieldWithSearchButton(fork);
 				formLayout.addComponent(fieldWithSearchButton);
 				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' added expression " + diagramLink.getExpressionChain().getRepresentation()
+						+ "' added expression " + diagramLink.getExpressionChain().getRepresentation(true)
 						+ " to Link with ID:" + diagramLink.getId() + "'.");
 			}
 		}

@@ -33,7 +33,7 @@ public class ExpressionElement extends CssLayout {
 			ObjectProperty<Double> property = new ObjectProperty<Double>((Double) expression.getValue());
 			elementName.setPropertyDataSource(property);
 		} else {
-			elementName = new Label(expression.getRepresentation());
+			elementName = new Label(expression.getRepresentation(true));
 		}
 
 		this.setWidth(null);

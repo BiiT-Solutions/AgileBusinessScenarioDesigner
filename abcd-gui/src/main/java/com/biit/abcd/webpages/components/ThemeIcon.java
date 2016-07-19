@@ -208,7 +208,9 @@ public enum ThemeIcon {
 	
 	PAGE_ERROR("page.error.svg"), 
 	
-	PAGE_NOT_FOUND("page.not.found.svg");
+	PAGE_NOT_FOUND("page.not.found.svg"), 
+	
+	CREATE_PDF("pdf.svg");
 	
 
 	private String value;

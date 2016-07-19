@@ -109,8 +109,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 	}
 
 	/**
-	 * Function to get the list of diagram object elements. Do not add elements to this list, use the appropriate
-	 * functions.
+	 * Function to get the list of diagram object elements. Do not add elements
+	 * to this list, use the appropriate functions.
 	 * 
 	 * @return
 	 */
@@ -244,8 +244,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 					diagramElement.copyData(child);
 					addDiagramObject(diagramElement);
 				} catch (InstantiationException | IllegalAccessException e) {
-					throw new NotValidStorableObjectException("Object '" + object + "' has a problem copying '" + child
-							+ "'.");
+					throw new NotValidStorableObjectException("Object '" + object + "' has a problem copying '" + child + "'.");
 				}
 			}
 		} else {
@@ -257,5 +256,6 @@ public class Diagram extends StorableObject implements INameAttribute {
 	public String toString() {
 		return getName();
 	}
+
 
 }

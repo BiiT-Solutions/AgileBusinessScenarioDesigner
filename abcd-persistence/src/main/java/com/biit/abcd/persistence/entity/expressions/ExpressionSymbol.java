@@ -33,8 +33,8 @@ public class ExpressionSymbol extends Expression implements IExpressionType<Avai
 	}
 
 	@Override
-	public String getRepresentation() {
-		if (value == null) {
+	public String getRepresentation(boolean showWhiteCharacter) {
+		if (value == null || value.equals(AvailableSymbol.PILCROW)) {
 			return "";
 		} else {
 			return value.getValue();
@@ -53,10 +53,7 @@ public class ExpressionSymbol extends Expression implements IExpressionType<Avai
 
 	@Override
 	protected String getExpression() {
-		if (value.equals(AvailableSymbol.PILCROW)) {
-			return "";
-		}
-		return getRepresentation();
+		return getRepresentation(false);
 	}
 
 	@Override

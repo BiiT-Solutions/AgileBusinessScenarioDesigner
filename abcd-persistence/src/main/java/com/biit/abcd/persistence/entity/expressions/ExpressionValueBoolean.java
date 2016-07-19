@@ -30,8 +30,8 @@ public class ExpressionValueBoolean extends ExpressionValue<Boolean> {
 	}
 
 	@Override
-	public String getRepresentation() {
-		return "" + value;
+	public String getRepresentation(boolean showWhiteCharacter) {
+		return value.toString();
 	}
 
 	// public T getValue() {

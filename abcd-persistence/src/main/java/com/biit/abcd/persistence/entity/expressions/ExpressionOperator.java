@@ -31,7 +31,7 @@ public abstract class ExpressionOperator extends Expression implements IExpressi
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		if ((currentValue == null) || (currentValue == AvailableOperator.NULL)) {
 			return " ";
 		} else {

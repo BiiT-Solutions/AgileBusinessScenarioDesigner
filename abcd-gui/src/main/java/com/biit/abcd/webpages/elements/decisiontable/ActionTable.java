@@ -75,7 +75,7 @@ public class ActionTable extends Table {
 		Item rowItem = getItem(row);
 		ActionValueEditCell actionValue = ((ActionValueEditCell) rowItem.getItemProperty(Columns.ACTION).getValue());
 		if (row.getAction() != null) {
-			String representation = row.getAction().getRepresentation();
+			String representation = row.getAction().getRepresentation(true);
 			if (representation.length() > CHARACTER_LIMIT) {
 				representation = "..."
 						+ representation.substring(representation.length() - CHARACTER_LIMIT, representation.length());

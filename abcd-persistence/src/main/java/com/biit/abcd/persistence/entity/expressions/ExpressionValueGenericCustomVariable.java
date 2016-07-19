@@ -50,7 +50,7 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		String expressionString = new String();
 		if ((getType() != null) && (getVariable() != null)) {
 			expressionString += getType().getExpressionName() + "." + getVariable().getName();

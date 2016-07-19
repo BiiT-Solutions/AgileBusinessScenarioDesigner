@@ -48,7 +48,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 	}
 
 	@Override
-	public String getRepresentation() {
+	public String getRepresentation(boolean showWhiteCharacter) {
 		String expressionString = new String();
 		if ((getReference() != null) && (variable != null)) {
 			expressionString += getReference().getName();
