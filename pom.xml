@@ -5,7 +5,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>1.5.262-SNAPSHOT</version>
+	<version>1.5.267-SNAPSHOT</version>
 	<name>Agile Business sCenario Designer Tool</name>
 	<description>Rules Designer</description>
 
@@ -22,18 +22,18 @@
 		<repository>
 			<id>central</id>
 			<name>biit-releases</name>
-			<url>https://dev.biit-solutions.com:8443/mavenartifactory/ext-release-local</url>
+			<url>https://git.biit-solutions.com:8443/artifactory/ext-release-local</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>libs-snapshot</name>
-			<url>https://dev.biit-solutions.com:8443/mavenartifactory/libs-snapshot</url>
+			<url>https://git.biit-solutions.com:8443/artifactory/libs-snapshot</url>
 		</snapshotRepository>
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:dev.biit-solutions.com:AgileBusinessScenarioDesigner.git</connection>
-		<developerConnection>scm:git:dev.biit-solutions.com:AgileBusinessScenarioDesigner.git</developerConnection>
+		<connection>scm:git:git.biit-solutions.com:AgileBusinessScenarioDesigner.git</connection>
+		<developerConnection>scm:git:git.biit-solutions.com:AgileBusinessScenarioDesigner.git</developerConnection>
 		<tag>abcd-tool-1.2.1</tag>
 	</scm>
 
