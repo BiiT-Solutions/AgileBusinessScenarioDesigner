@@ -197,6 +197,8 @@ public class GlobalVariable extends StorableObject implements IGlobalVariable {
 			return DroolsGlobalVariableFormat.POSTAL_CODE;
 		case TEXT:
 			return DroolsGlobalVariableFormat.TEXT;
+		case MULTI_TEXT:
+			return DroolsGlobalVariableFormat.MULTI_TEXT;
 		}
 		return null;
 	}
