@@ -12,6 +12,9 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Page to show an error. 
+ */
 public class ErrorPage extends WebPageComponent {
 	private static final long serialVersionUID = -587681959593342489L;
 	private static final String TEXT_WIDTH = "600px";
