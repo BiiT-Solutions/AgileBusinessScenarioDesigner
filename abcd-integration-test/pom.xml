@@ -178,13 +178,13 @@
 		</plugins>
 	</build>
 
-	<!-- 'mvn install -Prelease' test all application with jenkins -->
+	<!-- 'mvn install -PintegrationTests' test all application with jenkins -->
 	<profiles>
 		<profile>
-			<id>release</id>
+			<id>launchIntegrationTests</id>
 			<activation>
 				<property>
-					<name>release</name>
+					<name>launchIntegrationTests</name>
 				</property>
 			</activation>
 			<build>
