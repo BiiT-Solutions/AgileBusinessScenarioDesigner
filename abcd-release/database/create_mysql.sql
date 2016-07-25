@@ -1554,13 +1554,3 @@
         add constraint FK_mb6o16g0xsjlo3nx5xoc0i0g9 
         foreign key (tree_forms_ID) 
         references tree_forms (ID);
-
-	CREATE TABLE `hibernate_sequence` (
-		`next_val` bigint(20) DEFAULT NULL
-	);
-
-	LOCK TABLES `hibernate_sequence` WRITE;
-	INSERT INTO `hibernate_sequence` VALUES (1);
-	UNLOCK TABLES;
-
-
