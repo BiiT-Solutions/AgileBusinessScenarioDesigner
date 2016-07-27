@@ -53,20 +53,20 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 			boolean correctTable = false;
 
 			// Replace values
-			for (String line : lines) {
-				if (line.contains("create table ")) {
+			for (int i = 0; i < lines.size(); i++) {
+				if (lines.get(i).contains("create table ")) {
 					// Starting of a table.
 					correctTable = false;
-					if (line.contains("create table " + tableName + " (")) {
+					if (lines.get(i).contains("create table " + tableName + " (")) {
 						// Starting of the correct table.
 						correctTable = true;
 					}
 				}
-				if (correctTable && line.contains("label varchar(1000)")) {
-					line = line.replace("label varchar(1000)", "label varchar(190)");
+				if (correctTable && lines.get(i).contains("label varchar(1000)")) {
+					lines.set(i, lines.get(i).replace("label varchar(1000)", "label varchar(190)"));
 				}
-				if (correctTable && line.contains("formLabel varchar(1000)")) {
-					line = line.replace("formLabel varchar(1000)", "formLabel varchar(190)");
+				if (correctTable && lines.get(i).contains("formLabel varchar(1000)")) {
+					lines.set(i, lines.get(i).replace("formLabel varchar(1000)", "formLabel varchar(190)"));
 				}
 			}
 
