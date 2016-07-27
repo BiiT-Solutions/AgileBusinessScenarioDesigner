@@ -1,12 +1,13 @@
 package com.biit.abcd.persistence;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.persistence.HibernateDialect;
@@ -47,14 +48,12 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 		String oldFileName = directory + File.separator + outputFile;
 		String tmpFileName = System.getProperty("java.io.tmpdir") + File.separator + outputFile;
 
-		BufferedReader br = null;
-		BufferedWriter bw = null;
 		try {
-			br = new BufferedReader(new FileReader(oldFileName));
-			bw = new BufferedWriter(new FileWriter(tmpFileName));
-			String line;
+			List<String> lines = Files.readAllLines(Paths.get(oldFileName), Charset.defaultCharset());
 			boolean correctTable = false;
-			while ((line = br.readLine()) != null) {
+
+			// Replace values
+			for (String line : lines) {
 				if (line.contains("create table ")) {
 					// Starting of a table.
 					correctTable = false;
@@ -69,31 +68,26 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 				if (correctTable && line.contains("formLabel varchar(1000)")) {
 					line = line.replace("formLabel varchar(1000)", "formLabel varchar(190)");
 				}
-				bw.write(line + "\n");
 			}
+
+			// Store lines.
+			Path out = Paths.get(tmpFileName);
+			Files.write(out, lines, Charset.defaultCharset());
 		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
 			return;
-		} finally {
+		}
+		File oldFile = new File(oldFileName);
+		if (oldFile.delete()) {
+			// Once everything is complete, replace old file..
+			Path source = Paths.get(tmpFileName);
+			Path destination = Paths.get(oldFileName);
 			try {
-				if (br != null)
-					br.close();
-			} catch (IOException e) {
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
-			}
-			try {
-				if (bw != null)
-					bw.close();
+				Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
 		}
-		// Once everything is complete, delete old file..
-		File oldFile = new File(oldFileName);
-		oldFile.delete();
-
-		// And rename tmp file's name to old file name
-		File newFile = new File(tmpFileName);
-		newFile.renameTo(oldFile);
 	}
 
 	public static void main(String[] args) {
