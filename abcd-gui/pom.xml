@@ -7,7 +7,11 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
+<<<<<<< HEAD
 		<version>1.5.281-SNAPSHOT</version>
+=======
+		<version>1.5.279-SNAPSHOT</version>
+>>>>>>> refs/heads/development
 	</parent>
 	<properties>
 		<jetty.port>8081</jetty.port>
