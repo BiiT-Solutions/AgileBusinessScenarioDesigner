@@ -216,7 +216,7 @@ public class ExpressionViewer extends CssLayout {
 								stringInputWindow.setValue(DateManager.convertDateToString(
 										(Timestamp) expression.getValue(), ExpressionValueTimestamp.DATE_FORMAT));
 							} else {
-								stringInputWindow.setValue(((ExpressionValue<?>) expression).getValue().toString());
+								stringInputWindow.setValue(((ExpressionValue<?>) expression).getValue()+"");
 							}
 
 							stringInputWindow.addAcceptActionListener(new AcceptActionListener() {

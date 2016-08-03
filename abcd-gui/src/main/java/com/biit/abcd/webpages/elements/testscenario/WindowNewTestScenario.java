@@ -47,10 +47,10 @@ public class WindowNewTestScenario extends WindowCreateNewObject {
 			close();
 
 		} catch (FieldTooLongException e) {
-			AbcdLogger.warning(this.getClass().getName(), e.toString());
+			AbcdLogger.warning(this.getClass().getName(), e.getMessage());
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG);
 		} catch (CharacterNotAllowedException e) {
-			AbcdLogger.warning(this.getClass().getName(), e.toString());
+			AbcdLogger.warning(this.getClass().getName(), e.getMessage());
 			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
 					LanguageCodes.TEST_SCENARIOS_WARNING_CHARACTER_NOT_ALLOWED);
 		} catch (NotValidStorableObjectException e) {

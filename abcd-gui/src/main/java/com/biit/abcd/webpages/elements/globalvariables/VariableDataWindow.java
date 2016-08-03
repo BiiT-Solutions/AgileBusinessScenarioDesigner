@@ -106,13 +106,11 @@ public class VariableDataWindow extends AcceptCancelWindow {
 			return null;
 		}
 		if (validFrom.getValue() == null) {
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-					LanguageCodes.WARNING_VARIABLE_DATA_VALID_FROM_MISSING);
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_FROM_MISSING);
 			return null;
 		}
 		if (validTo != null && validTo.getValue() != null && validFrom.getValue().after(validTo.getValue())) {
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-					LanguageCodes.WARNING_VARIABLE_DATA_VALID_RANGE_WRONG);
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_VARIABLE_DATA_VALID_RANGE_WRONG);
 			return null;
 		}
 
@@ -146,18 +144,20 @@ public class VariableDataWindow extends AcceptCancelWindow {
 	}
 
 	public void setValue(VariableData variable) {
-		if (variable instanceof VariableDataText) {
-			((TextField) valueField).setValue(variable.toString());
-		} else if (variable instanceof VariableDataNumber) {
-			ObjectProperty<Double> property = new ObjectProperty<Double>((Double) variable.getValue());
-			((TextField) valueField).setPropertyDataSource(property);
-		} else if (variable instanceof VariableDataPostalCode) {
-			((TextField) valueField).setValue(variable.toString());
-		} else if (variable instanceof VariableDataDate) {
-			((DateField) valueField).setValue(((VariableDataDate) variable).getValue());
+		if (variable != null) {
+			if (variable instanceof VariableDataText) {
+				((TextField) valueField).setValue(variable.toString());
+			} else if (variable instanceof VariableDataNumber) {
+				ObjectProperty<Double> property = new ObjectProperty<Double>((Double) variable.getValue());
+				((TextField) valueField).setPropertyDataSource(property);
+			} else if (variable instanceof VariableDataPostalCode) {
+				((TextField) valueField).setValue(variable.toString());
+			} else if (variable instanceof VariableDataDate) {
+				((DateField) valueField).setValue(((VariableDataDate) variable).getValue());
+			}
+			validFrom.setValue(variable.getValidFrom());
+			validTo.setValue(variable.getValidTo());
 		}
-		validFrom.setValue(variable.getValidFrom());
-		validTo.setValue(variable.getValidTo());
 	}
 
 	public VariableData createVariable() {
@@ -183,8 +183,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 			}
 			return true;
 		case POSTAL_CODE:
-			return valueField.getConvertedValue().toString()
-					.matches(AbcdConfigurationReader.getInstance().getPostalCodeMask());
+			return valueField.getConvertedValue().toString().matches(AbcdConfigurationReader.getInstance().getPostalCodeMask());
 		default:
 			return true;
 		}

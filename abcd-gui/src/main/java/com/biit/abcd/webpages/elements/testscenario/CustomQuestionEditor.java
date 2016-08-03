@@ -254,7 +254,7 @@ public class CustomQuestionEditor extends CustomComponent {
 							validator.validate(field.getValue());
 							updateTestScenario(field);
 						} catch (InvalidValueException e) {
-							AbcdLogger.warning(this.getClass().getName(), e.toString());
+							AbcdLogger.warning(this.getClass().getName(), e.getMessage());
 						}
 					}
 				} else {

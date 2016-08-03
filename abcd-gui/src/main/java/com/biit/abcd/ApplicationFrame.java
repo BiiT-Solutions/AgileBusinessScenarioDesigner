@@ -18,8 +18,9 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
 /**
- * Main Ui class of application. Ui has been configured to preserve the Ui when a Refresh action has occurred. This way,
- * a UI is only discarded when the user is no longer active in a long time, instead of every time there is a refresh
+ * Main Ui class of application. Ui has been configured to preserve the Ui when
+ * a Refresh action has occurred. This way, a UI is only discarded when the user
+ * is no longer active in a long time, instead of every time there is a refresh
  * event.
  */
 @Theme("abcd")
@@ -49,7 +50,8 @@ public class ApplicationFrame extends UI {
 		getPage().setTitle("");
 		defineWebPages();
 
-		// Liferay send this data and automatically are used in the login screen.
+		// Liferay send this data and automatically are used in the login
+		// screen.
 		this.userEmail = request.getParameter(USER_PARAMETER_TAG);
 		this.password = request.getParameter(PASSWORD_PARAMETER_TAG);
 
@@ -63,14 +65,13 @@ public class ApplicationFrame extends UI {
 	private void autologinImplementation() {
 		// When accessing from Liferay, user and password are already set.
 		if (userEmail != null && userEmail.length() > 0 && password != null && password.length() > 0) {
-			AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
-					+ "' and password with length of " + password.length());
+			AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail + "' and password with length of " + password.length());
 			try {
 				IUser<Long> user = UserSessionHandler.getUser(userEmail, password);
 				if (user != null) {
-					// Try to go to the last page and last form if user has no logged out.
-					if (UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()) != null
-							&& UserSessionHandler.getFormController().getForm() != null) {
+					// Try to go to the last page and last form if user has no
+					// logged out.
+					if (UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()) != null && UserSessionHandler.getFormController().getForm() != null) {
 						UserSessionHandler.restoreUserSession();
 						navigateTo(UserSessionHandler.getUserLastPage(UserSessionHandler.getUser()));
 					} else {
@@ -78,13 +79,11 @@ public class ApplicationFrame extends UI {
 					}
 				}
 			} catch (InvalidCredentialsException | AuthenticationRequired | UserManagementException e) {
-				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
-						+ "' failed! Wrong user or password.");
+				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail + "' failed! Wrong user or password.");
 			}
 		} else {
 			if (userEmail != null && userEmail.length() > 0) {
-				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail
-						+ "' but no password provided!");
+				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail + "' but no password provided!");
 			} else {
 				AbcdLogger.debug(this.getClass().getName(), "Autologin failed.");
 			}
@@ -120,8 +119,7 @@ public class ApplicationFrame extends UI {
 			@Override
 			public void afterViewChange(ViewChangeEvent event) {
 				if (UserSessionHandler.getUser() != null) {
-					AbcdLogger.info(this.getClass().getName(), "User '"
-							+ UserSessionHandler.getUser().getEmailAddress() + "' has change view to '"
+					AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has change view to '"
 							+ event.getNewView().getClass().getName() + "'.");
 				}
 			}
@@ -144,7 +142,9 @@ public class ApplicationFrame extends UI {
 
 	@SuppressWarnings("unchecked")
 	private void addView(WebMap newPage) {
-		navigator.addView(newPage.toString(), newPage.getWebPageJavaClass());
+		if (newPage != null) {
+			navigator.addView(newPage.toString(), newPage.getWebPageJavaClass());
+		}
 	}
 
 	public static void navigateTo(WebMap newPage) {
