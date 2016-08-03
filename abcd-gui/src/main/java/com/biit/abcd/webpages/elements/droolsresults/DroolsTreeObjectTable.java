@@ -48,8 +48,11 @@ public class DroolsTreeObjectTable extends TreeTable {
 			}
 			item.getItemProperty(DroolsTreeObjectTableProperties.ELEMENT_NAME).setValue(element.getTag());
 			if (element instanceof SubmittedQuestion) {
-				item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue(
-						((SubmittedQuestion) element).getAnswers().toString());
+				if (((SubmittedQuestion) element).getAnswers() != null) {
+					item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue(((SubmittedQuestion) element).toString());
+				} else {
+					item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue("");
+				}
 			} else {
 				item.getItemProperty(DroolsTreeObjectTableProperties.ORIGINAL_VALUE).setValue("");
 			}

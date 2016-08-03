@@ -83,20 +83,17 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 	@SuppressWarnings("unchecked")
 	private void setVariables(ISubmittedObject submittedFormElement) {
 		if (customVariablesScopeMap != null) {
-			List<String> variables = customVariablesScopeMap
-					.get(getVariableScope(((ISubmittedFormElement) submittedFormElement)));
+			List<String> variables = customVariablesScopeMap.get(getVariableScope(((ISubmittedFormElement) submittedFormElement)));
 			if (variables != null) {
 				for (String variable : variables) {
 					if (((ISubmittedFormElement) submittedFormElement).getVariableValue(variable) != null) {
-						Object variableValue = ((ISubmittedFormElement) submittedFormElement)
-								.getVariableValue(variable);
+						Object variableValue = ((ISubmittedFormElement) submittedFormElement).getVariableValue(variable);
 						String result = "";
 						if (variableValue instanceof Number) {
-							DecimalFormat myFormatter = new DecimalFormat("###.##", new DecimalFormatSymbols(
-									Locale.ENGLISH));
+							DecimalFormat myFormatter = new DecimalFormat("###.##", new DecimalFormatSymbols(Locale.ENGLISH));
 							result = myFormatter.format(variableValue);
 						} else {
-							result = variableValue.toString();
+							result = variableValue + "";
 						}
 						submittedFormTreeTable.getItem(submittedFormElement).getItemProperty(variable).setValue(result);
 					}

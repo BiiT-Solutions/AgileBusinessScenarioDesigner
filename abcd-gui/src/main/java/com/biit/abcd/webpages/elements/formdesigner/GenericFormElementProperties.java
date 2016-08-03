@@ -44,8 +44,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		updatedBy.setEnabled(false);
 		updateTime = new TextField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_UPDATE_TIME));
 		updateTime.setEnabled(false);
-		clearOriginalReference = new Button(
-				ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CLEAR_REFERENCE_ID));
+		clearOriginalReference = new Button(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_CLEAR_REFERENCE_ID));
 		clearOriginalReference.setEnabled(false);
 		updateTime.setEnabled(false);
 		// init values;
@@ -60,29 +59,26 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 		commonProperties.addComponent(updateTime);
 		commonProperties.addComponent(clearOriginalReference);
 
-		addTab(commonProperties, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION),
-				false);
+		addTab(commonProperties, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_COMMON_FORM_CAPTION), false);
 	}
 
 	protected void initCommonPropertiesValues(final TreeObject element) {
 		String valueCreatedBy = "";
 		String valueUpdatedBy = "";
 		try {
-			valueCreatedBy = element.getCreatedBy() == null ? "" : securityService.getUserById(element.getCreatedBy())
-					.getEmailAddress();
+			valueCreatedBy = element.getCreatedBy() == null ? "" : securityService.getUserById(element.getCreatedBy()).getEmailAddress();
 		} catch (UserManagementException udne) {
 			valueCreatedBy = element.getCreatedBy() + "";
 		}
 
 		try {
-			valueUpdatedBy = element.getUpdatedBy() == null ? "" : securityService.getUserById(element.getUpdatedBy())
-					.getEmailAddress();
+			valueUpdatedBy = element.getUpdatedBy() == null ? "" : securityService.getUserById(element.getUpdatedBy()).getEmailAddress();
 		} catch (UserManagementException udne) {
 			valueUpdatedBy = element.getUpdatedBy() + "";
 		}
 
-		String valueCreationTime = element.getCreationTime() == null ? "" : element.getCreationTime().toString();
-		String valueUpdatedTime = element.getUpdateTime() == null ? "" : element.getUpdateTime().toString();
+		String valueCreationTime = element.getCreationTime() == null ? "" : element.getCreationTime() + "";
+		String valueUpdatedTime = element.getUpdateTime() == null ? "" : element.getUpdateTime() + "";
 
 		createdBy.setValue(valueCreatedBy);
 		creationTime.setValue(valueCreationTime);
@@ -96,8 +92,7 @@ public abstract class GenericFormElementProperties<T> extends PropertiesForClass
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					final AlertMessageWindow windowAccept = new AlertMessageWindow(
-							LanguageCodes.WARNING_TEST_SCENARIOS_CLEAR_ID);
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_TEST_SCENARIOS_CLEAR_ID);
 					windowAccept.addAcceptActionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {
