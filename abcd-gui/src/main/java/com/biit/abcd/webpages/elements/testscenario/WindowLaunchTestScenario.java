@@ -58,8 +58,7 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 		initializeTestScenarioData(formView);
 		for (SimpleTestScenarioView testScenarioView : testScenarioData) {
 			testScenario.addItem(testScenarioView);
-			testScenario.setItemCaption(testScenarioView,
-					testScenarioView.getName() + " (v" + testScenarioView.getFormVersion() + ")");
+			testScenario.setItemCaption(testScenarioView, testScenarioView.getName() + " (v" + testScenarioView.getFormVersion() + ")");
 		}
 
 		formVersion.setValue(formView);
@@ -88,8 +87,11 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	 * @throws NotConnectedToDatabaseException
 	 */
 	private void initializeFormData(SimpleFormView formView) {
-		formData = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(formView.getLabel(),
-				formView.getOrganizationId());
+		if (formView != null) {
+			formData = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(formView.getLabel(), formView.getOrganizationId());
+		} else {
+			formData = new ArrayList<>();
+		}
 	}
 
 	public Long getSelectedFormId() {

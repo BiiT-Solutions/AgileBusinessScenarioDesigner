@@ -48,7 +48,7 @@ public class FormProperties extends SecuredFormElementProperties<Form> {
 		formLabel.setValue(instance.getLabel());
 
 		formVersion = new TextField(ServerTranslate.translate(LanguageCodes.FORM_PROPERTIES_VERSION));
-		formVersion.setValue(instance.getVersion().toString());
+		formVersion.setValue(instance.getVersion()+"");
 		formVersion.setEnabled(false);
 
 		availableFrom = new DateField(ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_AVAILABLE_FROM));

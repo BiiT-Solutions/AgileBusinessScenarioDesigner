@@ -63,11 +63,11 @@ public class VariableTable extends Table {
 		addContainerProperty(FormVariablesProperties.VARIABLE_NAME, ComparableTextField.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_NAME), null, Align.LEFT);
 
-		addContainerProperty(FormVariablesProperties.TYPE, ComboBox.class, "",
-				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_TYPE), null, Align.LEFT);
+		addContainerProperty(FormVariablesProperties.TYPE, ComboBox.class, "", ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_TYPE), null,
+				Align.LEFT);
 
-		addContainerProperty(FormVariablesProperties.SCOPE, ComparableComboBox.class, "",
-				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_SCOPE), null, Align.LEFT);
+		addContainerProperty(FormVariablesProperties.SCOPE, ComparableComboBox.class, "", ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_SCOPE),
+				null, Align.LEFT);
 
 		addContainerProperty(FormVariablesProperties.DEFAULT_VALUE, AbstractField.class, "",
 				ServerTranslate.translate(LanguageCodes.FORM_VARIABLE_COLUMN_DEFAULT_VALUE), null, Align.LEFT);
@@ -180,8 +180,8 @@ public class VariableTable extends Table {
 						}
 
 						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has changed the property Type of the class '" + customVariable.getClass() + "' from '" + oldType
-								+ "' to '" + customVariable.getType() + "'.");
+								+ "' has changed the property Type of the class '" + customVariable.getClass() + "' from '" + oldType + "' to '"
+								+ customVariable.getType() + "'.");
 					} catch (DependencyExistException e) {
 						// Forbid the edit action if exist dependency.
 						MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
@@ -223,8 +223,8 @@ public class VariableTable extends Table {
 						updateInfo(customVariable);
 
 						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has changed the property Scope of the class '" + customVariable.getClass() + "' from '" + oldScope
-								+ "' to '" + customVariable.getScope() + "'.");
+								+ "' has changed the property Scope of the class '" + customVariable.getClass() + "' from '" + oldScope + "' to '"
+								+ customVariable.getScope() + "'.");
 					} catch (DependencyExistException e) {
 						// Forbid the edit action if exist dependency.
 						MessageManager.showWarning(LanguageCodes.VARIABLE_DESIGNER_WARNING_CANNOT_REMOVE_VARIABLE);
@@ -275,21 +275,20 @@ public class VariableTable extends Table {
 						String oldValue = customVariable.getDefaultValue();
 						switch (customVariable.getType()) {
 						case DATE:
-							customVariable.setDefaultValue(ExpressionValueTimestamp.getFormatter().format(
-									((DateField) defaultValueField).getValue()));
+							customVariable.setDefaultValue(ExpressionValueTimestamp.getFormatter().format(((DateField) defaultValueField).getValue()));
 							break;
 						case NUMBER:
 							Double a = (Double) defaultValueField.getConvertedValue();
-							customVariable.setDefaultValue(a.toString());
+							customVariable.setDefaultValue(a + "");
 							break;
 						case STRING:
-							customVariable.setDefaultValue(defaultValueField.getValue().toString());
+							customVariable.setDefaultValue(defaultValueField.getValue() + "");
 							break;
 						}
 						updateInfo(customVariable);
 						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has changed the property 'Default Value' of the class '" + customVariable.getClass() + "' from '"
-								+ oldValue + "' to '" + customVariable.getDefaultValue() + "'");
+								+ "' has changed the property 'Default Value' of the class '" + customVariable.getClass() + "' from '" + oldValue + "' to '"
+								+ customVariable.getDefaultValue() + "'");
 					}
 					// The value can be set to null again
 					else {
@@ -303,8 +302,8 @@ public class VariableTable extends Table {
 						}
 						updateInfo(customVariable);
 						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-								+ "' has changed the property 'Default Value' of the class '" + customVariable.getClass() + "' from '"
-								+ oldValue + "' to '" + customVariable.getDefaultValue() + "'");
+								+ "' has changed the property 'Default Value' of the class '" + customVariable.getClass() + "' from '" + oldValue + "' to '"
+								+ customVariable.getDefaultValue() + "'");
 					}
 				} catch (InvalidValueException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -337,15 +336,14 @@ public class VariableTable extends Table {
 			switch (customVariable.getType()) {
 			case DATE:
 				try {
-					((DateField) defaultValueField).setValue(ExpressionValueTimestamp.getFormatter()
-							.parse(customVariable.getDefaultValue()));
+					((DateField) defaultValueField).setValue(ExpressionValueTimestamp.getFormatter().parse(customVariable.getDefaultValue()));
 				} catch (ReadOnlyException | ConversionException | ParseException e) {
 					setValue(null);
 				}
 				break;
 			case NUMBER:
 			case STRING:
-				((TextField) defaultValueField).setValue(customVariable.getDefaultValue().toString());
+				((TextField) defaultValueField).setValue(customVariable.getDefaultValue() + "");
 				break;
 			default:
 				setValue(null);

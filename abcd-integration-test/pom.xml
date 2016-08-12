@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.5.276-SNAPSHOT</version>
+		<version>1.5.285-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -55,7 +55,8 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<dependencies><!-- DESEncryption -->
+	<dependencies>
+		<!-- DESEncryption -->
 		<dependency>
 			<groupId>com.biit.security</groupId>
 			<artifactId>DES-encryption</artifactId>
@@ -178,7 +179,7 @@
 		</plugins>
 	</build>
 
-	<!-- 'mvn install -PintegrationTests' test all application with jenkins -->
+	<!-- 'mvn install -PlaunchIntegrationTests' test all application with jenkins -->
 	<profiles>
 		<profile>
 			<id>launchIntegrationTests</id>

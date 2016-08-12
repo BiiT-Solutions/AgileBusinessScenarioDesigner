@@ -679,7 +679,7 @@
         updateTime datetime,
         updatedBy DOUBLE,
         formId bigint not null,
-        formLabel varchar(1000) not null,
+        formLabel varchar(190) not null,
         formOrganization DOUBLE not null,
         name varchar(190),
         testScenarioForm_ID bigint,
@@ -788,7 +788,7 @@
         creationTime datetime not null,
         updateTime datetime,
         updatedBy DOUBLE,
-        label varchar(1000),
+        label varchar(190),
         name varchar(190),
         originalReference varchar(190) not null,
         sortSeq bigint not null,
@@ -1198,7 +1198,7 @@
         add constraint UK_gtcyh8mle277igwtb5dvhjkr1  unique (comparationId);
 
     alter table tree_forms 
-        add constraint UK_iwgivd7sy9sfbjyj0hlyccrxt  unique (label, version);
+        add constraint UK_gyfbqpo5jwnsoftogc0bs77k0  unique (label, version, organizationId);
 
     alter table tree_forms 
         add constraint UK_plkq2e2pj19uak2ncrgf1ft6v  unique (ID);
