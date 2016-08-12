@@ -96,7 +96,7 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 		// Launch the JpaSchemaExporter
 		JpaSchemaExporter gen = new AbcdJpaSchemaExporter(getPacketsToScan(), getClassesToIgnoreWhenCreatingDatabase());
 		gen.createDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getOutputFile(), true);
-		gen = new JpaSchemaExporter(getPacketsToScan(), getClassesToIgnoreWhenUpdatingDatabase());
+		gen = new AbcdJpaSchemaExporter(getPacketsToScan(), getClassesToIgnoreWhenUpdatingDatabase());
 		gen.updateDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getHost(), getPort(), getUser(), getPassword(), getDatabaseName());
 
 		// Add hibernate sequence table.
