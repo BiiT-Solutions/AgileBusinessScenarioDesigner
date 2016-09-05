@@ -62,7 +62,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @Entity
-@Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version", "organizationId" })})
+@Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version", "organizationId" }) })
 @AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH, columnDefinition = "varchar("
 		+ StorableObject.MAX_UNIQUE_COLUMN_LENGTH + ")"))
 @Cacheable(true)
@@ -440,7 +440,8 @@ public class Form extends BaseForm {
 	@Override
 	public void setCreationTime(Timestamp dateCreated) {
 		if (availableFrom == null) {
-			Calendar cal = Calendar.getInstance(); // locale-specific
+			// locale-specific
+			Calendar cal = Calendar.getInstance();
 			cal.setTime(dateCreated);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
