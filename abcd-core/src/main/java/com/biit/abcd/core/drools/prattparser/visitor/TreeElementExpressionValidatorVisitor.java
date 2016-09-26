@@ -29,7 +29,8 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 		ValueType leftType = ExpressionValidator.getValueInsideExpressionChain((ExpressionChain) assign.getLeftExpressionChain());
 		ValueType rightType = ExpressionValidator.getFirstValueInsideExpressionChain(assign.getRightElement().getExpressionChain());
 		if (leftType != rightType) {
-			throw new NotCompatibleTypeException("Assignation types not compatible '" + leftType + "' vs '" + rightType + "'.", null);
+			throw new NotCompatibleTypeException("Assignation types not compatible '" + assign.getLeftExpressionChain() + " (" + leftType + ")' vs '"
+					+ assign.getRightElement().getExpressionChain() + " (" + rightType + ")'.", null);
 		}
 	}
 

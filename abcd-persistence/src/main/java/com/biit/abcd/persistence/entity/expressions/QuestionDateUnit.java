@@ -2,13 +2,13 @@ package com.biit.abcd.persistence.entity.expressions;
 
 public enum QuestionDateUnit {
 	// Days from now.
-	DAYS("D*", "Days from now", "DroolsDateUtils.returnDaysDistanceFromDate"),
+	DAYS("D*", "Days", "DroolsDateUtils.returnDaysDistanceFromDate"),
 
 	// Months from now.
-	MONTHS("M*", "Months from now", "DroolsDateUtils.returnMonthsDistanceFromDate"),
+	MONTHS("M*", "Months", "DroolsDateUtils.returnMonthsDistanceFromDate"),
 
 	// Years from now.
-	YEARS("Y*", "Years from now", "DroolsDateUtils.returnYearsDistanceFromDate"),
+	YEARS("Y*", "Years", "DroolsDateUtils.returnYearsDistanceFromDate"),
 
 	// Pure data format.
 	DATE("DT", "Date", " "),

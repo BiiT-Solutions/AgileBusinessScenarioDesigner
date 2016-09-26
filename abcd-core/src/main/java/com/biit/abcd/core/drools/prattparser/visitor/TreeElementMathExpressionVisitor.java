@@ -98,8 +98,8 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 					break;
 				case DATE:
 					if (expVal.getUnit() != null) {
-						builder.append(expVal.getUnit().getDroolsFunction() + "($" + id + ".getVariableValue('" + AnswerFormat.DATE.toString() + "'))");
-					}
+						builder.append(expVal.getUnit().getDroolsFunction() + "( $" + id + ".getAnswer('" + AnswerFormat.DATE.toString() + "'))");
+					}					
 					break;
 				case TEXT:
 				case MULTI_TEXT:
