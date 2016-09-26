@@ -92,6 +92,18 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 					case DATE:
 						this.builder.append("$" + id + ".getVariableValue('" + customVariableName + "')");
 						break;
+					case ABSOLUTE_DAYS:
+						this.builder.append("DroolsDateUtils.returnDaysDistanceFromOrigin( $" + id
+								+ ".getVariableValue('" + customVariableName + "'))");
+						break;
+					case ABSOLUTE_MONTHS:
+						this.builder.append("DroolsDateUtils.returnMonthsDistanceFromOrigin( $" + id
+								+ ".getVariableValue('" + customVariableName + "'))");
+						break;
+					case ABSOLUTE_YEARS:
+						this.builder.append("DroolsDateUtils.returnYearsDistanceFromOrigin( $" + id
+								+ ".getVariableValue('" + customVariableName + "'))");
+						break;
 					}
 				} else {
 					this.builder.append("$" + id + ".getVariableValue('" + customVariableName + "')");

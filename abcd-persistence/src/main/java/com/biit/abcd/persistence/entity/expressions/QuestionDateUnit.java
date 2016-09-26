@@ -1,13 +1,26 @@
 package com.biit.abcd.persistence.entity.expressions;
 
 public enum QuestionDateUnit {
-	DAYS("D", "Days"),
+	// Days from now.
+	DAYS("D*", "Days from now"),
 
-	MONTHS("M", "Months"),
+	// Months from now.
+	MONTHS("M*", "Months from now"),
 
-	YEARS("Y", "Years"),
+	// Years from now.
+	YEARS("Y*", "Years from now"),
 
-	DATE("DT", "Date");
+	//Pure data format.
+	DATE("DT", "Date"),
+	
+	//Date from 1970
+	ABSOLUTE_DAYS("D", "Days"),
+
+	//Date from 1970
+	ABSOLUTE_MONTHS("M", "Months"),
+	
+	//Date from 1970
+	ABSOLUTE_YEARS("Y", "Years");
 
 	String abbreviature;
 	String unitName;

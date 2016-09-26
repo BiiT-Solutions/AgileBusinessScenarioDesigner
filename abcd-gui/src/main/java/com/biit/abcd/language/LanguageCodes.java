@@ -421,6 +421,9 @@ public enum LanguageCodes {
 	EXPRESSION_DATE_MONTH("expression.date.month"),
 	EXPRESSION_DATE_YEAR("expression.date.year"),
 	EXPRESSION_DATE_DATE("expression.date.date"),
+	EXPRESSION_DATE_MONTH_FROM_ORIGIN("expression.date.month.origin"),
+	EXPRESSION_DATE_YEAR_FROM_ORIGIN("expression.date.year.origin"),
+	EXPRESSION_DATE_DAY_FROM_ORIGIN("expression.date.day.origin"),
 	EXPRESSION_DATE_CAPTION("expression.date.caption"),
 
 	EXPRESSION_FORM_VARIABLE_BUTTON_ADD_ELEMENT("expression.form.variable.addelement"),
