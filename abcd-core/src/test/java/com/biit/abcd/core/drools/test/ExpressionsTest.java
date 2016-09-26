@@ -111,6 +111,8 @@ public class ExpressionsTest extends KidsFormCreator {
 				new ExpressionValueCustomVariable(getTreeObject(form, "voeding"), daysCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 				new ExpressionValueTreeObjectReference(getTreeObject(form, "birthdate"), QuestionDateUnit.DAYS));
+		//TODO Remove!!!
+		System.out.println("#########AQUÍ FORM EXPRESSION#########"+form+"\n"+expression);
 		// Launch the expression
 		DroolsForm droolsForm = launchEngineWithExpression(form, expression);
 		if (droolsForm != null) {
