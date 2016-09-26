@@ -4,20 +4,20 @@
 		<groups>
 			<run>
 				<include name="droolsExpressions" />
-				<include name="droolsFork" />
-				<include name="droolsGeneric" />
-				<include name="droolsGlobalVariables" />
-				<include name="droolsNestedGroups" />
-				<include name="droolsOperators" />
-				<include name="droolsTableRule" />
-				<include name="droolsPrattParser" />
-				<include name="gson" />
-				<include name="newVersion" />
-				<include name="droolsEngineRules" />
-				<include name="pluginsTest" />
-				<include name="usesOfElement" />
-				<include name="multiSelectAnswer" />
-				<include name="graphviz" />
+				<exclude name="droolsFork" />
+				<exclude name="droolsGeneric" />
+				<exclude name="droolsGlobalVariables" />
+				<exclude name="droolsNestedGroups" />
+				<exclude name="droolsOperators" />
+				<exclude name="droolsTableRule" />
+				<exclude name="droolsPrattParser" />
+				<exclude name="gson" />
+				<exclude name="newVersion" />
+				<exclude name="droolsEngineRules" />
+				<exclude name="pluginsTest" />
+				<exclude name="usesOfElement" />
+				<exclude name="multiSelectAnswer" />
+				<exclude name="graphviz" />
 			</run>
 		</groups>
 		<classes>
