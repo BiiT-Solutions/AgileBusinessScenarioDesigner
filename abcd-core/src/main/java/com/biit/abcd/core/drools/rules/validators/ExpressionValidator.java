@@ -48,14 +48,12 @@ public class ExpressionValidator {
 	 * @throws InvalidExpressionException
 	 * @throws NotCompatibleTypeException
 	 */
-	public static void validateRule(Rule rule) throws PrattParserException, InvalidExpressionException,
-			NotCompatibleTypeException {
+	public static void validateRule(Rule rule) throws PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
 		validateConditions(rule.getConditions());
 		validateActions(rule.getActions());
 	}
 
-	public static void validateConditions(ExpressionChain expressionChain) throws PrattParserException,
-			InvalidExpressionException, NotCompatibleTypeException {
+	public static void validateConditions(ExpressionChain expressionChain) throws PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
 		if (expressionChain != null && expressionChain.getExpressions().size() > 1) {
 			ExpressionChain cleanedExpression = removeNewLineSymbols(RuleGenerationUtils.flattenExpressionChain(expressionChain));
 			// If there is a NOT expression, we have to add the remaining
@@ -81,8 +79,7 @@ public class ExpressionValidator {
 		}
 	}
 
-	public static void validateActions(ExpressionChain expressionChain) throws PrattParserException,
-			InvalidExpressionException, NotCompatibleTypeException {
+	public static void validateActions(ExpressionChain expressionChain) throws PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
 		if (expressionChain != null) {
 			ValueType leftVariableFormat = null;
 			ExpressionChain cleanedExpression = removeNewLineSymbols(RuleGenerationUtils.flattenExpressionChain(expressionChain));
@@ -103,8 +100,7 @@ public class ExpressionValidator {
 			// The second expression of the expression chain must be ALWAYS an
 			// assignation operator unless it's an IN or BETWEEN function
 			if (!(cleanedExpression.getExpressions().get(1) instanceof ExpressionOperatorMath)
-					|| !(((ExpressionOperatorMath) cleanedExpression.getExpressions().get(1)).getValue()
-							.equals(AvailableOperator.ASSIGNATION))) {
+					|| !(((ExpressionOperatorMath) cleanedExpression.getExpressions().get(1)).getValue().equals(AvailableOperator.ASSIGNATION))) {
 				throw new InvalidExpressionException();
 			}
 			Integer parsedElements = null;
@@ -143,12 +139,10 @@ public class ExpressionValidator {
 		}
 	}
 
-	private static void checkExpressionFunctionParameters(ValueType leftVariableFormat,
-			ExpressionChain prattExpressionChain) throws InvalidExpressionException {
+	private static void checkExpressionFunctionParameters(ValueType leftVariableFormat, ExpressionChain prattExpressionChain) throws InvalidExpressionException {
 		// The last expression must be a right parenthesis
 		if (!(prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1) instanceof ExpressionSymbol)
-				|| !(((ExpressionSymbol) prattExpressionChain.getExpressions().get(
-						prattExpressionChain.getExpressions().size() - 1)).getValue()
+				|| !(((ExpressionSymbol) prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1)).getValue()
 						.equals(AvailableSymbol.RIGHT_BRACKET))) {
 			throw new InvalidExpressionException();
 		}
@@ -163,18 +157,15 @@ public class ExpressionValidator {
 	 * @return
 	 * @throws InvalidExpressionException
 	 */
-	private static void checkMethodParameters(ValueType leftVariableFormat, ExpressionChain prattExpressionChain)
-			throws InvalidExpressionException {
+	private static void checkMethodParameters(ValueType leftVariableFormat, ExpressionChain prattExpressionChain) throws InvalidExpressionException {
 		int numberOfParameters = 0;
 		ValueType parameterType = null;
 
 		// Check that the parameter type matches
 		for (int expressionIndex = 2; expressionIndex < prattExpressionChain.getExpressions().size(); expressionIndex++) {
 			Expression expression = prattExpressionChain.getExpressions().get(expressionIndex);
-			if ((expression instanceof ExpressionChain)
-					&& (((ExpressionChain) expression).getExpressions().get(0) instanceof ExpressionValue<?>)) {
-				ExpressionValue<?> expressionValue = (ExpressionValue<?>) ((ExpressionChain) expression)
-						.getExpressions().get(0);
+			if ((expression instanceof ExpressionChain) && (((ExpressionChain) expression).getExpressions().get(0) instanceof ExpressionValue<?>)) {
+				ExpressionValue<?> expressionValue = (ExpressionValue<?>) ((ExpressionChain) expression).getExpressions().get(0);
 				numberOfParameters++;
 				// First parameter
 				if (parameterType == null) {
@@ -221,16 +212,12 @@ public class ExpressionValidator {
 			if (prattExpressionChain.getExpressions().size() > 6) {
 				if ((prattExpressionChain.getExpressions().get(4) instanceof ExpressionChain)
 						&& (prattExpressionChain.getExpressions().get(6) instanceof ExpressionChain)) {
-					ExpressionChain thenExpressionChain = (ExpressionChain) prattExpressionChain.getExpressions()
-							.get(4);
-					ExpressionChain elseExpressionChain = (ExpressionChain) prattExpressionChain.getExpressions()
-							.get(6);
+					ExpressionChain thenExpressionChain = (ExpressionChain) prattExpressionChain.getExpressions().get(4);
+					ExpressionChain elseExpressionChain = (ExpressionChain) prattExpressionChain.getExpressions().get(6);
 					if ((thenExpressionChain.getExpressions().get(0) instanceof ExpressionValue<?>)
 							&& (elseExpressionChain.getExpressions().get(0) instanceof ExpressionValue<?>)) {
-						ExpressionValue<?> thenExpressionValue = (ExpressionValue<?>) thenExpressionChain
-								.getExpressions().get(0);
-						ExpressionValue<?> elseExpressionValue = (ExpressionValue<?>) elseExpressionChain
-								.getExpressions().get(0);
+						ExpressionValue<?> thenExpressionValue = (ExpressionValue<?>) thenExpressionChain.getExpressions().get(0);
+						ExpressionValue<?> elseExpressionValue = (ExpressionValue<?>) elseExpressionChain.getExpressions().get(0);
 						if (!leftVariableFormat.equals(getExpressionValueType(thenExpressionValue))
 								&& !parameterType.equals(getExpressionValueType(elseExpressionValue))) {
 							throw new InvalidExpressionException();
@@ -268,12 +255,12 @@ public class ExpressionValidator {
 			return ValueType.POSTAL_CODE;
 		} else if (expression instanceof ExpressionValueString) {
 			return ValueType.TEXT;
-		} else if ((expression instanceof ExpressionValueTimestamp)
-				|| (expression instanceof ExpressionValueSystemDate)) {
+		} else if ((expression instanceof ExpressionValueTimestamp) || (expression instanceof ExpressionValueSystemDate)) {
 			return ValueType.DATE;
 		} else if (expression instanceof ExpressionValueGlobalConstant) {
 			GlobalVariable globalVariable = ((ExpressionValueGlobalConstant) expression).getValue();
 			switch (globalVariable.getFormat()) {
+			case MULTI_TEXT:
 			case TEXT:
 				return ValueType.TEXT;
 			case POSTAL_CODE:
@@ -339,6 +326,7 @@ public class ExpressionValidator {
 			case INPUT:
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case TEXT:
+				case MULTI_TEXT:
 					return ValueType.TEXT;
 				case POSTAL_CODE:
 					return ValueType.POSTAL_CODE;
@@ -365,6 +353,9 @@ public class ExpressionValidator {
 			case YEARS:
 			case MONTHS:
 			case DAYS:
+			case ABSOLUTE_DAYS:
+			case ABSOLUTE_MONTHS:
+			case ABSOLUTE_YEARS:
 				return ValueType.NUMBER;
 			case DATE:
 				return ValueType.DATE;
@@ -381,8 +372,7 @@ public class ExpressionValidator {
 	 * @return An object with the expression chain parsed inside;
 	 * @throws InvalidExpressionException
 	 */
-	private static ITreeElement calculatePrattParserResult(ExpressionChain expressionChain)
-			throws PrattParserException, InvalidExpressionException {
+	private static ITreeElement calculatePrattParserResult(ExpressionChain expressionChain) throws PrattParserException, InvalidExpressionException {
 		PrattParser prattParser = new ExpressionChainPrattParser(expressionChain);
 		ITreeElement prattParserResult = null;
 		prattParserResult = prattParser.parseExpression();
@@ -461,8 +451,7 @@ public class ExpressionValidator {
 		ExpressionChain cleanedExpression = (ExpressionChain) expressionChain.generateCopy();
 		for (int index = 0; index < cleanedExpression.getExpressions().size(); index++) {
 			if ((cleanedExpression.getExpressions().get(index) instanceof ExpressionSymbol)
-					&& (((ExpressionSymbol) cleanedExpression.getExpressions().get(index)).getValue()
-							.equals(AvailableSymbol.PILCROW))) {
+					&& (((ExpressionSymbol) cleanedExpression.getExpressions().get(index)).getValue().equals(AvailableSymbol.PILCROW))) {
 				cleanedExpression.getExpressions().remove(index);
 				index--;
 			}
@@ -480,8 +469,7 @@ public class ExpressionValidator {
 	private static void validatePluginCall(ExpressionChain prattExpressionChain) throws InvalidExpressionException {
 		// The last expression must be a right parenthesis
 		if (!(prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1) instanceof ExpressionSymbol)
-				|| !(((ExpressionSymbol) prattExpressionChain.getExpressions().get(
-						prattExpressionChain.getExpressions().size() - 1)).getValue()
+				|| !(((ExpressionSymbol) prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1)).getValue()
 						.equals(AvailableSymbol.RIGHT_BRACKET))) {
 			throw new InvalidExpressionException();
 		}
@@ -496,27 +484,23 @@ public class ExpressionValidator {
 	 * @return
 	 * @throws InvalidExpressionException
 	 */
-	private static void checkPluginMethodParameters(ExpressionChain prattExpressionChain)
-			throws InvalidExpressionException {
+	private static void checkPluginMethodParameters(ExpressionChain prattExpressionChain) throws InvalidExpressionException {
 		ExpressionPluginMethod pluginMethod = (ExpressionPluginMethod) prattExpressionChain.getExpressions().get(1);
 		List<Class<?>> parameters = new ArrayList<>();
 		for (int expressionIndex = 2; expressionIndex < prattExpressionChain.getExpressions().size(); expressionIndex++) {
 			Expression expression = prattExpressionChain.getExpressions().get(expressionIndex);
-			if ((expression instanceof ExpressionChain)
-					&& (((ExpressionChain) expression).getExpressions().get(0) instanceof ExpressionValue<?>)) {
-				ExpressionValue<?> expressionValue = (ExpressionValue<?>) ((ExpressionChain) expression)
-						.getExpressions().get(0);
+			if ((expression instanceof ExpressionChain) && (((ExpressionChain) expression).getExpressions().get(0) instanceof ExpressionValue<?>)) {
+				ExpressionValue<?> expressionValue = (ExpressionValue<?>) ((ExpressionChain) expression).getExpressions().get(0);
 				ValueType valueType = getExpressionValueType(expressionValue);
 				if (valueType != null) {
 					parameters.add(valueType.getClassType());
 				}
 			}
 		}
-		IPlugin pluginInterface = PluginController.getInstance().getPlugin(pluginMethod.getPluginInterface(),
-				pluginMethod.getPluginName());
+		IPlugin pluginInterface = PluginController.getInstance().getPlugin(pluginMethod.getPluginInterface(), pluginMethod.getPluginName());
 		if (pluginInterface == null) {
-			throw new InvalidExpressionException("Plugin interface: '" + pluginMethod.getPluginInterface()
-					+ "' not found for plugin: '" + pluginMethod.getPluginName() + "'");
+			throw new InvalidExpressionException("Plugin interface: '" + pluginMethod.getPluginInterface() + "' not found for plugin: '"
+					+ pluginMethod.getPluginName() + "'");
 		}
 		try {
 			pluginInterface.getPluginMethod(pluginMethod.getPluginMethodName(), listToArray(parameters));
