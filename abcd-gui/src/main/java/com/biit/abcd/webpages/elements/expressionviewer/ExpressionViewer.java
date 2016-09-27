@@ -267,6 +267,7 @@ public class ExpressionViewer extends CssLayout {
 												selectExpression = exprValuePostCode;
 												window.close();
 												break;
+											case MULTI_TEXT:
 											case TEXT:
 												ExpressionValueString exprValueString = new ExpressionValueString(value);
 												exprValueString.copyBasicExpressionInfo(expression);

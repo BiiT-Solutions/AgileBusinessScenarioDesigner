@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.pdfgenerator.exceptions.BadBlockException;
-import com.biit.abcd.pdfgenerator.utils.PdfCol;
 import com.biit.abcd.pdfgenerator.utils.PdfRow;
 import com.biit.abcd.pdfgenerator.utils.PdfTableBlock;
 import com.biit.abcd.persistence.entity.CustomVariable;
@@ -103,24 +102,24 @@ public class PdfBlockGenerator {
 		}
 	}
 
-	private static PdfTableBlock generateAnnexQuestionTableBlock(Question question) throws BadBlockException {
-		PdfTableBlock block = null;
-		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(), STRUCTURE_COLS);
-
-		block.insertRow(PdfRowGenerator.generateQuestion(question));
-
-		if (!question.getChildren().isEmpty()) {
-			block.insertCol(PdfCol.generateWhiteCol(question.getAllChildrenInHierarchy(BaseAnswer.class).size(), 1));
-			for (TreeObject child : question.getChildren()) {
-				// They are all answers
-				block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) child));
-				for (TreeObject subChild : child.getChildren()) {
-					block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) subChild));
-				}
-			}
-		}
-		return block;
-	}
+//	private static PdfTableBlock generateAnnexQuestionTableBlock(Question question) throws BadBlockException {
+//		PdfTableBlock block = null;
+//		block = new PdfTableBlock(MIN_QUESTION_ROWS + question.getAllChildrenInHierarchy(BaseAnswer.class).size(), STRUCTURE_COLS);
+//
+//		block.insertRow(PdfRowGenerator.generateQuestion(question));
+//
+//		if (!question.getChildren().isEmpty()) {
+//			block.insertCol(PdfCol.generateWhiteCol(question.getAllChildrenInHierarchy(BaseAnswer.class).size(), 1));
+//			for (TreeObject child : question.getChildren()) {
+//				// They are all answers
+//				block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) child));
+//				for (TreeObject subChild : child.getChildren()) {
+//					block.insertRow(PdfRowGenerator.generateAnnexAnswer((BaseAnswer) subChild));
+//				}
+//			}
+//		}
+//		return block;
+//	}
 
 	public static List<PdfTableBlock> generateAnnexFormTableBlocks(Form form) throws BadBlockException {
 		List<PdfTableBlock> blocks = new ArrayList<PdfTableBlock>();

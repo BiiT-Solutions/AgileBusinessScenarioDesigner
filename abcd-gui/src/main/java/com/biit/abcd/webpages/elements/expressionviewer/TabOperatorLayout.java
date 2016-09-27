@@ -416,6 +416,7 @@ public class TabOperatorLayout extends TabLayout {
 												addExpression(exprValuePostCode);
 												window.close();
 												break;
+											case MULTI_TEXT:
 											case TEXT:
 												ExpressionValueString exprValueString = new ExpressionValueString(value);
 												addExpression(exprValueString);

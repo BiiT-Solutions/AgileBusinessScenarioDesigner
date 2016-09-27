@@ -292,6 +292,7 @@ public class TestScenarioValidator {
 			break;
 		case INPUT:
 			switch (question.getAnswerFormat()) {
+			case MULTI_TEXT:
 			case TEXT:
 				if (!(testAnswer instanceof TestAnswerInputText)) {
 					TestScenarioQuestion newTestScenarioQuestion = replaceTestScenarioQuestion(testScenarioQuestion);

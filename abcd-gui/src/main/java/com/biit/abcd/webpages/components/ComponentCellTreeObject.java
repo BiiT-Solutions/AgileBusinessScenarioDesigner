@@ -39,6 +39,7 @@ public class ComponentCellTreeObject extends ComponentCell {
 					case POSTAL_CODE:
 						return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_POSTALCODE;
 					case TEXT:
+					case MULTI_TEXT:
 						return ThemeIcon.TREE_DESIGNER_QUESTION_TYPE_TEXT;
 					}
 				}

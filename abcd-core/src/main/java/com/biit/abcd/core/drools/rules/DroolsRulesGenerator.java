@@ -296,6 +296,7 @@ public class DroolsRulesGenerator {
 		case DATE:
 			return "global java.util.Date " + globalVariable.getName() + "\n";
 		case TEXT:
+		case MULTI_TEXT:
 			return "global java.lang.String " + globalVariable.getName() + "\n";
 		case POSTAL_CODE:
 			return "global java.lang.String " + globalVariable.getName() + "\n";

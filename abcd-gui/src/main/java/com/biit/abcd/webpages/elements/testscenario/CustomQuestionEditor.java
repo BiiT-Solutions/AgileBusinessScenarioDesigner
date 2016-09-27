@@ -49,8 +49,7 @@ public class CustomQuestionEditor extends CustomComponent {
 	private static String DATE_FORMAT = "dd/MM/yyyy";
 	private Set<FieldValueChangedListener> fieldValueChangeListeners;
 
-	public CustomQuestionEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap,
-			List<TreeObject> testScenarioObjects) {
+	public CustomQuestionEditor(HashMap<String, TreeObject> originalReferenceTreeObjectMap, List<TreeObject> testScenarioObjects) {
 		this.originalReferenceTreeObjectMap = originalReferenceTreeObjectMap;
 		fieldValueChangeListeners = new HashSet<>();
 		setCompositionRoot(generateContent());
@@ -78,7 +77,8 @@ public class CustomQuestionEditor extends CustomComponent {
 	}
 
 	/**
-	 * Creates the field based on the type of the question and retrieves the answer information if there is any.
+	 * Creates the field based on the type of the question and retrieves the
+	 * answer information if there is any.
 	 * 
 	 * @param testQuestion
 	 * @return
@@ -99,8 +99,7 @@ public class CustomQuestionEditor extends CustomComponent {
 					if ((subAnswerList != null) && !(subAnswerList.isEmpty())) {
 						for (TreeObject subAnswer : subAnswerList) {
 							((ComboBox) field).addItem(subAnswer.getName());
-							((ComboBox) field).setItemCaption(subAnswer.getName(),
-									answer.getName() + "/" + subAnswer.getName());
+							((ComboBox) field).setItemCaption(subAnswer.getName(), answer.getName() + "/" + subAnswer.getName());
 						}
 					} else {
 						((ComboBox) field).addItem(answer.getName());
@@ -148,6 +147,7 @@ public class CustomQuestionEditor extends CustomComponent {
 				break;
 			case INPUT:
 				switch (question.getAnswerFormat()) {
+				case MULTI_TEXT:
 				case TEXT:
 					field = new TextField(testQuestion.getName());
 					((TextField) field).setInputPrompt("TEXT");

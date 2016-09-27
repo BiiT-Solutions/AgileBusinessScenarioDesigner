@@ -84,8 +84,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 		expressionType.setImmediate(true);
 		for (AnswerFormatUi answerFormatUi : AnswerFormatUi.values()) {
 			expressionType.addItem(answerFormatUi.getAnswerFormat());
-			expressionType.setItemCaption(answerFormatUi.getAnswerFormat(),
-					ServerTranslate.translate(answerFormatUi.getLanguageCode()));
+			expressionType.setItemCaption(answerFormatUi.getAnswerFormat(), ServerTranslate.translate(answerFormatUi.getLanguageCode()));
 		}
 		expressionType.setValue(AnswerFormatUi.values()[0].getAnswerFormat());
 		expressionType.addValueChangeListener(new ValueChangeListener() {
@@ -168,9 +167,10 @@ public class StringInputWindow extends AcceptCancelWindow {
 			break;
 		case POSTAL_CODE:
 			((TextField) expressionValue).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_POSTAL_CODE));
-			expressionValue.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getPostalCodeMask(),
-					ServerTranslate.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
+			expressionValue.addValidator(new RegexpValidator(AbcdConfigurationReader.getInstance().getPostalCodeMask(), ServerTranslate
+					.translate(LanguageCodes.ERROR_DATA_FORMAT_INVALID)));
 			break;
+		case MULTI_TEXT:
 		case TEXT:
 			((TextField) expressionValue).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_TEXT));
 			break;
@@ -187,6 +187,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 		case POSTAL_CODE:
 			((TextField) expressionValue).setConverter(String.class);
 			break;
+		case MULTI_TEXT:
 		case TEXT:
 			((TextField) expressionValue).setConverter(String.class);
 			break;

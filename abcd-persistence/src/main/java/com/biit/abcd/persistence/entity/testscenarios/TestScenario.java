@@ -176,6 +176,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 				break;
 			case POSTAL_CODE:
 				testQuestion.setTestAnswer(new TestAnswerInputPostalCode());
+			case MULTI_TEXT:
 			case TEXT:
 				testQuestion.setTestAnswer(new TestAnswerInputText());
 				break;

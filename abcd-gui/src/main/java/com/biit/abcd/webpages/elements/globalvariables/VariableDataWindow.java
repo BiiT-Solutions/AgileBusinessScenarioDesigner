@@ -74,6 +74,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 			((TextField) valueField).setNullRepresentation("");
 			((TextField) valueField).setInputPrompt(ServerTranslate.translate(LanguageCodes.INPUT_PROMPT_POSTAL_CODE));
 			break;
+		case MULTI_TEXT:
 		case TEXT:
 			valueField = new TextField();
 			((TextField) valueField).setConverter(String.class);
