@@ -158,6 +158,7 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
+					<argLine>-Xms512m -Xmx2048M -Xss1024k -XX:MaxPermSize=512M</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
