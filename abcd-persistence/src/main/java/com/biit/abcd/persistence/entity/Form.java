@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -109,6 +110,7 @@ public class Form extends BaseForm {
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
 		customVariablesToDelete = new HashSet<>();
+		setAvailableFrom(new Timestamp(new Date().getTime()));
 	}
 
 	public Form(String name) throws FieldTooLongException, CharacterNotAllowedException {
@@ -119,6 +121,7 @@ public class Form extends BaseForm {
 		expressionChains = new HashSet<>();
 		rules = new HashSet<>();
 		customVariablesToDelete = new HashSet<>();
+		setAvailableFrom(new Timestamp(new Date().getTime()));
 	}
 
 	@Override
