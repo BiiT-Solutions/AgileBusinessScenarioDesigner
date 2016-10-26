@@ -311,10 +311,10 @@ public class DroolsRulesGenerator {
 	}
 
 	private StringBuilder getRulesBuilder() {
-		if (builder == null) {
-			builder = new StringBuilder();
+		if (this.builder == null) {
+			this.builder = new StringBuilder();
 		}
-		return builder;
+		return this.builder;
 	}
 
 }

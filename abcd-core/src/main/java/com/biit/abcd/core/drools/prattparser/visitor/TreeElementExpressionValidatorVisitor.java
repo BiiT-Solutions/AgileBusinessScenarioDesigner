@@ -92,17 +92,11 @@ public class TreeElementExpressionValidatorVisitor implements ITreeElementVisito
 				ValueType leftType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator.getLeftElement()).getExpressionChain());
 				ValueType rightType = ExpressionValidator.getValueInsideExpressionChain(((NameExpression) operator.getRightElement()).getExpressionChain());
 				if (leftType == rightType) {
-					if (operator.getOperator().equals(ExpressionTokenType.MINUS) || operator.getOperator().equals(ExpressionTokenType.MULTIPLICATION)
-							|| operator.getOperator().equals(ExpressionTokenType.DIVISION)) {
-						// Cannot apply the operators '-', '*','/' to
+					if (operator.getOperator().equals(ExpressionTokenType.PLUS) || operator.getOperator().equals(ExpressionTokenType.MINUS)
+							|| operator.getOperator().equals(ExpressionTokenType.MULTIPLICATION) || operator.getOperator().equals(ExpressionTokenType.DIVISION)) {
+						// Cannot apply the operators '+', '-', '*','/' to
 						// anything but numbers
 						if (!leftType.equals(ValueType.NUMBER)) {
-							throw new NotCompatibleTypeException("Operator types not compatible '" + operator.getOperator() + "' with '" + leftType + "'.",
-									null);
-						}
-					} else if (operator.getOperator().equals(ExpressionTokenType.PLUS)) {
-						// Operator '+' to numbers or strings.
-						if (!(leftType.equals(ValueType.TEXT) || leftType.equals(ValueType.NUMBER))) {
 							throw new NotCompatibleTypeException("Operator types not compatible '" + operator.getOperator() + "' with '" + leftType + "'.",
 									null);
 						}

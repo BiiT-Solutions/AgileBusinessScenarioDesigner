@@ -303,6 +303,9 @@ public class DroolsParser {
 		// We make sure the variables map is clear
 		TreeObjectDroolsIdMap.clearMap();
 
+		// System.out.println("RULE CONDITIONS: " + rule.getConditions());
+		// System.out.println("RULE ACTIONS: " + rule.getActions());
+
 		// Just in case we want the label and version of the drools files
 		/**
 		 * String formLabel = getDroolsHelper().getForm().getLabel(); String

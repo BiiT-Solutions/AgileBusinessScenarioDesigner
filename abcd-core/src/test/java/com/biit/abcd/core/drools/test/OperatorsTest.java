@@ -20,6 +20,7 @@ import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -81,61 +82,44 @@ public class OperatorsTest extends KidsFormCreator {
 	private final static String MAX = "max";
 	private final static String AVG = "avg";
 	private final static String PMT = "pmt";
-	private final static String STRING_VARIABLE = "FinalString";
 	private static final Double OR_RESULT_VALUE = 11.;
 	private static final String BETWEEN_CUSTOM_VARIABLE = "betweenCustomVariable";
 
 	@Test(enabled = true, groups = { "droolsOperators" })
-	public void mathematicalOperatorsTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
-			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
-			ElementIsReadOnly {
-		// Create a new form
-		Form form = createForm();
-		// Mathematical expression
-		CustomVariable bmiCustomVariable = new CustomVariable(form, BMI, CustomVariableType.NUMBER, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(form, bmiCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+	public void mathematicalOperatorsTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
+		try {
+			// Create a new form
+			Form form = createForm();
+			// Mathematical expression
+			CustomVariable bmiCustomVariable = new CustomVariable(form, BMI, CustomVariableType.NUMBER, CustomVariableScope.FORM);
+			ExpressionChain expression = new ExpressionChain("bmiCalculation", new ExpressionValueCustomVariable(form, bmiCustomVariable),
+					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
 
-				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject(form, "weight")),
-				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionSymbol(
-						AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject(form, "height")), new ExpressionOperatorMath(
-						AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-				new ExpressionSymbol(AvailableSymbol.PILCROW), new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionSymbol(
-						AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject(form, "height")), new ExpressionOperatorMath(
-						AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorMath(
-						AvailableOperator.PLUS), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueNumber(25.),
-				new ExpressionOperatorMath(AvailableOperator.MINUS), new ExpressionValueNumber(50.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		form.getExpressionChains().add(expression);
-		form.addDiagram(createExpressionsDiagram(form));
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules(form);
-		// Check bmi
-		Double height = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
-				.getChild(ISubmittedQuestion.class, "height")).getAnswers().iterator().next());
-		Double weight = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
-				.getChild(ISubmittedQuestion.class, "weight")).getAnswers().iterator().next());
-		Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
-		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(BMI), bmi);
-	}
-
-	@Test(enabled = true, groups = { "droolsOperators" })
-	public void concatenateStringTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
-			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
-			ElementIsReadOnly {
-		// Create a new form
-		Form form = createForm();
-		// Mathematical expression
-		CustomVariable stringCustomVariable = new CustomVariable(form, STRING_VARIABLE, CustomVariableType.STRING, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("Concatenation", new ExpressionValueCustomVariable(form, stringCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString("Marco"), new ExpressionOperatorMath(AvailableOperator.PLUS),
-				new ExpressionValueString("Polo"));
-		form.getExpressionChains().add(expression);
-		form.addDiagram(createExpressionsDiagram(form));
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules(form);
-		// Check new string
-		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(STRING_VARIABLE), "MarcoPolo");
+					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject(form, "weight")),
+					new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionSymbol(
+							AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject(form, "height")), new ExpressionOperatorMath(
+							AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+					new ExpressionSymbol(AvailableSymbol.PILCROW), new ExpressionOperatorMath(AvailableOperator.MULTIPLICATION), new ExpressionSymbol(
+							AvailableSymbol.LEFT_BRACKET), new ExpressionValueTreeObjectReference(getTreeObject(form, "height")), new ExpressionOperatorMath(
+							AvailableOperator.DIVISION), new ExpressionValueNumber(100.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET),
+					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET), new ExpressionOperatorMath(
+							AvailableOperator.PLUS), new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET), new ExpressionValueNumber(25.),
+					new ExpressionOperatorMath(AvailableOperator.MINUS), new ExpressionValueNumber(50.), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+			form.getExpressionChains().add(expression);
+			form.addDiagram(createExpressionsDiagram(form));
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules(form);
+			// Check bmi
+			Double height = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
+					.getChild(ISubmittedQuestion.class, "height")).getAnswers().iterator().next());
+			Double weight = Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
+					.getChild(ISubmittedQuestion.class, "weight")).getAnswers().iterator().next());
+			Double bmi = (weight / ((height / 100) * (height / 100))) + (25 - 50);
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(BMI), bmi);
+		} catch (NumberFormatException | FieldTooLongException | CharacterNotAllowedException | NotValidChildException | InvalidAnswerFormatException
+				| NotValidTypeInVariableData | ElementIsReadOnly e) {
+			Assert.fail("Exception in test");
+		}
 	}
 
 	@Test(enabled = true, groups = { "droolsOperators" })
@@ -193,7 +177,7 @@ public class OperatorsTest extends KidsFormCreator {
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, QuestionDoesNotExistException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly, DroolsRuleGenerationException, DroolsRuleExecutionException {
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Create a new form
 		Form form = createForm();
 		// AVG expression
@@ -205,22 +189,25 @@ public class OperatorsTest extends KidsFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
 		form.addDiagram(createExpressionsDiagram(form));
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules(form);
-		// Check result
-		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-		Double secondVal = (Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
-				.getChild(ISubmittedQuestion.class, "heightFather")).getAnswers().iterator().next()));
-		Double thirdVal = 1000.0;
-		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG), (firstVal + secondVal + thirdVal) / 3.0);
+		try {
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules(form);
+			// Check result
+			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+			Double secondVal = (Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
+					.getChild(ISubmittedQuestion.class, "heightFather")).getAnswers().iterator().next()));
+			Double thirdVal = 1000.0;
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG), (firstVal + secondVal + thirdVal) / 3.0);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(enabled = true, groups = { "droolsOperators" })
 	public void pmtOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, ElementIsReadOnly,
-			DroolsRuleGenerationException, DroolsRuleExecutionException {
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, ElementIsReadOnly {
 		// Create a new form
 		Form form = createForm();
 		// PMT expression
@@ -232,10 +219,14 @@ public class OperatorsTest extends KidsFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
 		form.addDiagram(createExpressionsDiagram(form));
-		// Create the rules and launch the engine
-		DroolsForm droolsForm = createAndRunDroolsRules(form);
-		// Check result
-		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(PMT), 21000.0);
+		try {
+			// Create the rules and launch the engine
+			DroolsForm droolsForm = createAndRunDroolsRules(form);
+			// Check result
+			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(PMT), 21000.0);
+		} catch (Exception e) {
+			AbcdLogger.errorMessage(this.getClass().getName(), e);
+		}
 	}
 
 	@Test(enabled = true, groups = { "droolsOperators" })
@@ -608,8 +599,8 @@ public class OperatorsTest extends KidsFormCreator {
 	public void betweenOperatorQuestionDateYearsValuesTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException {
-		// TODO !!!
-		// System.out.println("\n\n\nAQUI ESTÁ:");
+		//TODO !!!
+		//System.out.println("\n\n\nAQUI ESTÁ:");
 		// Create a new form
 		Form form = createForm();
 		// BETWEEN rule
@@ -1056,4 +1047,4 @@ public class OperatorsTest extends KidsFormCreator {
 		// Create the drools rules and launch the engine
 		return createAndRunDroolsRules(form);
 	}
-}
+	}

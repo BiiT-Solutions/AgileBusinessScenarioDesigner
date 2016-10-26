@@ -203,22 +203,8 @@ public class ExpressionValidator {
 		case AVG:
 		case MAX:
 		case MIN:
-			// Only numbers
-			if (!leftVariableFormat.equals(ValueType.NUMBER) && !parameterType.equals(ValueType.NUMBER)) {
-				throw new InvalidExpressionException();
-			}
-			break;
 		case SUM:
-			// Not equals elements
-			if (leftVariableFormat != parameterType) {
-				throw new InvalidExpressionException();
-			}
-
-			// Only numbers or strings.
-			if ((leftVariableFormat.equals(ValueType.NUMBER) && !parameterType.equals(ValueType.NUMBER))
-					|| (!leftVariableFormat.equals(ValueType.NUMBER) && parameterType.equals(ValueType.NUMBER))
-					|| (leftVariableFormat.equals(ValueType.TEXT) && !parameterType.equals(ValueType.TEXT))
-					|| (!leftVariableFormat.equals(ValueType.TEXT) && parameterType.equals(ValueType.TEXT))) {
+			if (!leftVariableFormat.equals(ValueType.NUMBER) && !parameterType.equals(ValueType.NUMBER)) {
 				throw new InvalidExpressionException();
 			}
 			break;
