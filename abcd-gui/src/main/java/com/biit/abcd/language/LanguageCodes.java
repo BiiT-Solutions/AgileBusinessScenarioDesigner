@@ -416,6 +416,7 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_PMT("expression.button.pmt"),
 	EXPRESSION_BUTTON_SUM("expression.button.sum"),
 	EXPRESSION_BUTTON_LOG("expression.button.log"),
+	EXPRESSION_BUTTON_CONCAT("expression.button.concat"),
 
 	EXPRESSION_DATE_DAY("expression.date.day"),
 	EXPRESSION_DATE_MONTH("expression.date.month"),
