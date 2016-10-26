@@ -74,7 +74,7 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor {
 	public void visit(OperatorExpression operator) throws NotCompatibleTypeException {
 		this.builder.append("(");
 		operator.getLeftElement().accept(this);
-		this.builder.append(" ").append(operator.getOperator().punctuator()).append(" ");
+		this.builder.append(" ").append(operator.getOperator().getPunctuator()).append(" ");
 		operator.getRightElement().accept(this);
 		this.builder.append(")");
 	}
@@ -83,12 +83,12 @@ public class TreeElementPrintVisitor implements ITreeElementVisitor {
 	public void visit(PostfixExpression postfix) throws NotCompatibleTypeException {
 		this.builder.append("(");
 		postfix.getLeftElement().accept(this);
-		this.builder.append(postfix.getOperator().punctuator()).append(")");
+		this.builder.append(postfix.getOperator().getPunctuator()).append(")");
 	}
 
 	@Override
 	public void visit(PrefixExpression prefix) throws NotCompatibleTypeException {
-		this.builder.append("(").append(prefix.getOperator().punctuator());
+		this.builder.append("(").append(prefix.getOperator().getPunctuator());
 		prefix.getRightElement().accept(this);
 		this.builder.append(")");
 	}

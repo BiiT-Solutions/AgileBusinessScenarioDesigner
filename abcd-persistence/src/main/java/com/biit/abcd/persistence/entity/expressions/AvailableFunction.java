@@ -30,7 +30,9 @@ public enum AvailableFunction {
 	
 	LOG("LOG("),
 
-	SUM("SUM(");
+	SUM("SUM("),
+	
+	CONCAT("CONCAT(");
 
 	private String value;
 

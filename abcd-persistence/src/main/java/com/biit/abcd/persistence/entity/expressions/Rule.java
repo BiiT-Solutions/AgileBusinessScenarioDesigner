@@ -161,6 +161,13 @@ public class Rule extends StorableObject implements INameAttribute {
 
 	@Override
 	public String toString() {
-		return "IF " + conditions.toString() + " DO " + actions.toString();
+		StringBuilder text = new StringBuilder();
+		if (conditions != null) {
+			text.append("IF " + conditions.toString() + " DO ");
+		}
+		if (actions != null) {
+			text.append(actions.toString());
+		}
+		return text.toString();
 	}
 }

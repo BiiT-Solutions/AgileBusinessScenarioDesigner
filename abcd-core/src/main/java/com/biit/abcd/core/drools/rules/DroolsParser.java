@@ -91,7 +91,8 @@ public class DroolsParser {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
 		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
-			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions().get(0);
+			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions()
+					.get(0);
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
 
 			// Get all the customVariables and treeObjects
@@ -129,13 +130,16 @@ public class DroolsParser {
 			case LOG:
 				ruleCore += "RulesOperators.calculateLogarithmFunction(variablesList));\n";
 				break;
+			case CONCAT:
+				ruleCore += "RulesOperators.concatenateStringsFunction(variablesList));\n";
+				break;
 			default:
 				throw new DroolsRuleCreationException("Error parsing an Action. Function '" + function.getValue() + "' not found.", actions);
 			}
 			// Set the value calculated
 			ruleCore += "\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set (" + leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
-					+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('" + leftExpressionCustomVariable.getVariable().getName()
-					+ "')+\")\");\n";
+					+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
+					+ leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
 		}
 
 		return ruleCore;
@@ -174,8 +178,8 @@ public class DroolsParser {
 	 * @throws NullTreeObjectException
 	 * @throws NullCustomVariableException
 	 */
-	private static String checkVariableAssignation(Expression expression) throws NullCustomVariableException, NullTreeObjectException, NullExpressionValueException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
+	private static String checkVariableAssignation(Expression expression) throws NullCustomVariableException, NullTreeObjectException,
+			NullExpressionValueException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		if (expression instanceof ExpressionValueCustomVariable) {
 			return SimpleConditionsGenerator.getTreeObjectCustomVariableConditions((ExpressionValueCustomVariable) expression);
 		} else if (expression instanceof ExpressionValueTreeObjectReference) {
@@ -184,8 +188,8 @@ public class DroolsParser {
 		return "";
 	}
 
-	private static String checkVariableAssignation(ExpressionValueTreeObjectReference variable) throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException {
+	private static String checkVariableAssignation(ExpressionValueTreeObjectReference variable) throws NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		return checkVariableAssignation(variable.getReference());
 	}
 
@@ -252,8 +256,8 @@ public class DroolsParser {
 	 */
 	public static String createDroolsRule(List<Rule> rules, DroolsHelper droolsHelper) throws RuleNotImplementedException, NotCompatibleTypeException,
 			ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
-			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException,
-			DroolsRuleCreationException, PrattParserException {
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
+			PluginInvocationException, DroolsRuleCreationException, PrattParserException {
 		setDroolsHelper(droolsHelper);
 		StringBuilder parsedText = new StringBuilder();
 		for (Rule rule : rules) {
@@ -295,8 +299,8 @@ public class DroolsParser {
 	 */
 	private static String createDroolsRule(Rule rule) throws RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException,
 			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException,
-			PrattParserException {
+			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException,
+			DroolsRuleCreationException, PrattParserException {
 		if (rule == null) {
 			return null;
 		}
@@ -354,8 +358,8 @@ public class DroolsParser {
 	 * @throws NullTreeObjectException
 	 * @throws DroolsRuleCreationException
 	 */
-	private static String createInBetweenFunctionConditions(ExpressionChain conditions) throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, DroolsRuleCreationException {
+	private static String createInBetweenFunctionConditions(ExpressionChain conditions) throws NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, DroolsRuleCreationException {
 		String droolsConditions = "";
 		AvailableFunction functionParsed = ((ExpressionFunction) conditions.getExpressions().get(1)).getValue();
 		List<Expression> operatorLeft = ((ExpressionChain) conditions.getExpressions().get(0)).getExpressions();
@@ -397,8 +401,8 @@ public class DroolsParser {
 						case FORM:
 							putTreeObjectName(leftVariable.getReference(), leftVariable.getReference().getUniqueNameReadable());
 							// First common part of the condition
-							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable() + " : DroolsSubmittedForm(isVariableDefined('" + variableName
-									+ "'), getVariableValue('" + variableName + "')";
+							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable() + " : DroolsSubmittedForm(isVariableDefined('"
+									+ variableName + "'), getVariableValue('" + variableName + "')";
 							switch (functionParsed) {
 							case BETWEEN:
 								if (functionValues.size() == 2) {
@@ -438,8 +442,8 @@ public class DroolsParser {
 							String className = leftVariable.getReference().getClass().getSimpleName();
 							// First common part of the condition
 							droolsConditions += "\t$" + leftVariable.getReference().getUniqueNameReadable() + " : DroolsSubmitted" + className + "( "
-									+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference()) + "', isVariableDefined('" + variableName
-									+ "'), getVariableValue('" + variableName + "')";
+									+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(leftVariable.getReference()) + "', isVariableDefined('"
+									+ variableName + "'), getVariableValue('" + variableName + "')";
 
 							switch (functionParsed) {
 							case BETWEEN:
@@ -484,7 +488,8 @@ public class DroolsParser {
 						Question leftQuestion = (Question) leftReference;
 						// First common part of the condition
 						droolsConditions += "\t$" + leftQuestion.getUniqueNameReadable() + " : DroolsSubmittedQuestion("
-								+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "', " + getTreeObjectAnswer(leftExpressionValueTreeObject);
+								+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(leftQuestion) + "', "
+								+ getTreeObjectAnswer(leftExpressionValueTreeObject);
 						// Comparison part of the condition
 						switch (functionParsed) {
 						case BETWEEN:
@@ -559,8 +564,8 @@ public class DroolsParser {
 		return pluginCall;
 	}
 
-	private static String createTreeObjectLogicOperatorCondition(Question question, Answer answer, AvailableOperator availableOperator) throws NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
+	private static String createTreeObjectLogicOperatorCondition(Question question, Answer answer, AvailableOperator availableOperator)
+			throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		StringBuilder droolsConditions = new StringBuilder();
 
 		// Create the conditions for parents hierarchy
@@ -631,8 +636,8 @@ public class DroolsParser {
 					CustomVariableType customVariableType = expressionValueCustomVariable.getVariable().getType();
 					putTreeObjectName(treeObjectCustomVariable, treeObjectCustomVariable.getUniqueNameReadable());
 					if (treeObjectCustomVariable instanceof Form) {
-						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : DroolsSubmittedForm( isVariableDefined('" + customVariable.getName()
-								+ "'), getVariableValue('" + customVariable.getName() + "') " + operator.getValue().toString()
+						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : DroolsSubmittedForm( isVariableDefined('"
+								+ customVariable.getName() + "'), getVariableValue('" + customVariable.getName() + "') " + operator.getValue().toString()
 								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
 								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ") + ") from $droolsForm.getDroolsSubmittedForm() \n";
 
@@ -642,12 +647,12 @@ public class DroolsParser {
 						// Check conditions for the parent
 						ruleCore += SimpleConditionsGenerator.getTreeObjectConditions(parent);
 						ruleCore += "\t$" + treeObjectCustomVariable.getUniqueNameReadable() + " : DroolsSubmitted" + treeObjectClassName + "( "
-								+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable) + "', isVariableDefined('" + customVariable.getName()
-								+ "'), getVariableValue('" + customVariable.getName() + "') " + operator.getValue().toString()
+								+ RuleGenerationUtils.returnSimpleTreeObjectNameFunction(treeObjectCustomVariable) + "', isVariableDefined('"
+								+ customVariable.getName() + "'), getVariableValue('" + customVariable.getName() + "') " + operator.getValue().toString()
 								+ (customVariableType.equals(CustomVariableType.STRING) ? " '" : " ") + droolsValue
 								+ (customVariableType.equals(CustomVariableType.STRING) ? "' " : " ") + ") from $" + parent.getUniqueNameReadable()
-								+ ".getChildren(ISubmitted" + treeObjectClassName + ".class) " + RuleGenerationUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable)
-								+ "\n";
+								+ ".getChildren(ISubmitted" + treeObjectClassName + ".class) "
+								+ RuleGenerationUtils.addFinalCommentsIfNeeded(treeObjectCustomVariable) + "\n";
 					}
 
 				} else {
@@ -903,11 +908,17 @@ public class DroolsParser {
 
 	private static String getVariablesListValuesForFunctions(ExpressionValueCustomVariable leftExpressionCustomVariable, List<Expression> variables) {
 		String ruleCore = "";
-		ruleCore += "\tList<Double> variablesList = new ArrayList<Double>();\n";
+		// Concat uses strings. Other uses numbers.
+		if (variables != null && !variables.isEmpty() && variables.get(0) instanceof ExpressionValueString) {
+			ruleCore += "\tList<String> variablesList = new ArrayList<String>();\n";
+		} else {
+			ruleCore += "\tList<Double> variablesList = new ArrayList<Double>();\n";
+		}
 		for (Expression variable : variables) {
 			if (variable instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
-				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isVariableDefined('" + expressionValueCustomVariable.getVariable().getName() + "')){";
+				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isVariableDefined('" + expressionValueCustomVariable.getVariable().getName()
+						+ "')){";
 				ruleCore += "variablesList.add(" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable) + ");}\n";
 
 				if (isRepeatableGroup(expressionValueCustomVariable.getReference())) {
@@ -943,6 +954,8 @@ public class DroolsParser {
 			} else if (variable instanceof ExpressionValue) {
 				if (variable instanceof ExpressionValueNumber) {
 					ruleCore += "variablesList.add(" + ((ExpressionValueNumber) variable).getValue() + "d);\n";
+				} else if (variable instanceof ExpressionValueString) {
+					ruleCore += "variablesList.add(\"" + ((ExpressionValueString) variable).getValue() + "\");\n";
 				}
 			}
 		}
@@ -958,14 +971,15 @@ public class DroolsParser {
 		return false;
 	}
 
-	private static String mathAssignationAction(ExpressionChain actions, ITreeElement prattParserResult) throws RuleNotImplementedException, NotCompatibleTypeException,
-			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException {
+	private static String mathAssignationAction(ExpressionChain actions, ITreeElement prattParserResult) throws RuleNotImplementedException,
+			NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
 
 		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
-			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions().get(0);
+			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions()
+					.get(0);
 			// Check if the reference exists in the rule, if not, it creates
 			// a new reference
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);
@@ -1025,9 +1039,9 @@ public class DroolsParser {
 	 * @throws NotCompatibleTypeException
 	 * @throws DroolsRuleCreationException
 	 */
-	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, PrattParserException,
-			DroolsRuleCreationException {
+	private static String parseActions(ExpressionChain expressionChain) throws RuleNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, PrattParserException, DroolsRuleCreationException {
 
 		ITreeElement prattParserResult = calculatePrattParserResult(expressionChain);
 		if (prattParserResult != null) {
@@ -1057,6 +1071,7 @@ public class DroolsParser {
 					case SUM:
 					case PMT:
 					case LOG:
+					case CONCAT:
 						return assignationFunctionAction(prattParserResultExpressionChain);
 					default:
 						break;
@@ -1105,8 +1120,9 @@ public class DroolsParser {
 	 * @throws NotCompatibleTypeException
 	 * @throws RuleNotImplementedException
 	 */
-	private static String parseDroolsRuleGroupEndRuleConditions(Rule rule) throws RuleNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException {
+	private static String parseDroolsRuleGroupEndRuleConditions(Rule rule) throws RuleNotImplementedException, NotCompatibleTypeException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException {
 		String result = "";
 
 		DroolsRuleGroupEndRule endRule = (DroolsRuleGroupEndRule) rule;
@@ -1157,8 +1173,8 @@ public class DroolsParser {
 			}
 		}
 		// Question (Logic operator) ExpressionValue
-		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference) && (operator instanceof ExpressionOperatorLogic)
-				&& (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValue)) {
+		else if ((operatorLeft.size() == 1) && (operatorLeft.get(0) instanceof ExpressionValueTreeObjectReference)
+				&& (operator instanceof ExpressionOperatorLogic) && (operatorRight.size() == 1) && (operatorRight.get(0) instanceof ExpressionValue)) {
 			Object value = ((ExpressionValue<?>) operatorRight.get(0)).getValue();
 			TreeObject leftTreeObject = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getReference();
 			if (leftTreeObject instanceof Question) {
@@ -1179,8 +1195,8 @@ public class DroolsParser {
 							+ operator.getValue();
 					switch (question.getAnswerFormat()) {
 					case NUMBER:
-						questionCondition += " " + value + " ) from $" + question.getParent().getUniqueNameReadable() + ".getChildren(ISubmittedQuestion.class)"
-								+ RuleGenerationUtils.addFinalCommentsIfNeeded(question) + "\n";
+						questionCondition += " " + value + " ) from $" + question.getParent().getUniqueNameReadable()
+								+ ".getChildren(ISubmittedQuestion.class)" + RuleGenerationUtils.addFinalCommentsIfNeeded(question) + "\n";
 						break;
 					case POSTAL_CODE:
 						// Postal code comparisons should be in ALWAYS in upper
@@ -1204,18 +1220,19 @@ public class DroolsParser {
 							QuestionDateUnit unit = ((ExpressionValueTreeObjectReference) operatorLeft.get(0)).getUnit();
 							if (unit != QuestionDateUnit.DATE) {
 								if (value instanceof Timestamp) {
-									throw new DateComparisonNotPossibleException(unit.getUnitName() + " and Date types incompatible", new ExpressionChain(expressions));
+									throw new DateComparisonNotPossibleException(unit.getUnitName() + " and Date types incompatible", new ExpressionChain(
+											expressions));
 								} else {
-									questionCondition += unit.getDroolsFunction() + "(getAnswer('" + getTreeObjectAnswerType(question) + "')) " + operator.getValue()
-											+ " " + ((ExpressionValueNumber) operatorRight.get(0)).getValue().intValue() + ") ";
+									questionCondition += unit.getDroolsFunction() + "(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
+											+ operator.getValue() + " " + ((ExpressionValueNumber) operatorRight.get(0)).getValue().intValue() + ") ";
 								}
 							} else {
 								if (value instanceof Timestamp) {
-									questionCondition += unit.getDroolsFunction() + "(getAnswer('" + getTreeObjectAnswerType(question) + "')) " + operator.getValue()
-											+ " (new Date(" + ((Timestamp) value).getTime() + ")) ) ";
+									questionCondition += unit.getDroolsFunction() + "(getAnswer('" + getTreeObjectAnswerType(question) + "')) "
+											+ operator.getValue() + " (new Date(" + ((Timestamp) value).getTime() + ")) ) ";
 								} else {
-									throw new DateComparisonNotPossibleException("The value to compare with the Date is not a Timestamp",
-											new ExpressionChain(expressions));
+									throw new DateComparisonNotPossibleException("The value to compare with the Date is not a Timestamp", new ExpressionChain(
+											expressions));
 								}
 							}
 							// Ending common part of the DATE condition
@@ -1255,7 +1272,8 @@ public class DroolsParser {
 		List<Expression> chainList = actions.getExpressions();
 
 		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
-			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions().get(0);
+			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions()
+					.get(0);
 			// Check if the reference exists in the rule, if not, it creates
 			// a new reference
 			ruleCore += checkVariableAssignation(leftExpressionCustomVariable);

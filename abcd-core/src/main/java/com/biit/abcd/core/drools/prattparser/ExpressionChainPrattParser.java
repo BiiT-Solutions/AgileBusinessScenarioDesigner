@@ -21,12 +21,12 @@ public class ExpressionChainPrattParser extends PrattParser {
 
 	public ExpressionChainPrattParser(ExpressionChain expressionChain) {
 		super(standardizeExpressions(expressionChain.getExpressions()));
-		this.registerParselets();
+		registerParselets();
 	}
 
 	public ExpressionChainPrattParser(List<Expression> expressions) {
 		super(standardizeExpressions(expressions));
-		this.registerParselets();
+		registerParselets();
 	}
 
 	/**
@@ -34,37 +34,38 @@ public class ExpressionChainPrattParser extends PrattParser {
 	 */
 	private void registerParselets() {
 		// Register the ones that need special parselets.
-		this.register(ExpressionTokenType.NAME, new NameParselet());
-		this.register(ExpressionTokenType.ASSIGNATION, new AssignParselet());
-		this.register(ExpressionTokenType.LEFT_BRACKET, new GroupParselet());
-		this.register(ExpressionTokenType.BETWEEN, new CallParselet());
-		this.register(ExpressionTokenType.IN, new CallParselet());
-		this.register(ExpressionTokenType.MIN, new CallParselet());
-		this.register(ExpressionTokenType.MAX, new CallParselet());
-		this.register(ExpressionTokenType.AVG, new CallParselet());
-		this.register(ExpressionTokenType.SUM, new CallParselet());
-		this.register(ExpressionTokenType.PMT, new CallParselet());
-		this.register(ExpressionTokenType.IF, new CallParselet());
-		this.register(ExpressionTokenType.LOG, new CallParselet());
+		register(ExpressionTokenType.NAME, new NameParselet());
+		register(ExpressionTokenType.ASSIGNATION, new AssignParselet());
+		register(ExpressionTokenType.LEFT_BRACKET, new GroupParselet());
+		register(ExpressionTokenType.BETWEEN, new CallParselet());
+		register(ExpressionTokenType.IN, new CallParselet());
+		register(ExpressionTokenType.MIN, new CallParselet());
+		register(ExpressionTokenType.MAX, new CallParselet());
+		register(ExpressionTokenType.AVG, new CallParselet());
+		register(ExpressionTokenType.SUM, new CallParselet());
+		register(ExpressionTokenType.CONCAT, new CallParselet());
+		register(ExpressionTokenType.PMT, new CallParselet());
+		register(ExpressionTokenType.IF, new CallParselet());
+		register(ExpressionTokenType.LOG, new CallParselet());
 		// Special token for parsing plugin calls
-		this.register(ExpressionTokenType.IPLUGIN, new CallParselet());
+		register(ExpressionTokenType.IPLUGIN, new CallParselet());
 
 		// Register the simple operator parselets.
-		this.prefix(ExpressionTokenType.NOT, Precedence.PREFIX);
-		this.infixLeft(ExpressionTokenType.PLUS, Precedence.SUM);
-		this.infixLeft(ExpressionTokenType.MINUS, Precedence.SUM);
-		this.infixLeft(ExpressionTokenType.MULTIPLICATION, Precedence.PRODUCT);
-		this.infixLeft(ExpressionTokenType.DIVISION, Precedence.PRODUCT);
-		this.infixLeft(ExpressionTokenType.MODULE, Precedence.PRODUCT);
-		this.infixLeft(ExpressionTokenType.AND, Precedence.LOGIC_AND);
-		this.infixLeft(ExpressionTokenType.OR, Precedence.LOGIC_OR);
-		this.infixLeft(ExpressionTokenType.EQUALS, Precedence.COMP_EQ_NEQ);
-		this.infixLeft(ExpressionTokenType.NOT_EQUALS, Precedence.COMP_EQ_NEQ);
-		this.infixLeft(ExpressionTokenType.GREATER_THAN, Precedence.COMP_LT_GT);
-		this.infixLeft(ExpressionTokenType.GREATER_EQUALS, Precedence.COMP_LT_GT);
-		this.infixLeft(ExpressionTokenType.LESS_THAN, Precedence.COMP_LT_GT);
-		this.infixLeft(ExpressionTokenType.LESS_EQUALS, Precedence.COMP_LT_GT);
-		this.infixRight(ExpressionTokenType.POW, Precedence.EXPONENT);
+		prefix(ExpressionTokenType.NOT, Precedence.PREFIX);
+		infixLeft(ExpressionTokenType.PLUS, Precedence.SUM);
+		infixLeft(ExpressionTokenType.MINUS, Precedence.SUM);
+		infixLeft(ExpressionTokenType.MULTIPLICATION, Precedence.PRODUCT);
+		infixLeft(ExpressionTokenType.DIVISION, Precedence.PRODUCT);
+		infixLeft(ExpressionTokenType.MODULE, Precedence.PRODUCT);
+		infixLeft(ExpressionTokenType.AND, Precedence.LOGIC_AND);
+		infixLeft(ExpressionTokenType.OR, Precedence.LOGIC_OR);
+		infixLeft(ExpressionTokenType.EQUALS, Precedence.COMP_EQ_NEQ);
+		infixLeft(ExpressionTokenType.NOT_EQUALS, Precedence.COMP_EQ_NEQ);
+		infixLeft(ExpressionTokenType.GREATER_THAN, Precedence.COMP_LT_GT);
+		infixLeft(ExpressionTokenType.GREATER_EQUALS, Precedence.COMP_LT_GT);
+		infixLeft(ExpressionTokenType.LESS_THAN, Precedence.COMP_LT_GT);
+		infixLeft(ExpressionTokenType.LESS_EQUALS, Precedence.COMP_LT_GT);
+		infixRight(ExpressionTokenType.POW, Precedence.EXPONENT);
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 	 * precedence.
 	 */
 	public void postfix(ExpressionTokenType token, int precedence) {
-		this.register(token, new PostfixOperatorParselet(precedence));
+		register(token, new PostfixOperatorParselet(precedence));
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 	 * precedence.
 	 */
 	public void prefix(ExpressionTokenType token, int precedence) {
-		this.register(token, new PrefixOperatorParselet(precedence));
+		register(token, new PrefixOperatorParselet(precedence));
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 	 * and precedence.
 	 */
 	public void infixLeft(ExpressionTokenType token, int precedence) {
-		this.register(token, new BinaryOperatorParselet(precedence, false));
+		register(token, new BinaryOperatorParselet(precedence, false));
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 	 * token and precedence.
 	 */
 	public void infixRight(ExpressionTokenType token, int precedence) {
-		this.register(token, new BinaryOperatorParselet(precedence, true));
+		register(token, new BinaryOperatorParselet(precedence, true));
 	}
 
 	/**

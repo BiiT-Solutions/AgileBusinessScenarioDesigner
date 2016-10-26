@@ -82,6 +82,7 @@ public class OperatorsTest extends KidsFormCreator {
 	private final static String MAX = "max";
 	private final static String AVG = "avg";
 	private final static String PMT = "pmt";
+	private final static String CONCAT = "concat";
 	private static final Double OR_RESULT_VALUE = 11.;
 	private static final String BETWEEN_CUSTOM_VARIABLE = "betweenCustomVariable";
 
@@ -177,7 +178,7 @@ public class OperatorsTest extends KidsFormCreator {
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, QuestionDoesNotExistException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly {
+			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly, DroolsRuleGenerationException, DroolsRuleExecutionException {
 		// Create a new form
 		Form form = createForm();
 		// AVG expression
@@ -189,18 +190,34 @@ public class OperatorsTest extends KidsFormCreator {
 						AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
 		form.addDiagram(createExpressionsDiagram(form));
-		try {
-			// Create the rules and launch the engine
-			DroolsForm droolsForm = createAndRunDroolsRules(form);
-			// Check result
-			Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
-			Double secondVal = (Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
-					.getChild(ISubmittedQuestion.class, "heightFather")).getAnswers().iterator().next()));
-			Double thirdVal = 1000.0;
-			Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG), (firstVal + secondVal + thirdVal) / 3.0);
-		} catch (Exception e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
-		}
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
+		// Check result
+		Double firstVal = (Double) getGlobalVariableValue(getGlobalVariableNumber());
+		Double secondVal = (Double.parseDouble(((SubmittedQuestion) droolsForm.getDroolsSubmittedForm().getChild(ISubmittedCategory.class, "Algemeen")
+				.getChild(ISubmittedQuestion.class, "heightFather")).getAnswers().iterator().next()));
+		Double thirdVal = 1000.0;
+		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG), (firstVal + secondVal + thirdVal) / 3.0);
+	}
+
+	@Test(enabled = true, groups = { "droolsOperators" })
+	public void concatenateStringTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
+			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
+			ElementIsReadOnly {
+		// Create a new form
+		Form form = createForm();
+		// AVG expression
+		CustomVariable stringCustomVariable = new CustomVariable(form, CONCAT, CustomVariableType.STRING, CustomVariableScope.FORM);
+		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT),
+				new ExpressionValueString("Marco"), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueString("Polo"), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		form.getExpressionChains().add(expression);
+		form.addDiagram(createExpressionsDiagram(form));
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
+		// Check new string
+		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "MarcoPolo");
 	}
 
 	@Test(enabled = true, groups = { "droolsOperators" })
@@ -599,8 +616,8 @@ public class OperatorsTest extends KidsFormCreator {
 	public void betweenOperatorQuestionDateYearsValuesTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException {
-		//TODO !!!
-		//System.out.println("\n\n\nAQUI ESTÁ:");
+		// TODO !!!
+		// System.out.println("\n\n\nAQUI ESTÁ:");
 		// Create a new form
 		Form form = createForm();
 		// BETWEEN rule
@@ -1047,4 +1064,4 @@ public class OperatorsTest extends KidsFormCreator {
 		// Create the drools rules and launch the engine
 		return createAndRunDroolsRules(form);
 	}
-	}
+}

@@ -138,7 +138,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 	public void visit(OperatorExpression operator) throws NotCompatibleTypeException {
 		builder.append("(");
 		operator.getLeftElement().accept(this);
-		builder.append(" ").append(operator.getOperator().punctuator()).append(" ");
+		builder.append(" ").append(operator.getOperator().getPunctuator()).append(" ");
 		operator.getRightElement().accept(this);
 		builder.append(")");
 	}
@@ -147,12 +147,12 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 	public void visit(PostfixExpression postfix) throws NotCompatibleTypeException {
 		builder.append("(");
 		postfix.getLeftElement().accept(this);
-		builder.append(postfix.getOperator().punctuator()).append(")");
+		builder.append(postfix.getOperator().getPunctuator()).append(")");
 	}
 
 	@Override
 	public void visit(PrefixExpression prefix) throws NotCompatibleTypeException {
-		builder.append("(").append(prefix.getOperator().punctuator());
+		builder.append("(").append(prefix.getOperator().getPunctuator());
 		prefix.getRightElement().accept(this);
 		builder.append(")");
 	}

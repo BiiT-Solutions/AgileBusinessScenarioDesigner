@@ -105,8 +105,10 @@ public class ExpressionValidator {
 			}
 			Integer parsedElements = null;
 			// If the third expression is a function, the pratt parser removes
-			// the
-			// assignation expression
+			// the assignation expression
+			if (prattExpressionChain.getExpressions().size() < 1) {
+				throw new InvalidExpressionException();
+			}
 			if (prattExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
 				// If the expression is a function, we have to check the values
 				// inside
@@ -114,21 +116,17 @@ public class ExpressionValidator {
 				// Due to the removal of the equals by the parser
 				parsedElements = countElementsInExpressionChain(prattExpressionChain) + 1;
 
-			}
-			// Plugin calls validation
-			else if (prattExpressionChain.getExpressions().get(1) instanceof ExpressionPluginMethod) {
+				// Plugin calls validation
+			} else if (prattExpressionChain.getExpressions().get(1) instanceof ExpressionPluginMethod) {
 				// If the expression is a function, we have to check the values
 				// inside
 				validatePluginCall(prattExpressionChain);
 				// Due to the removal of the equals by the parser
 				parsedElements = countElementsInExpressionChain(prattExpressionChain) + 1;
-			}
-
-			else {
+			} else {
 				// Check the number of elements returned by the Pratt parser
 				// (sometimes, the parser doesn't fail, it only skips the
-				// invalid
-				// characters)
+				// invalid characters)
 				parsedElements = countElementsInExpressionChain(prattExpressionChain);
 			}
 			if (cleanedExpression.getExpressions().size() != parsedElements) {
@@ -205,6 +203,11 @@ public class ExpressionValidator {
 		case MIN:
 		case SUM:
 			if (!leftVariableFormat.equals(ValueType.NUMBER) && !parameterType.equals(ValueType.NUMBER)) {
+				throw new InvalidExpressionException();
+			}
+			break;
+		case CONCAT:
+			if (!leftVariableFormat.equals(ValueType.TEXT) && !parameterType.equals(ValueType.TEXT)) {
 				throw new InvalidExpressionException();
 			}
 			break;

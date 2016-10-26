@@ -54,7 +54,7 @@ public class PrattParser {
 
 		// Register all of the TokenTypes that are explicit punctuators.
 		for (ExpressionTokenType type : ExpressionTokenType.values()) {
-			String punctuator = type.punctuator();
+			String punctuator = type.getPunctuator();
 			if (punctuator != null) {
 				this.mPunctuators.put(punctuator, type);
 			}
