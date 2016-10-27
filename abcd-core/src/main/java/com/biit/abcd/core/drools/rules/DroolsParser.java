@@ -736,11 +736,11 @@ public class DroolsParser {
 					}
 					break;
 				case TEXT:
-					return "$" + id + ".getAnswer('" + AnswerFormat.TEXT.getDroolsFormat() + "')";
+					return "(String)$" + id + ".getAnswer('" + AnswerFormat.TEXT.getDroolsFormat() + "')";
 				case POSTAL_CODE:
-					return "$" + id + ".getAnswer('" + AnswerFormat.POSTAL_CODE.getDroolsFormat() + "')";
+					return "(String)$" + id + ".getAnswer('" + AnswerFormat.POSTAL_CODE.getDroolsFormat() + "')";
 				case MULTI_TEXT:
-					return "$" + id + ".getAnswer('" + AnswerFormat.MULTI_TEXT.getDroolsFormat() + "')";
+					return "(String)$" + id + ".getAnswer('" + AnswerFormat.MULTI_TEXT.getDroolsFormat() + "')";
 				default:
 					break;
 				}
@@ -816,8 +816,7 @@ public class DroolsParser {
 					}
 				} else {
 					// Special case to match questions with radio button and
-					// multi
-					// checkbox
+					// multi checkbox
 					return AnswerFormat.NUMBER;
 				}
 			} else if (reference instanceof Answer) {
